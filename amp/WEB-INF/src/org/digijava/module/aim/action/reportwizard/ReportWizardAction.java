@@ -406,7 +406,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		
-		modeReset(mapping, form, request, response);
+		//modeReset(mapping, form, request, response);
 		
 		return null;
 	}

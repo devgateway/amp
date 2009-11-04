@@ -9,10 +9,13 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.util.CurrencyUtil"%>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 
@@ -30,6 +33,8 @@
 	<div id="myContentContent" class="content">
 	</div>
 </div>
+
+<c:set var="baseCurrencyGS" value="<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY) %>" target="request" />
 
 <script type="text/javascript">
 <!--
@@ -213,8 +218,8 @@ function validate() {
 		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 		return false;
 	}
-	if (document.aimCurrencyRateFormPop.updateCRateCode.value == 'USD') {
-		alert('<digi:trn key="aim:selectDifferentCurrency">All exchange rates are saved in terms of USD. Please select a different currency.</digi:trn>');
+	if (document.aimCurrencyRateFormPop.updateCRateCode.value == '${baseCurrencyGS}') {
+		alert('<digi:trn>All exchange rates are saved in terms of the base currency. Please select a different currency.</digi:trn>');
 		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 		return false;
 	}
@@ -242,12 +247,23 @@ function validate() {
 
 function saveRate() {
 	var valid = validate();
+
+	var callbackImpl	= {
+		success: function () {
+			myclose();
+			reload();
+		},
+		failure: function() {
+			alert ("<digi:trn>There was a connection error. Please try again.</digi:trn>");
+		}
+	};
+	
 	if (valid == true) {
 		var postString		= generateFields(2);
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
 		checkAndClose=true;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
 	}
 	return valid;
 }

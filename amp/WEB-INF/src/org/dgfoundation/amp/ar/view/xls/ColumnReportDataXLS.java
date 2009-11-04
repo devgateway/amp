@@ -61,63 +61,8 @@ public class ColumnReportDataXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
-	//	rowId.inc();
-	//	colId.reset();
-		
-		/*
-		// title:
-		if (columnReport.getParent() != null) {
-			HSSFRow row = sheet.createRow(rowId.shortValue());
-			HSSFCell cell = this.getCell(row,this.getHighlightedStyle(true));
-			cell.setCellValue(columnReport.getName());
-			makeColSpan(columnReport.getTotalDepth());
-			rowId.inc();
-			colId.reset();
-		}
-*/
-		
-//		title
-	/*	if (columnReport.getParent() != null) {
-			HSSFRow row = sheet.createRow(rowId.shortValue());
-			HSSFCell cell = this.getCell(row,this.getHighlightedStyle(true));
-			
-			//introducing the translaton issues
-			ReportData parent=(ReportData)columnReport.getParent();
-			
-			while (parent.getReportMetadata()==null)
-			{
-				parent=parent.getParent();
-			}
-			//when we get to the top of the hierarchy we have access to AmpReports
-			
-			//requirements for translation purposes
-			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=parent.getReportMetadata().getSiteId();
-			String locale=parent.getReportMetadata().getLocale();
-			String prefix="rep:pop:";
-			String translatedName=null;
-			try{
-				translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
-			}catch (WorkerException e)
-				{////System.out.println(e);}
-			
-		 
-			if(translatedName.compareTo("")==0)
-				cell.setCellValue(columnReport.getName());
-			else 
-				cell.setCellValue(translatedName);
-			makeColSpan(columnReport.getTotalDepth());
-			rowId.inc();
-			colId.reset();
-	}
-		*/
-		
-		
-		
-		
-		// add trail cells
-		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
-		trails.generate();
+			TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
+			trails.generate();
 	
 		
 
@@ -125,11 +70,15 @@ public class ColumnReportDataXLS extends XLSExporter {
 		if (metadata.getHideActivities() == null
 				|| metadata.getHideActivities().booleanValue() == false) {
 			Iterator i = columnReport.getOwnerIds().iterator();
+			
+			
 			while (i.hasNext()) {
 				Long element = (Long) i.next();
 				this.setOwnerId(element);
 				row = sheet.createRow(rowId.shortValue());
 				Iterator ii = columnReport.getItems().iterator();
+				HSSFCell cell=this.getCell(regularStyle);
+				colId.inc();
 				while (ii.hasNext()) {
 					Viewable velement = (Viewable) ii.next();
 					velement.invokeExporter(this);

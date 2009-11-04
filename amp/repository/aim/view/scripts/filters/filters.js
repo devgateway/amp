@@ -102,4 +102,8 @@ function resetFilter(){
 		if (aimReportsFilterPickerForm.governmentApprovalProcedures){
 			aimReportsFilterPickerForm.governmentApprovalProcedures.checked=false;
 		}
+		
+		if (aimReportsFilterPickerForm.computedYear){
+			aimReportsFilterPickerForm.computedYear.selectedIndex=0;
+		}
 	}

@@ -69,7 +69,7 @@ import org.digijava.module.um.util.AmpUserUtil;
 	        if(vwForm.getType() == 0) {
 	            for(Iterator ubIter = ubCol.iterator(); ubIter.hasNext(); ) {
 	                UserBean ub = (UserBean) ubIter.next();
-	                if(ub.getTeamMembers() != null) {
+	                if(ub.getTeamMembers() != null && ! ub.getTeamMembers().isEmpty()) {
 	                    ubIter.remove();
 	                }
 	            }
@@ -77,7 +77,7 @@ import org.digijava.module.um.util.AmpUserUtil;
 	        } else if(vwForm.getType() == 1) {
 	            for(Iterator ubIter = ubCol.iterator(); ubIter.hasNext(); ) {
 	                UserBean user = (UserBean) ubIter.next();
-	                if(user.getTeamMembers() == null) {
+	                if(user.getTeamMembers() == null || user.getTeamMembers().isEmpty()) {
 	                    ubIter.remove();
 	                }
 	            }

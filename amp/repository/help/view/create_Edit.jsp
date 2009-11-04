@@ -22,7 +22,7 @@ function validate(topickey){
         }
 }
   function getKey(){
-	
+
     var topicKey = document.getElementById("key").innerHTML;
     var key = topicKey.slice(topicKey.indexOf("y:")+2);
     return key;
@@ -33,9 +33,7 @@ function edit(){
     if(validate(getKey())){
     	
         <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
-		document.helpForm.action = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
-		document.helpForm.target = "_self";
-		document.helpForm.submit();
+        window.location = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
 
     }
 
@@ -45,11 +43,9 @@ function remove(){
 
     if(validate(getKey())){
 
-        <digi:context name="removeTopic" property="context/module/moduleinstance/helpActions.do~actionType=deleteHelpTopics"/>
-		document.helpForm.action = "<%=removeTopic%>~topicKey="+getKey()+"~wizardStep=0~multi=false";
-		document.helpForm.target = "_self";
-		document.helpForm.submit();
-
+    	<digi:context name="removeTopic" property="context/module/moduleinstance/helpActions.do~actionType=deleteHelpTopics"/>
+    	window.location = "<%=removeTopic%>~topicKey="+getKey()+"~wizardStep=0~multi=false";
+		
     }
 
 }
@@ -57,10 +53,8 @@ function remove(){
 function reFresh(){
 
         <digi:context name="tree" property="context/module/moduleinstance/helpActions.do~actionType=saved"/>
-		document.helpForm.action = "<%=tree%>~wizardStep=0";
-		document.helpForm.target = "_self";
-		document.helpForm.submit();
-
+        window.location = "<%=tree%>~wizardStep=0";
+		
 
 }
 
@@ -68,10 +62,8 @@ function reFresh(){
 function create(){
 
         <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=createHelpTopic"/>
-		document.helpForm.action = "<%=editTopic%>~wizardStep=0";
-		document.helpForm.target = "_self";
-		document.helpForm.submit();
-
+        window.location = "<%=editTopic%>~wizardStep=0";
+		
 
 }
 
@@ -151,7 +143,7 @@ function GetXmlHttpObj()	{
        progressViewer.innerHTML = "";
    }
 
-
+ 
 
 //-->
 </script>

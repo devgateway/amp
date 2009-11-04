@@ -1,35 +1,22 @@
 package org.dgfoundation.amp.test.reports;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 
-import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.test.util.Configuration;
 import org.dgfoundation.amp.test.util.TestUtil;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.action.DeleteAllReports;
 import org.digijava.module.aim.action.ViewNewAdvancedReport;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-
-import antlr.collections.List;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpSession;
@@ -39,7 +26,7 @@ public class TestReportWizard extends BasicActionTestCaseAdapter {
 
 	private ReportWizardAction action;
 	private ReportWizardForm form;
-	
+
 	private DeleteAllReports deleteAction;
 
 	MockHttpSession session;
@@ -159,24 +146,24 @@ public class TestReportWizard extends BasicActionTestCaseAdapter {
 
 	public void testDeleteReport() throws Exception {
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
-		//just in case ATL is no the leader
+		// just in case ATL is no the leader
 		teamMember.setTeamHead(true);
 		session.setAttribute("teamLeadFlag", "true");
 		Collection<AmpReports> reports = TeamUtil.getAllTeamReports(teamMember.getTeamId());
-		Long id=null;
+		Long id = null;
 		for (AmpReports ampReports : reports) {
 			if (ampReports.getName().equalsIgnoreCase("AUTO_TEST_REPORT")) {
 				id = ampReports.getAmpReportId();
 				break;
 			}
 		}
-		if (id==null){
+		if (id == null) {
 			fail("Report Doesn't exists");
-		} 
-		addRequestParameter("isTab","2");
+		}
+		addRequestParameter("isTab", "2");
 		addRequestParameter("rid", String.valueOf(id));
 		actionPerform(DeleteAllReports.class);
-		//verifyNoActionErrors();
+		// verifyNoActionErrors();
 		verifyForward("forwardReports");
 	}
 
@@ -185,24 +172,24 @@ public class TestReportWizard extends BasicActionTestCaseAdapter {
 		teamMember.setTeamHead(true);
 		session.setAttribute("teamLeadFlag", "true");
 		Collection<AmpReports> reports = TeamUtil.getAllTeamReports(teamMember.getTeamId());
-		Long id=null;
+		Long id = null;
 		for (AmpReports ampReports : reports) {
 			if (ampReports.getName().equalsIgnoreCase("AUTO_TEST_REPORT_ALL_COLUMNS")) {
 				id = ampReports.getAmpReportId();
 				break;
 			}
 		}
-		if (id==null){
+		if (id == null) {
 			fail("Report Doesn't exists");
-		} 
+		}
 
-		addRequestParameter("isTab","2");
+		addRequestParameter("isTab", "2");
 		addRequestParameter("rid", String.valueOf(id));
 		actionPerform(DeleteAllReports.class);
-		//verifyNoActionErrors();
+		// verifyNoActionErrors();
 		verifyForward("forwardReports");
 	}
-	
+
 	protected void tearDown() throws Exception {
 		// TODO Auto-generated method stub
 		super.tearDown();

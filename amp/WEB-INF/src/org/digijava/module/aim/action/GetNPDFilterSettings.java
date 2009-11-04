@@ -14,6 +14,7 @@ import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * Returns XML of Selected filters for NPD page
@@ -57,7 +58,8 @@ public class GetNPDFilterSettings extends Action{
                     break;
                 }
                 AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(Long.parseLong(statusId));
-                statuses += value.getValue() + ",";
+                String translatedValue=TranslatorWorker.translateText(value.getValue(),request);
+                statuses +=translatedValue + ",";
 
             }
              if (statuses.length() > 0) {

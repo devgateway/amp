@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 <digi:instance property="calendarViewForm"/>
 
@@ -33,17 +34,6 @@ function changeState() {
 function changeDonorsAndEventTypesState(){
 	changeDonorsState();
 	changeEventTypesState();
-}
-
-function openPrinter(){
-var view = document.getElementById("printView").value;
-var date = document.getElementById("printDate").value;
-var myDate = new Date(date)
-
-if(view!= null)
-     {
- 		window.open('/calendar/showCalendarView.do~filterInUse=false~view='+view+'~date='+myDate.valueOf()+'~print=true','mywindow','toolbar=no,location=no, width=1010,height=600", directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
-	}
 }
 
 function changeDonorsState(){	
@@ -92,7 +82,7 @@ function changeEventTypesState(){
 	<field:display name="Event Type Filter" feature="Filter">
 		<div style="width:220px;height:auto;max-height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
 		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family:Tahoma;">
-		  	<digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
+		  	<digi:trn>Event Types</digi:trn>
 		  </div>
 		  <div style="overflow:auto;width:220px;height:auto;max-height:92px;font-size:12px;font-family:Tahoma;">
 		    <c:if test="${!empty calendarViewForm.filter.eventTypes}">
@@ -122,7 +112,7 @@ function changeEventTypesState(){
 	<field:display name="Donor Filter" feature="Filter">
 		<div style="width:220px;height:auto;max-height:220px;border:1px solid #CCECFF;font-family:Tahoma;white-space: nowrap;">
 		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family: Tahoma;">
-		  <digi:trn key="calendar:bodydonors">Donors</digi:trn>
+		  <digi:trn>Donors</digi:trn>
 		  </div>
 		  <div style="overflow:auto;width:220px;height:auto;max-height:200px;font-size:12px;font-weight:bold;font-family:Tahoma;white-space: nowrap">
 		    <c:if test="${!empty calendarViewForm.filter.donors}">
@@ -132,7 +122,7 @@ function changeEventTypesState(){
 		            <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" styleId="donors_none"/>
 		          </td>
 		          <td style="padding:5px;width:115px;text-align:left;font-weight:bold;white-space: nowrap;">
-		            <digi:trn key="calendar:donorsNone">None</digi:trn>
+		            <digi:trn>None</digi:trn>
 		          </td>
 		        </tr>
 		        <c:forEach var="donor" items="${calendarViewForm.filter.donors}" varStatus="stat">
@@ -152,20 +142,16 @@ function changeEventTypesState(){
 	</field:display>
 	<div style="padding:5px;width:190px;height:28px;">
 	  <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
-	  <digi:trn key="calendar:showPublicEvents">
-	  &nbsp;Public events
-	  </digi:trn>
+	  <digi:trn>&nbsp;Public events</digi:trn>
 	</div>
-	<div style="padding:5px;width:200px;height:28px;">
+	<div style="padding:5px;width:250px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
-			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
+			<input type="submit" value="<digi:trn>Run Filter</digi:trn>" style="min-width:88px;" onclick="changeDonorsAndEventTypesState();"/>
 		</field:display>
-&nbsp;
-	    <field:display name="Reset Filter Button" feature="Filter">
-	    	<input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" />
-	    </field:display>
 	    &nbsp;
-	      <input type="button" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
+	    <field:display name="Reset Filter Button" feature="Filter">
+	    	<input type="reset" value="<digi:trn>Reset</digi:trn>" style="width:88px;" />
+	    </field:display>
 	</div>
 </feature:display>
 

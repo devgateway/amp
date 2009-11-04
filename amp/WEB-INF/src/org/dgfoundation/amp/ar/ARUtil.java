@@ -25,12 +25,17 @@ import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.dimension.ARDimension;
+import org.dgfoundation.amp.ar.dimension.DonorDimension;
+import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
+import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -233,6 +238,18 @@ public final class ARUtil {
 		}
 		return false;
 	}
+	
+	public static boolean containsColumn(String columName, Set columns) {
+		if (columName == null)
+			return false;
+		Iterator i = columns.iterator();
+		while (i.hasNext()) {
+			AmpReportColumn element = (AmpReportColumn) i.next();
+			if (element.getColumn().getColumnName().indexOf(columName) != -1)
+				return true;
+		}
+		return false;
+	}
 
 	public static List createOrderedHierarchies(Collection columns,
 			Collection hierarchies) {
@@ -414,4 +431,17 @@ public final class ARUtil {
 			periods.add( new ComparableMonth(12, "") );
 		}
 	}
+	
+	//AMP-6541
+	public static void clearDimension(Class c){
+		logger.info("removing dimension: "+c.toString());
+		ARDimension.DIMENSIONS.remove(c);
+	}
+	
+	public static void clearOrgGroupTypeDimensions(){
+        clearDimension(DonorDimension.class);
+        clearDimension(DonorGroupDimension.class);
+        clearDimension(DonorTypeDimension.class);
+	}
+	
 }

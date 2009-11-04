@@ -587,11 +587,13 @@ public class ShowActivityPrintPreview
                         Funding fund = new Funding();
                         //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
                         fund.setTypeOfAssistance( ampFunding.getTypeOfAssistance() );
+                        fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
+                        fund.setFundingStatus( ampFunding.getFundingStatus() );
+                        
                         fund.setFundingId(ampFunding.getAmpFundingId().
                                           longValue());
                         fund.setOrgFundingId(ampFunding.getFinancingId());
                         //fund.setModality(ampFunding.getModalityId());
-                        fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
                         fund.setConditions(ampFunding.getConditions());
                         Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
                        
@@ -616,7 +618,7 @@ public class ShowActivityPrintPreview
 	                         	}
 	                         	else
 	                         	{
-	                         		Double fixedExchangeRate = currentFundingDetail.getFixedExchangeRate();
+	                         		Double fixedExchangeRate = FormatHelper.parseDouble( currentFundingDetail.getFixedExchangeRate() );
 	                         		BigDecimal currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseBigDecimal(currentFundingDetail.getTransactionAmount()),fixedExchangeRate,1);
 	                            	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
 	                            	currentFundingDetail.setTransactionAmount(currentAmount);
@@ -844,6 +846,16 @@ public class ShowActivityPrintPreview
                 List reportingOrgs = new ArrayList();
                 List sectGroups = new ArrayList();
                 List regGroups = new ArrayList();
+                List respOrganisations	= new ArrayList<AmpOrganisation>();
+                
+                eaForm.getAgencies().setExecutingOrgToInfo(new HashMap<String, String>());
+                eaForm.getAgencies().setImpOrgToInfo(new HashMap<String, String>());
+                eaForm.getAgencies().setBenOrgToInfo(new HashMap<String, String>());
+                eaForm.getAgencies().setConOrgToInfo(new HashMap<String, String>());
+                eaForm.getAgencies().setRepOrgToInfo(new HashMap<String, String>());
+                eaForm.getAgencies().setSectOrgToInfo(new HashMap<String, String>());
+                eaForm.getAgencies().setRegOrgToInfo(new HashMap<String, String>());
+                eaForm.getAgencies().setRespOrgToInfo(new HashMap<String, String>());
 
                 Collection relOrgs = ActivityUtil.getOrgRole(activity.getAmpActivityId());
                 if (relOrgs != null) {
@@ -859,35 +871,57 @@ public class ShowActivityPrintPreview
                         Constants.EXECUTING_AGENCY)
                         && (!executingAgencies.contains(organisation))) {
                     	executingAgencies.add(organisation);
+                    	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                   		  	eaForm.getAgencies().getExecutingOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                     }
                     else if (role.getRoleCode().equals(
                         Constants.IMPLEMENTING_AGENCY)
                              && (!impAgencies.contains(organisation))) {
                     	impAgencies.add(organisation);
+                    	   if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                           	eaForm.getAgencies().getImpOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                     }
                     else if (role.getRoleCode().equals(
                         Constants.BENEFICIARY_AGENCY)
                              && (!benAgencies.contains(organisation))) {
                       benAgencies.add(organisation);
+                      if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                  		  eaForm.getAgencies().getBenOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                     }
                     else if (role.getRoleCode().equals(
                         Constants.CONTRACTING_AGENCY)
                              && (!conAgencies.contains(organisation))) {
                     	conAgencies.add(organisation);
+                    	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                     		  eaForm.getAgencies().getConOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                     }
                     else if (role.getRoleCode().equals(
                         Constants.REPORTING_AGENCY)
                              && (!reportingOrgs.contains(organisation))) {
                     	reportingOrgs.add(organisation);
-                    } else if (role.getRoleCode().equals(
+                    	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                     		  eaForm.getAgencies().getRepOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                    } 
+                    else if (role.getRoleCode().equals(
+                            Constants.RESPONSIBLE_ORGANISATION)
+                                 && (!respOrganisations.contains(organisation))) {
+                        	respOrganisations.add(organisation);
+                        	if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                      		  eaForm.getAgencies().getRespOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                     } 
+                    else if (role.getRoleCode().equals(
                             Constants.SECTOR_GROUP)
                             && (!sectGroups.contains(organisation))) {
                     	sectGroups.add(DbUtil.getOrganisation(orgRole.getOrganisation().getAmpOrgId()));
-                    	//sectGroups.add(orgRole.getOrganisation());
+                    	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                    		  eaForm.getAgencies().getSectOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                    	 
                    } else if (role.getRoleCode().equals(
                            Constants.REGIONAL_GROUP)
                            && (!regGroups.contains(organisation))) {
                 	   regGroups.add(organisation);
+                	   if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                 		  eaForm.getAgencies().getRegOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                   }
 
                   }
@@ -900,6 +934,7 @@ public class ShowActivityPrintPreview
                 eaForm.getAgencies().setReportingOrgs(reportingOrgs);
                 eaForm.getAgencies().setSectGroups(sectGroups);
                 eaForm.getAgencies().setRegGroups(regGroups);
+                eaForm.getAgencies().setRespOrganisations(respOrganisations);
                 
                 Collection colIssues = ActivityUtil.getAmpIssues(activity.getAmpActivityId());
                 if(colIssues != null

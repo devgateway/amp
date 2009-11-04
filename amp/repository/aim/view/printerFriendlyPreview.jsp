@@ -324,6 +324,29 @@
 &nbsp;										</td>
 									</tr>
 									</field:display>
+									<feature:display name="Budget" module="Project ID and Planning">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+										<b>
+											<digi:trn key="aim:actBudget">Budget</digi:trn>
+										</b>										
+										</td>
+										<td bgcolor="#ffffff">
+										<field:display name="On/Off Budget" feature="Budget">	
+
+										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="true">
+										<digi:trn key="aim:actBudgeton">
+												Activity is On Budget										</digi:trn>
+										</logic:equal>
+										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget										</digi:trn>
+										</logic:equal>
+										</field:display>
+										</td>
+									</tr>
+									</feature:display>
+ 
 									<field:display name="Project Category" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
@@ -339,7 +362,7 @@
 
 		</feature:display>
                                      <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
-                                     <feature:display name="Budget" module="Project Id And Planning">
+                                     <feature:display name="Budget" module="Project ID and Planning">
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap">
 												<b>
@@ -830,7 +853,7 @@
                                                                                   </logic:notEmpty>                                                                                </td>
                                                                               </tr>
 																			</field:display>
-																			<field:display name="Type Of Assistance" feature="Funding Information">
+																			<field:display name="Financing Instrument" feature="Funding Information">
                                                                               <tr>
                                                                                 <td align="left" width="339">
                                                                                   <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
@@ -867,6 +890,23 @@
 										                                        	                                                                               </td>
                                                                               </tr>
                                                                               
+																			</field:display>
+																			  <field:display name="Funding Status" feature="Funding Information">
+                                                                              <tr>
+                                                                                <td align="left" width="339">
+                                                                                  <a>
+                                                                                  	<digi:trn >Funding Status </digi:trn>
+																				  </a>                                                                                
+																				 </td>
+                                                                                <td width="10">:</td>
+                                                                                <td align="left">
+                                                                                  <logic:notEmpty name="funding" property="fundingStatus">
+                                                                                    <digi:trn>
+                                                                                    	<bean:write name="funding" property="fundingStatus.value"/>
+                                                                                    </digi:trn>
+                                                                                  </logic:notEmpty>                                                                                
+                                                                                  </td>
+                                                                              </tr>
 																			</field:display>
 				                                                            </table>
                                                                            </td>
@@ -1497,8 +1537,7 @@
 											<digi:trn key="aim:relatedDocuments">
 										    Related Documents</digi:trn>
 											</b>									</td>
-<td bgcolor="#ffffff">											
-											<c:if test="${!empty aimEditActivityForm.documents.documentList}">
+<td bgcolor="#ffffff">						<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">
@@ -1511,22 +1550,55 @@
 																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
 																<logic:notEqual name="docs" property="docDescription" value=" ">
 																	<br />&nbsp;
-																	<b>Description:</b>&nbsp;<bean:write name="docs" property="docDescription" />
+																	<b><digi:trn key="aim:description">Description</digi:trn>:</b>
+																	&nbsp;<bean:write name="docs" property="docDescription" />
 																</logic:notEqual>
 																<logic:notEmpty name="docs" property="date">
 																	<br />&nbsp;
-																	<b>Date:</b>&nbsp;<c:out value="${docs.date}"/>
+																	<b><digi:trn key="aim:date">Date</digi:trn>:</b>
+																	&nbsp;<c:out value="${docs.date}"/>
 																</logic:notEmpty>
 																<logic:notEmpty name="docs" property="docType">
 																	<br />&nbsp;
-																	<b>Document Type:</b>&nbsp;
+																	<b><digi:trn key="aim:documentType">Document Type</digi:trn>:</b>&nbsp;
 																	<bean:write name="docs" property="docType"/>
-																</logic:notEmpty>															</td>
+																</logic:notEmpty>															
+															</td>
 														</tr>
 													 </table>
 													</td></tr>
 													</c:if>
 													</logic:iterate>
+													<logic:notEmpty name="aimEditActivityForm" property="documents.crDocuments">
+														<tr>
+														<td>
+														<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
+															<table width="100%" class="box-border-nopadding">
+															 	<tr bgcolor="#ffffff">
+																	<td vAlign="center" align="left">
+																		&nbsp;<b><c:out value="${crDoc.title}"/></b> -
+																		&nbsp;&nbsp;&nbsp;<i><c:out value="${crDoc.name}"/></i>
+																		<c:set var="translation">
+																			<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
+																		</c:set>																		
+																		<a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>" onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}"><img src="/repository/contentrepository/view/images/check_out.gif" border="0"></a>									
+																		<logic:notEmpty name="crDoc" property="description">
+																			<br />&nbsp;
+																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;
+																			<bean:write name="crDoc" property="description" />
+																		</logic:notEmpty>
+																		<logic:notEmpty name="crDoc" property="calendar">
+																			<br />&nbsp;
+																			<b><digi:trn key="aim:date">Date</digi:trn>:</b>
+																			&nbsp;<c:out value="${crDoc.calendar}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															 </table>
+														</logic:iterate>
+														</td>
+														</tr>
+													</logic:notEmpty>
 												</table>
 											</c:if>
 											<c:if test="${!empty aimEditActivityForm.documents.linksList}">
@@ -1568,7 +1640,15 @@
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
 														id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-																<ul><li> <bean:write name="respOrg" property="name" /></li></ul>
+															<ul><li> 
+																<bean:write name="respOrg" property="name" />
+																<c:set var="tempOrgId" scope="page">${respOrg.ampOrgId}</c:set>
+																<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization">
+																	<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
+																	(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> ) 
+																	</logic:notEmpty>
+																</field:display>
+															</li></ul>
 														</logic:iterate>
 														</td></tr>
 													</table>
@@ -1581,8 +1661,17 @@
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies" id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
+													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies"
+													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<ul><li> 
+																<bean:write name="execAgencies" property="name" />
+																<c:set var="tempOrgId">${execAgencies.ampOrgId}</c:set>
+																<field:display name="Executing Agency Additional Info"  feature="Executing Agency">
+																	<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})" >
+																	(  <c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}" /> )
+																	</logic:notEmpty> 
+																</field:display>
+															</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1597,7 +1686,15 @@
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
 													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="impAgencies" property="name" /></li></ul>
+															<ul><li> 
+																	<bean:write name="impAgencies" property="name" />
+																	<c:set var="tempOrgId">${impAgencies.ampOrgId}</c:set>
+																	<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}" /> )
+																		</logic:notEmpty> 
+																	</field:display>
+															</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1612,7 +1709,15 @@
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.benAgencies"
 														id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-																<ul><li> <bean:write name="benAgency" property="name" /></li></ul>
+																<ul><li> 
+																		<bean:write name="benAgency" property="name" />
+																		<c:set var="tempOrgId">${benAgency.ampOrgId}</c:set>
+																		<field:display name="Beneficiary Agency  Additional Info"  feature="Beneficiary Agency">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})" >
+																			(  <c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}" /> ) 
+																			</logic:notEmpty>
+																		</field:display>
+																</li></ul>
 														</logic:iterate>
 														</td></tr>
 													</table>
@@ -1626,7 +1731,15 @@
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
 													id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> <bean:write name="conAgencies" property="name" /></li></ul>
+														<ul><li> 
+																<bean:write name="conAgencies" property="name" />
+																<c:set var="tempOrgId">${conAgencies.ampOrgId}</c:set>
+																	<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}" /> )
+																		</logic:notEmpty> 
+																	</field:display>
+														</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1643,7 +1756,15 @@
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
 														id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="sectGroup" property="name" /></li></ul>
+															<ul><li> 
+																	<bean:write name="sectGroup" property="name" />
+																	<c:set var="tempOrgId">${sectGroup.ampOrgId}</c:set>
+																	<field:display name="Sector Group Additional Info"  feature="Sector Group">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}" /> ) 
+																		</logic:notEmpty>
+																	</field:display>
+															</li></ul>
 														</logic:iterate>
 														</td></tr>
 													</table>											
@@ -1658,7 +1779,15 @@
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
 													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> <bean:write name="regGroup" property="name" /></li></ul>
+														<ul><li> 
+																<bean:write name="regGroup" property="name" />
+																<c:set var="tempOrgId">${regGroup.ampOrgId}</c:set>
+																<field:display name="Regional Group Additional Info"  feature="Regional Group">
+																	<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})"  name="aimEditActivityForm">
+																		(  <c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}" /> )
+																	</logic:notEmpty> 
+																</field:display>
+														</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>

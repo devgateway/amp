@@ -28,6 +28,10 @@ public abstract class Exporter {
 	 */
 	protected Viewable item;
 	
+	public Viewable getItem() {
+		return item;
+	}
+
 	protected AmpReports metadata; 
 
 	/**

@@ -300,8 +300,8 @@ function fnSubmit() {
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width="770" vAlign="top">
-						<table width="600px;" cellspacing="2" cellPadding="2" vAlign="top" align="left">
+					<td noWrap width="75%" vAlign="top">
+						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
 							<tr><td>
 								<!-- Filters -->
 								<table cellPadding=1 cellSpacing=1 align="left"  width="600" height = "70">
@@ -403,57 +403,83 @@ function fnSubmit() {
 							<tr>
                             <td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Exchange rates table -->
-								<table cellSpacing="0" cellPadding="2" vAlign="top" align="left" width="604">
+								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="450">
+									<tr bgcolor="eeeeee">
+										<td align="center" width="3">
+											<input type="checkbox" name="checkAll" onclick="checkall()">
+										</td>
+										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
+										</td>
+										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
+										</td>
+										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn> Source Currency Code</digi:trn></b>
+										</td>
+										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn>Source Currency Name</digi:trn></b>
+										</td>
+										<td align="center" width="80" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
+										</td>
+										<td align="center" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b>
+										</td>
+									</tr>
+									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
+									<tr bgcolor="#f4f4f2">
+										<td colspan="5" align="center">
+											<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
+										</td>
+									</tr>
+									</c:if>
+									<% int index = 0; %>
+									<c:if test="${!empty aimCurrencyRateForm.currencyRates}">
+									<c:forEach var="cRates" items="${aimCurrencyRateForm.currencyRates}">
+									<%
+									if (index%2 == 0) { %>
+									<tr class="rowNormal">
+									<% } else { %>
+									<tr class="rowAlternate">
+									<% }
+									index++;%>
+										<td align="center" width="3">
+											<html:multibox property="selectedRates">
+												<c:out value="${cRates.id}"/>
+											</html:multibox>
+										</td>
+										<td align="left">
+                                          <digi:trn>${cRates.currencyCode}</digi:trn>
+										</td>
+										<td align="left">
+											<c:out value="${cRates.currencyName}"/>
+										</td>
+										<td align="left">
+                                         	${cRates.fromCurrencyCode}
+										</td>
+										<td align="left">
+											<c:out value="${cRates.fromCurrencyName}"/>
+										</td>
+										<td align="center">
+											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
+											<c:out value="${cRates.exchangeRateDate}"/>
+											</a>
+										</td>
+										<td align="right" nowrap="nowrap">
+											<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
+										</td>
+									</tr>
+									</c:forEach>
+									</c:if>
+								</table>
 	
-										<td colspan="5">
-                                            <div style = "width:604px; height:20px; background-color:#999;">
-												 <div style = " float:left; width:25px;"><input type="checkbox" name="checkAll" onclick="checkall()"/></div>
-	                                             <div style = " float:left; width:130px;"><b><digi:trn key="aim:currCode">Code</digi:trn></b></div>
-											     <div style = " float:left; width:220px;"><b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b></div>
-												 <div style = " float:left; width:170px;"><b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b></div>
-												 <div style = " float:left; width:30px; "><b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b></div>              
-                                            </div>
-									       <div  style = " width:602px; float:left; overflow:auto; height:210px;  border:#999999 solid 1px; " >									
-											<table cellSpacing="0" cellPadding="2" vAlign="top" width="583" id="dataTable">
-											
-		
-											<c:if test="${empty aimCurrencyRateForm.currencyRates}">
-											<tr bgcolor="#f4f4f2">
-												<td colspan="5" align="center">
-													<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
-												</td>
-											</tr>
-											</c:if>
-									        
-											<c:if test="${!empty aimCurrencyRateForm.currencyRates}">
-											<c:forEach var="cRates" items="${aimCurrencyRateForm.currencyRates}">
-											
-											<tr >
-										
-												<td align="center" width="3">
-													<html:multibox property="selectedRates">
-														<c:out value="${cRates.id}"/>
-													</html:multibox>
-												</td>
-												<td align="left">
-		                                          <digi:trn key='aim:currency:${fn:replace(cRates.currencyCode, " ", "_")}'>${cRates.currencyCode}</digi:trn>
-												</td>
-												<td align="center" >
-													<c:out value="${cRates.currencyName}"/>
-												</td>
-												<td align="center">
-													<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
-													<c:out value="${cRates.exchangeRateDate}"/>
-													</a>
-												</td>
-												<td align="right" nowrap="nowrap">
-													<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
-												</td>
-											</tr>
-											</c:forEach>
-											</c:if>
-												
-										</table>
 									<script language="javascript">
 										setStripsTable("dataTable", "tableEven", "tableOdd");
 										setHoveredTable("dataTable", false);

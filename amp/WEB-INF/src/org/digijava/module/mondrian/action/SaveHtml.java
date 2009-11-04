@@ -22,6 +22,7 @@ import org.digijava.module.mondrian.query.MoConstants;
 import org.digijava.module.mondrian.query.QueryThread;
 
 import com.tonbeller.jpivot.mondrian.MondrianMdxQuery;
+import com.tonbeller.jpivot.mondrian.MondrianMember;
 import com.tonbeller.jpivot.mondrian.MondrianModel;
 import com.tonbeller.jpivot.tags.OlapModelProxy;
 
@@ -58,8 +59,11 @@ public class SaveHtml extends Action {
 						}
 					}
 				}
+				
 				for (int x = 0; x < mm.getMeasures().length; x++) {
-					Pattern p = Pattern.compile("\\["+mm.getMeasures()[x].getLabel()+"\\]");
+					MondrianMember momember = (MondrianMember) mm.getMeasures()[x];
+					String uniquename = momember.getUniqueName().substring(momember.getUniqueName().indexOf(".")+2,momember.getUniqueName().length()-1);
+					Pattern p = Pattern.compile("\\["+uniquename+"\\]");
 					Matcher m = p.matcher(result);
 					if (m.find()){
 						if (measures.length()>0){

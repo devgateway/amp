@@ -21,21 +21,27 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-									<tr><td>
+									<tr><td><field:display name="Regional Group" feature="Regional Group">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
 												id="regGroups" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+													<table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="3">
+															<td width="2%">
 																<html:multibox property="agencies.selRegGroups">
 																	<bean:write name="regGroups" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="49%">
 																<bean:write name="regGroups" property="name" />
+															</td>
+															<td width="49%">
+																<field:display name="Regional Group Department/Division"  feature="Regional Group">
+																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.regOrgToInfo(${regGroups.ampOrgId})"></html:text>
+																</field:display>
+																&nbsp;
 															</td>
 														</tr>
 													</table>
@@ -45,8 +51,8 @@
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<field:display name="Regional Group Add Button" feature="Regional Group">
-																	<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																<field:display name="Regional Group Add Button"  feature="Regional Group">
+																	<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
@@ -61,13 +67,12 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-
+										<field:display name="Regional Group Add Button" feature="Regional Group">
 										<logic:empty name="aimEditActivityForm" property="agencies.regGroups">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+											<table width="100%" bgcolor="#cccccc" cellSpacing="1" cellPadding="5">
 												<tr>
 													<td bgcolor="#ffffff">
-													<field:display name="Regional Group Add Button" feature="Regional Group">
-														<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+														<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														<%
 															selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 															selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");
@@ -78,9 +83,10 @@
 																compForm2.setDelegateClass("");
 															}
 														%>
-													</field:display>
 													</td>
 												</tr>
 											</table>
 										</logic:empty>
+										</field:display>
+									</field:display>
 									</td></tr>

@@ -39,6 +39,13 @@ function countryChanged() {
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
+
+	function woredaChanged() {
+		  document.aimThemeForm.fill.value = "woredaSelected";
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
+		  document.aimThemeForm.target = "_self";
+		  document.aimThemeForm.submit();
+	}
 	
 	function levelChanged() {
 		 
@@ -87,7 +94,7 @@ function countryChanged() {
 											<td align="left"><b><c:out value="${aimThemeForm.country}"></c:out></b></td>
 										</tr>
 									</c:if>
-									<c:if test="${aimThemeForm.locationLevelIndex==2 || aimThemeForm.locationLevelIndex==3}">
+									<c:if test="${aimThemeForm.locationLevelIndex>=2  &&  !empty aimThemeForm.regions}">
 										<tr>
 											<td align="right" width="50%"><digi:trn key="aim:selectRegion">Select Region</digi:trn></td>
 											<td align="left" width="50%">
@@ -100,7 +107,7 @@ function countryChanged() {
 											</td>
 										</tr>
 									</c:if>
-									<c:if test="${aimThemeForm.locationLevelIndex==3 &&  !empty aimThemeForm.zones }">
+									<c:if test="${aimThemeForm.locationLevelIndex>=3 &&  !empty aimThemeForm.zones }">
 										<tr>
 										<td align="right" width="50%"><digi:trn key="aim:selectZone">Select Zone</digi:trn></td>
 										<td align="left" width="50%">
@@ -112,11 +119,11 @@ function countryChanged() {
 											</html:select>
 										</td>
 									</tr>
-									<c:if test="${aimThemeForm.locationLevelIndex==3 &&  !empty aimThemeForm.woredas }">
+									<c:if test="${aimThemeForm.locationLevelIndex>=4 &&  !empty aimThemeForm.woredas }">
 									<tr>
 										<td align="right" width="50%"><digi:trn key="aim:selectWoreda">Select Woreda</digi:trn></td>
 										<td align="left" width="50%">
-											<html:select property="impWoreda"  styleClass="inp-text" >
+											<html:select property="impWoreda" onchange="woredaChanged()" styleClass="inp-text" >
 												<html:option value="-1">Select Woreda</html:option>
 												<logic:notEmpty name="aimThemeForm" property="woredas">
 													<html:optionsCollection name="aimThemeForm" property="woredas"value="id" label="name" />

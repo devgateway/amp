@@ -32,12 +32,13 @@ public class AmpFundingDetail implements Serializable {
 	private AmpOrganisation reportingOrgId;
 	private AmpFunding ampFundingId;
 	private Double fixedExchangeRate;
+	private AmpCurrency fixedRateBaseCurrency;
 	private Boolean disbursementOrderRejected;
 
 	private String expCategory;
 	private String disbOrderId;
 	private IPAContract contract;
-	private BigDecimal transactionAmountInUSD;
+	private Double transactionAmountInBaseCurrency;
 
 	public AmpFundingDetail() {
 	}
@@ -74,13 +75,21 @@ public class AmpFundingDetail implements Serializable {
 
 	}
 
-	public BigDecimal getTransactionAmountInUSD() {
-		return transactionAmountInUSD;
-	}
+       /**
+		 * @return the transactionAmountInBaseCurrency
+		 */
+		public Double getTransactionAmountInBaseCurrency() {
+			return transactionAmountInBaseCurrency;
+		}
 
-	public void setTransactionAmountInUSD(BigDecimal transactionAmountInUSD) {
-		this.transactionAmountInUSD = transactionAmountInUSD;
-	}
+
+		/**
+		 * @param transactionAmountInBaseCurrency the transactionAmountInBaseCurrency to set
+		 */
+		public void setTransactionAmountInBaseCurrency(
+				Double transactionAmountInBaseCurrency) {
+			this.transactionAmountInBaseCurrency = transactionAmountInBaseCurrency;
+		}
 
 	public IPAContract getContract() {
 		return contract;
@@ -349,5 +358,21 @@ public class AmpFundingDetail implements Serializable {
 	public Boolean getDisbursementOrderRejected() {
 		return disbursementOrderRejected;
 	}
+
+
+		/**
+		 * @return the fixedRateBaseCurrency
+		 */
+		public AmpCurrency getFixedRateBaseCurrency() {
+			return fixedRateBaseCurrency;
+		}
+
+
+		/**
+		 * @param fixedRateBaseCurrency the fixedRateBaseCurrency to set
+		 */
+		public void setFixedRateBaseCurrency(AmpCurrency fixedRateBaseCurrency) {
+			this.fixedRateBaseCurrency = fixedRateBaseCurrency;
+		}
 
 }

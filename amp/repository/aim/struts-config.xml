@@ -76,6 +76,7 @@
     <form-bean name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" />
     <form-bean name="aimViewSectorForm" type="org.digijava.module.aim.form.AddSectorForm" />
     <form-bean name="aimCurrencyForm" type="org.digijava.module.aim.form.CurrencyForm" />
+    <form-bean name="aimSelectFilteredCurrencyRatesForm" type="org.digijava.module.aim.form.SelectFilteredCurrencyRatesForm" />
     <form-bean name="aimAddCurrencyForm" type="org.digijava.module.aim.form.AddCurrencyForm" />
     <form-bean name="aimSearchSectorForm" type="org.digijava.module.aim.form.SearchSectorForm" />
     <form-bean name="aimWorkspaceForm" type="org.digijava.module.aim.form.WorkspaceForm" />
@@ -583,12 +584,12 @@
     </action>
     <action name="aimSurveyForm" path="/aim/getSurveyList" scope="request" type="org.digijava.module.aim.action.GetSurveyList" validate="false" />
     <action name="aimEditSurveyForm" path="/aim/getSurvey" scope="session" type="org.digijava.module.aim.action.GetSurvey" validate="false" />
-    <action name="aimEditActivityForm" path="/aim/editSurveyList" scope="session" type="org.digijava.module.aim.action.EditSurveyList" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=editSurveyList" />
-      <forward name="edit" path="/aim/editSurvey.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
-    </action>
+<!--    <action name="aimEditActivityForm" path="/aim/editSurveyList" scope="session" type="org.digijava.module.aim.action.EditSurveyList" validate="false">-->
+<!--      <forward name="forward" path="/showLayout.do?layout=editSurveyList" />-->
+<!--      <forward name="edit" path="/aim/editSurvey.do" />-->
+<!--      <forward name="index" path="/aim/index.do" redirect="true" />-->
+<!--      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />-->
+<!--    </action>-->
     <action name="aimEditActivityForm" path="/aim/editSurvey" scope="session" type="org.digijava.module.aim.action.EditSurvey" validate="false">
       <forward name="forward" path="/showLayout.do?layout=editSurvey" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -610,6 +611,9 @@
 		<forward name="forward" path="/showLayout.do?layout=view/viewParisIndicatorPopupFilter" />
     </action>
     
+    <action name="aimSelectFilteredCurrencyRatesForm" path="/aim/selectFilteredRates" scope="request" type="org.digijava.module.aim.action.SelectFilteredCurrencyRates" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=selectFilteredRates" />
+    </action>
     <action name="aimCurrencyForm" path="/aim/changeCurrencyStatus" scope="session" type="org.digijava.module.aim.action.ChangeCurrencyStatus" validate="false">
       <forward name="forward" path="/currencyManager.do" redirect="true" />
     </action>
@@ -1107,6 +1111,7 @@
       <forward name="addActivityStep11" path="/showLayout.do?layout=addActivityStep11" />
       <forward name="addActivityStep12" path="/showLayout.do?layout=addActivityStep12" />
       <forward name="addActivityStep13" path="/showLayout.do?layout=addActivityStep13" />
+      <forward name="addActivityStep17" path="/showLayout.do?layout=editSurveyList" />
       <forward name="preview" path="/showLayout.do?layout=previewActivity" />
       <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />

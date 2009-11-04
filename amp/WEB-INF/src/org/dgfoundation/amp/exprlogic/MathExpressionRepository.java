@@ -29,13 +29,13 @@ public class MathExpressionRepository {
 
 	public static final String CUMULATIVE_DISBURSEMENT = "cumulativeDisbursement";
 
-	public static final String EXECUTION_RATE = "buildExecutionRate";
+	public static final String CUMULATIVE_EXECUTION_RATE = "cumulativeExecutionRate";
 
 	public static final String PROJECT_PERIOD = "projectPeriod";
 
 	public static final String OVERAGE = "overage";
 
-	public static final String DISBURSEMENT_RADIO = "disbursmentRatio";
+	public static final String PERCENTAGE_DISBURSEMENT = "percentageDisbursements";
 
 	public static final String AVERAGE_SIZE_DISBURSEMENT = "averageSizeofDisbursements";
 
@@ -55,7 +55,27 @@ public class MathExpressionRepository {
 
 	public static final String UNCOMMITED_CUMULATIVE_BALANCE = "uncommitedCumulativeBalance";
 
+	public static final String UNDISBURSED_BALANCE = "undisbursedBalance";
+
+	public static final String UNCOMMITED_BALANCE = "uncommitedBalance";
+
 	public static final String NUMBER_OF_PROJECTS = "numberOfProjects";
+
+	public static final String COSTING_GRAND_TOTAL = "grandTotalCost";
+
+	public static final String EXECUTION_RATE = "executionRate";
+
+	/** NIGER COLUMNS */
+
+	public static final String PRIOR_ACTUAL_DISBURSEMENT = "priorActualDisbursements";
+
+	public static final String CURRENT_MONTH_DISBURSEMENT = "currentMonthDisbursements";
+
+	public static final String CUMULATED_DISBURSEMENT = "cumulatedDisbursements";
+
+	public static final String CONSUMPTION_RATE = "consumptionRate";
+
+	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENT = "selectedYearPlannedDisbursement";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -73,20 +93,33 @@ public class MathExpressionRepository {
 		buildActualCommitmentsVariance();
 		buildCumulativeCommitment();
 		buildCumulativeDisbursement();
-		buildExecutionRate();
+		buildCumulativeExecutionRate();
 		buildProjectPeriod();
 		buildOverage();
-		buildDisbursementRatio();
+		buildPercentageDisbursement();
 		buildCountActualCommitments();
 		buildCountActualDisbursement();
 		buildCountPlannedCommitments();
 		buildCountPlannedDisbursement();
 		buildAverageSizeofDisbursements();
-		buildAverageDisbursementRate();
+
 		buildProjectAgeRatio();
 		buildUndisbursedCumulativeBalance();
 		buildUncommitedCumulativeBalance();
 		buildNumberOfProject();
+		buildCostingGrandTotal();
+		buildExecutionRate();
+		buildAverageDisbursementRate();
+
+		buildUncommitedBalance();
+		buildUndisbursedBalance();
+
+		/** Niger Columns **/
+		buildPriorActualDisbursements();
+		buildCurrentMonthDisbursements();
+		buildCumulatedDisbursements();
+		buildConsumptionRate();
+		buildSelectdYearOfPlannedDisbursements();
 	}
 
 	/**
@@ -95,10 +128,8 @@ public class MathExpressionRepository {
 	private static void buildOverageProjects() {
 		try {
 			// subtract PROPOSED_COMPLETION_DATE_VALUE to CURRENT_DATE_VALUE
-			MathExpression oper = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
-			// get the result in days
-			MathExpression oper2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_DOWN, oper, new BigDecimal(1000 * 60 * 60 * 24));
-			expresions.put(OVERAGE_PROJECT, oper2);
+			MathExpression oper = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
+			expresions.put(OVERAGE_PROJECT, oper);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -199,13 +230,14 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Execution rate = (Cumulative Disbursement/ Cumulative Commitment)*100
+	 * Cumulative Execution Rate = (Cumulative Disbursement / Cumulative
+	 * Commitment) * 100
 	 */
-	private static void buildExecutionRate() {
+	private static void buildCumulativeExecutionRate() {
 		try {
 			MathExpression divideDisbursementByCommitment = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_COMMITMENT);
 			MathExpression multiplyBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideDisbursementByCommitment, new BigDecimal(100));
-			expresions.put(EXECUTION_RATE, multiplyBy100);
+			expresions.put(CUMULATIVE_EXECUTION_RATE, multiplyBy100);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -236,14 +268,14 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * (Actual Disbursement affected by all filters / Actual Disbursement of the
-	 * activity no affected by filters and percentages (overall total)) * 100
+	 * Percentage Of Total Disbursements (Actual Disbursement affected by all
+	 * filters / Actual Disbursement o affected by percentages
 	 */
-	private static void buildDisbursementRatio() {
+	private static void buildPercentageDisbursement() {
 		try {
-			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.ACTUAL_DISBURSEMENT);
 			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
-			expresions.put(DISBURSEMENT_RADIO, x2);
+			expresions.put(PERCENTAGE_DISBURSEMENT, x2);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -330,13 +362,15 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Average disbursement rate = Execution rate / Number of activities
-	 * (filtered)
+	 * Average Disbursement Cumulative Disb/Cumulative Commit * 100 / Number of
+	 * Activities (filtered)
 	 */
 	private static void buildAverageDisbursementRate() {
 		try {
-			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.SUM_OFF_RESULTS, ArConstants.COUNT_PROJECTS);
-			expresions.put(AVERAGE_DISBURSEMENT_RATE, x1);
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_COMMITMENT);
+			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100));
+			MathExpression x3 = new MathExpression(MathExpression.Operation.DIVIDE, x2, ArConstants.COUNT_PROJECTS);
+			expresions.put(AVERAGE_DISBURSEMENT_RATE, x3);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -356,8 +390,7 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Uncommited Cumulative Balance = Cumulative Commitment - Cumulative
-	 * Disbursement
+	 * Proposed project cost - Cummalative Commitments
 	 */
 	private static void buildUncommitedCumulativeBalance() {
 		try {
@@ -369,13 +402,131 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Number Of Projects = Count Of Activities under the current hierarchy
+	 * Undisbursed Balance = Actual Commitments (depending on filter) - Actual
+	 * Disbursements (dependent on filter).
 	 * 
+	 */
+	private static void buildUndisbursedBalance() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_COMMITMENT_FILTERED, ArConstants.ACTUAL_DISBURSEMENT_FILTERED);
+			expresions.put(UNDISBURSED_BALANCE, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Uncommitted Balance = Proposed project cost - Actual Commitments
+	 * (dependent on the filter)
+	 * 
+	 */
+	private static void buildUncommitedBalance() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PROPOSED_COST, ArConstants.ACTUAL_COMMITMENT_FILTERED);
+			expresions.put(UNCOMMITED_BALANCE, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Number Of Projects = Count Of Activities under the current hierarchy
 	 */
 	private static void buildNumberOfProject() {
 		try {
 			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COUNT_PROJECTS, new BigDecimal(1));
 			expresions.put(NUMBER_OF_PROJECTS, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Costing Grand Total value
+	 */
+	private static void buildCostingGrandTotal() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COSTING_GRAND_TOTAL, new BigDecimal(1));
+			expresions.put(COSTING_GRAND_TOTAL, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * (ACTUAL_DISBURSEMENT / PLANNED_DISBURSEMENT_FILTERED) * 100
+	 */
+	private static void buildExecutionRate() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.PLANNED_DISBURSEMENT_FILTERED);
+			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
+			expresions.put(EXECUTION_RATE, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Sum of Actual Disbursements of the current year (Not including the
+	 * current month)
+	 */
+	private static void buildPriorActualDisbursements() {
+		try {
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, new BigDecimal(1));
+			expresions.put(PRIOR_ACTUAL_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Sum of Actual Disbursements of the current month
+	 */
+	private static void buildCurrentMonthDisbursements() {
+		try {
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, new BigDecimal(1));
+			expresions.put(CURRENT_MONTH_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Cumulated Disbursements: Prior Actual Disbursements + Current Month
+	 * Disbursements
+	 */
+	private static void buildCumulatedDisbursements() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH);
+			expresions.put(CUMULATED_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 *Consumption Rate (Cumulated Disbursements of Selected year / Selected Year of Planned Disbursements) * 100
+	 */
+	private static void buildConsumptionRate() {
+		try {
+
+			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR);
+			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
+			expresions.put(CONSUMPTION_RATE, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Current Year Planned Disbursements
+	 */
+	private static void buildSelectdYearOfPlannedDisbursements() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, new BigDecimal(1));
+			expresions.put(SELECTED_YEAR_PLANNED_DISBURSEMENT, m);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -388,6 +539,9 @@ public class MathExpressionRepository {
 	 * @return
 	 */
 	public static MathExpression get(String key) {
+		if (expresions.get(key) == null) {
+			logger.error("Invalid Expression Key :" + key);
+		}
 		return expresions.get(key);
 	}
 }

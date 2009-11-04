@@ -108,6 +108,7 @@ public class AddEditData
         }
         if(event!=null && event.equals("addIndValue")){
             AmpPrgIndicatorValue prgIndVal = getPrgIndicatorValue();
+            prgIndVal.setValAmount(new Double(0));
             indValues.add(prgIndVal);
             themeForm.setPrgIndValues(indValues);
         }else if(event!=null && event.equals("delIndValue")){

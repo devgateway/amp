@@ -371,9 +371,19 @@
 		<table width="98%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff" >
 			<tr>
 				<td width="100%" align="center">
-					<html:button styleClass="dr-menu" value="Close" onclick="return hidePLogframe()" property="closeButton"/>
+					<c:set var="translation">
+							<digi:trn key='aim:boutonclose'>Close</digi:trn>
+						</c:set>
+
+					<html:button styleClass="dr-menu" value="${translation}" onclick="return hidePLogframe()" property="closeButton"/>
 						&nbsp;&nbsp;&nbsp;
-					<html:button styleClass="dr-menu" value="Print" onclick="return window.print()" property="printButton"/>&nbsp;&nbsp;
+
+                          <c:set var="translation">
+							<digi:trn key='aim:boutonPrint'>Print</digi:trn>
+						</c:set>
+
+
+					<html:button styleClass="dr-menu" value="${translation}" onclick="return window.print()" property="printButton"/>&nbsp;&nbsp;
 				</td>
 			</tr>
 		</table>

@@ -80,6 +80,12 @@ public class AmpARFilter extends PropertyListable {
 	private Set sectors = null;
 	private Set selectedSectors = null;
 	
+	private String CRISNumber;
+	private String budgetNumber;
+	
+	@PropertyListableIgnore
+	private Integer computedYear;
+	
 	@PropertyListableIgnore
 	private Collection history = null;
 	@PropertyListableIgnore
@@ -641,7 +647,7 @@ public class AmpARFilter extends PropertyListable {
 				case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
 					actStatusValue.append(" (approval_status='edited' and draft <>1)");break;
 				case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
-					actStatusValue.append(" (approval_status='started' and draft=1) ");break;
+					actStatusValue.append(" (approval_status in ('started', 'startedapproved') and draft=1) ");break;
 				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
 					actStatusValue.append(" (approval_status='started' and draft<>1)");break;
 				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
@@ -681,11 +687,7 @@ public class AmpARFilter extends PropertyListable {
 		String DONOR_TYPE_FILTER	= "SELECT amp_activity_id FROM v_donor_type WHERE org_type_id IN ("
 			+ Util.toCSString(donorTypes) + ")";
 
-		String DONOR_GROUP_FILTER = "SELECT aa.amp_activity_id "
-				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_group grp, amp_organisation og  "
-				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
-				+ "AND grp.amp_org_grp_id =  og.org_grp_id AND og.amp_org_id = aor.organisation "
-				+ "AND grp.amp_org_grp_id IN ("
+		String DONOR_GROUP_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("
 				+ Util.toCSString(donorGroups) + ")";
 
 		String EXECUTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_executing_agency v  "
@@ -928,6 +930,7 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
+		logger.info(this.generatedFilterQuery);
 		
 		if(draft){
 			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
@@ -1561,5 +1564,29 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setAmountinthousand(boolean amountinthousand) {
 		this.amountinthousand = amountinthousand;
+	}
+	
+	public String getCRISNumber() {
+		return CRISNumber;
+	}
+
+	public void setCRISNumber(String number) {
+		CRISNumber = number;
+	}
+
+	public String getBudgetNumber() {
+		return budgetNumber;
+	}
+
+	public void setBudgetNumber(String budgetNumber) {
+		this.budgetNumber = budgetNumber;
+	}
+
+	public Integer getComputedYear() {
+		return computedYear;
+	}
+
+	public void setComputedYear(Integer computedYear) {
+		this.computedYear = computedYear;
 	}
 }

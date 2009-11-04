@@ -32,7 +32,6 @@ public class AmpFunding implements Serializable
 	private Set fundingDetails ;
 	private Set<AmpFundingMTEFProjection> mtefProjections;
 //	private AmpTermsAssist ampTermsAssistId ;
-	private AmpCategoryValue typeOfAssistance;
 	private Set closingDateHistory;
 	
 	/*
@@ -44,8 +43,10 @@ public class AmpFunding implements Serializable
 	
 	private ArrayList <Boolean>activeList;
 	//private AmpModality modalityId;
-	private AmpCategoryValue financingInstrument;
 	
+	private AmpCategoryValue typeOfAssistance;
+	private AmpCategoryValue financingInstrument;
+	private AmpCategoryValue fundingStatus;
 	
 	//private Set survey;
 	
@@ -399,6 +400,20 @@ public class AmpFunding implements Serializable
 	 */
 	public void setDonorObjective(String donorObjective) {
 		this.donorObjective = donorObjective;
+	}
+
+	/**
+	 * @return the fundingStatus
+	 */
+	public AmpCategoryValue getFundingStatus() {
+		return fundingStatus;
+	}
+
+	/**
+	 * @param fundingStatus the fundingStatus to set
+	 */
+	public void setFundingStatus(AmpCategoryValue fundingStatus) {
+		this.fundingStatus = fundingStatus;
 	}
 	
 	

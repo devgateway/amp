@@ -20,6 +20,14 @@
 
 <script language="Javascript">
 
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	document.aimEditSurveyForm.action = "<%=addUrl%>~pageId=1~step=17~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimEditSurveyForm.target = "_self";
+	document.aimEditSurveyForm.submit();
+}
+
 <!--
 
 	function getSurvey() {

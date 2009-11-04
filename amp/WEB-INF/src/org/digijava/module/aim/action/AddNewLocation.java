@@ -4,10 +4,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeException;
 import org.digijava.module.aim.form.NewAddLocationForm;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -24,6 +29,8 @@ public class AddNewLocation extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         
+    	ActionErrors errors		= new ActionErrors();
+    	
         NewAddLocationForm addRegForm = (NewAddLocationForm) form;
         if (addRegForm.getEvent().equals("add")) {
             addRegForm.setCode(null);
@@ -68,7 +75,17 @@ public class AddNewLocation extends Action {
                 location.setDescription(addRegForm.getDescription());
                 location.setGsLat(addRegForm.getGsLat());
                 location.setGsLong(addRegForm.getGsLong());
-                LocationUtil.saveLocation(location);
+                
+                try {
+                	LocationUtil.saveLocation(location);
+                }
+                catch (DuplicateLocationCodeException e) {
+                	errors.add("title" ,  
+                			new ActionError("error.aim.addLocation.duplicateCode", TranslatorWorker.translateText("Duplicate", request) + " " +  TranslatorWorker.translateText(e.getCodeType(), request)) 
+                	);
+					this.saveErrors(request, errors);
+					return mapping.findForward("addEdit");
+				}
 
                 return mapping.findForward("added");
 

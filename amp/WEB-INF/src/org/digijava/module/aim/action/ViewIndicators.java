@@ -111,24 +111,37 @@ public class ViewIndicators
 			}
 		}
          	 
- 
-        switch(allIndForm.getSortBy()) {
-            case 0: {
-                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
-                break;
-            }
-            case 1: {
-                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorComparator());
-                break;
-            }
-////            case 2:{
-////                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanTypeComparator());
-////                break;
-////            }
-            default:{
-                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
-            }
+        if(allIndForm.getSortBy()!=null){
+        	if(allIndForm.getSortBy().equalsIgnoreCase("nameAsc")){
+        		 Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
+        	}else if(allIndForm.getSortBy().equalsIgnoreCase("nameDesc")){
+        		Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameDescendingComparator());
+        	}else if(allIndForm.getSortBy().equalsIgnoreCase("sectAsc")){
+        		Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorComparator());
+        	}else if(allIndForm.getSortBy().equalsIgnoreCase("sectDesc")){
+        		Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorDescendingComparator());
+        	}
+        }else{
+        	Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
         }
+        
+//        switch(allIndForm.getSortBy()) {
+//            case 0: {
+//                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
+//                break;
+//            }
+//            case 1: {
+//                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorComparator());
+//                break;
+//            }
+//////            case 2:{
+//////                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanTypeComparator());
+//////                break;
+//////            }
+//            default:{
+//                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
+//            }
+//        }
         
         
         allIndForm.setAllIndicators(allInds); 

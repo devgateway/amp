@@ -53,6 +53,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -95,6 +96,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
@@ -1415,12 +1417,16 @@ public class DbUtil {
         }
 
         try {
+        	String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        	if ( baseCurr == null )
+        		baseCurr	= "USD";
+        	
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
             queryString = "select f.thousandsTransactionAmount,"
-                + "f.transactionDate,f.ampCurrencyId, f.fixedExchangeRate from "
+                + "f.transactionDate,f.ampCurrencyId, f.fixedExchangeRate, f.fixedRateBaseCurrency from "
                 + AmpFundingDetail.class.getName()
-                + " f where (f.ampFundingId=:ampFundingId) "
+                + " f left outer join f.fixedRateBaseCurrency where (f.ampFundingId=:ampFundingId) "
                 + " and (f.transactionType=:trsType) "
                 + " and (f.adjustmentType=:adjType) order by f.transactionDate ";
             q = session.createQuery(queryString);
@@ -1428,6 +1434,20 @@ public class DbUtil {
             q.setParameter("trsType", trsType, Hibernate.INTEGER);
             q.setParameter("adjType", adjType, Hibernate.INTEGER);
             c = q.list();
+            
+            if ( c != null ) {
+            	Iterator<Object[]> iter	= c.iterator();
+            	while ( iter.hasNext() ) {
+            		Object [] details	= iter.next();
+            			Double fixedRate						= (Double)details[3];
+            			AmpCurrency fixedCurrency		= (AmpCurrency)details[4];
+            			String fixedCurrCode					= fixedCurrency!=null ? fixedCurrency.getCurrencyCode():"USD";
+            			if ( fixedRate != null && !baseCurr.equals(fixedCurrCode) ) {
+            				details[3]	= null;
+            			}
+            	}
+            }
+            
         } catch (Exception ex) {
             logger.error("Unable to get quarterly data from database", ex);
 
@@ -2830,7 +2850,7 @@ public class DbUtil {
                     else{
                         sess.save(contact);
                     }
-                   
+
                 }
             }
 
@@ -2845,7 +2865,7 @@ public class DbUtil {
                     logger.error("rollback() failed", ex);
                 }
             }
-            throw new DgException(e);
+              throw new DgException(e);
         }
     }
 

@@ -804,7 +804,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	}
 	
 	public static boolean equalsCategoryValue(AmpCategoryValue value, HardCodedCategoryValue hcValue){
-			if ( value != null && value.getValue().equals( hcValue.getValueKey() ) )
+			if ( value != null && value.getAmpCategoryClass().getKeyName().equals( hcValue.getCategoryKey() ) && value.getValue().equals( hcValue.getValueKey() ) )
 				return true;
 			else 
 				return false;

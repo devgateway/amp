@@ -1,5 +1,8 @@
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.form.ThemeForm;
@@ -34,6 +38,67 @@ public class SelectLocationForIndicatorValue extends Action {
             themeForm.setParentIndex(Long.valueOf(strIndex));
         }
 
+	        String iso= FeaturesUtil.getDefaultCountryIso();
+	        Long countryId;
+	        Country ampGS=null;
+	        String CountryName = null; 
+	        if(iso!=null){
+	        	themeForm.setDefaultCountryIsSet(true);                 
+	            Collection<Country> b = FeaturesUtil.getDefaultCountry(iso);
+	            Iterator<Country> itr2 = b.iterator();
+	            while (itr2.hasNext()) {
+	            ampGS = (Country) itr2.next();
+	            CountryName = ampGS.getCountryName();            
+	          }
+	
+	          if (themeForm.getFill() == null || themeForm.getFill().trim().length() == 0) {
+	        	  themeForm.setCountry(CountryName);
+	        	  themeForm.setImpCountry(iso);
+	        	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+	          }
+	          else {
+	            if (themeForm.getFill().equals("zone")) {
+	              if (themeForm.getImpRegion() != null) {
+                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
+	            	  themeForm.setZones(selectedRegion.getChildLocations());
+	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+	            	  themeForm.setImpZone(null);
+	//            	  themeForm.setImpMultiZone(null);
+	//            	  themeForm.setImpMultiWoreda(null);
+	            	  themeForm.setImpWoreda(null);                
+	              }
+	            }
+	            else if (themeForm.getFill().equals("woreda")) {
+	              if (themeForm.getImpZone() != null) {
+                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
+                     AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
+	            	  themeForm.setWoredas(selectedZone.getChildLocations());
+	            	  themeForm.setZones(selectedRegion.getChildLocations());
+	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+	            	  themeForm.setImpWoreda(null);
+	              }
+	            }
+	            else if (themeForm.getFill().equals("woredaSelected")) {
+	              if (themeForm.getImpWoreda() != null) {
+                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
+                     AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
+	            	  themeForm.setWoredas(selectedZone.getChildLocations());
+	            	  themeForm.setZones(selectedRegion.getChildLocations());
+	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+	            	  //themeForm.setImpWoreda(null);
+	              }
+		        }
+	          }
+	        }
+	        else{
+	        	themeForm.setDefaultCountryIsSet(false);
+	      }        
+	
+	        
+	
+	        if(themeForm.getAction() != null && themeForm.getAction().equalsIgnoreCase("add")) {
+
+
         AmpPrgIndicatorValue indValue = (AmpPrgIndicatorValue) themeForm.getPrgIndValues().get(themeForm.getParentIndex().intValue());
 
         Long[] id = themeForm.getUserSelectedLocs();
@@ -57,6 +122,7 @@ public class SelectLocationForIndicatorValue extends Action {
         themeForm.setLocation(null);
         themeForm.setLocationLevelIndex(null);
         themeForm.setAction(null);
+	    }
         return mapping.findForward("backToAddDataPage");
     }
 

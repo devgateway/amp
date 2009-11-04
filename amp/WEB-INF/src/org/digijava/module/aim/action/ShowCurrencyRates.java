@@ -29,7 +29,9 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyRateLoader;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
 
@@ -54,7 +56,9 @@ public class ShowCurrencyRates extends Action {
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
                 Boolean isFromAdminHome=crForm.isClean();
 
-
+        String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+        if ( baseCurrency == null )
+      	  baseCurrency			= "USD";
 
 		try {
 
@@ -72,7 +76,7 @@ public class ShowCurrencyRates extends Action {
 				logger.info("File name = " + crForm.getRatesFile());
 				Collection currRates = CurrencyRateLoader.getCurrencyRates(
 						crForm.getRatesFile());
-				CurrencyUtil.saveCurrencyRates(currRates);
+				CurrencyUtil.saveCurrencyRates(currRates, baseCurrency);
 				crForm.setDoAction("");
 				crForm.setAllRates(null);
 			}

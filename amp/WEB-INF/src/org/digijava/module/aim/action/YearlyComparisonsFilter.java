@@ -78,7 +78,7 @@ public class YearlyComparisonsFilter extends TilesAction	{
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
 			session.setAttribute("filterParams",fp);
-			formBean.setYears(YearUtil.getYears()); 
+			formBean.setYears(YearUtil.getYears());
 
 
 			Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp) ;

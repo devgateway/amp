@@ -35,21 +35,22 @@ public class Configuration {
 			// jboss-web.xml
 			// You need to have a JBoss instance running on localhost!
 			StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
-
+			HibernateClassLoader.HIBERNATE_CFG_XML = "/hibernate-test.xml";
+			
 			String repository = getProperties().getProperty("repository");
 			String path = this.getClass().getResource("/").getPath().replaceAll("/WEB-INF/classes/", repository);
-
+			
 			InitialContext ctx = new InitialContext();
 			DataSource src = (DataSource) ctx.lookup("java:comp/env/ampDS");
 			String databaseName = src.getConnection().getCatalog();
 
-			HibernateClassLoader.HIBERNATE_CFG_XML = "/hibernate-test.xml";
-
+			
+		
 			log.info("preparing hibernate configuration file");
 
 			String line;
 			StringBuffer sb = new StringBuffer();
-
+			//I had to make a direct connection due to remote exceptions after changing the connection pool manager
 			FileInputStream fis = new FileInputStream(this.getClass().getResource(HibernateClassLoader.HIBERNATE_CFG_XML).getFile());
 			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
 			while ((line = reader.readLine()) != null) {
@@ -60,7 +61,7 @@ public class Configuration {
 			BufferedWriter out = new BufferedWriter(new FileWriter(this.getClass().getResource(HibernateClassLoader.HIBERNATE_CFG_XML).getFile()));
 			out.write(sb.toString());
 			out.close();
-
+           
 			DigiConfigManager.initialize(path);
 			PersistenceManager.initialize(false);
 

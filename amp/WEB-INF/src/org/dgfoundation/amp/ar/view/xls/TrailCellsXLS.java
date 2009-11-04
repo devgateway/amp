@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -70,7 +71,14 @@ public class TrailCellsXLS extends XLSExporter {
 //			rowId.inc();
 //			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
-			HSSFCell cell = this.getCell(this.getHighlightedStyle(true));
+		
+			HSSFCellStyle hierarchyStyle;
+			if(grd.getLevelDepth()==2) 
+				hierarchyStyle = this.getHierarchyLevel1Style(true);
+			else hierarchyStyle=this.getHierarchyOtherStyle(true);
+			
+			
+			HSSFCell cell = this.getCell(hierarchyStyle);
 			
 			String modifiedName = (grd.getName()==null)?"":grd.getName();
 
@@ -104,20 +112,18 @@ public class TrailCellsXLS extends XLSExporter {
 			}
 			colId.inc();
 			Iterator i = grd.getTrailCells().iterator();
-			boolean first=true;
+			//the first column will be under the hierarchy cell
 			while (i.hasNext()) {
 				Cell element = (Cell) i.next();
 				if (element!=null){
 					element.invokeExporter(this);
-				}else{
-					if (!first){
-					HSSFCell cell2=this.getCell(getRegularStyle());
+				}else if (!metadata.getHideActivities()){
+					HSSFCell cell2=this.getCell(hierarchyStyle);
 					cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
 					cell2.setCellValue("");
 					colId.inc();
-					}
 				}
-			first=false;
+			
 			}
 			colId.reset();
 			rowId.inc();

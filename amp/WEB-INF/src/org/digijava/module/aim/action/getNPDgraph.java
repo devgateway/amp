@@ -216,6 +216,7 @@ public class getNPDgraph extends Action {
                            }
                          
                            // show data restrict to selected date range, here we choose target and base values.
+                           if (selectedYears!=null){
                         for (String selectedYear : selectedYears) {
                           
                             AmpIndicatorValue actValue = actualValues.get(selectedYear);
@@ -325,6 +326,8 @@ public class getNPDgraph extends Action {
                              dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
 
                         }
+                        	   
+                           }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         throw new AimException("Error creating dataset for graph.", ex);

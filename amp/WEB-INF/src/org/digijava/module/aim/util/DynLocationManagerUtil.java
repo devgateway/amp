@@ -27,6 +27,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -299,6 +300,7 @@ public class DynLocationManagerUtil {
 		}		
 	}
 	
+	@Deprecated
 	public static AmpCategoryValueLocations getLocationByName(String locationName, HardCodedCategoryValue hcLocationLayer) {
 		try {
 			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
@@ -314,6 +316,7 @@ public class DynLocationManagerUtil {
 	 * @param cvLocationLayer the AmpCategoryValue specifying the layer (level) of the location...like Country or Region
 	 * @return
 	 */
+	@Deprecated
 	public static AmpCategoryValueLocations getLocationByName(String locationName, AmpCategoryValue cvLocationLayer) {
 		Session dbSession										= null;
 		
@@ -344,6 +347,103 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
+	
+	public static AmpCategoryValueLocations getLocationByIso3(String locationIso3, HardCodedCategoryValue hcLocationLayer) {
+		try {
+			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
+			return getLocationByIso3(locationIso3, layer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * @param locationIso
+	 * @param cvLocationLayer the AmpCategoryValue specifying the layer (level) of the location...like Country or Region
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getLocationByIso3(String locationIso3, AmpCategoryValue cvLocationLayer) {
+		Session dbSession										= null;
+		
+		
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.iso3=:iso3)" ;
+			if ( cvLocationLayer != null ) {
+				queryString		+= " AND (loc.parentCategoryValue=:cvId) ";
+			}
+			Query qry			= dbSession.createQuery(queryString);
+			if ( cvLocationLayer != null) {
+				qry.setLong("cvId", cvLocationLayer.getId() );
+			}
+			qry.setString("iso3", locationIso3);
+			AmpCategoryValueLocations loc		= (AmpCategoryValueLocations) qry.uniqueResult();
+			return loc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return null;
+	}
+	
+	public static AmpCategoryValueLocations getLocationByName(String locationName, 
+			HardCodedCategoryValue hcLocationLayer, AmpCategoryValueLocations parentLocation) throws NullPointerException {
+		try {
+			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
+			return getLocationByName(locationName, layer, parentLocation);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public static AmpCategoryValueLocations getLocationByName(String locationName, 
+			AmpCategoryValue cvLocationLayer, AmpCategoryValueLocations parentLocation) throws NullPointerException,NonUniqueResultException {
+		Session dbSession										= null;
+		
+		if ( cvLocationLayer == null )
+			throw  new NullPointerException ("Value for Implementation Location cannot be null");
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.name=:name) " 
+				+ " AND (loc.parentCategoryValue=:cvId) ";
+			if ( parentLocation  == null ) {
+				queryString += "AND (loc.parentLocation is null) ";
+			}
+			else { 
+				queryString += "AND (loc.parentLocation=:parentLocationId) ";
+			}
+			Query qry			= dbSession.createQuery(queryString);
+			qry.setLong("cvId", cvLocationLayer.getId() );
+			qry.setString("name", locationName);
+			if ( parentLocation  != null )
+				qry.setLong	("parentLocationId", parentLocation.getId() );
+			
+			Collection<AmpCategoryValueLocations> locations		= qry.list();
+			if ( locations != null && locations.size() > 0 ) {
+				return locations.toArray(new AmpCategoryValueLocations[0])[0];
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return null;
+	}
+	
 	public static AmpCategoryValueLocations getLocationByIso(String locationIso, HardCodedCategoryValue hcLocationLayer) {
 		try {
 			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);

@@ -78,7 +78,6 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
@@ -92,7 +91,13 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
 import org.digijava.module.widget.helper.SectorHelper;
-
+import org.jfree.chart.axis.NumberAxis;
+import org.digijava.module.aim.util.SectorUtil;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.ui.TextAnchor;
 
 /**
  * Chart widgets util.
@@ -230,11 +235,17 @@ public class ChartWidgetUtil {
         renderer.setDrawBarOutline(false);
         renderer.setItemMargin(0);
         DecimalFormat formatter=FormatHelper.getDecimalFormat();
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}",formatter);
-        renderer.setBaseItemLabelsVisible(true);
-        renderer.setBaseItemLabelGenerator(labelGenerator);
-        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator("{2}",formatter));
-
+        NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
+        numberAxis.setNumberFormatOverride(format);
+        //This will expand ranges slightly so that points at the edge will move inside
+        //and number will not be cut by borders.
+        Range oldRange = numberAxis.getRange();
+        Range newRange = Range.expand(oldRange, 0.1, 0.1);
+        numberAxis.setRange(newRange);
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
+        renderer.setItemLabelsVisible(true);
+        renderer.setItemLabelGenerator(labelGenerator);
+        renderer.setPositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER,Math.PI/2 ));
         return chart;
     }
     
@@ -656,11 +667,23 @@ public class ChartWidgetUtil {
         
     public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
-        Font font8 = new Font(null, Font.BOLD, 12);
+        Font font12 = new Font(null, Font.BOLD, 12);
+    	Font font8 = new Font(null,Font.BOLD,8);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")", dataset, true, true, false);
-        chart.getTitle().setFont(font8);
+        String transTypeName="";
+        switch(filter.getTransactionType()){
+            case org.digijava.module.aim.helper.Constants.COMMITMENT: transTypeName="Commitment";break;
+            case org.digijava.module.aim.helper.Constants.DISBURSEMENT: transTypeName="Disbursement";break;
+        }
+        String transTypeNameTrn=TranslatorWorker.translateText(transTypeName,opt.getLangCode(),opt.getSiteId());
+
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+")", dataset, true, true, false);
+        chart.getTitle().setFont(font12);
+        if (opt.isShowLegend()) {
+            chart.getLegend().setItemFont(font12);
+        }
         PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelFont(font8);
         String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
@@ -686,14 +709,27 @@ public class ChartWidgetUtil {
        
        public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
      	JFreeChart chart = null;
-		Font font8 = new Font(null,Font.BOLD,12);
+        Font font12 = new Font(null, Font.BOLD, 12);
+        Font font8 = new Font(null, Font.BOLD, 8);
 		DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
-		chart=ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")",dataset, true, true,false);
-		chart.getTitle().setFont(font8);
+        String transTypeName = "";
+        switch (filter.getTransactionType()) {
+            case org.digijava.module.aim.helper.Constants.COMMITMENT:
+                transTypeName = "Commitment";
+                break;
+            case org.digijava.module.aim.helper.Constants.DISBURSEMENT:
+                transTypeName = "Disbursement";
+                break;
+        }
+        String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + ")", dataset, true, true, false);
+        chart.getTitle().setFont(font12);
 		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font8);		
+            chart.getLegend().setItemFont(font12);
 		}
         PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelFont(font8);
+
         String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
@@ -786,7 +822,7 @@ public class ChartWidgetUtil {
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
 		String oql ="select  actSec.ampActivitySectorId, "+
-                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
+                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInBaseCurrency)";
 		oql += " from ";
 		oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";

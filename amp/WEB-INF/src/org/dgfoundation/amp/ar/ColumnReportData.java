@@ -29,12 +29,20 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
  */
 public class ColumnReportData extends ReportData {
 	
+	/**
+	 * Returns the visible rows for the column report. 
+	 * Calculates the max number of visible rows for each column part of the column report
+	 * The visible rows of the column report is max
+	 * 
+	 */
     @Override
 	public int getVisibleRows() {
-    	    int ret=1; //one is for the title, one is for totals
+    	    int ret=0; //one was for the title/totals. now we are counting the title/totals only for summary report 
+    	    //if the report is summary then stop the processing here and return 1;
         	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
-    			return ret;
+    			return 1; // consider the subtotals/titles as rows 
 
+        	//compute the max for the underlying columns
     	    Iterator i=items.iterator();
     	    while (i.hasNext()) {
 				Column element = (Column) i.next();

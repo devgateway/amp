@@ -891,6 +891,7 @@ public class TeamMemberUtil {
 			String queryString = "select tm from " + AmpTeamMember.class.getName() +
 			  " tm where (tm.user=:user) order by ampTeam.name";
 			qry = session.createQuery(queryString);
+			qry.setCacheable(true);
 			qry.setLong("user",user.getId());
 			col = qry.list();
 		} catch (Exception e) {
@@ -1739,6 +1740,7 @@ public class TeamMemberUtil {
     			while ( iterMem.hasNext() ) {
     				AmpTeamMember mem	= (AmpTeamMember) iterMem.next();
     				if ( mem.getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    					//logger.info(act.getAmpActivityId());
     					iterMem.remove();
     				}
     			}

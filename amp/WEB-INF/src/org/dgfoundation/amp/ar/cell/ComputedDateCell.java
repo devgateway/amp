@@ -15,7 +15,12 @@ public class ComputedDateCell extends TextCell {
 		if ("".equalsIgnoreCase(result) || result==null){
 			result="0";
 		}
-		return FormatHelper.formatNumber(Double.parseDouble(result));
+		Double value=Double.parseDouble(result);
+		if (value > 0d) {
+			return FormatHelper.formatNumber(value);
+		}else{
+			return "";
+		}
 	}
 
 	@Override

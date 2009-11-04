@@ -168,6 +168,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private boolean add;  // added by Priyajith
 	private ArrayList<AmpCategoryValue> typesOfAssistance;
 	private ArrayList<AmpCategoryValue> modalities;
+	private ArrayList<AmpCategoryValue> fundingStatuses;
 
 	private Collection relOrgs;
 
@@ -729,16 +730,55 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 			return primarySectorMinistryContact;
 		}
 
+		/**
+		 * @return the primaryImplExecutingAgencyContact
+		 */
+		public AmpActivityContact getPrimaryImplExecutingAgencyContact() {
+			return primaryImplExecutingAgencyContact;
+		}
+
+		/**
+		 * @param primaryImplExecutingAgencyContact the primaryImplExecutingAgencyContact to set
+		 */
+		public void setPrimaryImplExecutingAgencyContact(
+				AmpActivityContact primaryImplExecutingAgencyContact) {
+			this.primaryImplExecutingAgencyContact = primaryImplExecutingAgencyContact;
+		}
+
+		/**
+		 * @param primarySectorMinistryContact the primarySectorMinistryContact to set
+		 */
 		public void setPrimarySectorMinistryContact(
 				AmpActivityContact primarySectorMinistryContact) {
 			this.primarySectorMinistryContact = primarySectorMinistryContact;
 		}
 
-		public AmpActivityContact getPrimaryImplExecutingAgencyContact() {
-			return primaryImplExecutingAgencyContact;
+		/**
+		 * @return the modalities
+		 */
+		public ArrayList<AmpCategoryValue> getModalities() {
+			return modalities;
 		}
 
-		public void setPrimaryImplExecutingAgencyContact(AmpActivityContact primaryImplExecutingAgencyContact) {
-			this.primaryImplExecutingAgencyContact = primaryImplExecutingAgencyContact;
+		/**
+		 * @param modalities the modalities to set
+		 */
+		public void setModalities(ArrayList<AmpCategoryValue> modalities) {
+			this.modalities = modalities;
 		}
+
+		/**
+		 * @return the fundingStatuses
+		 */
+		public ArrayList<AmpCategoryValue> getFundingStatuses() {
+			return fundingStatuses;
+		}
+
+		/**
+		 * @param fundingStatuses the fundingStatuses to set
+		 */
+		public void setFundingStatuses(ArrayList<AmpCategoryValue> fundingStatuses) {
+			this.fundingStatuses = fundingStatuses;
+		}
+
 }

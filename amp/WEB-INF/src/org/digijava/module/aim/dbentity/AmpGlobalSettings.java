@@ -67,7 +67,10 @@ public class AmpGlobalSettings implements Serializable {
 	public String getSection() {
 		return section;
 	}
-	
+	@Override
+	public String toString () {
+		return this.globalSettingsName;
+	}
 	
 	
 	

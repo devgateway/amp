@@ -1870,8 +1870,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Collection<AmpCurrency> validcurrencies;
 		private boolean dupFunding;
 		private String orgName;
-		private Long assistanceType = null;
-		private Long modality = null;
+		
+		private Long assistanceType = null;  // this is id of a category value from category Type Of Assistance
+		private Long modality = null; // this is id of a category value from category Financing Instrument
+		private Long fundingStatus = null; // this is id of a category value from category Funding Status
+		
 		private List<MTEFProjection> fundingMTEFProjections;
 		private List<KeyValue> availableMTEFProjectionYears;
 		private Collection projections;
@@ -2220,6 +2223,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.modality = modality;
 		}
 
+		/**
+		 * @return the fundingStatus
+		 */
+		public Long getFundingStatus() {
+			return fundingStatus;
+		}
+
+		/**
+		 * @param fundingStatus the fundingStatus to set
+		 */
+		public void setFundingStatus(Long fundingStatus) {
+			this.fundingStatus = fundingStatus;
+		}
+
 		public List<MTEFProjection> getFundingMTEFProjections() {
 			return fundingMTEFProjections;
 		}
@@ -2470,6 +2487,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 
 	public FundingOrganization getFundingOrganization(int index) {
+		if(getFunding().fundingOrganizations==null) return null;
 		int currentSize = getFunding().fundingOrganizations.size();
 		if (index >= currentSize) {
 			for (int i = 0; i <= index - currentSize; i++) {
@@ -3304,27 +3322,35 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private Long selConAgencies[];
 		private Collection<AmpOrganisation> conAgencies;
+		private HashMap<String, String> conOrgToInfo;
 
 		private Collection<AmpOrganisation> executingAgencies;
 		private Long selExAgencies[];
+		private HashMap<String, String> executingOrgToInfo;
 
 		private Collection<AmpOrganisation> impAgencies;
 		private Long selImpAgencies[];
+		private HashMap<String, String> impOrgToInfo;
 
 		private Collection<AmpOrganisation> regGroups;
 		private Long selRegGroups[];
+		private HashMap<String, String> regOrgToInfo;
 
 		private Collection<AmpOrganisation> reportingOrgs;
 		private Long selReportingOrgs[];
+		private HashMap<String, String> repOrgToInfo;
 
 		private Collection<AmpOrganisation> sectGroups;
 		private Long selSectGroups[];
+		private HashMap<String, String> sectOrgToInfo;
 
 		private Collection<AmpOrganisation> benAgencies;
 		private Long selBenAgencies[];
+		private HashMap<String, String> benOrgToInfo;
 
 		private Collection<AmpOrganisation> respOrganisations;
 		private Long selRespOrganisations[];
+		private HashMap<String, String> respOrgToInfo;
 
 		private int item;
 
@@ -3464,6 +3490,72 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selRespOrganisations = selRespOrganisations;
 		}
 
+		public HashMap<String, String> getConOrgToInfo() {
+			return conOrgToInfo;
+		}
+
+		public void setConOrgToInfo(HashMap<String, String> conOrgToInfo) {
+			this.conOrgToInfo = conOrgToInfo;
+		}
+
+		public HashMap<String, String> getExecutingOrgToInfo() {
+			return executingOrgToInfo;
+		}
+
+		public void setExecutingOrgToInfo(HashMap<String, String> executingOrgToInfo) {
+			this.executingOrgToInfo = executingOrgToInfo;
+		}
+
+		public HashMap<String, String> getImpOrgToInfo() {
+			return impOrgToInfo;
+		}
+
+		public void setImpOrgToInfo(HashMap<String, String> impOrgToInfo) {
+			this.impOrgToInfo = impOrgToInfo;
+		}
+
+		public HashMap<String, String> getRegOrgToInfo() {
+			return regOrgToInfo;
+		}
+
+		public void setRegOrgToInfo(HashMap<String, String> regOrgToInfo) {
+			this.regOrgToInfo = regOrgToInfo;
+		}
+
+		public HashMap<String, String> getRepOrgToInfo() {
+			return repOrgToInfo;
+		}
+
+		public void setRepOrgToInfo(HashMap<String, String> repOrgToInfo) {
+			this.repOrgToInfo = repOrgToInfo;
+		}
+
+		public HashMap<String, String> getSectOrgToInfo() {
+			return sectOrgToInfo;
+		}
+
+		public void setSectOrgToInfo(HashMap<String, String> sectOrgToInfo) {
+			this.sectOrgToInfo = sectOrgToInfo;
+		}
+
+		public HashMap<String, String> getBenOrgToInfo() {
+			return benOrgToInfo;
+		}
+
+		public void setBenOrgToInfo(HashMap<String, String> benOrgToInfo) {
+			this.benOrgToInfo = benOrgToInfo;
+		}
+
+		public HashMap<String, String> getRespOrgToInfo() {
+			return respOrgToInfo;
+		}
+
+		public void setRespOrgToInfo(HashMap<String, String> respOrgToInfo) {
+			this.respOrgToInfo = respOrgToInfo;
+		}
+
+		
+		
 	}
 
 	public class IndicatorME implements Serializable {
@@ -3819,6 +3911,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
             this.fundingCurrCode=null;
             this.regFundingPageCurrCode=null;
             this.funding=null;
+            this.issues=null;
 			step = "1";
 			reset = false;
 			steps = null;
@@ -3829,7 +3922,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 					cf.setValue(null);
 				}
 			}
-
+			if (this.costing !=null){
+				this.costing.allCosts = null;
+				this.costing.costs = null;
+				this.costing.overallContribution=null;
+				this.costing.overallCost = null;
+			}
 		}
 		if (this.getLocation().isLocationReset()) {
 			this.getLocation().reset(mapping, request);

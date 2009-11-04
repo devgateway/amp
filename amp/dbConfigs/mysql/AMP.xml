@@ -89,7 +89,7 @@
 			</Hierarchy>
 		</Dimension>
 		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
-			<Hierarchy hasAll="true" allMemberCaption="#All_Primary_Sectors#" allMemberName="All Primary Sectors" primaryKey="amp_activity_id">
+			<Hierarchy hasAll="true" allMemberCaption="#All_Primary_Sectors#" allMemberName="All Primary Sectors" primaryKey="amp_activity_id" caption="#Primary_Sector#">
 				<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
 				<Level name="Primary Sector" column="p_sectorname">
 				<NameExpression>

@@ -406,10 +406,11 @@ public class ResetAll extends Action
 					fund.setFundingId(System.currentTimeMillis());
 					//fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
 					fund.setTypeOfAssistance( ampFunding.getTypeOfAssistance() );
+					fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
+					fund.setFundingStatus(ampFunding.getFundingStatus());
 					fund.setFundingId(ampFunding.getAmpFundingId().intValue());
 					fund.setOrgFundingId(ampFunding.getFinancingId());
 					//fund.setModality(ampFunding.getModalityId());
-					fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 					fund.setConditions(ampFunding.getConditions());
 					Collection fundDetails = ampFunding.getFundingDetails();
 					Collection mtefProjections=ampFunding.getMtefProjections();

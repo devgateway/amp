@@ -48,7 +48,6 @@
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
@@ -81,7 +80,8 @@
 <feature:display module="Project ID and Planning" name="Identification"></feature:display> 
 <feature:display module="Project ID and Planning" name="Location"></feature:display> 
 <feature:display module="Project ID and Planning" name="Planning"></feature:display> 
-<feature:display module="Project ID and Planning" name="Sectors"></feature:display> 
+<feature:display module="Project ID and Planning" name="Sectors"></feature:display>
+<feature:display module="Project ID and Planning" name="Budget"></feature:display> 
 <feature:display module="Report Types" name="Contribution Report"></feature:display> 
 <feature:display name="About AMP" module="HELP"></feature:display> 
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
@@ -105,8 +105,6 @@
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
-<feature:display name="Budget" module="Project ID and Planning"></feature:display> 
-<feature:display name="Budget" module="Project Id And Planning"></feature:display> 
 <feature:display name="Calendar" module="Calendar"></feature:display> 
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
@@ -128,7 +126,6 @@
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Identification" module="Project ID and Planning"></feature:display> 
 <feature:display name="Implementing Agency" module="Organizations"></feature:display> 
 <%--<feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display> --%>
 <feature:display name="Results Dashboard Data" module="WIDGETS"></feature:display> 
@@ -136,7 +133,6 @@
 <feature:display name="Issues" module="Issues"></feature:display> 
 <feature:display name="Job Manager" module="ADMIN"></feature:display> 
 <feature:display name="Level Links" module="Activity Levels"></feature:display> 
-<feature:display name="Location" module="Project ID and Planning"></feature:display> 
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display> 
@@ -161,7 +157,6 @@
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
 <feature:display name="Planned Disbursements" module="Measures"></feature:display> 
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
-<feature:display name="Planning" module="Project ID and Planning"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
 <feature:display name="Program" module="Program"></feature:display> 
@@ -177,7 +172,6 @@
 <feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Sectors" module="Project ID and Planning"></feature:display> 
 <feature:display name="Support Request Form" module="HELP"></feature:display> 
 <feature:display name="Table Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Target Value" module="PI Reports"></feature:display> 
@@ -202,7 +196,6 @@
 <field:display feature="Identification" name="Objective Objectively Verifiable Indicators"></field:display> 
 <field:display feature="Identification" name="Objective Verification"></field:display> 
 <field:display feature="Identification" name="Objective"></field:display> 
-<field:display feature="Identification" name="Objectives"></field:display> 
 <field:display feature="Identification" name="Organizations and Project ID"></field:display> 
 <field:display feature="Identification" name="Project Title"></field:display> 
 <field:display feature="Identification" name="Purpose"></field:display> 
@@ -300,6 +293,7 @@
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency  Additional Info"  feature="Beneficiary Agency"></field:display>
 <field:display name="Cancel Button" feature="Admin - Component Type"></field:display> 
 <field:display name="Cancel Button" feature="Admin - Component"></field:display> 
 <field:display name="Cancel button" feature="Create Message Form"></field:display> 
@@ -351,6 +345,7 @@
 <field:display name="Contracting Agency Add Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency Remove Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 
+<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
 <field:display name="Contracting Contractor Name" feature="Contracting"></field:display> 
@@ -463,6 +458,7 @@
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Additional Info"  feature="Executing Agency"></field:display>
 <field:display name="External Financing" feature="Admin NPD"></field:display> 
 <field:display name="FY" feature="Budget"></field:display> 
 <field:display name="Final Date for Contracting" feature="Planning"></field:display> 
@@ -472,7 +468,8 @@
 <field:display name="Funding Organization Id" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Name" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization" feature="Funding Information"></field:display> 
-<field:display name="Funding Organizations Tab" feature="Funding Information"></field:display> 
+<field:display name="Funding Organizations Tab" feature="Funding Information"></field:display>
+<field:display name="Funding Status" feature="Funding Information"></field:display>  
 <field:display name="Government Agreement Number" feature="Identification"></field:display> 
 <field:display name="Government Approval Procedures" feature="Budget"></field:display> 
 <field:display name="Government Email" feature="Government Contact Information"></field:display> 
@@ -492,6 +489,7 @@
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency"></field:display>
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
 <field:display name="Inbox Message" feature="Message tab"></field:display> 
 <field:display name="Indicator Base Value" feature="Activity"></field:display> 
@@ -529,8 +527,7 @@
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
-<field:display name="Objectives" feature="Identification"></field:display> 
-<field:display name="On/Off Budget" feature="Budget"></field:display> 
+ <field:display name="On/Off Budget" feature="Budget"></field:display> 
 <field:display name="Organizations Selector" feature="Funding Information"></field:display> 
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 
@@ -590,6 +587,7 @@
 <field:display name="Regional Group Add Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group Remove Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group" feature="Regional Group"></field:display> 
+<field:display name="Regional Group Additional Info"  feature="Regional Group"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Related Activity Dropdown" feature="Create Message Form"></field:display> 
 <field:display name="Remove Actors Button" feature="Issues"></field:display> 
@@ -608,7 +606,8 @@
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
-<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Remove Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization"></field:display>
 <field:display name="Results" feature="Identification"></field:display> 
 <field:display name="Revised Target Value" feature="Activity"></field:display> 
 <field:display name="Risk" feature="Activity"></field:display> 
@@ -624,6 +623,7 @@
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
+<field:display name="Sector Group Additional Info"  feature="Sector Group"></field:display>
 <field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact Information"></field:display> 

@@ -66,9 +66,11 @@ function validate(field) {
 		      return true;
 		    }
 		  }
+		  alert("Please choose a sector to remove");
 		  return false;
 		}
 	}
+	alert("Please choose a sector to remove");
 	return false;
 }
 }

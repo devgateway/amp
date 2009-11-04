@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,6 +46,8 @@ import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.DgSecurityManager;
+import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.Constants;
 
 public class ViewEditUser extends Action {
@@ -89,6 +92,12 @@ public class ViewEditUser extends Action {
             		!user.isBuildInAdmin() // AMP-4598 build in administrator can not be banned.
             		) {
             	if (isBanned) {
+            		//see if the user we want to ban is admin
+                    Site site = RequestUtils.retreiveSiteDomain(request).getSite();        
+                    boolean siteAdmin = UserUtils.isAdmin(user, site);
+                    if(siteAdmin){ // should be impossible to ban admin
+                    	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.um.errorBanningAdmin"));
+                    }else{
             		List ampTeamMembers	= TeamMemberUtil.getAmpTeamMembersbyDgUserId(userId);
             		if ( ampTeamMembers != null && ampTeamMembers.size() == 0 ) {
             			user.setBanned(true);
@@ -111,8 +120,8 @@ public class ViewEditUser extends Action {
                                 new ActionError("error.um.userIsInTeams", teamNames));
             		}
             		if ( ampTeamMembers == null ) {
-            			errors.add("title",
-                                new ActionError("error.um.errorBanning"));
+                			errors.add("title",new ActionError("error.um.errorBanning"));
+                		}
             		}
             	}
             	else {
@@ -132,8 +141,7 @@ public class ViewEditUser extends Action {
                 }
                 DbUtil.updateUser(user);*/
             } else {
-                errors.add(ActionErrors.GLOBAL_ERROR,
-                           new ActionError("error.um.banUserInvalidPermission"));
+                errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.um.banUserInvalidPermission"));
             }
             resetViewEditUserForm(uForm);
             saveErrors(request, errors);

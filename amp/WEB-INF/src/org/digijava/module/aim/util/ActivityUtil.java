@@ -620,7 +620,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setUpdatedBy(member);
         session.saveOrUpdate(oldActivity);
         activityId = oldActivity.getAmpActivityId();
-        String ampId=generateAmpId(member.getUser(),activityId );
+        String ampId=generateAmpId(member.getUser(),activityId,session );
         if (oldActivity.getAmpId()==null){
             oldActivity.setAmpId(ampId);
         }
@@ -681,7 +681,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          */
         session.save(activity);
         activityId = activity.getAmpActivityId();
-        String ampId=generateAmpId(member.getUser(),activityId );
+        String ampId=generateAmpId(member.getUser(),activityId , session);
         activity.setAmpId(ampId);
         session.update(activity);
         //session.saveOrUpdate(member);
@@ -1480,10 +1480,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oql += " and categories.id in ("+statusCode+") ";
       }
       if (fromDate != null) {
-        oql += " and act.createdDate >= :FromDate";
+        oql += " and (act.actualStartDate >= :FromDate or (act.actualStartDate is null and act.proposedStartDate >= :FromDate) )";
       }
       if (toDate != null) {
-        oql += " and act.createdDate <= :ToDate";
+        oql += " and (act.actualStartDate <= :ToDate or (act.actualStartDate is null and act.proposedStartDate <= :ToDate) ) ";
       }
       if (locationId != null) {
         oql += " and act.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";
@@ -2303,7 +2303,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Session session = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
     	//session = PersistenceManager.getRequestDBSession();
       String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a " +
@@ -2315,17 +2315,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     catch (Exception e) {
       logger.debug("Exception in getAmpComponents() " + e.getMessage());
       e.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-        	session.close();
-			PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex) {
-          logger.debug("Exception while releasing session " + ex.getMessage());
-        }
-      }
     }
     //getComponents();
     return col;
@@ -3655,12 +3644,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
    * @param user,actId
    * @return ampId
    * @author dare
+ * @param session 
    */
-  public static String generateAmpId(User user,Long actId) {
+  public static String generateAmpId(User user,Long actId, Session session) {
 		String retValue=null;		
 		String globSetting="numeric";// TODO This should come from global settings
 		if(globSetting.equals("numeric")){
-			retValue=numericAmpId(user,actId);
+			retValue=numericAmpId(user,actId,session);
 		}else if(globSetting.equals("text")){
 			retValue=combinedAmpId(actId);
 		}
@@ -3671,12 +3661,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
  * @param user,actId
  * @return 
  * @author dare
+ * @param session 
  */
-	private static String numericAmpId(User user,Long actId){
+	private static String numericAmpId(User user,Long actId, Session session){
 		String retVal=null;
 		String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
 		String userId=user.getId().toString();
-                Country country=DbUtil.getDgCountry(countryCode);
+	    Country country=(Country) session.load(Country.class, countryCode);   
+            //    Country country=DbUtil.getDgCountry(countryCode);
                 String countryId="0";
                 if(country!=null){
                     countryId=country.getCountryId().toString();
@@ -4051,7 +4043,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 Date date = DateConversion.getDate(helperFdet.getTransactionDate());
                 BigDecimal transAmt = FormatHelper.parseBigDecimal(helperFdet.getTransactionAmount());
                 transAmt=FeaturesUtil.applyThousandsForEntry(transAmt);
-                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, helperFdet.getFixedExchangeRate());
+                double fixedExchangeRate		= FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() );
+                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, fixedExchangeRate);
                 ampFundDets.add(fundDet);
             }
         }

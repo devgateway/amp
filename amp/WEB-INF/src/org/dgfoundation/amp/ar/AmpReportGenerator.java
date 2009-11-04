@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -49,8 +50,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	List<AmpReportColumn> extractable;
 	protected int extractableCount;
 	private List<String> columnsToBeRemoved;
-	
-	
+	private boolean debugMode=false;
 	
 
 	/**
@@ -125,8 +125,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 			if (element.getExtractorView() != null) {
 				extractable.add(element2);
-				if (!element.getColumnName().equals(
-						ArConstants.COLUMN_PROPOSED_COST))
+				if ((!element.getColumnName().equals(ArConstants.COLUMN_PROPOSED_COST) || (!element.getColumnName().equals(ArConstants.COSTING_GRAND_TOTAL))))
 					extractableNames.add(element.getColumnName());
 			} else
 				generated.add(element2);
@@ -158,6 +157,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (generated.size() > 0) {
 			createDataForColumns(generated);
 		}
+		
+		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getColumns())){
+			rawColumns.getItems().remove(rawColumns.getColumn(ArConstants.COSTING_GRAND_TOTAL));
+		}
+		
 	}
 
 	/**
@@ -225,7 +229,10 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				ce.setRelatedColumn(col);
 				ce.setInternalCondition(columnFilterSQLClause);
-
+				
+				
+				ce.setDebugMode(debugMode);
+				
 				Column column = ce.populateCellColumn();
 
 				if (relatedContentPersisterClass != null) {
@@ -247,7 +254,7 @@ public class AmpReportGenerator extends ReportGenerator {
 					older.addCell(o);
 				    
 				} else {
-				    rawColumns.addColumn(rcol.getOrderId().intValue(), column);
+					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
 				    rawColumnsByName.put(column.getName(), (CellColumn) column);
 				}
 			}
@@ -349,12 +356,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		reportMetadata.getOrderedColumns().add(arc);
 
 		
+	
 		
-		
-		// attach funding coming from extra sources ... inject funding from
-		// proposed project cost, but with isShow=false so it won't be taken
-		// into calculations
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())||ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE,reportMetadata.getColumns())) {
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
 			arcProp.setColumn(acProp);
@@ -415,7 +419,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 			}
 		}
-
+		
 		/**
 		 * Iterare all measure and add a column for each computed measure
 		 */
@@ -431,18 +435,18 @@ public class AmpReportGenerator extends ReportGenerator {
 				TotalComputedMeasureColumn cTac=new TotalComputedMeasureColumn(m.getMeasureName());
 				cTac.setExpression(m.getExpression());
 				cTac.setDescription(m.getDescription());
-			Iterator i = funding.iterator();
-			while (i.hasNext()) {
-				AmountCell element = (AmountCell) i.next();
+				Iterator i = funding.iterator();
+				while (i.hasNext()) {
+					AmountCell element = (AmountCell) i.next();
 					cTac.addCell(element);
-			}
+				}
 
 				newcol.getItems().add(cTac);
-		}
 			}
-
+		}
+		
 		//end computted measures
-
+		
 		// we create the total commitments column
 
 		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
@@ -505,6 +509,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void prepareData() {
 
 		try {
+			
 			applyPercentagesToFilterColumns();
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -557,13 +562,26 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
-
-		// perform removal of funding column if no measure except undisbursed
-		// balance is selected. in such case,we just need totals
-		// or if widget mode is true...
-		if ((reportMetadata.getMeasures().size() == 1 && (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE, reportMetadata.getMeasures()) || ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())))|| arf.isWidget())
-			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
-
+		
+		// if it's a tab reports just remove funding
+		if (arf.isWidget()){
+			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);	
+		}else {
+			// perform removal of funding column when report has only Computed measures , or it a tab report
+			Set<AmpReportMeasures> ccmeasures = new HashSet<AmpReportMeasures>();
+			for (Iterator iterator = reportMetadata.getMeasures().iterator(); iterator.hasNext();) {
+			AmpReportMeasures measure = (AmpReportMeasures) iterator.next();
+			if (measure.getMeasure().getExpression() != null){
+				ccmeasures.add(measure);
+			}
+		}
+			if (ccmeasures != null && ccmeasures.size() > 0){
+				if (ccmeasures.size() == reportMetadata.getMeasures().size()){
+					reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
+				}
+			}
+		}
+		
 		// find out if this is a hierarchical report or not:
 		if (reportMetadata.getHierarchies().size() != 0)
 			createHierarchies();
@@ -621,7 +639,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				String translatedText = null;
 				//String prefix = "aim:reportGenerator:"; not used cos hash keys
 				try {
-					translatedText = TranslatorWorker.translateText(text, locale, new Long(siteId));
+					translatedText = TranslatorWorker.translateText(text, locale, siteId);
 				} catch (WorkerException e) {
 					e.printStackTrace();
 				}
@@ -692,6 +710,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		extractableCount = 0;
 
 		filter.generateFilterQuery(request);
+		
+		debugMode=(request.getParameter("debugMode")!=null);
+
+
 
 		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 
@@ -712,9 +734,23 @@ public class AmpReportGenerator extends ReportGenerator {
 		reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(
 				reportMetadata.getColumns(), reportMetadata.getHierarchies()));
 
+		// attach funding coming from extra sources ... inject funding from
+		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getColumns())) {
+			AmpReportColumn grandTotal = new AmpReportColumn();
+			AmpColumns grandTotalColumn = new AmpColumns();
+			grandTotal.setColumn(grandTotalColumn);
+			grandTotal.setOrderId(0L);
+			grandTotalColumn.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
+			grandTotalColumn.setColumnName(ArConstants.COSTING_GRAND_TOTAL);
+			grandTotalColumn.setExtractorView(ArConstants.VIEW_COST);
+			ColumnFilterGenerator.attachHardcodedFilters(grandTotalColumn);
+			reportMetadata.getOrderedColumns().add(grandTotal);
+		}
+
+
 		attachFundingMeta();
 	}
-
+	
 	public static Cell generateFakeCell (ColumnReportData rd, Long activityId) {
 		Cell fakeC = new TextCell();
 		fakeC.setValue(ArConstants.UNALLOCATED);

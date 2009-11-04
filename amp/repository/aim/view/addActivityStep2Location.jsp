@@ -16,7 +16,16 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-
+	var addLocationButton	= new ButtonWrapper('add_location_button');
+	function updateAddLocationButton() {
+		var locationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
+		if ( locationLevelSelect.selectedIndex > 0 ) {
+			addLocationButton.enable();
+		}
+		else
+			addLocationButton.disable();
+	}
+	YAHOOAmp.util.Event.on(window, "load", updateAddLocationButton);
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -99,6 +108,7 @@
 															if(implemLocationLevelSelect!=null){
 			                                              		implemLocationLevelSelect.onchange=function() {
 			                                              			removeAllLocations();
+			                                              			updateAddLocationButton();
 			                                              		}
 															}
 	                                              		</script>
@@ -133,7 +143,7 @@
                                                   <field:display name="Add Location" feature="Location">
                                                     <tr>
                                                     <td bgcolor="#ffffff"><html:button
-														styleClass="dr-menu" property="submitButton"
+														styleClass="dr-menu" property="submitButton" disabled="true" style="color: lightgray" styleId="add_location_button"
 														onclick="selectLocation()">
 														<digi:trn key="btn:addLocation">Add Location</digi:trn>
 													</html:button></td>
@@ -148,7 +158,7 @@
                                                           <tr>
                                                               <td width="100%">
                                                                 <table width="100%" cellSpacing="1" cellPadding="1"	vAlign="top" align="left">
-                                                                  <tr>
+                                                                  <tr><field:display name="Region" feature="Location">
                                                                     <td width="3" vAlign="center">
                                                                     <html:multibox property="location.selLocs" styleId="selLocs">
                                                                       <bean:write name="selectedLocs" property="locId" />
@@ -159,6 +169,7 @@
                                                                     	[${ancestorLoc}] 
                                                                     </c:forEach>
                                                                     </td>
+                                                                    </field:display>
                                                                     <%--<td vAlign="center" align="left" width="100%">
                                                                       <c:if test="${!empty selectedLocs.country}">
                                                                         [<bean:write name="selectedLocs" property="country" />]
@@ -194,7 +205,7 @@
                                                                 <field:display name="Add Location" feature="Location">
                                                                   <td>
                                                                     <html:button styleClass="dr-menu"
-																		property="submitButton"
+																		property="submitButton" disabled="true" style="color: lightgray" styleId="add_location_button"
 																		onclick="selectLocation()">
 																		<digi:trn key="btn:addLocation">Add Location</digi:trn>
 																	</html:button>

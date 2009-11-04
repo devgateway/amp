@@ -109,67 +109,70 @@ counter++;
 session.setAttribute("progressValue", counter);
 %>
 
+<table width="100%">
+<tr>
+	<td>
 <logic:notEqual name="widget" scope="request" value="true">
-<logic:notEqual name="viewFormat" scope="request" value="print">
-<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
-
-<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
-
-<logic:notEqual name="widget" scope="request" value="true">
-	<div class="reportname" style="background: #222E5D">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-  			<tr>
-    			<td align="left">
-    				<img src="images/tableftcorner.gif"/>
-    			</td>
-    			<td align="center" nowrap="nowrap" style="background:#222E5D; font-family: Arial;color:white;font-weight: bold;">
-    				<bean:write scope="session" name="reportMeta" property="name" />
-    			</td>
-    			<td align="right">
-    				<img src="images/tabrightcorner.gif" />
-    			</td>
-  			</tr>
-		</table>
-	</div>
-</logic:notEqual>
-
-<table width="100%" cellpadding="3" cellspacing="1" rules="rows" frame="box" style="margin-left: 5px;border-color:#999999;">
-	<logic:notEmpty property="reportDescription" name="reportMeta">
-	<tr style="border-top:#222E5D 3px solid;">
-		<td style="padding-left: 5px;padding-left: 5px;">
-			<digi:trn key="rep:pop:Description">Description:</digi:trn><br>
-				<span style="font-weight: bold;font-size: 13px;margin-left: 5px;margin-top: 3px; font-family: Arial">
-					<bean:write scope="session" name="reportMeta" property="reportDescription" />
-				</span>
-		</td>
-	</tr>
-	</logic:notEmpty>
-	<logic:empty property="reportDescription" name="reportMeta">
-		<tr style="border-top:#222E5D 3px solid;">
-	</logic:empty>
-	<logic:notEmpty property="reportDescription" name="reportMeta">
-	<tr>
-	</logic:notEmpty> 
-		<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
-			<span  style="color: red;font-family: Arial;font-size: 10px;">
-				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-					<c:set var="AllAmount">
-						<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-					</c:set>
-					<digi:trn key="rep:pop:AllAmount">
-						<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-					</digi:trn>
-				</gs:test>			
-				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
-				</logic:present>
-			</span>
-		</td>
-	</tr>
+	<logic:notEqual name="viewFormat" scope="request" value="print">
+		<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
+		
+		<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
+		<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
+		
+		<logic:notEqual name="widget" scope="request" value="true">
+			<div class="reportname" style="background: #222E5D">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		  			<tr>
+		    			<td align="left">
+		    				<img src="images/tableftcorner.gif"/>
+		    			</td>
+		    			<td align="center" nowrap="nowrap" style="background:#222E5D; font-family: Arial;color:white;font-weight: bold;">
+		    				<bean:write scope="session" name="reportMeta" property="name" />
+		    			</td>
+		    			<td align="right">
+		    				<img src="images/tabrightcorner.gif" />
+		    			</td>
+		  			</tr>
+				</table>
+			</div>
+		</logic:notEqual>
+		
+		<table width="100%" cellpadding="3" cellspacing="1" rules="rows" frame="box" style="margin-left: 5px;border-color:#999999;">
+			<logic:notEmpty property="reportDescription" name="reportMeta">
+			<tr style="border-top:#222E5D 3px solid;">
+				<td style="padding-left: 5px;padding-left: 5px;">
+					<digi:trn key="rep:pop:Description">Description:</digi:trn><br>
+						<span style="font-weight: bold;font-size: 13px;margin-left: 5px;margin-top: 3px; font-family: Arial">
+							<bean:write scope="session" name="reportMeta" property="reportDescription" />
+						</span>
+				</td>
+			</tr>
+			</logic:notEmpty>
+			<logic:empty property="reportDescription" name="reportMeta">
+				<tr style="border-top:#222E5D 3px solid;">
+			</logic:empty>
+			<logic:notEmpty property="reportDescription" name="reportMeta">
+			<tr>
+			</logic:notEmpty> 
+				<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
+					<span  style="color: red;font-family: Arial;font-size: 10px;">
+						<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+							<c:set var="AllAmount">
+								<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+							</c:set>
+							<digi:trn key="rep:pop:AllAmount">
+								<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+							</digi:trn>
+						</gs:test>			
+						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
+							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+							<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
+						</logic:present>
+					</span>
+				</td>
+			</tr>
 			</table>
-</logic:notEqual>
+	</logic:notEqual>
 </logic:notEqual>
 	<logic:equal name="viewFormat" scope="request" value="print">
 	<script language="JavaScript">
@@ -185,7 +188,8 @@ session.setAttribute("progressValue", counter);
 	<tr>
 		<td>
 		<div style="margin-left:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &lt;&lt;</span>
+	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
+	        
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
                 <a class="settingsLink" onClick="showSorter();">
@@ -227,7 +231,7 @@ session.setAttribute("progressValue", counter);
            
             </span>
              &nbsp;<br>
-             <div style="display:block;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
@@ -260,13 +264,15 @@ session.setAttribute("progressValue", counter);
 	</tr>
 	</logic:notEqual>
 	</logic:notEqual>
- 
+
 	<logic:equal name="widget" scope="request" value="true">
+
 	<table width="100%"> 
 		<tr>
 		<td style="padding-left:-2px;">
 		<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
 	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
+
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
                 <a class="settingsLink" onClick="showSorter();">
@@ -289,7 +295,7 @@ session.setAttribute("progressValue", counter);
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  |
            	  	<a  id="frezzlink" class="settingsLinkDisable">
-               		<script language="javascript">
+               		<script language="	">
 						document.write((scrolling)?msg2:msg1);
 					</script>
                 </a>
@@ -366,22 +372,27 @@ session.setAttribute("progressValue", counter);
 		<table width="100%">
 			<tr>
 			<td>
+
 <c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
 <c:if test="${recordsPerPage ne max_value}">
             <logic:notEqual name="viewFormat" value="print">
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if test="${report.startRow != 0}">
                     	<!-- Go to FIRST PAGE -->
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>~currentPage=0');">	
+                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
                     	&lt;&lt;
                     	</a>
                     	|
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>~currentPage=<c:out value="${i-1}"/>');">	
+                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
     		            	<digi:trn key="aim:previous">Previous</digi:trn>
                     	</a>
                     	|
                     </c:if>
                 </logic:equal>
+				<c:set var="lastPage">
+                	0
+                </c:set>
+<!-- 
 				<c:if test="${report.visibleRows gt 1}">
                 	<c:set var="visibleRows">
                 		${report.visibleRows-2}
@@ -392,60 +403,42 @@ session.setAttribute("progressValue", counter);
                 		0
                 	</c:set>
                 </c:if>
-                <c:set var="totalPages">
-                	<fmt:formatNumber value="${visibleRows/recordsPerPage}" maxFractionDigits="0"/>
-                </c:set>
-                <c:set var="viewablePagesOffset">
-	                <fmt:formatNumber value="${viewablePages/2}" maxFractionDigits="0"/>
-                </c:set>
-                <c:if test="${currentPage > viewablePagesOffset }">
-                    <c:set var="startPage" value="${currentPage - viewablePagesOffset}" />
-                    <c:set var="endPage" value="${currentPage + viewablePagesOffset}" />
-                </c:if>
-                <c:if test="${currentPage <= viewablePagesOffset }">
-                    <c:set var="startPage" value="0" />
-                    <c:set var="endPage" value="${viewablePages}" />
-                </c:if>
-                <c:if test="${(currentPage >= (visibleRows/recordsPerPage)-viewablePagesOffset)}">
-                    <c:set var="startPage" value="${(visibleRows/recordsPerPage)-viewablePages}" />
-                    <c:set var="endPage" value="${(visibleRows/recordsPerPage)}" />
-                </c:if>
-                <c:if test="${(visibleRows/recordsPerPage) < viewablePages}">
-                    <c:set var="startPage" value="0" />
-                    <c:set var="endPage" value="${totalPages}" />
-                </c:if>
-                <c:forEach var="i" begin="${startPage}" end="${endPage}">
+ -->
+                <c:forEach var="i" begin="0" end="${visibleRows}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
-                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${recordsPerPage*i}"/>~endRow=<c:out value="${(recordsPerPage*i)+recordsPerPage-1}"/>~currentPage=<c:out value="${i}"/>';">
+                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>
                     <logic:equal name="viewFormat" value="foldable">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${recordsPerPage*i}"/>~endRow=<c:out value="${(recordsPerPage*i)+recordsPerPage-1}"/>~currentPage=<c:out value="${i}"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">	
                     </logic:equal>
-                    <c:if test="${i eq currentPage}">
-                        <font color="red">
-                            <fmt:formatNumber value="${i+1}" maxFractionDigits="0"/>
-                        </font>
-                    </c:if>
-                    <c:if test="${i ne currentPage}">
-                            <fmt:formatNumber value="${i+1}" maxFractionDigits="0"/>
-                    </c:if>
+                    <c:choose>							
+                        <c:when  test="${i eq report.startRow}">
+                            <font color="#FF0000"><fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
+                        </c:when>
+                        <c:otherwise>
+                            <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
+                        </c:otherwise>								
+                    </c:choose>
                     </a>
-                </c:forEach>
+                    |
+                	<c:set var="lastPage">
+                    	${lastPage+1}
+                    </c:set>
+				</c:forEach>
+
 
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if  test="${(report.startRow+recordsPerPage+1) < report.visibleRows}">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>~currentPage=<c:out value="${currentPage+1}"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
                             <digi:trn key="aim:next">Next</digi:trn>
                         </a>
                         |
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${(totalPages*recordsPerPage)}"/>~endRow=<c:out value="${(totalPages*recordsPerPage)+recordsPerPage}"/>~currentPage=<fmt:formatNumber value="${totalPages}" maxFractionDigits="0"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
                         &gt;&gt;
                         </a>
                     </c:if>
                 </logic:equal>
 				</logic:notEqual>
-				<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${totalPages+1}"></c:out>&nbsp;Pages
-
 </c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
@@ -547,17 +540,20 @@ session.setAttribute("progressValue", counter);
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if test="${report.startRow != 0}">
                     	<!-- Go to FIRST PAGE -->
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>~currentPage=0');">	
+                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
                     	&lt;&lt;
                     	</a>
                     	|
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>~currentPage=<c:out value="${i-1}"/>');">	
+                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
     		            	<digi:trn key="aim:previous">Previous</digi:trn>
                     	</a>
                     	|
                     </c:if>
                 </logic:equal>
-				<c:if test="${report.visibleRows gt 1}">
+				<c:set var="lastPage">
+                	0
+                </c:set>
+                <c:if test="${report.visibleRows gt 1}">
                 	<c:set var="visibleRows">
                 		${report.visibleRows-2}
                 	</c:set>
@@ -567,62 +563,40 @@ session.setAttribute("progressValue", counter);
                 		0
                 	</c:set>
                 </c:if>
-                <c:set var="totalPages">
-                	<fmt:formatNumber value="${visibleRows/recordsPerPage}" maxFractionDigits="0"/>
-                </c:set>
-                <c:set var="viewablePagesOffset">
-	                <fmt:formatNumber value="${viewablePages/2}" maxFractionDigits="0"/>
-                </c:set>
-                <c:if test="${currentPage > viewablePagesOffset }">
-                    <c:set var="startPage" value="${currentPage - viewablePagesOffset}" />
-                    <c:set var="endPage" value="${currentPage + viewablePagesOffset}" />
-                </c:if>
-                <c:if test="${currentPage <= viewablePagesOffset }">
-                    <c:set var="startPage" value="0" />
-                    <c:set var="endPage" value="${viewablePages}" />
-                </c:if>
-                <c:if test="${(currentPage >= (visibleRows/recordsPerPage)-viewablePagesOffset)}">
-                    <c:set var="startPage" value="${(visibleRows/recordsPerPage)-viewablePages}" />
-                    <c:set var="endPage" value="${(visibleRows/recordsPerPage)}" />
-                </c:if>
-
-                <c:if test="${(visibleRows/recordsPerPage) < viewablePages}">
-                    <c:set var="startPage" value="0" />
-                    <c:set var="endPage" value="${totalPages}" />
-                </c:if>
-
-                <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                <c:forEach var="i" begin="0" end="${visibleRows}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
-                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${recordsPerPage*i}"/>~endRow=<c:out value="${(recordsPerPage*i)+recordsPerPage-1}"/>~currentPage=<c:out value="${i}"/>';">
+                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>
                     <logic:equal name="viewFormat" value="foldable">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${recordsPerPage*i}"/>~endRow=<c:out value="${(recordsPerPage*i)+recordsPerPage-1}"/>~currentPage=<c:out value="${i}"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">	
                     </logic:equal>
-                    <c:if test="${i eq currentPage}">
-                        <font color="red">
-                            <fmt:formatNumber value="${i+1}" maxFractionDigits="0"/>
-                        </font>
-                    </c:if>
-                    <c:if test="${i ne currentPage}">
-                            <fmt:formatNumber value="${i+1}" maxFractionDigits="0"/>
-                    </c:if>
+                    <c:choose>							
+                        <c:when  test="${i eq report.startRow}">
+                            <font color="#FF0000"><fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
+                        </c:when>
+                        <c:otherwise>
+                            <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
+                        </c:otherwise>								
+                    </c:choose>
                     </a>
-                </c:forEach>
-
+                    |
+                	<c:set var="lastPage">
+                    	${lastPage+1}
+                    </c:set>
+				</c:forEach>
 
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if  test="${(report.startRow+recordsPerPage+1) < report.visibleRows}">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>~currentPage=<c:out value="${currentPage+1}"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
                             <digi:trn key="aim:next">Next</digi:trn>
                         </a>
                         |
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${(totalPages*recordsPerPage)}"/>~endRow=<c:out value="${(totalPages*recordsPerPage)+recordsPerPage}"/>~currentPage=<fmt:formatNumber value="${totalPages}" maxFractionDigits="0"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
                         &gt;&gt;
                         </a>
                     </c:if>
                 </logic:equal>
 				</logic:notEqual>
-				<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${totalPages+1}"></c:out>&nbsp;Pages
 </c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
@@ -659,7 +633,9 @@ session.setAttribute("progressValue", counter);
 
 
 </table>
-
+	</td>
+</tr>
+</table>
 
 <%
 	session.setAttribute(" ", null);

@@ -1784,11 +1784,15 @@ public class ProgramUtil {
                             tx = session.beginTransaction();
                             while (settingsIter.hasNext()) {
                                     AmpActivityProgramSettings setting = (AmpActivityProgramSettings)settingsIter.next();
-                                    if(setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null && setting.getDefaultHierarchy().getAmpThemeId() != -1 )
+                                    if(setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null  )
                                     {
                                     	AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.get(AmpActivityProgramSettings.class,setting.getAmpProgramSettingsId());
 	                                    oldSetting.setAllowMultiple(setting.isAllowMultiple());
-	                                    oldSetting.setDefaultHierarchy(setting.getDefaultHierarchy());
+                                    	if (setting.getDefaultHierarchy().getAmpThemeId() != -1){
+    	                                    oldSetting.setDefaultHierarchy(setting.getDefaultHierarchy());
+                                    	}else{
+    	                                    oldSetting.setDefaultHierarchy(null);
+                                    	}
 	                                    session.update(oldSetting);
                                     }
 
@@ -2227,17 +2231,27 @@ public class ProgramUtil {
                 return indic1.getName().toLowerCase().compareTo(indic2.getName().toLowerCase());
             }
         }
+        
+        public static class HelperAllIndicatorBeanNameDescendingComparator implements Comparator<IndicatorsBean> {
+	        public int compare(IndicatorsBean obj1, IndicatorsBean obj2) {
+	            return -obj1.getName().toLowerCase().compareTo(obj2.getName().toLowerCase());
+	        }
+        }
 
-        public static class HelperAllIndicatorBeanSectorComparator
-            implements Comparator {
+        public static class HelperAllIndicatorBeanSectorComparator implements Comparator {
             public int compare(Object obj1, Object obj2) {
                 IndicatorsBean indic1 = (IndicatorsBean) obj1;
                 IndicatorsBean indic2 = (IndicatorsBean) obj2;
                 return indic1.getSectorName().toLowerCase().compareTo(indic2.getSectorName().toLowerCase());
-            	}
-
+            }
         }
 
+        public static class HelperAllIndicatorBeanSectorDescendingComparator implements Comparator<IndicatorsBean> {
+	        public int compare(IndicatorsBean obj1, IndicatorsBean obj2) {
+	            return -obj1.getSectorName().toLowerCase().compareTo(obj2.getSectorName().toLowerCase());
+	        }
+        }
+        
         public static class HelperAllIndicatorBeanTypeComparator
             implements Comparator {
             public int compare(Object obj1, Object obj2) {

@@ -22,6 +22,7 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
@@ -139,14 +140,21 @@ public class TeamUtil {
     
     public static Set getComputedOrgs(Collection relatedTeams) {
     	Set teamAssignedOrgs=new TreeSet();
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
     	Iterator i=relatedTeams.iterator();
 		while (i.hasNext()) {
 			AmpTeam team = (AmpTeam) i.next();
+				AmpTeam loadedTeam=(AmpTeam) session.load(AmpTeam.class,team.getAmpTeamId());
 			//if("Computed".equals(team.getAccessType())) {
-			if(team.getComputation()!=null && team.getComputation()==true)
-			{
-				teamAssignedOrgs.addAll(team.getOrganizations());
+				if (loadedTeam.getComputation() != null
+						&& loadedTeam.getComputation() == true) {
+					teamAssignedOrgs.addAll(loadedTeam.getOrganizations());
+				}
 			}
+		} catch (DgException e) {
+			logger.error(e);
+			e.printStackTrace();
 		}
 		return teamAssignedOrgs;
     }
@@ -440,6 +448,7 @@ public class TeamUtil {
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 AmpTeam team = (AmpTeam) itr.next();
+                team.getOrganizations().size(); //lazy init;
                 workspace = new Workspace();
                 workspace.setDescription(team.getDescription().trim());
                 workspace.setId(team.getAmpTeamId().toString());
@@ -853,7 +862,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            session.flush();
+            //session.flush();
             member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
             member.getDesktopTabSelections().size(); //lazy init
             PersistenceManager.releaseSession(session);
@@ -2381,7 +2390,11 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String queryString = "select t from " + AmpTeam.class.getName() + " t order by name";
             qry = session.createQuery(queryString);
+            qry.setCacheable(true);
             teams = qry.list();
+            for (AmpTeam t: (Collection<AmpTeam>)teams){
+            	t.getOrganizations().size(); //lazy init
+            }
         } catch(Exception e) {
             logger.debug("cannot get All teams");
             logger.debug(e.toString());

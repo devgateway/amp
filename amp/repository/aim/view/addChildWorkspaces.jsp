@@ -22,6 +22,15 @@
 		return true;
 
 	}
+
+	function updateCheckboxes() {
+		//alert("Starting!");
+		var value = document.getElementById("selectAllOrgs").checked;
+		var a = document.getElementsByName("selChildOrgs");
+		for (i=0;i<a.length;i++)
+			a[i].checked=value;
+		//alert("Done!");
+	}
 	
 	function resetForm() {
 		document.aimUpdateWorkspaceForm.ampOrgTypeId.value=-1;
@@ -346,12 +355,21 @@ function childOrgsAdded() {
 					<table width="100%" cellPadding=2 cellSpacing=1 valign="top"
 						align="left" bgcolor="#006699">
 						<tr>
-							<td align="center" class="textalb" height="20"><digi:trn
-								key="aim:listOfOrganizations">
-
-									List of organizations
-
-								</digi:trn></td>
+							<td align="center" class="textalb" height="20">
+							<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top"
+									align="center" border=0>
+								<tr>
+									<td width="3">
+										<input type="checkbox" id="selectAllOrgs" onchange="updateCheckboxes()"/>
+									</td>
+									<td align="center">
+										<digi:trn key="aim:listOfOrganizations">
+											List of organizations
+										</digi:trn>
+									</td>
+								</tr>
+							</table>
+							</td>
 						</tr>
 						<tr>
 							<td bgcolor="#ECF3FD">

@@ -15,6 +15,8 @@
  		<c:if test="${metaTextCell.colour == 'RED' && metaTextCell.statusFlag == 'started'}">
 	 		<c:set var="starFlag" value="true" target="request" scope="request" />
  		</c:if>
-
+		<c:if test="${metaTextCell.colour == 'RED' && metaTextCell.statusFlag == 'startedapproved'}">
+	 		<c:set var="starFlag" value="true" target="request" scope="request" />
+ 		</c:if>
  <%@ include file="TextCell.jsp"%>
  </font>

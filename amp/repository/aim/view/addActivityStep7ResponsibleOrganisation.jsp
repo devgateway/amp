@@ -21,6 +21,7 @@
 										&nbsp;
 									</td></tr>	
 																
+									<field:display name="Responsible Organization" feature="Responsible Organization">
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 										<tr>
 											<td>
@@ -28,16 +29,22 @@
 												<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations" 
 												id="repOrganisation" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
+													<table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
 														<tr>
-															<td width="3">
+															<td width="2%">
 																<html:multibox  property="agencies.selRespOrganisations">
 																	<bean:write name="repOrganisation" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="49%">
 																<bean:write name="repOrganisation" property="name" />
 															</td>
+														  
+																<field:display name="Responsible Organization Department/Division"  feature="Responsible Organization">
+															<td width="49%">
+																	<digi:trn>Department/Division: </digi:trn><html:text size="30" property="agencies.respOrgToInfo(${repOrganisation.ampOrgId})"></html:text>
+															</td>
+														</field:display>
 														</tr>
 													</table>
 												</td>
@@ -48,11 +55,11 @@
 												    <tr>
 													<td>
 														<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
-														<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+														<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"   form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														</field:display>
 													</td>
 													<td>
-														<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization">
+														<field:display name="Responsible Organization Remove Button" feature="Responsible Organization">
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(9)">
 															<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 														</html:button>
@@ -67,20 +74,20 @@
 											</td>
 											</tr>
 										</logic:notEmpty>
-
+										<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
 										<logic:empty name="aimEditActivityForm" property="agencies.respOrganisations">
 											<tr>
 												<td>
 													<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 														<tr>
 															<td bgcolor="#ffffff">
-																<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
-																<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
-																</field:display>
+																<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 															</td>
 														</tr>
 													</table>
 												</td>
 											</tr>
 										</logic:empty>
+										</field:display>
+									</field:display>
 										

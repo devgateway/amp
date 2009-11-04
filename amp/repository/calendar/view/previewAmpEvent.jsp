@@ -258,15 +258,18 @@ function getWeekdays(){
 				              <td>
 				              </td>
 				              <td>
-				                <input type="submit"  value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
-				                &nbsp;				               
-								<c:if test="${calendarEventForm.actionButtonsVisible!=false}">
-				                	<input type="submit"  value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+				                <c:if test="${calendarEventForm.actionButtonsVisible!=false}">
+				                	<input type="submit" style="width: 100px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
 				                	&nbsp;
-				                	<input type="submit" value="<digi:trn>Delete</digi:trn>"  onclick="deleteEvent();" />
-				               </c:if>
+				                	<input type="submit" style="width: 100px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
 				                	&nbsp;
-				                <input type="button" value="<digi:trn>Print</digi:trn>" onclick="openPrinter();" />
+				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
+				                </c:if>
+				                <c:if test="${calendarEventForm.actionButtonsVisible==false}">
+				                	&nbsp;
+				                	<input type="submit" style="width: 100px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
+				                	&nbsp;
+				                </c:if>
 				              </td>
 				            </tr>
 				          </table>

@@ -86,7 +86,10 @@
 	style="display: inline"
 	onMouseOver="stm(['<bean:write name="org" property="orgCode"/> Details',document.getElementById('org-<bean:write name="org" property="orgCode"/>').innerHTML],Style[0])" 
 	onMouseOut="htm()">
-	[<u><bean:write name="org" property="orgName"/></u>]
+	[ <u><bean:write name="org" property="orgName"/>
+		<logic:notEmpty name="org" property="additionalInformation" >
+			(${org.additionalInformation})
+		</logic:notEmpty></u>]
 	</div>
 	<c:if test="${onClickText!=''}">
 	   -&gt; <a style="cursor:pointer; text-decoration:underline; color: blue" onclick="${onClickText}" >

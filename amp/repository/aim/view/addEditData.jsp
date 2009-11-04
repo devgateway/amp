@@ -11,6 +11,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
@@ -30,12 +31,14 @@
             return false;
         }
     }
-function addData(){
+$(document).ready(function(){
+      $("#addDataBtn").click(function () {
+          $(this).attr('disabled', 'disabled');
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
   document.forms[0].action = "<%=addEditIndicator%>";
   document.forms[0].submit();
-}
-
+      });
+  });
 
 function deleteData(ind){
   var flag = confirm("Delete this data?");
@@ -189,7 +192,7 @@ function validation(){
   <tr>
     <td height="25" align="center" colspan="6">
       <c:set var="trnadd"><digi:trn key="aim:btn:adddata">Add data</digi:trn></c:set>
-      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData()">&nbsp;&nbsp;
+      <input id="addDataBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData()">&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>

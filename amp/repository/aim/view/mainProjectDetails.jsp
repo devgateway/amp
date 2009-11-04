@@ -59,7 +59,7 @@ function fnEditProject(id)
 {
 	
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
+    document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
     
@@ -300,7 +300,7 @@ html>body #mainEmpty {
 				parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Preview Activity" module="Previews">
 					<field:display feature="Preview Activity" name="Preview Button">
-						<a href="" target="_blank" onclick="javascript:preview(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
+						<a href="/aim/viewActivityPreview.do~pageId=2~activityId=<%=request.getParameter("ampActivityId")%>~isPreview=1" target="_blank" onclick="javascript:preview(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
 							<img src="/repository/aim/images/tangopack_preview.png" border="0"></a>
 					</field:display>
 				</feature:display>

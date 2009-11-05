@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -21,21 +20,21 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.ComputedDateCell;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.test.categorymanager.api.CategoryManagerApiTest;
 import org.dgfoundation.amp.test.util.Configuration;
 import org.dgfoundation.amp.test.util.TestUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.ViewNewAdvancedReport;
-import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Transaction;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
@@ -55,7 +54,7 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter implemen
 	protected MockHttpServletResponse response;
 	protected GroupReportData generatedReport;
 	private static Random random = new Random();
-
+	AmpFiscalCalendar calendar=null;
 	DecimalFormat format = new DecimalFormat("#.00");
 	private Long id = null;
 
@@ -135,6 +134,14 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter implemen
 		TestUtil.setCurrentMemberFirstATLTeam(session);
 
 		setValidate(true);
+		
+		calendar=new AmpFiscalCalendar();
+		calendar.setBaseCal("GREG-CAL");
+		calendar.setDescription("JUNIT TEST CALENDAR");
+		calendar.setStartDayNum(1);
+		calendar.setStartMonthNum(1);
+		calendar.setYearOffset(0);
+		PersistenceManager.getSession().save(calendar);
 		buildReport();
 	}
 
@@ -145,6 +152,7 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter implemen
 	}
 
 	public void removeData() throws Exception {
+		PersistenceManager.getSession().delete(calendar);
 		Connection con = PersistenceManager.getSession().connection();
 		con.createStatement().execute("DELETE FROM amp_report_hierarchy WHERE amp_report_id=" + getID());
 		con.createStatement().execute("DELETE FROM amp_report_measures WHERE amp_report_id=" + getID());
@@ -262,7 +270,20 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter implemen
 		request.setupAddParameter("debugMode", "debugMode");
 		request.setupAddParameter("ampCurrencyId", "USD");
 		filters.setCurrency(CurrencyUtil.getAmpcurrency("USD"));
+		filters.setCalendarType(calendar);
 		session.setAttribute(ArConstants.REPORTS_FILTER, filters);
+		
+		
+		
+		Collection<AmpGlobalSettings> cols=FeaturesUtil.getGlobalSettingsCache();
+		for (AmpGlobalSettings element : cols) {
+
+			if (element.getGlobalSettingsName().equalsIgnoreCase("Amounts in Thousands")){
+				element.setGlobalSettingsValue("false");
+			}
+			
+		}
+		
 		generatedReport = ARUtil.generateReport(null, form, request, response);
 
 	}

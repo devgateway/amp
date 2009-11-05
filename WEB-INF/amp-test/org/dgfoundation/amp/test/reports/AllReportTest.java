@@ -12,7 +12,6 @@ import junit.framework.TestSuite;
 public class AllReportTest {
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-		suite.addTestSuite(ExpressionsTest.class);
 		suite.addTestSuite(TestReportWizard.class);
 		suite.addTestSuite(TestDonorReportbyDonorAgency.class);
 		suite.addTestSuite(TestDonorReportbyNPO.class);
@@ -27,17 +26,12 @@ public class AllReportTest {
 		suite.addTestSuite(TestRegionalReportbyRegionAndNPO.class);
 		suite.addTestSuite(TestRegionalReportyRegionSectorandNPO.class);
 		suite.addTestSuite(TestComponentReportByRegion.class);
-		// suite.addTestSuite(TestComponentReportByComponent.class);
 		suite.addTestSuite(TestComponentReportBySector.class);
 		suite.addTestSuite(TesComputedDatesColumns.class);
 		suite.addTestSuite(TestComputedColumnReport.class);
 		suite.addTestSuite(TestComputedMeasures.class);
 
-		// suite.addTestSuite(TestComponentReportbyComponentandSector.class);
-		// suite.addTestSuite(TestComponentReportbyComponentandRegion.class);
-		// suite.addTestSuite(TestComponentReportbyComponentAndNPO.class);
-		// suite.addTestSuite(TestComponentReportbyComponentSectorAndNPO.class);
-		return suite;
+			return suite;
 	}
 
 	public static void main(String[] args) {

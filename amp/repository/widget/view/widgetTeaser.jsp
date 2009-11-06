@@ -40,7 +40,10 @@
             <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
             <jsp:include page="orgSummary.jsp" flush="true"/>
         </c:when>
-           <c:when test="${gisWidgetTeaserForm.type==7}">
+           <c:when test="${gisWidgetTeaserForm.type==2||gisWidgetTeaserForm.type==4}">
+            <jsp:include page="/orgProfile/showOrgProfileTables.do?type=${gisWidgetTeaserForm.type}" flush="true"/>
+        </c:when>
+         <c:when test="${gisWidgetTeaserForm.type==7}">
             <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
         </c:when>
         <c:otherwise>

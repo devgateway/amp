@@ -166,42 +166,7 @@ public class ChartWidgetUtil {
 		return chart;
 	}
     
-      /**
-     * Generates chart object from specified filters and options.
-     * This chart then can be rendered as image or pdf or file.
-     * @param opt
-     * @param filter
-     * @return chart
-     * @throws DgException
-     */
-    public static JFreeChart getTypeOfAidChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
-		JFreeChart chart = null;
-		Font font8 = new Font(null,Font.BOLD,12);
-		CategoryDataset dataset=getTypeOfAidDataset(opt,filter);
-        String titleMsg= TranslatorWorker.translateText("Type of Aid", opt.getLangCode(), opt.getSiteId());
-        DecimalFormat format=FormatHelper.getDecimalFormat();
-        String amount="";
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            amount = "Amounts in thousands";
-        } else {
-            amount = "Amounts";
-        }
-        String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-		chart=ChartFactory.createStackedBarChart(titleMsg,"",amountTranslatedTitle,dataset,PlotOrientation.VERTICAL, true, true,false);
-		chart.getTitle().setFont(font8);
-		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font8);		
-		}
-        DecimalFormat formatter=FormatHelper.getDecimalFormat();
-        CategoryPlot plot = chart.getCategoryPlot();
-        CategoryItemRenderer renderer = plot.getRenderer();
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}",formatter);
-		renderer.setBaseItemLabelsVisible(true);
-        renderer.setBaseItemLabelGenerator(labelGenerator);
-        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator("{2}",formatter));
-        return chart;
-	}
-    
+      
     
      /**
      * Generates chart object from specified filters and options.
@@ -223,7 +188,7 @@ public class ChartWidgetUtil {
             amount = "Amounts";
         }
         String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        String titleMsg= TranslatorWorker.translateText("Pledges/Comm/Disb", opt.getLangCode(), opt.getSiteId());
+        String titleMsg= TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId())+"("+filter.getCurrName()+")";
         chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
@@ -234,7 +199,6 @@ public class ChartWidgetUtil {
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         renderer.setItemMargin(0);
-        DecimalFormat formatter=FormatHelper.getDecimalFormat();
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
         numberAxis.setNumberFormatOverride(format);
         //This will expand ranges slightly so that points at the edge will move inside
@@ -249,142 +213,9 @@ public class ChartWidgetUtil {
         return chart;
     }
     
-    /**
-     * Generates chart object from specified filters and options.
-     * This chart then can be rendered as image or pdf or file.
-     * @param opt
-     * @param filter
-     * @return chart
-     * @throws DgException
-     */
-    public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
-		JFreeChart chart = null;
-		Font font8 = new Font(null,Font.BOLD,12);
-        DecimalFormat format=FormatHelper.getDecimalFormat();
-		CategoryDataset dataset=getODAProfileDataset(filter,opt);
-        String amount="";
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            amount = "Amounts in thousands";
-        } else {
-            amount = "Amounts";
-        }
-        String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        String titleMsg= TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
-		chart=ChartFactory.createStackedAreaChart(titleMsg,"",amountTranslatedTitle,dataset,PlotOrientation.VERTICAL, true, false,false);
-		chart.getTitle().setFont(font8);
-	
-
-         
-		return chart;
-	}
-      /**
-     * Generates category dataset using  filters .
-     * This chart then can be rendered as image or pdf or file.
-     * @param filter
-     * @return CategoryDataset
-     * @throws DgException
-     */
-    
-    
-    private static CategoryDataset getTypeOfAidDataset(ChartOption opt,FilterHelper filter) throws DgException {
-        boolean nodata=true; // for displaying no data message
-        DefaultCategoryDataset result = new DefaultCategoryDataset();
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-
-        Long currId = filter.getCurrId();
-        String currCode;
-        if (currId == null) {
-            currCode = "USD";
-        } else {
-            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        }
-           Long fiscalCalendarId = filter.getFiscalCalendarId();
-           for (int i = year.intValue() - 4; i <= year.intValue(); i++) {
-            // apply calendar filter
-            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
-            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
-            Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
-            for (AmpCategoryValue aid : typeOfAids) {
-                DecimalWraper funding = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, aid.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
-                try{
-                String aidName= TranslatorWorker.translateText(aid.getValue(), opt.getLangCode(), opt.getSiteId());
-                result.addValue(funding.doubleValue(),aidName , new Long(i));
-                }
-                catch(WorkerException ex){
-                    logger.error(ex);
-                    throw new DgException(ex);
-                    
-                }
-                if (funding.doubleValue() != 0) {
-                    nodata = false;
-                }
-            }
-
-        }
-         if(nodata){
-            result= new DefaultCategoryDataset();
-        }
-        
-        return result;
-    }
-      /**
-     * Generates category dataset using  filters .
-     * This chart then can be rendered as image or pdf or file.
-     * @param filter
-     * @return CategoryDataset
-     * @throws DgException
-     */
-    
-    private static CategoryDataset getODAProfileDataset(FilterHelper filter,ChartOption opt) throws DgException {
-        boolean nodata = true; // for displaying no data message
-        DefaultCategoryDataset result = new DefaultCategoryDataset();
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-
-        Long currId = filter.getCurrId();
-        String currCode;
-        if (currId == null) {
-            currCode = "USD";
-        } else {
-            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        }
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
-        for (int yearVal = year.intValue() - 4; yearVal <= year.intValue(); yearVal++) {
-            // apply calendar filter
-            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, yearVal);
-            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, yearVal);
-            Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-            for (AmpCategoryValue financingInstrument : financingInstruments) {
-                DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, financingInstrument.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
-                if (funding.doubleValue() != 0) {
-                    nodata = false;
-                }
-                try{
-                String value= TranslatorWorker.translateText(financingInstrument.getValue(), opt.getLangCode(), opt.getSiteId());
-                result.addValue(funding.doubleValue(), value, new Long(yearVal));
-                }
-                 catch(WorkerException ex){
-                    logger.error(ex);
-                    throw new DgException(ex);
-
-                }
-            }
-
-        }
-
-
-        if (nodata) {
-            result = new DefaultCategoryDataset();
-        }
-
-        return result;
-    }
-
+  
+     
+     
      /**
      * Generates category dataset using  filters .
      * This chart then can be rendered as image or pdf or file.

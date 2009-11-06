@@ -10,7 +10,7 @@
 <digi:instance property="orgProfilePIForm"/>
 
 
-<table border="1" id="pIndicator">
+<table border="1" class="tableElement">
 
     <tr>
         <td colspan="2" rowspan="2" class="tableHeaderCls">
@@ -50,8 +50,3 @@
 
 
 </table>
-
-<script language="javascript">
-setStripsTable("pIndicator", "tableEven", "tableOdd");
-setHoveredTable("pIndicator");
-</script>

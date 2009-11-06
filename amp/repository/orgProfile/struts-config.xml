@@ -8,6 +8,7 @@
         <form-bean name="orgProfLargestProjectsForm" type="org.digijava.module.orgProfile.form.LargestProjectsForm" />
         <form-bean name="gisWidgetTeaserForm" type="org.digijava.module.widget.form.WidgetTeaserForm"/>
         <form-bean name="orgProfilePIForm" type="org.digijava.module.orgProfile.form.OrgProfilePIForm"/>
+        <form-bean name="orgProfileNameValueYearForm" type="org.digijava.module.orgProfile.form.OrgProfileNameValueYearForm"/>
     </form-beans>
 	
     <action-mappings>
@@ -21,6 +22,9 @@
             </action>
             <action name="orgProfilePIForm" path="/orgProfile/showParisIndicator" type="org.digijava.module.orgProfile.action.OrgProfileParisIndicatorAction" validate="false">
                 <forward name="forward" path="/showLayout.do?layout=parisIndicators"/>
+            </action>
+             <action name="orgProfileNameValueYearForm" path="/orgProfile/showOrgProfileTables" scope="request" type="org.digijava.module.orgProfile.action.ShowOrgProfileTables" validate="false">
+                <forward name="forward" path="/showLayout.do?layout=showOrgProfileTables"/>
             </action>
        
 		

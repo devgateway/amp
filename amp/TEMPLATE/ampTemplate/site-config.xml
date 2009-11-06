@@ -684,6 +684,7 @@
 			</module>
             <module name="orgProfile">
 				<page>largestProjects</page>
+                                <page>showOrgProfileTables</page>
              	<page>parisIndicators</page>
 			</module>
 			<module name="mondrian">

@@ -66,18 +66,18 @@ public class ShowWidgetChart extends Action {
                 JFreeChart chart = null;
                 ChartRenderingInfo info = new ChartRenderingInfo();
                 switch (wForm.getChartType().intValue()) {
-                    case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
+                   /* case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                         chart = ChartWidgetUtil.getTypeOfAidChart(opt, filter);
-                        break;
+                        break;*/
 
                     case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
                         chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
                  
                         break;
                         
-                   case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+                 /*  case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
                         chart = ChartWidgetUtil.getODAProfileChart(opt, filter);
-                        break;
+                        break;*/
                    case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
                         chart = ChartWidgetUtil.getSectorByDonorChart(opt, filter);
                         break;

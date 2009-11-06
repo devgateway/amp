@@ -1,14 +1,24 @@
 package org.digijava.module.orgProfile.util;
 
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.rtf.table.RtfCell;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
 
+import java.util.ListIterator;
 import java.util.Set;
+import java.util.TreeMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
@@ -22,6 +32,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -34,6 +45,11 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.orgProfile.helper.NameValueYearHelper;
+import org.digijava.module.widget.util.WidgetUtil;
 
 /**
  *
@@ -42,6 +58,12 @@ import org.digijava.module.aim.util.ActivityUtil;
 public class OrgProfileUtil {
 
     private static Logger logger = Logger.getLogger(OrgProfileUtil.class);
+
+    public static final Color TITLECOLOR = new Color(34, 46, 93);
+    public static final Color BORDERCOLOR = new Color(255, 255, 255);
+    public static final Color CELLCOLOR=new Color(219, 229, 241);
+    public static final Font PLAINFONT = new Font(com.lowagie.text.Font.COURIER, 11);
+    public static final Font HEADERFONT = new Font(Font.COURIER, 11, Font.BOLD, new Color(255, 255, 255));
 
    /**
     *
@@ -707,6 +729,124 @@ public class OrgProfileUtil {
         total = tot.doubleValue();
         return total;
     }
+    public static List<NameValueYearHelper> getData(FilterHelper filter,int type) throws DgException {
+        List<NameValueYearHelper> result = new ArrayList<NameValueYearHelper>();
+        TreeMap<Long,String> totalValues=new TreeMap<Long,String>();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
 
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Collection<AmpCategoryValue>  categoryValues=null;
+        if(type==WidgetUtil.ORG_PROFILE_ODA_PROFILE){
+            categoryValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+        }
+        else{
+            categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+        }
+       
+        for (AmpCategoryValue categoryValue: categoryValues) {
+            NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+            nameValueYearHelper.setName(categoryValue.getValue());
+            for (Long i = year - 4; i <= year; i++) {
+                // apply calendar filter
+                Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
+                Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
+                DecimalWraper funding =null;
+                if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
+                   funding = ChartWidgetUtil.getFundingByFinancingInstrument(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, categoryValue.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
+                } else {
+                   funding = ChartWidgetUtil.getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, categoryValue.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
+                }
+                if(nameValueYearHelper.getYearValues()==null){
+                    nameValueYearHelper.setYearValues(new TreeMap<Long,String>());
+                }
+                if(totalValues.containsKey(i)){
+                    String value=(String)totalValues.get(i);
+                    Double newValue=funding.doubleValue()+FormatHelper.parseDouble(value);
+                    totalValues.remove(i);
+                    totalValues.put(i, FormatHelper.formatNumber(newValue));
+                }
+                else{
+                    totalValues.put(i, FormatHelper.formatNumber(funding.doubleValue()));
+                }
+                nameValueYearHelper.getYearValues().put(i, FormatHelper.formatNumber(funding.doubleValue()));
+                
+            }
+            result.add(nameValueYearHelper);
+
+        }
+
+        NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+        nameValueYearHelper.setName("TOTAL");
+        nameValueYearHelper.setYearValues(totalValues);
+        result.add(nameValueYearHelper);
+        return result;
+    }
+    public static void getDataTable(PdfPTable table,FilterHelper filter,Long siteId,String langCode,int type) throws Exception{
+        for (int i = 4; i >= 0; i--) {
+            PdfPCell cell=new PdfPCell(new Paragraph(""+(filter.getYear() - i),HEADERFONT));
+            cell.setBackgroundColor(TITLECOLOR);
+            table.addCell(cell);
+        }
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter,type);
+        ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
+        while (valuesIter.hasNext()) {
+            NameValueYearHelper value = valuesIter.next();
+            int index=valuesIter.nextIndex();
+            PdfPCell cellCatValue=new PdfPCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId)));
+            if(index%2==0){
+                    cellCatValue.setBackgroundColor(CELLCOLOR);
+            }
+            table.addCell(cellCatValue);
+            Collection<String> yearValues = value.getYearValues().values();
+            Iterator<String> yearValuesIter = yearValues.iterator();
+            while (yearValuesIter.hasNext()) {
+                PdfPCell cell=new PdfPCell(new Paragraph(yearValuesIter.next()));
+                if(index%2==0){
+                    cell.setBackgroundColor(CELLCOLOR);
+                }
+                table.addCell(cell);
+            }
+        }
+
+    }
+
+    public static void getDataTable(Table table,FilterHelper filter,Long siteId,String langCode,int type) throws Exception{
+        for (int i = 4; i >= 0; i--) {
+            RtfCell cell=new RtfCell(new Paragraph(""+(filter.getYear() - i),HEADERFONT));
+            cell.setBackgroundColor(TITLECOLOR);
+            table.addCell(cell);
+        }
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter,type);
+        ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
+        while (valuesIter.hasNext()) {
+            NameValueYearHelper value = valuesIter.next();
+            int index=valuesIter.nextIndex();
+            RtfCell cellCatValue=new RtfCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId)));
+            if(index%2==0){
+                    cellCatValue.setBackgroundColor(CELLCOLOR);
+            }
+            table.addCell(cellCatValue);
+            Collection<String> yearValues = value.getYearValues().values();
+            Iterator<String> yearValuesIter = yearValues.iterator();
+            while (yearValuesIter.hasNext()) {
+                RtfCell cell=new RtfCell(new Paragraph(yearValuesIter.next()));
+                if(index%2==0){
+                    cell.setBackgroundColor(CELLCOLOR);
+                }
+                table.addCell(cell);
+            }
+        }
+
+    }
 
 }

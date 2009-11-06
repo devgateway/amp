@@ -32,13 +32,13 @@
 <table width="100%">
 <tr>
 <td valign="top">
-<table border="1" id="lgProjects" bgcolor="#dddddd" width="100%"  >
+<table border="1"  bgcolor="#dddddd" width="100%"  class="tableElement">
     <tr>
-    <th colspan="3" class="tableHeaderCls">5 <digi:trn>Largest projects </digi:trn>(${sessionScope.orgProfileFilter.year-1})</th>
+    <th colspan="3" class="tableHeaderCls"><digi:trn>FIVE</digi:trn> (5) <digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year-1})</th>
     </tr>
     <tr>
         <td class="tableHeaderCls"><digi:trn>Project title</digi:trn></td>
-        <td class="tableHeaderCls"><digi:trn>Commitment</digi:trn></td>
+        <td class="tableHeaderCls"><digi:trn>Commitment</digi:trn>(${sessionScope.orgProfileFilter.currName})</td>
         <td class="tableHeaderCls"><digi:trn>Sector</digi:trn></td>
     </tr>
      
@@ -71,8 +71,3 @@
  </td>
 </tr>
 </table>
-<script language="javascript">
-setStripsTable("lgProjects", "tableEven", "tableOdd");
-setHoveredTable("lgProjects");
-</script>
-

@@ -11,9 +11,9 @@
 <table width="100%">
     <tr>
         <td height="110px" valign="top" >
-            <table id="orgTable" border="1" width="100%">
+            <table class="tableElement" border="1" width="100%">
                 <tr>
-                <th colspan="2" class="tableHeaderCls"><digi:trn>Summary</digi:trn></th>
+                <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
                 </tr>
                 <tr>
                     <td width="30%"><digi:trn>Group</digi:trn>:</td><td>${orgGroup.orgGrpName}&nbsp;</td>
@@ -44,7 +44,7 @@
     <tr>
         <td>
            
-                <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content" border="1">
+                <table width="100%" cellSpacing="1" cellPadding="1" align="left"  class="tableElement" border="1">
                     <thead>
                         <tr>
                             <th colspan="6" class="tableHeaderCls"><digi:trn>Contact Information</digi:trn></th>
@@ -105,9 +105,3 @@
 
 
  
-<script language="javascript">
-setStripsTable("orgTable", "tableEven", "tableOdd");
-setHoveredTable("orgTable");
-setStripsTable("table_contact_content", "tableEven", "tableOdd");
-setHoveredTable("table_contact_content");
-</script>

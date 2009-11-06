@@ -3,7 +3,6 @@ package org.dgfoundation.amp.ar.cell;
 import java.math.BigDecimal;
 import java.util.Iterator;
 
-import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.Values;
@@ -39,19 +38,20 @@ public class ComputedMeasureCell extends AmountCell {
 	public BigDecimal getAmount() {
 		BigDecimal ret = new BigDecimal(0);
 		if (id != null)
-			return (convert().multiply(new BigDecimal(getPercentage()).divide(new BigDecimal(100))));
-
-		values.putAll(ExpressionHelper.getMeasuresVariables(mergedCells));
-
+			return convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100));
+		
 		MathExpression math = null;
-
 		if (this.getColumn().getExpression() != null) {
 			math = MathExpressionRepository.get(this.getColumn().getExpression());
 		} else {
 			math = MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
 		}
-		return math.result(values);
-
+		BigDecimal val=math.result(getValues());
+		if (val!=null){
+			return val;
+		}else{
+			return new BigDecimal(0);
+		}
 	}
 
 	public Cell merge(Cell c) {

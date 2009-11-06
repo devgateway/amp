@@ -187,5 +187,20 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 		}
 		return retValue;
 	}
+	
+	protected void removeObjectFromSet(AmpObjectVisibility obj, Set set){
+		for (Iterator iter = set.iterator(); iter.hasNext();) {
+			AmpObjectVisibility item = (AmpObjectVisibility) iter.next();
+			if (item.getId().equals(obj.getId())){
+				iter.remove();
+				break;
+			}
+		}
+	}
 		
+	public void removeTemplate(AmpObjectVisibility template){
+		removeObjectFromSet(template, this.getTemplates());
+	}
+
+	
 }

@@ -1352,8 +1352,9 @@ public class FeaturesUtil {
 						retValue.getItems().add(obj);
 						obj.getTemplates().add(retValue);
 					} else {
-						retValue.getItems().remove(obj);
-						obj.getTemplates().remove(retValue);
+						retValue.removeModule(obj);
+						obj.removeTemplate(retValue);
+						unvisibleSubModules((AmpModulesVisibility)obj, retValue, session);
 					}
 				} else if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_FEATURE)){
 					obj = FeaturesUtil.getFeatureById(item.getId());
@@ -1361,8 +1362,9 @@ public class FeaturesUtil {
 						retValue.getFeatures().add(obj);
 						obj.getTemplates().add(retValue);
 					} else {
-						retValue.getFeatures().remove(obj);
-						obj.getTemplates().remove(retValue);
+						retValue.removeFeature(obj);
+						obj.removeTemplate(retValue);
+						unvisibleSubFields((AmpFeaturesVisibility)obj, retValue, session);
 					}
 				} else if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_FIELD)){
 					obj = FeaturesUtil.getFieldById(item.getId());
@@ -1370,11 +1372,12 @@ public class FeaturesUtil {
 						retValue.getFields().add(obj);
 						obj.getTemplates().add(retValue);
 					} else {
-						retValue.getFields().remove(obj);
-						obj.getTemplates().remove(retValue);
+						retValue.removeFiled(obj);
+						obj.removeTemplate(retValue);
 					}
 				}
 				session.update(obj);
+				session.update(retValue);
 			}	
 			tx.commit();
 			session.flush();
@@ -1400,6 +1403,36 @@ public class FeaturesUtil {
 		return retValue;
 	}
 	
+	
+	private static void unvisibleSubModules(AmpModulesVisibility module, AmpTemplatesVisibility template, Session session) throws HibernateException{
+		for (Iterator iterator = module.getSubmodules().iterator(); iterator.hasNext();) {
+			AmpModulesVisibility item = (AmpModulesVisibility) iterator.next();
+			template.removeModule(item);
+			item.removeTemplate(template);
+			unvisibleSubModules(item, template, session);
+			session.update(item);
+		}
+		unvisibleSubFeatures(module, template, session);
+	}
+
+	private static void unvisibleSubFeatures(AmpModulesVisibility module, AmpTemplatesVisibility template, Session session) throws HibernateException{
+		for (Iterator iterator = module.getItems().iterator(); iterator.hasNext();) {
+			AmpFeaturesVisibility item = (AmpFeaturesVisibility) iterator.next();
+			template.removeFeature(item);
+			item.removeTemplate(template);
+			unvisibleSubFields(item, template, session);
+			session.update(item);
+		}	
+	}
+
+	private static void unvisibleSubFields(AmpFeaturesVisibility module, AmpTemplatesVisibility template, Session session) throws HibernateException{
+		for (Iterator iterator = module.getItems().iterator(); iterator.hasNext();) {
+			AmpFieldsVisibility item = (AmpFieldsVisibility) iterator.next();
+			template.removeFiled(item);
+			item.removeTemplate(template);
+			session.update(item);
+		}	
+	}
 	
 	/**
 	 *

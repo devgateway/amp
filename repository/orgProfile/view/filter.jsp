@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
@@ -122,39 +123,41 @@
         orgSelect.innerHTML=responseText;
 
     }
-    function setStripsTable(tableId, classOdd, classEven) {
-        var tableElement = document.getElementById(tableId);
-        rows = tableElement.getElementsByTagName('tr');
-        for(var i = 0, n = rows.length; i < n; ++i) {
-            if(i%2 == 0)
-                rows[i].className = classEven;
-            else
-                rows[i].className = classOdd;
-        }
-        rows = null;
-    }
-    function setHoveredTable(tableId) {
-
-        var tableElement = document.getElementById(tableId);
-        if(tableElement){
-            var className = 'Hovered',
-            pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-            rows      = tableElement.getElementsByTagName('tr');
-
+    function setStripsTable(classOdd, classEven) {
+        var tableElements = $(".tableElement");
+        for(var j = 0; j < tableElements.length; j++) {
+            rows = tableElements[j].getElementsByTagName('tr');
             for(var i = 0, n = rows.length; i < n; ++i) {
-                rows[i].onmouseover = function() {
-                    this.className += ' ' + className;
-                };
-                rows[i].onmouseout = function() {
-                    this.className = this.className.replace(pattern, ' ');
-
-                };
+                if(i%2 == 0)
+                    rows[i].className = classEven;
+                else
+                   rows[i].className = classOdd;
             }
             rows = null;
+
         }
 
+    }
+    function setHoveredTable() {
+        var tableElements = $(".tableElement");
+        for(var j = 0; j < tableElements.length; j++) {
+            if(tableElements){
+                var className = 'Hovered',
+                pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+                rows      = tableElements[j].getElementsByTagName('tr');
 
-
+                for(var i = 0, n = rows.length; i < n; ++i) {
+                    rows[i].onmouseover = function() {
+                        this.className += ' ' + className;
+                    };
+                    rows[i].onmouseout = function() {
+                        this.className = this.className.replace(pattern, ' ');
+                      
+                    };
+                }
+                rows = null;
+            }
+        }
     }
 </script>
 <digi:instance property="orgProfOrgProfileFilterForm"/>

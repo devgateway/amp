@@ -77,13 +77,7 @@
                                             <digi:insert attribute="filters"/>
                                         </TD>
                                     </TR>
-                                    
-                                    <TR>
-                                        <TD>&nbsp;</TD>
-                                    </TR>
-                                    <TR>
-                                        <TD><digi:trn>All the amounts are in </digi:trn>  ${sessionScope.orgProfileFilter.currName} </TD>
-                                    </TR>
+                                                           
                                      <TR>
                                         <TD>&nbsp;</TD>
                                     </TR>
@@ -252,6 +246,10 @@
                 </TD>
             </TR>
         </TABLE>
+      <script language="javascript" type="text/javascript">
+        setStripsTable("tableEven", "tableOdd");
+        setHoveredTable();
+       </script>
     </BODY>
 </HTML>
 

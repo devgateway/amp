@@ -1,26 +1,24 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
-import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.Values;
+import org.digijava.module.aim.helper.FormatHelper;
 
 public class ComputedAmountCell extends CategAmountCell {
 
 	Values values = null;
 
 	private static String COMPUTED_VALUE = "COMPUTED_VALUE";
-	private boolean computedVaule = false;
 
 	// if is a trail cell the value will be set by the Column
 	public void setComputedVaule(BigDecimal value) {
-		computedVaule = true;
-		values.put(COMPUTED_VALUE, value);
+		getValues().put(COMPUTED_VALUE, value);
 	}
 
 	public Class getWorker() {
@@ -30,42 +28,52 @@ public class ComputedAmountCell extends CategAmountCell {
 	public BigDecimal getAmount() {
 		BigDecimal ret = new BigDecimal(0);
 		if (id != null)
-			 return convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100));
-
+			return convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100));
+		
 		// get values from mergedCells
-		values.putAll(ExpressionHelper.getRowVariables(mergedCells));
-		MathExpression expression = null;
 
-		// if the value was set by the column just return this
-		if (computedVaule) {
-			return values.get(COMPUTED_VALUE);
+		MathExpression expression = null;
+		
+		if (getValues().containsKey(COMPUTED_VALUE)) {
+			BigDecimal val = getValues().get(COMPUTED_VALUE);
+			if (val != null) {
+				return val;
+			} else {
+				return new BigDecimal(0);
+			}
+
 		} else {
 			// if the cell should return the value, do it only if the row
 			// expression is set
-			
+
 			if (this.getColumn().getExpression() != null) {
 				expression = MathExpressionRepository.get(this.getColumn().getExpression());
-			} else if (this.getColumn().getWorker().getRelatedColumn().getTokenExpression()!=null){
+			} else if (this.getColumn().getWorker().getRelatedColumn().getTokenExpression() != null) {
 				expression = MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
 			}
-			
-			String totalExpression=null;
-			if (this.getColumn().getWorker().getRelatedColumn().getTotalExpression()!=null){
-				totalExpression=this.getColumn().getWorker().getRelatedColumn().getTotalExpression();
+
+			String totalExpression = null;
+			if (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null) {
+				totalExpression = this.getColumn().getWorker().getRelatedColumn().getTotalExpression();
 			}
-			Boolean showRowCalculation=false;
-			if(this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations()!=null){
-				showRowCalculation=this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations();
+			Boolean showRowCalculation = false;
+			if (this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations() != null) {
+				showRowCalculation = this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations();
 			}
-			
+
 			// if rowsExpression is present so return the expression result
 			// value
-			if ((expression != null)&&(totalExpression==null || showRowCalculation )) {
-				return expression.result(values);
-			} else {
-				// if not this is a header result
-				return new BigDecimal(0);
+			if ((expression != null) && (totalExpression == null || showRowCalculation)) {
+				
+				getValues().prepareCountValues();
+				BigDecimal result = expression.result(getValues());
+				if (result != null) {
+					return result;
+				}
+
 			}
+
+			return new BigDecimal(0);
 
 		}
 	}
@@ -73,11 +81,6 @@ public class ComputedAmountCell extends CategAmountCell {
 	public ComputedAmountCell(Long ownerId) {
 		super(ownerId);
 		// TODO Auto-generated constructor stub
-	}
-
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
 	}
 
 	public ComputedAmountCell(AmountCell ac) {
@@ -103,6 +106,8 @@ public class ComputedAmountCell extends CategAmountCell {
 		realRet.getMergedCells().addAll(ret.getMergedCells());
 		CategAmountCell categ = (CategAmountCell) c;
 		realRet.getMetaData().addAll(categ.getMetaData());
+		this.getValues().mergeTrailValues(((ComputedAmountCell) c).getValues());
+		realRet.setValues(this.getValues());
 		return realRet;
 
 	}
@@ -141,20 +146,28 @@ public class ComputedAmountCell extends CategAmountCell {
 
 	}
 
-	/**
-	 * @return the values
-	 */
 	public Values getValues() {
+		if (values == null) {
+			values = new Values(ownerId); // getAmount();
+			Iterator<CategAmountCell> i = mergedCells.iterator();
+			while (i.hasNext()) {
+				values.collectCellVariables((CategAmountCell) i.next());
+			}
+		}
+		
+		
 		return values;
 	}
 
-	/**
-	 * @param values the values to set
-	 */
 	public void setValues(Values values) {
 		this.values = values;
 	}
 
+	public String toString() {
+		if ((this.getAmount().doubleValue() == 0d) && (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null)) {
+			return "";
+		}
 
-
+		return FormatHelper.formatNumberUsingCustomFormat(getAmount());
+	}
 }

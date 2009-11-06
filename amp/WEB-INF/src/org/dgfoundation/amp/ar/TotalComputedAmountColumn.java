@@ -5,16 +5,14 @@ package org.dgfoundation.amp.ar;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
-import org.dgfoundation.amp.exprlogic.ExpressionHelper;
-import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.dgfoundation.amp.exprlogic.Values;
 
 /**
  * 
@@ -89,36 +87,37 @@ public class TotalComputedAmountColumn extends TotalAmountColumn {
 	}
 
 	public List getTrailCells() {
-		ArrayList<ComputedAmountCell> ar = new ArrayList<ComputedAmountCell>();
-		ComputedAmountCell ac = new ComputedAmountCell();
-		Iterator i = items.iterator();
+		ArrayList ar=new ArrayList();
+		ComputedAmountCell ac=new ComputedAmountCell();		
+		Iterator i=items.iterator();
 		
-		String totalExpression=this.getWorker().getRelatedColumn().getTotalExpression();
-		String rowExpression=this.getWorker().getRelatedColumn().getTokenExpression();
 		
-		//if totaExpression is null sum  the items
-		if(totalExpression==null){
-			
-			while (i.hasNext()) {
-				Object el = i.next();
-				ComputedAmountCell element = (ComputedAmountCell) el;
-				ac.merge(element, ac);
-			}
-		}else{
-			HashMap<String, BigDecimal> variables =ExpressionHelper.getGroupVariable(items, ac,rowExpression);
-			 MathExpression expression =MathExpressionRepository.get(getWorker().getRelatedColumn ().getTotalExpression());
-			 ac.setComputedVaule(expression.result(variables)); ac.setColumn(this);
+		Values groupValues=new Values();
+		
+		while (i.hasNext()) {
+			ComputedAmountCell element = (ComputedAmountCell) i.next();
+			ac.merge(element,ac);
+			groupValues.collectTrailVariables(element.getValues());
 		}
 		
+		///ac=new trail cell 
 		ac.setColumn(this);
+		int totalUniqueRows=0;
+		if (this.getParent() instanceof org.dgfoundation.amp.ar.ColumnReportData) {
+			totalUniqueRows=((ColumnReportData)this.getParent()).getTotalUniqueRows();
+		}
+		groupValues.put(ArConstants.COUNT_PROJECTS, new BigDecimal(totalUniqueRows));
+		ac.setValues(groupValues);
+		//set the collected values to ac
+		//set the computed value to ac
+		if (this.getWorker().getRelatedColumn().getTotalExpression()!=null){
+			BigDecimal computedValue=MathExpressionRepository.get(this.getWorker().getRelatedColumn().getTotalExpression()).result(groupValues);
+			ac.setComputedVaule(computedValue);
+		}
+		
 		ar.add(ac);
 		return ar;
 	}
 
-	   
-	   
-	 
-	  
-	 
-
+	
 }

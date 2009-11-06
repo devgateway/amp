@@ -186,7 +186,7 @@ public class MathExpression {
 		return new BigDecimal(count * ((negaitveResult) ? -1 : 1));
 	}
 
-	public boolean constainsVariable(String var) {
+	private boolean constainsVariable(String var) {
 		if (oper1 instanceof String) {
 			if (var.equalsIgnoreCase((String) oper1)) {
 				return true;

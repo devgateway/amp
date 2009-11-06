@@ -6,6 +6,21 @@
 
 <%@page import="org.digijava.module.aim.fmtool.util.FMToolConstants"%>
 
+<script language="JavaScript">
+
+function cbStatusChange(state, value){
+
+	if (!state){
+		var cbItem = document.getElementById('cbId_'+value);
+		while (cbItem != null){
+			cbItem.checked = state;
+			cbItem = document.getElementById('cbId_'+ (++value));
+		}
+	}
+}
+
+</script> 
+
 <digi:instance property="fmAdvancedForm" />
 
 <c:set var="cModule" value="<%= FMToolConstants.FEATURE_TYPE_MODULE %>"/>
@@ -17,7 +32,7 @@
 	<c:forEach var="fVar" items="${fmAdvancedForm.fmeList}" varStatus="lStatus">
 		<div style="padding-left: ${fmAdvancedForm.paddingOffset+fVar.paddingLeft+5};">
 		
-		<input type="checkbox" name="fmeList[${lStatus.index}].visib" <c:if test="${fVar.visib}">checked</c:if> />
+		<input id="cbId_${lStatus.index}" onClick="cbStatusChange(this.checked, ${lStatus.index})" type="checkbox" name="fmeList[${lStatus.index}].visib" <c:if test="${fVar.visib}">checked</c:if> />
 		
 		<c:if test="${fVar.type==cModule}">
 			<img src="module/aim/images/folder.gif" alt="" width="15" height="11" border="0"/>

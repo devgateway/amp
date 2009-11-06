@@ -28,14 +28,29 @@ public class FMAdvancedModeAction extends DispatchAction{
 	private static Logger log = Logger.getLogger(FMAdvancedModeAction.class);
 	private static int paddingShift = 20;
 	private ServletContext ampContext = null;
+	private AmpTemplatesVisibility templateVisibility = null;
+	
+	private void loadCurrentTemplate(HttpServletRequest request){
+		Long templateId = null;
+		if(request.getParameter("templateId")!=null)
+			templateId=new Long(Long.parseLong(request.getParameter("templateId")));
+		if(templateId==null) 
+			templateId=(Long)request.getAttribute("templateId");
+		if(templateId==null) 
+			templateId = FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
 
+		templateVisibility = FeaturesUtil.getTemplateById(templateId);
+	}
+	
 	public ActionForward showModule(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		FMAdvancedForm fmForm = (FMAdvancedForm)form;
 		String fmName = request.getParameter("fmName");
 		fmForm.getFmeList().clear();
+
 		
 		if (fmName != null){
+			loadCurrentTemplate(request);
 			AmpModulesVisibility module = FeaturesUtil.getModuleVisibility(fmName);
 			fmForm.setPaddingOffset(addToList(fmForm, module, 0)*-1);
 		}
@@ -44,12 +59,14 @@ public class FMAdvancedModeAction extends DispatchAction{
 	}
 
 	public ActionForward showFeature(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+		
 		FMAdvancedForm fmForm = (FMAdvancedForm)form;
 		String fmName = request.getParameter("fmName");
 		fmForm.getFmeList().clear();
 		
 		if (fmName != null){
+			loadCurrentTemplate(request);
+			
 			AmpFeaturesVisibility feature = FeaturesUtil.getFeatureVisibility(fmName);
 			fmForm.setPaddingOffset(addToList(fmForm, feature, 0)*-1);
 		}
@@ -64,6 +81,8 @@ public class FMAdvancedModeAction extends DispatchAction{
 		fmForm.getFmeList().clear();
 		
 		if (fmName != null){
+			loadCurrentTemplate(request);
+			
 			AmpFieldsVisibility field = FeaturesUtil.getFieldVisibility(fmName);
 			fmForm.setPaddingOffset(addToList(fmForm, field, 0)*-1);
 		}
@@ -88,51 +107,37 @@ public class FMAdvancedModeAction extends DispatchAction{
 	}
 	
 	
-	private int addToList(FMAdvancedForm fmForm, AmpModulesVisibility module, int index){
+	private int addToList(FMAdvancedForm fmForm, AmpModulesVisibility module,  int index){
 		int retValue = index;
 		
 		fmForm.getFmeList().addFirst(fmForm.createFMAdvancedDisplay(module.getId(), module.getName(), FMToolConstants.FEATURE_TYPE_MODULE, 
-				isFMEVisible(module), retValue));
+				module.isVisibleTemplateObj(templateVisibility) , retValue));
 		if (module.getParent() != null){
 			retValue = addToList(fmForm, (AmpModulesVisibility)module.getParent(),  retValue - paddingShift);
 		}
 		return retValue;
 	}
 	
-	private int addToList(FMAdvancedForm fmForm, AmpFeaturesVisibility feature, int index){
+	private int addToList(FMAdvancedForm fmForm, AmpFeaturesVisibility feature,  int index){
 		int retValue = index;
 
 		fmForm.getFmeList().addFirst(fmForm.createFMAdvancedDisplay(feature.getId(), feature.getName(), FMToolConstants.FEATURE_TYPE_FEATURE, 
-				isFMEVisible(feature), retValue));
+				feature.isVisibleTemplateObj(templateVisibility) , retValue));
 		if (feature.getParent() != null){
 			retValue = addToList(fmForm, (AmpModulesVisibility)feature.getParent(),  retValue - paddingShift);
 		}
 		return retValue;
 	}
 
-	private int addToList(FMAdvancedForm fmForm, AmpFieldsVisibility field, int index){
+	private int addToList(FMAdvancedForm fmForm, AmpFieldsVisibility field,  int index){
 		int retValue = 0;
 
 		fmForm.getFmeList().addFirst(fmForm.createFMAdvancedDisplay(field.getId(), field.getName(), FMToolConstants.FEATURE_TYPE_FIELD, 
-				isFMEVisible(field), retValue));
+				field.isVisibleTemplateObj(templateVisibility) , retValue));
+		
 		if (field.getParent() != null){
 			retValue = addToList(fmForm, (AmpFeaturesVisibility)field.getParent(),  retValue - paddingShift);
 		}
-		return retValue;
-	}
-	
-	private boolean isFMEVisible(AmpObjectVisibility fme){
-		boolean retValue = false;
-		Long currentTemplateId = FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
-		
-		for (Iterator iterator = fme.getTemplates().iterator(); iterator.hasNext();) {
-			AmpTemplatesVisibility item = (AmpTemplatesVisibility) iterator.next();
-			if (item.getId().equals(currentTemplateId)){
-				retValue = true;
-				break;
-			}
-		}
-		
 		return retValue;
 	}
 }

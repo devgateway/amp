@@ -304,24 +304,31 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 								<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown"
 			  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
 															<TR valign="top" bgcolor="#f4f4f2">
-															<TD>&nbsp;</TD>
+				               				<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlFinancialOverview}" property="ampActivityId">
+
+																<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
+															</c:set>
+															<c:set target="${urlFinancialOverview}" property="ampFundingId">
+																<bean:write name="breakdown" property="ampFundingId"/>
+															</c:set>
+															<c:set target="${urlFinancialOverview}" property="tabIndex">
+																<bean:write name="aimFinancingBreakdownForm" property="tabIndex"/>
+															</c:set>
+															<c:set var="translation">
+																<digi:trn key="aim:clickToViewFinancialOverview">
+																Click here to view Financial Overview</digi:trn>
+															</c:set>
+															<TD>&nbsp;
+																		<field:display name="More Info Link" feature="Funding Information">
+																		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview"
+																		title="${translation}" >
+																			<digi:trn>More info...</digi:trn>
+																		</digi:link>
+																		</field:display>
+															</TD>
 												<field:display name="Funding Organization Id" feature="Funding Information">
 					    	           			<TD>
-						               				<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlFinancialOverview}" property="ampActivityId">
-
-																		<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
-																	</c:set>
-																	<c:set target="${urlFinancialOverview}" property="ampFundingId">
-																		<bean:write name="breakdown" property="ampFundingId"/>
-																	</c:set>
-																	<c:set target="${urlFinancialOverview}" property="tabIndex">
-																		<bean:write name="aimFinancingBreakdownForm" property="tabIndex"/>
-																	</c:set>
-																	<c:set var="translation">
-																		<digi:trn key="aim:clickToViewFinancialOverview">
-																		Click here to view Financial Overview</digi:trn>
-																	</c:set>
 						                  							<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview"
 																		title="${translation}" >
 																		<c:if test="${!empty breakdown.financingId}">

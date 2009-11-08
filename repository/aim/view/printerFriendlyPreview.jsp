@@ -121,39 +121,41 @@
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										
                                          </td>
-									</tr>    
-										<logic:present name="currentMember" scope="session">
-										<tr>
-											<td width="27%" align="right" valign="top" nowrap="nowrap" >
-												<b><digi:trn key="aim:objectiveComments">Objective Comments</digi:trn></b>	
-											</td>
-											<td bgcolor="#ffffff">
-											 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
-											 	<logic:equal name="comments" property="key" value="Objective Assumption">
-													<logic:iterate name="comments" id="comment" property="value"
-														type="org.digijava.module.aim.dbentity.AmpComments"><b>
-														<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
-														<bean:write name="comment" property="comment"/><br/>
-	                                        		</logic:iterate>
-	                                        	</logic:equal>
-	                                        	<logic:equal name="comments" property="key" value="Objective Verification">
-													<logic:iterate name="comments" id="comment" property="value"
-														type="org.digijava.module.aim.dbentity.AmpComments"><b>
-														<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</b>
-														<bean:write name="comment" property="comment"/><br/>
-	                                        		</logic:iterate>
-	                                        	</logic:equal>
-	                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
-													<logic:iterate name="comments" id="comment" property="value"
-														type="org.digijava.module.aim.dbentity.AmpComments"><b>
-														<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:</b>
-														<bean:write name="comment" property="comment"/><br/>
-	                                        		</logic:iterate>
-	                                        	</logic:equal>
-											</logic:iterate>										
-											</td>
-										</tr>
-										</logic:present>
+									</tr> 
+									   	<field:display name="Objective Comments" feature="Identification">
+											<logic:present name="currentMember" scope="session">
+											<tr>
+												<td width="27%" align="right" valign="top" nowrap="nowrap" >
+													<b><digi:trn key="aim:objectiveComments">Objective Comments</digi:trn></b>	
+												</td>
+												<td bgcolor="#ffffff">
+												 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
+												 	<logic:equal name="comments" property="key" value="Objective Assumption">
+														<logic:iterate name="comments" id="comment" property="value"
+															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
+															<bean:write name="comment" property="comment"/><br/>
+		                                        		</logic:iterate>
+		                                        	</logic:equal>
+		                                        	<logic:equal name="comments" property="key" value="Objective Verification">
+														<logic:iterate name="comments" id="comment" property="value"
+															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</b>
+															<bean:write name="comment" property="comment"/><br/>
+		                                        		</logic:iterate>
+		                                        	</logic:equal>
+		                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
+														<logic:iterate name="comments" id="comment" property="value"
+															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:</b>
+															<bean:write name="comment" property="comment"/><br/>
+		                                        		</logic:iterate>
+		                                        	</logic:equal>
+												</logic:iterate>										
+												</td>
+											</tr>
+											</logic:present>
+										</field:display>
 									</field:display>
 									 </feature:display>
                                        <feature:display name="Identification" module="Project ID and Planning">   
@@ -867,6 +869,7 @@
                                                                                     </digi:trn>
                                                                                   </logic:notEmpty>                                                                                </td>
                                                                               </tr>
+                                                                           <field:display name="Credit/Donation" feature="Planning">
                                                                            <tr>
                                                                                 <td align="left" width="339">
                                                                                   <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
@@ -889,6 +892,7 @@
                                                                                        
 										                                        	                                                                               </td>
                                                                               </tr>
+                                                                              </field:display>
                                                                               
 																			</field:display>
 																			  <field:display name="Funding Status" feature="Funding Information">

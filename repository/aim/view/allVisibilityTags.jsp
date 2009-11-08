@@ -60,7 +60,8 @@
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
-<module:display name="Report Types" parentModule="REPORTING"></module:display> 
+<module:display name="Report Types" parentModule="REPORTING"></module:display>
+<module:display name="Filter Section" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
@@ -117,9 +118,11 @@
 <feature:display name="Admin" module="M & E"></feature:display> 
 <feature:display name="Alert tab" module="Messages"></feature:display> 
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
-<feature:display name="Approval Tab" module="Messages"></feature:display> 
+<feature:display name="Approval Tab" module="Messages"></feature:display>
+<feature:display name="Approval Status Filters" module="Filter Section"></feature:display>
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
-<feature:display name="Channel Overview" module="Channel Overview"></feature:display> 
+<feature:display name="Channel Overview" module="Channel Overview"></feature:display>
+<feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
 <feature:display name="Content Repository" module="Document Management"></feature:display> 

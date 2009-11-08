@@ -515,7 +515,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Financial Instrument" feature="Budget"></field:display> 
 <field:display name="Financing Instrument" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Id" feature="Funding Information"></field:display> 
-<field:display name="More Info Link" feature="Funding Information"></field:display>
+<field:display name="Financial Progress More Info Link" feature="Funding Information"></field:display>
 <field:display name="Funding Organization Name" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Funding Organizations Tab" feature="Funding Information"></field:display> 

@@ -320,7 +320,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																Click here to view Financial Overview</digi:trn>
 															</c:set>
 															<TD>&nbsp;
-																		<field:display name="More Info Link" feature="Funding Information">
+																		<field:display name="Financial Progress More Info Link"  feature="Funding Information">
 																		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview"
 																		title="${translation}" >
 																			<digi:trn>More info...</digi:trn>

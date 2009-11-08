@@ -86,11 +86,11 @@
 						<html:option value="1" style="color:red">
 							*&nbsp;<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
-						<feature:display name="Approval Status Filters" module="Filter Section">
+						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
 							<html:option value="2" style="color:green">
 								*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
 							</html:option>
-						</feature:display>
+						</module:display>
 						<html:option value="4" style="color:blue">
 							&nbsp;<digi:trn key="rep:filter:ValidatedActivities" >Validated Activities</digi:trn>
 						</html:option>
@@ -99,11 +99,11 @@
 							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
 						</html:option>
 						</logic:notEqual>
-						<feature:display name="Approval Status Filters" module="Filter Section">
+						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
 							<html:option value="0" style="color:green">
 								<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
 							</html:option>
-						</feature:display>
+						</module:display>
 					</html:select>
 					</td>
 				</tr>

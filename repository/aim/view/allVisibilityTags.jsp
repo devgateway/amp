@@ -119,7 +119,6 @@
 <feature:display name="Alert tab" module="Messages"></feature:display> 
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display>
-<feature:display name="Approval Status Filters" module="Filter Section"></feature:display>
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 

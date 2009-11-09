@@ -3,6 +3,9 @@ package org.digijava.module.widget.util;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -47,11 +50,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
@@ -68,7 +67,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
-import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieToolTipGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
@@ -93,11 +91,15 @@ import org.jfree.ui.RectangleInsets;
 import org.digijava.module.widget.helper.SectorHelper;
 import org.jfree.chart.axis.NumberAxis;
 import org.digijava.module.aim.util.SectorUtil;
-import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.ui.TextAnchor;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.VerticalAlignment;
+import org.jfree.ui.HorizontalAlignment;
+import org.jfree.ui.Size2D;
+import org.jfree.ui.RectangleAnchor;
+import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 
 /**
  * Chart widgets util.
@@ -499,7 +501,6 @@ public class ChartWidgetUtil {
     public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
         Font font12 = new Font(null, Font.BOLD, 12);
-    	Font font8 = new Font(null,Font.BOLD,8);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
         String transTypeName="";
         switch(filter.getTransactionType()){
@@ -508,26 +509,36 @@ public class ChartWidgetUtil {
         }
         String transTypeNameTrn=TranslatorWorker.translateText(transTypeName,opt.getLangCode(),opt.getSiteId());
 
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+")", dataset, true, true, false);
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+" | "+filter.getCurrName()+")", dataset, true, false, false);
         chart.getTitle().setFont(font12);
-        if (opt.isShowLegend()) {
-            chart.getLegend().setItemFont(font12);
-        }
+        LegendTitle legend = chart.getLegend();
+        legend.setItemFont(font12);
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setLabelFont(font8);
-        String pattern = "{0} = {1} ({2})";
+        plot.setLabelFont(font12);
+        String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
         }
 
         DecimalFormat format = FormatHelper.getDecimalFormat();
         format.setMaximumFractionDigits(0);
-        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}");
         plot.setLabelGenerator(gen);
-        plot.setLegendLabelGenerator(gen);
-        plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
+        plot.setSimpleLabels(true);
+        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
+        plot.setLabelGap(0);
+        plot.setLabelLinkMargin(0.05);
+        plot.setLabelShadowPaint(null);
+        plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
+        legend.setPosition(RectangleEdge.LEFT);
+        legend.setVerticalAlignment(VerticalAlignment.TOP);
+        legend.setHorizontalAlignment(HorizontalAlignment.LEFT);
+        plot.setLegendItemShape(new Rectangle(10,10));
+        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
+        plot.setLegendLabelGenerator(genLegend);
+        plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
         return chart;
-    }
+    }   
       /**
      * Generates chart object from specified filters and options.
      * This chart then can be rendered as image or pdf or file.
@@ -541,8 +552,8 @@ public class ChartWidgetUtil {
        public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
      	JFreeChart chart = null;
         Font font12 = new Font(null, Font.BOLD, 12);
-        Font font8 = new Font(null, Font.BOLD, 8);
-		DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
+
+        DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
         String transTypeName = "";
         switch (filter.getTransactionType()) {
             case org.digijava.module.aim.helper.Constants.COMMITMENT:
@@ -553,25 +564,33 @@ public class ChartWidgetUtil {
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + ")", dataset, true, true, false);
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1)  +" | "+filter.getCurrName()+")", dataset, true, false, false);
         chart.getTitle().setFont(font12);
-		if (opt.isShowLegend()){
-            chart.getLegend().setItemFont(font12);
-		}
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setLabelFont(font8);
-
-        String pattern = "{0} = {1} ({2})";
+        plot.setLabelFont(font12);
+        String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
         }
         DecimalFormat format = FormatHelper.getDecimalFormat();
         format.setMaximumFractionDigits(0);
-        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}");
         plot.setLabelGenerator(gen);
-        plot.setLegendLabelGenerator(gen);
-        plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
-		return chart;
+        plot.setSimpleLabels(true);
+        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
+        plot.setLabelGap(0);
+        plot.setLabelLinkMargin(0.05);
+        plot.setLabelShadowPaint(null);
+        plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
+        LegendTitle legend = chart.getLegend();
+        legend.setPosition(RectangleEdge.LEFT);
+        legend.setVerticalAlignment(VerticalAlignment.TOP);
+        legend.setItemFont(font12);
+        plot.setLegendItemShape(new Rectangle(10,10));
+        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
+        plot.setLegendLabelGenerator(genLegend);
+        plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
+        return chart;
     }
 
 	/**

@@ -20,7 +20,9 @@
            	  UNDISBURSED BALANCE 	             </digi:trn></td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}
-</td>
+			<c:if test="${not empty funding.unDisbursementBalance}">
+				${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}
+			</c:if> &nbsp;
+		</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

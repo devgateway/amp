@@ -15,18 +15,21 @@
 <digi:instance property="aimEditActivityForm" />
 
 <!--start commitments-->
-<tr bgcolor="#ffffff">
-	<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
-		style="text-transform: uppercase;"><a
-		title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
-	<digi:trn key="aim:plannedcommitments">PLANNED COMMITMENTS </digi:trn>
-	</a></td>
-	<td bgcolor="#FFFFCC"><c:if
-		test="${aimEditActivityForm.funding.fixerate == true}">
-		<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
-	</c:if></td>
-</tr>
+<feature:display name="Planned Commitments" module="Measures">
+	<tr bgcolor="#ffffff">
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
+			style="text-transform: uppercase;"><a
+			title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
+		<digi:trn key="aim:plannedcommitments">PLANNED COMMITMENTS </digi:trn>
+		</a></td>
+		<td bgcolor="#FFFFCC"><c:if
+			test="${aimEditActivityForm.funding.fixerate == true}">
+			<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+		</c:if></td>
+	</tr>
+</feature:display>
 <c:if test="${!empty funding.fundingDetails}">
+<feature:display name="Planned Commitments" module="Measures">
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
@@ -54,11 +57,11 @@
 							</field:display> <field:display name="Currency Commitment"
 								feature="Commitments">
 								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
+							</field:display> &nbsp;</td>
 							<td height="18"><field:display
 								name="Exchange Rate" feature="Funding Information">
 								<bean:write name="fundingDetail" property="formattedRate" />
-							</field:display> &nbsp;</td>
+							</field:display></td>
 						</tr>
 			</logic:equal>
 		</logic:equal>
@@ -70,11 +73,14 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-                  ${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}
+				<c:if test="${not empty funding.subtotalPlannedCommitments}">
+                		  ${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}
+                </c:if>&nbsp;
             </td>
       		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</feature:display>
 
 	<tr><td colspan="4" height="7px"></td></tr>
 	<tr>
@@ -114,11 +120,11 @@
 							</field:display> <field:display name="Currency Commitment"
 								feature="Commitments">
 								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
+							</field:display>&nbsp;</td>
 							<td height="18"><field:display name="Exchange Rate"
 								feature="Funding Information">
 								<bean:write name="fundingDetail" property="formattedRate" />
-							</field:display> &nbsp;</td>
+							</field:display></td>
 						</tr>
 			</logic:equal>
 		</logic:equal>
@@ -129,7 +135,9 @@
 			key='aim:subtotalactualcommittment'> SUBTOTAL ACTUAL COMMITMENTS: </digi:trn>
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
-            ${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}
+			<c:if test="${not empty funding.subtotalActualCommitments}">
+           			 ${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}
+            </c:if>&nbsp;
         </td>    
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>

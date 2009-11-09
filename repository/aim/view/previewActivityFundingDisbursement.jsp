@@ -55,7 +55,7 @@
 							</field:display> <field:display name="Currency Disbursement"
 								feature="Funding Information">
 								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
+							</field:display>&nbsp;</td>
 							<td height="18"><field:display
 								name="Exchange Rate" feature="Funding Information">
 								<bean:write name="fundingDetail" property="formattedRate" />
@@ -74,7 +74,9 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-            ${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}
+			<c:if test="${not empty funding.subtotalPlannedDisbursements}">
+          		  ${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}
+            </c:if>&nbsp;
 			</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
@@ -114,7 +116,7 @@
 							</field:display> <field:display name="Currency Disbursement"
 								feature="Funding Information">
 								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
+							</field:display>&nbsp;</td>
 							<td height="18"><field:display name="Exchange Rate"
 								feature="Funding Information">
 								<bean:write name="fundingDetail" property="formattedRate" />
@@ -133,7 +135,10 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-                                  ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}</td>
+			 <c:if test="${not empty funding.subtotalDisbursements}">
+                                  ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}
+             </c:if>&nbsp;
+        </td>
                    
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

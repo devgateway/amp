@@ -54,11 +54,10 @@ public class FormatHelper {
     
     public static String formatNumber(double nr) {
     	
-    	
-    		Double number;
+    	Double number;
     	String result;
     	if (nr == 0) {
-    	    number = new Double(0d);
+    	    return "";
     	}
     	else number = new Double(nr);
 
@@ -79,7 +78,9 @@ public class FormatHelper {
    
 
    public static String formatNumber(Number number) {                                                                                                   
-       String result;                                                                                                                               
+       String result;
+       if ( number == null || number.doubleValue() == 0.0) 
+    	   		return "";
        DecimalFormat formater = getDecimalFormat();                                                     
 	   result = formater.format(number);                                                                                                            
        return result;                                                                                                                               

@@ -965,18 +965,22 @@
                                                                
 
                         <table cellSpacing=1 cellPadding=0 border="0" bordercolor="#FF0000" width="100%">
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
-                                key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
-                            </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" />
-                        </td>
-                        </tr>
+                        <feature:display name="Planned Commitments" module="Measures">
+	                        <tr>
+	                            <td bgcolor="#eeeeee"
+	                                style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
+	                                key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
+	                            </td>
+	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+	                                style="border-top: 1px solid #000000">
+	                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> <bean:write
+		                                name="aimEditActivityForm" property="currCode" />
+		                             </c:if>&nbsp;
+	                        </td>
+	                        </tr>
+                        </feature:display>
                         <tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
@@ -984,9 +988,12 @@
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalCommitments" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" /></td>
+                                 <c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
+	                                <bean:write
+	                                name="aimEditActivityForm" property="funding.totalCommitments" /> <bean:write
+	                                name="aimEditActivityForm" property="currCode" />
+	                              </c:if>&nbsp;
+	                         </td>
                         </tr>
                         <feature:display module="Funding"
                             name="Disbursement">
@@ -999,9 +1006,12 @@
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" /></td>
+                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> <bean:write
+		                                name="aimEditActivityForm" property="currCode" />
+		                          </c:if>&nbsp;
+                            </td>
                         </tr>
                         <tr>
                             <td bgcolor="#eeeeee"
@@ -1011,9 +1021,12 @@
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalDisbursements" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" /></td>
+                                 <c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalDisbursements" /> <bean:write
+		                                name="aimEditActivityForm" property="currCode" />
+		                          </c:if>&nbsp;
+                           </td>
                         </tr>
                         </feature:display>
                         <feature:display module="Funding" name="Expenditures">
@@ -1024,9 +1037,12 @@
                                   TOTAL PLANNED EXPENDITURES             </digi:trn></td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" /></td>
+                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
+			                                <bean:write
+			                                name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> <bean:write
+			                                name="aimEditActivityForm" property="currCode" />
+			                      </c:if>&nbsp;
+                            </td>
                         </tr>
                         <tr>
                             <td bgcolor="#eeeeee"
@@ -1035,9 +1051,12 @@
                                     TOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalExpenditures" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" /></td>
+                                 <c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalExpenditures" /> <bean:write
+		                                name="aimEditActivityForm" property="currCode" />
+		                          </c:if>&nbsp;
+		                    </td>
                         </tr>
                         </feature:display>
                         <feature:display module="Funding" name="Disbursement Orders">
@@ -1056,9 +1075,12 @@
                         </td>
                           <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000; text-transform: uppercase;">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />	<bean:write
-                                name="aimEditActivityForm" property="currCode" /></td>
+                                 <c:if test="${not empty aimEditActivityForm.funding.totalActualDisbursementsOrders}">
+	                                <bean:write
+	                                name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />	<bean:write
+	                                name="aimEditActivityForm" property="currCode" />
+	                             </c:if>&nbsp;
+	                       </td>
                       	</tr>
                         </feature:display>
                         <feature:display module="Funding" name="Undisbursed Balance">
@@ -1068,9 +1090,13 @@
                                 key="aim:undisbursedBalance">
                                   UNDISBURSED BALANCE 	             </digi:trn></td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000"><bean:write
-                                name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" /></td>
+                                style="border-top: 1px solid #000000">
+                                 <c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> <bean:write
+		                                name="aimEditActivityForm" property="currCode" />
+		                         </c:if>&nbsp;
+		                  </td>
                         </tr>
                         </feature:display>
                         </table>

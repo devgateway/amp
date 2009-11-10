@@ -849,9 +849,10 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
         
-	   public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
+    public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
         Long year = filter.getYear();
         Long orgGroupId = filter.getOrgGroupId();
+        double regionalTotal=0;
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -976,7 +977,22 @@ public class ChartWidgetUtil {
                     total = cal.getTotActualDisb();
                 }
                 ds.setValue(region.getName(), total.doubleValue());
+                regionalTotal+= total.doubleValue();
             }
+           List<String> keys=ds.getKeys();
+           Iterator<String> keysIter=keys.iterator();
+           double othersValue=0;
+           while(keysIter.hasNext()){
+               String key=keysIter.next();
+               Double value=(Double)ds.getValue(key);
+               if(value/regionalTotal<=0.05){
+                   othersValue+=value;
+                   ds.remove(key);
+               }
+           }
+           if(othersValue>0){
+               ds.setValue("Others", othersValue);
+           }
         } catch (Exception e) {
             logger.error(e);
             throw new DgException("Cannot load sector fundings by donors from db", e);

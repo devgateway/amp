@@ -403,10 +403,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
 				
-				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
-						element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
-						element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) || element.getExpression()!=null
-						)
+				if (element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || element.getExpression()!=null)
 					continue;
 
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
@@ -454,21 +451,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		//end computted measures
 		
-		// we create the total commitments column
-
-		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
-			TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(ArConstants.TOTAL_COMMITMENTS);
-			Iterator i = funding.iterator();
-			while (i.hasNext()) {
-				AmountCell element = (AmountCell) i.next();
-				// we do not care here about filtering commitments, that is done
-				// at UndisbursedAmountCell level
-				tac.addCell(element);
-			}
-
-			newcol.getItems().add(tac);
-		}
-
 		newcol.setName(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL: ArConstants.COLUMN_TOTAL);
 
 		// make order to measurements

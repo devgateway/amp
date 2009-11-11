@@ -7,19 +7,20 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
+import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Column that is built
@@ -104,7 +105,7 @@ public class GroupColumn extends Column {
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
 				
-				if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && element instanceof TotalCommitmentsAmountColumn){ 
+				if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && element.getExpression().equalsIgnoreCase(MathExpressionRepository.TOTAL_COMMITMENTS) ){ 
 					continue;
 				}
 				
@@ -129,11 +130,13 @@ public class GroupColumn extends Column {
      * @return a GroupColumn that holds the categorized Data
      */
     private static Column verticalSplitByCateg(CellColumn src,
-           String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
+        String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
         Column ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator i = src.iterator();
        
+        HashMap<String,String> computedCategories=new HashMap<String,String>();
+        
         AmpARFilter myFilters	= null;
         try{
         	myFilters	= src.getWorker().getGenerator().getFilter();
@@ -159,28 +162,16 @@ public class GroupColumn extends Column {
         	    metaSet.add(minfo);
         	}
         }
-        
-        //TODO: ugly stuff... i have no choice
-        //manually add all quarters
-//       if(category.equals(ArConstants.QUARTER)) {
-//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q1"));
-//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q2"));
-//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q3"));
-//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q4"));
-//        }
-// this has been moved to ARUtil.insertEmptyColumns   
       
-    	   //manually add at least one term :(
-    	if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
-    	   //Commented for Bolivia
+    	if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) 
+    			&& ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
+    	
     		if (metaSet.size()==0)
     			metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
-    		//   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Loan"));
-    		//metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"In Kind"));
     		}
        
        
-       //manually add measures selected
+       // split by selected measures
        if(category.equals(ArConstants.FUNDING_TYPE)) {
     	   metaSet.clear();
     	   Set<AmpReportMeasures> measures=reportMetadata.getMeasures();
@@ -188,38 +179,39 @@ public class GroupColumn extends Column {
     	   while (ii.hasNext()) {
 	    		AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
-				if (element.getMeasureName().equals(
-						ArConstants.UNDISBURSED_BALANCE)
-						|| element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) 
-							|| element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) || (element.getExpression()!=null)
-					) continue;
-				
-				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
-						ArConstants.FUNDING_TYPE, new FundingTypeSortedString(
-						element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
-				metaSet.add(metaInfo);
-    	   }
-    	   /*
-    	    * if there isn't a measure selected and TOTAL_COMMITMENTS isn't selected.
-    	    * We add at least one measure.
-    	    */    	   
-    	   if(metaSet.isEmpty() && !ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())){
-				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(ArConstants.PLANNED + " " + ArConstants.COMMITMENT, 0));
-				metaSet.add(metaInfo);    		   
-    	   }
-       }
+					boolean splitMeasure=(element.isAllowSplitbyCateg()!=null && element.isAllowSplitbyCateg());
+					if (splitMeasure) {
+						MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
+						if (element.getExpression()!=null){
+							computedCategories.put(element.getMeasureName(), element.getExpression());
+						}
+						metaSet.add(metaInfo);
+					}	
+				}
+			}
+    	  
+    	  
         
         
 
         // iterate the set and create a subColumn for each of the metainfo
         i = metaSet.iterator();
         while (i.hasNext()) {
-            MetaInfo element = (MetaInfo) i.next();
+            boolean isComputed=false;
+        	MetaInfo element = (MetaInfo) i.next();
             CellColumn cc = null;
-            if (generateTotalCols)
-                cc = new TotalAmountColumn(element.getValue().toString(),true);
-            else
-                cc = new AmountCellColumn( element.getValue().toString());
+            if (generateTotalCols){
+            	if (computedCategories.containsKey(element.getValue().toString())){
+            		isComputed=true;
+            		cc=new TotalComputedMeasureColumn(element.getValue().toString());	
+            		cc.setExpression(computedCategories.get(element.getValue().toString().toString()));
+            	}else{
+            		cc = new TotalAmountColumn(element.getValue().toString(),true);
+                  	}
+            	}
+            else{
+            	cc = new AmountCellColumn( element.getValue().toString());
+            }
             ret.getItems().add(cc);
             cc.setParent(ret);
             
@@ -228,37 +220,19 @@ public class GroupColumn extends Column {
             Iterator ii=src.iterator();
             while (ii.hasNext()) {
     			Categorizable item = (Categorizable) ii.next();
-    			if(item.hasMetaInfo(element)) cc.addCell(item);
-    		}
+    			if (isComputed){
+    				ComputedAmountCell c1=new ComputedAmountCell();
+    				c1.setValuesFromCell((CategAmountCell) item);
+    				cc.addCell(c1);
+    				
+    			}else{
+    				//MetaInfo costValues=new MetaInfo(ArConstants.PROPOSED_COST,"true");
+    				if(item.hasMetaInfo(element))//|| item.hasMetaInfo(costValues)) 
+    					cc.addCell(item);
+    			
+    			}
+    		} 
         }
-        
-        
-        // Start AMP-2724
-        if(category.equals(ArConstants.FUNDING_TYPE)) {
-			if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
-	
-				TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
-						ArConstants.TOTAL_COMMITMENTS);
-				
-	            List theItems = ret.getItems();
-	            
-	            int index = reportMetadata.getMeasureOrder(ArConstants.TOTAL_COMMITMENTS) - 1;
-	            
-	            theItems.add(index <  0  || index > theItems.size() ?  theItems.size() : index, tac);
-	            
-	            tac.setParent(ret);
-	            
-	            tac.setContentCategory(category);
-	            
-				Iterator it = src.iterator();
-				while (it.hasNext()) {
-					AmountCell element = (AmountCell) it.next();
-					tac.addCell(element);
-				}
-	
-			}  
-        }
-        // End AMP-2724
         
          
         if(ret.getItems().size()==0) {

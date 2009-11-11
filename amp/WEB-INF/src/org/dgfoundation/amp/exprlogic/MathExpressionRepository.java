@@ -5,6 +5,8 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -65,6 +67,8 @@ public class MathExpressionRepository {
 
 	public static final String EXECUTION_RATE = "executionRate";
 
+	public static final String TOTAL_COMMITMENTS = "totalCommitments";
+
 	/** NIGER COLUMNS */
 
 	public static final String PRIOR_ACTUAL_DISBURSEMENT = "priorActualDisbursements";
@@ -84,7 +88,7 @@ public class MathExpressionRepository {
 	 */
 
 	static {
-		// Build all expression
+		buildTotalCommitment();
 		buildOverageProjects();
 		buildAgeOfProject();
 		buildPredictabilityOfFunding();
@@ -168,7 +172,7 @@ public class MathExpressionRepository {
 	 */
 	private static void buildAverageSizeofProjects() {
 		try {
-			MathExpression divide = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.TOTAL_COMMITMENTS, ArConstants.COUNT_PROJECTS);
+			MathExpression divide = new MathExpression(MathExpression.Operation.DIVIDE, expresions.get(TOTAL_COMMITMENTS), ArConstants.COUNT_PROJECTS);
 			expresions.put(AVERAGE_SIZE_OF_PROJECT, divide);
 		} catch (Exception e) {
 			logger.error(e);
@@ -506,7 +510,8 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 *Consumption Rate (Cumulated Disbursements of Selected year / Selected Year of Planned Disbursements) * 100
+	 *Consumption Rate (Cumulated Disbursements of Selected year / Selected
+	 * Year of Planned Disbursements) * 100
 	 */
 	private static void buildConsumptionRate() {
 		try {
@@ -519,14 +524,25 @@ public class MathExpressionRepository {
 		}
 	}
 
-	/**
-	 * Current Year Planned Disbursements
-	 */
 	private static void buildSelectdYearOfPlannedDisbursements() {
 		try {
 
 			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, new BigDecimal(1));
 			expresions.put(SELECTED_YEAR_PLANNED_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	private static void buildTotalCommitment() {
+		try {
+			MathExpression m = null;
+			if (FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED).equalsIgnoreCase("ON")) {
+				m = new MathExpression(MathExpression.Operation.ADD, ArConstants.ACTUAL_COMMITMENT, ArConstants.PLANNED_COMMITMENT);
+			} else {
+				m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT, new BigDecimal(1));
+			}
+			expresions.put(TOTAL_COMMITMENTS, m);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -541,6 +557,10 @@ public class MathExpressionRepository {
 	public static MathExpression get(String key) {
 		if (expresions.get(key) == null) {
 			logger.error("Invalid Expression Key :" + key);
+		}
+		if (TOTAL_COMMITMENTS.equalsIgnoreCase(key)){
+			//refresh just in case global setting changed
+			buildTotalCommitment();
 		}
 		return expresions.get(key);
 	}

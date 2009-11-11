@@ -13,7 +13,7 @@ public class AllCategoryManagerTest {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(CategoryManagerAddCategoryTest.class);
 		suite.addTestSuite(CategoryManagerDeleteCategoryTest.class);
-		//suite.addTestSuite(CategoryManagerApiTest.class);
+		suite.addTestSuite(CategoryManagerApiTest.class);
 		suite.addTestSuite(CategoryManagerDataTest.class);
 		return suite;
 	}

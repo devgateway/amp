@@ -13,7 +13,7 @@
 		<property column="type" name="type" type="java.lang.String" />
         <property name="expression" column="expression" type="java.lang.String" />
         <property name="description" column="description" type="java.lang.String" />
-        
+        <property name="allowSplitbyCateg" column="allowSplitbyCateg" type="java.lang.Boolean"  />
 		<set name="reports" table="AMP_REPORT_MEASURES" lazy="true">
 			<cache usage="read-write" />
 			<key column="measureId" />

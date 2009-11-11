@@ -17,7 +17,14 @@ public class AmpMeasures  implements Serializable, Comparable
 	private Set reports;
 	private String expression;
 	private String description;
+	private Boolean allowSplitbyCateg;
 
+	public Boolean isAllowSplitbyCateg() {
+		return allowSplitbyCateg;
+	}
+	public void setAllowSplitbyCateg(Boolean allowSplitbyCateg) {
+		this.allowSplitbyCateg = allowSplitbyCateg;
+	}
 	public String getDescription() {
 		return description;
 	}

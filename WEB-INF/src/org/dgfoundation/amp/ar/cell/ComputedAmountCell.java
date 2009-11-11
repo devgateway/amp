@@ -9,6 +9,7 @@ import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.logic.Logic;
 
 public class ComputedAmountCell extends CategAmountCell {
 
@@ -153,6 +154,8 @@ public class ComputedAmountCell extends CategAmountCell {
 			while (i.hasNext()) {
 				values.collectCellVariables((CategAmountCell) i.next());
 			}
+		
+
 		}
 		
 		

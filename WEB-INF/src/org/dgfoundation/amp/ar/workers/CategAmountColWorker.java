@@ -362,7 +362,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		if(this.getViewName().equals("v_proposed_cost")) {
 		    //used as a flag, no value needed
-		    MetaInfo costMs = this.getCachedMetaInfo(ArConstants.PROPOSED_COST, null);
+		    MetaInfo costMs = this.getCachedMetaInfo(ArConstants.PROPOSED_COST, "true");
 		    acc.getMetaData().add(costMs);
 		}
 		

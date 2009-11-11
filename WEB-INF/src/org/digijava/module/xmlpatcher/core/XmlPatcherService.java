@@ -43,7 +43,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	 * to dynamically instantiate the scheduler
 	 */
 	private String schedulerName;
-
+	
 	/**
 	 * The scheduler used by the patcher service. The default scheduler is set
 	 * in the service constructor. However another scheduler may be provided in
@@ -80,7 +80,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	 * @param serviceContext
 	 * @throws DgException
 	 */
-	private void processUnclosedPatches(
+	public int processUnclosedPatches(
 			Collection<AmpXmlPatch> scheduledPatches,
 			ServiceContext serviceContext) throws DgException {
 		Iterator<AmpXmlPatch> iterator = scheduledPatches.iterator();
@@ -112,6 +112,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 							+ ampPatch.getPatchId());
 					continue;
 				}
+			logger.info("Applying patch: "+ampPatch.getPatchId());
 				XmlPatcherWorker<?, ?> patcherWorker = XmlPatcherWorkerFactory
 						.createWorker(patch, null, log);
 				success = patcherWorker.run();
@@ -135,6 +136,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			DbUtil.update(ampPatch);
 		}
 		logger.info(scheduledPatches.size()+" patches left unexecuted");
+		return scheduledPatches.size();
 	}
 
 	@Override
@@ -169,7 +171,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	 * @throws SQLException
 	 * @throws HibernateException
 	 */
-	private void performPatchDiscovery(String appPath) throws DgException,
+	public void performPatchDiscovery(String appPath) throws DgException,
 			HibernateException, SQLException {
 		// start by getting a complete list of patch locations:
 		Set<File> patchDirs = XmlPatcherUtil.discoverPatchDirs(appPath);

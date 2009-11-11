@@ -284,16 +284,18 @@
 	
 	<target name="runTest" depends="compileTest">
 		<mkdir dir="test-reports"/>
-    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
+    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes" fork="true">
+    	<jvmarg value="-Dhibernate.connection.release_mode=on_close"/>
     	  <classpath refid="run.classpath"/>
     	 	<formatter type="xml"/>
-    		 <test   name="org.dgfoundation.amp.test.AllTest" haltonfailure="no"  todir="test-reports"/>
+    		 <test   name="org.dgfoundation.amp.test.AllTest" haltonfailure="no"  todir="test-reports" />
     	</junit>
     </target>
 
 	<target name="runTestByTarget" depends="compileTest">
 			<mkdir dir="test-reports"/>
-	    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
+	    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes" fork="true">
+	    	<jvmarg value="-Dhibernate.connection.release_mode=on_close"/>
 	    	  <classpath refid="run.classpath"/>
 	    	 	<formatter type="xml"/>
 	    		 <test   name="org.dgfoundation.amp.test.${test-class}" haltonfailure="no"  todir="test-reports"/>

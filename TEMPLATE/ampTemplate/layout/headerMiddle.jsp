@@ -643,18 +643,20 @@ function adminHelp(){
                                         </a>
                                         </li>
                                         </feature:display>
-                                        <li style="_width:300px">
-                                        <a class="yuiampmenuitemlabel" href="#">
-                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
-                                        </a>
-                                          <div id="reports2" class="yuiampmenu">
-                                              <div class="bd">                    
-                                                  <ul>
-                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
-                                                  </ul>
-                                              </div>
-                                          </div>                              
-                                        </li>
+                                        <feature:display name="Language Option" module="Tools">
+	                                        <li style="_width:300px">
+	                                        <a class="yuiampmenuitemlabel" href="#">
+	                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+	                                        </a>
+	                                          <div id="reports2" class="yuiampmenu">
+	                                              <div class="bd">                    
+	                                                  <ul>
+	                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
+	                                                  </ul>
+	                                              </div>
+	                                          </div>                              
+	                                        </li>
+                                        </feature:display>
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">
                                                     <digi:insert flush="false" attribute="transmode"/>

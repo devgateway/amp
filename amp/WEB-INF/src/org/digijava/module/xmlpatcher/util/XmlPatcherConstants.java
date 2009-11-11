@@ -18,6 +18,7 @@ public final class XmlPatcherConstants {
 	
 	
 	public static final String patchDirName = "xmlpatches";
+	public static final String testPatchDirName = "testxmlpatches";
 	public static final String schedulersPackage = "org.digijava.module.xmlpatcher.scheduler.";
 
 	public static final String CONDITION_CUSTOM = "custom";

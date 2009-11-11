@@ -70,16 +70,12 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxen-1.1-beta-7.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxen-full.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxrpc.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.0.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.8.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcr-1.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcs.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jdom.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jdt-compiler.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/je.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jel.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.0.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jpivot.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jsf-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jsr173_1.0_api.jar"/>
@@ -137,5 +133,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/ecsClientSide.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.3-jdk15.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.13.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

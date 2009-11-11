@@ -18,6 +18,7 @@ import org.dgfoundation.amp.test.reports.AllReportTest;
 import org.dgfoundation.amp.test.sectormanager.AllSectorManagerTests;
 import org.dgfoundation.amp.test.widget.AllWidgetTest;
 import org.dgfoundation.amp.test.workspacemanager.AllWorkspaceManagerTests;
+import org.dgfoundation.amp.test.xmlpatcher.AllXmlPatcherTests;
 /**
  * This suite include all test suite modules 
  * @author Sebas
@@ -27,6 +28,7 @@ public class AllTest {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
+		suite.addTest(AllXmlPatcherTests.suite());
 		suite.addTest(AllReportTest.suite());
 		suite.addTest(AllCategoryManagerTest.suite());
 		suite.addTest(AllWidgetTest.suite());

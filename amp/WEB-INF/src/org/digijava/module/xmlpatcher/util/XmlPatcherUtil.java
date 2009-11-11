@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -25,7 +26,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.helpers.DefaultValidationEventHandler;
 import javax.xml.bind.util.JAXBResult;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -83,6 +83,7 @@ public final class XmlPatcherUtil {
 				AmpXmlPatch patch = new AmpXmlPatch(f.getName(), location);
 				DbUtil.add(patch);
 				patchNames.add(f.getName());
+				logger.info("Found new patch "+patch.getPatchId()+" in "+patch.getLocation());
 			}
 		}
 	}
@@ -153,7 +154,7 @@ public final class XmlPatcherUtil {
 			if (f.isDirectory() && !f.getName().equals("CVS") && !f.getName().equals(".svn")) {
 				if (f.getName().equals(XmlPatcherConstants.patchDirName))
 					patchDirs.add(f);
-				else
+				else 
 					patchDirs.addAll(discoverPatchDirs(f.getAbsolutePath()));
 			}
 		}
@@ -182,6 +183,7 @@ public final class XmlPatcherUtil {
 		return ret;
 	}
 
+	
 	/**
 	 * Unmarshalls using JAXB the xml file that the AmpXmlPatch object points to
 	 * 
@@ -230,6 +232,24 @@ public final class XmlPatcherUtil {
 			log.appendToLog(e);
 			return null;
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void deleteUnitTestPatches() throws DgException,
+			HibernateException, SQLException {
+		Session session = PersistenceManager.getRequestDBSession();
+		Query query = session.createQuery("select p from "
+				+ AmpXmlPatch.class.getName() + " p WHERE p.patchId LIKE 'junit-test%'");
+		List list = query.list();
+		
+		Iterator iterator = list.iterator();
+		while(iterator.hasNext()) {
+			AmpXmlPatch p=(AmpXmlPatch) iterator.next();
+			DbUtil.delete(p);
+		}
+		
+		PersistenceManager.releaseSession(session);
+
 	}
 
 	/**
@@ -302,6 +322,8 @@ public final class XmlPatcherUtil {
 		PersistenceManager.releaseSession(session);
 		return list;
 	}
+	
+
 	
 	/**
 	 * Returns the count of the list of discovered XmlPatches

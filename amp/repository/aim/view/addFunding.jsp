@@ -671,7 +671,7 @@ var isAlreadySubmitted = false;
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
-																<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById_Funding("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																</a>
 															</c:if>
@@ -908,7 +908,7 @@ var isAlreadySubmitted = false;
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
-																<a id="trans4Date<%=tempIndexStr%>" href='javascript:pickDateById("trans4Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<a id="trans4Date<%=tempIndexStr%>" href='javascript:pickDateById_Funding("trans4Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</c:if>
@@ -1134,7 +1134,7 @@ var isAlreadySubmitted = false;
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
-																<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById_Funding("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																</a>
 															</c:if>
@@ -1360,7 +1360,7 @@ var isAlreadySubmitted = false;
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
-																<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById_Funding("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</c:if>

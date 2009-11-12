@@ -25,10 +25,11 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFundingPopin.js"/>"></script>
 
-<div id="popin" style="display: none">
-	<div id="popinContent" class="content">
+<div id="popin" style="display: none" >
+	<div id="popinContent" class="content" ">
 	</div>
 </div>
+
 
 <div id="popin2" style="display: none">
 	<div id="popinContent2" class="content">
@@ -198,6 +199,8 @@
 	
 	function showContent(){
 		var element = document.getElementById("popin");
+		
+		
 		element.style.display = "inline";
 		if (panelStart < 1){
 			myPanel.setBody(element);
@@ -282,7 +285,8 @@
 	}
 
 	function myAddFunding(orgId) {		
-		myPanel.cfg.setProperty("width","1000px");
+		
+		myPanel.cfg.setProperty("width","880px");
 		myPanel.cfg.setProperty("height","500px");		
 		var msg='\n<digi:trn key="aim:addFunding">Add Funding</digi:trn>';
 		showPanelLoading(msg);

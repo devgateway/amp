@@ -747,6 +747,16 @@ for(var i = 0; i < oMenuBar.getItems().length; i++){
 
 oMenuBar.render();
 
+oMenuBar.subscribe("show", function () {
+
+	if (YAHOOAmp.env.ua.ie === 7 && this.parent) {
+		this.align();
+		this.align();
+	}
+
+});
+
+
 function onMenuItemClick(p_sType, p_aArgs, p_oValue) { 
 	if(arrowClicked){
 //		alert(oMenuBar.activeItem);

@@ -84,15 +84,34 @@ public class OrgProfileWidgetUtil {
 		}
 	}
         
-        /**
+     /**
+     * delete OrgProfile widget from db.
+     * @param widget
+     * @throws DgException
+     */
+    public static void delete(AmpWidgetOrgProfile widget) throws DgException {
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            delete(widget, session);
+        } catch (Exception ex) {
+            throw new DgException("Cannot delete Widget OrgProfile!", ex);
+        }
+
+    }
+
+     /**
 	 * delete OrgProfile widget from db.
 	 * @param widget
 	 * @throws DgException
 	 */
-	public static void delete(AmpWidgetOrgProfile widget) throws DgException{
-		Session session = PersistenceManager.getRequestDBSession();
+	public static void delete(AmpWidgetOrgProfile widget,Session session) throws DgException{
 		Transaction tx = null;
 		try {
+            if (session == null) {
+                /* we will use this in the Junit tests mainly because
+                getRequestDBSession() don't work there*/
+                session = PersistenceManager.getSession();
+            }
 			tx = session.beginTransaction();
 			session.delete(widget);
 			tx.commit();
@@ -109,7 +128,7 @@ public class OrgProfileWidgetUtil {
 			throw new DgException("Cannot delete  widget");
 		}
 	}
-	
-	
+
+
 
 }

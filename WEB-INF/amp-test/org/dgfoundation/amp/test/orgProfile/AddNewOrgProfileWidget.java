@@ -15,6 +15,9 @@ import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.form.OrgProfileWidgetForm;
 import org.digijava.module.widget.util.OrgProfileWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
+import org.digijava.module.widget.helper.WidgetVisitor;
+import org.digijava.module.widget.helper.WidgetVisitorAdapter;
+import org.digijava.module.widget.dbentity.AmpWidget;
 
 public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
 
@@ -25,9 +28,9 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
 	protected OrgProfileWidgetForm orgProfForm;
 	protected MockHttpSession session;
 	protected MockHttpServletRequest request;
-    protected AmpWidgetOrgProfile widget;
-    protected AmpDaWidgetPlace place;
-    protected final Long TEST_TYPE=100l;
+        protected AmpWidgetOrgProfile widget;
+        protected AmpDaWidgetPlace place;
+        protected final Long TEST_TYPE=100l;
 
 
 
@@ -41,10 +44,10 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
 		orgProfForm = (OrgProfileWidgetForm) createActionForm(OrgProfileWidgetForm.class);
 		session = getActionMockObjectFactory().getMockSession();
 		request = getActionMockObjectFactory().getMockRequest();
-        getActionMockObjectFactory().getMockActionMapping().setParameter("actType");
+                getActionMockObjectFactory().getMockActionMapping().setParameter("actType");
 		setValidate(false);
 
-		clean();
+		
 
 		setRelatedObjects();
 
@@ -52,7 +55,7 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		clean();
+		
 	}
 
 	protected void setRelatedObjects() {
@@ -69,24 +72,8 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
         session.setAttribute("ampAdmin", "true");
 
 	}
-
-	protected void clean() {
-        logger.info("start cleaning process");
-        try {
-            AmpDaWidgetPlace plc=WidgetUtil.getPlace("orgprof_chart_test_place");
-            if (plc != null) {
-                AmpWidgetOrgProfile wdg = (AmpWidgetOrgProfile) plc.getAssignedWidget();
-                WidgetUtil.clearPlacesForWidget(wdg.getId());
-                OrgProfileWidgetUtil.delete(wdg);
-                WidgetUtil.deleteWidgetPlace(plc);
-            }
-        } catch (DgException ex) {
-            logger.error("Unable to delete widget "+ex.getMessage());
-        }
-
-	}
-
-	public void testAddWidget() {
+        
+       public void testAddWidget() {
         try {
             OrgProfileWidgetUtil.saveWidget(widget);
             place.setAssignedWidget(widget);
@@ -95,8 +82,44 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
             logger.error("Unable to save place or widget"+ex.getMessage());
         }
 
-		
+
 	}
+
+	public void testDeleteWidget() {
+        logger.info("delete process");
+        try {
+            AmpDaWidgetPlace plc = WidgetUtil.getPlace("orgprof_chart_test_place");
+            if (plc != null) {
+                AmpWidget wd = plc.getAssignedWidget();
+                WidgetVisitor adapter = new WidgetVisitorAdapter() {
+
+                    @Override
+                    public void visit(AmpWidgetOrgProfile orgProfile) {
+                        try {
+                            logger.info("starting clearing process");
+                            WidgetUtil.clearPlacesForWidget(orgProfile.getId());
+                            logger.info("starting delete widget process");
+                            OrgProfileWidgetUtil.delete(orgProfile);
+                            logger.info("ended delete process");
+                        } catch (DgException ex) {
+                            logger.error("Unable to delete widget " + ex.getMessage());
+                            fail("Unable to delete widget ");
+                        }
+                    }
+                };
+                if (wd != null) {
+                    wd.accept(adapter);
+                }
+                logger.info("starting delete place process");
+                WidgetUtil.deleteWidgetPlace(plc);
+            }
+        } catch (DgException ex) {
+            logger.error("Unable to delete widget place " + ex.getMessage());
+            fail("Unable to delete widget place");
+        }
+    }
+
+	
 
 	/**
 	 * verifying action forwards...

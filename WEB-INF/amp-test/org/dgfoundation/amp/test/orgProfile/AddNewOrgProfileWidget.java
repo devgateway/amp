@@ -97,9 +97,9 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
                     public void visit(AmpWidgetOrgProfile orgProfile) {
                         try {
                             logger.info("starting clearing process");
-                            WidgetUtil.clearPlacesForWidget(orgProfile.getId());
+                            WidgetUtil.clearPlacesForWidget(orgProfile.getId(),null);
                             logger.info("starting delete widget process");
-                            OrgProfileWidgetUtil.delete(orgProfile);
+                            OrgProfileWidgetUtil.delete(orgProfile,null);
                             logger.info("ended delete process");
                         } catch (DgException ex) {
                             logger.error("Unable to delete widget " + ex.getMessage());
@@ -111,7 +111,7 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
                     wd.accept(adapter);
                 }
                 logger.info("starting delete place process");
-                WidgetUtil.deleteWidgetPlace(plc);
+                WidgetUtil.deleteWidgetPlace(plc,null);
             }
         } catch (DgException ex) {
             logger.error("Unable to delete widget place " + ex.getMessage());

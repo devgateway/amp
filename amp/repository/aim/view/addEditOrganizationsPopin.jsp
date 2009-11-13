@@ -19,7 +19,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/asynchronous.js'/>"></script>
 
 <div id="popin" style="display: none">
     <div id="popinContent" class="content">
@@ -352,10 +352,12 @@
 
         function addSelectedSectors(){
             var postString		= generateFields(3);
-    <digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
-            var url = "<%=Url%>";
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-            checkAndClose=true;
+            <digi:context name="url" property="context/aim/addSelectedSectors.do"/>
+            var url="${url}?"+postString;
+            var async=new Asynchronous();
+            async.complete=addSector;
+            async.call(url);
+            myclose();
         }
         function checkErrorAndClose(type){
             if(type==1){ //sector

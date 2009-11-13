@@ -111,19 +111,114 @@ public class EditOrganisation extends DispatchAction {
         AmpOrganisation organization = DbUtil.getOrganisation(orgId);
         editForm.setName(organization.getName());
         editForm.setAcronym(organization.getAcronym());
-        AmpOrgType orgType = organization.getOrgGrpId().getOrgType();
-        Long orgTypeId =orgType.getAmpOrgTypeId();
-        Collection orgGroups = DbUtil.searchForOrganisationGroupByType(orgTypeId);
-        if (orgGroups != null) {
+        Collection orgGroups = null;
+        AmpOrgType orgType = null;
+        if (organization.getOrgGrpId() != null) {
+            orgType = organization.getOrgGrpId().getOrgType();
+            Long orgTypeId = orgType.getAmpOrgTypeId();
+            orgGroups = DbUtil.searchForOrganisationGroupByType(orgTypeId);
+            editForm.setAmpOrgTypeId(orgType.getAmpOrgTypeId());
+            editForm.setAmpOrgGrpId(organization.getOrgGrpId().getAmpOrgGrpId());
             List sortedCol = new ArrayList(orgGroups);
             Collections.sort(sortedCol, new DbUtil.HelperAmpOrgGroupNameComparator());
             editForm.setOrgGroup(sortedCol);
-        }
-        if (organization.getOrgGrpId() != null) {
-            editForm.setAmpOrgGrpId(organization.getOrgGrpId().getAmpOrgGrpId());
+            editForm.setType(orgType.getClassification());
+            if (orgType.getClassification() != null && orgType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
+
+                if (organization.getStaffInfos() != null) {
+                    editForm.setStaff(new ArrayList(organization.getStaffInfos()));
+                }
+                if (organization.getOrganizationBudgetInfos() != null) {
+                    editForm.setOrgInfos(new ArrayList(organization.getOrganizationBudgetInfos()));
+                }
+                editForm.setOrgPrimaryPurpose(organization.getPrimaryPurpose());
+                if (organization.getMinPlanRegNumb() != null) {
+                    editForm.setRegNumbMinPlan(organization.getMinPlanRegNumb().toString());
+                }
+
+                editForm.setMinPlanRegDate(FormatHelper.formatDate(organization.getMinPlanRegDate()));
+                if (organization.getLegalPersonNum() != null) {
+                    editForm.setLegalPersonNum(organization.getLegalPersonNum().toString());
+                }
+
+                if (organization.getLegalPersonRegDate() != null) {
+                    editForm.setLegalPersonRegDate(FormatHelper.formatDate(organization.getLegalPersonRegDate()));
+                }
+                editForm.setRecipients(new ArrayList(organization.getRecipients()));
+                if (organization.getCountry() != null) {
+                    editForm.setCountryId(organization.getCountry().getId());
+                }
+
+                editForm.setTaxNumber(organization.getTaxNumber());
+
+                editForm.setAddressAbroad(organization.getAddressAbroad());
+                if (organization.getImplemLocationLevel() != null) {
+                    editForm.setImplemLocationLevel(organization.getImplemLocationLevel().getId());
+                } else {
+                    editForm.setImplemLocationLevel(null);
+                }
+                // locations
+                Collection<AmpOrgLocation> locations = organization.getLocations();
+                if (locations != null) {
+                    List<Location> locs = new ArrayList<Location>();
+                    Iterator<AmpOrgLocation> locationIter = locations.iterator();
+                    while (locationIter.hasNext()) {
+                        AmpOrgLocation location = locationIter.next();
+                        Location loc = new Location();
+                        AmpCategoryValueLocations catValLoc = location.getLocation();
+                        loc.setAmpCVLocation(catValLoc);
+                        loc.setPercent(location.getPercent().floatValue());
+                        loc.setAncestorLocationNames(DynLocationManagerUtil.getParents(catValLoc));
+                        loc.setLocationName(catValLoc.getName());
+                        loc.setLocId(catValLoc.getId());
+                        locs.add(loc);
+                    }
+                    editForm.setSelectedLocs(locs);
+                }
+
+
+            } else {
+
+                editForm.setDacOrgCode(organization.getDacOrgCode());
+                editForm.setOrgIsoCode(organization.getOrgIsoCode());
+                editForm.setOrgCode(organization.getOrgCode());
+                editForm.setBudgetOrgCode(organization.getBudgetOrgCode());
+
+                // Pledges
+                Collection<AmpPledge> funding = organization.getFundingDetails();
+                ArrayList<Pledge> fundingDet = new ArrayList<Pledge>();
+                Iterator<AmpPledge> it = funding.iterator();
+                while (it.hasNext()) {
+                    AmpPledge e = it.next();
+                    Pledge fund = new Pledge();
+                    fund.setAdjustmentType(e.getAdjustmentType().intValue());
+                    fund.setAmount(String.valueOf(e.getAmount()));
+                    fund.setCurrencyCode(e.getCurrency().getCurrencyCode());
+                    fund.setProgram(e.getProgram());
+                    // AMP-2828 by mouhamad
+                    String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+                    dateFormat = dateFormat.replace("m", "M");
+
+                    SimpleDateFormat dz = new SimpleDateFormat(dateFormat);
+                    String date = "";
+                    if (e.getDate() != null) {
+                        date = dz.format(e.getDate());
+                    }
+                    fund.setDate(date);
+                    fundingDet.add(fund);
+                }
+                editForm.setFundingDetails(fundingDet);
+
+
+            }
+
+        } else {
+            editForm.setAmpOrgTypeId(null);
+            editForm.setOrgGroup(null);
+            editForm.setAmpOrgGrpId(null);
+            editForm.setType(null);
         }
         this.putDocumentsInSession(request, organization);
-        editForm.setAmpOrgTypeId(orgType.getAmpOrgTypeId());
         editForm.setOrgUrl(organization.getOrgUrl());
         editForm.setAddress(organization.getAddress());
 
@@ -180,98 +275,11 @@ public class EditOrganisation extends DispatchAction {
         if (organization.getAmpFiscalCalId() != null) {
             editForm.setFiscalCalId(organization.getAmpFiscalCalId().getAmpFiscalCalId());
         }
-        editForm.setType(orgType.getClassification());
-        if(organization.getRegion()!=null){
+
+        if (organization.getRegion() != null) {
             editForm.setRegionId(organization.getRegion().getId());
         }
-        if (orgType.getClassification() != null && orgType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
 
-            if (organization.getStaffInfos() != null) {
-                editForm.setStaff(new ArrayList(organization.getStaffInfos()));
-            }
-            if (organization.getOrganizationBudgetInfos() != null) {
-                editForm.setOrgInfos(new ArrayList(organization.getOrganizationBudgetInfos()));
-            }
-            editForm.setOrgPrimaryPurpose(organization.getPrimaryPurpose());
-            if (organization.getMinPlanRegNumb() != null) {
-                editForm.setRegNumbMinPlan(organization.getMinPlanRegNumb().toString());
-            }
-
-            editForm.setMinPlanRegDate(FormatHelper.formatDate(organization.getMinPlanRegDate()));
-            if (organization.getLegalPersonNum() != null) {
-                editForm.setLegalPersonNum(organization.getLegalPersonNum().toString());
-            }
-
-            if (organization.getLegalPersonRegDate() != null) {
-                editForm.setLegalPersonRegDate(FormatHelper.formatDate(organization.getLegalPersonRegDate()));
-            }
-            editForm.setRecipients(new ArrayList(organization.getRecipients()));
-            if (organization.getCountry() != null) {
-                editForm.setCountryId(organization.getCountry().getId());
-            }
-          
-            editForm.setTaxNumber(organization.getTaxNumber());
-            
-            editForm.setAddressAbroad(organization.getAddressAbroad());
-            if (organization.getImplemLocationLevel() != null) {
-                editForm.setImplemLocationLevel(organization.getImplemLocationLevel().getId());
-            } else {
-                editForm.setImplemLocationLevel(null);
-            }
-            // locations
-            Collection<AmpOrgLocation> locations = organization.getLocations();
-            if (locations != null) {
-                List<Location> locs = new ArrayList<Location>();
-                Iterator<AmpOrgLocation> locationIter = locations.iterator();
-                while (locationIter.hasNext()) {
-                    AmpOrgLocation location = locationIter.next();
-                    Location loc = new Location();
-                    AmpCategoryValueLocations catValLoc = location.getLocation();
-                    loc.setAmpCVLocation(catValLoc);
-                    loc.setPercent(location.getPercent().floatValue());
-                    loc.setAncestorLocationNames(DynLocationManagerUtil.getParents(catValLoc));
-                    loc.setLocationName(catValLoc.getName());
-                    loc.setLocId(catValLoc.getId());
-                    locs.add(loc);
-                }
-                editForm.setSelectedLocs(locs);
-            }
-
-
-        } else {
-
-            editForm.setDacOrgCode(organization.getDacOrgCode());
-            editForm.setOrgIsoCode(organization.getOrgIsoCode());
-            editForm.setOrgCode(organization.getOrgCode());
-            editForm.setBudgetOrgCode(organization.getBudgetOrgCode());
-
-            // Pledges
-            Collection<AmpPledge> funding = organization.getFundingDetails();
-            ArrayList<Pledge> fundingDet = new ArrayList<Pledge>();
-            Iterator<AmpPledge> it = funding.iterator();
-            while (it.hasNext()) {
-                AmpPledge e = it.next();
-                Pledge fund = new Pledge();
-                fund.setAdjustmentType(e.getAdjustmentType().intValue());
-                fund.setAmount(String.valueOf(e.getAmount()));
-                fund.setCurrencyCode(e.getCurrency().getCurrencyCode());
-                fund.setProgram(e.getProgram());
-                // AMP-2828 by mouhamad
-                String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
-                dateFormat = dateFormat.replace("m", "M");
-
-                SimpleDateFormat dz = new SimpleDateFormat(dateFormat);
-                String date = "";
-                if (e.getDate() != null) {
-                    date = dz.format(e.getDate());
-                }
-                fund.setDate(date);
-                fundingDet.add(fund);
-            }
-            editForm.setFundingDetails(fundingDet);
-
-
-        }
         return mapping.findForward("forward");
     }
 

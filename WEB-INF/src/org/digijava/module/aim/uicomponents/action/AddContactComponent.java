@@ -64,7 +64,7 @@ public class AddContactComponent extends DispatchAction{
          createForm.setContactId(null);
          createForm.setTemporaryId(null);
          createForm.setOrganizations(null);
-         Object targetForm = session.getAttribute(AddContact.PARAM_PARAM_FORM_NAME);
+         Object targetForm = session.getAttribute(AddContact.PARAM_ADD_CONTACT_FORM_NAME);
          createForm.setTargetForm(targetForm);
          String collection = request.getParameter(AddContact.PARAM_COLLECTION_NAME);
          createForm.setTargetCollection(collection);
@@ -99,7 +99,7 @@ public class AddContactComponent extends DispatchAction{
         String contId = request.getParameter(EditContactLink.PARAM_CONTACT_ID);
         //AmpContact contact= ContactInfoUtil.getContact(contactId);
         HttpSession session = request.getSession();
-        Object targetForm = session.getAttribute(EditContactLink.PARAM_PARAM_FORM_NAME);
+        Object targetForm = session.getAttribute(EditContactLink.PARAM_EDIT_CONTACT_FORM_NAME);
         createForm.setTargetForm(targetForm);
         String collection = request.getParameter(EditContactLink.PARAM_COLLECTION_NAME);
         createForm.setTargetCollection(collection);

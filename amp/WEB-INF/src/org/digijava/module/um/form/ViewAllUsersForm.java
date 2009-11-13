@@ -37,6 +37,7 @@ public class ViewAllUsersForm   extends ActionForm {
     private int pagesSize;
     
     private boolean showBanned	= false;
+	private String sortDir;
     
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
           //pages = null;
@@ -216,6 +217,13 @@ public class ViewAllUsersForm   extends ActionForm {
 
 	public void setShowBanned(boolean showBanned) {
 		this.showBanned = showBanned;
+	}
+
+	public void setSortDir(String sortDir) {
+		this.sortDir = sortDir;
+	}
+	public String getSortDir() {
+		return sortDir;
 	}
 
 	

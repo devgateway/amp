@@ -10,7 +10,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 public class EditContactLink extends BodyTagSupport {
      private static final long serialVersionUID = 1L;
-    public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
+    public static final String PARAM_EDIT_CONTACT_FORM_NAME = "PARAM_EDIT_CONTACT_FORM_NAME";
     public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
     public static final String PARAM_CONTACT_ID = "PARAM_CONTACT_ID";
     private String collection = "";
@@ -44,7 +44,7 @@ public class EditContactLink extends BodyTagSupport {
     @Override
     public int doStartTag() throws JspException {
 		try {
-                        pageContext.getSession().setAttribute(PARAM_PARAM_FORM_NAME, form);
+                        pageContext.getSession().setAttribute(PARAM_EDIT_CONTACT_FORM_NAME, form);
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
 

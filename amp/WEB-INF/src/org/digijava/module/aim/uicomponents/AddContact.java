@@ -9,7 +9,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 public class AddContact extends BodyTagSupport {
     private static final long serialVersionUID = 1L;
-    public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
+    public static final String PARAM_ADD_CONTACT_FORM_NAME = "PARAM_ADD_CONTACT_FORM_NAME";
     public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
     public static final String STYLE_CLASS_NAME = "CLASS"; //buttons standard class property
     private String collection = "";
@@ -41,7 +41,7 @@ public class AddContact extends BodyTagSupport {
     }
     public int doStartTag() throws JspException {
 		try {
-                        pageContext.getSession().setAttribute(PARAM_PARAM_FORM_NAME, form);
+                        pageContext.getSession().setAttribute(PARAM_ADD_CONTACT_FORM_NAME, form);
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
 			html.append("<input type=\"button\" ");

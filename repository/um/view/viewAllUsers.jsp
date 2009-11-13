@@ -5,46 +5,101 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/datatable.css" />
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
+
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/connection-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/element-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/datasource-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/datatable-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/json-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/event-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/paginator-min.js"></script> 
+
+<script language="JavaScript">
+
+YAHOO.util.Event.addListener(window, "load", function() {
+	
+    YAHOO.example.XHR_JSON = new function() {
+    	
+       	         
+        this.formatActions = function(elCell, oRecord, oColumn, sData) {
+            elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +sData+">" +"<img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/>" + "</a>";
+            elCell.innerHTML +="&nbsp;&nbsp;<a onclick='return banUser();' title='Ban User' href=/um/viewEditUser.do~id=" +sData+"~ban=true>" +"<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/>" + "</a>";
+        };
+ 
+        this.myDataSource = new YAHOO.util.DataSource("/um/userSearch.do?");
+        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+        //this.myDataSource.connXhrMode = "queueRequests";
+        this.myDataSource.responseSchema = {
+            resultsList: "users",
+            fields: ["ID","name","email","workspaces","actions"],
+            metaFields: {
+            	totalRecords: "totalRecords" // Access to value in the server response
+        	}    
+        };
+        
+        
+        var myColumnDefs = [
+            //{key:"ID", label:"ID"},
+            {key:"name", label:"NAME", sortable:true},
+            {key:"email", label:"EMAIL", sortable:true},
+            {key:"workspaces", label:"WORKSPACES"},
+            {key:"actions", label:"ACTION",}
+            //{key:"actions", label:"ACTION", formatter:this.formatActions}
+        ];
+  
+        var div = document.getElementById('errors');
+
+        var handleSuccess = function(o){
+        	if(o.responseText != undefined){
+        		o.argument.oArgs.liner_element.innerHTML=o.responseText;
+        	}
+        }
+
+        var handleFailure = function(o){
+        	if(o.responseText !== undefined){
+        		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
+        		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
+        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
+        	}
+        }
+        // Create the Paginator 
+        var myPaginator = new YAHOO.widget.Paginator({ 
+        	rowsPerPage:10,
+        	containers : ["dt-pag-nav"], 
+        	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {CurrentPageReport}  {RowsPerPageDropdown}", 
+        	pageReportTemplate : "Showing items {startIndex} - {endIndex} of {totalRecords}", 
+        	rowsPerPageOptions : [10,25,50,100] 
+        });   
+        var myConfigs = {
+            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
+            dynamicData: true, // Enables dynamic server-driven data
+            sortedBy : {key:"name", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
+            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
+            paginator:myPaginator
+        };
+    	 
+        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
+        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
+        this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
+    
+       // Update totalRecords on the fly with value from server
+       this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+           oPayload.totalRecords = oResponse.meta.totalRecords;
+           return oPayload;
+       }
+       
+    };
+    
+});
+</script>
 
 
-<style type="text/css">
-.jcol{												
-	padding-left:10px;												 
-	}
-	.jlien{
-		text-decoration:none;
-	}
-	.tableEven {
-		background-color:#dbe5f1;
-		font-size:8pt;
-		padding:2px;
-	}
-
-	.tableOdd {
-		background-color:#FFFFFF;
-		font-size:8pt;
-		padding:2px;
-	}
-	 
-	.Hovered {
-		background-color:#a5bcf2;
-	}
-
-	.notHovered {
-		background-color:#FFFFFF;
-	}
-
-	.headTableTr{
-	    background-color:#B8B8B0; 
-	    color:#000;
-	    font-size:11px;
-	}
-
-	.headTableTd{    
-	    font-size: 11px;
-	}
-
-</style>
 <c:set var="translationBan">
 	<digi:trn key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
 </c:set>
@@ -73,73 +128,13 @@ function banUser(txt) {
 			 return true;		
 	}
 
-  function setStripsTable(tableId, classOdd, classEven) {
-		var tableElement = document.getElementById(tableId);
-		rows = tableElement.getElementsByTagName('tr');
-		for(var i = 0, n = rows.length; i < n; ++i) {
-			if(i%2 == 0)
-				rows[i].className = classEven;
-			else
-				rows[i].className = classOdd;
-		}
-		rows = null;
-	}
-	function setHoveredTable(tableId, hasHeaders) {
-
-		var tableElement = document.getElementById(tableId);
-		if(tableElement){
-	    	var className = 'Hovered',
-	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-	        rows      = tableElement.getElementsByTagName('tr');
-
-			for(var i = 0, n = rows.length; i < n; ++i) {
-				rows[i].onmouseover = function() {
-					this.className += ' ' + className;
-				};
-				rows[i].onmouseout = function() {
-					this.className = this.className.replace(pattern, ' ');
-
-				};
-			}
-			rows = null;
-		}
-	}
-
-	
-	function setHoveredRow(rowId) {
-
-		var rowElement = document.getElementById(rowId);
-		if(rowElement){
-	    	var className = 'Hovered',
-	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-	        cells      = rowElement.getElementsByTagName('td');
-
-			for(var i = 0, n = cells.length; i < n; ++i) {
-				cells[i].onmouseover = function() {
-					this.className += ' ' + className;
-				};
-				cells[i].onmouseout = function() {
-					this.className = this.className.replace(pattern, ' ');
-
-				};
-			}
-			cells = null;
-		}
-	}
-	
-	
-
 </script>
 
 <digi:instance property="umViewAllUsersForm" />
 <digi:context name="digiContext" property="context" />
 
-<!--  AMP Admin Logo -->
-<!-- jsp:include page="/repositoryteamPagesHeader.jsp" flush="true" /-->
-<!-- End of Logo -->
-
 <digi:form action="/viewAllUsers.do" method="post">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=980>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=850>
     <tr>
       		<td align=left vAlign=top>
 		        <table cellPadding=5 cellSpacing=0 width="100%">
@@ -263,7 +258,7 @@ function banUser(txt) {
 		            <td noWrap width=817 vAlign="top" colspan="7">
 		            	<table width="100%" cellspacing=1 cellSpacing=1>
 							<tr>
-								<td noWrap width=800 vAlign="top"> 
+								<td vAlign="top"> 
 									<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"  >
 										<tr >
 											<td vAlign="top" width="100%">
@@ -285,117 +280,13 @@ function banUser(txt) {
 																</tr>		
 		 														<tr>
 																	<td width="100%">
-																		<!--  ==== Test begin overflow ==== -->
-																		<table width="100%"BORDER=0 cellpadding="0" cellspacing="0" >
-																			<c:if test="${empty umViewAllUsersForm.pagedUsers}">
-										                                         <tr style="background-color:#ffffff; color:#000; " align="left" >
-																					<td height="30" width="100%" align="left">
-						                                                   				<b><digi:trn key="um:viewAllUsers:NoUsers">No users present</digi:trn>
-						                                                       			</b>
-																					</td>
-																				</tr>
-									                                        </c:if>
-																			<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
-																				<tr class="headTableTr">
-																					<td height="30" width="189" class="headTableTd" >
-																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='nameAscending'}">
-																							<digi:link href="/viewAllUsers.do?sortBy=nameAscending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
-																								<digi:trn key="um:viewAllUsers:UsersNames">NAME</digi:trn></b>
-																							</digi:link>
-																						</c:if>
-																						<c:if test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy=='nameAscending'}">
-																							<digi:link href="/viewAllUsers.do?sortBy=nameDescending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
-																								<digi:trn key="um:viewAllUsers:UsersNames">NAME</digi:trn></b>
-																							</digi:link>
-																						</c:if>
-																						<c:if test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy=='nameAscending'}"><img src="/repository/aim/images/up.gif"/></c:if>
-																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
-																					</td>	
-																					<td height="30" width="191" class="headTableTd">
-																						<c:if test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy!='emailAscending'}">
-																							<digi:link href="/viewAllUsers.do?sortBy=emailAscending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
-																								<digi:trn key="um:viewAllUsers:UsersEmails">EMAIL</digi:trn></b>
-																							</digi:link>
-																						</c:if>
-																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}">
-																							<digi:link href="/viewAllUsers.do?sortBy=emailDescending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
-																								<digi:trn key="um:viewAllUsers:UsersEmails">EMAIL</digi:trn></b>
-																							</digi:link>
-																						</c:if>
-																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
-																					</td>																	
-																					<td height="30" width="328" class="headTableTd"><b>
-																							<digi:trn key="um:viewAllUsers:UserWorkspace">WORKSPACE</digi:trn></b>
-																					</td>
-																					<td height="30"width="70" colspan="3" class="headTableTd"><b>
-																						<digi:trn key="aim:viewAllUsers:action">ACTIONS</digi:trn></b>
-																					</td>																		
-																				</tr>
-																			</c:if>
-																		</table>
-		
-																		<c:if test="${not empty umViewAllUsersForm.pagedUsers}">		
-																			<div  style="overflow:auto;width:100%;height:220px;max-height:220px;"  >
-																				<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable"    >
-																					<c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
-			                                                           					<tr >
-						                                                           			<td height="30" width="195">
-																							  ${us.firstNames}&nbsp;${us.lastName}
-																							</td>
-																							<td height="30" width="195">
-																							  	${us.email}																		  
-																							</td>																	
-																							<td height="30" width="340">
-																								<div >
-												                                                  	<c:if test="${!empty us.teamMembers}">
-																									   	<c:forEach var="member" items="${us.teamMembers}">
-																											<li> ${member.ampTeam.name}&nbsp;(${member.ampMemberRole.role})&nbsp;&nbsp;</li>
-																										</c:forEach>
-																									</c:if>
-												                                                  	<c:if test="${empty us.teamMembers}">
-												                                                    	<digi:trn key="um:viewAllUsers:UnassignedUser">Unassigned</digi:trn>
-												                                                  	</c:if>
-												                                                </div>
-																							</td>
-																							<td height="30" width="30" nowrap="nowrap" >
-																								<c:set var="translation">
-												                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user </digi:trn>
-												                                                </c:set>
-												                                                <digi:link href="/viewEditUser.do?id=${us.id}" title="${translation}">
-											                          										<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" />
-																									</digi:link>
-																							</td>
-																							<td height="30" width="30" nowrap="nowrap">
-																								<c:choose>
-												                                                  <c:when test="${us.ban}">
-												                                                    <c:set var="translation">
-												                                                      <digi:trn key="um:viewAllUsers:unBanUserLink">Remove ban </digi:trn>
-												                                                    </c:set>
-												                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false"  title="${translation}" onclick="return unbanUser()"  >
-																										<img src= "/TEMPLATE/ampTemplate/images/green_check_16.png" vspace="2" border="0" />
-																									</digi:link>
-												                                                  </c:when>
-												                                                  <c:otherwise>
-												                                                    <c:set var="translation">
-												                                                      	<digi:trn key="um:viewAllUsers:banUsersLink">Ban User </digi:trn>
-												                                                    </c:set>
-												
-												                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" title="${translation}" onclick="return banUser()">
-																											<img src= "/TEMPLATE/ampTemplate/images/deleteIcon.gif" vspace="2" border="0" />
-																									</digi:link>
-												                                                  </c:otherwise>
-												                                                </c:choose>
-																							</td>
-			                                                            				</tr>
-																					</c:forEach>
-																				</table>
-																			</div> <!-- ==end mon test overflow======= -->
-																		</c:if>
+																		<div class='yui-skin-sam'>
+																			<div id="dt-pag-nav"></div>
+																			<div id="dynamicdata"></div>
+																			<div id="errors"></div>
+																		</div>
 																	</td>
 																</tr>
-														 		<!-- end page logic -->
-														 		<!-- page logic for pagination $$$$$$$ -->
 																<tr>
 															
 																</tr>
@@ -422,91 +313,6 @@ function banUser(txt) {
 																	</tr>
 																</logic:notEmpty>	
 							                         		</table>
-														</td>
-													</tr>
-												</table>
-												<table>
-													<tr><!-- ===========  -->
-														<td colspan="4" nowrap="nowrap" >
-															<logic:notEmpty name="umViewAllUsersForm" property="pages">
-																<div  style="   float:left;">
-																	<table style="padding:5px;" >
-																		<tr id="rowHighlight">
-																			<!--	<digi:trn key="um:userPages">Pages :</digi:trn> -->
-																				<c:if test="${umViewAllUsersForm.currentPage > 1}">
-																					<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
-																					<c:set target="${urlParamsFirst}" property="page" value="1"/>
-																					<c:set var="translation">
-																						<digi:trn key="aim:firstpage">First Page</digi:trn>
-																					</c:set>
-																					<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-																						<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
-																							&lt;&lt;
-																						</digi:link>
-																					</td>
-																					
-																				</c:if>
-																				<c:set var="length" value="${umViewAllUsersForm.pagesToShow}"></c:set>
-																				<c:set var="start" value="${umViewAllUsersForm.offset}"/>
-																				<logic:iterate name="umViewAllUsersForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
-																					<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-																					<c:set target="${urlParams1}" property="page"><%=pages%>
-																					</c:set>
-																					<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
-																					<c:if test="${umViewAllUsersForm.currentPage == pages}">
-																						<td style="padding:3px;border:2px solid #000000; " nowrap="nowrap" >
-																							<font color="#FF0000"><%=pages%></font>
-																						</td>
-																					</c:if>
-																					<c:if test="${umViewAllUsersForm.currentPage != pages}">
-																						<c:set var="translation">
-																							<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
-																						</c:set>
-																						<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap" >
-																							<digi:link href="/userSearch.do" name="urlParams1" title="${translation}" >
-																								<%=pages%>
-																							</digi:link>
-																						</td>
-																					</c:if>
-																				</logic:iterate>	
-																				
-																				<c:if test="${umViewAllUsersForm.currentPage != umViewAllUsersForm.pagesSize}">
-																					
-																					<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-																					<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
-																					<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
-																					<c:set var="translation">
-																						<digi:trn key="aim:lastpage">Last Page</digi:trn>
-																					</c:set>
-																					<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-																						<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}" >
-																							&gt;&gt; 
-																						</digi:link>
-																					</td>
-																				</c:if>
-																			
-																			<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-																				<!--<c:out value="${umViewAllUsersForm.currentPage}"></c:out>&nbsp;-->
-																				<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.pagesSize}"></c:out>&nbsp;Pages
-																			</td>
-																			<td>&nbsp;&nbsp;&nbsp;</td>
-																			<td style="padding:3px;border:1px solid #999999">
-																	            <c:out value="${umViewAllUsersForm.numUsers}"></c:out>&nbsp;<digi:trn key="aim:records">records</digi:trn>
-														         			</td>
-																		</tr>
-																	</table>
-																</div>
-																<div  style=" float:left; padding-top:4px; padding-left:30px;"/>
-															</logic:notEmpty>
-															<div  style=" float:left; padding-top:4px; padding-left:3px;">
-																<digi:trn key="aim:results">Results:</digi:trn>&nbsp;
-																<html:select property="tempNumResults" styleClass="inp-text" onchange="document.umViewAllUsersForm.submit()"  >
-																	<html:option value="10">10</html:option>
-																	<html:option value="20">20</html:option>
-																	<html:option value="50">50</html:option>
-																	<html:option value="-1">-All-</html:option>
-																</html:select>
-															</div>
 														</td>
 													</tr>
 												</table>
@@ -635,15 +441,6 @@ function banUser(txt) {
 		</td>
 	</tr>
 </table>
-
-
-
-
-<script language="javascript">
-	setStripsTable("dataTable", "tableEven", "tableOdd");
-	setHoveredTable("dataTable", false);
-	setHoveredRow("rowHighlight");
-</script>
 </digi:form>
 
 

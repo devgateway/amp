@@ -146,7 +146,7 @@ public class UserSearch extends Action {
 			json.put("rowsPerPage",vwForm.getTempNumResults());
 
 			json.put("users", jsonArray);
-			System.out.println(json.toString(1));
+			//System.out.println(json.toString(1));
 
 			response.setContentType("text/json-comment-filtered");
 			OutputStreamWriter outputStream = null;

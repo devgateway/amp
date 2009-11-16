@@ -54,7 +54,7 @@ public class ECSService extends AbstractServiceImpl {
 	}
 
 	public void stopService() {
-		logger.info("Stopping ECS Service ...");
+		logger.error("Stopping ECS Service ...");
 		try {
 			ECSClient cl = new ECSClient();
 			String[] res = cl.getParameters(ECSConstants.SERVER_SHUTDOWN);
@@ -69,4 +69,26 @@ public class ECSService extends AbstractServiceImpl {
 			logger.error("Failed stopping ECS Service", e);
 		}
 	}
+	
+	@Override
+	public void processStopEvent(){
+		logger.info("Stopping ECS Service ...");
+		try {
+			ECSClient cl = new ECSClient();
+			String[] res = cl.getParameters(ECSConstants.SERVER_SHUTDOWN);
+		} catch (AMPException e) {
+			logger.error("Can't contact ECS Server", e);
+		}
+		
+		try {
+			ECS adc = ECS.getInstance();
+			adc.stop();
+		} catch (Exception e) {
+			logger.error("Failed stopping ECS Service", e);
+		}
+		logger.info("ECS Stopped!");
+	}
+	
+	
+	
 }

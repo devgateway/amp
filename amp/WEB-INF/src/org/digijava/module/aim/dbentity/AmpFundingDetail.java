@@ -38,7 +38,7 @@ public class AmpFundingDetail implements Serializable {
 	private String expCategory;
 	private String disbOrderId;
 	private IPAContract contract;
-	private Double transactionAmountInBaseCurrency;
+	private BigDecimal transactionAmountInBaseCurrency;
 
 	public AmpFundingDetail() {
 	}
@@ -78,7 +78,7 @@ public class AmpFundingDetail implements Serializable {
        /**
 		 * @return the transactionAmountInBaseCurrency
 		 */
-		public Double getTransactionAmountInBaseCurrency() {
+		public BigDecimal getTransactionAmountInBaseCurrency() {
 			return transactionAmountInBaseCurrency;
 		}
 
@@ -87,7 +87,7 @@ public class AmpFundingDetail implements Serializable {
 		 * @param transactionAmountInBaseCurrency the transactionAmountInBaseCurrency to set
 		 */
 		public void setTransactionAmountInBaseCurrency(
-				Double transactionAmountInBaseCurrency) {
+				BigDecimal transactionAmountInBaseCurrency) {
 			this.transactionAmountInBaseCurrency = transactionAmountInBaseCurrency;
 		}
 

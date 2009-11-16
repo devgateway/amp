@@ -130,7 +130,7 @@ public class XmlPatcherStructureTest extends BasicActionTestCaseAdapter {
 		Collection<AmpXmlPatch> scheduledPatches=new ArrayList<AmpXmlPatch>();
 		scheduledPatches.add(xmlpatch);
 		
-		int failedCount = service.processUnclosedPatches(scheduledPatches, serviceContext);
+		int failedCount = service.processAllUnclosedPatches(scheduledPatches, serviceContext);
 		
 		assertFalse("Patch "+testDbNamePatch+" has failed to be applied properly", failedCount!=0);
 	}
@@ -152,7 +152,7 @@ public class XmlPatcherStructureTest extends BasicActionTestCaseAdapter {
 		scheduledPatches.add(xmlpatch1);
 		scheduledPatches.add(xmlpatch2);
 		
-		int failedCount = service.processUnclosedPatches(scheduledPatches, serviceContext);
+		int failedCount = service.processAllUnclosedPatches(scheduledPatches, serviceContext);
 		
 		assertFalse("Patch "+testDependencyPatch+" has failed to be applied properly", failedCount!=0);
 	}
@@ -172,7 +172,7 @@ public class XmlPatcherStructureTest extends BasicActionTestCaseAdapter {
 		Collection<AmpXmlPatch> scheduledPatches=new ArrayList<AmpXmlPatch>();
 		scheduledPatches.add(xmlpatch);
 		
-		int failedCount = service.processUnclosedPatches(scheduledPatches, serviceContext);
+		int failedCount = service.processAllUnclosedPatches(scheduledPatches, serviceContext);
 		
 		assertFalse("Patch "+testSQLConditionPatch+" has failed to be applied properly", failedCount!=0);
 	}
@@ -192,7 +192,7 @@ public class XmlPatcherStructureTest extends BasicActionTestCaseAdapter {
 		Collection<AmpXmlPatch> scheduledPatches=new ArrayList<AmpXmlPatch>();
 		scheduledPatches.add(xmlpatch);
 		
-		int failedCount = service.processUnclosedPatches(scheduledPatches, serviceContext);
+		int failedCount = service.processAllUnclosedPatches(scheduledPatches, serviceContext);
 		
 		assertFalse("Patch "+testBSHConditionPatch+" has failed to be applied properly", failedCount!=0);
 	}

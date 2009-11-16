@@ -13,9 +13,7 @@
         <many-to-one name="patch" class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch">
             <column name="patch_id" />
         </many-to-one>
-        <property name="log" type="java.lang.String" length="65535">
-            <column name="log" length="65535"/>
-        </property>
+        <property name="log" type="text"/>
         <property name="date" type="java.util.Date">
             <column name="date" />
         </property>

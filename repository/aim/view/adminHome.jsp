@@ -121,9 +121,9 @@
                               <c:set var="trnSystemSettings">
                                 <digi:trn key="aim:clickToViewSystemSettings">Click here to view the Patches applied</digi:trn>
                               </c:set>
-                              <digi:link href="/ListAppliedPatches.do" title="${trnSystemSettings}" >
-                                <digi:trn key="aim:ListAppliedPatches">List Applied Patches</digi:trn>
-                              </digi:link>
+                              <a href="/xmlpatcher/xmlpatches.do?mode=listPatches" title="${trnSystemSettings}">
+                                <digi:trn key="aim:DbPatches">Database Patches</digi:trn>
+                              </a>
                             </td>
                           </tr>
                           </feature:display>

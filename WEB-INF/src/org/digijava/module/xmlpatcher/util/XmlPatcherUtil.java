@@ -72,8 +72,11 @@ public final class XmlPatcherUtil {
 		for (int i = 0; i < files.length; i++) {
 			File f = new File(dir, files[i]);
 			// directories ignored in xmlpatch dir
-			if (f.isDirectory()) 
+			if (f.isDirectory()){
+				if (f.getName().compareTo(".svn") != 0)
+					recordNewPatchesInDir(appPath,f,patchNames);
 				continue;
+			}
 			if (patchNames.contains(f.getName()))
 				continue;
 			else {

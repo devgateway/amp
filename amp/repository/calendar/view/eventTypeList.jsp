@@ -25,6 +25,16 @@
 .Hovered {
 	background-color:#a5bcf2;
 }
+.headTableTr{
+    background-color:#B8B8B0; 
+    color:#000;
+    font-size:11px;
+}
+
+.headTableTd{    
+    font-size: 11px;
+}
+
 </style>
 
 <script language="javascript">
@@ -292,13 +302,13 @@ function ColorPicker_highLightColor(c) {
 							                   	<tr>
 													<td>
 														<table  width=550 BORDER=0 cellpadding="3" cellspacing="0">
-															<tr>
-										                        <td bgcolor="#999999" height="30" width="280" style="color:black"><digi:trn key="calendar:typeName"><b>Name</b></digi:trn></td>
-										                       	<td bgcolor="#999999" height="30" width="120" style="color:black"><digi:trn key="calendar:typeColor"><b>Color</b></digi:trn></td>
-										                        <td bgcolor="#999999" height="30" width="30" style="color:black">&nbsp;</td>
-																<td bgcolor="#999999" height="30" width="30" style="color:black">&nbsp;</td>
-																<td bgcolor="#999999" height="30" width="30" style="color:black">&nbsp;</td>
-																<td bgcolor="#999999" height="30" width="30" style="color:black">&nbsp;</td>
+															<tr class="headTableTr">
+										                        <td class="headTableTd" height="30" width="280"><digi:trn key="calendar:typeName"><b>Name</b></digi:trn></td>
+										                       	<td class="headTableTd" height="30" width="120"><digi:trn key="calendar:typeColor"><b>Color</b></digi:trn></td>
+										                        <td class="headTableTd" height="30" width="30">&nbsp;</td>
+																<td class="headTableTd" height="30" width="30">&nbsp;</td>
+																<td class="headTableTd" height="30" width="30">&nbsp;</td>
+																<td class="headTableTd" height="30" width="30">&nbsp;</td>
 															</tr>
 														</table>
 													</td>

@@ -804,7 +804,7 @@ public class ChartWidgetUtil {
     }
 
        public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
-        String oql = "select  actSec, " + "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
+        String oql = "select  actSec, " + "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInBaseCurrency)";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec " + " inner join actSec.sectorId sec " + " inner join actSec.activityId act " + " inner join actSec.classificationConfig config ";

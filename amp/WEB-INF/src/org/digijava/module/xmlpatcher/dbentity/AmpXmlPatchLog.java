@@ -62,6 +62,7 @@ public class AmpXmlPatchLog implements Serializable {
 	 *            the string
 	 */
 	public void appendToLog(String s) {
+		error=true;
 		log.append(s);
 	}
 

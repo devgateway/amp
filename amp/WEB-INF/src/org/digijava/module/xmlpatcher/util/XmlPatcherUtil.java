@@ -72,7 +72,7 @@ public final class XmlPatcherUtil {
 		for (int i = 0; i < files.length; i++) {
 			File f = new File(dir, files[i]);
 			// directories ignored in xmlpatch dir
-			if (f.isDirectory())
+			if (f.isDirectory()) 
 				continue;
 			if (patchNames.contains(f.getName()))
 				continue;
@@ -229,7 +229,7 @@ public final class XmlPatcherUtil {
 			return enclosing.getValue();
 		} catch (Exception e) {
 			logger.error(e);
-			log.appendToLog(e);
+			if(log!=null) log.appendToLog(e);
 			return null;
 		}
 	}
@@ -301,6 +301,36 @@ public final class XmlPatcherUtil {
 		return serviceContext.getRealPath("/") + p.getLocation()
 				+ p.getPatchId();
 	}
+	
+	/**
+	 * Checks if the current patch is deprecating other patches (has deprecate tags). If so, it deprecates those patches.
+	 * This is run BEFORE the actual patch execution is invoked, thus it prevents deprecated patches to ever be applied.
+	 * @param p
+	 * @param log
+	 * @throws SQLException 
+	 * @throws HibernateException 
+	 */
+	public static void applyDeprecationTags(Patch p, AmpXmlPatchLog log) throws HibernateException, SQLException {
+		if (p==null || p.getDeprecate()==null) return;
+		for (String deprecatedId : p.getDeprecate()) {
+			// load the deprecated patch metadata:
+			Session session = PersistenceManager.getSession();
+			
+			AmpXmlPatch patch = (AmpXmlPatch) session.get(AmpXmlPatch.class,
+					deprecatedId);
+			PersistenceManager.releaseSession(session);
+			if (patch == null) {
+				log.appendToLog("Referenced deprecated patch does not exist: "
+						+ deprecatedId);
+				return;
+			}
+			if (XmlPatcherConstants.PatchStates.DEPRECATED != patch.getState()) {
+				patch.setState(XmlPatcherConstants.PatchStates.DEPRECATED);
+				DbUtil.update(patch);
+				logger.info("Patch "+deprecatedId+" marked deprecated");
+			}
+		}
+	}
 
 	/**
 	 * Returns the list of XmlPatches that are not in close state
@@ -316,8 +346,8 @@ public final class XmlPatcherUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query query = session
 				.createQuery("from " + AmpXmlPatch.class.getName()
-						+ " p WHERE p.state!="
-						+ XmlPatcherConstants.PatchStates.CLOSED);
+						+ " p WHERE p.state NOT IN ("
+						+ XmlPatcherConstants.PatchStates.CLOSED+","+XmlPatcherConstants.PatchStates.DEPRECATED+")");
 		List<AmpXmlPatch> list = query.list();
 		PersistenceManager.releaseSession(session);
 		return list;

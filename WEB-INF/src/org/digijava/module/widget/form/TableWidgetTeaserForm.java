@@ -17,6 +17,7 @@ public class TableWidgetTeaserForm extends ActionForm {
 	private Long tableId;
 	private Long columnId;
 	private Long itemId;
+	private Boolean preview;
 
 	public String getPlaceName() {
 		return placeName;
@@ -56,6 +57,14 @@ public class TableWidgetTeaserForm extends ActionForm {
 
 	public Long getItemId() {
 		return itemId;
+	}
+
+	public void setPreview(Boolean preview) {
+		this.preview = preview;
+	}
+
+	public Boolean getPreview() {
+		return preview;
 	}
 
 }

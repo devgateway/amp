@@ -34,6 +34,7 @@
 		<action name="gisTableWidgetDataForm" path="/widget/tableWidgetData" scope="session" parameter="actType" type="org.digijava.module.widget.action.AdminTableWidgetData" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
 			<forward name="returnToEdit" path="/widget/tableWidgetData.do?actType=showEdit" redirect="true"/>
+			<forward name="forwardToPreview" path="/showLayout.do?layout=preview_tableWidgetData"/>
     	</action>
     	<action name="gisTableWidgetRenderForm" path="/widget/previewTable" scope="request" type="org.digijava.module.widget.action.PreviewTableWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />

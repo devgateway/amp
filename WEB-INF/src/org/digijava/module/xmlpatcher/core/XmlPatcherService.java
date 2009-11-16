@@ -93,6 +93,58 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	}
 	
 	/**
+	 * Iterates the list of patches and applies deprecation tags
+	 * @param scheduledPatches
+	 * @param serviceContext
+	 * @throws DgException
+	 */
+	private void processDeprecation(
+			Collection<AmpXmlPatch> scheduledPatches,
+			ServiceContext serviceContext) throws DgException {
+		Iterator<AmpXmlPatch> iterator = scheduledPatches.iterator();
+		logger.info(scheduledPatches.size()+" patches scheduled for execution...");
+		while (iterator.hasNext()) {
+			AmpXmlPatch ampPatch = iterator.next();
+			long timeStart = System.currentTimeMillis();
+			AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
+			logger.info("Reading patch: "+ampPatch.getPatchId());
+			try {
+				log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
+						XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
+								serviceContext))));
+				Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
+						ampPatch, null); //we don't record unmarshalling logs here. we do that when we run the patch
+				
+				XmlPatcherUtil.applyDeprecationTags(patch,log);
+			} catch (NoSuchAlgorithmException e) {
+				logger.error(e);
+				throw new RuntimeException(e);
+			} catch (IOException e) {
+				logger.error(e);
+				throw new RuntimeException(e);
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
+
+			//the error may be that the patch is referencing for deprecation patches that do not exist.
+			//in order to prevent typing mistakes, this error makes the patch fail
+			if (log.getError()) {
+				logger.info("Failed to apply patch " + ampPatch.getPatchId());
+				ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
+				iterator.remove();
+				log.setElapsed(System.currentTimeMillis() - timeStart);
+				XmlPatcherUtil.addLogToPatch(ampPatch, log);
+				DbUtil.update(ampPatch);
+			}	
+		}
+
+	}
+	
+	/**
 	 * Attempts to execute the given collection of unclosed patches. The
 	 * collection is ordered using a scheduler that was given as a parameter in
 	 * digi.xml. If the scheduler is missing then the default scheduler is used.
@@ -167,9 +219,19 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	public void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 		try {
+			
+			//discover newly added patches
 			performPatchDiscovery(serviceContext.getRealPath("/"));
 
+			//applying deprecation tags -read all deprecate tags in all patches
+			//and flag deprecated the patches mentioned
 			List<AmpXmlPatch> rawPatches = XmlPatcherUtil
+			.getAllDiscoveredUnclosedPatches();
+			
+			processDeprecation(rawPatches, serviceContext);
+
+			//read patches again, after deprecation flags set (so only the ones that are not depr)
+			rawPatches = XmlPatcherUtil
 					.getAllDiscoveredUnclosedPatches();
 			scheduler = (XmlPatcherScheduler) Class.forName(
 					XmlPatcherConstants.schedulersPackage + schedulerName)
@@ -178,7 +240,6 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			Collection<AmpXmlPatch> scheduledPatches = scheduler
 					.getScheduledPatchCollection();
 
-			//running deprecation
 			
 			
 			processAllUnclosedPatches(scheduledPatches, serviceContext);

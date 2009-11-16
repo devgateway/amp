@@ -49,7 +49,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
             {key:"name", label:"NAME", sortable:true},
             {key:"email", label:"EMAIL", sortable:true},
             {key:"workspaces", label:"WORKSPACES"},
-            {key:"actions", label:"ACTION",}
+            {key:"actions", label:"ACTION"}
             //{key:"actions", label:"ACTION", formatter:this.formatActions}
         ];
   

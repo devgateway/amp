@@ -82,7 +82,9 @@ public class ECSRunner extends Thread {
 				sleep(DELAY_TIME);
 				//launch periodic ECSJob
 				ej.execute();
-			} catch (Exception ignored) {
+			}catch (InterruptedException ignored) {
+				// stopping mechanism
+			}catch (Exception ignored) {
 				logger.error("ECS Periodical Job error:", ignored);
 			}
 		}

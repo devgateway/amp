@@ -53,7 +53,7 @@
 	
 	
 	<br/>
-	<input type="button" value="Back" onclick="javascript:location.href='/widget/tableWidgetData.do~actType=startEdit~widgetId=${dform.widgetId}'"/>
+	<input type="button" value="Back" onclick="javascript:location.href='/widget/tableWidgetData.do~actType=showEdit~widgetId=${dform.widgetId}'"/>
 	
          
 

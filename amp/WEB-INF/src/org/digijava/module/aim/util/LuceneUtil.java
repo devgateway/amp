@@ -276,7 +276,7 @@ public class LuceneUtil implements Serializable {
 				try {
 					AmpLuceneIndexStamp currentStamp = getIdxStamp(activityIndexSufix);
 					if (currentStamp != null)
-						DbUtil.delete(currentStamp);
+						DbUtil.deleteAllStamps(activityIndexSufix);
 				} catch (Exception e1) {
 				}
 				

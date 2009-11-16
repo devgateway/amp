@@ -294,10 +294,10 @@ function ColorPicker_highLightColor(c) {
 				    </tr>
 				    <tr>
 				        <td>
-				          	<table  width=550>
+				          	<table  width=550 border="1">
 				            	<tr>
 				              		<td>
-				                        <table cellPadding="3" cellSpacing="0">
+				                        <table cellPadding="0" cellSpacing="0">
 							                <c:if test="${!empty calendarEventTypeForm.eventTypes}">
 							                   	<tr>
 													<td>

@@ -51,6 +51,12 @@ public final class XmlPatcherConstants {
 		 * and the developer needs to check what's wrong.
 		 */
 		public static final short FAILED = 2;
+		
+		/**
+		 * The patch has been deprecated by another newer patch.
+		 */
+		public static final short DEPRECATED = 3;
+
 	}
 
 	/**

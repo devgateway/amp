@@ -68,6 +68,30 @@ public class XmlPatcherService extends AbstractServiceImpl {
 		schedulerName = NaturalOrderXmlPatcherScheduler.class.getSimpleName();
 	}
 
+	
+	/**
+	 * Schedules the patch list for execution until the previous list is identical in size with the current list, meaning no more patches have been executed.
+	 * This is required to have all patch dependencies fullfilled
+	 * @param scheduledPatches
+	 * @param serviceContext
+	 * @return
+	 * @throws DgException
+	 * @see {@link XmlPatcherService#processUnclosedPatches(Collection, ServiceContext)}
+	 */
+	public int processAllUnclosedPatches(
+			Collection<AmpXmlPatch> scheduledPatches,
+			ServiceContext serviceContext) throws DgException {
+	
+		Collection<AmpXmlPatch> previouslyUnclosedPatches=null;
+		Collection<AmpXmlPatch> currentUnclosedPatches=null;
+		
+		do {
+			previouslyUnclosedPatches=currentUnclosedPatches;
+			currentUnclosedPatches = processUnclosedPatches(scheduledPatches, serviceContext);
+		}  while(previouslyUnclosedPatches==null || currentUnclosedPatches.size()!=previouslyUnclosedPatches.size());
+		return currentUnclosedPatches.size();
+	}
+	
 	/**
 	 * Attempts to execute the given collection of unclosed patches. The
 	 * collection is ordered using a scheduler that was given as a parameter in
@@ -80,7 +104,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	 * @param serviceContext
 	 * @throws DgException
 	 */
-	public int processUnclosedPatches(
+	private Collection<AmpXmlPatch> processUnclosedPatches(
 			Collection<AmpXmlPatch> scheduledPatches,
 			ServiceContext serviceContext) throws DgException {
 		Iterator<AmpXmlPatch> iterator = scheduledPatches.iterator();
@@ -136,7 +160,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			DbUtil.update(ampPatch);
 		}
 		logger.info(scheduledPatches.size()+" patches left unexecuted");
-		return scheduledPatches.size();
+		return scheduledPatches;
 	}
 
 	@Override
@@ -154,12 +178,18 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			Collection<AmpXmlPatch> scheduledPatches = scheduler
 					.getScheduledPatchCollection();
 
-			processUnclosedPatches(scheduledPatches, serviceContext);
-
+			//running deprecation
+			
+			
+			processAllUnclosedPatches(scheduledPatches, serviceContext);
+			
+			
 		} catch(Exception e) {
 			logger.error(e);
 			throw new ServiceException(e);
 		}
+		logger.info("XML Patcher session finished");
+
 	}
 
 	/**

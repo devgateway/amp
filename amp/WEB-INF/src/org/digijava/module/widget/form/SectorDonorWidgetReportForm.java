@@ -11,13 +11,21 @@ public class SectorDonorWidgetReportForm extends ActionForm {
     private Long donorId;
     private String startYear;
     private String endYear;
-    private String sectorId;
     private String sectorName;
     private String donorName;
     private String actualCommitmentsStr;
     private String actualDisbursementsStr;
     private String actualExpendituresStr;
     private Collection<ActivitySectorDonorFunding> actSectorDonorFundingInfo;
+    private Long[] sectorIds;
+
+    public Long[] getSectorIds() {
+        return sectorIds;
+    }
+
+    public void setSectorIds(Long[] sectorIds) {
+        this.sectorIds = sectorIds;
+    }
 
     public String getActualCommitmentsStr() {
         return actualCommitmentsStr;
@@ -81,14 +89,6 @@ public class SectorDonorWidgetReportForm extends ActionForm {
 
     public void setEndYear(String endYear) {
         this.endYear = endYear;
-    }
-
-    public String getSectorId() {
-        return sectorId;
-    }
-
-    public void setSectorId(String sectorId) {
-        this.sectorId = sectorId;
     }
 
     public String getStartYear() {

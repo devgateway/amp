@@ -10,7 +10,7 @@ import org.jfree.data.general.PieDataset;
 public class DonorSectorPieChartURLGenerator implements PieURLGenerator,Serializable {
 
     private String prefix;
-    private String sectorId="sectorId";
+    private String sectorId="sectorIds";
 
     public DonorSectorPieChartURLGenerator(String url){
         this.prefix=url;
@@ -19,7 +19,11 @@ public class DonorSectorPieChartURLGenerator implements PieURLGenerator,Serializ
     public String generateURL(PieDataset data, Comparable key, int pieIndex) {
         String url=prefix;
         SectorHelper sector=(SectorHelper)key;
-        url += "~" + this.sectorId + "=" + sector.getIds();
+        String[] secIds=sector.getIds().split(",");
+        for(int i=0;i<secIds.length;i++){
+              url += "~" + this.sectorId + "=" + secIds[i];
+        }
+     
         return url;
     }
 

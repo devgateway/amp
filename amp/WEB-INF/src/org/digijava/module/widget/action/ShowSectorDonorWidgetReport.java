@@ -59,12 +59,8 @@ public class ShowSectorDonorWidgetReport extends Action {
         }
 
         // sectors
-        String[] secIds=cForm.getSectorId().split(",");
-        sectorIDs=new Long[secIds.length];
-        for(int i=0;i<secIds.length;i++){
-            sectorIDs[i]=Long.valueOf(secIds[i]);
-        }
-        if(secIds.length==1){
+        sectorIDs=cForm.getSectorIds();
+        if(sectorIDs.length==1){
             cForm.setSectorName(SectorUtil.getAmpSector(sectorIDs[0]).getName());
         }
         else{

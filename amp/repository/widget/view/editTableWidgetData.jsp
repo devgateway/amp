@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<digi:instance />
 
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -33,6 +34,13 @@
 		myForm.action="<%=justSubmit%>"+"&filterColumnId="+colId+"&selectedFilterItemId="+sel.value;
 		myForm.submit();
 	}
+	function gotoPreview(myForm) {
+  		<digi:context name="justPreview" property="context/module/moduleinstance/tableWidgetData.do?actType=forwardToPreview" />
+  		myForm.action="<%=justPreview%>";
+  		myForm.submit();
+	}
+
+
 //-->
 </script>
 
@@ -124,7 +132,13 @@
 						<c:set var="saveButton"><digi:trn key="gis:saveButton">Save</digi:trn></c:set>
 						<html:submit title="Submit all moidications" value="${saveButton}"/>
 					</td>
+					<td>
+						<c:set var="previewButton"><digi:trn key="gis:previewButton">Preview</digi:trn></c:set>	
+						<input type="button" value="${previewButton}" onclick="gotoPreview(this.form)">
+						
+					</td>
 				</tr>
+				
 			</table>
 		</td>
 	</tr>

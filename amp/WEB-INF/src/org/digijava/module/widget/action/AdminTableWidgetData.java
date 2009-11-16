@@ -10,6 +10,7 @@ import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.widget.form.AdminTableWidgetDataForm;
 import org.digijava.module.widget.table.WiTable;
 import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
+import org.digijava.module.widget.util.TableWidgetUtil;
 
 /**
  * Action for editing table widget data.
@@ -19,7 +20,6 @@ import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
  */
 public class AdminTableWidgetData extends DispatchAction {
 
-	public static final String EDITING_WIDGET_TABLE = "Editing_Widget_Table";
 
 	/**
 	 * Forwards to {@link #showEdit(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)}
@@ -43,11 +43,11 @@ public class AdminTableWidgetData extends DispatchAction {
 	public ActionForward showEdit(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		if ( ! isEdit(request)){
+		if ( ! TableWidgetUtil.isEdit(request)){
 			return startEdit(mapping, form, request, response);
 		}
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
-		WiTable wTable = getFromSession(request);
+		WiTable wTable = TableWidgetUtil.getFromSession(request);
 		dForm.setColumns(wTable.getColumns());
 		if (wTable.getDataRows().size()==0){
 			wTable.appendNewRow();//we should have one empty row if table has no rows (data).
@@ -60,6 +60,30 @@ public class AdminTableWidgetData extends DispatchAction {
 		dForm.setTableName(wTable.getDataRows().toString());
 		return mapping.findForward("forward");
 	}
+	
+	/**
+	 * Shows preview page for table widget.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward forwardToPreview(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
+
+		WiTable wTable = TableWidgetUtil.getFromSession(request);
+		
+		
+		
+		return mapping.findForward("forwardToPreview");
+	}	
+	
+	
+	
 	
 	/**
 	 * Start edit process.
@@ -129,7 +153,7 @@ public class AdminTableWidgetData extends DispatchAction {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		if (null != dForm.getRowIndex() && dForm.getRowIndex()>=0){
 			int insertIndex=dForm.getRowIndex().intValue()+1;
-			WiTable wTable = getFromSession(request);
+			WiTable wTable = TableWidgetUtil.getFromSession(request);
 			wTable.addNewRowAt(insertIndex);
 		}		
 		return mapping.findForward("returnToEdit");
@@ -150,7 +174,7 @@ public class AdminTableWidgetData extends DispatchAction {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		if (null != dForm.getRowIndex() && dForm.getRowIndex()>=0){
 			int removeIndex = dForm.getRowIndex().intValue();
-			WiTable wTable = getFromSession(request);
+			WiTable wTable = TableWidgetUtil.getFromSession(request);
 			wTable.deleteDataRow(removeIndex);
 		}	
 		
@@ -173,7 +197,7 @@ public class AdminTableWidgetData extends DispatchAction {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		Long filterColumnId = dForm.getFilterColumnId();
 		Long filterItemId = dForm.getSelectedFilterItemId();
-		WiTable table = getFromSession(request);
+		WiTable table = TableWidgetUtil.getFromSession(request);
 		WiColumnDropDownFilter filterColumn = (WiColumnDropDownFilter) table.getColumnById(filterColumnId);
 		filterColumn.setFilterOn(filterItemId);
 		return mapping.findForward("returnToEdit");
@@ -193,10 +217,10 @@ public class AdminTableWidgetData extends DispatchAction {
 			throws Exception {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		System.out.println(dForm.getRows());
-		WiTable wTable = getFromSession(request);
+		WiTable wTable = TableWidgetUtil.getFromSession(request);
 		org.digijava.module.widget.table.util.TableWidgetUtil.saveTable(wTable);
 		
-		markEditStopped(request);
+		TableWidgetUtil.markEditStopped(request);
 		return mapping.findForward("listTableWidgets");
 	}
 	
@@ -206,19 +230,6 @@ public class AdminTableWidgetData extends DispatchAction {
 	 * @param rows
 	 */
 	private void markEditStarted(HttpServletRequest request,WiTable table){
-		updateSession(request, table);
-	}
-	private void markEditStopped(HttpServletRequest request){
-		request.getSession().removeAttribute(EDITING_WIDGET_TABLE);
-	}
-	private boolean isEdit(HttpServletRequest request){
-		return null!=getFromSession(request);
-	}
-
-	private WiTable getFromSession(HttpServletRequest request){
-		return (WiTable)request.getSession().getAttribute(EDITING_WIDGET_TABLE);
-	}
-	private void updateSession(HttpServletRequest request,WiTable table){
-		request.getSession().setAttribute(EDITING_WIDGET_TABLE, table);
+		TableWidgetUtil.updateSession(request, table);
 	}
 }

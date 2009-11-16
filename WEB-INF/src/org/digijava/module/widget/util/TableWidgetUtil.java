@@ -40,6 +40,11 @@ import org.hibernate.Transaction;
  */
 public class TableWidgetUtil {
 
+	/**
+	 * Used tostore table widget in session during edit and preview actions.
+	 */
+	public static final String EDITING_WIDGET_TABLE = "Editing_Widget_Table";
+	
     private static Logger logger = Logger.getLogger(TableWidgetUtil.class);
 	
     /**
@@ -399,6 +404,22 @@ public class TableWidgetUtil {
 		}
     	return result;
 	}
+	
+	
+	public static void markEditStopped(HttpServletRequest request){
+		request.getSession().removeAttribute(EDITING_WIDGET_TABLE);
+	}
+	public static boolean isEdit(HttpServletRequest request){
+		return null!=getFromSession(request);
+	}
+
+	public static WiTable getFromSession(HttpServletRequest request){
+		return (WiTable)request.getSession().getAttribute(EDITING_WIDGET_TABLE);
+	}
+	public static void updateSession(HttpServletRequest request,WiTable table){
+		request.getSession().setAttribute(EDITING_WIDGET_TABLE, table);
+	}
+
 	
 	//=======key resolvers==============
 	public static class TableWidgetKeyResolver implements KeyResolver<Long, AmpDaTable>{

@@ -1133,7 +1133,7 @@ function resetAll()
 																				</td>
 																				<td>${implExecAgency.contact.organisationName}</td>
 																				<td>
-																					<c:forEach var="phone" items="${sectorMinistry.contact.properties}">
+																					<c:forEach var="phone" items="${implExecAgency.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
 																							<div>${phone.value}</div>
 																						</c:if>

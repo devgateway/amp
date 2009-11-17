@@ -92,6 +92,7 @@ import org.jfree.ui.VerticalAlignment;
 import org.jfree.ui.HorizontalAlignment;
 import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
+import org.jfree.chart.axis.CategoryAxis;
 
 /**
  * Chart widgets util.
@@ -172,7 +173,8 @@ public class ChartWidgetUtil {
      */
     public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
-        Font font8 = new Font(null, Font.BOLD, 12);
+        Font titleFont = new Font("Arial", Font.BOLD, 12);
+        Font plainFont = new Font("Arial", Font.PLAIN, 10);
         CategoryDataset dataset = getPledgesCommDisbDataset(filter,opt);
         DecimalFormat format=FormatHelper.getDecimalFormat();
         String amount="";
@@ -184,17 +186,18 @@ public class ChartWidgetUtil {
         String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg= TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId())+"("+filter.getCurrName()+")";
         chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
-        chart.getTitle().setFont(font8);
-        if (opt.isShowLegend()) {
-            chart.getLegend().setItemFont(font8);
-        }
+        chart.getTitle().setFont(titleFont);
+        chart.getLegend().setItemFont(plainFont);
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
-        renderer.setItemMargin(0);
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
         numberAxis.setNumberFormatOverride(format);
+        numberAxis.setLabelFont(plainFont);
+        numberAxis.setTickLabelFont(plainFont);
+        CategoryAxis categoryAxis=plot.getDomainAxis();
+        categoryAxis.setTickLabelFont(plainFont);
         renderer.setSeriesPaint(0,new Color(0,0,255));
 	renderer.setSeriesPaint(1,new Color(0,204,255));
 	renderer.setSeriesPaint(2,new Color(204,255,255));
@@ -487,7 +490,8 @@ public class ChartWidgetUtil {
 
     public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
-        Font font12 = new Font(null, Font.BOLD, 12);
+        Font titleFont = new Font("Arial", Font.BOLD, 12);
+        Font plainFont = new Font("Arial", Font.PLAIN, 10);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
         String transTypeName="";
         switch(filter.getTransactionType()){
@@ -497,11 +501,11 @@ public class ChartWidgetUtil {
         String transTypeNameTrn=TranslatorWorker.translateText(transTypeName,opt.getLangCode(),opt.getSiteId());
 
         chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+" | "+filter.getCurrName()+")", dataset, true, true, false);
-        chart.getTitle().setFont(font12);
+        chart.getTitle().setFont(titleFont);
         LegendTitle legend = chart.getLegend();
-        legend.setItemFont(font12);
+        legend.setItemFont(plainFont);
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setLabelFont(font12);
+        plot.setLabelFont(plainFont);
         String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
@@ -538,7 +542,8 @@ public class ChartWidgetUtil {
 
        public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
      	JFreeChart chart = null;
-        Font font12 = new Font(null, Font.BOLD, 12);
+        Font titleFont = new Font("Arial", Font.BOLD, 12);
+        Font plainFont = new Font("Arial", Font.PLAIN, 10);
 
         DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
         String transTypeName = "";
@@ -552,9 +557,9 @@ public class ChartWidgetUtil {
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
         chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1)  +" | "+filter.getCurrName()+")", dataset, true, true, false);
-        chart.getTitle().setFont(font12);
+        chart.getTitle().setFont(titleFont);
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setLabelFont(font12);
+        plot.setLabelFont(titleFont);
         String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
@@ -569,10 +574,11 @@ public class ChartWidgetUtil {
         plot.setLabelLinkMargin(0.05);
         plot.setLabelShadowPaint(null);
         plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
+        plot.setLabelFont(plainFont);
         LegendTitle legend = chart.getLegend();
         legend.setPosition(RectangleEdge.LEFT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
-        legend.setItemFont(font12);
+        legend.setItemFont(plainFont);
         plot.setLegendItemShape(new Rectangle(10,10));
         PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
         plot.setLegendLabelGenerator(genLegend);

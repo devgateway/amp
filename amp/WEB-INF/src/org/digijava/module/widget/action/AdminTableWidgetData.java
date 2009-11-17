@@ -76,7 +76,7 @@ public class AdminTableWidgetData extends DispatchAction {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 
 		WiTable wTable = TableWidgetUtil.getFromSession(request);
-		
+		dForm.setTableName(wTable.getName());
 		
 		
 		return mapping.findForward("forwardToPreview");

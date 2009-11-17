@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -674,31 +675,27 @@ public class EditOrganisation extends DispatchAction {
         return mapping.findForward("forward");
     }
 
-    public ActionForward deleteContact(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    public ActionForward deleteContact(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
         if (sessionChk(request)) {
             return mapping.findForward("index");
         }
         AddOrgForm editForm = (AddOrgForm) form;
-        Long selContactId = editForm.getSelContactId();
+        String selContactId = editForm.getSelContactId();        
         Long[] selectedContactInfoIds = editForm.getSelectedContactInfoIds();
         List<AmpContact> oldContacts = editForm.getContacts();
         List<AmpContact> contactsForRemove = new ArrayList<AmpContact>();
         Iterator<AmpContact> contactIter = oldContacts.iterator();
         while (contactIter.hasNext()) {
             AmpContact contact = contactIter.next();
-            if (selContactId != null&&selContactId!=0) {
-                if ((contact.getId() != null && contact.getId().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(selContactId.toString()))) {
+            if (selContactId != null) {
+                if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().toString().equals(selContactId.toString()))) {
                     contactsForRemove.add(contact);
                     break;
                 }
             } else {
-
                 if (selectedContactInfoIds != null) {
                     for (Long contactId : selectedContactInfoIds) {
-                        if ((contact.getId() != null && contact.getId().equals(contactId))
-                                || (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId.toString()))) {
+                        if ((contact.getId() != null && contact.getId().equals(contactId))|| (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId.toString()))) {
                             contactsForRemove.add(contact);
                         }
                     }

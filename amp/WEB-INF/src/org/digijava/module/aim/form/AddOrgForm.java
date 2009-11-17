@@ -85,7 +85,7 @@ public class AddOrgForm extends ActionForm {
     private Long[] selLocs;
     private Long parentLocId;
     private List<AmpContact> contacts;
-    private Long selContactId;
+    private String selContactId;
     private String type;
     private String addressAbroad;
     private String taxNumber;
@@ -209,15 +209,6 @@ public class AddOrgForm extends ActionForm {
 
     public void setMinPlanRegDate(String minPlanRegDate) {
         this.minPlanRegDate = minPlanRegDate;
-    }
-
- 
-    public Long getSelContactId() {
-        return selContactId;
-    }
-
-    public void setSelContactId(Long selContactId) {
-        this.selContactId = selContactId;
     }
 
     public String getType() {
@@ -791,4 +782,12 @@ public class AddOrgForm extends ActionForm {
     public void setBudgetOrgCode(String budgetOrgCode) {
         this.budgetOrgCode = budgetOrgCode;
     }
+
+	public String getSelContactId() {
+		return selContactId;
+	}
+
+	public void setSelContactId(String selContactId) {
+		this.selContactId = selContactId;
+	}
 }

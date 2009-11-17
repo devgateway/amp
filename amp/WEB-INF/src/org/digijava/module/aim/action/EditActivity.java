@@ -72,6 +72,7 @@ import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -1583,7 +1584,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 	      }
 	      
 	      if(activityContacts!=null){
-	    	  ContactInfoUtil.copyContactsToSubLists(activityContacts, eaForm);
+	    	  AmpContactsWorker.copyContactsToSubLists(activityContacts, eaForm);
 	      }
 
           if (eaForm.getIsPreview() != 1 && !isPublicView) {

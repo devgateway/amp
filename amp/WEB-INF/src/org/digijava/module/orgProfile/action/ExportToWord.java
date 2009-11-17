@@ -278,9 +278,9 @@ public class ExportToWord extends Action {
                                     AmpContact contact=contactsIter.next();
                                     RtfCell name = new RtfCell(new Paragraph(contact.getLastname(),plainFont));
                                     RtfCell lastName = new RtfCell(new Paragraph(contact.getName(),plainFont));
-                                    RtfCell email = new RtfCell(new Paragraph(contact.getEmail(),plainFont));
-                                    RtfCell phone = new RtfCell(new Paragraph(contact.getPhone(),plainFont));
-                                    RtfCell fax = new RtfCell(new Paragraph(contact.getFax(),plainFont));
+//                                    RtfCell email = new RtfCell(new Paragraph(contact.getEmail(),plainFont));
+//                                    RtfCell phone = new RtfCell(new Paragraph(contact.getPhone(),plainFont));
+//                                    RtfCell fax = new RtfCell(new Paragraph(contact.getFax(),plainFont));
                                     String contacTitle = "";
                                     if (contact.getTitle() != null) {
                                         contacTitle = contact.getTitle().getValue();
@@ -288,17 +288,17 @@ public class ExportToWord extends Action {
                                     RtfCell title = new RtfCell(new Paragraph(contacTitle,plainFont));
                                     if(count%2==0){
                                         title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                         lastName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                         name.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                     }
                                     orgContactsTbl.addCell(lastName);
                                     orgContactsTbl.addCell(name);
-                                    orgContactsTbl.addCell(email);
-                                    orgContactsTbl.addCell(phone);
-                                    orgContactsTbl.addCell(fax);
+//                                    orgContactsTbl.addCell(email);
+//                                    orgContactsTbl.addCell(phone);
+//                                    orgContactsTbl.addCell(fax);
                                     orgContactsTbl.addCell(title);
                                     count++;
 

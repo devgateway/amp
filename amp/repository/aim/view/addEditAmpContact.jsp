@@ -17,6 +17,7 @@
     </div>
 </div>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script type="text/javascript">
     <!--
 
@@ -269,30 +270,27 @@ html>body #mainEmpty {
         }
         checkErrorAndClose();
     }
+
      function checkErrorAndClose(){
-                if(checkAndClose==true){
-                    if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-                        myPanel.hide();
-                        panelStart=1;
-                    }
-                    checkAndClose=false;
-                    <digi:context name="addCont" property="context/addressBook.do?actionType=addOrganization"/>
+     	if(checkAndClose==true){
+        	if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+            	myPanel.hide();
+                panelStart=1;
+            }
+            checkAndClose=false;
+            <digi:context name="addCont" property="context/addressBook.do?actionType=addOrganization"/>
 		    document.addressbookForm.action = "<%= addCont %>";
-                    document.addressbookForm.submit();
-                }
-            
+            document.addressbookForm.submit();
+        }            
      }
 
-	function checkNumber(phoneOrFaxId){
-		var phoneOrFax=document.getElementById(phoneOrFaxId);
-	 	var number=phoneOrFax.value;
+	function checkNumber(number){
 	 	var validChars= "0123456789()+ ";
 	 	for (var i = 0;  i < number.length;  i++) {
-	  		var ch = number.charAt(i);
+	 		var ch = number.charAt(i);
 	  		if (validChars.indexOf(ch)==-1){
-	   			alert('enter correct number');
-	   			phoneOrFax.value=number.substring(0,i);
-	   			return false;	   
+	  			alert('enter correct number');	   			
+	   			return false;
 	  		}
 	 	}	 
 	 return true;
@@ -301,7 +299,9 @@ html>body #mainEmpty {
 	function saveContact(){
 		if(validateInfo()){
 		    <digi:context name="addCont" property="context/addressBook.do?actionType=saveContact"/>
-		    document.addressbookForm.action = "<%= addCont %>";
+		    var url="<%= addCont %>";
+		    //url+=getParamsData();
+		    document.addressbookForm.action = url;
 		    document.addressbookForm.target = "_self";
 		    document.addressbookForm.submit();
 		}
@@ -316,26 +316,59 @@ html>body #mainEmpty {
 			alert('Please Enter lastname');
 			return false;
 		}
-		if(document.getElementById('email').value==null || document.getElementById('email').value==''){
-			alert('Please Enter email');
-			return false;
-		}else if(document.getElementById('email').value.indexOf('@')==-1){
-			alert('Please Enter Correct Email');
-			return false;
-		}
-		if (checkNumber('phone')==false){
-			return false;
-		}
-		if(checkNumber('fax')==false){
-			return false;
-		}		
-		if(checkNumber('mobilephone')==false){
-			return false;
-		}		
+		//check emails. At least one email should exist
+		var emails=$("input[@id^='email_']");
+    	if(emails!=null){
+        	for(var i=0;i < emails.length; i++){
+            	if(emails[i].value==null || emails[i].value==''){
+            		alert('Please enter email');
+            		return false;
+            	}
+            	if( emails[i].value!=null && emails[i].value !='' && emails[i].value.indexOf('@')==-1){
+            		alert('Please enter valid email');
+            		return false;
+            	}
+        	}
+    	}
+    	//phone shouldn't be empty and should contain valid characters
+    	//also if phone type is filled, number should be filled too and vice versa
+    	var phoneTypes=$("input[@id^='phoneType_']");
+    	var phoneNumbers=$("input[@id^='phoneNum_']");
+    	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
+    		for(var i=0;i < phoneNumbers.length; i++){
+        		if(phoneTypes[i].value=='' && phoneNumbers[i].value==''){
+            		alert('Please enter phone');
+            		return false;
+        		}else if(phoneTypes[i].value=='' && phoneNumbers[i].value!=''){
+        			alert('Please enter phone type');
+        			return false;
+        		}else if(phoneTypes[i].value!='' && phoneNumbers[i].value==''){
+        			alert('Please enter phone number');
+        			return false;
+        		}
+    		}
+    	}
+    	
+    	if(phoneNumbers!=null){
+        	for(var i=0;i < phoneNumbers.length; i++){
+            	if(checkNumber(phoneNumbers[i].value)==false){            		
+            		return false;
+            	}
+        	}
+    	}
+    	//check fax
+    	var faxes=$("input[@id^='faxes_']");
+    	if(faxes!=null){
+    		for(var i=0;i < faxes.length; i++){
+            	if(checkNumber(faxes[i].value)==false){
+            		return false;
+            	}
+        	}
+    	}
 		return true;
 	}
         function removeOrgs(){
-               <digi:context name="addCont" property="context/addressBook.do?actionType=removeOrganization"/>
+            <digi:context name="addCont" property="context/addressBook.do?actionType=removeOrganization"/>
 		    document.addressbookForm.action = "<%= addCont %>";
 		    document.addressbookForm.target = "_self";
 		    document.addressbookForm.submit();
@@ -348,6 +381,47 @@ html>body #mainEmpty {
                 '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
                 showContent();
         }
+
+        function addNewData(dataName){
+            if(notAchievedMaxAllowed(dataName)){
+            	<digi:context name="addCont" property="context/addressBook.do?actionType=addNewData"/>
+            	var url = "<%=addCont%>&data="+dataName;
+            	//url += getParamsData();
+    		    document.addressbookForm.action = url;
+    		    document.addressbookForm.target = "_self";
+    		    document.addressbookForm.submit();
+            }        	
+        }
+
+        function removeData(propertyType, index){ 
+        	<digi:context name="delCont" property="context/addressBook.do?actionType=removeData"/>
+        	var url = "<%=delCont%>&dataName="+propertyType+"&index="+index;
+		    document.addressbookForm.action = url;
+		    document.addressbookForm.target = "_self";
+		    document.addressbookForm.submit();
+        }
+
+        function notAchievedMaxAllowed(dataName){
+            var myArray=null;
+            var msg='';
+            if(dataName=='email' && $("input[@id^='email_']").length==3){
+                msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
+            	alert(msg);
+                return false;
+            }else if(dataName=='phone'  && $("input[@id^='phoneNum_']").length==3){
+            	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
+                alert(msg);
+            	return false;
+            }else if(dataName=='fax' && $("input[@id^='faxes_']").length==3){
+            	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
+                alert(msg);
+            	return false;
+            }
+            return true;
+        }
+        
+		// hide loading image
+        addLoadEvent(delBody);
 </script>
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
@@ -443,12 +517,12 @@ html>body #mainEmpty {
 																													<tr>
 																														<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
 																														<td align="left">
-                                                                                                                                                                                                                                                    <c:set var="translation">
-                                                                                                                                                                                                                                                        <digi:trn>Please select from below</digi:trn>
-                                                                                                                                                                                                                                                    </c:set>
-                                                                                                                                                                                                                                        <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
-                                                                                                                                                                                                                                                </td>
-																													</tr>	
+                                                                                                                        	<c:set var="translation">
+                                                                                                                            	<digi:trn>Please select from below</digi:trn>
+                                                                                                                            </c:set>
+                                                                                                                            <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
+                                                                                                                        </td>
+																													</tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>Last Name</digi:trn></strong><font color="red">*</font></td>
 																														<td align="left"><html:text property="lastname" styleId="lastname" size="40"/></td>
@@ -458,8 +532,29 @@ html>body #mainEmpty {
 																														<td align="left"><html:text property="name" styleId="name" size="40"/></td>
 																													</tr>
 																													<tr>
-																														<td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
-																														<td align="left"><html:text property="email" styleId="email" size="40"/></td>
+																														<td align="right" valign="top"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
+																														<td align="left">
+																															<logic:notEmpty name="addressbookForm" property="emails">
+																																 <logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
+																																 	<div>
+																																 		<html:text name="addressbookForm" property="emails[${ctr}].value" size="40" styleId="email_${ctr}"/>																																 		
+																																 		<c:if test="${addressbookForm.emailsSize>1}">
+																																 			 <a href="javascript:removeData('email',${ctr})"> 
+																																		 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+																																		 	</a>
+																																 		</c:if>
+																																 		<c:if test="${ctr==addressbookForm.emailsSize-1}">
+																																 			<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
+      																																		<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('email')">
+																																 		</c:if>
+																																 	</div>																										                    
+																												                 </logic:iterate>
+																															</logic:notEmpty>
+																															<logic:empty name="addressbookForm" property="emails">
+																																<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
+      																															<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('email')">
+																															</logic:empty>
+																														</td>
 																													</tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
@@ -469,52 +564,81 @@ html>body #mainEmpty {
 																														<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
 																														<td align="left"><html:text property="organisationName" size="40"/></td>
 																													</tr>
-                                                                                                                                                                                                                                        <tr>
-                                                                                                                                                                                                                                            <td colspan="2" align="center">
-                                                                                                                                                                                                                                                <c:choose>
-                                                                                                                                                                                                                                                    <c:when test="${empty addressbookForm.organizations}">
-                                                                                                                                                                                                                                                 <aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                                                                                                                                                                                                            </c:when>
-
-                                                                                                                                                                                                                                            <c:otherwise>
-                                                                                                                                                                                                                                                <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-                                                                                                                                                                                                                                                    <c:forEach var="organization" items="${addressbookForm.organizations}">
-                                                                                                                                                                                                                                                        <tr>
-                                                                                                                                                                                                                                                            <td width="3px">
-                                                                                                                                                                                                                                                                <html:multibox property="selOrgs">
-                                                                                                                                                                                                                                                                    <bean:write name="organization" property="ampOrgId" />
-                                                                                                                                                                                                                                                                </html:multibox>
-                                                                                                                                                                                                                                                            </td>
-
-                                                                                                                                                                                                                                                            <td align="left">
-                                                                                                                                                                                                                                                                <bean:write name="organization" property="name" />
-                                                                                                                                                                                                                                                            </td>
-
-                                                                                                                                                                                                                                                        </tr>
-                                                                                                                                                                                                                                                    </c:forEach>
-                                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                                        <td colspan="2">
-                                                                                                                                                                                                                                                    <aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                                                                                                                                                                                                                    <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                            </tr>
-
-                                                                                                                                                                                                                                        </table>
-                                                                                                                                                                                                                                        </c:otherwise>
-                                                                                                                                                                                                                                        </c:choose>
-                                                                                                                                                                                                                                        </td>
-                                                                                                                                                                                                                                        </tr>
-																													<tr>
-																														<td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
-																														<td align="left"><html:text property="phone" styleId="phone" size="40" onkeyup="checkNumber('phone')"/></td>
-																													</tr>		
-																													<tr>
-																														<td align="right"><strong><digi:trn>Mobile phone</digi:trn></strong></td>
-																														<td align="left"><html:text property="mobilephone" styleId="mobilephone" size="40" onkeyup="checkNumber('mobilephone')"/></td>
+                                                                                                                    <tr>
+                                                                                                                    	<td colspan="2" align="center">
+                                                                                                                        	<c:choose>
+                                                                                                                            	<c:when test="${empty addressbookForm.organizations}">
+                                                                                                                                	<aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                                                                                </c:when>
+                                                                                                                                <c:otherwise>
+                                                                                                                                	<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+                                                                                                                                    	<c:forEach var="organization" items="${addressbookForm.organizations}">
+                                                                                                                                        	<tr>
+                                                                                                                                               <td width="3px">
+	                                                                                                                                               	<html:multibox property="selOrgs">
+	                                                                                                                                                	<bean:write name="organization" property="ampOrgId" />
+	                                                                                                                                                </html:multibox>
+                                                                                                                                            	</td>
+                                                                                                                                                <td align="left">
+                                                                                                                                                	<bean:write name="organization" property="name" />
+                                                                                                                                                </td>
+                                                                                                                                             </tr>
+                                                                                                                                        </c:forEach>
+                                                                                                                                        <tr>
+                                                                                                                                            <td colspan="2">
+                                                                                                                                                 <aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                                                                                                 <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
+                                                                                                                                        	</td>
+                                                                                                                                    	</tr>
+                                                                                                                                	</table>
+                                                                                                                            	</c:otherwise>
+                                                                                                                        	</c:choose>
+                                                                                                                        </td>
+                                                                                                                    </tr>
+                                                                                                                   	<tr>
+																														<td align="right" valign="top" ><strong><digi:trn>Phone Number</digi:trn></strong></td>
+																														<td align="left">
+																															<logic:notEmpty name="addressbookForm" property="phones">
+																																 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
+																																 	<div>
+																																 		<html:text name="addressbookForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
+																												                    	<html:text name="addressbookForm" property="phones[${ctr}].value" size="26" styleId="phoneNum_${ctr}"/>
+																												                    	 <a href="javascript:removeData('phone',${ctr})"> 
+																																	 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+																																	 	</a>
+																												                    	<c:if test="${addressbookForm.phonesSize==0 ||  ctr==addressbookForm.phonesSize-1}">
+																												                			<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
+      																																		<input id="addPhoneBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('phone')">    	
+																												                    	</c:if>
+																																 	</div>																				                    
+																												                 </logic:iterate>
+																															</logic:notEmpty>
+																															<logic:empty name="addressbookForm" property="phones">
+																																<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
+      																															<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('phone')">
+																															</logic:empty>
+																														</td>
 																													</tr>	
 																													<tr>
-																														<td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
-																														<td align="left"><html:text property="fax" styleId="fax" size="40" onkeyup="checkNumber('fax')"/></td>
+																														<td align="right" valign="top"><strong><digi:trn>Fax</digi:trn></strong></td>
+																														<td align="left">
+																															<logic:notEmpty name="addressbookForm" property="faxes">
+																																 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
+																												                    <html:text name="addressbookForm" property="faxes[${ctr}].value" size="40" styleId="fax_${ctr}"/>																												                    																												                    
+																												                    <a href="javascript:removeData('fax',${ctr})"> 
+																																 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+																																 	</a>
+																												                    <c:if test="${ctr==addressbookForm.faxesSize-1}">
+																												                    	<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
+      																																	<input id="addFaxBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('fax')">
+																												                    </c:if>
+																												                 </logic:iterate>
+																															</logic:notEmpty>
+																															<logic:empty name="addressbookForm" property="faxes">
+																																<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
+      																															<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('fax')">
+																															</logic:empty>
+																														</td>
 																													</tr>
 																													<tr>
 																														<td align="right" valign="top"><strong><digi:trn>Office Address</digi:trn></strong></td>
@@ -523,7 +647,7 @@ html>body #mainEmpty {
 																													<tr height="5px"><td colspan="2"/></tr>
 																													<tr>
 																														<td colspan="4" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()">Save</html:button> </td>			
-																													</tr>																
+																													</tr>
 																												</table>
 																											</td>
 																										</tr>

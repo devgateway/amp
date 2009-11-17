@@ -13,16 +13,12 @@ public class AmpContact {
 	private Long id;
 	private String name;
 	private String lastname;
-	private String email;
 	private AmpCategoryValue title;
 	private String organisationName;
-	private String phone;
-	private String fax;
 	private String function;
-	private String mobilephone;
 	private String officeaddress;
 	private String temporaryId;
-        private Set<AmpOrganisation> organizations;
+    private Set<AmpOrganisation> organizations;
 	
 	/**
 	 * currently these fields are not usable, but will become when we decide 
@@ -32,6 +28,7 @@ public class AmpContact {
 	private AmpTeamMember creator; //who created the contact
 	
 	private Set<AmpActivityContact> activityContacts;
+	private Set<AmpContactProperty> properties;
 	
 	public Long getId() {
 		return id;
@@ -50,14 +47,7 @@ public class AmpContact {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	}	
 	public AmpCategoryValue getTitle() {
 		return title;
 	}
@@ -69,18 +59,6 @@ public class AmpContact {
 	}
 	public void setOrganisationName(String organisationName) {
 		this.organisationName = organisationName;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	public String getFax() {
-		return fax;
-	}
-	public void setFax(String fax) {
-		this.fax = fax;
 	}
 	public Boolean getShared() {
 		return shared;
@@ -114,25 +92,23 @@ public class AmpContact {
 	public void setFunction(String function) {
 		this.function = function;
 	}
-	public String getMobilephone() {
-		return mobilephone;
-	}
-	public void setMobilephone(String mobilephone) {
-		this.mobilephone = mobilephone;
-	}
 	public String getOfficeaddress() {
 		return officeaddress;
 	}
 	public void setOfficeaddress(String officeaddress) {
 		this.officeaddress = officeaddress;
 	}
-        public Set<AmpOrganisation> getOrganizations() {
+	public Set<AmpContactProperty> getProperties() {
+		return properties;
+	}
+	public void setProperties(Set<AmpContactProperty> properties) {
+		this.properties = properties;
+	}	
+	 public Set<AmpOrganisation> getOrganizations() {
             return organizations;
         }
 
         public void setOrganizations(Set<AmpOrganisation> organizations) {
             this.organizations = organizations;
         }
-	
-		
 }

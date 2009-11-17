@@ -4,21 +4,18 @@ import java.util.List;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.ContactPropertyHelper;
 
 public class AddContactComponentForm extends ActionForm {
 
     private static final long serialVersionUID = 1L;
     private Long[] selContactIds;
     private List<AmpContact> contacts;
-    private String name;
+    private String firstName;
     private String lastname;
-    private String email;
     private Long title;
     private String organisationName;
-    private String phone;
-    private String fax;
     private String function;
-    private String mobilephone;
     private String officeaddress;
     private String keyword;
     private String action;
@@ -27,6 +24,20 @@ public class AddContactComponentForm extends ActionForm {
     private Long contactId;
     private List<AmpOrganisation> organizations;
     private Long[] selContactOrgs;
+    
+    private String temporaryId; //contact's temporary id
+    
+    private ContactPropertyHelper[] emails;
+	private ContactPropertyHelper[] phones;
+	private ContactPropertyHelper[] faxes;
+	private int phonesSize;
+	private int emailsSize;
+	private int faxesSize;
+	
+	private String[] contEmail;
+	private String[] contPhoneType;
+	private String[] contPhoneNumber;
+	private String[] contFaxes;
 
     public Long[] getSelContactOrgs() {
         return selContactOrgs;
@@ -53,7 +64,15 @@ public class AddContactComponentForm extends ActionForm {
     }
   
 
-    public String getAction() {
+    public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getAction() {
         return action;
     }
 
@@ -96,22 +115,6 @@ public class AddContactComponentForm extends ActionForm {
         this.contacts = contacts;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFax() {
-        return fax;
-    }
-
-    public void setFax(String fax) {
-        this.fax = fax;
-    }
-
     public String getLastname() {
         return lastname;
     }
@@ -120,28 +123,12 @@ public class AddContactComponentForm extends ActionForm {
         this.lastname = lastname;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getOrganisationName() {
         return organisationName;
     }
 
     public void setOrganisationName(String organisationName) {
         this.organisationName = organisationName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public Long[] getSelContactIds() {
@@ -175,15 +162,6 @@ public class AddContactComponentForm extends ActionForm {
 	public void setFunction(String function) {
 		this.function = function;
 	}
-
-	public String getMobilephone() {
-		return mobilephone;
-	}
-
-	public void setMobilephone(String mobilephone) {
-		this.mobilephone = mobilephone;
-	}
-
 	public String getOfficeaddress() {
 		return officeaddress;
 	}
@@ -191,6 +169,76 @@ public class AddContactComponentForm extends ActionForm {
 	public void setOfficeaddress(String officeaddress) {
 		this.officeaddress = officeaddress;
 	}
-
-	private String temporaryId; //contact's temporary id
+	
+	public ContactPropertyHelper[] getEmails() {
+		return emails;
+	}
+	public void setEmails(ContactPropertyHelper[] emails) {
+		this.emails = emails;
+	}
+	public ContactPropertyHelper[] getPhones() {
+		return phones;
+	}
+	public void setPhones(ContactPropertyHelper[] phones) {
+		this.phones = phones;
+	}
+	public ContactPropertyHelper[] getFaxes() {
+		return faxes;
+	}
+	public void setFaxes(ContactPropertyHelper[] faxes) {
+		this.faxes = faxes;
+	}
+	public int getPhonesSize() {
+		return phonesSize;
+	}
+	public void setPhonesSize(int phonesSize) {
+		this.phonesSize = phonesSize;
+	}
+	public int getEmailsSize() {
+		return emailsSize;
+	}
+	public void setEmailsSize(int emailsSize) {
+		this.emailsSize = emailsSize;
+	}
+	public int getFaxesSize() {
+		return faxesSize;
+	}
+	public void setFaxesSize(int faxesSize) {
+		this.faxesSize = faxesSize;
+	}
+	public String[] getContEmail() {
+		return contEmail;
+	}
+	public void setContEmail(String[] contEmail) {
+		this.contEmail = contEmail;
+	}
+	public String[] getContPhoneType() {
+		return contPhoneType;
+	}
+	public void setContPhoneType(String[] contPhoneType) {
+		this.contPhoneType = contPhoneType;
+	}
+	public String[] getContPhoneNumber() {
+		return contPhoneNumber;
+	}
+	public void setContPhoneNumber(String[] contPhoneNumber) {
+		this.contPhoneNumber = contPhoneNumber;
+	}
+	public String[] getContFaxes() {
+		return contFaxes;
+	}
+	public void setContFaxes(String[] contFaxes) {
+		this.contFaxes = contFaxes;
+	}
+	public ContactPropertyHelper getEmails(int index) {
+        return emails[index];
+    }
+	
+	public ContactPropertyHelper getFaxes(int index) {
+        return faxes[index];
+    }
+	public ContactPropertyHelper getPhones(int index) {
+        return phones[index];
+    }
+	
 }

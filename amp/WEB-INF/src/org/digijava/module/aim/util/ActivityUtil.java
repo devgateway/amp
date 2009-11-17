@@ -52,6 +52,7 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -790,24 +791,40 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       if(activityContacts!=null && activityContacts.size()>0){
     	  for (AmpActivityContact activityContact : activityContacts) {
     	   	//save or update contact
-    		AmpContact contact=activityContact.getContact();
-    		if(contact.getId()!=null){ //contact already exists.
-    			AmpContact ampContact=(AmpContact)session.get(AmpContact.class, contact.getId());
+    		AmpContact contact=activityContact.getContact();   		
+    		AmpContact ampContact=null;
+    		if(contact.getId()!=null){ //contact already exists.    			
+    			ampContact=(AmpContact)session.get(AmpContact.class, contact.getId());
     			ampContact.setName(contact.getName());
     			ampContact.setLastname(contact.getLastname());
-    			ampContact.setEmail(contact.getEmail());
     			ampContact.setTitle(contact.getTitle());
     			ampContact.setOrganisationName(contact.getOrganisationName());
-    			ampContact.setPhone(contact.getPhone());
-    			ampContact.setFax(contact.getFax());
     			ampContact.setCreator(contact.getCreator());
     			ampContact.setShared(true);
-    			ampContact.setMobilephone(contact.getMobilephone());
     			ampContact.setOfficeaddress(contact.getOfficeaddress());
-    			session.update(ampContact);
+    			//remove old properties
+    			if(ampContact.getProperties()!=null){
+    				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
+    					session.delete(dbProperty);
+    				}
+    			}
+    			ampContact.setProperties(null);
+    			session.update(ampContact);    			    			
     		}else{
     			session.save(contact);
     		}
+    		//save properties
+    		if(contact.getProperties()!=null){
+				for (AmpContactProperty formProperty : contact.getProperties()) {
+					if(ampContact!=null){
+						formProperty.setContact(ampContact);
+					}else{
+						formProperty.setContact(contact);
+					}					
+					session.save(formProperty);
+				}
+			}
+
     		//link activity to activityContact
     		if(activityContact.getId()!=null){
     			AmpActivityContact ampActContact=(AmpActivityContact)session.get(AmpActivityContact.class, activityContact.getId());
@@ -1148,7 +1165,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			throw savedEx;
     }
     }
-
+    //session.clear();
     return activityId;
   }
 

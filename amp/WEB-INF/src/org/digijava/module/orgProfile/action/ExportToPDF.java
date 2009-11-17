@@ -284,9 +284,9 @@ public class ExportToPDF extends Action {
                                     AmpContact contact=contactsIter.next();
                                     PdfPCell name = new PdfPCell(new Paragraph(contact.getLastname(),OrgProfileUtil.PLAINFONT));
                                     PdfPCell lastName = new PdfPCell(new Paragraph(contact.getName(),OrgProfileUtil.PLAINFONT));
-                                    PdfPCell email = new PdfPCell(new Paragraph(contact.getEmail(),OrgProfileUtil.PLAINFONT));
-                                    PdfPCell phone = new PdfPCell(new Paragraph(contact.getPhone(),OrgProfileUtil.PLAINFONT));
-                                    PdfPCell fax = new PdfPCell(new Paragraph(contact.getFax(),OrgProfileUtil.PLAINFONT));
+//                                    PdfPCell email = new PdfPCell(new Paragraph(contact.getEmail(),OrgProfileUtil.PLAINFONT));
+//                                    PdfPCell phone = new PdfPCell(new Paragraph(contact.getPhone(),OrgProfileUtil.PLAINFONT));
+//                                    PdfPCell fax = new PdfPCell(new Paragraph(contact.getFax(),OrgProfileUtil.PLAINFONT));
                                     String contacTitle = "";
                                     if (contact.getTitle() != null) {
                                         contacTitle = contact.getTitle().getValue();
@@ -294,17 +294,17 @@ public class ExportToPDF extends Action {
                                     PdfPCell title = new PdfPCell(new Paragraph(contacTitle,OrgProfileUtil.PLAINFONT));
                                     if(count%2==0){
                                         title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                         lastName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                         name.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                     }
                                     orgContactsTbl.addCell(lastName);
                                     orgContactsTbl.addCell(name);
-                                    orgContactsTbl.addCell(email);
-                                    orgContactsTbl.addCell(phone);
-                                    orgContactsTbl.addCell(fax);
+//                                    orgContactsTbl.addCell(email);
+//                                    orgContactsTbl.addCell(phone);
+//                                    orgContactsTbl.addCell(fax);
                                     orgContactsTbl.addCell(title);
                                     count++;
 

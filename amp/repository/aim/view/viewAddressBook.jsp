@@ -448,7 +448,9 @@ html>body #mainEmpty {
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																					</td>
-																					<td width="100">																		
+																					<td width="100">
+																						<b><digi:trn>Email</digi:trn></b>
+																						<!--
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='emailAscending'}">
 																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=emailAscending&reset=false">
 																								<b><digi:trn>Email</digi:trn></b>
@@ -460,8 +462,9 @@ html>body #mainEmpty {
 																							</digi:link>
 																						</c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
-																					</td>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailDescending'}"><img src="/repository/aim/images/down.gif"/></c:if> 
+																						 -->
+																					</td>`
 																					<td width="5px">&nbsp;</td>
 																					<td width="150">
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='orgNameAscending'}">
@@ -511,7 +514,11 @@ html>body #mainEmpty {
 																						  ${cont.name}&nbsp;${cont.lastname}
 																						</td>
 																						<td height="30" width="100">
-																						  	${cont.email}
+																							<c:forEach var="email" items="${cont.properties}">
+																								<c:if test="${email.name=='contact email'}">
+																									<div>${email.value}</div>
+																								</c:if>
+																							</c:forEach>
 																						</td>
 																						<td width="5px">&nbsp;</td>																	
 																						<td height="30" width="100">
@@ -521,10 +528,18 @@ html>body #mainEmpty {
 																							${cont.title}
 																						</td>
 																						<td height="30" width="100">
-																							${cont.phone}
+																							<c:forEach var="phone" items="${cont.properties}">
+																								<c:if test="${phone.name=='contact phone'}">
+																									<div>${phone.value}</div>
+																								</c:if>
+																							</c:forEach>																							
 																						</td>
 																						<td height="30" width="100">
-																							${cont.fax}
+																							<c:forEach var="fax" items="${cont.properties}">
+																								<c:if test="${fax.name=='contact fax'}">
+																									<div>${fax.value}</div>
+																								</c:if>
+																							</c:forEach>
 																						</td>
 																						<td height="30" width="100">
 																							<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.EUActivity;
@@ -927,6 +928,8 @@ public class ExportActivityToPDF extends Action {
 			buildContactInfoOutput(mainLayout,"Sector Ministry contact information",myForm.getContactInformation().getSectorMinistryContacts());
 			//Project Coordinator contact information
 			buildContactInfoOutput(mainLayout,"Proj. Coordinator contact information",myForm.getContactInformation().getProjCoordinatorContacts());
+			//Implementing/executing agency contact information
+			buildContactInfoOutput(mainLayout,"Implementing/Executing Agency contact information",myForm.getContactInformation().getImplExecutingAgencyContacts());
 			
 			/**
 			 * Proposed Project Cost
@@ -2308,7 +2311,10 @@ public class ExportActivityToPDF extends Action {
 		if(contacts!=null && contacts.size()>0){
 			String output="";
 			for (AmpActivityContact cont : contacts) {
-				output+=cont.getContact().getName()+" "+cont.getContact().getLastname()+"- "+cont.getContact().getEmail()+ "\n";
+				Set<AmpContactProperty> contactProperties=cont.getContact().getProperties();
+				List<AmpContactProperty> emails=null;
+				// !!!!!!!!!!!!!!!!!!! here I should have inner table for emails !
+				//output+=cont.getContact().getName()+" "+cont.getContact().getLastname()+"- "+cont.getContact().getEmail()+ "\n";
 			}
 			paragraph=new Paragraph(output,plainFont);
 			paragraph.setAlignment(Element.ALIGN_LEFT);

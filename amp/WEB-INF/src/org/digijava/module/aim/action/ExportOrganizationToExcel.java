@@ -407,15 +407,15 @@ public class ExportOrganizationToExcel extends DispatchAction {
                 cell.setCellValue(new HSSFRichTextString(contact.getName()));
                 cell.setCellStyle(style);
                 cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(contact.getEmail()));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(contact.getPhone()));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(contact.getFax()));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
+//                cell.setCellValue(new HSSFRichTextString(contact.getEmail()));
+//                cell.setCellStyle(style);
+//                cell = row.createCell(cellNum++);
+//                cell.setCellValue(new HSSFRichTextString(contact.getPhone()));
+//                cell.setCellStyle(style);
+//                cell = row.createCell(cellNum++);
+//                cell.setCellValue(new HSSFRichTextString(contact.getFax()));
+//                cell.setCellStyle(style);
+//                cell = row.createCell(cellNum++);
                 String title="";
                 if(contact.getTitle()!=null){
                     title=contact.getTitle().getValue();

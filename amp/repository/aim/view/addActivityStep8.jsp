@@ -97,9 +97,11 @@
 
      YAHOOAmp.namespace("YAHOOAmp.amp");
 
-    var myPanelContact = new YAHOOAmp.widget.Panel("newpopins", {
-        width:"800px",
-        fixedcenter: true,
+    var myPanelContact = new YAHOOAmp.widget.Panel("newpopins", { 
+        x:250,
+        y:100,
+        minWidth:"400px",
+        fixedcenter: false,
         constraintoviewport: false,
         underlay:"none",
         close:true,
@@ -216,27 +218,53 @@
     function addOrganizations2Contact(){
          <digi:context name="addCont" property="context/activityContactInfo.do?toDo=addOrganization"/>;
             checkAndClose=true;
-            var url="${addCont}"+getContactParams();
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+            //var url="${addCont}"+getContactParams();
+             var url="${addCont}";
+             var parameters=getContactParams();
+            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
      }
 
         function getContactParams(){
-                var title = document.getElementById('contactTitle');
-                var titleId=title.options[title.selectedIndex].value;
-                var params="";
-                  params+="&contactInformation.name="+document.getElementById('name').value+
-                      "&contactInformation.lastname="+document.getElementById('lastname').value +
-                      "&contactInformation.email="+document.getElementById('email').value+
-                      "&contactInformation.title="+titleId+
-                      "&contactInformation.function="+document.getElementById('function').value+
-                      "&contactInformation.officeaddress="+document.getElementById('officeaddress').value+
-                      "&contactInformation.organisationName="+document.getElementById('organisationName').value+
-                      "&contactInformation.phone="+document.getElementById('phone').value+
-                      "&contactInformation.fax="+document.getElementById('fax').value+
-                      "&contactInformation.mobilephone="+document.getElementById('mobilephone').value+
-                      "&contactInformation.temporaryId="+document.getElementById('temporaryId').value;
-                  return params;
-              }
+        	var title = document.getElementById('contactTitle');
+            var titleId=title.options[title.selectedIndex].value;
+            var params="";
+            params+="&contactInformation.name="+document.getElementById('name').value+
+            	"&contactInformation.lastname="+document.getElementById('lastname').value +
+                "&contactInformation.title="+titleId+
+                "&contactInformation.function="+document.getElementById('function').value+
+                "&contactInformation.officeaddress="+document.getElementById('officeaddress').value+
+                "&contactInformation.organisationName="+document.getElementById('organisationName').value+
+                "&contactInformation.temporaryId="+document.getElementById('temporaryId').value;
+
+            var emails=$("input[@id^='email_']");
+        	if(emails!=null){
+            	for(var i=0;i < emails.length; i++){
+            		params+= "&contactInformation.contEmail="+emails[i].value;
+            	}
+        	}
+        	//get phone types
+        	var phoneTypes=$("input[@id^='phoneType_']");
+        	if(phoneTypes!=null){
+            	for(var i=0;i < phoneTypes.length; i++){
+            		params+= "&contactInformation.contPhoneType="+phoneTypes[i].value;
+            	}
+        	}
+        	//get phone numbers
+        	var phoneNums=$("input[@id^='phoneNum_']");
+        	if(phoneNums!=null){
+            	for(var i=0;i < phoneNums.length; i++){
+            		params+= "&contactInformation.contPhoneNumber="+phoneNums[i].value;
+            	}
+        	}
+        	//get faxes
+        	var faxes=$("input[@id^='fax_']");
+        	if(faxes!=null){
+            	for(var i=0;i < faxes.length; i++){
+            		params+= "&contactInformation.contFaxes="+faxes[i].value;
+            	}
+        	}
+            return params;
+        }
 
        function removeContactOrgs(){
         var params=getContactParams();
@@ -253,8 +281,8 @@
             alert(msg);
         }
          <digi:context name="addCont" property="context/activityContactInfo.do?toDo=removeOrganizations"/>;
-                        var url="${addCont}"+"&"+params;
-                        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+         var url="${addCont}";         
+         YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,params);
 
         }
 
@@ -325,9 +353,15 @@
 		}
 	}
 
-	function checkForduplicateEmail(){ //checks whether such email already exists in db
-		var email=document.getElementById('email').value;
-		var url=addActionToURL('activityContactInfo.do?toDo=checkDulicateEmail&email='+email);			
+	function checkForduplicateEmail(){ //checks whether such email already exists in db		
+		var params='';
+		var emails=$("input[@id^='email_']");
+    	if(emails!=null){
+        	for(var i=0;i < emails.length; i++){
+        		params+= emails[i].value+";";
+        	}
+    	}
+		var url=addActionToURL('activityContactInfo.do?toDo=checkDulicateEmail&params='+params);
 		var async=new Asynchronous();
 		async.complete=showErrorOrSaveContact;
 		async.call(url);
@@ -350,57 +384,119 @@
 			alert('Please Enter lastname');
 			return false;
 		}
-		if(document.getElementById('email').value==null || document.getElementById('email').value==''){
-			alert('Please Enter email');
-			return false;
-		}else if(document.getElementById('email').value.indexOf('@')==-1){
-			alert('Please Enter Correct Email');
-			return false;
-		}
-		if (checkNumber('phone')==false){
-			return false;
-		}
-		if(checkNumber('fax')==false){
-			return false;
-		}		
-		if(checkNumber('mobilephone')==false){
-			return false;
-		}		
+		//check emails. At least one email should exist
+		var emails=$("input[@id^='email_']");
+    	if(emails!=null){
+        	for(var i=0;i < emails.length; i++){
+            	if(emails[i].value==null || emails[i].value==''){
+            		alert('Please enter email');
+            		return false;
+            	}
+            	if( emails[i].value!=null && emails[i].value !='' && emails[i].value.indexOf('@')==-1){
+            		alert('Please enter valid email');
+            		return false;
+            	}
+        	}
+    	}
+    	//phone shouldn't be empty and should contain valid characters
+    	//also if phone type is filled, number should be filled too and vice versa
+    	var phoneTypes=$("input[@id^='phoneType_']");
+    	var phoneNumbers=$("input[@id^='phoneNum_']");
+    	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
+    		for(var i=0;i < phoneNumbers.length; i++){
+        		if(phoneTypes[i].value=='' && phoneNumbers[i].value==''){
+            		alert('Please enter phone');
+            		return false;
+        		}else if(phoneTypes[i].value=='' && phoneNumbers[i].value!=''){
+        			alert('Please enter phone type');
+        			return false;
+        		}else if(phoneTypes[i].value!='' && phoneNumbers[i].value==''){
+        			alert('Please enter phone number');
+        			return false;
+        		}
+    		}
+    	}
+    	
+    	if(phoneNumbers!=null){
+        	for(var i=0;i < phoneNumbers.length; i++){
+            	if(checkNumber(phoneNumbers[i].value)==false){            		
+            		return false;
+            	}
+        	}
+    	}
+    	//check fax
+    	var faxes=$("input[@id^='faxes_']");
+    	if(faxes!=null){
+    		for(var i=0;i < faxes.length; i++){
+            	if(checkNumber(faxes[i].value)==false){
+            		return false;
+            	}
+        	}
+    	}
 		return true;
 	}
 
-	function checkNumber(phoneOrFaxId){
-	 var phoneOrFax=document.getElementById(phoneOrFaxId);
-	 var number=phoneOrFax.value;
-	 var validChars= "0123456789()+ ";
-	 for (var i = 0;  i < number.length;  i++) {
-	  var ch = number.charAt(i);
-	  if (validChars.indexOf(ch)==-1){
-	   alert('enter correct number');
-	   phoneOrFax.value=number.substring(0,i);
-	   return false;	   
-	  }
-	 }	 
+	function checkNumber(number){
+	 	var validChars= "0123456789()+ ";
+	 	for (var i = 0;  i < number.length;  i++) {
+	 		var ch = number.charAt(i);
+	  		if (validChars.indexOf(ch)==-1){
+	  			alert('enter correct number');	   			
+	   			return false;
+	  		}
+	 	}	 
 	 return true;
 	}
+
+	function addNewData(dataName){
+        if(notAchievedMaxAllowed(dataName)){
+        	 <digi:context name="addCont" property="context/activityContactInfo.do?toDo=addNewData"/>;
+             var url="${addCont}&data="+dataName;
+             var parameters=getContactParams();
+             YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
+        }
+    }
+
+	function removeData(propertyType, index){ 
+    	<digi:context name="delCont" property="context/activityContactInfo.do?toDo=removeData"/>
+    	var url = "<%=delCont%>&dataName="+propertyType+"&index="+index;
+    	var parameters=getContactParams();
+    	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
+    }
+
+	function notAchievedMaxAllowed(dataName){
+        var myArray=null;
+        var msg='';
+        if(dataName=='email' && $("input[@id^='email_']").length==3){
+            msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
+        	alert(msg);
+            return false;
+        }else if(dataName=='phone'  && $("input[@id^='phoneNum_']").length==3){
+        	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
+            alert(msg);
+        	return false;
+        }else if(dataName=='fax' && $("input[@id^='faxes_']").length==3){
+        	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
+            alert(msg);
+        	return false;
+        }
+        return true;
+    }
 	
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
 			 if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-                        var callbackFunction='';
-                        if(document.aimSelectOrganizationForm!=null&&document.aimSelectOrganizationForm.callbackFunction!=null)
-                        callbackFunction=document.aimSelectOrganizationForm.callbackFunction.value;
-                         if( callbackFunction.trim()!=''){
-                                    eval(callbackFunction);
-
-                                }
-                                else{
-                                     refreshPage();
-                                }
-                        myclose();
-                    }
-                    checkAndClose=false;
-                    
+             	var callbackFunction='';
+                if(document.aimSelectOrganizationForm!=null&&document.aimSelectOrganizationForm.callbackFunction!=null)
+                	callbackFunction=document.aimSelectOrganizationForm.callbackFunction.value;
+                if( callbackFunction.trim()!=''){
+                	eval(callbackFunction);
+                }else{
+                    refreshPage();
+                }
+                myclose();
+             }
+             checkAndClose=false;                    
 		}
 	}
 
@@ -610,7 +706,7 @@ function resetAll()
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">
                                     <c:set var="message">
-										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+										<digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
 									</c:set>
 									<c:set var="quote">'</c:set>
 									<c:set var="escapedQuote">\'</c:set>
@@ -755,9 +851,21 @@ function resetAll()
 																			<tr bgcolor="${background}">
 																				<td>${donorContact.contact.name}</td>
 																				<td>${donorContact.contact.lastname}</td>
-																				<td>${donorContact.contact.email}</td>
+																				<td>
+																					<c:forEach var="email" items="${donorContact.contact.properties}">
+																						<c:if test="${email.name=='contact email'}">
+																							<div>${email.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td>${donorContact.contact.organisationName}</td>
-																				<td>${donorContact.contact.phone}</td>
+																				<td>
+																					<c:forEach var="phone" items="${donorContact.contact.properties}">
+																						<c:if test="${phone.name=='contact phone'}">
+																							<div>${phone.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryDonorContIds" styleId="donors_${stat.index}" value="${donorContact.contact.temporaryId}" onchange="changePrimaryState('donor')"/>																					
 																				</td>
@@ -811,9 +919,21 @@ function resetAll()
 																			<tr bgcolor="${background}">
 																				<td>${mofedContact.contact.name}</td>
 																				<td>${mofedContact.contact.lastname}</td>
-																				<td>${mofedContact.contact.email}</td>
+																				<td>
+																					<c:forEach var="email" items="${mofedContact.contact.properties}">
+																						<c:if test="${email.name=='contact email'}">
+																							<div>${email.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td>${mofedContact.contact.organisationName}</td>
-																				<td>${mofedContact.contact.phone}</td>
+																				<td>
+																					<c:forEach var="phone" items="${mofedContact.contact.properties}">
+																						<c:if test="${phone.name=='contact phone'}">
+																							<div>${phone.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryMofedContIds" styleId="mofed_${stat.index}" value="${mofedContact.contact.temporaryId}" onchange="changePrimaryState('mofed')"/>
 																				</td>
@@ -867,9 +987,21 @@ function resetAll()
 																			<tr bgcolor="${background}">
 																				<td>${projCoordinator.contact.name}</td>
 																				<td>${projCoordinator.contact.lastname}</td>
-																				<td>${projCoordinator.contact.email}</td>
+																				<td>
+																					<c:forEach var="email" items="${projCoordinator.contact.properties}">
+																						<c:if test="${email.name=='contact email'}">
+																							<div>${email.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td>${projCoordinator.contact.organisationName}</td>
-																				<td>${projCoordinator.contact.phone}</td>
+																				<td>
+																					<c:forEach var="phone" items="${projCoordinator.contact.properties}">
+																						<c:if test="${phone.name=='contact phone'}">
+																							<div>${phone.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryProjCoordContIds" styleId="proj_${stat.index}" value="${projCoordinator.contact.temporaryId}" onchange="changePrimaryState('proj')"/>
 																				</td>
@@ -923,9 +1055,21 @@ function resetAll()
 																			<tr bgcolor="${background}">
 																				<td>${sectorMinistry.contact.name}</td>
 																				<td>${sectorMinistry.contact.lastname}</td>
-																				<td>${sectorMinistry.contact.email}</td>
+																				<td>
+																					<c:forEach var="email" items="${sectorMinistry.contact.properties}">
+																						<c:if test="${email.name=='contact email'}">
+																							<div>${email.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td>${sectorMinistry.contact.organisationName}</td>
-																				<td>${sectorMinistry.contact.phone}</td>
+																				<td>
+																					<c:forEach var="phone" items="${sectorMinistry.contact.properties}">
+																						<c:if test="${phone.name=='contact phone'}">
+																							<div>${phone.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primarySecMinContIds" styleId="secMin_${stat.index}" value="${sectorMinistry.contact.temporaryId}" onchange="changePrimaryState('secMin')"/>
 																				</td>
@@ -944,7 +1088,7 @@ function resetAll()
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff"><html:button property="submitButton" styleClass="dr-menu" onclick="AddContactButton('SECTOR_MINISTRY_CONT')">Add Contact</html:button></td>
 																	</tr>																	
-																</table>												
+																</table>
 															</td>
 														</tr>
 														<tr style="height:20px"><td/></tr>

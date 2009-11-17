@@ -8,33 +8,46 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.ContactPropertyHelper;
 
 public class AddressBookForm   extends ActionForm {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private List<AmpContact> contactsForPage;
-	//contact information
+	/**
+	 * contact information
+	 */
 	private Long contactId;
 	private String name;
 	private String lastname;
-	private String email;
 	private Long title;
 	private String organisationName;
-	private String phone;
-	private String fax;	
 	private String function;	
-	private String mobilephone;	
-	private String officeaddress;	
-	//filter elements
+	private String officeaddress;
+	
+	private ContactPropertyHelper[] phones;
+	private int phonesSize; 
+	private ContactPropertyHelper[] emails;
+	private int emailsSize;
+	private ContactPropertyHelper[] faxes;
+	private int faxesSize;	
+	
+	/**
+	 * filter elements
+	 */
 	private String keyword;
 	private Integer resultsPerPage;	
 	private String sortBy;
 	private String[] contactNames;
-	 //selected letter
+	 /**
+	  * selected letter
+	  */
     private String currentAlpha;
     private String[] alphaPages = null; //massive of letters 
-	//pagination
+	/**
+	 * pagination
+	 */
 	private Collection pages = null;
 	private Integer currentPage;
 	private int offset;
@@ -42,24 +55,24 @@ public class AddressBookForm   extends ActionForm {
 	
 	//for import
 	private FormFile fileUploaded;
-        private List<AmpOrganisation> organizations;
-        private Long[] selOrgs;
+    private List<AmpOrganisation> organizations;
+    private Long[] selOrgs;
 
-        public Long[] getSelOrgs() {
-            return selOrgs;
-        }
+    public Long[] getSelOrgs() {
+    	return selOrgs;
+    }
 
-        public void setSelOrgs(Long[] selOrgs) {
-            this.selOrgs = selOrgs;
-        }
+    public void setSelOrgs(Long[] selOrgs) {
+    	this.selOrgs = selOrgs;
+    }
 
-        public List<AmpOrganisation> getOrganizations() {
-            return organizations;
-        }
+    public List<AmpOrganisation> getOrganizations() {
+    	return organizations;
+    }
 
-        public void setOrganizations(List<AmpOrganisation> organizations) {
-            this.organizations = organizations;
-        }
+    public void setOrganizations(List<AmpOrganisation> organizations) {
+    	this.organizations = organizations;
+    }
 	
 	public int getPagesSize() {
 		return pagesSize;
@@ -115,13 +128,7 @@ public class AddressBookForm   extends ActionForm {
 	}
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	}	
 	public Long getTitle() {
 		return title;
 	}
@@ -133,18 +140,6 @@ public class AddressBookForm   extends ActionForm {
 	}
 	public void setOrganisationName(String organisationName) {
 		this.organisationName = organisationName;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	public String getFax() {
-		return fax;
-	}
-	public void setFax(String fax) {
-		this.fax = fax;
 	}
 	public String getKeyword() {
 		return keyword;
@@ -200,16 +195,70 @@ public class AddressBookForm   extends ActionForm {
 	public void setFunction(String function) {
 		this.function = function;
 	}
-	public String getMobilephone() {
-		return mobilephone;
-	}
-	public void setMobilephone(String mobilephone) {
-		this.mobilephone = mobilephone;
-	}
 	public String getOfficeaddress() {
 		return officeaddress;
 	}
 	public void setOfficeaddress(String officeaddress) {
 		this.officeaddress = officeaddress;
+	}	
+
+	public ContactPropertyHelper[] getPhones() {
+		return phones;
+	}
+	
+	public ContactPropertyHelper getPhones(int index) {
+        return phones[index];
+   }
+
+	public void setPhones(ContactPropertyHelper[] phones) {
+		this.phones = phones;
+	}
+
+	public ContactPropertyHelper[] getEmails() {
+		return emails;
+	}
+	
+	public ContactPropertyHelper getEmails(int index) {
+        return emails[index];
+   }
+
+	public void setEmails(ContactPropertyHelper[] emails) {
+		this.emails = emails;
+	}
+
+	public ContactPropertyHelper[] getFaxes() {
+		return faxes;
+	}
+
+	public void setFaxes(ContactPropertyHelper[] faxes) {
+		this.faxes = faxes;
+	}
+	
+	public ContactPropertyHelper getFaxes(int index) {
+        return faxes[index];
+   }
+
+	public int getPhonesSize() {
+		return phonesSize;
+	}
+
+	public void setPhonesSize(int phonesSize) {
+		this.phonesSize = phonesSize;
+	}
+
+	public int getEmailsSize() {
+		return emailsSize;
+	}
+
+	public void setEmailsSize(int emailsSize) {
+		this.emailsSize = emailsSize;
+	}
+
+	public int getFaxesSize() {
+		return faxesSize;
+	}
+
+	public void setFaxesSize(int faxesSize) {
+		this.faxesSize = faxesSize;
 	}	
 }

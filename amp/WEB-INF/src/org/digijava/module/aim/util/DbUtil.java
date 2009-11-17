@@ -53,6 +53,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -2850,21 +2851,46 @@ public class DbUtil {
 
             }
             org.setSectors(sect);
-            Set<AmpContact> contacts = org.getContacts();
-            if (contacts != null) {
-                Iterator<AmpContact> iterContact = contacts.iterator();
-                while (iterContact.hasNext()) {
-                    AmpContact contact = iterContact.next();
-                    if(contact.getId()!=null){
-                         sess.merge(contact);
-                    }
-                    else{
-                        sess.save(contact);
-                    }
-
-                }
-            }
-
+            //contacts
+            Set<AmpContact> contacts = org.getContacts();            
+            //save or update contact
+            if(contacts!=null){            	
+            	for (AmpContact contact : contacts) {
+            		AmpContact ampContact=null;
+					if(contact.getId()!=null){
+						ampContact=(AmpContact)sess.get(AmpContact.class, contact.getId());
+						ampContact.setName(contact.getName());
+		    			ampContact.setLastname(contact.getLastname());
+		    			ampContact.setTitle(contact.getTitle());
+		    			ampContact.setOrganisationName(contact.getOrganisationName());
+		    			ampContact.setCreator(contact.getCreator());
+		    			ampContact.setShared(true);
+		    			ampContact.setOfficeaddress(contact.getOfficeaddress());
+		    			//remove old properties
+		    			if(ampContact.getProperties()!=null){
+		    				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
+		    					sess.delete(dbProperty);
+		    				}
+		    			}
+		    			ampContact.setProperties(null);
+		    			sess.update(ampContact);    			    			
+		    		}else{
+		    			sess.save(contact);
+		    		}
+					//save properties
+		    		if(contact.getProperties()!=null){
+						for (AmpContactProperty formProperty : contact.getProperties()) {
+							if(ampContact!=null){
+								formProperty.setContact(ampContact);
+							}else{
+								formProperty.setContact(contact);
+							}
+							sess.save(formProperty);
+						}
+					}
+				}
+            }            
+    		
             sess.saveOrUpdate(org);
             tx.commit();
         } catch (Exception e) {

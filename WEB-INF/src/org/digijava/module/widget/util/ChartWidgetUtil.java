@@ -109,7 +109,7 @@ import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 public class ChartWidgetUtil {
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
 
-  
+
     /**
      * Generates chart object from specified indicator and options.
      * This chart then can be rendered as image or pdf or file.
@@ -128,18 +128,18 @@ public class ChartWidgetUtil {
 		chart = ChartFactory.createTimeSeriesChart(opt.getTitle(), null, null, ds, opt.isShowLegend(), tooltips, urls);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font8);		
+			chart.getLegend().setItemFont(font8);
 		}
 		RectangleInsets padding = new RectangleInsets(0,0,0,0);
 		chart.setPadding(padding);
-		
+
 		XYPlot plot =(XYPlot) chart.getPlot();
 		plot.setRangeZeroBaselineVisible(true);
 		plot.getDomainAxis().setLabelFont(font8);
 		plot.getDomainAxis().setTickLabelFont(font8);
 		plot.getRangeAxis().setLabelFont(font8);
 		plot.getRangeAxis().setTickLabelFont(font8);
-		
+
 		XYItemRenderer renderer = plot.getRenderer();
 //		renderer.setItemLabelFont(font8);
 		renderer.setItemLabelsVisible(opt.isShowLabels());
@@ -154,9 +154,9 @@ public class ChartWidgetUtil {
 			r.setBaseShapesVisible(true);
 			r.setBaseShapesFilled(true);
 		}
-		
-		//This will expand ranges slightly so that points at the edge will move inside 
-		//and number will not be cut by borders. 
+
+		//This will expand ranges slightly so that points at the edge will move inside
+		//and number will not be cut by borders.
 		Range oldRange = plot.getRangeAxis().getRange();
 		Range newRange = Range.expand(oldRange, 0.1, 0.1);
 		plot.getRangeAxis().setRange(newRange);
@@ -167,9 +167,9 @@ public class ChartWidgetUtil {
 
 		return chart;
 	}
-    
-      
-    
+
+
+
      /**
      * Generates chart object from specified filters and options.
      * This chart then can be rendered as image or pdf or file.
@@ -191,7 +191,7 @@ public class ChartWidgetUtil {
         }
         String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg= TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId())+"("+filter.getCurrName()+")";
-        chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font8);
@@ -203,21 +203,16 @@ public class ChartWidgetUtil {
         renderer.setItemMargin(0);
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
         numberAxis.setNumberFormatOverride(format);
-        //This will expand ranges slightly so that points at the edge will move inside
-        //and number will not be cut by borders.
-        Range oldRange = numberAxis.getRange();
-        Range newRange = Range.expand(oldRange, 0.1, 0.1);
-        numberAxis.setRange(newRange);
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
-        renderer.setItemLabelsVisible(true);
-        renderer.setItemLabelGenerator(labelGenerator);
-        renderer.setPositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER,Math.PI/2 ));
+        renderer.setSeriesPaint(0,new Color(0,0,255));
+	renderer.setSeriesPaint(1,new Color(0,204,255));
+	renderer.setSeriesPaint(2,new Color(204,255,255));
+        renderer.setItemMargin(0);
         return chart;
     }
-    
-  
-     
-     
+
+
+
+
      /**
      * Generates category dataset using  filters .
      * This chart then can be rendered as image or pdf or file.
@@ -225,8 +220,8 @@ public class ChartWidgetUtil {
      * @return CategoryDataset
      * @throws DgException
      */
-    
-    
+
+
     private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter,ChartOption opt) throws DgException, WorkerException {
         boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
@@ -268,15 +263,15 @@ public class ChartWidgetUtil {
         return result;
     }
 
-    
+
     /**
      * Generates chart dataset from AMP data.
      * This dataset is required to generate chart object.
      * Because this chart show changes of some values in time we use time series objects.
-     * It creates two lines (TimeSeries): one line is desired change of values, which connects base value to target value, 
+     * It creates two lines (TimeSeries): one line is desired change of values, which connects base value to target value,
      * and another line is actual change of indicator value, it connects all actual value points.
-     * So we go through values of the indicator and put them in the correct TimeSeries objects. 
-     * Correctness of the resulting chart depends on correctness of data.  
+     * So we go through values of the indicator and put them in the correct TimeSeries objects.
+     * Correctness of the resulting chart depends on correctness of data.
      * @param indicator
      * @return
      * @throws DgException
@@ -302,7 +297,7 @@ public class ChartWidgetUtil {
 		}
 		return ds;
 	}
-	
+
 	/**
 	 * Returns all chart widgets.
 	 * @return
@@ -334,7 +329,7 @@ public class ChartWidgetUtil {
 		if (widget==null) return null;
 		return (AmpWidgetIndicatorChart)widget;
 	}
-	
+
 	/**
 	 * Loads indicator chart widget by its ID.
 	 * @param widgetId
@@ -352,7 +347,7 @@ public class ChartWidgetUtil {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Saves or creates indicator chart widget in db.
 	 * @param widget
@@ -380,7 +375,7 @@ public class ChartWidgetUtil {
 		}
 		return widget;
 	}
-	
+
 	/**
 	 * Removes indicator chart widget from db.
 	 * @param widget
@@ -406,10 +401,10 @@ public class ChartWidgetUtil {
 			throw new DgException("Cannot delete chart widget");
 		}
 	}
-	
+
 	/**
 	 * Checks if there is an widget for specified indicator.
-	 * This helps to prevent deletion of indicator while it is assigned to widgets. 
+	 * This helps to prevent deletion of indicator while it is assigned to widgets.
 	 * @param sectorIndicator
 	 * @return true if widgets for the indicator is found in db. othervise false is returned.
 	 * @throws DgException
@@ -430,7 +425,7 @@ public class ChartWidgetUtil {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Generates chart of sector-donor funding.
 	 * @param donors ID's of donors to use in calculation
@@ -442,7 +437,7 @@ public class ChartWidgetUtil {
 	 */
 	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer fromYear,Integer toYear,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
-		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear,opt);		
+		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear,opt);
         String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
 		String title = (opt.isShowTitle())? titleMsg:null;
 		boolean tooltips = false;
@@ -459,7 +454,7 @@ public class ChartWidgetUtil {
 			Font font = new Font(null,0,12);
 			result.getTitle().setFont(font);
 		}
-		
+
 		if (opt.isShowLabels()){
 			String pattern = "{0} = {2}";
 			if (opt.getLabelPattern()!=null){
@@ -472,7 +467,7 @@ public class ChartWidgetUtil {
 		}else{
 			plot.setLabelGenerator(null);
 		}
-		
+
 		//plot.setSectionOutlinesVisible(false);
         LegendTitle lt = result.getLegend();
         if (lt != null) {
@@ -496,8 +491,8 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-        
-        
+
+
     public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
         Font font12 = new Font(null, Font.BOLD, 12);
@@ -538,7 +533,7 @@ public class ChartWidgetUtil {
         plot.setLegendLabelGenerator(genLegend);
         plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
         return chart;
-    }   
+    }
       /**
      * Generates chart object from specified filters and options.
      * This chart then can be rendered as image or pdf or file.
@@ -548,7 +543,7 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-       
+
        public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
      	JFreeChart chart = null;
         Font font12 = new Font(null, Font.BOLD, 12);
@@ -607,16 +602,16 @@ public class ChartWidgetUtil {
 		if (fromYear!=null && toYear!=null){
 			/**
 			 * we should get default calendar and from/to dates should be taken according to it.
-			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from 
-			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July 
+			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from
+			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July
 			 */
 			Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
-			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);						
+			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
 			fromDate=getStartOfYear(fromYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
 			//we need data including the last day of toYear,this is till the first day of toYear+1
 			int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 			toDate =new Date(getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
-		}		
+		}
         Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
@@ -652,16 +647,16 @@ public class ChartWidgetUtil {
 		}
 		return ds;
 	}
-        
+
 	public static Date getStartOfYear(int year, int month,int day){
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.set(year, month, day, 0, 0, 0);
 		return cal.getTime();
 	}
-	
+
 	/**
-	 * Returns collection of DonorSectorFundingHelper beans. 
-	 * Each of them represents funding of one particular sector. 
+	 * Returns collection of DonorSectorFundingHelper beans.
+	 * Each of them represents funding of one particular sector.
 	 * @param donorIDs
 	 * @param fromDate
 	 * @param toDate
@@ -670,7 +665,7 @@ public class ChartWidgetUtil {
 	 * @throws DgException
 	 */
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
-    	Collection<DonorSectorFundingHelper> fundings=null;  
+    	Collection<DonorSectorFundingHelper> fundings=null;
 		String oql ="select  actSec.ampActivitySectorId, "+
                         "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInBaseCurrency)";
 		oql += " from ";
@@ -681,8 +676,8 @@ public class ChartWidgetUtil {
                         " inner join actSec.sectorId sec "+
                         " inner join actSec.activityId act "+
                         " inner join actSec.classificationConfig config ";
-		
-		
+
+
 		oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
@@ -712,8 +707,8 @@ public class ChartWidgetUtil {
 		} catch (Exception e) {
 			throw new DgException(
 					"Cannot load sector fundings by donors from db", e);
-		}	
-		
+		}
+
 		//Process grouped data
 		if (result != null) {
 			Map<Long, DonorSectorFundingHelper> donors = new HashMap<Long, DonorSectorFundingHelper>();
@@ -745,7 +740,7 @@ public class ChartWidgetUtil {
                                 //calculate whole funding information
                                 wholeFunding[0]+=calculated.doubleValue();
 			}
-			fundings = donors.values(); 
+			fundings = donors.values();
 		}
 		return fundings;
 	}
@@ -778,7 +773,7 @@ public class ChartWidgetUtil {
                         BigDecimal calculated = (sectorPrcentage.floatValue() == 100) ? amount : calculatePercentage(amount, sectorPrcentage);
                         //convert to
                         //Double converted = convert(calculated, currency);
-                        //search if we already have such sector data           
+                        //search if we already have such sector data
                         DonorSectorFundingHelper sectorFundngObj = donors.get(sectId);
                         //if not create and add to map
                         if (sectorFundngObj == null) {
@@ -839,7 +834,7 @@ public class ChartWidgetUtil {
         }
         return result;
     }
-    
+
 
      /**
      * Generates Pie dataset using  filters .
@@ -848,7 +843,7 @@ public class ChartWidgetUtil {
      * @return CategoryDataset
      * @throws DgException
      */
-        
+
     public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
         Long year = filter.getYear();
         Long orgGroupId = filter.getOrgGroupId();
@@ -1014,7 +1009,7 @@ public class ChartWidgetUtil {
     @SuppressWarnings("empty-statement")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
 
-     
+
         /* if user doesn't select year, currency we are
         taking this information from global settings value*/
 
@@ -1057,7 +1052,7 @@ public class ChartWidgetUtil {
                 " inner join actSec.sectorId sec " +
                 " inner join actSec.activityId act " +
                 " inner join actSec.classificationConfig config ";
-        
+
         oql += "  where  " +
                 " fd.adjustmentType = 1 and fd.transactionType =:transactionType  ";
         if (orgID == null || orgID == -1) {
@@ -1106,7 +1101,7 @@ public class ChartWidgetUtil {
                 } else {
                     others+=total.doubleValue();
                 }
-                
+
             }
             if(others>0){
                   ds.setValue("Others", others);
@@ -1208,9 +1203,9 @@ public class ChartWidgetUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-        
-        
-      
+
+
+
 	   public static DecimalWraper getFundingByFinancingInstrument(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long financingInstrumentId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
@@ -1292,8 +1287,8 @@ public class ChartWidgetUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-        
-       
+
+
 
 	   public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long assistanceTypeId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
@@ -1370,8 +1365,8 @@ public class ChartWidgetUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-        
-       
+
+
 
     public static double getPledgesFunding(Long orgID, Long orgGroupId,  Date startDate,Date endDate, String currCode) throws DgException {
         double totalPlannedPldges = 0;
@@ -1450,7 +1445,7 @@ public class ChartWidgetUtil {
                         orgIds+=getComputationOrgsQry(childTeam);
                         teamIds+=childTeam.getAmpTeamId()+",";
                     }
-                       
+
                     if (teamIds.length() > 1) {
                         teamIds = teamIds.substring(0, teamIds.length() - 1);
                         qr += "  act.team.ampTeamId in ( " + teamIds + ")";
@@ -1460,7 +1455,7 @@ public class ChartWidgetUtil {
                         qr+=" or f.ampDonorOrgId in(" +  orgIds + ")";
                     }
 
-                   
+
                     qr += " ) and act.draft=false and act.approvalStatus in ('approved','edited') ";
                 }
 
@@ -1503,7 +1498,7 @@ public class ChartWidgetUtil {
 
     }
 
-        
+
       /**
        * Returns actual or planned amount in selected currency
        * for selected organization and year
@@ -1514,7 +1509,7 @@ public class ChartWidgetUtil {
        * @return
        * @throws org.digijava.kernel.exception.DgException
        */
-       
+
 
     public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, String currCode, boolean isComm, TeamMember tm) throws DgException {
         String oql = "select fd ";
@@ -1572,7 +1567,7 @@ public class ChartWidgetUtil {
                     "Cannot load sector fundings by donors from db", e);
         }
     }
-    
+
     public static BigDecimal convert(BigDecimal amount,AmpCurrency originalCurrency){
     	try {
 			CurrencyWorker.convertToUSD(amount, originalCurrency.getCurrencyCode());
@@ -1582,12 +1577,12 @@ public class ChartWidgetUtil {
 		}
     	return amount;
     }
-    
+
     public static BigDecimal calculatePercentage(BigDecimal amount,Float percentage){
     	BigDecimal result=amount.multiply(new BigDecimal(percentage)).divide(new BigDecimal(100));
     	return result;
     }
-    
+
     public static String getInStatment(Long ids[]){
     	String oql="";
 		for (int i = 0; i < ids.length; i++) {
@@ -1598,7 +1593,7 @@ public class ChartWidgetUtil {
 		}
     	return oql;
     }
-    
+
     /**
      * Key worker for donors
      * @author Irakli Kobiashvili
@@ -1618,7 +1613,7 @@ public class ChartWidgetUtil {
 		public Long resolveKey(AmpOrganisation element) {
 			return element.getAmpOrgId();
 		}
-    	
+
     }
     //from field indicates whether we are taking years for "From Year" dropdown
     public static List<LabelValueBean> getYears(boolean from){
@@ -1638,7 +1633,7 @@ public class ChartWidgetUtil {
 		}
     	return getYears(fromYear.intValue(),toYear.intValue(),defaultCalendar.getIsFiscal());
     }
-    
+
     public static List<LabelValueBean> getYears(int fromYear,int toYear,boolean isCalendarFiscal){
     	List<LabelValueBean> years=new ArrayList<LabelValueBean>();
     	for (int year=fromYear;year<=toYear;year++) {

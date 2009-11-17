@@ -13,9 +13,6 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
-   <c:set var="helpBody">
-       <digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration are rendering  data of the previous fiscal year</digi:trn>
-   </c:set>
   
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
@@ -28,37 +25,7 @@
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 
-<style>
 
-            .tableEven {
-                background-color:#dbe5f1;
-                font-size:8pt;
-                padding:2px;
-            }
-
-            .tableOdd {
-                background-color:#FFFFFF;
-                font-size:8pt;!important
-                padding:2px;
-            }
-
-            .Hovered {
-                background-color:#a5bcf2;
-            }
-
-
-            .toolbar{
-                width: 350px;
-                background: #addadd;
-                background-color: #addadd;
-                padding: 3px 3px 3px 3px;
-                position: relative;
-                top: 10px;
-                left: 10px;
-                bottom: 100px;
-
-            }
-</style>
 
 <script language="javascript">
     var filter; // Filter panel
@@ -164,7 +131,6 @@
 
 <digi:form action="/showOrgProfile.do">
 
-    <!-- this is for the nice tooltip widgets -->
     <table border="0" align="left" width="100%">
         <tr>
             <td>
@@ -190,14 +156,14 @@
                             </UL>
                         </DIV>
                     </span>
-                    <span style="cursor:pointer;font-style: italic;float:right;" id="displaySettingsButton"><digi:trn>Show Current Settings</digi:trn>  &gt;&gt;</span>
+                    <span style="cursor:pointer;font-family:Arial; font-size:10px; font-style: italic;float:right;" id="displaySettingsButton"><digi:trn>Show Current Settings</digi:trn>  &gt;&gt;</span>
                     &nbsp;
                 </div>
                 <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
                     <table cellpadding="0" cellspacing="0" border="0" width="80%" >
                         <tbody id="filterSettingsTable">
                             <tr>
-                                <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+                                <td valign="top">
                                     <strong>
                                         <digi:trn>Selected Filters:</digi:trn>
                                     </strong>
@@ -257,7 +223,7 @@
                       <b><digi:trn>Organization Group</digi:trn>:</b>
                 </td>
                 <td align="left" >
-                        <html:select property="orgGroupId" styleClass="inp-text"  styleId="org_group_dropdown_id" style="width:200px">
+                    <html:select property="orgGroupId"   styleId="org_group_dropdown_id" styleClass="selectDropDown">
                             <html:option value="-1"><digi:trn>All</digi:trn></html:option>
                             <html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
                         </html:select> 
@@ -265,25 +231,11 @@
             </tr>
             <tr>
                 <td>
-                     <b><digi:trn key="orgProfile:filer:Organization">Organization</digi:trn>:</b>
-                </td>
-                <td align="left" >
-                    <span id="org_select">
-                        <html:select property="orgId" styleClass="inp-text" styleId="org_dropdown_id" style="width:200px">
-                            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-                            <html:optionsCollection property="organizations" value="ampOrgId" label="name" />
-                        </html:select>
-                    </span>
-                </td>
-
-            </tr>
-            <tr>
-                <td>
                      <b><digi:trn>Currency Code</digi:trn>:</b>
                 </td>
                 <td>
                    
-                    <html:select property="currencyId" styleClass="inp-text" style="width:200px">
+                    <html:select property="currencyId"  styleClass="selectDropDown">
                         <html:optionsCollection property="currencies"
                                             value="ampCurrencyId" label="currencyName" /></html:select>
                 </td>
@@ -291,7 +243,7 @@
             <tr>
                 <td><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
                 <td align="left">
-                    <html:select property="fiscalCalendarId" styleClass="inp-text" style="width:200px">
+                    <html:select property="fiscalCalendarId" styleClass="selectDropDown">
                         <html:option value="-1"><digi:trn>None</digi:trn></html:option>
                         <html:optionsCollection property="fiscalCalendars" label="name" value="ampFiscalCalId" />
                     </html:select>
@@ -301,7 +253,7 @@
                 <td><b><digi:trn key="orgProfile:filer:fiscalCalendar">Fiscal Year</digi:trn>:</b></td>
                 <td align="left">
                    
-                    <html:select property="year" styleClass="inp-text" style="width:200px">
+                    <html:select property="year" styleClass="selectDropDown">
                         <html:optionsCollection property="years" label="wrappedInstance" value="wrappedInstance" />
                     </html:select>
                 </td>
@@ -311,8 +263,7 @@
                     <font style="color:red;font-weight:bold"><digi:trn>Note: fiscal year will affect the data range for the graps as follows:</digi:trn></font>
                    <p>
                    <digi:trn>
-                   *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type of Aid and ODA Profile will display a range of five years (the current year and the previous four years)</p>
-                   </digi:trn>
+                   *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type of Aid and ODA Profile will display a range of five years (the current year and the previous four years) </digi:trn> *** <digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration are rendering  data of the previous fiscal year</digi:trn></p>
                    </td>
             </tr>
              <tr>
@@ -322,13 +273,12 @@
             </tr>
             <tr>
                 <td align="center" colspan="2">
-                    <html:submit styleClass="button" property="apply"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
-                    <digi:img  src="module/widget/images/help1.gif" title="${helpBody}"/>
+                    <html:submit styleClass="button" property="apply"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>    
                 </td>
             </tr>
         </table>
         </div>
-    </div>
+                    </div>
 
     <br>
 

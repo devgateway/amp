@@ -67,7 +67,9 @@ public class AmpContactsWorker {
 				ContactPropertyHelper contactProperty=new ContactPropertyHelper();
 				contactProperty.setName(property.getName());
 				if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-					contactProperty.setPhoneType(property.getValue().substring(0, property.getValue().indexOf(" ")));
+					if(property.getValue().indexOf(" ")!= -1){
+						contactProperty.setPhoneType(property.getValue().substring(0, property.getValue().indexOf(" ")));
+					}					
 					contactProperty.setValue(property.getValue().substring(property.getValue().indexOf(" ")+1));
 				}else{
 					contactProperty.setValue(property.getValue());

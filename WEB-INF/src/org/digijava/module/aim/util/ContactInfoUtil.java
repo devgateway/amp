@@ -1,16 +1,14 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.message.helper.RelatedActivity;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -38,6 +36,7 @@ public class ContactInfoUtil {
 			throw new AimException("update failed",ex);
 		}
 	}
+	
 	
 	public static void deleteContact(AmpContact contact) throws Exception{
 		Session session= null;
@@ -102,8 +101,8 @@ public class ContactInfoUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select cont from " +AmpContact.class.getName() + " cont where cont.name like '%"+keyword+"%' or cont.lastname like '%"+keyword
-			+"%' or cont.email like '%" + keyword + "%'";
+			queryString="select distinct(property.contact) from " + AmpContactProperty.class.getName() + " property where property.contact.name like '%"+keyword+"%' or property.contact.lastname like '%"
+			+keyword+"%' or (property.value like '%" + keyword + "%' and property.name='"+Constants.CONTACT_PROPERTY_NAME_EMAIL +"')";
 			query=session.createQuery(queryString);
 			contacts=query.list();
 		} catch (Exception e) {
@@ -112,6 +111,8 @@ public class ContactInfoUtil {
 		return contacts;
 	}
 	
+
+	
 	public static int getContactsCount(String email,Long id) throws Exception{
 		int retValue=0;
 		Session session=null;
@@ -119,15 +120,15 @@ public class ContactInfoUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select count(cont) from " +AmpContact.class.getName() + " cont where cont.email=:email  ";
-                        if(id!=null){
-                            queryString+=" and cont.id!=:id";
-                        }
+			queryString="select count(property.contact) from " +AmpContactProperty.class.getName() + " property where property.value=:email  ";
+            if(id!=null){
+            	queryString+=" and property.contact.id!=:id";
+            }
 			query=session.createQuery(queryString);
-                        if(id!=null){
-                            query.setLong("id", id);
-                        }
-                        query.setString("email", email);
+            if(id!=null){
+            	query.setLong("id", id);
+            }
+            query.setString("email", email);
 			retValue=(Integer)query.uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -165,6 +166,7 @@ public class ContactInfoUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
+			session.clear();
 			queryString="select cont from " + AmpContact.class.getName() +" cont ";
 			//filter
 			if(keyword!=null && alpha!=null){
@@ -179,11 +181,8 @@ public class ContactInfoUtil {
 				queryString += " order by cont.name" ;
 			}else if(sortBy.equals("nameDescending")){
 				queryString += " order by cont.name desc" ;
-			}else if(sortBy.equals("emailAscending")){
-				queryString += " order by cont.email";
-			}else if(sortBy.equals("emailDescending")){
-				queryString += " order by cont.email desc";
-			}else if(sortBy.equals("orgNameAscending")){
+			}
+			else if(sortBy.equals("orgNameAscending")){
 				queryString += " order by cont.organisationName";
 			}else if(sortBy.equals("orgNameDescending")){
 				queryString += " order by cont.organisationName desc";
@@ -308,76 +307,67 @@ public class ContactInfoUtil {
 		return retValue;
 	}
 	
-	/**
-	 * gets all activity contacts and divides it into subgroups(donor,mofed, e.t.c.)
-	 * @param activityContacts
-	 * @param eaForm
-	 */
-	public static void copyContactsToSubLists(List<AmpActivityContact> activityContacts, EditActivityForm eaForm){
-		//fill activity's donor contact List
-		if(eaForm.getContactInformation().getContactType()!=null && eaForm.getContactInformation().getContactType().equals(Constants.DONOR_CONTACT)){
-			List<AmpActivityContact> donorContacts=null;
-			for (AmpActivityContact cont : activityContacts) {
-				if(cont.getContactType().equals(Constants.DONOR_CONTACT)){
-					if(donorContacts==null){
-						donorContacts=new ArrayList<AmpActivityContact>();
-					}
-					donorContacts.add(cont);
-				}
+	public static void saveOrUpdateContactProperty(AmpContactProperty property) throws Exception{
+		Session session= null;
+		Transaction tx=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			tx=session.beginTransaction();
+			session.saveOrUpdate(property);
+			tx.commit();
+		}catch(Exception ex) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
 			}
-			eaForm.getContactInformation().setDonorContacts(donorContacts);
+			throw new AimException("update failed",ex);
 		}
-		//fill activity's mofed contact list
-		else if(eaForm.getContactInformation().getContactType()!=null && eaForm.getContactInformation().getContactType().equals(Constants.MOFED_CONTACT)){
-			List<AmpActivityContact> mofedContacts=null;
-			for (AmpActivityContact cont : activityContacts) {
-				if(cont.getContactType()!=null && cont.getContactType().equals(Constants.MOFED_CONTACT)){
-					if(mofedContacts==null){
-						mofedContacts=new ArrayList<AmpActivityContact>();
-					}
-					mofedContacts.add(cont);
-				}
+	}
+	
+	public static void deleteContactProperty(AmpContactProperty property) throws Exception{
+		Session session= null;
+		Transaction tx=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			tx=session.beginTransaction();
+			session.delete(property);
+			tx.commit();
+		}catch(Exception ex) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
 			}
-			eaForm.getContactInformation().setMofedContacts(mofedContacts);
+			throw new AimException("delete failed",ex);
 		}
-		//fill project coordinator contact list
-		else if(eaForm.getContactInformation().getContactType()!=null && eaForm.getContactInformation().getContactType().equals(Constants.PROJECT_COORDINATOR_CONTACT)){
-			List<AmpActivityContact> projCoordinatorContacts=null;
-			for (AmpActivityContact cont : activityContacts) {
-				if(cont.getContactType().equals(Constants.PROJECT_COORDINATOR_CONTACT)){
-					if(projCoordinatorContacts==null){
-						projCoordinatorContacts=new ArrayList<AmpActivityContact>();
-					}
-					projCoordinatorContacts.add(cont);
-				}
-			}
-			eaForm.getContactInformation().setProjCoordinatorContacts(projCoordinatorContacts);
+	}
+	
+	public static List<AmpContactProperty> getContactProperties(AmpContact contact){		
+		return getContactProperties(contact.getId());
+	}
+	
+	public static List<AmpContactProperty> getContactProperties(Long contactId){
+		List<AmpContactProperty> properties=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select prop from " + AmpContactProperty.class.getName()+ " prop where prop.contact.id="+contactId;
+			query=session.createQuery(queryString);
+			properties=(List<AmpContactProperty>) query.list();
+		} catch (Exception e) {
+			logger.error("couldn't load Properties" + e.getMessage());	
+			e.printStackTrace();
 		}
-		//fill sector ministry contact list
-		else if(eaForm.getContactInformation().getContactType()!=null && eaForm.getContactInformation().getContactType().equals(Constants.SECTOR_MINISTRY_CONTACT)){
-			List<AmpActivityContact> sectorMinistryContacts=null;
-			for (AmpActivityContact cont : activityContacts) {
-				if(cont.getContactType().equals(Constants.SECTOR_MINISTRY_CONTACT)){
-					if(sectorMinistryContacts==null){
-						sectorMinistryContacts=new ArrayList<AmpActivityContact>();
-					}
-					sectorMinistryContacts.add(cont);
-				}
-			}
-			eaForm.getContactInformation().setSectorMinistryContacts(sectorMinistryContacts);
-		}
-		//fill implementing/executing agency contact list
-		else if(eaForm.getContactInformation().getContactType()!=null && eaForm.getContactInformation().getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
-			List<AmpActivityContact> implExecAgencyContacts=null;
-			for (AmpActivityContact cont : activityContacts) {
-				if(cont.getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
-					if(implExecAgencyContacts==null){
-						implExecAgencyContacts=new ArrayList<AmpActivityContact>();
-					}
-					implExecAgencyContacts.add(cont);
-				}
-			}
-			eaForm.getContactInformation().setImplExecutingAgencyContacts(implExecAgencyContacts);
-		}
-	}	
+		return properties;
+	}
+		
 }

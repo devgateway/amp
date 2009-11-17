@@ -642,8 +642,8 @@ function getParamsData(){
 				"&valAmount="+(document.getElementsByName('valAmount')[i].value==""?0:document.getElementsByName('valAmount')[i].value)+
 				"&creationDate="+document.getElementsByName('creationDate')[i].value
                           +"&sourceId="+document.getElementsByName('sourceId')[i].value;
-		} 
+		}
 	}
-	return ret;	
+	return ret;
 }
 </script>

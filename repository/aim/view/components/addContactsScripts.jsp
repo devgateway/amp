@@ -45,7 +45,9 @@
    YAHOOAmp.namespace("YAHOOAmp.amp");
 
     var myPanelContact = new YAHOOAmp.widget.Panel("newpopins", {
-        width:"600px",
+    	x:250,
+        y:100,
+        minWidth:"400px",
         fixedcenter: true,
         constraintoviewport: false,
         underlay:"none",
@@ -128,8 +130,6 @@
             checkAndCloseContact=false;
         }
     }
-         
-   
 
     function  showContactPanelLoading(msg){
         myPanelContact.setHeader(msg);
@@ -140,8 +140,8 @@
         showContactContent();
     }
     function selectContact(params1) {
-        myPanelContact.cfg.setProperty("width","800px");
-        myPanelContact.cfg.setProperty("height","500px");
+       // myPanelContact.cfg.setProperty("width","800px");
+       // myPanelContact.cfg.setProperty("height","500px");
         YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback1);
     }
 
@@ -155,9 +155,14 @@
 
 
     function checkForduplicateEmail(){ //checks whether such email already exists in db
-        var email=document.getElementById('contactEmail').value;
-        var id=document.getElementById('contactId').value;
-        var url=addActionToURL('addAmpContactInfo.do?action=checkDulicateEmail&email='+email+"&contactId="+id);
+    	var params='';
+		var emails=$("input[@id^='email_']");
+    	if(emails!=null){
+        	for(var i=0;i < emails.length; i++){
+        		params+= emails[i].value+";";
+        	}
+    	}
+		var url=addActionToURL('addAmpContactInfo.do?action=checkDulicateEmail&params='+params);
         var async=new Asynchronous();
         async.complete=showErrorOrSaveContact;
         async.call(url);
@@ -178,8 +183,7 @@
         myPanelContact.hide();
         myPanelContact=1;
 
-    }
- 
+    } 
 
     function addActionToURL(actionName){
         var fullURL=document.URL;
@@ -189,48 +193,112 @@
     }
 
     function validateInfo(){
-        if(document.getElementById('contactName').value==null || document.getElementById('contactName').value==''){
-            alert('Please Enter Name');
-            return false;
+		if(document.getElementById('name').value==null || document.getElementById('name').value==''){
+			alert('Please Enter Name');
+			return false;
+		}
+		if(document.getElementById('lastname').value==null || document.getElementById('lastname').value==''){
+			alert('Please Enter lastname');
+			return false;
+		}
+		//check emails. At least one email should exist
+		var emails=$("input[@id^='email_']");
+    	if(emails!=null){
+        	for(var i=0;i < emails.length; i++){
+            	if(emails[i].value==null || emails[i].value==''){
+            		alert('Please enter email');
+            		return false;
+            	}
+            	if( emails[i].value!=null && emails[i].value !='' && emails[i].value.indexOf('@')==-1){
+            		alert('Please enter valid email');
+            		return false;
+            	}
+        	}
+    	}
+    	//phone shouldn't be empty and should contain valid characters
+    	//also if phone type is filled, number should be filled too and vice versa
+    	var phoneTypes=$("input[@id^='phoneType_']");
+    	var phoneNumbers=$("input[@id^='phoneNum_']");
+    	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
+    		for(var i=0;i < phoneNumbers.length; i++){
+        		if(phoneTypes[i].value=='' && phoneNumbers[i].value==''){
+            		alert('Please enter phone');
+            		return false;
+        		}else if(phoneTypes[i].value=='' && phoneNumbers[i].value!=''){
+        			alert('Please enter phone type');
+        			return false;
+        		}else if(phoneTypes[i].value!='' && phoneNumbers[i].value==''){
+        			alert('Please enter phone number');
+        			return false;
+        		}
+    		}
+    	}
+    	
+    	if(phoneNumbers!=null){
+        	for(var i=0;i < phoneNumbers.length; i++){
+            	if(checkNumber(phoneNumbers[i].value)==false){            		
+            		return false;
+            	}
+        	}
+    	}
+    	//check fax
+    	var faxes=$("input[@id^='faxes_']");
+    	if(faxes!=null){
+    		for(var i=0;i < faxes.length; i++){
+            	if(checkNumber(faxes[i].value)==false){
+            		return false;
+            	}
+        	}
+    	}
+		return true;
+	}
+
+	function checkNumber(number){
+	 	var validChars= "0123456789()+ ";
+	 	for (var i = 0;  i < number.length;  i++) {
+	 		var ch = number.charAt(i);
+	  		if (validChars.indexOf(ch)==-1){
+	  			alert('enter correct number');	   			
+	   			return false;
+	  		}
+	 	}	 
+	 return true;
+	}
+
+	function addNewData(dataName){
+        if(notAchievedMaxAllowed(dataName)){
+        	 <digi:context name="addCont" property="context/addAmpContactInfo.do?action=addNewData"/>;
+             var url="${addCont}&data="+dataName;
+             var parameters=getContactParams();
+             YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
         }
-        if(document.getElementById('contactLastname').value==null || document.getElementById('contactLastname').value==''){
-            alert('Please Enter lastname');
+    }
+
+	function removeData(propertyType, index){ 
+    	<digi:context name="delCont" property="context/addAmpContactInfo.do?action=removeData"/>
+    	var url = "<%=delCont%>&dataName="+propertyType+"&index="+index;
+    	var parameters=getContactParams();
+    	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
+    }
+
+	function notAchievedMaxAllowed(dataName){
+        var myArray=null;
+        var msg='';
+        if(dataName=='email' && $("input[@id^='email_']").length==3){
+            msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
+        	alert(msg);
             return false;
-        }
-        if(document.getElementById('contactEmail').value==null || document.getElementById('contactEmail').value==''){
-            alert('Please Enter email');
-            return false;
-        }else if(document.getElementById('contactEmail').value.indexOf('@')==-1){
-            alert('Please Enter Correct Email');
-            return false;
-        }
-        if (checkNumber('contactPhone')==false){
-            return false;
-        }
-        if(checkNumber('contactFax')==false){
-            return false;
+        }else if(dataName=='phone'  && $("input[@id^='phoneNum_']").length==3){
+        	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
+            alert(msg);
+        	return false;
+        }else if(dataName=='fax' && $("input[@id^='faxes_']").length==3){
+        	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
+            alert(msg);
+        	return false;
         }
         return true;
     }
-
-    function checkNumber(phoneOrFaxId){
-        var phoneOrFax=document.getElementById(phoneOrFaxId);
-        var number=phoneOrFax.value;
-        var validChars= "0123456789()+ ";
-        for (var i = 0;  i < number.length;  i++) {
-            var ch = number.charAt(i);
-            if (validChars.indexOf(ch)==-1){
-                alert('enter correct number');
-                phoneOrFax.value=number.substring(0,i);
-                return false;
-            }
-        }
-        return true;
-    }
-
- 
-
-    
 
 
 
@@ -241,24 +309,28 @@
         return partialURL+"/"+actionName;
     }
 
-          function addContact(){
-            <digi:context name="addCont" property="context/addAmpContactInfo.do?action=save"/>;
-                 var url="${addCont}"+"&"+getContactParams();
-		 var async=new Asynchronous();
-                 async.complete=closeContactPopin;
-                 async.call(url);
+    function addContact(){
+    	<digi:context name="addCont" property="context/addAmpContactInfo.do?action=save"/>;
+        document.contactForm.action = "<%= addCont %>";
+        document.contactForm.target = "_self";
+        document.contactForm.submit();              
+            //<digi:context name="addCont" property="context/addAmpContactInfo.do?action=save"/>;
+            //var url="${addCont}"+"&"+getContactParams();
+		 	//var async=new Asynchronous();
+            //async.complete=closeContactPopin;
+            //async.call(url);
+    }
 
-             }
-               function closeContactPopin(status, statusText, responseText, responseXML){
-                   checkAndCloseContact=true;
-                   checkErrorAndCloseContact();
-               }
+    function closeContactPopin(status, statusText, responseText, responseXML){
+    	checkAndCloseContact=true;
+        checkErrorAndCloseContact();
+    }
          
-        function searchContact(){
+    function searchContact(){
             var flg=checkEmptyKeywordContact();
             if(flg){
                 var keyword=document.getElementById('keyword').value;
-    <digi:context name="searchCont" property="context/addAmpContactInfo.do?action=search" />
+    			<digi:context name="searchCont" property="context/addAmpContactInfo.do?action=search" />
                 var url = "${searchCont}&keyword="+keyword;
                 YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
                 return true;
@@ -277,32 +349,60 @@
             return flag;
         }
 
-        function addSelectedContacts()
-        {
-              <digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
-                checkAndCloseContact=true;
-                var url="${addSelCont}"+"&"+getSelectedContactsParams();
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+        function addSelectedContacts() {
+        	 <digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
+             document.contactForm.action = "<%= addSelCont %>";
+             document.contactForm.target = "_self";
+             document.contactForm.submit();             
+        	//<digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
+            //checkAndCloseContact=true;
+            //var params=getSelectedContactsParams();
+            //var url="${addSelCont}";
+			//YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1 , params);
         }
 
-              function getContactParams(){
-                var title = document.getElementById('contactTitle');
-                var titleId=title.options[title.selectedIndex].value;
-                var params="";           
-                  params+="name="+document.getElementById('contactName').value+
-                      "&lastname="+document.getElementById('contactLastname').value +
-                      "&email="+document.getElementById('contactEmail').value+
-                      "&title="+titleId+
-                      "&function="+document.getElementById('contactFunction').value+
-                      "&officeaddress="+document.getElementById('contactOfficeaddress').value+            
-                      "&organisationName="+document.getElementById('contactOrgName').value+
-                      "&phone="+document.getElementById('contactPhone').value+
-                      "&fax="+document.getElementById('contactFax').value+
-                      "&mobilephone="+document.getElementById('contactMobilephone').value+
-                      "&contactId="+document.getElementById('contactId').value+
-                      "&temporaryId="+document.getElementById('temporaryId').value;
-                  return params;
-              }
+        function getContactParams(){
+        	var title = document.getElementById('contactTitle');
+            var titleId=title.options[title.selectedIndex].value;
+            var params="";
+            params+="&firstName="+document.getElementById('name').value+
+            	"&lastname="+document.getElementById('lastname').value +
+                "&title="+titleId+
+                "&function="+document.getElementById('function').value+
+                "&officeaddress="+document.getElementById('officeaddress').value+
+                "&organisationName="+document.getElementById('organisationName').value+
+                "&temporaryId="+document.getElementById('temporaryId').value;
+
+            var emails=$("input[@id^='email_']");
+        	if(emails!=null){
+            	for(var i=0;i < emails.length; i++){
+            		params+= "&contEmail="+emails[i].value;
+            	}
+        	}
+        	//get phone types
+        	var phoneTypes=$("input[@id^='phoneType_']");
+        	if(phoneTypes!=null){
+            	for(var i=0;i < phoneTypes.length; i++){
+            		params+= "&contPhoneType="+phoneTypes[i].value;
+            	}
+        	}
+        	//get phone numbers
+        	var phoneNums=$("input[@id^='phoneNum_']");
+        	if(phoneNums!=null){
+            	for(var i=0;i < phoneNums.length; i++){
+            		params+= "&contPhoneNumber="+phoneNums[i].value;
+            	}
+        	}
+        	//get faxes
+        	var faxes=$("input[@id^='fax_']");
+        	if(faxes!=null){
+            	for(var i=0;i < faxes.length; i++){
+            		params+= "&contFaxes="+faxes[i].value;
+            	}
+        	}
+            return params;
+        }
+
         function getSelectedContactsParams(){
             var params="";
             var contacts = document.getElementsByName("selContactIds");

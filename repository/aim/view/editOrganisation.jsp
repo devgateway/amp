@@ -306,7 +306,7 @@
             return true;
         }
         function removeContact(selContactId){
-    <digi:context name="remLocs" property="context/module/moduleinstance/editOrganisation.do" />
+    		<digi:context name="remLocs" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.action = "${remLocs}";
             document.aimAddOrgForm.target = "_self"
             document.aimAddOrgForm.actionFlag.value="deleteContact";
@@ -1570,13 +1570,25 @@
                                                 ${contact.name}
                                             </td>
                                             <td class="tdClass" nowrap>
-                                                ${contact.email}
+                                            	<c:forEach var="email" items="${contact.properties}">
+													<c:if test="${email.name=='contact email'}">
+														<div>${email.value}</div>
+													</c:if>
+												</c:forEach>
                                             </td>
                                             <td class="tdClass">
-                                                ${contact.phone}
+                                            	<c:forEach var="phone" items="${contact.properties}">
+													<c:if test="${phone.name=='contact phone'}">
+														<div>${phone.value}</div>
+													</c:if>
+												</c:forEach>
                                             </td>
                                             <td class="tdClass">
-                                                ${contact.fax}
+                                                <c:forEach var="phone" items="${contact.properties}">
+													<c:if test="${phone.name=='contact fax'}">
+														<div>${phone.value}</div>
+													</c:if>
+												</c:forEach>
                                             </td>
                                             <td class="tdClass">
                                                 <c:if test="${not empty contact.title}">

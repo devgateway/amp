@@ -1171,6 +1171,7 @@
     </action>
     <action name="aimAddContactForm" path="/aim/addAmpContactInfo" scope="session" type="org.digijava.module.aim.uicomponents.action.AddContactComponent"  parameter="action">
       <forward name="forward" path="/showLayout.do?layout=aim_contactComponentPopIn" />
+      <forward name="edit" path="/editOrganisation.do?actionFlag=reload" redirect="true"/>
     </action>
     
 

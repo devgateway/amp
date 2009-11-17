@@ -2,11 +2,7 @@ package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
 
-
-
-
-public class Constants
-{
+public class Constants {
 
 	public static class GlobalSettings {
 		public static final String YEAR_RANGE_START			= "Year Range Start";
@@ -351,6 +347,10 @@ public class Constants
     public static final String SECTOR_MINISTRY_CONTACT = "SECTOR_MINISTRY_CONT";
     public static final String PROJECT_COORDINATOR_CONTACT = "PROJ_COORDINATOR_CONT";
     public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT= "IMPL_EXEC_AGENCY_CONT";
+    //contact parameter names
+    public static final String CONTACT_PROPERTY_NAME_EMAIL="contact email";
+    public static final String CONTACT_PROPERTY_NAME_PHONE="contact phone";
+    public static final String CONTACT_PROPERTY_NAME_FAX="contact fax";
     //contact information pagination elements
     public static final int CONTACTS_PER_PAGE=15;
     public static final int PAGES_TO_SHOW=5;

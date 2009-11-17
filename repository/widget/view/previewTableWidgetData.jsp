@@ -7,26 +7,13 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance id="dform" property="gisTableWidgetDataForm"/>
-
+<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+<digi:ref href="css/gis.css" type="text/css" rel="stylesheet" />
 
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
-	<style>
-		.tableContainer table tr {
-		  background-color: #DBE5F1;
-		  color: #OOO;
-		}
-		.tableContainer table {
-		 border-color: #FFF;
-		}
-		.tableContainer table td {
-		 border: 1px solid #FFF;
-		}
-		.tableContainer table tr:hover {
-		background-color: #222E5D;
-		color: #FFF;
-		}
 	
-	</style>
+
+	
 	<br/>
 			<span class=crumb>
               <c:set var="translation">
@@ -47,11 +34,22 @@
 			<br/>
 			<br/>
 			<span class="subtitle-blue">Preview table widget data</span>
-	<div id="tableWidgetContainer_${dform.widgetId}" style="margin-left:20px; margin-top: 20px;" class="tableContainer">
-		
+	
+	
+	<div id="content" class="yui-skin-sam" style="width:90%;padding: 20px;">
+	 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+	   <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+	   <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+	   <div class="longTab">
+	      ${dform.tableName}
+	   </div>
+	   <div class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+	    <div id="tableWidgetContainer_${dform.widgetId}" style="margin-left:20px; margin-top: 20px;" class="tableContainer">
+		  
+	   </div>
+	  </div>
 	</div>
-	
-	
+	</div>
 	<br/>
 	<input type="button" value="Back" onclick="javascript:location.href='/widget/tableWidgetData.do~actType=showEdit~widgetId=${dform.widgetId}'"/>
 	
@@ -60,6 +58,58 @@
 
 
 	<script language="JavaScript">
+
+	function applyStyle(table){
+		table.className += " tableElement";
+		setStripsTable(table.id, "tableEven", "tableOdd");
+		setHoveredTable(table.id, true);
+
+	}
+	function setStripsTable(tableId, classOdd, classEven) {
+		var tableElement = document.getElementById(tableId);
+		if(tableElement)
+		{
+			tableElement.setAttribute("border","0");
+			tableElement.setAttribute("cellPadding","2");
+			tableElement.setAttribute("cellSpacing","2");
+			rows = tableElement.getElementsByTagName('tr');
+			for(var i = 0, n = rows.length; i < n; ++i) {
+				if(i%2 == 0)
+					rows[i].className = classEven;
+				else
+					rows[i].className = classOdd;
+			}
+			rows = null;
+		}
+	}
+	function setHoveredTable(tableId, hasHeaders) {
+		var tableElement = document.getElementById(tableId);
+		if(tableElement){
+		    var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        rows      = tableElement.getElementsByTagName('tr');
+
+			var i = 0;
+			if(hasHeaders){
+				rows[0].className += " tableHeader";
+				i = 1;
+				
+			}
+		
+			for(i, n = rows.length; i < n; ++i) {
+				rows[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				rows[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			rows = null;
+		}
+	
+	}
+		
 	
 		function requestTable_${dform.widgetId}(columnId,itemId){
 			<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />

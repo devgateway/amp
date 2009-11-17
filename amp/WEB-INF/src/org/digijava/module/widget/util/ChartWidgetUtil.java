@@ -3,9 +3,7 @@ package org.digijava.module.widget.util;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -65,10 +63,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.labels.StandardPieToolTipGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
@@ -91,15 +87,11 @@ import org.jfree.ui.RectangleInsets;
 import org.digijava.module.widget.helper.SectorHelper;
 import org.jfree.chart.axis.NumberAxis;
 import org.digijava.module.aim.util.SectorUtil;
-import org.jfree.chart.labels.ItemLabelAnchor;
-import org.jfree.chart.labels.ItemLabelPosition;
-import org.jfree.ui.TextAnchor;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.VerticalAlignment;
 import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.Size2D;
-import org.jfree.ui.RectangleAnchor;
 import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
+import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
 
 /**
  * Chart widgets util.
@@ -504,7 +496,7 @@ public class ChartWidgetUtil {
         }
         String transTypeNameTrn=TranslatorWorker.translateText(transTypeName,opt.getLangCode(),opt.getSiteId());
 
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+" | "+filter.getCurrName()+")", dataset, true, false, false);
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+" | "+filter.getCurrName()+")", dataset, true, true, false);
         chart.getTitle().setFont(font12);
         LegendTitle legend = chart.getLegend();
         legend.setItemFont(font12);
@@ -517,7 +509,7 @@ public class ChartWidgetUtil {
 
         DecimalFormat format = FormatHelper.getDecimalFormat();
         format.setMaximumFractionDigits(0);
-        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}");
+        PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
         plot.setLabelGenerator(gen);
         plot.setSimpleLabels(true);
         plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
@@ -559,7 +551,7 @@ public class ChartWidgetUtil {
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1)  +" | "+filter.getCurrName()+")", dataset, true, false, false);
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1)  +" | "+filter.getCurrName()+")", dataset, true, true, false);
         chart.getTitle().setFont(font12);
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setLabelFont(font12);
@@ -569,7 +561,7 @@ public class ChartWidgetUtil {
         }
         DecimalFormat format = FormatHelper.getDecimalFormat();
         format.setMaximumFractionDigits(0);
-        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}");
+        PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
         plot.setLabelGenerator(gen);
         plot.setSimpleLabels(true);
         plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));

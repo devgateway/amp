@@ -13,21 +13,21 @@
 <table border="1" class="tableElement">
 
     <tr>
-        <td colspan="2" rowspan="2" class="tableHeaderCls">
-        <digi:trn> PARIS DECLARATION INDICATORS - DONORS</digi:trn></td>
-        <td colspan="3" align="center" class="tableHeaderCls">
+        <th colspan="2" rowspan="2" class="tableHeaderCls">
+        <digi:trn> PARIS DECLARATION INDICATORS - DONORS</digi:trn></th>
+        <th colspan="3" align="center" class="tableHeaderCls">
             <digi:trn key="parisIndicatorAllDonors">All donors</digi:trn>
-       </td>
-       <td colspan="2" align="center" class="tableHeaderCls">
+       </th>
+       <th colspan="2" align="center" class="tableHeaderCls">
            ${orgProfilePIForm.organization.name}
-       </td>
+       </th>
     </tr>
     <tr>
-        <td class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></td>
-        <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} <digi:trn>Value</digi:trn></td>
-        <td class="tableHeaderCls">2010 <digi:trn>Target</digi:trn></td>
-        <td class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></td>
-        <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} <digi:trn>Value</digi:trn></td>
+        <th class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></th>
+        <th class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} <digi:trn>Value</digi:trn></th>
+        <th class="tableHeaderCls">2010 <digi:trn>Target</digi:trn></th>
+        <th class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></th>
+        <th class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} <digi:trn>Value</digi:trn></th>
 
     </tr>
     <c:forEach var="indicator" items="${orgProfilePIForm.indicators}">

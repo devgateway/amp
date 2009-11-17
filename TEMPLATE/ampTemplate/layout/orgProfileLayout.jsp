@@ -7,7 +7,6 @@
 
 <HTML>
     <digi:base />
-    <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
     <digi:context name="digiContext" property="context"/>
     <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
     <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
@@ -27,15 +26,57 @@
                    openURLinResizableWindow("/orgProfile/wordExport.do", 780, 500);
                }
           </script>
-        <style>
+        <style type="text/css">
             .tableHeaderCls {
                 font-size: 12px;
                 color: White;
                 background-color:
                 rgb(55, 96, 145);
-                font-family: Tahoma;
+                font-family: Arial;
                 text-align:center;
             }
+
+            .tableEven {
+                background-color:#dbe5f1;
+                font-size:10px;
+                font-family: Arial;
+                padding:2px;
+            }
+            td {
+                font-size:10px;
+                font-family: Arial;
+            }
+
+            .tableOdd {
+                background-color:#FFFFFF;
+                font-family: Arial;
+                font-size:10px;!important
+                padding:2px;
+            }
+
+           .selectDropDown {
+                font-family: Arial;
+                font-size:10px;
+                width:200px;
+            }
+
+            .Hovered {
+                background-color:#a5bcf2;
+            }
+
+
+            .toolbar{
+                width: 350px;
+                background: #addadd;
+                background-color: #addadd;
+                padding: 3px 3px 3px 3px;
+                position: relative;
+                top: 10px;
+                left: 10px;
+                bottom: 100px;
+
+            }
+
         </style>
         <script language="JavaScript" type="text/javascript">
 	      <jsp:include page="preLoadingMessage.js.jsp" flush="true" />

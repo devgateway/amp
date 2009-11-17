@@ -1124,9 +1124,21 @@ function resetAll()
 																			<tr bgcolor="${background}">
 																				<td>${implExecAgency.contact.name}</td>
 																				<td>${implExecAgency.contact.lastname}</td>
-																				<td>${implExecAgency.contact.email}</td>
+																				<td>
+																					<c:forEach var="email" items="${implExecAgency.contact.properties}">
+																						<c:if test="${email.name=='contact email'}">
+																							<div>${email.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td>${implExecAgency.contact.organisationName}</td>
-																				<td>${implExecAgency.contact.phone}</td>
+																				<td>
+																					<c:forEach var="phone" items="${sectorMinistry.contact.properties}">
+																						<c:if test="${phone.name=='contact phone'}">
+																							<div>${phone.value}</div>
+																						</c:if>
+																					</c:forEach>
+																				</td>
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryImplExecutingContIds" styleId="implExecuting_${stat.index}" value="${implExecAgency.contact.temporaryId}" onchange="changePrimaryState('implExecuting')"/>
 																				</td>

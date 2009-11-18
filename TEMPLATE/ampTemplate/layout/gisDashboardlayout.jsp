@@ -6,7 +6,7 @@
 
 
 <script language="JavaScript" type="text/javascript">
-<!--    <jsp:include page="preLoadingMessage.js.jsp" flush="true" />-->
+    <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
 </script>
 
 <style>

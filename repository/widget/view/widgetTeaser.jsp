@@ -47,7 +47,7 @@
             <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
         </c:when>
         <c:otherwise>
-            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=500" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap(${gisWidgetTeaserForm.type})"/>
+            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=600" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap(${gisWidgetTeaserForm.type})"/>
             <span id="chartMap${gisWidgetTeaserForm.type}">
               
             </span>

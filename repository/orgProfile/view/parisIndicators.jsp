@@ -10,7 +10,7 @@
 <digi:instance property="orgProfilePIForm"/>
 
 
-<table border="0" class="tableElement">
+<table border="0" class="tableElement" width="100%" cellspacing="0" cellpadding="0">
 
     <tr>
         <th colspan="2" rowspan="2" class="tableHeaderCls">

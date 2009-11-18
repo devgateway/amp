@@ -34,6 +34,11 @@
                 rgb(55, 96, 145);
                 font-family: Arial;
                 text-align:center;
+                border-style:solid;
+                border-right:none;
+                border-bottom:none;
+                border-width:1px;
+                border-color: rgb(255, 255, 255);
             }
 
             .tableEven {

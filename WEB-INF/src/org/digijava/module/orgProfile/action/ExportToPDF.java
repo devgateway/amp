@@ -91,7 +91,7 @@ public class ExportToPDF extends Action {
                         HttpSession session = request.getSession();
                         FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
                         ChartOption opt = new ChartOption();
-                        opt.setWidth(400);
+                        opt.setWidth(380);
                         opt.setHeight(350);
                         opt.setSiteId(siteId);
                         opt.setLangCode(langCode);
@@ -343,7 +343,8 @@ public class ExportToPDF extends Action {
                                 count=0;
                                 while(projectIter.hasNext()){
                                     Project project=projectIter.next();
-                                    PdfPCell title = new PdfPCell(new Paragraph(project.getTitle(),OrgProfileUtil.PLAINFONT));
+                                    String fullTitle=(project.getFullTitle()==null)?project.getTitle():project.getFullTitle();
+                                    PdfPCell title = new PdfPCell(new Paragraph(fullTitle,OrgProfileUtil.PLAINFONT));
                                     PdfPCell amount = new PdfPCell(new Paragraph(project.getAmount(),OrgProfileUtil.PLAINFONT));
                                     PdfPCell sectorsCell = new PdfPCell(new Paragraph(project.getSectorNames(),OrgProfileUtil.PLAINFONT));
                                     if(count%2==0){

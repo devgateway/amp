@@ -330,7 +330,8 @@ public class ExportToWord extends Action {
                                 count = 0;
                                 while (projectIter.hasNext()) {
                                     Project project = projectIter.next();
-                                    RtfCell title = new RtfCell(new Paragraph(project.getTitle(), OrgProfileUtil.PLAINFONT));
+                                    String fullTitle=(project.getFullTitle()==null)?project.getTitle():project.getFullTitle();
+                                    RtfCell title = new RtfCell(new Paragraph(fullTitle, OrgProfileUtil.PLAINFONT));
                                     RtfCell amount = new RtfCell(new Paragraph(project.getAmount(), OrgProfileUtil.PLAINFONT));
                                     RtfCell sectorsCell = new RtfCell(new Paragraph(project.getSectorNames(),OrgProfileUtil.PLAINFONT));
                                     if (count % 2 == 0) {

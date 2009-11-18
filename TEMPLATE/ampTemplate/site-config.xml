@@ -537,6 +537,13 @@
 				<page>amp_viewNPDoptions</page>
 				<page>amp_viewNPDgrid</page>
 			</module>
+            <module name="widget">
+            	<page>popup_addWidgetColumn</page>
+            	<page>preview_tableWidget</page>
+                <page>widget_showSectorTable</page>
+                <page>widget_showParisIndicatorTableWidget</page>
+                <page>showSectorDonorReport</page>
+            </module>
 		</page-group>
 		<page-group masterLayout="popup" tile="body">
 			<module name="calendar">
@@ -544,17 +551,9 @@
 				<page>colorPicker</page>
 				<page>printViewPopupLayout</page>
 				<page>printPreviewPopupLayout</page>
-				
             </module>
             <module name="message">
             	<page>viewSelectedMessage</page>
-            </module>
-            <module name="widget">
-            	<page>popup_addWidgetColumn</page>
-            	<page>preview_tableWidget</page>
-                <page>widget_showSectorTable</page>
-                <page>widget_showParisIndicatorTableWidget</page>
-                <page>showSectorDonorReport</page>
             </module>
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>

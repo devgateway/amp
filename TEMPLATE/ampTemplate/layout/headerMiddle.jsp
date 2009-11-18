@@ -8,6 +8,9 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
         <!-- Dependencies --> 
+		
+<%@page import="org.digijava.module.aim.helper.Constants"%>
+
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
@@ -18,6 +21,8 @@
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+
+<bean:define id="numOfLanguages" scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>" toScope="page" />
 
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
 <!--<div id="myAboutFilterWrapper" style="display: none;" >-->
@@ -209,18 +214,22 @@ function adminHelp(){
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
-                                        <li style="_width:240px">
-                                        <a class="yuiampmenuitemlabel" href="#">
-                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
-                                        </a>
-                                          <div id="reports2" class="yuiampmenu">
-                                              <div class="bd">                    
-                                                  <ul>
-													<digi:insert flush="false" attribute="dropdownLangSwitch" />
-                                                  </ul>
-                                              </div>
-                                          </div>                              
-                                        </li>
+                                       <feature:display name="Language Option" module="Tools">
+                                        	<c:if test="${numOfLanguages>1}">
+		                                        <li style="_width:240px">
+		                                        <a class="yuiampmenuitemlabel" href="#">
+		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                                        </a>
+		                                          <div id="reports2" class="yuiampmenu">
+		                                              <div class="bd">                    
+		                                                  <ul>
+															<digi:insert flush="false" attribute="dropdownLangSwitch" />
+		                                                  </ul>
+		                                              </div>
+		                                          </div>                              
+		                                        </li>
+		                                      </c:if>
+		                                   </feature:display>
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">
                                                     <digi:insert flush="false" attribute="transmode"/>
@@ -644,18 +653,20 @@ function adminHelp(){
                                         </li>
                                         </feature:display>
                                         <feature:display name="Language Option" module="Tools">
-	                                        <li style="_width:300px">
-	                                        <a class="yuiampmenuitemlabel" href="#">
-	                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
-	                                        </a>
-	                                          <div id="reports2" class="yuiampmenu">
-	                                              <div class="bd">                    
-	                                                  <ul>
-	                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
-	                                                  </ul>
-	                                              </div>
-	                                          </div>                              
-	                                        </li>
+                                        	<c:if test="${numOfLanguages>1}">
+		                                        <li style="_width:300px">
+		                                        <a class="yuiampmenuitemlabel" href="#">
+		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                                        </a>
+		                                          <div id="reports2" class="yuiampmenu">
+		                                              <div class="bd">                    
+		                                                  <ul>
+		                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
+		                                                  </ul>
+		                                              </div>
+		                                          </div>                              
+		                                        </li>
+		                                      </c:if>
                                         </feature:display>
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">

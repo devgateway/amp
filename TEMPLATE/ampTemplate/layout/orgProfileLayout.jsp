@@ -129,9 +129,9 @@
                                     </TR>
                                     <TR>
                                         <TD>
-                                            <TABLE cellpadding="5" border="0" width="80%">
+                                            <TABLE cellpadding="5" border="0" width="100%">
                                                 <TR>
-                                                    <TD NOWRAP VALIGN="TOP">
+                                                    <TD NOWRAP VALIGN="TOP" width="50%">
                                                         <feature:display name="orgprof_chart_place1" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -139,7 +139,7 @@
                                                                         &nbsp;   
                                                                     </div>
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial,Helvetica, sans-serif;;">
                                                                     <digi:insert attribute="chart1">
                                                                         <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
                                                                     </digi:insert>
@@ -158,7 +158,7 @@
                                                                                  
                                                                       </div>
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial,Helvetica, sans-serif;">
                                                                     <digi:insert attribute="chart2">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
                                                                     </digi:insert>
@@ -180,7 +180,7 @@
                                                                      </div>
                                                                     
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial,Helvetica, sans-serif;">
                                                                     <digi:insert attribute="chart3">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place3</digi:put>
                                                                     </digi:insert>
@@ -201,7 +201,7 @@
                                                                 </div>
                                                                               
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;">
                                                                     <digi:insert attribute="chart4">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place4</digi:put>
                                                                     </digi:insert>
@@ -225,7 +225,7 @@
                                                                    </div>
                                                                           
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;">
                                                                     <digi:insert attribute="chart5">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place5</digi:put>
                                                                     </digi:insert>
@@ -243,7 +243,7 @@
                                                                                        
                                                                   </div>
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;">
                                                                     <digi:insert attribute="chart6">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place6</digi:put>
                                                                     </digi:insert>
@@ -264,7 +264,7 @@
                                                                      </div>
                                                                              
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;">
                                                                     <digi:insert attribute="chart7">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place7</digi:put>
                                                                     </digi:insert>

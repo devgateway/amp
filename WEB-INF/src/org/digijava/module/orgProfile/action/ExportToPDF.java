@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -90,8 +91,8 @@ public class ExportToPDF extends Action {
                         HttpSession session = request.getSession();
                         FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
                         ChartOption opt = new ChartOption();
-                        opt.setWidth(350);
-                        opt.setHeight(420);
+                        opt.setWidth(400);
+                        opt.setHeight(350);
                         opt.setSiteId(siteId);
                         opt.setLangCode(langCode);
                         JFreeChart chart = null;
@@ -431,19 +432,21 @@ public class ExportToPDF extends Action {
                                            continue;
                                        }
                                        ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter,true);
-                                       PdfPCell indicatorCode = new PdfPCell(new Paragraph(piIndicator.getIndicatorCode()));
-                                       PdfPCell indicatorName = new PdfPCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(),langCode,siteId)));
+                                       PdfPCell indicatorCode = new PdfPCell(new Paragraph(piIndicator.getIndicatorCode(),OrgProfileUtil.PLAINFONT));
+                                       PdfPCell indicatorName = new PdfPCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(),langCode,siteId),OrgProfileUtil.PLAINFONT));
                                        String sufix="";
                                        if(!piIndicator.getIndicatorCode().equals("6")){
                                            sufix="%";
                                        }
 
-                                       PdfPCell indicatorAllBaseline = new PdfPCell(new Paragraph(piHelper.getAllDonorBaseLineValue()+ sufix));
-                                       PdfPCell indicatorAllCurrentValue = new PdfPCell(new Paragraph(piHelper.getAllCurrentValue()+ sufix));
-                                       PdfPCell indicatorAllTargetValue = new PdfPCell(new Paragraph(piHelper.getAllTargetValue()+ sufix));
-                                       PdfPCell indicatorOrgBaseline = new PdfPCell(new Paragraph(piHelper.getOrgBaseLineValue()+ sufix));
-                                       PdfPCell indicatorOrgCurrentValue = new PdfPCell(new Paragraph(piHelper.getOrgValue()+ sufix));
+                                       PdfPCell indicatorAllBaseline = new PdfPCell(new Paragraph(piHelper.getAllDonorBaseLineValue()+ sufix,OrgProfileUtil.PLAINFONT));
+                                       PdfPCell indicatorAllCurrentValue = new PdfPCell(new Paragraph(piHelper.getAllCurrentValue()+ sufix,OrgProfileUtil.PLAINFONT));
+                                       PdfPCell indicatorAllTargetValue = new PdfPCell(new Paragraph(piHelper.getAllTargetValue()+ sufix,OrgProfileUtil.PLAINFONT));
+                                       PdfPCell indicatorOrgBaseline = new PdfPCell(new Paragraph(piHelper.getOrgBaseLineValue()+ sufix,OrgProfileUtil.PLAINFONT));
+                                       PdfPCell indicatorOrgCurrentValue = new PdfPCell(new Paragraph(piHelper.getOrgValue()+ sufix,OrgProfileUtil.PLAINFONT));
                                        if (count % 2 == 1) {
+                                           indicatorCode.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                           indicatorName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                            indicatorAllBaseline.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                            indicatorAllCurrentValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                            indicatorAllTargetValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
@@ -471,17 +474,19 @@ public class ExportToPDF extends Action {
                                            AmpAhsurveyIndicator ind5aii = new AmpAhsurveyIndicator();
                                            ind5aii.setAmpIndicatorId(piIndicator.getAmpIndicatorId());
                                            ind5aii.setIndicatorCode("5aii");
-                                           PdfPCell indicator5aCode = new PdfPCell(new Paragraph("5aii"));
-                                           PdfPCell indicator5aName = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country PFM",langCode,siteId)));
+                                           PdfPCell indicator5aCode = new PdfPCell(new Paragraph("5aii",OrgProfileUtil.PLAINFONT));
+                                           PdfPCell indicator5aName = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country PFM",langCode,siteId),OrgProfileUtil.PLAINFONT));
                                            
                                            ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter,true);
-                                           PdfPCell indicator5aAllBaseline = new PdfPCell(new Paragraph(piInd5aHelper.getAllDonorBaseLineValue()+" "));
-                                           PdfPCell indicatorAll5aCurrentValue = new PdfPCell(new Paragraph(piInd5aHelper.getAllCurrentValue()+" "));
-                                           PdfPCell indicatorAll5aTargetValue = new PdfPCell(new Paragraph(piInd5aHelper.getAllTargetValue()+" "));
-                                           PdfPCell indicatorOrg5aBaseline = new PdfPCell(new Paragraph(piInd5aHelper.getOrgBaseLineValue()+" "));
-                                           PdfPCell indicatorOrg5aCurrentValue = new PdfPCell(new Paragraph(piInd5aHelper.getOrgValue()+" "));
+                                           PdfPCell indicator5aAllBaseline = new PdfPCell(new Paragraph(piInd5aHelper.getAllDonorBaseLineValue()+" ",OrgProfileUtil.PLAINFONT));
+                                           PdfPCell indicatorAll5aCurrentValue = new PdfPCell(new Paragraph(piInd5aHelper.getAllCurrentValue()+" ",OrgProfileUtil.PLAINFONT));
+                                           PdfPCell indicatorAll5aTargetValue = new PdfPCell(new Paragraph(piInd5aHelper.getAllTargetValue()+" ",OrgProfileUtil.PLAINFONT));
+                                           PdfPCell indicatorOrg5aBaseline = new PdfPCell(new Paragraph(piInd5aHelper.getOrgBaseLineValue()+" ",OrgProfileUtil.PLAINFONT));
+                                           PdfPCell indicatorOrg5aCurrentValue = new PdfPCell(new Paragraph(piInd5aHelper.getOrgValue()+" ",OrgProfileUtil.PLAINFONT));
 
                                             if (count % 2 == 1) {
+                                               indicator5aCode.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                               indicator5aName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                indicator5aAllBaseline.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                indicatorAll5aCurrentValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                indicatorAll5aTargetValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
@@ -505,11 +510,11 @@ public class ExportToPDF extends Action {
                                        }
                                        if (piIndicator.getIndicatorCode().equals("5b")) {
                                            AmpAhsurveyIndicator ind5bii = new AmpAhsurveyIndicator();
-                                          ind5bii.setIndicatorCode("5bii");
+                                           ind5bii.setIndicatorCode("5bii");
                                            ind5bii.setAmpIndicatorId(piIndicator.getAmpIndicatorId());
 
-                                           PdfPCell indicator5bCode = new PdfPCell(new Paragraph("5aii"));
-                                           PdfPCell indicator5bName = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country procurement system",langCode,siteId)));
+                                           PdfPCell indicator5bCode = new PdfPCell(new Paragraph("5aii",OrgProfileUtil.PLAINFONT));
+                                           PdfPCell indicator5bName = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country procurement system",langCode,siteId),OrgProfileUtil.PLAINFONT));
                                            ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter,true);
                                            PdfPCell indicator5bAllBaseline = new PdfPCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue()+sufix));
                                            PdfPCell indicator5bAllCurrentValue = new PdfPCell(new Paragraph(piInd5bHelper.getAllCurrentValue()+sufix));
@@ -518,6 +523,8 @@ public class ExportToPDF extends Action {
                                            PdfPCell indicator5bOrgCurrentValue = new PdfPCell(new Paragraph(piInd5bHelper.getOrgValue()+sufix));
 
                                            if (count % 2 == 1) {
+                                               indicator5bCode.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                               indicator5bName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                indicator5bAllBaseline.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                indicator5bAllCurrentValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                indicator5bAllTargetValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);

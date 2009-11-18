@@ -62,8 +62,8 @@ public class OrgProfileUtil {
     public static final Color TITLECOLOR = new Color(34, 46, 93);
     public static final Color BORDERCOLOR = new Color(255, 255, 255);
     public static final Color CELLCOLOR=new Color(219, 229, 241);
-    public static final Font PLAINFONT = new Font(com.lowagie.text.Font.COURIER, 11);
-    public static final Font HEADERFONT = new Font(Font.COURIER, 11, Font.BOLD, new Color(255, 255, 255));
+    public static final Font PLAINFONT = new Font(Font.TIMES_ROMAN, 10);
+    public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD, new Color(255, 255, 255));
 
    /**
     *
@@ -752,7 +752,7 @@ public class OrgProfileUtil {
         else{
             categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
         }
-       
+
         for (AmpCategoryValue categoryValue: categoryValues) {
             NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
             nameValueYearHelper.setName(categoryValue.getValue());
@@ -779,7 +779,7 @@ public class OrgProfileUtil {
                     totalValues.put(i, FormatHelper.formatNumber(funding.doubleValue()));
                 }
                 nameValueYearHelper.getYearValues().put(i, FormatHelper.formatNumber(funding.doubleValue()));
-                
+
             }
             result.add(nameValueYearHelper);
 
@@ -802,7 +802,7 @@ public class OrgProfileUtil {
         while (valuesIter.hasNext()) {
             NameValueYearHelper value = valuesIter.next();
             int index=valuesIter.nextIndex();
-            PdfPCell cellCatValue=new PdfPCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId)));
+            PdfPCell cellCatValue=new PdfPCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId),PLAINFONT ));
             if(index%2==0){
                     cellCatValue.setBackgroundColor(CELLCOLOR);
             }
@@ -810,7 +810,7 @@ public class OrgProfileUtil {
             Collection<String> yearValues = value.getYearValues().values();
             Iterator<String> yearValuesIter = yearValues.iterator();
             while (yearValuesIter.hasNext()) {
-                PdfPCell cell=new PdfPCell(new Paragraph(yearValuesIter.next()));
+                PdfPCell cell=new PdfPCell(new Paragraph(yearValuesIter.next(),PLAINFONT));
                 if(index%2==0){
                     cell.setBackgroundColor(CELLCOLOR);
                 }
@@ -831,7 +831,7 @@ public class OrgProfileUtil {
         while (valuesIter.hasNext()) {
             NameValueYearHelper value = valuesIter.next();
             int index=valuesIter.nextIndex();
-            RtfCell cellCatValue=new RtfCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId)));
+            RtfCell cellCatValue=new RtfCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId),PLAINFONT ));
             if(index%2==0){
                     cellCatValue.setBackgroundColor(CELLCOLOR);
             }
@@ -839,7 +839,7 @@ public class OrgProfileUtil {
             Collection<String> yearValues = value.getYearValues().values();
             Iterator<String> yearValuesIter = yearValues.iterator();
             while (yearValuesIter.hasNext()) {
-                RtfCell cell=new RtfCell(new Paragraph(yearValuesIter.next()));
+                RtfCell cell=new RtfCell(new Paragraph(yearValuesIter.next(),PLAINFONT));
                 if(index%2==0){
                     cell.setBackgroundColor(CELLCOLOR);
                 }

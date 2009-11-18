@@ -32,7 +32,7 @@
 <table width="100%">
 <tr>
 <td valign="top">
-<table border="1"  bgcolor="#dddddd" width="100%"  class="tableElement">
+<table border="0"  bgcolor="#dddddd" width="100%"  class="tableElement">
     <tr>
     <th colspan="3" class="tableHeaderCls"><digi:trn>FIVE</digi:trn> (5) <digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year-1})</th>
     </tr>

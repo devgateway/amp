@@ -10,7 +10,7 @@
     
 <digi:instance property="orgProfileNameValueYearForm"/>
 <div style="height:200px">
-            <table border="1" class="tableElement" bgcolor="#dddddd" width="100%"   >
+    <table border="0" class="tableElement" bgcolor="#dddddd" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                     <th colspan="6" class="tableHeaderCls">
                         <c:choose>
@@ -56,7 +56,7 @@
                                     <digi:trn>${value.name}</digi:trn>
                                 </td>
                                 <c:forEach var="amount" items="${value.yearValues}">
-                                    <td>${amount.value}</td>
+                                    <td align="center">${amount.value}</td>
                                 </c:forEach>
                             </tr>
                         </c:forEach>

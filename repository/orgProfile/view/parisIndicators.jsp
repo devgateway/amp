@@ -10,7 +10,7 @@
 <digi:instance property="orgProfilePIForm"/>
 
 
-<table border="1" class="tableElement">
+<table border="0" class="tableElement">
 
     <tr>
         <th colspan="2" rowspan="2" class="tableHeaderCls">
@@ -39,11 +39,11 @@
         <tr>
             <td>${indicator.prIndicator.indicatorCode}</td>
             <td><digi:trn>${indicator.prIndicator.name}</digi:trn></td>
-            <td>${indicator.allDonorBaseLineValue}${percent}</td>
-            <td>${indicator.allCurrentValue}${percent}</td>
-            <td>${indicator.allTargetValue}${percent}</td>
-            <td>${indicator.orgBaseLineValue}${percent}</td>
-            <td>${indicator.orgValue}${percent}</td>
+            <td align="center">${indicator.allDonorBaseLineValue}${percent}</td>
+            <td align="center">${indicator.allCurrentValue}${percent}</td>
+            <td align="center">${indicator.allTargetValue}${percent}</td>
+            <td align="center">${indicator.orgBaseLineValue}${percent}</td>
+            <td align="center">${indicator.orgValue}${percent}</td>
 
         </tr>
     </c:forEach>

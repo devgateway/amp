@@ -11,7 +11,7 @@
 <table width="100%" border="0" cellSpacing="1" cellPadding="5">
     <tr>
         <td height="110px" valign="top" >
-            <table class="tableElement" border="0" width="100%">
+            <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                 <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
                 </tr>
@@ -44,7 +44,7 @@
     <tr>
         <td>
            
-                <table width="100%" cellSpacing="1" cellPadding="1" align="left"  class="tableElement" border="0">
+                <table width="100%" cellSpacing="0" cellPadding="0" align="left"  class="tableElement" border="0">
                     <thead>
                         <tr>
                             <th colspan="6" class="tableHeaderCls"><digi:trn>Contact Information</digi:trn></th>

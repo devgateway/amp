@@ -4057,12 +4057,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 FundingDetail helperFdet = iter.next();
                 AmpCurrency detCurr = CurrencyUtil.getAmpcurrency(helperFdet.getCurrencyCode());
                 Date date = DateConversion.getDate(helperFdet.getTransactionDate());
+                java.sql.Date dt = new java.sql.Date(date.getTime());
                 Double transAmt = new Double(FormatHelper.parseDouble(helperFdet.getTransactionAmount()));
                 if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                     transAmt *= 1000;
                 }
-                double fixedExchangeRate		= FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() );
-                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, fixedExchangeRate);
+                double exchangeRate=(helperFdet.getFixedExchangeRate()!=null)?FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() ):Util.getExchange(detCurr.getCurrencyCode(), dt);
+                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, exchangeRate);
                 ampFundDets.add(fundDet);
             }
         }

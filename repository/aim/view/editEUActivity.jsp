@@ -80,20 +80,23 @@ function selectOrganisation1() {
 <digi:errors/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
-<tr><td colspan="4" bgcolor="#006699" class="textalb" align="center">
-<digi:trn key="aim:addEditActivity">Add/Edit Activity</digi:trn>
-</td></tr>
+	<tr>
+		<td colspan="4" bgcolor="#006699" class="textalb" align="center">
+			<digi:trn key="aim:addEditActivity">Add/Edit Activity</digi:trn>
+		</td>
+	</tr>
 	<tr>
 		<td align="right">
-		<b><digi:trn key="aim:addEditActivityName">Activity name:</digi:trn></b>
+			<font color="red">*</font>
+			<b><digi:trn key="aim:addEditActivityName">Activity name:</digi:trn></b>
 		</td>		
 		<td>
-		         	<html:text property="name" size="30"/> 
-		         	<field:display name="Costing Activity Id" feature="Costing">
-		&nbsp;&nbsp;<b><digi:trn key="aim:addEditActivityID">Activity ID:</digi:trn></b> <html:text property="textId" size="10"/> 
-		</field:display>
+			<html:text property="name" size="30"/> 
+		    <field:display name="Costing Activity Id" feature="Costing">&nbsp;&nbsp;
+		    	<b><digi:trn key="aim:addEditActivityID">Activity ID:</digi:trn></b> 
+		    	<html:text property="textId" size="10"/> 
+			</field:display>
 		</td>
-		
 	</tr>
 	<tr>
 		<td align="right">

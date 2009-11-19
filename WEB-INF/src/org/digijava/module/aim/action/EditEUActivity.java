@@ -303,7 +303,8 @@ public class EditEUActivity extends MultiAction {
 			errors.add("title", new ActionError(
 					"error.aim.euactivity.dueDate", TranslatorWorker.translateText("Please pick the Due Date",locale,siteId)));
 		}
-
+		if("".equalsIgnoreCase(eaf.getName())) errors.add("title", new ActionError(
+		"error.aim.euactivity.noactivityname", TranslatorWorker.translateText("Please enter the activity name",locale,siteId)));
 		if(hasInvalidAmounts(eaf.getContrAmountList())) errors.add("title", new ActionError(
 		"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrDonorIdList())) errors.add("title", new ActionError(

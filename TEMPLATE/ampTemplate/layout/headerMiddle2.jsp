@@ -30,11 +30,6 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 
-<c:set var="numOfLanguages" scope="page" value="2" />
-<logic:notEmpty scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>">
-		<bean:define id="numOfLanguages" scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>" toScope="page" />
-</logic:notEmpty>
-
 <c:set var="message">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
 </c:set>
@@ -81,7 +76,6 @@ border-right:1px solid white;
 	            </digi:link>
             </li>
             <feature:display name="Language Option" module="Tools">
-				<c:if test="${numOfLanguages>1}">
 		            <li>
 		                <span class="yuiampmenuitemlabel" style="float:left;position:relative;top:0px;_top:1px;border-right:0px;">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
@@ -92,12 +86,11 @@ border-right:1px solid white;
 		                <div id="reports2" class="yuiampmenu" style="width:120px;">
 		                    <div class="bd">                    
 		                        <ul>
-		                        <digi:insert attribute="dropdownLangSwitch" />
+		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                        </ul>
 		                    </div>
 		                </div>                              
 		            </li>
-				</c:if>
 			</feature:display>
           </ul>            
       </div>
@@ -126,7 +119,6 @@ border-right:1px solid white;
 	            </digi:link>
             </li>
             <feature:display name="Language Option" module="Tools">
-            	<c:if test="${numOfLanguages>1}">
 		            <li>
 		                <a href="#" class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;border-right:0px;">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
@@ -137,12 +129,11 @@ border-right:1px solid white;
 		                <div id="reports2" class="yuiampmenu" style="width:120px;">
 		                    <div class="bd">                    
 		                        <ul>
-		                        <digi:insert attribute="dropdownLangSwitch" />
+		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                        </ul>
 		                    </div>
 		                </div>                              
 		            </li>
-		  	</c:if>
 		 </feature:display>
           </ul>            
       </div>

@@ -208,7 +208,6 @@ public class TranslationManager {
         Collections.sort(languages);
 
         actionForm.setLanguages(languages);
-        request.getSession().setAttribute(Constants.NUM_OF_LANGUAGES, languages.size() );
     }
 
     private static String getRightPart(Site site, boolean trnLanguages) {

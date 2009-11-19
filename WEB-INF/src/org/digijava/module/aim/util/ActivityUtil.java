@@ -4060,7 +4060,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 Date date = DateConversion.getDate(helperFdet.getTransactionDate());
                 BigDecimal transAmt = FormatHelper.parseBigDecimal(helperFdet.getTransactionAmount());
                 transAmt=FeaturesUtil.applyThousandsForEntry(transAmt);
-                double fixedExchangeRate		= FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() );
+                Double fixedExchangeRate		= FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() );
                 AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, fixedExchangeRate);
                 ampFundDets.add(fundDet);
             }

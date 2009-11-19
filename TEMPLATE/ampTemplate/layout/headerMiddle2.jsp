@@ -30,7 +30,10 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 
-<bean:define id="numOfLanguages" scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>" toScope="page" />
+<c:set var="numOfLanguages" scope="page" value="2" />
+<logic:notEmpty scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>">
+		<bean:define id="numOfLanguages" scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>" toScope="page" />
+</logic:notEmpty>
 
 <c:set var="message">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>

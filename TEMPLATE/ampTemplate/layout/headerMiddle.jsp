@@ -22,7 +22,10 @@
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 
-<bean:define id="numOfLanguages" scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>" toScope="page" />
+<c:set var="numOfLanguages" scope="page" value="2" />
+<logic:notEmpty scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>">
+		<bean:define id="numOfLanguages" scope="session" name="<%=Constants.NUM_OF_LANGUAGES %>" toScope="page" />
+</logic:notEmpty>
 
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
 <!--<div id="myAboutFilterWrapper" style="display: none;" >-->

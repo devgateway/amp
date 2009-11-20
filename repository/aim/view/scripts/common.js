@@ -338,7 +338,7 @@ function checkAmountLen(amt,msgConfFunding)
 					if(amt.charCodeAt(j) == 44)
 						cnt = cnt - 1;
 				}
-				if(cnt > 6&correctLength)
+				if(cnt >= 6&correctLength)
 				{
 					valid = confirm(msgConfFunding);
                                         correctLength=false;
@@ -349,7 +349,7 @@ function checkAmountLen(amt,msgConfFunding)
 				return true;
 		}
 	}
-	if(len > 6&& correctLength)
+	if(len >= 6&& correctLength)
 	{
 		valid = confirm(msgConfFunding);
                 correctLength=false;

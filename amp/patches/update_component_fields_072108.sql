@@ -1,0 +1,3 @@
+update amp_fields_visibility set name = "Components Amount Commitments" where name ="Components Total Amount Commitments" and id = 499 and parent = 92;
+update amp_fields_visibility set name = "Components Amount Disbursements" where name ="Components Total Amount Disbursements" and id = 500 and parent = 92;
+update amp_fields_visibility set name = "Components Amount Expenditures" where name ="Components Total Amount Expenditures" and id = 501 and parent = 92;

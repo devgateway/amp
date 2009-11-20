@@ -89,10 +89,11 @@ import org.jfree.chart.axis.NumberAxis;
 import org.digijava.module.aim.util.SectorUtil;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.VerticalAlignment;
-import org.jfree.ui.HorizontalAlignment;
-import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
+import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.ui.HorizontalAlignment;
+import org.jfree.ui.Size2D;
 
 /**
  * Chart widgets util.
@@ -578,7 +579,7 @@ public class ChartWidgetUtil {
         LegendTitle legend = chart.getLegend();
         legend.setPosition(RectangleEdge.LEFT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
-        legend.setItemFont(plainFont);
+        legend.setItemFont(plainFont);    
         plot.setLegendItemShape(new Rectangle(10,10));
         PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
         plot.setLegendLabelGenerator(genLegend);

@@ -12,10 +12,7 @@
 		<TITLE>					
 			<digi:trn>Help Topics Admin</digi:trn>
 		</TITLE>
-		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">		
-		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-     	<META HTTP-EQUIV="EXPIRES" CONTENT="0">		
+
 	</HEAD>
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
 		<TABLE cellSpacing=0 cellPadding=0 width="100%"  border=0 valign="top" align="left">

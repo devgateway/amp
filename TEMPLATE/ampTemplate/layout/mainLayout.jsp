@@ -60,16 +60,6 @@
 
 
 
-		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-
-		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-
-		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-
-     	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
-
-
-
 		
 
 

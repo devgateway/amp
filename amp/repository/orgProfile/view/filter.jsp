@@ -229,6 +229,20 @@
                         </html:select> 
                 </td>
             </tr>
+             <tr>
+                <td>
+                     <b><digi:trn key="orgProfile:filer:Organization">Organization</digi:trn>:</b>
+                </td>
+                <td align="left" >
+                    <span id="org_select">
+                        <html:select property="orgId" styleClass="inp-text" styleId="org_dropdown_id">
+                            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+                            <html:optionsCollection property="organizations" value="ampOrgId" label="name" />
+                        </html:select>
+                    </span>
+                </td>
+
+            </tr>
             <tr>
                 <td>
                      <b><digi:trn>Currency Code</digi:trn>:</b>

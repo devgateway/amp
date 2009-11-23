@@ -948,7 +948,14 @@ private ActionForward showStep9(ActionMapping mapping,
 	        	//set all comments, some are empty
 	//        	eaForm.setRefDocComments(refdocComments);
 	
-	        	eaForm.getDocuments().setReferenceDocs(refDocs);
+	    		if(refDocs.size()>0){
+	    			ReferenceDoc[] myrefDoc = (ReferenceDoc[]) refDocs.toArray(new ReferenceDoc[0]);
+	    			eaForm.getDocuments().setReferenceDocs(myrefDoc);
+	    		}
+	    		else{
+	    			eaForm.getDocuments().setReferenceDocs(null);
+	    		}
+
 	
 	    	}
 	
@@ -1531,8 +1538,13 @@ private ActionForward showStep1(ActionMapping mapping,
 		eaForm.getDocuments().setAllReferenceDocNameIds(refdocIds);
 		//set all comments, some are empty
 //        	eaForm.setRefDocComments(refdocComments);
-
-		eaForm.getDocuments().setReferenceDocs(refDocs);
+		if(refDocs.size()>0){
+			ReferenceDoc[] myrefDoc = (ReferenceDoc[]) refDocs.toArray(new ReferenceDoc[0]);
+			eaForm.getDocuments().setReferenceDocs(myrefDoc);
+		}
+		else{
+			eaForm.getDocuments().setReferenceDocs(null);
+		}
 
 	}
 

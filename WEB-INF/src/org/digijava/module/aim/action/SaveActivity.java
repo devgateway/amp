@@ -542,33 +542,34 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		List formRefDocs=eaForm.getDocuments().getReferenceDocs();
+		//List formRefDocs=eaForm.getDocuments().getReferenceDocs();
+		ReferenceDoc[] myrefDoc = eaForm.getDocuments().getReferenceDocs();
     	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
-    	if(formRefDocs!=null && !formRefDocs.isEmpty())
-		for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {
-			ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
-			if(ArrayUtils.contains(eaForm.getDocuments().getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
-				AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
-				if (refDoc.getChecked() == true){
-					dbRefDoc=new AmpActivityReferenceDoc();
-					dbRefDoc.setCreated(new Date());
-					AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
-					dbRefDoc.setCategoryValue(catVal);
+    	if(myrefDoc!=null && myrefDoc.length!=0){
+	    	for(int i=0;i<myrefDoc.length;i++){
+				ReferenceDoc refDoc = myrefDoc[i];
+				if(ArrayUtils.contains(eaForm.getDocuments().getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
+					AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
+					if (refDoc.getChecked() == true){
+						dbRefDoc=new AmpActivityReferenceDoc();
+						dbRefDoc.setCreated(new Date());
+						AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
+						dbRefDoc.setCategoryValue(catVal);
+						dbRefDoc.setActivity(activity);
+					//}
 					dbRefDoc.setActivity(activity);
-				//}
-				dbRefDoc.setActivity(activity);
-				dbRefDoc.setComment(refDoc.getComment());
-				dbRefDoc.setLastEdited(new Date());
-				resultRefDocs.add(dbRefDoc);
-
-			}else{
-				dbRefDoc=null;
-				resultRefDocs.add(dbRefDoc);
+					dbRefDoc.setComment(refDoc.getComment());
+					dbRefDoc.setLastEdited(new Date());
+					resultRefDocs.add(dbRefDoc);
+	
+				}else{
+					dbRefDoc=null;
+					resultRefDocs.add(dbRefDoc);
+					}
 				}
 			}
-		}
-		activity.setReferenceDocs(resultRefDocs);
-
+			activity.setReferenceDocs(resultRefDocs);
+    	}
 	}
 	
 	

@@ -235,7 +235,10 @@ ${fn:replace(message,quote,escapedQuote)}
 									<tr><td>&nbsp;</td></tr>
 									<tr>
 										<td>
-											
+										<c:if test="${aimEditActivityForm.documents.referenceDocs == null }">
+										<digi:trn>There are not documents linked</digi:trn>
+										</c:if>	
+										<c:if test="${aimEditActivityForm.documents.referenceDocs != null }">
 										<table width="100%" bgcolor="#cccccc" cellPadding="5" cellSpacing="1">
 											<tr bgcolor="#ffffff">
 												<td>
@@ -243,7 +246,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<c:forEach items="${aimEditActivityForm.documents.referenceDocs}" var="refDoc" varStatus="loopstatus">
 															<tr valign="top">
 																<td>
-																	<html:hidden name="aimEditActivityForm" property="documents.referenceDoc[${loopstatus.index}].checked" value="${refDoc.checked}"/>
+																	<html:hidden name="aimEditActivityForm" property="documents.referenceDocs[${loopstatus.index}].checked" value="${refDoc.checked}"/>
 																	<html:multibox onclick="toggleDiv(${loopstatus.index})" styleId="refCheck${loopstatus.index}" name="aimEditActivityForm" property="documents.allReferenceDocNameIds" value="${refDoc.categoryValueId}"/>
 																</td>
 																<td>
@@ -253,12 +256,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td width="100%">
 																	<c:if test="${refDoc.checked}">
 																		<div Id="refComment${loopstatus.index}" >
-																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="documents.referenceDoc[${loopstatus.index}].comment" />
+																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="documents.referenceDocs[${loopstatus.index}].comment" />
 																		</div>
 																	</c:if>
 																	<c:if test="${! refDoc.checked}">
 																		<div Id="refComment${loopstatus.index}" style="display: none;" >
-																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="documents.referenceDoc[${loopstatus.index}].comment" />
+																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="documents.referenceDocs[${loopstatus.index}].comment" />
 																		</div>
 																	</c:if>
 
@@ -269,6 +272,7 @@ ${fn:replace(message,quote,escapedQuote)}
 												</td>
 											</tr>
 										</table>
+										</c:if>
 										</td>
 									</tr>
 

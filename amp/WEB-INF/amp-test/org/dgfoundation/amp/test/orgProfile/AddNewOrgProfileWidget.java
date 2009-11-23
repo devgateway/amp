@@ -70,56 +70,75 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
 
     }
 
-  
+	protected void setRelatedObjects() {
+        // creating test widget
+        actionPerform(OrgProfileManager.class, orgProfForm);
+        widget = new AmpWidgetOrgProfile();
+        widget.setName("test");
+        widget.setType(TEST_TYPE);
+        place=new AmpDaWidgetPlace();
+        place.setModule("widget");
+        place.setModuleInstance("default");
+        place.setName("orgprof_chart_test_place");
+        place.setCode("orgprof_chart_test_place");
+        session.setAttribute("ampAdmin", "true");
 
-    public void testAddWidget() {
+	}
+        
+       public void testAddWidget() {
         try {
             OrgProfileWidgetUtil.saveWidget(widget);
             place.setAssignedWidget(widget);
             WidgetUtil.savePlace(place);
         } catch (DgException ex) {
-            logger.error("Unable to save place or widget" + ex.getMessage());
-            fail("Unable to add widget ");
+            logger.error("Unable to save place or widget"+ex.getMessage());
         }
 
 
-    }
-    
-    public void testDeleteWidget() {
+	}
+
+	public void testDeleteWidget() {
         logger.info("delete process");
         try {
-            AmpDaWidgetPlace plc=WidgetUtil.getPlace("orgprof_chart_test_place");
+            AmpDaWidgetPlace plc = WidgetUtil.getPlace("orgprof_chart_test_place");
             if (plc != null) {
-               AmpWidget wd = plc.getAssignedWidget();
-                    WidgetVisitor adapter = new WidgetVisitorAdapter() {
-                        @Override
-                        public void visit(AmpWidgetOrgProfile orgProfile) {
-                            try {
-                                logger.info("starting clearing process");
-                                WidgetUtil.clearPlacesForWidget(orgProfile.getId(),null);
-                                 logger.info("starting delete widget process");
-                                OrgProfileWidgetUtil.delete(orgProfile,null);
-                            } catch (DgException ex) {
-                               logger.error("Unable to delete widget "+ex.getMessage());
-                                 fail("Unable to delete widget ");
-                            }
+                AmpWidget wd = plc.getAssignedWidget();
+                WidgetVisitor adapter = new WidgetVisitorAdapter() {
+
+                    @Override
+                    public void visit(AmpWidgetOrgProfile orgProfile) {
+                        try {
+                            logger.info("starting clearing process");
+                            WidgetUtil.clearPlacesForWidget(orgProfile.getId(),null);
+                            logger.info("starting delete widget process");
+                            OrgProfileWidgetUtil.delete(orgProfile,null);
+                            logger.info("ended delete process");
+                        } catch (DgException ex) {
+                            logger.error("Unable to delete widget " + ex.getMessage());
+                            fail("Unable to delete widget ");
                         }
-                    };
+                    }
+                };
+                if (wd != null) {
                     wd.accept(adapter);
-                 logger.info("starting delete place process");
+                }
+                logger.info("starting delete place process");
                 WidgetUtil.deleteWidgetPlace(plc,null);
             }
         } catch (DgException ex) {
-            logger.error("Unable to delete widget place "+ex.getMessage());
+            logger.error("Unable to delete widget place " + ex.getMessage());
             fail("Unable to delete widget place");
         }
     }
-    /**
+
+	
+
+	/**
 	 * verifying action forwards...
 	 */
 	public void testForwards() {
-
-
+           
+            
               //verify update
             addRequestParameter("actType", "update");
             verifyNoActionErrors();
@@ -139,9 +158,8 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
             addRequestParameter("actType", "delete");
             verifyNoActionErrors();
             verifyForward("forward");
-
+       
     }
-
 
 
 }

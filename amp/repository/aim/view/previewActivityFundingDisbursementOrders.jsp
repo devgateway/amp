@@ -117,7 +117,7 @@
 						</field:display><field:display name="Currency of Disbursement Order"
 							feature="Disbursement Orders">
 							<bean:write name="fundingDetail" property="currencyCode" />
-						</field:display></td>
+						</field:display> &nbsp;</td>
 
 
 						<td width="25%" bgcolor="#ffffff">&nbsp;</td>
@@ -141,7 +141,9 @@
 	</td>
 	  <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">
-            ${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currCode}
+			<c:if test="${not empty funding.subtotalActualDisbursementsOrders}">
+           			${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currCode}
+            </c:if> &nbsp;
            </td>
 	  <TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>

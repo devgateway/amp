@@ -866,6 +866,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">&nbsp;</td>
 																						</tr>
+																				<feature:display module="Funding" name="Expenditures">
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">
 																							<a title="<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>">	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>
@@ -907,6 +908,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																						</logic:equal>
 																						</logic:iterate>
                                                                                         </c:if>
+                                                                                       </feature:display>
 																					</table>
 																				</td>
 																			</tr>

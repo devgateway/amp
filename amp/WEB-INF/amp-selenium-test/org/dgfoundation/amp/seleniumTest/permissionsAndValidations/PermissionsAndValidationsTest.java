@@ -9,6 +9,7 @@ import org.dgfoundation.amp.seleniumTest.reports.TabTest;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class PermissionsAndValidationsTest extends SeleneseTestCase {
 	
@@ -18,7 +19,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		setUp("http://localhost:8080/", "*firefox");
 //		setUp("http://senegal.staging.ampdev.net/", "*chrome");
 	}
-	public static void testPermissionsAndValidations(Selenium selenium) throws Exception {
+	public static void testPermissionsAndValidations(LoggingSelenium selenium) throws Exception {
 		
 		String testTime =  String.valueOf(System.currentTimeMillis());
 		String activityName ="Activity of testing setup " + testTime;
@@ -46,6 +47,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		TabTest.addBasicTab(selenium, "Test Tab TL " + testTime, testTime);
 		if (selenium.isTextPresent(activityName)) {
 			logger.error("Activity is available for a wrong user");
+			selenium.logAssertion("assertTrue", "Activity is available for a wrong user", "condition=false");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -81,6 +83,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		Thread.sleep(12000);
 		if (!selenium.isTextPresent(activityName)) {
 			logger.error("Activity is not available");
+			selenium.logAssertion("assertTrue", "Activity is not available", "condition=false");
 		}
 		selenium.click("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div");
 		selenium.waitForPageToLoad("30000");
@@ -130,8 +133,18 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			}
 			cnt++;
 		}
-		String cId = selenium.getAttribute("//li[@title='Project Title']/input@id");		
-		cId = cId.substring(cId.indexOf("is:")+3);
+		String cId = "";
+		if (selenium.isElementPresent("//li[@title='Project Title']/input")) {
+        	cId = selenium.getAttribute("//li[@title='Project Title']/input@id");		
+    		cId = cId.substring(cId.indexOf("is:")+3);
+		} else if (selenium.isElementPresent("//li[@title='project title']/input")) {
+			cId = selenium.getAttribute("//li[@title='project title']/input@id");		
+    		cId = cId.substring(cId.indexOf("is:")+3);
+		} else if (selenium.isElementPresent("//li[@title='Project title']/input")) {
+			cId = selenium.getAttribute("//li[@title='Project title']/input@id");		
+    		cId = cId.substring(cId.indexOf("is:")+3);
+		}
+		
 		selenium.click("//a[@onclick= \"openFieldPermissionsPopup("+cId+")\"]"); // Project Title
 		//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 		Thread.sleep(5000);
@@ -141,8 +154,17 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         selenium.click("//input[@onclick='javascript:savePermissions();']");
         selenium.selectWindow("null"); 
         Thread.sleep(5000);
-        cId = selenium.getAttribute("//li[@title='Status']/input@id");		
-		cId = cId.substring(cId.indexOf("is:")+3);
+        if (selenium.isElementPresent("//li[@title='Status']/input")) {
+        	cId = selenium.getAttribute("//li[@title='Status']/input@id");		
+    		cId = cId.substring(cId.indexOf("is:")+3);
+		} else if (selenium.isElementPresent("//li[@title='status']/input")) {
+			cId = selenium.getAttribute("//li[@title='status']/input@id");		
+    		cId = cId.substring(cId.indexOf("is:")+3);
+		} else if (selenium.isElementPresent("//li[@title='STATUS']/input")) {
+			cId = selenium.getAttribute("//li[@title='STATUS']/input@id");		
+    		cId = cId.substring(cId.indexOf("is:")+3);
+		}
+        
 		selenium.click("//a[@onclick= \"openFieldPermissionsPopup("+cId+")\"]"); // Project Status
 		//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 		Thread.sleep(5000);
@@ -174,17 +196,21 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			String dis = selenium.getAttribute("identification.title@disabled");
 			if (dis.equalsIgnoreCase("disabled")) {
 				logger.error("Activity Title field is disabled");
+				selenium.logAssertion("assertTrue", "Activity Title field is disabled", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.info("Attribute 'Disabled' is not available for 'identification.title'");
+			selenium.logComment("Attribute 'Disabled' is not available for 'identification.title'");
 		}
 		try {
 			String dis = selenium.getAttribute("planning.statusId@disabled");
 			if (dis.equalsIgnoreCase("disabled")) {
 				logger.error("Status field is disabled");
+				selenium.logAssertion("assertTrue", "Status field is disabled", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.info("Attribute 'Disabled' is not available for 'planning.statusId'");
+			selenium.logComment("Attribute 'Disabled' is not available for 'planning.statusId'");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -211,17 +237,21 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			String dis = selenium.getAttribute("identification.title@disabled");
 			if (dis.equalsIgnoreCase("disabled")) {
 				logger.error("Activity Title field is disabled");
+				selenium.logAssertion("assertTrue", "Activity Title field is disabled", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.info("Attribute 'Disabled' is not available for 'identification.title'");
+			selenium.logComment("Attribute 'Disabled' is not available for 'identification.title'");
 		}
 		try {
 			String dis = selenium.getAttribute("planning.statusId@disabled");
 			if (dis.equalsIgnoreCase("disabled")) {
 				logger.error("Status field is disabled");
+				selenium.logAssertion("assertTrue", "Status field is disabled", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.info("Attribute 'Disabled' is not available for 'planning.statusId'");
+			selenium.logComment("Attribute 'Disabled' is not available for 'planning.statusId'");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -243,17 +273,21 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			String dis = selenium.getAttribute("identification.title@disabled");
 			if (!dis.equalsIgnoreCase("disabled")) {
 				logger.error("Activity Title field is enabled");
+				selenium.logAssertion("assertTrue", "Activity Title field is enabled", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.error("Activity Title field is enabled");
+			selenium.logAssertion("assertTrue", "Activity Title field is enabled", "condition=false");
 		}
 		try {
 			String dis = selenium.getAttribute("planning.statusId@disabled");
 			if (!dis.equalsIgnoreCase("disabled")) {
 				logger.error("Status field is enabled");
+				selenium.logAssertion("assertTrue", "Status field is enabled", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.error("Status field is enabled");
+			selenium.logAssertion("assertTrue", "Status field is enabled", "condition=false");
 		}
 		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
@@ -296,9 +330,11 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		Thread.sleep(12000);
 		if (!selenium.getAttribute("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font@color").equalsIgnoreCase("GREEN")) {
 			logger.error("Wrong font color for activity status");
+			selenium.logAssertion("assertTrue", "Wrong font color for activity status", "condition=false");
 		}
 		if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div").contains("*")) {
 			logger.error("Activity name is shown without *");
+			selenium.logAssertion("assertTrue", "Activity name is shown without *", "condition=false");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -327,12 +363,15 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		try {
 			if (!selenium.getAttribute("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font@color").equalsIgnoreCase("")) {
 				logger.error("Wrong font color for activity status");
+				selenium.logAssertion("assertTrue", "Wrong font color for activity status", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.info("Attribute 'color' is not available");
+			selenium.logComment("Attribute 'color' is not available");
 		}
 		if (selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div").contains("*")) {
 			logger.error("Activity name is shown with *");
+			selenium.logAssertion("assertTrue", "Activity name is shown with *", "condition=false");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -383,9 +422,11 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		Thread.sleep(12000);
 		if (!selenium.getAttribute("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font@color").equalsIgnoreCase("GREEN")) {
 			logger.error("Wrong font color for activity status");
+			selenium.logAssertion("assertTrue", "Wrong font color for activity status", "condition=false");
 		}
 		if (selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div").contains("*")) {
 			logger.error("Activity name is shown with *");
+			selenium.logAssertion("assertTrue", "Activity name is shown with *", "condition=false");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -420,6 +461,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		if (!selenium.isElementPresent("//a[contains(@href, \"mailto:uattm@amp.org\")]")) {
 			logger.error("Activity creator is wrong");
+			selenium.logAssertion("assertTrue", "Activity creator is wrong", "condition=false");
 		}
 		selenium.click("//a[@onclick=\"javascript:fnEditProject(document.getElementById('tempActivity').value); return false;\"]");
 		selenium.waitForPageToLoad("30000");
@@ -433,15 +475,18 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		Thread.sleep(12000);
 		if (!selenium.getAttribute("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font@color").equalsIgnoreCase("RED")) {
 			logger.error("Wrong font color for activity status");
+			selenium.logAssertion("assertTrue", "Wrong font color for activity status", "condition=false");
 		}
 		if (selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div").contains("*")) {
 			logger.error("Activity name is shown with *");
+			selenium.logAssertion("assertTrue", "Activity name is shown with *", "condition=false");
 		}
 		
 		selenium.click("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div");
 		selenium.waitForPageToLoad("30000");
 		if (!selenium.isElementPresent("//a[contains(@href, \"mailto:uattm@amp.org\")]")) {
 			logger.error("Activity creator is wrong");
+			selenium.logAssertion("assertTrue", "Activity creator is wrong", "condition=false");
 		}
 		selenium.click("//a[@onclick=\"javascript:fnEditProject(document.getElementById('tempActivity').value); return false;\"]");
 		selenium.waitForPageToLoad("30000");
@@ -465,11 +510,11 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 				selenium.waitForPageToLoad("30000");
 				done = true;
 			} else {
-				try {
+				if (selenium.isElementPresent("//a[contains(@href, \"javascript:page("+cnt+")\")]")) {
 					selenium.click("//a[contains(@href, \"javascript:page("+cnt+")\")]");
 					selenium.waitForPageToLoad("30000");
 					cnt++;
-				} catch (Exception e) {
+				} else {
 					done = true;
 				}
 			}
@@ -481,6 +526,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		Thread.sleep(12000);
 		if (selenium.isTextPresent(activityName2)) {
 			logger.error("Activity is available for a wrong user");
+			selenium.logAssertion("assertTrue", "Activity is available for a wrong user", "condition=false");
 		}
 		
 		logger.info("Permissions and Validation UAT Step 16'");
@@ -500,11 +546,11 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 				selenium.waitForPageToLoad("30000");
 				done = true;
 			} else {
-				try {
+				if (selenium.isElementPresent("//a[contains(@href, \"/aim/updateTeamActivity.do~page="+cnt+"\")]")) {
 					selenium.click("//a[contains(@href, \"/aim/updateTeamActivity.do~page="+cnt+"\")]");
 					selenium.waitForPageToLoad("30000");
 					cnt++;
-				} catch (Exception e) {
+				} else {
 					done = true;
 				}
 			}
@@ -519,6 +565,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		if (!selenium.isElementPresent("//a[contains(@href, \"mailto:uattmc@amp.org\")]")) {
 			logger.error("Activity owner is wrong");
+			selenium.logAssertion("assertTrue", "Activity owner is wrong", "condition=false");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -544,17 +591,21 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			String dis = selenium.getAttribute("identification.title@disabled");
 			if (dis.equalsIgnoreCase("disabled")) {
 				logger.error("Activity Title field is disabled");
+				selenium.logAssertion("assertTrue", "Activity Title field is disabled", "condition=false");
 			}
 		} catch (Exception e) {
 			logger.info("Attribute 'Disabled' is not available for 'identification.title'");
+			selenium.logComment("Attribute 'Disabled' is not available for 'identification.title'");
 		}
 		try {
 			String dis = selenium.getAttribute("planning.statusId@disabled");
 			if (dis.equalsIgnoreCase("disabled")) {
 				logger.error("Status field is disabled");
+				selenium.logAssertion("assertTrue", "Status field is disabled", "condition=false");
 			}			
 		} catch (Exception e) {
 			logger.info("Attribute 'Disabled' is not available for 'planning.statusId'");
+			selenium.logComment("Attribute 'Disabled' is not available for 'planning.statusId'");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
@@ -625,6 +676,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			if (selenium.isElementPresent("//a[@onclick=\"return deleteIndicator()\"]")) {
 				logger.error("Activity wasn't deleted");
+				selenium.logAssertion("assertTrue", "Activity wasn't deleted", "condition=false");
 			}
 			selenium.type("keyword", activityName2);
 			selenium.click("//input[@onclick=\"return searchActivity()\"]");
@@ -637,15 +689,17 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			if (selenium.isElementPresent("//a[@onclick=\"return deleteIndicator()\"]")) {
 				logger.error("Activity wasn't deleted");
+				selenium.logAssertion("assertTrue", "Activity wasn't deleted", "condition=false");
 			}
 		} else {
 			logger.info("Activity Manager is not available");
+			selenium.logComment("Activity Manager is not available");
 		}
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		logger.info("Permissions and Validations Test Finished Successfully");
-		
+		selenium.logComment("Permissions and Validations Test Finished Successfully");
 	}
 	
 	
@@ -655,21 +709,23 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 	 * @param activityName
 	 * @throws Exception 
 	 */
-	private static void addActivity (Selenium selenium, String activityName) throws Exception{
+	private static void addActivity (LoggingSelenium selenium, String activityName) throws Exception{
 		boolean addAvailable = false;
-		try {
+		if (selenium.isElementPresent("//a[contains(@href, \"javascript:addActivity()\")]")) {
 			selenium.click("//a[contains(@href, \"javascript:addActivity()\")]");
 			selenium.waitForPageToLoad("120000");
 			addAvailable = true;
-		} catch (Exception e) {
-			logger.error("Option \"Add Activity\" is not available.");			
+		} else {
+			logger.error("Option \"Add Activity\" is not available.");
+			selenium.logAssertion("assertTrue", "Option \"Add Activity\" is not available.", "condition=false");
 		}
 		if (addAvailable) {
 			selenium.type("identification.title", activityName);
-			try {
+			if (selenium.isElementPresent("planning.statusId")) {
 				selenium.select("planning.statusId", "index=1");
-			} catch (Exception e) {
+			} else {
 				logger.info("Field \"Status\" is not available.");
+				selenium.logComment("Field \"Status\" is not available.");
 			}
 			
 			selenium.click("//a[@href='javascript:gotoStep(2)']");
@@ -681,62 +737,72 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 					if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addSectors(false,1);']")) {
 						selenium.click("//input[@name='submitButton' and @onclick='addSectors(false,1);']");
 						SeleniumTestUtil.waitForElement(selenium,"sector", 90);
-						try {
+						if (selenium.isElementPresent("sector")) {
 							selenium.select("sector", "index=1");
 							Thread.sleep(5000);
 							selenium.click("addButton");
 							selenium.waitForPageToLoad("50000");	
-							try {
+							if (selenium.isElementPresent("activitySectors[0].sectorPercentage")) {
 								selenium.type("activitySectors[0].sectorPercentage", "100");
-							} catch (Exception e) {
+							} else {
 								logger.info("Add Primary Sector Fail ");
+								selenium.logComment("Add Primary Sector Fail ");
 							}
-						} catch (Exception e) {
+						} else {
 							logger.info("Sectors no found for Primary Sector");
+							selenium.logComment("Sectors no found for Primary Sector");
 						}
 					} else {
 						logger.error("Field \"Primary Sector\" is active in Feature Manager but is not available.");
+						selenium.logAssertion("assertTrue", "Field \"Primary Sector\" is active in Feature Manager but is not available.", "condition=false");
 					}
 				} else {
 					logger.info("Field \"Primary Sector\" is not available.");
+					selenium.logComment("Field \"Primary Sector\" is not available.");
 				}
 				//Add Secondary Sector
 				if (SeleniumFeaturesConfiguration.getFieldState("Secondary Sector")){
 					if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addSectors(false,2);']")) {
 						selenium.click("//input[@name='submitButton' and @onclick='addSectors(false,2);']");
 						SeleniumTestUtil.waitForElement(selenium,"sector", 90);
-						try {
+						if (selenium.isElementPresent("sector")) {
 							selenium.select("sector", "index=1");
 							Thread.sleep(5000);
 							selenium.click("addButton");
 							selenium.waitForPageToLoad("50000");
-							try {
+							if (selenium.isElementPresent("activitySectors[1].sectorPercentage")) {
 								selenium.type("activitySectors[1].sectorPercentage", "100");
-							} catch (Exception e) {
+							} else {
 								logger.info("Add Secondary Sector Fail ");
+								selenium.logComment("Add Secondary Sector Fail ");
 							}
-						} catch (Exception e) {
+						} else {
 							logger.info("Sectors no found for Secondary Sector");
+							selenium.logComment("Sectors no found for Secondary Sector");
 						}
 					} else {
-						logger.error("Field \"Current Completion Date\" is active in Feature Manager but is not available.");
+						logger.error("Field \"Secondary Sector\" is active in Feature Manager but is not available.");
+						selenium.logAssertion("assertTrue", "Field \"Secondary Sector\" is active in Feature Manager but is not available.", "condition=false");
 					}
 				} else {
 					logger.info("Field \"Secondary Sector\" is not available.");
+					selenium.logComment("Field \"Secondary Sector\" is not available.");
 				}
 			} else {
 				logger.info("Feature \"Sectors\" is not available.");
+				selenium.logComment("Feature \"Sectors\" is not available.");
 			}
 			
 			
 			//Add Funding
 			boolean fundingAvailable = false;
-			try {
+			if (selenium.isElementPresent("//a[@href='javascript:gotoStep(3)']")) {
 				selenium.click("//a[@href='javascript:gotoStep(3)']");
 				selenium.waitForPageToLoad("50000");
 				fundingAvailable = true;
-			} catch (Exception e) {
+			} else {
 				logger.info("Step \"Funding\" is not available.");
+				selenium.logComment("Step \"Funding\" is not available.");
 			}
 			
 			if (SeleniumFeaturesConfiguration.getFeatureState("Funding Information")){
@@ -758,24 +824,26 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 						selenium.waitForPageToLoad("50000");
 					} else {
 						logger.error("Field \"Add Donor Organization\" is active in Feature Manager but is not available.");
+						selenium.logAssertion("assertTrue", "Field \"Add Donor Organization\" is active in Feature Manager but is not available.", "condition=false");
 					}
 				} else {
 					logger.info("Field \"Add Donor Organization\" is not available.");
+					selenium.logComment("Field \"Add Donor Organization\" is not available.");
 				}
 			} else {
 				logger.info("Feature \"Funding Information\" is not available.");
+				selenium.logComment("Feature \"Funding Information\" is not available.");
 			}
-			
 			
 			selenium.click("//input[@onclick='saveClicked()']");
 			selenium.waitForPageToLoad("50000");
 			if (selenium.isElementPresent("//input[@onclick='saveClicked()']")) {
-				logger.error("Save Activity Fail");				
+				logger.error("Save Activity Fail");	
+				selenium.logAssertion("assertTrue", "Save Activity Fail", "condition=false");
 			}
 			if (selenium.isElementPresent("//input[@onclick='overwrite()']")) {
 				selenium.click("//input[@onclick='overwrite()']");			
 			}
 		}
 	}
-	
 }

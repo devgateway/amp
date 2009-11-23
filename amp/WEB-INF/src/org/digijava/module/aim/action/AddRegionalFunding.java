@@ -23,6 +23,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -278,8 +279,8 @@ public class AddRegionalFunding extends Action {
 		}
 		
 		} catch (Exception e) {
-			logger.debug("Exception");
-			logger.error(e);
+			logger.error("Exception",e);
+                        throw new DgException(e);
 		}
 		return null;
 	}

@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
@@ -16,18 +19,22 @@
 		<li>
 			<font color="RED">* <digi:trn key="aim:redtext">red</digi:trn></font> - <digi:trn key="aim:newDraftText">New Draft. These are new actvities that have been saved as drafts.</digi:trn>
 		</li>
-		<li>
-			<font color="GREEN">* <digi:trn key="aim:greentext">green text</digi:trn></font> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activites that have never been approved by the workspace manager</digi:trn>
-		</li>
+		<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
+			<li>
+				<font color="GREEN">* <digi:trn key="aim:greentext">green text</digi:trn></font> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activites that have never been approved by the workspace manager</digi:trn>
+			</li>
+		</module:display>
 		<li>
 			<font color="blue"> <digi:trn key="aim:bluetext">blue text</digi:trn></font> - <digi:trn key="aim:validatedText">Validated activities</digi:trn>
 		</li>
 		<li>
 			<font color="RED"><digi:trn key="aim:redtext">red</digi:trn></font> - <digi:trn key="aim:existingDraftsText">Existing Drafts. These are actvities that have been saved once and edited and saved as drafts.</digi:trn>
 		</li>
-		<li>
-			<font color="GREEN"><digi:trn key="aim:greentext">green text</digi:trn></font> - <digi:trn key="aim:existingUnvalidatedText">Existing Un-validated. These are activites that have been approved at least once by the workspace manager. These are edited actvities that are not approved.</digi:trn>
-		</li>
+		<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
+			<li>
+				<font color="GREEN"><digi:trn key="aim:greentext">green text</digi:trn></font> - <digi:trn key="aim:existingUnvalidatedText">Existing Un-validated. These are activites that have been approved at least once by the workspace manager. These are edited actvities that are not approved.</digi:trn>
+			</li>
+		</module:display>
 	</ul>
 </div>
 <div align="left" width="2" style="display: inline; cursor: default"

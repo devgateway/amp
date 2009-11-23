@@ -620,7 +620,7 @@ public class SaveActivity extends Action {
 							}
 						}
 						
-						if (isPrimarySectorEnabled()){
+						if (isPrimarySectorEnabled() && isInConfig(eaForm,"Primary")){
 							if(!hasPrimarySectorsAdded){
 								errors.add("noPrimarySectorsAdded",
 										new ActionError("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
@@ -630,7 +630,7 @@ public class SaveActivity extends Action {
 						}
 
 						
-						if (isSecondarySectorEnabled()){
+						if (isSecondarySectorEnabled() && isInConfig(eaForm, "Secondary")){
 							if(!hasSecondarySectorsAdded){
 								errors.add("noSecondarySectorsAdded",
 										new ActionError("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
@@ -2825,5 +2825,16 @@ public class SaveActivity extends Action {
 					}
 			return false;
 	  }
+		private boolean isInConfig(EditActivityForm eaForm, String sectorLevel) {
+			List <AmpClassificationConfiguration> classConfig = eaForm.getSectors().getClassificationConfigs();
+			for(AmpClassificationConfiguration cls : classConfig){
+				if(cls.getName().compareToIgnoreCase(sectorLevel)==0){
+					return true;
+				}
+			}
+			return false;
+		}
+
+
 
 }

@@ -33,7 +33,9 @@
                 <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
 		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
 		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
+		<feature:display name="Computed Columns Filters" module="Filter Section">
 		<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
+		</feature:display>
 	</ul>
 	<div class="yui-content" style="background-color: #EEEEEE">
 		<div id="keyword" >
@@ -84,9 +86,11 @@
 						<html:option value="1" style="color:red">
 							*&nbsp;<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
+						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
 						<html:option value="2" style="color:green">
 							*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
 						</html:option>
+						</module:display>
 						<html:option value="4" style="color:blue">
 							&nbsp;<digi:trn key="rep:filter:ValidatedActivities" >Validated Activities</digi:trn>
 						</html:option>
@@ -95,9 +99,11 @@
 							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
 						</html:option>
 						</logic:notEqual>
+						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
 						<html:option value="0" style="color:green">
 							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
 						</html:option>
+						</module:display>
 					</html:select>
 					</td>
 				</tr>
@@ -113,7 +119,6 @@
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">
 						<b><digi:trn key="rep:filter:CalendarTitle">Calendar</digi:trn></b>
-						<br>
 					</td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
@@ -754,6 +759,7 @@
 		</tr>
 		</table>
 		</div>
+		<feature:display name="Computed Columns Filters" module="Filter Section">
 		<div id="CCSettings" >
 			<br>
 			<br>
@@ -773,6 +779,7 @@
 				<br>
 				<br><br>
 		</div>
+		</feature:display> 
 	</div>
 	
 

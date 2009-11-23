@@ -2941,6 +2941,17 @@ public class DbUtil {
 		}
     }
    
+    public static void deleteAllStamps(String idxName){
+		Connection con;
+		try {
+			con = PersistenceManager.getSession().connection();
+			con.createStatement().execute("DELETE FROM amp_lucene_index WHERE idxName like '" + idxName + "'");
+			con.commit();
+		} catch (Exception e) {
+			logger.error("Error while trying to delete Lucene db stamps: ", e);
+		}
+    }
+    
     public static void deleteStatus(Long id) {
         AmpStatus oldStatusItem = new AmpStatus();
         Session sess = null;

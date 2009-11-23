@@ -236,7 +236,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<tr>
 										<td>
 										<c:if test="${aimEditActivityForm.documents.referenceDocs == null }">
-										<digi:trn>There are not documents linked</digi:trn>
+										<digi:trn>There are not documents referenced</digi:trn>
 										</c:if>	
 										<c:if test="${aimEditActivityForm.documents.referenceDocs != null }">
 										<table width="100%" bgcolor="#cccccc" cellPadding="5" cellSpacing="1">

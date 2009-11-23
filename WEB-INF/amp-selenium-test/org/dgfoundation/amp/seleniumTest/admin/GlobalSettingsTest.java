@@ -7,6 +7,7 @@ import org.dgfoundation.amp.seleniumTest.reports.TabTest;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class GlobalSettingsTest extends SeleneseTestCase {
 		
@@ -15,7 +16,7 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 	public void setUp() throws Exception {
 		setUp("http://localhost:8080/", "*chrome");
 	}
-	public static void testGlobalSettings(Selenium selenium) throws Exception {
+	public static void testGlobalSettings(LoggingSelenium selenium) throws Exception {
 		String testTime =  String.valueOf(System.currentTimeMillis());
 		boolean enbabledPublicView = false;
 		boolean alertSum = false;
@@ -114,10 +115,12 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			if (enbabledPublicView) {
 				if (!selenium.isElementPresent("//a[contains(@href, \"/aim/reportsPublicView.do\")]")) {
 					logger.error("Public View is enabled but is not available");
+					selenium.logAssertion("assertTrue", "Public View is enabled but is not available", "condition=false");
 				}
 			} else {
 				if (selenium.isElementPresent("//a[contains(@href, \"/aim/reportsPublicView.do\")]")) {
 					logger.error("Public View is not enabled but is available");
+					selenium.logAssertion("assertTrue", "Public View is not enabled but is available", "condition=false");
 				}
 			}
 			
@@ -132,6 +135,7 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			//}
 			if (!selenium.getText("//div[@id=\"currentDisplaySettings\"]/table/tbody/tr[2]/td").contains("2029")) {
 				logger.error("Default End Value doesn't change according Global Settings");
+				selenium.logAssertion("assertTrue", "Default End Value doesn't change according Global Settings", "condition=false");
 			}
 			selenium.click("//a[contains(@href, \"javascript:addActivity()\")]");
 			selenium.waitForPageToLoad("120000");
@@ -169,6 +173,7 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 								selenium.type("orgFundingId", "12345");
 							} else {
 								logger.info("Field \"Funding Organization Id\" is not available.");
+								selenium.logComment("Field \"Funding Organization Id\" is not available.");
 							}
 							selenium.select("funding.modality", "index=1");
 							
@@ -181,9 +186,11 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 									selenium.type("fundingDetail[0].transactionDate", "09/09/2009");
 								} catch (Exception e) {
 									logger.info("Option \"Actual\" is not available for commitments.");
+									selenium.logComment("Option \"Actual\" is not available for commitments.");
 								}
 							} else {
 								logger.info("Field \"Add Commitment Button\" is not available.");
+								selenium.logComment("Field \"Add Commitment Button\" is not available.");
 								allFundingOk = false;
 							}
 							if (SeleniumFeaturesConfiguration.getFieldState("Add Disbursement Button")){
@@ -195,9 +202,11 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 									selenium.type("fundingDetail[1].transactionDate", "09/09/2009");
 								} catch (Exception e) {
 									logger.info("Option \"Actual\" is not available for disbursement.");
+									selenium.logComment("Option \"Actual\" is not available for disbursement.");
 								}
 							} else {
 								logger.info("Field \"Add Disbursement Button\" is not available.");
+								selenium.logComment("Field \"Add Disbursement Button\" is not available.");
 								allFundingOk = false;
 							}
 							selenium.click("//input[@onclick=\"return addFunding()\"]");
@@ -212,12 +221,15 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 							}							
 						} else {
 							logger.error("Field \"Add Donor Organization\" is active in Feature Manager but is not available.");
+							selenium.logAssertion("assertTrue", "Field \"Add Donor Organization\" is active in Feature Manager but is not available.", "condition=false");
 						}
 					} else {
 						logger.info("Field \"Add Donor Organization\" is not available.");
+						selenium.logComment("Field \"Add Donor Organization\" is not available.");
 					}
 				} else {
 					logger.info("Feature \"Funding Information\" is not available.");
+					selenium.logComment("Feature \"Funding Information\" is not available.");
 				}
 			} 
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
@@ -296,10 +308,12 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 		} else {
 			logger.error("Global Settings is not available.");
+			selenium.logAssertion("assertTrue", "Global Settings is not available.", "condition=false");
 		}
 		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Global Settings Test Finished Successfully");
+		selenium.logComment("Global Settings Test Finished Successfully");
 	}
 }

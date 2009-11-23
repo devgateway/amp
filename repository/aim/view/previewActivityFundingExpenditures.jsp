@@ -51,7 +51,7 @@
 								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 								name="Currency Expenditure" feature="Expenditures">
 								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
+							</field:display> &nbsp;</td>
 							<td align="left" bgcolor="#ffffff"></td>
 						</tr>
 						<tr>
@@ -70,7 +70,9 @@
            	  SUBTOTAL PLANNED EXPENDITURES             </digi:trn></td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-            ${funding.subtotalPlannedExpenditures} ${aimEditActivityForm.currCode}
+			<c:if test="${not empty funding.subtotalPlannedExpenditures}">
+            		${funding.subtotalPlannedExpenditures} ${aimEditActivityForm.currCode}
+            </c:if> &nbsp;
            </td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
@@ -110,7 +112,7 @@
 								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 								name="Currency Expenditure" feature="Expenditures">
 								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
+							</field:display> &nbsp;</td>
 							<td align="left" bgcolor="#ffffff"></td>
 
 						</tr>
@@ -132,7 +134,9 @@
        	 	 	SUBTOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
- 			${funding.subtotalExpenditures} ${aimEditActivityForm.currCode}
+			<c:if test="${not empty funding.subtotalExpenditures}">
+ 				${funding.subtotalExpenditures} ${aimEditActivityForm.currCode}
+ 			</c:if> &nbsp;
            </td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

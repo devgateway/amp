@@ -131,7 +131,7 @@ public class OrgProfileWidgetUtil {
 			throw new DgException("Cannot delete  widget");
 		}
 	}
-	
-	
+
+
 
 }

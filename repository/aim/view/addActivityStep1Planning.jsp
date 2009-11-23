@@ -163,6 +163,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">&nbsp;
+												<digi:trn key="aim:actualApprovalDate">Actual Approval Date </digi:trn>
 												</a>
 												</td>
 												<td bgcolor="#ffffff">

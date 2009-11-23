@@ -4,12 +4,11 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript">
-    window.onunload=unload;
-	function check() {
+    function check() {
 		var str = document.aimAddOrgGroupForm.orgGrpName.value;
 		var type = trim(document.aimAddOrgGroupForm.orgTypeId.value);
 		str = trim(str);
@@ -27,13 +26,6 @@
 			document.aimAddOrgGroupForm.orgGrpName.value = str;
 			document.aimAddOrgGroupForm.target = "_self";
 			document.aimAddOrgGroupForm.submit();
-			window.close();
-			<digi:context name="selectLoc" property="/aim/editOrganisation.do" />
-		    url = "<%= selectLoc %>?orgGroupAdded=true&ampOrgId="+window.opener.document.aimAddOrgForm.ampOrgId.value+"&actionFlag="+window.opener.document.aimAddOrgForm.actionFlag.value;
-		  	window.opener.document.aimAddOrgForm.action = url;
-	 	 	window.opener.document.aimAddOrgForm.target = window.opener.name;
-	 	
-			window.opener.document.aimAddOrgForm.submit();
 			return true;
 		}
 	}
@@ -54,17 +46,26 @@
 	function load() {
 		document.aimAddOrgGroupForm.orgGrpName.focus();
 	}
-
-	function unload() {
-        //window.opener.document.aimAddOrgForm.currUrl.value="";
-	}
-
 </script>
-
 <digi:instance property="aimAddOrgGroupForm" />
 <digi:context name="digiContext" property="context"/>
 
-<digi:form action="/editOrgGroup.do" method="post">
+
+<digi:form action="/editOrgGroup.do" method="post">	
+
+
+<c:if test="${aimAddOrgGroupForm.flag=='refreshParent'}">
+<script language="JavaScript">
+	<digi:context name="selectLoc" property="/aim/editOrganisation.do" />
+	url = "<%= selectLoc %>?orgGroupAdded=true&ampOrgId="+window.opener.document.aimAddOrgForm.ampOrgId.value+"&actionFlag="+window.opener.document.aimAddOrgForm.actionFlag.value;
+	window.opener.document.aimAddOrgForm.action = url;
+	window.opener.document.aimAddOrgForm.target = window.opener.name;
+	window.opener.document.aimAddOrgForm.submit();
+	window.close();
+</script>
+</c:if>
+
+
 <html:hidden property="action" />
 <html:hidden property="ampOrgGrpId" />
 <html:hidden property="ampOrgId" />

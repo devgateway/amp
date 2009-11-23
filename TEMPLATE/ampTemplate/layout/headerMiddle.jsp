@@ -8,6 +8,9 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
         <!-- Dependencies --> 
+		
+<%@page import="org.digijava.module.aim.helper.Constants"%>
+
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
@@ -109,22 +112,24 @@ cursor:pointer;
             			</ul>
             		</div>
             	</div>
-           	</li>    
-            <li style="float:left;">
-                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
-                <digi:trn key="aim:deflanguage">Language</digi:trn>
-                </span>
-                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
-                </a>               
-                <div id="reports2" class="yuiampmenu">
-                    <div class="bd">                    
-                        <ul>
-                        <digi:insert attribute="dropdownLangSwitch" />
-                        </ul>
-                    </div>
-                </div>                              
-            </li>
+           	</li>
+           	<feature:display name="Language Option" module="Tools">
+		            <li style="float:left;">
+		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+		                <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                </span>
+		                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                </a>               
+		                <div id="reports2" class="yuiampmenu">
+		                    <div class="bd">                    
+		                        <ul>
+		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
+		                        </ul>
+		                    </div>
+		                </div>                              
+		            </li>
+		  </feature:display>
           </ul>            
       </div>
   </div>
@@ -151,21 +156,23 @@ border-right:1px solid white;
                 </digi:trn>
 	            </digi:link>
             </li>
-            <li>
-                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
-                <digi:trn key="aim:deflanguage">Language</digi:trn>
-                </span>
-                <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
-                </a>
-                <div id="reports2" class="yuiampmenu">
-                    <div class="bd">                    
-                        <ul>
-                        <digi:insert attribute="dropdownLangSwitch" />
-                        </ul>
-                    </div>
-                </div>                              
-            </li>
+            <feature:display name="Language Option" module="Tools">
+		            <li>
+		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+		                <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                </span>
+		                <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                </a>
+		                <div id="reports2" class="yuiampmenu">
+		                    <div class="bd">                    
+		                        <ul>
+		                        <digi:insert attribute="dropdownLangSwitch" />
+		                        </ul>
+		                    </div>
+		                </div>                              
+		            </li>
+		  </feature:display>
           </ul>            
       </div>
   </div>
@@ -209,18 +216,20 @@ function adminHelp(){
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
-                                        <li style="_width:240px">
-                                        <a class="yuiampmenuitemlabel" href="#">
-                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
-                                        </a>
-                                          <div id="reports2" class="yuiampmenu">
-                                              <div class="bd">                    
-                                                  <ul>
-													<digi:insert flush="false" attribute="dropdownLangSwitch" />
-                                                  </ul>
-                                              </div>
-                                          </div>                              
-                                        </li>
+                                       <feature:display name="Language Option" module="Tools">
+		                                        <li style="_width:240px">
+		                                        <a class="yuiampmenuitemlabel" href="#">
+		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                                        </a>
+		                                          <div id="reports2" class="yuiampmenu">
+		                                              <div class="bd">                    
+		                                                  <ul>
+															<digi:insert flush="false" attribute="dropdownLangSwitch" />
+		                                                  </ul>
+		                                              </div>
+		                                          </div>                              
+		                                        </li>
+		                                   </feature:display>
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">
                                                     <digi:insert flush="false" attribute="transmode"/>
@@ -655,18 +664,20 @@ function adminHelp(){
                                         </a>
                                         </li>
                                         </feature:display>
-                                        <li style="_width:300px">
-                                        <a class="yuiampmenuitemlabel" href="#">
-                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
-                                        </a>
-                                          <div id="reports2" class="yuiampmenu">
-                                              <div class="bd">                    
-                                                  <ul>
-                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
-                                                  </ul>
-                                              </div>
-                                          </div>                              
-                                        </li>
+                                        <feature:display name="Language Option" module="Tools">
+		                                        <li style="_width:300px">
+		                                        <a class="yuiampmenuitemlabel" href="#">
+		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                                        </a>
+		                                          <div id="reports2" class="yuiampmenu">
+		                                              <div class="bd">                    
+		                                                  <ul>
+		                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
+		                                                  </ul>
+		                                              </div>
+		                                          </div>                              
+		                                        </li>
+                                        </feature:display>
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">
                                                     <digi:insert flush="false" attribute="transmode"/>
@@ -768,6 +779,16 @@ for(var i = 0; i < oMenuBar.getItems().length; i++){
 }
 
 oMenuBar.render();
+
+oMenuBar.subscribe("show", function () {
+
+	if (YAHOOAmp.env.ua.ie === 7 && this.parent) {
+		this.align();
+		this.align();
+	}
+
+});
+
 
 function onMenuItemClick(p_sType, p_aArgs, p_oValue) { 
 	if(arrowClicked){

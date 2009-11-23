@@ -50,6 +50,7 @@
                     <tr align="center" bgcolor="#f4f4f2" valign="top">
                       <td class="f-names">
                         <table cellPadding="0" cellSpacing="0" width="320px">
+                        	<module:display name="Event Type Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -61,7 +62,9 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
 
+						<module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -73,6 +76,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                        </module:display>  
                           <module:display name="Flag uploader" parentModule="ADMINISTRATIVE SECTION"> 
                           <tr>
                             <td class="f-names" nowrap="nowrap">
@@ -103,6 +107,8 @@
                             </td>
                            </module:display>
                           </tr>
+                          
+                          <module:display name="Global Settings" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -114,6 +120,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                           <feature:display name="Applied Patches" module="Applied Patches">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
@@ -152,6 +159,7 @@
                             </td>
                           </tr>
 
+						<module:display name="Category Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -163,6 +171,8 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
+                          <module:display name="User Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -174,6 +184,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                           <feature:display  name="Paris Indicators Targets Manager" module="Admin Home">
                             <tr>
                               <td class="f-names" nowrap="nowrap">
@@ -187,6 +198,7 @@
                               </td>
                             </tr>
                           </feature:display>
+                          <module:display name="Message Manager" parentModule="ADMINISTRATIVE SECTION">
                           	<tr>
                           		<td class="f-names" nowrap="nowrap">
                                 <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -198,6 +210,7 @@
                                 </digi:link>
                               </td>
                           	</tr>
+                          </module:display>
                           	<feature:display name="Admin Topics Help" module="HELP">
                           	<tr>
                           		<td class="f-names" nowrap="nowrap">
@@ -298,17 +311,20 @@
                           </tr>
                           </module:display>
                           
-                          <tr>
-                            <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="translation">
-                                <digi:trn key="aim:clickToViewCurrencyManager">Click here to view Currency Manager</digi:trn>
-                              </c:set>
-                              <digi:link href="/currencyManager.do" title="${translation}" >
-                                <digi:trn key="aim:currencyManager">Currency Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
+                          <module:display name="Currency Manager" parentModule="ADMINISTRATIVE SECTION">
+	                          <tr>
+	                            <td class="f-names" nowrap="nowrap">
+	                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+	                              <c:set var="translation">
+	                                <digi:trn key="aim:clickToViewCurrencyManager">Click here to view Currency Manager</digi:trn>
+	                              </c:set>
+	                              <digi:link href="/currencyManager.do" title="${translation}" >
+	                                <digi:trn key="aim:currencyManager">Currency Manager</digi:trn>
+	                              </digi:link>
+	                            </td>
+	                          </tr>
+                          </module:display>
+                          <module:display name="Currency Rates Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <c:set var="translation">
@@ -320,6 +336,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                           <%--
                           <tr>
                             <td class="f-names" nowrap="nowrap">
@@ -346,6 +363,7 @@
                             </td>
                           </tr>
                           </module:display>
+                          <module:display name="Sector  Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -357,6 +375,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                           <feature:display  name="Table Widgets" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
@@ -505,7 +524,7 @@
                           </tr>
 						 </feature:display>
 						 -->
-						 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+						 <module:display name="Program Managers" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                           <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -568,7 +587,8 @@
                               </digi:link>
                             </td>
                           </tr>
--->
+-->	
+						<module:display name="Audit Logger Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -582,6 +602,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                         </table>
                       </td>
                     </tr>
@@ -597,6 +618,7 @@
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td>
                         <table cellPadding="0" cellSpacing="0" width="320">
+                        <module:display name="Activity Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -608,6 +630,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

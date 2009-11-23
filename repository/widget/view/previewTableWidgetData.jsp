@@ -10,8 +10,9 @@
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <digi:ref href="css/gis.css" type="text/css" rel="stylesheet" />
 
-
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+	
+
 	
 	<br/>
 			<span class=crumb>
@@ -33,6 +34,8 @@
 			<br/>
 			<br/>
 			<span class="subtitle-blue">Preview table widget data</span>
+	
+	
 	<div id="content" class="yui-skin-sam" style="width:90%;padding: 20px;">
 	 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
 	   <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -47,8 +50,6 @@
 	  </div>
 	</div>
 	</div>
-	
-	
 	<br/>
 	<input type="button" value="Back" onclick="javascript:location.href='/widget/tableWidgetData.do~actType=showEdit~widgetId=${dform.widgetId}'"/>
 	
@@ -108,6 +109,7 @@
 		}
 	
 	}
+		
 	
 		function requestTable_${dform.widgetId}(columnId,itemId){
 			<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />

@@ -665,15 +665,12 @@ public class AmpDbUtil {
           				append("(c.startDate <= :startDate and :endDate <= c.endDate))");
        
 
-//          if(showPublicEvents){
-//        	  queryString.append(" and ac.privateEvent=false");
-//          }else{
-//        	  queryString.append(" and ac.privateEvent=true");
-//          }
-          if(!showPublicEvents){
+          if(showPublicEvents){
+        	  queryString.append(" and ac.privateEvent=false");
+          }else{
         	  queryString.append(" and ac.privateEvent=true");
           }
-
+         
           if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
         	  queryString.append(" and ac.eventsType.id in (:selectedEventTypes)");
           }else{

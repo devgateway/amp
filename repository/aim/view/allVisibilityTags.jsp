@@ -60,7 +60,8 @@
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
-<module:display name="Report Types" parentModule="REPORTING"></module:display> 
+<module:display name="Report Types" parentModule="REPORTING"></module:display>
+<module:display name="Filter Section" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
@@ -103,6 +104,7 @@
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
 <feature:display name="Activity Dashboard" module="M & E"></feature:display> 
 <feature:display name="Workspace Info" module="Tools"></feature:display>
+<feature:display name="Language Option" module="Tools"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 
@@ -117,9 +119,10 @@
 <feature:display name="Admin" module="M & E"></feature:display> 
 <feature:display name="Alert tab" module="Messages"></feature:display> 
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
-<feature:display name="Approval Tab" module="Messages"></feature:display> 
+<feature:display name="Approval Tab" module="Messages"></feature:display>
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
-<feature:display name="Channel Overview" module="Channel Overview"></feature:display> 
+<feature:display name="Channel Overview" module="Channel Overview"></feature:display>
+<feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
 <feature:display name="Content Repository" module="Document Management"></feature:display> 
@@ -522,6 +525,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Financial Instrument" feature="Budget"></field:display> 
 <field:display name="Financing Instrument" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Id" feature="Funding Information"></field:display> 
+<field:display name="Financial Progress More Info Link" feature="Funding Information"></field:display>
 <field:display name="Funding Organization Name" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Funding Organizations Tab" feature="Funding Information"></field:display> 

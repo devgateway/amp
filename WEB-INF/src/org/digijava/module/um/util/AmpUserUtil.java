@@ -37,9 +37,10 @@ public class AmpUserUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select u from " + User.class.getName() + " u"
-					+ " where u.banned=:banned order by u.email";
+					+ " where u.banned=:banned and u.globalAdmin=:gadmin order by u.email";
 			qry = session.createQuery(queryString);
 			qry.setBoolean("banned", getBanned);
+				qry.setInteger("gadmin", 0);
 			users = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get user");

@@ -5,6 +5,7 @@ import org.dgfoundation.amp.seleniumTest.reports.TabTest;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class WorkspaceManagerTest  extends SeleneseTestCase {
 	
@@ -13,7 +14,7 @@ public class WorkspaceManagerTest  extends SeleneseTestCase {
 	public void setUp() throws Exception {
 		setUp("http://localhost:8080/", "*chrome");
 	}
-	public static void testWorkspaceManager(Selenium selenium) throws Exception {
+	public static void testWorkspaceManager(LoggingSelenium selenium) throws Exception {
 		String testTime =  String.valueOf(System.currentTimeMillis());
 		String wsName ="Test Workspace Manager " + testTime;
 		
@@ -37,17 +38,23 @@ public class WorkspaceManagerTest  extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, '/aim/assignActivity.do~id="+tId+"')]");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("selectedActivities");
-			String aId = selenium.getAttribute("selectedActivities@value");
-			selenium.click("//input[@type=\"submit\"]");
-			selenium.waitForPageToLoad("30000");
-			if (!selenium.getAttribute("selActivities@value").equals(aId)) {
-				logger.error("Activity assigned is not in the list");
+			if (selenium.isElementPresent("selectedActivities")) {
+				selenium.click("selectedActivities");
+				String aId = selenium.getAttribute("selectedActivities@value");
+				selenium.click("//input[@type=\"submit\"]");
+				selenium.waitForPageToLoad("30000");
+				if (!selenium.getAttribute("selActivities@value").equals(aId)) {
+					logger.error("Activity assigned is not in the list");
+					selenium.logAssertion("assertTrue", "Activity assigned is not in the list", "condition=false");
+				}
+				selenium.click("selActivities");
+				selenium.click("//input[@onclick=\"return confirmDelete()\"]");
+				selenium.getConfirmation();
+				selenium.waitForPageToLoad("30000");
+			} else {
+				logger.info("There is not activities to assign");
+				selenium.logComment("There is not activities to assign");
 			}
-			selenium.click("selActivities");
-			selenium.click("//input[@onclick=\"return confirmDelete()\"]");
-			selenium.getConfirmation();
-			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/aim/workspaceManager.do\")]");
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, '/aim/deleteWorkspace.do~tId="+tId+"~event=delete')]");
@@ -55,14 +62,16 @@ public class WorkspaceManagerTest  extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			if (selenium.isElementPresent("link="+wsName)) {
 				logger.error("Workspace wasn't deleted");
+				selenium.logAssertion("assertTrue", "Workspace wasn't deleted", "condition=false");
 			}
 		} else {
 			logger.error("Module \"Workspace Manager\" is not available");
+			selenium.logAssertion("assertTrue", "Module \"Workspace Manager\" is not available", "condition=false");
 		}
 		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Workspace Manager Test Finished Successfully");
-		
+		selenium.logComment("Workspace Manager Test Finished Successfully");
 	}
 }

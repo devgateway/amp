@@ -239,6 +239,8 @@ function submitForm()
 
 	var calendarHelp="<digi:trn key='calendar:calendarHelp'>Calendar</digi:trn>"
 	var separateEmails="<digi:trn key='calendar:separateEmails'>Please separate email addresses by semicolons</digi:trn>"
+	var validEmailmsg="<digi:trn >Invalid e-mail address:</digi:trn>"
+		var alreadyAdded="<digi:trn >E-mail address already added: </digi:trn>"
 		
 function makePublic(){
 
@@ -379,15 +381,23 @@ function addOrganisation(orgId, orgName){
 	      return;
 	    }
 	
-	    var flag=false;
-	    for(var i=0; i<list.length;i++){
-	      if(list.options[i].value=='g:'+guest.value &&list.options[i].text==guest.value){
-	        flag=true;
-	        break;
+   
+
+	var guestVal=guest.value;
+
+
+	
+	while(guestVal.indexOf(";")!=-1){		
+		var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
+		if (!checkEmail(optionValue)){
+			alert(validEmailmsg+' '+optionValue);
+			return false;
 	      }
+		if (isGuestAllreadyAdded(optionValue)){
+			alert(alreadyAdded+' '+optionValue);
+			return false;
 	    }
-	    if(flag){
-	      return false;
+		 guestVal=guestVal.substring(guestVal.indexOf(";")+1);
 	    }
 	
 		var guestVal=guest.value;
@@ -397,6 +407,15 @@ function addOrganisation(orgId, orgName){
 		    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
 		}
 		if(guestVal.length>0){
+		if (!checkEmail(guestVal)){
+			alert(validEmailmsg+' '+guestVal);
+			return false;
+		}
+
+		if (isGuestAllreadyAdded(guestVal)){
+			alert(alreadyAdded+' '+guestVal);
+			return false;
+		}
 			addOption(list,guestVal,'g:'+guestVal);
 		}	
 	    guest.value = "";
@@ -409,13 +428,25 @@ function addOrganisation(orgId, orgName){
     function isGuestAllreadyAdded(guest){
 	  var selreceivers=document.getElementById('selreceivers');
 	  for(var j=0; j<selreceivers.length;j++){
-	    if(selreceivers.options[j].value==guest){
+	    if(selreceivers.options[j].value=='g:'+guest){
 	      return true;
 	    }
 	  }
 	  return false
 	}
   
+    function checkEmail(email){	
+        var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+        var expression = new RegExp(pattern)
+        if(expression.test(email)){         
+    		return true;   
+        }else{   
+        	return false; 
+        }
+    }
+
+   
+
   function removeAtt() {
     var list = document.getElementById('selreceivers');
     if (list == null) {

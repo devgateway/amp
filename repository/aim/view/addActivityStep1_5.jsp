@@ -81,7 +81,7 @@ function popupwin()
 function toggleDiv(num){
 	var textBoxName='#refComment'+num;
 	var checkBoxName='#refCheck'+num;
-	var hiddenName='referenceDoc['+num+'].checked';//'input[@name=referenceDoc['+num+'].checked]';
+	var hiddenName='documents.referenceDocs['+num+'].checked';//'input[@name=referenceDoc['+num+'].checked]';
 	var hidInput=document.getElementsByName(hiddenName)[0];
 	$(textBoxName).toggle("fast");
 	hidInput.value=$(checkBoxName).get(0).checked;

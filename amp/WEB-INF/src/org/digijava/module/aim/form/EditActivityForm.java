@@ -2525,32 +2525,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Boolean primaryAllowed; //defines whether activity contact can be primary or not. primary contact must be one for each type(mofed,donor,e.t.c.)
 		private String contactType;		
 		
-		private String name;
-		private String lastname;
-		private Long title;
-		private String organisationName;
-		private String function;
-		private String officeaddress;
 		private String temporaryId; //contact's temporary id		
-		
-		private String keyword;
-		private Long[] contactIds; //for adding several contacts
-		
-		private String action;
-        private Long[] selContactOrgs;
-        private List<AmpOrganisation> organizations;        
 
-		private ContactPropertyHelper[] emails;
-		private ContactPropertyHelper[] phones;
-		private ContactPropertyHelper[] faxes;
-		private int phonesSize;
-		private int emailsSize;
-		private int faxesSize;
-		
-		private String[] contEmail;
-		private String[] contPhoneType;
-		private String[] contPhoneNumber;
-		private String[] contFaxes;
 		
 		public String[] getPrimaryDonorContIds() {
 			return primaryDonorContIds;
@@ -2576,36 +2552,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setPrimarySecMinContIds(String[] primarySecMinContIds) {
 			this.primarySecMinContIds = primarySecMinContIds;
 		}
-		public String getAction() {
-			return action;
-		}
-		public void setAction(String action) {
-			this.action = action;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public String getLastname() {
-			return lastname;
-		}
-		public void setLastname(String lastname) {
-			this.lastname = lastname;
-		}
-		public Long getTitle() {
-			return title;
-		}
-		public void setTitle(Long title) {
-			this.title = title;
-		}
-		public String getOrganisationName() {
-			return organisationName;
-		}
-		public void setOrganisationName(String organisationName) {
-			this.organisationName = organisationName;
-		}
+		
 		public List<AmpActivityContact> getMofedContacts() {
 			return mofedContacts;
 		}
@@ -2657,29 +2604,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setContactType(String contactType) {
 			this.contactType = contactType;
 		}
-		public String getTemporaryId() {
-			return temporaryId;
-		}
-		public void setTemporaryId(String temporaryId) {
-			this.temporaryId = temporaryId;
-		}
 		public Boolean getPrimaryAllowed() {
 			return primaryAllowed;
 		}
 		public void setPrimaryAllowed(Boolean primaryAllowed) {
 			this.primaryAllowed = primaryAllowed;
-		}
-		public String getKeyword() {
-			return keyword;
-		}
-		public void setKeyword(String keyword) {
-			this.keyword = keyword;
-		}
-		public Long[] getContactIds() {
-			return contactIds;
-		}
-		public void setContactIds(Long[] contactIds) {
-			this.contactIds = contactIds;
 		}
 		public Boolean getResetDonorIds() {
 			return resetDonorIds;
@@ -2705,18 +2634,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setResetSecMinIds(Boolean resetSecMinIds) {
 			this.resetSecMinIds = resetSecMinIds;
 		}
-		public String getFunction() {
-			return function;
-		}
-		public void setFunction(String function) {
-			this.function = function;
-		}
-		public String getOfficeaddress() {
-			return officeaddress;
-		}
-		public void setOfficeaddress(String officeaddress) {
-			this.officeaddress = officeaddress;
-		}
 		public List<AmpActivityContact> getImplExecutingAgencyContacts() {
 			return implExecutingAgencyContacts;
 		}
@@ -2736,92 +2653,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setResetImplExecutingIds(Boolean resetImplExecutingIds) {
 			this.resetImplExecutingIds = resetImplExecutingIds;
 		}
-
-		public List<AmpOrganisation> getOrganizations() {
-            return organizations;
-        }
-
-        public void setOrganizations(List<AmpOrganisation> organizations) {
-            this.organizations = organizations;
-        }
-
-        public Long[] getSelContactOrgs() {
-            return selContactOrgs;
-        }
-
-        public void setSelContactOrgs(Long[] selContactOrgs) {
-            this.selContactOrgs = selContactOrgs;
-        }
-		public ContactPropertyHelper[] getEmails() {
-			return emails;
+		public String getTemporaryId() {
+			return temporaryId;
 		}
-		public void setEmails(ContactPropertyHelper[] emails) {
-			this.emails = emails;
+		public void setTemporaryId(String temporaryId) {
+			this.temporaryId = temporaryId;
 		}
-		public ContactPropertyHelper[] getPhones() {
-			return phones;
-		}
-		public void setPhones(ContactPropertyHelper[] phones) {
-			this.phones = phones;
-		}
-		public ContactPropertyHelper[] getFaxes() {
-			return faxes;
-		}
-		public void setFaxes(ContactPropertyHelper[] faxes) {
-			this.faxes = faxes;
-		}
-		public int getPhonesSize() {
-			return phonesSize;
-		}
-		public void setPhonesSize(int phonesSize) {
-			this.phonesSize = phonesSize;
-		}
-		public int getEmailsSize() {
-			return emailsSize;
-		}
-		public void setEmailsSize(int emailsSize) {
-			this.emailsSize = emailsSize;
-		}
-		public int getFaxesSize() {
-			return faxesSize;
-		}
-		public void setFaxesSize(int faxesSize) {
-			this.faxesSize = faxesSize;
-		}
-		public String[] getContEmail() {
-			return contEmail;
-		}
-		public void setContEmail(String[] contEmail) {
-			this.contEmail = contEmail;
-		}
-		public String[] getContPhoneType() {
-			return contPhoneType;
-		}
-		public void setContPhoneType(String[] contPhoneType) {
-			this.contPhoneType = contPhoneType;
-		}
-		public String[] getContPhoneNumber() {
-			return contPhoneNumber;
-		}
-		public void setContPhoneNumber(String[] contPhoneNumber) {
-			this.contPhoneNumber = contPhoneNumber;
-		}
-		public String[] getContFaxes() {
-			return contFaxes;
-		}
-		public void setContFaxes(String[] contFaxes) {
-			this.contFaxes = contFaxes;
-		}
-		public ContactPropertyHelper getEmails(int index) {
-	        return emails[index];
-	    }
 		
-		public ContactPropertyHelper getFaxes(int index) {
-	        return faxes[index];
-	    }
-		public ContactPropertyHelper getPhones(int index) {
-	        return phones[index];
-	    }
 	}
 
 	public class Comments {

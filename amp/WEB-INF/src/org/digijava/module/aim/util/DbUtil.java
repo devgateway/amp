@@ -2873,7 +2873,11 @@ public class DbUtil {
 		    				}
 		    			}
 		    			ampContact.setProperties(null);
-		    			sess.update(ampContact);    			    			
+		    			if(ampContact.getOrganizations()!=null){
+		    				ampContact.getOrganizations().clear();		    				
+		    			}
+		    			ampContact.setOrganizations(contact.getOrganizations());
+		    			sess.update(ampContact);
 		    		}else{
 		    			sess.save(contact);
 		    		}

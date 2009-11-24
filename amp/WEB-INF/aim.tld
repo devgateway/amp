@@ -191,14 +191,21 @@
 			<name>collection</name>
 			<required>true</required>
 			<description>
-				Collection where the selcted contacts will be added
+				Collection where the selected contacts will be added
 			</description>
 		</attribute>
 
-	<attribute>
+		<attribute>
 			<rtexprvalue>true</rtexprvalue>
 			<name>form</name>
 			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>contactType</name>
+			<required>false</required>
+			<description>
+				Activity Contact Type
+			</description>
 		</attribute>
 		<description>
 			The name of the form on any scope that will be used to set
@@ -226,6 +233,14 @@
                 <name>form</name>
                 <required>true</required>
             </attribute>
+            <attribute>
+				<name>contactType</name>
+				<required>false</required>
+				 <rtexprvalue>true</rtexprvalue>
+				<description>
+					Activity Contact Type
+				</description>
+			</attribute>
             <description>
 			The name of the form on any scope that will be used to edit
 			the selected contact

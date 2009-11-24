@@ -11,13 +11,13 @@
 <%@ taglib uri="/taglib/aim"prefix="aim"%>
 
 <digi:context name="digiContext" property="context"/>
-<digi:instance property="aimEditActivityForm"/>
+<digi:instance property="aimAddContactForm"/>
 
-<digi:form name="contactForm" type="aimEditActivityForm" action="/activityContactInfo.do" method="post">
+<digi:form name="contactForm" type="aimAddContactForm" action="/activityContactInfo.do" method="post">
 	<table cellpadding="2" cellspacing="5" width="100%" border="1" height="100%">
 		<tr height="5px"><td colspan="2"/></tr>
 		<!-- page logic row start -->
-                <html:hidden property="contactInformation.temporaryId" styleId="temporaryId"/>
+                <html:hidden property="temporaryId" styleId="temporaryId"/>
                 <tr>
 			<!-- create new contact td start -->
 			<td width="50%" height="100%">
@@ -29,37 +29,37 @@
                             <c:set var="translation">
                             	<digi:trn>Please select from below</digi:trn>
                             </c:set>
-                            <category:showoptions multiselect="false" firstLine="${translation}" name="aimEditActivityForm" property="contactInformation.title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
+                            <category:showoptions multiselect="false" firstLine="${translation}" name="contactForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
                        </td>
 					</tr>	
 					<tr>
 						<td align="right"><strong><digi:trn>Lastname</digi:trn></strong><font color="red">*</font></td>
-						<td align="left"><html:text property="contactInformation.lastname" size="30" styleId="lastname"/></td>
+						<td align="left"><html:text property="lastname" size="30" styleId="lastname"/></td>
 					</tr>
 					<tr>						
 						<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
-						<td align="left"><html:text property="contactInformation.name" size="30" styleId="name"/></td>
+						<td align="left"><html:text property="firstName" size="30" styleId="name"/></td>
 					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
 						<td align="left" nowrap="nowrap">
-							<logic:notEmpty name="aimEditActivityForm" property="contactInformation.emails">
-								 <logic:iterate name="aimEditActivityForm" property="contactInformation.emails" id="foo" indexId="ctr">
+							<logic:notEmpty name="contactForm" property="emails">
+								 <logic:iterate name="contactForm" property="emails" id="foo" indexId="ctr">
 								 	<div>
-								 		<html:text name="aimEditActivityForm" property="contactInformation.emails[${ctr}].value" size="30" styleId="email_${ctr}"/>																																 		
-								 		<c:if test="${aimEditActivityForm.contactInformation.emailsSize>1}">
+								 		<html:text name="contactForm" property="emails[${ctr}].value" size="30" styleId="email_${ctr}"/>																																 		
+								 		<c:if test="${contactForm.emailsSize>1}">
 											 <a href="javascript:removeData('email',${ctr})"> 
 										 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
 								 		 	</a>
 								 		</c:if>
-								 		<c:if test="${ctr==aimEditActivityForm.contactInformation.emailsSize-1}">
+								 		<c:if test="${ctr==contactForm.emailsSize-1}">
 								 			<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       										<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('email')">
 								 		</c:if>
 								 	</div>																										                    
 								</logic:iterate>
 							</logic:notEmpty>
-							<logic:empty name="aimEditActivityForm" property="contactInformation.emails">
+							<logic:empty name="contactForm" property="emails">
 								<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       							<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('email')">
 							</logic:empty>
@@ -70,25 +70,25 @@
 					</tr>										
 					<tr>
 						<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
-                        <td align="left"><html:text property="contactInformation.function" size="30" styleId="function"/></td>
+                        <td align="left"><html:text property="function" size="30" styleId="function"/></td>
 					</tr>	
 					<tr>
 						<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
-                        <td align="left"><html:text property="contactInformation.organisationName" size="30" styleId="organisationName"/></td>
+                        <td align="left"><html:text property="organisationName" size="30" styleId="organisationName"/></td>
 					</tr>
                                         <tr>
                                             <td colspan="2" align="center">
                                                 <c:choose>
-                                                    <c:when test="${empty aimEditActivityForm.contactInformation.organizations}">
+                                                    <c:when test="${empty contactForm.organizations}">
                                                 <aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimEditActivityForm.contactInformation}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                             </c:when>
 
                                             <c:otherwise>
                                                 <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-                                                    <c:forEach var="organization" items="${aimEditActivityForm.contactInformation.organizations}">
+                                                    <c:forEach var="organization" items="${contactForm.organizations}">
                                                         <tr>
                                                             <td width="3px">
-                                                                <html:multibox property="contactInformation.selContactOrgs">
+                                                                <html:multibox property="selContactOrgs">
                                                                     <bean:write name="organization" property="ampOrgId" />
                                                                 </html:multibox>
                                                             </td>
@@ -101,7 +101,7 @@
                                                     </c:forEach>
                                                     <tr>
                                                         <td colspan="2">
-                                                    <aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimEditActivityForm.contactInformation}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                    <aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${contactForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                     <input type="button" class="dr-menu" onclick="javascript:removeContactOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
                                                 </td>
                                             </tr>
@@ -118,19 +118,19 @@
 							<logic:notEmpty name="aimEditActivityForm" property="contactInformation.phones">
 								<logic:iterate name="aimEditActivityForm" property="contactInformation.phones" id="foo" indexId="ctr">
 									<div>
-										<html:text name="aimEditActivityForm" property="contactInformation.phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
-									   	<html:text name="aimEditActivityForm" property="contactInformation.phones[${ctr}].value" size="16" styleId="phoneNum_${ctr}"/>
+										<html:text property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
+									   	<html:text property="phones[${ctr}].value" size="16" styleId="phoneNum_${ctr}"/>
 									  	<a href="javascript:removeData('phone',${ctr})"> 
 									 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
 									 	</a>
-									  	<c:if test="${aimEditActivityForm.contactInformation.phonesSize==0 ||  ctr==aimEditActivityForm.contactInformation.phonesSize-1}">
+									  	<c:if test="${contactForm.phonesSize==0 ||  ctr==contactForm.phonesSize-1}">
 											<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       										<input id="addPhoneBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('phone')">    	
 									   	</c:if>
 									</div>																				                    
 								</logic:iterate>
 							</logic:notEmpty>
-							<logic:empty name="aimEditActivityForm" property="contactInformation.phones">
+							<logic:empty name="contactForm" property="phones">
 								<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       							<input id="addPhoneBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('phone')">
 							</logic:empty>
@@ -139,19 +139,19 @@
 					<tr>
 						<td align="right" valign="top"><strong><digi:trn>Fax</digi:trn></strong></td>
 						<td align="left" nowrap="nowrap">
-							<logic:notEmpty name="aimEditActivityForm" property="contactInformation.faxes">
-								 <logic:iterate name="aimEditActivityForm" property="contactInformation.faxes" id="foo" indexId="ctr">
-							         <html:text name="aimEditActivityForm" property="contactInformation.faxes[${ctr}].value" size="30" styleId="fax_${ctr}"/>																												                    																												                    
+							<logic:notEmpty name="contactForm" property="faxes">
+								 <logic:iterate name="contactForm" property="faxes" id="foo" indexId="ctr">
+							         <html:text name="contactForm" property="faxes[${ctr}].value" size="30" styleId="fax_${ctr}"/>																												                    																												                    
 							         <a href="javascript:removeData('fax',${ctr})"> 
 								 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
 								 	</a>
-							        <c:if test="${ctr==aimEditActivityForm.contactInformation.faxesSize-1}">
+							        <c:if test="${ctr==contactForm.faxesSize-1}">
 							           	<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       									<input id="addFaxBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('fax')">
 							        </c:if>
 							     </logic:iterate>
 							</logic:notEmpty>
-							<logic:empty name="aimEditActivityForm" property="contactInformation.faxes">
+							<logic:empty name="contactForm" property="faxes">
 								<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       							<input id="addFaxBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('fax')">
 							</logic:empty>
@@ -159,7 +159,7 @@
 					</tr>
 					<tr>
 						<td align="right" valign="top"><strong><digi:trn>Office Address</digi:trn></strong></td>
-                        <td align="left"><html:textarea property="contactInformation.officeaddress" cols="36" rows="3" styleId="officeaddress"/></td>
+                        <td align="left"><html:textarea property="officeaddress" cols="36" rows="3" styleId="officeaddress"/></td>
 					</tr>	
 					<tr height="5px"><td colspan="2"/></tr>
 					<tr>
@@ -169,7 +169,7 @@
 			</td>
 			<!-- create new contact td end -->
 			<!-- filter start -->
-			<c:if test="${aimEditActivityForm.contactInformation.action=='add' || aimEditActivityForm.contactInformation.action=='search'}">
+			<c:if test="${contactForm.action=='add' || contactForm.action=='search'}">
 				<td width="50%" height="100%" bordercolor="#f4f4f2">						
 					<table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0" height="100%" class="box-border-nopadding" >
 						<tr><td vAlign="top">
@@ -190,7 +190,7 @@
 																<digi:trn>Enter a keyword </digi:trn>
 															</td>
 															<td>
-																<html:text property="contactInformation.keyword"  styleClass="inp-text" styleId="keyword"/>
+																<html:text property="keyword"  styleClass="inp-text" styleId="keyword"/>
 															</td>
 														</tr>
 														<tr>
@@ -219,16 +219,16 @@
 				                               <digi:errors/>
 				                            </td>
 				                         </tr>				                        
-				                         <c:if test="${not empty aimEditActivityForm.contactInformation.contacts}">
+				                         <c:if test="${not empty contactForm.contacts}">
 											<tr height="150px">
 												<td rowspan="1" align="left" vAlign="top">
 													<div style="overflow: scroll;height: 150px" >
 														<table width="100%" cellPadding="3" cellspacing="0" border="0" style="overflow: scroll;height: 150px" >
-														<c:forEach var="contact" items="${aimEditActivityForm.contactInformation.contacts}">
+														<c:forEach var="contact" items="${contactForm.contacts}">
 															<tr>
 																<td bgcolor="#ECF3FD" colspan="5" style="font:11px">
 																	&nbsp;&nbsp;
-																	<html:multibox property="contactInformation.contactIds">
+																	<html:multibox property="selContactIds">
 																		${contact.id}
 																	</html:multibox>&nbsp;
 																	${contact.name}&nbsp;${contact.lastname}&nbsp;-
@@ -246,7 +246,7 @@
 												</td>
 											</tr>
 										</c:if>				                        										
-										<c:if test="${empty aimEditActivityForm.contactInformation.contacts && aimEditActivityForm.contactInformation.action=='search'}">
+										<c:if test="${empty contactForm.contacts && contactForm.action=='search'}">
 											<tr>
 												<td>
 													<br><br>&nbsp;&nbsp;&nbsp;
@@ -264,7 +264,7 @@
 					<!-- buttons start -->
 					<tr>
 						<td align="center" colspan="3">
-							<c:if test="${not empty aimEditActivityForm.contactInformation.contacts}">
+							<c:if test="${not empty contactForm.contacts}">
 								<table cellPadding="5">
 									<tr>
 										<td>
@@ -279,13 +279,13 @@
 										</td>
 									</tr>
 								</table>
-							</c:if>				
+							</c:if>
 						</td>
 					</tr>
 					<!-- buttons end -->
-				</table>				
+				</table>
 			</td>
-			</c:if>			
+			</c:if>
 			<!-- filter end -->
 		</tr>
 		<tr>

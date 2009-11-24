@@ -12,9 +12,11 @@ public class AddContact extends BodyTagSupport {
     public static final String PARAM_ADD_CONTACT_FORM_NAME = "PARAM_ADD_CONTACT_FORM_NAME";
     public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
     public static final String STYLE_CLASS_NAME = "CLASS"; //buttons standard class property
+    public static final String PARAM_CONTACT_TYPE="CONTACT_TYPE";
     private String collection = "";
     private Object form;
     private String styleClass="";
+    private String contactType=""; //donor,mofed,sector ministry, Project Coordinator , Implementing/Executing Agency
 
     public String getStyleClass() {
         return styleClass;
@@ -39,9 +41,18 @@ public class AddContact extends BodyTagSupport {
     public void setForm(Object form) {
         this.form = form;
     }
-    public int doStartTag() throws JspException {
+    
+    public String getContactType() {
+		return contactType;
+	}
+
+	public void setContactType(String contactType) {
+		this.contactType = contactType;
+	}
+
+	public int doStartTag() throws JspException {
 		try {
-                        pageContext.getSession().setAttribute(PARAM_ADD_CONTACT_FORM_NAME, form);
+            pageContext.getSession().setAttribute(PARAM_ADD_CONTACT_FORM_NAME, form);
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
 			html.append("<input type=\"button\" ");
@@ -49,7 +60,7 @@ public class AddContact extends BodyTagSupport {
 				html.append(STYLE_CLASS_NAME);
 				html.append("=");
 				html.append("\""+styleClass+"\"");
-			}
+			}			
 	
 			html.append(" onclick=\"javascript:selectContact('/aim/addAmpContactInfo.do~reset=true~action=create~");
 			if (!"".equalsIgnoreCase(collection)) {
@@ -58,7 +69,13 @@ public class AddContact extends BodyTagSupport {
 				html.append("=");
 				html.append(collection);
 				html.append("~");
-			}		
+			}
+			if(!"".equalsIgnoreCase(contactType)){
+				html.append(PARAM_CONTACT_TYPE);
+				html.append("=");
+				html.append(contactType);
+				html.append("~");
+			}
 			html.append("','addContactWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
 
 			out.write(html.toString());

@@ -38,6 +38,8 @@ public class AddContactComponentForm extends ActionForm {
 	private String[] contPhoneType;
 	private String[] contPhoneNumber;
 	private String[] contFaxes;
+	
+	private String activityContactType; //Donor contact, Mofed contact, e.t.c.
 
     public Long[] getSelContactOrgs() {
         return selContactOrgs;
@@ -240,5 +242,13 @@ public class AddContactComponentForm extends ActionForm {
 	public ContactPropertyHelper getPhones(int index) {
         return phones[index];
     }
+
+	public String getActivityContactType() {
+		return activityContactType;
+	}
+
+	public void setActivityContactType(String activityContactType) {
+		this.activityContactType = activityContactType;
+	}	
 	
 }

@@ -561,7 +561,7 @@ function resetAll()
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryDonorContIds" styleId="donors_${stat.index}" value="${donorContact.contact.temporaryId}" onchange="changePrimaryState('donor')"/>																					
 																				</td>
-																				<td>
+																				<td>	
 																					<c:set var="ampContactId">
 		                                            									<c:choose>
 		                                                									<c:when test="${empty donorContact.contact.id||donorContact.contact.id==0}">
@@ -575,6 +575,10 @@ function resetAll()
 																					 <aim:editContactLink collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${donorContact.contactType}">
 						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+						                                        					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																					<c:set target="${urlParams}" property="tempId">
+																						<bean:write name="donorContact" property="contact.temporaryId"/>
+																					</c:set>
 																					<c:set target="${urlParams}" property="contType" value="DONOR_CONT"/>
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
 																				</td>
@@ -583,8 +587,7 @@ function resetAll()
 																	</c:if>
 																	<tr>																		
 																		<td colspan="7" bgcolor="#ffffff">
-																			<aim:addContactButton collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactType="DONOR_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>
-																			<!-- <html:button property="submitButton" styleClass="dr-menu" onclick="AddContactButton('DONOR_CONT')">Add Contact</html:button> -->																		
+																			<aim:addContactButton collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactType="DONOR_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>						
 																		</td>
 																	</tr>																	
 																</table>												
@@ -654,6 +657,10 @@ function resetAll()
 																					 <aim:editContactLink collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${mofedContact.contactType}">
 						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+						                                        					<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+																					<c:set target="${urlParams1}" property="tempId">
+																						<bean:write name="mofedContact" property="contact.temporaryId"/>
+																					</c:set>
 																					<c:set target="${urlParams1}" property="contType" value="MOFED_CONT"/>
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams1"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
 																				</td>
@@ -732,6 +739,10 @@ function resetAll()
 																					 <aim:editContactLink collection="projCoordinatorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${projCoordinator.contactType}">
 						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+						                                        					<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+																					<c:set target="${urlParams2}" property="tempId">
+																						<bean:write name="projCoordinator" property="contact.temporaryId"/>
+																					</c:set>
 																					<c:set target="${urlParams2}" property="contType" value="PROJ_COORDINATOR_CONT"/>
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams2"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
 																				</td>
@@ -810,6 +821,10 @@ function resetAll()
 																					 <aim:editContactLink collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${sectorMinistry.contactType}">
 						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+																					<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
+																					<c:set target="${urlParams3}" property="tempId">
+																						<bean:write name="sectorMinistry" property="contact.temporaryId"/>
+																					</c:set>
 																					<c:set target="${urlParams3}" property="contType" value="SECTOR_MINISTRY_CONT"/>
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams3"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
 																				</td>
@@ -818,7 +833,7 @@ function resetAll()
 																	</c:if>
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
-																			<aim:addContactButton collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactType="SECTOR_MINISTRY_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>
+																			<aim:addContactButton collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactType="SECTOR_MINISTRY_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>																			
 																		</td>
 																	</tr>																	
 																</table>
@@ -889,6 +904,10 @@ function resetAll()
 																					 <aim:editContactLink collection="implExecutingAgencyContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${implExecAgency.contactType}">
 						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+						                                        					<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
+																					<c:set target="${urlParams4}" property="tempId">
+																						<bean:write name="implExecAgency" property="contact.temporaryId"/>
+																					</c:set>
 																					<c:set target="${urlParams4}" property="contType" value="IMPL_EXEC_AGENCY_CONT"/>
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams4"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
 																				</td>

@@ -66,9 +66,6 @@ public class ShowSectorTable extends Action {
         tableForm.setDonorColumnAdded(donorColumnAdded);
         List<AmpSectorTableYear> sectorTableYears = new ArrayList(secTableWidget.getYears());
         List<AmpSectorOrder> sectorOrders = new ArrayList(secTableWidget.getSectorsColumns());
-        List<Long> sectorIds = SectorTableWidgetUtil.getAmpSectorIds(id);
-        Long[] allSectorIds = new Long[sectorIds.size()];
-        sectorIds.toArray(allSectorIds);
         Iterator<AmpSectorOrder> sectorOrderIter = sectorOrders.iterator();
         SectorTableHelper sectorTableRowOther = new SectorTableHelper();
         sectorTableRowOther.setSectorName(headingOther);

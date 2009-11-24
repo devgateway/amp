@@ -167,7 +167,7 @@
 														
 															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${clickToEditSector}">${edittext}</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="55" align="center">
+														<td bgcolor="#ffffff" width="75" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSectorId">
 																<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />

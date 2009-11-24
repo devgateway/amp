@@ -66,7 +66,11 @@ public class Configuration {
 			PersistenceManager.initialize(false);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
+		}
+		catch (Error er) {
+			er.printStackTrace();
 		}
 	}
 

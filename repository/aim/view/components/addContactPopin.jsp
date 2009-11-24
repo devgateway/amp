@@ -78,7 +78,7 @@
                     <tr>
                     	<td colspan="2" align="center">
                         	<c:choose>
-                            	<c:when test="${empty aimEditActivityForm.contactInformation.organizations}">
+                            	<c:when test="${empty aimAddContactForm.organizations}">
                                 	<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimAddContactForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                 </c:when>
 							    <c:otherwise>
@@ -135,14 +135,16 @@
 						<td align="left" nowrap="nowrap">
 							<logic:notEmpty name="aimAddContactForm" property="faxes">
 								 <logic:iterate name="aimAddContactForm" property="faxes" id="foo" indexId="ctr">
-							         <html:text name="aimAddContactForm" property="faxes[${ctr}].value" size="30" styleId="fax_${ctr}"/>																												                    																												                    
-							         <a href="javascript:removeData('fax',${ctr})"> 
-								 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
-								 	</a>
-							        <c:if test="${ctr==aimAddContactForm.faxesSize-1}">
-							           	<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
-      									<input id="addFaxBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('fax')">
-							        </c:if>
+								 	<div>
+								 		<html:text name="aimAddContactForm" property="faxes[${ctr}].value" size="30" styleId="fax_${ctr}"/>																												                    																												                    
+								         <a href="javascript:removeData('fax',${ctr})"> 
+									 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+									 	</a>
+								        <c:if test="${ctr==aimAddContactForm.faxesSize-1}">
+								           	<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
+	      									<input id="addFaxBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('fax')">
+								        </c:if>
+								 	</div>							         
 							     </logic:iterate>
 							</logic:notEmpty>
 							<logic:empty name="aimAddContactForm" property="faxes">

@@ -9,13 +9,15 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 
 public class EditContactLink extends BodyTagSupport {
-     private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     public static final String PARAM_EDIT_CONTACT_FORM_NAME = "PARAM_EDIT_CONTACT_FORM_NAME";
     public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
     public static final String PARAM_CONTACT_ID = "PARAM_CONTACT_ID";
+    public static final String PARAM_CONTACT_TYPE="CONTACT_TYPE";
     private String collection = "";
     private Object form;
     private String contactId;
+    private String contactType="";
 
     public String getContactId() {
         return contactId;
@@ -41,10 +43,19 @@ public class EditContactLink extends BodyTagSupport {
     public void setForm(Object form) {
         this.form = form;
     }
-    @Override
+    
+    public String getContactType() {
+		return contactType;
+	}
+
+	public void setContactType(String contactType) {
+		this.contactType = contactType;
+	}
+
+	@Override
     public int doStartTag() throws JspException {
 		try {
-                        pageContext.getSession().setAttribute(PARAM_EDIT_CONTACT_FORM_NAME, form);
+            pageContext.getSession().setAttribute(PARAM_EDIT_CONTACT_FORM_NAME, form);
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
 
@@ -56,10 +67,16 @@ public class EditContactLink extends BodyTagSupport {
 				html.append(collection);
 				html.append("~");
 			}
-                        if (contactId!=null&&!"".equalsIgnoreCase(contactId)) {
+            if (contactId!=null&&!"".equalsIgnoreCase(contactId)) {
 				html.append(PARAM_CONTACT_ID);
 				html.append("=");
 				html.append(contactId);
+				html.append("~");
+			}
+            if(!"".equalsIgnoreCase(contactType)){
+				html.append(PARAM_CONTACT_TYPE);
+				html.append("=");
+				html.append(contactType);
 				html.append("~");
 			}
 			html.append("','addContactWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");

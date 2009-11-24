@@ -77,6 +77,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.EditActivityForm.Survey;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -1617,21 +1618,22 @@ public class SaveActivity extends Action {
 	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
+		ActivityContactInfo contactInfo=eaForm.getContactInformation();
 		
-		if(eaForm.getContactInformation().getResetDonorIds()!=null && eaForm.getContactInformation().getResetDonorIds()){
-			eaForm.getContactInformation().setPrimaryDonorContIds(null);
+		if(contactInfo.getResetDonorIds()!=null && contactInfo.getResetDonorIds()){
+			contactInfo.setPrimaryDonorContIds(null);
 		}
-		if(eaForm.getContactInformation().getResetMofedIds()!=null && eaForm.getContactInformation().getResetMofedIds()){
-			eaForm.getContactInformation().setPrimaryMofedContIds(null);
+		if(contactInfo.getResetMofedIds()!=null && contactInfo.getResetMofedIds()){
+			contactInfo.setPrimaryMofedContIds(null);
 		}
-		if(eaForm.getContactInformation().getResetProjCoordIds()!=null && eaForm.getContactInformation().getResetProjCoordIds()){
-			eaForm.getContactInformation().setPrimaryProjCoordContIds(null);
+		if(contactInfo.getResetProjCoordIds()!=null && contactInfo.getResetProjCoordIds()){
+			contactInfo.setPrimaryProjCoordContIds(null);
 		}
-		if(eaForm.getContactInformation().getResetSecMinIds()!=null && eaForm.getContactInformation().getResetSecMinIds()){
-			eaForm.getContactInformation().setPrimarySecMinContIds(null);
+		if(contactInfo.getResetSecMinIds()!=null && contactInfo.getResetSecMinIds()){
+			contactInfo.setPrimarySecMinContIds(null);
 		}
-		if(eaForm.getContactInformation().getResetImplExecutingIds()!=null && eaForm.getContactInformation().getResetImplExecutingIds()){
-			eaForm.getContactInformation().setPrimaryImplExecutingContIds(null);
+		if(contactInfo.getResetImplExecutingIds()!=null && contactInfo.getResetImplExecutingIds()){
+			contactInfo.setPrimaryImplExecutingContIds(null);
 		}
 		
 		String[] donorContsIds=null;
@@ -1642,11 +1644,11 @@ public class SaveActivity extends Action {
 		
 		if (check){
 			//Do the checks here
-			donorContsIds=eaForm.getContactInformation().getPrimaryDonorContIds();
-			mofedContsIds=eaForm.getContactInformation().getPrimaryMofedContIds();
-			projCoordContsIds=eaForm.getContactInformation().getPrimaryProjCoordContIds();
-			sectorMinContsIds=eaForm.getContactInformation().getPrimarySecMinContIds();
-			implExecutingContsIds=eaForm.getContactInformation().getPrimaryImplExecutingContIds();
+			donorContsIds=contactInfo.getPrimaryDonorContIds();
+			mofedContsIds=contactInfo.getPrimaryMofedContIds();
+			projCoordContsIds=contactInfo.getPrimaryProjCoordContIds();
+			sectorMinContsIds=contactInfo.getPrimarySecMinContIds();
+			implExecutingContsIds=contactInfo.getPrimaryImplExecutingContIds();
 			
 			if(donorContsIds!=null && donorContsIds.length>1){ //more then one primary contact is not allowed				
 				errors.add("invalidDonorCont",new ActionError("error.aim.addActivity.contactInfo.invalidDonorCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));				
@@ -1677,7 +1679,23 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		List<AmpActivityContact> allContacts=eaForm.getContactInformation().getActivityContacts();
+		List<AmpActivityContact> allContacts=new ArrayList<AmpActivityContact>(); //eaForm.getContactInformation().getActivityContacts();
+		if(contactInfo.getDonorContacts()!=null && contactInfo.getDonorContacts().size()>0){
+			allContacts.addAll(contactInfo.getDonorContacts());
+		}
+		if(contactInfo.getMofedContacts()!=null && contactInfo.getMofedContacts().size()>0){
+			allContacts.addAll(contactInfo.getMofedContacts());
+		}
+		if(contactInfo.getSectorMinistryContacts()!=null && contactInfo.getSectorMinistryContacts().size()>0){
+			allContacts.addAll(contactInfo.getSectorMinistryContacts());
+		}
+		if(contactInfo.getProjCoordinatorContacts()!=null && contactInfo.getProjCoordinatorContacts().size()>0){
+			allContacts.addAll(contactInfo.getProjCoordinatorContacts());
+		}
+		if(contactInfo.getImplExecutingAgencyContacts()!=null && contactInfo.getImplExecutingAgencyContacts().size()>0){
+			allContacts.addAll(contactInfo.getImplExecutingAgencyContacts());
+		}
+		
 		if(allContacts!=null && allContacts.size()>0){
 			for (AmpActivityContact ampActContact : allContacts) {
 				if(ampActContact.getContactType().equals(Constants.DONOR_CONTACT)){
@@ -1694,6 +1712,7 @@ public class SaveActivity extends Action {
 			}
 		}
 		
+		contactInfo.setActivityContacts(allContacts);		
 	}
 
 	private void fillActivityContactPrimaryField(String[] actContactIds,AmpActivityContact ampActContact) {

@@ -783,7 +783,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		  }
     		  if(count==0){ //if activity contains contact,which is not in contact list, we should remove it
     			  AmpActivityContact activityCont=(AmpActivityContact)session.get(AmpActivityContact.class, actContact.getId());
+    			  AmpContact cont=activityCont.getContact();
     			  session.delete(activityCont);
+    			  cont.getActivityContacts().remove(activityCont);
+    			  session.update(cont);    			  		  
     		  }
     	  }
       }
@@ -791,9 +794,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       if(activityContacts!=null && activityContacts.size()>0){
     	  for (AmpActivityContact activityContact : activityContacts) {
     	   	//save or update contact
-    		AmpContact contact=activityContact.getContact();   		
+    		AmpContact contact=activityContact.getContact();
     		AmpContact ampContact=null;
-    		if(contact.getId()!=null){ //contact already exists.    			
+    		if(contact.getId()!=null){ //contact already exists.
     			ampContact=(AmpContact)session.get(AmpContact.class, contact.getId());
     			ampContact.setName(contact.getName());
     			ampContact.setLastname(contact.getLastname());
@@ -809,6 +812,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     				}
     			}
     			ampContact.setProperties(null);
+    			if(ampContact.getOrganizations()!=null){
+    				ampContact.getOrganizations().clear();
+    			}
+    			ampContact.setOrganizations(contact.getOrganizations());
     			session.update(ampContact);    			    			
     		}else{
     			session.save(contact);
@@ -820,7 +827,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 						formProperty.setContact(ampContact);
 					}else{
 						formProperty.setContact(contact);
-					}					
+					}
 					session.save(formProperty);
 				}
 			}

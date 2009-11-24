@@ -5,13 +5,11 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -31,6 +30,7 @@ import org.digijava.module.aim.helper.ContactPropertyHelper;
 import org.digijava.module.aim.uicomponents.AddContact;
 import org.digijava.module.aim.uicomponents.EditContactLink;
 import org.digijava.module.aim.uicomponents.form.AddContactComponentForm;
+import org.digijava.module.aim.uicomponents.helper.ContactsComponentHelper;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -60,11 +60,16 @@ public class AddContactComponent extends DispatchAction{
 			 createForm.getEmails()[0]=AmpContactsWorker.createProperty(Constants.CONTACT_PROPERTY_NAME_EMAIL);
 		 }
 		 createForm.setEmailsSize(createForm.getEmails().length);
+		 //if we are creating contact from activity's contact step
+		 String activityContactType=request.getParameter(AddContact.PARAM_CONTACT_TYPE);
+		 if(activityContactType!=null && !activityContactType.equals("")){
+			 createForm.setActivityContactType(activityContactType);
+		 }		 
          return mapping.findForward("forward");
     }
 
 	private void clearForm(AddContactComponentForm createForm) {
-		createForm.setKeyword(null);
+		 createForm.setKeyword(null);
          createForm.setContacts(null);
          createForm.setLastname(null);
          createForm.setFirstName(null);
@@ -86,12 +91,12 @@ public class AddContactComponent extends DispatchAction{
          createForm.setContPhoneType(null);
          createForm.setContPhoneNumber(null);
          createForm.setContFaxes(null);
+         createForm.setActivityContactType(null);
 	}
 
-      public  ActionForward addOrganizations(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+      public  ActionForward addOrganizations(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
          AddContactComponentForm createForm = (AddContactComponentForm) form;
+         fillContactProperties(createForm);
          return setAction(createForm, mapping);
     }
 
@@ -104,10 +109,11 @@ public class AddContactComponent extends DispatchAction{
                  createForm.getOrganizations().remove(organization);
              }
          }
-        return setAction(createForm, mapping);
+         fillContactProperties(createForm);
+         return setAction(createForm, mapping);
     }
 
-      public ActionForward edit(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+     public ActionForward edit(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddContactComponentForm createForm = (AddContactComponentForm) form;
         clearForm(createForm);
         String contId = request.getParameter(EditContactLink.PARAM_CONTACT_ID);
@@ -119,83 +125,30 @@ public class AddContactComponent extends DispatchAction{
         createForm.setTargetCollection(collection);
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
-        Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
-        Iterator<AmpContact> contcatIter = targetCollecion.iterator();
-        while (contcatIter.hasNext()) {
-            AmpContact contact = contcatIter.next();
-            boolean compareIds=false;
-            try{
-                  compareIds=contact.getId() != null && contact.getId().equals(Long.valueOf(contId));
-                  if(!compareIds){
-                       compareIds=contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(contId);
-                  }
-            }
-            catch(NumberFormatException ex){
-                compareIds=contact.getTemporaryId()!=null && contact.getTemporaryId().equals(contId);
-            }
-
-            if(compareIds){
-                createForm.setKeyword(null);
-                createForm.setContacts(null);
-                createForm.setContactId(contact.getId());
-                createForm.setTemporaryId(contact.getTemporaryId());
-                createForm.setLastname(contact.getLastname());
-                createForm.setFirstName(contact.getName());
-                createForm.setOrganisationName(contact.getOrganisationName());
-                createForm.setSelContactIds(null);
-                if (contact.getTitle() != null) {
-                    createForm.setTitle(contact.getTitle().getId());
-                }
-                createForm.setOrganizations(new ArrayList<AmpOrganisation>());
-                if (contact.getOrganizations() != null) {
-                    createForm.getOrganizations().addAll(contact.getOrganizations());
-                }
-                createForm.setFunction(contact.getFunction());
-                createForm.setOfficeaddress(contact.getOfficeaddress());
-                
-                List<ContactPropertyHelper> contactProperties=AmpContactsWorker.buildHelperContactProperties(contact.getProperties()); //properties can't be null, cos contact has to have at lets 1 email
-        		
-        		List<ContactPropertyHelper> emails=null;
-        		List<ContactPropertyHelper> phones=null;
-        		List<ContactPropertyHelper> faxes=null;
-        		if(contactProperties!=null){
-        			for (ContactPropertyHelper property : contactProperties) {
-        				if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-        					if(emails==null){
-        						emails=new ArrayList<ContactPropertyHelper>();
-        					}
-        					emails.add(property);
-        				}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-        					if(phones==null){
-        						phones=new ArrayList<ContactPropertyHelper>();
-        					}
-        					phones.add(property);
-        				}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
-        					if(faxes==null){
-        						faxes=new ArrayList<ContactPropertyHelper>();
-        					}
-        					faxes.add(property);
-        				}
-        			}
-        		}
-        		
-        		if(emails!=null){
-        			createForm.setEmails(emails.toArray(new ContactPropertyHelper[emails.size()]));
-        			createForm.setEmailsSize(createForm.getEmails().length);
-        		}
-        		if(phones!=null){
-        			createForm.setPhones(phones.toArray(new ContactPropertyHelper[phones.size()]));
-        			createForm.setPhonesSize(createForm.getPhones().length);
-        		}
-        		if(faxes!=null){
-        			createForm.setFaxes(faxes.toArray(new ContactPropertyHelper[faxes.size()]));
-        			createForm.setFaxesSize(createForm.getFaxes().length);
-        		}
-            }
-
-        }
+        
+        
+  		String activityContactType=request.getParameter(EditContactLink.PARAM_CONTACT_TYPE);
+  		if(activityContactType!=null && !activityContactType.equals("")){//if we are creating contact from activity's contact step
+  			createForm.setActivityContactType(activityContactType);
+  			 
+  			Collection<AmpActivityContact> targetCollecion = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
+  	        Iterator<AmpActivityContact> actContIter = targetCollecion.iterator();
+  	        while (actContIter.hasNext()) {
+  	        	AmpActivityContact activityContact = actContIter.next();
+  	        	AmpContact contact=activityContact.getContact();
+  	        	fillFormFromContact(createForm, contId, contact);
+  	        }    
+  		}else{
+  			Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
+  	        Iterator<AmpContact> contcatIter = targetCollecion.iterator();
+  	        while (contcatIter.hasNext()) {
+  	            AmpContact contact = contcatIter.next();
+  	            fillFormFromContact(createForm, contId, contact);
+  	        }
+  		}
         return mapping.findForward("forward");
     }
+
       
     public ActionForward search(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddContactComponentForm createForm = (AddContactComponentForm) form;
@@ -254,36 +207,38 @@ public class AddContactComponent extends DispatchAction{
         return null;
 
     }
+
     public ActionForward addSelectedConts(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddContactComponentForm createForm = (AddContactComponentForm) form;
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
-        Collection<AmpContact> sortedtargetCollecion = new TreeSet<AmpContact>(new AmpContactCompare());
-        Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
-        if (targetCollecion != null) {
-            sortedtargetCollecion.addAll(targetCollecion);
-        }
-        else{
-            targetCollecion = new ArrayList<AmpContact>();
-        }
         Long[] contIds = createForm.getSelContactIds();
-        if (contIds != null && contIds.length > 0) {
-            for (int i = 0; i < contIds.length; i++) {
-                AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
-                if (!sortedtargetCollecion.contains(contact)) {
-                    sortedtargetCollecion.add(contact);
-                } else {
-                    sortedtargetCollecion.remove(contact);
-                    sortedtargetCollecion.add(contact);
+        String redirectWhere=null;
+        if(createForm.getActivityContactType()!=null && !createForm.getActivityContactType().equals("")){
+        	Collection<AmpActivityContact> targetCollecion = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
+       	 	if (contIds != null && contIds.length > 0) {
+                for (int i = 0; i < contIds.length; i++) {
+                    AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
+                    AmpActivityContact actContact=new AmpActivityContact();	
+            		actContact.setContact(contact);
+            		actContact.setContactType(createForm.getActivityContactType());
+                    targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());
                 }
             }
-
+       	 	target.set(createForm.getTargetForm(), targetCollecion);
+       	 	redirectWhere="step8";
+        }else{
+        	 Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
+        	 if (contIds != null && contIds.length > 0) { 
+                 for (int i = 0; i < contIds.length; i++) {
+                     AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
+                     targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, contact, new ContactsComponentHelper.AmpContactCompare());
+                 }
+             }
+        	 target.set(createForm.getTargetForm(), targetCollecion);
+        	 redirectWhere="editOrg";
         }
-        targetCollecion.clear();
-        targetCollecion.addAll(sortedtargetCollecion);
-        target.set(createForm.getTargetForm(), targetCollecion);
-
-        return mapping.findForward("edit");
+        return mapping.findForward(redirectWhere);
 
     }
     
@@ -343,25 +298,44 @@ public class AddContactComponent extends DispatchAction{
         
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
-        Collection<AmpContact> sortedtargetCollecion = new TreeSet<AmpContact>(new AmpContactCompare());
-        Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
-        if (targetCollecion != null) {
-        	sortedtargetCollecion.addAll(targetCollecion);
-        } else {
-            targetCollecion = new ArrayList<AmpContact>();
+        if(createForm.getActivityContactType()!=null && !createForm.getActivityContactType().equals("")){
+        	//Collection<AmpActivityContact> sortedCollection=new TreeSet<AmpActivityContact>(new AmpActivityContactCompareByContact());
+        	Collection<AmpActivityContact> targetCollecion = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
+            AmpActivityContact actContact=new AmpActivityContact();	
+    		actContact.setContact(contact);
+    		actContact.setContactType(createForm.getActivityContactType());
+    		//targetCollecion=ContactsComponentHelper.getActContactCollectionFiller().fillTargetFormCollection(targetCollecion, sortedCollection, actContact);
+    		//targetCollecion=new ContactsComponentHelper.AmpActivityContactCollectionFiller().fillTargetFormCollection(targetCollecion, sortedCollection, actContact);
+    		targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());
+    		target.set(createForm.getTargetForm(), targetCollecion);
+    	        
+    	    return mapping.findForward("step8");
+        }else{
+        	//Collection<AmpContact> sortedtargetCollecion = new TreeSet<AmpContact>(new AmpContactCompare());
+            Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
+            targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, contact, new ContactsComponentHelper.AmpContactCompare());
+            //targetCollecion=ContactsComponentHelper.getAmpContCollectionFiller().fillTargetFormCollection(targetCollecion, sortedtargetCollecion, contact);
+            //targetCollecion=new ContactsComponentHelper.AmpContactCollectionFiller().fillTargetFormCollection(targetCollecion, sortedtargetCollecion, contact);
+//            if (targetCollecion != null) {
+//            	sortedtargetCollecion.addAll(targetCollecion);
+//            } else {
+//                targetCollecion = new ArrayList<AmpContact>();
+//            }
+//            if (!sortedtargetCollecion.contains(contact)) {
+//            	sortedtargetCollecion.add(contact);
+//            } else {
+//                //removing because properties may be changed...
+//                sortedtargetCollecion.remove(contact);
+//                sortedtargetCollecion.add(contact);
+//            }
+//            targetCollecion.clear();
+//            targetCollecion.addAll(sortedtargetCollecion);
+    
+            target.set(createForm.getTargetForm(), targetCollecion);
         }
-        if (!sortedtargetCollecion.contains(contact)) {
-        	sortedtargetCollecion.add(contact);
-        } else {
-            //removing because properties may be changed...
-            sortedtargetCollecion.remove(contact);
-            sortedtargetCollecion.add(contact);
-        }
-        targetCollecion.clear();
-        targetCollecion.addAll(sortedtargetCollecion);
-
-        target.set(createForm.getTargetForm(), targetCollecion);
-        return mapping.findForward("edit");
+        
+        
+        return mapping.findForward("editOrg");
         /* ContactInfoUtil.saveOrUpdateContact(contact);
         createForm.setSelContactIds(new Long[]{contact.getId()});
         return addSelectedConts(mapping, form, request, response);*/
@@ -453,6 +427,15 @@ public class AddContactComponent extends DispatchAction{
 		return setAction(myForm, mapping);
      }
      
+     private ActionForward setAction(AddContactComponentForm createForm, ActionMapping mapping) {
+         if (createForm.getContactId() == null || createForm.getContactId() == 0) {
+             createForm.setAction("add");
+         } else {
+             createForm.setAction("edit");
+         }
+         return mapping.findForward("forward");
+     }
+     
      //fills properties array from form submitted values  ---- ADD NEW DATA !
  	private ContactPropertyHelper[] buildContactPropertiesForAddNewData(ContactPropertyHelper [] oldProperties, String propertyName, String [] submittedValues, String[] phoneTypes){
  		ContactPropertyHelper [] retVal=null;
@@ -471,17 +454,8 @@ public class AddContactComponent extends DispatchAction{
  			retVal[oldProperties.length]=AmpContactsWorker.createProperty(propertyName);			
  		}	
  		return retVal;
- 	}
-
-    
- 	private ActionForward setAction(AddContactComponentForm createForm, ActionMapping mapping) {
-        if (createForm.getContactId() == null || createForm.getContactId() == 0) {
-            createForm.setAction("add");
-        } else {
-            createForm.setAction("edit");
-        }
-        return mapping.findForward("forward");
-    }
+ 	}    
+ 	
     
     private ContactPropertyHelper[] buildContactPropertiesBeforeRemoveData(String propertyName, String [] submittedValues, String[] phoneTypes){
 		ContactPropertyHelper [] retVal=null;
@@ -497,6 +471,7 @@ public class AddContactComponent extends DispatchAction{
 		}
 		return retVal;
 	}
+    
     
     private void fillContactProperties(AddContactComponentForm myForm){
     	myForm.setEmails(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
@@ -517,26 +492,78 @@ public class AddContactComponent extends DispatchAction{
 		}else{
 			myForm.setFaxesSize(0);
 		}
-	}
+	}    
 
-    class AmpContactCompare implements Comparator<AmpContact> {
-        public int compare(AmpContact cont1, AmpContact cont2) {
-            if(cont1.getId()!=null&&cont2.getId()!=null){
-                return cont1.getId().compareTo(cont2.getId());
-            }
-            else{
-                 if(cont1.getId()==null&&cont2.getId()==null){
-                       return cont1.getTemporaryId().compareTo(cont2.getTemporaryId());
-                 }
-                 else{
-                     if(cont1.getId()==null){
-                         return -1;
-                     }
-                     else{
-                         return 1;
-                     }
-                 }
-            }            
-        }
-    }
+    private void fillFormFromContact(AddContactComponentForm createForm,String contId, AmpContact contact) {
+		boolean compareIds=false;
+		try{
+		      compareIds=contact.getId() != null && contact.getId().equals(Long.valueOf(contId));
+		      if(!compareIds){
+		           compareIds=contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(contId);
+		      }
+		}catch(NumberFormatException ex){
+		    compareIds=contact.getTemporaryId()!=null && contact.getTemporaryId().equals(contId);
+		}
+
+		if(compareIds){
+		    createForm.setKeyword(null);
+		    createForm.setContacts(null);
+		    createForm.setContactId(contact.getId());
+		    createForm.setTemporaryId(contact.getTemporaryId());
+		    createForm.setLastname(contact.getLastname());
+		    createForm.setFirstName(contact.getName());
+		    createForm.setOrganisationName(contact.getOrganisationName());
+		    createForm.setSelContactIds(null);
+		    if (contact.getTitle() != null) {
+		        createForm.setTitle(contact.getTitle().getId());
+		    }
+		    createForm.setOrganizations(new ArrayList<AmpOrganisation>());
+		    if (contact.getOrganizations() != null) {
+		        createForm.getOrganizations().addAll(contact.getOrganizations());
+		    }
+		    createForm.setFunction(contact.getFunction());
+		    createForm.setOfficeaddress(contact.getOfficeaddress());
+		    
+		    List<ContactPropertyHelper> contactProperties=AmpContactsWorker.buildHelperContactProperties(contact.getProperties()); //properties can't be null, cos contact has to have at lets 1 email
+			
+			List<ContactPropertyHelper> emails=null;
+			List<ContactPropertyHelper> phones=null;
+			List<ContactPropertyHelper> faxes=null;
+			if(contactProperties!=null){
+				for (ContactPropertyHelper property : contactProperties) {
+					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+						if(emails==null){
+							emails=new ArrayList<ContactPropertyHelper>();
+						}
+						emails.add(property);
+					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+						if(phones==null){
+							phones=new ArrayList<ContactPropertyHelper>();
+						}
+						phones.add(property);
+					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
+						if(faxes==null){
+							faxes=new ArrayList<ContactPropertyHelper>();
+						}
+						faxes.add(property);
+					}
+				}
+			}
+			
+			if(emails!=null){
+				createForm.setEmails(emails.toArray(new ContactPropertyHelper[emails.size()]));
+				createForm.setEmailsSize(createForm.getEmails().length);
+			}
+			if(phones!=null){
+				createForm.setPhones(phones.toArray(new ContactPropertyHelper[phones.size()]));
+				createForm.setPhonesSize(createForm.getPhones().length);
+			}
+			if(faxes!=null){
+				createForm.setFaxes(faxes.toArray(new ContactPropertyHelper[faxes.size()]));
+				createForm.setFaxesSize(createForm.getFaxes().length);
+			}
+			
+		}
+	}
+    
 }

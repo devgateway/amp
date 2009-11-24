@@ -51,9 +51,16 @@
 											<logic:notEmpty name="identification" property="selectedOrganizations">
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
-												<c:forEach items="${identification.selectedOrganizations}" var="selectedOrganizations">
+												<tr><td>
+												<c:if test="${identification.selectedOrganizations != null}">
+												<table class="box-border">
+												<tr style="background-color: rgb(204, 219, 255); ">
+												<td>&nbsp;</td>
+												<td style="font-weight: bold;"><digi:trn>Organization</digi:trn></td>
+												<td style="font-weight: bold;"><digi:trn>Project Id</digi:trn></td>
+												</tr>
+													<c:forEach items="${identification.selectedOrganizations}" var="selectedOrganizations">
 													<tr>
-
 														<c:if test="${!empty selectedOrganizations.id}">
 															<td align="left" width=3>
 																<html:multibox styleId="selOrgs" property="identification.selOrgs">
@@ -71,6 +78,9 @@
 													  </c:if>	
 													</tr>
 													</c:forEach>
+													</table>
+													</c:if>
+													</td></tr>
 													<tr><td colspan="3">
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
@@ -83,7 +93,8 @@
 																</td>
 															</tr>
 														</table>
-													</td></tr>
+													</td>
+													</tr>
 												</table>
 											</td>
 											</logic:notEmpty>

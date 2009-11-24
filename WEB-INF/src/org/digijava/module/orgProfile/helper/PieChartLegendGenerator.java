@@ -54,10 +54,10 @@ public class PieChartLegendGenerator implements PieSectionLabelGenerator {
 
             result += lastText + '\n';
         }
-        if (result.charAt(result.length() - 1) == '\n') {
+        if (result.length() > 0) {
             result = result.substring(0, result.length() - 1);
         }
-
+        
         return result;
     }
 

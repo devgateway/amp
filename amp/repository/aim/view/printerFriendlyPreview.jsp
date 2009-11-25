@@ -1841,7 +1841,11 @@
 															<div>
 																<c:out value="${donorContact.contact.name}"/>
 																<c:out value="${donorContact.contact.lastname}"/> -
-																<c:out value="${donorContact.contact.email}"/>			
+																<c:forEach var="property" items="${donorContact.contact.properties}">
+																	<c:if test="${property.name=='contact email'}">
+																		<c:out value="${property.value}"/> ;
+																	</c:if>
+																</c:forEach>			
 															</div>
 														</c:forEach>
 													</c:if>																						
@@ -1859,7 +1863,11 @@
 															<div>
 																<c:out value="${mofedContact.contact.name}"/>
 																<c:out value="${mofedContact.contact.lastname}"/> -
-																<c:out value="${mofedContact.contact.email}"/>			
+																<c:forEach var="property" items="${mofedContact.contact.properties}">
+																	<c:if test="${property.name=='contact email'}">
+																		<c:out value="${property.value}"/> ;
+																	</c:if>
+																</c:forEach>			
 															</div>
 														</c:forEach>
 													</c:if>
@@ -1877,7 +1885,11 @@
 															<div>
 																<c:out value="${projCoordinatorContact.contact.name}"/>
 																<c:out value="${projCoordinatorContact.contact.lastname}"/> -
-																<c:out value="${projCoordinatorContact.contact.email}"/>			
+																<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
+																	<c:if test="${property.name=='contact email'}">
+																		<c:out value="${property.value}"/> ;
+																	</c:if>
+																</c:forEach>			
 															</div>
 														</c:forEach>
 													</c:if>
@@ -1895,7 +1907,11 @@
 															<div>
 																<c:out value="${sectorMinistryContact.contact.name}"/>
 																<c:out value="${sectorMinistryContact.contact.lastname}"/> -
-																<c:out value="${sectorMinistryContact.contact.email}"/>			
+																<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
+																	<c:if test="${property.name=='contact email'}">
+																		<c:out value="${property.value}"/>;
+																	</c:if>
+																</c:forEach>			
 															</div>
 														</c:forEach>
 													</c:if>
@@ -1913,7 +1929,11 @@
 															<div>
 																<c:out value="${implExecAgencyContact.contact.name}"/>
 																<c:out value="${implExecAgencyContact.contact.lastname}"/> -
-																<c:out value="${implExecAgencyContact.contact.email}"/>			
+																<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
+																	<c:if test="${property.name=='contact email'}">
+																		<c:out value="${property.value}"/>;
+																	</c:if>
+																</c:forEach>
 															</div>
 														</c:forEach>
 													</c:if>

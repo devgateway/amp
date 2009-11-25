@@ -2312,9 +2312,15 @@ public class ExportActivityToPDF extends Action {
 			String output="";
 			for (AmpActivityContact cont : contacts) {
 				Set<AmpContactProperty> contactProperties=cont.getContact().getProperties();
-				List<AmpContactProperty> emails=null;
-				// !!!!!!!!!!!!!!!!!!! here I should have inner table for emails !
-				//output+=cont.getContact().getName()+" "+cont.getContact().getLastname()+"- "+cont.getContact().getEmail()+ "\n";
+				String emails="";
+				if(contactProperties!=null){
+					for (AmpContactProperty email : contactProperties) {
+						if(email.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+							emails+=email.getValue()+"; ";
+						}
+					}
+				}				
+				output+=cont.getContact().getName()+" "+cont.getContact().getLastname()+"- "+emails+ "\n";
 			}
 			paragraph=new Paragraph(output,plainFont);
 			paragraph.setAlignment(Element.ALIGN_LEFT);

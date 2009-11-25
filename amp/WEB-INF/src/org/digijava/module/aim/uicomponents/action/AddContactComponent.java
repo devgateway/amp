@@ -219,7 +219,8 @@ public class AddContactComponent extends DispatchAction{
        	 	if (contIds != null && contIds.length > 0) {
                 for (int i = 0; i < contIds.length; i++) {
                     AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
-                    AmpActivityContact actContact=new AmpActivityContact();	
+                    contact.setTemporaryId("_"+new Date().getTime());
+                    AmpActivityContact actContact=new AmpActivityContact();
             		actContact.setContact(contact);
             		actContact.setContactType(createForm.getActivityContactType());
                     targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());

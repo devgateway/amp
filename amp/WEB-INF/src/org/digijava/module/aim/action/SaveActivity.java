@@ -1712,7 +1712,7 @@ public class SaveActivity extends Action {
 			}
 		}
 		
-		contactInfo.setActivityContacts(allContacts);		
+		contactInfo.setActivityContacts(allContacts);
 	}
 
 	private void fillActivityContactPrimaryField(String[] actContactIds,AmpActivityContact ampActContact) {

@@ -24,7 +24,9 @@ public class WorkspaceManager extends Action {
 
 	private static Logger logger = Logger.getLogger(WorkspaceManager.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
@@ -74,15 +76,6 @@ public class WorkspaceManager extends Action {
 			NUM_RECORDS =ampWorkspaces.size();
 		}
 		
-		/*
-		 * check whether the numPages is less than the page . if yes return
-		 * error.
-		 */
-
-		int currPage = wsForm.getPage();
-		int stIndex = ((currPage - 1) * NUM_RECORDS);
-		int edIndex = stIndex + NUM_RECORDS;
-		
 		Collection<AmpTeam> colAt=new ArrayList<AmpTeam>();
 		for (AmpTeam at : ampWorkspaces) {
 			at.setChildrenWorkspaces(TeamUtil.getAllChildrenWorkspaces(at.getAmpTeamId()));
@@ -104,17 +97,13 @@ public class WorkspaceManager extends Action {
 				  workspaces.add(ampTeam);
 			  }
 			}
-		//pages
-		int numPages = workspaces.size() / NUM_RECORDS;
-		numPages += (workspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
-		//workspaces for current page
-		if(edIndex>workspaces.size()){
-			edIndex=workspaces.size();	
 		}
-		workspaces=((List)workspaces).subList(stIndex, edIndex);
 		
 		//pages
 		Collection<Integer> pages = null;
+		int currPage = wsForm.getPage();
+		int stIndex = ((currPage - 1) * NUM_RECORDS);
+		int edIndex = stIndex + NUM_RECORDS;
 				
 		Collection<AmpTeam> workspacesFiltered=new ArrayList<AmpTeam>();
 		if(!workspaces.isEmpty())
@@ -142,10 +131,8 @@ public class WorkspaceManager extends Action {
 		}
 		
 		wsForm.setPages(pages);
-		}
 		return mapping.findForward("forward");
 	}
-
 	
 	private Collection<Integer> setupPagination(Collection<AmpTeam> workspaces, int currentPage, int numberOfRecordsPerPage){		
 		Collection<Integer> pages=null;

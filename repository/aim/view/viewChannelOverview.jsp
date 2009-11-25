@@ -1040,8 +1040,12 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 																				<i><digi:trn>Email</digi:trn></i>:
 																				<c:if test="${not empty aimChannelOverviewForm.primaryDonorContact}">
-																					<c:set	var="mailTo" value="mailto:${aimChannelOverviewForm.primaryDonorContact.contact.email}" /> 
-																					<a	href="mailto:${aimChannelOverviewForm.primaryDonorContact.contact.email}">${aimChannelOverviewForm.primaryDonorContact.contact.email}</a>
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryDonorContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																						</c:if>
+																					</c:forEach>																					
 																				</c:if>
 																			</TD>
 																		</TR>
@@ -1076,8 +1080,12 @@ function commentWin(val) {
 																				<TD bgcolor="#ffffff">
 																					<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
 																					<c:if test="${not empty aimChannelOverviewForm.primaryMofedContact}">
-																						<c:set	var="mailTo" value="mailto:${aimChannelOverviewForm.primaryMofedContact.contact.email}" /> 
-																						<a	href="mailto:${aimChannelOverviewForm.primaryMofedContact.contact.email}">${aimChannelOverviewForm.primaryMofedContact.contact.email}</a>
+																						<c:forEach var="property" items="${aimChannelOverviewForm.primaryMofedContact.contact.properties}">
+																							<c:if test="${property.name=='contact email'}">
+																								<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																								<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																							</c:if>
+																						</c:forEach>																					
 																					</c:if>
 																				</TD>
 																			</TR>
@@ -1112,8 +1120,12 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
 																				<c:if test="${not empty aimChannelOverviewForm.primaryprojCoordinatorContact}">
-																					<c:set	var="mailTo" value="mailto:${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.email}" /> 
-																					<a	href="mailto:${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.email}">${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.email}</a>
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a>;
+																						</c:if>
+																					</c:forEach>																					
 																				</c:if>
 																			</TD>
 																		</TR>
@@ -1148,8 +1160,12 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
 																				<c:if test="${not empty aimChannelOverviewForm.primarySectorMinistryContact}">
-																					<c:set	var="mailTo" value="mailto:${aimChannelOverviewForm.primarySectorMinistryContact.contact.email}" /> 
-																					<a	href="mailto:${aimChannelOverviewForm.primarySectorMinistryContact.contact.email}">${aimChannelOverviewForm.primarySectorMinistryContact.contact.email}</a>
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primarySectorMinistryContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																						</c:if>
+																					</c:forEach>																					
 																				</c:if>
 																			</TD>
 																		</TR>
@@ -1184,8 +1200,12 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 																				<i><digi:trn>Email</digi:trn></i>: 
 																				<c:if test="${not empty aimChannelOverviewForm.primaryImplExecutingAgencyContact}">
-																					<c:set	var="mailTo" value="mailto:${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.email}" /> 
-																					<a	href="mailto:${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.email}">${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.email}</a>
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																						</c:if>
+																					</c:forEach>																					
 																				</c:if>
 																			</TD>
 																		</TR>

@@ -200,7 +200,7 @@
 													<!-- page logic for pagination -->
 													<logic:notEmpty name="aimWorkspaceForm" property="pages">
 													<tr bgcolor="#ffffff">
-														<td colspan="5">
+														<td colspan="6">
 															<digi:trn>Pages :</digi:trn>
 															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
 															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"

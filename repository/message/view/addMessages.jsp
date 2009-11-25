@@ -320,7 +320,7 @@
 																	</tr>
 																	<tr>
 																	  <field:display name="Related Activity Dropdown" feature="Create Message Form">
-																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
+																		<td align="right" nowrap="nowrap"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
 																			<div id="statesautocomplete"> 
 																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:320px;font-size:100%"></html:text>																			    
@@ -343,17 +343,17 @@
 																	<tr>
 																		 <field:display name="Set Alert Drop down" feature="Create Message Form">
 																			<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
-																			<td align="left"> 
-	                                                                                            <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
-																								  <html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
-																								  <html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
-																			  				    </html:select>																												                                                																																												
+																			<td align="left">
+	                                                                        	<html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
+																					<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
+																					<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
+																			  	</html:select>																												                                                																																												
 																			</td>
 																		</field:display>
 																      </tr>	
                                                                        <tr>
                                                                        		<field:display name="Recievers" feature="Create Message Form">
-																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
+																					<td nowrap="nowrap" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>

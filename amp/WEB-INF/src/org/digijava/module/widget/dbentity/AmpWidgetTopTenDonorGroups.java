@@ -6,7 +6,9 @@ import org.digijava.module.widget.helper.WidgetVisitor;
 
 
 public class AmpWidgetTopTenDonorGroups extends AmpWidget {
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public void accept(WidgetVisitor visitor) {
         visitor.visit(this);
     }

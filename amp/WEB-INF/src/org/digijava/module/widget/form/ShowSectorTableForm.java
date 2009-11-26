@@ -2,12 +2,14 @@
 package org.digijava.module.widget.form;
 
 import java.util.List;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.widget.helper.SectorTableHelper;
 
 public class ShowSectorTableForm  extends ActionForm {
-    private Long widgetId;
+	private static final long serialVersionUID = 1L;
+	private Long widgetId;
     private List<SectorTableHelper> sectorsInfo;
     private List<String> years;
     private List<AmpOrganisation> donors;

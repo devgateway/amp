@@ -2,9 +2,9 @@
 package org.digijava.module.widget.action;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

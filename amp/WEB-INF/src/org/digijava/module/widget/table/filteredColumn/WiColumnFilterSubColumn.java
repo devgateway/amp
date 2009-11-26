@@ -23,8 +23,11 @@ public class WiColumnFilterSubColumn extends WiColumnStandard {
                     cell.saveData(dbSession, dbColumn);
                 }
                 for (WiCell trashedCell : trashedCells) {
-                    trashedCell.removeData(dbSession, dbColumn);
+                	if (trashedCell.getId() != null && trashedCell.getId() >0){
+                		trashedCell.removeData(dbSession, dbColumn);
+                	}
                 }
+                this.clearTrashedCells();
             } catch (HibernateException e) {
                 throw new DgException("cannot save column, ID=" + getId(), e);
             }

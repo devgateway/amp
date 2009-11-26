@@ -1,6 +1,7 @@
 package org.digijava.module.widget.dbentity;
 
 import java.util.Set;
+
 import org.digijava.module.widget.helper.WidgetVisitor;
 
 /**

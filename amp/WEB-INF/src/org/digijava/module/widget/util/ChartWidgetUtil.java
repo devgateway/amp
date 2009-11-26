@@ -48,8 +48,11 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
+import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -57,12 +60,15 @@ import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
 import org.digijava.module.widget.helper.DonorSectorPieChartURLGenerator;
+import org.digijava.module.widget.helper.SectorHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
@@ -83,17 +89,10 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.ui.RectangleInsets;
-import org.digijava.module.widget.helper.SectorHelper;
-import org.jfree.chart.axis.NumberAxis;
-import org.digijava.module.aim.util.SectorUtil;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.VerticalAlignment;
-import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
-import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
-import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.Size2D;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
 
 /**
  * Chart widgets util.
@@ -843,7 +842,8 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
 
-    public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
+    @SuppressWarnings("unchecked")
+	public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
         Long year = filter.getYear();
         Long orgGroupId = filter.getOrgGroupId();
         double regionalTotal=0;
@@ -890,7 +890,6 @@ public class ChartWidgetUtil {
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += getTeamQuery(teamMember);
         Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings("unchecked")
         List<AmpCategoryValueLocations> regions = null;
         try {
             Query query = session.createQuery(oql);
@@ -1005,7 +1004,7 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
 
-    @SuppressWarnings("empty-statement")
+	@SuppressWarnings("unchecked")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
 
 
@@ -1066,7 +1065,6 @@ public class ChartWidgetUtil {
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.name='Primary' ";
         oql+=getTeamQuery(tm);
         Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings("unchecked")
         List<AmpSector> sectors = null;
         try {
             Query query = session.createQuery(oql);
@@ -1131,7 +1129,8 @@ public class ChartWidgetUtil {
      * @see FundingCalculationsHelper
      */
 
-    public static DecimalWraper getSectorFunding(Date startDate, Date endDate, Long orgId, Long orgGroupId, int transactionType, Long sectorId, String currCode, TeamMember tm) throws DgException {
+    @SuppressWarnings("unchecked")
+	public static DecimalWraper getSectorFunding(Date startDate, Date endDate, Long orgId, Long orgGroupId, int transactionType, Long sectorId, String currCode, TeamMember tm) throws DgException {
         Session session = PersistenceManager.getRequestDBSession();
         String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
         oql += " from ";
@@ -1205,7 +1204,8 @@ public class ChartWidgetUtil {
 
 
 
-	   public static DecimalWraper getFundingByFinancingInstrument(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long financingInstrumentId, String currCode, int transactionType, TeamMember tm) throws DgException {
+	   @SuppressWarnings("unchecked")
+	public static DecimalWraper getFundingByFinancingInstrument(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long financingInstrumentId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
         oql += " from ";
@@ -1230,7 +1230,6 @@ public class ChartWidgetUtil {
 
 
         Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings("unchecked")
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
@@ -1289,7 +1288,8 @@ public class ChartWidgetUtil {
 
 
 
-	   public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long assistanceTypeId, String currCode, int transactionType, TeamMember tm) throws DgException {
+	   @SuppressWarnings("unchecked")
+	public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long assistanceTypeId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
         oql += " from ";
@@ -1313,7 +1313,6 @@ public class ChartWidgetUtil {
         oql += getTeamQuery(tm);
 
         Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings("unchecked")
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
@@ -1367,7 +1366,8 @@ public class ChartWidgetUtil {
 
 
 
-    public static double getPledgesFunding(Long orgID, Long orgGroupId,  Date startDate,Date endDate, String currCode) throws DgException {
+    @SuppressWarnings("unchecked")
+	public static double getPledgesFunding(Long orgID, Long orgGroupId,  Date startDate,Date endDate, String currCode) throws DgException {
         double totalPlannedPldges = 0;
         String oql = "select fd ";
         oql += " from ";
@@ -1383,7 +1383,6 @@ public class ChartWidgetUtil {
         }
         oql += " and fd.date>=:startDate and fd.date<=:endDate ";
         Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings("unchecked")
         List<AmpPledge> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
@@ -1477,26 +1476,18 @@ public class ChartWidgetUtil {
             }
 
         }
-
-
-
         return orgIds;
-
-
     }
 
-       public static String getOrganizationQuery(boolean orgGroupView) {
-        String qry="";
-        if(orgGroupView){
-            qry=" and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId=:orgGroupId ";
-        }
-        else{
-           qry=" and f.ampDonorOrgId=:orgID ";
-        }
-        return qry;
-
-    }
-
+	public static String getOrganizationQuery(boolean orgGroupView) {
+		String qry = "";
+		if (orgGroupView) {
+			qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId=:orgGroupId ";
+		} else {
+			qry = " and f.ampDonorOrgId=:orgID ";
+		}
+		return qry;
+	}
 
       /**
        * Returns actual or planned amount in selected currency
@@ -1508,9 +1499,8 @@ public class ChartWidgetUtil {
        * @return
        * @throws org.digijava.kernel.exception.DgException
        */
-
-
-    public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, String currCode, boolean isComm, TeamMember tm) throws DgException {
+    @SuppressWarnings("unchecked")
+	public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, String currCode, boolean isComm, TeamMember tm) throws DgException {
         String oql = "select fd ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() +
@@ -1532,7 +1522,6 @@ public class ChartWidgetUtil {
 
 
         Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings("unchecked")
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);

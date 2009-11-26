@@ -2,11 +2,13 @@ package org.digijava.module.widget.dbentity;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.digijava.module.widget.helper.WidgetVisitor;
 
 public class AmpSectorTableWidget extends AmpWidget {
 
-    private Set<AmpSectorOrder> sectorsColumns;
+	private static final long serialVersionUID = 1L;
+	private Set<AmpSectorOrder> sectorsColumns;
     private Set<AmpSectorTableYear> years;
     private Long donorYear;
 

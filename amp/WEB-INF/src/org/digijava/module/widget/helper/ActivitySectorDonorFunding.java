@@ -2,6 +2,7 @@ package org.digijava.module.widget.helper;
 
 
 import java.util.List;
+
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;

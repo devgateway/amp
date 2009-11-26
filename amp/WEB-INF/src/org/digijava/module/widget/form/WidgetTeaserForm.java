@@ -2,7 +2,6 @@ package org.digijava.module.widget.form;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.widget.dbentity.AmpWidget;
-import org.digijava.module.widget.oldTable.DaTable;
 import org.digijava.module.widget.table.WiTable;
 
 /**
@@ -25,7 +24,6 @@ public class WidgetTeaserForm extends ActionForm {
 	 */
 	private String embeddedHtml;
 	private AmpWidget widget;
-	private DaTable table;
 	private WiTable tableWidget;
 	/**
 	 * multi-purpose ID.
@@ -92,12 +90,6 @@ public class WidgetTeaserForm extends ActionForm {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public DaTable getTable() {
-		return table;
-	}
-	public void setTable(DaTable table) {
-		this.table = table;
 	}
 	public String getPlaceName() {
 		return placeName;

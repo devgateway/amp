@@ -4,13 +4,11 @@
 
 package org.digijava.module.aim.util;
 
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -225,11 +223,17 @@ public class TeamUtil {
         return col;
     }
 
-    public static Collection getAllChildrenWorkspaces(Long id) {
+    /**
+     * Returns children workspaces for specified parent.
+     * @param id pk of prent workspace.
+     * @return collection of {@link AmpTeam} beans.
+     */
+    @SuppressWarnings("unchecked")
+	public static Collection<AmpTeam> getAllChildrenWorkspaces(Long id) {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection<AmpTeam> col = new ArrayList<AmpTeam>();
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             String query = "select team from " + AmpTeam.class.getName()
                 + " team where (team.parentTeamId.ampTeamId=:pid) order by name";
             Query qry = session.createQuery(query);
@@ -237,23 +241,16 @@ public class TeamUtil {
             col = qry.list();
 
         } catch(Exception e) {
+        	//FIXME why runtime exception?
             throw new RuntimeException(e);
-
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
         }
        return col;
     }
     
-    public static Collection getAllRelatedTeamsByType(String type) {
+    @SuppressWarnings("unchecked")
+	public static Collection<AmpTeam> getAllRelatedTeamsByType(String type) {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection<AmpTeam> col = new ArrayList<AmpTeam>();
 
         try {
             session = PersistenceManager.getSession();

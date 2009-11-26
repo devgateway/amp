@@ -2,11 +2,13 @@ package org.digijava.module.widget.dbentity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.digijava.module.widget.helper.WidgetVisitor;
 
 public class AmpParisIndicatorTableWidget extends AmpWidget {
 
-    private Long donorGroupYear;
+	private static final long serialVersionUID = 1L;
+	private Long donorGroupYear;
     private List<AmpParisIndicatorBaseTargetValues> parisIndicators;
 
     public List<AmpParisIndicatorBaseTargetValues> getParisIndicators() {

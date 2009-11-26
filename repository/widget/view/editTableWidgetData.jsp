@@ -39,7 +39,12 @@
   		myForm.action="<%=justPreview%>";
   		myForm.submit();
 	}
-
+	function focusOnLastCell(){
+		var cell = document.getElementById("cellToFocus");
+		if (cell!=null){
+			cell.focus();
+		}
+	}
 
 //-->
 </script>
@@ -105,12 +110,19 @@
 					<tr>
 						<c:forEach var="dcell" items="${drow.cells}" varStatus="statCell">
 							<td> 
-								<html:text name="dform" property="row[${drow.pk}].cell[${dcell.column.id}].value"/>
+								<c:if test="${statRow.last && statCell.first}">
+									<html:text styleId="cellToFocus" name="dform" property="row[${drow.pk}].cell[${dcell.column.id}].value"/>
+								</c:if>
+								<c:if test="${!statRow.last || !statCell.first}">
+									<html:text name="dform" property="row[${drow.pk}].cell[${dcell.column.id}].value"/>
+								</c:if>
 							</td>
 						</c:forEach>
 						<td>
-							<c:set var="addButton"><digi:trn key="gis:addButton">Add</digi:trn></c:set>
-							<c:set var="removeButton"><digi:trn key="gis:removeButton">Remove</digi:trn></c:set>
+							<c:set var="appandButton"><digi:trn>Add next</digi:trn></c:set>
+							<c:set var="addButton"><digi:trn>Add above</digi:trn></c:set>
+							<c:set var="removeButton"><digi:trn>Delete</digi:trn></c:set>
+							<input type="button" value="${appandButton}" onclick="addRow(this.form,${drow.pk + 1})">
 							<input type="button" value="${addButton}" onclick="addRow(this.form,${drow.pk})">
 							<input type="button" value="${removeButton}" onclick="removeRow(this.form,${drow.pk})">
 						</td>
@@ -143,6 +155,11 @@
 		</td>
 	</tr>
 </table>
+<script type="text/javascript">
+<!--
 
+	focusOnLastCell();
+//-->
+</script>
 
 </digi:form>

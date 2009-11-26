@@ -292,6 +292,7 @@ public class GetActivities extends Action {
         BigDecimal proposedSum = new BigDecimal(0);
         BigDecimal actualSum = new BigDecimal(0);
         BigDecimal actualDisbSum = new BigDecimal(0);
+        BigDecimal plannedCommitments=new BigDecimal(0);
 		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		result += "<" + ROOT_TAG;
 		String temp = "";
@@ -306,13 +307,15 @@ public class GetActivities extends Action {
 				proposedSum =proposedSum.add( amounts.getProposedAmout());
 				actualSum =actualSum.add( amounts.getActualAmount());
 				actualDisbSum=actualDisbSum.add( amounts.getActualDisbAmoount());
+				plannedCommitments=plannedCommitments.add(amounts.getPlannedAmount());
 				//generate one activity portion of XML from helper
 				temp += item.getXml();
 			}
 		}
-		result += " proposedSum=\"" +((proposedSum.doubleValue()!=0)? FormatHelper.formatNumber(proposedSum):0) + "\" ";
+		//result += " proposedSum=\"" +((proposedSum.doubleValue()!=0)? FormatHelper.formatNumber(proposedSum):0) + "\" ";
 		result += " actualSum=\"" + ((actualSum.doubleValue()!=0)? FormatHelper.formatNumber(actualSum):0)+ "\" ";
 		result += " actualDisbSum=\"" + ((actualDisbSum.doubleValue()!=0)? FormatHelper.formatNumber(actualDisbSum):0) + "\" ";
+		result += " plannedCommSum=\"" + ((plannedCommitments.doubleValue()!=0)? FormatHelper.formatNumber(plannedCommitments):0) + "\" ";
 		result += " totalPages=\""+maxPages+"\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;

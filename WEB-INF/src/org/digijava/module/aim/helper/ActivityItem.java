@@ -163,6 +163,11 @@ public class ActivityItem implements Comparable<ActivityItem>{
 				}else{
 					actualDisbAmount=amounts.actualDisbAmount();
 				}
+				if(!amounts.plannedAmount().equalsIgnoreCase("N/A")){
+					plannedAmount=FormatHelper.formatNumber(amounts.getPlannedAmount());
+				}else{
+					plannedAmount=amounts.plannedAmount();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -193,9 +198,10 @@ public class ActivityItem implements Comparable<ActivityItem>{
 			result += " " + PARAM_ID + "=\"" + id.toString()+ "\"";
 			result += " " + PARAM_STATUS + "=\"" + getStatusValue() + "\"";
 			result += " " + PARAM_NAME + "=\"" + getNameValue() + "\"";
-			result += " " + PARAM_PROPOSED_AMOUNT + "=\"" + getProposedAmount() + "\"";
+			//result += " " + PARAM_PROPOSED_AMOUNT + "=\"" + getProposedAmount() + "\"";
 			result += " " + PARAM_ACTUAL_AMOUNT + "=\"" + getActualAmount() + "\"";
 			result += " " + PARAM_ACTUAL_DISB_AMOUNT + "=\"" + getActualDisbAmount()+ "\"";
+			result += " " + PARAM_PLANNED_AMOUNT + "=\"" + getPlannedAmount()+ "\"";
 			result += " " + PARAM_DATE + "=\"" + getStartDate() + "\"";
 			result += ">";
 			result += "<" + DONORS_TAG_NAME + ">";

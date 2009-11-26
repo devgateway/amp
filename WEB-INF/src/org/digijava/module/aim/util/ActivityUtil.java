@@ -3545,8 +3545,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
   }
 
-  public static ActivityAmounts getActivityAmmountIn(AmpActivity act,
-      String tocode,Float percent) throws Exception {
+  public static ActivityAmounts getActivityAmmountIn(AmpActivity act,String tocode,Float percent) throws Exception {
     BigDecimal tempProposed = new BigDecimal(0);
     BigDecimal tempActual = new BigDecimal(0);
     BigDecimal tempPlanned = new BigDecimal(0);

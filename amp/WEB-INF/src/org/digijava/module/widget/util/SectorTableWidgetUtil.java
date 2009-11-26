@@ -1,5 +1,6 @@
 package org.digijava.module.widget.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -118,12 +119,7 @@ public class SectorTableWidgetUtil {
      * @throws DgException
      */
     public static Long calculateFunding(Long[] donorId, Long[] sectorId,Date startDate,Date endDate) throws DgException {
-        double result = 0;
-        Collection<DonorSectorFundingHelper> fundings = ChartWidgetUtil.getDonorSectorFunding(donorId, startDate, endDate, sectorId);
-        for (DonorSectorFundingHelper funding : fundings) {
-        result+=funding.getFounding();
-        }
-       
+        double result = ChartWidgetUtil.getDonorSectorFunding(donorId, startDate, endDate, sectorId);
         result/=1000000;
         return Math.round(result);
     }

@@ -540,7 +540,6 @@
             <module name="widget">
             	<page>popup_addWidgetColumn</page>
             	<page>preview_tableWidget</page>
-                <page>widget_showSectorTable</page>
                 <page>widget_showParisIndicatorTableWidget</page>
                 <page>showSectorDonorReport</page>
             </module>

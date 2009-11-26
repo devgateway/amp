@@ -613,7 +613,7 @@ public class WidgetUtil {
 			toDate =new Date(ChartWidgetUtil.getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
 		}		
         Session session = PersistenceManager.getRequestDBSession();
-        String queryString = " select new   org.digijava.module.widget.helper.TopDonorGroupHelper(orgGrp.orgGrpName, sum(fd.transactionAmountInUSD)) ";
+        String queryString = " select new   org.digijava.module.widget.helper.TopDonorGroupHelper(orgGrp.orgGrpName, sum(fd.transactionAmountInBaseCurrency)) ";
         queryString += " from ";
         queryString += AmpFundingDetail.class.getName() +
                 " as fd  inner join fd.ampFundingId f ";
@@ -624,7 +624,7 @@ public class WidgetUtil {
         queryString += " and act.team is not null ";
         queryString += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)  ";
         queryString += " group by orgGrp.ampOrgGrpId ";
-        queryString += " order by sum(fd.transactionAmountInUSD) desc ";
+        queryString += " order by sum(fd.transactionAmountInBaseCurrency) desc ";
         try {
             Query query = session.createQuery(queryString);
             query.setDate("startDate", fromDate);
@@ -636,7 +636,7 @@ public class WidgetUtil {
             }
         } catch (Exception e) {
             logger.error(e);
-            throw new DgException("cannot load SectorIndicators!", e);
+            throw new DgException("cannot load top donors!", e);
         }
         return donorGroups;
     }

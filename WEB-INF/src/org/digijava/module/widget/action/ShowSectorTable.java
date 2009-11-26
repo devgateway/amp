@@ -1,5 +1,7 @@
 package org.digijava.module.widget.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -34,6 +36,11 @@ import org.digijava.module.widget.util.SectorTableWidgetUtil;
 public class ShowSectorTable extends Action {
 
     private static Logger logger = Logger.getLogger(ShowSectorTable.class);
+    public static final String ROOT_TAG = "SectorTableWidget";
+    public static final String SECTOR_TAG = "Sector";
+    public static final String YEAR_TAG = "Year";
+    public static final String HEADERS_TAG = "Header";
+    public static final String SELECT_TAG="Select";
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -58,23 +65,13 @@ public class ShowSectorTable extends Action {
         AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(fiscalCalendarId));
         Long id = tableForm.getWidgetId();
         AmpSectorTableWidget secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(id);
-        boolean donorColumnAdded = false;
-        if (secTableWidget.getDonorYear() != null) {
-            donorColumnAdded = true;
-            Collection<AmpOrganisation> donors = DbUtil.getAmpOrganisations(false);
-            tableForm.setDonors(new ArrayList(donors));
-        }
-        tableForm.setDonorColumnAdded(donorColumnAdded);
+ 
         List<AmpSectorTableYear> sectorTableYears = new ArrayList(secTableWidget.getYears());
         List<AmpSectorOrder> sectorOrders = new ArrayList(secTableWidget.getSectorsColumns());
         Iterator<AmpSectorOrder> sectorOrderIter = sectorOrders.iterator();
         SectorTableHelper sectorTableRowOther = new SectorTableHelper();
         sectorTableRowOther.setSectorName(headingOther);
         sectorTableRowOther.setSectorId(SectorTableHelper.OTHER_ROW_SECTOR_ID);
-
-        SectorTableHelper sectorTableRowEmpty = new SectorTableHelper();
-        sectorTableRowEmpty.setEmptyRow(true);
-        sectorTableRowEmpty.setSectorId(SectorTableHelper.EMPTY_ROW_SECTOR_ID);
 
         SectorTableHelper sectorTableRowTotal = new SectorTableHelper();
         sectorTableRowTotal.setSectorName(headingTotal);
@@ -89,17 +86,17 @@ public class ShowSectorTable extends Action {
 
         List<Long> otherAmounts = new ArrayList<Long>();
 
-         /* here we will use this variable to store sums of percents for each year,
-          * i.e. the suming pecents for all selected  sectors for each year
-          * we are using such approach because of round values problem
-          * (round may give us 101% instead of 100 ;) )
-          */
+        /* here we will use this variable to store sums of percents for each year,
+         * i.e. the suming pecents for all selected  sectors for each year
+         * we are using such approach because of round values problem
+         * (round may give us 101% instead of 100 ;) )
+         */
         List<Long> otherPercents = new ArrayList<Long>();
 
         boolean isTotalsCalcualted = false;
         while (sectorOrderIter.hasNext()) {
             AmpSectorOrder sectorOrder = sectorOrderIter.next();
-            
+
             //creating row  for each sector
             SectorTableHelper sectorTableRow = new SectorTableHelper();
             AmpSector sector = sectorOrder.getSector();
@@ -138,14 +135,14 @@ public class ShowSectorTable extends Action {
 
                 // summing sector amounts for each year separately
                 if (otherAmounts.size() <= index) {
-                    allExceptOthersAmount =amount;
+                    allExceptOthersAmount = amount;
                     otherAmounts.add(allExceptOthersAmount);
                 } else {
-                    allExceptOthersAmount = otherAmounts.get(index)+amount;
+                    allExceptOthersAmount = otherAmounts.get(index) + amount;
                     otherAmounts.remove(index);
-                    otherAmounts.add(index,allExceptOthersAmount);
+                    otherAmounts.add(index, allExceptOthersAmount);
                 }
-                
+
                 String heading = "";
                 if (sectorTableYear.getType().equals(AmpSectorTableYear.TOTAL_TYPE_YEAR)) {
                     if (calendar.getIsFiscal()) {
@@ -157,12 +154,11 @@ public class ShowSectorTable extends Action {
                     if (!isTotalsCalcualted) {
                         totalValues.add(wholeAmount + "");
                     }
-                    if(otherValues.size()<=index){
-                        otherValues.add((wholeAmount.longValue()-allExceptOthersAmount.longValue())+"");
-                    }
-                    else{
+                    if (otherValues.size() <= index) {
+                        otherValues.add((wholeAmount.longValue() - allExceptOthersAmount.longValue()) + "");
+                    } else {
                         otherValues.remove(index);
-                        otherValues.add(index,(wholeAmount.longValue()-allExceptOthersAmount.longValue())+"");
+                        otherValues.add(index, (wholeAmount.longValue() - allExceptOthersAmount.longValue()) + "");
                     }
 
                     cells.add(amount + "");
@@ -176,12 +172,12 @@ public class ShowSectorTable extends Action {
                         heading = " % " + headingPercent + " " + year;
                     }
                     long percent = 0;
-                    long allExcludeOthersPercent=0;
+                    long allExcludeOthersPercent = 0;
                     if (wholeAmount != 0) {
                         percent = Math.round(1.0 * amount / wholeAmount * 100);
                     }
                     if (otherPercents.size() <= index) {
-                        allExcludeOthersPercent=percent;
+                        allExcludeOthersPercent = percent;
                         otherPercents.add(allExcludeOthersPercent);
                     } else {
                         allExcludeOthersPercent = otherPercents.get(index).longValue() + percent;
@@ -193,12 +189,11 @@ public class ShowSectorTable extends Action {
                     if (wholeAmount != 0) {
                         wholePercent = 100;
                     }
-                    if(otherValues.size()<=index){
-                        otherValues.add((wholePercent-allExcludeOthersPercent)+"%");
-                    }
-                    else{
+                    if (otherValues.size() <= index) {
+                        otherValues.add((wholePercent - allExcludeOthersPercent) + "%");
+                    } else {
                         otherValues.remove(index);
-                        otherValues.add(index,(wholePercent-allExcludeOthersPercent)+"%");
+                        otherValues.add(index, (wholePercent - allExcludeOthersPercent) + "%");
                     }
                     if (!isTotalsCalcualted) {
                         totalValues.add(wholePercent + "%");
@@ -215,15 +210,52 @@ public class ShowSectorTable extends Action {
             sectorTableRow.setValues(cells);
             sectorsInfo.add(sectorTableRow);
         }
-        tableForm.setYears(yearsHeader);
+      
         sectorTableRowTotal.setValues(totalValues);
         sectorTableRowOther.setValues(otherValues);
         sectorsInfo.add(sectorTableRowOther);
-        sectorsInfo.add(sectorTableRowEmpty);
         sectorsInfo.add(sectorTableRowTotal);
-        tableForm.setSectorsInfo(sectorsInfo);
 
-        return mapping.findForward("forward");
+        //creating xml
+        response.setContentType("text/xml");
+        OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+        PrintWriter out = new PrintWriter(outputStream, true);
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        xml += "<" + ROOT_TAG + ">";
+        for (String header : yearsHeader) {
+            xml += "<" + HEADERS_TAG + " name=\"" + header + "\" />";
+        }
+        for (SectorTableHelper sectorTableRow : sectorsInfo) {
+            xml += "<" + SECTOR_TAG + " id=\"" + sectorTableRow.getSectorId() + "\" ";
+            String name=sectorTableRow.getSectorName();
+            xml += "name=\"" +DbUtil.filter(name) + "\" ";
+            xml += ">";
+            if (sectorTableRow.getValues() != null) {
+                for (String value : sectorTableRow.getValues()) {
+                    xml += "<" + YEAR_TAG + " value=\"" + value + "\" />";
+                }
+            }
+            xml += "</" + SECTOR_TAG + ">";
+        }
+        if (secTableWidget.getDonorYear() != null) {
+            xml += "<" + SELECT_TAG +" >";
+            Collection<AmpOrganisation> donors = DbUtil.getAmpOrganisations(false);
+            Iterator<AmpOrganisation> donorIter=donors.iterator();
+            while(donorIter.hasNext()){
+                AmpOrganisation donor=donorIter.next();
+                xml +="<option id=\""+donor.getAmpOrgId()+"\" name=\"" + DbUtil.filter(donor.getName()) + "\" />";
+            }
+            xml += "</" + SELECT_TAG + ">";
+
+        }
+        xml += "</" + ROOT_TAG + ">";
+        out.println(xml);
+        out.close();
+        outputStream.close();
+
+
+
+        return null;
     }
 }
 

@@ -743,61 +743,38 @@ public class ChartWidgetUtil {
 		return fundings;
 	}
 
-     public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Long sectorIds[]) throws DgException {
-        Collection<DonorSectorFundingHelper> fundings = null;
-         Map<Long, DonorSectorFundingHelper> donors=null;
+    public static Double getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Long sectorIds[]) throws DgException {
+        Double amount = 0d;
+        Long[] sectIds = null;
         if (sectorIds != null) {
             for (Long sectId : sectorIds) {
-                List<Long>ids=new ArrayList<Long>();
+                List<Long> ids = new ArrayList<Long>();
                 ids.add(sectId);
                 List<AmpSector> sectors = SectorUtil.getAllDescendants(sectId);
-                for(AmpSector sector:sectors){
+                for (AmpSector sector : sectors) {
                     ids.add(sector.getAmpSectorId());
                 }
-                Long[] sectIds=new Long[ids.size()];
+                sectIds = new Long[ids.size()];
                 ids.toArray(sectIds);
-                List result = getFunding(donorIDs, fromDate, toDate, sectIds);
-                //Process grouped data
-                if (result != null) {
-                  donors  = new HashMap<Long, DonorSectorFundingHelper>();
-                    for (Object row : result) {
-                        Object[] rowData = (Object[]) row;
-                        AmpActivitySector activitySector = (AmpActivitySector) rowData[0];
-                        AmpSector sector = activitySector.getSectorId();
-                        Float sectorPrcentage = activitySector.getSectorPercentage();    //This field is NULL sometimes !
-                        BigDecimal amt = (BigDecimal) rowData[2];
-                        BigDecimal amount = FeaturesUtil.applyThousandsForVisibility(amt);
-                        //calculate percentage
-                        BigDecimal calculated = (sectorPrcentage.floatValue() == 100) ? amount : calculatePercentage(amount, sectorPrcentage);
-                        //convert to
-                        //Double converted = convert(calculated, currency);
-                        //search if we already have such sector data
-                        DonorSectorFundingHelper sectorFundngObj = donors.get(sectId);
-                        //if not create and add to map
-                        if (sectorFundngObj == null) {
-                            sectorFundngObj = new DonorSectorFundingHelper(sector);
-                            donors.put(sectId, sectorFundngObj);
-                        }
-                        //add amount to sector
-                        sectorFundngObj.addFunding(calculated.doubleValue());
-
-                    }
-                    fundings = donors.values();
-                }
 
             }
+        }
 
+        List result = getFunding(donorIDs, fromDate, toDate, sectIds);
+        //Process grouped data
+        if (result != null) {
+            amount = ((Double) result.get(0));
         }
-        else{
-             Double[] wholeFunding = {new Double(0)};// to hold whole funding value
-             fundings=getDonorSectorFunding(donorIDs,fromDate, toDate, wholeFunding);
+        if (amount == null) {
+            amount = 0d;
         }
-        return fundings;
+        return amount;
+
 
     }
 
        public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
-        String oql = "select  actSec, " + "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInBaseCurrency)";
+        String oql = "select   sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec " + " inner join actSec.sectorId sec " + " inner join actSec.activityId act " + " inner join actSec.classificationConfig config ";
@@ -812,8 +789,6 @@ public class ChartWidgetUtil {
               oql += " and actSec.sectorId in (" + getInStatment(sectorIds) + ") ";
         }
         oql += " and config.name='Primary' and act.team is not null ";
-        oql += " group by act.ampActivityId, actSec ";
-        oql += " order by actSec";
         Session session = PersistenceManager.getRequestDBSession();
         //search for grouped data
         @SuppressWarnings(value = "unchecked")

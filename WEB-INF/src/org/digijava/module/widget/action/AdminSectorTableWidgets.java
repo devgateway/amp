@@ -6,19 +6,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -33,7 +31,6 @@ import org.digijava.module.widget.util.WidgetUtil;
 
 public class AdminSectorTableWidgets extends DispatchAction {
 
-    private static Logger logger = Logger.getLogger(AdminSectorTableWidgets.class);
 
     @Override
     public ActionForward unspecified(ActionMapping mapping,

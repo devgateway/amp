@@ -1,14 +1,13 @@
 package org.digijava.module.widget.util;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
@@ -25,7 +24,6 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -278,6 +276,7 @@ public class WidgetUtil {
 		return places;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<AmpDaWidgetPlace> getPlacesWithID(Long[] pids) throws DgException{
 		List<AmpDaWidgetPlace> places = new ArrayList<AmpDaWidgetPlace>(pids.length);
 		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where (p.id in ( ";
@@ -291,7 +290,7 @@ public class WidgetUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
 			Query query = session.createQuery(oql);
-			places = (List<AmpDaWidgetPlace>)query.list();
+			places = query.list();
 		} catch (Exception e) {
 			logger.error(e);
 			throw new DgException("cannot search widget places!",e);
@@ -299,6 +298,7 @@ public class WidgetUtil {
 		return places;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<AmpWidgetOrgProfile> getNewWidgetWithID(Long[] pids) throws DgException{
 		List<AmpWidgetOrgProfile> places = new ArrayList<AmpWidgetOrgProfile>(pids.length);
 		String oql = "select p from "+AmpWidgetOrgProfile.class.getName()+" as p where (p.id in ( ";
@@ -312,7 +312,7 @@ public class WidgetUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
 			Query query = session.createQuery(oql);
-			places = (List<AmpWidgetOrgProfile>)query.list();
+			places = query.list();
 		} catch (Exception e) {
 			logger.error(e);
 			throw new DgException("cannot search widget places!",e);
@@ -594,7 +594,8 @@ public class WidgetUtil {
             
         }
 
-      public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException {
+      @SuppressWarnings("unchecked")
+	public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException {
         List<TopDonorGroupHelper> donorGroups = new ArrayList<TopDonorGroupHelper>();
         Date fromDate = null;
 		Date toDate = null;
@@ -732,7 +733,8 @@ public class WidgetUtil {
         return result;
     }
 
-    public static void getFunding(ActivitySectorDonorFunding activityFundngObj, Date fromDate, Date toDate) throws DgException {
+    @SuppressWarnings("unchecked")
+	public static void getFunding(ActivitySectorDonorFunding activityFundngObj, Date fromDate, Date toDate) throws DgException {
         AmpActivity activity = activityFundngObj.getActivity();
         List<AmpSector> sectors = activityFundngObj.getSectors();
         List<AmpOrganisation> donors = activityFundngObj.getDonorOrgs();
@@ -764,7 +766,6 @@ public class WidgetUtil {
         oql += " and config.name='Primary' ";
         oql += " order by actSec";
         Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings(value = "unchecked")
         Query query = session.createQuery(oql);
         if (fromDate != null && toDate != null) {
             query.setDate("fDate", fromDate);

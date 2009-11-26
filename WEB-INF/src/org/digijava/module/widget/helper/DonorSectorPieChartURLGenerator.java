@@ -3,13 +3,15 @@
 package org.digijava.module.widget.helper;
 
 import java.io.Serializable;
+
 import org.jfree.chart.urls.PieURLGenerator;
 import org.jfree.data.general.PieDataset;
 
 
 public class DonorSectorPieChartURLGenerator implements PieURLGenerator,Serializable {
 
-    private String prefix;
+	private static final long serialVersionUID = 1L;
+	private String prefix;
     private String sectorId="sectorIds";
 
     public DonorSectorPieChartURLGenerator(String url){

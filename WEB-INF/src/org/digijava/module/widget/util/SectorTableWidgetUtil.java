@@ -8,8 +8,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpSectorTableYear;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
@@ -136,9 +134,10 @@ public class SectorTableWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static List<AmpSectorTableYear> getAmpSectorTableYears(Long id,Long columnType) throws DgException {
+    @SuppressWarnings("unchecked")
+	public static List<AmpSectorTableYear> getAmpSectorTableYears(Long id,Long columnType) throws DgException {
         Session session = PersistenceManager.getRequestDBSession();
-        List<AmpSectorTableYear> result = new ArrayList();
+        List<AmpSectorTableYear> result = new ArrayList<AmpSectorTableYear>();
         try {
             String oql = "select year  from " + AmpSectorTableYear.class.getName() + " year  where  year.widget.id=:id and year.type=:type order by year.order";
             Query query = session.createQuery(oql);
@@ -151,7 +150,8 @@ public class SectorTableWidgetUtil {
         return result;
     }
 
-    public static List<Long> getAmpSectorIds(Long id) throws DgException {
+    @SuppressWarnings("unchecked")
+	public static List<Long> getAmpSectorIds(Long id) throws DgException {
         List<Long> sectorIds=new ArrayList<Long>();
         Session session = PersistenceManager.getRequestDBSession();
       

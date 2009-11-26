@@ -22,6 +22,8 @@ public abstract class WiRow implements HtmlGenerator{
 	private Long pk;
 	private Map<Long, WiColumn> columns = new HashMap<Long, WiColumn>();
 	private WiTable table;
+	//TODO this was used for debuging. remove it
+	private int num;
 
 	public WiRow(Long pk){
 		this.pk = pk;
@@ -92,6 +94,7 @@ public abstract class WiRow implements HtmlGenerator{
 	public WiCell getCell(Long columnId){
 		return columns.get(columnId).getCell(this.pk);
 	}
+	
 	public WiCell getCell(int columnId){
 		return columns.get(new Long(columnId)).getCell(this.pk);
 	}
@@ -101,17 +104,23 @@ public abstract class WiRow implements HtmlGenerator{
 	}
 
 	public void setPk(Long newPk) {
-		Long oldPk = this.pk;
 		this.pk =  newPk;
-		for (WiColumn col : this.columns.values()) {
-			col.replacePk(oldPk, newPk);
-		}
 	}
+
 	public void setTable(WiTable table) {
 		this.table = table;
 	}
+	
 	public WiTable getTable() {
 		return table;
+	}
+	
+	public void setNum(int num) {
+		this.num = num;
+	}
+	
+	public int getNum() {
+		return num;
 	}
 	
 }

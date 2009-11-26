@@ -3,12 +3,14 @@
 package org.digijava.module.widget.form;
 
 import java.util.Collection;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.widget.helper.ActivitySectorDonorFunding;
 
 
 public class SectorDonorWidgetReportForm extends ActionForm {
-    private Long donorId;
+	private static final long serialVersionUID = 1L;
+	private Long donorId;
     private String startYear;
     private String endYear;
     private String sectorName;

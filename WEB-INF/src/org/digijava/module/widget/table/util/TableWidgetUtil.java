@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -51,6 +52,8 @@ import org.hibernate.Transaction;
  *
  */
 public final class TableWidgetUtil {
+	
+	private static volatile int number=1;
 
 	/**
 	 * Restrict instance creation for this class.
@@ -117,14 +120,14 @@ public final class TableWidgetUtil {
 	 * @param value
 	 * @return
 	 */
-	public static WiCell newCell(AmpDaValue value){
+	public static WiCell newCell(AmpDaValue value) {
 		WiCell cell = null;
-		if (value instanceof AmpDaValueFiltered){
+		if (value instanceof AmpDaValueFiltered) {
 			cell = new WiCellFiltered();
-			((WiCellFiltered)cell).setFilterItemId(((AmpDaValueFiltered)value).getFilterItemId());
-		}else{
-                    cell = new WiCellStandard(value);
-                }
+			((WiCellFiltered) cell).setFilterItemId(((AmpDaValueFiltered) value).getFilterItemId());
+		} else {
+			cell = new WiCellStandard(value);
+		}
 		cell.setId(value.getId());
 		cell.setPk(value.getPk());
 		cell.setValue(value.getValue());
@@ -168,6 +171,7 @@ public final class TableWidgetUtil {
 	public static WiRow newDataRow(Map<Long, WiColumn> columnMap, WiTable table){
 		WiRow result = new WiRowStandard(-1L,columnMap);
 		result.setTable(table);
+		result.setNum(number++);
 		return result;
 	}
 	
@@ -256,7 +260,7 @@ public final class TableWidgetUtil {
 		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
 		private List<FilterItem> items = new ArrayList<FilterItem>();
 		
-		@SuppressWarnings({ "unchecked", "deprecation" })
+		@SuppressWarnings({ "deprecation" })
 		public DonorFilter(Long siteId, String locale){
 			Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
 			if (donors==null){
@@ -285,7 +289,7 @@ public final class TableWidgetUtil {
 			}
 			
 		}
-		@SuppressWarnings({ "unchecked", "deprecation" })
+		@SuppressWarnings({ "deprecation" })
 		public DonorFilter(){
 			Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
 			if (donors==null){
@@ -465,6 +469,33 @@ public final class TableWidgetUtil {
 		
 	}
 
+	/**
+	 * Compares {@link WiCell}s with Pks.
+	 * Used for sorting a column.
+	 * @author ika
+	 *
+	 */
+	public static class WiCellPkComparator implements Comparator<WiCell>{
+		@Override
+		public int compare(WiCell c1, WiCell c2) {
+			return c1.getPk().compareTo(c2.getPk());
+		}
+	}
+	
+	/**
+	 * Resolves pk as key for cell to be used in map building or any other reason.
+	 * @author Irakli Kobiashvili
+	 *
+	 */
+	public static class WiCellPkKeyResolver implements KeyResolver<Long, WiCell>{
+
+		@Override
+		public Long resolveKey(WiCell cell) {
+			return cell.getPk();
+		}
+		
+	}
+	
 	/**
 	 * Compares columns with their order numbers.
 	 * @author Irakli Kobiashvili

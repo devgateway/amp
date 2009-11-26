@@ -1,8 +1,8 @@
 package org.digijava.module.widget.form;
 
 import java.util.List;
+
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpSectorOrder;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
@@ -10,7 +10,8 @@ import org.digijava.module.widget.dbentity.AmpSectorTableYear;
 
 public class AdminSectorTableWidgetForm extends ActionForm {
 
-    private List<AmpSectorTableWidget> sectorTables;
+	private static final long serialVersionUID = 1L;
+	private List<AmpSectorTableWidget> sectorTables;
     private Long sectorTableId;
     private String name;
     private String[] selectedTotalYears;

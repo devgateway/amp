@@ -3,13 +3,15 @@
 package org.digijava.module.widget.form;
 
 import java.util.List;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.widget.dbentity.AmpParisIndicatorBaseTargetValues;
 
 
 public class ShowParisIndicatorTableForm extends ActionForm {
-    private Long widgetId;
+	private static final long serialVersionUID = 1L;
+	private Long widgetId;
     private List<AmpParisIndicatorBaseTargetValues> parisIndicators;
     private List<AmpOrgGroup> donorGroups;
   

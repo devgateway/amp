@@ -406,8 +406,25 @@ public class WiTable extends Widget{
 	 * @return
 	 */
 	public WiRow addDataRowAt(Long rowIndex,WiRow newRow){
-		this.dataRows.add(rowIndex.intValue(), newRow);
+		//update columns - this will produce new cells at index place in all columns.
+		for (WiColumn column : this.columns) {
+			column.addCellAt(rowIndex);
+		}
+
+		//update rows - this will add extra row.
+		Collections.sort(this.dataRows, new TableWidgetUtil.WiRowPkComparator());
+		long toIncrement = rowIndex;
+		for (WiRow row : this.dataRows) {
+			if (row.getPk().longValue() == toIncrement){
+				row.setPk(row.getPk()+1);
+				toIncrement = row.getPk();
+			}
+		}
+		//Add new row.
+		this.dataRows.add(newRow);
+//		this.dataRows.add(rowIndex.intValue(), newRow);
 		rebuildDataRowsMap();
+		
 		return newRow;
 	}
 	
@@ -448,13 +465,20 @@ public class WiTable extends Widget{
 	 * @param rowPk pk of the row to remove
 	 * @return
 	 */
-	public WiRow deleteDataRow(long rowPk){
-		WiRow deletedRow = dataRowsByPk.get(new Long(rowPk));
-		if (deletedRow != null){
-			dataRowsByPk.remove(new Long(rowPk));
-			dataRows.remove(deletedRow);
+	public WiRow deleteDataRow(long rowPk) {
+		WiRow deletedRow = dataRowsByPk.remove(new Long(rowPk));
+		if (deletedRow != null) {
+			//remove cells of the row from each column
 			for (WiColumn col : this.columns) {
-                            WiCell trashedCell=col.removeCellWithPk(deletedRow.getPk());                            col.addTrashedCell(trashedCell);			}
+				col.removeCellWithPk(deletedRow.getPk());
+			}
+			//remove row and rebuild pk's and map.
+			Collections.sort(this.dataRows, new TableWidgetUtil.WiRowPkComparator());
+			dataRows.remove(deletedRow);
+			long newPk = 0;
+			for (WiRow row : this.dataRows) {
+				row.setPk(newPk++);
+			}
 			rebuildDataRowsMap();
 		}
 		return deletedRow;
@@ -476,18 +500,16 @@ public class WiTable extends Widget{
 	 * @return
 	 */
 	private Long getLastPk(){
-		//remember this is not thread safe
+		//remember this is not thread safe and ugly!
 		return new Long(this.dataRows.size());
 	}
 	
 	private void rebuildDataRowsMap(){
-		long pk=0;
 		this.dataRowsByPk = new HashMap<Long, WiRow>(this.dataRows.size());
 		for (WiRow row : this.dataRows) {
-			row.setPk(new Long(pk++));
 			this.dataRowsByPk.put(row.getPk(), row);
 		}
-		Collections.sort(dataRows,new TableWidgetUtil.WiRowPkComparator());
+		Collections.sort(this.dataRows,new TableWidgetUtil.WiRowPkComparator());
 	}
 
 	public WiRow getDataRowByPk(Long pk){

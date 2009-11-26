@@ -3,6 +3,7 @@
 package org.digijava.module.widget.form;
 
 import java.util.List;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpParisIndicatorBaseTargetValues;
@@ -10,7 +11,8 @@ import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
 
 
 public class AdminParisIndicatorTableWidgetForm  extends ActionForm{
-    private List<AmpParisIndicatorTableWidget> piTableWidgets;
+	private static final long serialVersionUID = 1L;
+	private List<AmpParisIndicatorTableWidget> piTableWidgets;
     private Long piTableWidgetId;
     private List<AmpParisIndicatorBaseTargetValues> parisIndicators;
     private Long donorGroupYearColumn;

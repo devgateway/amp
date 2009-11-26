@@ -7,10 +7,10 @@ import java.util.Date;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
+import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
-import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.util.WidgetUtil;
 

@@ -342,9 +342,9 @@ if(myDiv.childNodes.length>1){
                          var trHead=document.createElement('TR');
                          var tdHeadEmpty=document.createElement('TD');
                          tdHeadEmpty.innerHTML="&nbsp;"
-                     var tdHeadDonorGroup=document.createEle    ment('TD');
+                         var tdHeadDonorGroup=document.createElement('TD');
                          tdHeadDonorGroup.innerHTML="<strong><digi:trn>Top 10 Donors</digi:trn></strong>";
-                     var tdHeadCom=document.createEle    ment('TD');
+                         var tdHeadCom=document.createElement('TD');
                          tdHeadCom.innerHTML="<strong><digi:trn>Commitments in USD Millions for</digi:trn> "+root.getAttribute("years")+"</strong>";
                          trHead.appendChild(tdHeadEmpty);
                          trHead.appendChild(tdHeadDonorGroup);

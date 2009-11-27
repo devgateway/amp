@@ -37,8 +37,6 @@
 
 <script type="text/javascript"
 	src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
-<script type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 
 <!-- dynamic tooltip -->
 <script type="text/javascript"

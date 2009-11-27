@@ -121,7 +121,7 @@
                             </strong>
                         </td>
                         <td  colspan="2">
-                            <html:select name="gisIndicatorSectorRegionForm" property="selIndicator">
+                            <html:select name="gisIndicatorSectorRegionForm" property="selIndicator" style="width:200px">
                                 <html:option value="-1"><digi:trn>Select Indicator</digi:trn></html:option>
                                 <c:forEach var="indicator" items="${gisIndicatorSectorRegionForm.indicators}">
                                     <html:option value="${indicator.indicatorId}"><digi:trn>${indicator.name}</digi:trn></html:option>
@@ -150,10 +150,8 @@
                             </td>
                         </c:if>
                         <c:if test="${not empty gisIndicatorSectorRegionForm.sector}">
-                            <td>
+                            <td colspan="2">
                                 ${gisIndicatorSectorRegionForm.sector.name}
-                            </td>
-                            <td>
                                 <input type="button" onclick="addSectors()" value="<digi:trn key='gis:createIndicatorSector:changeSector'>Change Sector</digi:trn>" >
                             </td>
                         </c:if>                     
@@ -169,7 +167,7 @@
                             </strong>
                         </td>
                         <td  colspan="2">
-                            <html:select name="gisIndicatorSectorRegionForm" property="selRegionId">
+                            <html:select name="gisIndicatorSectorRegionForm" property="selRegionId" style="width:200px">
                                 <html:option value="-1"><digi:trn>Select Region</digi:trn></html:option>
                                  <html:option value="-2"><digi:trn>All</digi:trn></html:option>
                                  <html:option value="-3"><digi:trn>National</digi:trn></html:option>

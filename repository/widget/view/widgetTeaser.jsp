@@ -12,51 +12,46 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <digi:instance property="gisWidgetTeaserForm" />
-<script language="javascript" type="text/javascript">
- 
-   
-    function getGraphMap(type){
-        var lastTimeStamp = new Date().getTime();
-        var url="/widget/getWidgetMap.do?type="+type+'&timestamp='+lastTimeStamp;
-        var async=new Asynchronous();
-        async.complete=mapCallBack_${gisWidgetTeaserForm.type};
-        async.call(url);
-    }
-    
-    function mapCallBack_${gisWidgetTeaserForm.type}(status, statusText, responseText, responseXML){
-        var map=responseXML.getElementsByTagName('map')[0];
-	var id=map.getAttribute('id');
-        var mapSpan= document.getElementById(id);
-        mapSpan.innerHTML=responseText;  
-    }
-
-
-</script>
-
 <c:if test="${gisWidgetTeaserForm.rendertype==5}">
-<feature:display name="orgprof_chart_place${gisWidgetTeaserForm.type}" module="Org Profile">
-    <c:choose>
-        <c:when test="${gisWidgetTeaserForm.type==1}">
-            <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
-            <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
-            <jsp:include page="orgSummary.jsp" flush="true"/>
-        </c:when>
-           <c:when test="${gisWidgetTeaserForm.type==2||gisWidgetTeaserForm.type==4}">
-            <jsp:include page="/orgProfile/showOrgProfileTables.do?type=${gisWidgetTeaserForm.type}" flush="true"/>
-        </c:when>
-         <c:when test="${gisWidgetTeaserForm.type==7}">
-            <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
-        </c:when>
-        <c:otherwise>
-            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=600" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap(${gisWidgetTeaserForm.type})"/>
-            <span id="chartMap${gisWidgetTeaserForm.type}">
-              
-            </span>
-            
-           
-        </c:otherwise>
-    </c:choose>
-   </feature:display>
+    <feature:display name="orgprof_chart_place${gisWidgetTeaserForm.type}" module="Org Profile">
+        <c:choose>
+            <c:when test="${gisWidgetTeaserForm.type==1}">
+                <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
+                <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
+                <jsp:include page="orgSummary.jsp" flush="true"/>
+            </c:when>
+            <c:when test="${gisWidgetTeaserForm.type==2||gisWidgetTeaserForm.type==4}">
+                <jsp:include page="/orgProfile/showOrgProfileTables.do?type=${gisWidgetTeaserForm.type}" flush="true"/>
+            </c:when>
+            <c:when test="${gisWidgetTeaserForm.type==7}">
+                <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
+            </c:when>
+            <c:otherwise>
+                <script language="javascript" type="text/javascript">
+                    function getGraphMap_${gisWidgetTeaserForm.type}(){
+                        var lastTimeStamp = new Date().getTime();
+                        var url="/widget/getWidgetMap.do?type="+${gisWidgetTeaserForm.type}+'&timestamp='+lastTimeStamp;
+                        var async=new Asynchronous();
+                        async.complete=mapCallBack_${gisWidgetTeaserForm.type};
+                        async.call(url);
+                    }
+
+                    function mapCallBack_${gisWidgetTeaserForm.type}(status, statusText, responseText, responseXML){
+                        var map=responseXML.getElementsByTagName('map')[0];
+                        var id=map.getAttribute('id');
+                        var mapSpan= document.getElementById(id);
+                        mapSpan.innerHTML=responseText;
+                    }
+                </script>
+                <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=600" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
+                <span id="chartMap${gisWidgetTeaserForm.type}">
+
+                </span>
+
+
+            </c:otherwise>
+        </c:choose>
+    </feature:display>
      	
 
 

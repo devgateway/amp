@@ -207,6 +207,8 @@ public class OrgProfileUtil {
                 if (orgId == null || orgId == -1) {
                     if (orgGroupId != null && orgGroupId != -1) {
                         queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
+                    } else {
+                        queryString += " and  ah.ampDonorOrgId.orgGrpId.orgType.orgTypeCode in ('BIL','MUL')";
                     }
                 } else {
                     queryString += " and ah.ampDonorOrgId=:orgId ";
@@ -264,6 +266,8 @@ public class OrgProfileUtil {
             if (orgId == null || orgId == -1) {
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
+                } else {
+                    queryString += " and  ah.ampDonorOrgId.orgGrpId.orgType.orgTypeCode in ('BIL','MUL')";
                 }
             } else {
                 queryString += " and ah.ampDonorOrgId=:orgId ";
@@ -356,6 +360,8 @@ public class OrgProfileUtil {
             } else {
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += " and org.orgGrpId=:orgGroupId";
+                } else {
+                    queryString += " and  org.orgGrpId.orgType.orgTypeCode in ('BIL','MUL')";
                 }
             }
             Query qry = session.createQuery(queryString + " and size(cal.organisations)>1 "); //joint
@@ -441,6 +447,8 @@ public class OrgProfileUtil {
             if (orgID == null || orgID == -1) {
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += ChartWidgetUtil.getOrganizationQuery(true);
+                } else {
+                     queryString += " and f.ampDonorOrgId.orgGrpId.orgType.orgTypeCode in ('BIL','MUL')";
                 }
             } else {
                 queryString += ChartWidgetUtil.getOrganizationQuery(false);
@@ -479,6 +487,8 @@ public class OrgProfileUtil {
                 if (orgID == null || orgID == -1) {
                     if (orgGroupId != null && orgGroupId != -1) {
                         queryString += ChartWidgetUtil.getOrganizationQuery(true);
+                    } else {
+                        queryString += " and f.ampDonorOrgId.orgGrpId.orgType.orgTypeCode in ('BIL','MUL')";
                     }
                 } else {
                     queryString += ChartWidgetUtil.getOrganizationQuery(false);

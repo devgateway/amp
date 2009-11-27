@@ -387,11 +387,11 @@
 							</tr>
 							<tr><td>
 							<field:display name="Add IPA Contract" feature="Contracting">
-								<div style="width:99.5%;height:12px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+								<div style="width:99.5%;height:18px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
 						            <span style="cursor:pointer;float:left;">
-						                <a class="settingsLink" onClick="addContract();">
+						                <html:button styleClass="dr-menu" property="submitButton" onclick="addContract();">
 						                	<digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn>
-						                </a>
+						                </html:button>
 					                </span>
 				                </div> 
 							</field:display>
@@ -780,7 +780,7 @@
 			                                               </td>		
 			                                           </tr>
 		                                            </field:display>
-		                                            <tr><td>  
+		                                            <tr><td colspan="2">  
 			                                            <field:display name="Edit Contract" feature="Contracting">
 			                                            		<a style="cursor:pointer;color:#006699; text-decoration: underline" title="Click to edit the contract" onClick='editContract(${idx.count})'><b><digi:trn key="aim:editThisItem">Edit this item</b></digi:trn></a> 
 			                                            </field:display>

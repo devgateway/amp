@@ -20,26 +20,7 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-									<feature:display name="Content Repository" module="Document Management">
-									<tr>
-										<td>
-										<table width="100%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white">
-										
-										<tr>
-											<td>
-												<field:display name="Add Documents From Repository Button" feature="Related Documents">											
-												<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>												
-												<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocumentsDM(&apos;${documentsType}&apos;)">
-														<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
-												</html:button>
-												</field:display>
-											</td>
-										</tr>
-										</table>
-										</td>
-									</tr>
-									<tr><td>&nbsp;</td></tr>
-									</feature:display>
+									
 									<feature:display name="Related Documents" module="Document"></feature:display>
 									
 									<tr><td>
@@ -50,7 +31,14 @@
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocuments()">
 																<digi:trn key="btn:addDocuments">Add Documents</digi:trn>
 														</html:button>
-
+														<feature:display name="Content Repository" module="Document Management">
+																<field:display name="Add Documents From Repository Button" feature="Related Documents">											
+																<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>												
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocumentsDM(&apos;${documentsType}&apos;)">
+																		<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
+																</html:button>
+																</field:display>
+														</feature:display>
 													</td>
 												</tr>
 											</table>

@@ -9,6 +9,8 @@ public class YearlyComparison {
 	private double plannedExpenditure = 0.0;
 	private double actualExpenditure = 0.0;
 	private double disbOrders = 0.0;
+	private double totalCost = 0.0;
+	private double uncommittedBalance =0.0;
 
 	public int getFiscalYear() {
 		return fiscalYear;
@@ -72,6 +74,22 @@ public class YearlyComparison {
 
 	public void setDisbOrders(double disbOrders) {
 		this.disbOrders = disbOrders;
+	}
+
+	public double getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(double totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public double getUncommittedBalance() {
+		return uncommittedBalance;
+	}
+
+	public void setUncommittedBalance(double uncommittedBalance) {
+		this.uncommittedBalance = uncommittedBalance;
 	}
 
 }

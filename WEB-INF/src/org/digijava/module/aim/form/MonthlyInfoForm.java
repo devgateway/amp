@@ -20,6 +20,8 @@ public class MonthlyInfoForm extends DetailedInfoForm {
     private BigDecimal totalActualExpenditure;
     private BigDecimal totalPlannedExpenditure;
     private BigDecimal totalDisbOrder;
+    private BigDecimal totalCost;
+    private BigDecimal uncommittedBalance;
 
     public BigDecimal getTotalActualCommitment() {
         return totalActualCommitment;
@@ -93,4 +95,20 @@ public class MonthlyInfoForm extends DetailedInfoForm {
     public void setTotalPlannedExpenditure(BigDecimal totalPlannedExpenditure) {
         this.totalPlannedExpenditure = totalPlannedExpenditure;
     }
+
+	public BigDecimal getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(BigDecimal totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public BigDecimal getUncommittedBalance() {
+		return uncommittedBalance;
+	}
+
+	public void setUncommittedBalance(BigDecimal uncommittedBalance) {
+		this.uncommittedBalance = uncommittedBalance;
+	}
 }

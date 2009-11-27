@@ -383,6 +383,26 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                                 <digi:trn key="aim:actualExpenditures">Actual Expenditures</digi:trn>
                   </div></td>
                 </feature:display>
+              
+              <td bgcolor="#999999"><div align="center" style="font-weight:bold;color:black;">
+
+			                  			              	<div align="center">
+
+																		<FONT color="blue">*</FONT>
+
+																		<digi:trn >Total Estimated Cost</digi:trn>
+
+													  </div>
+
+			                     		         	</td>	
+												   <td bgcolor="#999999"><div align="center" style="font-weight:bold;color:black;">
+			                  			              	<div align="center">
+
+																<FONT color="blue">*</FONT>
+																			<digi:trn>Uncommitted balance</digi:trn>
+															  </div>
+
+			                     		         	</td>
               </tr>
               <logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" >
                 <tr valign="top">
@@ -433,7 +453,17 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                         <aim:formatNumber value="${quarterlyComparison.actualExpenditure}" />
                       </div></td>
                     </feature:display>
-                  </tr>
+                  
+                      <td><div align="right">
+                        <aim:formatNumber value="${quarterlyComparison.totalCost}" />
+                      </div></td>
+                      <td><div align="right">
+                        <aim:formatNumber value="${quarterlyComparison.uncommittedBalance}" />
+                      </div></td>
+                    </tr>
+                
+                
+                  
                 </logic:iterate>
                 <tr valign="top">
                   <td colspan="2"><span class="note"> <font color="blue">*</font>
@@ -455,10 +485,21 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                   </span> </div></td>
                   <feature:display module="Funding" name="Expenditures">
                     <td><div align="right"> <span class="note">
-                      <bean:write name="aimQuarterlyComparisonsForm" property="totalActualExpenditure" />
+                    <aim:formatNumber value="${aimQuarterlyComparisonsForm.totalActualExpenditure}" />
+                
                     </span> </div></td>
                   </feature:display>
+                
+                  <td><div align="right"> <span class="note">
+                    <aim:formatNumber value="${aimQuarterlyComparisonsForm.totalCost}" />
+                
+                    </span> </div></td>
+                      <td><div align="right"> <span class="note">
+                    <aim:formatNumber value="${aimQuarterlyComparisonsForm.uncommittedBalance}" />
+                
+                    </span> </div></td>
                 </tr>
+                
               </logic:notEmpty>
             </table></td>
           </tr>

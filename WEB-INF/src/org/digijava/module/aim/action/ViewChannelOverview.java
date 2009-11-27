@@ -267,6 +267,7 @@ public class ViewChannelOverview extends TilesAction {
 		    if (fp == null) {
 		    	fp = new FilterParams();
 		    }
+		  
 		    if (fp.getCurrencyCode() == null)
 			{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());

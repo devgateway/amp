@@ -573,7 +573,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 			            		                  
 			            		                  <feature:display module="Funding" name="Expenditures">
-			            		                  	<td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
+			            		                  <td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
 			                  			              	<div align="center">
 
@@ -586,6 +586,29 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 			                     		         	</td>
 			                     		         	
 												</feature:display>
+												
+												<td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
+
+			                  			              	<div align="center">
+
+																		<FONT color="blue">*</FONT>
+
+																		<digi:trn >Total Estimated Cost</digi:trn>
+
+													  </div>
+
+			                     		         	</td>	
+													<td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
+
+			                  			              	<div align="center">
+
+																<FONT color="blue">*</FONT>
+																			<digi:trn>Uncommitted balance</digi:trn>
+															  </div>
+
+			                     		         	</td>
+												
+												  	
                             						</tr>
 
 			                            			<logic:empty name="aimYearlyComparisonsForm" property="yearlyComparisons">
@@ -627,7 +650,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="actualCommitment" />
+																		<aim:formatNumber  value="${yearlyComparisons.actualCommitment}" />
 
 																	</div>
 
@@ -640,7 +663,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="disbOrders" />
+																		<aim:formatNumber  value="${yearlyComparisons.disbOrders}" />
 
 																	</div>
                                                                                                                                   
@@ -653,7 +676,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="plannedDisbursement" />
+																		<aim:formatNumber  value="${yearlyComparisons.plannedDisbursement}" />
 
 																	</div>
 
@@ -663,22 +686,38 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="actualDisbursement" />
+																		<aim:formatNumber  value="${yearlyComparisons.actualDisbursement}" />
 
 																	</div>
 
 																</td>
-  <feature:display module="Funding" name="Expenditures">
-				                  	            	<td>
+  																		<feature:display module="Funding" name="Expenditures">
+				                  	            						<td>
 
-																	<div align="right">
+																			<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="actualExpenditure" />
-													</div>
+																			<aim:formatNumber  value="${yearlyComparisons.actualExpenditure}" />
+																			</div>
 
-											  </td>
+											 							 </td>
 
-  </feature:display>
+  																		</feature:display>
+			               	           			
+			               	           										<td>
+	
+																			<div align="right">
+
+																			<aim:formatNumber  value="${aimYearlyComparisonsForm.totalCost}" />
+																			</div>
+
+											 							 </td>
+											 							 <td>
+
+																			<div align="right">
+																				<aim:formatNumber  value="${yearlyComparisons.uncommittedBalance}" />
+																			</div>
+
+											 							 </td>
 			               	           			</tr>
 
 															</logic:iterate>
@@ -775,6 +814,24 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 													  </td>
 </feature:display>
+			<td>
+	
+																			<div align="right">
+	<aim:formatNumber  value="${aimYearlyComparisonsForm.totalCost}" />
+
+																			
+																			</div>
+
+											 							 </td>
+											 							 <td>
+
+																			<div align="right">
+	<aim:formatNumber  value="${aimYearlyComparisonsForm.uncommittedBalance}" />
+
+																	
+																			</div>
+
+											 							 </td>
 			      			                      </tr>
 
 			               			             </logic:notEmpty>

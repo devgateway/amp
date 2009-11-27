@@ -8,8 +8,7 @@ public class FilterParams {
   	private Long fiscalCalId;
   	private int fromYear;
   	private int toYear;
-
-	/**
+  	/**
 	 * @return
 	 */
 	public Long getAmpFundingId() {
@@ -103,6 +102,7 @@ public class FilterParams {
 		setToYear(fp.getToYear());
 		setTransactionType(fp.getTransactionType());
 		return true;
-	}	
+	}
+
 	
 }

@@ -14,6 +14,9 @@ public class YearlyComparisonsForm extends DetailedInfoForm {
 	private double totalActualDisbursement;
 	private double totalActualExpenditure;
 	private double totalDisbOrder;
+	private double totalCost;
+	private double uncommittedBalance;
+
 	private Collection yearlyDiscrepanciesAll;
 	private Collection fiscalYears;
 	private long fiscalCalId;
@@ -104,6 +107,22 @@ public class YearlyComparisonsForm extends DetailedInfoForm {
 
 	public Collection getFiscalYears() {
 		return fiscalYears;
+	}
+
+	public double getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(double totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public double getUncommittedBalance() {
+		return uncommittedBalance;
+	}
+
+	public void setUncommittedBalance(double uncommittedBalance) {
+		this.uncommittedBalance = uncommittedBalance;
 	}
 
 

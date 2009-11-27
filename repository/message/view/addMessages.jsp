@@ -21,8 +21,6 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
-<!-- this is for the nice tooltip widgets -->
-<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
 <style>
 <!--
@@ -308,6 +306,13 @@ div.fakefile2 input{
 			}
 		}	
 	}
+    function showMessagesHelpTooltip() {
+           var div=document.getElementById("createMessagesHelpTooltip");
+           div.style.display = "block";
+    }
+    function hideMessagesHelpTooltip(){
+      document.getElementById("createMessagesHelpTooltip").style.display = "none";
+    }
 
 </script>
 
@@ -436,10 +441,16 @@ div.fakefile2 input{
 																		<td align="left" nowrap="nowrap">
 																			<div id="myAutoComplete">
 																				<html:text property="relatedActivityName" name="messageForm" styleId="myInput" style="width:320px;font-size:100%"></html:text>
-																				<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,relatedActs],Style[15])" onmouseout="htm()" align="top" id="myImage"/>
+																				<img alt="" src="../ampTemplate/images/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    
 																		    	<div id="myContainer" style="width:315px;"></div>																		    	
 																		   	</div>
-																		   	<html:hidden property="selectedActId" styleId="myHidden"/>											
+																		   	<html:hidden property="selectedActId" styleId="myHidden"/>
+                                                                            <div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; left:400px;  border: 1px solid silver;">
+                                                                                    <TABLE WIDTH='200px' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
+                                                                                        <TR style="background-color:#376091"><TD style="color:#FFFFFF" nowrap><digi:trn>Message Help</digi:trn></TD></TR>
+                                                                                        <TR style="background-color:#FFFFFF"><TD><digi:trn>Type first letter of activity to view suggestions</digi:trn></TD></TR>
+                                                                                    </TABLE>
+                                                                            </div>
 																		</td>
 																	  </field:display>																			
 																	</tr>

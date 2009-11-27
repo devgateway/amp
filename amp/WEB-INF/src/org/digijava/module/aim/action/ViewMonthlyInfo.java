@@ -22,11 +22,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.MonthlyInfoForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
+import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.MonthlyComparison;
@@ -34,6 +36,7 @@ import org.digijava.module.aim.helper.MonthlyInfo;
 import org.digijava.module.aim.helper.MonthlyInfoWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -98,6 +101,17 @@ public class ViewMonthlyInfo extends TilesAction {
             List monthlyInfos = new ArrayList();
             try {
                 if (mapping.getInput().equals("/aim/viewMonthlyComparisons")) {
+                	BigDecimal total = new BigDecimal(0);
+        			Long ampActivityId = Long.parseLong(request.getParameter("ampActivityId"));
+        			try {
+        				AmpActivity activity = ActivityUtil.loadActivity(ampActivityId);
+        				total = CurrencyWorker.convert(activity.getFunAmount(), fp.getCurrencyCode());
+        				monthlyForm.setTotalCost(total);
+        				
+        			} catch (DgException e) {
+        				logger.error("can't get the total cost",e);
+        			}
+        			
                   BigDecimal totalActualComm = new BigDecimal(0);
                   BigDecimal totalDisbOrders = new BigDecimal(0);
                   BigDecimal totalPlannedDisb=new BigDecimal(0);
@@ -105,7 +119,7 @@ public class ViewMonthlyInfo extends TilesAction {
                   BigDecimal totalActualExp=new BigDecimal(0);
                   BigDecimal totalPlannedExp=new BigDecimal(0);
                   
-                    monthlyInfos = MonthlyInfoWorker.getMonthlyComparisons(fp);
+                    monthlyInfos = MonthlyInfoWorker.getMonthlyComparisons(fp,total);
                     if(monthlyInfos!=null){
                        Iterator iterInfo = monthlyInfos.iterator();
                         while (iterInfo.hasNext()) {
@@ -124,6 +138,7 @@ public class ViewMonthlyInfo extends TilesAction {
                        monthlyForm.setTotalPlannedDisbursement(totalPlannedDisb);
                        monthlyForm.setTotalPlannedExpenditure(totalPlannedExp);
                        monthlyForm.setTotalDisbOrder(totalDisbOrders);
+                       monthlyForm.setUncommittedBalance(total.subtract(totalActualComm));
                        Collections.sort(monthlyInfos);
                     }
 

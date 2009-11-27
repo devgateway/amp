@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper ;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -9,7 +10,7 @@ import org.apache.log4j.Logger;
 public class YearlyComparisonsWorker	{
 	private static Logger logger = Logger.getLogger(YearlyComparisonsWorker.class);
 
-	public static Collection getYearlyComparisons(FilterParams fp)	{
+	public static Collection getYearlyComparisons(FilterParams fp, BigDecimal totalCost){
 		if ( logger.isDebugEnabled() )
 			logger.debug("GETYEARLYCOMPARISONS() WITH AMPFUNDINGID : " + fp.getAmpFundingId() );
 		ArrayList arrList = new ArrayList();
@@ -25,7 +26,8 @@ public class YearlyComparisonsWorker	{
 			yearlyComparison.setFiscalYear(yearlyInfo.getFiscalYear());
 			yearlyComparison.setPlannedCommitment(yearlyInfo.getPlannedAmount());
 			yearlyComparison.setActualCommitment(yearlyInfo.getActualAmount());
-
+			yearlyComparison.setUncommittedBalance(totalCost.subtract(new BigDecimal(yearlyInfo.getActualAmount())).doubleValue());
+			
 			arrList.add(yearlyComparison);
 		}
               fp.setTransactionType(Constants.DISBURSEMENT_ORDER);
@@ -106,6 +108,7 @@ public class YearlyComparisonsWorker	{
 							+ arrList.size()) ;
 		return arrList ;
 	}
+	
 
 	public static AllTotals getAllTotals(Collection c)	{
 		if ( logger.isDebugEnabled() )

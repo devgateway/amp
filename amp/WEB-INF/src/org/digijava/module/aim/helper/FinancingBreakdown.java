@@ -1,26 +1,37 @@
-package org.digijava.module.aim.helper ;
+package org.digijava.module.aim.helper;
+
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
-public class FinancingBreakdown
-{
-	private long ampFundingId ;
-	private String financingId ;
-	private String donor ;
-	private String totalCommitted ;
-	private String totalDisbursed ;
-	private String unDisbursed ;
-	private String totalExpended ;
-	private String unExpended ;
-    private String totalDisbOrdered;
+public class FinancingBreakdown {
+	private long ampFundingId;
+	private String financingId;
+	private String donor;
+	private String totalCommitted;
+	private String totalDisbursed;
+	private String unDisbursed;
+	private String totalExpended;
+	private String unExpended;
+	private String totalDisbOrdered;
+	private String totalCost;
+	private String uncommittedbalance;
+
 
 	/* Added for Tanzania */
 	private String totalProjection;
 
-	private String actualStartDate ;
-	private String actualCompletionDate ;
+	private String actualStartDate;
+	private String actualCompletionDate;
 	private String signatureDate; // added by Priyajith
 	private String goeId;
 	private AmpOrganisation organisation;
+
+	public String getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(String totalCost) {
+		this.totalCost = totalCost;
+	}
 
 	/**
 	 * @return
@@ -170,8 +181,10 @@ public class FinancingBreakdown
 	public String getSignatureDate() {
 		return signatureDate;
 	}
+
 	/**
-	 * @param signatureDate The signatureDate to set.
+	 * @param signatureDate
+	 *            The signatureDate to set.
 	 */
 	public void setSignatureDate(String signatureDate) {
 		this.signatureDate = signatureDate;
@@ -189,15 +202,23 @@ public class FinancingBreakdown
 		return totalProjection;
 	}
 
-        public String getTotalDisbOrdered() {
-                return totalDisbOrdered;
-        }
+	public String getTotalDisbOrdered() {
+		return totalDisbOrdered;
+	}
 
-        public void setTotalProjection(String totalProjection) {
+	public void setTotalProjection(String totalProjection) {
 		this.totalProjection = totalProjection;
 	}
 
-        public void setTotalDisbOrdered(String totalDisbOrdered) {
-                this.totalDisbOrdered = totalDisbOrdered;
-        }
+	public void setTotalDisbOrdered(String totalDisbOrdered) {
+		this.totalDisbOrdered = totalDisbOrdered;
+	}
+
+	public String getUncommittedbalance() {
+		return uncommittedbalance;
+	}
+
+	public void setUncommittedbalance(String uncommittedbalance) {
+		this.uncommittedbalance = uncommittedbalance;
+	}
 }

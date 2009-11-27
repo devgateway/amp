@@ -65,7 +65,7 @@ public class MonthlyInfoWorker {
      * @param fp
      * @return List
      */
-    public static List<MonthlyComparison> getMonthlyComparisons(FilterParams fp) throws DgException {
+    public static List<MonthlyComparison> getMonthlyComparisons(FilterParams fp, BigDecimal totalCost) throws DgException {
 
 
         List<MonthlyComparison> monthlyData = new ArrayList<MonthlyComparison>();
@@ -97,6 +97,8 @@ public class MonthlyInfoWorker {
                     List monthPlannedComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.PLANNED, month, year);
                     List monthActualComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.ACTUAL, month, year);
                     comparison.setActualCommitment(getSumAmounts(monthActualComm, currCode));
+                    comparison.setUncommittedBalance(totalCost.subtract(comparison.getActualCommitment()));
+                    comparison.setTotalCost(totalCost);
                     comparison.setPlannedCommitment(getSumAmounts(monthPlannedComm, currCode));
 
 

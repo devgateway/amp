@@ -226,7 +226,8 @@ private
   # Returns a glossary tooltip icon if an attribute description can be found in the localization file
   def glossary_tooltip(name, attribute_name)
     info = I18n.translate(:"activerecord.attributes.#{@object_name.underscore}.#{attribute_name}.description", :raise => true)
-    @template.content_for :body, @template.content_tag(:div, info, :class => 'info', :id => name + '_info')
+    info_tag = @template.content_tag(:span, info)
+    @template.content_for :body, @template.content_tag(:div, info_tag, :class => 'info', :id => name + '_info')
     @template.image_tag('interface/info-icon.gif', :class => 'info-icon', :id => name + '_info_icon', :alt => '?')
   rescue I18n::MissingTranslationData
      nil

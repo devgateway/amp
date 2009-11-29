@@ -33,13 +33,15 @@ class Reports::CustomController < ReportsController
     projects = Project.published.ordered.all(
       :include => [:mdg_relevances, :donor, :sector_relevances, :geo_relevances, :fundings], 
       :conditions => sql_conditions_from_params)
+    # this may be interesting in later refactoring:
+    # Project.send(:preload_associations, projects, [:fundings, :funding_forecasts])
     
     data = Reports::ProjectAggregator.new(
       :fields => fields, 
       :funding_details => funding_details, 
       :projects => projects, 
       :middleware => disaggregators_from_params).data
-    
+      
     report = ComplexReport.create!(:data => data)
     redirect_to reports_custom_path(report, :format => params[:format], :currency => "EUR")
   end

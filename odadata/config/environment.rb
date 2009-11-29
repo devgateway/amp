@@ -22,9 +22,10 @@ Rails::Initializer.run do |config|
   config.gem "andand"
   config.gem "RedCloth"
   config.gem "ruport"  
-  config.gem "acts_as_reportable"
+  config.gem "acts_as_reportable",        :lib => false
   config.gem "spreadsheet"
-  config.gem "ruby-tilecache",            :lib => 'tile_cache'
+  config.gem "tilecache",                 :lib => 'tile_cache',         :version => '>=0.0.3'
+  config.gem "jrails",                    :version => '>=0.6.0'
   # Gems from GitHub
   config.gem 'mislav-will_paginate',      :lib => 'will_paginate',      :source => 'http://gems.github.com'
   config.gem 'rubyist-aasm',              :lib => 'aasm',               :source => 'http://gems.github.com'

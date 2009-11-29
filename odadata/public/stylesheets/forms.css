@@ -28,6 +28,11 @@ form fieldset ol li {
     padding: .5em 0;
 }
 
+form fieldset ol li:last-of-type {
+    border-bottom: none;
+    padding: .5em 0;
+}
+
 form fieldset label {
     display: block;
     font-weight: bold;

@@ -6,13 +6,20 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 		<title><%= render_page_title %></title>
-    	
-		<%= javascript_include_tag(:defaults, 'swfobject', 'jquery_expander', 'jquery_template', 'behavior/menu', "ui.datepicker-#{I18n.locale}", 'jquery.livequery.min' , :cache => 'basic') %>
+    
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/jquery_expander.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/jquery.livequery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/application.js" type="text/javascript" charset="utf-8"></script>
+		
+		<%= javascript_include_tag('behavior/menu', "ui.datepicker-#{I18n.locale}") %>
 		<%= stylesheet_link_tag(
 				'layout', 'forms', 'ui.datepicker', 
 				"layouts/#{current_user.andand.layout || 'public'}",
-				:media => :all, :cache => 'styles') 
-		%>
+				:media => :all, :cache => 'styles') %>
+				
 		<%= stylesheet_link_tag('print', :media => :print, :cache => false) %>
     	
 		<%= yield :head %>

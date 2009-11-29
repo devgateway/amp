@@ -1,36 +1,5 @@
-<% js_behavior :related_selects %>
+<% js_behavior :related_selects, :tabs %>
 <% stylesheet 'tabs' %>
-
-
-<script type="text/javascript" charset="utf-8">
-  var checkOnUnload = true;
-	function highlightTabsWithErrors(element) {
-		var tabs = element.children('li');
-		tabs.each(function() {
-			divId = $(this).children('a').attr('href');
-			correspondingDiv = $(divId);
-			
-			if (correspondingDiv.find('.fieldWithErrors').length > 0) {
-				$(this).addClass('tab_with_errors');
-			}
-		});
-	}
-	
-	$(document).ready(function(){
-        window.onbeforeunload = checkFirst;
-		$("ul#tabs").tabs();
-		highlightTabsWithErrors($("ul#tabs"));
-	});
-    function checkFirst(){
-      if(checkOnUnload)
-        return '';
-    }
-
-    $(window).scroll(function()
-    {
-      $('#command_box').animate({top:$(window).scrollTop()+27+"px" },{queue: false, duration: 350});
-    });
-</script>
 
 <% labeled_form_for @project do |form| %>
 <div id="tab_container" style="float:left;width:750px;">

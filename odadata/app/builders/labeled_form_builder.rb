@@ -77,6 +77,13 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
       label_opts.merge(:class => 'fluid', :reverse => true))
   end
   
+  def radio_button(method, tag_value, options = {})
+    label_opts = extract_label_options!(options)
+    wrap_in_label_row(method, 
+      @template.radio_button(@object_name, method, tag_value, options), 
+      label_opts.merge(:class => 'fluid', :reverse => true))
+  end
+  
   def habtm_check_box(method, options = {}, value = nil)
     label_opts = extract_label_options!(options)
     # We want the label to be on the right side!
@@ -250,11 +257,10 @@ private
       :label_class => nil,
       :glossary => false,
       :required => false)
-
-    # Renaming  
-    opts[:class] = opts.delete(:label_class)
-
-    opts
+    
+    returning opts do |label_opts|
+      label_opts[:class] = label_opts.delete(:label_class)
+    end
   end
 
   def strip_options_for_select!(options)

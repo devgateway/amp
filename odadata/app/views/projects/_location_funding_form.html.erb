@@ -1,24 +1,58 @@
-<% f.field_set do %>
+<script type="text/javascript" charset="utf-8">
+	$('div.cofunding input[type=radio].donor').livequery('change', function() {
+		if ($(this).checked) {
+			$(this).nextAll('select.agencies').hide();
+			$(this).nextAll('select.donors').show();
+		} else {
+			$(this).nextAll('select.donors').hide();
+			$(this).nextAll('select.agencies').show();
+		}
+	});
+	
+	$('div.cofunding input[type=radio].agency').livequery('change', function() {
+		if ($(this).checked) {
+			$(this).nextAll('select.donors').hide();
+			$(this).nextAll('select.agencies').show();
+		} else {
+			$(this).nextAll('select.agencies').hide();
+			$(this).nextAll('select.donors').show();
+		}
+	});
+</script>
+
+<% f.field_set t('projects.geo_relevances_title') do %>
 	<p><%=t 'projects.geo_usage' %></p>
 	
 	<li>
-		<%= f.label :geo_relevances %>
-		<%= f.add_associated_button(t('projects.add_location'), @project.geo_relevances.build, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
+		<%= f.add_associated_button(t('projects.add_location'), @project.geo_relevances.new, :style => "display: block; float: right; margin-top: -10px; width: 170px") %>
 		
-        <%= error_message_on(:project, :geo_relevances, "","", "error_message" ) %>
+		<%= error_message_on(:project, :geo_relevances, "","", "error_message" ) %>
 		<div id="geo_relevances">
-			<%= f.render_associated_form @project.geo_relevances %>
+			<%= f.render_associated_form @project.geo_relevances, :new => 1 %>
   		</div>
 	</li>
 	
 <% end %>
 
 <% f.field_set t('projects.cofunding_title') do %>
-	<div id="cofundings">
-		<%= f.render_associated_form(@project.cofundings, :new => 1) %>
-	</div>
-	
-	<%= f.add_associated_link(t('projects.add_cofunding_donor'), @project.cofundings.build) %>
+	<li>
+		<%= f.add_associated_button(t('projects.add_cofunding_donor'), @project.cofundings.new, :style => "display: block; float: right; margin-top: -5px; width: 170px", :partial => "cofunding_donor") %>
+		<%= f.add_associated_button(t('projects.add_cofunding_agency'), @project.cofundings.new, :style => "display: block; float: right; margin-top: -5px; width: 170px", :partial => "cofunding_agency") %>
+		
+   	<%= error_message_on(:project, :cofundings, "","", "error_message" ) %>
+
+		<div id="cofundings">
+			<% @project.cofundings.each do |cofunding| %>
+				<% f.fields_for :cofundings, cofunding do |cf| %>
+					<% if cofunding.donor_type == "Donor" %>
+						<%= render :partial => "cofunding_donor", :locals => { :f => cf } %>
+					<% elsif cofunding.donor_type == "Agency" %>
+						<%= render :partial => "cofunding_agency", :locals => { :f => cf } %>
+					<% end %>
+				<% end %>
+			<% end %>
+		</div>
+	</li>
 <% end %>
 	
 <% f.field_set t('projects.historic_funding', :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>

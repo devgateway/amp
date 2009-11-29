@@ -102,8 +102,10 @@ en:
     add_province: Add another province
     zero_provinces_warning: Please select at least one province!
     add_cofunding_donor: Add another Donor
+    add_cofunding_agency: Add NGO/Private/Other
     add_sector: Add another Sector
     add_location: Add another Location
+    geo_relevances_title: Relevant Locations
     cofunding_title: Co-Funding Donors and Amounts
     historic_funding: Historic Funding (up to the end of {{year}})
     funding_title: Finances {{year}}

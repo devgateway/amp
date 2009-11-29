@@ -7,11 +7,12 @@ class Donor < ActiveRecord::Base
 
   has_many :donor_details, :class_name => "DonorDetails"
   accepts_nested_attributes_for :donor_details
+  
   has_many :projects
   has_many :country_strategies, :dependent => :delete_all
   has_many :agencies, :class_name => "DonorAgency", :dependent => :delete_all
   
-  has_many :cofundings
+  has_many :cofundings, :as => :donor
   has_many :cofinanced_projects, :through => :cofundings, :source => :project
   
   has_many :accessible_fundings

@@ -1,14 +1,14 @@
 <div class="geo_relevance" style="padding-left:10px;border-bottom:1px dashed #CCCCCC;">
-		<%= f.collection_select :province_id, Province.ordered, :id, :name, 
-				{ :prompt => ll(:options, :prompt) }, :class => 'dynamic_select parent large' %>
-		
-		<%= f.related_collection_select :district_id, :province_id, 
-				Province.ordered, :'districts.ordered', :name, :id, :name, 
-				{ :label => false }, :class => 'dynamic_select child large' %>
-				
-		<%= f.text_field :amount %>
+	<%= f.collection_select :province_id, Province.ordered, :id, :name, 
+		{ :prompt => ll(:options, :prompt) }, :class => 'dynamic_select parent large' %>
 
-<br/>
-	<%= f.remove_link t('actions.delete') %>
-	
+	<%= f.related_collection_select :district_id, :province_id, 
+		Province.ordered, :'districts.ordered', :name, :id, :name, 
+		{ :label => false }, :class => 'dynamic_select child large' %>
+
+	<%= f.text_field :amount %>
+
+        <br/>
+
+        <%= f.remove_link t('actions.delete') %>
 </div>

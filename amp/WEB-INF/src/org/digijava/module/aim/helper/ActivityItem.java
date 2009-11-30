@@ -294,6 +294,14 @@ public class ActivityItem implements Comparable<ActivityItem>{
 		return endDate;
 	}
 
+	public List<LabelValueBean> getDonors() {
+		return donors;
+	}
+
+	public void setDonors(List<LabelValueBean> donors) {
+		this.donors = donors;
+	}
+
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}

@@ -86,10 +86,10 @@ public class ChartUtil {
     //renderer.setItemLabelsVisible(false);
 
     // set up gradient paints for series...
-	renderer.setSeriesPaint(0,new Color(0,0,255));									
+	renderer.setSeriesPaint(0,new Color(0,0,255));
 	renderer.setSeriesPaint(1,new Color(0,204,255));
 	renderer.setSeriesPaint(2,new Color(204,255,255));
-	renderer.setItemMargin(0);	
+	renderer.setItemMargin(0);
 
 //	Color color=COLOR_BLUE_START;
 //	Calendar year = Calendar.getInstance();

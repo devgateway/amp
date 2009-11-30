@@ -329,19 +329,19 @@ function showFilter(){
     }
 
 	function getInidcatorsParam(){
-		var params = p1d + 'programId='+curProgId;
+		var params = getURL();
 		if(selYear!=null){
 			for (var y=0; y<selYear.length; y++){
 				params += pd + 'selYears=' + selYear[y];
 			}
-		}
-		return params;
+		}		
+		return params;       
 	}
 
 	function openGridWindow(showGraph){
 		if (curProgId !=null){
 			var msg='\n<digi:trn>NPD Print</digi:trn>';
-			showPanelLoading(msg);			
+			showPanelLoading(msg);
 			
 			var url=addActionToURL('npdGrid.do');
 			var params = getInidcatorsParam();
@@ -350,7 +350,6 @@ function showFilter(){
 				extraActions = true;
 			}
 			url += params;
-			
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 			//var win = openURLinResizableWindow(url,600,600);
 		}
@@ -961,8 +960,6 @@ function showFilter(){
             }
 			return;
 		}
-
-
 
 		//sum labels
 		var labelsTR1 = document.createElement('TR');

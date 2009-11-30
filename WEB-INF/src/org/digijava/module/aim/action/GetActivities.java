@@ -4,12 +4,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,13 +16,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.Constants;
@@ -35,7 +28,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.NpdUtil;
-import org.digijava.module.aim.util.ProgramUtil;
 
 /**
  * Returns XML of Activities list depending on request parameters. This action
@@ -79,12 +71,12 @@ public class GetActivities extends Action {
 		PrintWriter out = new PrintWriter(outputStream, true);
 
 		try {
-			Date fromYear = yearToDate(actForm.getStartYear(), false);
-			Date toYear = yearToDate(actForm.getEndYear(), true);
+			Date fromYear = NpdUtil.yearToDate(actForm.getStartYear(), false);
+			Date toYear = NpdUtil.yearToDate(actForm.getEndYear(), true);
 
 			//count activities with same filter but without pagination. this should be fast.
 			logger.debug("counting activities");
-			Integer count=getActivitiesCount(actForm.getProgramId(),actForm.getStatusId(),actForm.getDonorIds(), fromYear,toYear, null, tm, false);
+			Integer count=NpdUtil.getActivitiesCount(actForm.getProgramId(),actForm.getStatusId(),actForm.getDonorIds(), fromYear,toYear, null, tm, false);
 			//calculate pagination
 			Integer pageStart=null;
 			Integer rowCount=null;
@@ -98,7 +90,7 @@ public class GetActivities extends Action {
 			}
 
 			logger.debug("retriving activities");
-			Collection<ActivityItem> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorIds(), fromYear,toYear, null, tm, pageStart,rowCount);
+			Collection<ActivityItem> activities = NpdUtil.getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorIds(), fromYear,toYear, null, tm, pageStart,rowCount);
 
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
             AmpCurrency curr=ampAppSettings.getCurrency();
@@ -129,131 +121,8 @@ public class GetActivities extends Action {
 		}
 		return null;
 	}
-
-	/**
-	 * Retrieves Activities filtered according params.
-	 * @param ampThemeId filter activities assigne to programm(Theme) specified ith this id.
-	 * @param statusCode filter activities, get anly with this status.
-	 * @param donorOrgId
-	 * @param fromDate
-	 * @param toDate
-	 * @param locationId
-	 * @param teamMember
-	 * @param recurse
-	 * @return
-	 * @throws AimException
-	 */
-	private Collection<ActivityItem> getActivities(Long ampThemeId,
-			String statusCode,
-			String donorOrgId,
-			Date fromDate,
-			Date toDate,
-			Long locationId,
-			TeamMember teamMember,
-			Integer pageStart,
-			Integer rowCount) throws AimException, DgException{
-
-
-		Collection<ActivityItem> result=null;
-
-		//search actvities in db, with pagination.
-            result = ActivityUtil.searchActivitieProgPercents(ampThemeId,
-				statusCode,
-				donorOrgId,
-				fromDate,
-				toDate,
-				locationId,
-				teamMember,
-				pageStart,
-				rowCount);
-
-
-
-		//Set<AmpActivity> activities = new TreeSet<AmpActivity>(new ActivityUtil.ActivityIdComparator());
-		List<ActivityItem> sortedActivities = null;
-		if (result!=null){
-			sortedActivities= new ArrayList<ActivityItem>(result);
-			Collections.sort(sortedActivities);
-		}
-
-		return sortedActivities;
-	}
-
-	private Integer getActivitiesCount(Long ampThemeId,
-			String statusCode,
-			String donorOrgId,
-			Date fromDate,
-			Date toDate,
-			Long locationId,
-			TeamMember teamMember,
-			boolean recurse) throws AimException, DgException{
-
-
-		int result=0;
-
-		result = ActivityUtil.searchActivitiesCount(ampThemeId,
-				statusCode,
-				donorOrgId,
-				fromDate,
-				toDate,
-				locationId,
-				teamMember);
-
-		if (recurse){
-			Collection<AmpTheme> children = ProgramUtil.getSubThemes(ampThemeId);
-			if (children!= null && children.size() > 0){
-				for (AmpTheme prog : children) {
-//					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
-//							prog.getAmpThemeId(), statusCode, donorOrgId,
-//							fromDate, toDate, locationId, teamMember);
-//					if (subActivities!= null && subActivities.size()>0){
-//						result.addAll(subActivities);
-//					}
-					Integer childsActivities=getActivitiesCount(prog.getAmpThemeId(), statusCode, donorOrgId, fromDate, toDate, locationId, teamMember, recurse);
-					if (childsActivities!=null){
-						result+=childsActivities;
-					}
-				}
-			}
-		}
-
-		return result;
-	}
-
-
-
-	/**
-	 * Converts year represented as String to date. It can create last day or
-	 * first day of the year depending on the second parameter. todo: this
-	 * should be changed to last and first second of the year.
-	 *
-	 * @param year
-	 * @param lastSecondOfYear
-	 * @return
-	 * @throws AimException
-	 */
-	private Date yearToDate(String year, boolean lastSecondOfYear)
-			throws AimException {
-		if (year != null) {
-			try {
-				Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.YEAR, Integer.valueOf(year).intValue());
-				if (lastSecondOfYear) {
-					cal.set(Calendar.MONTH, Calendar.DECEMBER);
-					cal.set(Calendar.DAY_OF_MONTH, 31);
-				} else {
-					cal.set(Calendar.MONTH, Calendar.JANUARY);
-					cal.set(Calendar.DAY_OF_MONTH, 1);
-				}
-				return cal.getTime();
-			} catch (Exception e) {
-				logger.error(e);
-				throw new AimException("Cannot convert year: " + year
-						+ " to int. Invalid request param", e);
-			}
-		}
-		return null;
-	}
+	
+	
 
 	/**
 	 * Converts Exception stack trace to XML.

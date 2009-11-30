@@ -19,6 +19,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/asynchronous.js'/>"></script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 <div id="popin" style="display: none">
@@ -277,8 +278,9 @@
 	
 	}
 
-	function closeWindow() {
-		myclose2();
+	function closeWindow(status, statusText, responseText, responseXML) {
+        checkAndClose2=true
+		checkErrorAndClose2();
 	}
 
 	function showPanelLoading2(msg){
@@ -576,28 +578,46 @@ function  levelChanged() {
       YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2, params);
 }
 
-function generateFieldsLocation(){
-		var ret="parentLocId=" + document.getElementsByName("parentLocId")[0].value;
-                ret+="&parentIndex=" + document.getElementsByName("parentIndex")[0].value;
-		if (document.getElementsByName('userSelectedLocs').length > 0){
-			var opt = document.getElementsByName('userSelectedLocs')[0].length;
-			for(var i=0; i< opt; i++){
-				if(document.getElementsByName('userSelectedLocs')[0].options[i].selected==true){
-					ret += "&userSelectedLocs=" + document.getElementsByName('userSelectedLocs')[0].options[i].value;
-                                        break;
-				}
-			}
-		}
-		return ret;
-	}
+        function generateFieldsLocation(){
+            var ret="parentLocId=" + document.getElementsByName("parentLocId")[0].value;
+            ret+="&parentIndex=" + document.getElementsByName("parentIndex")[0].value;
+            return ret;
+        }
+        function generateSelectedLocation(){
+            var ret='';
+            if (document.getElementsByName('userSelectedLocs').length > 0){
+                var opt = document.getElementsByName('userSelectedLocs')[0].length;
+                for(var i=0; i< opt; i++){
+                    if(document.getElementsByName('userSelectedLocs')[0].options[i].selected==true){
+                        ret += "&userSelectedLocs=" + document.getElementsByName('userSelectedLocs')[0].options[i].value;
+                        break;
+                    }
+                }
+            }
+            return ret;
+        }
 
-	function buttonAddLocation(){
-		var postString		= generateFieldsLocation();
-		<digi:context name="url" property="context/aim/selectLocationForIndicatorValue.do"/>
-		var url = "${url}";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		closeWindow();
-	}
+      function buttonAddLocation(){
+                var postString		= generateFieldsLocation();
+                var selectedLocs=generateSelectedLocation();
+                if(selectedLocs==''){
+                    var msg="<digi:trn>please select location</digi:trn>";
+                    alert(msg);
+                    return false;
+                }
+                else{
+                    postString+=selectedLocs;
+                }
+            <digi:context name="url" property="context/aim/selectLocationForIndicatorValue.do"/>
+              var content = document.getElementById("popinContent2");
+              content.innerHTML = '<div style="text-align: center">' +
+                  '<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+                  '<digi:trn>Saving, please wait ...</digi:trn><br/><br/></div>';
+              var url = "${url}?"+postString;
+              var async=new Asynchronous();
+              async.complete=closeWindow;
+              async.call(url);
+         }
 
 function validation(){
 	var values=document.getElementsByTagName("select");

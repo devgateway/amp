@@ -15,11 +15,12 @@
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
         
         <!-- Source File -->
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>

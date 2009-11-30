@@ -16,10 +16,6 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <jsp:include page="/repository/aim/view/components/addContactsScripts.jsp" flush="true" />
 
@@ -71,9 +67,7 @@
                 panelStrat=0;
 	}
 
-     YAHOOAmp.namespace("YAHOOAmp.amp");
-
-    var myPanelContact = new YAHOOAmp.widget.Panel("newpopins", { 
+	var myPanelContact = new YAHOOAmp.widget.Panel("newpopins2", { 
         x:250,
         y:100,
         minWidth:"400px",

@@ -14,13 +14,6 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
-
-
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">
 	</div>
@@ -46,7 +39,7 @@
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
 		    });
-		var myPanel2 = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel2 = new YAHOOAmp.widget.Panel("newpopins2", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,

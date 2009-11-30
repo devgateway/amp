@@ -44,7 +44,7 @@
     <!--
    YAHOOAmp.namespace("YAHOOAmp.amp");
 
-    var myPanelContact = new YAHOOAmp.widget.Panel("newpopins", {
+    var myPanelContact = new YAHOOAmp.widget.Panel("newpopins3", {
     	x:250,
         y:100,
         minWidth:"400px",

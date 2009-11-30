@@ -10,6 +10,7 @@
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
   <!-- Dependencies --> 
+  
         <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
@@ -22,6 +23,10 @@
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+		
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />

@@ -178,7 +178,9 @@ public class FinancingBreakdownWorker {
 		BigDecimal cost=new BigDecimal(0);
 		try {
 			activity = ActivityUtil.loadActivity(ampActivityId);
-			cost=activity.getFunAmount();
+            if(activity.getFunAmount()!=null){
+                cost=activity.getFunAmount();
+            }
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

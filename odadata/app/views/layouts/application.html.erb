@@ -30,13 +30,12 @@
 			<div id="generalContainer">
 				<div id="header">
 					<%= render_header_content_for_role(current_user.andand.role_title) %>
-				</div>
-			
-				<div id="content">
 					<!-- START Flash Messages section -->
 					<%= flash_messages %>
 					<!-- END Flash Messages section -->
-					
+				</div>
+			
+				<div id="content">					
 					<!-- START yield :header section -->
 					<%= yield :header %>
 					<!-- END yield :header section -->

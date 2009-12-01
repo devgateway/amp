@@ -30,10 +30,10 @@ class ProjectsController < ApplicationController
     @project = current_donor.projects.build(params[:project])
     
     if @project.save
-      flash[:notice] = I18n.t('projects.successfully_created', :project => @project.donor_project_number).to_s
+      flash[:notice] = "Project <i>#{@project.donor_project_number}</i> has been successfully added."
       redirect_to projects_path
     else
-      flash[:error] = I18n.t('projects.fields_missing').to_s
+      flash[:error] = "Project could not be saved. Please correct the errors shown below."
       render :action => 'new'
     end
   end
@@ -46,9 +46,10 @@ class ProjectsController < ApplicationController
     @project = current_donor.projects.find(params[:id])
     
     if @project.update_attributes(params[:project])
+      flash[:notice] = "Project <i>#{@project.donor_project_number}</i> has been successfully saved."
       redirect_to projects_path(:status => @project.data_status)
     else
-      flash[:error] = I18n.t('projects.fields_missing').to_s
+      flash[:error] = "Project could not be saved. Please correct the errors shown below."
       render :action => 'edit'
     end
   end
@@ -84,6 +85,7 @@ class ProjectsController < ApplicationController
     list = project.list_action
     project.update_attribute(:data_status, 2)
     
+    flash[:notice] = "Project has been deleted."
     render :action => list
   end
   
@@ -93,6 +95,7 @@ class ProjectsController < ApplicationController
     
     project.update_attribute(:data_status, 1)
     
+    flash[:notice] = "Project has been published. It is now included into reports and publicly visible."
     redirect_to :action => 'list_draft'
   end
   

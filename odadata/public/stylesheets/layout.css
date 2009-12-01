@@ -70,6 +70,31 @@ A:visited { color: #666; }
 A:hover { color: #fff; background-color: #000; }
 A IMG { border: 0; }
 
+/* FLash messages */
+.flash {
+	height: 25px;
+	text-align: center;
+	margin: -22px 0px 10px 0px;
+	padding-top: 2px;
+	vertical-align: bottom;
+	width: 100%;
+	z-index: 100; /* we overlay the scrollbar */
+}
+
+.flash.notice, .flash.message {
+	background-color: #BEC;
+	border: 1px solid #483;
+	border-right: none;
+	border-left: none;
+}
+
+.flash.error, .flash.warning {
+	background-color: #FF9999;
+	border: 1px solid #FF6666;
+	border-right: none;
+	border-left: none;
+}
+
 /* Start GENERAL CLASSES */
 
 .horizontalBox {

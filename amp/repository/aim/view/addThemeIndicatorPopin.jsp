@@ -12,6 +12,7 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/asynchronous.js'/>"></script>
 
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />

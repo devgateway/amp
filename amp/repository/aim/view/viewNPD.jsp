@@ -168,9 +168,22 @@
 			'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent();
 	}
-
-var filter; // Filter panel
-
+function initFilterPanel(){
+    var filterDiv = document.getElementById('filter');
+    filterDiv.style.display="block";
+    filterDiv.stytelvisibility="visible";
+    filter=new YAHOO.widget.Panel("filter",{
+            width:"400px",
+            fixedcenter: true,
+            constraintoviewport: true,
+            Underlay:"shadow",
+            modal: true,
+            close:true,
+            visible:false,
+            draggable:true} );
+    filter.render(); // Filter panel
+}
+    
 /*
  *    method to expand or colapse
  *    filter settings
@@ -191,19 +204,7 @@ function toggleSettings(){
 
 // show filter window
 function showFilter(){
-    var filterDiv = document.getElementById('filter');
-    filterDiv.style.display="block";
-    filterDiv.stytelvisibility="visible";
-    filter=new YAHOO.widget.Panel("filter",{    		
-            width:"400px",
-            fixedcenter: true,
-            constraintoviewport: true,
-            Underlay:"shadow",
-            modal: true,
-            close:true,
-            visible:true,
-            draggable:true} );
-    filter.render();
+  filter.show();
 }
 </script>
 
@@ -1383,6 +1384,7 @@ function showFilter(){
 		setupYears();
 		initTree();
 		initPopinScript();
+        initFilterPanel();
 	}
 
 	/**

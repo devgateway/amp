@@ -105,8 +105,8 @@ public class TextCell extends Cell {
 		return false;
 	}
 
-	public Comparable comparableToken() {
-		return value;
+	public Comparable<String> comparableToken() {
+		return value.toLowerCase();
 	}
 
 	@Override

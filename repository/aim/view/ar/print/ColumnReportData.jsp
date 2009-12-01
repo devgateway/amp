@@ -110,12 +110,12 @@
 								<logic:iterate name="col" property="items" id="cell"
 									type="org.dgfoundation.amp.ar.Viewable" length="1">
 									<tr>
-										<td height="20"
+										<td
 											style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px dotted;text-transform: uppercase;"
 											width="50">&nbsp;</td>
 										<logic:iterate id="cellHeader" name="col" property="items"
 											type="org.dgfoundation.amp.ar.Viewable">
-											<td width="25%"
+											<td width="50"
 												style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px dotted;text-transform: uppercase;border-left:1px dotted #CCCCCC;">
 												<c:set var="key" value="aim:reportBuilder:${cellHeader.name}">
 													</c:set>
@@ -129,12 +129,12 @@
 								<c:set var="showHeader" value="false" scope="page" />
 							</c:if>
 							<tr>
-								<td height="18" width="20%"
+								<td width="20%"
 									style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px dotted;text-transform: uppercase;">
 										<c:out value="${col.name}"></c:out></td>
 								<logic:iterate id="cell" name="col" property="items"
 									type="org.dgfoundation.amp.ar.Viewable">
-									<td width="25%" nowrap="nowrap"
+									<td width="50" nowrap="nowrap"
 										style="font-size:8pt;text-align: right;border-bottom:1px dotted;border-left:1px dotted #CCCCCC"
 										valign="middle"><bean:define id="viewable" name="cell"
 										type="org.dgfoundation.amp.ar.Viewable" scope="page"

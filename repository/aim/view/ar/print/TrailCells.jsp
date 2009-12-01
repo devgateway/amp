@@ -8,7 +8,7 @@
 
 <bean:define id="reportData" name="viewable"  type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page" />
 
-<table border="0" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="margin-top: 15px;margin-bottom: 15px">
+<table border="0" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 	<!-- generate total row -->
 	<tr>
 		<td style="text-align: left;text-transform: uppercase;font-size: 8pt;" colspan="2">

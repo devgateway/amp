@@ -94,6 +94,7 @@ counter++;
 session.setAttribute("progressValue", counter);
 %>
 
+<logic:notEqual name="viewFormat" scope="request" value="print">
 <div id="myFilterWrapper" style="display: none;" >
 	<div id="myFilter" style="display: none;" >
 			<jsp:include page="/aim/reportsFilterPicker.do" />
@@ -105,6 +106,7 @@ session.setAttribute("progressValue", counter);
 	          <jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 	</div>
 </div>
+</logic:notEqual>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
@@ -490,7 +492,7 @@ session.setAttribute("progressValue", counter);
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter("pageNumber"))%>" scope="request"/>
 			</c:if>
 		<logic:equal name="viewFormat" value="print">
-			<table id='reportTable'  cellSpacing="0" width="780" style="overflow:hidden">
+			<table id='reportTable'  cellSpacing="0" width="900" style="overflow:hidden">
 				<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>

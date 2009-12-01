@@ -14,7 +14,7 @@
 <% if (isGroup.equalsIgnoreCase("false")){%>
 <td width="5%">&nbsp</td>
 <%} %>
-<td height="18"  nowrap="nowrap" style="font-size:8pt;text-transform: uppercase">
+<td nowrap="nowrap" style="font-size:8pt;text-transform: uppercase">
 <% Cell c=cellColumn.getByOwner(ownerId);%>
 		<c:set var="key">
 			aim:reportBuilder:<%=cellColumn.getName()%>
@@ -23,7 +23,7 @@
 	 		<%=cellColumn.getName()%>
 		 </digi:trn>:
 </td>
-<td height="18"  style="font-size:8pt;padding-left: 3px;" width="100%">
+<td style="font-size:8pt;padding-left: 3px;" width="100%">
 <% if(c!=null) {
 	request.setAttribute("cell",c);
 %> 

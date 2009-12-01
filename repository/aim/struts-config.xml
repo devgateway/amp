@@ -1107,7 +1107,6 @@
       <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
       <forward name="addActivityStep10" path="/showLayout.do?layout=addActivityStep10" />
       <forward name="addActivityStep11" path="/showLayout.do?layout=addActivityStep11" />
-      <forward name="addActivityStep12" path="/showLayout.do?layout=addActivityStep12" />
       <forward name="addActivityStep13" path="/showLayout.do?layout=addActivityStep13" />
       <forward name="addActivityStep17" path="/showLayout.do?layout=editSurveyList" />
       <forward name="preview" path="/showLayout.do?layout=previewActivity" />

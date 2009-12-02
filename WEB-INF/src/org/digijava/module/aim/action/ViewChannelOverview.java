@@ -151,6 +151,11 @@ public class ViewChannelOverview extends TilesAction {
 				e.printStackTrace();
 			}
 
+			//Lazy init Locations so JSP can display
+			Set loc = activity.getLocations();
+			if (loc != null)
+				loc.size();
+			
 			formBean.clearMessages();
 			AmpTeam ampTeam=TeamUtil.getAmpTeam(teamMember.getTeamId());
 			boolean hasTeamLead=true;

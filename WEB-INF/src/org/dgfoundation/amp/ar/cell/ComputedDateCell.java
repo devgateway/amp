@@ -1,10 +1,14 @@
 package org.dgfoundation.amp.ar.cell;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.workers.ComputedDateColWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
 public class ComputedDateCell extends TextCell {
 
+	private static Logger log = Logger.getLogger(ComputedDateCell.class);
+	
+	
 	public Class getWorker() {
 		return ComputedDateColWorker.class;
 	}
@@ -37,4 +41,20 @@ public class ComputedDateCell extends TextCell {
 	public ComputedDateCell() {
 		super();
 	}
+	
+	@Override
+	public Comparable comparableToken() {
+		Double retValue = 0d;
+		try {
+			if (this.getValue() != null){
+				String value = (String) this.getValue();
+				if (!value.equalsIgnoreCase("")) {
+					retValue = Double.parseDouble(value);
+				}		
+			}
+		} catch (NumberFormatException ex){
+			log.debug(ex);
+		}
+		return retValue;
+	}	
 }

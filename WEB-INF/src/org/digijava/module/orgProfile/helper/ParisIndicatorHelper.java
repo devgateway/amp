@@ -49,7 +49,7 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, 2005);
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
         String indicatorCode = prIndicator.getIndicatorCode();
-        long allDonorBaseLineValue = OrgProfileUtil.getValue( indicatorCode, currency, null, orgGroupId, startDate, endDate, member);
+        long allDonorBaseLineValue = OrgProfileUtil.getValue( indicatorCode, currency, null, null, startDate, endDate, member);
         return allDonorBaseLineValue;
     }
 
@@ -76,7 +76,7 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         String indicatorCode = prIndicator.getIndicatorCode();
-        long previousYearValue =OrgProfileUtil.getValue( indicatorCode,  currency, null, orgGroupId, startDate, endDate, member);;
+        long previousYearValue =OrgProfileUtil.getValue( indicatorCode,  currency, null, null, startDate, endDate, member);;
         return previousYearValue;
 
     }

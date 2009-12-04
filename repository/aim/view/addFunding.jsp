@@ -944,11 +944,11 @@ var isAlreadySubmitted = false;
                                              <td>
                                              	<!-- 
                                              	<c:if test="${contentDisabled=='true'}">
-                                            	   <input type="submit" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                            	   <input type="button" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
                                             	</c:if>
                                             	-->
                                             	<c:if test="${contentDisabled=='false'}">
-                                            	   <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                            	   <input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
                                             	</c:if>
 											</td>
 
@@ -1193,10 +1193,10 @@ var isAlreadySubmitted = false;
 											</c:if>
                                             <td>
                                             	<c:if test="${contentDisabled=='false'}">
-                                               		<input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                               		<input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 												</c:if>
                                             	<c:if test="${contentDisabled=='true'}">
-                                               		<input type="submit" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                               		<input type="button" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 												</c:if>
 											</td>
 

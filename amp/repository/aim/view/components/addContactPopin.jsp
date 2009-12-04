@@ -13,7 +13,6 @@
 <digi:context name="digiContext" property="context"/>
 <digi:instance property="aimAddContactForm"/>
 
-
 <digi:form name="contactForm" type="aimAddContactForm" action="/addAmpContactInfo.do" method="post">
     <html:hidden name="aimAddContactForm" property="contactId" styleId="contactId"/>
     <html:hidden name="aimAddContactForm" property="temporaryId" styleId="temporaryId"/>

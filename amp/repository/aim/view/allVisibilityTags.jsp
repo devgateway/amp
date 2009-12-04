@@ -134,7 +134,7 @@
 <feature:display name="Step1" module="Custom Fields"></feature:display>
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
 <feature:display name="Documents Tab" module="Document"></feature:display> 
-<feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
+<feature:display name="Donor Contact Information" module="Contact Information"></feature:display> Project Coordinator Contact
 <feature:display name="Donor Report" module="Report Types"></feature:display> 
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
@@ -381,9 +381,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Conditions for Fund Release" feature="Funding Information"></field:display> 
 <field:display name="Contact Name" feature="Reports Contact Information"></field:display>
 <field:display name="Donor Contact" feature="Reports Contact Information"></field:display>
-<field:display name="Ministry of Finance Contact" feature="Reports Contact Information"></field:display>
-<field:display name="Project Coordinator" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry Of Finance Contact" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator Contact" feature="Reports Contact Information"></field:display>
 <field:display name="Sector Ministry Contact" feature="Reports Contact Information"></field:display> 
+<field:display name="Implementing/Executing Agency Contact" feature="Reports Contact Information"></field:display> 
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Contract Donor Disbursements" feature="Contracting"></field:display> 
@@ -597,7 +598,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Primary Program Level 5" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 7" feature="NPD Programs"></field:display> 
-<field:display name="Primary Program Level 8" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 8" feature="NPD Programs"></field:display>
 <field:display name="Secondary Program Level 1" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 2" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 3" feature="NPD Programs"></field:display> 

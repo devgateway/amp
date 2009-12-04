@@ -353,14 +353,14 @@ public class OrgProfileUtil {
             Query qry = session.createQuery(queryString + " and size(cal.organisations)>1 "); //joint
             qry.setDate("startDate", startDate);
             qry.setDate("endDate", endDate);
-            if (orgIds == null && orgGroupId != -1) {
+            if (orgIds == null&& orgGroupId!=null && orgGroupId != -1) {
                 qry.setLong("orgGroupId", orgGroupId);
             }
             long jointMisssion = qry.list().size();
             qry = session.createQuery(queryString); // all missions
             qry.setDate("startDate", startDate);
             qry.setDate("endDate", endDate);
-            if (orgIds == null && orgGroupId != -1) {
+            if (orgIds == null && orgGroupId!=null&& orgGroupId != -1) {
                 qry.setLong("orgGroupId", orgGroupId);
             }
             long allMisssion = qry.list().size();
@@ -684,7 +684,7 @@ public class OrgProfileUtil {
 
         }
         qry.setInteger("adjustmentType", adjustmentType);
-        if (orgIds == null&&orgGroupId!=-1) {
+        if (orgIds == null&&orgGroupId!=null&&orgGroupId!=-1) {
            qry.setLong("orgGroupId", orgGroupId);
         }
         List<AmpFundingDetail> fundingDets = qry.list();

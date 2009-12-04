@@ -41,37 +41,37 @@
 
 </style>
 <script type="text/javascript">
-    <!--
-   YAHOOAmp.namespace("YAHOOAmp.amp");
+<!--
+YAHOOAmp.namespace("YAHOOAmp.amp");
 
-    var myPanelContact = new YAHOOAmp.widget.Panel("newpopins3", {
-    	x:250,
-        y:100,
-        minWidth:"400px",
-        fixedcenter: true,
-        constraintoviewport: false,
-        underlay:"none",
-        close:true,
-        visible:false,
-        modal:true,
-        draggable:true,
-        context: ["showbtn", "tl", "bl"]
-    });
-    var panelStartContact=0;
-    var checkAndCloseContact=false;
+ var myPanelContact = new YAHOOAmp.widget.Panel("newpopins3", {
+ 	x:250,
+     y:100,
+     minWidth:"400px",
+     fixedcenter: true,
+     constraintoviewport: false,
+     underlay:"none",
+     close:true,
+     visible:false,
+     modal:true,
+     draggable:true,
+     context: ["showbtn", "tl", "bl"]
+ });
+ var panelStartContact=0;
+ var checkAndCloseContact=false;
 
-      function initContactScript() {
-        var msg='\n<digi:trn >Add Contact Information</digi:trn>';
-        myPanelContact.setHeader(msg);
-        myPanelContact.setBody("");
-        myPanelContact.beforeHideEvent.subscribe(function() {
-            panelStartContact=1;
-        });
+   function initContactScript() {
+     var msg='\n<digi:trn >Add Contact Information</digi:trn>';
+     myPanelContact.setHeader(msg);
+     myPanelContact.setBody("");
+     myPanelContact.beforeHideEvent.subscribe(function() {
+         panelStartContact=1;
+     });
 
-        myPanelContact.render(document.body);
-        panelStartContact=0;
-    }
-  -->
+     myPanelContact.render(document.body);
+     panelStartContact=0;
+ }
+-->
 </script>
 
 <script type="text/javascript">
@@ -126,10 +126,13 @@
             if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
                  myContactClose();
                  refreshPage();
+                 
             }
             checkAndCloseContact=false;
         }
     }
+         
+   
 
     function  showContactPanelLoading(msg){
         myPanelContact.setHeader(msg);
@@ -140,8 +143,8 @@
         showContactContent();
     }
     function selectContact(params1) {
-       // myPanelContact.cfg.setProperty("width","800px");
-       // myPanelContact.cfg.setProperty("height","500px");
+        //myPanelContact.cfg.setProperty("width","800px");
+        //myPanelContact.cfg.setProperty("height","500px");
         YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback1);
     }
 
@@ -183,7 +186,8 @@
         myPanelContact.hide();
         myPanelContact=1;
 
-    } 
+    }
+ 
 
     function addActionToURL(actionName){
         var fullURL=document.URL;
@@ -301,32 +305,36 @@
     }
 
 
-
-    function addActionToURL(actionName){
-        var fullURL=document.URL;
-        var lastSlash=fullURL.lastIndexOf("/");
-        var partialURL=fullURL.substring(0,lastSlash);
-        return partialURL+"/"+actionName;
-    }
-
     function addContact(){
-    	<digi:context name="addCont" property="context/addAmpContactInfo.do?action=save"/>;
-        document.contactForm.action = "<%= addCont %>";
-        document.contactForm.target = "_self";
-        document.contactForm.submit();              
-            //<digi:context name="addCont" property="context/addAmpContactInfo.do?action=save"/>;
-            //var url="${addCont}"+"&"+getContactParams();
-		 	//var async=new Asynchronous();
-            //async.complete=closeContactPopin;
-            //async.call(url);
-    }
+       <digi:context name="addCont" property="context/addAmpContactInfo.do?action=save"/>;
+       var url="${addCont}";
+       var params=getContactParams();
+       YAHOOAmp.util.Connect.asyncRequest("POST", url, addContactCallBack , params);
+	   //var async=new Asynchronous();
+       //async.complete=closeContactPopin;
+       //async.call(url);
+     }
 
-    function closeContactPopin(status, statusText, responseText, responseXML){
+    var responseSuccessAddContact=function(o){        
     	checkAndCloseContact=true;
         checkErrorAndCloseContact();
     }
+
+    var responseFailureAddContact=function(o){
+    	return false;
+    }
+
+    var addContactCallBack={
+    	success: responseSuccessAddContact, 
+    	failure: responseFailureAddContact
+    }; 
+
+   // function closeContactPopin(status, statusText, responseText, responseXML){
+   // 	checkAndCloseContact=true;
+   //     checkErrorAndCloseContact();
+   // }
          
-    function searchContact(){
+        function searchContact(){
             var flg=checkEmptyKeywordContact();
             if(flg){
                 var keyword=document.getElementById('keyword').value;
@@ -350,15 +358,10 @@
         }
 
         function addSelectedContacts() {
-        	 <digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
-             document.contactForm.action = "<%= addSelCont %>";
-             document.contactForm.target = "_self";
-             document.contactForm.submit();             
-        	//<digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
-            //checkAndCloseContact=true;
-            //var params=getSelectedContactsParams();
-            //var url="${addSelCont}";
-			//YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1 , params);
+            <digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
+            checkAndCloseContact=true;
+            var url="${addSelCont}"+"&"+getSelectedContactsParams();
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, addContactCallBack);
         }
 
         function getContactParams(){
@@ -402,7 +405,7 @@
         	}
             return params;
         }
-
+        
         function getSelectedContactsParams(){
             var params="";
             var contacts = document.getElementsByName("selContactIds");

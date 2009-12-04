@@ -10,10 +10,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -28,7 +29,6 @@ import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
+import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.AddOrgForm;
@@ -58,7 +59,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.JDBCException;
-import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 
 public class EditOrganisation extends DispatchAction {
 
@@ -87,9 +87,7 @@ public class EditOrganisation extends DispatchAction {
         return create(mapping, form, request, response);
     }
 
-    public ActionForward create(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    public ActionForward create(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (sessionChk(request)) {
             return mapping.findForward("index");
         }
@@ -758,10 +756,13 @@ public class EditOrganisation extends DispatchAction {
 
     }
 
-    public ActionForward reload(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        return mapping.findForward("forward");
+    public ActionForward reload(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+    	String forwardWhere="forward";
+    	String asynchCall=request.getParameter("asynchCall");
+    	if(asynchCall!=null && asynchCall.equals("true")){
+    	   forwardWhere = null;
+    	}
+    	return mapping.findForward(forwardWhere);
     }
 
     public ActionForward save(ActionMapping mapping, ActionForm form,

@@ -286,6 +286,9 @@ public class AddContactComponent extends DispatchAction{
         }
         
         Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
+        createForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,createForm.getContEmail(),null));
+        createForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,createForm.getContPhoneNumber(),createForm.getContPhoneType()));
+        createForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,createForm.getContFaxes(),null));
         if(createForm.getEmails()!=null){
         	contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(createForm.getEmails()));
         }        
@@ -294,44 +297,23 @@ public class AddContactComponent extends DispatchAction{
 		}
 		if(createForm.getPhones()!=null){
 			contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(createForm.getPhones()));
-		}
+		}        
 		contact.setProperties(contactProperties);
         
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
         if(createForm.getActivityContactType()!=null && !createForm.getActivityContactType().equals("")){
-        	//Collection<AmpActivityContact> sortedCollection=new TreeSet<AmpActivityContact>(new AmpActivityContactCompareByContact());
         	Collection<AmpActivityContact> targetCollecion = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
             AmpActivityContact actContact=new AmpActivityContact();	
     		actContact.setContact(contact);
     		actContact.setContactType(createForm.getActivityContactType());
-    		//targetCollecion=ContactsComponentHelper.getActContactCollectionFiller().fillTargetFormCollection(targetCollecion, sortedCollection, actContact);
-    		//targetCollecion=new ContactsComponentHelper.AmpActivityContactCollectionFiller().fillTargetFormCollection(targetCollecion, sortedCollection, actContact);
     		targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());
     		target.set(createForm.getTargetForm(), targetCollecion);
     	        
     	    return mapping.findForward("step8");
         }else{
-        	//Collection<AmpContact> sortedtargetCollecion = new TreeSet<AmpContact>(new AmpContactCompare());
             Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
             targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, contact, new ContactsComponentHelper.AmpContactCompare());
-            //targetCollecion=ContactsComponentHelper.getAmpContCollectionFiller().fillTargetFormCollection(targetCollecion, sortedtargetCollecion, contact);
-            //targetCollecion=new ContactsComponentHelper.AmpContactCollectionFiller().fillTargetFormCollection(targetCollecion, sortedtargetCollecion, contact);
-//            if (targetCollecion != null) {
-//            	sortedtargetCollecion.addAll(targetCollecion);
-//            } else {
-//                targetCollecion = new ArrayList<AmpContact>();
-//            }
-//            if (!sortedtargetCollecion.contains(contact)) {
-//            	sortedtargetCollecion.add(contact);
-//            } else {
-//                //removing because properties may be changed...
-//                sortedtargetCollecion.remove(contact);
-//                sortedtargetCollecion.add(contact);
-//            }
-//            targetCollecion.clear();
-//            targetCollecion.addAll(sortedtargetCollecion);
-    
             target.set(createForm.getTargetForm(), targetCollecion);
         }
         
@@ -351,24 +333,24 @@ public class AddContactComponent extends DispatchAction{
 				ContactPropertyHelper [] contactEmails=myForm.getEmails();
 				myForm.setEmails(buildContactPropertiesForAddNewData(contactEmails,Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
 				myForm.setEmailsSize(myForm.getEmails().length);
-				myForm.setPhones(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
-				myForm.setFaxes(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
+				myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
+				myForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
 			}
 			//user clicked Add new Phone
 			if(dataName.equalsIgnoreCase("phone")){
 				ContactPropertyHelper [] contactPhones=myForm.getPhones();
 				myForm.setPhones(buildContactPropertiesForAddNewData(contactPhones,Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
 				myForm.setPhonesSize(myForm.getPhones().length);
-				myForm.setEmails(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
-				myForm.setFaxes(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
+				myForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
+				myForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
 			}
 			//user clicked Add New Fax
 			if(dataName.equalsIgnoreCase("fax")){
 				ContactPropertyHelper [] contactFaxes=myForm.getFaxes();
 				myForm.setFaxes(buildContactPropertiesForAddNewData(contactFaxes,Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));				 
 				myForm.setFaxesSize(myForm.getFaxes().length);
-				myForm.setEmails(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
-				myForm.setPhones(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
+				myForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
+				myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
 			}
 			
 			 return setAction(myForm, mapping);
@@ -458,7 +440,7 @@ public class AddContactComponent extends DispatchAction{
  	}    
  	
     
-    private ContactPropertyHelper[] buildContactPropertiesBeforeRemoveData(String propertyName, String [] submittedValues, String[] phoneTypes){
+    private ContactPropertyHelper[] buildContactProperties(String propertyName, String [] submittedValues, String[] phoneTypes){
 		ContactPropertyHelper [] retVal=null;
 		if(submittedValues!=null){
 			retVal=new ContactPropertyHelper [submittedValues.length];
@@ -475,9 +457,9 @@ public class AddContactComponent extends DispatchAction{
     
     
     private void fillContactProperties(AddContactComponentForm myForm){
-    	myForm.setEmails(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
-    	myForm.setPhones(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
-    	myForm.setFaxes(buildContactPropertiesBeforeRemoveData(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
+    	myForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
+    	myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
+    	myForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
 		if(myForm.getEmails()!=null){
 			myForm.setEmailsSize(myForm.getEmails().length);
 		}else{

@@ -17,7 +17,7 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-<jsp:include page="/repository/aim/view/components/addContactsScripts.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/components/contactScripts.jsp" flush="true" />
 
 <style type="text/css">
 	

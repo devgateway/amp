@@ -72,7 +72,7 @@
 
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" flush="true" />
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
-<jsp:include page="/repository/aim/view/components/addContactsScripts.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/components/contactScripts.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
     function initScripts() {
@@ -86,6 +86,9 @@
         document.aimAddOrgForm.actionFlag.value='reload'
         document.aimAddOrgForm.submit();
     }
+
+    
+    
     function addOrganizations2Contact(){
         var params=getContactParams();
     <digi:context name="addCont" property="context/addAmpContactInfo.do?action=addOrganizations"/>;
@@ -605,17 +608,39 @@
               function getGeneralInfoParams(){
                       var params="";
                       params+="name="+document.getElementById('orgName').value;
-                      params+="&regNumbMinPlan="+document.getElementById('regNumbMinPlan').value;
-                      params+="&minPlanRegDate="+document.getElementById('minPlanRegDate').value;
-                      params+="&fiscalCalId="+document.getElementById('fiscalCalId').value;
-                      params+="&orgUrl="+document.getElementById('orgUrl').value;
-                      params+="&address="+document.getElementById('address').value;
-                      params+="&addressAbroad="+document.getElementById('addressAbroad').value;
-                      params+="&legalPersonNum="+document.getElementById('legalPersonNum').value;
-                      params+="&legalPersonRegDate="+document.getElementById('legalPersonRegDate').value;
-                      params+="&countryId="+document.getElementById('countryId').value;
-                      params+="&taxNumber="+document.getElementById('taxNumber').value;
-                      params+="&implemLocationLevel="+ document.getElementsByName("implemLocationLevel")[0].value;
+                      if(document.getElementById('regNumbMinPlan')!=null){
+                    	  params+="&regNumbMinPlan="+document.getElementById('regNumbMinPlan').value;
+                      }
+                      if(document.getElementById('minPlanRegDate')!=null){
+                    	  params+="&minPlanRegDate="+document.getElementById('minPlanRegDate').value;
+                      }
+                      if(document.getElementById('fiscalCalId')!=null){
+                          params+="&fiscalCalId="+document.getElementById('fiscalCalId').value;
+                      }
+						if(document.getElementById('orgUrl')!=null){
+						     params+="&orgUrl="+document.getElementById('orgUrl').value;                     
+						}
+						if(document.getElementById('address')!=null){
+						    params+="&address="+document.getElementById('address').value;
+						}
+						if(document.getElementById('addressAbroad')!=null){
+						    params+="&addressAbroad="+document.getElementById('addressAbroad').value;
+						}
+						if(document.getElementById('legalPersonNum')!=null){
+						    params+="&legalPersonNum="+document.getElementById('legalPersonNum').value;
+						}
+						if(document.getElementById('legalPersonRegDate')!=null){
+							params+="&legalPersonRegDate="+document.getElementById('legalPersonRegDate').value;    
+						}
+						if(document.getElementById('countryId')!=null){
+							params+="&countryId="+document.getElementById('countryId').value;    
+						}
+						if(document.getElementById('taxNumber')!=null){
+							params+="&taxNumber="+document.getElementById('taxNumber').value;    
+						}
+						if(document.getElementById('implemLocationLevel')!=null){
+							params+="&implemLocationLevel="+ document.getElementsByName("implemLocationLevel")[0].value;    
+						}
                       return params;
               }
            
@@ -730,7 +755,7 @@
                                                     <font size="2" color="#FF0000">*</font>
                                                 </td>
                                                 <td>    
-                                                    <html:text name="aimAddOrgForm" property="acronym" size="20"/>
+                                                    <html:text name="aimAddOrgForm" property="acronym" size="20" styleId="acronym"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -754,7 +779,7 @@
                                                     <font size="2" color="#FF0000">*</font>
                                                 </td>
                                                 <td>
-                                                    <html:select property="ampOrgGrpId" styleClass="selectStyle">
+                                                    <html:select property="ampOrgGrpId" styleClass="selectStyle" styleId="orgGroup">
                                                         <c:set var="translation">
                                                             <digi:trn>Select Group</digi:trn>
                                                         </c:set>
@@ -803,7 +828,7 @@
                                                 <font size="2" color="#FF0000">*</font>
                                             </td>
                                             <td>
-                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="160" rows="4" />
+                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="160" rows="4" styleId="orgPrimaryPurpose"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -1284,14 +1309,14 @@
                 <tr>
                     <td style=" text-align:right;" class="tdBoldClass"><digi:trn
                             key="aim:organizationDac">DAC Code</digi:trn></td>
-                    <td width="500px" height="30px"><html:text
-                        property="dacOrgCode" size="15" /></td>
+                    <td width="500px" height="30px">
+                    	<html:text property="dacOrgCode" size="15" styleId="dacOrgCode"/></td>
                 </tr>
                 <tr>
                     <td style=" text-align:right;" class="tdBoldClass"><digi:trn
                             key="aim:organizationIsoCode">ISO Code</digi:trn></td>
                     <td width="500px" height="30px" ><html:text
-                            name="aimAddOrgForm" property="orgIsoCode" size="15" />
+                            name="aimAddOrgForm" property="orgIsoCode" size="15" styleId="orgIsoCode"/>
                     </td>
                 </tr>
                 <tr>
@@ -1299,7 +1324,7 @@
                             key="aim:organizationCode">Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
                     <td width="500px" height="30px"><html:text
-                        property="orgCode" size="15" /></td>
+                        property="orgCode" size="15" styleId="orgCode"/></td>
                 </tr>
 
                 <tr>
@@ -1307,13 +1332,13 @@
                             key="aim:budgetOrganizationCode">Budget Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
                     <td width="500px" height="30px"><html:text
-                        property="budgetOrgCode" size="15" /></td>
+                        property="budgetOrgCode" size="15" styleId="budgetOrgCode"/></td>
                 </tr>
                 <tr>
                     <td style=" text-align:right;" class="tdBoldClass"><digi:trn
                             key="aim:fiscalCalendar">Fiscal Calendar</digi:trn></td>
                     <td width="500px" height="30px"><html:select
-                            property="fiscalCalId" styleClass="selectStyle">
+                            property="fiscalCalId" styleClass="selectStyle" styleId="fiscalCalId">
                             <c:set var="translation">
                                 <digi:trn
                                     key="aim:editOrganisationSelectFiscalCalendar">Fiscal Calendar</digi:trn>
@@ -1633,19 +1658,19 @@
     <tr>
         <td style=" text-align:right" class="tdBoldClass"><digi:trn>Organization URL</digi:trn></td>
         <td>
-            <html:text property="orgUrl"/>
+            <html:text property="orgUrl" styleId="orgUrl"/>
         </td>
     </tr>
     <tr>
         <td style=" text-align:right" class="tdBoldClass"><digi:trn>Address</digi:trn></td>
         <td width="500px" height="30px">
-            <html:textarea property="address"/>
+            <html:textarea property="address" styleId="address"/>
         </td>
     </tr>
     <tr>
         <td style=" text-align:right" class="tdBoldClass"><digi:trn>Description</digi:trn></td>
         <td width="500px" height="30px">
-            <html:textarea property="description"/>
+            <html:textarea property="description" styleId="description"/>
         </td>
     </tr>
     <tr>

@@ -5,6 +5,8 @@
 package org.digijava.module.um.action;
 
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -40,6 +42,16 @@ public class RegisterUser extends Action {
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response) throws Exception {
 
+		
+		/**
+		 * Test if user is administrator
+		 */
+		HttpSession session		= request.getSession();
+		String ampAdmin			= (String)session.getAttribute("ampAdmin"); 
+		if ( ampAdmin == null || ampAdmin.equals("no") ) {
+			return mapping.findForward("login");
+		}
+		
 		AddUserForm userRegisterForm = (AddUserForm) form;
 
 		logger.debug("In UserRegisterAction");

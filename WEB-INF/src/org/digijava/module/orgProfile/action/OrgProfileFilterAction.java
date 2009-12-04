@@ -31,7 +31,7 @@ import org.springframework.beans.BeanWrapperImpl;
  * @author medea
  */
 public class OrgProfileFilterAction extends Action {
-
+@Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -41,10 +41,10 @@ public class OrgProfileFilterAction extends Action {
         String reset=request.getParameter("reset");
         if(reset!=null&&reset.equals("true")){
             orgForm.setCurrencyId(null);
-            orgForm.setOrgId(null);
             orgForm.setOrgGroupId(null);
             orgForm.setFiscalCalendarId(null);
             orgForm.setYear(null);
+            orgForm.setOrgIds(null);
             orgForm.setTransactionType(Constants.COMMITMENT);
         }
 
@@ -68,19 +68,18 @@ public class OrgProfileFilterAction extends Action {
                 orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
             }
         }
-        // Org profile is only for Mul and Bil organizations
-        List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getBilMulOrgGroups());
+        List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getAllOrgGroups());
         orgForm.setOrgGroups(orgGroups);
-        if(orgForm.getOrgGroupId()!=null&&orgForm.getOrgGroupId()!=-1){
-            if (orgGroups.size() > 0) {
-                List<AmpOrganisation> orgs = DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
-                orgForm.setOrganizations(orgs);
-            }
+        List<AmpOrganisation> orgs=null;
+        if(orgForm.getOrgGroupId()==null||orgForm.getOrgGroupId()==-1){
+            // all groups
+            orgForm.setOrgGroupId(-1l);
+            orgs=new ArrayList(DbUtil.getAll(AmpOrganisation.class));
         }
         else{
-            orgForm.setOrganizations(DbUtil.getBilMulOrganisations());
+             orgs = DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
         }
-
+        orgForm.setOrganizations(orgs);  
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());
         Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
         Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
@@ -113,9 +112,7 @@ public class OrgProfileFilterAction extends Action {
         else{
             filter=new FilterHelper(orgForm);
         }
-
        session.setAttribute("orgProfileFilter", filter);
-      
-        return mapping.findForward("forward");
+       return mapping.findForward("forward");
     }
 }

@@ -7,70 +7,149 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-   
+
 <table width="100%" border="0" cellSpacing="1" cellPadding="5">
     <tr>
         <td height="110px" valign="top" >
             <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
-                <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
+                    <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
                 </tr>
                 <tr>
-                    <td width="30%"><digi:trn>Group</digi:trn>:</td><td>${orgGroup.orgGrpName}&nbsp;</td>
-                </tr>
-                 <tr>
                     <td width="30%"><digi:trn>Type</digi:trn>:</td>
-                    <td><c:choose>
-                            <c:when test="${not empty orgGroup.orgType}">${orgGroup.orgType}</c:when>
-                            <c:otherwise>${organization.orgGrpId.orgType}</c:otherwise>&nbsp;
+                    <td>
+                        <c:choose>
+                         <c:when test="${orgsCount==1}">
+                            ${organization.orgGrpId.orgType}
+                        </c:when>
+                        <c:when test="${empty orgGroup&&orgsCount==0}">
+                            <digi:trn>All</digi:trn>
+                        </c:when>
+                        <c:when test="${orgsCount>0}">
+                             <digi:trn>Multiple Organizations Selected</digi:trn>
+                        </c:when>
+                        <c:otherwise>
+                            <digi:trn>${orgGroup.orgType}</digi:trn>
+                        </c:otherwise>
                         </c:choose>
                     </td>
                 </tr>
                 <tr>
-                    <td width="30%"><digi:trn>Organization Name</digi:trn>:</td><td>${organization.name}&nbsp;</td>
+                    <td width="30%"><digi:trn>Organization Name</digi:trn>:</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${orgsCount>1}">
+                                <digi:trn>Multiple Organizations Selected</digi:trn>
+                            </c:when>
+                            <c:when test="${orgsCount==1}">
+                                ${organization.name}&nbsp;
+                            </c:when>
+                            <c:otherwise>
+                                <digi:trn>N/A</digi:trn>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                 <tr>
-                    <td width="30%"><digi:trn>Organization Acronym</digi:trn>:</td><td>${organization.acronym}&nbsp;</td>
+                    <td width="30%"><digi:trn>Organization Acronym</digi:trn>:</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${orgsCount>1}">
+                                <digi:trn>Multiple Organizations Selected</digi:trn>
+                            </c:when>
+                            <c:when test="${orgsCount==1}">
+                                ${organization.acronym}&nbsp;
+                            </c:when>
+                            <c:otherwise>
+                                <digi:trn>N/A</digi:trn>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                 <tr>
-                    <td width="30%"><digi:trn>Donor Group</digi:trn>:</td><td>${organization.orgGrpId.orgGrpName}&nbsp;</td>
+                    <td width="30%"><digi:trn>Donor Group</digi:trn>:</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${orgsCount==1}">
+                                ${organization.orgGrpId.orgGrpName}
+                            </c:when>
+                            <c:when test="${empty orgGroup&&orgsCount==0}">
+                                <digi:trn>All</digi:trn>
+                            </c:when>
+                            <c:when test="${orgsCount>0}">
+                                <digi:trn>Multiple Organizations Selected</digi:trn>
+                            </c:when>
+                            <c:otherwise>
+                                ${orgGroup.orgGrpName}
+                            </c:otherwise>  
+                        </c:choose>
+                    </td>
                 </tr>
                 <tr>
-                    <td width="30%"><digi:trn>Web Link</digi:trn>:</td><td>${organization.orgUrl}&nbsp;</td>
+                    <td width="30%"><digi:trn>Web Link</digi:trn>:</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${orgsCount>1}">
+                                <digi:trn>Multiple Organizations Selected</digi:trn>
+                            </c:when>
+                            <c:when test="${orgsCount==1}">
+                                ${organization.orgUrl}&nbsp;
+                            </c:when>
+                            <c:otherwise>
+                                <digi:trn>N/A</digi:trn>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
+                <c:if test="${orgsCount!=1}">
+                    <tr>
+                        <td width="30%"><digi:trn>Contact</digi:trn>:</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${orgsCount>1}">
+                                    <digi:trn>Multiple Organizations Selected</digi:trn>
+                                </c:when>
+                                <c:otherwise>
+                                    <digi:trn>N/A</digi:trn>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                </c:if>
             </table>
         </td>
     </tr>
-    <tr>
-        <td>
-           
+    <c:if test="${orgsCount==1}">
+        <tr>
+            <td>
+
                 <table width="100%" cellSpacing="0" cellPadding="0" align="left"  class="tableElement" border="0">
                     <thead>
                         <tr>
                             <th colspan="6" class="tableHeaderCls"><digi:trn>Contact Information</digi:trn></th>
                         </tr>
                         <tr>
-                        <th class="tableHeaderCls">
-                            <digi:trn>LAST NAME</digi:trn>
-                        </th>
-                        <th class="tableHeaderCls">
-                            <digi:trn>FIRST NAME</digi:trn>
-                        </th>
-                        <th class="tableHeaderCls">
-                            <digi:trn>EMAIL </digi:trn>
-                        </th>
-                        <th class="tableHeaderCls">
-                            <digi:trn> TELEPHONE </digi:trn>
-                        </th>
-                        <th class="tableHeaderCls">
-                            <digi:trn> FAX </digi:trn>
-                        </th>
-                        <th class="tableHeaderCls">
-                            <digi:trn>TITLE </digi:trn>
-                        </th>
+                            <th class="tableHeaderCls">
+                                <digi:trn>LAST NAME</digi:trn>
+                            </th>
+                            <th class="tableHeaderCls">
+                                <digi:trn>FIRST NAME</digi:trn>
+                            </th>
+                            <th class="tableHeaderCls">
+                                <digi:trn>EMAIL </digi:trn>
+                            </th>
+                            <th class="tableHeaderCls">
+                                <digi:trn> TELEPHONE </digi:trn>
+                            </th>
+                            <th class="tableHeaderCls">
+                                <digi:trn> FAX </digi:trn>
+                            </th>
+                            <th class="tableHeaderCls">
+                                <digi:trn>TITLE </digi:trn>
+                            </th>
                         </tr>
                     </thead>
-                    
+
                     <c:forEach var="contact" items="${organization.contacts}">
                         <tr>
                             <td class="tdClass" nowrap>
@@ -92,10 +171,12 @@
                                 ${contact.title}&nbsp;
                             </td>
                         </tr>
-                        </c:forEach>
-                </table>       
-        </td>
-    </tr>
+                    </c:forEach>
+                </table>
+            </td>
+        </tr>
+    </c:if>
+
     <tr>
         <td height="210px" valign="top">
             <jsp:include page="/orgProfile/showLargestProjects.do" flush="true"/>
@@ -104,4 +185,4 @@
 </table>
 
 
- 
+

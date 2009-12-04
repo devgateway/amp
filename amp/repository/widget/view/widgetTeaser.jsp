@@ -18,6 +18,7 @@
             <c:when test="${gisWidgetTeaserForm.type==1}">
                 <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
                 <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
+                <c:set var="orgsCount" scope="request" value="${fn:length(sessionScope.orgProfileFilter.orgIds)}"/>
                 <jsp:include page="orgSummary.jsp" flush="true"/>
             </c:when>
             <c:when test="${gisWidgetTeaserForm.type==2||gisWidgetTeaserForm.type==4}">

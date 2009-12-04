@@ -19,7 +19,7 @@
             <digi:trn key="parisIndicatorAllDonors">All donors</digi:trn>
        </th>
        <th colspan="2" align="center" class="tableHeaderCls">
-           ${orgProfilePIForm.organization.name}
+           ${orgProfilePIForm.name}
        </th>
     </tr>
     <tr>

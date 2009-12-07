@@ -678,19 +678,17 @@ var isAlreadySubmitted = false;
 												</td>
 											</field:display>
 											</tr>	
-										<tr>
-											<td bgcolor="#ffff00">&nbsp;
+										<tr bgcolor="#ecf3fd">
+											<td>&nbsp;
 												
 											</td>
-											<td align="left"  bgcolor="#ffff00">
-												<b>
-													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
-													( <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> )
-												</b>
+											<td align="left">
+												&nbsp;
 											</td>
-											<td colspan="5"  bgcolor="#ffff00">
+											<td colspan="5">
 												<b>
-													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn> 
+													<digi:trn key="aim:fixedRate">Fixed Exchange Rate</digi:trn>
+													- <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" />
 												</b>
 											</td>
 										</tr>

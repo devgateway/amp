@@ -3,7 +3,7 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpModulesVisibility"
 		table="AMP_MODULES_VISIBILITY" lazy="false">
-		<cache usage="transactional" />
+		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">amp_modules_visibility_id_SEQ</param>
@@ -26,6 +26,7 @@
 
 
 		<set name="submodules" cascade="all" inverse="true" lazy="false">
+			<cache usage="read-write" />
 			<key column="parent" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
 		</set>

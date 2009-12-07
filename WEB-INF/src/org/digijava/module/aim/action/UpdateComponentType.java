@@ -20,6 +20,8 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.form.ComponentTypeForm;
 import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class UpdateComponentType extends Action {
 	private static Logger logger = Logger.getLogger(UpdateComponentType.class);
@@ -68,20 +70,14 @@ public class UpdateComponentType extends Action {
 		if (compForm.getId()==0) {
 			if(existComponent != null) addErrorsToSession(request);
 			else{
-				AmpComponentType type = new AmpComponentType();
-				type.setName(compForm.getName());
-				type.setCode(compForm.getCode());
-				type.setEnable(compForm.getEnable());
-				type.setSelectable(compForm.getSelectable());
+				AmpCategoryValue type = new AmpCategoryValue();
+				type.setValue(compForm.getName());
 				ComponentsUtil.addNewComponentType(type);
 			}
 		} else {
-			AmpComponentType type = ComponentsUtil.getComponentTypeById(compForm.getId());
+			AmpCategoryValue type = ComponentsUtil.getComponentTypeById(compForm.getId());
 			if(existComponent != null && existComponent.getType_id().equals(compForm.getId())){
-				type.setName(compForm.getName());
-				type.setCode(compForm.getCode());
-				type.setEnable(compForm.getEnable());
-				type.setSelectable(compForm.getSelectable());
+				type.setValue(compForm.getName());
 				ComponentsUtil.addNewComponentType(type);
 			}
 			else  addErrorsToSession(request);
@@ -123,14 +119,10 @@ public class UpdateComponentType extends Action {
 		ComponentTypeForm compForm = (ComponentTypeForm) form;
 		Long id=Long.parseLong(request.getParameter("id"));
 		
-		AmpComponentType type=ComponentsUtil.getComponentTypeById(id);
+		AmpCategoryValue type=ComponentsUtil.getComponentTypeById(id);
 		if (type!=null){
-			compForm.setId(type.getType_id());
-			compForm.setName(type.getName());
-			compForm.setCode(type.getCode());
-			compForm.setEnable(type.getEnable());
-			compForm.setSelectable(type.getSelectable());
-			
+			compForm.setId(type.getId());
+			compForm.setName(type.getValue());
 		}
 		return mapping.findForward("edit");
 

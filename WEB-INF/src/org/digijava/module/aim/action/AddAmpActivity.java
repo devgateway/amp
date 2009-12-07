@@ -209,8 +209,16 @@ public class AddAmpActivity extends Action {
 
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-      ArrayList<AmpComponentType> ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-      eaForm.getComponents().setAllCompsType(ampComponentTypes);
+      
+      //Get components types from category class
+      Collection<AmpCategoryValue> componentstype = null;
+		try {
+			componentstype = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.COMPONET_TYPE_KEY, null, request);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+      	
+      	eaForm.getComponents().setAllCompsType(componentstype);
       
       
        if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0 && eaForm.getIndicator().getIndicatorsME()==null){

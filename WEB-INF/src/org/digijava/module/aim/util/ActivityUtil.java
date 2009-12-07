@@ -2225,7 +2225,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           Components<FundingDetail> components = new Components<FundingDetail>();
           components.setComponentId(ampComp.getAmpComponentId());
           components.setDescription(ampComp.getDescription());
-          components.setType_Id((ampComp.getType()!=null)?ampComp.getType().getType_id():null);
+          components.setType_Id((ampComp.getType()!=null)?ampComp.getType().getId():null);
           components.setTitle(ampComp.getTitle());
           components.setCommitments(new ArrayList());
           components.setDisbursements(new ArrayList());

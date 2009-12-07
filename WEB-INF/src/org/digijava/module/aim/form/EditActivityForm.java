@@ -52,6 +52,8 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.helper.DocumentData;
 
 public class EditActivityForm extends ActionForm implements Serializable {
@@ -1384,7 +1386,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Collection activityComponentes;
 		private String multiSectorSelecting;
 		private Long selActivityComponentes[];
-		private ArrayList<AmpComponentType> allCompsType;
+		private Collection<AmpCategoryValue> allCompsType;
 		private Long selectedType;
 		private String newCompoenentName;
 		private Collection allComps;
@@ -1441,12 +1443,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selComp = selComp;
 		}
 
-		public ArrayList<AmpComponentType> getAllCompsType() {
+		public Collection<AmpCategoryValue> getAllCompsType() {
 			return allCompsType;
 		}
 
-		public void setAllCompsType(ArrayList<AmpComponentType> allCompsType) {
-			this.allCompsType = allCompsType;
+		public void setAllCompsType(Collection<AmpCategoryValue> componentstype) {
+			this.allCompsType = componentstype;
 		}
 
 		public Long getSelectedType() {
@@ -1465,7 +1467,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.newCompoenentName = newCompoenentName;
 		}
 
-		public Collection getAllComps() {
+		public Collection<AmpCategoryClass> getAllComps() {
 			return allComps;
 		}
 

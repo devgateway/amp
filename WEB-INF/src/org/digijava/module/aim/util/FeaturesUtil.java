@@ -39,6 +39,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.Logic;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -3124,7 +3125,7 @@ public class FeaturesUtil {
 	}
 	
 	
-	public static AmpComponentType getDefaultComponentType() {
+	public static AmpCategoryValue getDefaultComponentType() {
 		String defaultComponentTypeIdStr = getGlobalSettingValue("Default Component Type");
 		return ComponentsUtil.getComponentTypeById(Long.parseLong(defaultComponentTypeIdStr));
 	}

@@ -18,6 +18,7 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.*;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -509,8 +510,8 @@ public class ExportBuilder {
 		
 		retValue.setComponentName(component.getTitle());
 		
-		AmpComponentType type = ComponentsUtil.getComponentTypeById(component.getType_Id());
-		retValue.setComponentType(buildCodeValue(type.getCode(), type.getName()));
+		AmpCategoryValue type = ComponentsUtil.getComponentTypeById(component.getType_Id());
+		retValue.setComponentType(buildCodeValue(type.getValue()));
 		
 		ComponentFundingType componentFunding = objectFactory.createComponentFundingType();
 		retValue.getComponentFunding().add(componentFunding);

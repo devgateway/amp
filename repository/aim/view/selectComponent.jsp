@@ -70,14 +70,7 @@
 										<digi:trn key="aim:selecType">-Select Type-</digi:trn>
 									</html:option>
 									<c:forEach var="comp" items="${aimEditActivityForm.components.allCompsType}">
-										<c:choose>
-											<c:when test="${comp.selectable}">
-												<html:option value="${comp.type_id}">${comp.name }</html:option>
-											</c:when>
-											<c:otherwise>
-												<html:option disabled="true" value="${comp.type_id}">${comp.name }</html:option>
-											</c:otherwise>
-										</c:choose>	
+										<html:option value="${comp.id}">${comp.value }</html:option>
 									</c:forEach>
 								</html:select></td>
 							</tr>

@@ -1230,7 +1230,7 @@ public class ShowActivityPrintPreview
 			Components<FundingDetail> tempComp = new Components<FundingDetail>();
 			tempComp.setTitle(temp.getTitle());
 			tempComp.setComponentId(temp.getAmpComponentId());
-			tempComp.setType_Id((temp.getType()!=null)?temp.getType().getType_id():null);
+			tempComp.setType_Id((temp.getType()!=null)?temp.getType().getId():null);
 			
 			if (temp.getDescription() == null) {
 				tempComp.setDescription(" ");

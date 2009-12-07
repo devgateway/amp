@@ -26,6 +26,8 @@ import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -63,7 +65,7 @@ public class ComponentsUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select distinct co from " + AmpComponent.class.getName() + " co where co.type.type_id=:id";
+            queryString = "select distinct co from " + AmpComponent.class.getName() + " co where co.type.id=:id";
             qry = session.createQuery(queryString);
             qry.setLong("id", id);
             col = qry.list();
@@ -92,20 +94,24 @@ public class ComponentsUtil {
         return col;
     }
     
-    public static AmpComponentType getComponentTypeById(Long id) {
+    public static AmpCategoryValue getComponentTypeById(Long id) {
         Collection col = null;
         String queryString = null;
         Session session = null;
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select co from " + AmpComponentType.class.getName() + " co where co.type_id=:id";
+            queryString = "select co from " + AmpCategoryValue.class.getName() + " co where co.id=:id";
             qry = session.createQuery(queryString);
             qry.setParameter("id", id, Hibernate.LONG);
 
             col = qry.list();
             if (col.size() > 0){
-            	return new ArrayList<AmpComponentType>(col).get(0);
+            	for (Iterator iterator = col.iterator(); iterator.hasNext();) {
+					AmpCategoryValue catclass = (AmpCategoryValue) iterator.next();
+					return catclass;
+				}
+            	
             }
         } catch (Exception ex) {
             logger.error("Unable to get Component for editing from database " + ex.getMessage());
@@ -145,7 +151,7 @@ public class ComponentsUtil {
     /*
      * add a new Component
      */
-    public static void addNewComponentType(AmpComponentType type) throws DgException {
+    public static void addNewComponentType(AmpCategoryValue type) throws DgException {
         DbUtil.add(type);
 
     }
@@ -636,7 +642,7 @@ public class ComponentsUtil {
 			collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
             
-            int result = (o1.getType().getName()==null || o2.getType().getName()==null)?0:collator.compare(o1.getType().getName(), o2.getType().getName());
+            int result = (o1.getType().getValue()==null || o2.getType().getValue()==null)?0:collator.compare(o1.getType().getValue(), o2.getType().getValue());
             return result;
 		}
     }

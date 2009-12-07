@@ -101,10 +101,10 @@
 													class="box-border-nopadding">
 														<tr>
 															<td>
-																<logic:iterate id="type" name="aimEditActivityForm" property="components.allCompsType" type="org.digijava.module.aim.dbentity.AmpComponentType">
+																<logic:iterate id="type" name="aimEditActivityForm" property="components.allCompsType" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 																	<b>
-																		<%if (selComponents.getType_Id().longValue()==type.getType_id().longValue()){%>
-																	 		<digi:trn key="aim:type">Type:</digi:trn> <%=type.getName()%>	
+																		<%if (selComponents.getType_Id().longValue()==type.getId().longValue()){%>
+																	 		<digi:trn key="aim:type">Type:</digi:trn> <%=type.getValue()%>	
 																		<%} %>
 																	</b>
 																</logic:iterate>

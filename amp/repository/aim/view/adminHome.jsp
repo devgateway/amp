@@ -498,6 +498,7 @@
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td class="f-names">
                         <table cellPadding="0" cellSpacing="0" width="320px">
+						 <!-- 
 						 <feature:display name="Admin - Component Type" module="Components">
                           <tr>
                             <td class="f-names" nowrap="nowrap"><digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -509,6 +510,7 @@
                               </digi:link>         </td>
                           </tr>
 						 </feature:display>
+						  -->
 						 <!--
 						 <feature:display name="Admin - Component" module="Components">
                           <tr>

@@ -72,6 +72,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -631,13 +632,17 @@ public class ImportBuilder {
 			ampComp.setTitle(component.getComponentName());
 			Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
 			
-			//TODO: ampComponentsType -> probably soon will be moved to category manager
-			ArrayList ampCompTypes = (ArrayList) ComponentsUtil.getAmpComponentTypes();
+			Collection<AmpCategoryValue> componentstype = null;
+			try {
+				componentstype = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.COMPONET_TYPE_KEY, null, request);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			boolean found=false;
-			for (Iterator ampCompTypesIt = ampCompTypes.iterator(); ampCompTypesIt.hasNext();) {
-				AmpComponentType act = (AmpComponentType) ampCompTypesIt.next();
-				if(act.getName() != null && "".compareTo(act.getName().trim()) !=0 
-						&& act.getName().compareTo(component.getComponentType().getValue())==0){
+			for (Iterator ampCompTypesIt = componentstype.iterator(); ampCompTypesIt.hasNext();) {
+				AmpCategoryValue act = (AmpCategoryValue) ampCompTypesIt.next();
+				if(act.getValue() != null && "".compareTo(act.getValue().trim()) !=0 
+						&& act.getValue().compareTo(component.getComponentType().getValue())==0){
 					found =true;
 					ampComp.setType(act);
 				}

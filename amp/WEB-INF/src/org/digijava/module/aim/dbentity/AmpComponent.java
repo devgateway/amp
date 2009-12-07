@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Persister class for Components
@@ -23,7 +25,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	private String code;
 	
 	//private String type;
-	private AmpComponentType type;
+	private AmpCategoryValue type;
 	
 	private Set activities;
 	private String Url;
@@ -59,10 +61,10 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 		this.title = title;
 	}
 	
-	public AmpComponentType getType() {
+	public AmpCategoryValue getType() {
 		return type;
 	}
-	public void setType(AmpComponentType type) {
+	public void setType(AmpCategoryValue type) {
 		this.type = type;
 	}
 	

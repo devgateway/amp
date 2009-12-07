@@ -58,7 +58,7 @@ public class UpdateComponents extends Action {
 					updCompForm.setId(ampComp.getAmpComponentId());
 					updCompForm.setCompTitle(ampComp.getTitle());
 					updCompForm.setCompDes(ampComp.getDescription());
-					updCompForm.setCompType((ampComp.getType() != null) ? ampComp.getType().getType_id() : null);
+					updCompForm.setCompType((ampComp.getType() != null) ? ampComp.getType().getId() : null);
 					updCompForm.setCompCode(ampComp.getCode());
 				}
 				updCompForm.setCheck("false");
@@ -71,7 +71,7 @@ public class UpdateComponents extends Action {
 				ampComp.setAmpComponentId(id);
 				ampComp.setTitle(updCompForm.getCompTitle());
 				ampComp.setCode(updCompForm.getCompCode());
-				ampComp.setType(ComponentsUtil.getComponentTypeById(updCompForm.getCompType()));
+				ampComp.setType(ComponentsUtil.getComponentTypeById(updCompForm.getId()));
 				if (updCompForm.getCompDes() == null) {
 					ampComp.setDescription(" ");
 				} else {

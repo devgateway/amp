@@ -44,6 +44,10 @@ import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ShowAddComponent extends Action {
 
@@ -83,8 +87,14 @@ public class ShowAddComponent extends Action {
 	public ActionForward switchType(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		ArrayList<AmpComponentType> ampComponentTypes  = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		eaForm.getComponents().setAllCompsType(ampComponentTypes);
+		
+		Collection<AmpCategoryValue> componentstype = null;
+		try {
+			componentstype = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.COMPONET_TYPE_KEY, null, request);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		eaForm.getComponents().setAllCompsType(componentstype);
 
 		ArrayList<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = null;
 		ampComponents = (ArrayList<org.digijava.module.aim.dbentity.AmpComponent>) ComponentsUtil.getAmpComponentsByType(eaForm.getComponents().getSelectedType());
@@ -117,15 +127,17 @@ public class ShowAddComponent extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 		eaForm.setStep("5");
 		
-		ArrayList<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = null;
-		ArrayList<AmpComponentType> ampComponentTypes = null;
-		ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		eaForm.getComponents().setAllCompsType(ampComponentTypes);
+		Collection<AmpCategoryValue> componentstype = null;
+		try {
+			componentstype = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.COMPONET_TYPE_KEY, null, request);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		eaForm.getComponents().setAllCompsType(componentstype);
 		eaForm.getComponents().setComponentId(new Long(-1));
 		eaForm.getComponents().setComponentTitle(null);
 		eaForm.getComponents().setComponentDesc(null);
 		eaForm.getComponents().setNewCompoenentName(null);
-		//String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
         if(eaForm.getComponents().getFundingCurrCode()==null){
@@ -134,8 +146,8 @@ public class ShowAddComponent extends Action {
         setFundingTotals(eaForm,session);
 
 		if(!isComponentTypeEnabled()){
-			AmpComponentType defaultComponentType = FeaturesUtil.getDefaultComponentType();
-			eaForm.getComponents().setSelectedType(defaultComponentType.getType_id());
+			AmpCategoryValue defaultComponentType = FeaturesUtil.getDefaultComponentType();
+			eaForm.getComponents().setSelectedType(defaultComponentType.getId());
 			return switchType(mapping, form, request, response);
 		}
 
@@ -172,9 +184,16 @@ public class ShowAddComponent extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 		List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
 		eaForm.setStep("5");
-		ArrayList<AmpComponentType> ampComponentTypes = null;
-		ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		eaForm.getComponents().setAllCompsType(ampComponentTypes);
+		//ArrayList<AmpComponentType> ampComponentTypes = null;
+		//ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
+		
+		Collection<AmpCategoryValue> componentstype = null;
+		try {
+			componentstype = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.COMPONET_TYPE_KEY, null, request);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		eaForm.getComponents().setAllCompsType(componentstype);
 	
 		List<AmpComponent> componentsList = new ArrayList<AmpComponent>();
 		ampComponents = (ArrayList<org.digijava.module.aim.dbentity.AmpComponent>) ComponentsUtil.getAmpComponents();
@@ -219,7 +238,7 @@ public class ShowAddComponent extends Action {
 	public ActionForward addNewComponent(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)  throws Exception {
 		EditActivityForm eaForm = (EditActivityForm) form;
 		String name = eaForm.getComponents().getNewCompoenentName();
-		AmpComponentType type = ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
+		AmpCategoryValue type = ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
 		org.digijava.module.aim.dbentity.AmpComponent newCompo = new org.digijava.module.aim.dbentity.AmpComponent();
 
 		newCompo.setType(type);
@@ -242,7 +261,7 @@ public class ShowAddComponent extends Action {
 			eaForm.setStep("5");
 			
 			String name 							= eaForm.getComponents().getNewCompoenentName();
-			AmpComponentType type		= ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
+			AmpCategoryValue type = ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
 			org.digijava.module.aim.dbentity.AmpComponent ampComp 	= ComponentsUtil.getComponentById( eaForm.getComponents().getComponentId() );
 			ampComp.setTitle( name );
 			ampComp.setType( type );

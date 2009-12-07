@@ -12,21 +12,30 @@
     <tr>
         <td height="210px" valign="top" >
             <table id="orgTable" border="1" width="100%">
-                <th colspan="2" class="tableHeaderCls"><digi:trn>Summary</digi:trn></th>
+               <tr><th colspan="2" class="tableHeaderCls"><digi:trn>Summary</digi:trn></th></tr>
                 <tr>
-                    <td width="30%"><digi:trn>Group</digi:trn>:</td><td>${orgGroup.orgGrpName}&nbsp;</td>
+                    <td width="30%"><digi:trn>Donor Group</digi:trn>:</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty orgGroup}">${orgGroup.orgGrpName}&nbsp;</c:when>
+                            <c:otherwise><digi:trn>All</digi:trn></c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                  <tr>
                     <td width="30%"><digi:trn>Type</digi:trn>:</td><td>${orgGroup.orgType.orgType}&nbsp;</td>
                 </tr>
                 <tr>
-                    <td width="30%"><digi:trn>Organization Name</digi:trn>:</td><td>${organization.name}&nbsp;</td>
+                    <td width="30%"><digi:trn>Organization Name</digi:trn>:</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty organization}">${organization.name}&nbsp;</c:when>
+                            <c:otherwise><digi:trn>All</digi:trn></c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                 <tr>
                     <td width="30%"><digi:trn>Organization Acronym</digi:trn>:</td><td>${organization.acronym}&nbsp;</td>
-                </tr>
-                <tr>
-                    <td width="30%"><digi:trn>Donor Group</digi:trn>:</td><td>${organization.orgGrpId.orgGrpName}&nbsp;</td>
                 </tr>
                 <tr>
                     <td width="30%"><digi:trn>Web Link</digi:trn>:</td><td>${organization.orgUrl}&nbsp;</td>

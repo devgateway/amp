@@ -97,32 +97,25 @@ public class FilterHelper implements Serializable{
     }
     
     public AmpOrganisation getOrganization() {
-        //view entire group...
-        if (orgId == null || orgId == -1) {
-            return new AmpOrganisation();
+        AmpOrganisation org = null;
+        if (orgId != null && orgId != -1) {
+            //view particular organization...
+            org = DbUtil.getOrganisation(orgId);
         }
-        //view particular organization...
-        return DbUtil.getOrganisation(orgId);
-
+        return org;
     }
 
-     public AmpOrgGroup getOrgGroup(){
-         AmpOrgGroup orgGroup;
-        if(orgGroupId!=null&&orgGroupId!=-1){
-             orgGroup=DbUtil.getAmpOrgGroup(orgGroupId);
-        }
-        else{
-        	if (orgId == null || orgId == -1){
-        		orgGroup=new AmpOrgGroup();
-        	}
-        	else{
-        		AmpOrganisation org = DbUtil.getOrganisation(orgId);
-        		return org.getOrgGrpId();
-        	}
-        		
+    public AmpOrgGroup getOrgGroup() {
+        AmpOrgGroup orgGroup = null;
+        if (orgGroupId != null && orgGroupId != -1) {
+            orgGroup = DbUtil.getAmpOrgGroup(orgGroupId);
+        } else {
+            if (orgId != null && orgId != -1) {
+                AmpOrganisation org = DbUtil.getOrganisation(orgId);
+                return org.getOrgGrpId();
+            }
         }
         return orgGroup;
-
     }
     public String getCurrName() {
         AmpCurrency curr=CurrencyUtil.getAmpcurrency(this.currId);

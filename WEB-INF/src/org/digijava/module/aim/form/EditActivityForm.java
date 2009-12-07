@@ -188,6 +188,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String projectCode;
 		private Long gbsSbs;
 		private String approvalStatus;
+		private String previousApprovalStatus;
 		private Boolean wasDraft;
 		private String convenioNumcont;
 		private Collection levelCollection = null;
@@ -652,6 +653,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setProjectComments(String projectComments) {
 			this.projectComments = projectComments;
+		}
+
+		/**
+		 * @return the previousApprovalStatus
+		 */
+		public String getPreviousApprovalStatus() {
+			return previousApprovalStatus;
+		}
+
+		/**
+		 * @param previousApprovalStatus the previousApprovalStatus to set
+		 */
+		public void setPreviousApprovalStatus(String previousApprovalStatus) {
+			this.previousApprovalStatus = previousApprovalStatus;
 		}
 
 	}

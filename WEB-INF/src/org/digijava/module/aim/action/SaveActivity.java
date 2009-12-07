@@ -1793,6 +1793,7 @@ public class SaveActivity extends Action {
 			//if an approved activity is edited and the appsettings is set to newOnly then the activity
 			//doesn't need to be approved again!
 			AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+			eaForm.getIdentification().setPreviousApprovalStatus(aAct.getApprovalStatus());
 
 			activity.setApprovalStatus(aAct.getApprovalStatus());
 			if(tm.getTeamId().equals(aAct.getTeam().getAmpTeamId())){
@@ -2359,9 +2360,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getComments().getField() != null)
 			field = eaForm.getComments().getField().getAmpFieldId();
 
-		//this fields are used to determine receivers of approvals(Messaging System)
-		String oldActivityApprovalStatus="";
-		String editedActivityApprovalStatus="";
+
 
 		
 		/*
@@ -2402,7 +2401,8 @@ public class SaveActivity extends Action {
 			activity = rsp.getActivity();
               
                         AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
-                        if (aAct.getDraft() != null && !aAct.getDraft()) {
+                        if (aAct.getDraft() != null && !aAct.getDraft() &&
+                        		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
                             if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
                                 if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {                                	
                                     new ApprovedActivityTrigger(aAct, previouslyUpdatedBy);

@@ -70,11 +70,15 @@ public class ExportToPDF extends Action {
             PdfWriter.getInstance(doc, baos);
             List<AmpDaWidgetPlace> orgPlaces = WidgetUtil.getAllOrgProfilePlaces();
             Iterator<AmpDaWidgetPlace> placeIter = orgPlaces.iterator();
-            doc.open();
-            PdfPTable mainLayout = new PdfPTable(2);
-            mainLayout.setWidthPercentage(100);
             HttpSession session = request.getSession();
             FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
+            String footerText =OrgProfileUtil.getFooterText(langCode, siteId, filter);
+            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), false);
+            footer.setBorder(0);
+            doc.setFooter(footer);
+            doc.open();
+            PdfPTable mainLayout = new PdfPTable(2);
+            mainLayout.setWidthPercentage(100);    
             AmpOrganisation organization = filter.getOrganization();
             String multipleSelected = TranslatorWorker.translateText("Multiple Organizations Selected", langCode, siteId);
             String all = TranslatorWorker.translateText("All", langCode, siteId);
@@ -667,9 +671,6 @@ public class ExportToPDF extends Action {
             mainLayout.addCell("");
             //   mainLayout.writeSelectedRows(0, -1, 50, 50, writer.getDirectContent());
             doc.add(mainLayout);
-            String footerText =OrgProfileUtil.getFooterText(langCode, siteId, filter);
-            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), false);
-            doc.setFooter(footer);
             doc.close();
             response.setContentLength(baos.size());
             ServletOutputStream out = response.getOutputStream();

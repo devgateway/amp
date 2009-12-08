@@ -11,7 +11,7 @@
         var donorGroupSelectId="parisIndicatorTableSelect_"+widgetId;
         //used to insert ajax loading image
         var partialId="donorGroup_"+widgetId+"_";  
-        $("td[@id^='"+partialId+"']").html('<img src="images/amploading.gif" height="10px"/>');
+        $("td[id^='"+partialId+"']").html('<img src="images/amploading.gif" height="10px"/>');
         var donorGroupSelect=document.getElementById(donorGroupSelectId);
         var selectedIndex=donorGroupSelect.selectedIndex;
         var options=donorGroupSelect.options;

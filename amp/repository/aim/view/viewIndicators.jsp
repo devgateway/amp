@@ -242,8 +242,8 @@
                                         <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
                                             <tr>
                                                 <td>
-                                                    <div  style="overflow:auto;width:100%;height:220px;max-height:220px;"  >
-                                                        <table width="100%" BORDER=0 cellpadding="2" cellspacing="0" id="dataTable">
+                                                    
+                                                        <table width="100%" BORDER=0 cellpadding="2" cellspacing="0" >
                                                             <tr  style="background-color:#999999; color:#000000;">
                                                                 <td width="63%">
                                                                     <c:if test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
@@ -280,35 +280,43 @@
                                                                 </td>
                                                             </tr>
                                                             <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
-                                                                <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
-                                                                    <tr height="25">
-                                                                        <td width="63%">
-                                                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">${indItr.name}</a>
-                                                                        </td>
-                                                                        <td width="30%" align="center">
-                                                                            <c:if test="${!empty indItr.sectorNames}">
-                                                                                <c:forEach var="indsectname" items="${indItr.sectorNames}">
-                                                                                    ${indsectname}<br>
+                                                                <tr>
+                                                                    <td colspan="3">
+                                                                        <div style="overflow:auto;width:100%;height:220px;max-height:220px;">
+                                                                            <table width="100%" border="0px" cellpadding="2" cellspacing="0"  id="dataTable" >
+                                                                                <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
+                                                                                    <tr>
+                                                                                        <td width="63%">
+                                                                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">${indItr.name}</a>
+                                                                                        </td>
+                                                                                        <td width="30%" align="center">
+                                                                                            <c:if test="${!empty indItr.sectorNames}">
+                                                                                                <c:forEach var="indsectname" items="${indItr.sectorNames}">
+                                                                                                    ${indsectname}<br>
+                                                                                                </c:forEach>
+                                                                                            </c:if>
+                                                                                        </td>
+                                                                                        <td align="center" width="7%">
+                                                                                            <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+                                                                                            <c:set target="${urlParams}" property="indicatorId">
+                                                                                                ${indItr.id}
+                                                                                            </c:set>
+                                                                                            <c:set var="translation">
+                                                                                                <digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
+                                                                                            </c:set>
+                                                                                            <digi:link href="/removeIndicator.do" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
+                                                                                                <img src= "../ampTemplate/images/trash_12.gif" border=0>
+                                                                                            </digi:link>
+                                                                                        </td>
+                                                                                    </tr>
                                                                                 </c:forEach>
-                                                                            </c:if>
-                                                                        </td>
-                                                                        <td align="center" width="7%">
-                                                                            <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-                                                                            <c:set target="${urlParams}" property="indicatorId">
-                                                                                ${indItr.id}
-                                                                            </c:set>
-                                                                            <c:set var="translation">
-                                                                                <digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
-                                                                            </c:set>
-                                                                            <digi:link href="/removeIndicator.do" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
-                                                                                <img src= "../ampTemplate/images/trash_12.gif" border=0>
-                                                                            </digi:link>
-                                                                        </td>
-                                                                    </tr>
-                                                                </c:forEach>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+
                                                             </c:if>
                                                         </table>
-                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr height="10">

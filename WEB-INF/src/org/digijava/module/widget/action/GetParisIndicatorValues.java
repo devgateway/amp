@@ -26,6 +26,7 @@ public class GetParisIndicatorValues extends Action {
     public static final String ROOT_TAG = "ParisIndicatorValuesList";
     public static final String INDICATOR_TAG = "Indicator";
 
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/xml");
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";

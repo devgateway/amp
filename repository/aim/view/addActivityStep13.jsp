@@ -51,12 +51,12 @@
 		};
 		*/
 		    
-	    var myPanel5 = new YAHOOAmp.widget.Panel("newmyContract", {
-			width:"720px",
+	    var myPanelIPAContracting = new YAHOOAmp.widget.Panel("newmyContract", {
+			width:"730px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
-		    close:false,
+		    close:true,
 		    visible:false,
 		    modal:true,
 		    draggable:true,
@@ -67,10 +67,10 @@
 	//myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 	var panelStart;	    
 	function initScripts() {
-		var msgP5='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
-		myPanel5.setHeader(msgP5);
-		myPanel5.setBody("");
-		myPanel5.render(document.body);
+		var msgIPAPanel='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
+		myPanelIPAContracting.setHeader(msgIPAPanel);
+		myPanelIPAContracting.setBody("");
+		myPanelIPAContracting.render(document.body);
 		panelStart = 0;
 	}
 	
@@ -78,17 +78,17 @@
 		var element5 = document.getElementById("myContract");
 		element5.style.display = "inline";
 		if (panelStart < 1){
-			myPanel5.setBody(element5);
+			myPanelIPAContracting.setBody(element5);
 		}
 		if (panelStart < 2){
 			document.getElementById("myContractContent").scrollTop=0;
-			myPanel5.show();
+			myPanelIPAContracting.show();
 			panelStart = 2;
 		}
 	}
 	function hideAddContract() {
 		panelStart = 1;
-		myPanel5.hide();
+		myPanelIPAContracting.hide();
 	}
 	
 	function resetFilter(){

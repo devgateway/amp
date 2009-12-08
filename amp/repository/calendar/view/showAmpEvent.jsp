@@ -216,8 +216,7 @@ function removeSelOrgs() {
 	selectAtts();
 	document.calendarEventForm.submit();
 }
-function submitForm()
-{
+function submitForm() {
 	setMethod("");
 	selectAtts();
 	document.calendarEventForm.submit();
@@ -571,10 +570,12 @@ function is_mail(m) {
 }
 
 function submitForm(thisform){
-	typeid = thisform.elements.namedItem('selectedCalendarTypeId').value;
+	//typeid = thisform.elements.namedItem('selectedCalendarTypeId').value;
+	var typeid = document.getElementById('selectedCalendarTypeId').value;
 	document.getElementById('CalendatTypeid').value = typeid;
-	thisform.submit();
-	
+	setMethod("");
+	//thisform.submit();
+	document.calendarEventForm.submit();
 }
 
 addLoadEvent(delBody);
@@ -694,7 +695,7 @@ addLoadEvent(delBody);
 			                    		<td width="2px">&nbsp;</td>
 			                    		<td align="left">
 			                    			 <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
+			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
 			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
 			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
 				                                        	<html:option value="${type.value}">${type.label}</html:option>

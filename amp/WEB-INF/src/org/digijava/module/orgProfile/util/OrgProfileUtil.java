@@ -835,7 +835,7 @@ public class OrgProfileUtil {
             footerText += TranslatorWorker.translateText("All", langCode, siteId);
         }
         if (filter.getOrgGroupId() != null && filter.getOrgGroupId() != -1) {
-            footerText += " " + TranslatorWorker.translateText("from", langCode, siteId) + filter.getOrgGroup().getOrgGrpName();
+            footerText += " " + TranslatorWorker.translateText("from", langCode, siteId) + " "+filter.getOrgGroup().getOrgGrpName();
         }
         return footerText;
     }

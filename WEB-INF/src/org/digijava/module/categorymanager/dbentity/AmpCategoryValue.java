@@ -87,6 +87,8 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 
 	public boolean equals (Object o) {
 		AmpCategoryValue a = (AmpCategoryValue) o;
+		if ( a == null )
+			return false;
 		return this.getId().equals( a.getId() );
 	}
 

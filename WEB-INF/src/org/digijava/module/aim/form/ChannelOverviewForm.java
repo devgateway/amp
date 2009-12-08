@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -56,13 +57,13 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
     private List nationalPlanObjectivePrograms;
 	private Collection<ActivitySector> activitySectors;
 	
-	private Collection financingBreakdown;
+	private Collection<FinancingBreakdown> financingBreakdown;
         
-    public Collection getFinancingBreakdown() {
+    public Collection<FinancingBreakdown> getFinancingBreakdown() {
 		return financingBreakdown;
 	}
 
-	public void setFinancingBreakdown(Collection financingBreakdown) {
+	public void setFinancingBreakdown(Collection<FinancingBreakdown> financingBreakdown) {
 		this.financingBreakdown = financingBreakdown;
 	}
 

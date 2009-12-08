@@ -46,6 +46,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FilterParams;
+import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.RelOrganization;
@@ -338,6 +339,9 @@ public class ViewChannelOverview extends TilesAction {
 				          while (orgItr.hasNext()) {
 				            AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
 				            AmpOrganisation auxOrgRel = orgRole.getOrganisation();
+				            if ( Constants.FUNDING_AGENCY.equals(orgRole.getRole().getRoleCode()) ) {
+				            	continue;
+				            }
 				            if(auxOrgRel!=null)
 				            {
 				            	RelOrganization relOrg = new RelOrganization();
@@ -354,6 +358,23 @@ public class ViewChannelOverview extends TilesAction {
 				                	relOrgs.add(relOrg);
 				                }
 				            }
+				          }
+				          if ( formBean.getFinancingBreakdown() != null ) {
+				        	  for ( FinancingBreakdown fb1: formBean.getFinancingBreakdown() ) {
+				        		  AmpOrganisation auxOrgRel = fb1.getOrganisation();
+				        		  RelOrganization relOrg = new RelOrganization();
+					                relOrg.setOrgName(auxOrgRel.getName());
+					                relOrg.setRole( Constants.FUNDING_AGENCY );
+					                relOrg.setAcronym(auxOrgRel.getAcronym());
+					                relOrg.setOrgCode(auxOrgRel.getOrgCode());
+					                relOrg.setBudgetOrgCode(auxOrgRel.getBudgetOrgCode());
+					                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+					                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+					                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
+					                if (!relOrgs.contains(relOrg)) {
+					                	relOrgs.add(relOrg);
+					                }
+				        	  }
 				          }
 				        }
 				        formBean.setRelOrgs(relOrgs);

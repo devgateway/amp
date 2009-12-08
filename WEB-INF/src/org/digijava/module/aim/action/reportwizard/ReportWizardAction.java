@@ -483,7 +483,7 @@ public class ReportWizardAction extends MultiAction {
 				for(Iterator jt=ampAllFields.iterator();jt.hasNext();)
 				{
 					AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
-					if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
+					if(ampColumn.getColumnName().toLowerCase().compareTo(ampFieldVisibility.getName().toLowerCase())==0)
 					{
 						if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
 						{

@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UserDetailForm;
 import org.digijava.module.aim.helper.TeamMember;
@@ -61,6 +62,13 @@ public class ViewUserProfile
             }
         } else if (member != null) {
         	user = DbUtil.getUser(member.getUser().getId()); 
+        	if(user.getAssignedOrgId()!=null && user.getOrganizationName() == null) {
+                AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
+                if(organization != null){
+                	user.setOrganizationName( organization.getName() );
+                }
+
+            }
             if(user!=null) 
             	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
         }

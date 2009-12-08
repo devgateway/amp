@@ -145,7 +145,7 @@ public class OrgProfileFilterForm extends ActionForm {
     }
 
     public String getOrgsName() {
-        String name = null;
+        String name = "";
         if (orgIds != null) {
             for (Long id : orgIds) {
                 AmpOrganisation organization = DbUtil.getOrganisation(id);

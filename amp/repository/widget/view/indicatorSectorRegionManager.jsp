@@ -138,7 +138,7 @@
 	
 	<tr>
 		<td>			
-			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
+            <table border="0" width="100%" ellpadding="2" cellspacing="0" align="center" style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#c9c9c7">
 					<td width="30%">
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy!='nameAscending'}">
@@ -154,7 +154,7 @@
 						<c:if test="${empty gisIndicatorSectorRegionForm.sortBy || gisIndicatorSectorRegionForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 					</td>
-					<td width="30%">
+					<td width="20%">
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy!='sectNameAscending'}">
 							<digi:link href="/indSectRegManager.do~actType=viewAll&sortBy=sectNameAscending&reset=false">
 								<strong><digi:trn>Sector Name</digi:trn></strong>
@@ -168,7 +168,7 @@
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='sectNameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='sectNameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 					</td>
-					<td width="30%">
+					<td width="20%">
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy!='regionNameAscending'}">
 							<digi:link href="/indSectRegManager.do~actType=viewAll&sortBy=regionNameAscending&reset=false">
 								<strong><digi:trn>Region Name</digi:trn></strong>
@@ -188,54 +188,54 @@
 					<td>
 						<strong><digi:trn>Operations</digi:trn></strong>
 					</td>
-				</tr>				
-				<c:forEach var="indSecRegWithSubGrp" items="${gisIndicatorSectorRegionForm.indSectsWithSubGroups}" varStatus="stat">
-					<c:set var="background">
-						<c:if test="${stat.index%2==0}">#ffffff</c:if>
-						<c:if test="${stat.index%2==1}">#d7eafd</c:if>
-					</c:set>
-					<tr bgcolor="${background}">
-						<td nowrap="nowrap" width="30%" title="${indSecRegWithSubGrp.indSector.indicator.name}">
-							${indSecRegWithSubGrp.shortIndName}
-						</td>
-						<td nowrap="nowrap" width="30%" title="${indSecRegWithSubGrp.indSector.sector.name}">
-						 	${indSecRegWithSubGrp.shortSectName}
-						</td>
+				</tr>             
+                            <c:forEach var="indSecRegWithSubGrp" items="${gisIndicatorSectorRegionForm.indSectsWithSubGroups}" varStatus="stat">
+                                <c:set var="background">
+                                    <c:if test="${stat.index%2==0}">#dbe5f1</c:if>
+                                    <c:if test="${stat.index%2==1}">#FFFFFF</c:if>
+                                </c:set>
+                                <tr bgcolor="${background}">
+                                    <td nowrap="nowrap" width="30%" title="${indSecRegWithSubGrp.indSector.indicator.name}">
+                                        ${indSecRegWithSubGrp.shortIndName}
+                                    </td>
+                                    <td nowrap="nowrap" width="20%" title="${indSecRegWithSubGrp.indSector.sector.name}">
+                                        ${indSecRegWithSubGrp.shortSectName}
+                                    </td>
                         <td nowrap="nowrap" width="20%">
-                        	<c:choose>
-                            	<c:when test="${empty indSecRegWithSubGrp.indSector.location.ampRegion&& not empty indSecRegWithSubGrp.indSector.location.dgCountry}">
+                                        <c:choose>
+                                            <c:when test="${empty indSecRegWithSubGrp.indSector.location.ampRegion&& not empty indSecRegWithSubGrp.indSector.location.dgCountry}">
                                 	National
-                                </c:when>
-                                <c:otherwise>
-                                	<div title="${indSecRegWithSubGrp.indSector.location.location.name}">
-                                		${indSecRegWithSubGrp.shortRegionName}
-                                	</div>                                	
-                                </c:otherwise>
-                            </c:choose>
-						</td>
-						<td nowrap="nowrap" width="10%">
-							<c:if test="${not empty indSecRegWithSubGrp.subGroups}">
-								<c:forEach var="subGrp" items="${indSecRegWithSubGrp.subGroups}">
-									<div>${subGrp}</div> 
-								</c:forEach>
-							</c:if>
-						</td>
-						<td nowrap="nowrap">
-							<a href="/widget/indSectRegManager.do~actType=edit~indSectId=${indSecRegWithSubGrp.indSector.id}">
-								<digi:trn key="gis:editLink">Edit</digi:trn>
-							</a>
-                            &nbsp;|
-                            <a href="/widget/indSectRegManager.do~actType=addEditValue~indSectId=${indSecRegWithSubGrp.indSector.id}">
-								<digi:trn key="gis:addEditValueLink">Add/Edit Value</digi:trn>
-							</a>
-                                                        
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div title="${indSecRegWithSubGrp.indSector.location.location.name}">
+                                                    ${indSecRegWithSubGrp.shortRegionName}
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td nowrap="nowrap" width="15%">
+                                        <c:if test="${not empty indSecRegWithSubGrp.subGroups}">
+                                            <c:forEach var="subGrp" items="${indSecRegWithSubGrp.subGroups}">
+                                                <div>${subGrp}</div>
+                                            </c:forEach>
+                                        </c:if>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <a href="/widget/indSectRegManager.do~actType=edit~indSectId=${indSecRegWithSubGrp.indSector.id}">
+                                            <digi:trn key="gis:editLink">Edit</digi:trn>
+                                        </a>
+                                        &nbsp;|
+                                        <a href="/widget/indSectRegManager.do~actType=addEditValue~indSectId=${indSecRegWithSubGrp.indSector.id}">
+                                            <digi:trn key="gis:addEditValueLink">Add/Edit Value</digi:trn>
+                                        </a>
+
 							|&nbsp;
-							<a href="/widget/indSectRegManager.do~actType=delete~indSectId=${indSecRegWithSubGrp.indSector.id}">
-								<img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
-							</a>
-						</td>
-					</tr>
-				</c:forEach>
+                                        <a href="/widget/indSectRegManager.do~actType=delete~indSectId=${indSecRegWithSubGrp.indSector.id}">
+                                            <img border="0" src='<digi:file src="images/deleteIcon.gif"/>' alt="">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
 				<logic:notEmpty name="gisIndicatorSectorRegionForm" property="pages">
 					<tr>
 						<td colspan="4" nowrap="nowrap">

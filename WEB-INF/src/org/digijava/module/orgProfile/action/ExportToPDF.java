@@ -1,6 +1,7 @@
 package org.digijava.module.orgProfile.action;
 
 import com.lowagie.text.Element;
+import com.lowagie.text.HeaderFooter;
 import java.io.ByteArrayOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import javax.servlet.ServletOutputStream;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -665,7 +667,9 @@ public class ExportToPDF extends Action {
             mainLayout.addCell("");
             //   mainLayout.writeSelectedRows(0, -1, 50, 50, writer.getDirectContent());
             doc.add(mainLayout);
-
+            String footerText =OrgProfileUtil.getFooterText(langCode, siteId, filter);
+            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), false);
+            doc.setFooter(footer);
             doc.close();
             response.setContentLength(baos.size());
             ServletOutputStream out = response.getOutputStream();

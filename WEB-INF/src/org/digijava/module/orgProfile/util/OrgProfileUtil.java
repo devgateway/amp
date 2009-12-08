@@ -32,10 +32,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -45,6 +47,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -817,6 +820,24 @@ public class OrgProfileUtil {
             }
         }
 
+    }
+    public static String getFooterText(String langCode, Long siteId, FilterHelper filter) throws WorkerException {
+        String footerText = TranslatorWorker.translateText("Selected organizations", langCode, siteId) + ": ";
+        if (filter.getOrgIds() != null) {
+            for (Long id : filter.getOrgIds()) {
+                AmpOrganisation org = DbUtil.getOrganisation(id);
+                footerText += org.getName() + ", ";
+            }
+            if (footerText.length() > 0) {
+                footerText = footerText.substring(0, footerText.length() - 2);
+            }
+        } else {
+            footerText += TranslatorWorker.translateText("All", langCode, siteId);
+        }
+        if (filter.getOrgGroupId() != null && filter.getOrgGroupId() != -1) {
+            footerText += " " + TranslatorWorker.translateText("from", langCode, siteId) + filter.getOrgGroup().getOrgGrpName();
+        }
+        return footerText;
     }
 
 }

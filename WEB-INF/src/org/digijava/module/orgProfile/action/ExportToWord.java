@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpSession;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -621,8 +622,9 @@ public class ExportToWord extends Action {
                     }
                 }
             }
-
-
+            String footerText =OrgProfileUtil.getFooterText(langCode, siteId, filter);
+            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), false);
+            doc.setFooter(footer);
             doc.close();
             response.setContentLength(baos.size());
             ServletOutputStream out = response.getOutputStream();

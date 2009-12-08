@@ -67,21 +67,26 @@
 														%>
 
 														<tr class="<%=rowClass%>">
-															<td vAlign="center" align="left">
-																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
-																<c:out value="${issues.name}"/></a>
-																 &nbsp;
+															<td vAlign="center" align="left" bgcolor="#dbe5f1">
+															  <div style="display:block;padding:2px;font-size:10pt;">
+																<c:out value="${issues.name}"/>
 																<field:display feature="Issues" name="Issue Date">
-																	<c:out value="${issues.issueDate}"/>
+  																<br/>
+																	<strong><c:out value="${issues.issueDate}"/></strong>
 																</field:display>
-																<a href="javascript:removeIssue('${issues.id}')">
-																	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
-																</a>&nbsp;&nbsp;&nbsp;&nbsp;
+																<br/>
+																</div>
+																<button onclick="updateIssues('<c:out value="${issues.id}"/>');return false;" title="Edit this issue"  class="buton">Edit issue</button>
+																<button onclick="removeIssue('${issues.id}');return false;" title="Delete this issue" class="buton">Delete issue</button>
+<!--
+																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')"  title="Edit this issue"><digi:img src="../ampTemplate/images/application_edit.png" border="0"/></a>
+																<a href="javascript:removeIssue('${issues.id}')" title="Delete this issue"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
+-->
 																<field:display feature="Issues" name="Measures Taken">
 																	<field:display name="Add Measures Link" feature="Issues">
-																		<a href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
+																		<button class="buton" href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
 																			<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
-																		</a>
+																		</button>
 																	</field:display>													
 																</field:display>
 															</td>
@@ -89,30 +94,36 @@
 														<field:display feature="Issues" name="Measures Taken">
 														<tr class="<%=rowClass%>">
 															<td vAlign="center" align="left">
-																<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
+																<table width="100%" cellPadding=2 cellSpacing=1 vAlign="top" border=0
 																bgcolor="#dddddd">
 																	<logic:notEmpty name="issues" property="measures">
 																	<logic:iterate name="issues" property="measures" id="measure"
 																	 type="org.digijava.module.aim.helper.Measures">
 																	<tr class="<%=rowClass%>">
-																		<td vAlign="center" align="left" width="3">
-																			&nbsp;&nbsp;
+																		<td vAlign="top" align="left" width="3">
+																			<digi:img src="../ampTemplate/images/link_out_bot.gif" border="0" />
 																		</td>
-																		<td vAlign="center" align="left">
-																			<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
-																			<c:out value="${measure.name}"/> </a>
-																			<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
-																				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
-																			</a>&nbsp;&nbsp;&nbsp;&nbsp;
+																		<td vAlign="center" align="left" bgcolor="#dedede">
+																			<div style="display:block;font-size:10pt;">
+																			<c:out value="${measure.name}"/>
+																			<br/>
+																			<br/>
+<!--
+       																<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" title="Edit this measure"><digi:img src="../ampTemplate/images/application_edit.png" border="0"/></a>
+      																<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" title="Delete this measure"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
+-->
+      																</div>
+      																<button class="buton" onclick="updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Edit this measure">Edit measure</button>
+      																<button class="buton" onclick="removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Delete this measure">Delete measure</button>
 																			<field:display name="Add Actors Link" feature="Issues">
-																				<a href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></a>
+																				<button class="buton" href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
 																			</field:display>
 																		</td>
 																	</tr>
 																	<tr class="<%=rowClass%>">
 																		<td vAlign="center" align="left" width="3">
 																		</td>
-																		<td vAlign="center" align="left">
+																		<td vAlign="center" align="left" >
 																		  <field:display name="Actors" feature="Issues">
 																			<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
 																			bgcolor="#dddddd">
@@ -121,15 +132,15 @@
 																				 type="org.digijava.module.aim.dbentity.AmpActor">
 																				<tr class="<%=rowClass%>">
 																					<td vAlign="center" align="left" width="3">
-																						&nbsp;&nbsp;
+       																			<digi:img src="../ampTemplate/images/link_out_bot.gif" border="0" />
 																					</td>
-																					<td vAlign="center" align="left">
-																						<a href="javascript:updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
-																							<c:out value="${actor.name}"/>
-																						</a>
-																						<a href="javascript:removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
-																							<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
-																						</a>&nbsp;
+																					<td vAlign="center" align="left" style="border:1px solid #cecece;" >
+      																			<div style="display:block;">
+																						<c:out value="${actor.name}"/>
+																						</div>
+																						<br/>
+																						<button class="buton" onclick="updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;">Edit actor</button>
+																						<button class="buton" onclick="removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;">Delete actor</button>
 																					</td>
 																				</tr>
 																				</logic:iterate>

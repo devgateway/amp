@@ -134,7 +134,7 @@
 <feature:display name="Step1" module="Custom Fields"></feature:display>
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
 <feature:display name="Documents Tab" module="Document"></feature:display> 
-<feature:display name="Donor Contact Information" module="Contact Information"></feature:display> Project Coordinator Contact
+<feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Donor Report" module="Report Types"></feature:display> 
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 

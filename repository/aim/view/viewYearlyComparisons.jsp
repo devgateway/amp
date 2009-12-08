@@ -627,7 +627,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="actualCommitment" />
+																		<aim:formatNumber  value="${yearlyComparisons.actualCommitment}" />
 
 																	</div>
 
@@ -640,7 +640,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="disbOrders" />
+																		<aim:formatNumber  value="${yearlyComparisons.disbOrders}" />
 
 																	</div>
                                                                                                                                   
@@ -653,7 +653,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	<div align="right">
 
-																		<bean:write name="yearlyComparisons" property="plannedDisbursement" />
+																		<aim:formatNumber  value="${yearlyComparisons.plannedDisbursement}" />
 
 																	</div>
 
@@ -662,9 +662,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 			      	                        		<td>
 
 																	<div align="right">
-
-																		<bean:write name="yearlyComparisons" property="actualDisbursement" />
-
+																		<aim:formatNumber  value="${yearlyComparisons.actualDisbursement}" />
 																	</div>
 
 																</td>
@@ -672,8 +670,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 				                  	            	<td>
 
 																	<div align="right">
-
-																		<bean:write name="yearlyComparisons" property="actualExpenditure" />
+																		<aim:formatNumber  value="${yearlyComparisons.actualExpenditure}" />
 													</div>
 
 											  </td>

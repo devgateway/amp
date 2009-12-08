@@ -72,6 +72,9 @@
           
          
         });
+        $("#deselectAll").click(function () {
+            $("#org_dropdown_id option").removeAttr("selected");
+        });
 
     });
 
@@ -301,7 +304,10 @@
             <div style="width:200px">
             <table cellpadding="2" border="0" >
                 <tr align="left" style="background-color:rgb(153, 153, 153); color: rgb(0, 0, 0);">
-                    <td><digi:trn>Organizations</digi:trn></td>
+                    <td>
+                        <digi:trn>Organizations</digi:trn>
+                       
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -310,6 +316,7 @@
                                 <html:optionsCollection property="organizations" value="ampOrgId" label="name" />
                             </html:select>
                         </span>
+                        <input type="button" class="button" value="<digi:trn>Deselect All</digi:trn>" id="deselectAll">
                         <p style="color:red;font-weight:bold"><digi:trn> Note: Data will include all organizations in the current group if none from organization's list is selected.</digi:trn> </p>
                     </td>
                 </tr>

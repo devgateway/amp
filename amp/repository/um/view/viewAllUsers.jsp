@@ -19,7 +19,28 @@
 <script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-min.js"></script> 
 <script type="text/javascript" src="/repository/xmlpatcher/js/event-min.js"></script> 
 <script type="text/javascript" src="/repository/xmlpatcher/js/paginator-min.js"></script> 
+<style>
+.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
+color:#000000;
+font-weight:bold;
+font-size: 11px;
+text-decoration:none;
+vertical-align:bottom;
+}
+.yui-skin-sam th.yui-dt-asc, .yui-skin-sam th.yui-dt-desc {
+background:#B8B8B0;
+}
+.yui-skin-sam .yui-dt th {
+background:#B8B8B0;
+}
+.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
+background:transparent url(/repository/aim/images/up.gif) no-repeat scroll right center;
+}
+.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
+background:transparent url(/repository/aim/images/down.gif) no-repeat scroll right center;
+}
 
+</style>
 <script language="JavaScript">
 
 YAHOO.util.Event.addListener(window, "load", function() {
@@ -28,8 +49,9 @@ YAHOO.util.Event.addListener(window, "load", function() {
     	
        	         
         this.formatActions = function(elCell, oRecord, oColumn, sData) {
-            elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +sData+">" +"<img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/>" + "</a>";
-            elCell.innerHTML +="&nbsp;&nbsp;<a onclick='return banUser();' title='Ban User' href=/um/viewEditUser.do~id=" +sData+"~ban=true>" +"<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/>" + "</a>";
+            //elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +sData+">" +"<img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/>" + "</a>";
+            //elCell.innerHTML +="&nbsp;&nbsp;<a onclick='return banUser();' title='Ban User' href=/um/viewEditUser.do~id=" +sData+"~ban=true>" +"<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/>" + "</a>";
+        	elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +oRecord.getData( 'ID' )+" title='Edit User'>" + sData + "</a>";
         };
  
         this.myDataSource = new YAHOO.util.DataSource("/um/userSearch.do?");
@@ -46,10 +68,10 @@ YAHOO.util.Event.addListener(window, "load", function() {
         
         var myColumnDefs = [
             //{key:"ID", label:"ID"},
-            {key:"name", label:"NAME", sortable:true},
-            {key:"email", label:"EMAIL", sortable:true},
-            {key:"workspaces", label:"WORKSPACES"},
-            {key:"actions", label:"ACTION"}
+            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, formatter:this.formatActions, width: 150},
+            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:true, width: 150},
+            {key:"workspaces", label:"<digi:trn>WORKSPACES</digi:trn>", width: 260},
+            {key:"actions", label:"<digi:trn>ACTION</digi:trn>", width: 40}
             //{key:"actions", label:"ACTION", formatter:this.formatActions}
         ];
   
@@ -72,9 +94,9 @@ YAHOO.util.Event.addListener(window, "load", function() {
         var myPaginator = new YAHOO.widget.Paginator({ 
         	rowsPerPage:10,
         	containers : ["dt-pag-nav"], 
-        	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {CurrentPageReport}  {RowsPerPageDropdown}", 
-        	pageReportTemplate : "Showing items {startIndex} - {endIndex} of {totalRecords}", 
-        	rowsPerPageOptions : [10,25,50,100] 
+        	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}", 
+        	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
+        	rowsPerPageOptions : [10,25,50,100]
         });   
         var myConfigs = {
             initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
@@ -255,7 +277,7 @@ function banUser(txt) {
 						</td>
 		        	</tr>
 		        	<tr>
-		            <td noWrap width=817 vAlign="top" colspan="7">
+		            <td noWrap width=850 vAlign="top" colspan="7">
 		            	<table width="100%" cellspacing=1 cellSpacing=1>
 							<tr>
 								<td vAlign="top"> 
@@ -266,7 +288,7 @@ function banUser(txt) {
 										</tr>
 										<tr >
 											<td valign="top">
-												<table align=center bgColor=#ffffff cellPadding=0 cellSpacing=0  border=1 >
+												<table align=center bgColor=#ffffff cellPadding=0 cellSpacing=0  border=0 >
 													<tr>
 														<td bgColor=#ffffff >
 															<table border=0 cellPadding=0 cellSpacing=0  width="100%">
@@ -281,8 +303,8 @@ function banUser(txt) {
 		 														<tr>
 																	<td width="100%">
 																		<div class='yui-skin-sam'>
-																			<div id="dt-pag-nav"></div>
 																			<div id="dynamicdata"></div>
+																			<div id="dt-pag-nav"></div>
 																			<div id="errors"></div>
 																		</div>
 																	</td>
@@ -318,39 +340,6 @@ function banUser(txt) {
 												</table>
 											</td>
 										</tr>
-										<tr>
-									        <td>
-												<table>
-									             	<tr>
-									                 	<td colspan="2">
-									                 		<strong><digi:trn key="aim:IconReference">Icons Reference</digi:trn></strong>
-									       				</td>
-									       			</tr>
-									     			<tr>
-									           			<td nowrap="nowrap"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
-									               			<digi:trn key="aim:ClickEditUser">Click on this icon to edit the user&nbsp;</digi:trn>
-									               			<br />
-									       				</td>
-									       			</tr>
-									        		<tr>
-														<c:choose>
-		                                                  <c:when test="${umViewAllUsersForm.showBanned}">
-															<td nowrap="nowrap"><img src= "/TEMPLATE/ampTemplate/images/green_check_16.png" vspace="2" border="0" align="absmiddle" />
-									               				<digi:trn key="aim:ClickUnbanUser">Click on this icon to unban the user&nbsp;</digi:trn>
-									                   			<br />
-															</td>
-		                                                  </c:when>
-		                                                  <c:otherwise>
-																<td nowrap="nowrap"><img src= "/TEMPLATE/ampTemplate/images/deleteIcon.gif" vspace="2" border="0" align="absmiddle" />
-									               					<digi:trn key="aim:ClickBanUser">Click on this icon to ban the user&nbsp;</digi:trn>
-									                   			<br />
-																</td>
-		                                                    </c:otherwise>
-		                                                </c:choose>	
-									           		</tr>
-									       		</table>
-									     	</td>
-									    </tr> 
 									</table>
 							    </td>
 								<td noWrap width="180" vAlign="top">
@@ -419,8 +408,8 @@ function banUser(txt) {
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
 																<td>
 																	<digi:link  module="aim" href="/../um/viewAllUsers.do~showBanned=true">
-																	<digi:trn key="aim:ViewBannedUsers">
-																	View Banned Users
+																	<digi:trn>
+																	View Inactive Users
 																	</digi:trn>
 																	</digi:link>
 																</td>

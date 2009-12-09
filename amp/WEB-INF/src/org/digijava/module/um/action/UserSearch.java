@@ -128,11 +128,15 @@ public class UserSearch extends Action {
 				Collection<AmpTeamMember> teamMembers = user.getTeamMembers();
 				String ws = "";
 				for (AmpTeamMember teamMember : teamMembers) {
-					ws += "<li/>" + teamMember.getAmpTeam().getName() + " ("
-							+ teamMember.getAmpMemberRole().getRole() + ")";
+					ws += "<li/>" + "<a href=/aim/getWorkspace.do~dest=admin~tId=" +teamMember.getAmpTeam().getAmpTeamId()+"~event=edit"+" title='Edit Workspace'>"+teamMember.getAmpTeam().getName() + " ("
+							+ teamMember.getAmpMemberRole().getRole() + ")"+"</a>";
 				}
 				juser.put("workspaces", ws);
-				juser.put("actions", "<a href=/um/viewEditUser.do~id=" +user.getId()+" title='Edit User'><img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/></a>&nbsp;&nbsp;<a onclick='return banUser();' title='Ban User' href=/um/viewEditUser.do~id=" +user.getId()+"~ban=true><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/> </a>");
+				if(vwForm.getShowBanned()){
+					juser.put("actions", "<a href=/um/viewEditUser.do~id=" +user.getId()+" title='Edit User'><img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/></a>&nbsp;&nbsp;<a onclick='return unbanUser();' title='Make User Active' href=/um/viewEditUser.do~id=" +user.getId()+"~ban=false><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/green_check_16.png'/> </a>");
+				}else{
+					juser.put("actions", "<a href=/um/viewEditUser.do~id=" +user.getId()+" title='Edit User'><img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/></a>&nbsp;&nbsp;<a onclick='return banUser();' title='Make User Inactive' href=/um/viewEditUser.do~id=" +user.getId()+"~ban=true><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/> </a>");
+				}
 				jsonArray.add(juser);
 
 			}

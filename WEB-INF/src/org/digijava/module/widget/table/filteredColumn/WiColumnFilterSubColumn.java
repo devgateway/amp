@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
+import org.digijava.module.widget.dbentity.AmpDaValue;
+import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiColumnStandard;
 import org.hibernate.HibernateException;
@@ -39,5 +41,21 @@ public class WiColumnFilterSubColumn extends WiColumnStandard {
 
 	public Long getFilterItemId() {
 		return filterItemId;
+	}
+    @Override
+	public WiCell createCell() {
+		WiCellFiltered cell = new WiCellFiltered();
+		cell.setColumn(this);
+		return cell;
+	}
+
+	@Override
+	public WiCell createCell(AmpDaValue value) {
+		WiCellFiltered cell = (WiCellFiltered)this.createCell();
+		cell.setId(value.getId());
+		cell.setPk(value.getPk());
+		cell.setValue(value.getValue());
+		cell.setFilterItemId(((AmpDaValueFiltered) value).getFilterItemId());
+		return cell;
 	}
 }

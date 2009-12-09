@@ -159,13 +159,25 @@
                                 ${contact.name}
                             </td>
                             <td class="tdClass" nowrap>
-                                ${contact.email}
+                                <c:forEach var="property" items="${contact.properties}">
+									<c:if test="${property.name=='contact email'}">
+										<div>${property.value}</div>
+									</c:if>
+								</c:forEach>
                             </td>
                             <td class="tdClass">
-                                ${contact.phone}&nbsp;
+                            	<c:forEach var="property" items="${contact.properties}">
+									<c:if test="${property.name=='contact phone'}">
+										<div>${property.value}</div>
+									</c:if>
+								</c:forEach>
                             </td>
                             <td class="tdClass">
-                                ${contact.fax}&nbsp;
+                            	<c:forEach var="property" items="${contact.properties}">
+									<c:if test="${property.name=='contact fax'}">
+										<div>${property.value}</div>
+									</c:if>
+								</c:forEach>                               
                             </td>
                             <td class="tdClass">
                                 ${contact.title}&nbsp;

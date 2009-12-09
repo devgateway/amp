@@ -83,6 +83,8 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Collection closingDates;
 	
 	private Integer countryIndex;
+	
+	private List<Integer> numOfLocationsPerLayer;
 
 	/**
 	 * @return Returns the revCompDates.
@@ -702,6 +704,14 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 
 		public void setFundingStatuses(ArrayList<AmpCategoryValue> fundingStatuses) {
 			this.fundingStatuses = fundingStatuses;
+		}
+
+		public List<Integer> getNumOfLocationsPerLayer() {
+			return numOfLocationsPerLayer;
+		}
+
+		public void setNumOfLocationsPerLayer(List<Integer> numOfLocationsPerLayer) {
+			this.numOfLocationsPerLayer = numOfLocationsPerLayer;
 		}
 	  
 

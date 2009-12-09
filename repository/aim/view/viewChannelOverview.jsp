@@ -642,11 +642,13 @@ function commentWin(val) {
                                                                                        
                                                                                          <tr>
                                                                                         	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
-                                                                                        	 	<td align="center" bgcolor="#ffffff">
-                                                                                         		<i>
-                                                                                         			<category:getoptionvalue categoryIndex="${indexLayer}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
-                                                                                         		</i>
-                                                                                         		</td>
+                                                                                        	 	<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
+	                                                                                        	 	<td align="center" bgcolor="#ffffff">
+	                                                                                         		<i>
+	                                                                                         			<category:getoptionvalue categoryIndex="${indexLayer}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+	                                                                                         		</i>
+	                                                                                         		</td>
+                                                                                         		</c:if>
                                                                                         	 </c:forEach>
                                                                                         	 <td  align="center" bgcolor="#ffffff">
                                                                                               <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
@@ -724,16 +726,18 @@ function commentWin(val) {
 																							<tr>
 																							<bean:size id="numOfAncestors" name="ancestorMap"/>
 																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
-																								<td align="center" bgcolor="#ffffff">
-																								<c:choose>
-																									<c:when test="${ancestorMap[indexLayer] != null}">
-																											${ancestorMap[indexLayer]}
-																									</c:when>
-																									<c:otherwise>
-																										&nbsp;
-																									</c:otherwise>
-																								</c:choose>
-																								</td>
+																								<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
+																									<td align="center" bgcolor="#ffffff">
+																									<c:choose>
+																										<c:when test="${ancestorMap[indexLayer] != null}">
+																												${ancestorMap[indexLayer]}
+																										</c:when>
+																										<c:otherwise>
+																											&nbsp;
+																										</c:otherwise>
+																									</c:choose>
+																									</td>
+																								</c:if>
 																							</c:forEach>
 																							<td align="center" bgcolor="#ffffff">
 																								<field:display name="Regional Percentage" feature="Location">&nbsp;

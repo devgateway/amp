@@ -56,6 +56,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -123,6 +124,12 @@ public class ViewChannelOverview extends TilesAction {
 					AmpCategoryValue country		= 
 						CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
 					formBean.setCountryIndex( country.getIndex() );
+					
+					formBean.setNumOfLocationsPerLayer(new ArrayList<Integer>(formBean.getNumImplLocationLevels()) );
+					for (int i=0; i<formBean.getNumImplLocationLevels(); i++) {
+						Integer numOfLocations	= DynLocationManagerUtil.getNumOfLocations(i);
+						formBean.getNumOfLocationsPerLayer().add(numOfLocations);
+					}
 				}
 				catch (Exception e) {
 					e.printStackTrace();

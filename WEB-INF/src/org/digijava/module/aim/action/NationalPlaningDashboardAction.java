@@ -267,7 +267,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 				dataset = createPercentsDataset(currentTheme, selIndicators, selYears);
 			}
-			JFreeChart chart = ChartUtil.createChart(dataset,ChartUtil.CHART_TYPE_BAR);
+			JFreeChart chart = ChartUtil.createChart(dataset,ChartUtil.CHART_TYPE_BAR,true);
 
 			response.setContentType("image/png");
 			ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, ChartUtil.CHART_WIDTH,ChartUtil.CHART_HEIGHT);

@@ -19,6 +19,7 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer3D;
 import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.general.Dataset;
 
 public class ChartUtil {
   private static Logger logger = Logger.getLogger(ChartUtil.class);
@@ -44,7 +45,7 @@ public class ChartUtil {
 //    return chart;
 //  }
 
-  private static JFreeChart createBarChart(CategoryDataset dataset) {
+  private static JFreeChart createBarChart(CategoryDataset dataset,boolean fixedRange) {
 
     // create the chart...
     JFreeChart chart = ChartFactory.createBarChart3D(
@@ -75,8 +76,11 @@ public class ChartUtil {
     CategoryPlot plot = chart.getCategoryPlot();
 
     // set the range axis to display integers only...
-    final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-    rangeAxis.setRange(0D, 1D);
+    final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();    
+    
+    if(fixedRange){
+    	rangeAxis.setRange(0D, 1D);
+    }
     rangeAxis.setNumberFormatOverride(new DecimalFormat("###%"));
 
     // disable bar outlines...
@@ -226,16 +230,16 @@ public class ChartUtil {
 	  return result;
   }
   
-  public static JFreeChart createChart(CategoryDataset dataset, int chartType) {
+  public static JFreeChart createChart(CategoryDataset dataset, int chartType,boolean fixedRange) {
     switch (chartType) {
       case CHART_TYPE_BAR:
-    	  return createBarChart(dataset);
+    	  return createBarChart(dataset,fixedRange);
       case CHART_TYPE_STACKED_BARS:
     	  return createStackedBarChart(dataset);
       case CHRAT_TYPE_STACKED_BARS_PERCENTAGE:
     	  return createStackedPercentBarChart(dataset);
       default:
-    	  return createBarChart(dataset);
+    	  return createBarChart(dataset,fixedRange);
     }
 
   }

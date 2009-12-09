@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
+import org.digijava.module.aim.helper.CategoryDatasetHolder;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.NpdUtil;
@@ -71,15 +72,16 @@ public class getNPDgraph extends Action {
 
             //session for storing latest map for graph
             HttpSession session = request.getSession();
-
-            CategoryDataset dataset = null;
+            
+            CategoryDatasetHolder datasetHolder=null;
             if (currentThemeId != null && currentThemeId.longValue() > 0) {
                 AmpTheme currentTheme = ProgramUtil.getThemeObject(currentThemeId);
-
-
-                dataset = createPercentsDataset(currentTheme, selIndicators, selYears,request);
+                datasetHolder=createPercentsDataset(currentTheme, selIndicators, selYears,request);
+                
             }
-            JFreeChart chart = ChartUtil.createChart(dataset, ChartUtil.CHART_TYPE_BAR);
+            CategoryDataset dataset=datasetHolder!=null?datasetHolder.getDataset():null;
+            boolean fixedRange = datasetHolder!=null?datasetHolder.isFixedRange():true;
+            JFreeChart chart = ChartUtil.createChart(dataset, ChartUtil.CHART_TYPE_BAR,fixedRange);
 
 
             ChartRenderingInfo info = new ChartRenderingInfo();
@@ -120,11 +122,12 @@ public class getNPDgraph extends Action {
 
 
     // TODO This method should be moved to NPD or chart util.
-    private CategoryDataset createPercentsDataset(AmpTheme currentTheme,
-                                                  long[] selectedIndicators, String[] selectedYears, HttpServletRequest request)
+    private CategoryDatasetHolder createPercentsDataset(AmpTheme currentTheme,long[] selectedIndicators, String[] selectedYears, HttpServletRequest request)
             throws AimException {
-
+    	
+    	CategoryDatasetHolder retValue= new CategoryDatasetHolder();
         CustomCategoryDataset dataset = new CustomCategoryDataset();
+        boolean fixedRange=true;
         String baseValueSource="";
         String actualValueSource="";
         String targetValueSource="";
@@ -322,8 +325,12 @@ public class getNPDgraph extends Action {
                             }
                          // create dataset for graph
                             dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear,baseValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(targetValue,targetYear, selectedYear,targetValueSource)});
-                             Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
-                             dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
+                            Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
+                            dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
+                            
+                            if(realActual.doubleValue()<0D || realActual.doubleValue()>1D){ //in any realActual is less/more then 0/100,then chart range shouldn't be 0-100%
+                            	fixedRange=false;
+                            }
 
                         }
                         	   
@@ -336,7 +343,9 @@ public class getNPDgraph extends Action {
             }
 
         }
-        return dataset;
+        retValue.setDataset(dataset);
+        retValue.setFixedRange(fixedRange);
+        return retValue;
 
     }
 

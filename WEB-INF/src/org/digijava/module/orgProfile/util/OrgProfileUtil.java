@@ -222,7 +222,7 @@ public class OrgProfileUtil {
                     qry.setLong("teamId", member.getTeamId());
 
                 }
-                if (orgIds == null&&orgGroupId!=-1 ) {
+                if (orgIds == null&&orgGroupId!=null&&orgGroupId!=-1 ) {
                     qry.setLong("orgGroupId", orgGroupId);
                 }
                 size = qry.list().size();
@@ -275,7 +275,7 @@ public class OrgProfileUtil {
                 qry.setLong("teamId", member.getTeamId());
 
             }
-            if (orgIds ==null&&orgGroupId!=-1) {
+            if (orgIds ==null&&orgGroupId!=null&&orgGroupId!=-1) {
              qry.setLong("orgGroupId", orgGroupId);
             }
             size = qry.list().size();

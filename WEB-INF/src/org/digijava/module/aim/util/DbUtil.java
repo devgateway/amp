@@ -119,6 +119,9 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.action.EntityUpdateAction;
+import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.EUActivityContribution;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -720,6 +723,33 @@ public class DbUtil {
 
         } catch (Exception e) {
             logger.error("Uanble to get object of class " + c.getName() + " width id=" + id + ". Error was:" + e);
+        } finally {
+
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (Exception ex) {
+                logger.error("releaseSession() failed " + ex);
+            }
+        }
+        return o;
+    }
+
+    public static EUActivity getEuActivity(Long id) {
+        Session session = null;
+        EUActivity o = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            o = (EUActivity) session.load(EUActivity.class, id);
+            o.getName();
+            Set<EUActivityContribution> s = o.getContributions();
+            for (EUActivityContribution i: s){
+            	i.getDonor().getName();
+            }
+            
+
+        } catch (Exception e) {
+            logger.error("Uanble to get object of class " + EUActivity.class.getName() + " width id=" + id + ". Error was:" + e);
         } finally {
 
             try {

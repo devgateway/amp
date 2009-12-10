@@ -33,7 +33,7 @@ public class ViewEUActivity extends Action {
 			return mapping.findForward("index");
 		}
 		
-		EUActivity eua=(EUActivity) DbUtil.get(EUActivity.class,activityId);
+		EUActivity eua=(EUActivity) DbUtil.getEuActivity(activityId);
 		
 		request.setAttribute("euActivity",eua);
 		return mapping.findForward("forward");

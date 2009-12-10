@@ -32,9 +32,11 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
@@ -313,11 +315,23 @@ public class ExportToPDF extends Action {
                                         Iterator<AmpContact> contactsIter = contacts.iterator();
                                         while (contactsIter.hasNext()) {
                                             AmpContact contact = contactsIter.next();
-                                            PdfPCell name = new PdfPCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
-                                            PdfPCell lastName = new PdfPCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
-//                                    PdfPCell email = new PdfPCell(new Paragraph(contact.getEmail(),OrgProfileUtil.PLAINFONT));
-//                                    PdfPCell phone = new PdfPCell(new Paragraph(contact.getPhone(),OrgProfileUtil.PLAINFONT));
-//                                    PdfPCell fax = new PdfPCell(new Paragraph(contact.getFax(),OrgProfileUtil.PLAINFONT));
+                                            PdfPCell name = new PdfPCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
+                                            PdfPCell lastName = new PdfPCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
+                                            String emails="";
+                                            String phones="";
+                                            String faxes="";
+                                            for (AmpContactProperty property : contact.getProperties()) {
+												if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+													emails+=property.getValue()+";\n";
+												}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+													phones+=property.getValue()+";\n";
+												}else{
+													faxes+=property.getValue()+";\n";
+												}
+											}
+                                    PdfPCell email = new PdfPCell(new Paragraph(emails,OrgProfileUtil.PLAINFONT));
+                                    PdfPCell phone = new PdfPCell(new Paragraph(phones,OrgProfileUtil.PLAINFONT));
+                                    PdfPCell fax = new PdfPCell(new Paragraph(faxes,OrgProfileUtil.PLAINFONT));
                                             String contacTitle = "";
                                             if (contact.getTitle() != null) {
                                                 contacTitle = contact.getTitle().getValue();
@@ -325,17 +339,17 @@ public class ExportToPDF extends Action {
                                             PdfPCell title = new PdfPCell(new Paragraph(contacTitle, OrgProfileUtil.PLAINFONT));
                                             if (count % 2 == 0) {
                                                 title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-//                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-//                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-//                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                 lastName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                 name.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                             }
                                             orgContactsTbl.addCell(lastName);
                                             orgContactsTbl.addCell(name);
-//                                    orgContactsTbl.addCell(email);
-//                                    orgContactsTbl.addCell(phone);
-//                                    orgContactsTbl.addCell(fax);
+                                    orgContactsTbl.addCell(email);
+                                    orgContactsTbl.addCell(phone);
+                                    orgContactsTbl.addCell(fax);
                                             orgContactsTbl.addCell(title);
                                             count++;
 

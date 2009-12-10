@@ -1,31 +1,34 @@
 package org.digijava.module.orgProfile.action;
 
+import java.awt.Font;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
-import javax.servlet.ServletOutputStream;
-
-import java.awt.Font;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpSession;
-import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
 import org.digijava.module.orgProfile.helper.Project;
@@ -42,14 +45,16 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.Plot;
-import org.digijava.module.aim.util.DbUtil;
-import com.lowagie.text.*;
+
+import com.lowagie.text.Element;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ExportToWord extends Action {
 
@@ -299,11 +304,23 @@ public class ExportToWord extends Action {
                                         Iterator<AmpContact> contactsIter = contacts.iterator();
                                         while (contactsIter.hasNext()) {
                                             AmpContact contact = contactsIter.next();
-                                            RtfCell name = new RtfCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
-                                            RtfCell lastName = new RtfCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
-//                                    RtfCell email = new RtfCell(new Paragraph(contact.getEmail(),OrgProfileUtil.PLAINFONT));
-//                                    RtfCell phone = new RtfCell(new Paragraph(contact.getPhone(),OrgProfileUtil.PLAINFONT));
-//                                    RtfCell fax = new RtfCell(new Paragraph(contact.getFax(),OrgProfileUtil.PLAINFONT));
+                                            RtfCell name = new RtfCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
+                                            RtfCell lastName = new RtfCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
+                                            String emails="";
+                                            String phones="";
+                                            String faxes="";
+                                            for (AmpContactProperty property : contact.getProperties()) {
+												if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+													emails+=property.getValue()+";\n";
+												}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+													phones+=property.getValue()+";\n";
+												}else{
+													faxes+=property.getValue()+";\n";
+												}
+											}
+                                    RtfCell email = new RtfCell(new Paragraph(emails,OrgProfileUtil.PLAINFONT));
+                                    RtfCell phone = new RtfCell(new Paragraph(phones,OrgProfileUtil.PLAINFONT));
+                                    RtfCell fax = new RtfCell(new Paragraph(faxes,OrgProfileUtil.PLAINFONT));
                                             String contacTitle = "";
                                             if (contact.getTitle() != null) {
                                                 contacTitle = contact.getTitle().getValue();
@@ -311,17 +328,17 @@ public class ExportToWord extends Action {
                                             RtfCell title = new RtfCell(new Paragraph(contacTitle, OrgProfileUtil.PLAINFONT));
                                             if (count % 2 == 0) {
                                                 title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-//                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-//                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-//                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                 lastName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                                 name.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                             }
                                             orgContactsTbl.addCell(lastName);
                                             orgContactsTbl.addCell(name);
-//                                    orgContactsTbl.addCell(email);
-//                                    orgContactsTbl.addCell(phone);
-//                                    orgContactsTbl.addCell(fax);
+                                    orgContactsTbl.addCell(email);
+                                    orgContactsTbl.addCell(phone);
+                                    orgContactsTbl.addCell(fax);
                                             orgContactsTbl.addCell(title);
                                             count++;
 

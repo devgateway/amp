@@ -109,26 +109,19 @@ if(myDiv.childNodes.length>1){
 			
 			var row = table.rows[k];
 			var celllength = row.cells.length;
-	
-		     for(i=1; i<responceHtmlTable.rows.length; i++){
-					
-					var responceRow = responceHtmlTable.rows[i];
+					var responceRow = responceHtmlTable.rows[k];
 					//alert(responceRow.innerHTML);
-					var responceCellLength = responceRow.cells.length;
-					if(k == i){
-						var value = responceRow.cells[responceCellLength-1].innerHTML;
-						
-					}
+					var responseCellLength = responceRow.cells.length;
+                    for(var j=0;j<responseCellLength;j++){
+                        var value = responceRow.cells[j].innerHTML;
+                        row.cells[j].innerHTML = value;
+                    }
+										             
 				}
-
-                row.cells[celllength-1].innerHTML = value;
-                
+             
 	  	}
-
 	 //erase Helper hidden < Table> was select tag problems;
-	responce.innerHTML = '';
-	
-	}else{
+	else{
 
 		myDiv.innerHTML = htmlResponce;
 	}

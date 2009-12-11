@@ -4,15 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-
-import org.hibernate.Hibernate;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -26,6 +20,10 @@ import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.exception.CalendarException;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AmpDbUtil {
   private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -431,106 +429,10 @@ public class AmpDbUtil {
     }
   }
 
-  public static Collection<AmpCalendar> getAmpCalendarEventsByMember(GregorianCalendar startDate,
-                                          GregorianCalendar endDate,
-                                          String[] selectedEventTypeIds,
-                                          String[] selectedDonorIds,
-                                          AmpTeamMember curMember,
-                                          boolean showPublicEvents,
-                                          String instanceId, String siteId) throws
-      CalendarException {
-      try{
-         // AmpTeam curMemTeam=curMember.getAmpTeam();
-
-          Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
-
-          List events = getAmpCalendarEvents(startDate, endDate, selectedEventTypeIds, selectedDonorIds, Long.valueOf(0), showPublicEvents, instanceId, siteId);
-          if (events != null) {
-              for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
-                  AmpCalendar ampCal = (AmpCalendar) eventItr.next();
-                  if (ampCal.getMember() != null) {
-                	  //AmpTeam calTeam = ampCal.getMember().getAmpTeam();
-                	  
-                	  //creator of the event should see this event
-                	  if(ampCal.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-                    		retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                	  }
-                	  /**
-                	   * if showPublicEvents=true, then public and private events should show up on the page. (AMP-4860)
-                	   * In this case , everyone should see public events, but if event is private, 
-                	   * then it should show up only if it's attendee is current user.
-                	   */
-//                	  if(showPublicEvents && !ampCal.isPrivateEvent()){
-//                		  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-//            			  continue;
-//                	  }
-//                	  if(!showPublicEvents || (showPublicEvents && ampCal.isPrivateEvent())){
-//                		//If the event is not public
-//                  		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
-//                          	for (Object attendee : ampCal.getAttendees()) {
-//                            		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
-//                            		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-//                            			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-//                            			continue;
-//                            		}
-//                            }
-//                  		}
-//                	  }
-                	  
-                	  boolean isCurrentMemberEventAttendee=false;                	 
-                	  if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
-                		  for (Object attendee : ampCal.getAttendees()) {
-                      		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
-                      		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-                      			isCurrentMemberEventAttendee=true;
-                      			break;
-                      		}                      		
-                		  }
-                	  }
-                	  
-                	  if(showPublicEvents && !ampCal.isPrivateEvent()){
-                		  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-            			  continue;
-                	  }
-                	  if(!showPublicEvents || (showPublicEvents && ampCal.isPrivateEvent())){
-                		  if(isCurrentMemberEventAttendee){
-                			  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                  			continue;
-                		  }
-                	  }
-                     
-//                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMemTeam.getAmpTeamId())) {
-//                          retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-//                          continue;
-//                      }
-//                      if (ampCal.getAttendees() != null) {
-//                          for (Iterator attItr = ampCal.getAttendees().iterator(); attItr.hasNext(); ) {
-//                              AmpCalendarAttendee att = (AmpCalendarAttendee) attItr.next();
-//                              AmpTeamMember member = null;
-//                              if (att.getMember() != null) {
-//                                  member = att.getMember();
-//                              }
-//                              if (member != null &&
-//                                  member.getAmpTeamMemId().equals(curMember.getAmpTeamMemId()) &&
-//                                  !retEvents.containsKey(ampCal.getCalendarPK().getCalendar().getId())) {
-//                                  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-//                                  break;
-//                              }
-//                          }
-//                      }
-                  }
-              }
-          }
-          return retEvents.values();
-      } catch (Exception ex) {
-          throw new RuntimeException(ex);
-      }
-  }
-
   
   public static Collection<AmpCalendar> getAmpCalendarEventsByMember(AmpTeamMember curMember,
 		  boolean showPublicEvents, 
-		  String[] selectedDonorIds,
+		  String[] selectedDonorIds,String[] selectedeventTypeIds,
 		  String instanceId, 
 		  String siteId)
 		  throws CalendarException {
@@ -540,7 +442,7 @@ public class AmpDbUtil {
 
 		  Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
 		
-	List events = getAmpCalendarEvents(selectedDonorIds, curMember.getUser().getId(), showPublicEvents, instanceId, siteId);
+	List events = getAmpCalendarEvents(selectedDonorIds,selectedeventTypeIds, curMember.getUser().getId(), showPublicEvents, instanceId, siteId);
 	if (events != null) {
 		for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
 			AmpCalendar ampCal = (AmpCalendar) eventItr.next();
@@ -551,14 +453,14 @@ public class AmpDbUtil {
 				}
 
 
-				boolean isCurrentMemberEventAttendee=false;                	 
+				boolean isCurrentMemberEventAttendee=false;
 					if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
 						for (Object attendee : ampCal.getAttendees()) {
 							AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
 							if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
 								isCurrentMemberEventAttendee=true;
 								break;
-							}                      		
+							}
 						}
 					}
 
@@ -581,7 +483,7 @@ public class AmpDbUtil {
 	  	}
   }
   
-  public static List getAmpCalendarEvents(String[] selectedDonorIds,
+  public static List getAmpCalendarEvents(String[] selectedDonorIds,String[] selectedEventTypeIds,
 		  Long userId,boolean showPublicEvents,String instanceId, String siteId) throws CalendarException {
 	  try {
 		  Session session = PersistenceManager.getRequestDBSession();
@@ -622,6 +524,12 @@ public class AmpDbUtil {
 				queryString.append(")");
 			}
 			
+			if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
+	        	  queryString.append(" and ac.eventsType.id in (:selectedEventTypes)");
+	          }else{
+	        	  queryString.append(" and 0 = 1");
+	          }
+			
 			if (instanceId != null) {
 				queryString.append(" and c.instanceId = :instanceId");
 			}
@@ -633,6 +541,14 @@ public class AmpDbUtil {
 			if (selectedDonorIds != null && selectedDonorIds.length != 0 && selectedDonors.size()>0) {
 				query.setParameterList("selectedDonorIds", selectedDonors);
 			}
+			
+			if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
+	        	  List <Long> selectedEventType = new ArrayList<Long>();
+	        	  for(int index = 0; index < selectedEventTypeIds.length; index++) {
+	        		  selectedEventType.add(Long.parseLong(selectedEventTypeIds[index]));
+	        	  }
+	              query.setParameterList("selectedEventTypes", selectedEventType);
+	          }
 			
 			if (instanceId != null) {
 				query.setString("instanceId", instanceId);
@@ -647,95 +563,7 @@ public class AmpDbUtil {
 			throw new CalendarException("Unable to get amp calendar events", ex);
 	}
 }
-  
-  
-  
-  public static List getAmpCalendarEvents(GregorianCalendar startDate,GregorianCalendar endDate,String[] selectedEventTypeIds,String[] selectedDonorIds,
-                                          Long userId,boolean showPublicEvents,String instanceId, String siteId) throws CalendarException {
-      try {
-          Session session = PersistenceManager.getRequestDBSession();
 
-          StringBuffer queryString = new StringBuffer();
-          queryString.append("select ac from ").append(AmpCalendar.class.getName());
-          queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" c ");
-
-          queryString.append("where c.id=ac.calendarPK.calendar.id and ").
-          				append ("((:startDate <= c.startDate and c.startDate <= :endDate) or ").
-          				append("(:startDate <= c.endDate and c.endDate <= :endDate) or ").
-          				append("(c.startDate <= :startDate and :endDate <= c.endDate))");
-       
-
-          if(showPublicEvents){
-        	  queryString.append(" and ac.privateEvent=false");
-          }else{
-        	  queryString.append(" and ac.privateEvent=true");
-          }
-         
-          if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
-        	  queryString.append(" and ac.eventsType.id in (:selectedEventTypes)");
-          }else{
-        	  queryString.append(" and 0 = 1");
-          }
-
-          List <Long> selectedDonors = new ArrayList<Long>();
-          if(selectedDonorIds != null && selectedDonorIds.length != 0) {
-        	  boolean includeNullOrganizations = false;
-              // FFerreyra: Add clause to where for "None" donor selected. See AMP-2691
-              for(int index = 0; index < selectedDonorIds.length; index++){
-                  if(selectedDonorIds[index].equals("None")){
-                	  includeNullOrganizations = true;
-                  } else {
-                	  selectedDonors.add(Long.parseLong(selectedDonorIds[index]));
-                  }
-              }
-              
-              queryString.append(" and (");
-              if (selectedDonors.size() > 0) {
-            	  queryString.append("org.id in (:selectedDonorIds)");
-              }
-              if (includeNullOrganizations) {
-            	  if (selectedDonors.size() > 0) {
-            		  queryString.append(" or ");
-            	  }
-            	  queryString.append("org is null");
-              }
-              queryString.append(")");
-          }
-
-          if (instanceId != null) {
-        	  queryString.append(" and c.instanceId = :instanceId");
-          }
-          if (siteId != null) {
-        	  queryString.append(" and c.siteId = :siteId");
-          }
-          //queryString += " group by c.id";
-          Query query = session.createQuery(queryString.toString());
-          query.setCalendar("startDate", startDate);
-          query.setCalendar("endDate", endDate);
-          if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
-        	  List <Long> selectedEventType = new ArrayList<Long>();
-        	  for(int index = 0; index < selectedEventTypeIds.length; index++) {
-        		  selectedEventType.add(Long.parseLong(selectedEventTypeIds[index]));
-        	  }
-              query.setParameterList("selectedEventTypes", selectedEventType);
-          }
-          if (selectedDonorIds != null && selectedDonorIds.length != 0 && selectedDonors.size()>0) {
-              query.setParameterList("selectedDonorIds", selectedDonors);
-          }
-
-          if (instanceId != null) {
-              query.setString("instanceId", instanceId);
-          }
-          if (siteId != null) {
-              query.setString("siteId", siteId);
-          }
-
-          return query.list();
-      } catch (Exception ex) {
-          logger.debug("Unable to get amp calendar events", ex);
-          throw new CalendarException("Unable to get amp calendar events", ex);
-      }
-  }
   
   public static List getAmpCalendarEventsType() throws CalendarException {
 		List events = null;

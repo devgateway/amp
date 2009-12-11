@@ -69,10 +69,9 @@
 	<div id="tableWidgetContainer_${gisWidgetTeaserForm.id}">
 		
 	</div>
-	<table id="table" style="display: none"></table>
-
 	
-         
+
+	     
 	<script language="JavaScript">
 	
 		function requestTable_${gisWidgetTeaserForm.id}(columnId,itemId){
@@ -95,46 +94,17 @@
 	
 		function processTableResponce_${gisWidgetTeaserForm.id}(htmlResponce){
 			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
-
-
-if(myDiv.childNodes.length>1){
-	
-	var table = document.getElementById("tableWidget${gisWidgetTeaserForm.id}");
-	var responce = document.getElementById("table");
-	responce.innerHTML= htmlResponce;
-	var responceHtmlTable = responce.firstChild;	
-
-	
-		for(k=1; k<table.rows.length; k++){
-			
-			var row = table.rows[k];
-			var celllength = row.cells.length;
-					var responceRow = responceHtmlTable.rows[k];
-					//alert(responceRow.innerHTML);
-					var responseCellLength = responceRow.cells.length;
-                    for(var j=0;j<responseCellLength;j++){
-                        var value = responceRow.cells[j].innerHTML;
-                        row.cells[j].innerHTML = value;
-                    }
-										             
-				}
-             
-	  	}
-	 //erase Helper hidden < Table> was select tag problems;
-	else{
-
-		myDiv.innerHTML = htmlResponce;
-	}
-
-
-}
+            myDiv.innerHTML = htmlResponce;
+       }
 		
+
+
 		function tableWidgetFilterChanged_${gisWidgetTeaserForm.id}(columnId){
 
 			
-			
+
 			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
-			var selItem = document.getElementsByName('selectedFilterItemId_${gisWidgetTeaserForm.id}')[0];	
+			var selItem = document.getElementsByName('selectedFilterItemId_${gisWidgetTeaserForm.id}')[0];
 			var itemId = selItem.value;
 			//myDiv.innerHTML = 'loading...';
 			requestTable_${gisWidgetTeaserForm.id}(columnId,itemId);

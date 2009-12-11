@@ -91,12 +91,13 @@
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" language="JavaScript" type="text/javascript"></script>
   <script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
 
+<div style="display: none"><jsp:include page="viewEventsFilter.jsp" flush="true"/></div>
+
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/layout.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/note.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/recurring.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/lightbox.css"/>"> 
  
-<div style="display: none"><jsp:include page="viewEventsFilter.jsp" flush="true"/></div>
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">

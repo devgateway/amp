@@ -178,11 +178,11 @@ public class CalendarUtil {
 		return CalDate;
 	}
 	
-	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String instanceId,Long userId) throws ParseException{
+	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String[] selectedEventTypeIdsIds,String instanceId,Long userId) throws ParseException{
 		 String xml="";
 					try {
 						
-						     Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(member, filter,selectedDonorIds, null, null);
+						     Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(member, filter,selectedDonorIds,selectedEventTypeIdsIds, null, null);
 						
 							//List events = DbUtil.getCalendarEvents(siteId, instanceId, userId);
 							if(!ampCalendarEvents.isEmpty()){

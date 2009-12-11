@@ -1,0 +1,20 @@
+[PropertyInfo]
+calendarItem,Set,false,false, , ,false,<default>
+country,String,false,false, , ,false,<default>
+enableHTML,boolean,false,false, , ,false,<default>
+enableSmiles,boolean,false,false, , ,false,<default>
+endDate,Date,false,false, , ,false,<default>
+id,Long,false,false, , ,false,<default>
+instanceId,String,false,false, , ,false,<default>
+location,String,false,false, , ,false,<default>
+mailTo,String,false,false, , ,false,<default>
+siteId,String,false,false, , ,false,<default>
+sourceName,String,false,false, , ,false,<default>
+sourceUrl,String,false,false, , ,false,<default>
+startDate,Date,false,false, , ,false,<default>
+status,ItemStatus,false,false, , ,false,<default>
+[IconNames]
+
+
+
+

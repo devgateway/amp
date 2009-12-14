@@ -480,11 +480,9 @@ public class ColumnReportData extends ReportData {
 		return id.toLowerCase().replaceAll(" ",	"");
 	}
 
-
-
-
-	
-
-
+	@SuppressWarnings("unchecked")
+	public List<Column> getColumns(){
+		return items;
+	}
 	
 }

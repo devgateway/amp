@@ -19,7 +19,6 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 /**
  * 
@@ -325,7 +324,6 @@ public class ColumnReportData extends ReportData {
 		
 		List sorterItems = theColumn.getItems();
 		
-		
 		//remove null values
 		i=sorterItems.iterator();
 		while (i.hasNext()) {
@@ -333,8 +331,12 @@ public class ColumnReportData extends ReportData {
 			if(element.getValue()==null) i.remove();
 		}
 		
-		
-		Collections.sort(sorterItems,new Cell.CellComparator());
+		if (theColumn.getHits() == null) {
+			Collections.sort(sorterItems,new Cell.CellComparator());
+		} else {
+			Collections.sort(sorterItems,new Cell.LuceneScoreComparator());
+			sortAscending = true;
+		}
 		
 		//we read all the ownerIds from the sortedItems;
 		List sortedIds=new ArrayList();
@@ -353,7 +355,7 @@ public class ColumnReportData extends ReportData {
 			if(!referenceIds.containsKey(element)) sortedIds.add(0,element);
 		}
 		
-		if(!getSortAscending()) 
+		if(!getSortAscending() && theColumn.getHits() == null) 
 			Collections.reverse(sortedIds);
 		
 		return sortedIds;

@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
@@ -22,7 +21,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -38,6 +36,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -48,28 +47,22 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
-import org.hibernate.HibernateException;
-import org.hibernate.JDBCException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import com.lowagie.text.pdf.codec.Base64.InputStream;
 
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1014,5 +1007,21 @@ public class LuceneUtil implements Serializable {
     		e.printStackTrace();
     	}
     }
- 
+
+    @SuppressWarnings("unchecked")
+	public static void addHitsToCell(CellColumn column) throws IOException{
+    	if (column != null && column.getItemsMap() != null && column.getHits() != null){
+	    	HashMap<Long,Cell> items  = column.getItemsMap();
+	    	Hits hits = column.getHits();
+	    	
+	    	for (Iterator iterator = hits.iterator(); iterator.hasNext();) {
+	    		Hit hit = (Hit) iterator.next();
+	    		Document doc = hit.getDocument();
+	    		Cell cell = items.get(new Long(doc.get("id")));
+	    		if (cell != null)
+	    			cell.setLuceneScore(new Float(hit.getScore()));
+			}
+    	}
+    }
+
 }

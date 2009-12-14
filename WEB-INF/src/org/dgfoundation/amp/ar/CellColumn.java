@@ -15,7 +15,6 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleCellException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
@@ -134,6 +133,7 @@ public class CellColumn extends Column {
 	@Override
 	public Column postProcess() {
 		CellColumn dest = (CellColumn) this.newInstance();
+		dest.setHits(this.getHits());
 		ListCell lc = new ListCell();
 		Iterator i = this.iterator();
 		while (i.hasNext()) {

@@ -20,10 +20,10 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.lucene.search.Hits;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -38,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.util.LuceneUtil;
 
 /**
  * 
@@ -51,6 +52,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected int extractableCount;
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode=false;
+	private Hits hits = null;
 	
 
 	/**
@@ -241,6 +243,11 @@ public class AmpReportGenerator extends ReportGenerator {
 				ce.setDebugMode(debugMode);
 				
 				Column column = ce.populateCellColumn();
+				
+				column.setHits(this.hits);
+				if (this.hits != null ){
+					LuceneUtil.addHitsToCell((CellColumn)column);
+				}
 
 				if (relatedContentPersisterClass != null) {
 					column.setRelatedContentPersisterClass(Class
@@ -698,7 +705,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		this.filter = filter;
 		extractableCount = 0;
 
-		filter.generateFilterQuery(request);
+		this.hits = filter.generateFilterQuery(request);
 		
 		debugMode=(request.getParameter("debugMode")!=null);
 

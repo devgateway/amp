@@ -55,8 +55,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 
 /**
@@ -82,10 +80,11 @@ public class AmpARFilter extends PropertyListable {
 	
 	private String CRISNumber;
 	private String budgetNumber;
+	private String luceneIndex = null;
 	
 	@PropertyListableIgnore
 	private Integer computedYear;
-	
+
 	@PropertyListableIgnore
 	private Collection history = null;
 	@PropertyListableIgnore
@@ -468,8 +467,9 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 	}
 
-	public void generateFilterQuery(HttpServletRequest request) {
+	public Hits generateFilterQuery(HttpServletRequest request) {
 		indexedParams=new ArrayList<FilterParam>();
+		Hits hits = null;
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="
 				+ (budget != null ? (budget)?"1":"0" : "null")
@@ -804,7 +804,8 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(TEXT_FILTER);
 			}
 		}
-
+		hits = null;
+		luceneIndex = null;
 		if (indexText != null)
 			if ("".equals(indexText.trim()) == false) {
 				String LUCENE_ID_LIST = "";
@@ -813,24 +814,28 @@ public class AmpARFilter extends PropertyListable {
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
 
-				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.activityIndexDirectory, "all", indexText);
+				hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.activityIndexDirectory, "all", indexText);
 				logger.info("New lucene search !");
-				if(hits!=null)
-				for (int i = 0; i < hits.length(); i++) {
-					Document doc;
-					try {
-						doc = hits.doc(i);
-						if (LUCENE_ID_LIST == "")
-							LUCENE_ID_LIST = doc.get("id");
-						else
-							LUCENE_ID_LIST = LUCENE_ID_LIST + ","
-									+ doc.get("id");
-						// AmpActivity act =
-						// ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				if(hits!=null){
+					for (int i = 0; i < hits.length(); i++) {
+						Document doc;
+						try {
+							doc = hits.doc(i);
+							if (LUCENE_ID_LIST == "")
+								LUCENE_ID_LIST = doc.get("id");
+							else
+								LUCENE_ID_LIST = LUCENE_ID_LIST + ","
+										+ doc.get("id");
+							// AmpActivity act =
+							// ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
+					sortByAsc=true;
+					luceneIndex = "Lucene hits";
+
 				}
 				logger.info("Lucene ID List:" + LUCENE_ID_LIST);
 				if (LUCENE_ID_LIST.length() < 1) {
@@ -939,7 +944,7 @@ public class AmpARFilter extends PropertyListable {
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 		
-		
+		return hits;
 	}
 
 	private void fillAllLocationWithChild (AmpCategoryValueLocations cvl, Set<AmpCategoryValueLocations> allSelectedLocations){
@@ -1589,4 +1594,14 @@ public class AmpARFilter extends PropertyListable {
 	public void setComputedYear(Integer computedYear) {
 		this.computedYear = computedYear;
 	}
+
+	public String getLuceneIndex() {
+		return luceneIndex;
+	}
+
+	public void setLuceneIndex(String luceneIndex) {
+		this.luceneIndex = luceneIndex;
+	}
+	
+	
 }

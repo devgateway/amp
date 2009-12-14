@@ -9,10 +9,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/tags-fckeditor" prefix="FCK" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 <script>
 
 <%
@@ -48,8 +48,7 @@ function validate(){
 	if (size==-1){
 		size=100000;
 	}
-	
-	if (content.FCKeditorAPI.GetInstance('content').GetData().length > size){
+	if (CKEDITOR.instances.content.getData().length > size){
 		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'+' Max is'+size+' chrs';
 		alert(msg);
 		return false;
@@ -96,12 +95,13 @@ function validate(){
                 </tr>                    
             </table>
     </c:if>
-    <br>        
-       <FCK:editor id="content"   basePath="/FCKeditor/" width="80%" height="500" toolbarSet="AMP" defaultLanguage="${editorForm.lang}">
-       		${editorForm.content}
-       </FCK:editor>
+    <br>
+    <textarea name="content" id="content" cols="80" rows="10">${editorForm.content}</textarea>
+    <script type="text/javascript">
+        CKEDITOR.replace( 'content',{language :'${editorForm.lang}'});
+	</script>
 
-
+    
 	<b><span style="color: #cc4000">
 
 	<bean:write name="editorForm" property="key"/></span></b>&nbsp;

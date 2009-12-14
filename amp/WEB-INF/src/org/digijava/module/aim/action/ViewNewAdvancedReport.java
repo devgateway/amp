@@ -28,6 +28,8 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.Column;
+import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
@@ -69,7 +71,7 @@ public class ViewNewAdvancedReport extends Action {
 		AdvancedReportForm arf=(AdvancedReportForm) form;
 		HttpSession httpSession = request.getSession();
 
-		
+
 		String loadStatus=request.getParameter("loadstatus");
 		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;
 		if(progressValue == null)
@@ -161,7 +163,8 @@ public class ViewNewAdvancedReport extends Action {
 			}
 			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
 		}
-
+		filter.setLuceneIndex(null);
+		
 		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType()))){
 			filter.setApproved(true);
@@ -229,6 +232,14 @@ public class ViewNewAdvancedReport extends Action {
 		else{
 				filter.setSortBy(sortBy);
 				filter.setSortByAsc( Boolean.parseBoolean(sortByAsc) );
+				
+				for (Iterator iterator = rd.getItems().iterator(); iterator.hasNext();) {
+					ColumnReportData columnReportData = (ColumnReportData) iterator.next();
+					for (Iterator iteratorReportData = columnReportData.getItems().iterator(); iteratorReportData.hasNext();) {
+						Column cellColumn = (Column) iteratorReportData.next();
+						cellColumn.setHits(null);
+					}
+				}
 		}
 		
 		if ( applySorter == null && !cached) {

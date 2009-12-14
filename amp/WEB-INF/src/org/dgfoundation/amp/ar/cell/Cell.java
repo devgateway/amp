@@ -34,6 +34,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public abstract class Cell extends Viewable implements RowIdentifiable, ColumnIdentifiable, Comparable,Cloneable {
 
+	private Float luceneScore = new Float(0);
 	
 	@Override
 	public ReportData getNearestReportData() {
@@ -84,6 +85,13 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		}
 	}
 	
+    public static class LuceneScoreComparator implements Comparator<Cell>{
+    	@Override
+    	public int compare(Cell cell0, Cell cell1) {
+    		return cell1.getLuceneScore().compareTo(cell0.getLuceneScore());
+    	}    	
+    }
+    
 	@Override
 	public int getVisibleRows() {
 	    return 1;
@@ -280,6 +288,14 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 
 	public String getObjectId() {
 		return super.toString();
+	}
+
+	public Float getLuceneScore() {
+		return luceneScore;
+	}
+
+	public void setLuceneScore(Float luceneScore) {
+		this.luceneScore = luceneScore;
 	}
 	
 }

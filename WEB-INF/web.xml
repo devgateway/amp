@@ -258,10 +258,6 @@
 		<taglib-uri>/taglib/jstl-functions</taglib-uri>
 		<taglib-location>/WEB-INF/fn.tld</taglib-location>
 	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/tags-fckeditor</taglib-uri>
-		<taglib-location>/WEB-INF/FCKeditor.tld</taglib-location>
-	</taglib>
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Restricted Resources</web-resource-name>

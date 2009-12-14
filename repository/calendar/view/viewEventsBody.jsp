@@ -89,9 +89,8 @@
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/lightbox.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxdataprocessor.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" language="JavaScript" type="text/javascript"></script>
-  <script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
+<script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
 
-<div style="display: none"><jsp:include page="viewEventsFilter.jsp" flush="true"/></div>
 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/layout.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/note.css"/>"> 

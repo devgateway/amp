@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -363,5 +364,13 @@ public class GroupReportData extends ReportData {
 	}
 
 
+	public List<Column> getColumns(){
+		Set<Column> retValue = new HashSet<Column>();
+		for (Iterator iterator = items.iterator(); iterator.hasNext();) {
+			ReportData reportData = (ReportData) iterator.next();
+			retValue.addAll(reportData.getColumns());
+		}
+		return new ArrayList<Column>(retValue);
+	}
 	
 }

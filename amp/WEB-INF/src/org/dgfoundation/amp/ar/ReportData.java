@@ -167,6 +167,8 @@ public abstract class ReportData extends Viewable {
 	
 	public abstract void removeEmptyChildren();
 	
+	public abstract List<Column> getColumns();
+	
 	public String getNameTrn(){
 		return this.name.toLowerCase().replaceAll(" ", "");
 	}

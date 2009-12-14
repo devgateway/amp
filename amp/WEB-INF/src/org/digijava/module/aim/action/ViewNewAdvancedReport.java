@@ -29,7 +29,6 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
@@ -232,14 +231,10 @@ public class ViewNewAdvancedReport extends Action {
 		else{
 				filter.setSortBy(sortBy);
 				filter.setSortByAsc( Boolean.parseBoolean(sortByAsc) );
-				
-				for (Iterator iterator = rd.getItems().iterator(); iterator.hasNext();) {
-					ColumnReportData columnReportData = (ColumnReportData) iterator.next();
-					for (Iterator iteratorReportData = columnReportData.getItems().iterator(); iteratorReportData.hasNext();) {
-						Column cellColumn = (Column) iteratorReportData.next();
-						cellColumn.setHits(null);
-					}
+				for (Column column : rd.getColumns()) {
+					column.setHits(null);
 				}
+				
 		}
 		
 		if ( applySorter == null && !cached) {

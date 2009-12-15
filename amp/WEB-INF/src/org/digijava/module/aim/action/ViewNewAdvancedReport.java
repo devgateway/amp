@@ -162,7 +162,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
 		}
-		filter.setLuceneIndex(null);
+		filter.setLucene(null);
 		
 		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType()))){

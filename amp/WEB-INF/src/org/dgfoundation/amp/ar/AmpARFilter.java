@@ -80,7 +80,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	private String CRISNumber;
 	private String budgetNumber;
-	private String luceneIndex = null;
+	private String lucene = null;
 	
 	@PropertyListableIgnore
 	private Integer computedYear;
@@ -116,7 +116,7 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
 	private Set selectedSecondarySectors = null;
-	
+
 
 	@PropertyListableIgnore
 	private List nationalPlanningObjectives;
@@ -138,7 +138,6 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private List secondaryPrograms;
 	private Set selectedSecondaryPrograms;
-	
 
 	@PropertyListableIgnore
 	public List getNationalPlanningObjectives() {
@@ -817,7 +816,7 @@ public class AmpARFilter extends PropertyListable {
 			}
 		}
 		hits = null;
-		luceneIndex = null;
+		lucene = null;
 		if (indexText != null)
 			if ("".equals(indexText.trim()) == false) {
 				String LUCENE_ID_LIST = "";
@@ -846,7 +845,7 @@ public class AmpARFilter extends PropertyListable {
 					}
 				}
 					sortByAsc=true;
-					luceneIndex = "Lucene hits";
+					lucene = "Hits";
 
 				}
 				logger.info("Lucene ID List:" + LUCENE_ID_LIST);
@@ -951,8 +950,9 @@ public class AmpARFilter extends PropertyListable {
 		
 		if(draft){
 			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
+		} else { 
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		}
-		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 		
@@ -1623,12 +1623,12 @@ public class AmpARFilter extends PropertyListable {
 		this.computedYear = computedYear;
 	}
 
-	public String getLuceneIndex() {
-		return luceneIndex;
+	public String getLucene() {
+		return lucene;
 	}
 
-	public void setLuceneIndex(String luceneIndex) {
-		this.luceneIndex = luceneIndex;
+	public void setLucene(String luceneIndex) {
+		this.lucene = luceneIndex;
 	}
 	
 	

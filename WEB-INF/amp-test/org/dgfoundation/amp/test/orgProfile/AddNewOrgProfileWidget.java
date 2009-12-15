@@ -69,21 +69,6 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
         session.setAttribute("ampAdmin", "true");
 
     }
-
-	protected void setRelatedObjects() {
-        // creating test widget
-        actionPerform(OrgProfileManager.class, orgProfForm);
-        widget = new AmpWidgetOrgProfile();
-        widget.setName("test");
-        widget.setType(TEST_TYPE);
-        place=new AmpDaWidgetPlace();
-        place.setModule("widget");
-        place.setModuleInstance("default");
-        place.setName("orgprof_chart_test_place");
-        place.setCode("orgprof_chart_test_place");
-        session.setAttribute("ampAdmin", "true");
-
-	}
         
        public void testAddWidget() {
         try {

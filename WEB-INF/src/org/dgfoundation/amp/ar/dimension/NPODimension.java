@@ -43,7 +43,6 @@ public class NPODimension extends ARDimension  {
 	
 	@Override
 	public Long getParentObject(Long parentId,	Class relatedContentPersisterClass) {
-		// TODO Auto-generated method stub
 		Map<Long,Long> m=links.get(relatedContentPersisterClass);
 		if(m!=null)
 			return m.get(parentId);

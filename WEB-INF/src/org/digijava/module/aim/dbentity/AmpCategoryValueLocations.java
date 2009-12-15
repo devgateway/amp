@@ -2,6 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.dgfoundation.amp.ar.dimension.LocationsDimension;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -9,7 +11,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  *
  * @author medea
  */
-public class AmpCategoryValueLocations implements Identifiable {
+public class AmpCategoryValueLocations implements Identifiable, ARDimensionable {
 
     private Long id;
     private String name;
@@ -133,5 +135,10 @@ public class AmpCategoryValueLocations implements Identifiable {
 	@Override
 	public Object getIdentifier() {
 		return this.id;
+	}
+
+	@Override
+	public Class getDimensionClass() {
+		return LocationsDimension.class;
 	}
 }

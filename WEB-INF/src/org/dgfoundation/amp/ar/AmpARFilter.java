@@ -116,8 +116,7 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
 	private Set selectedSecondarySectors = null;
-	@PropertyListableIgnore
-	private Set relatedSecondaryProgs;
+	
 
 	@PropertyListableIgnore
 	private List nationalPlanningObjectives;
@@ -135,8 +134,11 @@ public class AmpARFilter extends PropertyListable {
 	private Set relatedPrimaryProgs;
 
 	@PropertyListableIgnore
+	private Set relatedSecondaryProgs;
+	@PropertyListableIgnore
 	private List secondaryPrograms;
 	private Set selectedSecondaryPrograms;
+	
 
 	@PropertyListableIgnore
 	public List getNationalPlanningObjectives() {
@@ -250,7 +252,10 @@ public class AmpARFilter extends PropertyListable {
 	private Integer yearFrom;
 	private Integer toMonth;
 	private Integer yearTo;
-	private Collection<AmpCategoryValueLocations> regionSelected = null;
+	private Collection<AmpCategoryValueLocations> locationSelected = null;
+	@PropertyListableIgnore
+	private Collection<AmpCategoryValueLocations> relatedLocations;
+	
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
@@ -618,17 +623,24 @@ public class AmpARFilter extends PropertyListable {
 			}
 		}
 		
-		if (regionSelected!=null) {
+		if (locationSelected!=null) {
 			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
-			Iterator<AmpCategoryValueLocations> iter = regionSelected.iterator();
-			while (iter.hasNext()) {
-				AmpCategoryValueLocations cvl = DynLocationManagerUtil.getLocation(iter.next().getId(), true);
-				fillAllLocationWithChild(cvl, allSelectedLocations);
-			}
+			allSelectedLocations.addAll(locationSelected);
+			
+			DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
+			this.relatedLocations						= new ArrayList<AmpCategoryValueLocations>();
+			this.relatedLocations.addAll(allSelectedLocations);
+			DynLocationManagerUtil.populateWithAscendants(this.relatedLocations, locationSelected);
+			
+			String allSelectedLocationString			= Util.toCSString(allSelectedLocations);
+			String subSelect			= "SELECT aal.amp_activity_id FROM amp_activity_location aal, amp_location al " +
+					"WHERE ( aal.amp_location_id=al.amp_location_id AND " +
+					"al.location_id IN (" + allSelectedLocationString + ") )";
+			
 			if (REGION_SELECTED_FILTER.equals("")) {
-				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE location_id IN (" + Util.toCSString(allSelectedLocations) + ")";
+				REGION_SELECTED_FILTER	= subSelect;
 			} else {
-				REGION_SELECTED_FILTER += " OR amp_activity_id IN (SELECT amp_activity_id FROM v_regions WHERE location_id IN (" + Util.toCSString(allSelectedLocations) + "))"; 
+				REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
 			}			
 		}
 		
@@ -817,22 +829,22 @@ public class AmpARFilter extends PropertyListable {
 				hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.activityIndexDirectory, "all", indexText);
 				logger.info("New lucene search !");
 				if(hits!=null){
-					for (int i = 0; i < hits.length(); i++) {
-						Document doc;
-						try {
-							doc = hits.doc(i);
-							if (LUCENE_ID_LIST == "")
-								LUCENE_ID_LIST = doc.get("id");
-							else
-								LUCENE_ID_LIST = LUCENE_ID_LIST + ","
-										+ doc.get("id");
-							// AmpActivity act =
-							// ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+				for (int i = 0; i < hits.length(); i++) {
+					Document doc;
+					try {
+						doc = hits.doc(i);
+						if (LUCENE_ID_LIST == "")
+							LUCENE_ID_LIST = doc.get("id");
+						else
+							LUCENE_ID_LIST = LUCENE_ID_LIST + ","
+									+ doc.get("id");
+						// AmpActivity act =
+						// ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+				}
 					sortByAsc=true;
 					luceneIndex = "Lucene hits";
 
@@ -947,7 +959,7 @@ public class AmpARFilter extends PropertyListable {
 		return hits;
 	}
 
-	private void fillAllLocationWithChild (AmpCategoryValueLocations cvl, Set<AmpCategoryValueLocations> allSelectedLocations){
+	/*private void fillAllLocationWithChild (AmpCategoryValueLocations cvl, Set<AmpCategoryValueLocations> allSelectedLocations){
 		allSelectedLocations.add(cvl);
 		Set<AmpCategoryValueLocations> childLocs = cvl.getChildLocations();
 		Iterator<AmpCategoryValueLocations> iter = childLocs.iterator();
@@ -959,7 +971,7 @@ public class AmpARFilter extends PropertyListable {
 				allSelectedLocations.add(cvlChild);
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 * @return Returns the ampCurrencyCode.
@@ -1302,15 +1314,31 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return the regionSelected
 	 */
-	public Collection<AmpCategoryValueLocations> getRegionSelected() {
-		return regionSelected;
+	public Collection<AmpCategoryValueLocations> getLocationSelected() {
+		return locationSelected;
 	}
 
 	/**
 	 * @param regionSelected the regionSelected to set
 	 */
-	public void setRegionSelected(Collection<AmpCategoryValueLocations> regionSelected) {
-		this.regionSelected = regionSelected;
+	public void setLocationSelected(Collection<AmpCategoryValueLocations> regionSelected) {
+		this.locationSelected = regionSelected;
+	}
+	
+	/**
+	 * @return the relatedLocations
+	 */
+	@PropertyListableIgnore
+	public Collection<AmpCategoryValueLocations> getRelatedLocations() {
+		return relatedLocations;
+	}
+
+	/**
+	 * @param relatedLocations the relatedLocations to set
+	 */
+	public void setRelatedLocations(
+			Collection<AmpCategoryValueLocations> relatedLocations) {
+		this.relatedLocations = relatedLocations;
 	}
 
 	public String getIndexText() {

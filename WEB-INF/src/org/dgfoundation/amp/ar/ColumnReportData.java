@@ -210,7 +210,9 @@ public class ColumnReportData extends ReportData {
 			Iterator<Column> ii = this.getItems().iterator();
 			while (ii.hasNext()) {
 				Column col =  ii.next();
-				crd.addColumn(col.filterCopy(cat, ids));
+				Column newCol = col.filterCopy(cat, ids);
+				newCol.setHits(col.getHits());
+				crd.addColumn(newCol);
 			}
 		}
 

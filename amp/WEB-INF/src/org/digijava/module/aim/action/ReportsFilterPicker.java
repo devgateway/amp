@@ -624,10 +624,11 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		
 		if (selectedRegions != null && selectedRegions.size() > 0) {
-			arf.setRegionSelected(new HashSet());
-			arf.getRegionSelected().addAll(selectedRegions);
+			arf.setLocationSelected(new HashSet());
+			arf.getLocationSelected().addAll(selectedRegions);
 		} else {
-			arf.setRegionSelected(null);
+			arf.setLocationSelected(null);
+			arf.setRelatedLocations(null);
 		}
 		
 		if (!all.equals(filterForm.getApprovalStatusSelected())){

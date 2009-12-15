@@ -30,6 +30,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Hibernate;
+import org.hibernate.LazyInitializationException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -589,7 +590,7 @@ public class DynLocationManagerUtil {
 			qry.setLong("id", id);
 			AmpCategoryValueLocations returnLoc		= (AmpCategoryValueLocations)qry.uniqueResult();
 			if ( initChildLocs )
-				returnLoc.getChildLocations().size();
+				logger.debug( returnLoc.getName() + " has " + returnLoc.getChildLocations().size() + " children." );
 			return returnLoc;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -601,6 +602,54 @@ public class DynLocationManagerUtil {
 			}
 		}
 		return null;
+	}
+	
+
+	
+	public static AmpCategoryValueLocations getLocationByIdRequestSession(Long id) {
+		Session dbSession										= null;
+		try {
+			dbSession			= PersistenceManager.getRequestDBSession();
+			
+			AmpCategoryValueLocations returnLoc		= (AmpCategoryValueLocations) dbSession.get(AmpCategoryValueLocations.class, id);
+			return returnLoc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
+	
+	public static void populateWithDescendants(Collection <AmpCategoryValueLocations> destCollection, 
+									Collection<AmpCategoryValueLocations> locations ) {
+		
+		
+		if (  locations != null ) {
+			Iterator<AmpCategoryValueLocations> iterLoc	= locations.iterator();
+			while (iterLoc.hasNext()) {
+				AmpCategoryValueLocations loc	 = 
+					DynLocationManagerUtil.getLocation(iterLoc.next().getId(), true);
+				Set<AmpCategoryValueLocations> childrenLocs		= loc.getChildLocations();
+				if ( childrenLocs  != null && childrenLocs.size() > 0 ) {
+					destCollection.addAll(childrenLocs);
+					populateWithDescendants(destCollection, childrenLocs );
+				}
+			}
+		}
+	}
+	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 
+			Collection<AmpCategoryValueLocations> locations ) {
+		if (  locations != null ) {
+			Iterator<AmpCategoryValueLocations> iterLoc	= locations.iterator();
+			while (iterLoc.hasNext()) {
+				AmpCategoryValueLocations loc	 = iterLoc.next();
+				
+				while (loc.getParentLocation() != null){
+					loc		= loc.getParentLocation();
+					destCollection.add(loc);
+				}
+			}
+		}
+		
 	}
 	
 	
@@ -653,17 +702,6 @@ public class DynLocationManagerUtil {
 		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 	}
 	
-	public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
-		try {
-			AmpCategoryValue layer		= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLayer);
-			return getLocationsByLayer(layer);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
 	public static AmpCategoryValueLocations getAncestorByLayer (AmpCategoryValueLocations loc, HardCodedCategoryValue hcValue) {
 		if ( loc == null )
 			logger.error ("loc parameter in getAncestorByLayer should not be null");
@@ -708,6 +746,17 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 	
+	public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
+		try {
+			AmpCategoryValue layer		= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLayer);
+			return getLocationsByLayer(layer);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public static Set<AmpCategoryValue> getCategoryValueByClass(AmpCategoryClass acc) {
 		TreeSet<AmpCategoryValue> returnSet			= new TreeSet<AmpCategoryValue>();
 		Session dbSession										= null;

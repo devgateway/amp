@@ -14,6 +14,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				,'Donor Agency'
 				,'Primary Sector'
 				,'Status', 'Region'
+				,'Zone','District'
 				,'Type Of Assistance'
 				,'Financing Instrument'
 				,'On/Off Budget'

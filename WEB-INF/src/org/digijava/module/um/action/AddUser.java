@@ -55,6 +55,7 @@ public class AddUser extends Action {
 			logger.debug("actionFlag: " + actionFlag);
 
 			if ("".equals(actionFlag) || actionFlag == null) {
+					registerForm.setErrors(null);
 
 					// set country resident data
 

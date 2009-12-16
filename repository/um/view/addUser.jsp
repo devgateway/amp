@@ -55,165 +55,6 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
-<script language="JavaScript">
-
-
-
-	function optionChanged(flag) {
-		if (flag == 'otype') {
-			var index1  = document.umAddUserForm.selectedOrgType.selectedIndex;
-			var val1    = document.umAddUserForm.selectedOrgType.options[index1].value;
-			var orgType = document.umAddUserForm.orgType.value;
-			if ( val1 != "-1") {
-				if (val1 != orgType) {
-					document.umAddUserForm.orgType.value = val1;
-					document.umAddUserForm.actionFlag.value = "typeSelected";
-					<digi:context name="selectType" property="context/module/moduleinstance/addUser.do" />
-		   			document.umAddUserForm.action = "<%= selectType %>";
-					document.umAddUserForm.target = "_self";
-					document.umAddUserForm.submit();
-				}
-				return false;
-			}
-			else
-				return false;
-		}
-		if (flag == 'ogroup') {
-			var index2  = document.umAddUserForm.selectedOrgGroup.selectedIndex;
-			var val2    = document.umAddUserForm.selectedOrgGroup.options[index2].value;
-			var orgGrp = document.umAddUserForm.orgGrp.value;
-			if ( val2 != "-1") {
-				if (val2 != orgGrp) {
-					document.umAddUserForm.orgGrp.value = val2;
-					document.umAddUserForm.actionFlag.value = "groupSelected";
-					<digi:context name="selectGrp" property="context/module/moduleinstance/addUser.do" />
-		   			document.umAddUserForm.action = "<%= selectGrp %>";
-					document.umAddUserForm.target = "_self";
-					document.umAddUserForm.submit();
-				}
-				return false;
-			}
-			else
-				return false;
-		}
-	}
-
-	function cancel()
-	{
-		document.umAddUserForm.action = "/um/viewAllUsers.do";
-		document.umAddUserForm.target = "_self";
-		document.umAddUserForm.submit();
-		return false;
-	}
-	function isVoid(name){
-        if (name == "" || name == null || !isNaN(name) || name.charAt(0) == ' '){
-        	return true;
-        }		
-		return false;		
-	}
-	function validate(){
-        name = document.umAddUserForm.firstNames.value;
-        lastname = document.umAddUserForm.lastName.value;
-        password = document.umAddUserForm.password.value;
-        passwordConfirmation = document.umAddUserForm.passwordConfirmation.value;
-        selectedOrgType = document.umAddUserForm.selectedOrgType.value;
-        selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
-        selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
-        
-        if (isVoid(name))
-        {
-			<c:set var="translation">
-			<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-        }
-        if (isVoid(lastname))
-        {
-			<c:set var="translation">
-			<digi:trn key="error.registration.LastNameBlank">LastName is Blank</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-        }
-        if(validateEmail()==false)
-            return false
-        if (isVoid(password)||isVoid(passwordConfirmation))
-        {
-			<c:set var="translation">
-			<digi:trn key="error.registration.passwordBlank">Password field is Blank</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-        }
-        if(password != passwordConfirmation){
-			<c:set var="translation">
-			<digi:trn key="error.registration.NoPasswordMatch">Passwords in both fields must be the same</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-        }
-        if(selectedOrgType=="-1"){
-			<c:set var="translation">
-			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-        }
-        if(selectedOrgGroup=="-1"){
-			<c:set var="translation">
-			<digi:trn key="error.registration.NoOrgGroup">Please Select Organization Group</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-        }
-        if(selectedOrganizationId=="-1"){
-			<c:set var="translation">
-			<digi:trn key="error.registration.NoOrganization">Please Select Organization</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-        }
-
-        return true;
-	}
-	function validateEmail() {
-	    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-		var address = document.umAddUserForm.email.value;
-		var address2 = document.umAddUserForm.emailConfirmation.value;
-		if(reg.test(address) == false||reg.test(address2) == false) {
-			<c:set var="translation">
-			<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-		}
-		if(address != address2){
-			<c:set var="translation">
-			<digi:trn key="error.registration.noemailmatch">Emails in both fields must be the same</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-		}
-		return true;
-	}
-
-	function init() {
-		var u = document.getElementById('email');
-		u.setAttribute("autocomplete", "off");
-		
-		var u = document.getElementById('emailConfirmation');
-		u.setAttribute("autocomplete", "off");
-		
-		var u = document.getElementById('password');
-		u.setAttribute("autocomplete", "off");
-		
-		var u = document.getElementById('passwordConfirmation');
-		u.setAttribute("autocomplete", "off");
-		
-	}
-	YAHOOAmp.util.Event.addListener(window, "load", init) ;
-</script>
 <digi:instance property="umAddUserForm" />
 
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
@@ -224,112 +65,66 @@
 
 	<input type="hidden" name="actionFlag" value="">
 
-	<table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=705>
+	<table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=650>
 		<tr>
-			<td width=14>&nbsp;</td>
-			<td align=left vAlign=top width=752>
+			<td align=left vAlign=top>
 			<table cellPadding=5 cellSpacing=0 width="100%">
+			<tr>
+			<td>
+			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+				<logic:notEmpty name="umAddUserForm" property="errors">
 				<tr>
-					<!-- Start Navigation -->
-					<td height=33><span class=crumb> 
-						<c:set	var="translation">
-						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</c:set> 
-						<digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}">
-							<digi:trn key="aim:AmpAdminHome">
-				            	Admin Home
-				        	</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp; 
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewAllUsers">Click here to goto users manager</digi:trn>
-						</c:set> 
-						<digi:link href="/viewAllUsers.do" styleClass="comment"	title="${translation}">
-							<digi:trn key="aim:viewAllUsers">
-				            	List of users
-				        	</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp; 
-							<digi:trn key="aim:viewEditUser:EditUser">
-				          		Edit user
-				          	</digi:trn> 
-				        </span>
-				    </td>
-					<!-- End navigation -->
+					<td width="3%">&nbsp;</td>
+					<td align=left colspan="4">
+					<!-- digi:errors /-->
+						<font color="red">
+						<ul>
+							<logic:iterate id="element" name="umAddUserForm"
+								property="errors">
+								<li>
+								<digi:trn key="${element.key}">
+									<bean:write name="element" property="value" />
+								</digi:trn>
+								</li>
+							</logic:iterate>
+						</ul>
+						</font>
+					</td>
 				</tr>
+				</logic:notEmpty>
 				<tr>
-					<td colspan="2"><span class=subtitle-blue> 
-					<digi:trn key="aim:viewEditUser:AddEditUserHeader">
-			          Add user
-			        </digi:trn> </span>
-			        </td>
+				    <td width="3%">&nbsp;</td>
+					<td align=left noWrap colspan="4">
+						<digi:trn key="um:allMarkedRequiredField">
+							All fields marked with an 
+							<FONT color=red><B><BIG>*</BIG> </B></FONT> are required.
+							</digi:trn> 
+							<digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn>
+					</td>
 				</tr>
-				<tr>
-					<td noWrap width=616 vAlign="top">
-						<table class="contentbox_border" width="75%" border="0" bgcolor="#f4f4f2">
-                            <tr>			
-                               <td align="center">
-                             	  <table width="100%">
-                                      <tr>
-                                    	<td style="background-color: #CCDBFF;height: 18px;"/>
-                                      </tr>
-                                  </table>
-                               </td>
-                            </tr>
+			</table>
+			
+			</td>
+			</tr>
+
 					   		<tr>
-							  <td valign="top" bgcolor="#f4f4f2" align="center">
-								  <table border=0 cellPadding=0 cellSpacing=0 width=772>
+							  <td valign="top" align="center">
+								  <table border=0 cellPadding=0 cellSpacing=0>
 	
 									<tr>
-										<td width=14>&nbsp;</td>
-										<td align=left vAlign=top width=520><br>
-										<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+										<td align=left vAlign=top width=520>
+											<fieldset>
+											<legend><digi:trn>User Data</digi:trn></legend>
+											<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=left class=title noWrap colspan="2">
-												<!-- digi:errors /-->
-												<logic:notEmpty name="umAddUserForm" property="errors">
-													<font color="red">
-													<ul>
-														<logic:iterate id="element" name="umAddUserForm"
-															property="errors">
-															<li>
-															<digi:trn key="${element.key}">
-																<bean:write name="element" property="value" />
-															</digi:trn>
-															</li>
-														</logic:iterate>
-													</ul>
-													</font>
-												</logic:notEmpty>
-												</td>
-											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=left class=title noWrap colspan="2">
-												<digi:trn key="um:userAccountInformation">User Account information</digi:trn>
-												</td>
-											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=left class=title noWrap colspan="2">
-													<digi:trn key="um:allMarkedRequiredField">
-														All fields marked with an 
-														<FONT color=red><B><BIG>*</BIG> </B></FONT> are required.
-	 												</digi:trn> 
-	 												<digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn>
-												</td>
-											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap width="40%">
+												<td align=right noWrap width="40%">
 													<FONT color=red>*</FONT> 
 													<digi:trn key="um:firstName">First Name</digi:trn>
 												</td>
 												<td align="left">
-													<html:text property="firstNames" size="20" styleClass="inp-text" /></td>
-											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap width="40%">
+													<html:text property="firstNames" size="20" styleClass="inp-text" />
+												</td>
+												<td align=right noWrap width="40%">
 													<FONT color=red>*</FONT> 
 													<digi:trn key="um:lastName">Last Name</digi:trn>
 												</td>
@@ -338,36 +133,30 @@
 												</td>
 											</tr>
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
-													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
+													<digi:trn key="um:emailAddress">E-mail Address</digi:trn>
+												</td>
 												<td align="left">
 													<html:text  styleId="userEmail" property="email" size="20" styleClass="inp-text" />
 												</td>
-											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
-													<digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn></td>
+													<digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn>
+												</td>
 												<td align="left">
 													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text" />
 												</td>
 											</tr>
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
-													<digi:trn key="um:password">Password</digi:trn></td>
+													<digi:trn key="um:password">Password</digi:trn>
+												</td>
 												<td align="left">
 													<html:password styleId="userPassword" property="password"size="20" />
 												</td>
-											</tr>
-										
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repPassword">Repeat Password</digi:trn></td>
 												<td align="left">
@@ -375,11 +164,10 @@
 												</td>
 											</tr>
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:countryOfResidence">Country of Residence</digi:trn></td>
-												<td align="left">
+												<td align="left" colspan="3">
 													<html:select property="selectedCountryResidence" styleClass="inp-text">
 														<c:forEach var="cn"	items="${umAddUserForm.countryResidence}">
 															<html:option value="${cn.iso}">${cn.name}</html:option>
@@ -388,15 +176,18 @@
 												</td>
 											</tr>
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<digi:trn key="um:mailingAddress">Mailing Address</digi:trn></td>
-												<td align="left">
+												<td align="left" colspan="3">
 													<html:text property="mailingAddress" size="20" styleClass="inp-text" /></td>
 											</tr>
+											</table>
+											</fieldset>
+											<fieldset>
+											<legend><digi:trn>Organization Data</digi:trn></legend>
+											<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:organizationType">Organization Type</digi:trn>
 												</td>
@@ -405,10 +196,14 @@
 														<html:option value="-1">-- <digi:trn key="um:selectType">Select a type</digi:trn> --</html:option>
 														<html:optionsCollection name="umAddUserForm" property="orgTypeColl" value="ampOrgTypeId" label="orgType" />
 													</html:select></td>
+												<td colspan="2">
+													<html:checkbox property="sendEmail"	styleClass="inp-text">
+														<digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn>
+													</html:checkbox></td>
+													
 											</tr>
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:organizationGroup">Organization Group</digi:trn>
 												</td>
@@ -419,13 +214,17 @@
 															<html:optionsCollection name="umAddUserForm" property="orgGroupColl" value="ampOrgGrpId" label="orgGrpName" />
 														</logic:notEmpty>
 													</html:select></td>
+												<td colspan="2">
+													<html:checkbox property="addWorkspace" styleClass="inp-text">
+														<digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn>
+													</html:checkbox></td>
+													
 											</tr>
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:organizationName">Organization Name</digi:trn></td>
-												<td align="left">
+												<td align="left" colspan="3">
 													<html:hidden property="organizationName" value="-1" /> 
 													<html:select property="selectedOrganizationId" styleClass="inp-text">
 														<html:option value="-1">-- <digi:trn key="um:selectOrganization">Select an organization</digi:trn> --</html:option>
@@ -436,11 +235,10 @@
 	
 											</tr>
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td align=right noWrap>
 													<digi:trn key="um:yourLangSettings">Your language settings</digi:trn>
 												</td>
-												<td align="left">
+												<td align="left" colspan="3">
 													<html:select property="selectedLanguage" styleClass="inp-text">
 														<bean:define id="languages" name="umAddUserForm"
 															property="navigationLanguages" type="java.util.Collection" />
@@ -449,44 +247,29 @@
 													</html:select></td>
 	
 											</tr>
-											<tr>
-												<td>&nbsp;</td>
-												<td>&nbsp;</td>
-												<td class=f-names>
-													<html:checkbox property="sendEmail"	styleClass="inp-text">
-														<digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn>
-													</html:checkbox></td>
-											</tr>
-											<tr>
-												<td>&nbsp;</td>
-												<td>&nbsp;</td>
-												<td class=f-names>
-													<html:checkbox property="addWorkspace" styleClass="inp-text">
-														<digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn>
-													</html:checkbox></td>
-											</tr>
+											</table>
+											</fieldset>
+										<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 											<tr>
 												<td>&nbsp;</td>
 												<td align="right">
 													<c:set var="btnSubmit">
 														<digi:trn key="btn:submit">Submit</digi:trn>
 													</c:set> 
-													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" /></td>
+<!--													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" /></td>-->
+													<input type="button" value="${btnSubmit}" onclick='return registerNewUser()'/>
+												</td>
 												<td align="left">
 													<c:set var="btnCancel">
 														<digi:trn key="btn:cancel">Cancel</digi:trn>
 													</c:set> 
-													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="cancel()" /></td>
-											</tr>
-											<tr>
-												<td colspan=3>&nbsp;</td>
+<!--													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="cancel()" /></td>-->
+													<input type="button" value="${btnCancel}" onclick='closeWindow()'/>													
 											</tr>
 										</table>
 										</td>
 									</tr>
 								  </table>
-						          <br />
-						          <br />
 						      </td>
 					        </tr>
 						</table>						

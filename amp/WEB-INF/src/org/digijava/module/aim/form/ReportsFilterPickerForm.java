@@ -140,7 +140,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer customDecimalPlacesTxt;
 	private String customGroupCharacterTxt;
 	private Integer customGroupSize;
-	private Boolean amountinthousands;
+	private Boolean amountinthousands=false;
 	
 	private String resetFormat;
 	

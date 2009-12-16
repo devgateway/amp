@@ -204,6 +204,7 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
 	#tab_no_link .yui-content {
 		border-top:1px solid #000;
 	}
+
 	#tab_no_link .yui-nav a {
 		border-color:#A3A3A3;
 		border-style:solid;
@@ -211,7 +212,9 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
 		color:#000000;
 		position:relative;
 		text-decoration:none;
+		width:220px;
 	}
+	
 	#tab_no_link .yui-nav {
 		border-color:#222E5D;
 		border-style:solid;

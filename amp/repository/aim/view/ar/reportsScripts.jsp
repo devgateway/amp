@@ -721,6 +721,76 @@ function validateFormat(){
 			window.setTimeout(call,200);
 		}
 
+var normalStyleOrgValue=null
+var headerStyleOrgValue=null
+var aHrefStyleOrgValue=null
+
+function fontResize(param){
+	if (normalStyleOrgValue==null){
+		normalStyleOrgValue=parseFloat($('td.reportsBorderTD').css('font-size'));
+	}
+	if (headerStyleOrgValue==null){
+		headerStyleOrgValue=parseFloat($('td.clsTableTitleCol>a').css('font-size'));
+	}
+	if (aHrefStyleOrgValue==null){
+		aHrefStyleOrgValue=parseFloat($('td.reportsBorderTD>a').css('font-size'));
+	}
+
+	var normalStyleCurValue=parseFloat($('td.reportsBorderTD').css('font-size'));
+	var headerStyleCurValue=parseFloat($('td.clsTableTitleCol>a').css('font-size'));
+	var aHrefStyleCurValue=parseFloat($('td.reportsBorderTD>a').css('font-size'));
+
+
+	var normalStyleNextVal=normalStyleCurValue;
+	var headerStyleNextVal=headerStyleCurValue;
+	var aHrefStyleNextVal=headerStyleCurValue;
+
+	var step=1;	
+	if (param=='add'){
+		normalStyleNextVal++;
+		headerStyleNextVal++;
+		aHrefStyleNextVal++;
+	}
+	if (param=='less'){
+		normalStyleNextVal--;
+		headerStyleNextVal--;
+		aHrefStyleNextVal--;
+	}
+	if (param=='reset'){
+		normalStyleNextVal=normalStyleOrgValue;
+		headerStyleNextVal=headerStyleOrgValue;
+		aHrefStyleNextVal=aHrefStyleOrgValue;
+	}
+
+
+	
+	$('td.reportsBorderTD').css('font-size',normalStyleNextVal+'px');
+	$('td.clsTableTitleCol>a').css('font-size',headerStyleNextVal+'px');
+	$("td.reportsBorderTD>a").css('font-size',aHrefStyleNextVal+'px');
+
+
+	
+	createCookie('normalStyleOrgValue',normalStyleOrgValue,10); 
+	createCookie('headerStyleOrgValue',headerStyleOrgValue,10); 
+	createCookie('aHrefStyleOrgValue',aHrefStyleOrgValue,10); 
+
+	createCookie('normalStyleNextVal',normalStyleNextVal,10); 
+	createCookie('headerStyleNextVal',headerStyleNextVal,10); 
+	createCookie('aHrefStyleNextVal',aHrefStyleNextVal,10); 
+
+	
+	
+}
+function fontResizeFromCookies(){
+	normalStyleOrgValue=readCookie("normalStyleOrgValue")
+	headerStyleOrgValue=readCookie("headerStyleOrgValue")
+	aHrefStyleOrgValue=readCookie("aHrefStyleOrgValue")
+	$('td.reportsBorderTD').css('font-size',readCookie("normalStyleNextVal")+'px');
+	$('td.clsTableTitleCol>a').css('font-size',readCookie("headerStyleNextVal")+'px');
+	$("td.reportsBorderTD>a").css('font-size',readCookie("aHrefStyleNextVal")+'px');
+}
+
+
 </script>
 <style type="text/css">
 .mask {

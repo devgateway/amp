@@ -43,10 +43,11 @@ background:transparent url(/repository/aim/images/down.gif) no-repeat scroll rig
 </style>
 <script language="JavaScript">
 
-YAHOO.util.Event.addListener(window, "load", function() {
+YAHOO.util.Event.addListener(window, "load", initDynamicTable);
+	function initDynamicTable() {
 	
     YAHOO.example.XHR_JSON = new function() {
-    	
+ 	
        	         
         this.formatActions = function(elCell, oRecord, oColumn, sData) {
             //elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +sData+">" +"<img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/>" + "</a>";
@@ -118,9 +119,457 @@ YAHOO.util.Event.addListener(window, "load", function() {
        
     };
     
-});
+	}
 </script>
 
+
+<div id="popin" style="display: none">
+	<div id="popinContent" class="content">
+	</div>
+</div>
+
+<script type="text/javascript">
+<!--
+
+		YAHOOAmp.namespace("YAHOOAmp.amp");
+
+		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+			width:"700px",
+			fixedcenter: true,
+		    constraintoviewport: false,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true,
+		    context: ["showbtn", "tl", "bl"]
+		    });
+	var panelStart;
+	var checkAndClose=false;	
+	var userRegistered=false;    
+	    
+	function initCurrencyManagerScript() {
+		var msg='\n<digi:trn>Select Indicator</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.beforeHideEvent.subscribe(function() {
+			panelStart=1;
+			if(userRegistered){
+				initDynamicTable();
+				userRegistered=false;
+			}
+		}); 
+		myPanel.render(document.body);
+		panelStart = 0;
+		
+	}
+	
+	addLoadEvent(initCurrencyManagerScript);
+-->	
+</script>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#popin .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	.bd a:hover {
+  		background-color:#ecf3fd;
+		font-size: 10px; 
+		color: #0e69b3; 
+		text-decoration: none	  
+	}
+	.bd a {
+	  	color:black;
+	  	font-size:10px;
+	}
+		
+</style>
+
+<script language="JavaScript">
+    <!--
+   
+    //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
+    function mapCallBack(status, statusText, responseText, responseXML){
+       window.location.reload();
+    }
+    
+    
+    var responseSuccess = function(o){
+		var response = o.responseText; 
+		var content = document.getElementById("popinContent");
+		content.innerHTML = response;
+		showContent();
+	}
+ 
+	var responseFailure = function(o){ 
+		alert("Connection Failure!"); 
+	}  
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	};
+
+	function showContent(){
+		var element = document.getElementById("popin");
+		element.style.display = "inline";
+		if (panelStart < 1){
+			myPanel.setBody(element);
+		}
+		if (panelStart < 2){
+			document.getElementById("popin").scrollTop=0;
+			myPanel.show();
+			panelStart = 2;
+		}
+		checkErrorAndClose();
+	}
+	function checkErrorAndClose(){
+		if(checkAndClose==true){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+				myclose();
+				refreshPage();
+			}
+			checkAndClose=false;			
+		}
+	}
+	function refreshPage(){
+		document.aimCurrencyForm.submit();
+	}
+
+	function myclose(){
+		var content = document.getElementById("popinContent");
+		content.innerHTML="";
+		myPanel.hide();	
+		panelStart=1;
+	
+	}
+	function closeWindow() {
+		myclose();
+		if(userRegistered){
+			initDynamicTable();
+			userRegistered=false;
+		}
+	}
+	function showPanelLoading(msg){
+		myPanel.setHeader(msg);		
+		var content = document.getElementById("popinContent");
+		content.innerHTML = '<div style="text-align: center">' + 
+		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+		showContent();
+	}
+	function addNewUser()	{
+		var msg='\n<digi:trn>Add New User</digi:trn>';
+		showPanelLoading(msg);
+		<digi:context name="commentUrl" property="context/um/addUser.do"/>  
+		var url = "<%=commentUrl %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+	}
+
+	-->
+
+</script>
+<script language="JavaScript">
+
+
+	function getParams(){
+        var ret=""
+        ret="orgType="+document.getElementsByName('orgType')[0].value+
+        	"&orgGrp="+document.getElementsByName('orgGrp')[0].value+
+        	"&actionFlag="+document.getElementsByName('actionFlag')[0].value+
+        	"&firstNames="+document.getElementsByName('firstNames')[0].value+
+        	"&lastName="+document.getElementsByName('lastName')[0].value+
+        	"&email="+document.getElementsByName('email')[0].value+
+        	"&emailConfirmation="+document.getElementsByName('emailConfirmation')[0].value+
+        	"&password="+document.getElementsByName('password')[0].value+
+        	"&passwordConfirmation="+document.getElementsByName('passwordConfirmation')[0].value+
+        	"&selectedCountryResidence="+document.getElementsByName('selectedCountryResidence')[0].value+
+        	"&mailingAddress="+document.getElementsByName('mailingAddress')[0].value+
+        	"&selectedOrgType="+document.getElementsByName('selectedOrgType')[0].value+
+        	"&selectedOrgGroup="+document.getElementsByName('selectedOrgGroup')[0].value+
+        	"&organizationName="+document.getElementsByName('organizationName')[0].value+
+        	"&selectedOrganizationId="+document.getElementsByName('selectedOrganizationId')[0].value+
+        	"&selectedLanguage="+document.getElementsByName('selectedLanguage')[0].value;
+    	if(document.getElementsByName('sendEmail')[0].checked){
+    		ret+="&sendEmail=true";
+        }
+    	else{
+    		ret+="&sendEmail=false";
+        }
+    	if(document.getElementsByName('addWorkspace')[0].checked){
+    		ret+="&addWorkspace=true";
+        }
+    	else{
+    		ret+="&addWorkspace=false";
+        }
+    	return ret;
+		
+	}
+	function optionChanged(flag) {
+		if (flag == 'otype') {
+			var index1  = document.umAddUserForm.selectedOrgType.selectedIndex;
+			var val1    = document.umAddUserForm.selectedOrgType.options[index1].value;
+			var orgType = document.umAddUserForm.orgType.value;
+			if ( val1 != "-1") {
+				if (val1 != orgType) {
+					document.umAddUserForm.orgType.value = val1;
+					document.umAddUserForm.actionFlag.value = "typeSelected";
+					<digi:context name="selectType" property="context/module/moduleinstance/addUser.do" />
+		   			document.umAddUserForm.action = "<%= selectType %>";
+					document.umAddUserForm.target = "_self";
+					//document.umAddUserForm.submit();
+					var url = "<%=selectType %>";
+					YAHOOAmp.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+				}
+				return false;
+			}
+			else
+				return false;
+		}
+		if (flag == 'ogroup') {
+			var index2  = document.umAddUserForm.selectedOrgGroup.selectedIndex;
+			var val2    = document.umAddUserForm.selectedOrgGroup.options[index2].value;
+			var orgGrp = document.umAddUserForm.orgGrp.value;
+			if ( val2 != "-1") {
+				if (val2 != orgGrp) {
+					document.umAddUserForm.orgGrp.value = val2;
+					document.umAddUserForm.actionFlag.value = "groupSelected";
+					<digi:context name="selectGrp" property="context/module/moduleinstance/addUser.do" />
+		   			document.umAddUserForm.action = "<%= selectGrp %>";
+					document.umAddUserForm.target = "_self";
+					//document.umAddUserForm.submit();
+					var url = "<%=selectGrp %>";
+					YAHOOAmp.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+					
+				}
+				return false;
+			}
+			else
+				return false;
+		}
+	}
+
+	function cancel()
+	{
+		document.umAddUserForm.action = "/um/viewAllUsers.do";
+		document.umAddUserForm.target = "_self";
+		document.umAddUserForm.submit();
+		return false;
+	}
+	function isVoid(name){
+        if (name == "" || name == null || !isNaN(name) || name.charAt(0) == ' '){
+        	return true;
+        }		
+		return false;		
+	}
+	function validate(){
+        name = document.umAddUserForm.firstNames.value;
+        lastname = document.umAddUserForm.lastName.value;
+        password = document.umAddUserForm.password.value;
+        passwordConfirmation = document.umAddUserForm.passwordConfirmation.value;
+        selectedOrgType = document.umAddUserForm.selectedOrgType.value;
+        selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
+        selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
+        
+        if (isVoid(name))
+        {
+			<c:set var="translation">
+			<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if (isVoid(lastname))
+        {
+			<c:set var="translation">
+			<digi:trn key="error.registration.LastNameBlank">LastName is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(validateEmail()==false)
+            return false
+        if (isVoid(password)||isVoid(passwordConfirmation))
+        {
+			<c:set var="translation">
+			<digi:trn key="error.registration.passwordBlank">Password field is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(password != passwordConfirmation){
+			<c:set var="translation">
+			<digi:trn key="error.registration.NoPasswordMatch">Passwords in both fields must be the same</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(selectedOrgType=="-1"){
+			<c:set var="translation">
+			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(selectedOrgGroup=="-1"){
+			<c:set var="translation">
+			<digi:trn key="error.registration.NoOrgGroup">Please Select Organization Group</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(selectedOrganizationId=="-1"){
+			<c:set var="translation">
+			<digi:trn key="error.registration.NoOrganization">Please Select Organization</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+
+        return true;
+	}
+	function validateEmail() {
+	    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+		var address = document.umAddUserForm.email.value;
+		var address2 = document.umAddUserForm.emailConfirmation.value;
+		if(reg.test(address) == false||reg.test(address2) == false) {
+			<c:set var="translation">
+			<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+		}
+		if(address != address2){
+			<c:set var="translation">
+			<digi:trn key="error.registration.noemailmatch">Emails in both fields must be the same</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+		}
+		return true;
+	}
+
+	function init_addUserForm() {
+		var u = document.getElementsByName('email')[0];
+		u.setAttribute("autocomplete", "off");
+		
+		var u = document.getElementsByName('emailConfirmation')[0];
+		u.setAttribute("autocomplete", "off");
+		
+		var u = document.getElementsByName('password')[0];
+		u.setAttribute("autocomplete", "off");
+		
+		var u = document.getElementsByName('passwordConfirmation')[0];
+		u.setAttribute("autocomplete", "off");
+		
+	}
+	//YAHOOAmp.util.Event.addListener(window, "load", init_addUserForm) ;
+	function registerNewUser(){
+      if(validate()){
+        userRegistered = true;
+		<digi:context name="addNewUser" property="context/module/moduleinstance/registerUser.do" />
+		var url = "<%=addNewUser %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+         
+      }
+    }
+	
+</script>
+<script language="JavaScript">
+	function deleteWS(id){
+		document.umAddUserForm.teamMemberId.value=id;
+		document.umAddUserForm.actionFlag.value = "deleteWS";
+		<digi:context name="selectType" property="context/module/moduleinstance/addWorkSpaceUser.do" />
+		var url = "<%= selectType %>";
+		url += "?"+getParamsWS()+"&teamMemberId="+id+"&actionFlag=deleteWS";
+		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+	}
+	function cancelAddWorkSpace()
+	{
+        ret="firstNames="+
+    	"&lastName="+
+    	"&email="+
+    	"&emailConfirmation="+
+    	"&password="+
+    	"&passwordConfirmation="+
+		"&role=-1"+
+		"&teamId=-1"+
+		"&addWorkspace=false"+
+		"&selectedOrgType=-1"+
+		"&selectedOrgGroup=-1"+
+		"&selectedOrganizationIde=-1"+
+		"&sendEmail=-1"+
+		"&teamId=-1";
+		
+		<digi:context name="commentUrl" property="context/um/addUser.do"/>  
+		var url = "<%=commentUrl %>";
+		url += "?"+ret;
+		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+	}
+	function validateWS()
+	{
+		if(document.umAddUserForm.teamId.value=="-1"){
+			<c:set var="translation">
+			<digi:trn key="aim:chooseTeam">Please choose workspace</digi:trn>
+    		</c:set>
+			
+			alert("${translation}");
+			document.umAddUserForm.teamId.focus();
+			return false;
+		}	
+		if(document.umAddUserForm.role.value=="-1"){
+			<c:set var="translation">
+			<digi:trn key="aim:chooseRole">Please choose role</digi:trn>
+    		</c:set>
+			
+			alert("${translation}");
+			document.umAddUserForm.role.focus();
+			return false;
+		}	
+		return true;
+	}
+	function getParamsWS(){
+        var ret=""
+        ret="firstNames="+document.getElementsByName('firstNames')[0].value+
+        	"&lastName="+document.getElementsByName('lastName')[0].value+
+        	"&email="+document.getElementsByName('email')[0].value+
+        	"&emailConfirmation="+document.getElementsByName('emailConfirmation')[0].value+
+        	"&password="+document.getElementsByName('password')[0].value+
+        	"&passwordConfirmation="+document.getElementsByName('passwordConfirmation')[0].value+
+        	"&selectedCountryResidence="+document.getElementsByName('selectedCountryResidence')[0].value+
+        	//"&mailingAddress="+document.getElementsByName('mailingAddress')[0].value+
+        	"&selectedOrgType="+document.getElementsByName('selectedOrgType')[0].value+
+        	"&selectedOrgGroup="+document.getElementsByName('selectedOrgGroup')[0].value+
+        	"&sendEmail="+document.getElementsByName('sendEmail')[0].value+
+        	"&addWorkspace="+document.getElementsByName('addWorkspace')[0].value+
+        	"&organizationName="+document.getElementsByName('organizationName')[0].value+
+        	"&selectedOrganizationId="+document.getElementsByName('selectedOrganizationId')[0].value+
+        	"&selectedLanguage="+document.getElementsByName('selectedLanguage')[0].value+
+        	"&teamId="+document.getElementsByName('teamId')[0].value+
+        	"&role="+document.getElementsByName('role')[0].value;
+    	return ret;
+		
+	}
+	
+	function addWorkSpace(){
+		if(validateWS()){
+			//var msg='\n<digi:trn>Add New User</digi:trn>';
+			//showPanelLoading(msg);
+			<digi:context name="commentUrl" property="context/um/addWorkSpaceUser.do"/>  
+			var url = "<%=commentUrl %>";
+			YAHOOAmp.util.Connect.asyncRequest("POST",url+"?"+getParamsWS(), callback, '');
+		}
+	}
+</script>
 
 <c:set var="translationBan">
 	<digi:trn key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
@@ -359,11 +808,11 @@ function banUser(txt) {
 															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														</td>
 														<td>
-															<digi:link module="aim"  href="/../um/addUser.do">
+															<a href="javascript:addNewUser();">
 										 						<digi:trn key="aim:addNewUser">
 																	Add new user
 																</digi:trn>
-															</digi:link>
+															</a>
 														</td>
 													</tr>																								
 													<tr>

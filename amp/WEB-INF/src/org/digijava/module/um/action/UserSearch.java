@@ -70,9 +70,11 @@ public class UserSearch extends Action {
 		String sortBy = vwForm.getSortBy();
 		String dir = request.getParameter("dir");
 		String dirBy = vwForm.getSortDir();
-		if ((sortBy == null && dirBy==null) || (sort != null && dir!=null && (!sortBy.equals(sort)||!dirBy.equals(dir)))) {
+        //the following "if" was commented to update just the table of user 
+        //and to avoid refreshing the complete page after adding a new user
+		//if ((sortBy == null && dirBy==null) || (sort != null && dir!=null && (!sortBy.equals(sort)||!dirBy.equals(dir)))) {
 			myexecute(mapping, vwForm, request, response);
-		}
+		//}
 
 		if (request.getParameter("page") == null) {
 			page = 1;

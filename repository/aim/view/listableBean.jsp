@@ -65,19 +65,38 @@
 
 	</logic:iterate>
 </logic:equal>
-
 <logic:equal name="style" value="settingsList">
-	<I>${listable.beanName}</I>
 	<logic:iterate id="prop" name="pMap">
-    	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
-            <digi:trn key="${prefix}:${prop.key}"><i>${prop.key}</i></digi:trn>:
-            <c:if test="${prop.key == 'teamAssignedOrgs'}">
-            	${prop.value}
-            </c:if>
-            <c:if test="${prop.key != 'teamAssignedOrgs'}">
-            <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-            </c:if>
-            |
-        </c:if>
-	</logic:iterate>
+		<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
+	        <c:set var="description">
+	          	<c:if test="${prop.value.showDescription==true}">
+	        		<digi:trn>${prop.value.description}</digi:trn>
+	        	</c:if>
+	        </c:set>
+	       
+	        <c:set var="value">
+		        <c:if test="${prop.value.hiddenValue!=true}">
+		        	<digi:trn>${prop.value.value}</digi:trn> 
+		        </c:if>
+	        </c:set>
+	  
+	  	    <c:if test="${prop.value.position =='LEFT'}">
+	    	   	 ${description} ${value}
+	        </c:if>
+	    	
+	    	<c:if test="${prop.value.position =='RIGTH'}">
+	    		${value} ${description}
+	    	</c:if>
+    		
+    		<c:if test="${prop.value.position==NULL}">
+    	 	 	 ${name} ${value} 
+	    	</c:if>
+       		<c:if test="${prop.value.hiddenValue!=true || prop.value.showDescription==true}">
+ 				/
+ 			</c:if>
+ 		 </c:if>
+ 	   </logic:iterate>
+
+
 </logic:equal>
+

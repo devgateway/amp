@@ -580,10 +580,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 			}
 		}
-
-		if (filterForm.getText() != null) {
-			arf.setText(filterForm.getText());
-		}
+		arf.setText(filterForm.getText());
 
 		if (filterForm.getIndexString() != null) {
 			arf.setIndexText(filterForm.getIndexString());

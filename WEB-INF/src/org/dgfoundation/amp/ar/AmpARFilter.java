@@ -33,6 +33,8 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
+import org.dgfoundation.amp.ProperyDescription;
+import org.dgfoundation.amp.PropertyDescPosition;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
@@ -386,16 +388,12 @@ public class AmpARFilter extends PropertyListable {
 		Date checkDate = null;
 		if (renderStartYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			// Check if there is value on workspace setting
-			if (tempSettings != null
-					&& tempSettings.getReportStartYear() != null
-					&& tempSettings.getReportStartYear().intValue() != 0) {
+			if (tempSettings != null && tempSettings.getReportStartYear() != null && tempSettings.getReportStartYear().intValue() != 0) {
 				this.setRenderStartYear(tempSettings.getReportStartYear());
 			} else { // if not check if the value exist on
 				// global setting
-				 gvalue = FeaturesUtil
-						.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-				if (gvalue != null && !"".equalsIgnoreCase(gvalue)
-						&& Integer.parseInt(gvalue) > 0) {
+				gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+				if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
 					renderStartYear = Integer.parseInt(gvalue);
 				}
 
@@ -810,8 +808,8 @@ public class AmpARFilter extends PropertyListable {
 		 */
 		if (text != null) {
 			if ("".equals(text.trim()) == false) {
-				String TEXT_FILTER = "SELECT a.amp_activity_id from amp_activity a WHERE a.amp_id="
-						+ text;
+				String TEXT_FILTER = "SELECT a.amp_activity_id from amp_activity a WHERE `name` like '"
+						+text+"%'";
 				queryAppend(TEXT_FILTER);
 			}
 		}
@@ -1070,6 +1068,7 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return Returns the calendarType.
 	 */
+	@ProperyDescription(description = "", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public AmpFiscalCalendar getCalendarType() {
 		return calendarType;
 	}
@@ -1113,6 +1112,7 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return Returns the statuses.
 	 */
+	@ProperyDescription(description = "Approval Status: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getStatuses() {
 		return statuses;
 	}
@@ -1143,6 +1143,7 @@ public class AmpARFilter extends PropertyListable {
 		this.widget = widget;
 	}
 
+	@ProperyDescription(description = "Activities On Budget", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public Boolean getBudget() {
 		return budget;
 	}
@@ -1151,6 +1152,7 @@ public class AmpARFilter extends PropertyListable {
 		this.budget = budget;
 	}
 
+	@ProperyDescription(description = "Risk Level ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getRisks() {
 		return risks;
 	}
@@ -1180,12 +1182,9 @@ public class AmpARFilter extends PropertyListable {
 			for (int i = 0; i < propertyDescriptors.length; i++) {
 				Method m = propertyDescriptors[i].getReadMethod();
 				Object object = m.invoke(this, new Object[] {});
-				if (object == null
-						|| IGNORED_PROPERTIES.contains(propertyDescriptors[i]
-								.getName()))
+				if (object == null || IGNORED_PROPERTIES.contains(propertyDescriptors[i].getName()))
 					continue;
-				ret.append("<b>").append(propertyDescriptors[i].getName())
-						.append(": ").append("</b>");
+				ret.append("<b>").append(propertyDescriptors[i].getName()).append(": ").append("</b>");
 				if (object instanceof Collection)
 					ret.append(Util.toCSString((Collection) object));
 
@@ -1212,7 +1211,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	private static final String IGNORED_PROPERTIES = "class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
-
+	@PropertyListableIgnore
 	public Integer getLineMinRank() {
 		return lineMinRank;
 	}
@@ -1220,7 +1219,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setLineMinRank(Integer lineMinRank) {
 		this.lineMinRank = lineMinRank;
 	}
-
+	@PropertyListableIgnore
 	public Integer getPlanMinRank() {
 		return planMinRank;
 	}
@@ -1238,6 +1237,7 @@ public class AmpARFilter extends PropertyListable {
 		this.ampReportId = ampReportId;
 	}
 
+	@ProperyDescription(description = "Starting with ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getText() {
 		return text;
 	}
@@ -1317,7 +1317,6 @@ public class AmpARFilter extends PropertyListable {
 	public Collection<AmpCategoryValueLocations> getLocationSelected() {
 		return locationSelected;
 	}
-
 	/**
 	 * @param regionSelected the regionSelected to set
 	 */
@@ -1341,6 +1340,7 @@ public class AmpARFilter extends PropertyListable {
 		this.relatedLocations = relatedLocations;
 	}
 
+	@ProperyDescription(description = "Search Text ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getIndexText() {
 		return indexText;
 	}
@@ -1359,6 +1359,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	@IgnorePersistence
+	@ProperyDescription(description = "Including Draf Activites ", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public boolean isDraft() {
 		return draft;
 	}
@@ -1383,6 +1384,7 @@ public class AmpARFilter extends PropertyListable {
 		this.donorGroups = donorGroups;
 	}
 
+	@ProperyDescription(description = "Beneficiary Agencies", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getBeneficiaryAgency() {
 		return beneficiaryAgency;
 	}
@@ -1391,6 +1393,7 @@ public class AmpARFilter extends PropertyListable {
 		this.beneficiaryAgency = beneficiaryAgency;
 	}
 
+	@ProperyDescription(description = "Executing Agencies", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getExecutingAgency() {
 		return executingAgency;
 	}
@@ -1399,6 +1402,7 @@ public class AmpARFilter extends PropertyListable {
 		this.executingAgency = executingAgency;
 	}
 
+	@ProperyDescription(description = "Implementing Agencies", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getImplementingAgency() {
 		return implementingAgency;
 	}
@@ -1407,6 +1411,7 @@ public class AmpARFilter extends PropertyListable {
 		this.implementingAgency = implementingAgency;
 	}
 
+	@ProperyDescription(description = "Sectors", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getSelectedSectors() {
 		return selectedSectors;
 	}
@@ -1432,6 +1437,7 @@ public class AmpARFilter extends PropertyListable {
 		this.selectedSecondarySectors = selectedSecondarySectors;
 	}
 
+	@ProperyDescription(description = "Type Of Assistance", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set<AmpCategoryValue> getTypeOfAssistance() {
 		return typeOfAssistance;
 	}
@@ -1474,6 +1480,7 @@ public class AmpARFilter extends PropertyListable {
 		this.currentFormat = currentFormat;
 	}
 
+	@ProperyDescription(description = "From", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getFromDate() {
 		return fromDate;
 	}
@@ -1482,6 +1489,7 @@ public class AmpARFilter extends PropertyListable {
 		this.fromDate = fromDate;
 	}
 
+	@ProperyDescription(description = "To", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getToDate() {
 		return toDate;
 	}
@@ -1490,6 +1498,7 @@ public class AmpARFilter extends PropertyListable {
 		this.toDate = toDate;
 	}
 
+	@ProperyDescription(description = "Approval Status", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Collection<String> getApprovalStatusSelected() {
 		return approvalStatusSelected;
 	}
@@ -1505,6 +1514,8 @@ public class AmpARFilter extends PropertyListable {
 	public void setDonnorgAgency(Set<AmpOrganisation> donnorgAgency) {
 		this.donnorgAgency = donnorgAgency;
 	}
+
+	@ProperyDescription(description = "workspaces", position = PropertyDescPosition.RIGTH, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	@IgnorePersistence
 	public String getAccessType() {
 		return accessType;
@@ -1514,6 +1525,7 @@ public class AmpARFilter extends PropertyListable {
 		this.accessType = accessType;
 	}
 
+	@ProperyDescription(description = "Activities Rejected ByFilter", position = PropertyDescPosition.RIGTH, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	@IgnorePersistence
 	public Long getActivitiesRejectedByFilter() {
 		return activitiesRejectedByFilter;
@@ -1531,6 +1543,7 @@ public class AmpARFilter extends PropertyListable {
 		this.teamAccessType = teamAccessType;
 	}
 
+	@PropertyListableIgnore
 	public boolean isJustSearch() {
 		return justSearch;
 	}
@@ -1538,6 +1551,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setJustSearch(boolean justSearch) {
 		this.justSearch = justSearch;
 	}
+
 	@PropertyListableIgnore
 	public ArrayList<FilterParam> getIndexedParams() {
 		return indexedParams;
@@ -1551,6 +1565,7 @@ public class AmpARFilter extends PropertyListable {
 		this.responsibleorg = responsibleorg;
 	}
 
+	@ProperyDescription(description = "Sorty by ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getSortBy() {
 		return sortBy;
 	}
@@ -1559,6 +1574,7 @@ public class AmpARFilter extends PropertyListable {
 		this.sortBy = sortBy;
 	}
 
+	@ProperyDescription(description = "Ascending Sorting ", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public Boolean getSortByAsc() {
 		return sortByAsc;
 	}
@@ -1567,6 +1583,7 @@ public class AmpARFilter extends PropertyListable {
 		this.sortByAsc = sortByAsc;
 	}
 
+	@ProperyDescription(description = "Hierarchy Sorters ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Collection<String> getHierarchySorters() {
 		return hierarchySorters;
 	}
@@ -1578,7 +1595,8 @@ public class AmpARFilter extends PropertyListable {
 	public void setDisbursementOrderRejected(Boolean b) {
 		this.disbursementOrderRejected = b;
 	}
-	
+
+	@ProperyDescription(description = "Disbursement Order Rejected ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Boolean getDisbursementOrderRejected() {
 		return this.disbursementOrderRejected;
 	}
@@ -1591,6 +1609,7 @@ public class AmpARFilter extends PropertyListable {
 		this.unallocatedLocation = unallocatedLocation;
 	}
 
+	@ProperyDescription(description = "Amount in Thousand", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public boolean isAmountinthousand() {
 		return amountinthousand;
 	}
@@ -1598,7 +1617,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setAmountinthousand(boolean amountinthousand) {
 		this.amountinthousand = amountinthousand;
 	}
-	
+
 	public String getCRISNumber() {
 		return CRISNumber;
 	}
@@ -1615,6 +1634,7 @@ public class AmpARFilter extends PropertyListable {
 		this.budgetNumber = budgetNumber;
 	}
 
+	@ProperyDescription(description = "Compuer year ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Integer getComputedYear() {
 		return computedYear;
 	}
@@ -1622,6 +1642,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setComputedYear(Integer computedYear) {
 		this.computedYear = computedYear;
 	}
+	
 
 	public String getLucene() {
 		return lucene;
@@ -1630,6 +1651,6 @@ public class AmpARFilter extends PropertyListable {
 	public void setLucene(String luceneIndex) {
 		this.lucene = luceneIndex;
 	}
-	
+
 	
 }

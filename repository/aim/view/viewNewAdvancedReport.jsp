@@ -10,7 +10,8 @@
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
   <!-- Dependencies --> 
-        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+        
+<%@page import="org.digijava.kernel.translator.TranslatorWorker"%><script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
@@ -236,6 +237,7 @@ session.setAttribute("progressValue", counter);
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
+					
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
                 <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
@@ -256,7 +258,6 @@ session.setAttribute("progressValue", counter);
                 <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
              </td>
              </tr>
-             <tr>
            </table>
            </div>
     	</div>
@@ -311,7 +312,10 @@ session.setAttribute("progressValue", counter);
            
             </span>
              &nbsp;<br>
-             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             
+             <%String display=(TranslatorWorker.getInstance().isTranslationMode(request)?"block":"none");%>
+             
+             <div style="display:<%=display%>;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
@@ -322,6 +326,7 @@ session.setAttribute("progressValue", counter);
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
                     <jsp:include page="${listable.jspFile}" flush="true"/>
+                    
                 </logic:present>
              </td>
              </tr>
@@ -329,11 +334,11 @@ session.setAttribute("progressValue", counter);
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
                     <c:set var="all" scope="page">
-                	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
+                	<digi:trn>Include All</digi:trn>
                 </c:set>
                 
-            	<digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
-                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
+            	<%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%>  /
+                <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> 
               </td>
              </tr>
            </table>
@@ -370,6 +375,56 @@ session.setAttribute("progressValue", counter);
 		<tr>
 		<td style="padding-left: 5px;padding-right: 5px" align="left">
 		<table width="100%">
+		<tr>
+           <td colspan="2">
+        	
+        		<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td>
+        			<digi:trn>Go to:</digi:trn>  
+        			<digi:instance property="aimReportsFilterPickerForm" />
+             		<html:select styleClass="inp-text" name="aimReportsFilterPickerForm" property="text" onchange="document.getElementsByName('aimReportsFilterPickerForm')[0].text.value=this.value,submitFilters()">
+           			<html:option value="">All</html:option>
+           			<html:option value="A">A</html:option>
+           			<html:option value="B">B</html:option>
+           			<html:option value="C">C</html:option>
+           			<html:option value="D">D</html:option>
+           			<html:option value="E">E</html:option>
+           			<html:option value="F">F</html:option>
+           			<html:option value="G">G</html:option>
+           			<html:option value="H">H</html:option>
+           			<html:option value="I">I</html:option>
+           			<html:option value="J">J</html:option>
+           			<html:option value="J">K</html:option>
+           			<html:option value="L">L</html:option>
+           			<html:option value="M">M</html:option>
+           			<html:option value="N">N</html:option>
+           			<html:option value="O">O</html:option>
+           			<html:option value="P">P</html:option>
+           			<html:option value="Q">Q</html:option>
+           			<html:option value="R">R</html:option>
+           			<html:option value="S">S</html:option>
+           			<html:option value="T">T</html:option>
+           			<html:option value="U">U</html:option>
+           			<html:option value="V">V</html:option>
+           			<html:option value="W">W</html:option>
+           			<html:option value="X">X</html:option>
+           			<html:option value="Y">Y</html:option>
+           			<html:option value="Z">Z</html:option>
+           		</html:select>
+           		<html:text styleClass="inp-text" styleId="quikSearch" name="aimReportsFilterPickerForm" property="indexString" />
+           		<c:set var="btnVarValue"><digi:trn>Search</digi:trn></c:set>
+             	<input type="button" onclick="document.getElementsByName('aimReportsFilterPickerForm')[0].text.value='';document.getElementsByName('aimReportsFilterPickerForm')[0].indexString.value=quikSearch.value;submitFilters()"  value="${btnVarValue}">
+             	</td><td align="right"">
+             	<a href="javascript:fontResize('less')">-A</a> &nbsp; 
+             	
+             	<a href="javascript:fontResize('reset')">A</a> &nbsp;
+             	
+             	<a href="javascript:fontResize('add')">+A</a> 
+             	&nbsp;&nbsp;
+             	</td>
+             	</tr>
+             	</table>
+             	</td>
+             </tr>
 			<tr>
 			<td>
 
@@ -392,18 +447,7 @@ session.setAttribute("progressValue", counter);
 				<c:set var="lastPage">
                 	0
                 </c:set>
-<!-- 
-				<c:if test="${report.visibleRows gt 1}">
-                	<c:set var="visibleRows">
-                		${report.visibleRows-2}
-                	</c:set>
-                </c:if>
-                <c:if test="${report.visibleRows lt 2}">
-                	<c:set var="visibleRows">
-                		0
-                	</c:set>
-                </c:if>
- -->
+
                 <c:forEach var="i" begin="0" end="${visibleRows}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">

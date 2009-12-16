@@ -46,13 +46,18 @@ function loadpage(page_request, containerid){
 if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1)){
 document.getElementById(containerid).innerHTML=page_request.responseText;
 	try
-	{	var reporTable=new scrollableTable("reportTable",300);
+	{	
+			fontResizeFromCookies();
+			var reporTable=new scrollableTable("reportTable",300);
 			reporTable.debug=false;
 			reporTable.usePercentage=false;
 			reporTable.maxRowDepth=4;
 			reporTable.useFixForDisplayNoneRows=true;
 			reporTable.scroll();
 			continueExecution = false;
+			//set user defined font size
+			
+			
 	}catch(e)
 	{
 		//alert(e);

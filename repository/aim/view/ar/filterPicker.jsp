@@ -23,6 +23,8 @@
 
 <digi:form action="/reportsFilterPicker.do">
 
+
+<html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
 	
 
@@ -792,7 +794,7 @@
 			<td align="center" colspan="5">
 			<html:hidden property="ampReportId" />
 			<html:hidden property="defaultCurrency" />
-			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="submitFilters()"
+			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
 				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
 			<html:button onclick="resetFilter();" styleClass="dr-menu"
 				property="reset">

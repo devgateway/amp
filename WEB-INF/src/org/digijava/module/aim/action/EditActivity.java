@@ -1524,11 +1524,16 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getContactInfo().setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
           eaForm.getContactInfo().setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
 
-          if (eaForm.getIsPreview() != 1 && !isPublicView) {
-            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.
-                getMemberId());
-            activity.setActivityCreator(teamMember);
-          }
+// The if block below doesn't seem to make any sense. I don't see any reason to set the 
+// activity creator when editing the activity. 
+// If someone still need to re-enable this piece of code at least change the condition 
+// eaForm.getIsPreview!=1 => isPreview
+//          
+//          if (eaForm.getIsPreview() != 1 && !isPublicView) {
+//            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.
+//                getMemberId());
+//            activity.setActivityCreator(teamMember);
+//          }
           if (activity.getCondition() != null)
         	  eaForm.getIdentification().setConditions(activity.getCondition().trim());
 

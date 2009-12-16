@@ -335,7 +335,7 @@ function ColorPicker_highLightColor(c) {
 											                        	</td>
 											                        	<td  width="50" align="center">
 																			<c:set var="translation">
-							                                                  <digi:trn key="calendar:EventTypeSave">Save type </digi:trn>
+							                                                  <digi:trn key="calendar:EventTypeSave">Click here to save type </digi:trn>
 							                                                </c:set>
 											                          		<a href=javascript:; >
 											                          			<img src= "/TEMPLATE/ampTemplate/images/save_16.png" vspace="2" border="0" align="absmiddle" title="${translation}" onclick="saveEventType('${eventType.id}');"/>
@@ -343,7 +343,7 @@ function ColorPicker_highLightColor(c) {
 											                        	</td>
 											                        	<td width="50" align="center">
 																			<c:set var="translation">
-							                                                  <digi:trn key="calendar:EventTypeSave">Delete type </digi:trn>
+							                                                  <digi:trn key="calendar:EventTypeDelete">Click here to delete type </digi:trn>
 							                                                </c:set>
 											                         		<a href=javascript:;>
 																				<img src= "/TEMPLATE/ampTemplate/images/trash_16.gif" vspace="2" border="0" align="absmiddle" title="${translation}" onclick="setDeleteId('${eventType.id}');"/>
@@ -365,33 +365,9 @@ function ColorPicker_highLightColor(c) {
 				            </table>
 				        </td>
 				    </tr>
-				
-					<tr>
-				        <td>
-							<table>
-				             	<tr>
-				                 	<td colspan="2">
-				                 		<strong><digi:trn key="calendar:IconReference">Icons Reference</digi:trn></strong>
-				       				</td>
-				       			</tr>
-				     			<tr>
-				           			<td nowrap="nowrap"><img src= "/TEMPLATE/ampTemplate/images/save_16.png" vspace="2" border="0" align="absmiddle" />
-				               			<digi:trn key="calendar:ClickSaveEventType">Click on this icon to save the event type&nbsp;</digi:trn>
-				               			<br />
-				       				</td>
-				       			</tr>
-				        		<tr>
-				           			<td nowrap="nowrap"><img src= "/TEMPLATE/ampTemplate/images/trash_16.gif" vspace="2" border="0" align="absmiddle" />
-				               			<digi:trn key="calendar:ClickDeleteEventType">Click on this icon to delete the event type&nbsp;</digi:trn>
-				                   		<br />
-									</td>
-				           		</tr>
-				       		</table>
-				     	</td>
-				    </tr> 
 				</table>
 			</td>
-			<td width="550">
+			<td width="550" valign="bottom">
 				<div id="displayColorPalete"></div>
 			</td>
 		</tr>

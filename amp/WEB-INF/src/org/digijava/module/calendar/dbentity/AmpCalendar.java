@@ -6,11 +6,9 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpCalendar {
-   
+public class AmpCalendar {   
 
 	private AmpCalendarPK calendarPK;
-    private AmpEventType eventType;
     private AmpTeamMember member;
     private Set<AmpOrganisation> organisations;
     private Set attendees;
@@ -32,11 +30,6 @@ public class AmpCalendar {
     public AmpCalendarPK getCalendarPK() {
         return calendarPK;
     }
-
-    public AmpEventType getEventType() {
-        return eventType;
-    }
-
     public boolean isPrivateEvent() {
         return privateEvent;
     }
@@ -56,11 +49,6 @@ public class AmpCalendar {
     public void setCalendarPK(AmpCalendarPK calendarPK) {
         this.calendarPK = calendarPK;
     }
-
-    public void setEventType(AmpEventType eventType) {
-        this.eventType = eventType;
-    }
-
     public void setPrivateEvent(boolean privateEvent) {
         this.privateEvent = privateEvent;
     }

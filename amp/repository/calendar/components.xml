@@ -18,10 +18,8 @@
     <page page="noEvents" name="noEvents" title="No Events" />
     <page page="calendarOrgPopupLayout" name="calendarOrgPopupLayout" title="Calendar Organisation Popup" />
     <page page="showAmpEvent" name="showAmpEvent" title="Show Amp Event" />
-    <page page="previewAmpEvent" name="previewAmpEvent" title="Preview Amp Event" />
-    <page page="eventTypesList" name="eventTypes" title="Event Types" />
+    <page page="previewAmpEvent" name="previewAmpEvent" title="Preview Amp Event" />   
     <page page="recurringEventPopupLayout" name="recurringEventPopupLayout" title="Recurring Event" />
-    <page page="colorPicker" name="colorPicker" title="Show Color Palete" />
     <page page="printViewPopupLayout" name="printViewPopupLayout" title="Print Preview" />
     <page page="printPreviewPopupLayout" name="printPreviewPopupLayout" title="Print Preview" />
 </secondary-pages>
@@ -42,9 +40,7 @@
     <page name="noEvents">noEventTypes.jsp</page>
     <page name="showAmpEvent">showAmpEvent.jsp</page>
     <page name="previewAmpEvent">previewAmpEvent.jsp</page>
-    <page name="eventTypesList">eventTypeList.jsp</page>
-    <page name="colorPicker">colorPicker.jsp</page>
-    
+        
     <page name="calendarOrgPopupLayout">selectOrganisation.jsp</page>
     <page name="recurringEventPopupLayout">recurringEvent.jsp</page>
     <page name="printViewPopupLayout">showCalendarPrintView.jsp</page>

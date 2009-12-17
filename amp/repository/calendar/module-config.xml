@@ -42,7 +42,6 @@
 		<hibernate-class>org.digijava.module.calendar.dbentity.Calendar</hibernate-class>
 		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarItem</hibernate-class>
 		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.calendar.dbentity.AmpEventType</hibernate-class>
         <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendar</hibernate-class>
         <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendarAttendee</hibernate-class>
 		<hibernate-class>org.digijava.module.calendar.dbentity.RecurrCalEvent</hibernate-class>

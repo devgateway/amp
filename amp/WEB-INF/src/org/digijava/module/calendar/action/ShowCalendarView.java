@@ -18,7 +18,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.calendar.dbentity.AmpEventType;
+import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;

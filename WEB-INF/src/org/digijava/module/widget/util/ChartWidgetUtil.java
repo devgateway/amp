@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -43,7 +43,6 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -430,52 +429,52 @@ public class ChartWidgetUtil {
 	 * @throws DgException
 	 * @throws WorkerException
 	 */
-	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer fromYear,Integer toYear,ChartOption opt)throws DgException,WorkerException{
-		JFreeChart result = null;
-		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear,opt);
-        String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
-		String title = (opt.isShowTitle())? titleMsg:null;
-		boolean tooltips = false;
-		boolean urls = true;
-		result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
-                String donorString="";
-                if(donors!=null){
-                    donorString+="~donorId="+getInStatment(donors);
-                }
-                String url=opt.getUrl()+"~startYear="+fromYear+"~endYear="+toYear+donorString;
-		PiePlot plot = (PiePlot)result.getPlot();
+	   public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException, WorkerException {
+        JFreeChart result = null;
+        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
+        String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
+        String title = (opt.isShowTitle()) ? titleMsg : null;
+        boolean tooltips = false;
+        boolean urls = true;
+        result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
+        String donorString = "";
+        if (donors != null) {
+            donorString += "~donorId=" + getInStatment(donors);
+        }
+        String url = opt.getUrl() + "~startYear=" + fromYear + "~endYear=" + toYear + donorString;
+        PiePlot plot = (PiePlot) result.getPlot();
 
-		if (opt.isShowTitle()){
-			Font font = new Font(null,0,12);
-			result.getTitle().setFont(font);
-		}
+        if (opt.isShowTitle()) {
+            Font font = new Font(null, 0, 12);
+            result.getTitle().setFont(font);
+        }
 
-		if (opt.isShowLabels()){
-			String pattern = "{0} = {2}";
-			if (opt.getLabelPattern()!=null){
-				pattern=opt.getLabelPattern();
-			}
-                        DecimalFormat format=FormatHelper.getDecimalFormat();
-                        format.setMaximumFractionDigits(0);
-			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,format,new DecimalFormat("0.0%"));
-			plot.setLabelGenerator(gen);
-		}else{
-			plot.setLabelGenerator(null);
-		}
+        if (opt.isShowLabels()) {
+            String pattern = "{0} = {2}";
+            if (opt.getLabelPattern() != null) {
+                pattern = opt.getLabelPattern();
+            }
+            DecimalFormat format = FormatHelper.getDecimalFormat();
+            format.setMaximumFractionDigits(0);
+            PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+            plot.setLabelGenerator(gen);
+        } else {
+            plot.setLabelGenerator(null);
+        }
 
-		//plot.setSectionOutlinesVisible(false);
+        //plot.setSectionOutlinesVisible(false);
         LegendTitle lt = result.getLegend();
         if (lt != null) {
             Font labelFont = new Font(null, Font.PLAIN, 9);
             lt.setItemFont(labelFont);
             plot.setLabelFont(labelFont);
         }
-                DonorSectorPieChartURLGenerator urlGen=new DonorSectorPieChartURLGenerator(url);
-                plot.setURLGenerator(urlGen);
-		plot.setIgnoreNullValues(true);
-		plot.setIgnoreZeroValues(true);
-		return result;
-	}
+        DonorSectorPieChartURLGenerator urlGen = new DonorSectorPieChartURLGenerator(url);
+        plot.setURLGenerator(urlGen);
+        plot.setIgnoreNullValues(true);
+        plot.setIgnoreZeroValues(true);
+        return result;
+    }
 
       /**
      * Generates chart object from specified filters and options.
@@ -610,13 +609,13 @@ public class ChartWidgetUtil {
 			int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 			toDate =new Date(getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
 		}
-        Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
+        BigDecimal[] allFundingWrapper={BigDecimal.ZERO};// to hold whole funding value
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
             double otherFunfing=0;
             String otherIds="";
 			for (DonorSectorFundingHelper funding : fundings) {
-				Double percent = funding.getFounding() / allFundingWrapper[0];
+				Double percent = (funding.getFounding().divide(allFundingWrapper[0],RoundingMode.HALF_UP)).doubleValue();
                 // the sectors which percent is less then 5% should be group in "Other"
                 AmpSector sector = funding.getSector();
 
@@ -624,9 +623,9 @@ public class ChartWidgetUtil {
                     SectorHelper secHelper=new SectorHelper();
                     secHelper.setName(sector.getName());
                     secHelper.setIds(sector.getAmpSectorId().toString());
-                    ds.setValue(secHelper, Math.round(funding.getFounding()));
+                    ds.setValue(secHelper, Math.round(funding.getFounding().doubleValue()));
                 } else {
-                	otherFunfing += funding.getFounding();
+                	otherFunfing += funding.getFounding().doubleValue();
                         otherIds+=sector.getAmpSectorId()+",";
                 }
 			}
@@ -662,10 +661,9 @@ public class ChartWidgetUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
+	 public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,BigDecimal[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;
-		String oql ="select  actSec.ampActivitySectorId, "+
-                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInBaseCurrency)";
+		String oql ="select actSec.sectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
 		oql += " from ";
 		oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
@@ -674,8 +672,6 @@ public class ChartWidgetUtil {
                         " inner join actSec.sectorId sec "+
                         " inner join actSec.activityId act "+
                         " inner join actSec.classificationConfig config ";
-
-
 		oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
@@ -684,9 +680,7 @@ public class ChartWidgetUtil {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
         oql +=" and config.name='Primary' and act.team is not null ";
-        //  strange oracle doesn't understand act.ampActivityId... need to investigate...
-		oql += " group by act.ampActivityId.ampActivityId, actSec.ampActivitySectorId ";
-		oql += " order by actSec.ampActivitySectorId";
+		oql += " group by actSec.sectorId ";
 
 		Session session = PersistenceManager.getRequestDBSession();
 
@@ -713,20 +707,10 @@ public class ChartWidgetUtil {
 			for (Object row : result) {
 				Object[] rowData = (Object[]) row;
 				//AmpOrganisation donor = (AmpOrganisation) rowData[0];
-                Long activitySectorId=(Long) rowData[0];
-                AmpActivitySector activitySector=ActivityUtil.getAmpActivitySector(activitySectorId);
-				AmpSector sector =activitySector.getSectorId() ;
-				Float sectorPrcentage =activitySector.getSectorPercentage();    //This field is NULL sometimes !
-				//AmpActivity activity = (AmpActivity) rowData[3];
-				//AmpCurrency currency = (AmpCurrency) rowData[4];
-				BigDecimal amt = (BigDecimal)rowData[2];
+				AmpSector sector =(AmpSector) rowData[0];
+				BigDecimal amt = new BigDecimal((Double)rowData[1]);
 				BigDecimal amount =FeaturesUtil.applyThousandsForVisibility(amt);
-				//calculate percentage
-				BigDecimal calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
-				//convert to
-				//Double converted = convert(calculated, currency);
-				//search if we already have such sector data
-                                sector = SectorUtil.getAmpParentSector(sector.getAmpSectorId());
+                sector = SectorUtil.getTopLevelParent(sector);
 				DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
 				//if not create and add to map
 				if (sectorFundngObj == null){
@@ -734,9 +718,9 @@ public class ChartWidgetUtil {
 					donors.put(sector.getAmpSectorId(), sectorFundngObj);
 				}
 				//add amount to sector
-				sectorFundngObj.addFunding(calculated.doubleValue());
-                                //calculate whole funding information
-                                wholeFunding[0]+=calculated.doubleValue();
+				sectorFundngObj.addFunding(amount);
+               //calculate whole funding information
+               wholeFunding[0]=wholeFunding[0].add(amount);
 			}
 			fundings = donors.values();
 		}

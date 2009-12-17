@@ -323,6 +323,14 @@ public class SectorUtil {
 		return ++level;
 	}
 
+    // This recursive method helps the generateLevelHierarchy method.
+	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
+		if (topLevelSector.getParentSectorId() != null) {
+			topLevelSector = getTopLevelParent(topLevelSector.getParentSectorId());
+		}
+		return topLevelSector;
+	}
+
 	public static List<AmpSector> generateChildHierarchy(List<AmpSector> list) {
 		Iterator<AmpSector> iter = list.iterator();
 		while (iter.hasNext()) {

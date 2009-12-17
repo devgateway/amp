@@ -2,6 +2,7 @@ package org.digijava.module.widget.action;
 
 import java.awt.Font;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +61,7 @@ public class ShowSectorByDonorChart extends Action {
         if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){
         	donorIDs = new Long[1];
         	donorIDs[0] = cForm.getSelectedDonor();
-        }        
+        }
         
         //generate chart
 		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear, toYear, opt);

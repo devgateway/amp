@@ -1,5 +1,6 @@
 package org.digijava.module.widget.helper;
 
+import java.math.BigDecimal;
 import org.digijava.module.aim.dbentity.AmpSector;
 
 /**
@@ -11,10 +12,11 @@ import org.digijava.module.aim.dbentity.AmpSector;
  */
 public class DonorSectorFundingHelper {
 	private AmpSector sector;
-	private double founding;
+	private BigDecimal founding;
 	
 	public DonorSectorFundingHelper(AmpSector sector){
 		this.sector = sector;
+        this.founding=BigDecimal.ZERO;
 	}
 
 	/**
@@ -22,8 +24,8 @@ public class DonorSectorFundingHelper {
 	 * Amount should always be in one currency.
 	 * @param amount
 	 */
-	public void addFunding(double amount){
-		this.founding+=amount;
+	public void addFunding(BigDecimal amount){
+		this.founding=this.founding.add(amount);
 	}
 	
 	public AmpSector getSector() {
@@ -34,11 +36,11 @@ public class DonorSectorFundingHelper {
 		this.sector = sector;
 	}
 
-	public Double getFounding() {
-		return new Double(founding);
+	public BigDecimal getFounding() {
+		return founding;
 	}
 
-	public void setFounding(Double founding) {
-		this.founding = founding.doubleValue();
+	public void setFounding(BigDecimal founding) {
+		this.founding = founding;
 	}
 }

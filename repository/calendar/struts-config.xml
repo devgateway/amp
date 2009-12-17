@@ -8,7 +8,6 @@
     <form-bean name="calendarAdminForm" type="org.digijava.module.calendar.form.CalendarAdminForm" />
     <form-bean name="calendarViewForm" type="org.digijava.module.calendar.form.CalendarViewForm" />
     <form-bean name="calendarEventForm" type="org.digijava.module.calendar.form.CalendarEventForm" />
-    <form-bean name="calendarEventTypeForm" type="org.digijava.module.calendar.form.EventTypeForm" />
     <form-bean name="calendarEditActivityForm" type="org.digijava.module.calendar.form.EditActivityForm" />
     <form-bean name="calendarColorPaleteForm" type="org.digijava.module.calendar.form.ColorPaleteForm" />
     
@@ -87,10 +86,7 @@
     </action>
     <action name="calendarEventForm" path="/calendar/DeleteEvent" scope="session" type="org.digijava.module.calendar.action.DeleteEvent" validate="false">
       <forward name="success" path="/calendar/showCalendarView.do" redirect="true" />
-    </action>
-    <action name="calendarEventTypeForm" parameter="method" path="/calendar/eventTypes" scope="session" type="org.digijava.module.calendar.action.EventTypeAction" validate="false">
-      <forward name="eventTypesPage" path="/showLayout.do?layout=eventTypes" />
-    </action>
+    </action>   
     <action name="calendarEventForm" path="/calendar/selectOrganization" scope="session" type="org.digijava.module.calendar.action.SelectOrganization">
       <forward name="forward" path="/showLayout.do?layout=calendarOrgPopupLayout" />
     </action>

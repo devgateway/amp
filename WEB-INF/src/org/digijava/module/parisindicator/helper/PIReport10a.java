@@ -253,7 +253,14 @@ public class PIReport10a extends PIAbstractReport {
 				while (iterCal.hasNext()) {
 					auxRow = new PIReport10aRow();
 					AmpCalendar auxCalendar = iterCal.next();
-					if (PIConstants.MISSION.equalsIgnoreCase(auxCalendar.getEventType().getName())) {
+					String eventTypeName="";
+                    if(auxCalendar.getEventsType()!=null){
+                    	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(auxCalendar.getEventsType().getId());
+                    	if (ampCategoryValue != null){
+                    		eventTypeName=ampCategoryValue.getValue();
+                    	}
+                    }
+					if (PIConstants.MISSION.equalsIgnoreCase(eventTypeName)) {
 						Calendar cal = (Calendar) auxCalendar.getCalendarPK().getCalendar();
 						int year = new Integer(yearFormat.format(cal.getStartDate())).intValue();
 						// checking if the Mission is 'joint'

@@ -1,4 +1,4 @@
-package org.digijava.module.calendar.dbentity;
+package org.digijava.module.calendar.entity;
 
 public class AmpEventType {
     private Long id;

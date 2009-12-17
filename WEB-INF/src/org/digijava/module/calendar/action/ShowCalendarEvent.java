@@ -43,10 +43,10 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
-import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.RecurrCalEvent;
+import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
@@ -128,13 +128,11 @@ public class ShowCalendarEvent extends Action {
         }
 
         ceform.setCalendarTypes(calendarTypesList);
-        ceform.setEventTypesList(AmpDbUtil.getEventTypes());
-        if (ceform.getSelectedEventTypeId() != null && ceform.getSelectedEventTypeId() > 0) {
-            AmpEventType eventType = AmpDbUtil.getEventType(ceform.getSelectedEventTypeId());
-            if (eventType != null) {
-                ceform.setSelectedEventTypeName(eventType.getName());
-            }
+        if(ceform.getSelectedEventTypeId() != null && ceform.getSelectedEventTypeId() > 0){
+        	String eventTypeName=CategoryManagerUtil.getAmpCategoryValueFromDb(ceform.getSelectedEventTypeId()).getValue();
+        	ceform.setSelectedEventTypeName(eventTypeName);
         }
+        
         // selected calendar type
         Long selectedCalendarTypeId = ceform.getCalendarTypeId();
         if (selectedCalendarTypeId == null ||
@@ -377,7 +375,7 @@ public class ShowCalendarEvent extends Action {
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
-            if(ceform.getRecurrPeriod() != 0){           
+            if(ceform.getRecurrPeriod()!=null && ceform.getRecurrPeriod().longValue() != 0){           
 	            Set recEvent =new HashSet();
 	            RecurrCalEvent recurrEvent = new RecurrCalEvent();
 	            recurrEvent.setCalendar(calendar);

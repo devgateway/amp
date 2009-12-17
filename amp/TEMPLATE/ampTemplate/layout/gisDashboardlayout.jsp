@@ -11,6 +11,120 @@
  <script type="text/javascript">
        var donorWidget=false;
 </script>
+    <script type="text/javascript">
+        <!--
+        var lastTimeStamp;
+
+
+        function donorChanged(){
+            rechart();
+        }
+        function yearChanged(){
+            rechart();
+            if(donorWidget){
+                getTopTenDonorTable();
+            }
+        }
+        function rechart(){
+            lastTimeStamp = new Date().getTime();
+            var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
+            var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
+            sectorByDonorChartImageLoadDiv.style.display="block";
+            sectorByDonorChartImageDiv.style.display="none";
+            var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
+            removeAllChildren(chartImageMap);
+            var chartImage=document.getElementById('sectorByDonorChartImage');
+            //from year
+            var fy=document.getElementsByName('selectedFromYear')[0].value;
+            //to year
+            var ty=document.getElementsByName('selectedToYear')[0].value;
+            var d=document.getElementsByName('selectedDonor')[0].value;
+            var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
+            myUrl+=getLegendState();
+            myUrl+=getLabelState();
+            chartImage.src=myUrl;
+            removeAllChildren(sectorByDonorChartImageDiv);
+            sectorByDonorChartImageDiv.appendChild(chartImage);
+            //alert(myUrl);
+        }
+
+
+
+        function loadSectorDonorMap(){
+            getSectorDonorGraphMap(lastTimeStamp);
+        }
+
+        function constructSectorDonorMapUrl(timestmp){
+        <digi:context name="donorSectorMap" property="context/widget/getDonorSectorMap.do" />
+          var url="${donorSectorMap}";
+          if (typeof lastTimeStamp != 'undefined') {
+             url+='~timestamp='+timestmp;
+         }
+            return url;
+         }
+
+         function getSectorDonorGraphMap(timestamp){
+             var url=constructSectorDonorMapUrl(timestamp);
+             var async=new Asynchronous();
+             async.complete=updateSectorDonorMapCallBack;
+             async.call(url);
+           }
+          function removeAllChildren(parent){
+                var childrenAreas=parent.childNodes;
+                if(childrenAreas!=null){
+                while (parent.firstChild) {
+                     parent.removeChild(parent.firstChild);
+                   }
+            }
+          }
+
+          function updateSectorDonorMapCallBack(status, statusText, responseText, responseXML){
+             var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
+             var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
+             var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
+             removeAllChildren(chartImageMap);
+             var areas=responseXML.getElementsByTagName('area');
+             for(var i=0;i<areas.length;i++){
+             var area=document.createElement('area');
+             area.setAttribute("alt", " ");
+             area.setAttribute("shape", "poly");
+             area.setAttribute("coords", areas[i].getAttribute("coords"));
+             var url= areas[i].getAttribute("href");
+             area.onclick = (function(par) {
+             return function(){showSectorDonorWidgetReport(par) }
+             })(url);
+             chartImageMap.appendChild(area);
+              }
+              sectorByDonorChartImageLoadDiv.style.display="none";
+              sectorByDonorChartImageDiv.style.display="block";
+             }
+
+
+        function showSectorDonorWidgetReport(url) {
+          var popup = window.open(url, "SectorDonorWidgetReport", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+          popup.focus();
+        }
+
+
+        function getLegendState(){
+         var chkLegend = document.getElementsByName('showLegends')[0];
+         if (chkLegend.checked){
+            return '~showLegend=true'
+         }else{
+         return '~showLegend=false'
+          }
+         }
+         function getLabelState(){
+           var chkLabel = document.getElementsByName('showLabels')[0];
+           if (chkLabel.checked){
+               return '~showLabel=true'
+             }else{
+            return '~showLabel=false'
+            }
+           }
+
+                                                                                                          //-->
+    </script>
 <style>
     #content{
         height: 100%;
@@ -311,134 +425,13 @@
         </TABLE>
 
                                             
-
-                                                <script type="text/javascript">
-                                                    <!--
-                                                    var lastTimeStamp;
-                                                    
-
-                                                    function donorChanged(){
-                                                        rechart();
-                                                    }
-                                                    function yearChanged(){
-                                                        rechart();
-                                                        if(donorWidget){
-                                                             getTopTenDonorTable();
-                                                        }
-                                                    }
-                                                    function rechart(){
-                                                        lastTimeStamp = new Date().getTime();
-                                                        var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
-                                                        var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
-                                                        sectorByDonorChartImageLoadDiv.style.display="block";
-                                                        sectorByDonorChartImageDiv.style.display="none";
-                                                        var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
-                                                        removeAllChildren(chartImageMap);
-                                                        var chartImage=document.createElement("img");
-                                                        //from year
-                                                        var fy=document.getElementsByName('selectedFromYear')[0].value;
-                                                        //to year
-                                                        var ty=document.getElementsByName('selectedToYear')[0].value;
-                                                        var d=document.getElementsByName('selectedDonor')[0].value;
-                                                        var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
-                                                        myUrl+=getLegendState();
-                                                        myUrl+=getLabelState();
-                                                        chartImage.onload=loadSectorDonorMap;
-                                                        chartImage.useMap = '#sectorByDonorChartImageMap';
-                                                        chartImage.border=0;
-                                                        chartImage.src=myUrl;
-                                                        chartImage.setAttribute("alt", " ")
-                                                        removeAllChildren(sectorByDonorChartImageDiv);
-                                                        sectorByDonorChartImageDiv.appendChild(chartImage);
-                                                        //alert(myUrl);
-                                                    }
-
-
-
-                                                    function loadSectorDonorMap(){
-                                                        getSectorDonorGraphMap(lastTimeStamp);
-                                                    }
-
-                                                    function constructSectorDonorMapUrl(timestmp){
-                                                    <digi:context name="donorSectorMap" property="context/widget/getDonorSectorMap.do" />
-                                                            var url="${donorSectorMap}";
-                                                            url+='~timestamp='+timestmp;
-                                                            return url;
-                                                        }
-
-                                                        function getSectorDonorGraphMap(timestamp){
-                                                            var url=constructSectorDonorMapUrl(timestamp);
-                                                            var async=new Asynchronous();
-                                                            async.complete=updateSectorDonorMapCallBack;
-                                                            async.call(url);
-                                                        }
-                                                        function removeAllChildren(parent){
-                                                            var childrenAreas=parent.childNodes;
-                                                            if(childrenAreas!=null){
-                                                                while (parent.firstChild) {
-                                                                    parent.removeChild(parent.firstChild);
-                                                                }
-                                                            }
-                                                        }
-
-                                                        function updateSectorDonorMapCallBack(status, statusText, responseText, responseXML){
-                                                            var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
-                                                            sectorByDonorChartImageLoadDiv.style.display="none"
-                                                            var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
-                                                            sectorByDonorChartImageDiv.style.display="block";
-                                                            var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
-                                                            removeAllChildren(chartImageMap);
-                                                            var areas=responseXML.getElementsByTagName('area');
-                                                            for(var i=0;i<areas.length;i++){
-                                                                var area=document.createElement('area');
-                                                                area.setAttribute("alt", " ");
-                                                                area.setAttribute("shape", "poly");
-                                                                area.setAttribute("coords", areas[i].getAttribute("coords"));
-                                                                var url= areas[i].getAttribute("href");
-                                                                area.onclick = (function(par) {
-                                                                    return function(){showSectorDonorWidgetReport(par) }
-                                                                })(url);
-                                                                chartImageMap.appendChild(area);
-                                                            }
-
-
-                                                        }
-
-
-                                                        function showSectorDonorWidgetReport(url) {
-                                                            var popup = window.open(url, "SectorDonorWidgetReport", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
-                                                            popup.focus();
-                                                        }
-
-
-                                                        function getLegendState(){
-                                                            var chkLegend = document.getElementsByName('showLegends')[0];
-                                                            if (chkLegend.checked){
-                                                                return '~showLegend=true'
-                                                            }else{
-                                                                return '~showLegend=false'
-                                                            }
-                                                        }
-                                                        function getLabelState(){
-                                                            var chkLabel = document.getElementsByName('showLabels')[0];
-                                                            if (chkLabel.checked){
-                                                                return '~showLabel=true'
-                                                            }else{
-                                                                return '~showLabel=false'
-                                                            }
-                                                        }
-
-                                                   
-                                                        addLoadEvent(rechart);
-                                                        addLoadEvent(resizeDivs);
-                                                        addLoadEvent(delBody);
-                                                       
-                                                      
-                                                        //-->
-                                                </script>
+<script type="text/javascript">
+       addLoadEvent(resizeDivs);
+       addLoadEvent(delBody);
+</script>
+                                                
                                                
                                          
-
     </BODY>
 </HTML>
 

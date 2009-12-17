@@ -34,8 +34,8 @@ public class GetSectoByDonorWidgetMap extends Action {
 
 		ChartUtil.GraphMapRecord rec= (ChartUtil.GraphMapRecord) session.getAttribute(ChartUtil.LATEST_GRAPH_MAP);
 
-		if (rec !=null && tForm.getTimestamp() !=null){
-			if (tForm.getTimestamp() !=null && tForm.getTimestamp().equals(rec.timestamp)){
+		if (rec !=null){
+			if (tForm.getTimestamp()==null||(tForm.getTimestamp() !=null && tForm.getTimestamp().equals(rec.timestamp))){
 				try {
 					response.getWriter().print(rec.map);
 				} catch (IOException e) {

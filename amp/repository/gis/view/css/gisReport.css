@@ -32,3 +32,15 @@ div.gisReportWarning {
 	text-align : center;
 	padding: 0px;
 }
+
+.tableMainHeader{
+    color:#FFFFFF;
+    font-weight:bold;
+    background:#222E5D;
+    font-size:11px
+}
+
+.tableHeader{
+background-color: #4A5A80;
+color:#FFFFFF;
+}

@@ -29,6 +29,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
@@ -1564,6 +1565,21 @@ function showFilter(){
 <script language="javascript" type="text/javascript">
 
 	var localIndicators=[];
+
+    function selectAllIndicators(){
+        $("input[@name^='selIndicators']").each(
+        function (i){
+             this.checked=true;
+        } 
+    );
+    }
+    function deselectAllIndicators(){
+    var allChkboxes=$("input[@name^='selIndicators']:checked").each(
+    function (i){
+        this.checked=false;
+    }
+    );
+    }
 	
 
 	function getSelectedIndicators(){
@@ -1894,3 +1910,6 @@ function showFilter(){
 </div>
 
 </digi:form>
+<script type="text/javascript">
+       addLoadEvent(delBody);
+</script>

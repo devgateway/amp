@@ -382,11 +382,11 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>MDXQueryServlet</servlet-name>
-		<url-pattern>/mdxquery</url-pattern>
+		<url-pattern>/mdxquery.out</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>MondrianXmlaServlet</servlet-name>
-		<url-pattern>/xmla</url-pattern>
+		<url-pattern>/xmla.out</url-pattern>
 	</servlet-mapping>
 	<taglib>
 		<taglib-uri>http://www.tonbeller.com/wcf</taglib-uri>

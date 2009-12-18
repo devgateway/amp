@@ -168,8 +168,11 @@
                                     <c:when test="${orgProfile.type==6}">
                                         <digi:trn>Regional Breakdown</digi:trn>
                                     </c:when>
-                                    <c:otherwise>
+                                     <c:when test="${orgProfile.type==7}">
                                         <digi:trn>Paris Declaration</digi:trn>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <digi:trn>Unknown</digi:trn>
                                     </c:otherwise>
                                 </c:choose>
                             </c:set>
@@ -177,10 +180,10 @@
                              &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;                  
 						</td>
                           <td nowrap="nowrap" align="center" height="35px">
-                          <c:if test="${orgProfile.type == 1 || orgProfile.type == 7}">
+                          <c:if test="${orgProfile.type == 1 || orgProfile.type == 7||orgProfile.type == 2 ||orgProfile.type == 4 }">
                           		<digi:trn>Table</digi:trn>
                           </c:if>
-                          <c:if test="${orgProfile.type == 2 || orgProfile.type == 4 || orgProfile.type == 3 || orgProfile.type == 6 || orgProfile.type == 5}">
+                          <c:if test="${orgProfile.type == 3 ||  orgProfile.type == 6 || orgProfile.type == 5}">
                           		 <digi:trn>Chart</digi:trn>
                           </c:if>
                             &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;

@@ -1,8 +1,3 @@
-<%@page import="org.digijava.module.aim.dbentity.AmpLocation"%>
-<%@page import="org.digijava.module.aim.dbentity.AmpActivityLocation"%>
-<%@page import="org.digijava.module.aim.dbentity.AmpSector"%>
-
-
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -39,28 +34,28 @@
 
 		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;background:#FFFFFF" border="1" bordercolor="#000000">
 			<tr>
-				<td width="120" style="color:#FFFFFF;font-weight:bold;background:#222E5D;font-size:11px">Sector</td>
+				<td width="120" class="tableMainHeader">Sector</td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="sectorName"/></td>
 			</tr>
 			
                         <tr>
-				<td style="color:#FFFFFF;font-weight:bold;background:#222E5D;font-size:11px">Donor</td>
+				<td class="tableMainHeader">Donor</td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="donorName"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold;background:#222E5D;font-size:11px">Year Range</td>
+				<td class="tableMainHeader">Year Range</td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="startYear"/> - <bean:write name="sectorDonorWidgetReportForm" property="endYear"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold;background:#222E5D;font-size:11px">Actual Commitments</td>
+				<td class="tableMainHeader">Actual Commitments</td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold;background:#222E5D;font-size:11px">Actual Disbursements</td>
+				<td class="tableMainHeader">Actual Disbursements</td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold;background:#222E5D;font-size:11px">Actual Expenditures</td>
+				<td class="tableMainHeader tableHeadColorStyle">Actual Expenditures</td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualExpendituresStr"/></td>
 			</tr>
 			<tr>
@@ -82,14 +77,14 @@
 						<thead>
 
 						<tr>
-								<td colspan="4" style="overflow:auto; background-color: #4A5A80; color:#FFFFFF;" >
+								<td colspan="4" class="tableHeader" >
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Overall information</digi:trn>
 										</div>
 									</div>
 								</td>
-								<td colspan="3" style="overflow:auto; background-color: #4A5A80; color:#FFFFFF;">
+								<td colspan="3" class="tableHeader">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
                                                                                     <digi:trn>For selected sector/donor</digi:trn>
@@ -100,42 +95,42 @@
 
 
 						<tr>
-								<td width="30%" style="overflow:auto; background-color: #222E5D; color:#FFFFFF;">
+								<td width="30%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Activity</digi:trn>
 										</div>
 
 								</td>
-								<td width="20%" style="overflow:auto; background-color: #222E5D; color:#FFFFFF;">
+								<td width="20%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Sector(s)</digi:trn>
 										</div>
 
 								</td>
-								<td width="20%" style="overflow:auto; background-color: #222E5D; color:#FFFFFF;">
+								<td width="20%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
 											Donor(s)
 										</div>
 
 								</td>
-								<td width="10%" style="overflow:auto; background-color: #222E5D; color:#FFFFFF;">
+								<td width="10%"  class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
 											Commitments
 										</div>
 
 								</td>
-								<td width="10%" style="overflow:auto; background-color: #222E5D; color:#FFFFFF;">
+								<td width="10%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
 											Disbursements
 										</div>
 
 								</td>
-								<td width="10%" style="overflow:auto; background-color: #222E5D; color:#FFFFFF;">
+								<td width="10%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
 											Expenditures
@@ -150,9 +145,9 @@
                                               
 						<logic:iterate name="sectorDonorWidgetReportForm" property="actSectorDonorFundingInfo" id="activitySectorDonorFunding">
 							<tr>
-								<td width="30%" valign="top" style="overflow:auto;" height="20px">
-									<div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+								<td width="30%"  height="40px">
+                                    <div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal"  style="overflow: auto">
 											<a title="<bean:write name="activitySectorDonorFunding" property="activity.name"/>" href="javascript:showSelActivity(<bean:write name="activitySectorDonorFunding" property="activity.ampActivityId"/>);">
 												<bean:write name="activitySectorDonorFunding" property="activity.name"/>
 											</a>
@@ -160,12 +155,12 @@
 									</div>
 								</td>
 							
-								<td width="20%" align="left" style="overflow:auto;">
+								<td width="20%" align="left" height="40px">
 									<div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" style="overflow: auto">
 											<logic:present name="activitySectorDonorFunding" property="sectors">
 												<logic:notEmpty name="activitySectorDonorFunding" property="sectors">
-													<ul style="margin:0 0 0 20px; padding:0;">
+													<ul>
                                                                                                             <c:forEach var="sector" items="${activitySectorDonorFunding.sectors}">
 														<li>
                                                                                                                     <c:out value="${sector.name}"/>
@@ -178,12 +173,12 @@
 										</div>
 									</div>
 								</td>
-								<td width="20%" align="left" style="overflow:auto;">
+                                <td width="20%" align="left"  height="40px" >
 									<div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" style="overflow: auto">
 											<logic:present name="activitySectorDonorFunding" property="donorOrgs">
 												<logic:notEmpty name="activitySectorDonorFunding" property="donorOrgs">
-													<ul style="margin:0 0 0 20px; padding:0;">
+													<ul>
 													 <c:forEach var="donor"   items="${activitySectorDonorFunding.donorOrgs}">
 														<li>
 														 <c:out value="${donor.name}"/>
@@ -195,7 +190,7 @@
 										</div>
 									</div>
 								</td>
-								<td width="10%" style="overflow:auto;">
+								<td width="10%" height="40px">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
 									<logic:present name="activitySectorDonorFunding" property="fmtCommitment">
@@ -210,7 +205,7 @@
 
 									</div>
 								</td>
-								<td width="10%" style="overflow:auto;">
+								<td width="10%"  height="40px">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
 									<logic:present  name="activitySectorDonorFunding" property="fmtDisbursement">
@@ -224,7 +219,7 @@
 									</div>
 									</div>
 								</td>
-								<td width="10%" style="overflow:auto;">
+								<td width="10%"  height="40px">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
 									<logic:present name="activitySectorDonorFunding" property="fmtExpenditure">

@@ -99,10 +99,7 @@
 	<tr>
 		<td colspan="3">      
                     <div id="sectorByDonorChartImageDiv" style="display:none">
-                        <c:set var="sectorChartCompeletUrl">
-                            /widget/showSectorByDonorChart.do~timestamp=
-                        </c:set>
-                        <img alt="" id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do" onload="loadSectorDonorMap()" usemap="#sectorByDonorChartImageMap" border="0">
+                        <img alt="" id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do" onload="loadSectorDonorMap()" usemap="#sectorByDonorChartImageMap" border="0" style="cursor: pointer">
                     </div>
                     <div id="sectorByDonorChartImageDivLoad">
                         <img src='<digi:file src="images/amploading.gif"/>' alt="">

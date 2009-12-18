@@ -36,6 +36,9 @@
 									</c:forEach>
 								</td>
 							</tr>
+                            <tr>
+                                <td><input type="button" value="<digi:trn>Select All</digi:trn>" onclick="selectAllIndicators()"><input type="button" value="<digi:trn>None</digi:trn>" onclick="deselectAllIndicators()"></td>
+                            </tr>
 						</table>
 					</td>
 				</tr>

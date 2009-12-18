@@ -99,12 +99,12 @@
 	<tr>
 		<td colspan="3">      
                     <div id="sectorByDonorChartImageDiv" style="display:none">
-                        <img alt="" id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do" onload="loadSectorDonorMap()" usemap="#sectorByDonorChartImageMap" border="0" style="cursor: pointer">
+                        <img alt="" id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do" onload="loadSectorDonorMap()" usemap="#sectorByDonorChartImageMap" border="0" >
                     </div>
                     <div id="sectorByDonorChartImageDivLoad">
                         <img src='<digi:file src="images/amploading.gif"/>' alt="">
                     </div>
-                    <MAP name="sectorByDonorChartImageMap" id="sectorByDonorChartImageMap">
+                          <MAP name="sectorByDonorChartImageMap" id="sectorByDonorChartImageMap">
                     </MAP>
 		</td>
 	</tr>

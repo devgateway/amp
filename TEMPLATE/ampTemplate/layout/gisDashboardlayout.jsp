@@ -89,10 +89,7 @@
              area.setAttribute("alt", " ");
              area.setAttribute("shape", "poly");
              area.setAttribute("coords", areas[i].getAttribute("coords"));
-             var url= areas[i].getAttribute("href");
-             area.onclick = (function(par) {
-             return function(){showSectorDonorWidgetReport(par) }
-             })(url);
+             area.setAttribute("href", "javascript:showSectorDonorWidgetReport('"+areas[i].getAttribute("href")+"')");
              chartImageMap.appendChild(area);
               }
               sectorByDonorChartImageLoadDiv.style.display="none";

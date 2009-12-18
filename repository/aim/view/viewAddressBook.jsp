@@ -522,7 +522,14 @@ html>body #mainEmpty {
 																						</td>
 																						<td width="5px">&nbsp;</td>																	
 																						<td height="30" width="100">
-																							${cont.organisationName}
+                                                                                            <ul>
+                                                                                                <c:if test="${not empty cont.organisationName}">
+                                                                                                    <li>${cont.organisationName}</li>
+                                                                                                   </c:if>
+                                                                                                    <c:forEach var="organization" items="${cont.organizations}">
+                                                                                                    <li>${organization}</li>
+                                                                                                </c:forEach>
+                                                                                            </ul>
 																						</td>
 																						<td height="30" width="100">
 																							${cont.title}

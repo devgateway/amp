@@ -53,10 +53,10 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
-import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -123,10 +123,8 @@ import org.hibernate.Transaction;
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
         
-           public static String filter(String text) {
-
-		String result = null;
-             
+    public static String filter(String text) {
+		String result = null;             
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
 			result = result.replaceAll(">", "&gt;");
@@ -135,13 +133,10 @@ public class DbUtil {
 			result = result.replaceAll("\"", "&quot;");
 			
 		}
-                
-
 		return result;
-
 	}
-	public static String getDescParsed(String str)
-	{
+    
+	public static String getDescParsed(String str) {
 		StringBuffer strbuff = new StringBuffer();
 		char[] ch = new char[str.length()];
 
@@ -4618,6 +4613,24 @@ public class DbUtil {
         }
         return grp;
     }
+    
+    public static int getOrgGroupsAmount(String groupName,Long groupId) throws Exception{
+    	Session session = null;
+    	Query qry =null;
+    	int count=0;
+    	try {
+    		session = PersistenceManager.getRequestDBSession();
+            String queryString = "select count(*) from " + AmpOrgGroup.class.getName()+ " grp " + "where grp.orgGrpName='"+groupName+"'";
+            if(groupId!=null && groupId.longValue()!=0){
+            	queryString += " and grp.ampOrgGrpId!="+groupId;
+            }
+            qry = session.createQuery(queryString);
+            count=((Integer)qry.uniqueResult()).intValue();
+		} catch (Exception e) {
+			logger.error("unable to get org. group count " + e);
+		}
+    	return count;
+    }
 
     public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(Long orgType) {
         Session session = null;
@@ -4756,6 +4769,24 @@ public class DbUtil {
             logger.debug("Exception from getOrgType() : " + e.getMessage());
         }
         return ot;
+    }
+    
+    public static int getOrgTypesAmount(String name,Long groupId) throws Exception{
+    	Session sess = null;
+        Query qry = null;
+        int count=0;
+        try {
+        	 sess = PersistenceManager.getRequestDBSession();
+             String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where o.orgType='"+name+"'";
+             if(groupId!=null && groupId.longValue()!=0){
+            	 queryString += " and o.ampOrgTypeId!="+groupId;
+             }
+             qry = sess.createQuery(queryString);
+             count=((Integer)qry.uniqueResult()).intValue();
+		} catch (Exception e) {
+			logger.error("Exception while getting org types amount:" +e.getMessage());
+		}
+        return count;
     }
 
     public static Collection getOrgByCode(String action, String code, Long id) {

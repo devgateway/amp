@@ -185,7 +185,7 @@
                               </td>
                             </tr>
                           </feature:display>
-                          <module:display name="Message Manager" parentModule="ADMINISTRATIVE SECTION">
+                         <feature:display name="Message Manager" module="ADMIN">
                           	<tr>
                           		<td class="f-names" nowrap="nowrap">
                                 <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -197,7 +197,7 @@
                                 </digi:link>
                               </td>
                           	</tr>
-                          </module:display>
+                          </feature:display> 
                           	<feature:display name="Admin Topics Help" module="HELP">
                           	<tr>
                           		<td class="f-names" nowrap="nowrap">

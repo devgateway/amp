@@ -43,7 +43,7 @@ public class Constants {
 	
 	public static final String CATEG_VALUE_ACTIVITY_STATUS = "activity_status";
 	public static final String CATEG_VALUE_IMPLEMENTATION_LEVEL = "implementation_level";
-	public static final String CATEG_VALUE_IMPLEMENTATION_LOCATION = "implementation_location";
+		public static final String CATEG_VALUE_IMPLEMENTATION_LOCATION = "implementation_location";
 	public static final String CATEG_VALUE_TYPE_OF_ASSISTANCE ="type_of_assistence";
 	public static final String CATEG_VALUE_FINANCING_INSTRUMENT = "financing_instrument";
 	public static final String CATEG_VALUE_MTEF_PROJECTION = "mtef_projection";

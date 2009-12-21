@@ -55,7 +55,6 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 	
 	public String getQueryText() {
 		String result = QueryThread.getQuery(); 
-		result = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1  AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ('edited','approved') AND amp_team_id IS NOT NULL AND amp_team_id IN (12,15,16,19)  OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN (12,15,16,19) ) OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN (6647,6648) AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN ('edited','approved') ) OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN (6647,6648) AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN ('edited','approved') ))";
 		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
 		Matcher m = p.matcher(result);
 		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
@@ -63,10 +62,8 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 	}
 	
 	private String Translate(String shema){
-		Long siteId; //= QueryThread.getSite().getId();
-		String locale;// = QueryThread.getLocale().getCode();
-		siteId = new Long(3);
-		locale = "en";
+		Long siteId = QueryThread.getSite().getId();
+		String locale = QueryThread.getLocale().getCode();
 		try {
 			shema = shema.replaceAll("#Activity#", TranslatorWorker.translateText(MoConstants.ACTIVITY, locale, siteId));
 			shema = shema.replaceAll("#Primary_Program#", TranslatorWorker.translateText(MoConstants.PRIMARY_PROGRAMS, locale, siteId));

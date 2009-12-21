@@ -53,7 +53,7 @@ public class ViewMainProjectDetails extends TilesAction {
 			String documentsTabColor = Constants.INACTIVE_MAIN_TAB_CLASS;
 			formBean.setAmpActivityId(id.longValue());
 			formBean.setTabIndex(tabIndex);
-			AmpActivity ampActivity = ActivityUtil.getProjectChannelOverview(id);
+			AmpActivity ampActivity = ActivityUtil.loadActivity(id);
 			if(ampActivity!=null){
 				if (ampActivity.getProjectComments() == null)
 					formBean.setProjectComments("");
@@ -102,7 +102,7 @@ public class ViewMainProjectDetails extends TilesAction {
 			formBean.setDocumentsTabColor(documentsTabColor);
 			
 			//Long id = new Long(request.getParameter("ampActivityId"));
-			AmpActivity activity = ActivityUtil.getAmpActivity(id);
+			AmpActivity activity = ActivityUtil.loadActivity(id);
 			//AmpActivity ampact = ActivityUtil.getAmpActivity(id);
 			String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
 			TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");

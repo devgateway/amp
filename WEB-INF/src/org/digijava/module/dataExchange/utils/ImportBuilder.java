@@ -3,10 +3,12 @@
  */
 package org.digijava.module.dataExchange.utils;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +32,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.dgfoundation.amp.error.AMPError;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -79,6 +83,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.dataExchange.Exception.AmpImportException;
 import org.digijava.module.dataExchange.action.ImportValidationEventHandler;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
@@ -104,6 +109,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.springframework.util.FileCopyUtils;
 import org.xml.sax.SAXException;
+
 
 /**
  * @author dan
@@ -226,7 +232,6 @@ public class ImportBuilder {
 		//approval status Senegal change
 		
 		activity.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
-		
 		
 		//assigning org
 		
@@ -920,11 +925,9 @@ public class ImportBuilder {
 		}
 		
 	}
-	private boolean isFreeTextTypeValid(FreeTextType title) {
-		// TODO Auto-generated method stub
-		if(title != null && title.getValue()!=null) return true;
-		return false;
-	}
+
+	
+
 
 	private Collection getFundingXMLtoAMP(ActivityType actType, AmpActivity activity, HashMap hm) throws Exception{
 		ArrayList<AmpFunding> fundings= null;
@@ -934,6 +937,7 @@ public class ImportBuilder {
 			
 			
 			
+
 			FundingType funding = (FundingType) it.next();
 			CodeValueType fundingOrg=funding.getFundingOrg();
 			AmpFunding ampFunding = new AmpFunding();
@@ -978,6 +982,7 @@ public class ImportBuilder {
 		}
 		else activity.getOrgrole().addAll(orgRole);
 		
+
 		return fundings;
 	}
 	
@@ -1023,9 +1028,10 @@ public class ImportBuilder {
 		// TODO Auto-generated method stub
 		for (Iterator it = fundingsDetails.iterator(); it.hasNext();) {
 			FundingDetailType fundDet = (FundingDetailType) it.next();
-			
+
 			//senegal
 			if(fundDet.getAmount().compareTo(new BigDecimal(0)) == 0 ) continue;
+			
 			
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
 	
@@ -1284,24 +1290,8 @@ public class ImportBuilder {
 		return null;
 	}
 	
-	private boolean isValidLang(String lang){
+
 		
-		//TODO: validate lang based on dg_locale code for languages
-		if(lang!=null && lang.length() == 2 && !"".equals(lang))
-			return true;
-		return false;
-		
-	}
-	
-	private boolean isStringValid(String lang ){
-		
-		//TODO: validate lang based on dg_locale code for languages
-		if(lang != null && !"".equals(lang.trim()))
-			return true;
-		return false;
-		
-	}
-	
 	private AmpCategoryValue addCategValueForCodeValueType(CodeValueType element, HashMap hm, String fieldType, String categoryKey ){
 		//TODO: refresh the cache!!!!
 		AmpCategoryValue acv=null;
@@ -1441,9 +1431,10 @@ public class ImportBuilder {
 				
 				//contact information
 				processStep7(activityImported, activity,request, "en",hm);
-				
+
 				//custom fields
 				processStep8(activityImported, activity,request, "en",hm);
+				
 				
 				DataExchangeUtils.saveComponents(activity, request, tempComps);
 				DataExchangeUtils.saveActivity(activity, request);
@@ -1526,126 +1517,136 @@ public class ImportBuilder {
         return true;
 		
 	}
-//	
-//
-//	public boolean checkXMLIntegrity(String xsdPath, InputStream inputS, InputStream inputStream1) {
-//		// TODO Auto-generated method stub
-//		
-//		boolean isOk = true;
-//		this.setIsOk(true);
-//		Activities acts = null;
-//		
-//		try {
-//		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
-//        Unmarshaller m = jc.createUnmarshaller();
-//        FeaturesUtil.errorLog="";
-//        boolean xsdValidate = true;
-//        	
-//        	if(xsdValidate){
-//                // create a SchemaFactory that conforms to W3C XML Schema
-//                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-//
-//                 // parse the purchase order schema
-//                 Schema schema = sf.newSchema(new File(xsdPath));
-//
-//                 m.setSchema(schema);
-//                 // set your error handler to catch errors during schema construction
-//                 // we can use custom validation event handler
-//                 m.setEventHandler(new ImportValidationEventHandler());
-//           }
-//        	acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.inputStream);
-//        } 
-//		catch (SAXException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			isOk = false;
-//			this.setIsOk(false);
-//		}
-//        catch (javax.xml.bind.JAXBException jex) {
-//        	jex.printStackTrace();
-//         
-//        	String line = null;
-//            String result="";
-//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//            try {
-//            	   FileCopyUtils.copy(inputStream1, outputStream);
-//               } catch (IOException e) {
-//    			// TODO Auto-generated catch block
-//    			e.printStackTrace();
-//               }
-//            result = outputStream.toString();
-//            String[] s =result.split("<activity");
-//            String header, footer=null;
-//            header = s[0];
-//            String[] forFooter = s[s.length-1].split("<spider");
-//            footer = "<spider"+ forFooter[1];
-//            s[s.length-1] = forFooter[0];
-//            
-//            ArrayList<InputStream> activitiesChunks = new ArrayList<InputStream>();
-//            for (int i = 1; i < s.length; i++) {
-//				String newActivity = "";
-//				newActivity+=header+"<activity"+s[i]+footer;
-//				activitiesChunks.add(new ByteArrayInputStream(newActivity.getBytes()));
-//			}
-//            if(this.generatedActivities == null) this.generatedActivities = new ArrayList<InputStream>();
-//            this.generatedActivities = activitiesChunks;
-//            isOk = false;
-//            this.setIsOk(false);
-//            logger.error("JAXB Exception!") ;
-//        } 
-//       this.activities = acts;
-//	  return isOk;
-//	}
+
+	public boolean splitInChunks(OutputStream outputStream) {
+		
+		String result="";
+        result = outputStream.toString();
+        String[] s =result.split("<activity");
+        String header, footer=null;
+        header = s[0];
+        String[] forFooter = null;
+        if(s[s.length-1].contains("<spider"))
+        	{
+        		forFooter = s[s.length-1].split("<spider");
+        		footer = "<spider"+ forFooter[1];
+        	}
+        else{
+        	forFooter = s[s.length-1].split("</activities>");
+    		footer = "</activities>";
+        }
+        	
+        s[s.length-1] = forFooter[0];
+        
+        
+        if(this.getImportLogs() == null || this.getImportLogs().size() < 1) this.setImportLogs(new ArrayList<AmpDEImportLog>());
+        String newActivity = "";
+        if(s.length <2) return false;
+        for (int i = 1; i < s.length; i++) {
+			newActivity="";
+        	newActivity+=header+"<activity"+s[i]+footer;
+        	AmpDEImportLog ilog = new AmpDEImportLog();
+        	String content = s[i];
+        	String[] aux = content.split("<title");
+        	String[] aux1 ;
+        	String[] aux2 ;
+        	if(aux.length < 2){
+        		ilog.addError("JAXB Exception - XML file is damaged for this activity - NO TITLE");
+        		ilog.setObjectNameLogged("NoNameActivity");
+        		this.getActivityList().add("NoNameActivity");
+        	}
+        	else{
+        		aux1 = aux[1].split(">",2);
+        		if(aux1.length == 2)
+        			aux2 = aux1[1].split("</title>");
+        		else aux2 = aux1[0].split("</title>");
+        		ilog.setObjectNameLogged(i+". "+aux2[0]);
+        		this.getActivityList().add(aux2[0]);
+        	}
+
+        	ilog.setCounter(i);
+        	
+        	ilog.setObjectTypeLogged("IDMLActivity");
+        	OutputStream outputStream1 = new ByteArrayOutputStream();
+        	//outputStream = new ByteArrayOutputStream();
+        	try {
+				FileCopyUtils.copy(new ByteArrayInputStream(newActivity.getBytes()), outputStream1);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	ilog.setOutputStream(outputStream1);
+        	this.getImportLogs().add(ilog);
+        	//return true;
+		}
+        return true;
+		
+	}
 
 	
-	public boolean checkXMLIntegrityNoChunks(String xsdPath, InputStream inputS) {
+	
+	public void checkXMLIntegrityNoChunks(String xsdPath, InputStream inputS, String locale, Long siteId) throws AmpImportException{
 		// TODO Auto-generated method stub
 		
 		boolean isOk = true;
-		//this.setIsOk(true);
 		Activities acts = null;
 		
 		try {
-		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
-        Unmarshaller m = jc.createUnmarshaller();
-        FeaturesUtil.errorLog="";
-        boolean xsdValidate = true;
-        	
-        	if(xsdValidate){
-                // create a SchemaFactory that conforms to W3C XML Schema
-                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-                 // parse the purchase order schema
-                 Schema schema = sf.newSchema(new File(xsdPath));
-
-                 m.setSchema(schema);
-                 // set your error handler to catch errors during schema construction
-                 // we can use custom validation event handler
-                 m.setEventHandler(new ImportValidationEventHandler());
-           }
-        	acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(inputS);
+			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
+	        Unmarshaller m = jc.createUnmarshaller();
+	        FeaturesUtil.errorLog="";
+	        	
+	         // create a SchemaFactory that conforms to W3C XML Schema
+	        SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	         // parse the purchase order schema
+	        Schema schema = sf.newSchema(new File(xsdPath));
+	
+	        m.setSchema(schema);
+	         // set your error handler to catch errors during schema construction
+	         // we can use custom validation event handler
+	        m.setEventHandler(new ImportValidationEventHandler());
+	        acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(inputS);
         } 
 		catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			isOk = false;
-			//this.setIsOk(false);
+            logger.error("SAX Exception!") ;
 		}
         catch (javax.xml.bind.JAXBException jex) {
         	jex.printStackTrace();
-        	
             logger.error("JAXB Exception!") ;
+            isOk = false;
         } 
-        this.activities = acts;
-	  return isOk;
+	  if(!isOk){
+		  
+		  String errMessage = "";
+		try {
+			 errMessage = TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again", locale, siteId);
+			} catch (WorkerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		throw new AmpImportException(errMessage, 2);
+	  }
+	  if( !"".equals(FeaturesUtil.errorLog) ) {
+		  String errMessage = "";
+			try {
+				 errMessage = TranslatorWorker.translateText("The file you have uploaded is not IDML compliant. Please verify it and try upload again", locale, siteId)+" \n "+ FeaturesUtil.errorLog ;
+				} catch (WorkerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			throw new AmpImportException(errMessage, 2);
+	  }
+	  
 	}
-
-	public void generateLogForActivities(String path) {
+	public void generateLogForActivities(String path, String locale, Long siteId) {
 		// TODO Auto-generated method stub
 		Activities acts = null;
 		for (Iterator it = this.getImportLogs().iterator(); it.hasNext();) {
 			AmpDEImportLog iLog = (AmpDEImportLog) it.next();
-			FeaturesUtil.errorLog = "";
+			//FeaturesUtil.errorLog = "";
 			boolean ok= false;
 			try {
 				JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
@@ -1666,6 +1667,9 @@ public class ImportBuilder {
 		                 m.setEventHandler(new ImportValidationEventHandler());
 		           }
 		        	acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(iLog.getInputStream());
+		        	
+		        	validateFields(iLog, acts, locale, siteId);
+		        	
 		        	ok = true;
 		        } 
 				catch (SAXException e) {
@@ -1688,6 +1692,88 @@ public class ImportBuilder {
 		
 		
 	}
+
+	
+	
+	
+	private void validateFields(AmpDEImportLog iLog, Activities acts, String locale, Long siteId) {
+		// TODO Auto-generated method stub
+		
+		String error="";
+		if(activities !=null && acts.getActivity() !=null)
+			for (Iterator<ActivityType> it = acts.getActivity().iterator(); it.hasNext();) {
+				error = "";
+				ActivityType activityImported = (ActivityType) it.next();
+				
+				//title
+				try {
+					validate(activityImported.getTitle());
+				} catch (AmpImportException e) {
+					try {
+						error = TranslatorWorker.translateText("Title "+e.getMessage(), locale, siteId);
+					} catch (WorkerException e1) {
+						e1.printStackTrace();
+					}
+					iLog.addError(error);
+				}
+				
+				//Status
+				try {
+					validate(activityImported.getStatus());
+				} catch (AmpImportException e) {
+					try {
+						error = TranslatorWorker.translateText("Status "+e.getMessage(), locale, siteId);
+					} catch (WorkerException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					iLog.addError(error);
+				}
+				
+				
+				activityImported.getSectors();
+			}
+		
+	}
+
+	private void validate(CodeValueType cvt) throws AmpImportException {
+		// TODO Auto-generated method stub
+		if(cvt == null) throw new AmpImportException("is null", 2);
+		if( !(isStringValid(cvt.getCode()) && isStringValid(cvt.getValue())) )
+			throw new AmpImportException("is not valid", 2);
+	}
+
+	private boolean isFreeTextTypeValid(FreeTextType title) {
+		// TODO validate the language attribute!
+		if(title != null && title.getValue()!=null && !"".equals(title.getValue())) return true;
+		return false;
+	}
+	
+	private void validate(List<FreeTextType> ftt) throws AmpImportException{
+		if(ftt == null || ftt.size() < 1) throw new AmpImportException("is null", 2);
+		// TODO languages of the title
+		for (FreeTextType freeTextType : ftt) {
+			if(!isFreeTextTypeValid(freeTextType)) throw new AmpImportException("is not valid", 2);
+		}
+	}
+
+	private boolean isValidLang(String lang){
+		
+		//TODO: validate lang based on dg_locale code for languages
+		if(lang!=null && lang.length() == 2 && !"".equals(lang))
+			return true;
+		return false;
+		
+	}
+	
+	private boolean isStringValid(String lang ){
+		
+		//TODO: validate lang based on dg_locale code for languages
+		if(lang != null && !"".equals(lang.trim()))
+			return true;
+		return false;
+		
+	}
 	
 	public void createActivityTree() {
 		// TODO Auto-generated method stub
@@ -1704,6 +1790,7 @@ public class ImportBuilder {
 			root.getElements().add(iLog);
 		}
 	}
+
 	
 	public String printLogs(){
 		String result = new String();
@@ -1745,11 +1832,6 @@ public class ImportBuilder {
 	public void setHm(HashMap hm) {
 		this.hm = hm;
 	}
-
-
-
-
-
 
 
 	

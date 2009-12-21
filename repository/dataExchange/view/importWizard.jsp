@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@page import="org.digijava.module.dataExchange.util.ExportHelper"%>
+
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -32,7 +34,7 @@
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
-    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNodeImport.js"></script>
+    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
 
 <style type="text/css">
 
@@ -100,7 +102,7 @@ div.fakefile2 input{
 
 	<br>
 	<br>
-
+<digi:instance property="deImportForm" />
   
 	<script type="text/javascript">
 	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchangeImport");
@@ -120,12 +122,12 @@ div.fakefile2 input{
 			YAHOOAmp.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
 		}
 
-
+/*
     function treeInit() {
       YAHOOAmp.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
      
     }
-    
+  */  
 	  function cancelImportManager() {
 	      <digi:context name="url" property="/aim/admin.do" />
 	      window.location="<%= url %>";
@@ -137,6 +139,106 @@ div.fakefile2 input{
             form.target="_self"
             form.submit();
       }
+
+
+       function treeInit() {
+         tabView = new YAHOO.widget.TabView('wizard_container');
+         buildRandomTaskNodeTree();
+       }
+       
+       //handler for expanding all nodes
+       YAHOOAmp.util.Event.on("expand", "click", function(e) {
+         tree.expandAll();
+         YAHOOAmp.util.Event.preventDefault(e);
+       });
+       
+       //handler for collapsing all nodes
+       YAHOOAmp.util.Event.on("collapse", "click", function(e) {
+         tree.collapseAll();
+         YAHOOAmp.util.Event.preventDefault(e);
+       });
+
+       //handler for checking all nodes
+       YAHOOAmp.util.Event.on("check", "click", function(e) {
+         checkAll();
+         YAHOOAmp.util.Event.preventDefault(e);
+       });
+       
+       //handler for unchecking all nodes
+       YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
+         uncheckAll();
+         YAHOOAmp.util.Event.preventDefault(e);
+       });
+
+
+       YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
+         YAHOOAmp.util.Event.preventDefault(e);
+       });
+
+       //Function  creates the tree and 
+       //builds between 3 and 7 children of the root node:
+         function buildRandomTaskNodeTree() {
+       
+         //instantiate the tree:
+             tree = new YAHOOAmp.widget.TreeView("dataImportActivityTree");
+               
+             <bean:define id="tree" name="deImportForm" property="activityStructure" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
+             <%= ExportHelper.renderActivityTree(tree, request) %>
+
+         //The tree is not created in the DOM until this method is called:
+             tree.draw();
+             
+         }
+
+//       var callback = null;
+
+       function buildRandomTaskBranch(node) {
+         if (node.depth < 3) {
+//           YAHOOAmp.log("buildRandomTextBranch: " + node.index);
+           for ( var i = 0; i < Math.floor(Math.random() * 2) ; i++ ) {
+             var tmpNode = new YAHOOAmp.widget.TaskNode(node.label + "-" + i, node, false);
+                     //tmpNode.onCheckClick = onCheckClick;
+             buildRandomTaskBranch(tmpNode);
+           }
+         }
+       }
+
+         function checkAll() {
+             var topNodes = tree.getRoot().children;
+             for(var i=0; i<topNodes.length; ++i) {
+                 topNodes[i].checkAll();
+             }
+         }
+
+         function uncheckAll() {
+             var topNodes = tree.getRoot().children;
+             for(var i=0; i<topNodes.length; ++i) {
+                 topNodes[i].unCheckAll();
+             }
+         }
+
+         // Gets the labels of all of the fully checked nodes
+         // Could be updated to only return checked leaf nodes by evaluating
+         // the children collection first.
+          function getCheckedNodes(nodes) {
+              nodes = nodes || tree.getRoot().children;
+              checkedNodes = [];
+              for(var i=0, l=nodes.length; i<l; i=i+1) {
+                  var n = nodes[i];
+                  //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
+                  if (n.checkState === 2) {
+                      checkedNodes.push(n); // just using label for simplicity
+                      alert(n.aid+' '+n.label);
+                      if (n.hasChildren()) {
+                          checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
+                       }
+                  }
+              }
+
+              return checkedNodes;
+          }  
+
+       
            
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 </script>
@@ -187,7 +289,7 @@ div.fakefile2 input{
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-		<digi:instance property="deImportForm" />
+		
 		<digi:form action="/import.do" method="post" enctype="multipart/form-data" styleId="form">
 		<span id="formChild" style="display:none;">&nbsp;</span>
      
@@ -227,34 +329,36 @@ div.fakefile2 input{
 				<div id="tab_file_selection" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-					<div style="height: 255px;">
-    					<table cellpadding="5px" width="80%">
+					<div style="height: 390px;">
+    					<table cellpadding="5px" width="100%">
     						<tr>
         						<td width="47%" align="left" valign="top"><br/><br/><br/> 
-        								<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
-        								</digi:trn><br/>
-        								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-											<input id="uploadedFile" name="uploadedFile" type="file" class="file">												
-										</div>        																		
+        						
+        							<div id="expandcontractdiv" align="left" style="width:85%">
+					                    <a id="expand" href="#"><digi:trn>Expand all</digi:trn></a>
+					                    <a id="collapse" href="#"><digi:trn>Collapse all</digi:trn></a>
+					                  
+					                    <a id="check" href="#"><digi:trn>Check all</digi:trn></a>
+					                    <a id="uncheck" href="#"><digi:trn>Uncheck all</digi:trn></a>
+			                    	</div>
+        						<div id="source_col_div" class="draglist" style="border-width: 0px; width: 85%;">
+			                    	<div id="dataImportActivityTree"></div>
+			                    </div>	      																		
         						</td>
         						<td align="left" >
         							<br/><br/><br/>
-        							<digi:trn key="aim:pleaseChooseTheLanguage">Please choose the language(s) that exist in imported file
-        								</digi:trn><br/>
-        							<table bgcolor="white" width="70%">
-        							<logic:iterate name="deImportForm" property="languages" id="lang">
+        							
+        							<table width="70%">
         								<tr><td>
-        								<html:multibox property="selectedLanguages">
-        									<bean:write name="lang"/>
-        								</html:multibox>
-        								<bean:write name="lang"/>&nbsp;&nbsp;&nbsp;
+        									<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
+	        								</digi:trn><br/>
+	        								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+												<input id="uploadedFile" name="uploadedFile" type="file" class="file">												
+											</div>  
+	        									<br/><br/><br/>
+	        								<digi:trn key="aim:pleaseChooseTheOption">Please choose the option for import the activities
+	        								</digi:trn><br/>
         								</td></tr>
-        							</logic:iterate>
-        							</table>
-        							<br/><br/><br/>
-        							<digi:trn key="aim:pleaseChooseTheOption">Please choose the option for import the activities
-        								</digi:trn><br/>
-        							<table bgcolor="white" width="70%">
         							<logic:iterate name="deImportForm" property="options" id="option">
         								<tr><td>
         								<bean:define id="optionValue">
@@ -264,7 +368,17 @@ div.fakefile2 input{
         								<bean:write name="option"/> <digi:trn>Activity</digi:trn><br/>
         								</td></tr>
         							</logic:iterate>
+        							<tr><td>
+        								<br/><digi:trn key="aim:pleaseChooseKeysForImport"> Please choose the primary keys for import </digi:trn>: <br/>
+        									<html:checkbox property="primaryKeys" name="deImportForm" value="title">
+        									Title
+        									</html:checkbox>
+        									<html:checkbox property="primaryKeys" name="deImportForm" value="chapitre">
+        									Chapitre Code
+        									</html:checkbox>
+        							</td></tr>
         							</table>
+        							
         						</td>
     						</tr>
     					</table>
@@ -295,7 +409,7 @@ div.fakefile2 input{
 				
 			</div>
 		</div>
-
+<%= ExportHelper.renderHiddenElements(tree) %>
 		</digi:form>
 	</td>
 	</tr>

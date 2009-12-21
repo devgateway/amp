@@ -117,7 +117,7 @@
           
           
           <bean:define id="tree" name="deImportForm" property="activityTree" type="org.digijava.module.dataExchange.dbentity.AmpDEImportLog" toScope="page"/>
-          <%= DataExchangeUtils.renderActivityTree(tree, request) %>
+          <%= DataExchangeUtils.renderActivityTree(tree) %>
           
       //The tree is not created in the DOM until this method is called:
           tree.draw();
@@ -186,8 +186,16 @@
             form.target="_self"
             form.submit();
       }
-           
+
+       function generateLog(){
+           var form = document.getElementById('form');
+           form.action = "/dataExchange/import.do?method=generateLog";
+           form.target="_self"
+           form.submit();
+        }
+          
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
+		
 	</script>
 
 
@@ -283,6 +291,9 @@
 				<div id="tab_log_after_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
+					<div style="width:100%; height:20px;text-align: right;">
+						Download the log file from <html:link style="color:red" href="/dataExchange/import.do?method=generateLog"> here </html:link>
+					</div>                    
                     <div  style="width:100%;height:250px;overflow:auto;text-align: left">
                     	<logic:notEqual name="DELogGenerated" scope="session" value="false">
 							<%= session.getAttribute("DELogGenerated") %>

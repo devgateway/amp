@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,9 +38,11 @@ import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.action.ShowAddComponent;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
@@ -124,12 +127,12 @@ public class ActivityUtil {
   // */
   //I've seen no references so I marked it deprecated
   //@Deprecated
-//  public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
+//  public static Long saveActivity(AmpActivityVersion activity, ArrayList commentsCol,
 //                                  boolean serializeFlag, Long field,
 //                                  Collection relatedLinks, Long memberId,
 //                                  Set<Components<AmpComponentFunding>> ampTempComp,List<IPAContract> contracts) throws Exception {
 //    /*
-//     * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
+//     * calls saveActivity(AmpActivityVersion activity,Long oldActivityId,boolean edit)
 //     * by passing null and false to the paramindicatorseters oldActivityId and edit respectively
 //     * since this is creating a new activity
 //     */
@@ -138,24 +141,25 @@ public class ActivityUtil {
 //  }
 
   /**
-   * Persist an AmpActivity object to the database
+   * Persist an AmpActivityVersion object to the database
    * This function is used to either update an existing activity
    * or creating a new activity. If the parameter 'edit' is set to
    * true the function will update an existing activity with id
    * given by the parameter 'oldActivityId'. If the 'edit' parameter
    * is false, the function will create a new activity
    *
-   * @param activity The AmpActivity object to be persisted
-   * @param oldActivityId The id of the AmpActivity object which is to be updated
+   * @param activity The AmpActivityVersion object to be persisted
+   * @param oldActivityId The id of the AmpActivityVersion object which is to be updated
    * @param edit This boolean variable represents whether to create a new
    * activity object or to update the existing activity object
    * @throws Exception 
    */
 public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	//Retrieving parameters
-	AmpActivity activity = rsp.getActivity();
+	AmpActivityVersion activity = rsp.getActivity();
 	Long oldActivityId = rsp.getOldActivityId();
 	boolean edit = rsp.isEdit();
+	//edit = false;
 	ArrayList commentsCol = rsp.getEaForm().getComments().getCommentsCol();
 	boolean serializeFlag = rsp.getEaForm().isSerializeFlag();
 	Long field = rsp.getField();
@@ -166,6 +170,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	List<IPAContract> contracts = rsp.getEaForm().getContracts().getContracts();
 	boolean alwaysRollback = rsp.isAlwaysRollback();
 	List<AmpActivityContact> activityContacts=rsp.getEaForm().getContactInformation().getActivityContacts();
+	AmpActivityGroup usedAmpActivityGroup = null;
 	//***
 	
 	
@@ -173,7 +178,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     logger.debug("In save activity " + activity.getName());
     Session session = null;
     Transaction tx = null;
-    AmpActivity oldActivity = null;
+    AmpActivityVersion oldActivity = null;
 
     Long activityId = null;
     Set fundSet		= null;
@@ -189,13 +194,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
 
-      if (edit) { /* edit an existing activity */
-        oldActivity = (AmpActivity) session.load(AmpActivity.class,
-                                                 oldActivityId);
+      if (oldActivityId != null) {
+    	  oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, oldActivityId);
+      }
+      
+      if (edit) { /* edit an existing activity */        
 
         activityId = oldActivityId;
 
         activity.setAmpActivityId(oldActivityId);
+        
+        usedAmpActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, oldActivity
+						.getAmpActivityGroup().getAmpActivityGroupId());
+        
+        //creo una nueva actividad a ver q pasa.
+        //oldActivity = new AmpActivityVersion();
+        oldActivity.setAmpActivityId(new Long(oldActivityId.intValue()+1));
+        
 
         if (oldActivity == null) {
           logger.debug("Previous Activity is null");
@@ -627,6 +642,18 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
         session.update(oldActivity);
         activity = oldActivity;
+        
+        /**
+         * ACTIVITY VERSIONING: This section saves a new record in amp_activity_group table.
+         */
+        //TODO: Check for activated versioning.
+        usedAmpActivityGroup.setAmpActivityLastVersion(oldActivity);
+		session.save(usedAmpActivityGroup);
+		oldActivity.setAmpActivityGroup(usedAmpActivityGroup);
+		oldActivity.setModifiedDate(Calendar.getInstance().getTime());
+		oldActivity.setModifiedBy(member);
+		session.update(oldActivity);
+        
         /*
                 // added by Akash
                 // desc: Saving team members in amp_member_activity table in case activity is Approved
@@ -686,14 +713,102 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         activity.setAmpId(ampId);
         session.update(activity);
         //session.saveOrUpdate(member);
+        
+        /**
+         * ACTIVITY VERSIONING: This section saves a new record in amp_activity_group table.
+         */
+        //TODO: Check for activated versioning.
+				if (oldActivity == null) {
+					// New activity.
+					AmpActivityGroup newActivityGroup = new AmpActivityGroup();
+					newActivityGroup.setAmpActivityLastVersion(activity);
+					session.save(newActivityGroup);
+					activity.setAmpActivityGroup(newActivityGroup);
+					activity.setModifiedDate(Calendar.getInstance().getTime());
+					activity.setModifiedBy(member);
+					session.update(activity);
+				} else if (oldActivity != null && oldActivity.getAmpActivityGroup() != null) {
+					// Edited activity with version group.
+					AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class,
+							oldActivity.getAmpActivityGroup().getAmpActivityGroupId());
+					auxActivityGroup.setAmpActivityLastVersion(activity);
+					session.save(auxActivityGroup);
+					activity.setAmpActivityGroup(auxActivityGroup);
+					activity.setModifiedDate(Calendar.getInstance().getTime());
+					activity.setModifiedBy(member);
+					activity.setAmpActivityPreviousVersion(oldActivity);
+					session.update(activity);
+				} else if (oldActivity != null && oldActivity.getAmpActivityGroup() == null) {
+					// Edited activity with no version group info (activity created BEFORE the versioning system).
+					AmpActivityGroup newActivityGroup = new AmpActivityGroup();
+					newActivityGroup.setAmpActivityLastVersion(activity);
+					session.save(newActivityGroup);
+					activity.setAmpActivityGroup(newActivityGroup);
+					activity.setModifiedDate(Calendar.getInstance().getTime());
+					activity.setModifiedBy(member);
+					activity.setAmpActivityPreviousVersion(oldActivity);
+					session.update(activity);
+					// Add version info to old un-versioned activity.
+					oldActivity.setAmpActivityGroup(newActivityGroup);
+					session.update(oldActivity);
+				}        
      
-      if(activity.getComponentProgress()!=null){
-	        Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
-	        for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
-	      	  ampPhysicalPerformance.setAmpActivityId(activity);
+      if(activity.getComponentProgress()!=null) {
+    	  Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
+	      for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
+	    	  ampPhysicalPerformance.setAmpActivityId(activity);
 	      	  session.save(ampPhysicalPerformance);
-	  		}
-	      }
+	  	  }
+      } else {
+    	  if(oldActivity != null && oldActivity.getComponentProgress()!=null) {
+        	  Collection<AmpPhysicalPerformance> oldProgress= oldActivity.getComponentProgress();
+    	      for (AmpPhysicalPerformance ampPhysicalPerformance : oldProgress) {
+    	    	  AmpPhysicalPerformance auxPP = new AmpPhysicalPerformance();
+    	    	  auxPP.setAmpActivityId(activity);
+    	    	  auxPP.setComments(ampPhysicalPerformance.getComments());
+    	    	  
+    	    	  //TODO: Evaluate if the creation of a new component part is needed.
+    	    	  AmpComponent auxComponent = new AmpComponent();
+    	    	  //auxComponent.setActivities(new HashSet());
+    	    	  //auxComponent.getActivities().add(activity);
+    	    	  auxComponent.setCode(ampPhysicalPerformance.getComponent().getCode());
+    	    	  auxComponent.setCreationdate(ampPhysicalPerformance.getComponent().getCreationdate());
+    	    	  auxComponent.setDescription(ampPhysicalPerformance.getComponent().getDescription());
+    	    	  auxComponent.setTitle(ampPhysicalPerformance.getComponent().getTitle());
+    	    	  auxComponent.setType(ampPhysicalPerformance.getComponent().getType());
+    	    	  auxComponent.setUrl(ampPhysicalPerformance.getComponent().getUrl());
+    	    	  auxPP.setComponent(auxComponent);
+    	    	  activity.getComponents().add(auxComponent);
+    	    	  // If the upper code is disabled then enable the following line.
+    	    	  //auxPP.setComponent(ampPhysicalPerformance.getComponent());
+    	    	  
+    	    	  auxPP.setDescription(ampPhysicalPerformance.getDescription());
+    	    	  auxPP.setLanguage(ampPhysicalPerformance.getLanguage());
+    	    	  auxPP.setReportingDate(ampPhysicalPerformance.getReportingDate());
+    	    	  auxPP.setReportingOrgId(ampPhysicalPerformance.getReportingOrgId());
+    	    	  auxPP.setTitle(ampPhysicalPerformance.getTitle());
+    	    	  auxPP.setType(ampPhysicalPerformance.getType());
+    	    	  auxPP.setAmpActivityId(activity);
+
+    	    	  //session.saveOrUpdate(activity);
+    	    	  session.save(auxComponent);
+    	    	  session.save(auxPP);
+    	  	  }
+          }
+      }
+      if (activity.getClosingDates() != null) {
+    	  Collection<AmpActivityClosingDates> newClosingDates = activity.getClosingDates();
+    	  // activity.getClosingDates().clear();
+    	  Iterator<AmpActivityClosingDates> iter = newClosingDates.iterator();
+    	  while (iter.hasNext()) {
+    		  AmpActivityClosingDates auxClosingDate = iter.next();
+    		  if (auxClosingDate.getClosingDate() != null) {
+    			  auxClosingDate.setAmpActivityId(activity);
+    			  session.save(auxClosingDate);
+    		  }
+    	  }
+      }
+      
       }
 
       /*
@@ -1130,7 +1245,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        if (!edit) {
 	       session = PersistenceManager.getRequestDBSession();
 	       tx = session.beginTransaction();
-	       AmpActivity savedActivity = (AmpActivity) session.load(AmpActivity.class, activity.getAmpActivityId());
+	       AmpActivityVersion savedActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activity.getAmpActivityId());
 	       savedActivity.setSurvey(activity.getSurvey());
 	       session.saveOrUpdate(savedActivity);
 	       tx.commit();
@@ -1743,6 +1858,25 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          session = PersistenceManager.getRequestDBSession();
 
       activity = (AmpActivity) session.load(AmpActivity.class,
+          id);
+    }
+    catch (Exception e) {
+      logger.error("Unable to getAmpActivity");
+      e.printStackTrace(System.out);
+    }
+    return activity;
+  }
+
+  public static AmpActivityVersion getAmpActivityVersion(Long id) {
+	  //TODO: This is a mess, shouldn't be here. Check where it is used and change it.
+	  
+    Session session = null;
+    AmpActivityVersion activity = null;
+
+    try {
+         session = PersistenceManager.getRequestDBSession();
+
+      activity = (AmpActivityVersion) session.load(AmpActivityVersion.class,
           id);
     }
     catch (Exception e) {
@@ -3142,6 +3276,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
   /* functions to DELETE an activity by Admin start here.... */
   public static void deleteActivity(Long ampActId) {
+	logger.warn("deleting...");
+	Date startDate = new Date(System.currentTimeMillis());
     Session session = null;
     Transaction tx = null;
 
@@ -3149,13 +3285,35 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       session = PersistenceManager.getSession();
       tx = session.beginTransaction();
 
-      AmpActivity ampAct = (AmpActivity) session.load(
-          AmpActivity.class, ampActId);
+      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(
+          AmpActivityVersion.class, ampActId);
+      AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
 
       if (ampAct == null)
-        logger.debug("Activity is null. Hence no activity with id : " +
+        logger.debug("ActivityVersion is null. Hence no activity with id : " +
                      ampActId);
       else {
+    	 
+    	 //Delete access info.
+    	  Query qry = session.createSQLQuery("DELETE FROM amp_activity_access WHERE amp_activity_id = ?");
+    	  qry.setParameter(0, ampActId);
+    	  qry.executeUpdate();
+    	  
+    	// Delete group info.
+    	  
+    	  //qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName() + " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = "+ampActId);
+    	  //qry.setParameter(0, ampActId);
+    	  //qry.executeUpdate();
+    	  ampAct.setAmpActivityGroup(null);
+    	  //session.update(ampAct);
+    	  auxGroup.getActivities().remove(ampAct);
+    	  session.update(auxGroup);
+    	  //session.update(ampAct);
+    	  //qry = session.createQuery("UPDATE " + AmpActivityGroup.class.getName() + " SET ampActivityLastVersion = NULL WHERE ampActivityGroupId = " + ampActId);
+    	  //qry.setParameter(0, ampActId);
+    	  //qry.executeUpdate(); 
+    	  //TODO: relink ampActivityPreviousVersion if needed (when deleting drafts to older non-draft versions).
+    	  
         /* delete fundings and funding details */
         Set fundSet = ampAct.getFunding();
         if (fundSet != null) {
@@ -3380,8 +3538,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
 	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
       
+	//Query qry = session.createQuery("DELETE " + AmpActivityGroup.class.getName() + " WHERE ampActivityLastVersion = "+ampActId);
+	  //qry.setParameter(0, ampActId);
+	  //qry.executeUpdate();
+	  
+	  session.delete(auxGroup);
 	  session.delete(ampAct);
-      tx.commit();
+	  tx.commit();
       session.flush();
     }
     catch (Exception e1) {
@@ -3398,6 +3561,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
       }
     }
+    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
   }
 
   public static void deleteActivityAmpComments(Collection commentId, Session session) throws Exception{

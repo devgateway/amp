@@ -176,6 +176,7 @@ public class ShowEditText
                 formBean.setLang(editor.getLanguage());
             }
             formBean.setContent(editor.getBody());
+            formBean.setOriginalContent(formBean.getContent());
             formBean.setKey(editor.getEditorKey());
             formBean.setTitle(editor.getTitle());
 

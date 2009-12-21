@@ -1,18 +1,21 @@
 package org.digijava.module.categorymanager.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 /**
  * Represents one of the possible values for a certain category
  * @author Alex Gartner
  *
  */
-public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue> {
+public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, Versionable {
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
@@ -106,5 +109,18 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 		this.usedByValues = usedByValues;
 	}
 
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		return this.equals(obj);
+	}
 
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { "Class: " }, new Object[] { this.ampCategoryClass.getName() }));
+		out.getOutputs().add(new Output(null, new String[] { " Value: " }, new Object[] { this.value }));
+		return out;
+	}
 }

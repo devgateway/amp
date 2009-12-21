@@ -6,6 +6,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -19,6 +20,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -55,6 +58,10 @@ public class EditSurveyList extends Action {
         
         //this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
         request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
+        
+        //TODO: ver si siempre saco el edit mode.
+        boolean editMode = false;
+        //editMode = svForm.isEditAct();
 
         Comparator sfComp = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -64,7 +71,7 @@ public class EditSurveyList extends Action {
             }
         };
         List<SurveyFunding> surveyColl = new ArrayList<SurveyFunding>();
-        if (svForm.isEditAct() == true) {
+        if (editMode/*svForm.getActivityId() != null*/) {
         	surveyColl = (List<SurveyFunding>) DbUtil.getAllSurveysByActivity(svForm.getActivityId(), svForm);
         	Collections.sort(surveyColl, sfComp);
             svForm.setSurveyFundings(surveyColl);
@@ -88,7 +95,23 @@ public class EditSurveyList extends Action {
         			auxSurveyFunding.setFundingOrgName(auxOrganization.getName());
         			//I have to assign an ID, for new surveys I use negative numbers and the donor id.
         			tempID = fundingOrganization.getAmpOrgId().intValue() * -1;
-        			auxSurveyFunding.setSurveyId(new Long(tempID));
+        			auxSurveyFunding.setOrgID(new Long(tempID * -1));
+        			try {
+						Collection<AmpAhsurvey> savedSurveys = DbUtil.getAllSurveysByActivityWithoutAdding(svForm
+								.getActivityId());
+						Iterator<AmpAhsurvey> iter = savedSurveys.iterator();
+						while(iter.hasNext()){
+							AmpAhsurvey auxSurvey = iter.next();
+							if(auxSurvey.getAmpDonorOrgId().getAmpOrgId().equals(new Long(tempID * -1))) {
+								tempID = auxSurvey.getAmpAHSurveyId().intValue();
+							}
+						}
+						auxSurveyFunding.setSurveyId(new Long(tempID));
+					} catch (DgException e) {
+						logger.error(e);
+						e.printStackTrace();
+					}
+        			
         			surveyColl.add(auxSurveyFunding);
         		}
         		svForm.setSurveyFundings(surveyColl);

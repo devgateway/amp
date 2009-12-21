@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionErrors;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Components;
@@ -27,7 +28,7 @@ public class RecoverySaveParameters {
 	private String stepFailureText[];
 	private EditActivityForm eaForm;
 	private TeamMember tm;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private boolean createdAsDraft;
 	private ActionErrors errors;
 	private HttpServletRequest request;
@@ -87,10 +88,10 @@ public class RecoverySaveParameters {
 	public void setTm(TeamMember tm) {
 		this.tm = tm;
 	}
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	public boolean isCreatedAsDraft() {

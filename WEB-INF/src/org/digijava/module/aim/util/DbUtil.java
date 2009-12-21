@@ -5290,9 +5290,11 @@ public class DbUtil {
                             if (svy.getPointOfDeliveryDonor() != null) {
                                 svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
                                 svfund.setAcronim(svy.getPointOfDeliveryDonor().getAcronym());
+                                svfund.setOrgID(svy.getPointOfDeliveryDonor().getAmpOrgId());
                             } else {
                                 svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
                                 svfund.setAcronim(svy.getAmpDonorOrgId().getAcronym());
+                                svfund.setOrgID(svy.getAmpDonorOrgId().getAmpOrgId());
                             }
 
                             survey.add(svfund);
@@ -5314,6 +5316,13 @@ public class DbUtil {
         logger.debug("survey.size() : " + survey.size());
         return survey;
     }
+    
+    public static Collection<AmpAhsurvey> getAllSurveysByActivityWithoutAdding(Long id) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+		return activity.getSurvey();
+
+	}
     
     public static Collection getAllSurveysByActivity(Long activityId) {
         ArrayList survey = new ArrayList();
@@ -5553,13 +5562,14 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
+            //survey = (AmpAhsurvey) session.load(AmpAhsurvey.class, surveyId);
             String qry = "select svy from " + AmpAhsurvey.class.getName()
                 + " svy where (svy.ampAHSurveyId=:surveyId)";
             Query q = session.createQuery(qry);
             q.setParameter("surveyId", surveyId, Hibernate.LONG);
             survey = (AmpAhsurvey) q.list().get(0);
         } catch (Exception ex) {
-            logger.debug("Unable to get survey : ", ex);
+            logger.error("Unable to get survey : ", ex);
         }
         return survey;
     }
@@ -5620,6 +5630,7 @@ public class DbUtil {
             }
             activity.getSurvey().add(survey);
             survey.setAmpAHSurveyId(null);
+            survey.setResponses(new HashSet<AmpAhsurveyResponse>());
             
             //setup responses.
             Iterator itr1 = indicators.iterator();
@@ -5636,6 +5647,34 @@ public class DbUtil {
                     survey.getResponses().add(res);
                 }
             }
+    }
+    
+    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+    	
+		AmpAhsurvey newSurvey = new AmpAhsurvey();
+		newSurvey.setAmpActivityId(activity);
+		newSurvey.setAmpAHSurveyId(null);
+		newSurvey.setAmpDonorOrgId(survey.getAmpDonorOrgId());
+		newSurvey.setPointOfDeliveryDonor(survey.getPointOfDeliveryDonor());
+		newSurvey.setResponses(new HashSet<AmpAhsurveyResponse>());
+		Iterator iterResponses = survey.getResponses().iterator();
+		while(iterResponses.hasNext()){
+			AmpAhsurveyResponse res = (AmpAhsurveyResponse) iterResponses.next();
+			AmpAhsurveyResponse newResponse = new AmpAhsurveyResponse();
+			newResponse.setAmpAHSurveyId(newSurvey);
+			newResponse.setAmpQuestionId(res.getAmpQuestionId());
+			newResponse.setAmpReponseId(null);
+			newResponse.setResponse(res.getResponse());
+			//res.setAmpAHSurveyId(newSurvey);
+			newSurvey.getResponses().add(newResponse);
+			//session.saveOrUpdate(newResponse);
+		}
+		if(activity.getSurvey() == null) {
+			activity.setSurvey(new HashSet<AmpAhsurvey>());
+		}
+		activity.getSurvey().add(newSurvey);
+		//session.saveOrUpdate(newSurvey);
     }
 
     public static void saveSurveyResponses(Long surveyId, Collection indicator) {

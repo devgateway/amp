@@ -9,9 +9,10 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpTheme implements Serializable, Identifiable, ARDimensionable
+public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Versionable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivity activityId;
@@ -358,4 +359,20 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable
 			return NPODimension.class;
 		}
 
+		@Override
+		public boolean equalsForVersioning(Object obj) {
+			return this.equals(obj);
+		}
+
+		@Override
+		public Object getValue() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Output getOutput() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 }

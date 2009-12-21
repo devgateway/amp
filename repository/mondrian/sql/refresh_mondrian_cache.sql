@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS cached_amp_activity;
-CREATE TABLE cached_amp_activity LIKE amp_activity;
+CREATE TABLE cached_amp_activity LIKE amp_activity_version;
 INSERT INTO cached_amp_activity SELECT * FROM amp_activity;
 
 DROP TABLE IF EXISTS cached_v_donor_date_hierarchy;

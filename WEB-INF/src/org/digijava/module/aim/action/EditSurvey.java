@@ -72,6 +72,10 @@ public class EditSurvey extends Action {
 
         AmpAhsurvey auxAmpAhsurvey = null;
         Survey auxSurvey = null;
+        
+        svForm.setEditAct(false);
+        //firstLoad = true;
+        
         if (svForm.isEditAct() == true) {
 	        	if (firstLoad) {
 		            auxAmpAhsurvey = getAmpAhsurvey(surveyId, svForm.getAmpAhsurveys());
@@ -79,7 +83,7 @@ public class EditSurvey extends Action {
 		            	auxAmpAhsurvey = DbUtil.getAhSurvey(surveyId);
 		            	svForm.getAmpAhsurveys().add(auxAmpAhsurvey);
 		            }
-		            auxSurvey = getSurvey(surveyId, svForm.getSurveys(), svForm);
+		            auxSurvey = getSurvey(surveyId, svForm.getSurveys());
 		            if(auxSurvey == null) {
 		            	auxSurvey = svForm.new Survey();
 		            	svForm.setSurvey(auxSurvey);
@@ -102,49 +106,71 @@ public class EditSurvey extends Action {
 		            }
 	        	}
         } else { //This is a new activity.
+        	boolean edited = false;
         	if (firstLoad == true) {
         		auxAmpAhsurvey = getAmpAhsurvey(surveyId, svForm.getAmpAhsurveys());
 	            if (auxAmpAhsurvey == null) {
-		        	auxAmpAhsurvey = new AmpAhsurvey();
-		        	auxAmpAhsurvey.setAmpActivityId(null);
-		        	auxAmpAhsurvey.setAmpAHSurveyId(new Long(0));
-		        	auxAmpAhsurvey.setAmpDonorOrgId(DbUtil.getOrganisation(surveyId * -1));
-		        	auxAmpAhsurvey.setPointOfDeliveryDonor(DbUtil.getOrganisation(surveyId * -1));
-		        	auxAmpAhsurvey.setResponses(new HashSet<AmpAhsurveyResponse>());
+	            	// Added for activity versioning.
+	            	auxAmpAhsurvey = DbUtil.getAhSurvey(surveyId);
+	            	if (auxAmpAhsurvey == null
+							|| (auxAmpAhsurvey.getAmpDonorOrgId() == null && auxAmpAhsurvey.getPointOfDeliveryDonor() == null)) {
+			        	auxAmpAhsurvey = new AmpAhsurvey();
+			        	auxAmpAhsurvey.setAmpActivityId(null);
+			        	auxAmpAhsurvey.setAmpAHSurveyId(new Long(0));
+			        	//aca deberia recibir de la pagina otro parametro con el id de la organizacion.
+			        	String orgID = request.getParameter("orgId");
+			        	Long organizationId = new Long(orgID);
+			        	auxAmpAhsurvey.setAmpDonorOrgId(DbUtil.getOrganisation(organizationId));
+			        	auxAmpAhsurvey.setPointOfDeliveryDonor(DbUtil.getOrganisation(organizationId));
+			        	auxAmpAhsurvey.setResponses(new HashSet<AmpAhsurveyResponse>());
+	            	} else {
+	            		edited = true;
+	            	}
 		        	svForm.getAmpAhsurveys().add(auxAmpAhsurvey);
 	            }
 	        	
-	            auxSurvey = getSurvey(surveyId, svForm.getSurveys(), svForm);
+	            auxSurvey = getSurvey(surveyId, svForm.getSurveys());
 	            if(auxSurvey == null) {
 	            	auxSurvey = svForm.new Survey();
 	            	auxSurvey.setAmpSurveyId(new Long(surveyId));
 	            	svForm.setSurvey(auxSurvey);
 	            	
-		        	List indicators = new ArrayList<Indicator>();
-		        	Collection<AmpAhsurveyIndicator> ampAhSurveyIndicators = DbUtil.getAllAhSurveyIndicators();      	
-		        	Iterator<AmpAhsurveyIndicator> iterAhSurveyIndicators = ampAhSurveyIndicators.iterator();
-		        	while (iterAhSurveyIndicators.hasNext()) {
-		        		AmpAhsurveyIndicator auxAmpAhSurveyIndicator = iterAhSurveyIndicators.next();
-		        		Indicator auxIndicator = new Indicator();
-		        		auxIndicator.setIndicatorCode(auxAmpAhSurveyIndicator.getIndicatorCode());
-		        		auxIndicator.setName(auxAmpAhSurveyIndicator.getName());
-		        		auxIndicator.setQuestion(new ArrayList<Question>());
-		        		Iterator<AmpAhsurveyQuestion> iterQuestions = auxAmpAhSurveyIndicator.getQuestions().iterator();
-		        		while (iterQuestions.hasNext()) {
-		        			AmpAhsurveyQuestion auxAhSurveyQuestion = iterQuestions.next();
-		        			Question auxQuestion = new Question();
-		        			auxQuestion.setQuestionId(auxAhSurveyQuestion.getAmpQuestionId());
-		        			auxQuestion.setQuestionText(auxAhSurveyQuestion.getQuestionText());
-		        			auxQuestion.setQuestionType(auxAhSurveyQuestion.getAmpTypeId().getName());
-		        			auxQuestion.setResponse("");
-		        			auxQuestion.setResponseId(null);
-		        			auxIndicator.getQuestion().add(auxQuestion);
-		        		}
-		        		indicators.add(auxIndicator);
+	            	if(edited == false) {
+		        		List indicators = new ArrayList<Indicator>();
+		        		Collection<AmpAhsurveyIndicator> ampAhSurveyIndicators = DbUtil.getAllAhSurveyIndicators();      	
+		        		Iterator<AmpAhsurveyIndicator> iterAhSurveyIndicators = ampAhSurveyIndicators.iterator();
+			        	while (iterAhSurveyIndicators.hasNext()) {
+			        		AmpAhsurveyIndicator auxAmpAhSurveyIndicator = iterAhSurveyIndicators.next();
+			        		//AMP doesn't calculate the 8th indicator, but we need in the result matrix
+	                    	if(auxAmpAhSurveyIndicator.getIndicatorCode().equals("8")){
+	                        	continue;
+	                    	}
+			        		Indicator auxIndicator = new Indicator();
+			        		auxIndicator.setIndicatorCode(auxAmpAhSurveyIndicator.getIndicatorCode());
+			        		auxIndicator.setName(auxAmpAhSurveyIndicator.getName());
+			        		auxIndicator.setQuestion(new ArrayList<Question>());
+			        		Iterator<AmpAhsurveyQuestion> iterQuestions = auxAmpAhSurveyIndicator.getQuestions().iterator();
+			        		while (iterQuestions.hasNext()) {
+			        			AmpAhsurveyQuestion auxAhSurveyQuestion = iterQuestions.next();
+			        			Question auxQuestion = new Question();
+			        			auxQuestion.setQuestionId(auxAhSurveyQuestion.getAmpQuestionId());
+			        			auxQuestion.setQuestionText(auxAhSurveyQuestion.getQuestionText());
+			        			auxQuestion.setQuestionType(auxAhSurveyQuestion.getAmpTypeId().getName());
+			        			auxQuestion.setResponse("");
+			        			auxQuestion.setResponseId(null);
+			        			auxIndicator.getQuestion().add(auxQuestion);
+			        		}
+			        		indicators.add(auxIndicator);
+			        	}
+			        	svForm.getSurvey().setIndicators(new ArrayList<Indicator>(indicators));        	
+			        	svForm.getSurvey().setAhsurvey(auxAmpAhsurvey);
+			            svForm.getSurvey().setFundingOrg(auxAmpAhsurvey.getAmpDonorOrgId().getAcronym());
+		        	} else {
+		        		auxSurvey.setIndicators(DbUtil.getResposesBySurvey(surveyId, svForm.getActivityId()));
+		            	auxSurvey.setAmpSurveyId(surveyId);
+		            	svForm.getSurvey().setAhsurvey(auxAmpAhsurvey);
+			            svForm.getSurvey().setFundingOrg(auxAmpAhsurvey.getAmpDonorOrgId().getAcronym());
 		        	}
-		        	svForm.getSurvey().setIndicators(new ArrayList<Indicator>(indicators));        	
-		        	svForm.getSurvey().setAhsurvey(auxAmpAhsurvey);
-		            svForm.getSurvey().setFundingOrg(auxAmpAhsurvey.getAmpDonorOrgId().getAcronym());
 		            
 		            svForm.getSurveys().add(auxSurvey);
 	            } else {
@@ -184,18 +210,18 @@ public class EditSurvey extends Action {
      * @return
      */
     private static AmpAhsurvey getAmpAhsurvey(Long id, Set<AmpAhsurvey> surveys) {
-    	AmpAhsurvey ret = null;
-    	Iterator<AmpAhsurvey> iterSurvey = surveys.iterator();
-    	while (iterSurvey.hasNext()) {
-    		AmpAhsurvey aux = iterSurvey.next();
-    		if (aux.getAmpAHSurveyId().equals(id)) {
-    			ret = aux;
-    		}
-    	}
-    	return ret;
-    }
+		AmpAhsurvey ret = null;
+		Iterator<AmpAhsurvey> iterSurvey = surveys.iterator();
+		while (iterSurvey.hasNext()) {
+			AmpAhsurvey aux = iterSurvey.next();
+			if (aux.getAmpAHSurveyId() != null && aux.getAmpAHSurveyId().equals(id)) {
+				ret = aux;
+			}
+		}
+		return ret;
+	}
     
-    private static Survey getSurvey(Long id, Set<Survey> surveys, EditActivityForm svForm) {
+    public static Survey getSurvey(Long id, Set<Survey> surveys) {
     	Survey ret = null;
     	Iterator<Survey> iterSurveys = surveys.iterator();
     	while (iterSurveys.hasNext()) {

@@ -1,11 +1,13 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.util.Output;
 
-public class AmpLocation implements Serializable
+public class AmpLocation implements Serializable, Versionable
 {
 	private Long ampLocationId ;
 	private String iso3Code ;
@@ -261,4 +263,62 @@ public class AmpLocation implements Serializable
 		return ret;
 	}
 
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpLocation aux = (AmpLocation) obj;
+		String original = " " + this.iso3Code + this.name + this.description + this.gisCoordinates + this.language
+				+ this.version + this.country + this.region + this.zone + this.woreda;
+		String copy = " " + aux.iso3Code + aux.name + aux.description + aux.gisCoordinates + aux.language + aux.version
+				+ aux.country + aux.region + aux.zone + aux.woreda;
+		if (original.equals(copy)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		if (this.iso3Code != null && !this.iso3Code.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " ISO 3 Code: " }, new Object[] { this.iso3Code }));
+		}
+		if (this.name != null && !this.name.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " Name: " }, new Object[] { this.name }));
+		}
+		if (this.description != null && !this.description.trim().equals("")) {
+			out.getOutputs()
+					.add(new Output(null, new String[] { " Description: " }, new Object[] { this.description }));
+		}
+		if (this.gisCoordinates != null && !this.gisCoordinates.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " GIS: " }, new Object[] { this.gisCoordinates }));
+		}
+		if (this.language != null && !this.language.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " Lang: " }, new Object[] { this.language }));
+		}
+		if (this.version != null && !this.version.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " Version: " }, new Object[] { this.version }));
+		}
+		if (this.country != null && !this.country.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " Country: " }, new Object[] { this.country }));
+		}
+		if (this.region != null && !this.region.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " Region: " }, new Object[] { this.region }));
+		}
+		if (this.zone != null && !this.zone.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " Zone: " }, new Object[] { this.zone }));
+		}
+		if (this.woreda != null && !this.woreda.trim().equals("")) {
+			out.getOutputs().add(new Output(null, new String[] { " Woreda: " }, new Object[] { this.woreda }));
+		}
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		return this.iso3Code + "-" + this.name + "-" + this.description + "-" + this.gisCoordinates + "-"
+				+ this.language + "-" + this.version + "-" + this.country + "-" + this.region + "-" + this.zone + "-"
+				+ this.woreda;
+	}
 }	

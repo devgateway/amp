@@ -437,8 +437,8 @@ public class AmpFunding implements Serializable, Versionable
 	public Object getValue() {
 		// Compare fields from AmpFunding.
 		String ret = "";
-		ret = ret + "-Type of Assistance:" + this.typeOfAssistance.getEncodedValue();
-		ret = ret + "-Financing Instrument:" + this.financingInstrument.getEncodedValue();
+		ret = ret + "-Type of Assistance:" + (this.typeOfAssistance != null ? this.typeOfAssistance.getEncodedValue() : "");
+		ret = ret + "-Financing Instrument:" + (this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : "");
 		ret = ret + "-Conditions:" + (this.conditions == null ? "" : this.conditions.trim());
 		ret = ret + "-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim());
 		ret = ret + "-Active:" + this.active;
@@ -478,12 +478,16 @@ public class AmpFunding implements Serializable, Versionable
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
 				new Output(null, new String[] { "Organization: " }, new Object[] { this.ampDonorOrgId.getName() }));
-		out.getOutputs().add(
-				new Output(null, new String[] { "<br />", "Type of Assistance: " },
-						new Object[] { this.typeOfAssistance.getEncodedValue() }));
-		out.getOutputs().add(
-				new Output(null, new String[] { "<br />", "Financing Instrument: " },
-						new Object[] { this.financingInstrument.getEncodedValue() }));
+		if (this.typeOfAssistance != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br />", "Type of Assistance: " },
+							new Object[] { this.typeOfAssistance.getEncodedValue() }));
+		}
+		if (this.financingInstrument != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br />", "Financing Instrument: " },
+							new Object[] { this.financingInstrument.getEncodedValue() }));
+		}
 		if (this.conditions != null && !this.conditions.trim().equals("")) {
 			out.getOutputs().add(
 					new Output(null, new String[] { "<br/>", " Conditions: " }, new Object[] { this.conditions }));

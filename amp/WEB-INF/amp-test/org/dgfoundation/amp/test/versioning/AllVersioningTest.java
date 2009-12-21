@@ -7,7 +7,7 @@ public class AllVersioningTest {
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(TestVersionActivity.class);
-		//suite.addTestSuite(TestCompareVersion.class);
+		suite.addTestSuite(TestCompareVersion.class);
 
 		return suite;
 

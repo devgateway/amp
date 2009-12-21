@@ -110,6 +110,7 @@ public class EditorForm
 
     private String title;
     private String content;
+    private String originalContent;
     private String notice;
 
     private Editor editor;
@@ -121,7 +122,9 @@ public class EditorForm
     
     private String activityName;
     private String activityFieldName;
-
+    
+    private String newId;
+    
     public String getActivityName() {
         return activityName;
     }
@@ -251,5 +254,21 @@ public class EditorForm
 
 	public void setActivityFieldName(String activityFieldName) {
 		this.activityFieldName = activityFieldName;
+	}
+
+	public String getOriginalContent() {
+		return originalContent;
+	}
+
+	public void setOriginalContent(String originalContent) {
+		this.originalContent = originalContent;
+	}
+
+	public String getNewId() {
+		return newId;
+	}
+
+	public void setNewId(String newId) {
+		this.newId = newId;
 	}
 }

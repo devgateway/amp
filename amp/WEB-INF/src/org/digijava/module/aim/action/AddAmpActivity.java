@@ -4,6 +4,8 @@
 
 package org.digijava.module.aim.action;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -425,11 +427,41 @@ public class AddAmpActivity extends Action {
       }
       else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
         eaForm.setStep("1");
+        String newID = null;
+        // If this is not a new activity then create a new ID string.
+        if (eaForm.isEditAct()) {
+        	newID = eaForm.getEditKey().substring(0, eaForm.getEditKey().lastIndexOf("-"));
+        	newID = newID + "-" + System.currentTimeMillis();
+        } else {
+        	newID = "";
+        }
+        
         // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
         session.setAttribute("activityName", eaForm.getIdentification().getTitle());
         session.setAttribute("activityFieldName", request.getParameter("fieldName"));
         String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.getNavigationLanguage(request).getCode()+
-            "&referrer=" + eaForm.getContext() +"/aim/addActivity.do?edit=true";
+            "&newId=" + newID + "&referrer=" + eaForm.getContext() +"/aim/addActivity.do?edit=true";
+        
+        		// Replace the old id.
+        		String auxOldId = eaForm.getEditKey();
+				if (eaForm.isEditAct()) {
+					Class auxClass = EditActivityForm.Identification.class;
+					Field[] fields = auxClass.getDeclaredFields();
+					for (int i = 0; i < fields.length; i++) {
+						Field auxField = fields[i];
+						if (auxField.getType().getName().equals("java.lang.String")) {
+							String methodName = auxField.getName().substring(0, 1).toUpperCase() + auxField.getName().substring(1);
+							Method auxMethod = auxClass.getMethod("get" + methodName, null);
+							String auxValue = (String) auxMethod.invoke(eaForm.getIdentification(), null);
+							if(auxValue != null && auxValue.equals(auxOldId)) {
+								auxMethod = auxClass.getMethod("set" + methodName, String.class);
+								auxMethod.invoke(eaForm.getIdentification(), newID);
+							}
+						}
+					}
+
+				}
+        
         response.sendRedirect(eaForm.getContext() + url);
       }
       else if (eaForm.getStep().equals("1_5")) { // show the 'Refernces' step page.
@@ -437,12 +469,43 @@ public class AddAmpActivity extends Action {
       }
       else if (eaForm.getStep().equals("2.2")) { // shows the edit page of the editor module
           eaForm.setStep("2");
+          
+          String newID = null;
+          // If this is not a new activity then create a new ID string.
+          if (eaForm.isEditAct()) {
+          	newID = eaForm.getEditKey().substring(0, eaForm.getEditKey().lastIndexOf("-"));
+          	newID = newID + "-" + System.currentTimeMillis();
+          } else {
+          	newID = "";
+          }
+          
           // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
-          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
-                        getNavigationLanguage(request).
-                        getCode()+
-              "&referrer=" + eaForm.getContext() +
-              "/aim/addActivity.do?edit=true";
+          session.setAttribute("activityName", eaForm.getIdentification().getTitle());
+          session.setAttribute("activityFieldName", request.getParameter("fieldName"));
+          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() + "&lang="
+						+ RequestUtils.getNavigationLanguage(request).getCode() + "&newId=" + newID + "&referrer="
+						+ eaForm.getContext() + "/aim/addActivity.do?edit=true";
+
+          
+          		// Replace the old id.
+          		String auxOldId = eaForm.getEditKey();
+  				if (eaForm.isEditAct()) {
+  					Class auxClass = EditActivityForm.CrossCuttingIssues.class;
+  					Field[] fields = auxClass.getDeclaredFields();
+  					for (int i = 0; i < fields.length; i++) {
+  						Field auxField = fields[i];
+  						if (auxField.getType().getName().equals("java.lang.String")) {
+  							String methodName = auxField.getName().substring(0, 1).toUpperCase() + auxField.getName().substring(1);
+  							Method auxMethod = auxClass.getMethod("get" + methodName, null);
+  							String auxValue = (String) auxMethod.invoke(eaForm.getCrossIssues(), null);
+  							if(auxValue != null && auxValue.equals(auxOldId)) {
+  								auxMethod = auxClass.getMethod("set" + methodName, String.class);
+  								auxMethod.invoke(eaForm.getCrossIssues(), newID);
+  							}
+  						}
+  					}
+  				}
+          
           response.sendRedirect(eaForm.getContext() + url);
         }
       else if (eaForm.getStep().equals("2")) { // show the step 2 page.

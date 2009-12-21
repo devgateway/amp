@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS cached_amp_activity;
-CREATE TABLE cached_amp_activity AS SELECT * FROM amp_activity;
+CREATE TABLE cached_amp_activity AS SELECT * FROM amp_activity_version;
 DROP TABLE IF EXISTS cached_v_donor_date_hierarchy;
 CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarchy limit 0;
 insert into cached_v_donor_date_hierarchy SELECT * FROM v_donor_date_hierarchy;

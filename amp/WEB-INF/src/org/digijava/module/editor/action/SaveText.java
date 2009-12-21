@@ -82,7 +82,13 @@ public class SaveText
             editor.setEditorKey(formBean.getKey());
             editor.setLanguage(formBean.getLang());
         }
-
+        
+        // If Activity Versioning is active and the text has changed then create
+		// a new record.
+        if (!formBean.getContent().equals(formBean.getOriginalContent())) {
+			exists = false;
+			editor.setEditorKey(formBean.getNewId());
+		}
 
         if (formBean.getContent() != null) {
             editor.setBody(formBean.getContent());

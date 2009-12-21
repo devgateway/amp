@@ -31,6 +31,7 @@
 	<hibernate-classes required="false">
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivity</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityVersion</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityInternalId</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPledge</hibernate-class>
@@ -140,6 +141,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation</hibernate-class>
 
                 <hibernate-class>org.digijava.module.aim.fmtool.dbentity.AmpFeatureSource</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroup</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

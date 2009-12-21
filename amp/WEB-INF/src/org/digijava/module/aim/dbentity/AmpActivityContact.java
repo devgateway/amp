@@ -1,6 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
-public class AmpActivityContact {
+import java.util.ArrayList;
+
+import org.digijava.module.aim.util.Output;
+
+public class AmpActivityContact implements Versionable {
 	
 	private Long id;
 	private AmpActivity activity;
@@ -37,5 +41,29 @@ public class AmpActivityContact {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpActivityContact aux = (AmpActivityContact) obj;
+		String original = "" + this.contact.getId();
+		String copy = "" + aux.contact.getId();
+		if (original.equals(copy)) {
+			return true;
+		}
+		return false;
+	}
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { "Contact: " }, new Object[] { this.contact.getLastname() + " "
+						+ this.contact.getName() }));
+		return out;
+	}
+	@Override
+	public Object getValue() {
+		return "" + this.contactType + "-" + this.primaryContact;
 	}	
 }

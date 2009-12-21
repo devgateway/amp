@@ -51,7 +51,11 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -90,6 +94,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
@@ -97,11 +102,13 @@ import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
+import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -126,6 +133,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -1761,6 +1769,34 @@ public class SaveActivity extends Action {
 				}
 			}
 		} else {
+			// Process surveys from original version that have not been viewed.
+			Session session = PersistenceManager.getRequestDBSession();
+			Query qry = session.createQuery("select survey from " + AmpAhsurvey.class.getName() + " survey where ampActivityId.ampActivityId = ?");
+			qry.setParameter(0, eaForm.getActivityId());
+			Collection savedAhSurveyList = qry.list();
+			Iterator iterOriginalAhSurveys = savedAhSurveyList.iterator();
+			while (iterOriginalAhSurveys.hasNext()) {
+				AmpAhsurvey originalSurvey = (AmpAhsurvey) iterOriginalAhSurveys.next();
+				boolean exists = false;
+				if (eaForm.getSurveys() != null) {
+					Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
+					while (iterSurveys.hasNext()) {
+						Survey auxSurvey = iterSurveys.next();
+						if (auxSurvey != null && auxSurvey.getAhsurvey() != null
+								&& auxSurvey.getAhsurvey().getAmpDonorOrgId() != null
+								&& auxSurvey.getAhsurvey().getAmpDonorOrgId().equals(originalSurvey.getAmpDonorOrgId())) {
+							exists = true;
+							//eaForm.getSurveys().remove(auxSurvey);
+						}
+					}
+					if (!exists) {
+						DbUtil.saveNewSurvey(originalSurvey, activity);
+					}
+				} else {
+					DbUtil.saveNewSurvey(originalSurvey, activity);
+				}
+			}
+			
 			if (eaForm.getSurveys() != null) {
 				Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
 				while (iterSurveys.hasNext()) {
@@ -2069,6 +2105,8 @@ public class SaveActivity extends Action {
 		else{
 			rsp.setOldActivityId(null);
 			rsp.setEdit(false);
+			//Added for activity versioning.
+			rsp.setOldActivityId(rsp.getEaForm().getActivityId());
 			/*actId = ActivityUtil.saveActivity(activity, null, false, 
 					eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 					field, relatedLinks,tm.getMemberId() , 
@@ -2085,7 +2123,7 @@ public class SaveActivity extends Action {
 		AMPException err;
 		Long actId;
 		
-		AmpActivity recoveryActivity=null;
+		AmpActivityVersion recoveryActivity=null;
 		boolean recoveryMode = false;
 		logger.debug("Attempting normal save!");
 		try {
@@ -2115,7 +2153,7 @@ public class SaveActivity extends Action {
 			boolean rebuild = false;
 			logger.debug("Building savable activity!");
 			while (currentStep < rsp.getNoOfSteps() || rebuild){
-				recoveryActivity = new AmpActivity();
+				recoveryActivity = new AmpActivityVersion();
 				rsp.setActivity(recoveryActivity);
 				thisStep:
 				{
@@ -2268,8 +2306,10 @@ public class SaveActivity extends Action {
 		ampContext = getServlet().getServletContext();
 		ActionErrors errors = new ActionErrors();
 		EditActivityForm eaForm = (EditActivityForm) form;
-		AmpActivity activity = new AmpActivity();
+		AmpActivityVersion activity = new AmpActivityVersion();
 		Collection relatedLinks = new ArrayList();
+		
+		eaForm.setEditAct(false);
 		
 		/**
 		 * Forward the user if:
@@ -2298,14 +2338,14 @@ public class SaveActivity extends Action {
 		String toDelete = request.getParameter("delete");
 		if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
 			if (eaForm.isEditAct() == false) {
-				AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
+				/*AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
 				if (act != null) {
 					request.setAttribute("existingActivity", act);
 					eaForm.setActivityId(act.getAmpActivityId());
 					logger.debug("Activity with the name "
 							+ eaForm.getIdentification().getTitle() + " already exist.");
 					return mapping.findForward("activityExist");
-				}
+				}*/
 			}
 		} else if (toDelete.trim().equals("true")) {
 			eaForm.setEditAct(true);
@@ -2362,13 +2402,11 @@ public class SaveActivity extends Action {
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(">>> Unknown error on step:" + stepText[stepNumber]);
+				logger.error(e);
+				e.printStackTrace();
 			}
 			stepNumber++;
 		}
-		
-		// AMP-4660: Add filters for viewed, created and updated activities.
-		ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
-				eaForm.getActivityId(), true);
 
 		if(eaForm.getCustomFields()!=null){
 			List<CustomField<?>> customFields = eaForm.getCustomFields();
@@ -2548,8 +2586,28 @@ public class SaveActivity extends Action {
 		}
 
 		
+		// AMP-4660: Add filters for viewed, created and updated activities.
+		if(eaForm.getActivityId()!=null) {
+			ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
+				eaForm.getActivityId(), true);
+		} /*else {
+			ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
+				actId, true);
+		}*/
 
 		
+		// When an activity is draft then delete the old version (and is not a new activity).
+		if(eaForm.getActivityId() != null) {
+			AmpActivityVersion originalActivity = ActivityUtil.getAmpActivityVersion(eaForm.getActivityId());
+			if (originalActivity.getDraft() != null && originalActivity.getDraft().booleanValue() == true) {
+				ActivityUtil.deleteActivity(eaForm.getActivityId());
+			} else {
+				// Delete old version when versioning is disabled on GS.
+				if (ActivityVersionUtil.numberOfVersions() == 0) {
+					ActivityUtil.deleteActivity(eaForm.getActivityId());
+				}
+			}
+		}
 	
 	
 		

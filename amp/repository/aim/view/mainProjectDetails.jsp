@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="previewLogframeUtil.jsp" flush="true" />
+<jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <jsp:include page="overviewOptionsPopupUtil.jsp" flush="true" />
 
 <style type="text/css">
@@ -63,6 +64,15 @@ function fnEditProject(id)
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
     
+}
+
+function fnShowHistory(id) {
+	//alert(id);
+	//document.aimChannelOverviewForm.action = "/aim/viewActivityHistory.do~activityId=" + id;
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityHistory.do" />
+   	document.aimChannelOverviewForm.action = "<%=addUrl%>~activityId=" + id;
+	document.aimChannelOverviewForm.target = "_self";
+	document.aimChannelOverviewForm.submit();
 }
 
 function preview(id)
@@ -328,6 +338,8 @@ html>body #mainEmpty {
 					</field:display>
 				</feature:display>
 			</module:display>
+			<a style="cursor:pointer" target="_blank" onclick="javascript:previewHistory(document.getElementById('tempActivity').value); return false;" title="<digi:trn>View History</digi:trn>">
+				<img src="/repository/aim/images/activity_history.png" border="0"></a>&nbsp;
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Logframe" module="Previews">
 					<field:display name="Logframe Preview Button" feature="Logframe">

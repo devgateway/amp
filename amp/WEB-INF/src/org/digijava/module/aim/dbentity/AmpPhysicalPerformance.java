@@ -1,9 +1,12 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class AmpPhysicalPerformance implements Serializable
+import org.digijava.module.aim.util.Output;
+
+public class AmpPhysicalPerformance implements Serializable, Versionable
 {
 	
 	private Long ampPpId ;
@@ -165,5 +168,35 @@ public class AmpPhysicalPerformance implements Serializable
 		AmpPhysicalPerformance ampPhysicalPerformance = (AmpPhysicalPerformance) obj;
 		return this.ampPpId.equals(ampPhysicalPerformance.ampPpId);
 		
+	}
+
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpPhysicalPerformance aux = (AmpPhysicalPerformance) obj;
+		if (this.title.equals(aux.getTitle())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(new Output(null, new String[] { "Title: " }, new Object[] { this.title }));
+		if (this.description != null && !this.description.trim().equals("")) {
+			out.getOutputs()
+					.add(new Output(null, new String[] { " - Description: " }, new Object[] { this.description }));
+		}
+		if (this.reportingDate != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { " - Reporting Date: " }, new Object[] { this.reportingDate }));
+		}
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		return this.description;
 	}	
 }	

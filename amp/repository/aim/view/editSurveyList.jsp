@@ -363,6 +363,8 @@
 
                                                 <c:set target="${urlParams}" property="index" value="${cntr}" />
 
+												<c:set target="${urlParams}" property="orgId" value="${surveyFund.orgID}" />
+
 												<c:set var="translation">
 
 													<digi:trn key="aim:clickToViewAESurvey">Click here to view Aid Effectiveness Survey</digi:trn>

@@ -1,5 +1,5 @@
 call drop_table_if_exist ('cached_amp_activity');
-CREATE TABLE cached_amp_activity as select * from amp_activity;
+CREATE TABLE cached_amp_activity as select * from amp_activity_version;
 call drop_table_if_exist ('cached_v_donor_date_hierarchy');
 CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarchy where rownum=0;
 alter table cached_v_donor_date_hierarchy modify quarter_name varchar(2);

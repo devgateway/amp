@@ -9,8 +9,9 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-public class AmpTeam  implements Serializable, Comparable, Identifiable {
+public class AmpTeam  implements Serializable, Comparable, Identifiable, Versionable {
 	
 	private Long ampTeamId;
 
@@ -229,5 +230,19 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 		this.childrenWorkspaces = childrenWorkspaces;
 	}
 
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		return this.equals(obj);
+	}
 
+	@Override
+	public Object getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Output getOutput() {
+		return new Output(null, new String[] { this.name }, new Object[] { "" });
+	}
 }

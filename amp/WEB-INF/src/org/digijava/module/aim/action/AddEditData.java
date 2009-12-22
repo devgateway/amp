@@ -26,16 +26,11 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-public class AddEditData
-    extends Action {
+public class AddEditData extends Action {
 
     private static Logger logger = Logger.getLogger(AddEditData.class);
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-
-
-
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         ThemeForm themeForm = (ThemeForm) form;
 
         String parent=request.getParameter("parent");
@@ -124,17 +119,14 @@ public class AddEditData
            }
             themeForm.setPrgIndValues(indValues);
         }else if(event!=null && event.equals("save")){
-            if (themeForm.getParentId() != null) {
-				for (Iterator indValIter = indValues.iterator(); indValIter
-						.hasNext();) {
-					AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter
-							.next();
-					if (indVal.getIndicatorValueId() != null
-							&& (indVal.getIndicatorValueId().longValue() < 0)) {
-						// ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
-					}
-				}
-			}
+//            if (themeForm.getParentId() != null) {
+//				for (Iterator indValIter = indValues.iterator(); indValIter	.hasNext();) {
+//					AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter.next();
+//					if (indVal.getIndicatorValueId() != null && (indVal.getIndicatorValueId().longValue() < 0)) {
+//						// ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
+//					}
+//				}
+//			}
 			// AmpThemeIndicators
 			// themeInd=ProgramUtil.getThemeIndicatorById(themeForm.getParentId());
 			// AmpIndicator indId =
@@ -155,14 +147,14 @@ public class AddEditData
 						value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
 						value.setValueType(prgValue.getValueType());
 						value.setLocation(prgValue.getLocation());
-                                                Long sourceId = prgValue.getSourceId();
-                                                if(sourceId!=null&&sourceId!=0){
-                                                    AmpCategoryValue source=CategoryManagerUtil.getAmpCategoryValueFromDb(sourceId);
-                                                    value.setIndicatorSource(source);
-                                                }
+                        Long sourceId = prgValue.getSourceId();
+                        if(sourceId!=null&&sourceId!=0){
+                        	AmpCategoryValue source=CategoryManagerUtil.getAmpCategoryValueFromDb(sourceId);
+                            value.setIndicatorSource(source);
+                        }
 						value.setIndicatorConnection(connection);
 						connection.getValues().add(value);
-					}					
+					}
 				}
             	try{
                 	IndicatorUtil.updateThemeConnection(connection);

@@ -2572,4 +2572,12 @@ public class TeamUtil {
         }
     }
 
+    public static class HelperAmpTeamNameComparatorDesc implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            AmpTeam team1 = (AmpTeam) obj1;
+            AmpTeam team2 = (AmpTeam) obj2;
+            return team2.getName().compareTo(team1.getName());
+        }
+    }
+    
 }

@@ -38,7 +38,6 @@ public class WorkspaceManager extends Action {
 			}
 		}
 
-		int NUM_RECORDS = 10000;
 		Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
 		
@@ -57,23 +56,10 @@ public class WorkspaceManager extends Action {
 	         keywords.add(st.nextToken().toLowerCase());
 	     }
 
-		String temp = request.getParameter("page"); 
-		if (temp != null) {
-			wsForm.setPage(Integer.parseInt(temp));
-		} else if (wsForm.getPage() <= 0) {
-			wsForm.setPage(1);
-		}
-		
 		Collection<AmpTeam> ampWorkspaces = (Collection<AmpTeam>) session.getAttribute("ampWorkspaces");
 		if (ampWorkspaces == null) {
 			ampWorkspaces = TeamUtil.getAllTeams();
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
-		}
-		
-		if(wsForm.getNumPerPage()!=-1) {
-			NUM_RECORDS =wsForm.getNumPerPage();
-		}else {
-			NUM_RECORDS =ampWorkspaces.size();
 		}
 		
 		Collection<AmpTeam> colAt=new ArrayList<AmpTeam>();
@@ -82,7 +68,6 @@ public class WorkspaceManager extends Action {
 			colAt.add(at);
 		}
 		Vector<AmpTeam> vect = new Vector<AmpTeam>();
-		//vect.addAll(ampWorkspaces);
 		vect.addAll(colAt);
 		String workspaceType = wsForm.getWorkspaceType();
 		for (AmpTeam ampTeam : vect) {
@@ -99,12 +84,6 @@ public class WorkspaceManager extends Action {
 			}
 		}
 		
-		//pages
-		Collection<Integer> pages = null;
-		int currPage = wsForm.getPage();
-		int stIndex = ((currPage - 1) * NUM_RECORDS);
-		int edIndex = stIndex + NUM_RECORDS;
-				
 		Collection<AmpTeam> workspacesFiltered=new ArrayList<AmpTeam>();
 		if(!workspaces.isEmpty())
 		{
@@ -123,45 +102,12 @@ public class WorkspaceManager extends Action {
 		}
 		
 		if(workspacesFiltered.isEmpty() && keywords.isEmpty()){
-			pages=setupPagination(workspaces, wsForm.getPage(), NUM_RECORDS);			
-			wsForm.setWorkspaces(getWorkspacesForPage(workspaces,stIndex,edIndex));
+			wsForm.setWorkspaces(workspaces);
 		}else {			
-			pages=setupPagination(workspacesFiltered, wsForm.getPage(), NUM_RECORDS);
-			wsForm.setWorkspaces(getWorkspacesForPage(workspacesFiltered,stIndex,edIndex));
+			wsForm.setWorkspaces(workspacesFiltered);
 		}
 		
-		wsForm.setPages(pages);
 		return mapping.findForward("forward");
 	}
-	
-	private Collection<Integer> setupPagination(Collection<AmpTeam> workspaces, int currentPage, int numberOfRecordsPerPage){		
-		Collection<Integer> pages=null;
-		int numPages = workspaces.size() / numberOfRecordsPerPage;
-		numPages += (workspaces.size() % numberOfRecordsPerPage != 0) ? 1 : 0;
-		
-		int currPage = currentPage;
-		int stIndex = ((currPage - 1) * numberOfRecordsPerPage);
-		int edIndex = stIndex + numberOfRecordsPerPage;
-		if(edIndex>workspaces.size()){
-			edIndex=workspaces.size();
-		}
-		
-		if (numPages > 1) {
-			pages = new ArrayList<Integer>();
-			for (int i = 0; i < numPages; i++) {
-				Integer pageNum = new Integer(i + 1);
-				pages.add(pageNum);
-			}
-		}
-		return pages;
-	}
-	
-	private Collection<AmpTeam> getWorkspacesForPage(Collection<AmpTeam> workspaces , int stIndex, int endIndex){
-		Collection<AmpTeam> retVal=null;
-		if(endIndex>workspaces.size()){
-			endIndex=workspaces.size();
-		}			
-		retVal=((List)workspaces).subList(stIndex, endIndex);
-		return retVal;
-	}
+
 }

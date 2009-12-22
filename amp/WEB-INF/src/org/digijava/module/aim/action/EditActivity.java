@@ -179,6 +179,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	activityId=actIdParam;
     
   
+    String resetMessages = request.getParameter("resetMessages");
+    if(resetMessages != null && resetMessages.equals("true")) {
+    	if(eaForm.getMessages() != null) {
+    		eaForm.getMessages().clear();
+    	}
+    }
+    
     // set Globam Settings Multi-Sector Selecting
    /* String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);

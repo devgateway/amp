@@ -145,6 +145,14 @@ function saveClicked() {
  
 }
 
+function closeClicked() {
+	if(canExit()) {
+		document.aimEditActivityForm.action = "/showDesktop.do";
+	    document.aimEditActivityForm.target = "_self";
+	    document.aimEditActivityForm.submit();
+	}	    
+}
+
 function saveAsDraftClicked() {
   var draftStatus=document.getElementById("draftFlag");
   if(draftStatus!=null){
@@ -205,6 +213,22 @@ var draftStatus=document.getElementById("draftFlag");
 }
 -->
 </script>
+
+<c:set var="previewTitle">
+	<digi:trn>This button will take you to the Activity Preview page</digi:trn>
+</c:set>
+<c:set var="previewLogframeTitle">
+	<digi:trn>This button will take you the Logframe overview page</digi:trn>
+</c:set>
+<c:set var="saveAsDraftTitle">
+	<digi:trn>This button will save all changes that were made to the activity. The activity will be saved as a Draft</digi:trn>
+</c:set>
+<c:set var="saveAndSubmitTitle">
+	<digi:trn>This button will close the activity, submit for validation and will take you to My Desktop</digi:trn>
+</c:set>
+<c:set var="closeTitle">
+	<digi:trn>This button will take you back to My Desktop and will alert you if the changes to an activity have not been saved</digi:trn>
+</c:set>
 
 <digi:instance property="aimEditActivityForm" />
 <html:hidden property="workingTeamLeadFlag" />
@@ -829,7 +853,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					<field:display name="Logframe Preview Button" feature="Logframe" >
 						<tr>
 							<td align="center">
-								<html:button  styleClass="dr-menu" property="logframe" onclick="previewLogFrameClicked()">
+								<html:button  styleClass="dr-menu" property="logframe" onclick="previewLogFrameClicked()" title="${previewLogframeTitle}">
 									<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>
 								</html:button>
 							</td>
@@ -840,7 +864,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					<field:display feature="Preview Activity" name="Preview Button">
 						<tr>
 							<td align="center">
-								<html:button  styleClass="dr-menu" property="logframe" onclick="previewClicked()">
+								<html:button  styleClass="dr-menu" property="logframe" onclick="previewClicked()" title="${previewTitle}">
 									<digi:trn key="aim:preview">Preview</digi:trn>
 								</html:button>
 							</td>
@@ -849,20 +873,27 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				</feature:display>			
 				<tr>
 					<td align="center">
-						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveClicked()">
-							<digi:trn key="aim:save">Save</digi:trn>
+						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveClicked()" title="${saveAndSubmitTitle}">
+							<digi:trn>Save and Submit</digi:trn>
 						</html:button>
 					</td>
 				</tr>
 				<field:display name="Draft" feature="Identification">
 				<tr>
 					<td align="center">
-						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()">
+						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()" title="${saveAsDraftTitle}">
 							<digi:trn key="aim:saveAsDraft">Save as draft</digi:trn>
 						</html:button>
 					</td>
 				</tr>
 				</field:display>
+				<tr>
+					<td align="center">
+						<html:button  styleClass="dr-menu" property="submitButton" onclick="closeClicked()" title="${closeTitle}">
+							<digi:trn>Close</digi:trn>
+						</html:button>
+					</td>
+				</tr>
 			</table>
 		</td>
 	</tr>

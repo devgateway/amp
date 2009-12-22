@@ -22,8 +22,10 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -156,5 +158,12 @@ public class ActivityVersionUtil {
 			ret = aux;
 		}
 		return ret;
+	}
+
+	public static AmpActivity getLastActivityFromGroup(Long groupId) throws Exception {
+		AmpActivity auxActivity = null;
+		Session session = PersistenceManager.getSession();
+		auxActivity = ((AmpActivityGroup) session.load(AmpActivityGroup.class, groupId)).getAmpActivityLastVersion();
+		return auxActivity;
 	}
 }

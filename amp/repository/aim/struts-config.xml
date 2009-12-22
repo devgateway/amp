@@ -689,6 +689,7 @@
       <forward name="forward" path="/showLayout.do?layout=workspaceManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimWorkspaceForm" path="/aim/searchWorkspaces" scope="session" type="org.digijava.module.aim.action.searchWorkspaces" validate="false"/>
     <action input="/showLayout.do?layout=updateWorkspace" name="aimUpdateWorkspaceForm" path="/aim/updateWorkspace" scope="session" type="org.digijava.module.aim.action.UpdateWorkspace" validate="true">
       <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
       <forward name="index" path="/aim/index.do" redirect="true" />

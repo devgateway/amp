@@ -178,7 +178,12 @@
 										<c:if test="${not empty aimOrgManagerForm.alphaPages}">
 										<logic:iterate name="aimOrgManagerForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 											<c:if test="${alphaPages != null}">
-												<html:option value="<%=alphaPages %>" ><%=alphaPages %></html:option>
+												<c:if test="${alphaPages=='0-9'}">
+													<html:option value="[${alphaPages}]" >${alphaPages}</html:option>
+												</c:if>
+												<c:if test="${alphaPages!='0-9'}">
+													<html:option value="${alphaPages}" >${alphaPages}</html:option>
+												</c:if>
 											</c:if>
 										</logic:iterate>
 										</c:if>

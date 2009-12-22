@@ -153,6 +153,21 @@ public class OrganisationManager
 
           String[] alphaArray = new String[26];
           int i = 0;
+          for(char c='0';c<='9';c++){
+        	  boolean breakLoop=false;
+        	  Iterator itr = col.iterator();
+              while (itr.hasNext()) {            	
+                AmpOrganisation org = (AmpOrganisation) itr.next();
+                if(org.getName().indexOf(c)==0){
+                	alphaArray[i++]="0-9";
+                	breakLoop=true;
+                	break;
+                }
+              }
+              if(breakLoop){
+            	  break;
+              }
+          }
           for (char c = 'A'; c <= 'Z'; c++) {
             Iterator itr = col.iterator();
             while (itr.hasNext()) {
@@ -162,7 +177,7 @@ public class OrganisationManager
                 break;
               }
             }
-          }
+          }          
           eaForm.setAlphaPages(alphaArray);
         }
         else {
@@ -175,14 +190,15 @@ public class OrganisationManager
           Iterator itr = col.iterator();
           while (itr.hasNext()) {
             AmpOrganisation org = (AmpOrganisation) itr.next();
-            if (org.getName().toUpperCase().startsWith(alpha)) {
-              colAlpha.add(org);
-            }
+            if(org.getName().toUpperCase().matches("^"+alpha+".+")){
+        		colAlpha.add(org);
+            }                     
           }
           eaForm.setColsAlpha(colAlpha); 
+        }else{
+        	eaForm.setStartAlphaFlag(true);
         }
-        else
-          eaForm.setStartAlphaFlag(true);
+          
       int stIndex = 1;
       int edIndex = eaForm.getNumResults();
 

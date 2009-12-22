@@ -97,7 +97,7 @@ cursor:pointer;
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
                 	<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                		<img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 				</module:display>
                 <div id="reports" class="yuiampmenu" style="opacity:0.9;">
@@ -120,7 +120,7 @@ cursor:pointer;
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
 		                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                   <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
 		                <div id="reports2" class="yuiampmenu">
 		                    <div class="bd">                    
@@ -163,7 +163,7 @@ border-right:1px solid white;
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
 		                <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                   <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>
 		                <div id="reports2" class="yuiampmenu">
 		                    <div class="bd">                    
@@ -212,7 +212,7 @@ function adminHelp(){
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
                               <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -247,7 +247,7 @@ function adminHelp(){
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
                               <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -366,7 +366,7 @@ function adminHelp(){
                                  <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
@@ -439,7 +439,7 @@ function adminHelp(){
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -527,7 +527,7 @@ function adminHelp(){
                           	</c:if>
                           	<feature:display name="Create Event" module="Calendar">
                           		<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;"  onclick="return canExit()">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
@@ -561,7 +561,7 @@ function adminHelp(){
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
                               </span>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                                   <div class="bd">                    
@@ -625,7 +625,7 @@ function adminHelp(){
                                  <digi:trn key="fm:messages">Messages</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -653,7 +653,7 @@ function adminHelp(){
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -714,7 +714,7 @@ function adminHelp(){
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    

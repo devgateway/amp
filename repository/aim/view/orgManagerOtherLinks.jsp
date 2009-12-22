@@ -26,7 +26,7 @@
 				<table cellPadding=5 cellSpacing=1 width="100%">
 					<tr>
 						<td>
-							<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 						<td>
 								<digi:link href="/editOrganisation.do?actionFlag=create&mode=resetMode" >
 									<digi:trn key="aim:addNewOrganization">Add an Organization</digi:trn></digi:link>
@@ -34,7 +34,7 @@
 					</tr>
 					<tr>
 						<td>
-							<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 						<td>
 								<digi:link href="/orgTypeManager.do" >
 									<digi:trn key="aim:orgTypeManager">Organization Type Manager</digi:trn></digi:link>
@@ -42,7 +42,7 @@
 					</tr>
 					<tr>
 						<td>
-							<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 						<td>
 								<digi:link href="/orgGroupManager.do" >
 									<digi:trn key="aim:orgGroupManager">Organization Group Manager</digi:trn></digi:link>
@@ -50,7 +50,7 @@
 					</tr>
 					<tr>
 						<td>
-							<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 						<td>
 							<digi:link href="/admin.do">
 							<digi:trn key="aim:AmpAdminHome">

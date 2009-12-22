@@ -41,7 +41,7 @@
                            	<TR bgcolor="#F4F4F2" height="17"> 
                               	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
 											<digi:trn key="aim:description">Description</digi:trn></TD>
-	                              <TD><IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17"></TD>
+	                              <TD><IMG src="./TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17"></TD>
    	                        </TR>
       	                  </TABLE>									
 								</TD>

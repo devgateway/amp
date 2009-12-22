@@ -489,7 +489,7 @@ div.fakefile2 input{
 														<b>Please enter here keywords of the translations you want to be skipped/updated during import</b>
 													</digi:trn>
 										 			&nbsp;
-										 			<img src="../ampTemplate/images/help.gif" onmouseover="stm([importHelp,separateKeywords],Style[15])" onmouseout="htm()"/>
+										 			<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([importHelp,separateKeywords],Style[15])" onmouseout="htm()"/>
 										 		</div>									 		 
 										 	</td>
 										</tr>

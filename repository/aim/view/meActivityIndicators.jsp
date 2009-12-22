@@ -286,7 +286,7 @@
                                                 
                                                                 <td width="9">
                                                 
-                                                                    <img src= "../ampTemplate/images/bullet_red.gif" border=0>
+                                                                    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
                                                 
                                                                 </td>
                                                 
@@ -298,7 +298,7 @@
                                                 
                                                                 <td width="9">
                                                 
-                                                                    <img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+                                                                    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" border=0>
                                                 
                                                                 </td>
                                                 
@@ -389,7 +389,7 @@
 
 																		<digi:link href="/collapseIndicator.do">
 
-																		<img src= "../ampTemplate/images/arrow_down.gif" border=0>
+																		<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" border=0>
 
 																		</digi:link>
 
@@ -411,7 +411,7 @@
 
 																		<digi:link href="/expandIndicator.do" name="urlParams">
 
-																			<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+																			<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
 
 																		</digi:link>
 
@@ -423,13 +423,13 @@
 
 																	<c:if test="${indicator.defaultInd == true}">
 
-																		<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+																		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
 
 																	</c:if>
 
 																	<c:if test="${indicator.defaultInd == false}">
 
-																		<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+																		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" border=0>
 
 																	</c:if>
 
@@ -477,7 +477,7 @@
 
 																	onclick="return confirmDelete()">
 
-																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 
 																	</digi:link>
 
@@ -527,7 +527,7 @@
 
 																				<td align="left" vAlign="center">
 																					<a id="date1" href='javascript:pickDate("date1",document.aimUpdateIndicatorValuesForm.baseValDate)'>
-																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
 																				</td>
 
@@ -623,7 +623,7 @@
 
 																				<td align="left" vAlign="center">
 																					<a id="date2" href='javascript:pickDate("date2",document.aimUpdateIndicatorValuesForm.targetValDate)'>
-																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
 																				</td>
 
@@ -675,7 +675,7 @@
 
 																				<td align="left" vAlign="center">
 																					<a id="date3" href='javascript:pickDate("date3",document.aimUpdateIndicatorValuesForm.revisedTargetValDate)'>
-																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
 																				</td>
 

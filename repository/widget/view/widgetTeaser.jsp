@@ -261,7 +261,7 @@
 
         </div>
         <div id="sectorTableWidgetDivLoad_${gisWidgetTeaserForm.id}">
-            <img src='<digi:file src="images/amploading.gif"/>' alt="">
+            <img src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>' alt="">
         </div>
 
 </c:if>
@@ -279,7 +279,7 @@
             function getTopTenDonorTable(){
                 var topTenDonorTable=document.getElementById('topTenDonorGroupsDiv');
             <digi:context name="topDonorsRendererUrl" property="/widget/getTopTenDonorGroups.do" />
-                         topTenDonorTable.innerHTML= '<digi:img src="images/amploading.gif"/>';
+                         topTenDonorTable.innerHTML= '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>';
                          //from year
                          var fy=document.getElementsByName('selectedFromYear')[0].value;
                          //to year

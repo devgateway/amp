@@ -134,7 +134,7 @@ a.itr:hover {
 											  </td>
 											  <c:set var="draftTrn"><digi:trn>Save as Draft</digi:trn></c:set>
 											  <td width="5%">
-											  	<a href="javascript:saveAsDraft(${act.activityId})"><digi:img border="0" src="/repository/aim/images/draft.png" title="${draftTrn}"/> </a>
+											  	<a href="javascript:saveAsDraft(${act.activityId})"><digi:img border="0" src="/TEMPLATE/ampTemplate/imagesSource/common/draft.png" title="${draftTrn}"/> </a>
 											  </td>
 				                           </tr>
                                           </c:forEach>

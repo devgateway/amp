@@ -123,7 +123,7 @@
 											<tr>
 												<td align="center" >
 													<digi:trn>Message Refresh Time(minutes)</digi:trn> &nbsp;
-													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
+													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgRefreshTimeCurr}</td>
 												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew"/></td>
@@ -135,7 +135,7 @@
 											<tr>
 												<td align="center">
 													<digi:trn>Message Storage Per Message Type</digi:trn>
-													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
+													<img src="./TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgStoragePerMsgTypeCurr} </td>
 												<td align="center"><html:text name="messageForm" property="msgStoragePerMsgTypeNew" /> </td>
@@ -144,7 +144,7 @@
 											<tr>
 												<td align="center">
 													<digi:trn>Days of Advance Alert Warnings</digi:trn>
-													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForAdvanceAlerts],Style[13])" onmouseout="htm()"/>
+													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForAdvanceAlerts],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
 												<td align="center"><html:text name="messageForm" property="daysForAdvanceAlertsWarningsNew"/> </td>
@@ -153,7 +153,7 @@
 											<tr>
 												<td align="center">
 													<digi:trn>Email Alerts</digi:trn>
-													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
+													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">
 													<c:if test="${messageForm.emailMsgsCurrent==-1}">
@@ -208,7 +208,7 @@
 													<table cellPadding=3 cellSpacing=1 width="100%">
 														<tr>
 															<td>
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="translation">
 																	<digi:trn>Click here to goto Admin Home</digi:trn>
 																</c:set>
@@ -219,7 +219,7 @@
 														</tr>
 														<tr>
 															<td>
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="trn">
 								                                  <digi:trn>Click here to view TemplateAlerts Manager</digi:trn>
 								                                </c:set>

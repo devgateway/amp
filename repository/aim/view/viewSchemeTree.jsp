@@ -187,9 +187,9 @@
 										 		<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
 										 			<li id="rootnode" noDrag="true" noSiblings="true" noDelete="true" noRename="true" >
 										 				<a>Root
-															<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 14px; cursor: pointer;" onclick='newNode(<%=request.getParameter("rootId")%>, 0)'/>
-															<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 14px; cursor: pointer;" onclick="editRootNode(<%=request.getParameter("rootId")%>)"/>
-															<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 14px; cursor: pointer;" onclick="deleteRootNode(<%=request.getParameter("rootId")%>)"/>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 14px; cursor: pointer;" onclick='newNode(<%=request.getParameter("rootId")%>, 0)'/>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" style="height: 14px; cursor: pointer;" onclick="editRootNode(<%=request.getParameter("rootId")%>)"/>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/common/deleteIcon.gif" style="height: 14px; cursor: pointer;" onclick="deleteRootNode(<%=request.getParameter("rootId")%>)"/>
 														</a>
 										 				<ul id = "rootNod">
 										 				</ul>
@@ -334,7 +334,7 @@
 													<bean:write name="aimAddSectorForm" property="secSchemeId" />
 												</c:set>
 												<c:set target="${urlParams5}" property="parent" value="scheme"/>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToAddSector">
 												<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 												</c:set>
@@ -349,7 +349,7 @@
 										<field:display name="View Schemes Link" feature="Sectors">
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToViewSchemes">
 												<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 												</c:set>
@@ -363,7 +363,7 @@
 										</field:display>
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToViewAdmin">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

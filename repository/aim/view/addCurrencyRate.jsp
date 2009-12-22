@@ -197,7 +197,7 @@
 	function showPanelLoading(){
 		  var content = document.getElementById("myContentContent");
 			content.innerHTML = '<div style="text-align: center">' + 
-			'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+			'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
 			'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		  showContent();
 	}

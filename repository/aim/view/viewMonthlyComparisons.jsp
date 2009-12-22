@@ -842,7 +842,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 															<TD width="15">
 
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 
 															</TD>
 
@@ -886,7 +886,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 															<TD width="15">
 
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 
 															</TD>
 

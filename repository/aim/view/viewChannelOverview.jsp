@@ -263,7 +263,7 @@ function commentWin(val) {
 									align="left" bgColor=#f4f4f2>
 									<TR>
 										<TD width="100%"><IMG height=10
-											src="../ampTemplate/images/arrow-014E86.gif" width=15>
+											src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
                                             <c:set var="status">
                                             	${aimChannelOverviewForm.status}
                                             </c:set>
@@ -314,7 +314,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																			<b>
 																	  		<digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 																	  	</td>
@@ -329,7 +329,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																		<b>
 																		<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs</digi:trn></b>
 																	  </td></TR>
@@ -360,7 +360,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn key="aim:status">Status</digi:trn></b></TD>
 																		</TR>
 																		<TR>
@@ -385,7 +385,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn key="aim:actBudget">Budget</digi:trn></b>
 																			</TD>
 																		</TR>
@@ -514,7 +514,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn key="aim:sector">Sector</digi:trn></b></TD>
 																		</TR>
 																		<TR>
@@ -548,7 +548,7 @@ function commentWin(val) {
 																									<field:display name="Sector Scheme Name" feature="Sectors">
 																										<c:out value="${actSect.sectorScheme}" />
 																										<br/>&nbsp;
-																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
+																										<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
 																									</field:display>
 																									<field:display name="${config.name} Sector" feature="Sectors">
 																										<c:out value="${actSect.sectorName}" />
@@ -556,13 +556,13 @@ function commentWin(val) {
 																									<c:if test="${!empty actSect.subsectorLevel1Name}">
 																										<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">
 																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																											src="../ampTemplate/images/link_out_bot.gif"/>
+																											src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
 																										<c:out value="${actSect.subsectorLevel1Name}" />
 																										
 																											<c:if test="${!empty actSect.subsectorLevel2Name}">
 																											<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
 																												 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																													src="../ampTemplate/images/link_out_bot.gif"/>
+																													src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
 																												<c:out value="${actSect.subsectorLevel2Name}" />
 																												&nbsp;
 																											</field:display>
@@ -603,7 +603,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																		<b><digi:trn key="aim:location">Location</digi:trn></b>
 																		</TD>
 																	</TR>
@@ -779,7 +779,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
 																		</TR>
@@ -797,7 +797,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
 																		</TR>
@@ -815,7 +815,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
 																		</TR>
@@ -1021,7 +1021,7 @@ function commentWin(val) {
 																<TABLE width="100%" cellPadding="3" cellSpacing="1"vAlign="top" align="top" bgcolor="#aaaaaa">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																			<IMG height="10"src="../ampTemplate/images/arrow-014E86.gif" width="15"/>
+																			<IMG height="10"src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15"/>
 																			<b><digi:trn >Donor funding Contact Information</digi:trn></b>
 																		</TD>
 																	</TR>
@@ -1060,7 +1060,7 @@ function commentWin(val) {
 																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																				<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
 																				<b><digi:trn>MOFED Contact Information</digi:trn></b>
 																			</TD>
 																		</TR>
@@ -1100,7 +1100,7 @@ function commentWin(val) {
 																<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																			<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+																			<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
 																			<b><digi:trn>Project Coordinator Contact Information</digi:trn></b>
 																		</TD>
 																	</TR>
@@ -1140,7 +1140,7 @@ function commentWin(val) {
 																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																				<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
 																				<b><digi:trn>Sector Ministry Contact Information</digi:trn></b>
 																			</TD>
 																	</TR>
@@ -1180,7 +1180,7 @@ function commentWin(val) {
 																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																				<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
 																				<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
 																			</TD>
 																	</TR>
@@ -1227,7 +1227,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width=15> <b><digi:trn
 																		key="aim:AccessionInstrument">
 																	Accession Instrument</digi:trn></b></TD>
@@ -1252,7 +1252,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width=15> <b><digi:trn key="aim:acChapter">
                                                               A.C. Chapter</digi:trn></b></TD>
 																</TR>
@@ -1272,7 +1272,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width=15> <b>
 																		<digi:trn key="aim:crisNumber">Cris Number</digi:trn>
 																		</b></TD>
@@ -1294,7 +1294,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width=15> <b><digi:trn
 																		key="aim:ProjectCategory">
 																	Project Category</digi:trn></b></TD>
@@ -1323,7 +1323,7 @@ function commentWin(val) {
 															vAlign="top" align="left" bgcolor="#aaaaaa">
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																	height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																	height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																	width=15> <b><digi:trn
 																	key="aim:relatedOrganizations">Related Organizations</digi:trn></b>
 																</TD>
@@ -1604,7 +1604,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																		<b><digi:trn key="aim:keyActivityDates">Key Activity Dates</digi:trn></b>
 																		</TD>
 																	</TR>
@@ -1713,7 +1713,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:typeOfAssistance">
 																				Type Of Assistance</digi:trn></b></TD>
@@ -1746,7 +1746,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:financingInstruments">
 																				Financing Instruments</digi:trn></b></TD>
@@ -1781,7 +1781,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
+																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																				width=15> <b><digi:trn>
 																				Funding Status</digi:trn></b></TD>
 																		</TR>
@@ -1809,7 +1809,7 @@ function commentWin(val) {
 															vAlign="top" align="top" bgcolor="#aaaaaa">
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																	height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																	height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																	width=15> <b><digi:trn
 																	key="aim:activityCreationDetails">
 																	Activity creation details</digi:trn></b></TD>

@@ -82,7 +82,7 @@
 		<tr>	
 			<logic:greaterThan name="aimCommitmentbyDonorForm" property="yrCount" value="5">
 				<td valign="bottom" class="crumb">&nbsp;&nbsp;
-					<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
+					<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -93,7 +93,7 @@
 			</logic:greaterThan>    
 			<logic:lessEqual name="aimCommitmentbyDonorForm" property="yrCount" value="5">
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
+					&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -105,7 +105,7 @@
            </tr>
 			<tr>
 				<td valign="bottom" class="crumb" >&nbsp;&nbsp;
-				<img src="../ampTemplate/images/xls_icon.jpg" border=0>
+				<img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border=0>
 				<c:set var="translation">
 					<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 				</c:set>
@@ -326,7 +326,7 @@
 					Quaterly Date Range 
 					</digi:trn>
 					</td>
-                    <td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" width="17" height="17"></td>
+                    <td bgcolor="#FFFFFF"><img src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17"></td>
                 </tr>
               </table>
 			  </td>

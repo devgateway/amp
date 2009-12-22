@@ -184,7 +184,7 @@
 					<td colspan="2" align="left">
 					<html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
 					<a id="date1" href='javascript:pickDateById("date1","fromDate")'>
-						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 					</td>
 					
@@ -192,7 +192,7 @@
 					<td colspan="2" align="left">
 					<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
 					<a id="date2" href='javascript:pickDateById("date2","toDate")'>
-						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 					</td>
 				</tr>

@@ -55,7 +55,7 @@
 		this.hideButton();
 		this.disableButton();
 		this.setFooter("");
-		this.setBody( "<img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
+		this.setBody( "<img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
 		this.panel.show();
 		
 		new GetDataManager().getData();
@@ -181,7 +181,7 @@
 	}
 	SaveDataManager.prototype.saveData				= function () {
 		tabManager.disableButton();
-		tabManager.setFooter( "<img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
+		tabManager.setFooter( "<img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
 	
 		var postString		= this.createPostString();
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/tabManager.do", this, postString);

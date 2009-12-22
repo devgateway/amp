@@ -236,10 +236,10 @@ function selectOrganisation1() {
 		<td>
 			<html:text readonly="true" name="aimEUActivityForm" property="dueDate" styleClass="inp-text" styleId="dueDate"/>
             <a id="clear1" href='javascript:clearDate(document.getElementById("dueDate"),"clear1")'>
-                <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete "/>
+                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete "/>
             </a>
             <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("dueDate"),"clear1")'>
-                <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
             </a>
 		</td>
 	</tr>	

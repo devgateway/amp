@@ -151,7 +151,7 @@
 
       function addLodingImageToLogTab(logDiv){
           var v_img = document.createElement("img");
-          v_img.setAttribute("src", "/TEMPLATE/ampTemplate/images/amploading.gif");
+          v_img.setAttribute("src", "/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif");
           v_img.setAttribute("alt", "");
           v_img.setAttribute("border", "0");
 
@@ -321,17 +321,17 @@
 						</tr>
 						<tr>
 							<td nowrap="nowrap" bgcolor="#e9e9e9">
-								<img vspace="2" border="0" align="absmiddle" src="module/aim/images/folder.gif"/> Module
+								<img vspace="2" border="0" align="absmiddle" src="/TEMPLATE/ampTemplate/imagesSource/common/folder.gif"/> Module
 							</td>
 						</tr>
 						<tr>
 							<td nowrap="nowrap" bgcolor="#e9e9e9">
-								<img vspace="2" border="0" align="absmiddle" src="module/aim/images/gfolder.gif"/> Feature
+								<img vspace="2" border="0" align="absmiddle" src="/TEMPLATE/ampTemplate/imagesSource/common/gfolder.gif"/> Feature
 							</td>
 						</tr>
 						<tr>
 							<td nowrap="nowrap" bgcolor="#e9e9e9">
-								<img vspace="2" border="0" align="absmiddle" src="module/aim/images/sheet.gif"/> Field
+								<img vspace="2" border="0" align="absmiddle" src="/TEMPLATE/ampTemplate/imagesSource/common/sheet.gif"/> Field
 							</td>
 						</tr>
 					</table>        

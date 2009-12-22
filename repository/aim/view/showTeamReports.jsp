@@ -544,7 +544,7 @@ function confirmFunc() {
 	                                      	</c:if>
                                         </c:set>
 	                                    <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
-	                                      <img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+	                                      <img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
 	                                    </digi:link> 
                                       &nbsp;
                                       <c:set var="translation">
@@ -558,7 +558,7 @@ function confirmFunc() {
                                       	</c:if>
                                        </c:set>
                                       <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-										<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
 	                                  </digi:link> 
 	                                  
 	                                </logic:equal>                            
@@ -574,7 +574,7 @@ function confirmFunc() {
 	                                      		</c:if>
                                         	</c:set>
 	                                    	<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
-	                                      		<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+	                                      		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
 	                                    	</digi:link>
 
 		                                    <c:set var="translation">
@@ -588,7 +588,7 @@ function confirmFunc() {
 	                                      		</c:if>
 	                                       	</c:set>
 	                                       	<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-												<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
 		                                  	</digi:link>
 	                                    </logic:equal>    
 	                                  </logic:present>                                                                                                
@@ -709,13 +709,13 @@ function confirmFunc() {
                </TR>
 <c:if test="${!aimTeamReportsForm.showTabs}">
                <TR>
-                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
                        <digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
                        <br />
                </TD>
                </TR>
                 <TR>
-                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
                        <digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
                        <br />
                </TD>
@@ -723,13 +723,13 @@ function confirmFunc() {
 </c:if>
 <c:if test="${aimTeamReportsForm.showTabs}">
                <TR>
-                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
                        <digi:trn key="aim:ClickEditTab">Click on this icon to edit tab&nbsp;</digi:trn>
                        <br />
                </TD>
                </TR>
                 <TR>
-                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
                        <digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
                        <br />
                </TD>

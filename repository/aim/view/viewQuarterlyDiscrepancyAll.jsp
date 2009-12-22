@@ -429,7 +429,7 @@
 							
 								</td>
                         		<td width="57%" align="right" bgcolor="#F4F4F2">
-									<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+									<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 									<c:set target="${urlSubTabs}" property="transactionType">
 		        						<bean:write name='aimQuarterlyDiscrepancyAllForm' property='transactionType'/>
 		        					</c:set>

@@ -197,7 +197,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                   <digi:trn key="aim:edit">Edit</digi:trn>
                                 </c:set>
                                 <a href="javascript:editType(<bean:write name="componentTypesList" property="type_id"/>)" style="text-decoration:none;" >
-									<img border="0" align="absmiddle" vspace="2" src="/repository/message/view/images/edit.gif"/>
+									<img border="0" align="absmiddle" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png"/>
 									<c:out value="${edit}"/>
 							    </a>
 								<c:set var="delete">
@@ -208,7 +208,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                   </c:set>
                                   <c:if test="${!empty componentTypesList.components}">
                                    <a title="${ForDelete}"  style="text-decoration:none;color:#999999">
-									<img border="0" align="absmiddle" vspace="2" src="/repository/message/view/images/trash_12.gif"/>
+									<img border="0" align="absmiddle" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>
 										${delete}
 									</a>
                                   </c:if>
@@ -217,7 +217,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                  </c:set>
                                   <c:if test="${empty componentTypesList.components}">
                                     <a title="${ForDeleteComponent}"  href="javascript:deleteType(${componentTypesList.type_id});" style="text-decoration:none;">
-                                    <img border="0" align="absmiddle" vspace="2" src="/repository/message/view/images/trash_12.gif"/>
+                                    <img border="0" align="absmiddle" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>
 										<c:out value="${delete}"/>
 									</a></c:if>                                
                                  </td>
@@ -262,7 +262,7 @@ function setHoveredTable(tableId, hasHeaders) {
 										<tr>
 											<td>
 												<div style="width:100px; ">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												
 												
 												
@@ -281,7 +281,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																				
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

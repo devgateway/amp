@@ -291,7 +291,7 @@
 											<td align="right"/>
 											<td >
 												<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">
-													<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
+													<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
 													<digi:trn key="aim:categoryManagerSubmit">
 															Submit
 													</digi:trn>
@@ -317,7 +317,7 @@
 															<td width="30%">
 																<button type="button" onclick="return addLabelCategory()" class="buton" 
 																	style="vertical-align:bottom; padding: 1px;">
-																	<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
+																	<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
 																	<digi:trn key="aim:categoryManagerAddLabel">
 																			Add Label Category
 																	</digi:trn>
@@ -360,7 +360,7 @@
 																	<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryName(usedCateg.getKeyName()) %>">${usedCateg.name}</digi:trn>
 																	<a onclick="return delLabelCategory(${usedCateg.id})" 
 																		title="<digi:trn key='cm:categoryManagerDeleteLabelCategory'>Delete Label Category</digi:trn>">
-																		<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px;" />
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" style="height: 10px;" />
 																	</a>
 																</td>
 															</logic:iterate>
@@ -449,7 +449,7 @@
 																		<div style="width: 100%; text-align: center">
 																		<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="showLabelOptions('labelPanel${usedCateg.keyName}${index.count-1}')"
 																			title="<digi:trn key='cm:categorymanagerModifyLabels'>Modify Labels</digi:trn>">
-																				<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 12px;" />
+																				<img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" style="height: 12px;" />
 																		</a>
 																		</div>
 																	</td>
@@ -460,14 +460,14 @@
 																	&nbsp;
 																	<a style="cursor:pointer;"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
 																			title="<digi:trn key='aim:categoryManagerValueDelete'>Delete</digi:trn>">
-																		<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 14px;" />
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" style="height: 14px;" />
 																	</a>
 																</span>
 																<span id="undo${index.count}" style="${undeleteField}">
 																	&nbsp;
 																	<a style="cursor:pointer;"  onclick="return undeleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
 																		title="<digi:trn key='aim:categoryManagerValueUndelete'>Undelete</digi:trn>">
-																		<img src="/TEMPLATE/ampTemplate/images/green_check_16.png" style="height: 18px;" />
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_check_16.png" style="height: 18px;" />
 																	</a>
 																</span>
 															</td>
@@ -477,7 +477,7 @@
 																		&nbsp;
 																		<a style="cursor:pointer;" onclick="addNewValue(${index.count})"
 																			title="<digi:trn key='cm:categoryManagerAddValuesAbove'>Add value(s) above</digi:trn>">
-															  				<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px;" />
+															  				<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 16px;" />
 															  			</a>
 																	</span>
 																</td>
@@ -502,7 +502,7 @@
 														<td width="40%">
 															<button type="button" title="<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>" onclick="addNewValue(-1)" class="buton" 
 																style="vertical-align:bottom; padding: 1px;">
-																<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
+																<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
 																<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>
 															</button>
 														</td>

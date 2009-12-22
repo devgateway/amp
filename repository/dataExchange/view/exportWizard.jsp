@@ -329,7 +329,7 @@
         
         function addLodingImageToLogTab(logDiv){
             var v_img = document.createElement("img");
-            v_img.setAttribute("src", "/TEMPLATE/ampTemplate/images/amploading.gif");
+            v_img.setAttribute("src", "/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif");
             v_img.setAttribute("alt", "");
             v_img.setAttribute("border", "0");
 
@@ -585,7 +585,7 @@
                           <tbody>
                             <tr>
                               <td id="logDivId" width="100%" align="center">
-                                <img src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="" border="0"/>  
+                                <img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" alt="" border="0"/>  
                               </td>
                             </tr>
                           </tbody>

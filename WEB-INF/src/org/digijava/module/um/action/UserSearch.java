@@ -135,9 +135,9 @@ public class UserSearch extends Action {
 				}
 				juser.put("workspaces", ws);
 				if(vwForm.getShowBanned()){
-					juser.put("actions", "<a href=/um/viewEditUser.do~id=" +user.getId()+" title='Edit User'><img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/></a>&nbsp;&nbsp;<a onclick='return unbanUser();' title='Make User Active' href=/um/viewEditUser.do~id=" +user.getId()+"~ban=false><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/green_check_16.png'/> </a>");
+					juser.put("actions", "<a href=/um/viewEditUser.do~id=" +user.getId()+" title='Edit User'><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/></a>&nbsp;&nbsp;<a onclick='return unbanUser();' title='Make User Active' href=/um/viewEditUser.do~id=" +user.getId()+"~ban=false><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/green_check_16.png'/> </a>");
 				}else{
-					juser.put("actions", "<a href=/um/viewEditUser.do~id=" +user.getId()+" title='Edit User'><img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/></a>&nbsp;&nbsp;<a onclick='return banUser();' title='Make User Inactive' href=/um/viewEditUser.do~id=" +user.getId()+"~ban=true><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/> </a>");
+					juser.put("actions", "<a href=/um/viewEditUser.do~id=" +user.getId()+" title='Edit User'><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/></a>&nbsp;&nbsp;<a onclick='return banUser();' title='Make User Inactive' href=/um/viewEditUser.do~id=" +user.getId()+"~ban=true><img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/> </a>");
 				}
 				jsonArray.add(juser);
 

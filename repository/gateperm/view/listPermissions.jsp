@@ -67,10 +67,10 @@ ${fn:replace(message,quote,escapedQuote)}
  --%>
 <td>
 <digi:link href="/managePerm.do?edit" paramId="permissionId" paramName="perm" paramProperty="id" title="EDIT">
-<digi:img src="module/gateperm/images/edit.gif" border="0" />
+<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" />
 </digi:link>
 <digi:link href="/managePerm.do?delete" paramId="permissionId" onclick="return confirmDeletion('${msg}')" paramName="perm" paramProperty="id" title="DELETE">
-<digi:img src="module/gateperm/images/delete.gif" border="0" />
+<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" />
 </digi:link>
 </td>
 </tr>
@@ -79,7 +79,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </div>
 <div align="left">&nbsp;&nbsp;
 <digi:link href="/managePerm.do?new" title="NEW">
-<digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission
+<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/add.gif" border="0" />Add New Permission
 </digi:link>
 
 </div>

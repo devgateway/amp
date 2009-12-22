@@ -41,7 +41,7 @@
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+						<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
 							<digi:trn key="aim:registeredUserLogIn">
 							Registered User Log In:
 							</digi:trn>
@@ -59,7 +59,7 @@
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+						<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
 						<digi:trn key="aim:password">
 						Password:
 						</digi:trn>

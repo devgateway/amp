@@ -93,7 +93,7 @@
 														<logic:iterate name="aimComponentsForm" property="compIndicators" id="indicators" type="org.digijava.module.aim.dbentity.AmpComponentsIndicators">
 															<tr bgcolor="#ffffff">
 																<td width="9">
-																	<img src= "../ampTemplate/images/arrow_right.gif" border=0>	
+																	<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>	
 																</td>
 																<td>
 																<a href="javascript:editIndicator(<bean:write name="indicators" property="ampCompIndId"/>)">
@@ -108,7 +108,7 @@
 																		<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																	</bean:define>
 																	<a href="javascript:deleteIndicator(<bean:write name="indicators" property="ampCompIndId" />)" onclick="return onDelete()">
-																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																	</a>
 																</td>
 															</tr>

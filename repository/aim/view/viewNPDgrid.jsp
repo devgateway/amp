@@ -28,12 +28,12 @@
 													<c:set target="${urlParamsSort}" property="startYear" value="${aimNPDForm.startYear}"/>
 													<c:set target="${urlParamsSort}" property="endYear" value="${aimNPDForm.endYear}"/>			
 													<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}" name="urlParamsSort">
-														<digi:trn>Export to Excel</digi:trn>&nbsp;<digi:img src="images/xls_icon.jpg" border="0"/>
+														<digi:trn>Export to Excel</digi:trn>&nbsp;<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
 													</digi:link>
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												 	<digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
 													<digi:trn>Print</digi:trn>
-													&nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
+													&nbsp;<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/print_icon.gif" border="0"/></digi:link>
 												</td>
 											</tr>
 									        <tr>
@@ -71,10 +71,10 @@
 											<c:set target="${urlParamsSort1}" property="endYear" value="${aimNPDForm.endYear}"/>								
 																		
 											<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}" name="urlParamsSort1">
-												<digi:trn >Export to Excel</digi:trn>&nbsp;<digi:img src="images/xls_icon.jpg" border="0"/>
+												<digi:trn >Export to Excel</digi:trn>&nbsp;<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
 											</digi:link>
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											<digi:link styleId="printWin" href="#" onclick="window.print(); return false;"><digi:trn key="aim:print">Print</digi:trn> &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
+											<digi:link styleId="printWin" href="#" onclick="window.print(); return false;"><digi:trn key="aim:print">Print</digi:trn> &nbsp;<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/print_icon.gif" border="0"/></digi:link>
 										</td>
 									</tr>
 								</table>								

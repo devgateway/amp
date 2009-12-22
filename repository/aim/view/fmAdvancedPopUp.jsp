@@ -35,13 +35,13 @@ function cbStatusChange(state, value){
 		<input id="cbId_${lStatus.index}" onClick="cbStatusChange(this.checked, ${lStatus.index})" type="checkbox" name="fmeList[${lStatus.index}].visib" <c:if test="${fVar.visib}">checked</c:if> />
 		
 		<c:if test="${fVar.type==cModule}">
-			<img src="module/aim/images/folder.gif" alt="" width="15" height="11" border="0"/>
+			<img src="/TEMPLATE/ampTemplate/imagesSource/common/folder.gif" alt="" width="15" height="11" border="0"/>
 		</c:if>
 		<c:if test="${fVar.type==cFeature}">
-			<img src="module/aim/images/gfolder.gif" alt="" width="15" height="11" border="0"/>
+			<img src="/TEMPLATE/ampTemplate/imagesSource/common/gfolder.gif" alt="" width="15" height="11" border="0"/>
 		</c:if>
 		<c:if test="${fVar.type==cField}">
-			<img src="module/aim/images/sheet.gif" alt="" width="15" height="11" border="0"/>
+			<img src="/TEMPLATE/ampTemplate/imagesSource/common/sheet.gif" alt="" width="15" height="11" border="0"/>
 		</c:if>
 		${fVar.name}</div>
 	</c:forEach>

@@ -445,8 +445,8 @@ html>body #mainEmpty {
 																								<b><digi:trn>Name</digi:trn></b>
 																							</digi:link>																					
 																						</c:if>
-																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy=='nameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='nameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																					</td>
 																					<td width="100">
 																						<b><digi:trn>Email</digi:trn></b>
@@ -461,8 +461,8 @@ html>body #mainEmpty {
 																								<b><digi:trn>Email</digi:trn></b>
 																							</digi:link>
 																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailDescending'}"><img src="/repository/aim/images/down.gif"/></c:if> 
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if> 
 																						 -->
 																					</td>`
 																					<td width="5px">&nbsp;</td>
@@ -477,8 +477,8 @@ html>body #mainEmpty {
 																								<b><digi:trn >Organisation Name</digi:trn></b>
 																							</digi:link>																					
 																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>																																			
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>																																			
 																					</td>
 																					<td width="100">
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='titleAscending'}">
@@ -491,8 +491,8 @@ html>body #mainEmpty {
 																								<b><digi:trn>Title</digi:trn></b>
 																							</digi:link>																					
 																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																					</td>
 																					<td height="30" width="100">
 																						<b><digi:trn>Phone</digi:trn></b>													
@@ -553,8 +553,8 @@ html>body #mainEmpty {
 																							<c:set target="${urlParams}" property="contactId">
 																								<bean:write name="cont" property="id"/>
 																							</c:set>
-																							<digi:link href="/addressBook.do?actionType=editContact" name="urlParams"><img src="/repository/message/view/images/edit.gif" border="0" /></digi:link>
-																							<digi:link href="/addressBook.do?actionType=deleteContact" name="urlParams" onclick="return confirmDelete()"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																							<digi:link href="/addressBook.do?actionType=editContact" name="urlParams"><img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" /></digi:link>
+																							<digi:link href="/addressBook.do?actionType=deleteContact" name="urlParams" onclick="return confirmDelete()"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
 																						</td>																			
 					                                                            	</tr>
 																				</c:forEach>

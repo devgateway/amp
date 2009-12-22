@@ -198,7 +198,7 @@
 																			<td align="left" width="10%">
 																				<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 																				<c:set target="${urlParamsSort}" property="memberId" value="${tm.ampTeamMemId}"/>
-																				<digi:link href="/viewEditUser.do?event=removeWorkspace" name="urlParamsSort" onclick="return confirmDelete()"><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></digi:link>																				
+																				<digi:link href="/viewEditUser.do?event=removeWorkspace" name="urlParamsSort" onclick="return confirmDelete()"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0 hspace="2"/></digi:link>																				
 																			</td>
 																		</tr>
 																	</c:forEach>

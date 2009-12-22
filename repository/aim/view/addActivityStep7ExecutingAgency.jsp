@@ -16,7 +16,7 @@
 
 									
 									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:AgencyExecuting">The organization that receives the funds from the funding country/agency, and coordinates the project</digi:trn>">
 										<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b></a>
 									</td></tr>

@@ -76,10 +76,10 @@
             
 	            <c:if test="${subColumn.name == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
-	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	              <logic:equal name="columnReport" property="sortAscending" value="true">
-	                <img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	            </c:if>
             
@@ -107,10 +107,10 @@
 	            
 				<c:if test="${subColumn.name == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
-	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	              <logic:equal name="columnReport" property="sortAscending" value="true">
-	                <img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	            </c:if>
 	                    		

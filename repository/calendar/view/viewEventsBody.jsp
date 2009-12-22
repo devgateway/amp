@@ -127,7 +127,7 @@
 	  		<td>	
 	 	
 		 	<a target="_blank" title="Printing" onclick="window.print();" style="cursor: pointer">
-		 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/module/aim/images/printer.gif"/>
+		 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"/>
 		 	</a>
 	 		<input type="button" value="close" onClick="window.close()" width="20" height="30"/>
 	 		</td>
@@ -236,7 +236,7 @@
 		    var dotted= "..."; 
 			var isDotted = ev.text.length >20 ? dotted : "";
 		    var text = ev.text.substr(0,20)+isDotted;
-	        var img = '<digi:img src="module/calendar/images/magnifier.png" height="12" width="12" align="left"/>';
+	        var img = '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
 	        return "<span title='"+"Title:"+text+" "+"StartDate:"+start_date+"EndDate:"+end_date+"'>"+img+""+text+"</span>";
 		 }
 	 }else{

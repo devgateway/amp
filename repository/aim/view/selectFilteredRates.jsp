@@ -166,7 +166,7 @@
 													<td bgColor="#ffffff" class="box-border">
 													<table cellPadding=5 cellSpacing=1 width="100%">
 														<tr>
-															<td><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td><digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -176,7 +176,7 @@
 														</tr>
 														<tr>
 															<td>
-																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to the Currency Manager</digi:trn>
@@ -188,7 +188,7 @@
 														</tr>
 														<tr>
 															<td>
-																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>

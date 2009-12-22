@@ -28,7 +28,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="green">
-		<td><digi:img src="module/admin/images/greenLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="/TEMPLATE/ampTemplate/imagesSource/admin/greenLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%" align="center">
 			<font class="sectionTitle">
 				<digi:link styleClass="admin" href="/showLayout.do"><digi:trn key="admin:adminMenu">Admin Menu</digi:trn></digi:link>			

@@ -408,7 +408,7 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
 										<b><digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn></b>
 										</a>
@@ -436,7 +436,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.indicator.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
-															<img src= "../ampTemplate/images/arrow_down.gif" border=0>
+															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" border=0>
 														</digi:link>
 													</c:if>
 													<c:if test="${aimEditActivityForm.indicator.expIndicatorId!=indicator.indicatorId}">
@@ -448,7 +448,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														</c:set>
 														<c:set target="${urlParams}" property="edit" value="true" />
 														<digi:link href="/detailedIndicator.do" name="urlParams">
-															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;
 													<field:display name="Indicator Name" feature="Activity">
@@ -469,7 +469,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<bean:write name="indicator" property="indicatorId" />
 													</c:set>
 													<digi:link href="/removeIndFromActivity.do" name="urlParams1">
-														<img src="../ampTemplate/images/trash_12.gif" border="0" onclick="return deleteIndicator()"/>
+														<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" onclick="return deleteIndicator()"/>
 													</digi:link>
 												</td>
 											</tr>
@@ -513,11 +513,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtBaseValDate">&nbsp;&nbsp;
 																
 																	<a id="clear1" href="javascript:clearDate(document.getElementById("txtBaseValDate"), 'clear1')">
-																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																
 																	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtBaseValDate"),"clear1")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																
 																</td>
@@ -554,11 +554,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtTargetValDate">&nbsp;&nbsp;
 																	
 																	<a id="clear2" href="javascript:clearDate(document.getElementById('txtTargetValDate'), 'clear2')">
-																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	
 																	<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("txtTargetValDate"),"clear2")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 															
 																</td>
@@ -613,10 +613,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtRevisedTargetValDate">&nbsp;&nbsp;
 
 																	<a id="clear3" href="javascript:clearDate(document.getElementById('txtRevisedTargetValDate'), 'clear3')">
-																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("txtRevisedTargetValDate"),"clear3")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>
@@ -639,7 +639,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															id="priorValues" type="org.digijava.module.aim.helper.PriorCurrentValues">
 																<tr bgColor=#f4f4f2>
 																	<td align="center">
-																		<img src= "../ampTemplate/images/arrow_dark.gif" border=0>
+																		<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_dark.gif" border=0>
 																	</td>
 																	<td>
 																		<bean:write name="priorValues" property="currValue" />
@@ -685,10 +685,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtCurrValDate">&nbsp;&nbsp;
 
 																	<a id="clear4" href="javascript:clearDate(document.getElementById('txtCurrValDate'), 'clear4')">
-																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date4" href='javascript:pickDateWithClear("date4",document.getElementById("txtCurrValDate"),"clear4")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>																
 															</tr>

@@ -25,7 +25,7 @@
 													Paris Indicator 1
 												</digi:trn>
 											</td>
-											<td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" ></td>
+											<td bgcolor="#FFFFFF"><img src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" ></td>
 										</tr>
 										<tr>
 										&nbsp;

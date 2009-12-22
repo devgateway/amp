@@ -297,7 +297,7 @@
 																				<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 																			</c:set>
 																			<digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >
-																				<digi:img src="../ampTemplate/images/application_edit.png" border="0"/>
+																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 																			</digi:link>
 																		</td>
 																		<td align="center" width="10%">
@@ -313,7 +313,7 @@
 																				<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 																			</c:set>
 																			<digi:link href="/deleteSector.do" name="urlParams4" title="${translation}" onclick="return onDelete()">
-																				<digi:img src="../ampTemplate/images/trash_16.gif" border="0"/>
+																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
 																			</digi:link>
 																		</td>
 																	</tr>
@@ -356,7 +356,7 @@
 														<bean:write name="aimAddSectorForm" property="sectorId" />
 													</c:set>
 													<c:set target="${urlParams5}" property="parent" value="sector"/>
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 													</c:set>
@@ -372,7 +372,7 @@
 											<field:display name="View Schemes Link" feature="Sectors">
 											<tr>
 												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 													</c:set>
@@ -386,7 +386,7 @@
 											</field:display>
 											<tr>
 												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 													</c:set>
@@ -414,7 +414,7 @@
 						       			</tr>
 						     			<tr>
 						           			<td width="15" height="20" align="center">
-												<img src= "../ampTemplate/images/application_edit.png" vspace="2" border="0" align="absmiddle" />
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
 											</td>
 											<td nowrap="nowrap">
 						               			<digi:trn key="aim:clickToEditSector">Click on this icon to edit Sector</digi:trn>
@@ -423,7 +423,7 @@
 						       			</tr>
 						        		<tr>
 						           			<td width="15" height="20" align="center">
-												<img src= "../ampTemplate/images/trash_16.gif" vspace="2" border="0" align="absmiddle" />
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
 						               		</td>
 											<td nowrap="nowrap">
 											<digi:trn key="aim:clickToDeleteSector">Click on this icon to delete Sector</digi:trn>

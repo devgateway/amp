@@ -17,7 +17,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="/TEMPLATE/ampTemplate/imagesSource/admin/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:configuration">Configuration</digi:trn>
@@ -38,10 +38,10 @@
 						<table border="0" cellpadding="0" cellspacing="0">
 							<tr class="configContainerHeader">
 								<td>
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5" height="20">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="5" height="20">
 								</td>							
 								<td>
-									<img src="<digi:file src="module/admin/images/icons/bookIcon.gif"/>">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/bookIcon.gif"/>">
 								</td>
 								<td width="100%" align="left">
 									&nbsp;Teaser/layout configuration
@@ -55,7 +55,7 @@
 						<div id="treeContainer" class="container" style="width:100%; height:100%;">Processing XML data. Please wait ...</div>
 					</td>
 					<td width="5" class="configVerticalRow">
-						<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5">
+						<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="5">
 					</td>
 					<td height="400" width="50%">
 						<div id="propertyViewContainer" class="container" style="width:100%; height:100%;">
@@ -74,27 +74,27 @@
 						<table border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr class="configContainerHeader">
 								<td align="center" width="20">
-									<img src="<digi:file src="module/admin/images/configToolStart.gif"/>">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/configToolStart.gif"/>">
 								</td>
 								<td class="configToolsSeparator" width="2">
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="2">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="2">
 								</td>
 								<td>
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5" height="20">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="5" height="20">
 								</td>
 								<td align="center">
 									<digi:link href="/showConfiguration.do">
-										<img src="<digi:file src="module/admin/images/icons/configReload.gif"/>" border="0">
+										<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/configReload.gif"/>" border="0">
 									</digi:link>
 								</td>
 								<td>
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="5">
 								</td>								
 								<td class="configToolsSeparator" width="2">
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="2">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="2">
 								</td>
 								<td width="99%">
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>">
 								</td>								
 							</tr>
 						</table>
@@ -103,16 +103,16 @@
 						<table border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr class="configContainerHeader">
 								<td align="center" width="20">
-									<img src="<digi:file src="module/admin/images/configToolStart.gif"/>">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/configToolStart.gif"/>">
 								</td>
 								<td class="configToolsSeparator" width="2">
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="2">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="2">
 								</td>								
 								<td>
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5" height="20">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" width="5" height="20">
 								</td>
 								<td width="99%">
-									<img src="<digi:file src="module/admin/images/spacer.gif"/>">
+									<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>">
 								</td>								
 							</tr>
 						</table>
@@ -120,7 +120,7 @@
 				</tr>
 				<tr>
 					<td colspan="3" style="background-color:#D6B85D" class="configCell" height="5">
-						<img src="<digi:file src="module/admin/images/spacer.gif"/>" height="5" width="5">
+						<img src="<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/>" height="5" width="5">
 					</td>
 				</tr>
 			</table>	

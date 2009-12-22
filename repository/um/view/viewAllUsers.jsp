@@ -263,7 +263,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 		myPanel.setHeader(msg);		
 		var content = document.getElementById("popinContent");
 		content.innerHTML = '<div style="text-align: center">' + 
-		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
 		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent();
 	}
@@ -805,7 +805,7 @@ function banUser(txt) {
 												<table cellPadding=5 cellSpacing=1 width="100%">
 													<tr>
 														<td>
-															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+															<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
 														</td>
 														<td>
 															<a href="javascript:addNewUser();">
@@ -817,7 +817,7 @@ function banUser(txt) {
 													</tr>																								
 													<tr>
 														<td>
-															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+															<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 														<td>
 															<digi:link module="aim"  href="/admin.do">
 															<digi:trn key="aim:AmpAdminHome">
@@ -828,7 +828,7 @@ function banUser(txt) {
 													</tr>
 													<tr>
 														<td>
-															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+															<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 														<td>
 															<digi:link  module="aim" href="/workspaceManager.do~page=1">
 															<digi:trn key="aim:WorkspaceManager">
@@ -841,7 +841,7 @@ function banUser(txt) {
 														<c:when test="${umViewAllUsersForm.showBanned}">
 															<tr>
 																<td>
-																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+																	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 																<td>
 																	<digi:link  module="aim" href="/../um/viewAllUsers.do~showBanned=false">
 																	<digi:trn key="aim:ViewActiveUsers">
@@ -854,7 +854,7 @@ function banUser(txt) {
 														<c:otherwise>
 															<tr>
 																<td>
-																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+																	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 																<td>
 																	<digi:link  module="aim" href="/../um/viewAllUsers.do~showBanned=true">
 																	<digi:trn>

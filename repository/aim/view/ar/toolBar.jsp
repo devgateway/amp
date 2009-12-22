@@ -197,25 +197,25 @@ addLoadEvent(addpanel);
 
 		<td noWrap align=left valign="center">		
 			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+				<digi:img width="17" height="20" hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
 			</a>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
 			</a>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/csv.gif" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
 		
 		<td noWrap align=left valign="center">
 			<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
 			</digi:link>
 		</td>
 	</tr>
@@ -259,7 +259,7 @@ function openPrinter(){
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tr>
 			<td align="center"> 
-				<digi:img hspace="2" vspace="2" src="module/aim/images/dgf_logo.jpg" border="0" />						
+				<digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/dgf_logo.jpg" border="0" />						
 			</td>
 		</tr>
 		<tr>
@@ -287,7 +287,7 @@ function openPrinter(){
 				<table cellpadding="5" cellspacing="5" border="0" width="100%">
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(1, 'statementPopup');" title="${displayampstatement}"  />
+							<digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" onclick="javascript:showMyPanel(1, 'statementPopup');" title="${displayampstatement}"  />
 							<digi:trn key="rep:pop:StatementOptions">Statement Options</digi:trn>
 						</td>
 						<td>
@@ -299,7 +299,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:StatementPositionOptions">Statement Position Options</digi:trn>														
 						</td>
 						<td>
@@ -311,7 +311,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td>
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:DateOptions">Date Options</digi:trn>
 						</td>
 						<td>
@@ -323,7 +323,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td>
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(2, 'logoPopup');" title="${displayofficialamplogo}" />
+							<digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" onclick="javascript:showMyPanel(2, 'logoPopup');" title="${displayofficialamplogo}" />
 							<digi:trn key="rep:pop:LogoOptions">Logo Options</digi:trn>
 						</td>
 						<td>
@@ -335,7 +335,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:LogoPositionOptions">Logo Position Options</digi:trn>														
 						</td>
 						<td>

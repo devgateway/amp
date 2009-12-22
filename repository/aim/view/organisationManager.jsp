@@ -240,8 +240,8 @@
 																			<b><digi:trn key="aim:organizationName">Organization Name</digi:trn></b>
 																		</digi:link>																					
 																	</c:if>
-																	<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+																	<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy=='nameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																</td>
 																<td align="left" width="30%">																		
 																	<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='acronymAscending'}">
@@ -254,8 +254,8 @@
 																			<b><digi:trn key="aim:organizationAcronym">Organization Acronym</digi:trn></b>
 																		</digi:link>																					
 																	</c:if>
-																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																</td>																	
 																<td align="left" width="20%">
 																	<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='typeAscending'}">
@@ -268,8 +268,8 @@
 																			<b><digi:trn key="aim:organizationType">Type</digi:trn></b>
 																		</digi:link>																					
 																	</c:if>
-																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>																																			
+																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>																																			
 																</td>
 																<td align="left" width="20%">
 																<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='groupAscending'}">
@@ -282,8 +282,8 @@
 																			<b><digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
 																		</digi:link>																					
 																	</c:if>
-																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																</td>
 															</tr>
 														</table>

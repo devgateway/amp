@@ -441,7 +441,7 @@ div.fakefile2 input{
 																		<td align="left" nowrap="nowrap">
 																			<div id="myAutoComplete">
 																				<html:text property="relatedActivityName" name="messageForm" styleId="myInput" style="width:320px;font-size:100%"></html:text>
-																				<img alt="" src="../ampTemplate/images/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    
+																				<img alt="" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    
 																		    	<div id="myContainer" style="width:315px;"></div>																		    	
 																		   	</div>
 																		   	<html:hidden property="selectedActId" styleId="myHidden"/>
@@ -464,10 +464,10 @@ div.fakefile2 input{
 																						<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
 																					</c:if>																					
 																					<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
-																						<img src="/repository/message/view/images/attachment.png" border="0" />
+																						<img src="/TEMPLATE/ampTemplate/imagesSource/common/attachment.png" border="0" />
 																						${attachedDoc.contentTitle}
 																					</digi:link>
-																					<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/repository/message/view/images/trash_12.gif" border=0"/></a>
+																					<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0"/></a>
 																				</td>
 																			</tr>
 																		</c:forEach>

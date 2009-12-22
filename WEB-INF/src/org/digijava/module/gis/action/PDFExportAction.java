@@ -820,7 +820,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
 		try {
-			Image image = Image.getInstance(this.getServlet().getServletContext().getRealPath("/repository/gis/view/images/fundingLegend.png"));
+			Image image = Image.getInstance(this.getServlet().getServletContext().getRealPath("/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png"));
 			// image.scaleAbsoluteWidth(320f);
 			image.setAlignment(Image.ALIGN_RIGHT);
 			// image.scaleAbsoluteHeight(20f);
@@ -952,7 +952,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
 		try {
-			Image image = Image.getInstance(this.getServlet().getServletContext().getRealPath("/TEMPLATE/ampTemplate/images/legend1.jpg"));
+			Image image = Image.getInstance(this.getServlet().getServletContext().getRealPath("/TEMPLATE/ampTemplate/imagesSource/common/legend1.jpg"));
 			image.scaleAbsoluteWidth(50f);
 			image.setAlignment(Image.ALIGN_RIGHT);
 			// image.scaleAbsoluteHeight(20f);

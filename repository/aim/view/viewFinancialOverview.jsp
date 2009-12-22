@@ -173,7 +173,7 @@ function preview(id)
 					                    	<TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
 			      	                		<TR bgColor=#f4f4f2>
 			                        			<TD width="7" height="17">
-                                                <img src="/TEMPLATE/ampTemplate/css/boxleftcorner.gif" border="0"  /><br />
+                                                <img src="/TEMPLATE/ampTemplate/imagesSource/common/boxleftcorner.gif" border="0"  /><br />
                                                 </TD>
 			                        			<TD bgColor=#ccdbff height="17" style="padding:4px 4px 4px 4px;">
 												<strong>
@@ -181,7 +181,7 @@ function preview(id)
                                                 </strong>
 			                          			</TD>
 			                        			<TD width="7" height="17">
-                                                <img src="/TEMPLATE/ampTemplate/css/boxrightcorner.gif" border="0"  /><br />
+                                                <img src="/TEMPLATE/ampTemplate/imagesSource/common/boxrightcorner.gif" border="0"  /><br />
                                                 </TD>
 			                          		</TR>
 			                  			</TABLE>

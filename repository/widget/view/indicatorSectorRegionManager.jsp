@@ -151,8 +151,8 @@
 								<strong><digi:trn>Indicator Name</digi:trn></strong>
 							</digi:link>																					
 						</c:if>
-						<c:if test="${empty gisIndicatorSectorRegionForm.sortBy || gisIndicatorSectorRegionForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+						<c:if test="${empty gisIndicatorSectorRegionForm.sortBy || gisIndicatorSectorRegionForm.sortBy=='nameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='nameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 					</td>
 					<td width="20%">
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy!='sectNameAscending'}">
@@ -165,8 +165,8 @@
 								<strong><digi:trn>Sector Name</digi:trn></strong>
 							</digi:link>																					
 						</c:if>
-						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='sectNameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='sectNameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='sectNameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='sectNameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 					</td>
 					<td width="20%">
 						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy!='regionNameAscending'}">
@@ -179,8 +179,8 @@
 								<strong><digi:trn>Region Name</digi:trn></strong>
 							</digi:link>																					
 						</c:if>
-						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='regionNameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='regionNameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='regionNameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+						<c:if test="${not empty gisIndicatorSectorRegionForm.sortBy && gisIndicatorSectorRegionForm.sortBy=='regionNameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 					</td>
 					<td>
 						<strong><digi:trn>Sub Group</digi:trn></strong> 
@@ -231,7 +231,7 @@
 
 							|&nbsp;
                                         <a href="/widget/indSectRegManager.do~actType=delete~indSectId=${indSecRegWithSubGrp.indSector.id}">
-                                            <img border="0" src='<digi:file src="images/deleteIcon.gif"/>' alt="">
+                                            <img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>' alt="">
                                         </a>
                                     </td>
                                 </tr>

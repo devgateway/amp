@@ -167,7 +167,7 @@
                                                     <table cellPadding=5 cellSpacing=1 width="100%">
                                                         <tr>
                                                             <td>
-                                                                <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
                                                                 </c:set>
@@ -180,7 +180,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                                                                 </c:set>

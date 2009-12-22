@@ -165,7 +165,7 @@
 		myPanel.setHeader(msg);		
 		var content = document.getElementById("popinContent");
 		content.innerHTML = '<div style="text-align: center">' + 
-		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
 		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent();
 	}
@@ -418,7 +418,7 @@
 
 									<tr><td>
 
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 
 										<b><c:out value="${aimEditActivityForm.survey.fundingOrg}" /></b>&nbsp;>&nbsp;
 

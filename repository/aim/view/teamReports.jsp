@@ -221,7 +221,7 @@ function setHoveredTable(tableId, hasHeaders) {
 												<table width="100%">
 													<tr>
 														<td valign="top">
-															<img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="absmiddle" />															
+															<img src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_public.gif" vspace="2" border="0" align="absmiddle" />															
                     									</td>
                     									<td>	
                     										<font color="blue">
@@ -240,7 +240,7 @@ function setHoveredTable(tableId, hasHeaders) {
                     										</font>														
                     									</td>
 														<td valign="top">
-															<img src= "/repository/contentrepository/view/images/make_private.gif" border="0" align="absmiddle" />
+															<img src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_private.gif" border="0" align="absmiddle" />
 															
 														</td>
 														<td>	
@@ -471,7 +471,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																			</c:if>	
 																			
 																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																				<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this public</digi:trn>" src= "/repository/contentrepository/view/images/make_private.gif" border=0>
+																				<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this public</digi:trn>" src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_private.gif" border=0>
 																			</digi:link>
 																		</td>
 																	</logic:equal>
@@ -490,7 +490,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																			</c:if>	
 
 																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																				<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border=0>
+																				<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_public.gif" border=0>
 																			</digi:link>
 																		</td>
 																	</logic:equal>

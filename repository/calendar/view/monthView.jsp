@@ -98,14 +98,14 @@
 								<tr>
 									<td width="10%" height="38">
 										<digi:link href="/viewMonthEvents.do" paramName="calendarItemForm" paramId="nav" paramProperty="prev">
-										<digi:img border="0" src="module/calendar/images/arrowl.gif"/></digi:link>
+										<digi:img border="0" src="/TEMPLATE/ampTemplate/imagesSource/calendar/arrowl.gif"/></digi:link>
 									</td>
 									<td width="80%" height="38" class="dgtitle" align="center">
 										<bean:write name="calendarItemForm" property="infoText"/>
 									</td>
 									<td width="10%" height="38" align="right">
 										<digi:link href="/viewMonthEvents.do" paramName="calendarItemForm" paramId="nav" paramProperty="next">
-										<digi:img border="0" src="module/calendar/images/arrowr.gif"/></digi:link>
+										<digi:img border="0" src="/TEMPLATE/ampTemplate/imagesSource/calendar/arrowr.gif"/></digi:link>
 									</td>
 								</tr>
 							</table>

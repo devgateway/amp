@@ -173,7 +173,7 @@ function checkYear( year, base, range ) {
 														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text" styleId="defRecsPerPage"/>
                                                             <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
-														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+														    	<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                                                             </a>
 														</td>
 													</tr>
@@ -184,7 +184,7 @@ function checkYear( year, base, range ) {
 														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defaultReportViewablePages" size="5"  styleClass="inp-text" styleId="defaultReportViewablePages"/>
                                                             <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
-														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+														    	<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                                                             </a>
 														</td>
 													</tr>
@@ -196,7 +196,7 @@ function checkYear( year, base, range ) {
 															<html:text property="defReportsPerPage" size="5"  styleClass="inp-text"/>
 														    
                                                             <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBody],Style[15])" onmouseout="htm()">
-														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+														    	<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                                                             </a>
 														</td>
 													</tr>

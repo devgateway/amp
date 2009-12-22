@@ -408,7 +408,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                             <td>
                                             <br />
                                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                              <IMG alt="Link" height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15" />
+                                              <IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" />
                                               <a title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>">
                                               <b>
                                                 <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
@@ -510,7 +510,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                           <td>
                                           <br />
                                           &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <IMG alt="Link" height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+                                            <IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
                                               <a title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
 	                                              <b>
 	                                                <digi:trn key="aim:fundingOrganizations">Funding Information</digi:trn>

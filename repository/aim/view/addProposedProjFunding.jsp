@@ -107,7 +107,7 @@
                         </td>
                         <td align="center" valign="middle" width="100">
                           <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
-                          <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
+                          <img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" title="${translation}" />
                         </td>
                         <td align="center" valign="middle" width="120" colspan="2">
                           <b><font color="white"><digi:trn key="aim:PlannedCommitmentDate">Planned Commitment Date</digi:trn></font></b>
@@ -130,7 +130,7 @@
                         </td>
                         <td valign="center" align="center">
             				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
                         </td>
             

@@ -206,7 +206,7 @@ function preview(id)
 													<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp; <digi:trn
 														key="aim:managedDocuments">DM-Managed Documents</digi:trn></TD>
 
-													<TD><IMG src="../ampTemplate/images/corner-r.gif"
+													<TD><IMG src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif"
 														width="17" height="17"></TD>
 
 												</TR>
@@ -248,7 +248,7 @@ function preview(id)
 															<TR bgcolor="#f4f4f2">
 
 																<TD align="right"><IMG alt=Link height=10
-																	src="../ampTemplate/images/arrow-gr.gif"></TD>
+																	src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-gr.gif"></TD>
 
 																<TD width="98%" align="left"><b> <bean:write
 																	name="document" property="name" /></b> - <i>File : <c:out

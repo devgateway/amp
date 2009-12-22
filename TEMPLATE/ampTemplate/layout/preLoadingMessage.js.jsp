@@ -3,7 +3,7 @@
 <%@taglib uri="/taglib/digijava" prefix="digi"%>
 
 document.write('<div id="loading" class="loading" style="z-index:1;"><p class="load">' +
-		'<br/><img src="/TEMPLATE/ampTemplate/images/amploading.gif" border="0"/>&nbsp;&nbsp;<digi:trn>Loading, please wait ...</digi:trn><br/><br/></p></div>');
+		'<br/><img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0"/>&nbsp;&nbsp;<digi:trn>Loading, please wait ...</digi:trn><br/><br/></p></div>');
 
 function delBody(){
   document.getElementById("loading").style.display="none";

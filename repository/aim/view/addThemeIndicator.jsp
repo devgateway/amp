@@ -343,7 +343,7 @@ function unload(){}
 								</tr>
 						    	<tr>
 									<td width="9" height="15" bgcolor="#ffffff" id="menu1" onClick="showhide(menu1outline${prgIndicatorItr.indicatorThemeId},menu1sign${prgIndicatorItr.indicatorThemeId})" >
-												<img id="menu1sign${prgIndicatorItr.indicatorThemeId}" src= "../ampTemplate/images/arrow_right.gif" valign="bottom">
+												<img id="menu1sign${prgIndicatorItr.indicatorThemeId}" src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" valign="bottom">
 									</td>
 									<td align="left" width="60%" bgcolor="#f4f4f2">
 										<b>${prgIndicatorItr.indicator.name}</b>

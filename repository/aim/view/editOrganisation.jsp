@@ -704,7 +704,7 @@
                         <td>
                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
 
-                                <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Print"/>
+                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Print"/>
                             </digi:link>
 
                         </td>
@@ -792,7 +792,7 @@
                                             <tr>
                                                 <td align="right" height="2" colspan="2">&nbsp;</td>
                                                 <td height="1" align="center" colspan="2"><digi:img
-                                                        src="module/aim/images/arrow-014E86.gif" width="15"
+                                                        src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15"
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn
                                                             key="aim:addOrganizationGroup">Add a Group</digi:trn>
                                                     </a></td>
@@ -835,12 +835,12 @@
                                             <td width="100%" colspan="2">
                                                 <div style="float:right">
                                                     <a href="javascript:exportGeneralInfo();" >
-                                                        <digi:img src="images/xls_icon.jpg" border="0"/>
+                                                        <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                                                     </a>
                                                 </div>
                                                         <fieldset><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
-                                                      <img id="img_general" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
-                                <img id="imgh_general" alt="" src="../ampTemplate/images/arrow_down.gif"  onclick="collapse('general')"/>
+                                                      <img id="img_general" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
+                                <img id="imgh_general" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"  onclick="collapse('general')"/>
                                 <div id="div_container_general">
                                     <table width="100%" cellpadding="5" cellspacing="5">
                                                     <tr>
@@ -855,10 +855,10 @@
                                                                     <td>
                                                                         <html:text property="minPlanRegDate" size="10" styleId="minPlanRegDate" styleClass="inp-text" readonly="true" />
                                                                         <a id="clear1" href='javascript:clearDate(document.getElementById("minPlanRegDate"), "clear1")'>
-                                                                            <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this "/>
+                                                                            <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this "/>
                                                                         </a>
                                                                         <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("minPlanRegDate"),"clear1")'>
-                                                                            <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                            <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -977,10 +977,10 @@
                                                                     <td>
                                                                         <html:text property="legalPersonRegDate" size="10" styleId="legalPersonRegDate" styleClass="inp-text" readonly="true" />
                                                                         <a id="clear2" href='javascript:clearDate(document.getElementById("legalPersonRegDate"), "clear2")'>
-                                                                            <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+                                                                            <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
                                                                         </a>
                                                                         <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("legalPersonRegDate"),"clear2")'>
-                                                                            <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                            <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -1112,13 +1112,13 @@
                     <td colspan="2">
                         <div style="float:right">
                         <a href="javascript:exportInfo('exportStaffInfo')" >
-				<digi:img src="images/xls_icon.jpg" border="0"/>
+				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                         </a>
                          </div>
                         <fieldset>
                             <legend align="left" class="tdBoldClass" style="font-size:13px;color:#0000FF; "><digi:trn>Staff Information</digi:trn></legend>
-                            <img id="img_staff" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
-                            <img id="imgh_staff" alt="" src="../ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
+                            <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
+                            <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
                             <table cellpadding="2" cellspacing="0" border="0">
                                 <c:if test="${not empty aimAddOrgForm.staff}">
@@ -1138,7 +1138,7 @@
                                                             <td class="tdClass" style="width:125px;text-align:center;">${info.year}</td>
                                                             <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${info.type.value}</digi:trn></td>
                                                             <td class="tdClass" style="width:200px;text-align:center;">${info.staffNumber}</td>
-                                                            <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"></a></td>
+                                                            <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
                                                         </tr>
                                                     </c:forEach>
                                                 </table>
@@ -1200,13 +1200,13 @@
                     <td colspan="2">
                         <div style="float:right">
                         <a href="javascript:exportInfo('exportBudgetInfo')" >
-				<digi:img src="images/xls_icon.jpg" border="0"/>
+				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                         </a>
                          </div>
                         <fieldset>
                             <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
-                                <img id="img_budget" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
-                                <img id="imgh_budget" alt="" src="../ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
+                                <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
+                                <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"  onclick="collapse('budget')"/>
                                 <div id="div_container_budget">
                                 <table cellpadding="2" cellspacing="0" border="0">
                                
@@ -1230,7 +1230,7 @@
                                                             <td class="tdClass" style="width:150px;text-align:center;">${orgInfo.percent}<c:if test="${not empty orgInfo.percent}">%</c:if></td>
                                                             <td class="tdClass" style="width:150px;text-align:center;">${orgInfo.amount}</td>
                                                             <td class="tdClass" style="width:205px;text-align:center;">${orgInfo.currency.currencyCode}</td>
-                                                            <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"></a></td>
+                                                            <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
                                                         </tr>
                                                     </c:forEach>
                                                 </table>
@@ -1490,14 +1490,14 @@
                                                             id="transDate<%=tempIndexStr%>"
                                                             href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
                                                             <img
-                                                                src="../ampTemplate/images/show-calendar.gif"
+                                                                src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif"
                                                                 alt="Click to View Calendar" border=0> </a></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td valign="bottom"><a
                                                 href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>)">
-                                                <digi:img src="../ampTemplate/images/deleteIcon.gif"
+                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
                                                           border="0" alt="Delete this transaction" /> </a></td>
                                     </tr>
                                 </c:forEach>
@@ -1529,13 +1529,13 @@
     <td colspan="2">
         <div style="float:right">
             <a href="javascript:exportInfo('exportContactInfo')" >
-                <digi:img src="images/xls_icon.jpg" border="0"/>
+                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
             </a>
         </div>
         <fieldset>
             <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
-                <img id="img_contact" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
-                <img id="imgh_contact" alt="" src="../ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>
+                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
+                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"   onclick="collapse('contact')"/>
                 <div id="div_container_contact">
                 <table cellpadding="2" cellspacing="0" border="0" width="100%">
                 <c:if test="${not empty aimAddOrgForm.contacts}">
@@ -1623,12 +1623,12 @@
                                             <td>
 
                                         <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${ampContactId}">
-                                            <img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+                                            <img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
                                         </aim:editContactLink>
                                         </td>
                                         <td>
                                             <a href="javascript:removeContact('${ampContactId}')">
-                                                <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"/>
+                                                <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
                                             </a>
                                         </td>
                                         </tr>

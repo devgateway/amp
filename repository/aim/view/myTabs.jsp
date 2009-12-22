@@ -305,7 +305,7 @@ Click on one of the tabs to display activities. You can add more tabs by using t
 	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
 </c:set>
 <script type="text/javascript">
-	loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
+	loadstatustext='<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	startajaxtabs("MyTabs");
 	if(document.getElementById(tabName)){

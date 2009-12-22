@@ -128,13 +128,13 @@
                                         </td>
                                         <td >
                                             <c:if test="${status.first != true}">
-                                                <a href="javascript:moveUp(${sector.sector.ampSectorId})"><img border="0" src='<digi:file src="images/up.gif"/>'></a>
+                                                <a href="javascript:moveUp(${sector.sector.ampSectorId})"><img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/>'></a>
                                             </c:if>
 
                                         </td>
                                         <td>
                                             <c:if test="${status.last != true}">
-                                                <a href="javascript:moveDown(${sector.sector.ampSectorId})"><img border="0" src='<digi:file src="images/down.gif"/>'></a>
+                                                <a href="javascript:moveDown(${sector.sector.ampSectorId})"><img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/>'></a>
                                             </c:if>
                                         </td>
                                     </tr>
@@ -174,13 +174,13 @@
                                         </td>
                                         <td >
                                             <c:if test="${status.first != true}">
-                                                <a href="javascript:moveUp(${sectorTableYear.year},${sectorTableYear.type})"><img border="0" src='<digi:file src="images/up.gif"/>'></a>
+                                                <a href="javascript:moveUp(${sectorTableYear.year},${sectorTableYear.type})"><img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/>'></a>
                                             </c:if>
 
                                         </td>
                                         <td>
                                             <c:if test="${status.last != true}">
-                                                <a href="javascript:moveDown(${sectorTableYear.year},${sectorTableYear.type})"><img border="0" src='<digi:file src="images/down.gif"/>'></a>
+                                                <a href="javascript:moveDown(${sectorTableYear.year},${sectorTableYear.type})"><img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/>'></a>
                                             </c:if>
                                         </td>
                                     </tr>

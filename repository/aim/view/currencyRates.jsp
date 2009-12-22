@@ -338,7 +338,7 @@ function fnSubmit() {
 													</td>
 													<td align="left" vAlign="center">&nbsp;
 														<a id="date1" href='javascript:pickDate("date1",document.aimCurrencyRateForm.filterByDateFrom)'>
-															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 														</a>
 													</td>
 												</tr>
@@ -376,7 +376,7 @@ function fnSubmit() {
 										  </a>
                                         </td>
                                         <td vAlign="middle" align="center">
-										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>
+										  &nbsp;&nbsp;&nbsp;<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>
 										</td>                                   
                                         
                                         <td  vAlign="left" align="left">
@@ -614,7 +614,7 @@ function fnSubmit() {
 												<table cellPadding=5 cellSpacing=1 width="100%">
 													<tr>
 														<td>
-															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+															<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
 														</td>
 														<td>
 															<digi:link module="aim"  href="/../um/addUser.do">
@@ -626,7 +626,7 @@ function fnSubmit() {
 													</tr>																								
 													<tr>
 														<td>
-															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+															<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/></td>
 														<td>
 															<digi:link module="aim"  href="/admin.do">
 															<digi:trn key="aim:AmpAdminHome">

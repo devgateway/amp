@@ -181,7 +181,7 @@
 																						<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																									<td width="9" height="15" bgcolor="#f4f4f2">
-																											<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+																											<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
 																									</td>
 																									<td bgcolor="#ffcccc" width="50">
 																											<bean:write name="subPrograms" property="themeCode"/>
@@ -230,7 +230,7 @@
 																													</digi:trn>
 																											</c:set>
 																											<digi:link href="/addSubTheme.do?event=delete" name="urlParams1" title="${translation}" onclick="return deleteProgram()">
-																													<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																											</digi:link>
 																									</td>
 																							</tr>
@@ -248,10 +248,10 @@
 																						<table width="99%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																										<td width="9" height="15">
-																												<img src="../ampTemplate/images/link_out_bot.gif">
+																												<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif">
 																										</td>
 																										<td width="9" height="15" bgcolor="#f4f4f2">
-																												<img src= "../ampTemplate/images/square1.gif" border=0>
+																												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square1.gif" border=0>
 																										</td>
 																										<td bgcolor="#f4f4f2" width="50">
 																												<bean:write name="subPrograms" property="themeCode"/>
@@ -292,7 +292,7 @@
 																														</digi:trn>
 																												</c:set>
 																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams2" title="${translation}" onclick="return deleteProgram()">
-																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																												</digi:link>
 																										</td>
 																								</tr>
@@ -310,10 +310,10 @@
 																						<table width="98%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																										<td width="9" height="15">
-																												<img src="../ampTemplate/images/link_out_bot.gif">
+																												<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif">
 																										</td>
 																										<td width="9" height="15" bgcolor="#f4f4f2">
-																												<img src= "../ampTemplate/images/square2.gif" border=0>
+																												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square2.gif" border=0>
 																										</td>
 																										<td bgcolor="#f4f4f2" width="50">
 																												<bean:write name="subPrograms" property="themeCode"/>
@@ -353,7 +353,7 @@
 																														</digi:trn>
 																												</c:set>
 																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams3" title="${translation}" onclick="return deleteProgram()">
-																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																												</digi:link>
 																										</td>
 																								</tr>
@@ -371,10 +371,10 @@
 																						<table width="97%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																										<td width="9" height="15">
-																												<img src="../ampTemplate/images/link_out_bot.gif">
+																												<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif">
 																										</td>
 																										<td width="9" height="15" bgcolor="#f4f4f2">
-																												<img src= "../ampTemplate/images/square3.gif" border=0>
+																												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square3.gif" border=0>
 																										</td>
 																										<td bgcolor="#f4f4f2" width="50">
 																												<bean:write name="subPrograms" property="themeCode"/>
@@ -414,7 +414,7 @@
 																														</digi:trn>
 																												</c:set>
 																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams4" title="${translation}" onclick="return deleteProgram()">
-																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																												</digi:link>
 																										</td>
 																								</tr>
@@ -432,10 +432,10 @@
 																						<table width="96%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																										<td width="9" height="15">
-																												<img src="../ampTemplate/images/link_out_bot.gif">
+																												<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif">
 																										</td>
 																										<td width="9" height="15" bgcolor="#f4f4f2">
-																												<img src= "../ampTemplate/images/square4.gif" border=0>
+																												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square4.gif" border=0>
 																										</td>
 																										<td bgcolor="#f4f4f2" width="50">
 																												<bean:write name="subPrograms" property="themeCode"/>
@@ -475,7 +475,7 @@
 																														</digi:trn>
 																												</c:set>
 																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams5" title="${translation}" onclick="return deleteProgram()">
-																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																												</digi:link>
 																										</td>
 																								</tr>
@@ -493,10 +493,10 @@
 																						<table width="95%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																										<td width="9" height="15">
-																												<img src="../ampTemplate/images/link_out_bot.gif">
+																												<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif">
 																										</td>
 																										<td width="9" height="15" bgcolor="#f4f4f2">
-																												<img src= "../ampTemplate/images/square5.gif" border=0>
+																												<img src= "./TEMPLATE/ampTemplate/imagesSource/common/square5.gif" border=0>
 																										</td>
 																										<td bgcolor="#f4f4f2" width="50">
 																												<bean:write name="subPrograms" property="themeCode"/>
@@ -536,7 +536,7 @@
 																														</digi:trn>
 																												</c:set>
 																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams6" title="${translation}" onclick="return deleteProgram()">
-																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																												</digi:link>
 																										</td>
 																								</tr>
@@ -554,10 +554,10 @@
 																						<table width="94%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																										<td width="9" height="15">
-																												<img src="../ampTemplate/images/link_out_bot.gif">
+																												<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif">
 																										</td>
 																										<td width="9" height="15" bgcolor="#f4f4f2">
-																												<img src= "../ampTemplate/images/square6.gif" border=0>
+																												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square6.gif" border=0>
 																										</td>
 																										<td bgcolor="#f4f4f2" width="50">
 																												<bean:write name="subPrograms" property="themeCode"/>
@@ -597,7 +597,7 @@
 																														</digi:trn>
 																												</c:set>
 																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams7" title="${translation}" onclick="return deleteProgram()">
-																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																												</digi:link>
 																										</td>
 																								</tr>
@@ -615,10 +615,10 @@
 																						<table width="93%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																								<tr bgcolor="#ffffff">
 																										<td width="9" height="15">
-																												<img src="../ampTemplate/images/link_out_bot.gif">
+																												<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif">
 																										</td>
 																										<td width="9" height="15" bgcolor="#f4f4f2">
-																												<img src= "../ampTemplate/images/square7.gif" border=0>
+																												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square7.gif" border=0>
 																										</td>
 																										<td bgcolor="#f4f4f2" width="50">
 																												<bean:write name="subPrograms" property="themeCode"/>
@@ -649,7 +649,7 @@
 																														</digi:trn>
 																												</c:set>
 																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams8" title="${translation}" onclick="return deleteProgram()">
-																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
 																												</digi:link>
 																										</td>
 																								</tr>
@@ -688,14 +688,14 @@
 				</tr>
 			<tr>
 						<td class=r-dotted-lg width="20%" nowrap="nowrap">
-								<img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1,
-								<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2,
-								<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3,
-								<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4,
-								<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5,
-								<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6,
-								<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7,
-								<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8.
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>  Level 1,
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square1.gif" border=0>  Level 2,
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square2.gif" border=0>  Level 3,
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square3.gif" border=0>  Level 4,
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square4.gif" border=0>  Level 5,
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square5.gif" border=0>  Level 6,
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square6.gif" border=0>  Level 7,
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square7.gif" border=0>  Level 8.
 						</td>
 			</tr>
 				</table>

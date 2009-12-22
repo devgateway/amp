@@ -445,11 +445,11 @@
 						</td>
 						<td valign="middle" align="center">
 							<button class="buton arrow" type="button" onClick="ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
 							</button>
 							<br/> <br />
 							<button class="buton arrow" type="button" onClick="ColumnsDragAndDropObject.deselectObjs('dest_col_ul')">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_left.gif"/>
 							</button>
 						</td>
 						<td width="47%" align="center">
@@ -500,11 +500,11 @@
 						</td>
 						<td valign="middle" align="center">
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.selectObjs('source_hierarchies_ul', 'dest_hierarchies_ul')">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
 							</button>
 							<br/> <br />
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_hierarchies_ul', 'source_hierarchies_ul')">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_left.gif"/>
 							</button>
 						</td>
 						<td width="47%" align="center">
@@ -545,11 +545,11 @@
 						</td>
 						<td valign="middle"  align="center">
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
 							</button>
 							<br/> <br />
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_left.gif"/>
 							</button>
 						</td>
 						<td width="47%" align="center">

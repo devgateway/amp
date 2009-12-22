@@ -577,7 +577,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	<td align="right" width="10">
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																		<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
-																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
+																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
 																		border="0" alt="Remove this linked org"/></a>&nbsp;
 																		</c:if>
 																	</td>
@@ -621,7 +621,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	<td align="right" width="10">
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																		<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
+																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
 																		border="0" alt="Remove this child workspace"/></a>&nbsp;
 																		</c:if>
 																	</td>
@@ -707,7 +707,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 									<table cellPadding=5 cellSpacing=1 width="100%">
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/workspaceManager.do">
 												<digi:trn key="aim:teams">
 												Teams
@@ -717,7 +717,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 										</tr>
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/roles.do">
 												<digi:trn key="aim:roles">
 												Roles
@@ -727,7 +727,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 										</tr>
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/updateRole.do">
 												<digi:trn key="aim:addRole">
 												Add Roles
@@ -737,7 +737,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 										</tr>
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/admin.do">
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home

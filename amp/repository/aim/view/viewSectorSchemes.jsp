@@ -186,7 +186,7 @@
 																			<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 																		</c:set>
 																		<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${trnEditScheme}" >
-																		 	<digi:img src="../ampTemplate/images/application_edit.png" border="0"/>
+																		 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 																		</digi:link>
 																	</td>
 																	<td align="center" width="10%">
@@ -201,7 +201,7 @@
 																			</c:set>
 																			<digi:link href="/updateSectorSchemes.do" name="urlParams4"
 																				title="${trnDeleteScheme}" onclick="return onDelete()">
-																				 <digi:img src="../ampTemplate/images/trash_16.gif" border="0"/>
+																				 <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
 																			</digi:link>
 			                                                            </c:if>
 																	</td>
@@ -259,7 +259,7 @@
 										<field:display name="Add Scheme Link" feature="Sectors">
 											<tr>
 												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="trnAddScheme">
 														<digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
 													</c:set>
@@ -274,7 +274,7 @@
                                       	<field:display name="Multi Sector Configuration" feature="Sectors">
                                               <tr>
                                                   <td>
-                                                      <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
                                                       <c:set var="trnViewConfigurations">
                                                           <digi:trn key="aim:ClickToConfigureClassifications">Click here to see the Configuration of Classifications</digi:trn>
                                                       </c:set>
@@ -288,7 +288,7 @@
 										</field:display>
                                         <tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="trnViewAdmin">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>
@@ -315,7 +315,7 @@
 				       			</tr>
 				     			<tr>
 				           			<td width="15" height="20" align="center">
-										<img src= "../ampTemplate/images/application_edit.png" vspace="2" border="0" align="absmiddle" />
+										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
 									</td>
 									<td nowrap="nowrap">
 				               			<digi:trn key="aim:clickToEditScheme">Click on this icon to edit Scheme</digi:trn>
@@ -324,7 +324,7 @@
 				       			</tr>
 				        		<tr>
 				           			<td width="15" height="20" align="center">
-										<img src= "../ampTemplate/images/trash_16.gif" vspace="2" border="0" align="absmiddle" />
+										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
 				               		</td>
 									<td nowrap="nowrap">
 									<digi:trn key="aim:clickToDeleteScheme">Click on this icon to delete Scheme</digi:trn>

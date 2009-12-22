@@ -10,7 +10,7 @@
 
 <div>
 
-   <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+   <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
    <c:set var="trnDataExchangeExportTitle">
     <digi:trn key="dataexchange:trnDataExchangeExportTitle">Click here to view Data Export Manager</digi:trn>
    </c:set>
@@ -22,7 +22,7 @@
 
 <div>
 
-   <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+   <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
    <c:set var="trnDataExchangeExportTitle">
     <digi:trn key="dataexchange:trnDataExchangeImportTitle">Click here to view Data Import Manager</digi:trn>
    </c:set>

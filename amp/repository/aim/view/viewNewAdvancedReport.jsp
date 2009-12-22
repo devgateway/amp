@@ -125,13 +125,13 @@ session.setAttribute("progressValue", counter);
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		  			<tr>
 		    			<td align="left">
-		    				<img src="images/tableftcorner.gif"/>
+		    				<img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif"/>
 		    			</td>
 		    			<td align="center" nowrap="nowrap" style="background:#222E5D; font-family: Arial;color:white;font-weight: bold;">
 		    				<bean:write scope="session" name="reportMeta" property="name" />
 		    			</td>
 		    			<td align="right">
-		    				<img src="images/tabrightcorner.gif" />
+		    				<img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" />
 		    			</td>
 		  			</tr>
 				</table>

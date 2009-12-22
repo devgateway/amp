@@ -234,7 +234,7 @@ function changeFormula(el, ampIndicatorId, enabled, baseLineValue, targetValue, 
                                  <c:forEach var="prop" items="${report.calcFormulas}" varStatus="rowCounter">
 									<tr id="${report.ampIndicatorId}" onClick='changeFormula(this, "${report.ampIndicatorId}","${prop.enabled}","${prop.baseLineValue}","${prop.targetValue}","${prop.constantName}","${prop.calcFormula}");'>
 									<td>
-	                                    <IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10 />
+	                                    <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-gr.gif" width=10 />
 	                                    <strong>[${report.indicatorCode}]</strong>
 	                                    <c:set var="translation">
 	                                      <digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>

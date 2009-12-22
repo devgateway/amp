@@ -245,7 +245,7 @@
 												</c:set>
 												<c:set target="${urlParams5}" property="parent" value="sector3"/>
 												<c:set target="${urlParams5}" property="level" value="three"/>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 												</c:set>
@@ -262,7 +262,7 @@
 										<field:display name="View Schemes Link" feature="Sectors">
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 												</c:set>
@@ -276,7 +276,7 @@
 										</field:display>
 										<tr>
 											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

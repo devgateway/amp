@@ -189,8 +189,8 @@
 								<TBODY>
 									<TR valign="middle" bgcolor="#507EA9">
 										<TD height="25" colspan="4" width="510">	&nbsp;
-											<digi:img src="module/calendar/images/1blt.gif"/>
-											<digi:img src="module/calendar/images/spacer.gif" width="1" height="1"/><b><font color="#FFFFFF">&nbsp;<font color="#E8F1F8">
+											<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/1blt.gif"/>
+											<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" width="1" height="1"/><b><font color="#FFFFFF">&nbsp;<font color="#E8F1F8">
 											<digi:trn key="calendar:addEditEvent">Add/Edit Event</digi:trn></font></font></b>
 										</TD>
 									</TR>
@@ -309,72 +309,72 @@
 													</TR>
 													<TR vAlign="center" align="middle">
 														<TD><A href="javascript:emoticon(':D')">
-															<digi:img title="Very Happy" alt="Very Happy" src="module/common/images/smiles/icon_biggrin.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Very Happy" alt="Very Happy" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_biggrin.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':)')">
-															<digi:img title="Smile" alt="Smile" src="module/common/images/smiles/icon_smile.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Smile" alt="Smile" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_smile.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':(')">
-															<digi:img title="Sad" alt="Sad" src="module/common/images/smiles/icon_sad.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Sad" alt="Sad" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_sad.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':o')">
-															<digi:img title="Surprised" alt="Surprised" src="module/common/images/smiles/icon_surprised.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Surprised" alt="Surprised" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_surprised.gif" border="0" width="15" height="15"/></A>
 														</TD>
 													</TR>
 													<TR vAlign="center" align="middle">
 														<TD><A href="javascript:emoticon(':shock:')">
-															<digi:img title="Shocked" alt="Shocked" src="module/common/images/smiles/icon_eek.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Shocked" alt="Shocked" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_eek.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':?')">
-															<digi:img title="Confused" alt="Confused" src="module/common/images/smiles/icon_confused.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Confused" alt="Confused" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_confused.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon('8)')">
-															<digi:img title="Cool" alt="Cool" src="module/common/images/smiles/icon_cool.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Cool" alt="Cool" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_cool.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':lol:')">
-															<digi:img title="Laughing" alt="Laughing" src="module/common/images/smiles/icon_lol.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Laughing" alt="Laughing" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_lol.gif" border="0" width="15" height="15"/></A>
 														</TD>
 													</TR>
 													<TR vAlign="center" align="middle">
 														<TD><A href="javascript:emoticon(':x')">
-															<digi:img title="Mad" alt="Mad" src="module/common/images/smiles/icon_mad.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Mad" alt="Mad" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_mad.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':P')">
-															<digi:img title="Razz" alt="Razz" src="module/common/images/smiles/icon_razz.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Razz" alt="Razz" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_razz.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':oops:')">
-															<digi:img title="Embarassed" alt="Embarassed" src="module/common/images/smiles/icon_redface.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Embarassed" alt="Embarassed" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_redface.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':cry:')">
-															<digi:img title="Crying or Very sad" alt="Crying or Very sad" src="module/common/images/smiles/icon_cry.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Crying or Very sad" alt="Crying or Very sad" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_cry.gif" border="0" width="15" height="15"/></A>
 														</TD>
 													</TR>
 													<TR vAlign="center" align="middle">
 														<TD><A href="javascript:emoticon(':evil:')">
-															<digi:img title="Evil or Very Mad" alt="Evil or Very Mad" src="module/common/images/smiles/icon_evil.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Evil or Very Mad" alt="Evil or Very Mad" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_evil.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':twisted:')">
-															<digi:img title="Twisted Evil" alt="Twisted Evil" src="module/common/images/smiles/icon_twisted.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Twisted Evil" alt="Twisted Evil" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_twisted.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':roll:')">
-															<digi:img title="Rolling Eyes" alt="Rolling Eyes" src="module/common/images/smiles/icon_rolleyes.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Rolling Eyes" alt="Rolling Eyes" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_rolleyes.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':wink:')">
-															<digi:img title="Wink" alt="Wink" src="module/common/images/smiles/icon_wink.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Wink" alt="Wink" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_wink.gif" border="0" width="15" height="15"/></A>
 														</TD>
 													</TR>
 													<TR vAlign="center" align="middle">
 														<TD><A href="javascript:emoticon(':!:')">
-															<digi:img title="Exclamation" alt="Exclamation" src="module/common/images/smiles/icon_exclaim.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Exclamation" alt="Exclamation" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_exclaim.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':?:')">
-															<digi:img title="Question" alt="Question" src="module/common/images/smiles/icon_question.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Question" alt="Question" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_question.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':idea:')">
-															<digi:img title="Idea" alt="Idea" src="module/common/images/smiles/icon_idea.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Idea" alt="Idea" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_idea.gif" border="0" width="15" height="15"/></A>
 														</TD>
 														<TD><A href="javascript:emoticon(':arrow:')">
-															<digi:img title="Arrow" alt="Arrow" src="module/common/images/smiles/icon_arrow.gif" border="0" width="15" height="15"/></A>
+															<digi:img title="Arrow" alt="Arrow" src="/TEMPLATE/ampTemplate/imagesSource/calendar/smiles/icon_arrow.gif" border="0" width="15" height="15"/></A>
 														</TD>
 													</TR>
 												</TBODY>

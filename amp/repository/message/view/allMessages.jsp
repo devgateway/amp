@@ -204,7 +204,7 @@ background-color:yellow;
         var divBody=document.createElement('DIV');
         divBody.className="bd";
         divBody.id="msg_bd";
-        divBody.innerHTML='<digi:img src="images/amploading.gif"/><digi:trn>Loading, please wait ...</digi:trn>';
+        divBody.innerHTML='<digi:img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/><digi:trn>Loading, please wait ...</digi:trn>';
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
             x:"20",
@@ -723,8 +723,8 @@ background-color:yellow;
         	msgId+='_fId'+newMsgId; // create id for forwarded message
         }               
 		imgTD.vAlign='top';               
-        imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/unread.gif" title="<digi:trn>Click on this icon to expand message&nbsp;</digi:trn>"/>'+
-			'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn> Click on this icon to collapse message&nbsp;</digi:trn>/>';
+        imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/TEMPLATE/ampTemplate/imagesSource/messages/unread.gif" title="<digi:trn>Click on this icon to expand message&nbsp;</digi:trn>"/>'+
+			'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/TEMPLATE/ampTemplate/imagesSource/messages/read.gif" style="display : none" <digi:trn> Click on this icon to collapse message&nbsp;</digi:trn>/>';
 
 	   msgTr.appendChild(imgTD);               
 					
@@ -946,9 +946,9 @@ background-color:yellow;
                 fwdOrEditTD.vAlign="top";
 		
 		if(isDraft=='true'){
-                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
+                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border=0 hspace="2" /></digi:link>';									
 		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
+			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/TEMPLATE/ampTemplate/imagesSource/messages/finalForward.gif" border=0  hspace="2" /></digi:link>';
 		}
 		msgTr.appendChild(fwdOrEditTD);	
 					
@@ -958,7 +958,7 @@ background-color:yellow;
 		deleteTD.align='center';
                 deleteTD.vAlign="top";
 		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
+		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0 hspace="2"/></a>';
 		msgTr.appendChild(deleteTD);
                 //delete link
 		var deleteTDCheckbox=document.createElement('TD');
@@ -1465,31 +1465,31 @@ $(document).ready(function(){
                                         </TD>
                                     </TR>
                                     <TR>
-                                    	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unread.gif" vspace="2" border="0" align="absmiddle" />
+                                    	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/messages/unread.gif" vspace="2" border="0" align="absmiddle" />
                                         	<digi:trn> Click on this icon to expand message&nbsp;</digi:trn>
                                         	<br />
                                         </TD>
                                     </TR>
                                     <TR>
-                                    	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/read.gif" vspace="2" border="0" align="absmiddle" />
+                                    	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/messages/read.gif" vspace="2" border="0" align="absmiddle" />
                                         	<digi:trn>Click on this icon to collapse message&nbsp;</digi:trn>
                                             <br/>
                                         </TD>
                                      </TR>
                                      <TR>
-                                        <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/finalForward.gif" vspace="2" border="0" align="absmiddle" />
+                                        <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/messages/finalForward.gif" vspace="2" border="0" align="absmiddle" />
                                         	<digi:trn>Click on this icon to forward message&nbsp;</digi:trn>
                                             <br />
                                         </TD>
                                      </TR>
                                      <TR>
-                                     	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                                     	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
                                         	<digi:trn>Click on this icon to edit message&nbsp;</digi:trn>
                                             <br />
                                         </TD>
                                      </TR>
                                      <TR>
-                                     	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                                     	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
                                         	<digi:trn>Click on this icon to delete message&nbsp;</digi:trn>
                                             <br />
                                         </TD>

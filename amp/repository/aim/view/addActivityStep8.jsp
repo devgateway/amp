@@ -137,7 +137,7 @@
 		myPanel.setHeader(msg);		
 		var content = document.getElementById("popinContent");
 		content.innerHTML = '<div style="text-align: center">' + 
-		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
 		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent();
 	}
@@ -510,7 +510,7 @@ function resetAll()
 													<feature:display name="Donor Contact Information" module="Contact Information">
 														<tr>
 															<td>
-																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																<a title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>Donor Contact Information</digi:trn></b>
 																</a>	
@@ -567,14 +567,14 @@ function resetAll()
 		                                            									</c:choose>
 		                                        									 </c:set>
 																					 <aim:editContactLink collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${donorContact.contactType}">
-						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams}" property="tempId">
 																						<bean:write name="donorContact" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams}" property="contType" value="DONOR_CONT"/>
-																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
 																				</td>
 																			</tr>
 																		</c:forEach>
@@ -592,7 +592,7 @@ function resetAll()
 													<feature:display name="Government Contact Information" module="Contact Information">
 														<tr>
 															<td>
-																<IMG alt="Link" height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+																<IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
 																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>MOFED Contact Information</digi:trn></b>
 																</a>	
@@ -649,14 +649,14 @@ function resetAll()
 		                                            									</c:choose>
 		                                        									 </c:set>
 																					 <aim:editContactLink collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${mofedContact.contactType}">
-						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams1}" property="tempId">
 																						<bean:write name="mofedContact" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams1}" property="contType" value="MOFED_CONT"/>
-																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams1"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams1"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
 																				</td>
 																			</tr>
 																		</c:forEach>
@@ -674,7 +674,7 @@ function resetAll()
 													<feature:display name="Project Coordinator Contact Information" module="Contact Information">
 														<tr>
 															<td>
-																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>Project Coordinator Contact Information</digi:trn></b>
 																</a>	
@@ -731,14 +731,14 @@ function resetAll()
 		                                            									</c:choose>
 		                                        									 </c:set>
 																					 <aim:editContactLink collection="projCoordinatorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${projCoordinator.contactType}">
-						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams2}" property="tempId">
 																						<bean:write name="projCoordinator" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams2}" property="contType" value="PROJ_COORDINATOR_CONT"/>
-																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams2"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams2"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
 																				</td>
 																			</tr>
 																		</c:forEach>
@@ -756,7 +756,7 @@ function resetAll()
 													<feature:display name="Sector Ministry Contact Information" module="Contact Information">
 														<tr>
 															<td>
-																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>Sector Ministry Contact Information</digi:trn></b>
 																</a>	
@@ -813,14 +813,14 @@ function resetAll()
 		                                            									</c:choose>
 		                                        									 </c:set>
 																					 <aim:editContactLink collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${sectorMinistry.contactType}">
-						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 																					<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams3}" property="tempId">
 																						<bean:write name="sectorMinistry" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams3}" property="contType" value="SECTOR_MINISTRY_CONT"/>
-																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams3"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams3"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
 																				</td>
 																			</tr>
 																		</c:forEach>
@@ -839,7 +839,7 @@ function resetAll()
 													<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
 														<tr>
 															<td>
-																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
 																</a>	
@@ -896,14 +896,14 @@ function resetAll()
 		                                            									</c:choose>
 		                                        									 </c:set>
 																					 <aim:editContactLink collection="implExecutingAgencyContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${implExecAgency.contactType}">
-						                                            					<img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams4}" property="tempId">
 																						<bean:write name="implExecAgency" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams4}" property="contType" value="IMPL_EXEC_AGENCY_CONT"/>
-																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams4"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams4"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
 																				</td>
 																			</tr>
 																		</c:forEach>

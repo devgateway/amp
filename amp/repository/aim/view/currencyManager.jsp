@@ -279,7 +279,7 @@ function setHoveredRow(rowId) {
 																</c:set>
 																<a href="javascript:makeInactive('${curr.currencyCode}')"
 																title="${translation}">
-																<digi:img src="module/aim/images/bullet_green.gif" border="0"/></a>
+																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_green.gif" border="0"/></a>
 															</c:if>
 															<c:if test="${curr.activeFlag != 1}">
 																<c:set var="translation">
@@ -289,7 +289,7 @@ function setHoveredRow(rowId) {
 																</c:set>
 																<a href="javascript:makeActive('${curr.currencyCode}')"
 																title="${translation}">
-																<digi:img src="module/aim/images/bullet_grey.gif" border="0"/></a>
+																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey.gif" border="0"/></a>
 															</c:if>
 														</td>
 														<td align="left" width="15%">
@@ -310,7 +310,7 @@ function setHoveredRow(rowId) {
 			                                            </td>
 														<td align="center" width="15%">
 															<a href="javascript:deleteCurrency('${curr.currencyCode}')">
-													 		<digi:img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete this Currency"/>
+													 		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this Currency"/>
 															</a>
 														</td>
 													</tr>
@@ -460,7 +460,7 @@ function setHoveredRow(rowId) {
 						       			</tr>
 						     			<tr>
 						           			<td width="15" height="20" align="center">
-												<img src= "module/aim/images/bullet_grey.gif" vspace="2" border="0" align="absmiddle" />
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey.gif" vspace="2" border="0" align="absmiddle" />
 											</td>
 											<td nowrap="nowrap">
 						               			<digi:trn key="aim:clickToInactiveCurrency">Click on this icon to activate a Currency (Currently inactive)&nbsp;</digi:trn>
@@ -469,7 +469,7 @@ function setHoveredRow(rowId) {
 						       			</tr>
 						        		<tr>
 						           			<td width="15" height="20" align="center">
-												<img src= "module/aim/images/bullet_green.gif" vspace="2" border="0" align="absmiddle" />
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green.gif" vspace="2" border="0" align="absmiddle" />
 						               		</td>
 											<td nowrap="nowrap">
 											<digi:trn key="aim:clickToActiveCurrency">Click on this icon to deactivate a Currency (Currently active)&nbsp;</digi:trn>
@@ -478,7 +478,7 @@ function setHoveredRow(rowId) {
 						       			</tr>
 										<tr>
 						           			<td width="15" height="20" align="center">
-												<img src= "../ampTemplate/images/trash_16.gif" vspace="2" border="0" align="absmiddle" />
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
 						               		</td>
 											<td nowrap="nowrap">
 											<digi:trn key="aim:clickToDeleteCurrency">Click on this icon to delete a Currency&nbsp;</digi:trn>
@@ -511,7 +511,7 @@ function setHoveredRow(rowId) {
 													<td bgColor="#ffffff" class="box-border">
 													<table cellPadding=5 cellSpacing=1 width="100%">
 														<tr>
-															<td><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td><digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -521,7 +521,7 @@ function setHoveredRow(rowId) {
 														</tr>
 														<tr>
 															<td>
-																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>
@@ -533,7 +533,7 @@ function setHoveredRow(rowId) {
 														</tr>
 														<tr>
 															<td>
-																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>

@@ -18,7 +18,7 @@
 
 								<table width="95%" bgcolor="#f4f4f2">
 									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
 										<b><digi:trn key="aim:components">Components</digi:trn></b></a>
 									</td></tr>
@@ -317,7 +317,7 @@
 																			<% String url1 =
 																			"/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
 																			<digi:link href="<%=url1%>">
-																				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"
+																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"
 																				alt="Delete this physical progress"/>
 																			</digi:link>
 																		</td>																			

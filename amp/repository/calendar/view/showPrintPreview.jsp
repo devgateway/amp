@@ -46,7 +46,7 @@ function deleteEvent(){
 	<tr>
 	<td>
 	<a target="_blank" title="Printing" onclick="window.print();" style="cursor: pointer">
- 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/module/aim/images/printer.gif"/>
+ 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"/>
  	</a>
  	<a target="_blank"  title="Printing" onclick="window.close();" style="cursor: pointer" height="30">
 				               Close

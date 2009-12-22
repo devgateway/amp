@@ -144,14 +144,14 @@
                                 <LI>
                                     <div>
                                         <a target="_blank" onclick="exportPDF(); return false;">
-                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
+                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt='Export to PDF'/>
                                         </a>
                                         <a target="_blank" onclick="exportWord(); return false;">
-                                            <digi:img  hspace="0" vspace="0" src="images/icons/doc.gif" border="0" alt='Export to Word'/>
+                                            <digi:img  hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/imagesSource/common/doc.gif" border="0" alt='Export to Word'/>
                                         </a>
                                         <span id="changeFilterLink">
                                             <a>
-                                                <digi:img width="15px" height="15px" hspace="0" vspace="0" src="images/filter.png" border="0" alt='Apply Filter'/>
+                                                <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/imagesSource/common/filter.png" border="0" alt='Apply Filter'/>
                                             </a>
                                         </span>
                                     </div>

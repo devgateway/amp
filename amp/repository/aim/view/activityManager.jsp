@@ -324,12 +324,12 @@
 																<tr height="20">
 																	<logic:notEmpty name="activities" property="team">
 																		<td width="3%" height="15">
-																			<img src="../ampTemplate/images/arrow_right.gif" border=0>
+																			<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
 																		</td>
 																	</logic:notEmpty>
 																	<logic:empty name="activities" property="team">
 																		<td width="3%" height="15">
-																			<img src="../ampTemplate/images/start_button.gif" border=0>
+																			<img src="/TEMPLATE/ampTemplate/imagesSource/common/start_button.gif" border=0>
 																		</td>
 																	</logic:empty>
 																	<td width="57%" align="left">
@@ -366,7 +366,7 @@
 										</tr>
 										<tr>
 											<td bgColor="#ffffff" height="20" align="left"><img
-												src="../ampTemplate/images/start_button.gif" border="0">
+												src="/TEMPLATE/ampTemplate/imagesSource/common/start_button.gif" border="0">
 											- <b><digi:trn>Unassigned Activities</digi:trn></b>
 											</td>
 										</tr>

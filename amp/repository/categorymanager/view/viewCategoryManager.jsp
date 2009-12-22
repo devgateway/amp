@@ -159,7 +159,7 @@ function confirmDelete() {
 				<digi:trn key="aim:categoryManagerAddNewCategoryTitle">Click here to add a new category with specified values</digi:trn>
 			</c:set>
 			<digi:link href="/categoryManager.do?new=true" title="${translation}">
-				<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 22px; cursor: pointer; border:0">	
+				<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 22px; cursor: pointer; border:0">	
 				<digi:trn key="aim:categoryManagerAddNewCategory">Add New Category</digi:trn>
 				</img>
 			</digi:link>
@@ -244,10 +244,10 @@ function confirmDelete() {
 							</td>
 							<td width="15%"align="left">
 								<% if (category.isMultiselect()) {%>
-									<img src= "../ampTemplate/images/bullet_green.gif" border=0>
+									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green_sq.gif" border=0>
 								<% }
 									else { %>
-									<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
 								<%} %>
 								&nbsp;
 								<digi:trn key='aim:categoryIsMultiselect'>
@@ -255,10 +255,10 @@ function confirmDelete() {
 								</digi:trn>
 								<br />
 								<% if (category.isOrdered()) {%>
-									<img src= "../ampTemplate/images/bullet_green.gif" border=0>
+									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green_sq.gif" border=0>
 								<% }
 									else { %>
-									<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
 								<%} %>
 								&nbsp;
 								<digi:trn key='aim:categoryIsOrdered'>
@@ -271,7 +271,7 @@ function confirmDelete() {
 								</c:set>
 							
 								<digi:link paramId="edit" paramName="category" paramProperty="id"  href='/categoryManager.do' title="${translation}">
-								    <img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" />
+								    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" />
 								</digi:link>
 								<br/>
 								<c:set var="translation">
@@ -279,7 +279,7 @@ function confirmDelete() {
 								</c:set>
 								
 								<digi:link paramId="delete" paramName="category" paramProperty="id"  href='/categoryManager.do' title="${translation}" onclick="return confirmDelete()">
-									<img src= "/TEMPLATE/ampTemplate/images/deleteIcon.gif" vspace="2" border="0" />
+									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" />
 								</digi:link>
 							</td>
 						</tr>
@@ -305,7 +305,7 @@ function confirmDelete() {
 									<tr>
 										<td>
 											<div style="width:100px; ">
-											<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+											<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 											<c:set var="translation">
 											<digi:trn key="aim:categoryManagerAddNewCategoryTitle">Click here to add a new category with specified values</digi:trn>
 											</c:set>
@@ -319,7 +319,7 @@ function confirmDelete() {
 																			
 									<tr>
 										<td>
-											<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+											<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>
@@ -343,11 +343,11 @@ function confirmDelete() {
 					<digi:trn key="aim:tablelegend">
 						Legend :
 					</digi:trn>
-					<img src= "../ampTemplate/images/bullet_green.gif" border=0>
+					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green_sq.gif" border=0>
 					<digi:trn key="aim:tableunable">
 						Unable 
 					</digi:trn>
-					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
 					<digi:trn key="aim:tabledisable">
 						Disable 
 					</digi:trn>

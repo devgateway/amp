@@ -146,7 +146,7 @@
 				<tr>
 					<td width="14" class="r-dotted-lg">&nbsp;</td>
 					<td align="left">
-					&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+					&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/print_icon.gif">
 				<digi:link href="/htmlCommitmentbyModality.do" target="_blank">
 					Print
 				</digi:link>
@@ -158,7 +158,7 @@
 				<td width="14" class="r-dotted-lg">&nbsp;</td>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
-							&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
+							&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>	
 							<c:set var="translation">
 								<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 							</c:set>
@@ -173,7 +173,7 @@
 				<td width="14" class="r-dotted-lg">&nbsp;</td>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
-							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+							&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border=0>	
 							<c:set var="translation">
 								<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 							</c:set>
@@ -192,7 +192,7 @@
 			        <td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
 							&nbsp;
-					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<img src="/TEMPLATE/ampTemplate/imagesSource/common/icon_csv.gif" border=0>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
 					</c:set>
@@ -383,7 +383,7 @@
 					 Trend Analysis
 					 </digi:trn>
 					 </td>
-                    <td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" width="17" height="17"></td>
+                    <td bgcolor="#FFFFFF"><img src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17"></td>
                   </tr>
               </table></td>
             </tr>

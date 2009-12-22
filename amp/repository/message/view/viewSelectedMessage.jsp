@@ -64,9 +64,9 @@ background: #FFF;
 																					<td colspan="3" align="right">priority</td>
 																					<td align="left" bgcolor="#ffffff">
 																						<logic:equal name="messageForm" property="priorityLevel" value="0">None</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="1"><img src="/repository/message/view/images/low.gif" title="low"/></logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="2"><img src="/repository/message/view/images/medium.gif" title="medium"/></logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="3"><img src="/repository/message/view/images/critical.gif" title="Critical"/></logic:equal>																						
+																						<logic:equal name="messageForm" property="priorityLevel" value="1"><img src="/TEMPLATE/ampTemplate/imagesSource/common/low.gif" title="low"/></logic:equal>
+																						<logic:equal name="messageForm" property="priorityLevel" value="2"><img src="/TEMPLATE/ampTemplate/imagesSource/common/medium.gif" title="medium"/></logic:equal>
+																						<logic:equal name="messageForm" property="priorityLevel" value="3"><img src="/TEMPLATE/ampTemplate/imagesSource/common/critical.gif" title="Critical"/></logic:equal>																						
 																					</td>																					
 																				</tr>
 																				<tr><td colspan="4"></td></tr>
@@ -106,7 +106,7 @@ background: #FFF;
 																									<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 																									<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>																																														
 																									<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${item.paragraphOrder}" name="urlParamsSort">
-																										<img src="/repository/message/view/images/attachment.png" border="0" />
+																										<img src="/TEMPLATE/ampTemplate/imagesSource/common/attachment.png" border="0" />
 																										${item.contentTitle}
 																									</digi:link>
 																								</div>

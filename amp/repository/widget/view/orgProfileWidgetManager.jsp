@@ -119,7 +119,7 @@
 	<tr>
 		<td bgColor="#d7eafd"; colspan='3'>
 		 <a href=javascript:; style="text-decoration:none" onclick="save()">
-		  		<img border="0" height="16"  src='<digi:file src="/TEMPLATE/ampTemplate/images/save.png"/>'/>
+		  		<img border="0" height="16"  src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/reports/save.png"/>'/>
 		  		<digi:trn>Save</digi:trn>
 		 </a>
 		</td>

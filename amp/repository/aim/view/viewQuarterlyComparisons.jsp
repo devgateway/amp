@@ -509,7 +509,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
           <tr>
             <td align="right"><table cellspacing="0" cellpadding="0" valign="top">
               <tr>
-                <td width="15"><digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                <td width="15"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
                 </td>
                 <td><jsp:useBean id="urlShowQuarterly" type="java.util.Map" class="java.util.HashMap"/>
                   
@@ -529,7 +529,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                 </td>
               </tr>
               <tr>
-                <td width="15"><digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                <td width="15"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
                 </td>
                 <td><c:set var="translation">
                   <digi:trn key="aim:clickToViewMonthlyComparisons">Click here to view Monthly Comparisons</digi:trn>

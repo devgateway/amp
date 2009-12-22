@@ -12,7 +12,7 @@
 		<td>
 			<table width="100%">	  	
 				<tr>				   
-				    <td> <img src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif"/>
+				    <td> <img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"/>
 				    	<digi:edit key="aim:statusDescription:${param.catEditKey}">no description</digi:edit><br>
 							<digi:secure actions="ADMIN, TRANSLATE">
 								<script language="JavaScript">

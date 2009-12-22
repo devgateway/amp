@@ -165,7 +165,7 @@
 		myPanel.setHeader(msg);
 		var content = document.getElementById("popinContent");
 		content.innerHTML = '<div style="text-align: center">' + 
-			'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+			'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
 			'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent();
 	}
@@ -1300,7 +1300,7 @@ function showFilter(){
 		var par=firstTR.parentNode;
 		clearActivityTable(firstTR);
 		var tr=document.createElement('tr');
-		var str='<td align="center" colspan="6"><img src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="loading..."/>loading...</td>';
+		var str='<td align="center" colspan="6"><img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" alt="loading..."/>loading...</td>';
 		tr.innerHTML=str;
 		par.appendChild(tr);
 	}
@@ -1729,7 +1729,7 @@ function showFilter(){
 							<tr>
 								<td valign="top">
 									<div id="divGraphLoading" style="vertical-align: middle; display: none; width: ${aimNPDForm.graphWidth}px; height: ${aimNPDForm.graphHeight}px" align="center">
-										<digi:img src="images/amploading.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>
+										<digi:img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>
 									</div>
 									<div id="divGraphImage" style="display: block">
 										<digi:context name="showChart" property="/module/moduleinstance/npdGraph.do"/>

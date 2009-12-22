@@ -465,7 +465,7 @@ function WindowControllerObject(bodyContainerEl) {
 				if ( this.showOnlyDocs ) 
 						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
 				//alert(parameters);
-				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
+				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' /> </div>";
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};

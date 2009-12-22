@@ -248,14 +248,14 @@
                                                                 <td width="63%">
                                                                     <c:if test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
                                                                         <a href="javascript:sortByVal('nameDesc')">
-                                                                            <b><digi:trn>Indicator Name</digi:trn></b> <img  src="/repository/aim/images/up.gif" border="0"/>
+                                                                            <b><digi:trn>Indicator Name</digi:trn></b> <img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif" border="0"/>
                                                                         </a>
                                                                     </c:if>
                                                                     <c:if test="${not empty aimViewIndicatorsForm.sortBy && aimViewIndicatorsForm.sortBy!='nameAsc'}">
                                                                         <a href="javascript:sortByVal('nameAsc')">
                                                                             <b><digi:trn key="aim:indicator">Indicator Name
                                                                             </digi:trn></b><c:if test="${aimViewIndicatorsForm.sortBy=='nameDesc'}">
-                                                                                <img src="/repository/aim/images/down.gif" border="0"/>
+                                                                                <img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif" border="0"/>
                                                                             </c:if>
                                                                         </a>
                                                                     </c:if>
@@ -263,14 +263,14 @@
                                                                 <td width="30%" align="center">
                                                                     <c:if test="${aimViewIndicatorsForm.sortBy=='sectAsc'}">
                                                                         <a href="javascript:sortByVal('sectDesc')">
-                                                                            <b><digi:trn>Sector</digi:trn></b><img  src="/repository/aim/images/up.gif" border="0"/>
+                                                                            <b><digi:trn>Sector</digi:trn></b><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif" border="0"/>
                                                                         </a>
                                                                     </c:if>
                                                                     <c:if test="${aimViewIndicatorsForm.sortBy!='sectAsc'}">
                                                                         <a href="javascript:sortByVal('sectAsc')">
                                                                             <b><digi:trn>Sector</digi:trn></b>
                                                                             <c:if test="${aimViewIndicatorsForm.sortBy=='sectDesc'}">
-                                                                                <img src="/repository/aim/images/down.gif" border="0"/>
+                                                                                <img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif" border="0"/>
                                                                             </c:if>
                                                                         </a>
                                                                     </c:if>
@@ -305,7 +305,7 @@
                                                                                                 <digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
                                                                                             </c:set>
                                                                                             <digi:link href="/removeIndicator.do" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
-                                                                                                <img src= "../ampTemplate/images/trash_12.gif" border=0>
+                                                                                                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
                                                                                             </digi:link>
                                                                                         </td>
                                                                                     </tr>

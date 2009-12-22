@@ -94,14 +94,14 @@
 				<table border="0" cellpadding="0" cellspacing="0" width="28%" height="35">
 					<tr>
 						<td width="9%" height="35">
-							<digi:img src="module/calendar/images/arrowl.gif"/>
+							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/calendar/arrowl.gif"/>
 						</td>
 						<td width="83%" height="35" class="tlt">
 							<p align="center"><b><font size="4">
 							<bean:write name="calendarItemForm" property="infoText"/></font></b>
 						</td>
 						<td width="8%" height="35">
-							<digi:img src="module/calendar/images/arrowr.gif"/>
+							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/calendar/arrowr.gif"/>
 						</td>
 					</tr>
 				</table>

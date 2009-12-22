@@ -143,7 +143,7 @@ function validation(){
           <td bgColor=#d7eafd  height="10" align="center" nowrap="nowrap">
             <html:text name="ind" property="creationDate" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
 			<a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
-				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
+				<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0> 
 			</a> 
 
           </td>
@@ -172,7 +172,7 @@ function validation(){
           </td>
           <td bgColor=#d7eafd>
             <a href="javascript:deleteData('${index.count-1}')">
-              <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
+              <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete indicator value" />
             </a>
           </td>
         </tr>        

@@ -1861,12 +1861,12 @@ public class ProgramUtil {
 				retVal += "<tr class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
 			}
 			retVal += "   <td width=\"1%\" >";
-			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
-			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n";
+			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif\"/>\n";
+			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif\"  style=\"display : none;\"/>\n";
 			retVal += "   </td>";
 			if (level>1){
 				retVal += "   <td width=\"1%\">";
-				retVal += "     <img src=\"../ampTemplate/images/link_out_bot.gif\"/>\n";
+				retVal += "     <img src=\"/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif\"/>\n";
 				retVal += "   </td>";
 				retVal += "   <td width=\"1%\">";
 				retVal += "     <img src=\""+getLevelImage(level)+"\" />\n";
@@ -1883,7 +1883,7 @@ public class ProgramUtil {
 			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";
 			retVal += "   </td>";
 			retVal += "   <td width=\"12\">";
-			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
 			retVal += "   </td>";
 			retVal += " </tr></table>";
 			retVal += "</div>\n";
@@ -1929,25 +1929,25 @@ public class ProgramUtil {
     public static String getLevelImage(int level){
     	switch (level) {
 		case 0:
-			return "../ampTemplate/images/arrow_right.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/arrow_right.gif";
 		case 1:
-			return "../ampTemplate/images/arrow_right.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/arrow_right.gif";
 		case 2:
-			return "../ampTemplate/images/square1.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/square1.gif";
 		case 3:
-			return "../ampTemplate/images/square2.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/square2.gif";
 		case 4:
-			return "../ampTemplate/images/square3.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/square3.gif";
 		case 5:
-			return "../ampTemplate/images/square4.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/square4.gif";
 		case 6:
-			return "../ampTemplate/images/square5.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/square5.gif";
 		case 7:
-			return "../ampTemplate/images/square6.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/square6.gif";
 		case 8:
-			return "../ampTemplate/images/square7.gif";
+			return "/TEMPLATE/ampTemplate/imagesSource/common/square7.gif";
 		}
-    	return "../ampTemplate/images/arrow_right.gif";
+    	return "/TEMPLATE/ampTemplate/imagesSource/common/arrow_right.gif";
     }
 
     public static Collection<AmpActivity> checkActivitiesUsingProgram( Long programId ) {

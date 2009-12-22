@@ -235,8 +235,8 @@
 																<b><digi:trn key="aim:orgGroupName">Group Name</digi:trn></b>
 															</digi:link>																															
 														</c:if>
-														<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+														<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 													</td>	
 													<td align="left" width="25%">
 														<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
@@ -251,8 +251,8 @@
 																<b><digi:trn key="aim:orgGroupCode">Code</digi:trn></b>
 															</digi:link>																															
 														</c:if>
-														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 													</td>
 													<td align="left" width="25%">
 														<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
@@ -267,8 +267,8 @@
 																<b><digi:trn key="aim:orgGroupType">Type</digi:trn></b>
 															</digi:link>																														
 														</c:if>
-														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+														<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																													
 													</td>
 												</tr>
@@ -387,21 +387,21 @@
 							<table cellPadding=5 cellSpacing=1 width="100%">
 								<tr>
 									<td>
-										<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+										<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
 											<digi:link href="/editOrgGroup.do?action=create" >
 												<digi:trn key="aim:addNewOrgGroup">Add Group</digi:trn></digi:link>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+										<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
 											<digi:link href="/organisationManager.do" >
 												<digi:trn key="aim:organizationManager">Organization Manager</digi:trn></digi:link>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+										<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
 										<digi:link href="/admin.do">
 										<digi:trn key="aim:AmpAdminHome">
 										Admin Home

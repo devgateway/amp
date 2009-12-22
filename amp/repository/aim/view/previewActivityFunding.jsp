@@ -21,9 +21,9 @@
 			<td width="30%" align="right" valign="top" nowrap="nowrap"
 				bgcolor="#f4f4f2" class="t-name"><img id="group_funding_plus"
 				onclick="toggleGroup('group_funding')"
-				src="/TEMPLATE/ampTemplate/images/arrow_right.gif" /> <img
+				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" /> <img
 				id="group_funding_minus" onclick="toggleGroup('group_funding')"
-				src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
+				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"
 				style="display: none" /> <digi:trn key="aim:funding">Funding</digi:trn>
 			</td>
 			<td bgcolor="#ffffff"><b>

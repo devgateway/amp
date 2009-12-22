@@ -81,7 +81,7 @@ border-right:1px solid white;
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
 		                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                   <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
 		                <div id="reports2" class="yuiampmenu" style="width:120px;">
 		                    <div class="bd">                    
@@ -124,7 +124,7 @@ border-right:1px solid white;
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </a>
 		                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                   <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
 		                <div id="reports2" class="yuiampmenu" style="width:120px;">
 		                    <div class="bd">                    

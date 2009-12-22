@@ -366,13 +366,13 @@ function deleteFlag(id) {
 						<div style = "float:left;  width:50px;">
 		                        <c:if test="${flag.defaultFlag == true}">
 		
-		                          <digi:img src="images/bullet_green.gif" border="0" height="11" width="11" align="center" />
+		                          <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_green.gif" border="0" height="11" width="11" align="center" />
 		
 		                        </c:if>
 		
 		                        <c:if test="${flag.defaultFlag == false}">
 		
-		                          <a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')"><digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" /></a>
+		                          <a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey.gif" border="0" height="9" width="9" align="center" /></a>
 		
 		                        </c:if>
 		
@@ -381,7 +381,7 @@ function deleteFlag(id) {
 		                        <a href="javascript:deleteFlag('<bean:write name="flag" property="cntryId" />')">
 		
 		                      <!--   <digi:img src="images/trash_12.gif" border="0" height="11" width="11" align="center" /> -->
-								<img vspace="2" border="0" align="center" src="/TEMPLATE/ampTemplate/images/trash_16.gif"/>
+								<img vspace="2" border="0" align="center" src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>
 		                       </a>	
 
 					</div>					
@@ -401,12 +401,12 @@ function deleteFlag(id) {
 
           <td>
 			<br> <br><br>
-            <digi:img src="images/bullet_green.gif" border="0" height="12" width="12" align="top" />&nbsp; -
+            <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_green.gif" border="0" height="12" width="12" align="top" />&nbsp; -
 
             <digi:trn key="aim:defaultFlag">Default Flag</digi:trn>
 			
 			&nbsp;&nbsp;&nbsp;
-			<img vspace="2" border="0" align="center" src="/TEMPLATE/ampTemplate/images/trash_16.gif"/> -
+			<img vspace="2" border="0" align="center" src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/> -
 			
 			<digi:trn key="aim:toDeleteflag">Delete Flag</digi:trn>				
 
@@ -415,7 +415,7 @@ function deleteFlag(id) {
 
             <digi:trn key="aim:flagUploadHelpPhrase1">Click the image</digi:trn>
 
-            <digi:img src="images/bullet_grey.gif" border="0" height="11" width="11" align="top" />			
+            <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey.gif" border="0" height="11" width="11" align="top" />			
 
             <digi:trn key="aim:flagUploadHelpPhrase2">next to the flag to make it as the default for the site</digi:trn>
 			

@@ -308,7 +308,7 @@ function startClock(){
 			                            <tr>
 			                               <td width="60%">
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
-			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              
+			                                   <img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              
 			                                 </logic:notEmpty>
 			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
 										   </td>

@@ -312,7 +312,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 																<td width="7" valign="center">
 
-																	<img src= "../ampTemplate/images/arrow_dark.gif" border=0>
+																	<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_dark.gif" border=0>
 
 																</td>
 

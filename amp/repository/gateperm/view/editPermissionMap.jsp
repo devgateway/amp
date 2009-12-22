@@ -74,7 +74,7 @@ function submitForm(mode) {
 						</html:select> <html:button property="saveGlobal"
 							onclick="submitForm('saveGlobal')">Assign Global</html:button> <digi:link
 							href="/managePerm.do?list" title="EDIT PERMISSIONS">
-							<digi:img src="module/gateperm/images/edit.gif" border="0" />&nbsp;Edit Permissions</digi:link></td>
+							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" />&nbsp;Edit Permissions</digi:link></td>
 					
 				</logic:notEmpty>
 				<tr>

@@ -17,7 +17,7 @@
 			<tr>
 				<td>
 					<br/><br/><br/><br/><br/><br/>
-					<p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/save-loader.gif" /></p>
+					<p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/save-loader.gif" /></p>
 					<p align="center"><b><digi:trn key="aim:savePopup:title">Saving</digi:trn>...</b></p>
 					<br/><br/><br/><br/><br/><br/>
 				</td>
@@ -252,7 +252,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 1}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="./TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 			            <c:set var="trnClickToAdd">
 							<digi:trn key="aim:clickToAdd/UpdateActivityIdentificationFields">Add / Update Activity Identification fields</digi:trn>
 			            </c:set>
@@ -269,7 +269,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-								<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+								<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 									<span class="textalb">
 									<digi:trn key="aim:identification">
 									Identification</digi:trn>
@@ -287,7 +287,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 1}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="./TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd1">
 							<digi:trn key="aim:clickToAdd/UpdateActivityPlanningFields">Add / Update Activity Planning fields</digi:trn>
 						</c:set>
@@ -304,7 +304,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19" nowrap="nowrap">
-									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+									<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 									<span class="textalb">
 										<digi:trn key="aim:planning">
 										Planning</digi:trn>
@@ -322,7 +322,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != '1_5'}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height="10" src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd1">
 							<digi:trn key="aim:editMenu:referenceTitle">References</digi:trn>
 						</c:set>
@@ -338,7 +338,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19" nowrap="nowrap">
-									<IMG alt=Link height="10" src="../ampTemplate/images/arrow-th-BABAB9.gif" width="15">
+									<IMG alt=Link height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="15">
 									<span class="textalb">
 										<digi:trn key="aim:editMenu:References">References</digi:trn>
 									</span>
@@ -355,7 +355,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 2}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickTohttp://amp-demo.code.ro/aim/addActivity.do~pageId=1~reset=true~action=createAdd2">
 							<digi:trn key="aim:clickToAdd/UpdateLocation">Add / Update Location</digi:trn>
 						</c:set>
@@ -372,7 +372,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+									<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 									<span class="textalb">
 										<digi:trn key="aim:location">
 											Location</digi:trn>
@@ -390,7 +390,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 2}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd3">
 							<digi:trn key="aim:clickToAdd/UpdateSectorsandSubsectors">Add / Update Sectors and Sub sectors</digi:trn>
 						</c:set>
@@ -407,7 +407,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:sectors">
 							Sectors</digi:trn>
@@ -425,7 +425,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 2}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd4">
 							<digi:trn key="aim:clickToAdd/UpdateProgram">Add / Update Program</digi:trn>
 						</c:set>
@@ -442,7 +442,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19" nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:program">
 							Program</digi:trn>
@@ -461,7 +461,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 3}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd5">
 							<digi:trn key="aim:clickToAdd/UpdateFundingDetails">Add / Update Funding details</digi:trn>
 						</c:set>
@@ -478,7 +478,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:funding">
 							Funding</digi:trn>
@@ -496,7 +496,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 4}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd6">
 							<digi:trn key="aim:clickToAdd/UpdateRegionalFunding">Add / Update Regional Funding</digi:trn>
 						</c:set>
@@ -513,7 +513,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-								<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+								<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 								<span class="textalb">
 									<digi:trn key="aim:regionalFunding">
 									Regional Funding</digi:trn>
@@ -531,7 +531,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 5}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd7">
 							<digi:trn key="aim:clickToAdd/UpdateComponents">Add / Update Components</digi:trn>
 						</c:set>
@@ -548,7 +548,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:components">
 							Components</digi:trn>
@@ -566,7 +566,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 5}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd8">
 							<digi:trn key="aim:clickToAdd/UpdateIssues">Add / Update Issues</digi:trn>
 						</c:set>
@@ -583,7 +583,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+									<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 									<span class="textalb">
 										<digi:trn key="aim:issues">
 										Issues</digi:trn>
@@ -601,7 +601,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 6}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd9">
 							<digi:trn key="aim:clickToAdd/UpdateDocumentsAndLinks">Add / Update the documents and links</digi:trn>
 						</c:set>
@@ -618,7 +618,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:relatedDocuments">
 							Related Documents</digi:trn>
@@ -636,7 +636,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 7}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd10">
 							<digi:trn key="aim:clickToAdd/UpdateOrganizationsInvolved">Add / Update the organizations involved</digi:trn>
 						</c:set>
@@ -653,7 +653,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:relatedOrgs">
 							Related Organizations</digi:trn>
@@ -671,7 +671,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 8}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd11">
 							<digi:trn key="aim:clickToAdd/UpdateContactPersonDetails">Add / Update the contact person details</digi:trn>
 						</c:set>
@@ -688,7 +688,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:contactInformation">
 							Contact Information</digi:trn>
@@ -706,7 +706,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 			      <tr>
 			      <c:if test="${aimEditActivityForm.step != 17}">
 			        <td>
-			          <IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			          <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 			            <c:set var="translation">
 							<digi:trn key="aim:clickToAdd/UpdateParisIndicators">Add / Update Paris Indicators</digi:trn>
 			            </c:set>
@@ -723,7 +723,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-									<IMG alt="Link" height="10" src="../ampTemplate/images/arrow-th-BABAB9.gif" width="15">
+									<IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="15">
 										<span class="textalb">
 											<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
 										</span>
@@ -741,7 +741,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 10}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="trnClickToAdd12">
 							<digi:trn key="aim:clickToGoToMonitoringEvaluation">Monitoring and Evaluation</digi:trn>
 						</c:set>
@@ -759,7 +759,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+									<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 										<span class="textalb">
 											<digi:trn key="aim:MandE">
 												M & E
@@ -780,7 +780,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 11}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="translation">
 							<digi:trn key="aim:euProjectCosting">EU Project Costing</digi:trn>
 						</c:set>
@@ -796,7 +796,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:costing">Costing</digi:trn>
 						</span>
@@ -816,7 +816,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 13}">
 					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<c:set var="translation">
 							<digi:trn key="aim:ipaContracting">IPA Contracting</digi:trn>
 						</c:set>
@@ -832,7 +832,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
 								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:ipacontracting">IPA Contracting</digi:trn>
 						</span>

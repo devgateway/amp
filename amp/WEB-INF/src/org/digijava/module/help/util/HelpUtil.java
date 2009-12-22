@@ -567,11 +567,11 @@ System.out.println("lang:"+lang);
 					// visible div start
 			retVal += " <div>";
 			if(item.getChildren().isEmpty()){
-				retVal += "<img src=\"../ampTemplate/images/tree_minus.gif\";\">\n";
+				retVal += "<img src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif\";\">\n";
 			}else{
-			retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
+			retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif\"/>\n";
 			}
-			retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
+			retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif\" style=\"display : none;\">\n";
 			if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
 			retVal += "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+getTrn(topic.getTopicKey(), request)+"</a>";
 			}
@@ -634,11 +634,11 @@ System.out.println("lang:"+lang);
 				
 				retVal += "<td>";
 				if(item.getChildren().isEmpty()){
-					retVal += "<img src=\"../ampTemplate/images/tree_minus.gif\";\">\n";
+					retVal += "<img src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif\";\">\n";
 				}else{
-					retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
+					retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif\"/>\n";
 				}
-				retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
+				retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif\" style=\"display : none;\">\n";
 				if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
 					//retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTopicKey(), request)+"</a>";
 					retVal += "<a>"+getTrn(topic.getTopicKey(), request)+"</a>";
@@ -664,9 +664,9 @@ System.out.println("lang:"+lang);
 				//delete link
 				retVal += "   <td width=\"12\">";
 				if(helpType != "admin"){
-					retVal += "<a href=\"/help/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+					retVal += "<a href=\"/help/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
 				}else{
-					retVal += "<a href=\"/help~admin/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+					retVal += "<a href=\"/help~admin/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
 				}
 				retVal += "   </td>";
 				retVal += " </tr></table>";

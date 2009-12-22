@@ -73,7 +73,7 @@
 
                                 |&nbsp;
                                 <a href="/widget/piTableWidgetManager.do~actType=delete~piTableWidgetId=${piTable.id}">
-                                    <img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
+                                    <img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>'>
                                 </a>
                             </td>
                         </tr>

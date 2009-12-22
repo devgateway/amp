@@ -491,18 +491,18 @@ function toggleSettings(){
 								<tr>
 									<td noWrap align=left valign="center">
 										<a href="" onclick="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />'); return false;" paramName="indcId" paramId="indcId" target="_blank">
-											<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+											<digi:img width="17" height="20" hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
 										</a>
 									</td>
 									<td noWrap align=left valign="center">
 										<a href="" onclick="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />'); return false;" paramName="indcId" paramId="indcId" target="_blank">
-											<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+											<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
 										</a>
 									</td>				
 									<td noWrap align=left valign="center">
 										
 										<a href="#" paramName="indcId" paramId="indcId" onclick="javascript:openPrinter(); return false;" paramName="indcId" paramId="indcId" target="_blank">
-											<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+											<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
 										</a>
 										
 									</td>
@@ -582,7 +582,7 @@ function toggleSettings(){
 							</tr>
 							<tr>
 								<td style="padding:5">
-									<strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15">
+									<strong><p><img src="/TEMPLATE/ampTemplate/imagesSource/common/info.png" width="15" height="15">
 									<c:if test="${aimParisIndicatorReportForm.indicatorName != null}">
 									<digi:trn key="aim:parisIndicator:name"> ${aimParisIndicatorReportForm.indicatorName}</digi:trn>
 									</c:if>

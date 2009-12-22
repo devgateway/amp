@@ -244,14 +244,14 @@
 											<tr>
 											
 												<td  width="20%" nowrap="nowrap"> <digi:trn key="aim:subprogramleves">Sub Program leves</digi:trn> :
-												<img src= "../ampTemplate/images/arrow_right.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
-												<img src= "../ampTemplate/images/square1.gif" border=0><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
-												<img src= "../ampTemplate/images/square2.gif" border=0><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
-												<img src= "../ampTemplate/images/square3.gif" border=0><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,
-												<img src= "../ampTemplate/images/square4.gif" border=0><digi:trn key="aim:subproglevel_5">  Level 5</digi:trn>,
-												<img src= "../ampTemplate/images/square5.gif" border=0><digi:trn key="aim:subproglevel_6">  Level 6</digi:trn>,
-												<img src= "../ampTemplate/images/square6.gif" border=0><digi:trn key="aim:subproglevel_7">  Level 7</digi:trn>,
-												<img src= "../ampTemplate/images/square7.gif" border=0><digi:trn key="aim:subproglevel_8">  Level 8</digi:trn>.
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square1.gif" border=0><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square2.gif" border=0><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square3.gif" border=0><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square4.gif" border=0><digi:trn key="aim:subproglevel_5">  Level 5</digi:trn>,
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square5.gif" border=0><digi:trn key="aim:subproglevel_6">  Level 6</digi:trn>,
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square6.gif" border=0><digi:trn key="aim:subproglevel_7">  Level 7</digi:trn>,
+												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square7.gif" border=0><digi:trn key="aim:subproglevel_8">  Level 8</digi:trn>.
 												</td>
 											</tr>
 														<logic:empty name="aimThemeForm" property="themes">

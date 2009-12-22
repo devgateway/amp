@@ -40,8 +40,8 @@
 
 <div class="yui-skin-sam" style="width:100%;height:100%;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width:100%;">
-      <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-      <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
       <div class="longTab">
           <digi:trn key="gis:regionalview">Regional View</digi:trn>
       </div>

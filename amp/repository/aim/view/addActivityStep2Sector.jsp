@@ -34,13 +34,13 @@
             
             <tr>
                 <td>
-                    <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
+                    <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15 />
                     <b>
                 	<FONT color="red">*</FONT>
 					<digi:trn key="aim:sector">Sector</digi:trn>
                     </b>
                     <a href="javascript:popupwin()">
-                        <img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
+                        <img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
                     </a>
                 </td>
             </tr>

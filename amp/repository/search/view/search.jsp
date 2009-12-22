@@ -228,8 +228,8 @@ $(document).ready(function(){
 															<logic:present name="resultActivities" scope="request">
 																<tr>
 																	<td bgcolor="#dadada">
-                                                                    <img id="activityRows_plus"  onclick="toggleResultsGroup('activityRows')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
-																	<img id="activityRows_minus" onclick="toggleResultsGroup('activityRows')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
+                                                                    <img id="activityRows_plus"  onclick="toggleResultsGroup('activityRows')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" align="absmiddle" style="float:left;"/>
+																	<img id="activityRows_minus" onclick="toggleResultsGroup('activityRows')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
 						                                            &nbsp;&nbsp;${fn:length(resultActivities)} <strong><digi:trn>Results found in Activities. Please try another keyword</digi:trn></strong>
 																	</td>
                                                                 </tr>

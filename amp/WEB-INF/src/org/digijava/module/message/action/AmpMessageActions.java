@@ -1066,7 +1066,7 @@ public class AmpMessageActions extends DispatchAction {
                 	String links="";
                 	for (Object item : attachedDocs.getItems()) {
 						SdmItem attachedFile=(SdmItem)item;						
-						links += "<img src=\""+"/repository/message/view/images/attachment.png"+"\" border=\""+"0\" />";
+						links += "<img src=\""+"/TEMPLATE/ampTemplate/imagesSource/common/attachment.png"+"\" border=\""+"0\" />";
 						links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
 						links += attachedFile.getContentTitle();
 						links += "</a>";
@@ -1137,7 +1137,7 @@ public class AmpMessageActions extends DispatchAction {
         	String links="";
         	for (Object item : attachedDocs.getItems()) {
 				SdmItem attachedFile=(SdmItem)item;						
-				links += "<img src=\""+"/repository/message/view/images/attachment.png"+"\" border=\""+"0\" />";
+				links += "<img src=\""+"/TEMPLATE/ampTemplate/imagesSource/common/attachment.png"+"\" border=\""+"0\" />";
 				links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
 				links += attachedFile.getContentTitle();
 				links += "</a>";

@@ -447,7 +447,7 @@ function eventType(){
                                              </td>
                                              <td>
                                                <a id="clear2" href="javascript:clearDate(document.getElementById('recurrSelectedEndDate'),'clear2')">
-                                                 <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+                                                 <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
                                                </a>
                                              </td>
                                              <td>
@@ -455,7 +455,7 @@ function eventType(){
                                              </td>
                                              <td>
                                                <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("recurrSelectedEndDate"),"clear2")'>
-                                                 <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                 <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
                                                </a>
                                              </td>
                                            </tr>

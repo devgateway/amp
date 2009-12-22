@@ -143,12 +143,12 @@
 								<td align="center">
 									<c:if test="${report.publicreport==false}">
 									<a href="/mondrian/mainreports.do?id=${report.id}&action=public" title="<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>">
-		                        		<img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="middle" />
+		                        		<img src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_public.gif" vspace="2" border="0" align="middle" />
 		                            </a>
 		                            </c:if>
 		                            <c:if test="${report.publicreport==true}">
 										<a href="/mondrian/mainreports.do?id=${report.id}&action=nopublic" title="<digi:trn key="aim:clicktomakethisprivate">Click here to make this private</digi:trn>">
-											<img src= "/repository/contentrepository/view/images/make_private.gif" border="0" align="middle" />
+											<img src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_private.gif" border="0" align="middle" />
 		                            	</a>
 		                            </c:if>
                                  </td>
@@ -248,7 +248,7 @@
                             		<c:if test="${!empty report.ownerId}">
 	                         			<p style="white-space: nowrap">
 	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>">
-	                            			<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" /></a>
+	                            			<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" /></a>
 	                            		</p>
 	                            	</c:if>
                              	</td>
@@ -257,12 +257,12 @@
 								<td align="center">
 									<c:if test="${report.publicreport==false}">
 									<a href="/mondrian/mainreports.do?id=${report.id}&action=public" title="<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>">
-		                        		<img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="middle" />
+		                        		<img src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_public.gif" vspace="2" border="0" align="middle" />
 		                            </a>
 		                            </c:if>
 		                            <c:if test="${report.publicreport==true}">
 										<a href="/mondrian/mainreports.do?id=${report.id}&action=nopublic" title="<digi:trn key="aim:clicktomakethisprivate">Click here to make this private</digi:trn>">
-											<img src= "/repository/contentrepository/view/images/make_private.gif" border="0" align="middle" />
+											<img src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_private.gif" border="0" align="middle" />
 		                            	</a>
 		                            </c:if>
                                  </td>

@@ -62,8 +62,8 @@
 
 <div id="content" class="yui-skin-sam" style="width:600px;height:100%;max-width: 600x;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width: 600;">
-      <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-      <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
       <div class="longTab">
           <digi:trn key="gis:regionalview">Regional View</digi:trn>
       </div>
@@ -100,7 +100,7 @@
 	
 	<tr>
 		<td colspan="2">
-			<digi:img src="module/gis/images/fundingLegend.png" border="0"/>
+			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png" border="0"/>
 			<%--
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>
 
@@ -144,7 +144,7 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			<img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/images/amploading.gif">
+			<img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif">
 		</td>
 	</tr>
 	

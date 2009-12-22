@@ -294,7 +294,7 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
 										<b><digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn></b>
 										</a>
@@ -325,7 +325,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
-															<img src= "../ampTemplate/images/arrow_down.gif" border=0>
+															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" border=0>
 														</digi:link>
 													</c:if>
 													<c:if test="${aimEditActivityForm.expIndicatorId!=indicator.indicatorId}">
@@ -337,7 +337,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														</c:set>
 														<c:set target="${urlParams}" property="edit" value="true" />
 														<digi:link href="/detailedIndicator.do" name="urlParams">
-															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
 													<bean:define id="indName">
@@ -442,7 +442,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="baseValDate" />"
 																	class="inp-text" size="10" readonly="true" id="baseValDate">&nbsp;&nbsp;
 																	<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.baseValDate)'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>
@@ -477,7 +477,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="targetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
 																	<a id="date2" href='javascript:pickDate("date2",document.aimEditActivityForm.targetValDate)'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 																</c:if>
@@ -532,7 +532,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="revisedTargetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="revisedTargetValDate">&nbsp;&nbsp;
 																	<a id="date3" href='javascript:pickDate("date3",document.aimEditActivityForm.revTargetValDate)'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>
@@ -558,7 +558,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															id="priorValues" type="org.digijava.module.aim.helper.PriorCurrentValues">
 																<tr bgColor=#f4f4f2>
 																	<td align="center">
-																		<img src= "../ampTemplate/images/arrow_dark.gif" border=0>
+																		<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_dark.gif" border=0>
 																	</td>
 																	<td>
 																		<bean:write name="priorValues" property="currValue" />
@@ -609,7 +609,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="currentValDate" />"
 																	class="inp-text" size="10" readonly="true" id="currValDate">&nbsp;&nbsp;
 																	<a id="date4" href='javascript:pickDate("date4",document.aimEditActivityForm.currValDate)'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>

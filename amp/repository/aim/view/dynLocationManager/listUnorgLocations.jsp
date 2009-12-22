@@ -22,9 +22,9 @@
 			<span style="display: none;">${locCV.index}</span> 
 			<span class="spantree">[${locCV.value }]</span>
 			
-			<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;" 
+			<img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" style="height: 13px; cursor: pointer;" 
 					onclick="editLocation(${loc.id})" />
-			<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;" />
+			<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" style="height: 10px; cursor: pointer;" />
 			<span class="spantree" style="display: none; color: red;">ERROR</span>
 			
 		</li>

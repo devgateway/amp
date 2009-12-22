@@ -366,11 +366,11 @@
                    	    			</td>
                    	    			<td valign="middle" align="center">
 										<button class="buton arrow" type="button" onClick="moveOptions('sourceOptions', 'destinationOptions'); check('destinationOptions', 'importButton');">
-											<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
 										</button>
 										<br/> <br />
 										<button class="buton arrow" type="button" onClick="moveOptions('destinationOptions', 'sourceOptions'); check('destinationOptions', 'importButton'); ">
-											<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
+											<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_left.gif"/>
 										</button>
 									</td>
                    	    			<td>

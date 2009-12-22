@@ -109,7 +109,7 @@
 			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 				<tr>
 					<td colspan=4 align="left">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/print_icon.gif">
 				<digi:link href="/htmlQuarterlyMulitlateralbyDonor.do" target="_blank">
 					Print
 				</digi:link>
@@ -124,7 +124,7 @@
 				<td valign="bottom" class="crumb">
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 						&nbsp;&nbsp;
-						<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
+						<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>	
 						<c:set var="translation">
 							<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 						</c:set>
@@ -139,7 +139,7 @@
 				<td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 					&nbsp;&nbsp;
-					<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
+					<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>	
 						<c:set var="translation">
 							<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 						</c:set>
@@ -157,7 +157,7 @@
 						<td valign="bottom" class="crumb" >
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 								&nbsp;&nbsp;
-								<img src="../ampTemplate/images/xls_icon.jpg" border=0>
+								<img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border=0>
 								<c:set var="translation">
 									<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel</digi:trn>
 								</c:set>
@@ -173,7 +173,7 @@
 					
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
-							&nbsp;&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+							&nbsp;&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border=0>	
 								<c:set var="translation">
 									<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel</digi:trn>
 								</c:set>
@@ -192,7 +192,7 @@
 			        <td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 							&nbsp;&nbsp;
-					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<img src="/TEMPLATE/ampTemplate/imagesSource/common/icon_csv.gif" border=0>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>
 					</c:set>
@@ -407,7 +407,7 @@
 					Multilateral Cooperation Department Commitment Disbursement
 					</digi:trn>
 					</td>
-                    <td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" width="17" height="17"></td>
+                    <td bgcolor="#FFFFFF"><img src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17"></td>
                   </tr>
               </table></td>
             </tr>

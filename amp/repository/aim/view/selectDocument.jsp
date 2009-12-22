@@ -354,7 +354,7 @@ div.fakefile2 input {
 													</td>
 													<td align="left" vAlign="center">&nbsp;
 														<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.docDate)'>
-															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 														</a>
 													</td>
 												</tr>

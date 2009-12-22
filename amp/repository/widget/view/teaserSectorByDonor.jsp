@@ -28,8 +28,8 @@
 
 <div id="content" class="yui-skin-sam" style="width:100%;z-index: 1;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-      <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-      <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
       <div class="longTab">
           <digi:trn key="gis:breakdownbysector">Breakdown by sector</digi:trn>
         </div>
@@ -47,7 +47,7 @@
                 <c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==false}">
                		<digi:trn>All amounts in USD</digi:trn>
                </c:if>
-            <digi:img  src="module/widget/images/help1.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
+            <digi:img  src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
         </td>
     </tr>
 	<tr>
@@ -102,7 +102,7 @@
                         <img alt="" id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do" onload="loadSectorDonorMap()" usemap="#sectorByDonorChartImageMap" border="0" >
                     </div>
                     <div id="sectorByDonorChartImageDivLoad">
-                        <img src='<digi:file src="images/amploading.gif"/>' alt="">
+                        <img src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>' alt="">
                     </div>
                           <MAP name="sectorByDonorChartImageMap" id="sectorByDonorChartImageMap">
                     </MAP>

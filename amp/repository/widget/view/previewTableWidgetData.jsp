@@ -38,8 +38,8 @@
 	
 	<div id="content" class="yui-skin-sam" style="width:90%;padding: 20px;">
 	 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-	   <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-	   <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+	   <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+	   <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
 	   <div class="longTab">
 	      ${dform.tableName}
 	   </div>

@@ -377,7 +377,7 @@ html>body #mainEmpty {
             myPanel.setHeader(msg);
             var content = document.getElementById("popinContent");
             content.innerHTML = '<div style="text-align: center">' +
-                '<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+                '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
                 '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
                 showContent();
         }
@@ -540,7 +540,7 @@ html>body #mainEmpty {
 																																 		<html:text name="addressbookForm" property="emails[${ctr}].value" size="40" styleId="email_${ctr}"/>																																 		
 																																 		<c:if test="${addressbookForm.emailsSize>1}">
 																																 			 <a href="javascript:removeData('email',${ctr})"> 
-																																		 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+																																		 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
 																																		 	</a>
 																																 		</c:if>
 																																 		<c:if test="${ctr==addressbookForm.emailsSize-1}">
@@ -604,7 +604,7 @@ html>body #mainEmpty {
 																																 		<html:text name="addressbookForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
 																												                    	<html:text name="addressbookForm" property="phones[${ctr}].value" size="26" styleId="phoneNum_${ctr}"/>
 																												                    	 <a href="javascript:removeData('phone',${ctr})"> 
-																																	 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+																																	 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
 																																	 	</a>
 																												                    	<c:if test="${addressbookForm.phonesSize==0 ||  ctr==addressbookForm.phonesSize-1}">
 																												                			<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
@@ -626,7 +626,7 @@ html>body #mainEmpty {
 																																 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
 																												                    <html:text name="addressbookForm" property="faxes[${ctr}].value" size="40" styleId="fax_${ctr}"/>																												                    																												                    
 																												                    <a href="javascript:removeData('fax',${ctr})"> 
-																																 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+																																 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
 																																 	</a>
 																												                    <c:if test="${ctr==addressbookForm.faxesSize-1}">
 																												                    	<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>

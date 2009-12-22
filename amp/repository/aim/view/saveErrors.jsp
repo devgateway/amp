@@ -111,7 +111,7 @@
 					<tr>
 						<td>
 							<div id="redirectImg">
-								<img align="top" width="16px" height="16px" src="/repository/aim/view/scripts/ajaxtabs/save-loader.gif" />
+								<img align="top" width="16px" height="16px" src="/TEMPLATE/ampTemplate/imagesSource/loaders/save-loader.gif" />
 							</div>
 						</td>
 						<td>
@@ -128,11 +128,11 @@
 			<table align="center" width="50%">
 			<tr>
 				<td>
-					<img align="top" width="48px" height="48px" src="/repository/aim/view/scripts/ajaxtabs/info.gif" />			
+					<img align="top" width="48px" height="48px" src="/TEMPLATE/ampTemplate/imagesSource/common/info.gif" />			
 				</td>
 				<td>
 					<font size="3px">Activity Save failed and recovery save managed to save only the steps marked with
-					<img align="top" width="16px" height="16px" src="/repository/aim/view/scripts/ajaxtabs/ok.gif" />. Also your activity was 
+					<img align="top" width="16px" height="16px" src="/TEMPLATE/ampTemplate/imagesSource/common/ok.gif" />. Also your activity was 
 					saved as draft</font>
 				</td>
 			</tr>
@@ -151,7 +151,7 @@
 							</font></b>
 						</td>
 						<td>
-					 		<img align="top" width="24px" height="24px" src="/repository/aim/view/scripts/ajaxtabs/ok.gif" />
+					 		<img align="top" width="24px" height="24px" src="/TEMPLATE/ampTemplate/imagesSource/common/ok.gif" />
 					 	</td>
 					 	
 					</c:if>
@@ -166,7 +166,7 @@
 						</td>
 						<td valign="top">
 							<a onclick="javascript:toggleLayer('errMsg<c:out value="${idx}" />');">
-								<img align="top" width="24px" height="24px" src="/repository/aim/view/scripts/ajaxtabs/failed.gif" />
+								<img align="top" width="24px" height="24px" src="/r/TEMPLATE/ampTemplate/imagesSource/common/failed.gif" />
 							</a>
 						</td>
 					</c:if>

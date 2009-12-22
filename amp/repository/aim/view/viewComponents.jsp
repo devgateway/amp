@@ -217,7 +217,7 @@ function deleteComponent(id){
 <!--          </tr>-->
           <tr>
             <td>
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+              <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>

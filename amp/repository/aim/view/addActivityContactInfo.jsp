@@ -49,7 +49,7 @@
 								 		<html:text name="contactForm" property="emails[${ctr}].value" size="30" styleId="email_${ctr}"/>																																 		
 								 		<c:if test="${contactForm.emailsSize>1}">
 											 <a href="javascript:removeData('email',${ctr})"> 
-										 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+										 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
 								 		 	</a>
 								 		</c:if>
 								 		<c:if test="${ctr==contactForm.emailsSize-1}">
@@ -121,7 +121,7 @@
 										<html:text property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
 									   	<html:text property="phones[${ctr}].value" size="16" styleId="phoneNum_${ctr}"/>
 									  	<a href="javascript:removeData('phone',${ctr})"> 
-									 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+									 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
 									 	</a>
 									  	<c:if test="${contactForm.phonesSize==0 ||  ctr==contactForm.phonesSize-1}">
 											<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
@@ -143,7 +143,7 @@
 								 <logic:iterate name="contactForm" property="faxes" id="foo" indexId="ctr">
 							         <html:text name="contactForm" property="faxes[${ctr}].value" size="30" styleId="fax_${ctr}"/>																												                    																												                    
 							         <a href="javascript:removeData('fax',${ctr})"> 
-								 		<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0"/>
+								 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
 								 	</a>
 							        <c:if test="${ctr==contactForm.faxesSize-1}">
 							           	<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>

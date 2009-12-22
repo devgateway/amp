@@ -89,7 +89,7 @@
         	<table width="85%" cellpadding="5">
         		<tr>
         			<td width="120px" valign="top" >
-        				<img alt="AMP Error Image" src="../ampTemplate/images/exceptionImg.jpg" />
+        				<img alt="AMP Error Image" src="/TEMPLATE/ampTemplate/imagesSource/common/exceptionImg.jpg" />
         			</td>
         			<td align="left" valign="middle" style="background-color: #F0F0F0">
         				<br/>
@@ -159,7 +159,7 @@
 					          </legend>
 					          <div id="docDiv" style="display: block;">
 						          <p align="center">
-						          	  <img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="loading..."/>
+						          	  <img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" alt="loading..."/>
 						          </p>
 							  </div>
 							</fieldset>

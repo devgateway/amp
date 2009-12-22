@@ -41,7 +41,7 @@
 								<table width="95%" bgcolor="#f4f4f2">
 
 									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
 										<b><digi:trn key="aim:issues">Issues</digi:trn></b></a>
 									</td></tr>
@@ -63,7 +63,7 @@
 															<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
 																<tr class="rowIssue" >
 																	<td width="20%" align="left">
-																	    <IMG src="../ampTemplate/images/arrow_down.gif"/>
+																	    <IMG src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"/>
 																		<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
 																		<c:out value="${issues.name}"/></a>
 																		 &nbsp;
@@ -71,7 +71,7 @@
 																			<c:out value="${issues.issueDate}"/>
 																		</field:display>
 																		<a href="javascript:removeIssue('${issues.id}')" >
-																			<IMG src="../ampTemplate/images/deleteIcon.gif" border="0" />
+																			<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" />
 																		</a> 
 																	</td>
 																	<td align="left">
@@ -96,14 +96,14 @@
 																	 type="org.digijava.module.aim.helper.Measures">
 																	<tr class="rowMeasure">
 																		<td vAlign="center" align="left" width="3">
-																			<IMG src="../ampTemplate/images/link_out_bot.gif"/>
+																			<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
 																		</td>
 																		<td vAlign="center" align="left" width="20%" >
-																		    <IMG src="../ampTemplate/images/arrow_down.gif"/>
+																		    <IMG src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"/>
 																			<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
 																			<c:out value="${measure.name}"/> </a>
 																			<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
-																				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
+																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
 																			</a>
 																		</td>
 																		<td>
@@ -126,14 +126,14 @@
 																						&nbsp;&nbsp;
 																					</td>
 																					<td vAlign="center" align="left">
-																					    <IMG src="../ampTemplate/images/link_out_bot.gif"/>
+																					    <IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
 																						<a href="javascript:updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
 																							<c:out value="${actor.name}"/>
 																						</a>
 																					</td>
 																					<td  align="left">
 																						<a href="javascript:removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
-																							<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
+																							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
 																						</a>																					
 																					</td>
 																				</tr>

@@ -148,17 +148,17 @@
 									<tr>
                                         <td noWrap="nowrap" align="left" valign="center">
 									       <a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank">
-									           <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+									           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
                                            </a>
                                         </td>
 										<td noWrap="nowrap" align="left" valign="center">
 									       <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank">
-									           <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+									           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
 									       </a>
 									    </td>
 										<td noWrap="nowrap" align="left" valign="center">
 										   <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank">
-										      <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" /> 
+										      <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" /> 
 										   </a>
 										</td>
 									</tr>
@@ -209,7 +209,7 @@
 	                            </tr>
 	                            <tr>
 	                                <td style="padding:5">
-	                                    <strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15">&nbsp;<bean:write name="parisIndicatorForm" property="piReport.name"/></p></strong>
+	                                    <strong><p><img src="/TEMPLATE/ampTemplate/imagesSource/common/info.png" width="15" height="15">&nbsp;<bean:write name="parisIndicatorForm" property="piReport.name"/></p></strong>
 	                                </td>
 	                            </tr>
 	                        </table>

@@ -188,8 +188,8 @@
                          </div>
                           <div id="content" class="yui-skin-sam" style="float:left">
                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                    <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-                                    <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
                                     <div class="longTab">
                                         <digi:trn key="gis:resourcesatglance">Resources at a glance</digi:trn>
                                     </div>
@@ -227,8 +227,8 @@
                         <div style="clear:both; font-size:10px;">&nbsp;</div>
                         <div id="content" class="yui-skin-sam" style="width:60%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-                                <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
                                 <div class="longTab">
                                     <digi:trn key="gis:millenniumdevelopmentgoals">Millennium Development Goals</digi:trn>
                                 </div>
@@ -277,7 +277,7 @@
                                                 <digi:trn key="gis:sixChartLegend:desctiption">&nbsp;</digi:trn>
                                             </td>
                                             <td align="right">
-                                                <digi:img src="images/legend1.jpg"/>
+                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/legend1.jpg"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -293,8 +293,8 @@
                         <div style="display:block; clear:both; font-size:1px;"></div>
                         <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-                                <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
                                 <div class="longTab">
                                     <digi:trn key="gis:aideffectivenessindicators">Aid Effectiveness Process Indicators</digi:trn>
                                 </div>
@@ -339,8 +339,8 @@
                         <div style="clear:both; font-size:10px;">&nbsp;</div>
                         <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-                                <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
                                 <div class="longTab">
                                     <digi:trn key="gis:outputindicators">Output Indicators</digi:trn>
                                 </div>
@@ -366,8 +366,8 @@
                          <div style="clear:both; font-size:10px;">&nbsp;</div>
                         <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-                                <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
                                 <div class="longTab">
                                     <digi:trn key="gis:totalresources">Total resources</digi:trn>
                                 </div>
@@ -390,8 +390,8 @@
                          <div style="clear:both; font-size:10px;">&nbsp;</div>
                         <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-                                <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
                                 <div class="longTab">
                                     <digi:trn key="gis:externalaidresources">External Aid Resources</digi:trn>
                                 </div>

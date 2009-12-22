@@ -68,7 +68,7 @@ function load()
 										 Paris Indicator Reports
 										</digi:trn>
 								 </td>
-								 <td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" width="17" height="17">
+								 <td bgcolor="#FFFFFF"><img src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17">
 								 </td>
 							  </tr>
 			              </table>

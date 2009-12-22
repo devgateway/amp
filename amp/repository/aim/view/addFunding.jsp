@@ -445,7 +445,7 @@ var isAlreadySubmitted = false;
 					</field:display>
 					<field:display name="Projection Currency Code" feature="MTEF Projections">
 					<td><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
-					<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
+					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" title="${translation}" />
 					</td>
 					</field:display>
 					<field:display name="Projection Date" feature	="MTEF Projections">
@@ -516,7 +516,7 @@ var isAlreadySubmitted = false;
 											<td>&nbsp;
 												<field:display name="Remove MTEF Projection" feature	="MTEF Projections">
 													<a href="javascript:removeMTEFProjection(${indexMTEF})">
-													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
+													 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this projection"/>
 													</a>
 												</field:display>
 											</td>
@@ -597,7 +597,7 @@ var isAlreadySubmitted = false;
 								<field:display name="Currency Commitment" feature="Commitments">
 								<td align="center" valign="middle" width="170">
 								<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">											  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
-								<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
+								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
 								<td align="center" valign="middle" width="200">
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
@@ -672,7 +672,7 @@ var isAlreadySubmitted = false;
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
 																<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById_Funding("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+																	<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border="0">
 																</a>
 															</c:if>
 														</td>														
@@ -684,7 +684,7 @@ var isAlreadySubmitted = false;
 											<field:display name="Remove Commitment Link" feature="Commitments">
 												<td align="right">
 														<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-											 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+											 				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 														</a>
 												</td>
 											</field:display>
@@ -828,7 +828,7 @@ var isAlreadySubmitted = false;
 								<td align="center" valign="middle" width="170">
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
-									<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
+									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" title="${translation}" />
 								</td>
 								</field:display>
 								<field:display name="Date of Disbursement Order" feature="Disbursement Orders">
@@ -909,7 +909,7 @@ var isAlreadySubmitted = false;
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
 																<a id="trans4Date<%=tempIndexStr%>" href='javascript:pickDateById_Funding("trans4Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</c:if>
 														</td>
@@ -964,7 +964,7 @@ var isAlreadySubmitted = false;
                                             <field:display name="Remove Disbursement Order Link" feature="Disbursement Orders">											
 												<td>
 													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
-													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+													 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 													</a>
 												</td>
 											</field:display>
@@ -1050,7 +1050,7 @@ var isAlreadySubmitted = false;
 								<td align="center" valign="middle" width="170">
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
-								    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
+								    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
                                 </field:display>
 								<field:display name="Date Disbursement" feature="Disbursement">
 								<td align="center" valign="middle" width="120">
@@ -1135,7 +1135,7 @@ var isAlreadySubmitted = false;
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
 																<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById_Funding("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+																	<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border="0">
 																</a>
 															</c:if>
 														</td>
@@ -1203,7 +1203,7 @@ var isAlreadySubmitted = false;
 											<field:display name="Remove Disbursement Link" feature="Disbursement">
 												<td>
 													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
-													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+													 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 													</a>
 												</td>
 											</field:display>
@@ -1287,7 +1287,7 @@ var isAlreadySubmitted = false;
 										<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">								   		  
 											<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
 										</a>
-									    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle"  title="${translation}" />
+									    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle"  title="${translation}" />
 									</td>
 								</field:display>
 								<field:display name="Date Expenditure" feature="Expenditures">
@@ -1361,7 +1361,7 @@ var isAlreadySubmitted = false;
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
 																<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById_Funding("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</c:if>
 															<% tempIndex++; %>
@@ -1375,7 +1375,7 @@ var isAlreadySubmitted = false;
 									<field:display name="Remove Expenditure Link" feature="Expenditures">
 											<td align="center"> 
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
-								 					<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+								 					<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 												</a>
 											</td>
 									</field:display>

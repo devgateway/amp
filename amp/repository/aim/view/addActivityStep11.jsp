@@ -281,7 +281,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<tr>
 																		<td>
 																			<IMG alt=Link height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																			<a title="<digi:trn key="aim:costing">Costing</digi:trn>">
 																				<b><digi:trn key="aim:costing">Costing</digi:trn></b>
 																			</a>

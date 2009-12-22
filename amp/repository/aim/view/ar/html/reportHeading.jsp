@@ -73,7 +73,7 @@
                               if (subColumn.getDescription()!=null){
                               String text=subColumn.getDescription();
                               if (text!=null){ %> 
-                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
+                       			<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
                     		 	<%}
                      		  }%>
 	              	</html:link>
@@ -81,10 +81,10 @@
             
 	            <c:if test="${column.name == columnReport.sorterColumn}">
 	            	<logic:equal name="columnReport" property="sortAscending" value="false">
-	                	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	                	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align="absmiddle" border="0"/>
 	              	</logic:equal>
 	              	<logic:equal name="columnReport" property="sortAscending" value="true">
-	                	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	                	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align="absmiddle" border="0"/>
 	              	</logic:equal>
 	            </c:if>
 	         </td>
@@ -113,10 +113,10 @@
 	            
 					<c:if test="${subColumn.name == columnReport.sorterColumn}">
 	        			<logic:equal name="columnReport" property="sortAscending" value="false">
-	                		<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	                		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align="absmiddle" border="0"/>
 	            		</logic:equal>
 	            		<logic:equal name="columnReport" property="sortAscending" value="true">
-	                		<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	                		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align="absmiddle" border="0"/>
 	            		</logic:equal>
 	       			</c:if>
 	     		</c:otherwise>
@@ -125,7 +125,7 @@
                               if (subColumn.getDescription()!=null){
                               String text=subColumn.getDescription();
                               if (text!=null){ %> 
-                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
+                       			<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
                     		 	<%}
                      		  }%>
 	     	</td>	            

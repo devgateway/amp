@@ -28,21 +28,21 @@
 	
 <table border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td width="10" height="25"><digi:img src="images/ui/teaserTitleLeft.gif"/></td>
+		<td width="10" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserTitleLeft.gif"/></td>
 		<td width="100%" height="25" class="teaserTitleBody">
 			&nbsp;Pages
 		</td>
-		<td width="5" height="25"><digi:img src="images/ui/teaserTitleRight.gif"/></td>
+		<td width="5" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserTitleRight.gif"/></td>
 	</tr>
 	<tr>
-		<td width="10" height="25"><digi:img src="images/ui/teaserExtrainfoLeft.gif"/></td>
+		<td width="10" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserExtrainfoLeft.gif"/></td>
 		<td width="100%" height="25" class="teaserExtraBody">
 			&nbsp; Navigation bar
 		</td>
-		<td width="5" height="25"><digi:img src="images/ui/teaserExtrainfoRight.gif"/></td>
+		<td width="5" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserExtrainfoRight.gif"/></td>
 	</tr>
 	<tr>
-	<td class="bodyLeftTile" width="10"><digi:img src="images/ui/spacer.gif"/></td>
+	<td class="bodyLeftTile" width="10"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/></td>
 	<td class="bodyField" width="100%">	
 	
 	
@@ -51,7 +51,7 @@
 		<logic:iterate id="editor" name="editorForm" property="navBarEditorList" type="Editor">
 			<tr onmouseover="navMouseOver(this)" onmouseout="navMouseOut(this)">
 				<td width="1">
-					<digi:img src="images/ui/navBarLeftArrow.gif" style="visibility:hidden"/>
+					<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/navBarLeftArrow.gif" style="visibility:hidden"/>
 				</td>
 				<td width="99%">
 					&nbsp;
@@ -77,13 +77,13 @@
 	
 	
 </td>
-	<td class="bodyRightTile" width="10"><digi:img src="images/ui/spacer.gif"/></td>
+	<td class="bodyRightTile" width="10"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/></td>
 	</tr>
 	
 	<tr>
-	<td width="10" height="11"><digi:img src="images/ui/teaserBottomLeft.gif"/></td>
-	<td width="100%" height="11" class="teaserBottomBody"><digi:img src="images/ui/spacer.gif"/></td>
-	<td width="5" height="11"><digi:img src="images/ui/teaserBottomRight.gif"/></td>
+	<td width="10" height="11"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserBottomLeft.gif"/></td>
+	<td width="100%" height="11" class="teaserBottomBody"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/></td>
+	<td width="5" height="11"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserBottomRight.gif"/></td>
 	</tr>	
 </table>	
 	

@@ -26,6 +26,10 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
+
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 
 <div id="popin" style="display: none">
@@ -182,7 +186,7 @@
 	}
 
 	function selectOrg(params1, params2, params3, params4) {
-		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+		var msg='\n<digi:trn>Select Organization</digi:trn>';
 		showPanelLoading(msg);
 		YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback);
 	}
@@ -230,15 +234,11 @@ function submitForm() {
 <jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
 
-
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
 
-	var calendarHelp="<digi:trn key='calendar:calendarHelp'>Calendar</digi:trn>"
-	var separateEmails="<digi:trn key='calendar:separateEmails'>Please separate email addresses by semicolons</digi:trn>"
-	var validEmailmsg="<digi:trn >Invalid e-mail address:</digi:trn>"
+	var calendarHelp="<digi:trn>Calendar</digi:trn>"
+	var separateEmails="<digi:trn>Please separate email addresses by semicolons</digi:trn>"
+	var validEmailmsg="<digi:trn>Invalid e-mail address:</digi:trn>"
 		var alreadyAdded="<digi:trn >E-mail address already added: </digi:trn>"
 		
 function makePublic(){
@@ -379,13 +379,9 @@ function addOrganisation(orgId, orgName){
 	    if (list == null || guest == null || guest.value == null || guest.value == "") {
 	      return;
 	    }
-	
-   
 
 	var guestVal=guest.value;
-
-
-	
+		
 	while(guestVal.indexOf(";")!=-1){		
 		var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
 		if (!checkEmail(optionValue)){
@@ -443,7 +439,6 @@ function addOrganisation(orgId, orgName){
         	return false; 
         }
     }
-
    
 
   function removeAtt() {
@@ -570,16 +565,15 @@ function is_mail(m) {
 }
 
 function submitForm(thisform){
-	//typeid = thisform.elements.namedItem('selectedCalendarTypeId').value;
 	var typeid = document.getElementById('selectedCalendarTypeId').value;
 	document.getElementById('CalendatTypeid').value = typeid;
 	setMethod("");
-	//thisform.submit();
+	selectAtts();
 	document.calendarEventForm.submit();
 }
 
 addLoadEvent(delBody);
-  </script>
+</script>
 
 
 <digi:form action="/showCalendarEvent.do">
@@ -1108,9 +1102,9 @@ addLoadEvent(delBody);
 <script type="text/javascript">
 	//attach character counters
 	$("#eventTitle").charCounter(50,{
-									format: " (%1"+ " <digi:trn key="calendar:charactersRemaining">characters remaining</digi:trn>)",
+									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 									pulse: false});
 	$("#descMax").charCounter(300,{
-									format: " (%1"+ " <digi:trn key="calendar:charactersRemaining">characters remaining</digi:trn>)",
+									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 									pulse: false});
 </script>

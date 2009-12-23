@@ -1792,12 +1792,11 @@ public class ImportBuilder {
 			ContactType contact = activityImported.getDonorContacts().iterator().next();
 			createActivityContactInformation(activity, contact,org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
 		}
-		if(activityImported.getGovContacts()!=null && activityImported.getDonorContacts().size() > 0){
-			ContactType contact = activityImported.getDonorContacts().iterator().next();
+		if(activityImported.getGovContacts()!=null && activityImported.getGovContacts().size() > 0){
+			ContactType contact = activityImported.getGovContacts().iterator().next();
 			createActivityContactInformation(activity, contact,org.digijava.module.aim.helper.Constants.MOFED_CONTACT);
 		}
 	}
-
 
 	private void createActivityContactInformation(AmpActivity activity,ContactType contact,String type) {
 		if(contact!=null){

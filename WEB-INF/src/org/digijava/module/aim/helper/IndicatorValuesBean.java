@@ -3,7 +3,7 @@ package org.digijava.module.aim.helper;
 import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
+
 
 public class IndicatorValuesBean {
     private Long indicatorValueId;
@@ -27,16 +27,7 @@ public class IndicatorValuesBean {
         this.connectionId = value.getIndicatorConnection().getId();
     }
     
-    @Deprecated
-    public IndicatorValuesBean(AmpThemeIndicatorValue dbIndicatorValue) {
-        this.indicatorValueId = dbIndicatorValue.getAmpThemeIndValId();
-        this.valueTypeId = dbIndicatorValue.getValueType();
-//        this.valueType=(db)?
-        this.value = dbIndicatorValue.getValueAmount().toString();
-        this.creationDate = dbIndicatorValue.getCreationDate();
-        this.indicatorId = dbIndicatorValue.getThemeIndicatorId().getAmpThemeIndId();
-    }
-
+   
     public Date getCreationDate() {
         return creationDate;
     }

@@ -23,7 +23,6 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -34,7 +33,6 @@ import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -1403,42 +1401,7 @@ public class IndicatorUtil {
          return tempInd;
 		}
 	 
-	 @Deprecated
-	 public static void saveEditPrgIndValues(Collection<AmpPrgIndicatorValue> prgIndValues,AmpIndicator ampInd)
-		{
-			Session session = null;
-			Transaction tx = null;
-			try
-			{
-				session = PersistenceManager.getRequestDBSession();
-				Iterator indValItr = prgIndValues.iterator();
-				while(indValItr.hasNext())
-				{
-					AmpThemeIndicatorValue ampThIndVal = null;
-					AmpPrgIndicatorValue ampPrgIndVal = (AmpPrgIndicatorValue) indValItr.next();
-					if(ampPrgIndVal.getIndicatorValueId() == null){
-						ampThIndVal = new AmpThemeIndicatorValue();
-					}else{
-												ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class,ampPrgIndVal.getIndicatorValueId());
-					}
-					ampThIndVal.setValueAmount(ampPrgIndVal.getValAmount());
-					ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
-					ampThIndVal.setValueType(ampPrgIndVal.getValueType());
-					ampThIndVal.setIndicatorId(ampInd);
-					tx = session.beginTransaction();
-					session.saveOrUpdate(ampThIndVal);
-					tx.commit();
-					}
-				}
-			
-			catch(Exception ex)
-			{
-				
-		             logger.error("Unable to get the specified Indicator");
-		             logger.debug("Exception : "+ex);
-			}
-			
-		}
+	
 	 
 	 public static Collection<AmpCategoryValue> getRisks(Long actId) throws Exception{
 		 ArrayList<AmpCategoryValue> risks=new ArrayList<AmpCategoryValue>();

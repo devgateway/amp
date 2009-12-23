@@ -3,7 +3,7 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 
 public class AmpIndSectors implements Serializable
 {
@@ -12,7 +12,7 @@ private Long ampIndicatorSectorId;
 	
 	private AmpSector sectorId;
 	
-	private AmpThemeIndicators themeIndicatorId;
+	private IndicatorTheme themeIndicatorId;
 
 	public Long getAmpIndicatorSectorId() {
 		return ampIndicatorSectorId;
@@ -30,11 +30,11 @@ private Long ampIndicatorSectorId;
 		this.sectorId = sectorId;
 	}
 
-	public AmpThemeIndicators getThemeIndicatorId() {
+	public IndicatorTheme getThemeIndicatorId() {
 		return themeIndicatorId;
 	}
 
-	public void setThemeIndicatorId(AmpThemeIndicators themeIndicatorId) {
+	public void setThemeIndicatorId(IndicatorTheme themeIndicatorId) {
 		this.themeIndicatorId = themeIndicatorId;
 	}
 	

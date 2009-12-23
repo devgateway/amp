@@ -90,7 +90,7 @@ public class AddThemeIndicator extends Action {
 								.getIndicatorDescription());
 						ampPrgInd.setPrgIndicatorValues(themeForm
 								.getPrgIndValues());
-						ProgramUtil.saveThemeIndicators(ampPrgInd, id);
+						//ProgramUtil.saveThemeIndicators(ampPrgInd, id);
 					} else {
 						Long indicatorId = new Long(Long.parseLong(indId));
 						allPrgInd.setIndicatorId(indicatorId);
@@ -106,7 +106,7 @@ public class AddThemeIndicator extends Action {
 						allPrgInd.setNpIndicator(themeForm.isNpIndicator());
 						allPrgInd
 								.setThemeIndValues(themeForm.getPrgIndValues());
-						ProgramUtil.saveEditThemeIndicators(allPrgInd, id);
+						//ProgramUtil.saveEditThemeIndicators(allPrgInd, id);
 					}
 				}
 			}
@@ -136,7 +136,7 @@ public class AddThemeIndicator extends Action {
 				AllPrgIndicators allPrgInd = new AllPrgIndicators();
 				Long indId = new Long(Long.parseLong(request
 						.getParameter("prgIndicatorId")));
-				allPrgInd = ProgramUtil.getThemeIndValues(indId);
+				//allPrgInd = ProgramUtil.getThemeIndValues(indId);
 				themeForm.setIndicatorId(allPrgInd.getIndicatorId());
 				themeForm.setName(allPrgInd.getName());
 				themeForm.setCode(allPrgInd.getCode());
@@ -149,7 +149,7 @@ public class AddThemeIndicator extends Action {
 				themeForm.setNpIndicator(allPrgInd.isNpIndicator());
 				List prgIndVal = new ArrayList(allPrgInd.getThemeIndValues());
 				themeForm.setPrgIndValues(prgIndVal);
-				themeForm.setPrgIndicators(ProgramUtil.getThemeIndicators(id));
+				//themeForm.setPrgIndicators(ProgramUtil.getThemeIndicators(id));
 				return mapping.findForward("forward");
 			}
 			if (event.equals("overall")) {

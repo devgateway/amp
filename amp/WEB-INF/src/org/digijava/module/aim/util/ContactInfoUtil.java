@@ -289,7 +289,7 @@ public class ContactInfoUtil {
 		return retValue;
 	}
 	
-	public static AmpActivityContact getActivityPrimaryContact(Long activityId, String primaryContactType) throws Exception{
+	public static AmpActivityContact getActivityPrimaryContact(Long activityId, String primaryContactType){
 		Session session=null;
 		String queryString =null;
 		Query query=null;
@@ -368,6 +368,24 @@ public class ContactInfoUtil {
 			e.printStackTrace();
 		}
 		return properties;
+	}
+	
+	public static List<String> getContactEmails(Long contactId){
+		List<String> emails=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select prop.value from " + AmpContactProperty.class.getName()+ " prop where prop.contact.id="+contactId+
+			" and prop.name='"+Constants.CONTACT_PROPERTY_NAME_EMAIL+"'";
+			query=session.createQuery(queryString);
+			emails=(List<String>) query.list();
+		} catch (Exception e) {
+			logger.error("couldn't load Emails" + e.getMessage());	
+			e.printStackTrace();
+		}
+		return emails;
 	}
 		
 }

@@ -2,23 +2,42 @@ package org.digijava.module.dataExchange.util;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpNotes;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
-import org.digijava.module.aim.util.*;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -277,19 +296,27 @@ public class ExportBuilder {
 			}
 			
 		} 
-//		else if (path.equalsIgnoreCase("activity.donorContacts")){
-//			ContactType cont = buildContactType(ampActivity.getContFirstName(),
-//					ampActivity.getContLastName(), ampActivity.getEmail());
-//			if (cont != null){
-//				parent.getDonorContacts().add(cont);
-//			}
-//		} else if (path.equalsIgnoreCase("activity.govContacts")){
-//			ContactType cont = buildContactType(ampActivity.getMofedCntFirstName(),
-//					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail());
-//			if (cont != null){
-//				parent.getGovContacts().add(cont);
-//			}
-//		} 
+		else if (path.equalsIgnoreCase("activity.donorContacts")){
+			AmpActivityContact donorCont=ContactInfoUtil.getActivityPrimaryContact(ampActivity.getAmpActivityId(), Constants.DONOR_CONTACT);
+			if(donorCont!=null){
+				AmpContact donorContact=donorCont.getContact();
+				List<String> emails=ContactInfoUtil.getContactEmails(donorContact.getId());
+				ContactType cont = buildContactType(donorContact.getName(),donorContact.getLastname(),emails);
+				if (cont != null){
+					parent.getDonorContacts().add(cont);
+				}
+			}
+		} else if (path.equalsIgnoreCase("activity.govContacts")){
+			AmpActivityContact mofCont=ContactInfoUtil.getActivityPrimaryContact(ampActivity.getAmpActivityId(), Constants.MOFED_CONTACT);
+			if(mofCont!=null){
+				AmpContact mofedContact=mofCont.getContact();
+				List<String> emails=ContactInfoUtil.getContactEmails(mofedContact.getId());
+				ContactType cont = buildContactType(mofedContact.getName(),mofedContact.getLastname(),emails);
+				if (cont != null){
+					parent.getGovContacts().add(cont);
+				}
+			}			
+		} 
 		else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
 		}
@@ -310,7 +337,6 @@ public class ExportBuilder {
 	}
 
 	private CodeValueType buildImplementationLevel() throws AmpExportException{
-
 		AmpCategoryValue ampCategoryValue = 
 			CategoryManagerUtil.getAmpCategoryValueFromListByKey(
 					CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
@@ -575,14 +601,17 @@ public class ExportBuilder {
 		return retValue;
 	}
 	
-	private ContactType buildContactType (String firstName, String lastName, String mail) throws AmpExportException{
+	private ContactType buildContactType (String firstName, String lastName, List<String> emails) throws AmpExportException{
 		ContactType retValue = null;
-		if (firstName != null && firstName.trim().length() > 0 &&
-				lastName != null && lastName.trim().length() > 0 ){
+		if (firstName != null && firstName.trim().length() > 0 &&lastName != null && lastName.trim().length() > 0 ){
 			retValue = objectFactory.createContactType();
 			retValue.setFirstName(firstName);
 			retValue.setLastName(lastName);
-			retValue.setEmail(mail);
+			String contactEmails="";
+			for (String email : emails) {
+				contactEmails+= email+ ";";
+			}			
+			retValue.setEmail(contactEmails);
 		}
 		
 		return retValue;

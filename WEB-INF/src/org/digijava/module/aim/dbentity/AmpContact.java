@@ -19,6 +19,15 @@ public class AmpContact {
 	private String officeaddress;
 	private String temporaryId;
     private Set<AmpOrganisation> organizations;
+    
+    public AmpContact(){
+    	
+    }
+    
+    public AmpContact(String name, String lastName){
+    	this.name=name;
+    	this.lastname=lastName;
+    }
 	
 	/**
 	 * currently these fields are not usable, but will become when we decide 

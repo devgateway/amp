@@ -493,9 +493,6 @@
    <action name="aimThemeForm" path="/aim/addThemeIndicator" scope="session" type="org.digijava.module.aim.action.AddThemeIndicator" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addPrgIndicator" />
     </action>
-    <action name="aimThemeForm" path="/aim/editThemeIndicator" scope="session" type="org.digijava.module.aim.action.EditThemeIndicator" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_editPrgIndicator" />
-    </action>
     <action name="aimThemeForm" path="/aim/closeThemeIndicator" scope="session" type="org.digijava.module.aim.action.CloseThemeIndicator" validate="false">
       <forward name="overall" path="/aim/overallIndicatorManager.do" redirect="true" />
       <forward name="forward" path="/aim/themeManager.do" redirect="true" />

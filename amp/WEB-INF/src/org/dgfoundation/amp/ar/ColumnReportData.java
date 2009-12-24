@@ -485,6 +485,7 @@ public class ColumnReportData extends ReportData {
 	@SuppressWarnings("unchecked")
 	public List<Column> getColumns(){
 		return items;
+
 	}
 	
 }

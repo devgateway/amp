@@ -67,4 +67,11 @@
 		</c:if>
 		<c:set var="firstCell" value="${false}"></c:set>
 		</logic:iterate>
-</tr>
+		
+		<% if (reportData.getLevelDepth() < 3) { %>
+						<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
+					<% } else { %>	
+						<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
+					<% } %>&nbsp;</td>
+		
+		</tr>

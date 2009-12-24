@@ -4297,4 +4297,41 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}
 	}
 	
+    //WTF!!!!
+      public static Boolean isDraft(Long id) throws DgException {
+    		Session session = PersistenceManager.getRequestDBSession();
+    		try {
+    		Query  query=session.createQuery("select draft from "+AmpActivity.class.getName()+" where ampActivityId=:id");
+    		query.setLong("id", id);
+    		List result=query.list();
+    		Iterator iter=result.iterator();
+    		if (iter.hasNext()){
+    			Boolean value=(Boolean) iter.next();
+    			if (value!=null){
+    				return value;
+    			} 
+    		}
+    		
+    		} catch (Exception e) {
+    			throw new DgException("Cannot load AmpActivity with id " + id, e);
+    		}
+    	 return false; 
+      }
+      
+      public static AmpTeam getActivityTeam(Long id) throws DgException {
+    		Session session = PersistenceManager.getRequestDBSession();
+    		try {
+    		Query  query=session.createQuery("select t.team from "+AmpActivity.class.getName()+" t  where t.ampActivityId=:id");
+    		query.setLong("id", id);
+    		List result=query.list();
+    		Iterator iter=result.iterator();
+    		if (iter.hasNext()){
+    			return (AmpTeam) iter.next();
+    		}
+    		
+    		} catch (Exception e) {
+    			throw new DgException("Cannot load AmpActivity with id " + id, e);
+    		}
+    	 return null;
+    }
 } // End

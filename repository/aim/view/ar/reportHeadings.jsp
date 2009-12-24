@@ -122,6 +122,9 @@
       </logic:iterate>
       
     </logic:iterate>
+  
+ 		<td align="center" style="background-color:#999999;color:black;" class="clsTableTitleCol" width="40">&nbsp;</td>
+  
   </tr>
 
   <%}

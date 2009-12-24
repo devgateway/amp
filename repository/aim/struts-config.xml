@@ -270,6 +270,8 @@
     <action name="aimMainProjectDetailsForm" path="/aim/viewProjectDetails" scope="session" type="org.digijava.module.aim.action.ViewProjectDetails" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_projectDetails" />
     </action>
+    <action  path="/aim/reportMenuAction" scope="session" type="org.digijava.module.aim.action.ReportMenuAction" validate="false" parameter="action"/>
+  
     <action path="/aim/viewEUActivityDetails" scope="request" type="org.digijava.module.aim.action.ViewEUActivity" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_euActivityDetails" />
     </action>

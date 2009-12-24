@@ -791,6 +791,40 @@ function fontResizeFromCookies(){
 }
 
 
+var items=new Array();
+var currentRMenu=null;
+function reportOptions(element,id){
+	//cargar opciones
+	if (currentRMenu!=null){
+		currentRMenu.destroy();
+		}
+	var itemsUrl='/aim/reportMenuAction.do?action=getOPtions&id='+id;
+
+	var oMenu = new YAHOOAmp.widget.Menu("reportMenu", { fixedcenter: false,srcElement:element,context:[element, "tl", "bl"] }); 
+	//if(oMenu.getItems().length==0){
+		$.get(itemsUrl,'',function(data){
+		for (i=0;i < data.childNodes[0].childNodes.length;i++){
+				var node=data.childNodes[0].childNodes[i]
+				var strUrl=node.getAttribute('url')+id;
+				var confirmation=node.getAttribute('confirmation');
+				var text=data.childNodes[0].childNodes[i].childNodes[0].nodeValue
+	
+				var oItem = oMenu.addItem(new YAHOOAmp.widget.MenuItem(text));
+				oItem.cfg.setProperty("url",strUrl);
+				oMenu.addItem(oItem);
+				
+			}
+		oMenu.render(document.body);
+		oMenu.show();
+		currentRMenu=oMenu;
+		}); 
+	
+	//}else{
+	//	oMenu.render(document.body);
+	//	oMenu.show();
+	//}
+}
+
 </script>
 <style type="text/css">
 .mask {
@@ -798,6 +832,15 @@ function fontResizeFromCookies(){
   opacity:.80;
   filter: alpha(opacity=80);
   background-color:#2f2f2f;
+}
+#reportMenu {
+	width:70px;
+}
+#reportMenu ul li a {
+	font-size:9px;
+	padding:3px !important;
+	text-transform:uppercase;
+	text-decoration:none
 }
 </style>
 

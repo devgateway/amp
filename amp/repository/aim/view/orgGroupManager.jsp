@@ -95,6 +95,18 @@
 			cells = null;
 		}
 	}
+
+
+       function showDonorList(groupId) {
+           var div=document.getElementById("donorList"+groupId);
+           div.style.display = "block";
+        }
+       
+
+        function hideDonorList(groupId) {
+             document.getElementById("donorList"+groupId).style.display = "none";
+       }
+
 	-->
 
 </script>
@@ -287,9 +299,29 @@
 															  <c:set target="${urlParams}" property="ampOrgGrpId">
 															  	<bean:write name="organisation" property="ampOrgGrpId" />
 															  </c:set>
-															  <digi:link href="/editOrgGroup.do" name="urlParams">
-															  	<bean:write name="organisation" property="orgGrpName" />
+															  <digi:link href="/editOrgGroup.do" name="urlParams" onmouseover="showDonorList(${organisation.ampOrgGrpId})" onmouseout="hideDonorList(${organisation.ampOrgGrpId})">
+															  	<bean:write name="organisation" property="orgGrpName"  />
 															  </digi:link>
+                                                              <div id="donorList${organisation.ampOrgGrpId}" style="display:none; width: 200px; z-index:10; position: absolute; left:70px;  background-color: #ffffff; border: 1px solid silver;">
+                                                                  <TABLE WIDTH='100%' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
+                                                                      <TR style="background-color:#cc0000"><TH style="color:#FFFFFF" nowrap><digi:trn>Donors</digi:trn></TH></TR>
+                                                                      <TR style="background-color:#FFCC99">
+                                                                          <TD>
+                                                                              <c:if test="${not empty organisation.donorOrgs}">
+                                                                                  <UL>
+                                                                                      <c:forEach var="donor" items="${organisation.donorOrgs}">
+                                                                                          <LI>${donor.name}</LI>
+                                                                                      </c:forEach>
+                                                                                  </UL>
+
+                                                                              </c:if>
+                                                                              <c:if test="${empty organisation.donorOrgs}">
+                                                                                  <digi:trn>No data available</digi:trn>
+                                                                              </c:if>
+                                                                          </TD>
+                                                                      </TR>
+                                                                  </TABLE>
+                                                              </div>
 															</td>
 															<td width="25%">
 																<logic:empty name="organisation" property="orgGrpCode">

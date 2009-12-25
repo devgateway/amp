@@ -4482,6 +4482,24 @@ public class DbUtil {
         return col;
     }
 
+    public static Collection<AmpOrganisation> getDonorOrgsByGroupId(Long orgGroupId) throws  DgException{
+        Session session = null;
+        Collection<AmpOrganisation> organizations = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct org from " + AmpFunding.class.getName()
+                + " f inner join f.ampDonorOrgId org where org.orgGrpId=:orgGroupId";
+            Query qry = session.createQuery(queryString);
+            qry.setLong("orgGroupId", orgGroupId);
+            organizations = qry.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get organizations : " + ex);
+            throw new DgException(ex);
+        }
+        return organizations;
+    }
+
     public static Collection getAllOrgGrpBeeingUsed(){
         Session session = null;
         Collection col = new ArrayList();

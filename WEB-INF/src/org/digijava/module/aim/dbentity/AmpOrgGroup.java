@@ -2,9 +2,12 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Identifiable;
 
 
@@ -92,6 +95,16 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	}
 	public Class getDimensionClass() {
 	    return DonorGroupDimension.class;
+	}
+    
+    /**
+     * 
+     * @return the organizations associated to the organization 
+     * group manager which are assigned to funding.
+     */
+    public Collection<AmpOrganisation> getDonorOrgs() throws DgException {
+        Collection<AmpOrganisation> donorOrgs=DbUtil.getDonorOrgsByGroupId(ampOrgGrpId);
+	    return donorOrgs;
 	}
 
 }

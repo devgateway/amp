@@ -75,9 +75,7 @@
 <c:if test="${!empty org.orgCode}">
 <li>Organization Code: <bean:write name="org" property="orgCode"/></li>
 </c:if>
-<c:if test="${!empty org.role}">
-<li>Role: <bean:write name="org" property="role"/></li>
-</c:if>
+
 </ul>
 </div>
 <ul>

@@ -494,7 +494,7 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,m
 
 				}
 				
-				if (msgConfirmFunding != "" && checkAmountLen(temp[i].value,msgConfirmFunding) == false) {
+				if (msgConfirmFunding != "" && checkAmountLen(temp[i].value,msgConfirmFunding, this.groupSymbol,this.decimalSymbol) == false) {
 
 					temp[i].focus();
 

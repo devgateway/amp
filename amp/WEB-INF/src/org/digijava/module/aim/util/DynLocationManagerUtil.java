@@ -841,6 +841,40 @@ public class DynLocationManagerUtil {
 		return ampLoc;
 	}
 	
+	/**
+	 * 
+	 * @param indexOfLayer
+	 * @return Number of locations of the layer specified by indexOfLayer
+	 */
+	public static int getNumOfLocations(int indexOfLayer) {
+		Session dbSession										= null;
+		try {
+			AmpCategoryValue cvLocationType		= 
+				CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, (long)indexOfLayer);
+			if (cvLocationType != null)
+			{
+				dbSession			= PersistenceManager.getSession();
+				String queryString 	= "select count(loc) from "
+					+ AmpCategoryValueLocations.class.getName()
+					+ " loc where (loc.parentCategoryValue=:cvId)" ;			
+				Query qry			= dbSession.createQuery(queryString);
+				qry.setCacheable(true);
+				qry.setLong("cvId", cvLocationType.getId() );
+				int returnValue		= (Integer)qry.uniqueResult();
+				return returnValue;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return 0;
+	}
+	
 	
 	public static Comparator<AmpCategoryValueLocations> alphabeticalLocComp		=
 																	new Comparator<AmpCategoryValueLocations>() {

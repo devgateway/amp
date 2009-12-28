@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
@@ -194,6 +195,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String projectCode;
 		private Long gbsSbs;
 		private String approvalStatus;
+		private String previousApprovalStatus;
 		private Boolean wasDraft;
 		private String convenioNumcont;
 		private Collection levelCollection = null;
@@ -658,6 +660,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setProjectComments(String projectComments) {
 			this.projectComments = projectComments;
+		}
+
+		/**
+		 * @return the previousApprovalStatus
+		 */
+		public String getPreviousApprovalStatus() {
+			return previousApprovalStatus;
+		}
+
+		/**
+		 * @param previousApprovalStatus the previousApprovalStatus to set
+		 */
+		public void setPreviousApprovalStatus(String previousApprovalStatus) {
+			this.previousApprovalStatus = previousApprovalStatus;
 		}
 
 	}
@@ -2835,7 +2851,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private int pagesToShow;
 		private int pagesSize;
 		private int startPage;
-		private List referenceDocs;
+		private ReferenceDoc[] referenceDocs;
 
 		private Long docType;
 		private Long docLang;
@@ -3043,16 +3059,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public int getStartPage() {
 			return startPage;
 		}
-
+ 
 		public void setStartPage(int startPage) {
 			this.startPage = startPage;
 		}
 
-		public List getReferenceDocs() {
+		public ReferenceDoc[] getReferenceDocs() {
 			return referenceDocs;
 		}
 
-		public void setReferenceDocs(List referenceDocs) {
+		public void setReferenceDocs(ReferenceDoc[] referenceDocs) {
 			this.referenceDocs = referenceDocs;
 		}
 

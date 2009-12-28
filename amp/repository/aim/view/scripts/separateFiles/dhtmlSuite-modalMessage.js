@@ -234,7 +234,7 @@ DHTMLSuite.modalMessage.prototype = {
 		
 		/* Call the __resizeAndPositionDivElements method twice in case the css file has changed. The first execution of this method may not catch these changes */
 		window.refToThisModalBoxObj = this;		
-		setTimeout('window.refToThisModalBoxObj.__resizeAndPositionDivElements()',150);
+		setTimeout('window.refToThisModalBoxObj.__resizeAndPositionDivElements()',50);
 		
 		this.__addHTMLContent();	// Calling method which inserts content into the message div.
 	}
@@ -328,8 +328,8 @@ DHTMLSuite.modalMessage.prototype = {
     	
 		
 		
-    	this.divs_content.style.left = Math.ceil((bodyWidth - tmpWidth) / 2) + 'px';;
-    	this.divs_content.style.top = (Math.ceil((bodyHeight - tmpHeight) / 2) +  topOffset) + 'px';
+    	this.divs_content.style.left = 300 + 'px';
+    	this.divs_content.style.top =  (topOffset + 100) + 'px';
     	this.divs_shadow.style.left = (this.divs_content.style.left.replace('px','')/1 + this.shadowOffset) + 'px';
     	this.divs_shadow.style.top = (this.divs_content.style.top.replace('px','')/1 + this.shadowOffset) + 'px';
     	this.divs_shadow.style.height = tmpHeight + 'px';

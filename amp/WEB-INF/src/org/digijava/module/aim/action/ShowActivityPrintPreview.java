@@ -1092,7 +1092,14 @@ public class ShowActivityPrintPreview
                 					activityRefDocs,
                 					new ActivityUtil.CategoryIdRefDocMapBuilder());
                 		}
-                		eaForm.getDocuments().setReferenceDocs(refDocs);
+                		if(refDocs.size()>0){
+                			ReferenceDoc[] myrefDoc = (ReferenceDoc[]) refDocs.toArray(new ReferenceDoc[0]);
+                			eaForm.getDocuments().setReferenceDocs(myrefDoc);
+                		}
+                		else{
+                			eaForm.getDocuments().setReferenceDocs(null);
+                		}
+
                 	}
                 		
                 		

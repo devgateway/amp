@@ -51,6 +51,15 @@ public class AddUser extends Action {
 		AddUserForm registerForm = (AddUserForm) form;
 
 		try {
+			
+			/**
+			 * Test if user is administrator
+			 */			
+			String ampAdmin			= (String)session.getAttribute("ampAdmin"); 
+			if ( ampAdmin == null || ampAdmin.equals("no") ) {
+				return mapping.findForward("index");
+			}
+			
 			String actionFlag = request.getParameter("actionFlag");
 			logger.debug("actionFlag: " + actionFlag);
 

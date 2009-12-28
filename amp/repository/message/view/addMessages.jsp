@@ -495,19 +495,18 @@ div.fakefile2 input{
                                                                     </tr> 
 																	<tr>
 																		 <field:display name="Set Alert Drop down" feature="Create Message Form">
-																			<td align="right" valign="top"><digi:trn>Set As</digi:trn></td>
-																			<td align="left"> 
-	                                                                            <html:select property="setAs" styleClass="inp-text" style="width:140px">																							
-																					<html:option value="message"><digi:trn>Message</digi:trn> </html:option>
-																					<html:option value="alert"><digi:trn>Alert</digi:trn> </html:option>
-																					<html:option value="approval"><digi:trn>Approval</digi:trn> </html:option>
+																			<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
+																			<td align="left">
+	                                                                        	<html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
+																					<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
+																					<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
 																			  	</html:select>																												                                                																																												
 																			</td>
 																		</field:display>
 																      </tr>	
                                                                        <tr>
                                                                        		<field:display name="Recievers" feature="Create Message Form">
-																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
+																					<td nowrap="nowrap" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>

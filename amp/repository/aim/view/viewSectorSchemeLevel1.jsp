@@ -270,7 +270,7 @@
 																						<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 																					</digi:link>
 																				</td>
-																				<td align="center" width="10%">
+																				<td bgcolor="#ffffff" width="75" align="center">
 																					<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams4}" property="ampSectorId">
 																						<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />

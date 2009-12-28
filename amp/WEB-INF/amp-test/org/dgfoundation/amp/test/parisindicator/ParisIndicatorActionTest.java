@@ -47,27 +47,16 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		//Setup some user data.
 		TestUtil.setLocaleEn(request);
 		TestUtil.setSiteDomain(request);
-		addRequestParameter("id", "79");
-		addRequestParameter("user", "atl@amp.org");
-
-		//Setup teamMember info needed for the reports.
-		AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(new Long(1));
-		if(ampTeamMember == null) {
-			fail("Please choose a different user id");
-		}
-		teamMember = new TeamMember();
-		teamMember.setMemberId(ampTeamMember.getAmpTeamMemId());
-		teamMember.setTeamId(ampTeamMember.getAmpTeam().getAmpTeamId());
-		teamMember.setEmail(ampTeamMember.getUser().getEmail());
-		AmpApplicationSettings ampAppSettings = DbUtil.getMemberAppSettings(ampTeamMember.getAmpTeamMemId());
+		TestUtil.setCurrentMemberFirstATLTeam(session);
+		AmpApplicationSettings ampAppSettings = DbUtil.getMemberAppSettings(((AmpTeamMember) session.getAttribute("JUnitAmpTeamMember")).getAmpTeamMemId());
 		ApplicationSettings appSettings = new ApplicationSettings();
 		appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage().intValue());
 		appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
 		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
 		appSettings.setValidation(ampAppSettings.getValidation());
-		teamMember.setAppSettings(appSettings);
-		request.getSession().setAttribute("currentMember", teamMember);
+		((TeamMember) session.getAttribute("currentMember")).setAppSettings(appSettings);
+		
 	}
 	
 	/**

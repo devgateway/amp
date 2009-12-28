@@ -15,7 +15,6 @@
 
 
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 

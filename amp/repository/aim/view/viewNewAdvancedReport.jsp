@@ -24,6 +24,10 @@
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+		
+
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
@@ -90,6 +94,7 @@ counter++;
 session.setAttribute("progressValue", counter);
 %>
 
+<logic:notEqual name="viewFormat" scope="request" value="print">
 <div id="myFilterWrapper" style="display: none;" >
 	<div id="myFilter" style="display: none;" >
 			<jsp:include page="/aim/reportsFilterPicker.do" />
@@ -101,6 +106,7 @@ session.setAttribute("progressValue", counter);
 	          <jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 	</div>
 </div>
+</logic:notEqual>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
@@ -237,7 +243,6 @@ session.setAttribute("progressValue", counter);
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
-					
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
                 <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
@@ -326,7 +331,6 @@ session.setAttribute("progressValue", counter);
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
                     <jsp:include page="${listable.jspFile}" flush="true"/>
-                    
                 </logic:present>
              </td>
              </tr>
@@ -375,7 +379,7 @@ session.setAttribute("progressValue", counter);
 		<tr>
 		<td style="padding-left: 5px;padding-right: 5px" align="left">
 		<table width="100%">
-		<tr>
+			<tr>
            <td colspan="2">
         	
         		<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td>
@@ -529,7 +533,7 @@ session.setAttribute("progressValue", counter);
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter("pageNumber"))%>" scope="request"/>
 			</c:if>
 		<logic:equal name="viewFormat" value="print">
-			<table id='reportTable'  cellSpacing="0" width="780" style="overflow:hidden">
+			<table id='reportTable'  cellSpacing="0" width="900" style="overflow:hidden">
 				<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>

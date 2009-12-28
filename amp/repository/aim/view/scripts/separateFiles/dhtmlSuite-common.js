@@ -122,11 +122,15 @@ DHTMLSuite.config.prototype = {
 	 */
 	init : function()
 	{
-		this.imagePath = '../images_dhtmlsuite/';	// Path to images		
-		this.cssPath = '../css_dhtmlsuite/';	// Path to images	
+//		this.imagePath = '../images_dhtmlsuite/';	// Path to images		
+//		this.cssPath = '../css_dhtmlsuite/';	// Path to images	
+		
+		this.imagePath = '/repository/aim/view/images/images_dhtmlsuite/';	// Path to images		
+		this.cssPath = '/repository/aim/view/css/css_dhtmlsuite/';	// Path to images	
 		
 		this.defaultCssPath = this.cssPath;
 		this.defaultImagePath = this.imagePath;
+		//expandAll();
 			
 	}	
 	// }}}
@@ -296,6 +300,25 @@ DHTMLSuite.common.prototype = {
 	}
 	// }}}
 	,
+
+	getTopPosCalendar : function(el){
+		if(el.getBoundingClientRect){	// IE
+			var box = el.getBoundingClientRect();
+			return (box.top/1 + Math.max(document.body.scrollTop,document.documentElement.scrollTop));
+		}
+		if(document.getBoxObjectFor){
+			if(el.tagName!='INPUT' && el.tagName!='SELECT' && el.tagName!='TEXTAREA')return document.getBoxObjectFor(el).y
+		}
+
+		var returnValue = el.offsetTop;
+		while((el = el.offsetParent) != null){
+			if(el.tagName!='HTML'){
+				returnValue += (el.offsetTop - el.scrollTop);
+				if(document.all)returnValue+=el.clientTop;
+			}
+		} 
+		return returnValue;
+	}	,
 	// {{{ __setOkToMakeTextSelections()
     /**
      * Is it ok to make text selections ?

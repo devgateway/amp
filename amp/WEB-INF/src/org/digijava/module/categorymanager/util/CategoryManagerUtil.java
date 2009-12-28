@@ -438,7 +438,9 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 *
 	 * @param categoryId
 	 * @return AmpCategoryClass object with name=categoryName from the database
+	 * @deprecated use loadAmpCategoryClassByKey instead
 	 */
+	@Deprecated
 	public static AmpCategoryClass loadAmpCategoryClass(String name) throws NoCategoryClassException {
 		Session dbSession			= null;
 		Collection returnCollection	= null;

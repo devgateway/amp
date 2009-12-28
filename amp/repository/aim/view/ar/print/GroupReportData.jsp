@@ -9,8 +9,8 @@
 <bean:define id="groupReport" name="viewable" type="org.dgfoundation.amp.ar.GroupReportData" scope="request" toScope="page"/>
 <logic:present name="groupReport" property="parent">
 	<tr>
-		<td colspan="3" style="font-size: 13pt; color:#000000;padding-bottom: 5px;padding-top: 5px;" >
-			<b><bean:write name="groupReport" property="name"/></u></b>
+		<td colspan="3" style="font-size: 12pt; color:#000000" >
+			<bean:write name="groupReport" property="name"/>
 		</td>
 	</tr>
 </logic:present>

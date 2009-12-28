@@ -119,12 +119,17 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.action.EntityUpdateAction;
+import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.EUActivityContribution;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
         
-    public static String filter(String text) {
-		String result = null;             
+           public static String filter(String text) {
+
+		String result = null;
+             
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
 			result = result.replaceAll(">", "&gt;");
@@ -133,9 +138,11 @@ public class DbUtil {
 			result = result.replaceAll("\"", "&quot;");
 			
 		}
+                
+
 		return result;
 	}
-    
+
 	public static String getDescParsed(String str) {
 		StringBuffer strbuff = new StringBuffer();
 		char[] ch = new char[str.length()];
@@ -730,6 +737,33 @@ public class DbUtil {
         } catch (Exception e) {
             logger.error("Uanble to get object of class " + c.getName() + " width id=" + id + ". Error was:" + e);
         } 
+        return o;
+    }
+
+    public static EUActivity getEuActivity(Long id) {
+        Session session = null;
+        EUActivity o = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            o = (EUActivity) session.load(EUActivity.class, id);
+            o.getName();
+            Set<EUActivityContribution> s = o.getContributions();
+            for (EUActivityContribution i: s){
+            	i.getDonor().getName();
+            }
+            
+
+        } catch (Exception e) {
+            logger.error("Uanble to get object of class " + EUActivity.class.getName() + " width id=" + id + ". Error was:" + e);
+        } finally {
+
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (Exception ex) {
+                logger.error("releaseSession() failed " + ex);
+            }
+        }
         return o;
     }
 
@@ -4631,7 +4665,7 @@ public class DbUtil {
         }
         return grp;
     }
-    
+
     public static int getOrgGroupsAmount(String groupName,Long groupId) throws Exception{
     	Session session = null;
     	Query qry =null;
@@ -4788,7 +4822,7 @@ public class DbUtil {
         }
         return ot;
     }
-    
+
     public static int getOrgTypesAmount(String name,Long groupId) throws Exception{
     	Session sess = null;
         Query qry = null;
@@ -5697,7 +5731,7 @@ public class DbUtil {
                 }
             }
     }
-    
+
     public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity) throws DgException {
 		Session session = PersistenceManager.getRequestDBSession();
     	

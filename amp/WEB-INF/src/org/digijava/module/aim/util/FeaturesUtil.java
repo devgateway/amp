@@ -1051,7 +1051,7 @@ public class FeaturesUtil {
 		Session hbsession=null;
 
 		try {
-			hbsession=PersistenceManager.getSession();
+			hbsession=PersistenceManager.getRequestDBSession();
 			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
 			" f";
 			qry = hbsession.createQuery(qryStr);
@@ -1060,7 +1060,7 @@ public class FeaturesUtil {
 		catch (Exception ex) {
 			logger.error("Exception ..... " + ex.getMessage());
 			//ex.printStackTrace();
-		}
+		}/*
 		finally{
 			try {
 				PersistenceManager.releaseSession(hbsession);
@@ -1071,7 +1071,7 @@ public class FeaturesUtil {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		}*/
 		return col;
 	}
 
@@ -1498,30 +1498,27 @@ public class FeaturesUtil {
 		Transaction tx = null;
 		Session hbsession=null;
 		try {
-			hbsession=PersistenceManager.getSession();
+			hbsession=PersistenceManager.getRequestDBSession();
 			tx=hbsession.beginTransaction();
 			AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
 			ft = (AmpTemplatesVisibility) hbsession.load(AmpTemplatesVisibility.class,id);
 //			ft.setItems(null);
 //			ft.setFeatures(null);
 //			ft.setFields(null);
-			
-			for (Iterator iterator = ft.getFields().iterator(); iterator.hasNext();) {
-				AmpFieldsVisibility field = (AmpFieldsVisibility) iterator.next();
-				field.getTemplates().remove(ft);
+			for (Iterator it = ft.getFields().iterator(); it.hasNext();) {
+				AmpFieldsVisibility f = (AmpFieldsVisibility) it.next();
+				f.getTemplates().remove(ft);
+			}
+			for (Iterator it = ft.getFeatures().iterator(); it.hasNext();) {
+				AmpFeaturesVisibility f = (AmpFeaturesVisibility) it.next();
+				f.getTemplates().remove(ft);
+			}
+			for (Iterator it = ft.getItems().iterator(); it.hasNext();) {
+				AmpModulesVisibility f = (AmpModulesVisibility) it.next();
+				f.getTemplates().remove(ft);
 			}
 			ft.getFields().clear();
-			
-			for (Iterator iterator = ft.getFields().iterator(); iterator.hasNext();) {
-				AmpFeaturesVisibility feature = (AmpFeaturesVisibility) iterator.next();
-				feature.getTemplates().remove(ft);
-			}
 			ft.getFeatures().clear();
-
-			for (Iterator iterator = ft.getFields().iterator(); iterator.hasNext();) {
-				AmpModulesVisibility module = (AmpModulesVisibility) iterator.next();
-				module.getTemplates().remove(ft);
-			}
 			ft.getItems().clear();
 			
 			hbsession.delete(ft);
@@ -1537,7 +1534,7 @@ public class FeaturesUtil {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		}/*
 		finally{
 			try {
 				PersistenceManager.releaseSession(hbsession);
@@ -1550,7 +1547,7 @@ public class FeaturesUtil {
 			}
 			
 		}
-		
+		*/
 		return true;
 	}
 

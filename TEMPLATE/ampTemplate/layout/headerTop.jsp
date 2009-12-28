@@ -66,6 +66,10 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
 	font-size:18px;!important
 	letter-spacing:2px;!important
 }
+ .logLabel{
+   color: white;
+ }
+
 </style>
 <table cellspacing="0" cellPadding="0" border="0" width="100%" vAlign="top" bgcolor="#27415f">
 	<tbody>
@@ -80,8 +84,10 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
                     <digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
             </digi:link>
         </td>
-		<td valign="middle" align="right" width="30%">
-          <logic:present name="currentMember" scope="session">
+		<td valign="middle" align="right" width="40%">
+		<digi:insert attribute="logWidget"/>
+		<%-- 
+		 <logic:present name="currentMember" scope="session">
               <c:set var="translation">
                 <digi:trn key="aim:workspacename">Workspace Name</digi:trn>
               </c:set>
@@ -98,8 +104,9 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
                 	${teamMember.memberName}
                 </a>
               </span>
-          </logic:present>        
-		</td>
+          </logic:present> 
+          --%>   
+     	</td>
    	</tr>
    </tbody>
 

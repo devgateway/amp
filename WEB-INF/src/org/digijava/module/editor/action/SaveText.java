@@ -85,7 +85,7 @@ public class SaveText
         
         // If Activity Versioning is active and the text has changed then create
 		// a new record.
-        if (!formBean.getContent().equals(formBean.getOriginalContent())) {
+        if (!formBean.getContent().equals(formBean.getOriginalContent()) && formBean.getNewId()!=null) {
 			exists = false;
 			editor.setEditorKey(formBean.getNewId());
 		}

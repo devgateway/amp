@@ -161,5 +161,6 @@
    		<forward name="index" path="/aim/index.do" redirect="true" />
    		<forward name="forward" path="/showLayout.do?layout=umViewAllUsers" /> 
     </action>
+    <action forward="/showLayout.do?layout=preview_FirstPage" path="/um/previewFirstPage"/>
   </action-mappings>
 </struts-config>

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -1459,6 +1460,30 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             }
           }
 
+          Comparator compareIssues = new Comparator(){
+			public int compare(Object arg0, Object arg1) {
+				Issues aux0 = (Issues) arg0;
+				Issues aux1 = (Issues) arg1;
+				return aux0.getName().compareTo(aux1.getName());
+			}  
+          };
+          
+          Comparator compareMeasures = new Comparator(){
+  			public int compare(Object arg0, Object arg1) {
+  				Measures aux0 = (Measures) arg0;
+  				Measures aux1 = (Measures) arg1;
+  				return aux0.getName().compareTo(aux1.getName());
+  			}  
+          };
+          
+          Comparator compareActor = new Comparator(){
+    			public int compare(Object arg0, Object arg1) {
+    				AmpActor aux0 = (AmpActor) arg0;
+    				AmpActor aux1 = (AmpActor) arg1;
+    				return aux0.getName().compareTo(aux1.getName());
+    			}  
+          };
+          
           if (activity.getIssues() != null
               && activity.getIssues().size() > 0) {
             ArrayList issueList = new ArrayList();
@@ -1490,14 +1515,17 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                           .next();
                       actorList.add(actor);
                     }
+                    Collections.sort(actorList, compareActor);
                   }
                   measure.setActors(actorList);
                   measureList.add(measure);
                 }
+                Collections.sort(measureList, compareMeasures);
               }
               issue.setMeasures(measureList);
               issueList.add(issue);
             }
+            Collections.sort(issueList, compareIssues);
             eaForm.getIssues().setIssues(issueList);
           }
           else {

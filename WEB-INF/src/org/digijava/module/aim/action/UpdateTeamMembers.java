@@ -56,6 +56,7 @@ public class UpdateTeamMembers extends Action {
         }
 
         TeamMemberForm upForm = (TeamMemberForm) form;
+        upForm.setSomeError(false);
         ActionErrors errors = new ActionErrors();
         AmpTeam ampTeam = TeamUtil.getAmpTeam(upForm.getTeamId());
         if (upForm.getAction() != null
@@ -78,6 +79,7 @@ public class UpdateTeamMembers extends Action {
                 error.add(ActionErrors.GLOBAL_ERROR,
                           new ActionError(
                               "error.aim.addTeamMember.teamLeadRole"));
+                upForm.setSomeError(true);
             }
             if (role.getRole().equals(teamLead.getRole())) {
                 logger.info("team name = " + ampTeam.getName());
@@ -94,6 +96,7 @@ public class UpdateTeamMembers extends Action {
                         new ActionError(
                             "error.aim.addTeamMember.teamLeadAlreadyExist", msg));
                     saveErrors(request, errors);
+                    upForm.setSomeError(true);
 
                     return mapping.findForward("forward");
                     //return mapping.getInputForward();

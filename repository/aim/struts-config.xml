@@ -750,12 +750,14 @@
       <forward name="workspaceManager" path="/aim/workspaceManager.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimTeamMemberForm" path="/aim/teamMembersJSON" scope="request" type="org.digijava.module.aim.action.GetTeamMembersJSON" validate="false"/>
     <action name="aimTeamActivitiesForm" path="/aim/teamActivities" scope="request" type="org.digijava.module.aim.action.GetTeamActivities" validate="false">
       <forward name="forward" path="/showLayout.do?layout=showTeamActivities" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="workspaceManager" path="/aim/workspaceManager.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimTeamActivitiesForm" path="/aim/teamActivitiesJSON" scope="request" type="org.digijava.module.aim.action.GetTeamActivitiesJSON" validate="false"/>
     <action name="aimMemberActivitiesForm" path="/aim/teamMemberActivities" scope="request" type="org.digijava.module.aim.action.GetMemberActivities" validate="false">
       <forward name="forward" path="/showLayout.do?layout=teamMemberActivities" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -793,10 +795,18 @@
       <forward name="forward" path="/aim/teamActivities.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimAssignActivityForm" path="/aim/assignActivityJSON" scope="request" type="org.digijava.module.aim.action.AssignActivity" validate="false">
+      <forward name="showAssignActivity" path="/showLayout.do?layout=aim_assignActivitiesJSON" />
+      <forward name="forward" path="/aim/teamActivitiesJSON.do"/>
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
     <action name="aimTeamActivitiesForm" path="/aim/removeTeamActivity" scope="request" type="org.digijava.module.aim.action.RemoveTeamActivity" validate="false">
       <forward name="showRemoveActivity" path="/showLayout.do?layout=removeTeamActivities" />
     	 <forward name="forward" path="/aim/teamActivities.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimTeamActivitiesForm" path="/aim/removeTeamActivityJSON" scope="request" type="org.digijava.module.aim.action.RemoveTeamActivity" validate="false">
+	  <forward name="forward" path="/aim/teamActivitiesJSON.do" />
     </action>
     <action name="aimTeamActivitiesForm" path="/aim/teamActivityList" scope="request" type="org.digijava.module.aim.action.GetTeamActivities" validate="false">
       <forward name="forward" path="/showLayout.do?layout=teamActivities" />
@@ -917,10 +927,17 @@
       <forward name="showAddFromTeam" path="/showLayout.do?layout=teamMembersAdd" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimTeamMemberForm" path="/aim/addTeamMemberJSON" scope="session" type="org.digijava.module.aim.action.AddTeamMember" validate="false">
+      <forward name="addedFromAdmin" path="/showLayout.do?layout=aim_teamMembersAddFromAdminJSON" />
+      <forward name="showAddFromAdmin" path="/showLayout.do?layout=aim_teamMembersAddFromAdminJSON" />
+    </action>
     <action name="aimTeamMemberForm" path="/aim/showAddTeamMember" scope="session" type="org.digijava.module.aim.action.ShowAddTeamMember">
       <forward name="showAddFromAdmin" path="/showLayout.do?layout=teamMembersAddFromAdmin" />
       <forward name="showAddFromTeam" path="/showLayout.do?layout=teamMembersAdd" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimTeamMemberForm" path="/aim/showAddTeamMemberJSON" scope="session" type="org.digijava.module.aim.action.ShowAddTeamMember">
+      <forward name="showAddFromAdmin" path="/showLayout.do?layout=aim_teamMembersAddFromAdminJSON" />
     </action>
     <action input="/showLayout.do?layout=getEmail" name="aimUserEmailForm" path="/aim/resetUserPassword" scope="request" type="org.digijava.module.um.action.UserEmail" validate="true">
       <forward name="success" path="/showLayout.do?layout=resetEmailSuccess" />
@@ -932,6 +949,11 @@
     </action>
     <action name="aimTeamMemberForm" path="/aim/getTeamMemberDetails" scope="request" type="org.digijava.module.aim.action.GetTeamMemberDetails" validate="false">
       <forward name="showUpdate" path="/showLayout.do?layout=updateTeamMembers" />
+      <forward name="forward" path="/aim/teamMembers.do" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimTeamMemberForm" path="/aim/getTeamMemberDetailsJSON" scope="request" type="org.digijava.module.aim.action.GetTeamMemberDetails" validate="false">
+      <forward name="showUpdate" path="/showLayout.do?layout=aim_updateTeamMembersJSON" />
       <forward name="forward" path="/aim/teamMembers.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -948,6 +970,10 @@
       <forward name="forward" path="/aim/teamMembers.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimTeamMemberForm" path="/aim/updateTeamMemberJSON" scope="request" type="org.digijava.module.aim.action.UpdateTeamMembers" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=aim_updateTeamMembersJSON" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>    
     <action input="/showLayout.do?layout=login" name="aimLoginForm" path="/aim/login" scope="request" type="org.digijava.module.aim.action.Login" validate="true">
       <forward name="forward" path="/showLayout.do?layout=login" />
       <forward name="admin" path="/aim/admin.do" redirect="true" />

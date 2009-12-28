@@ -16,7 +16,6 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-latest.pack.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
@@ -45,8 +44,19 @@
 		YAHOOAmp.amptab.init = function() {
 		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 		};
-	    var myPanel5 = new YAHOOAmp.widget.Panel("newmyContract", {
-			width:"800px",
+		
+		/*
+		YAHOOAmp.amptab.handleClose = function() {
+			var wrapper			= document.getElementById('myFilterWrapper');
+			var filter			= document.getElementById('myFilter');
+			if (filter.parent != null)
+					filter.parent.removeChild(filter);
+			wrapper.appendChild(filter);
+		};
+		*/
+			
+	    var myPanelIPAContracting = new YAHOOAmp.widget.Panel("newmyContract", {
+			width:"730px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -57,6 +67,7 @@
 		    context: ["showbtn", "tl", "bl"] 
 		    }
 		     );
+	
 		var myPanel2 = new YAHOOAmp.widget.Panel("newpopins", {
 			width:"300px",
 			height:"200px",
@@ -74,17 +85,17 @@
 	var panelStart, panelStart2;
 	var checkAndClose2=false;	    
 	function initScripts() {
-		var msgP5='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
-		myPanel5.setHeader(msgP5);
-		myPanel5.setBody("");
-		myPanel5.beforeHideEvent.subscribe(function() {
+		var msgIPAPanel='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
+		myPanelIPAContracting.setHeader(msgP5);
+		myPanelIPAContracting.setBody("");
+		myPanelIPAContracting.beforeHideEvent.subscribe(function() {
 			panelStart=1;
 			if(calendarObjForForm.isVisible()){
 				calendarObjForForm.hide();
 			}
 		});		
 		
-		myPanel5.render(document.body);
+		myPanelIPAContracting.render(document.body);
 		panelStart = 0;
 		
 		var msgP2='\n<digi:trn key="aim:selectOrganization">Select Organization</digi:trn>';
@@ -102,17 +113,17 @@
 		var element5 = document.getElementById("myContract");
 		element5.style.display = "inline";
 		if (panelStart < 1){
-			myPanel5.setBody(element5);
+			myPanelIPAContracting.setBody(element5);
 		}
 		if (panelStart < 2){
 			document.getElementById("myContractContent").scrollTop=0;
-			myPanel5.show();
+			myPanelIPAContracting.show();
 			panelStart = 2;
 		}
 	}
 	function hideAddContract() {
 		panelStart = 1;
-		myPanel5.hide();
+		myPanelIPAContracting.hide();
 	}
 	
 	function resetFilter(){
@@ -733,11 +744,11 @@
 							</tr>
 							<tr><td>
 							<field:display name="Add IPA Contract" feature="Contracting">
-								<div style="width:99.5%;height:12px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+								<div style="width:99.5%;height:18px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
 						            <span style="cursor:pointer;float:left;">
-						                <a class="settingsLink" onClick="addContract();">
+						                <html:button styleClass="dr-menu" property="submitButton" onclick="addContract();">
 						                	<digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn>
-						                </a>
+						                </html:button>
 					                </span>
 				                </div> 
 							</field:display>
@@ -1126,7 +1137,7 @@
 			                                               </td>		
 			                                           </tr>
 		                                            </field:display>
-		                                            <tr><td>  
+		                                            <tr><td colspan="2">  
 			                                            <field:display name="Edit Contract" feature="Contracting">
 			                                            		<a style="cursor:pointer;color:#006699; text-decoration: underline" title="Click to edit the contract" onClick='editContract(${idx.count})'><b><digi:trn key="aim:editThisItem">Edit this item</b></digi:trn></a> 
 			                                            </field:display>

@@ -43,7 +43,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-xom.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ELJTagLib.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ezmorph-1.0.6.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/FCKeditor-2.3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/flexjson.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/fop.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/groovy-all-1.0-jsr-03.jar"/>

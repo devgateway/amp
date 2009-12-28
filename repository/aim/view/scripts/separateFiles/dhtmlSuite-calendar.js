@@ -44,7 +44,7 @@ DHTMLSuite.calendarLanguageModel.prototype = {
 	{
 		switch(this.languageCode){
 			case "ge":	/* German */
-				this.monthArray = ['Januar','Februar','M?rz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+				this.monthArray = ['Januar','Februar','Marz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 				this.monthArrayShort = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 				this.dayArray = ['Mon','Die','Mit','Don','Fre','Sam','Son'];	
 				this.weekString = 'Woche';
@@ -77,7 +77,7 @@ DHTMLSuite.calendarLanguageModel.prototype = {
 				this.weekString = 'Semana';
 				this.todayIsString = 'Hoy es';
 				this.todayString = 'Hoy';
-				this.timeString = '';
+				this.timeString = 'Hora';
 				break; 	
 			case "pt-br":  /* Brazilian portuguese (pt-br) */
 				this.monthArray = ['Janeiro','Fevereiro','Mar&ccedil;o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -89,13 +89,13 @@ DHTMLSuite.calendarLanguageModel.prototype = {
 				this.timeString = '';				
 				break;
 			case "fr":      /* French */
-				this.monthArray = ['Janvier','F?vrier','Mars','Avril','Mai','Juin','Juillet','Ao?t','Septembre','Octobre','Novembre','D?cembre'];		
+				this.monthArray = ['Janvier','F&eacute;vrier','Mars','Avril','Mai','Juin','Juillet','Ao&ucirc;t','Septembre','Octobre','Novembre','D&eacute;cembre'];		
 				this.monthArrayShort = ['Jan','Fev','Mar','Avr','Mai','Jun','Jul','Aou','Sep','Oct','Nov','Dec'];
 				this.dayArray = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-				this.weekString = 'Sem';
+				this.weekString = 'Semaine';
 				this.todayIsString = "Aujourd'hui";
 				this.todayString = 'Aujourd';
-				this.timeString = '';
+				this.timeString = 'Heure';
 				break; 	
 			case "da": /*Danish*/
 				this.monthArray = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
@@ -279,11 +279,47 @@ DHTMLSuite.calendarModel.prototype =
      */		
 	setInitialDateFromInput : function(inputReference,format)
 	{		
+		var tmpDay;
 		if(inputReference.value.length>0){			
+			if (format.toLowerCase().indexOf('mmm') != -1){
+				var monthPos = format.toLowerCase().indexOf('mmm');
+				var monthName = inputReference.value.substr(monthPos,3);
+				
+				var pos = -1;
+				var k;
+				for (k = 0; k < 12; k++)
+					if (this.languageModel.monthArrayShort[k].toLowerCase() == monthName.toLowerCase()){
+						pos = k + 1;
+						break;
+					}
+					
+				var yearPos = format.indexOf('yyyy');
+				this.initialYear = inputReference.value.substr(yearPos,4);		
+				var dayPos = format.indexOf('dd');
+				tmpDay = inputReference.value.substr(dayPos,2);		
+				this.initialDay = tmpDay;
+
+				if (pos == -1){
+					monthName = inputReference.value.substr(monthPos,2);
+					pos = monthName / 1;
+					
+					this.initialYear = inputReference.value.substr(yearPos-1,4);		
+					tmpDay = inputReference.value.substr(dayPos-1,2);		
+					this.initialDay = tmpDay;
+				}
+
+				this.initialMonth = pos;
+				
+				
+				var empty = "blank";
+				empty = "nt";
+			}
+			else		
 			if(!format.match(/^[0-9]*?$/gi)){
 				var items = inputReference.value.split(/[^0-9]/gi);
 				var positionArray = new Array();
-				positionArray['m'] = format.indexOf('mm');
+				//AMP-2480 path to make it compatible with java date formats 
+				positionArray['m'] = (format.indexOf('mm')==-1)?format.indexOf('MM'):format.indexOf('mm');
 				if(positionArray['m']==-1)positionArray['m'] = format.indexOf('m');
 				positionArray['d'] = format.indexOf('dd');
 				if(positionArray['d']==-1)positionArray['d'] = format.indexOf('d');
@@ -332,7 +368,9 @@ DHTMLSuite.calendarModel.prototype =
 				tmpDay = tmpDay / 1;
 				this.initialDay = tmpDay;
 			}else{		
-				var monthPos = format.indexOf('mm');
+				//AMP-2480 path to make it compatible with java date formats 
+				var monthPos = (format.indexOf('mm')==-1)?format.indexOf('MM'):format.indexOf('mm');
+				//format.indexOf('mm');
 				this.initialMonth = inputReference.value.substr(monthPos,2)/1;	
 				var yearPos = format.indexOf('yyyy');
 				this.initialYear = inputReference.value.substr(yearPos,4);		
@@ -1031,7 +1069,7 @@ DHTMLSuite.calendar = function(propertyArray)
 	this.hourDropDownOffsetInHour = 0;
 	this.minuteDropDownOffsetInHour = 0;
 	this.minuteDropDownOffsetInMinute = 0;
-	this.layoutCSS = 'repository/aim/view/css/css_dhtmlsuite/calendar.css';
+	this.layoutCSS = 'calendar.css';
 	this.isDragable = false;
 	this.scrollInYearDropDownActive = false;
 	this.scrollInHourDropDownActive = false;
@@ -1737,7 +1775,7 @@ DHTMLSuite.calendar.prototype =
 	__positionDropDownMonths : function()
 	{
 		this.divElementMonthDropdown.style.left = DHTMLSuite.commonObj.getLeftPos(this.divElementMonthNameInHeading) + 'px';
-		this.divElementMonthDropdown.style.top = (DHTMLSuite.commonObj.getTopPos(this.divElementMonthNameInHeading) + this.divElementMonthNameInHeading.offsetHeight) + 'px';
+		this.divElementMonthDropdown.style.top = (DHTMLSuite.commonObj.getTopPosCalendar(this.divElementMonthNameInHeading) + this.divElementMonthNameInHeading.offsetHeight) + 'px';
 		
 		if(this.iframeElementDropDowns){
 			this.iframeElementDropDowns.style.left = this.divElementMonthDropdown.style.left;
@@ -1759,7 +1797,7 @@ DHTMLSuite.calendar.prototype =
 	__positionDropDownYears : function()
 	{
 		this.divElementYearDropdown.style.left = DHTMLSuite.commonObj.getLeftPos(this.divElementYearInHeading) + 'px';
-		this.divElementYearDropdown.style.top = (DHTMLSuite.commonObj.getTopPos(this.divElementYearInHeading) + this.divElementYearInHeading.offsetHeight) + 'px';
+		this.divElementYearDropdown.style.top = (DHTMLSuite.commonObj.getTopPosCalendar(this.divElementYearInHeading) + this.divElementYearInHeading.offsetHeight) + 'px';
 		if(this.iframeElementDropDowns){
 			this.iframeElementDropDowns.style.left = this.divElementYearDropdown.style.left;
 			this.iframeElementDropDowns.style.top = this.divElementYearDropdown.style.top;
@@ -2415,6 +2453,7 @@ DHTMLSuite.calendar.prototype =
 				'({'
 				+ ' year:' + this.calendarModelReference.__getDisplayedYear() 
 				+ ',month:"' + this.calendarModelReference.__getDisplayedMonthNumberWithLeadingZeros() + '"'
+				+ ',monthName:"' + this.calendarModelReference.languageModel.monthArrayShort[this.calendarModelReference.__getDisplayedMonthNumber() - 1] + '"'
 				+ ',day:"' + this.calendarModelReference.__getDisplayedDayWithLeadingZeros() + '"'
 				+ ',hour:"' + this.calendarModelReference.__getDisplayedHourWithLeadingZeros() + '"'
 				+ ',minute:"' + this.calendarModelReference.__getDisplayedMinuteWithLeadingZeros() + '"'

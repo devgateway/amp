@@ -32,7 +32,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * @since Nov 13, 2006
  *
  */
-public abstract class Cell extends Viewable implements RowIdentifiable, ColumnIdentifiable, Comparable,Cloneable {
+public abstract class Cell <C extends Cell> extends Viewable implements RowIdentifiable, ColumnIdentifiable, Comparable<C>,Cloneable {
 
 	private Float luceneScore = new Float(0);
 	
@@ -41,48 +41,14 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		return column.getNearestReportData();
 	}
 	
-	public static class CellComparator implements Comparator { 
-		public final int compare (Object o1, Object o2) {
-			Cell c1=(Cell) o1;
-			Cell c2=(Cell) o2;
-			//AMP-6574
-			if (c1 == null && c2 ==null){
+	public static class CellComparator implements Comparator<Cell> { 
+		public final int compare (Cell o1, Cell o2) {
+			if (o1 == null || o2 == null)
 				return 0;
+	        logger.debug("3 cell o1 instance : "+o1.getValue());
+	        logger.debug("4 cell o2 instance : "+o2.getValue());            
+			return o1.comparableToken().compareTo(o2.comparableToken());
 			}
-			if (c1 instanceof ComputedDateCell && c2 instanceof ComputedDateCell) {
-				Double v1 = 0d, v2 = 0d;
-
-				if (c1.getValue() != null) {
-					String value = (String) c1.getValue();
-					if (!value.equalsIgnoreCase("")) {
-						v1 = Double.parseDouble((String) c1.getValue());
-					}
-				}
-				if (c2.getValue() != null) {
-					String value = (String) c2.getValue();
-					if (!value.equalsIgnoreCase("")) {
-						v2 = Double.parseDouble((String) c2.getValue());
-					}
-				}
-				return Double.compare(v1, v2);
-			}
-			
-	        if(c1 instanceof TextCell && c2 instanceof TextCell){
-	            String c1Value=c1.comparableToken().toString();
-	            String c2Value=c2.comparableToken().toString();
-	           return c1Value.compareToIgnoreCase(c2Value);
-	        } 
-	        if(c1 instanceof AmountCell && c2 instanceof AmountCell){
-	        	AmountCell ac1 = (AmountCell) c1;
-	        	AmountCell ac2 = (AmountCell) c2;
-	        	
-	        	return ac1.getAmount().compareTo(ac2.getAmount());
-	        	//return Double.compare(ac1.getAmount(), ac2.getAmount());
-	        }
-	        logger.info("3 cell c1 instance : "+c1.getValue());
-	        logger.info("4 cell c2 instance : "+c2.getValue());            
-			return c1.comparableToken().toString().compareTo(c2.comparableToken().toString());
-		}
 	}
 	
     public static class LuceneScoreComparator implements Comparator<Cell>{
@@ -126,9 +92,8 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	public abstract Class getWorker();
 	
 
-	public int compareTo(Object o) {
-		Cell c=(Cell) o;
-		return ((Comparable)this.getValue()).compareTo(c.getValue());
+	public int compareTo(C o) {
+		return ((Comparable)this.getValue()).compareTo(o.getValue());
 	}
 	
 	public abstract Comparable comparableToken();

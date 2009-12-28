@@ -23,7 +23,7 @@
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
-
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 
@@ -689,19 +689,17 @@ var isAlreadySubmitted = false;
 												</td>
 											</field:display>
 											</tr>	
-										<tr>
-											<td bgcolor="#ffff00">&nbsp;
+										<tr bgcolor="#ecf3fd">
+											<td>&nbsp;
 												
 											</td>
-											<td align="left"  bgcolor="#ffff00">
-												<b>
-													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
-													( <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> )
-												</b>
+											<td align="left">
+												&nbsp;
 											</td>
-											<td colspan="5"  bgcolor="#ffff00">
+											<td colspan="5">
 												<b>
-													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn> 
+													<digi:trn key="aim:fixedRate">Fixed Exchange Rate</digi:trn>
+													- <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" />
 												</b>
 											</td>
 										</tr>
@@ -928,6 +926,7 @@ var isAlreadySubmitted = false;
 												<html:text name="fundingDetail" property="disbOrderId" readonly="true" disabled="${contentDisabled}"/>
 											</td>
                                             
+                                            <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
                                             
 											<c:set var="contentDisabled"><field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
@@ -951,15 +950,15 @@ var isAlreadySubmitted = false;
                                             	   <input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
                                             	</c:if>
 											</td>
+											</field:display>
 
 
-											<c:set var="contentDisabled"><field:display name="Rejected Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
-											<c:if test="${contentDisabled==''}">
-												<c:set var="contentDisabled">true</c:set>
-											</c:if>
+											<field:display name="Rejected Disbursement Order" feature="Disbursement Orders">
+											
                                             <td>
-												<html:checkbox name="fundingDetail" indexed="true" property="disbursementOrderRejected" disabled="${contentDisabled}"/>
+												<html:checkbox name="fundingDetail" indexed="true" property="disbursementOrderRejected" />
 											</td>
+											</field:display>
                                             
                                             <field:display name="Remove Disbursement Order Link" feature="Disbursement Orders">											
 												<td>
@@ -1172,10 +1171,7 @@ var isAlreadySubmitted = false;
 											</td>
 											 -->        
 
-											<c:set var="contentDisabled"><field:display name="Link to Disbursement Order ID" feature="Disbursement">false</field:display></c:set>
-											<c:if test="${contentDisabled==''}">
-												<c:set var="contentDisabled">true</c:set>
-											</c:if>
+										<field:display name="Link to Disbursement Order ID" feature="Disbursement">
 											 	<td align="center">
                                                 	<c:if test="${empty fundingDetail.contract}">
 														<input type="text" value="" disabled/>
@@ -1185,12 +1181,9 @@ var isAlreadySubmitted = false;
         												<input type="text" value="${fundingDetail.contract.contractName}" disabled/>
                                                     </c:if>
 											</td>
+										</field:display>
 
-
-											<c:set var="contentDisabled"><field:display name="Contract of Disbursement" feature="Disbursement">false</field:display></c:set>
-											<c:if test="${contentDisabled==''}">
-												<c:set var="contentDisabled">true</c:set>
-											</c:if>
+											<field:display name="Contract of Disbursement" feature="Disbursement">
                                             <td>
                                             	<c:if test="${contentDisabled=='false'}">
                                                		<input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
@@ -1199,9 +1192,10 @@ var isAlreadySubmitted = false;
                                                		<input type="button" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 												</c:if>
 											</td>
+											</field:display>
 
 											<field:display name="Remove Disbursement Link" feature="Disbursement">
-												<td>
+												<td align="right">
 													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 													 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 													</a>

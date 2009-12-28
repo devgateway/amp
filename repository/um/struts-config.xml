@@ -150,11 +150,13 @@
     <action input="/um/addUser.do" name="umAddUserForm" path="/um/registerUser" scope="session" type="org.digijava.module.um.action.RegisterUser" validate="true">
       <forward name="forward" path="/showLayout.do?layout=addWorkSpaceUser" />
       <forward name="index" path="/showLayout.do?layout=umAddUser" />
+      <forward name="login" path="/aim/index.do" redirect="true" />
     </action>
 
     <action name="umAddUserForm" path="/um/addUser" scope="session" type="org.digijava.module.um.action.AddUser" validate="false">
       <forward name="forward" path="/showLayout.do?layout=umAddUser"/>
       <forward name="saved" path="/um/viewAllUsers.do" redirect="false"/>
+      <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
  
     <action name="umViewAllUsersForm" path="/um/userSearch" scope="session" type="org.digijava.module.um.action.UserSearch">

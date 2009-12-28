@@ -15,6 +15,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@page import="org.digijava.module.aim.helper.Constants"%>
 
 
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
@@ -641,11 +642,13 @@ function commentWin(val) {
                                                                                        
                                                                                          <tr>
                                                                                         	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
-                                                                                        	 	<td align="center" bgcolor="#ffffff">
-                                                                                         		<i>
-                                                                                         			<category:getoptionvalue categoryIndex="${indexLayer}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
-                                                                                         		</i>
-                                                                                         		</td>
+                                                                                        	 	<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
+	                                                                                        	 	<td align="center" bgcolor="#ffffff">
+	                                                                                         		<i>
+	                                                                                         			<category:getoptionvalue categoryIndex="${indexLayer}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+	                                                                                         		</i>
+	                                                                                         		</td>
+                                                                                         		</c:if>
                                                                                         	 </c:forEach>
                                                                                         	 <td  align="center" bgcolor="#ffffff">
                                                                                               <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
@@ -723,16 +726,18 @@ function commentWin(val) {
 																							<tr>
 																							<bean:size id="numOfAncestors" name="ancestorMap"/>
 																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
-																								<td align="center" bgcolor="#ffffff">
-																								<c:choose>
-																									<c:when test="${ancestorMap[indexLayer] != null}">
-																											${ancestorMap[indexLayer]}
-																									</c:when>
-																									<c:otherwise>
-																										&nbsp;
-																									</c:otherwise>
-																								</c:choose>
-																								</td>
+																								<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
+																									<td align="center" bgcolor="#ffffff">
+																									<c:choose>
+																										<c:when test="${ancestorMap[indexLayer] != null}">
+																												${ancestorMap[indexLayer]}
+																										</c:when>
+																										<c:otherwise>
+																											&nbsp;
+																										</c:otherwise>
+																									</c:choose>
+																									</td>
+																								</c:if>
 																							</c:forEach>
 																							<td align="center" bgcolor="#ffffff">
 																								<field:display name="Regional Percentage" feature="Location">&nbsp;
@@ -1351,6 +1356,7 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD>
+																							<%-- 
 																							<c:if test="${!empty aimChannelOverviewForm.financingBreakdown}">
 																								<logic:iterate name="aimChannelOverviewForm" property="financingBreakdown" id="breakdown"
 					  	                   															type="org.digijava.module.aim.helper.FinancingBreakdown">
@@ -1358,6 +1364,20 @@ function commentWin(val) {
 																										<ul><li><i><jsp:include page="previewFinancingOrganizationPopup.jsp"/></i></li></ul>
 																								</logic:iterate>
 																							</c:if>
+																							--%>
+																							
+																							<c:forEach var="relOrg"
+																								items="${aimChannelOverviewForm.relOrgs}">
+																								<c:if test="${relOrg.role == 'DN'}">
+																									<c:set var="currentOrg" value="${relOrg}"
+																										target="request" scope="request" />
+																									<%-- <li><c:out value="${relOrg.orgName}" /></li><br>
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />--%>
+																									<jsp:include page="organizationPopup.jsp" />
+																								</c:if>
+																							</c:forEach>
 																						</TD>
 																						<td bgcolor="#ffffff">&nbsp;</td>
 																					</TR>

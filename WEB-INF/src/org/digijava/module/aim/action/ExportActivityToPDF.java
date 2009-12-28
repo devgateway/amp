@@ -622,7 +622,7 @@ public class ExportActivityToPDF extends Action {
         		referenceCell1.setBorder(0);
     			mainLayout.addCell(referenceCell1);
     			
-            	List<ReferenceDoc> refDocs=myForm.getDocuments().getReferenceDocs();
+            	ReferenceDoc[] refDocs=myForm.getDocuments().getReferenceDocs();
             	String output="";
         		if(refDocs!=null){
         			for (ReferenceDoc referenceDoc : refDocs) {

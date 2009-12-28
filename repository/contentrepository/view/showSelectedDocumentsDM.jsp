@@ -38,7 +38,7 @@
 	</c:if>
 
 	<logic:empty name="windowName">
-		<c:set var="windowName" target="request"><digi:trn key="cr:selectedDocs:defaultWindowName">Selection</digi:trn></c:set>
+		<c:set var="windowName" target="request">&nbsp;</c:set>
 	</logic:empty>
 	<c:if test="${ (!empty relDocs) || (!empty tempDocs) }" >
 

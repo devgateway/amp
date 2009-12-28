@@ -43,7 +43,11 @@ public class Configuration {
 
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
+		}
+		catch (Error er) {
+			er.printStackTrace();
 		}
 	}
 

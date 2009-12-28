@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpModulesVisibility" table="AMP_MODULES_VISIBILITY" lazy="false">
-		<cache usage="transactional" />
+		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">AMP_MODULES_VISIBILITY_SEQ</param>
@@ -24,6 +24,7 @@
 
 
 		<set name="submodules" cascade="all-delete-orphan" lazy="false" inverse="true">
+			<cache usage="read-write" />
 			<key column="parent" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
 		</set>

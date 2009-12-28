@@ -17,7 +17,7 @@ location=no, directories=no, status=no')
 
 function load() {
 }
- var correctLength=true;
+ var keepChecking=true;
 
 function test(callerId) {
 		caller = document.getElementById(callerId);
@@ -314,48 +314,19 @@ function checkAmount(amt)
 	return valid;
 }
 
-function checkAmountLen(amt,msgConfFunding)
+function checkAmountLen(amt,msgConfFunding,groupSymbol,decimalSymbol)
 {
-	var len = amt.length;
-	var valid = false;
-	var cnt = 0;
-	for (var x = 0;x < amt.length;x++)
-	{
-		if(amt.charCodeAt(x) == 44)
-		{
-			len = len - 1;
-		}
-	}
-	for (i = 0;i < amt.length; i++)
-	{
-		if(amt.charCodeAt(i) == 46)
-		{
-			if(i > 6)
-			{
-				cnt = i;
-				for(j = 0;j < i; j++)
-				{
-					if(amt.charCodeAt(j) == 44)
-						cnt = cnt - 1;
-				}
-				if(cnt >= 6&correctLength)
-				{
-					valid = confirm(msgConfFunding);
-                                        correctLength=false;
-				}
-				return valid;
-			}
-			else
-				return true;
-		}
-	}
-	if(len >= 6&& correctLength)
-	{
+	var amtIntPart = amt.split(decimalSymbol)[0]
+	var amtInt = amtArray[0].replace(groupSymbol, "");
+
+	if (amtInt.length >= 6 && keepChecking){
 		valid = confirm(msgConfFunding);
-                correctLength=false;
-		return valid;
+		if(valid) keepChecking = false;
 	}
-         return true;
+	else {
+		valid = true
+	}
+	return valid;
 	
 }
 

@@ -554,33 +554,34 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		List formRefDocs=eaForm.getDocuments().getReferenceDocs();
+		//List formRefDocs=eaForm.getDocuments().getReferenceDocs();
+		ReferenceDoc[] myrefDoc = eaForm.getDocuments().getReferenceDocs();
     	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
-    	if(formRefDocs!=null && !formRefDocs.isEmpty())
-		for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {
-			ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
-			if(ArrayUtils.contains(eaForm.getDocuments().getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
-				AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
-				if (refDoc.getChecked() == true){
-					dbRefDoc=new AmpActivityReferenceDoc();
-					dbRefDoc.setCreated(new Date());
-					AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
-					dbRefDoc.setCategoryValue(catVal);
+    	if(myrefDoc!=null && myrefDoc.length!=0){
+	    	for(int i=0;i<myrefDoc.length;i++){
+				ReferenceDoc refDoc = myrefDoc[i];
+				if(ArrayUtils.contains(eaForm.getDocuments().getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
+					AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
+					if (refDoc.getChecked() == true){
+						dbRefDoc=new AmpActivityReferenceDoc();
+						dbRefDoc.setCreated(new Date());
+						AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
+						dbRefDoc.setCategoryValue(catVal);
+						dbRefDoc.setActivity(activity);
+					//}
 					dbRefDoc.setActivity(activity);
-				//}
-				dbRefDoc.setActivity(activity);
-				dbRefDoc.setComment(refDoc.getComment());
-				dbRefDoc.setLastEdited(new Date());
-				resultRefDocs.add(dbRefDoc);
-
-			}else{
-				dbRefDoc=null;
-				resultRefDocs.add(dbRefDoc);
+					dbRefDoc.setComment(refDoc.getComment());
+					dbRefDoc.setLastEdited(new Date());
+					resultRefDocs.add(dbRefDoc);
+	
+				}else{
+					dbRefDoc=null;
+					resultRefDocs.add(dbRefDoc);
+					}
 				}
 			}
-		}
-		activity.setReferenceDocs(resultRefDocs);
-
+			activity.setReferenceDocs(resultRefDocs);
+    	}
 	}
 	
 	
@@ -1860,6 +1861,7 @@ public class SaveActivity extends Action {
 			//if an approved activity is edited and the appsettings is set to newOnly then the activity
 			//doesn't need to be approved again!
 			AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+			eaForm.getIdentification().setPreviousApprovalStatus(aAct.getApprovalStatus());
 
 			activity.setApprovalStatus(aAct.getApprovalStatus());
 			if(tm.getTeamId().equals(aAct.getTeam().getAmpTeamId())){
@@ -2346,7 +2348,7 @@ public class SaveActivity extends Action {
 							+ eaForm.getIdentification().getTitle() + " already exist.");
 					return mapping.findForward("activityExist");
 				}*/
-			}
+				}
 		} else if (toDelete.trim().equals("true")) {
 			eaForm.setEditAct(true);
 		} else {
@@ -2407,7 +2409,7 @@ public class SaveActivity extends Action {
 			}
 			stepNumber++;
 		}
-
+		
 		if(eaForm.getCustomFields()!=null){
 			List<CustomField<?>> customFields = eaForm.getCustomFields();
 			Iterator<CustomField<?>> cfi = customFields.iterator();
@@ -2432,9 +2434,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getComments().getField() != null)
 			field = eaForm.getComments().getField().getAmpFieldId();
 
-		//this fields are used to determine receivers of approvals(Messaging System)
-		String oldActivityApprovalStatus="";
-		String editedActivityApprovalStatus="";
+
 
 		
 		/*
@@ -2475,7 +2475,8 @@ public class SaveActivity extends Action {
 			activity = rsp.getActivity();
               
                         AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
-                        if (aAct.getDraft() != null && !aAct.getDraft()) {
+                        if (aAct.getDraft() != null && !aAct.getDraft() &&
+                        		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
                             if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
                                 if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {                                	
                                     new ApprovedActivityTrigger(aAct, previouslyUpdatedBy);
@@ -2647,7 +2648,7 @@ public class SaveActivity extends Action {
 					return mapping.findForward("saveErrors");
 				} else {
 					if (activity.getDraft()!=null && !activity.getDraft()) {
-						return mapping.findForward("viewMyDesktop");
+					return mapping.findForward("viewMyDesktop");
 					} else {
 						eaForm.setActivityId(ActivityVersionUtil.getLastActivityFromGroup(activity.getAmpActivityGroup().getAmpActivityGroupId()).getAmpActivityId());
 						// Set to 1 or next time will be -1 and will fail some checks.

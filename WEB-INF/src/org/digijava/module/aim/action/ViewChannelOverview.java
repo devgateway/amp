@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FilterParams;
+import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.RelOrganization;
@@ -59,6 +60,7 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -126,6 +128,12 @@ public class ViewChannelOverview extends TilesAction {
 					AmpCategoryValue country		= 
 						CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
 					formBean.setCountryIndex( country.getIndex() );
+					
+					formBean.setNumOfLocationsPerLayer(new ArrayList<Integer>(formBean.getNumImplLocationLevels()) );
+					for (int i=0; i<formBean.getNumImplLocationLevels(); i++) {
+						Integer numOfLocations	= DynLocationManagerUtil.getNumOfLocations(i);
+						formBean.getNumOfLocationsPerLayer().add(numOfLocations);
+					}
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -348,6 +356,9 @@ public class ViewChannelOverview extends TilesAction {
 				          while (orgItr.hasNext()) {
 				            AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
 				            AmpOrganisation auxOrgRel = orgRole.getOrganisation();
+				            if ( Constants.FUNDING_AGENCY.equals(orgRole.getRole().getRoleCode()) ) {
+				            	continue;
+				            }
 				            if(auxOrgRel!=null)
 				            {
 				            	RelOrganization relOrg = new RelOrganization();
@@ -365,6 +376,24 @@ public class ViewChannelOverview extends TilesAction {
 				                	relOrgs.add(relOrg);
 				                }
 				            }
+				          }
+				          if ( formBean.getFinancingBreakdown() != null ) {
+				        	  for ( FinancingBreakdown fb1: formBean.getFinancingBreakdown() ) {
+				        		  AmpOrganisation auxOrgRel = fb1.getOrganisation();
+				        		  RelOrganization relOrg = new RelOrganization();
+					                relOrg.setOrgName(auxOrgRel.getName());
+					                relOrg.setRole( Constants.FUNDING_AGENCY );
+					                relOrg.setAcronym(auxOrgRel.getAcronym());
+					                relOrg.setOrgCode(auxOrgRel.getOrgCode());
+					                relOrg.setBudgetOrgCode(auxOrgRel.getBudgetOrgCode());
+					                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+					                if(auxOrgRel.getOrgGrpId()!=null)
+					                	relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
+					                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
+					                if (!relOrgs.contains(relOrg)) {
+					                	relOrgs.add(relOrg);
+					                }
+				        	  }
 				          }
 				        }
 				        formBean.setRelOrgs(relOrgs);

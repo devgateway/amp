@@ -27,6 +27,7 @@ public class TeamMemberForm extends ActionForm {
 	private int fromPage;
 	private Long headId;
 	private Long workspaceManId;
+	private boolean someError;
 
 	
 	/**
@@ -263,5 +264,13 @@ public class TeamMemberForm extends ActionForm {
 	}
 	public void setWokspaceManId(Long wmId) {
 		this.workspaceManId = wmId;
+	}
+	public void setSomeError(boolean b) {
+		this.someError = b;
+		
+	}
+	public boolean getSomeError() {
+		return this.someError;
+		
 	}
 }

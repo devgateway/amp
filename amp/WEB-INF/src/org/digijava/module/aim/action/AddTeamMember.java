@@ -42,7 +42,7 @@ public class AddTeamMember extends Action {
 		TeamMemberForm upMemForm = (TeamMemberForm) form;
 		ActionErrors errors = new ActionErrors();
 		logger.debug("In add members");
-		
+		upMemForm.setSomeError(false);
 		AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
 		User user = DbUtil.getUser(upMemForm.getEmail());
 
@@ -52,6 +52,7 @@ public class AddTeamMember extends Action {
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					"error.aim.addTeamMember.invalidUser"));
 			saveErrors(request, errors);
+			upMemForm.setSomeError(true);
 			if (upMemForm.getFromPage() == 1) {
 				return mapping.findForward("showAddFromAdmin");	
 			} else {
@@ -65,6 +66,7 @@ public class AddTeamMember extends Action {
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					"error.aim.addTeamMember.roleNotSelected"));
 			saveErrors(request, errors);
+			upMemForm.setSomeError(true);
 			if (upMemForm.getFromPage() == 1) {
 				return mapping.findForward("showAddFromAdmin");	
 			} else {
@@ -80,6 +82,7 @@ public class AddTeamMember extends Action {
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
 					"error.aim.addTeamMember.teamLeadAlreadyExist"));
 			saveErrors(request, errors);
+			upMemForm.setSomeError(true);
 			if (upMemForm.getFromPage() == 1) {
 				return mapping.findForward("showAddFromAdmin");	
 			} else {
@@ -93,6 +96,7 @@ public class AddTeamMember extends Action {
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
 					"error.aim.addTeamMember.teamMemberAlreadyExist"));
 			saveErrors(request, errors);
+			upMemForm.setSomeError(true);
 			logger.debug("Member is already existing");
 			if (upMemForm.getFromPage() == 1) {
 				logger.debug("Forwarding to showAddFromAdmin");
@@ -107,6 +111,7 @@ public class AddTeamMember extends Action {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamMemberIsAdmin"));
 			saveErrors(request, errors);
+			upMemForm.setSomeError(true);
 			logger.debug("Member is already existing");
 			if (upMemForm.getFromPage() == 1) {
 				logger.debug("Forwarding to showAddFromAdmin");
@@ -175,7 +180,9 @@ public class AddTeamMember extends Action {
 			upMemForm.setEmail(null);
 			upMemForm.setRole(null);
 			upMemForm.setTeamName(null);
-			upMemForm.setAmpRoles(null);
+			if (upMemForm.getFromPage() != 1) {
+				upMemForm.setAmpRoles(null);
+			}
 			upMemForm.setPermissions(null);
 		}
 		if (upMemForm.getFromPage() == 1) {

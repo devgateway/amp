@@ -299,6 +299,10 @@
 	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />
 	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />
 	<page page="viewProjectDescObj" name="aim_projectDetails" title="AMP - Project Details" />
+	
+	<page page="assignActivitiesJSON" name="aim_assignActivitiesJSON" title="AMP - Assign Activities" />
+	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title="AMP - Update Team Member" />
+	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title="AMP - Assign Team Member" />
 
 	<page page="addIssue" name="aim_addIssue" title="AMP - Add Issue" />
 	<page page="addMeasure" name="aim_addMeasure" title="AMP - Add Measure" />

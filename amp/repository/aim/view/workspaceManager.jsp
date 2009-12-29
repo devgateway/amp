@@ -75,7 +75,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         
         
         var myColumnDefs = [
-            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250, formatter:this.formatActionsName},
+            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250},
             {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 150, formatter:this.formatActions,className:"ignore"}
         ];
   
@@ -113,9 +113,19 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
         this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
         this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
-    
-       // Update totalRecords on the fly with value from server
-       this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+        this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
+ 		this.myDataTable.subscribe("rowClickEvent", function (ev) {
+				var target = YAHOO.util.Event.getTarget(ev);
+				var record = this.getRecord(target);
+				showTeamDetails(record.getData('ID'), record.getData('name'));
+			});
+        
+        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+        // Programmatically bring focus to the instance so arrow selection works immediately 
+        this.myDataTable.focus(); 
+
+        // Update totalRecords on the fly with value from server
+        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
            oPayload.totalRecords = oResponse.meta.totalRecords;
            return oPayload;
        }

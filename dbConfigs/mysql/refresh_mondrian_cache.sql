@@ -54,7 +54,7 @@ CREATE INDEX idx_psub_activity ON `cached_v_sub_sector` (amp_activity_id);
 CREATE INDEX idx_psub_name ON `cached_v_sub_sector` (sectorname);
 CREATE INDEX idx_psub_id ON `cached_v_sub_sector`(amp_sector_id);
 CREATE INDEX idx_psub_per ON `cached_v_sub_sector`(sector_percentage);
-CREATE INDEX idx_psub_parent ON `cached_v_sub_sector`(parent_sector_id);
+
 
 DROP TABLE IF EXISTS cached_v_donor_funding;
 CREATE TABLE cached_v_donor_funding AS SELECT * FROM `v_donor_funding_cached`;

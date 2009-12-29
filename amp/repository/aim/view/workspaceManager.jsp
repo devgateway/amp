@@ -51,38 +51,15 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
  	
        	         
         this.formatActions = function(elCell, oRecord, oColumn, sData) {
-            //elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +sData+">" +"<img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/>" + "</a>";
-            //elCell.innerHTML +="&nbsp;&nbsp;<a onclick='return banUser();' title='Ban User' href=/um/viewEditUser.do~id=" +sData+"~ban=true>" +"<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/>" + "</a>";
         	elCell.innerHTML = 
-        	//"[<a href=\"JavaScript:showTeamMembers(" +oRecord.getData( 'ID' )+");\" title='Click here to view Members'>" + "<digi:trn>Members</digi:trn>" + "</a>]&nbsp;&nbsp;&nbsp;&nbsp;"+
-        	//"[<a href=/aim/teamActivities.do~id=" +oRecord.getData( 'ID' )+" title='Click here to view Activities'>" + "<digi:trn>Activities</digi:trn>" + "</a>]&nbsp;&nbsp;&nbsp;&nbsp;"+
-        	"<a href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='Click here to Edit Workspace'>" + "<img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-        	"<a href=/aim/deleteWorkspace.do~event=delete~tId=" +oRecord.getData( 'ID' )+" title='Click here to Delete Workspace'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+        	"<a href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+        	"<a href=/aim/deleteWorkspace.do~event=delete~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
         	"[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+"<digi:trn>Npd Settings</digi:trn>"+"</a>]"
         };
+        
         this.formatActionsName = function(elCell, oRecord, oColumn, sData) {
         	elCell.innerHTML = 
         	'<a href="JavaScript:showTeamDetails(' +oRecord.getData( 'ID' )+',  \''+oRecord.getData( 'name' )+'\');" title="<digi:trn>Click here to view Details</digi:trn>">' + oRecord.getData( 'name' ) + '</a>'
-        };
-
-        this.formatActionsMembers = function(elCell, oRecord, oColumn, sData) {
-        	elCell.innerHTML = 
-        	"[<a href=\"JavaScript:showTeamMembers(" +oRecord.getData( 'ID' )+");\" title='<digi:trn>Click here to view Members</digi:trn>'>" + "<digi:trn>Members</digi:trn>" + "</a>]"
-        };
-
-        this.formatActionsEdit = function(elCell, oRecord, oColumn, sData) {
-        	elCell.innerHTML =         	
-        	"[<a href=/aim/teamActivities.do~id=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to view Activities</digi:trn>'>" + "<digi:trn>Activities</digi:trn>" + "</a>]"
-        };
-
-        this.formatActionsDelete = function(elCell, oRecord, oColumn, sData) {
-        	elCell.innerHTML = 
-        	"[<a href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<digi:trn>Edit</digi:trn>" + "</a>]"
-        };
-        
-        this.formatActionsNPD = function(elCell, oRecord, oColumn, sData) {
-        	elCell.innerHTML = 
-        	"[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+"<digi:trn>Npd Settings</digi:trn>"+"</a>]"
         };
  
         this.myDataSource = new YAHOO.util.DataSource("/aim/searchWorkspaces.do?");
@@ -98,14 +75,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         
         
         var myColumnDefs = [
-            //{key:"ID", label:"ID"},
             {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250, formatter:this.formatActionsName},
-            //{key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:true, width: 150},
             {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 150, formatter:this.formatActions,className:"ignore"}
-            //{key:"", label:"", width: 50, formatter:this.formatActionsMembers},
-            //{key:"", label:"", width: 50, formatter:this.formatActionsEdit},
-            //{key:"", label:"", width: 50, formatter:this.formatActionsDelete},
-            //{key:"", label:"", width: 70, formatter:this.formatActionsNPD}
         ];
   
         var div = document.getElementById('errors');
@@ -458,8 +429,8 @@ function updateTableMembers(members){
             html[j++] = '<tr><td width="250">';
             html[j++] = '<a href=\'javascript:showUserProfile('+item.ID+')\' title=\'Click to View Member Detais\'>'+item.name+'</a>';
             html[j++] = '</td><td align=\'center\' width="100">';
-            html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn>Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/repository/message/view/images/edit.gif\'/>' + '</a>'
-            html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/images/deleteIcon.gif\'/>' + '</a>'
+            html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn>Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
+            html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
             html[j++] = '</td></tr>';
         }
         document.getElementById('footerMessage').innerHTML='<em><digi:trn>* Worskpace Manager</digi:trn></em>';

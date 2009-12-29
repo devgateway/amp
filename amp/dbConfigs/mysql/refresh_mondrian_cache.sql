@@ -34,6 +34,28 @@ CREATE TABLE `cached_v_secondary_sector` AS SELECT * FROM `v_secondary_sectors`;
 DROP TABLE IF EXISTS `cached_v_sec_sub_sector`;
 CREATE TABLE cached_v_sec_sub_sector AS SELECT * FROM `v_secondary_sub_sectors`;
 
+
+
+CREATE INDEX idx_amp_activity ON `cached_v_status`(amp_activity_id);
+CREATE INDEX idx_st_name ON `cached_v_status`(name);
+CREATE INDEX idx_st_id ON `cached_v_status`(amp_status_id);
+
+CREATE INDEX idx_psec_activity ON `cached_v_primary_sector` (amp_activity_id);
+CREATE INDEX idx_psec_name ON `cached_v_primary_sector` (sectorname);
+CREATE INDEX idx_pesc_id ON `cached_v_primary_sector`(amp_sector_id);
+CREATE INDEX idx_pesc_per ON `cached_v_primary_sector`(sector_percentage);
+
+CREATE INDEX idx_ssec_activity ON `cached_v_secondary_sector` (amp_activity_id);
+CREATE INDEX idx_ssec_name ON `cached_v_secondary_sector` (sectorname);
+CREATE INDEX idx_sesc_id ON `cached_v_secondary_sector`(amp_sector_id);
+CREATE INDEX idx_sesc_per ON `cached_v_secondary_sector`(sector_percentage);
+
+CREATE INDEX idx_psub_activity ON `cached_v_sub_sector` (amp_activity_id);
+CREATE INDEX idx_psub_name ON `cached_v_sub_sector` (sectorname);
+CREATE INDEX idx_psub_id ON `cached_v_sub_sector`(amp_sector_id);
+CREATE INDEX idx_psub_per ON `cached_v_sub_sector`(sector_percentage);
+CREATE INDEX idx_psub_parent ON `cached_v_sub_sector`(parent_sector_id);
+
 DROP TABLE IF EXISTS cached_v_donor_funding;
 CREATE TABLE cached_v_donor_funding AS SELECT * FROM `v_donor_funding_cached`;
 
@@ -53,7 +75,3 @@ CREATE INDEX idx_pri_prog_name ON `cached_v_donor_funding`(primary_program_name)
 CREATE INDEX idx_sec_prog_name ON `cached_v_donor_funding`(secondary_program_name);
 CREATE INDEX idx_nac_prog_name ON `cached_v_donor_funding`(national_program_name);
 CREATE INDEX idx_pri_sector_name ON `cached_v_donor_funding`(p_sectorname);
-
-CREATE INDEX idx_amp_activity ON `cached_v_status`(amp_activity_id);
-CREATE INDEX idx_st_name ON `cached_v_status`(name);
-CREATE INDEX idx_st_id ON `cached_v_status`(amp_status_id);

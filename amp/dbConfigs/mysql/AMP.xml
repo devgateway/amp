@@ -90,7 +90,7 @@
 		</Dimension>
 		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" allMemberCaption="#All_Primary_Sectors#" allMemberName="All Primary Sectors" primaryKey="amp_activity_id" caption="#Primary_Sector#">
-				<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
+				<Level name="Primary Sector Scheme" column="p_amp_sec_scheme_name"/>
 				<Level name="Primary Sector" column="p_sectorname">
 				<NameExpression>
 						<SQL dialect="mysql">
@@ -100,19 +100,29 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
-		<!-- 
 		<Dimension name="Secondary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" allMemberCaption="#All_Secondary_Sectors#" allMemberName="All Secondary Sectors" primaryKey="amp_activity_id">
-				<Level name="Secondary Sector" column="secondary_sector_name">
+				<Level name="Secondary Sector Scheme" column="s_amp_sec_scheme_name"/>
+				<Level name="Secondary Sector" column="s_sectorname">
 					<NameExpression>
 						<SQL dialect="mysql">
-							IFNULL(secondary_sector_name,'#No_Data#')
+							IFNULL(s_sectorname,'#No_Data#')
 						</SQL>
 					</NameExpression>
 				</Level>
 			</Hierarchy>
 		</Dimension>
-		 -->
+		<Dimension name="Sec-Sub-Sector">
+		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Sec-Sub-Sectors#">
+			<Level name="sec-sub-sector" column="s_sub_sector_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(s_sub_sector_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
 		<Dimension name="Regions">
 		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="amp_activity_id" caption="#Regions#">
 			<Level name="Region" column="region">
@@ -177,7 +187,7 @@
 					</SQL>
 				</NameExpression>
 			</Level>
-			<level name="Amounts" column="raw_amount" formatter="org.digijava.module.mondrian.Formatter.CurrencyFormatter"/>
+			<level name="Amounts" column="transaction_amount" formatter="org.digijava.module.mondrian.Formatter.CurrencyFormatter"/>
 		</Hierarchy>
 	</Dimension>
 	

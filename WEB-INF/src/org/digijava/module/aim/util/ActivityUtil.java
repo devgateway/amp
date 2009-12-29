@@ -194,7 +194,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
 
-      if (oldActivityId != null) {
+      if (oldActivityId != null && oldActivityId != 0) {
     	  oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, oldActivityId);
       }
       

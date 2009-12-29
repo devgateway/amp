@@ -148,6 +148,10 @@ function confirmDelete() {
 						
 					</td>
 				</tr>
+                 <tr><td align="left">
+                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                    </td>
+                </tr>
 				<tr>
 					<td height=16 vAlign=center width=571>
 						<digi:errors />
@@ -171,8 +175,9 @@ function confirmDelete() {
 			<tr>
 			<td>
 				<logic:notEmpty name="myForm" property="categories">
-				   <div align="center" >
+                    <div align="center"  class="report">
 					<table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0 >
+                        <thead>
 						<tr style="background-color:#999999; color:#000;">
 							<td height="22" width="20%" align="center" valign="center" bgcolor="#999999">
 								<digi:trn key="aim:categoryName" >
@@ -195,7 +200,7 @@ function confirmDelete() {
 									Category Options
 								</digi:trn>
 							</td>
-							<td bgcolor="#999999" width="9%" align="center">
+							<td bgcolor="#999999" width="9%" align="center" class="ignore">
 								<digi:trn key="aim:categoryActions">
 									Actions
 								</digi:trn>
@@ -204,10 +209,12 @@ function confirmDelete() {
 							</td>
 
 						</tr>
+                         </thead>
 						</table>
 						</div>
-						<div style = "overflow:auto;width:100%;height:220px;max-height:220px;">
+						<div style = "overflow:auto;width:100%;height:220px;max-height:220px;" class="report">
 						<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable">
+                        <tbody class="yui-dt-data">
 						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass">
 						<tr align="center">
 							<td  width="20%">
@@ -242,7 +249,7 @@ function confirmDelete() {
 								</logic:iterate>
 								</ul>
 							</td>
-							<td width="15%"align="left">
+							<td width="15%"align="left" class="ignore">
 								<% if (category.isMultiselect()) {%>
 									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green_sq.gif" border=0>
 								<% }
@@ -265,7 +272,7 @@ function confirmDelete() {
 									Ordered
 								</digi:trn>
 							</td>
-							<td align="center" >
+                            <td align="center" class="ignore" >
 								<c:set var="translation">
 									<digi:trn>Edit Category</digi:trn>
 								</c:set>
@@ -284,6 +291,7 @@ function confirmDelete() {
 							</td>
 						</tr>
 						</logic:iterate>
+                         </tbody>
 					</table>
 					</div>
 				

@@ -148,6 +148,10 @@
 						</span>
 					</td>
 				</tr>
+                 <tr><td align="left">
+                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                    </td>
+                </tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table cellspacing=0 cellSpacing=0>
@@ -163,7 +167,7 @@
 											<tr>
 												<td >
 													<table border=1 cellPadding=0 cellSpacing=0  width="100%"   >
-												
+
 														<!-- Page Logic -->
 														<logic:empty name="aimFiscalCalendarForm" property="fiscalCal">
 														<tr>
@@ -174,8 +178,9 @@
 														</logic:empty>
 														<logic:notEmpty name="aimFiscalCalendarForm" 	property="fiscalCal">
 														<tr>
-															<td width="100%">
+															<td width="100%" class="report">
 																<table width="533" border=0 cellspacing="0" id="dataTable"	 >
+                                                                    <thead>
 																	<tr style="background-color:#999999; color:#000;   " >
 																	  <td width="144" class="tdtextsize" >
 																			<digi:trn key="aim:nameFiscalCalendar">Name</digi:trn>
@@ -196,7 +201,9 @@
 																			<digi:trn key="aim:offsetFromCurrentYear">Offset (From current year)</digi:trn>
 																		</td>
 																	</tr>
+                                                                    </thead>
                                                                 <c:set value="0" var="monthIndex"/>
+                                                                <tbody class="yui-dt-data">
 																<logic:iterate name="aimFiscalCalendarForm" property="fiscalCal" id="fiscalCal">
 																
 																	<tr>
@@ -235,6 +242,7 @@
 																		</td>
 																	</tr>
 																  </logic:iterate>
+                                                                   </tbody>
 															  </table>
 															</td>
 														</tr>

@@ -101,7 +101,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
             //{key:"ID", label:"ID"},
             {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250, formatter:this.formatActionsName},
             //{key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:true, width: 150},
-            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 150, formatter:this.formatActions}            
+            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 150, formatter:this.formatActions,className:"ignore"}
             //{key:"", label:"", width: 50, formatter:this.formatActionsMembers},
             //{key:"", label:"", width: 50, formatter:this.formatActionsEdit},
             //{key:"", label:"", width: 50, formatter:this.formatActionsDelete},
@@ -833,7 +833,7 @@ function setHoveredRow(rowId) {
 </script> 
 
 <DIV id="TipLayer"	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-	
+
 <digi:instance property="aimWorkspaceForm" />
 <digi:context name="digiContext" property="context" />
 
@@ -877,6 +877,10 @@ function setHoveredRow(rowId) {
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
+                                        <tr><td align="left">
+                                                <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                                            </td>
+                                        </tr>
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 											<digi:trn>Teams</digi:trn>
@@ -939,7 +943,7 @@ function setHoveredRow(rowId) {
 													<tr>
 														<td width="70%">
 															<div class='yui-skin-sam'>
-																<div id="dynamicdata"></div>
+                                                                <div id="dynamicdata" class="report"></div>
 																<div id="dt-pag-nav"></div>
 																<div id="errors"></div>
 															</div>

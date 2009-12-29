@@ -96,7 +96,7 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-<digi:form action="/getSectorSchemes.do" method="post">
+
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
 		<td align=left vAlign=top width=750>
@@ -127,6 +127,11 @@
 						<digi:errors />
 					</td>
 				</tr>
+                 <tr><td align="left">
+                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                    </td>
+                </tr>
+                <digi:form action="/getSectorSchemes.do" method="post">
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
@@ -137,8 +142,9 @@
 
 									<table cellSpacing="0" cellPadding="0" vAlign="top" align="left" width="100%">
 										<tr>
-											<td>
+											<td class="report">
 												<table width="100%" height="30" cellpadding="2" cellspacing="0">
+                                                    <thead>
 													<tr style="background-color: #999999; color: #000000;" align="center">
 														<td width="100%" align="center">
 															<b><digi:trn key="aim:schemes">Schemes </digi:trn></b>
@@ -146,13 +152,15 @@
 														<td width="20%" rowspan="2">
 														</td>
 													</tr>
+                                                     </thead>
 												</table>
 											</td>
 										</tr>
 										<tr>
 											<td>
-												<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;">
+												<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;" class="report">
 													<table width="100%" cellspacing="0" cellpadding="2" id="dataTable">
+                                                        <tbody class="yui-dt-data">
 														<logic:empty name="aimAddSectorForm" property="formSectorSchemes">
 															<tr bgcolor="#ffffff">
 																<td colspan="5" align="center"><b>
@@ -205,7 +213,7 @@
 																			</digi:link>
 			                                                            </c:if>
 																	</td>
-																	<td width="30%" align="left">
+																	<td width="30%" align="left" class="ignore">
 																		<c:set var="trnShowSectorCode">
 																			<digi:trn>Show Sector Code with name</digi:trn>
 																		</c:set>
@@ -218,6 +226,7 @@
 			                                                    </tr>
 															</logic:iterate>
 														</logic:notEmpty>
+                                                          <tbody>
 													</table>
 												</div>
 											</td>

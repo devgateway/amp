@@ -25,6 +25,7 @@
 		<action login-required="true" pattern="/npdSettingsAction" />
 		<action login-required="false" pattern="/feedback" />
 		<action login-required="false" pattern="/confirmRegisteration" />
+        <action login-required="true" pattern="/exportAdminTable" />
 	</security>
 
 	<!-- AIM classes Begin-->

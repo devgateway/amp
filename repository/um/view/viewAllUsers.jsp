@@ -72,7 +72,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
             {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, formatter:this.formatActions, width: 150},
             {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:true, width: 150},
             {key:"workspaces", label:"<digi:trn>WORKSPACES</digi:trn>", width: 260},
-            {key:"actions", label:"<digi:trn>ACTION</digi:trn>", width: 40}
+            {key:"actions", label:"<digi:trn>ACTION</digi:trn>", width: 40, className: 'ignore'}
             //{key:"actions", label:"ACTION", formatter:this.formatActions}
         ];
   
@@ -601,10 +601,7 @@ function banUser(txt) {
 
 </script>
 
-<digi:instance property="umViewAllUsersForm" />
-<digi:context name="digiContext" property="context" />
 
-<digi:form action="/viewAllUsers.do" method="post">
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=850>
     <tr>
       		<td align=left vAlign=top>
@@ -639,6 +636,15 @@ function banUser(txt) {
 			              </span>
 			            </td>
 		          	</tr>
+                      <tr>
+                        <td>
+                            <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                        </td>
+                    </tr>
+                    <digi:instance property="umViewAllUsersForm" />
+                    <digi:context name="digiContext" property="context" />
+
+                    <digi:form action="/viewAllUsers.do" method="post">
 		        	<tr style="width:50%;">
 			          	<c:choose>
 			          		<c:when test="${umViewAllUsersForm.showBanned}">
@@ -752,7 +758,7 @@ function banUser(txt) {
 		 														<tr>
 																	<td width="100%">
 																		<div class='yui-skin-sam'>
-																			<div id="dynamicdata"></div>
+																			<div id="dynamicdata" class="report"></div>
 																			<div id="dt-pag-nav"></div>
 																			<div id="errors"></div>
 																		</div>

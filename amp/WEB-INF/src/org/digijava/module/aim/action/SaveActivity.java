@@ -2561,15 +2561,14 @@ public class SaveActivity extends Action {
 			actId = recoverySave(rsp);			
 			activity = rsp.getActivity();
                         
-			AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
             if(activity.getDraft()!=null && !activity.getDraft()){
             	if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-            		if(TeamMemberUtil.getTeamHead(aAct.getActivityCreator().getAmpTeam().getAmpTeamId())!=null && 
-            				! TeamMemberUtil.getTeamHead(aAct.getActivityCreator().getAmpTeam().getAmpTeamId()).getAmpTeamMemId().equals(aAct.getActivityCreator().getAmpTeamMemId())){
-            			new ApprovedActivityTrigger(aAct,null); //if TL created activity, then no Trigger is needed
+            		if(TeamMemberUtil.getTeamHead(activity.getActivityCreator().getAmpTeam().getAmpTeamId())!=null && 
+            				! TeamMemberUtil.getTeamHead(activity.getActivityCreator().getAmpTeam().getAmpTeamId()).getAmpTeamMemId().equals(activity.getActivityCreator().getAmpTeamMemId())){
+            			new ApprovedActivityTrigger(activity,null); //if TL created activity, then no Trigger is needed
             		}
             	}else{
-            		new NotApprovedActivityTrigger(aAct);
+            		new NotApprovedActivityTrigger(activity);
             	}
             }
 			/*actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
@@ -2588,9 +2587,8 @@ public class SaveActivity extends Action {
 
 		
 		// AMP-4660: Add filters for viewed, created and updated activities.
-		if(eaForm.getActivityId()!=null) {
-			ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
-				eaForm.getActivityId(), true);
+		if(activity.getAmpActivityId() != null) {
+			ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),	activity.getAmpActivityId(), true);
 		} /*else {
 			ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
 				actId, true);
@@ -2598,7 +2596,7 @@ public class SaveActivity extends Action {
 
 		
 		// When an activity is draft then delete the old version (and is not a new activity).
-		if(eaForm.getActivityId() != null) {
+		if(eaForm.getActivityId() != null && eaForm.getActivityId() != 0) {
 			AmpActivityVersion originalActivity = ActivityUtil.getAmpActivityVersion(eaForm.getActivityId());
 			if (originalActivity.getDraft() != null && originalActivity.getDraft().booleanValue() == true) {
 				ActivityUtil.deleteActivity(eaForm.getActivityId());

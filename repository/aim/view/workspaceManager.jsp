@@ -869,6 +869,9 @@ function setHoveredRow(rowId) {
 						<digi:errors />
 					</td>
 				</tr>
+				<tr><td align="left">
+                    <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                </td></tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
@@ -877,10 +880,6 @@ function setHoveredRow(rowId) {
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-                                        <tr><td align="left">
-                                                <jsp:include page="/repository/aim/view/exportTable.jsp" />
-                                            </td>
-                                        </tr>
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 											<digi:trn>Teams</digi:trn>
@@ -968,7 +967,7 @@ function setHoveredRow(rowId) {
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center" id="teamTitle">
-											<digi:trn>Teams</digi:trn>
+											<digi:trn>Team Name</digi:trn>
 										</td>
 										</tr>
 										<tr><td>&nbsp;</td></tr>
@@ -1000,38 +999,38 @@ function setHoveredRow(rowId) {
 										</td>
 										</tr>
 										<tr><td>
-										<div class="yui-dt">
+										<div>
 										<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0" >
 										<tr>
 										<td>
-												<input type="hidden" name="teamId" value=""/>
-												<input type="hidden" name="teamName" value=""/>
-												<table  cellspacing="1" cellpadding="2" align="left" width="100%">
-												<tr><td>
-												<div style="width: 100%" class="box-border-nopadding" class="box-border-nopadding">
-												<table  cellspacing="1" cellpadding="2" align="left" width="100%">
-											        <tr class="headTableTr">
-											            <td height="22" align="center" width="300" align="center" class="headTableTd"><digi:trn>Name</digi:trn></td>
-											            <td height="22" align="center" width="100" align="center" class="headTableTd"><digi:trn>Actions</digi:trn></td>
-											        </tr>
-												</table>
-												</div>
-												<div id="demo" style="overflow: auto; width: 100%; height: 309px; max-height: 309px;" class="box-border-nopadding">
-												    <table id="dataTable"  cellspacing="1" cellpadding="2" align="left" width="100%" >
-												    <tbody>
-												        <tr><td colspan="2"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
-												    </tbody>
-												 	</table>
-												</div>
-											    <table cellspacing="1" cellpadding="2" align="left" width="100%">
-												    <tbody>
-												        <tr><td colspan="2" id="footerMessage">&nbsp;
-												        </td></tr>
-												    </tbody>
-												 	</table>
-												</td>
-												</tr>
-												</table>
+											<input type="hidden" name="teamId" value=""/>
+											<input type="hidden" name="teamName" value=""/>
+											<table  cellspacing="1" cellpadding="2" align="left" width="100%">
+											<tr><td>
+											<div style="width: 100%" class="box-border-nopadding" class="box-border-nopadding">
+											<table  cellspacing="1" cellpadding="2" align="left" width="100%">
+										        <tr class="headTableTr">
+										            <td height="22" align="center" width="300" align="center" class="headTableTd"><digi:trn>Name</digi:trn></td>
+										            <td height="22" align="center" width="100" align="center" class="headTableTd"><digi:trn>Actions</digi:trn></td>
+										        </tr>
+											</table>
+											</div>
+											<div id="demo" style="overflow: auto; width: 100%; height: 309px; max-height: 309px;" class="box-border-nopadding">
+											    <table id="dataTable"  cellspacing="1" cellpadding="2" align="left" width="100%" >
+											    <tbody>
+											        <tr><td colspan="2"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
+											    </tbody>
+											 	</table>
+											</div>
+										    <table cellspacing="1" cellpadding="2" align="left" width="100%">
+											    <tbody>
+											        <tr><td colspan="2" id="footerMessage">&nbsp;
+											        </td></tr>
+											    </tbody>
+											 	</table>
+											</td>
+											</tr>
+											</table>
 										</td>
 										</tr>
 									</table>

@@ -52,7 +52,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         this.formatActions = function(elCell, oRecord, oColumn, sData) {
             //elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +sData+">" +"<img vspace='2' border='0' src='/repository/message/view/images/edit.gif'/>" + "</a>";
             //elCell.innerHTML +="&nbsp;&nbsp;<a onclick='return banUser();' title='Ban User' href=/um/viewEditUser.do~id=" +sData+"~ban=true>" +"<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/>" + "</a>";
-        	elCell.innerHTML = "<a href=/um/viewEditUser.do~id=" +oRecord.getData( 'ID' )+" title='Edit User'>" + sData + "</a>";
+        	elCell.innerHTML = "<a href=JavaScript:showUserProfile("+oRecord.getData( 'ID' )+")  title='<digi:trn>Edit User</digi:trn>'>" + sData + "</a>";
         };
  
         this.myDataSource = new YAHOO.util.DataSource("/um/userSearch.do?");
@@ -580,7 +580,11 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 </c:set>
 
 <script language="JavaScript">
-
+function showUserProfile(id){
+	var param = "~edit=true~id="+id;
+    previewWorkspaceframe('/aim/default/userProfile.do',param);
+	
+}
 
 function banUser(txt) {
   var ban=confirm("${translationBan}");

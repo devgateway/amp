@@ -79,6 +79,8 @@ public class PIExportUseCase {
 			export = new PIReport9Export(site, langCode, currency);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_10a.equalsIgnoreCase(reportCode)) {
 			export = new PIReport10aExport(site, langCode);
+		} else if (PIConstants.PARIS_INDICATOR_REPORT_10b.equalsIgnoreCase(reportCode)) {
+			export = new PIReport10bExport(site, langCode);
 		}
 
 		try {

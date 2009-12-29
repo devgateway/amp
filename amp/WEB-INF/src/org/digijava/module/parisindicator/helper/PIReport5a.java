@@ -537,4 +537,12 @@ public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Collection<PIReportAbstractRow> generateReport10b(Collection<AmpOrganisation> commonData, int startYear,
+			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
+			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

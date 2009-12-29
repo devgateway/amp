@@ -12,6 +12,8 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -389,8 +391,14 @@
 			var transAmountLabel="fundingDetail["+i+"].transactionAmount";
 			var transTypeLabel="fundingDetail["+i+"].transactionType";
 			var amount = 0;
-	    	amount = (document.getElementsByName(transAmountLabel)[0].value) * 1;
-	    	if ((document.getElementsByName(transTypeLabel)[0].value == 0) && (document.getElementsByName(adjLabel)[0].value == 1)) {
+
+			var strAmount=document.getElementsByName(transAmountLabel)[0].value;
+			var decimalSeparator="<%=FormatHelper.getDecimalSymbol()%>";
+			var groupSeparator="<%=FormatHelper.getGroupSymbol()%>";
+			strAmount=strAmount.replace(groupSeparator,"");
+			strAmount=strAmount.replace(decimalSeparator,".");
+			amount=parseFloat(strAmount);
+			if ((document.getElementsByName(transTypeLabel)[0].value == 0) && (document.getElementsByName(adjLabel)[0].value == 1)) {
 				totalComms	+= amount;
 			} else {
 				if ((document.getElementsByName(transTypeLabel)[0].value == 1) && (document.getElementsByName(adjLabel)[0].value == 1)) {
@@ -398,17 +406,26 @@
 				}
 			}
 		}
+
+    	
+	<%
+		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
+		if (new Boolean(value)){%>
 		if (totalDisbs > totalComms) {
 			var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you wish to proceed?</digi:trn>";
-			if(confirm(Warn))
-				{
+			if(confirm(Warn)) {	
 					return true;
 				} else {
 					return false;	
 				}
-		} else {
-			return true;
 		}
+	<%}%>
+		
+		
+
+
+		return true;
+		
    	}
     
 	function addMTEFProjection() {

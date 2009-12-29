@@ -167,6 +167,7 @@
     <form-bean name="selectProgramForm" type="org.digijava.module.aim.form.ProgramsForm"/>
 
     <form-bean name="fmAdvancedForm" type="org.digijava.module.aim.form.FMAdvancedForm"/>
+    <form-bean name="exportTableForm" type="org.digijava.module.aim.form.ExportTableForm"/>
  
 </form-beans>
 
@@ -1796,7 +1797,8 @@
 	
 	<action name="fmAdvancedForm" path="/aim/fmAdvancedPopup" type="org.digijava.module.aim.action.FMAdvancedModeAction" scope="session" parameter="method">
 		<forward name="default" path="/showLayout.do?layout=fmAdvancedPopUp"/>
-	</action>  
+	</action>
+     <action name="exportTableForm" path="/aim/exportAdminTable"  scope="request" type="org.digijava.module.aim.action.ExportAdminTable"/>
     
   </action-mappings>
 </struts-config>

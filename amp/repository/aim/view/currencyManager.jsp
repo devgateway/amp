@@ -146,18 +146,6 @@ function setHoveredRow(rowId) {
 }
 </style>
 
-<digi:instance property="aimCurrencyForm" />
-
-<digi:form action="/currencyManager.do">
-
-<html:hidden property="page"/>
-<html:hidden property="currencyCode"/>
-<html:hidden property="currencyName"/>
-<html:hidden property="countryId"/>
-<html:hidden property="order"/>
-
-
-
 <table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
 <tr><td>
 <!--  AMP Admin Logo -->
@@ -192,6 +180,19 @@ function setHoveredRow(rowId) {
 						<digi:errors/>
 					</td>
 				</tr>
+                 <tr><td align="left">
+                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                    </td>
+                </tr>
+                <digi:instance property="aimCurrencyForm" />
+
+                <digi:form action="/currencyManager.do">
+
+                    <html:hidden property="page"/>
+                    <html:hidden property="currencyCode"/>
+                    <html:hidden property="currencyName"/>
+                    <html:hidden property="countryId"/>
+                    <html:hidden property="order"/>
 				<tr>
 					<td noWrap width=75% vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
@@ -238,8 +239,9 @@ function setHoveredRow(rowId) {
 								<!-- Currency list table -->
 								<table cellSpacing="0" cellPadding="0" vAlign="top" align="left" width="85%">
 									<tr>
-										<td>
+										<td class="report">
 											<table width="100%" height="30" cellpadding="0" cellspacing="0">
+                                                <thead>
 												<tr style="background-color: #999999; color: #000000;" align="center">
 													<td width="5%" > </td>
 													<td align="left" width="15%" style="cursor:pointer;" onclick="sortSubmit(1)" >
@@ -253,6 +255,7 @@ function setHoveredRow(rowId) {
 													</td>
 													<td width="15%" > </td>
 												</tr>
+                                                </thead>
 											</table>
 										</td>
 									</tr>
@@ -266,8 +269,9 @@ function setHoveredRow(rowId) {
 									<c:if test="${!empty aimCurrencyForm.currency}">
 									<tr>
 										<td>
-											<div style="overflow: auto; width: 100%; height: 220px; max-height: 220px;">
+											<div style="overflow: auto; width: 100%; height: 220px; max-height: 220px;" class="report">
 												<table width="100%" cellspacing="0" cellpadding="0" id="dataTable">
+                                                    <tbody class="yui-dt-data">
 													<c:forEach var="curr" items="${aimCurrencyForm.currency}">
 														<tr height="30">
 														<td align="center" width="5%">
@@ -308,13 +312,14 @@ function setHoveredRow(rowId) {
 			                                                </c:if>
 			                                              </a>
 			                                            </td>
-														<td align="center" width="15%">
+                                                        <td align="center" width="15%" class="ignore">
 															<a href="javascript:deleteCurrency('${curr.currencyCode}')">
 													 		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this Currency"/>
 															</a>
 														</td>
 													</tr>
 													</c:forEach>
+                                                    </tbody>
 												</table>
 											</div>
 										</td>

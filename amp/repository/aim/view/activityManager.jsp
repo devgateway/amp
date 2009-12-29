@@ -190,8 +190,6 @@
 }
 </style>
 
-<digi:instance property="aimActivityForm" />
-<digi:form action="/activityManager.do" method="post">
 
 	<!--  AMP Admin Logo -->
 	<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -221,6 +219,12 @@
 						</span>
 					</td>
 				</tr>
+                <tr><td align="left">
+                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                    </td>
+                </tr>
+              <digi:instance property="aimActivityForm" />
+                <digi:form action="/activityManager.do" method="post">
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="0" >
@@ -272,16 +276,17 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
+                                            <td>
 											<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" >
 												<logic:notEmpty name="aimActivityForm" property="activityList">
 													<tr>
-														<td>
-														<table width="100%" height="30" cellpadding="0" cellspacing="0">
+                                                        <td class="report">
+														<table width="100%" height="30" cellpadding="0" cellspacing="0" >
+                                                            <thead>
 															<tr style="background-color: #999999; color: #000000;" align="center">
 																<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap" />
 																<c:set target="${urlParamsSort}" property="action" value="sort" />
-																<td width="3%" align="center" />
+                                                                <td width="3%" align="center" class="ignore" />
 																<td width="57%" align="center">
 																	<b> 
 																		<c:set target="${urlParamsSort}" property="sortByColumn" value="activityName" /> 
@@ -306,29 +311,31 @@
 																		</digi:link> 
 																	</b>
 																</td>
-																<td width="5%" align="center">
+																<td width="5%" align="center" class="ignore">
 																	<c:set var="trnSelectAll">
 																		<digi:trn>Select All</digi:trn>
 																	</c:set> 
 																	<input type="checkbox" id="chkAll" onclick="javascript:selectAll()" title="${trnSelectAll}"/>
 																</td>
 															</tr>
+                                                           </thead>
 														</table>
 														</td>
 													</tr>
 													<tr>
 														<td>
-														<div style="overflow: auto; width: 100%; height: 220px; max-height: 220px;">
-														<table width="100%" cellspacing="0" cellpadding="0" id="dataTable">
+														<div style="overflow: auto; width: 100%; height: 200px; max-height: 220px;" class="report">
+														<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" >
+                                                            <tbody class="yui-dt-data">
 															<logic:iterate name="aimActivityForm" property="activityList" id="activities" type="org.digijava.module.aim.dbentity.AmpActivity">
 																<tr height="20">
 																	<logic:notEmpty name="activities" property="team">
-																		<td width="3%" height="15">
+																		<td width="3%" height="15" class="ignore">
 																			<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
 																		</td>
 																	</logic:notEmpty>
 																	<logic:empty name="activities" property="team">
-																		<td width="3%" height="15">
+																		<td width="3%" height="15" class="ignore">
 																			<img src="/TEMPLATE/ampTemplate/imagesSource/common/start_button.gif" border=0>
 																		</td>
 																	</logic:empty>
@@ -343,7 +350,7 @@
 																	<td width="17%" align="center">
 																		<bean:write name="activities" property="ampId" />
 																	</td>
-																	<td width="3%" align="center">
+																	<td width="3%" align="center" class="ignore">
 																		<c:set var="actId">
 																			<bean:write name="activities" property="ampActivityId" />
 																		</c:set> 
@@ -351,8 +358,9 @@
 																	</td>
 																</tr>
 															</logic:iterate>
+                                                            </tbody>
 														</table>
-														</div>
+                                                         </div>
 														</td>
 													</tr>
 												</logic:notEmpty>

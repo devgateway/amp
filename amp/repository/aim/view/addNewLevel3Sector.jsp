@@ -100,15 +100,11 @@ function setStripsTable(tableId, classOdd, classEven) {
 }
 </style>
 
-<digi:instance property="aimAddSectorForm" />
-<digi:context name="digiContext" property="context" />
-<digi:form action="/addSector.do" method="post">
+
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<html:hidden property="treeView" />
-<html:hidden property="rootId" />
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
@@ -145,7 +141,16 @@ function setStripsTable(tableId, classOdd, classEven) {
 					<td height=16 vAlign=center width=571>
 						<digi:errors />
 					</td>
-				</tr>				
+				</tr>
+                <tr><td align="left">
+                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                    </td>
+                </tr>
+                <digi:instance property="aimAddSectorForm" />
+                <digi:context name="digiContext" property="context" />
+                <digi:form action="/addSector.do" method="post">
+                    <html:hidden property="treeView" />
+                    <html:hidden property="rootId" />
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
@@ -155,7 +160,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
 										<tr>
-											<td>	
+											<td>
 												<table width="100%">
 													<tr>
 														<td>
@@ -215,9 +220,9 @@ function setStripsTable(tableId, classOdd, classEven) {
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="report">
 												<table  width="100%" height="30" cellpadding="2" cellspacing="0">
-										
+                                                <thead>
 													<tr style="background-color: #999999; color: #000000;" align="center">
 														<td width="10%" align="left">
 														<b> 
@@ -248,14 +253,16 @@ function setStripsTable(tableId, classOdd, classEven) {
 													</td>
 													
 													</tr>
+                                                    </thead>
 										</table>
 										</td>
 										</tr>
 										
 										<tr>
 											<td>
-												<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;">
+												<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;" class="report">
 													<table width="100%" cellspacing="0" cellpadding="2" id="dataTable">
+                                                        <tbody  class="yui-dt-data">
 														<logic:empty name="aimAddSectorForm" property="subSectors">
 														<tr bgcolor="#ffffff">
 															<td colspan="5" align="center"><b>
@@ -284,7 +291,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 																	<digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >
 																	<bean:write name="sectorLevelTwo" property="name"/></digi:link>
 																</td>
-																<td align="center" width="10%">
+																<td align="center" width="10%" class="ignore">
 																	<c:set var="translation">
 																		<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 																	</c:set>
@@ -292,7 +299,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 																		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 																	</digi:link>
 																</td>
-																<td align="center" width="10%">
+																<td align="center" width="10%" class="ignore">
 																	<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlParams4}" property="ampSectorId">
 																		<bean:write name="sectorLevelTwo" property="ampSectorId" />
@@ -311,7 +318,8 @@ function setStripsTable(tableId, classOdd, classEven) {
 															</tr>
 															</logic:iterate>
 														</logic:notEmpty>
-												<!-- end page logic -->													
+												<!-- end page logic -->
+                                                </tbody>
 													</table>
 												</td>
 											</tr>

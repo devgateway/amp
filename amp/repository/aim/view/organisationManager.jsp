@@ -123,10 +123,7 @@
 </style>
 
 <digi:errors/>
-<digi:instance property="aimOrgManagerForm" />
-<digi:context name="digiContext" property="context" />
 
-<digi:form action="/organisationManager.do" method="post">
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -157,6 +154,13 @@
 						</span>
 					</td>
 				</tr>
+                 <tr><td align="left">
+                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                    </td>
+                </tr>
+                <digi:instance property="aimOrgManagerForm" />
+                <digi:context name="digiContext" property="context" />
+                <digi:form action="/organisationManager.do" method="post">
 				<tr>
 					<td>
 						<table width="100%">
@@ -226,8 +230,9 @@
 										<td width="100%">
 											<table cellpadding="2" width="100%">
 												<tr>
-													<td>
+													<td class="report">
 														<table width="100%" height="30" cellpadding="2" cellspacing="0">
+                                                            <thead>
 															<tr style="background-color: #999999; color: #000000;" align="center">
 																<td align="left" width="30%">
 																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
@@ -286,13 +291,15 @@
 																	<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																</td>
 															</tr>
+                                                            </thead>
 														</table>
 													</td>
 												</tr>
 												<tr>
 													<td>
-														<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;">
+														<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;" class="report">
 															<table width="100%" cellspacing="0" cellpadding="2" id="dataTable">
+                                                                <tbody class="yui-dt-data">
 																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation" indexId="index">
                                                            			<tr height="25">
 																		<td align="left" width="30%">
@@ -322,6 +329,7 @@
 																		</td>
                                                             		</tr>
 																</logic:iterate>
+                                                                </tbody>
 															</table>
 														</div>
 													</td>

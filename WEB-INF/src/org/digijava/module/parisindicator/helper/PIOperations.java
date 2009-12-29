@@ -21,6 +21,11 @@ public interface PIOperations {
 			Collection<AmpSector> sectorsFilter, Collection<AmpCategoryValue> statusFilter,
 			Collection<AmpCategoryValue> financingInstrumentFilter);
 
+	public abstract Collection<PIReportAbstractRow> generateReport10b(Collection<AmpOrganisation> commonData,
+			int startYear, int endYear, AmpFiscalCalendar calendar, AmpCurrency currency,
+			Collection<AmpSector> sectorsFilter, Collection<AmpCategoryValue> statusFilter,
+			Collection<AmpCategoryValue> financingInstrumentFilter);
+
 	public abstract Collection<PIReportAbstractRow> reportPostProcess(Collection<PIReportAbstractRow> baseReport,
 			int startYear, int endYear) throws Exception;
 }

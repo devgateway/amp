@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -28,6 +29,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.helper.PIReport10a;
+import org.digijava.module.parisindicator.helper.PIReport10b;
 import org.digijava.module.parisindicator.helper.PIReport3;
 import org.digijava.module.parisindicator.helper.PIReport4;
 import org.digijava.module.parisindicator.helper.PIReport5a;
@@ -137,7 +139,8 @@ public class PIUseCase {
 				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_6)
 				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_7)
 				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_9)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_10a)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
 			ret = name;
 		}
 		return ret;
@@ -183,6 +186,8 @@ public class PIUseCase {
 			report = new PIReport9();
 		} else if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
 			report = new PIReport10a();
+		} else if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
+			report = new PIReport10b();
 		}
 
 		// Get the common info from surveys and apply some filters.
@@ -195,18 +200,30 @@ public class PIUseCase {
 		Collection<AmpCategoryValue> auxStatuses = PIUtils.getStatuses(form.getSelectedStatuses());
 		Collection<AmpCategoryValue> auxFinancingInstruments = PIUtils.getFinancingInstruments(form
 				.getSelectedFinancingIstruments());
-		if (!report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
+		if (!report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)
+				&& !report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
 			Collection<AmpAhsurvey> commonData = getCommonSurveyData(auxDonors, auxDonorGroups);
 
 			// Execute the logic for generating each report.
 			preMainReportRows = report.generateReport(commonData, form.getSelectedStartYear(), form
 					.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses, auxFinancingInstruments);
 		} else {
-			Collection<AmpOrganisation> commonData10a = getCommonSurveyDataForPI10a(auxDonors, auxDonorGroups);
+			if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
+				Collection<AmpOrganisation> commonData10a = getCommonSurveyDataForPI10a(auxDonors, auxDonorGroups);
 
-			// Execute the logic for generating each report.
-			preMainReportRows = report.generateReport10a(commonData10a, form.getSelectedStartYear(), form
-					.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses, auxFinancingInstruments);
+				// Execute the logic for generating each report.
+				preMainReportRows = report.generateReport10a(commonData10a, form.getSelectedStartYear(), form
+						.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses,
+						auxFinancingInstruments);
+			}
+			if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
+				Collection<AmpOrganisation> commonData10b = getCommonSurveyDataForPI10b(auxDonors, auxDonorGroups);
+
+				// Execute the logic for generating each report.
+				preMainReportRows = report.generateReport10b(commonData10b, form.getSelectedStartYear(), form
+						.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses,
+						auxFinancingInstruments);
+			}
 		}
 
 		// Postprocess the report if needed.
@@ -309,5 +326,55 @@ public class PIUseCase {
 			logger.error(e);
 		}
 		return commonData;
+	}
+
+	public Collection<AmpOrganisation> getCommonSurveyDataForPI10b(Collection<AmpOrganisation> filterDonors,
+			Collection<AmpOrgGroup> filterDonorGroups) {
+
+		/*Collection<AmpOrganisation> commonData = new ArrayList<AmpOrganisation>();
+		Session session = null;
+		try {
+			// TODO: change this code to use restrictions like the
+			// getCommonSurveyData() method.
+			session = PersistenceManager.getRequestDBSession();
+			List<AmpActivityDocument> documents = session.createCriteria(AmpActivityDocument.class).list();
+			Iterator<AmpActivityDocument> iterDocs = documents.iterator();
+			while (iterDocs.hasNext()) {
+				AmpActivityDocument auxDocs = iterDocs.next();
+				Set<AmpOrganisation> auxOrganisations = auxDocs.getOrganisations();
+				if (auxOrganisations != null) {
+					Iterator<AmpOrganisation> iterOrganisations = auxOrganisations.iterator();
+					while (iterOrganisations.hasNext()) {
+						AmpOrganisation auxOrganisation = iterOrganisations.next();
+						AmpOrgGroup auxOrgGrp = auxOrganisation.getOrgGrpId();
+						// Filter for Multilateral and Bilateral PoDDs.
+						if (auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_BILATERAL)
+								|| auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
+							boolean add = true;
+							// If needed, filter for organizations.
+							if (filterDonors != null) {
+								if (!PIUtils.containOrganisations(filterDonors, auxOrganisation)) {
+									add = false;
+								}
+							}
+							// If needed, filter for organization groups.
+							if (filterDonorGroups != null) {
+								if (!PIUtils.containOrgGrps(filterDonorGroups, auxOrgGrp)) {
+									add = false;
+								}
+							}
+							if (add) {
+								commonData.add(auxOrganisation);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return commonData;*/
+		//TODO: Implement this method when 6012 is fixed.
+		return null;
 	}
 }

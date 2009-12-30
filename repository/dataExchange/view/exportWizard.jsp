@@ -225,8 +225,8 @@
 
         var v_table = document.getElementById('logTableId');
       	v_table.setAttribute("height","100%");
-        var v_tbody = v_table.childNodes[1];
-        v_tbody.innerHTML = '';
+        var v_tbody = v_table.tBodies[0];
+        removeAllChildren(v_tbody);
         row = document.createElement("tr");
         logDiv = createCall("td","");
         logDiv.setAttribute("id","logDivId");
@@ -237,6 +237,11 @@
 
         addLodingImageToLogTab(logDiv);
         
+      }
+      function removeAllChildren(parent){
+          while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        };   
       }
 
       function cancelFilter(){
@@ -253,7 +258,7 @@
       function changeTeam(){
     	  var selTeamId = document.getElementById('teamId');
     	  disableLogTab();
-    	  
+
           if (selTeamId.value != "-1"){
         	  enableExportButton();
           } else {

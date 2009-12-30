@@ -64,36 +64,61 @@ div.fakefile2 input{
 	width: 83px;
 }
 
-		.jcol{												
-		padding-left:10px;												 
-		}
-		.jlien{
-			text-decoration:none;
-		}
-		.tableEven {
-			background-color:#dbe5f1;
-			font-size:8pt;
-			padding:2px;
-		}
+.jcol{												
+padding-left:10px;												 
+}
+.jlien{
+	text-decoration:none;
+}
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
 
-		.tableOdd {
-			background-color:#FFFFFF;
-			font-size:8pt;
-			padding:2px;
-		}
-		 
-		.Hovered {
-			background-color:#a5bcf2;
-		}
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+.notHovered {
+	background-color:#FFFFFF;
+}
+.mapagination{
+padding:3px;border:1px solid #999999; width:10px; height:10px; float:left;
+}
+
+.clsTableTitleCol {
+	-x-system-font:none;
+	background-color:#B8B8B0;
+	color:#000000;
+	cursor:default;
+	font-family:"Verdana";
+	font-size:7.5pt;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:bold;
+	line-height:normal;
+	text-align:center;
+}		
+.reportsBorderTable {
+	border-collapse:collapse;
+}
+.reportsBorderTD {
+	cellpadding: 0px;
+	cellspacing: 0px;
+	padding: 0px;
+	margin: 0px;
+	font-family:Arial,Helvetica,sans-serif;
+}
 		
-		.notHovered {
-			background-color:#FFFFFF;
-		}
-		.mapagination{
-		padding:3px;border:1px solid #999999; width:10px; height:10px; float:left;
-		}
-
-
 -->
 </style>
 
@@ -403,39 +428,38 @@ function fnSubmit() {
 							<tr>
                             <td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Exchange rates table -->
-								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="450">
-									<tr bgcolor="eeeeee">
-										<td align="center" width="3">
+								<table width="600" class="reportsBorderTable">
+								<thead class="fixedHeader">
+									<tr>
+										<td align="center" width="23" class="clsTableTitleCol">
 											<input type="checkbox" name="checkAll" onclick="checkall()">
 										</td>
-										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td align="center" width="45" class="clsTableTitleCol">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
 										</td>
-										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td align="center" width="150" class="clsTableTitleCol">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
-										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td align="center" width="55" class="clsTableTitleCol">
 											<b><digi:trn> Source Currency Code</digi:trn></b>
 										</td>
-										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td align="center" width="150" class="clsTableTitleCol">
 											<b><digi:trn>Source Currency Name</digi:trn></b>
 										</td>
-										<td align="center" width="80" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td align="center" width="85" class="clsTableTitleCol">
 											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
 										</td>
-										<td align="center" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td align="center" width="65" class="clsTableTitleCol">
 											<b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b>
 										</td>
 									</tr>
+									</thead>
+								</table>
+								<div id="demo" style="overflow: auto; width: 600px; height: 309px; max-height: 309px;" class="box-border-nopadding">
+								<table id="dataTable" class="reportsBorderTable" width="100%" cellspacing="0" cellpadding="1" style="visibility: visible;">
 									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
 									<tr bgcolor="#f4f4f2">
-										<td colspan="5" align="center">
+										<td colspan="5" align="center" class="reportsBorderTD">
 											<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
 										</td>
 									</tr>
@@ -450,41 +474,36 @@ function fnSubmit() {
 									<tr class="rowAlternate">
 									<% }
 									index++;%>
-										<td align="center" width="3">
+										<td align="center" width="23" class="reportsBorderTD">
 											<html:multibox property="selectedRates">
 												<c:out value="${cRates.id}"/>
 											</html:multibox>
 										</td>
-										<td align="left">
+										<td align="left" width="45" class="reportsBorderTD">
                                           <digi:trn>${cRates.currencyCode}</digi:trn>
 										</td>
-										<td align="left">
+										<td align="left" width="150" class="reportsBorderTD">
 											<c:out value="${cRates.currencyName}"/>
 										</td>
-										<td align="left">
+										<td align="center" width="55" class="reportsBorderTD">
                                          	${cRates.fromCurrencyCode}
 										</td>
-										<td align="left">
+										<td align="center" width="150" class="reportsBorderTD">
 											<c:out value="${cRates.fromCurrencyName}"/>
 										</td>
-										<td align="center">
+										<td align="center" width="85" class="reportsBorderTD">
 											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
 											<c:out value="${cRates.exchangeRateDate}"/>
 											</a>
 										</td>
-										<td align="right" nowrap="nowrap">
+										<td align="right" nowrap="nowrap" width="60" class="reportsBorderTD">
 											<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
 										</td>
 									</tr>
 									</c:forEach>
 									</c:if>
 								</table>
-	
-									<script language="javascript">
-										setStripsTable("dataTable", "tableEven", "tableOdd");
-										setHoveredTable("dataTable", false);
-										setHoveredRow("rowHighlight");
-									</script>
+								</div>
 								</div>
 										 </td>
 									</tr>
@@ -581,7 +600,7 @@ function fnSubmit() {
 							</c:if>
 							<!--end end-->
 							<tr><td>
-								<table width="450" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
+								<table width="600" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 									<tr>
 										<td align="left">
 											<!-- <a href="javascript:addExchangeRate()">
@@ -600,8 +619,10 @@ function fnSubmit() {
 							</td></tr>
 				
 						</table>
+						</td>
+						<td valign="top">
 							<!--  =================LINKLINKLINKLINK=================== -->
-								<table align=center cellPadding=0 cellSpacing=0 width="130" border=0 style ="  margin-top:76px; _margin-top:90px;">
+								<table align=center cellPadding=0 cellSpacing=0 width="130" border=0 style ="  margin-top:136px; _margin-top:90px;">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title height="20">
 												<digi:trn key="aim:Links">
@@ -653,4 +674,9 @@ function fnSubmit() {
 
 <script type="text/javascript">
 	initFileUploads();
+</script>
+<script language="javascript">
+	setStripsTable("dataTable", "tableEven", "tableOdd");
+	setHoveredTable("dataTable", false);
+	setHoveredRow("rowHighlight");
 </script>

@@ -224,52 +224,31 @@
 			alert("${msgEnterPgrType}");
 			document.aimThemeFormPopin.programTypeCategValId.focus();
 			return false;
-		}		
-
-		if(document.aimThemeFormPopin.programInernalFinancing != null){
-			document.aimThemeFormPopin.programInernalFinancing.value=trim(document.aimThemeFormPopin.programInernalFinancing.value);
-			if (document.aimThemeFormPopin.programInernalFinancing.value.length > 0){
-					var text=document.aimThemeFormPopin.programInernalFinancing.value;
-					for (i=0; i < text.length; i++){
-						if (validNumbers.indexOf(text.charAt(i)) ==-1){
-						alert("${msgValidNumbers} ${programInernalFinancing}");
-						document.aimThemeFormPopin.programInernalFinancing.focus();
-						return false;
-						}
-					}			
-				}else{
-				document.aimThemeFormPopin.programInernalFinancing.value=0;
-			} 
-	
-			document.aimThemeFormPopin.programExternalFinancing.value=trim(document.aimThemeFormPopin.programExternalFinancing.value);
-			if (document.aimThemeFormPopin.programExternalFinancing.value.length > 0){
-				var text=document.aimThemeFormPopin.programExternalFinancing.value;
-				for (i=0; i < text.length; i++){
-					if (validNumbers.indexOf(text.charAt(i)) ==-1){
-					alert("${msgValidNumbers} ${programExternalFinancing}");
-					document.aimThemeFormPopin.programExternalFinancing.focus();
-					return false;
-					}
-				}			
-			} else{
-				document.aimThemeFormPopin.programExternalFinancing.value=0;
-				}
-	
-			document.aimThemeFormPopin.programTotalFinancing.value=trim(document.aimThemeFormPopin.programTotalFinancing.value);
-				if (document.aimThemeFormPopin.programTotalFinancing.value.length > 0){
-				var text=document.aimThemeFormPopin.programTotalFinancing.value;
-				for (i=0; i < text.length; i++){
-					if (validNumbers.indexOf(text.charAt(i)) ==-1){
-					alert("${msgValidNumbers} ${programTotalFinancing}");
-					document.aimThemeFormPopin.programTotalFinancing.focus();
-					return false;
-					}
-				}
-			} else{
-				document.aimThemeFormPopin.programTotalFinancing.value=0;
-			}
 		}
-			
+        var regexp = new RegExp(/^\d*.?\d{0,2}$/g);
+        if( document.aimThemeFormPopin.programInernalFinancing!=null){
+        if (document.aimThemeFormPopin.programInernalFinancing.value.search(regexp)==-1){
+        alert("${msgValidNumbers} ${programInernalFinancing}");
+        document.aimThemeFormPopin.programInernalFinancing.focus();
+        return false;
+         }
+        }
+        if( document.aimThemeFormPopin.programExternalFinancing!=null){
+        if (document.aimThemeFormPopin.programExternalFinancing.value.search(regexp)==-1){
+            alert("${msgValidNumbers} ${programExternalFinancing}");
+            document.aimThemeFormPopin.programExternalFinancing.focus();
+            return false;
+        }
+        }
+        if(document.aimThemeFormPopin.programTotalFinancing!=null){
+         if (document.aimThemeFormPopin.programTotalFinancing.value.search(regexp)==-1){
+            alert("${msgValidNumbers} ${programTotalFinancing}");
+            document.aimThemeFormPopin.programTotalFinancing.focus();
+			return false;
+        }
+        }
+		
+		
 		return true;
 	}
 	function getParams(){
@@ -280,11 +259,18 @@
 			"&prgLevel="+document.getElementsByName('prgLevel')[0].value+
 			"&programName="+document.getElementsByName('programName')[0].value+
 			"&programDescription="+document.getElementsByName('programDescription')[0].value;
-			if(document.getElementsByName('programInernalFinancing')[0]!=null){
-				ret += "&programInernalFinancing="+document.getElementsByName('programInernalFinancing')[0].value+
-					"&programExternalFinancing="+document.getElementsByName('programExternalFinancing')[0].value+
-					"&programTotalFinancing="+document.getElementsByName('programTotalFinancing')[0].value;
-			}
+            var programInernalFinancing=document.getElementsByName('programInernalFinancing')[0];
+			if(programInernalFinancing!=null&&programInernalFinancing.value.trim()!=''){
+				ret += "&programInernalFinancing="+programInernalFinancing.value;
+             }
+             var programExternalFinancing=document.getElementsByName('programExternalFinancing')[0];
+             if(programExternalFinancing!=null&&programExternalFinancing.value.trim()!=''){
+				ret += "&programExternalFinancing="+programExternalFinancing.value;
+             }
+             var programTotalFinancing=document.getElementsByName('programTotalFinancing')[0]
+             if(programTotalFinancing!=null&& programTotalFinancing.value.trim()!=''){
+				ret += "&programTotalFinancing="+programTotalFinancing.value;
+             }
 			ret += "&programLeadAgency="+document.getElementsByName('programLeadAgency')[0].value+
 			"&programCode="+document.getElementsByName('programCode')[0].value+
 			"&programTypeCategValId="+document.getElementsByName('programTypeCategValId')[0].value+

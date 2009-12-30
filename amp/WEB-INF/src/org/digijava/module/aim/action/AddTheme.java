@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -287,7 +288,7 @@ public class AddTheme extends Action {
 		ampTheme.setInternalFinancing(themeForm.getProgramInernalFinancing());
 		ampTheme.setTotalFinancing(themeForm.getProgramTotalFinancing());
 
-	}
+ 	}
 
 	/**
 	 * fill form using theme values
@@ -321,21 +322,21 @@ public class AddTheme extends Action {
 		themeForm.setProgramOutputs(ampTheme.getOutputs());
 		themeForm.setProgramBeneficiaries(ampTheme.getBeneficiaries());
 		themeForm.setProgramEnvironmentConsiderations(ampTheme.getEnvironmentConsiderations());
-
-		if (ampTheme.getExternalFinancing() == null) {
-			themeForm.setProgramExternalFinancing(new BigDecimal(0));
-		} else {
-			themeForm.setProgramExternalFinancing(ampTheme.getExternalFinancing());
-		}
-		if (ampTheme.getInternalFinancing() == null) {
-			themeForm.setProgramInernalFinancing(new BigDecimal(0));
-		} else {
-			themeForm.setProgramInernalFinancing(ampTheme.getInternalFinancing());
-		}
-		if (ampTheme.getTotalFinancing() == null) {
-			themeForm.setProgramTotalFinancing(new BigDecimal(0));
-		} else {
-			themeForm.setProgramTotalFinancing(ampTheme.getTotalFinancing());
-		}
+        BigDecimal externalFinancing=ampTheme.getExternalFinancing();
+        if(externalFinancing!=null){
+           externalFinancing=externalFinancing.setScale(2, RoundingMode.HALF_UP);
+        }
+        BigDecimal inernalFinancing=ampTheme.getInternalFinancing();
+        if(inernalFinancing!=null){
+            inernalFinancing=inernalFinancing.setScale(2, RoundingMode.HALF_UP);
+        }
+        BigDecimal totalFinancing=ampTheme.getTotalFinancing();
+        if(totalFinancing!=null){
+            totalFinancing=totalFinancing.setScale(2, RoundingMode.HALF_UP);
+        }
+        themeForm.setProgramExternalFinancing(externalFinancing);
+		themeForm.setProgramInernalFinancing(inernalFinancing);
+		themeForm.setProgramTotalFinancing(totalFinancing);
+		
 	}
 }

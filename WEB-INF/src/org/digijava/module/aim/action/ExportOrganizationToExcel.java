@@ -709,7 +709,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
             cell = row.createCell(cellNum++);
             Collection<Location> selectedLocations=editForm.getSelectedLocs();
             String locations="";
-            if(orgs!=null){
+            if(selectedLocations!=null){
                 Iterator<Location> locationIter=selectedLocations.iterator();
                 while(locationIter.hasNext()){
                     Location location=locationIter.next();

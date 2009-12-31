@@ -304,7 +304,7 @@
 															  </digi:link>
                                                               <div id="donorList${organisation.ampOrgGrpId}" style="display:none; width: 200px; z-index:10; position: absolute; left:70px;  background-color: #ffffff; border: 1px solid silver;">
                                                                   <TABLE WIDTH='100%' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
-                                                                      <TR style="background-color:#cc0000"><TH style="color:#FFFFFF" nowrap><digi:trn>Donors</digi:trn></TH></TR>
+                                                                      <TR style="background-color:#cc0000"><TH style="color:#FFFFFF" nowrap><digi:trn>Donors agency affiliated</digi:trn></TH></TR>
                                                                       <TR style="background-color:#FFCC99">
                                                                           <TD>
                                                                               <c:if test="${not empty organisation.donorOrgs}">
@@ -316,7 +316,7 @@
 
                                                                               </c:if>
                                                                               <c:if test="${empty organisation.donorOrgs}">
-                                                                                  <digi:trn>No data available</digi:trn>
+                                                                                  <digi:trn>No donor agency affiliated to this group</digi:trn>
                                                                               </c:if>
                                                                           </TD>
                                                                       </TR>

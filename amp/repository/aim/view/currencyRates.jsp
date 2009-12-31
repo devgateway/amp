@@ -7,6 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
@@ -279,7 +282,7 @@ function fnSubmit() {
 		}
 	}
 </script>
-
+<c:set var="baseCurrencyGS" value="<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY) %>" scope="request" />
 <digi:errors/>
 <digi:instance property="aimCurrencyRateForm" />
 
@@ -329,9 +332,9 @@ function fnSubmit() {
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
 							<tr><td>
 								<!-- Filters -->
-								<table cellPadding=1 cellSpacing=1 align="left"  width="600" height = "70">
+								<table cellPadding=1 cellSpacing=1 align="left"  width="700" height = "70">
 								<tr><td >
-								<table cellPadding=0 cellSpacing=2 align="left" width="600" border=0>
+								<table cellPadding=0 cellSpacing=2 align="left" width="700" border=0>
 									<tr>
 										<td  vAlign="center">
 											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>
@@ -344,6 +347,17 @@ function fnSubmit() {
 												<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
 												<html:optionsCollection name="aimCurrencyRateForm" property="currencyCodes"
 												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;
+											</html:select>
+										</td>
+										<td  vAlign="center">
+											<digi:trn>Base Code</digi:trn>
+										</td>
+										<td  vAlign="center">
+											<html:select property="filterByBaseCode" styleClass="inp-text">
+<!--												<html:option value=""><digi:trn>${baseCurrencyGS}</digi:trn></html:option>-->
+												<logic:iterate id="codebase" name="aimCurrencyRateForm" property="currencyCodes">																																															
+													<html:option value="${codebase.currencyCode}"><digi:trn>${codebase.currencyCode}</digi:trn></html:option>	
+												</logic:iterate>	
 											</html:select>
 										</td>
 										<td vAlign="center">
@@ -418,6 +432,7 @@ function fnSubmit() {
                                         </a>
                                        
                                         </td>
+                                       </tr>
                                     </table>
                                   </td>
                                   

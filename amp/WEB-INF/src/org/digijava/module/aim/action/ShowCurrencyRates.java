@@ -143,7 +143,15 @@ public class ShowCurrencyRates extends Action {
 		if (!filtered) {
 			tempList = new ArrayList(crForm.getAllRates());
 		}
-
+		
+		if (crForm.getFilterByBaseCode() != null && crForm.getFilterByBaseCode().trim().length() > 0){
+			tempList = filterByBaseCode(tempList, crForm.getFilterByBaseCode().toUpperCase());	
+		}
+		else{
+			crForm.setFilterByBaseCode(baseCurrency);			
+			tempList = filterByBaseCode(tempList, baseCurrency.toUpperCase());
+		}
+		
 		if (crForm.getNumResultsPerPage() == 0) {
 			crForm.setNumResultsPerPage(Constants.NUM_RECORDS);
 		}
@@ -202,6 +210,19 @@ public class ShowCurrencyRates extends Action {
 		timePeriods.add(new LabelValueBean("Year","5"));
 		timePeriods.add(new LabelValueBean("ALL",String.valueOf(ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES)));		
 		return timePeriods;
+	}
+	private ArrayList filterByBaseCode(ArrayList tempList, String baseCode){
+		logger.debug("Filtering based on base code ....");
+		ArrayList baseCodeList = new ArrayList();
+		Iterator itr = tempList.iterator();
+		CurrencyRates cRates = null;
+		while (itr.hasNext()) {
+			cRates = (CurrencyRates) itr.next();
+			if (cRates.getFromCurrencyCode().toUpperCase().equals(baseCode)){
+				baseCodeList.add(cRates);
+			}
+		}
+		return baseCodeList;
 	}
 
 }

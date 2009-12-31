@@ -4,7 +4,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
-	<div style="margin: 5px 5px 5px 5px" >
+	<div style="margin: 15px 10px 5px 5px" >
 	 <digi:secure authenticated="true">
 	 <logic:present name="currentMember" scope="session">
               <c:set var="translation">
@@ -27,10 +27,10 @@
          </digi:secure> 
          <digi:secure authenticated="false">
           <logic:notPresent name="currentMember" scope="session">
-          <div style="background-color:#05528B; border: white 1px solid">
+          <div style="background-color:#376091; border: white 1px solid">
            <form action="/j_acegi_security_check" method="post"">
             
-              <table width="100%"  cellspacing="0" cellpadding="0" style=" margin: 5px 5px 5px 5px">
+              <table width="100%"  cellspacing="0" cellpadding="0" style=" margin-top: 10px">
                 <tr>
                   <td align="center" vAlign="middle" style="color: white" width="15%">
                     <digi:trn >	Username</digi:trn>
@@ -45,12 +45,13 @@
                     <input type="password" name="j_password" size="20" class="inp-text" />
                   </td>
                   <td align="center">
-                    <html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Sign In</digi:trn></html:submit>
+                    <html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Login</digi:trn></html:submit>
                   </td>
                 </tr>
               </table>
               </form>
                <div style="margin: 0px 5px 0px; 0px;">
+               <%-- 
                  <%					
 					String logoutMessage = (String)session.getAttribute("showLogoutMessage");
 					if(logoutMessage != null && !logoutMessage.equals("")){
@@ -64,7 +65,7 @@
 						session.removeAttribute("showLogoutMessage");
 					}
 					%>
-					
+					--%>
 					
 						<digi:errors/>
 						<c:if test="${param['loginError'] != null}">
@@ -101,18 +102,10 @@
 						  <bean:message key="errors.footer" />
 						</c:if>
 					
-					
-					
-					
-                 <c:set var="trn1">
-                      <digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have forgot your password</digi:trn>
-                    </c:set>
-                    <digi:link href="/showEmailForm.do" module="aim" title="${trn1}" style="color:white; ">
-                      <digi:trn key="aim:forgotPassword">
-                      Forgot Password
-                      </digi:trn>
-                    </digi:link>
-                    |
+				 	
+
+                    
+               <%--     | #7536
                     <c:set var="trn2">
                       <digi:trn key="aim:clickToChangeYourPassword">Click here if you want to change your password</digi:trn>
                     </c:set>
@@ -121,8 +114,27 @@
                       Change Password
                       </digi:trn>
                     </digi:link>
+                    --%> 
               </div>
               
           </logic:notPresent>
           </digi:secure>
        </div>
+      <digi:secure authenticated="false" >
+        		<c:set var="trn3">
+					<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
+				</c:set>
+				  <digi:link href="/showRegisterUser.do" module="aim" style="color:white; margin-top: 3px;">
+				    <digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
+				  </digi:link>	
+                 &nbsp;&nbsp;<span style="color: white;">|</span>&nbsp;&nbsp;
+                 <c:set var="trn1">
+                      <digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have problem with login in</digi:trn>
+                    </c:set>
+                    <digi:link href="/showEmailForm.do" module="aim" title="${trn1}" style="color:white; ">
+                      <digi:trn key="aim:forgotPassword">
+                      Trouble signing in?
+                      </digi:trn>
+                    </digi:link>
+      </digi:secure>
+       

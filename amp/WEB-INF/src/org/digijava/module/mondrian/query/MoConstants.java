@@ -24,6 +24,7 @@ public final class MoConstants {
 	public static  String NATIONAL_PROGRAM= "National Program";
 	public static String SECTORS= "Sectors";
 	public static String SUB_SECTORS = "Sub-Sectors";
+	public static String SEC_SUB_SECTORS = "Secondary Sector Sub-Sector";
 	public static String CURRENCY = "currency";
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";

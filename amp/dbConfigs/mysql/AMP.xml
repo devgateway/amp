@@ -195,6 +195,7 @@
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id" />
 		
+		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" caption="#Activity_Count#" />
 		<Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
@@ -215,8 +216,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" caption="#Activity_Count#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter" />
-		<Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#">
+		<Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter" >
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					case when cached_v_donor_funding.transaction_type=2

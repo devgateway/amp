@@ -25,6 +25,8 @@
     }
     </script>
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
+
 <digi:instance property="aimEditActivityForm" />
 <tr>
     <td>
@@ -33,21 +35,17 @@
             
             
             <tr>
-                <td>
+                <td class="separator1">
                     <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15 />
-                    <b>
-                	<FONT color="red">*</FONT>
 					<digi:trn key="aim:sector">Sector</digi:trn>
-                    </b>
                     <a href="javascript:popupwin()">
                         <img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
                     </a>
                 </td>
             </tr>
             <tr>
-                <td>
-                    <FONT color=red>*</FONT>
-                    <digi:trn key="aim:chooseSector">Choose the sector.</digi:trn>
+                <td class="requiredField">
+                    * <digi:trn key="aim:chooseSector">Choose the sector.</digi:trn>
                 </td>
             </tr>
             <tr>

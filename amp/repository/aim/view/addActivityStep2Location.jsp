@@ -28,6 +28,8 @@
 	YAHOOAmp.util.Event.on(window, "load", updateAddLocationButton);
 </script>
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
+
 <digi:instance property="aimEditActivityForm" />
 <bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
                               <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#f4f4f2">
@@ -35,13 +37,11 @@
                                   <td bgColor=#f4f4f2 align="center" vAlign="top"><!-- contents -->
                                     <table width="95%" bgcolor="#f4f4f2">
                                       <tr>
-                                        <td>
+                                        <td class="separator1">
                                           <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15 />
-                                          <b>
                                             <digi:trn key="aim:location">
                                             Location
                                             </digi:trn>
-                                          </b>
                                         </td>
                                       </tr>
                                       <tr>

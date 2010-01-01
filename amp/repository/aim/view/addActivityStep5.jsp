@@ -660,6 +660,9 @@ function removeSelComponents() {
                     </table>
                   </td>
                 </tr>
+				<tr><td>
+					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
+				</td></tr>
                 <tr>
                   <td>
                     <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -695,40 +698,6 @@ function removeSelComponents() {
 						<tr><td width="75%" vAlign="top">
 
 						<table cellPadding=0 cellSpacing=0 width="100%">
-
-							<tr>
-
-								<td width="100%">
-
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-
-										<tr>
-
-											<td width="13" height="20" background="module/aim/images/left-side.gif">
-
-											</td>
-
-											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-
-												<digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of</digi:trn>  ${fn:length(aimEditActivityForm.steps)}:
-                                                                                                 <digi:trn key="aim:activity:Components">
-                                                                                                 Components
-                                                                                                 </digi:trn>
-
-											</td>
-
-											<td width="13" height="20" background="module/aim/images/right-side.gif">
-
-											</td>
-
-										</tr>
-
-									</table>
-
-								</td>
-
-							</tr>
-
 							<tr><td width="100%" bgcolor="#f4f4f2">
 
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">

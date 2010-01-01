@@ -17,6 +17,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="addActivityStep11Popin.jsp" flush="true" />
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <script language="JavaScript">
 	<!--
@@ -228,6 +229,9 @@ ${fn:replace(message,quote,escapedQuote)}
 								</table>
 							</td></tr>
 							<tr><td>
+								<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
+							</td></tr>
+							<tr><td>
 								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 									<tr>
 										<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -237,10 +241,7 @@ ${fn:replace(message,quote,escapedQuote)}
 												</digi:trn>
 											</c:if>
 											<c:if test="${aimEditActivityForm.editAct == true}">
-												<digi:trn key="aim:editActivity">
-													Edit Activity
-												</digi:trn>:
-													<bean:write name="aimEditActivityForm" property="identification.title"/>
+												<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
 											</c:if>
 										</td>
 									</tr>
@@ -253,22 +254,7 @@ ${fn:replace(message,quote,escapedQuote)}
 								<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 									<tr><td width="75%" vAlign="top">
 										<table cellPadding=0 cellSpacing=0 width="100%" vAlign="top" >
-											<tr>
-												<td width="100%">
-													<table cellPadding=0 cellSpacing=0 width="100%">
-														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"></td>
-															<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-                                                                                                                           <digi:trn>
-													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
-                                                                                                                            ${fn:length(aimEditActivityForm.steps)}:
-																<digi:trn key="aim:stepCosting">EU Project Costing</digi:trn>
-															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
+											
 											
 											<feature:display name="Costing" module="Activity Costing">
 											<tr valign="top">
@@ -279,12 +265,10 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td bgColor=#f4f4f2 align="center" vAlign="top">
 																<table width="95%">
 																	<tr>
-																		<td>
+																		<td class="separator1" title="<digi:trn key="aim:costing">Costing</digi:trn>">
 																			<IMG alt=Link height=10
 																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																			<a title="<digi:trn key="aim:costing">Costing</digi:trn>">
-																				<b><digi:trn key="aim:costing">Costing</digi:trn></b>
-																			</a>
+																			<digi:trn key="aim:costing">Costing</digi:trn>
 																		</td>
 																	</tr>
 																	<tr><td>&nbsp;</td></tr>

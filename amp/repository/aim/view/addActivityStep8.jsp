@@ -38,6 +38,8 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
+
 <script type="text/javascript">
 <!--
 
@@ -461,6 +463,9 @@ function resetAll()
 					</table>
 				</td></tr>
 				<tr><td>
+					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
+				</td></tr>
+				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -470,10 +475,7 @@ function resetAll()
 									</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">
-										Edit Activity
-									</digi:trn>:
-										<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -483,23 +485,7 @@ function resetAll()
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
 							<table cellPadding=0 cellSpacing=0 width="100%">
-								<tr>
-									<td width="100%">
-										<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-											<tr>
-												<td width="13" height="20" background="module/aim/images/left-side.gif">
-												</td>
-												<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-													<digi:trn>
-														Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>${fn:length(aimEditActivityForm.steps)}:
-	                                                <digi:trn key="aim:activity:ContactInformation">Contact Information</digi:trn>
-												</td>
-												<td width="13" height="20" background="module/aim/images/right-side.gif">
-												</td>
-											</tr>
-										</table>
-									</td>
-								</tr>
+								
 								<tr><td width="100%" bgcolor="#f4f4f2">
 									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 										<tr>
@@ -509,11 +495,9 @@ function resetAll()
 													
 													<feature:display name="Donor Contact Information" module="Contact Information">
 														<tr>
-															<td>
+															<td class="separator1" title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<a title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
-																<b><digi:trn>Donor Contact Information</digi:trn></b>
-																</a>	
+																<digi:trn>Donor Contact Information</digi:trn>
 															</td>
 														</tr>
 														<tr>
@@ -591,11 +575,9 @@ function resetAll()
 													</feature:display>													
 													<feature:display name="Government Contact Information" module="Contact Information">
 														<tr>
-															<td>
+															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
-																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
-																<b><digi:trn>MOFED Contact Information</digi:trn></b>
-																</a>	
+																<digi:trn>MOFED Contact Information</digi:trn>
 															</td>
 														</tr>
 														<tr>
@@ -673,11 +655,9 @@ function resetAll()
 													</feature:display>
 													<feature:display name="Project Coordinator Contact Information" module="Contact Information">
 														<tr>
-															<td>
+															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
-																<b><digi:trn>Project Coordinator Contact Information</digi:trn></b>
-																</a>	
+																<digi:trn>Project Coordinator Contact Information</digi:trn>
 															</td>
 														</tr>
 														<tr>
@@ -755,11 +735,9 @@ function resetAll()
 													</feature:display>
 													<feature:display name="Sector Ministry Contact Information" module="Contact Information">
 														<tr>
-															<td>
+															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
-																<b><digi:trn>Sector Ministry Contact Information</digi:trn></b>
-																</a>	
+																<digi:trn>Sector Ministry Contact Information</digi:trn>
 															</td>
 														</tr>
 														<tr>
@@ -838,11 +816,9 @@ function resetAll()
 													<!-- Implementing/Executing agencies -->
 													<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
 														<tr>
-															<td>
+															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
-																<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
-																</a>	
+																<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>	
 															</td>
 														</tr>
 														<tr>

@@ -31,7 +31,7 @@
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 
-
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -40,10 +40,9 @@
 							<field:display name="Issues" feature="Issues">
 								<table width="95%" bgcolor="#f4f4f2">
 
-									<tr><td>
+									<tr><td class="separator1" title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
 										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
-										<b><digi:trn key="aim:issues">Issues</digi:trn></b></a>
+										<digi:trn key="aim:issues">Issues</digi:trn>
 									</td></tr>
 									<tr><td>
 										&nbsp;

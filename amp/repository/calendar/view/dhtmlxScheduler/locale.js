@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 scheduler.locale={
 	date:{
 		month_full:["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -15,7 +9,8 @@ scheduler.locale={
     	dhx_cal_today_button:"Today",
     	day_tab:"Day",
     	week_tab:"Week",
-    	month_tab:"Month",
+    	month_tab:"Month_loc",
+    	year_tab:"Year",
     	new_event:"New event",
 		icon_save:"Save",
 		icon_cancel:"Cancel",
@@ -27,11 +22,19 @@ scheduler.locale={
 		section_description:"Description",
 		section_time:"Time period",
 		
+		/*recurring events*/
 		confirm_recurring:"Do you want to edit the whole set of repeated events?",
 		section_recurring:"Repeat event",
 		button_recurring:"Disabled",
-		button_recurring_open:"Enabled"
+		button_recurring_open:"Enabled",
+		
+		/*agenda view extension*/
+		agenda_tab:"Agenda",
+		date:"Date",
+		description:"Description"
+		
+		/*year view extension*/
+		
     }
 }
-
 

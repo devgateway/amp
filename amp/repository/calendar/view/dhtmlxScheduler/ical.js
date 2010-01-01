@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 scheduler.ical={
 	parse:function(str){
 		var data = str.match(RegExp(this.c_start+"[^\f]*"+this.c_end,""));
@@ -56,7 +50,7 @@ scheduler.ical={
 			dm=t[1].substr(2,2);
 		}
 		var dy = t[0].substr(0,4);
-		var dn = parseInt(t[0].substr(4,2))-1;
+		var dn = parseInt(t[0].substr(4,2),10)-1;
 		var dd = t[0].substr(6,2);
 		
 		return new Date(dy,dn,dd,dh,dm);

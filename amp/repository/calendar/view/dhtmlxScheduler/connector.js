@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 if (window.dhtmlXGridObject){
 	dhtmlXGridObject.prototype._init_point_connector=dhtmlXGridObject.prototype._init_point;
 	dhtmlXGridObject.prototype._init_point=function(){

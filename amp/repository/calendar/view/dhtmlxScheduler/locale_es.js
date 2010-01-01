@@ -1,9 +1,3 @@
-﻿//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 /*
 	@Autor Manuel Fernandez Panzuela - www.mfernandez.es
 */
@@ -11,7 +5,7 @@ scheduler.locale={
 	date:{
 		month_full:["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
 		month_short:["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-		day_full:["Domingo", "Lunes", "Martes", "Miércores", "Jueves", "Viernes", "Sábado"],
+		day_full:["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
     	day_short:["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"]
     },
     labels:{
@@ -33,6 +27,14 @@ scheduler.locale={
 		confirm_recurring:"¿Desea modificar el conjunto de eventos repetidos?",
 		section_recurring:"Repita el evento",
 		button_recurring:"Impedido",
-		button_recurring_open:"Permitido"
+		button_recurring_open:"Permitido",
+		
+		/*agenda view extension*/
+		agenda_tab:"Dia",
+		date:"Fecha",
+		description:"Descripción",
+		
+		/*year view extension*/
+		year_tab:"Año"
 	}
 }

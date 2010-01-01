@@ -3,6 +3,7 @@
 	font-family:Tahoma; 
 	font-size:8pt;
 	position:relative;
+	overflow:hidden;
 }
 .dhx_cal_container div{
 	-moz-user-select:none;    
@@ -172,4 +173,7 @@
 	background-repeat:no-repeat;
 	border-bottom:1px dotted #8894A3;
 	border-left:1px dotted #8894A3;	
+}
+.dhtmlxLayoutPolyContainer_dhx_skyblue 	.dhx_cal_container {
+	background-color: #d0e5ff;
 }

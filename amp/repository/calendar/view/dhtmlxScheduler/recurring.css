@@ -27,11 +27,11 @@ div input.checkbox 	{ margin:0 0 0 -4px !ie; }
 }
 
 .dhx_repeat_left{
-    width:67px;
+    width:95px;
 }
 
 .dhx_repeat_center{
-    width:287px;
+    width:335px;
     margin-top:12px;
 }
 
@@ -46,7 +46,7 @@ div input.checkbox 	{ margin:0 0 0 -4px !ie; }
 .dhx_repeat_right {
     float:right;
     height:115px;
-    width:150px;
+    width:160px;
     padding:10px 3px 10px 10px;
     margin-top:7px;
 }
@@ -71,7 +71,6 @@ input.dhx_repeat_date{
     width: 80px;
     padding:0 0 0 2px;
     margin: 0 4px 0 4px;
-    background-image:url("images/calendar.gif");
     background-repeat:no-repeat;
     background-position:64px 0;
     border:1px #7f9db9 solid;
@@ -101,5 +100,12 @@ input.dhx_repeat_checkbox {
 	margin-right:10px;
 }
 .dhx_custom_button{
-	width:80px;
+	width:90px;
+}
+/* increase width of lightbox */
+.dhx_cal_light{
+	width:640px;
+}
+.dhx_cal_larea{
+	width:632px;
 }

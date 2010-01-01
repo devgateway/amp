@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 scheduler.uid=function(){
 	if (!this._seed) this._seed=(new Date).valueOf();
 	return this._seed++;
@@ -58,6 +52,7 @@ scheduler.for_rendered=function(id,method){
 			method(this._rendered[i],i);
 }
 scheduler.changeEventId=function(id,new_id){
+	if (id == new_id) return;
 	var ev=this._events[id];
 	if (ev){
 		ev.id=new_id;
@@ -78,24 +73,31 @@ scheduler.changeEventId=function(id,new_id){
 		return function(id){ return (scheduler.getEvent(id))[name]; }
 	}
 	var create_setter=function(name){
-		return function(id,value){ var ev=scheduler.getEvent(id); ev[name]=value; ev._changed=true; scheduler.event_updated(ev); }
+		return function(id,value){ 
+			var ev=scheduler.getEvent(id); ev[name]=value; 
+			ev._changed=true; 
+			ev._timed=this.is_one_day_event(ev);
+			scheduler.event_updated(ev,true); 
+		}
 	}
 	for (var i=0; i<attrs.length; i+=2){
-		scheduler["getEvent_"+attrs[i+1]]=create_getter(attrs[i]);
+		scheduler["getEvent"+attrs[i+1]]=create_getter(attrs[i]);
 		scheduler["setEvent"+attrs[i+1]]=create_setter(attrs[i]);
 	}
 })();
 
-scheduler.event_updated=function(ev){
+scheduler.event_updated=function(ev,force){
 	if (this.is_visible_events(ev))
 		this.render_view_data();
+	else this.clear_event(ev.id);
 }
 scheduler.is_visible_events=function(ev){
 	if (ev.start_date<this._max_date && this._min_date<ev.end_date) return true;
 	return false;
 }
 scheduler.is_one_day_event=function(ev){
-	return (ev.start_date.getDate()==ev.end_date.getDate() && ev.start_date.getMonth()==ev.end_date.getMonth() && ev.start_date.getFullYear()==ev.end_date.getFullYear()) ;
+	var delta = ev.end_date.getDate()-ev.start_date.getDate();
+	return ( (!delta || (delta == 1 && !ev.end_date.getHours() && !ev.end_date.getMinutes())) && ev.start_date.getMonth()==ev.end_date.getMonth() && ev.start_date.getFullYear()==ev.end_date.getFullYear()) ;
 }
 scheduler.get_visible_events=function(){
 	//not the best strategy for sure
@@ -175,26 +177,35 @@ scheduler._pre_render_events=function(evs,hold){
 					//we have v-scroll, decrease last day cell
 					for (var i=0; i<evl.rows.length; i++){
 						var cell = evl.rows[i].cells[6].childNodes[0];
-						var w = cell.offsetWidth-18+"px";
+						var w = cell.offsetWidth-scheduler.xy.scroll_width+"px";
 						cell.style.width = w;
 						cell.nextSibling.style.width = w;
 					}		
 					evl._h_fix=true;
 				}
-			} else if (evs.length){
-				//shift days to have space for multiday events
-				var childs = evl.parentNode.childNodes;
-				var dh = (h[0]+1)*hb+"px";
-				for (var i=0; i<childs.length; i++)
-					if (this._colsS[i])
-						childs[i].style.top=dh;
-				var last = this._els["dhx_multi_day"][0];
-				last.style.top = "0px";
-				last.style.height=dh;
-				last=this._els["dhx_multi_day"][1];
-				last.style.height=dh;
-				if (!h[0]) last.className="dhx_multi_day_icon_small";
-				this._dy_shift=(h[0]+1)*hb;
+			} else{
+				
+				if (!evs.length && this._els["dhx_multi_day"][0].style.visibility == "visible")
+					h[0]=-1;
+				if (evs.length || h[0]==-1){
+					//shift days to have space for multiday events
+					var childs = evl.parentNode.childNodes;
+					var dh = (h[0]+1)*hb+"px";
+					for (var i=0; i<childs.length; i++)
+						if (this._colsS[i])
+							childs[i].style.top=dh;
+					var last = this._els["dhx_multi_day"][0];
+					last.style.top = "0px";
+					last.style.height=dh;
+					last.style.visibility=(h[0]==-1?"hidden":"visible");
+					last=this._els["dhx_multi_day"][1];
+					last.style.height=dh;
+					last.style.visibility=(h[0]==-1?"hidden":"visible");
+					last.className=h[0]?"dhx_multi_day_icon":"dhx_multi_day_icon_small";
+					
+					this._dy_shift=(h[0]+1)*hb;
+				}				
+				
 			}
 		}
 	}
@@ -219,6 +230,7 @@ scheduler._pre_render_events_line=function(evs,hold){
 		if (!days[ev._sday]) days[ev._sday]=[];
 		
 		if (!hold){
+			ev._inner=false;
 			var stack=days[ev._sday];
 			while (stack.length && stack[stack.length-1].end_date<=ev.start_date)
 				stack.splice(stack.length-1,1);
@@ -253,8 +265,8 @@ scheduler._pre_render_events_line=function(evs,hold){
 	
 	return evs;
 }	
-scheduler._pre_render_events_table=function(evs,hold){ // max - max height of week slot
-	evs.sort(function(a,b){ 
+scheduler._time_order=function(evs){
+		evs.sort(function(a,b){ 
 		if (a.start_date.valueOf()==b.start_date.valueOf()){
 			if (a._timed && !b._timed) return 1;
 			if (!a._timed && b._timed) return -1;
@@ -262,7 +274,10 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 		}
 		return a.start_date>b.start_date?1:-1;
 	 })
-		
+}
+scheduler._pre_render_events_table=function(evs,hold){ // max - max height of week slot
+	this._time_order(evs);
+	
 	var out=[];
 	var weeks=[[],[],[],[],[],[],[]]; //events by weeks
 	var max = this._colsS.heights;
@@ -275,8 +290,11 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 		if (sd<this._min_date) sd=this._min_date;
 		if (ed>this._max_date) ed=this._max_date;
 		
-		ev._sday=this.locate_holder_day(sd)%7;
-		ev._eday=(this.locate_holder_day(ed,true)%7)||7; //7 used to fill full week, when event end on monday
+		var locate_s = this.locate_holder_day(sd,false,ev);
+		ev._sday=locate_s%7;
+		var locate_e = this.locate_holder_day(ed,true,ev)||7;
+		ev._eday=(locate_e%7)||7; //7 used to fill full week, when event end on monday
+		ev._length=locate_e-locate_s;
 		
 		//3600000 - compensate 1 hour during winter|summer time shift
 		ev._sweek=Math.floor((sd.valueOf()+3600000-this._min_date.valueOf())/(60*60*1000*24*7)); 	
@@ -284,18 +302,18 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 		//current slot
 		var stack=weeks[ev._sweek];
 		//check order position
-		while (stack.length && stack[stack.length-1].end_date<=this.date.date_part(this.date.copy(ev.start_date)) )
+		while (stack.length && stack[stack.length-1]._eday<=ev._sday)
+		//while (stack.length && stack[stack.length-1].end_date<=this.date.date_part(this.date.copy(ev.start_date)) )
 				stack.splice(stack.length-1,1);
 		//get max height of slot
 		if (stack.length>max[ev._sweek]) max[ev._sweek]=stack.length;
 				
-		ev._sorder=stack.length; stack.push(ev);
-		
-		ev._length=Math.ceil((ed.valueOf()-sd.valueOf())/(60*60*1000*24));
+		ev._sorder=stack.length; 
 		
 		if (ev._sday+ev._length<=7){
 			start_date=null;
 			out.push(ev);
+			stack.push(ev);
 		} else{ // split long event in chunks
 			copy=this._copy_event(ev);
 			copy._length=7-ev._sday;
@@ -304,7 +322,7 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 			copy.end_date=this.date.add(sd,copy._length,"day");
 			
 			out.push(copy);
-			
+			stack.push(copy);
 			start_date=copy.end_date;
 			i--; continue;  //repeat same step
 		}
@@ -343,6 +361,7 @@ scheduler.clear_event=function(id){
 }
 scheduler.render_event=function(ev){
 	var parent=scheduler.locate_holder(ev._sday);	
+	if (!parent) return; //attempt to render non-visible event
 	var top = (Math.round((ev.start_date.valueOf()-this._min_date.valueOf()-this.config.first_hour*60*60*1000)*this.config.hour_size_px/(60*60*1000)))%(this.config.hour_size_px*24)+1; //42px/hour
 	var height = Math.max(25,Math.round((ev.end_date.valueOf()-ev.start_date.valueOf())*(this.config.hour_size_px+(this._quirks?1:0))/(60*60*1000))-14); //42px/hour
 	var width=Math.ceil((parent.clientWidth-25)/ev._count);
@@ -368,14 +387,14 @@ scheduler.render_event=function(ev){
 			
 		var d2=document.createElement("DIV");
 		this.set_xy(d2,width-6,height-12);
-		d2.style.cssText+=";margin:2px 2px 2px 2px;";
+		d2.style.cssText+=";margin:2px 2px 2px 2px;overflow:hidden;";
 		
 		d.appendChild(d2);
 		this._els["dhx_cal_data"][0].appendChild(d);
 		this._rendered.push(d);
 	
 		d2.innerHTML="<textarea class='dhx_cal_editor'>"+ev.text+"</textarea>";
-		if (this._quirks7) d2.firstChild.style.height=height-16+"px"; //IEFIX
+		if (this._quirks7) d2.firstChild.style.height=height-12+"px"; //IEFIX
 		this._editor=d2.firstChild;
 		this._editor.onkeypress=function(e){ 
 			if ((e||event).shiftKey) return true;
@@ -473,7 +492,7 @@ scheduler.edit=function(id){
 	this.updateEvent(id);
 }
 scheduler.editStop=function(mode,id){
-	if (id && this._edit_id!=id) return;
+	if (id && this._edit_id==id) return;
 	var ev=this.getEvent(this._edit_id);
 	if (ev){
 		if (mode) ev.text=this._editor.value;

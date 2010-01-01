@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 /*
 %e	Day of the month without leading zeros (01..31)
 %d	Day of the month, 2 digits with leading zeros (01..31)
@@ -21,11 +15,11 @@ To use it on other terms or get Professional edition of the component please con
 */
 
 scheduler.config={
-	default_date: "%d %M %Y",
+	default_date: "%j %M %Y",
 	month_date: "%F %Y",
 	load_date: "%Y-%m-%d",
 	week_date: "%l",
-	day_date: "%D, %F %d",
+	day_date: "%D, %F %j",
 	hour_date: "%H:%i",
 	month_day : "%d",
 	xml_date:"%m/%d/%Y %H:%i",
@@ -70,20 +64,21 @@ scheduler.init_templates=function(){
 		day_date:d(c.default_date),
 		month_date:d(c.month_date),
 		week_date:function(d1,d2){
-			return scheduler.templates.day_date(d1)+" &ndash; "+scheduler.templates.day_date(d2);
+			return scheduler.templates.day_date(d1)+" &ndash; "+scheduler.templates.day_date(scheduler.date.add(d2,-1,"day"));
 		},
 		day_scale_date:d(c.default_date),
 		month_scale_date:d(c.week_date),
 		week_scale_date:d(c.day_date),
 		hour_scale:d(c.hour_date),
+		time_picker:d(c.hour_date),
+		event_date:d(c.hour_date),
 		month_day:d(c.month_day),
 		xml_date:scheduler.date.str_to_date(c.xml_date,c.server_utc),
 		load_format:d(c.load_date,c.server_utc),
 		xml_format:d(c.xml_date,c.server_utc),
 		api_date:scheduler.date.str_to_date(c.api_date),
-		
 		event_header:function(start,end,ev){
-			return scheduler.templates.hour_scale(start)+" - "+scheduler.templates.hour_scale(end);
+			return scheduler.templates.event_date(start)+" - "+scheduler.templates.event_date(end);
 		},
 		event_text:function(start,end,ev){
 			return ev.text;
@@ -98,7 +93,7 @@ scheduler.init_templates=function(){
 			return "";
 		},
 		event_bar_date:function(start,end,ev){
-			return scheduler.templates.hour_scale(start)+" ";
+			return scheduler.templates.event_date(start)+" ";
 		},
 		event_bar_text:function(start,end,ev){
 			return ev.text;

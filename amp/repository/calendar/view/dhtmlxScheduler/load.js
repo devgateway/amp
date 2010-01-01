@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 scheduler._loaded={};
 scheduler._load=function(url,from){
 	url=url||this._load_url;
@@ -19,13 +13,19 @@ scheduler._load=function(url,from){
 		while (from>this._min_date) from=this.date.add(from,-1,this._load_mode);
 		to = from;
 		
+		var cache_line = true;
 		while (to<this._max_date){
 			to=this.date.add(to,1,this._load_mode);	
-			if (this._loaded[lf(from)]) 
+			if (this._loaded[lf(from)] && cache_line) 
 				from=this.date.add(from,1,this._load_mode);	
+			else cache_line = false;
 		}
-		while (to>from && this._loaded[lf(to)]) 
-			to = this.date.add(to,-1,this._load_mode);
+		
+		var temp_to=to;
+		do {
+			to = temp_to;
+			temp_to=this.date.add(to,-1,this._load_mode);
+		} while (temp_to>from && this._loaded[lf(temp_to)]);
 			
 		if (to<=from) 
 			return false; //already loaded
@@ -128,7 +128,8 @@ scheduler.attachEvent("onXLS",function(){
 });
 scheduler.attachEvent("onXLE",function(){
 	var t;
-	if (t=this.config.show_loading){
+	if (t=this.config.show_loading)
+		if (typeof t == "object"){
 		this._obj.removeChild(t);
 		this.config.show_loading=true;
 	}

@@ -233,6 +233,7 @@ function callerFunction(funcObject, dhtmlObject){
   *     @topic: 0  
   */
 function getAbsoluteLeft(htmlObject){
+	return getOffset(htmlObject).left;
 	var xPos = htmlObject.offsetLeft;
 	var temp = htmlObject.offsetParent;
 
@@ -249,9 +250,9 @@ function getAbsoluteLeft(htmlObject){
   *     @topic: 0  
   */
 function getAbsoluteTop(htmlObject){
+	return getOffset(htmlObject).top;
 	var yPos = htmlObject.offsetTop;
 	var temp = htmlObject.offsetParent;
-
 	while (temp != null){
 		yPos+=temp.offsetTop;
 		temp=temp.offsetParent;
@@ -259,6 +260,34 @@ function getAbsoluteTop(htmlObject){
 	return yPos;
 }
 
+function getOffsetSum(elem) {
+	var top=0, left=0;
+	while(elem) {
+		top = top + parseInt(elem.offsetTop);
+		left = left + parseInt(elem.offsetLeft);
+		elem = elem.offsetParent;
+	}
+	return {top: top, left: left};
+}
+function getOffsetRect(elem) {
+	var box = elem.getBoundingClientRect();
+	var body = document.body;
+	var docElem = document.documentElement;
+	var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+	var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+	var clientTop = docElem.clientTop || body.clientTop || 0;
+	var clientLeft = docElem.clientLeft || body.clientLeft || 0;
+	var top  = box.top +  scrollTop - clientTop;
+	var left = box.left + scrollLeft - clientLeft;
+	return { top: Math.round(top), left: Math.round(left) };
+}
+function getOffset(elem) {
+	if (elem.getBoundingClientRect) {
+		return getOffsetRect(elem);
+	} else {
+		return getOffsetSum(elem);
+	}
+}
 
 /**  
 *     @desc: Convert string to it boolean representation
@@ -1670,12 +1699,12 @@ if (window.dataProcessor){
 		this.serverProcessor+=(this.serverProcessor.indexOf("?")!=-1?"&":"?")+"editing=true";
 	}
 }
-dhtmlxError.catchError("LoadXML",function(a,b,c){
+/*dhtmlxError.catchError("LoadXML",function(a,b,c){
 	alert(c[0].responseText);
-});
+});*/
 
 
-window.dhtmlXScheduler=window.scheduler={};
+window.dhtmlXScheduler=window.scheduler={version:2.1};
 dhtmlxEventable(scheduler);
 scheduler.init=function(id,date,mode){
 	date=date||(new Date());
@@ -1693,7 +1722,8 @@ scheduler.init=function(id,date,mode){
 	dhtmlxEvent(window,"resize",function(){
 		window.clearTimeout(scheduler._resize_timer);
 		scheduler._resize_timer=window.setTimeout(function(){
-			scheduler.update_view();
+			if (scheduler.callEvent("onSchedulerResize",[]))
+				scheduler.update_view();
 		}, 100);
 	})
 	
@@ -1702,7 +1732,8 @@ scheduler.init=function(id,date,mode){
 }
 scheduler.xy={
 	nav_height:22,
-	scale_left:50,
+	scale_width:50,
+	bar_height:20,
 	scroll_width:18,
 	scale_height:20
 }
@@ -1711,8 +1742,8 @@ scheduler.set_sizes=function(){
 	var h = this._y = this._obj.clientHeight;
 	
 	//not-table mode always has scroll - need to be fixed in future
-	var scale_x=this._table_view?0:(this.xy.scale_left+this.xy.scroll_width);
-	var scale_s=this._table_view?-1:this.xy.scale_left;
+	var scale_x=this._table_view?0:(this.xy.scale_width+this.xy.scroll_width);
+	var scale_s=this._table_view?-1:this.xy.scale_width;
 	var data_y=this.xy.scale_height+this.xy.nav_height+(this._quirks?-2:0);
 	
 	this.set_xy(this._els["dhx_cal_navline"][0],w,this.xy.nav_height,0,0);
@@ -1720,8 +1751,8 @@ scheduler.set_sizes=function(){
 	this.set_xy(this._els["dhx_cal_data"][0],w,h-(data_y+2),0,data_y+2);
 }
 scheduler.set_xy=function(node,w,h,x,y){
-	node.style.width=w+"px";
-	node.style.height=h+"px";
+	node.style.width=Math.max(0,w)+"px";
+	node.style.height=Math.max(0,h)+"px";
 	if (arguments.length>3){
 		node.style.left=x+"px";
 		node.style.top=y+"px";	
@@ -1783,11 +1814,8 @@ scheduler._click={
 			var mask = trg.className;
 			if (mask.indexOf("_icon")!=-1)
 				scheduler._click.buttons[mask.split(" ")[1].replace("icon_","")](id);
-			} else if (new Date().valueOf()-(scheduler._new_event||0) > 500 && scheduler._edit_id){
-				var c=scheduler.locale.labels.confirm_closing;
-					if (!c || confirm(c))
-						scheduler.editStop(scheduler.config.positive_closing);
-				}
+		} else
+			scheduler._close_not_saved();
 	},
 	dhx_cal_prev_button:function(){
 		scheduler.setCurrentView(scheduler.date.add(scheduler._date,-1,scheduler._mode));
@@ -1810,24 +1838,35 @@ scheduler._click={
 		cancel:function(id){ scheduler.editStop(false); }
 	}
 }
-scheduler._on_dbl_click=function(e){
-	var src = e.target||e.srcElement;
+
+scheduler.addEventNow=function(start,end,e){
+	var d = this.config.time_step*60000;
+	if (!start) start = Math.round((new Date()).valueOf()/d)*d;
+	end = (end||(start+d));
+	
+	this._drag_id=this.uid();
+	this._drag_mode="new-size";
+	this._loading=true;
+	
+	this.addEvent(new Date(start), new Date(end),this.locale.labels.new_event,this._drag_id);
+	this.callEvent("onEventCreated",[this._drag_id,e]);
+	this._loading=false;
+	this._drag_event={}; //dummy , to trigger correct event updating logic
+	this._on_mouse_up(e);	
+}
+scheduler._on_dbl_click=function(e,src){
+	src = src||(e.target||e.srcElement);
 	if (this.config.readonly) return;
-	switch(src.className.split(" ")[0]){
+	var name = src.className.split(" ")[0];
+	switch(name){
 		case "dhx_scale_holder":
 		case "dhx_scale_holder_now":
 		case "dhx_month_body":
-			if (!scheduler.config.drag_create) break;
+			if (!scheduler.config.dblclick_create) break;
 			var pos=this._mouse_coords(e);
 			var start=this._min_date.valueOf()+(pos.y*this.config.time_step+(this._table_view?0:pos.x)*24*60)*60000;
-			var end = start+this.config.time_step*60000;
-			this._drag_id=this.uid();
-			this._drag_mode="new-size";
-			this._loading=true;
-			this.addEvent(new Date(start), new Date(end),this.locale.labels.new_event,this._drag_id);
-			this.callEvent("onEventCreated",[this._drag_id]);
-			this._loading=false;
-			this._on_mouse_up(e);		
+			start = this._correct_shift(start);
+			this.addEventNow(start,null,e);
 			break;
 		case "dhx_body":
 		case "dhx_cal_event_line":
@@ -1839,18 +1878,29 @@ scheduler._on_dbl_click=function(e){
 			else
 				this.edit(id);
 			break;
+		case "":
+			if (src.parentNode)
+				return scheduler._on_dbl_click(e,src.parentNode);			
+		default:
+			var t = this["dblclick_"+name];
+			if (t) t.call(this,e);
+			break;
 	}
 }
+
 scheduler._mouse_coords=function(ev){
 	var pos;
+	var b=document.body;
+	var d = document.documentElement;
 	if(ev.pageX || ev.pageY)
 	    pos={x:ev.pageX, y:ev.pageY};
 	else pos={
-	    x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
-	    y:ev.clientY + document.body.scrollTop  - document.body.clientTop
+	    x:ev.clientX + (b.scrollLeft||d.scrollLeft||0) - b.clientLeft,
+	    y:ev.clientY + (b.scrollTop||d.scrollTop||0) - b.clientTop
 	}
+
 	//apply layout
-	pos.x-=getAbsoluteLeft(this._obj)+(this._table_view?0:this.xy.scale_left);
+	pos.x-=getAbsoluteLeft(this._obj)+(this._table_view?0:this.xy.scale_width);
 	pos.y-=getAbsoluteTop(this._obj)+this.xy.nav_height+this._dy_shift+this.xy.scale_height-this._els["dhx_cal_data"][0].scrollTop;
 	//transform to date
 	if (!this._table_view){
@@ -1866,16 +1916,33 @@ scheduler._mouse_coords=function(ev){
 	}
 	return pos;
 }
+scheduler._close_not_saved=function(){
+	if (new Date().valueOf()-(scheduler._new_event||0) > 500 && scheduler._edit_id){
+		var c=scheduler.locale.labels.confirm_closing;
+		if (!c || confirm(c))
+			scheduler.editStop(scheduler.config.positive_closing);
+	}
+}
+scheduler._correct_shift=function(start){
+	return start-=((new Date(scheduler._min_date)).getTimezoneOffset()-(new Date(start)).getTimezoneOffset())*60000;	
+}
 scheduler._on_mouse_move=function(e){
 	if (this._drag_mode){
 		var pos=this._mouse_coords(e);
 		if (!this._drag_pos || this._drag_pos.x!=pos.x || this._drag_pos.y!=pos.y){
+			
+			if (this._edit_id!=this._drag_id)
+				this._close_not_saved();
+				
 			this._drag_pos=pos;
 			
 			if (this._drag_mode=="create"){
+				this._close_not_saved();
 				this._loading=true; //will be ignored by dataprocessor
 				
 				var start=this._min_date.valueOf()+(pos.y*this.config.time_step+(this._table_view?0:pos.x)*24*60)*60000;
+				start = this._correct_shift(start);
+				
 				if (!this._drag_start){
 					this._drag_start=start; return; 
 				}
@@ -1884,7 +1951,8 @@ scheduler._on_mouse_move=function(e){
 				
 				this._drag_id=this.uid();
 				this.addEvent(new Date(this._drag_start), new Date(end),this.locale.labels.new_event,this._drag_id);
-				this.callEvent("onEventCreated",[this._drag_id]);
+				
+				this.callEvent("onEventCreated",[this._drag_id,e]);
 				this._loading=false;
 				this._drag_mode="new-size";
 				
@@ -1898,9 +1966,11 @@ scheduler._on_mouse_move=function(e){
 			} else {
 				start = ev.start_date.valueOf();
 				if (this._table_view)
-					end = this._min_date.valueOf()+(pos.y+(24*60/this.config.hour_size_px))*this.config.time_step*60000;
-				else
+					end = this._min_date.valueOf()+pos.y*this.config.time_step*60000 + 24*60*60000;
+				else{
 					end = this.date.date_part(ev.end_date).valueOf()+pos.y*this.config.time_step*60000;
+					this._els["dhx_cal_data"][0].style.cursor="s-resize";
+				}
 				if (this._drag_mode == "new-size"){ 
 					if (end <= this._drag_start){
 						start = end;
@@ -1910,23 +1980,33 @@ scheduler._on_mouse_move=function(e){
 					end=start+this.config.time_step*60000;
 			}
 
+			start = this._correct_shift(start);
+			end = this._correct_shift(end);
 			var new_end = new Date(end-1);			
 			var new_start = new Date(start);
 			//prevent out-of-borders situation for day|week view
-			if (this._table_view || new_end.getDate()==new_start.getDate()){
+			if (this._table_view || (new_end.getDate()==new_start.getDate() && new_end.getHours()<this.config.last_hour)){
 				ev.start_date=new_start;
 				ev.end_date=new Date(end);
 				if (this.config.update_render)
 					this.update_view();
 				else
 					this.updateEvent(this._drag_id);
-			}		
+			}
+			if (this._table_view)
+				this.for_rendered(this._drag_id,function(r){
+					r.className+=" dhx_in_move";
+				})
 		}
 	}
 }
-scheduler._on_mouse_down=function(e){
-	if (this.config.readonly) return;
-	var src = e.target||e.srcElement;
+scheduler._on_mouse_context=function(e,src){
+	return this.callEvent("onContextMenu",[this._locate_event(src),e]);
+}
+scheduler._on_mouse_down=function(e,src){
+	if (this.config.readonly || this._drag_mode) return;
+	src = src||(e.target||e.srcElement);
+	if (e.button==2) return this._on_mouse_context(e,src);
 		switch(src.className.split(" ")[0]){
 		case "dhx_cal_event_line":
 		case "dhx_cal_event_clear":
@@ -1945,15 +2025,19 @@ scheduler._on_mouse_down=function(e){
 		case "dhx_month_body":
 			this._drag_mode="create";
 			break;
+		case "":
+			if (src.parentNode)
+				return scheduler._on_mouse_down(e,src.parentNode);
 		default:
 			this._drag_mode=null;
 			this._drag_id=null;
 	}
 	if (this._drag_mode){
-		if (!this.config["drag_"+this._drag_mode])
+		var id = this._locate_event(src);
+		if (!this.config["drag_"+this._drag_mode] || !this.callEvent("onBeforeDrag",[id, this._drag_mode, e]))
 			this._drag_mode=this._drag_id=0;
 		else {
-			this._drag_id=this._locate_event(src);
+			this._drag_id= id;
 			this._drag_event=this._copy_event(this.getEvent(this._drag_id)||{});
 		}
 	}
@@ -1961,6 +2045,7 @@ scheduler._on_mouse_down=function(e){
 }
 scheduler._on_mouse_up=function(e){
 	if (this._drag_mode && this._drag_id){
+		this._els["dhx_cal_data"][0].style.cursor="default";
 		//drop
 		var ev=this.getEvent(this._drag_id);
 		if (!this._drag_event.start_date || ev.start_date.valueOf()!=this._drag_event.start_date.valueOf() || ev.end_date.valueOf()!=this._drag_event.end_date.valueOf()){
@@ -1974,21 +2059,31 @@ scheduler._on_mouse_up=function(e){
 				}
 				this._drag_pos=true; //set flag to trigger full redraw
 				this._select_id=this._edit_id=this._drag_id;
-			}else
+			} else if (!this._new_event)
 				this.callEvent(is_new?"onEventAdded":"onEventChanged",[this._drag_id,this.getEvent(this._drag_id)]);
+			
+				
 		}
 		if (this._drag_pos) this.render_view_data(); //redraw even if there is no real changes - necessary for correct positioning item after drag
 	}
 	this._drag_mode=null;
 	this._drag_pos=null;
-}
+}	
 scheduler.update_view=function(){
-	this.set_sizes();
+	//this.set_sizes();
 	this._reset_scale();
 	if (this._load_mode && this._load()) return;
 	this.render_view_data();
 }
 scheduler.setCurrentView=function(date,mode){
+	
+	if (!this.callEvent("onBeforeViewChange",[this._mode,this._date,mode,date])) return;
+	//hide old custom view
+	if (this[this._mode+"_view"] && mode && this._mode!=mode)
+		this[this._mode+"_view"](false);
+		
+	this._close_not_saved();
+	
 	this._mode=mode||this._mode;
 	this._date=date;
 	this._table_view=(this._mode=="month");
@@ -1998,14 +2093,31 @@ scheduler.setCurrentView=function(date,mode){
 		tabs[i].className="dhx_cal_tab"+((tabs[i].getAttribute("name")==this._mode+"_tab")?" active":"");
 	};
 	
-	this.update_view();
+	//show new view
+	var view=this[this._mode+"_view"];
+	view?view(true):this.update_view();
+	
+	this.callEvent("onViewChange",[this._mode,this._date]);
+}
+scheduler._render_x_header = function(i,left,d,h){
+	//header scale	
+	var head=document.createElement("DIV"); head.className="dhx_scale_bar";
+	this.set_xy(head,this._cols[i]-1,this.xy.scale_height-2,left,0);//-1 for border
+	head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+	h.appendChild(head);
 }
 scheduler._reset_scale=function(){
 	var h=this._els["dhx_cal_header"][0];
 	var b=this._els["dhx_cal_data"][0];
+	var c = this.config;
 	
 	h.innerHTML="";
 	b.innerHTML="";
+	
+	
+	var str=((c.readonly||(!c.drag_resize))?" dhx_resize_denied":"")+((c.readonly||(!c.drag_move))?" dhx_move_denied":"");
+	if (str) b.className = "dhx_cal_data"+str;
+		
 		
 	this._cols=[];	//store for data section
 	this._colsS={height:0};
@@ -2037,19 +2149,14 @@ scheduler._reset_scale=function(){
 	for (var i=0; i<count; i++){
 		this._cols[i]=Math.floor(summ/(count-i));
 	
-		//header scale	
-		var c=document.createElement("DIV"); c.className="dhx_scale_bar";
-		this.set_xy(c,this._cols[i]-1,this.xy.scale_height-2,left,0);//-1 for border
-		c.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
-		h.appendChild(c);
-		
+		this._render_x_header(i,left,d,h);
 		if (!this._table_view){
-			var c=document.createElement("DIV");
+			var scales=document.createElement("DIV");
 			var cls = "dhx_scale_holder"
 			if (d.valueOf()==today.valueOf()) cls = "dhx_scale_holder_now";
-			c.className=cls+" "+this.templates.week_date_class(d,today);
-			this.set_xy(c,this._cols[i]-1,this.config.hour_size_px*(this.config.last_hour-this.config.first_hour),left+51,0);//-1 for border
-			b.appendChild(c);
+			scales.className=cls+" "+this.templates.week_date_class(d,today);
+			this.set_xy(scales,this._cols[i]-1,c.hour_size_px*(c.last_hour-c.first_hour),left+this.xy.scale_width+1,0);//-1 for border
+			b.appendChild(scales);
 		}
 		
 		d=this.date.add(d,1,"day")
@@ -2064,12 +2171,19 @@ scheduler._reset_scale=function(){
 		this._reset_month_scale(b,dd,sd);
 	else{
 		this._reset_hours_scale(b,dd,sd);
-		if (this.config.multi_day){
-			var c = document.createElement("DIV");
-			c.className="dhx_multi_day";
-			this.set_xy(c,parseInt(h.style.width),0,50,0);
-			b.appendChild(c);
-			this._els["dhx_multi_day"]=[c];
+		if (c.multi_day){
+			var c1 = document.createElement("DIV");
+			c1.className="dhx_multi_day";
+			c1.style.visibility="hidden";
+			this.set_xy(c1,parseInt(h.style.width),0,this.xy.scale_width,0);
+			b.appendChild(c1);
+			var c2 = c1.cloneNode(true);
+			c2.className="dhx_multi_day_icon";
+			c2.style.visibility="hidden";
+			this.set_xy(c2,this.xy.scale_width-1,0,0,0);
+			b.appendChild(c2);
+			
+			this._els["dhx_multi_day"]=[c1,c2];
 		}
 	}
 }
@@ -2082,12 +2196,15 @@ scheduler._reset_hours_scale=function(b,dd,sd){
 		var cc=document.createElement("DIV");
 		cc.className="dhx_scale_hour";
 		cc.style.height=this.config.hour_size_px-(this._quirks?0:1)+"px";
+		cc.style.width=this.xy.scale_width+"px";
 		cc.innerHTML=scheduler.templates.hour_scale(date);
 		
 		c.appendChild(cc);
 		date=this.date.add(date,1,"hour");
 	};
 	b.appendChild(c);
+	if (this.config.scroll_hour)
+		b.scrollTop = this.config.hour_size_px*(this.config.scroll_hour-this.config.first_hour);
 }
 scheduler._reset_month_scale=function(b,dd,sd){
 	var ed=scheduler.date.add(dd,1,"month");
@@ -2169,7 +2286,7 @@ scheduler.date={
 			case "day": ndate.setDate(ndate.getDate()+inc); break;
 			case "week": ndate.setDate(ndate.getDate()+7*inc); break;
 			case "month": ndate.setMonth(ndate.getMonth()+inc); break;
-			case "year": ndate.setYear(ndate.getYear()+inc); break;
+			case "year": ndate.setYear(ndate.getFullYear()+inc); break;
 			case "hour": ndate.setHours(ndate.getHours()+inc); break;
 			case "minute": ndate.setMinutes(ndate.getMinutes()+inc); break;
 			default:
@@ -2187,8 +2304,11 @@ scheduler.date={
 	date_to_str:function(format,utc){
 		format=format.replace(/%[a-zA-Z]/g,function(a){
 			switch(a){
-				case "%d": return "\"+date.getDate()+\"";
-				case "%m": return "\"+(date.getMonth()+1)+\"";
+				
+				case "%d": return "\"+scheduler.date.to_fixed(date.getDate())+\"";
+				case "%m": return "\"+scheduler.date.to_fixed((date.getMonth()+1))+\"";
+				case "%j": return "\"+date.getDate()+\"";
+				case "%n": return "\"+(date.getMonth()+1)+\"";
 				case "%y": return "\"+date.getYear()+\"";
 				case "%Y": return "\"+date.getFullYear()+\"";
 				case "%D": return "\"+scheduler.locale.date.day_short[date.getDay()]+\"";
@@ -2200,6 +2320,7 @@ scheduler.date={
 				case "%i": return "\"+scheduler.date.to_fixed(date.getMinutes())+\"";
 				case "%a": return "\"+(date.getHours()>11?\"pm\":\"am\")+\"";
 				case "%A": return "\"+(date.getHours()>11?\"PM\":\"AM\")+\"";
+				case "%s": return "\"+scheduler.date.to_fixed(date.getSeconds())+\"";
 				default: return a;
 			}
 		})
@@ -2207,12 +2328,14 @@ scheduler.date={
 		return new Function("date","return \""+format+"\";");
 	},
 	str_to_date:function(format,utc){
-		var splt="var temp=date.split(/[^0-9]+/g);";
+		var splt="var temp=date.split(/[^0-9a-zA-Z]+/g);";
 		var mask=format.match(/%[a-zA-Z]/g);
 		for (var i=0; i<mask.length; i++){
 			switch(mask[i]){
+				case "%j":
 				case "%d": splt+="set[2]=temp["+i+"]||0;";
 					break;
+				case "%n":
 				case "%m": splt+="set[1]=(temp["+i+"]||1)-1;";
 					break;
 				case "%y": splt+="set[0]=temp["+i+"]*1+(temp["+i+"]>50?1900:2000);";
@@ -2226,11 +2349,16 @@ scheduler.date={
 					break;
 				case "%Y":  splt+="set[0]=temp["+i+"]||0;";
 					break;
+				case "%a":					
+				case "%A":  splt+="set[3]=set[3]%12+((temp["+i+"]||'').toLowerCase()=='am'?0:12);";
+					break;					
+				case "%s":  splt+="set[5]=temp["+i+"]||0;";
+					break;
 			}
 		}
-		var code ="set[0],set[1],set[2],set[3],set[4]";
+		var code ="set[0],set[1],set[2],set[3],set[4],set[5]";
 		if (utc) code =" Date.UTC("+code+")";
-		return new Function("date","var set=[0,0,0,0,0]; "+splt+" return new Date("+code+");");
+		return new Function("date","var set=[0,0,0,0,0,0]; "+splt+" return new Date("+code+");");
 	}
 }
 
@@ -2255,15 +2383,24 @@ scheduler.locale={
 		icon_delete:"Delete",
 		confirm_closing:"",//Your changes will be lost, are your sure ?
 		confirm_deleting:"Event will be deleted permanently, are you sure?",
-		confirm_recurring:"Do you want to edit whole seria?",
 		section_description:"Description",
+		section_time:"Time period",
+		
+		/*recurring events*/
+		confirm_recurring:"Do you want to edit the whole set of repeated events?",
 		section_recurring:"Repeat event",
 		button_recurring:"Disabled",
 		button_recurring_open:"Enabled",
-		section_time:"Time period"
+		
+		/*agenda view extension*/
+		agenda_tab:"Agenda",
+		date:"Date",
+		description:"Description",
+		
+		/*year view extension*/
+		year_tab:"Year"
     }
 }
-
 
 
 
@@ -2284,11 +2421,11 @@ scheduler.locale={
 */
 
 scheduler.config={
-	default_date: "%d %M %Y",
+	default_date: "%j %M %Y",
 	month_date: "%F %Y",
 	load_date: "%Y-%m-%d",
 	week_date: "%l",
-	day_date: "%D, %F %d",
+	day_date: "%D, %F %j",
 	hour_date: "%H:%i",
 	month_day : "%d",
 	xml_date:"%m/%d/%Y %H:%i",
@@ -2304,6 +2441,7 @@ scheduler.config={
 	drag_resize:1,
 	drag_move:1,
 	drag_create:1,
+	dblclick_create:1,
 	edit_on_create:1,
 	details_on_create:0,
 	click_form_details:0,
@@ -2332,20 +2470,21 @@ scheduler.init_templates=function(){
 		day_date:d(c.default_date),
 		month_date:d(c.month_date),
 		week_date:function(d1,d2){
-			return scheduler.templates.day_date(d1)+" &ndash; "+scheduler.templates.day_date(d2);
+			return scheduler.templates.day_date(d1)+" &ndash; "+scheduler.templates.day_date(scheduler.date.add(d2,-1,"day"));
 		},
 		day_scale_date:d(c.default_date),
 		month_scale_date:d(c.week_date),
 		week_scale_date:d(c.day_date),
 		hour_scale:d(c.hour_date),
+		time_picker:d(c.hour_date),
+		event_date:d(c.hour_date),
 		month_day:d(c.month_day),
 		xml_date:scheduler.date.str_to_date(c.xml_date,c.server_utc),
 		load_format:d(c.load_date,c.server_utc),
 		xml_format:d(c.xml_date,c.server_utc),
 		api_date:scheduler.date.str_to_date(c.api_date),
-		
 		event_header:function(start,end,ev){
-			return scheduler.templates.hour_scale(start)+" - "+scheduler.templates.hour_scale(end);
+			return scheduler.templates.event_date(start)+" - "+scheduler.templates.event_date(end);
 		},
 		event_text:function(start,end,ev){
 			return ev.text;
@@ -2360,12 +2499,13 @@ scheduler.init_templates=function(){
 			return "";
 		},
 		event_bar_date:function(start,end,ev){
-			return scheduler.templates.hour_scale(start)+" ";
+			return scheduler.templates.event_date(start)+" ";
 		},
 		event_bar_text:function(start,end,ev){
 			return ev.text;
 		}
 	});
+	this.callEvent("onTemplatesReady",[])
 }
 
 
@@ -2378,6 +2518,7 @@ scheduler.uid=function(){
 scheduler._events={};
 scheduler.clearAll=function(){
 	this._events={};
+	this._loaded={};
 	this.clear_view();
 }
 scheduler.addEvent=function(start_date,end_date,text,id,extra_data){
@@ -2391,7 +2532,6 @@ scheduler.addEvent=function(start_date,end_date,text,id,extra_data){
 	}
 	ev.id = ev.id||scheduler.uid();
 	ev.text = ev.text||"";
-	ev.extra_data = ev.extra_data||{};
 	
 	if (typeof ev.start_date == "string")  ev.start_date=this.templates.api_date(ev.start_date);
 	if (typeof ev.end_date == "string")  ev.end_date=this.templates.api_date(ev.end_date);
@@ -2400,7 +2540,8 @@ scheduler.addEvent=function(start_date,end_date,text,id,extra_data){
 	var is_new=!this._events[ev.id];
 	this._events[ev.id]=ev;
 	this.event_updated(ev);
-	this.callEvent(is_new?"onEventAdded":"onEventChanged",[ev.id,ev]);
+	if (!this._loading)
+		this.callEvent(is_new?"onEventAdded":"onEventChanged",[ev.id,ev]);
 }
 scheduler.deleteEvent=function(id,silent){ 
 	var ev=this._events[id];
@@ -2424,6 +2565,7 @@ scheduler.for_rendered=function(id,method){
 			method(this._rendered[i],i);
 }
 scheduler.changeEventId=function(id,new_id){
+	if (id == new_id) return;
 	var ev=this._events[id];
 	if (ev){
 		ev.id=new_id;
@@ -2439,37 +2581,48 @@ scheduler.changeEventId=function(id,new_id){
 };
 
 (function(){
-	var attrs=["Text","StartDate","EndDate"];
+	var attrs=["text","Text","start_date","StartDate","end_date","EndDate"];
 	var create_getter=function(name){
 		return function(id){ return (scheduler.getEvent(id))[name]; }
 	}
 	var create_setter=function(name){
-		return function(id,value){ var ev=scheduler.getEvent(id); ev[name]=value; ev._changed=true; scheduler.event_updated(ev); }
+		return function(id,value){ 
+			var ev=scheduler.getEvent(id); ev[name]=value; 
+			ev._changed=true; 
+			ev._timed=this.is_one_day_event(ev);
+			scheduler.event_updated(ev,true); 
+		}
 	}
-	for (var i=0; i<attrs.length; i++){
-		scheduler["getEvent_"+attrs[i]]=create_getter(attrs[i]);
-		scheduler["setEvent"+attrs[i]]=create_setter(attrs[i]);
+	for (var i=0; i<attrs.length; i+=2){
+		scheduler["getEvent"+attrs[i+1]]=create_getter(attrs[i]);
+		scheduler["setEvent"+attrs[i+1]]=create_setter(attrs[i]);
 	}
 })();
 
-scheduler.event_updated=function(ev){
+scheduler.event_updated=function(ev,force){
 	if (this.is_visible_events(ev))
 		this.render_view_data();
+	else this.clear_event(ev.id);
 }
 scheduler.is_visible_events=function(ev){
 	if (ev.start_date<this._max_date && this._min_date<ev.end_date) return true;
 	return false;
 }
 scheduler.is_one_day_event=function(ev){
-	return (ev.start_date.getDate()==ev.end_date.getDate() && ev.start_date.getMonth()==ev.end_date.getMonth() && ev.start_date.getFullYear()==ev.end_date.getFullYear()) ;
+	var delta = ev.end_date.getDate()-ev.start_date.getDate();
+	return ( (!delta || (delta == 1 && !ev.end_date.getHours() && !ev.end_date.getMinutes())) && ev.start_date.getMonth()==ev.end_date.getMonth() && ev.start_date.getFullYear()==ev.end_date.getFullYear()) ;
 }
 scheduler.get_visible_events=function(){
 	//not the best strategy for sure
 	var stack=[];
+	var filter = this["filter_"+this._mode];
+	
 	for( var id in this._events)
 		if (this.is_visible_events(this._events[id]))
 			if (this._table_view || this.config.multi_day || this._events[id]._timed)
-				stack.push(this._events[id]);
+				if (!filter || filter(id,this._events[id]))
+					stack.push(this._events[id]);
+				
 	return stack;
 }
 scheduler.render_view_data=function(){
@@ -2491,10 +2644,10 @@ scheduler.render_view_data=function(){
 			else
 				tvd.push(evs[i]);
 		};
-		this.render_data(tvs);
 		this._table_view=true;
 		this.render_data(tvd);
-		this._table_view=false;
+		this._table_view=false;		
+		this.render_data(tvs);
 	} else 
 		this.render_data(evs);	
 }
@@ -2507,6 +2660,7 @@ scheduler.render_data=function(evs,hold){
 			this.render_event(evs[i]);
 }
 scheduler._pre_render_events=function(evs,hold){
+	var hb = this.xy.bar_height;
 	var h_old = this._colsS.heights;	
 	var h=this._colsS.heights=[0,0,0,0,0,0,0];
 	
@@ -2521,11 +2675,11 @@ scheduler._pre_render_events=function(evs,hold){
 			if (evl.rows){
 				for (var i=0; i<evl.rows.length; i++){
 					h[i]++;
-					if ((h[i])*20 > this._colsS.height-22){
+					if ((h[i])*hb > this._colsS.height-hb-2){
 						//we have overflow, update heights
 						var cells = evl.rows[i].cells;
 						for (var j=0; j < cells.length; j++) {
-							cells[j].childNodes[1].style.height = h[i]*20+"px";
+							cells[j].childNodes[1].style.height = h[i]*hb+"px";
 						}
 						h[i]=(h[i-1]||0)+cells[0].offsetHeight;
 					}
@@ -2536,23 +2690,35 @@ scheduler._pre_render_events=function(evs,hold){
 					//we have v-scroll, decrease last day cell
 					for (var i=0; i<evl.rows.length; i++){
 						var cell = evl.rows[i].cells[6].childNodes[0];
-						var w = cell.offsetWidth-18+"px";
+						var w = cell.offsetWidth-scheduler.xy.scroll_width+"px";
 						cell.style.width = w;
 						cell.nextSibling.style.width = w;
 					}		
 					evl._h_fix=true;
 				}
-			} else if (evs.length){
-				//shift days to have space for multiday events
-				var childs = evl.parentNode.childNodes;
-				var dh = (h[0]+1)*20+"px";
-				for (var i=0; i<childs.length; i++)
-					if (this._colsS[i])
-						childs[i].style.top=dh;
-				var last = this._els["dhx_multi_day"][0];
-				last.style.top = "0px";
-				last.style.height=dh;
-				this._dy_shift=(h[0]+1)*20;
+			} else{
+				
+				if (!evs.length && this._els["dhx_multi_day"][0].style.visibility == "visible")
+					h[0]=-1;
+				if (evs.length || h[0]==-1){
+					//shift days to have space for multiday events
+					var childs = evl.parentNode.childNodes;
+					var dh = (h[0]+1)*hb+"px";
+					for (var i=0; i<childs.length; i++)
+						if (this._colsS[i])
+							childs[i].style.top=dh;
+					var last = this._els["dhx_multi_day"][0];
+					last.style.top = "0px";
+					last.style.height=dh;
+					last.style.visibility=(h[0]==-1?"hidden":"visible");
+					last=this._els["dhx_multi_day"][1];
+					last.style.height=dh;
+					last.style.visibility=(h[0]==-1?"hidden":"visible");
+					last.className=h[0]?"dhx_multi_day_icon":"dhx_multi_day_icon_small";
+					
+					this._dy_shift=(h[0]+1)*hb;
+				}				
+				
 			}
 		}
 	}
@@ -2565,12 +2731,19 @@ scheduler._get_event_sday=function(ev){
 scheduler._pre_render_events_line=function(evs,hold){
 	evs.sort(function(a,b){ return a.start_date>b.start_date?1:-1; })
 	var days=[]; //events by weeks
+	var evs_originals = [];
 	for (var i=0; i < evs.length; i++) {
 		var ev=evs[i];
+
+		//check scale overflow
+		var sh = ev.start_date.getHours();
+		var eh = ev.end_date.getHours();
+		
 		ev._sday=this._get_event_sday(ev);
 		if (!days[ev._sday]) days[ev._sday]=[];
 		
 		if (!hold){
+			ev._inner=false;
 			var stack=days[ev._sday];
 			while (stack.length && stack[stack.length-1].end_date<=ev.start_date)
 				stack.splice(stack.length-1,1);
@@ -2578,16 +2751,35 @@ scheduler._pre_render_events_line=function(evs,hold){
 			ev._sorder=stack.length; stack.push(ev);
 			if (stack.length>(stack.max_count||0)) stack.max_count=stack.length;
 		}
+		
+		if (sh < this.config.first_hour || eh >= this.config.last_hour){
+			evs_originals.push(ev);
+			evs[i]=ev=this._copy_event(ev);
+			if (sh < this.config.first_hour){
+				ev.start_date.setHours(this.config.first_hour);
+				ev.start_date.setMinutes(0);
+			}
+			if (eh >= this.config.last_hour){
+				ev.end_date.setMinutes(0);
+				ev.end_date.setHours(this.config.last_hour);
+			}
+			if (ev.start_date>ev.end_date) {
+				evs.splice(i,1); i--; continue;
+			}
+		}
+				
 	}
-	if (!hold)
-	for (var i=0; i < evs.length; i++) {
-		evs[i]._count=days[evs[i]._sday].max_count;
+	if (!hold){
+		for (var i=0; i < evs.length; i++) 
+			evs[i]._count=days[evs[i]._sday].max_count;
+		for (var i=0; i < evs_originals.length; i++) 
+			evs_originals[i]._count=days[evs_originals[i]._sday].max_count;
 	}
 	
 	return evs;
 }	
-scheduler._pre_render_events_table=function(evs,hold){ // max - max height of week slot
-	evs.sort(function(a,b){ 
+scheduler._time_order=function(evs){
+		evs.sort(function(a,b){ 
 		if (a.start_date.valueOf()==b.start_date.valueOf()){
 			if (a._timed && !b._timed) return 1;
 			if (!a._timed && b._timed) return -1;
@@ -2595,7 +2787,10 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 		}
 		return a.start_date>b.start_date?1:-1;
 	 })
-		
+}
+scheduler._pre_render_events_table=function(evs,hold){ // max - max height of week slot
+	this._time_order(evs);
+	
 	var out=[];
 	var weeks=[[],[],[],[],[],[],[]]; //events by weeks
 	var max = this._colsS.heights;
@@ -2608,8 +2803,11 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 		if (sd<this._min_date) sd=this._min_date;
 		if (ed>this._max_date) ed=this._max_date;
 		
-		ev._sday=this.locate_holder_day(sd);
-		ev._eday=this.locate_holder_day(ed,true)||7; //7 used to fill full week, when event end on monday
+		var locate_s = this.locate_holder_day(sd,false,ev);
+		ev._sday=locate_s%7;
+		var locate_e = this.locate_holder_day(ed,true,ev)||7;
+		ev._eday=(locate_e%7)||7; //7 used to fill full week, when event end on monday
+		ev._length=locate_e-locate_s;
 		
 		//3600000 - compensate 1 hour during winter|summer time shift
 		ev._sweek=Math.floor((sd.valueOf()+3600000-this._min_date.valueOf())/(60*60*1000*24*7)); 	
@@ -2617,18 +2815,18 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 		//current slot
 		var stack=weeks[ev._sweek];
 		//check order position
-		while (stack.length && stack[stack.length-1].end_date<=this.date.date_part(this.date.copy(ev.start_date)) )
+		while (stack.length && stack[stack.length-1]._eday<=ev._sday)
+		//while (stack.length && stack[stack.length-1].end_date<=this.date.date_part(this.date.copy(ev.start_date)) )
 				stack.splice(stack.length-1,1);
 		//get max height of slot
 		if (stack.length>max[ev._sweek]) max[ev._sweek]=stack.length;
 				
-		ev._sorder=stack.length; stack.push(ev);
-		
-		ev._length=Math.ceil((ed.valueOf()-sd.valueOf())/(60*60*1000*24));
+		ev._sorder=stack.length; 
 		
 		if (ev._sday+ev._length<=7){
 			start_date=null;
 			out.push(ev);
+			stack.push(ev);
 		} else{ // split long event in chunks
 			copy=this._copy_event(ev);
 			copy._length=7-ev._sday;
@@ -2637,7 +2835,7 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 			copy.end_date=this.date.add(sd,copy._length,"day");
 			
 			out.push(copy);
-			
+			stack.push(copy);
 			start_date=copy.end_date;
 			i--; continue;  //repeat same step
 		}
@@ -2645,8 +2843,14 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 	
 	return out;
 }
+scheduler._copy_dummy=function(){ 
+	this.start_date=new Date(this.start_date);
+	this.end_date=new Date(this.end_date);
+}
 scheduler._copy_event=function(ev){
-	return {start_date:ev.start_date, end_date:ev.end_date, text:ev.text, id:ev.id}
+	this._copy_dummy.prototype = ev;
+	return new this._copy_dummy();
+	//return {start_date:ev.start_date, end_date:ev.end_date, text:ev.text, id:ev.id}
 }
 scheduler._rendered=[];
 scheduler.clear_view=function(){
@@ -2670,6 +2874,7 @@ scheduler.clear_event=function(id){
 }
 scheduler.render_event=function(ev){
 	var parent=scheduler.locate_holder(ev._sday);	
+	if (!parent) return; //attempt to render non-visible event
 	var top = (Math.round((ev.start_date.valueOf()-this._min_date.valueOf()-this.config.first_hour*60*60*1000)*this.config.hour_size_px/(60*60*1000)))%(this.config.hour_size_px*24)+1; //42px/hour
 	var height = Math.max(25,Math.round((ev.end_date.valueOf()-ev.start_date.valueOf())*(this.config.hour_size_px+(this._quirks?1:0))/(60*60*1000))-14); //42px/hour
 	var width=Math.ceil((parent.clientWidth-25)/ev._count);
@@ -2695,14 +2900,14 @@ scheduler.render_event=function(ev){
 			
 		var d2=document.createElement("DIV");
 		this.set_xy(d2,width-6,height-12);
-		d2.style.cssText+=";margin:2px 2px 2px 2px;";
+		d2.style.cssText+=";margin:2px 2px 2px 2px;overflow:hidden;";
 		
 		d.appendChild(d2);
 		this._els["dhx_cal_data"][0].appendChild(d);
 		this._rendered.push(d);
 	
 		d2.innerHTML="<textarea class='dhx_cal_editor'>"+ev.text+"</textarea>";
-		if (this._quirks7) d2.firstChild.style.height=height-16+"px"; //IEFIX
+		if (this._quirks7) d2.firstChild.style.height=height-12+"px"; //IEFIX
 		this._editor=d2.firstChild;
 		this._editor.onkeypress=function(e){ 
 			if ((e||event).shiftKey) return true;
@@ -2712,6 +2917,8 @@ scheduler.render_event=function(ev){
 		}
 		this._editor.onselectstart=function(e){ return (e||event).cancelBubble=true; }
 		d2.firstChild.focus();
+		//IE and opera can add x-scroll during focusing
+		this._els["dhx_cal_data"][0].scrollLeft=0;
 		d2.firstChild.select();
 	}
 	
@@ -2748,10 +2955,9 @@ scheduler.locate_holder=function(day){
 	return this._els["dhx_cal_data"][0].childNodes[day];
 }
 scheduler.locate_holder_day=function(date,past){
-	var day = date.getDay()-this.config.start_on_monday;
-	//when locating end data of event , we need to use next day if some time was defined
+	var day = Math.floor((date-this._min_date-((date.getTimezoneOffset()-this._min_date.getTimezoneOffset())*60000))/(60*60*24*1000));
+	//when locating end data of event , we need to use next day if time part was defined
 	if (past && this.date.time_part(date)) day++;
-	if (day<0) day+=7;
 	return day;
 }
 scheduler.render_event_bar=function(ev){
@@ -2760,8 +2966,9 @@ scheduler.render_event_bar=function(ev){
 	var x=this._colsS[ev._sday];
 	var x2=this._colsS[ev._eday];
 	if (x2==x) x2=this._colsS[ev._eday+1];
+	var hb = this.xy.bar_height;
 	
-	var y=this._colsS.heights[ev._sweek]+(this._colsS.height?22:2)+ev._sorder*20; 
+	var y=this._colsS.heights[ev._sweek]+(this._colsS.height?(this.xy.scale_height+2):2)+ev._sorder*hb; 
 			
 	var d=document.createElement("DIV");
 	var cs = ev._timed?"dhx_cal_event_clear":"dhx_cal_event_line";
@@ -2798,7 +3005,7 @@ scheduler.edit=function(id){
 	this.updateEvent(id);
 }
 scheduler.editStop=function(mode,id){
-	if (id && this._edit_id!=id) return;
+	if (id && this._edit_id==id) return;
 	var ev=this.getEvent(this._edit_id);
 	if (ev){
 		if (mode) ev.text=this._editor.value;
@@ -2842,13 +3049,19 @@ scheduler._load=function(url,from){
 		while (from>this._min_date) from=this.date.add(from,-1,this._load_mode);
 		to = from;
 		
+		var cache_line = true;
 		while (to<this._max_date){
 			to=this.date.add(to,1,this._load_mode);	
-			if (this._loaded[lf(from)]) 
+			if (this._loaded[lf(from)] && cache_line) 
 				from=this.date.add(from,1,this._load_mode);	
+			else cache_line = false;
 		}
-		while (to>from && this._loaded[lf(to)]) 
-			to = this.date.add(to,-1,this._load_mode);
+		
+		var temp_to=to;
+		do {
+			to = temp_to;
+			temp_to=this.date.add(to,-1,this._load_mode);
+		} while (temp_to>from && this._loaded[lf(temp_to)]);
 			
 		if (to<=from) 
 			return false; //already loaded
@@ -2951,12 +3164,76 @@ scheduler.attachEvent("onXLS",function(){
 });
 scheduler.attachEvent("onXLE",function(){
 	var t;
-	if (t=this.config.show_loading){
+	if (t=this.config.show_loading)
+		if (typeof t == "object"){
 		this._obj.removeChild(t);
 		this.config.show_loading=true;
 	}
 });
 
+
+scheduler.ical={
+	parse:function(str){
+		var data = str.match(RegExp(this.c_start+"[^\f]*"+this.c_end,""));
+		if (!data.length) return;
+		
+		//unfolding 
+		data[0]=data[0].replace(/[\r\n]+(?=[a-z \t])/g," ");
+		//drop property
+		data[0]=data[0].replace(/\;[^:]*/g,"");
+		
+		
+		var incoming=[];
+		var match;
+		var event_r = RegExp("(?:"+this.e_start+")([^\f]*?)(?:"+this.e_end+")","g");
+		while (match=event_r.exec(data)){
+			var e={};
+			var param;
+			var param_r = /[^\r\n]+\r\n/g;
+			while (param=param_r.exec(match[1]))
+				this.parse_param(param.toString(),e);
+			incoming.push(e);	
+		}
+		return incoming;
+	},
+	parse_param:function(str,obj){
+		var d = str.indexOf(":"); 
+			if (d==-1) return;
+		
+		var name = str.substr(0,d).toLowerCase();
+		var value = str.substr(d+1).replace(/\\\,/g,",").replace(/[\r\n]+$/,"");
+		if (name=="summary")
+			name="text";
+		else if (name=="dtstart"){
+			name = "start_date";
+			value = this.parse_date(value,0,0);
+		}
+		else if (name=="dtend"){
+			name = "end_date";
+			if (obj.start_date && obj.start_date.getHours()==0)
+				value = this.parse_date(value,24,00);
+			else
+				value = this.parse_date(value,23,59);
+		}
+		obj[name]=value;
+	},
+	parse_date:function(value,dh,dm){
+		var t = value.split("T");
+		if (t[1]){
+			dh=t[1].substr(0,2);
+			dm=t[1].substr(2,2);
+		}
+		var dy = t[0].substr(0,4);
+		var dn = parseInt(t[0].substr(4,2),10)-1;
+		var dd = t[0].substr(6,2);
+		
+		return new Date(dy,dn,dd,dh,dm);
+	},
+	c_start:"BEGIN:VCALENDAR",
+	e_start:"BEGIN:VEVENT",
+	e_end:"END:VEVENT",
+	c_end:"END:VCALENDAR"	
+}
 
 scheduler.form_blocks={
 	textarea:{
@@ -2998,8 +3275,8 @@ scheduler.form_blocks={
 			//hours
 			var dt = this.date.date_part(new Date());
 			var html="<select>";
-			for (var i=0; i<60*24; i+=this.config.time_step){
-				var time=this.templates.hour_scale(dt);
+			for (var i=0; i<60*24; i+=this.config.time_step*1){
+				var time=this.templates.time_picker(dt);
 				html+="<option value='"+i+"'>"+time+"</option>";
 				dt=this.date.add(dt,this.config.time_step,"minute");
 			}
@@ -3030,7 +3307,7 @@ scheduler.form_blocks={
 				s[i+2].value=d.getMonth();
 				s[i+3].value=d.getFullYear();
 			}
-			s=node.getElementsByTagName("select");
+			var s=node.getElementsByTagName("select");
 			_fill_lightbox_select(s,0,ev.start_date);
 			_fill_lightbox_select(s,4,ev.end_date);
 		},
@@ -3038,20 +3315,28 @@ scheduler.form_blocks={
 			s=node.getElementsByTagName("select");
 			ev.start_date=new Date(s[3].value,s[2].value,s[1].value,0,s[0].value);
 			ev.end_date=new Date(s[7].value,s[6].value,s[5].value,0,s[4].value);
+			if (ev.end_date<=ev.start_date) 
+				ev.end_date=scheduler.date.add(ev.start_date,scheduler.config.time_step,"minute");
 		},
 		focus:function(node){
 			node.getElementsByTagName("select")[0].focus(); 
 		}
 	}
 }
+scheduler.showCover=function(box){
+	this.show_cover();
+	if (box){
+		box.style.display="block";
+		var pos = getOffset(this._obj);
+		box.style.top=Math.round(pos.top+(this._obj.offsetHeight-box.offsetHeight)/2)+"px";
+		box.style.left=Math.round(pos.left+(this._obj.offsetWidth-box.offsetWidth)/2)+"px";	
+	}
+}
 scheduler.showLightbox=function(id){
 	if (!id) return;
-	this.show_cover();
+	if (!this.callEvent("onBeforeLightbox",[id])) return;
 	var box = this._get_lightbox();
-	box.style.display="block";
-	box.style.top=Math.round((document.body.offsetHeight-box.offsetHeight)/2)+"px";
-	box.style.left=Math.round((document.body.offsetWidth-box.offsetWidth)/2)+"px";	
-	
+	this.showCover(box);
 	this._fill_lightbox(id,box);
 }
 scheduler._fill_lightbox=function(id,box){ 
@@ -3071,11 +3356,7 @@ scheduler._fill_lightbox=function(id,box){
 	
 	scheduler._lightbox_id=id;
 }
-scheduler._empty_lightbox=function(){
-	var id=scheduler._lightbox_id;
-	var ev=this.getEvent(id);
-	var box=this._get_lightbox();
-	
+scheduler._lightbox_out=function(ev){
 	var sns = this.config.lightbox.sections;	
 	for (var i=0; i < sns.length; i++) {
 		var node=document.getElementById(sns[i].id).nextSibling;
@@ -3083,7 +3364,15 @@ scheduler._empty_lightbox=function(){
 		var res=block.get_value.call(this,node,ev);
 		if (sns[i].map_to!="auto")
 			ev[sns[i].map_to]=res;
-	};
+	}
+	return ev;
+}
+scheduler._empty_lightbox=function(){
+	var id=scheduler._lightbox_id;
+	var ev=this.getEvent(id);
+	var box=this._get_lightbox();
+	
+	this._lightbox_out(ev);
 	
 	ev._timed=this.is_one_day_event(ev);
 	this.setEvent(ev.id,ev);
@@ -3091,13 +3380,17 @@ scheduler._empty_lightbox=function(){
 	this.render_view_data();
 }
 scheduler.hide_lightbox=function(id){
-	this._get_lightbox().style.display="none";
-	this.hide_cover();
+	this.hideCover(this._get_lightbox());
 	this._lightbox_id=null;
+	this.callEvent("onAfterLightbox",[]);
+}
+scheduler.hideCover=function(box){
+	if (box) box.style.display="none";
+	this.hide_cover();
 }
 scheduler.hide_cover=function(){
 	if (this._cover) 
-		document.body.removeChild(this._cover);
+		this._cover.parentNode.removeChild(this._cover);
 	this._cover=null;
 }
 scheduler.show_cover=function(){
@@ -3112,6 +3405,8 @@ scheduler._init_lightbox_events=function(){
 		if (src && src.className)
 			switch(src.className){
 				case "dhx_save_btn":
+					if (scheduler.checkEvent("onEventSave") && 						!scheduler.callEvent("onEventSave",[scheduler._lightbox_id,scheduler._lightbox_out({})]))
+							return;
 					scheduler._empty_lightbox()
 					scheduler.hide_lightbox();
 					break;
@@ -3140,6 +3435,7 @@ scheduler._init_lightbox_events=function(){
 	this._get_lightbox().onkeypress=function(e){
 		switch((e||event).keyCode){
 			case 13:
+				if ((e||event).shiftKey) return;
 				scheduler._empty_lightbox()
 				scheduler.hide_lightbox();
 				break;
@@ -3165,6 +3461,8 @@ scheduler._get_lightbox=function(){
 	if (!this._lightbox){
 		var d=document.createElement("DIV");
 		d.className="dhx_cal_light";
+		if (/msie|MSIE 6/.test(navigator.userAgent))
+			d.className+=" dhx_ie6";
 		d.style.visibility="hidden";
 		d.innerHTML=this._lightbox_template;
 		document.body.insertBefore(d,document.body.firstChild);
@@ -3177,7 +3475,7 @@ scheduler._get_lightbox=function(){
 			if (!block) continue; //ignore incorrect blocks
 			sns[i].id="area_"+this.uid();
 			var button = "";
-			if (sns[i].button) button = "<div style='float:right;' class='dhx_custom_button' index='"+i+"'><div class='dhx_custom_button_"+sns[i].name+"'></div><div>"+this.locale.labels["button_"+sns[i].name]+"</div></div>";
+			if (sns[i].button) button = "<div style='float:right;' class='dhx_custom_button' index='"+i+"'><div class='dhx_custom_button_"+sns[i].name+"'></div><div>"+this.locale.labels["button_"+sns[i].button]+"</div></div>";
 			html+="<div id='"+sns[i].id+"' class='dhx_cal_lsection'>"+button+this.locale.labels["section_"+sns[i].name]+"</div>"+block.render.call(this,sns[i]);
 		};
 		
@@ -3251,7 +3549,9 @@ scheduler.setEventTextStyle=function(id,style){
 	this.for_rendered(id,function(r){
 		r.style.cssText+=";"+style;
 	})
-	this.getEvent(id)["_text_style"]=style;
+	var ev = this.getEvent(id);
+	ev["_text_style"]=style;
+	this.event_updated(ev);
 }
 scheduler.validId=function(id){
 	return true;

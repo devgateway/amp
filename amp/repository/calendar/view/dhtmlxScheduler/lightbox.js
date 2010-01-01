@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 scheduler.form_blocks={
 	textarea:{
 		render:function(sns){
@@ -44,8 +38,8 @@ scheduler.form_blocks={
 			//hours
 			var dt = this.date.date_part(new Date());
 			var html="<select>";
-			for (var i=0; i<60*24; i+=this.config.time_step){
-				var time=this.templates.hour_scale(dt);
+			for (var i=0; i<60*24; i+=this.config.time_step*1){
+				var time=this.templates.time_picker(dt);
 				html+="<option value='"+i+"'>"+time+"</option>";
 				dt=this.date.add(dt,this.config.time_step,"minute");
 			}
@@ -76,7 +70,7 @@ scheduler.form_blocks={
 				s[i+2].value=d.getMonth();
 				s[i+3].value=d.getFullYear();
 			}
-			s=node.getElementsByTagName("select");
+			var s=node.getElementsByTagName("select");
 			_fill_lightbox_select(s,0,ev.start_date);
 			_fill_lightbox_select(s,4,ev.end_date);
 		},
@@ -84,6 +78,8 @@ scheduler.form_blocks={
 			s=node.getElementsByTagName("select");
 			ev.start_date=new Date(s[3].value,s[2].value,s[1].value,0,s[0].value);
 			ev.end_date=new Date(s[7].value,s[6].value,s[5].value,0,s[4].value);
+			if (ev.end_date<=ev.start_date) 
+				ev.end_date=scheduler.date.add(ev.start_date,scheduler.config.time_step,"minute");
 		},
 		focus:function(node){
 			node.getElementsByTagName("select")[0].focus(); 
@@ -94,8 +90,9 @@ scheduler.showCover=function(box){
 	this.show_cover();
 	if (box){
 		box.style.display="block";
-		box.style.top=Math.round((document.body.offsetHeight-box.offsetHeight)/2)+"px";
-		box.style.left=Math.round((document.body.offsetWidth-box.offsetWidth)/2)+"px";	
+		var pos = getOffset(this._obj);
+		box.style.top=Math.round(pos.top+(this._obj.offsetHeight-box.offsetHeight)/2)+"px";
+		box.style.left=Math.round(pos.left+(this._obj.offsetWidth-box.offsetWidth)/2)+"px";	
 	}
 }
 scheduler.showLightbox=function(id){
@@ -122,11 +119,7 @@ scheduler._fill_lightbox=function(id,box){
 	
 	scheduler._lightbox_id=id;
 }
-scheduler._empty_lightbox=function(){
-	var id=scheduler._lightbox_id;
-	var ev=this.getEvent(id);
-	var box=this._get_lightbox();
-	
+scheduler._lightbox_out=function(ev){
 	var sns = this.config.lightbox.sections;	
 	for (var i=0; i < sns.length; i++) {
 		var node=document.getElementById(sns[i].id).nextSibling;
@@ -134,7 +127,15 @@ scheduler._empty_lightbox=function(){
 		var res=block.get_value.call(this,node,ev);
 		if (sns[i].map_to!="auto")
 			ev[sns[i].map_to]=res;
-	};
+	}
+	return ev;
+}
+scheduler._empty_lightbox=function(){
+	var id=scheduler._lightbox_id;
+	var ev=this.getEvent(id);
+	var box=this._get_lightbox();
+	
+	this._lightbox_out(ev);
 	
 	ev._timed=this.is_one_day_event(ev);
 	this.setEvent(ev.id,ev);
@@ -152,7 +153,7 @@ scheduler.hideCover=function(box){
 }
 scheduler.hide_cover=function(){
 	if (this._cover) 
-		document.body.removeChild(this._cover);
+		this._cover.parentNode.removeChild(this._cover);
 	this._cover=null;
 }
 scheduler.show_cover=function(){
@@ -167,6 +168,8 @@ scheduler._init_lightbox_events=function(){
 		if (src && src.className)
 			switch(src.className){
 				case "dhx_save_btn":
+					if (scheduler.checkEvent("onEventSave") && 						!scheduler.callEvent("onEventSave",[scheduler._lightbox_id,scheduler._lightbox_out({})]))
+							return;
 					scheduler._empty_lightbox()
 					scheduler.hide_lightbox();
 					break;
@@ -235,7 +238,7 @@ scheduler._get_lightbox=function(){
 			if (!block) continue; //ignore incorrect blocks
 			sns[i].id="area_"+this.uid();
 			var button = "";
-			if (sns[i].button) button = "<div style='float:right;' class='dhx_custom_button' index='"+i+"'><div class='dhx_custom_button_"+sns[i].name+"'></div><div>"+this.locale.labels["button_"+sns[i].name]+"</div></div>";
+			if (sns[i].button) button = "<div style='float:right;' class='dhx_custom_button' index='"+i+"'><div class='dhx_custom_button_"+sns[i].name+"'></div><div>"+this.locale.labels["button_"+sns[i].button]+"</div></div>";
 			html+="<div id='"+sns[i].id+"' class='dhx_cal_lsection'>"+button+this.locale.labels["section_"+sns[i].name]+"</div>"+block.render.call(this,sns[i]);
 		};
 		

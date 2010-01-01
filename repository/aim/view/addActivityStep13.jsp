@@ -703,6 +703,9 @@
 					</table>
 				</td></tr>
 				<tr><td>
+					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
+				</td></tr>
+				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -710,8 +713,7 @@
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
-									<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -724,24 +726,7 @@
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-							<tr>
-								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-										<tr>
-											<td width="13" height="20" background="module/aim/images/left-side.gif">
-											</td>
-											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-                                                                                             <digi:trn>
-													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
-                                                                                            ${fn:length(aimEditActivityForm.steps)}:
-												 <digi:trn key="aim:stepContracting">IPA Contracting</digi:trn>
-											</td>
-											<td width="13" height="20" background="module/aim/images/right-side.gif">
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
+							
 							<tr><td>
 							<field:display name="Add IPA Contract" feature="Contracting">
 								<div style="width:99.5%;height:18px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">

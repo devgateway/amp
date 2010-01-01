@@ -12,15 +12,16 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
+
 <%@page import="org.digijava.module.aim.util.DbUtil"%>
 <%@page import="org.digijava.module.aim.form.ActivityForm"%><digi:instance property="aimEditActivityForm"/>
 
 
 								<table width="95%" bgcolor="#f4f4f2">
-									<tr><td>
+									<tr><td class="separator1" title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
 										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
-										<b><digi:trn key="aim:components">Components</digi:trn></b></a>
+										<digi:trn key="aim:components">Components</digi:trn>
 									</td></tr>
 									<tr><td>&nbsp;
 										

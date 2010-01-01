@@ -256,44 +256,7 @@
 
 						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
 
-							<tr>
-
-								<td width="100%">
-
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-
-										<tr>
-
-											<td width="13" height="20" background="module/aim/images/left-side.gif">
-
-                                            &nbsp;
-
-											</td>
-                                                                                        <td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-													<digi:trn>
-													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
-                                                                                                 ${fn:length(aimEditActivityForm.steps)}:
-                                                                                                <digi:trn key="aim:aidEffectiveIndicators">
-
-													Aid Effectiveness Indicators
-                                                                                                  </digi:trn>
-											</td>
-
-											
-
-											<td width="13" height="20" background="module/aim/images/right-side.gif">
-
-                                            &nbsp;
-
-											</td>
-
-										</tr>
-
-									</table>
-
-								</td>
-
-							</tr>
+							
 
 							<tr><td bgcolor="#f4f4f2" width="100%">
 

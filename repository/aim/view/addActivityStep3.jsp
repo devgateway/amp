@@ -192,6 +192,8 @@
 	-->
 </script>
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
+
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step"/>
@@ -343,6 +345,9 @@ ${fn:replace(message,quote,escapedQuote)}
 						</tr>
 					</table>
 				</td></tr>
+				<tr><td>
+					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
+				</td></tr>
                 <tr>
                   <td>
                     <table width="100%" cellSpacing="1" cellPadding="1" valign="top">
@@ -354,10 +359,7 @@ ${fn:replace(message,quote,escapedQuote)}
                             </digi:trn>
                           </c:if>
                           <c:if test="${aimEditActivityForm.editAct == true}">
-                            <digi:trn key="aim:editActivity">
-                            Edit Activity
-                            </digi:trn>:
-                            <bean:write name="aimEditActivityForm" property="identification.title"/>
+                            <digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
                           </c:if>
                           </span>
                         </td>
@@ -376,26 +378,7 @@ ${fn:replace(message,quote,escapedQuote)}
                       <tr>
                         <td width="75%" vAlign="top">
                           <table cellPadding="0" cellSpacing="0" width="100%" vAlign="top">
-                            <tr>
-                              <td width="100%">
-                                <table cellPadding="0" cellSpacing="0" width="100%" border="0">
-                                  <tr>
-                                    <td width="13" height="20" background="module/aim/images/left-side.gif">
-                                    </td>
-                                    <td vAlign="middle" align ="center" class="textalb" height="20" bgcolor="#006699">
-                             
-                                    	<digi:trn>
-													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
-                                      <digi:trn key="aim:activity:Funding">
-                                          Funding
-                                      </digi:trn>
-                                    </td>
-                                    <td width="13" height="20" background="module/aim/images/right-side.gif">
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
+                            
                             <tr>
                               <td bgColor="#f4f4f2" align="center" vAlign="top" width="100%">
                                 <table width="100%" cellSpacing="0" vAlign="top" align="left" bgcolor="#006699">
@@ -405,15 +388,9 @@ ${fn:replace(message,quote,escapedQuote)}
                              	  	<feature:display name="Proposed Project Cost" module="Funding">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0">
                                           <tr>
-                                            <td>
-                                            <br />
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <td class="separator1" title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>">
                                               <IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" />
-                                              <a title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>">
-                                              <b>
-                                                <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
-                                              </b>
-											</a><br /><br />
+                                              <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
                                             </td>
                                           </tr>
                                           <tr>
@@ -507,15 +484,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                       
                                       <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0" >
                                         <tr>
-                                          <td>
-                                          <br />
-                                          &nbsp;&nbsp;&nbsp;&nbsp;
+                                          <td class="separator1" title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
                                             <IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
-                                              <a title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
-	                                              <b>
-	                                                <digi:trn key="aim:fundingOrganizations">Funding Information</digi:trn>
-	                                              </b>
-											  </a><br /><br />
+											<digi:trn key="aim:fundingOrganizations">Funding Information</digi:trn>
                                           </td>
                                         </tr>
 

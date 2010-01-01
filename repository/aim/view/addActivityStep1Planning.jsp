@@ -17,10 +17,12 @@ function myclearDate(editBox, clearLink, checkboxId){
 }
 </script>
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
+
 <digi:instance property="aimEditActivityForm" />
-									<tr><td>
+									<tr><td class="separator1">
 										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-										<b><digi:trn key="aim:planning">Planning</digi:trn></b>
+										<digi:trn key="aim:planning">Planning</digi:trn>
 									</td></tr>
 									<tr><td>
 										&nbsp;
@@ -397,8 +399,9 @@ function myclearDate(editBox, clearLink, checkboxId){
 											</c:if>											
 											<tr>
 												<td bgcolor="#ffffff">
-												<FONT color=red>*</FONT>&nbsp;
-												<digi:trn key="aim:status">Status</digi:trn>												  
+													<a class="requiredField">
+														*&nbsp;<digi:trn key="aim:status">Status</digi:trn>
+													</a>												  
 												<a href="javascript:popupwin('activity_status')">
 												<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width=10 height=10 border=0></a>
 												</td>

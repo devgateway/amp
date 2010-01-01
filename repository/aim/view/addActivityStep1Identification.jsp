@@ -54,6 +54,8 @@
 -->
 </style>
 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
+
 <script language="JavaScript">
 
 function OnBudgetRules ( textboxId,  messageElId, numOfCharsNeeded) {
@@ -225,9 +227,8 @@ target.style.cursor = "default"
 											<field:display name="Project Title" feature="Identification"></field:display>
 											<tr bgcolor="#ffffff">											
 												<td valign="top" align="left">
-													<FONT color=red>*</FONT>
-													<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
-													<digi:trn key="aim:projectTitle">Project Title</digi:trn>
+													<a class="requiredField" title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
+													* <digi:trn key="aim:projectTitle">Project Title</digi:trn>
 													</a>
 												
 												</td>
@@ -875,4 +876,3 @@ target.style.cursor = "default"
 	}; 
 
 </script>
-									

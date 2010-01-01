@@ -26,6 +26,7 @@
 	var trn_day_tab ='<digi:trn>Day</digi:trn>';
 	var trn_week_tab='<digi:trn>Week</digi:trn>';
 	var trn_month_tab='<digi:trn>Month</digi:trn>';
+	var trn_year_tab='<digi:trn>Year</digi:trn>';
 	
 //Translations for calendar locale_sv.js file 
 //month full names
@@ -89,14 +90,14 @@
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/lightbox.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxdataprocessor.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" language="JavaScript" type="text/javascript"></script>
-<script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
-
+ <script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
+ <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxscheduler_year_view.js"/>" language="JavaScript" type="text/javascript"></script>
 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/layout.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/note.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/recurring.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/lightbox.css"/>"> 
- 
+ <link rel="stylesheet" href="<digi:file src="module/calendar/css/dhtmlxscheduler_ext.css"/>"> 
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">
@@ -180,13 +181,12 @@
 		if(printView!=null){
 			if(printView == 1){
 				defoultView = "day"
-
-				}else if(printView == 2){
-					defoultView = "week"
-
-				}
-
+			}else if(printView == 2){
+				defoultView = "week"
+			}else if(printView == 4){
+				defoultView = "year"
 			}
+		}
 		
 		
 		scheduler.init('scheduler_here',date,defoultView,type, ehtMonth);
@@ -209,14 +209,18 @@
 			   var monthly='<digi:trn>Monthly View</digi:trn>';
 			   var weekly='<digi:trn>Weekly View</digi:trn>';
 			   var daily='<digi:trn>Daily View</digi:trn>';
+			   var yearly='<digi:trn>Yearly View</digi:trn>';
 			   if(mode=='month'){
 				   whichView.innerHTML=monthly;
 			   }else if(mode=='week'){
 				   whichView.innerHTML=weekly;
 			   }else if(mode=='day'){
 				   whichView.innerHTML=daily;
+			   }else if(mode=='year'){
+				   whichView.innerHTML=yearly;
 			   }			   
 			});
+		//scheduler.attachEvent("onMouseOver",showToolTip);
 		scheduler.attachEvent("onClick",function(id){
 		    var ev = scheduler.getEvent(id);
 			var eventId = ev.id;
@@ -329,7 +333,7 @@ addLoadEvent(delBody);
 			<div class="dhx_cal_next_button">&nbsp;</div>
 			<div class="dhx_cal_today_button"></div>
 			<div class="dhx_cal_date"></div>
-	<!-- <div  class="dhx_cal_tab" name="unit_tab" style="right:270px;"></div>  -->	 
+	 		<div class="dhx_cal_tab" name="year_tab" style="right:270px;"></div>  	 
 			<div class="dhx_cal_tab" name="month_tab" style="right:205px;"></div>
 			<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
 			<div class="dhx_cal_tab" name="day_tab" style="right:76px;"></div>

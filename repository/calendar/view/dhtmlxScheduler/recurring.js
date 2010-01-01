@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 scheduler.form_blocks["recurring"]={
 	render:function(sns){
 		return scheduler.__recurring_template;
@@ -334,8 +328,11 @@ scheduler.attachEvent("onEventCreated",function(id){
 })
 scheduler.attachEvent("onEventCancel",function(id){
 	var ev = this.getEvent(id);	
-	if (ev.rec_type)
+	if (ev.rec_type){
 		this._roll_back_dates(ev);
+		// a bit expensive, but we need to be sure that event re-rendered, because view can be corrupted by resize , during edit process
+		this.render_view_data(ev.id);
+	}
 })
 scheduler._roll_back_dates=function(ev){
 	ev.event_length = (ev.end_date.valueOf() - ev.start_date.valueOf())/1000;
@@ -383,11 +380,15 @@ scheduler.get_visible_events=function(){
 		else out.push(stack[i]);
 	}
 	return out;
-}
+};
+
+(function(){
+var old = scheduler.is_one_day_event;
 scheduler.is_one_day_event=function(ev){
 	if (ev.rec_type) return true;
-	return (ev.start_date.getDate()==ev.end_date.getDate() && ev.start_date.getMonth()==ev.end_date.getMonth() && ev.start_date.getFullYear()==ev.end_date.getFullYear()) ;
+	return old.call(this,ev);
 }
+})();
 
 scheduler.transponse_size={
 	day:1, week:7, month:1, year:12 
@@ -447,9 +448,7 @@ scheduler.transpose_type = function(type){
 			}
 			this.date[gf] = function(sd,inc){
 				var nd =  new Date(sd.valueOf());
-				//var d = nd.getDate();
 				nd.setMonth(nd.getMonth()+inc*step);
-				//if (d != nd.getDate()) nd.setDate(0);
 				if (str[3])
 					scheduler.date.day_week(nd,str[2],str[3]);
 				return nd;
@@ -478,7 +477,7 @@ scheduler.repeat_date=function(ev,stack,non_render,from,to){
 			copy.end_date = ted;
 			copy._timed=this.is_one_day_event(copy);
 			
-			if (!copy._timed && !this._table_view) return;
+			if (!copy._timed && !this._table_view && !this.config.multi_day) return;
 			stack.push(copy);
 			
 			if(!non_render){

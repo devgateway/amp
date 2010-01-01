@@ -21,7 +21,7 @@ To use it on other terms please contact us at sales@dhtmlx.com
 	}
 	.dhx_mark{
 		position:relative; top:3px;
-		background-image:url('./imgs/controls.gif');
+		background-image:url('../images/controls.gif');
 		background-position: 0px -43px;
 		padding-left:10px;
 	}
@@ -83,18 +83,18 @@ To use it on other terms please contact us at sales@dhtmlx.com
 		cursor:pointer;
 	}
 	.dhx_save_btn{
-		background-image:url('./imgs/controls.gif');
+		background-image:url('../images/controls.gif');
 		background-position:-104px 0px;
 		width:21px;
 		
 	}
 	.dhx_cancel_btn{
-		background-image:url('./imgs/controls.gif');
+		background-image:url('../images/controls.gif');
 		background-position:-83px 0px;
 		width:20px;
 	}
 	.dhx_delete_btn{
-		background-image:url('./imgs/controls.gif');
+		background-image:url('../images/controls.gif');
 		background-position:-42px 0px;
 		width:20px;
 	}

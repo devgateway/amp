@@ -1,9 +1,3 @@
-//v.2.0 build 90722
-/*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
-*/
 scheduler._props = {};
 scheduler.createUnitsView=function(name,property,list){
 	scheduler.date[name+"_start"]= scheduler.date.day_start;
@@ -29,7 +23,7 @@ scheduler.createUnitsView=function(name,property,list){
 			var s = scheduler;
 			var dx = 24*60*60*1000;
 			var ind = Math.floor((ev.end_date - s._min_date)/dx);
-			ev.end_date = new Date(s.date.time_part(ev.end_date)*10+s._min_date.valueOf());
+			ev.end_date = new Date(s.date.time_part(ev.end_date)*1000+s._min_date.valueOf());
 			ev.start_date = new Date(s.date.time_part(ev.start_date)*1000+s._min_date.valueOf());
 			ev[pr.map_to]=pr.options[ind].key;
 			return true;
@@ -52,6 +46,15 @@ scheduler.createUnitsView=function(name,property,list){
 		}
 		return r.call(this,ev);
 	}
+	var l = scheduler.locate_holder_day;
+	scheduler.locate_holder_day=function(a,b,ev){
+		var pr = scheduler._props[this._mode];
+		if (pr){
+			fix_und(pr,ev);
+			return pr.order[ev[pr.map_to]]*1+(b?1:0);	
+		}
+		return l.apply(this,arguments);
+	}
 	var p = scheduler._mouse_coords;
 	scheduler._mouse_coords=function(){
 		var pr = scheduler._props[this._mode];
@@ -67,6 +70,16 @@ scheduler.createUnitsView=function(name,property,list){
 			pos.x = 0;
 		}
 		return pos;
+	}
+	var o = scheduler._time_order;
+	scheduler._time_order = function(evs){
+		var pr = scheduler._props[this._mode];
+		if (pr){
+			evs.sort(function(a,b){
+				return pr.order[a[pr.map_to]]>pr.order[b[pr.map_to]]?1:-1;
+			});
+		} else
+			o.apply(this,arguments);
 	}
 	
 	scheduler.attachEvent("onEventAdded",function(id,ev){

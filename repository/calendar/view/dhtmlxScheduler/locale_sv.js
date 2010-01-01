@@ -23,7 +23,7 @@ scheduler.locale={
     	day_tab:trn_day_tab,
     	week_tab:trn_week_tab,
     	month_tab:trn_month_tab,
-    	unit_tab:"Year",
+    	year_tab:trn_year_tab,
     	new_event:"Nuovo evento",
 		icon_save:"Salva",
 		icon_cancel:"Cancella",

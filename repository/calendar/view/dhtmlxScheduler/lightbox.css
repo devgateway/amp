@@ -33,6 +33,7 @@
 	.dhx_cal_ltitle{
 		padding:2px 0px 2px 5px;
 		overflow:hidden;
+		white-space:nowrap;
 	}
 	.dhx_cal_ltitle span{
 		white-space:nowrap;
@@ -46,9 +47,9 @@
 	}
 	.dhx_cal_ltext{
 		padding:2px	0px 2px 10px;
-		
 		height:130px;
 		height=140px;
+		overflow:hidden;
 	}
 	.dhx_cal_ltext textarea{
 		background-color:transparent;
@@ -57,6 +58,7 @@
 		color:#887A2E;
 		height:100%;
 		width:100%;
+		outline:none !important;
 	}
 	.dhx_time{
 		font-weight:bold;

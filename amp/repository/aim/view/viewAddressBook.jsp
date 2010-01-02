@@ -1,4 +1,3 @@
-<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -267,6 +266,7 @@ html>body #mainEmpty {
 	font-weight:bold;
 	line-height:normal;
 	text-align:center;
+	height: 30px;
 }		
 .reportsBorderTable {
 	border-collapse:collapse;
@@ -450,7 +450,7 @@ html>body #mainEmpty {
 														<tr>
 															<td>
 <!--																<div style="border:1px solid #999999;width: 865px" >-->
-																		<div class="reportHead" style="width:865px;height:30px;max-height:30px; ">
+																		<div class="reportHead" style="width: 865px; height: 30px; max-height: 30px; ">
 																			<table width="865" class="reportsBorderTable">																				
 																				<thead class="fixedHeader">											                            	
 												                            	<tr height="100%">																						
@@ -471,7 +471,6 @@ html>body #mainEmpty {
 																					<td width="130" class="clsTableTitleCol">
 																						<b><digi:trn>Email</digi:trn></b>
 																					</td>
-																					<td width="5px" class="clsTableTitleCol">&nbsp;</td>
 																					<td width="120" class="clsTableTitleCol">
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='orgNameAscending'}">
 																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=orgNameAscending&reset=false">
@@ -515,7 +514,7 @@ html>body #mainEmpty {
 																		</table>
 																	</div>
 																	<div class="report" style="overflow:auto;width:865px;height:250px;max-height:220px; " >																		
-																		<table width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
+																		<table width="100%" id="dataTable" cellspacing="0" cellpadding="1" align="left">
 																			<c:if test="${empty addressbookForm.contactsForPage}">
 													                        	<tr>
 																					<td colspan="5">
@@ -542,7 +541,6 @@ html>body #mainEmpty {
 																								</c:if>
 																							</c:forEach>
 																						</td>
-																						<td width="5px" class="reportsBorderTD">&nbsp;</td>																	
 																						<td class="reportsBorderTD" width="100" align="left">
                                                                                             <ul>
                                                                                                 <c:if test="${not empty cont.organisationName}">

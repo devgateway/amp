@@ -202,6 +202,35 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 	font-weight:bold;
     font-size: 11px;
     text-decoration:none;
+    height: 22px;
+}
+.clsTableTitleCol {
+	-x-system-font:none;
+	background-color:#B8B8B0;
+	color:#000000;
+	cursor:default;
+	font-family:"Verdana";
+	font-size:7.5pt;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:bold;
+	line-height:normal;
+	text-align:center;
+	height: 22px;
+}		
+.reportsBorderTable {
+	border-collapse:collapse;
+}
+.reportsBorderTD {
+	cellpadding: 0px;
+	cellspacing: 0px;
+	padding: 0px;
+	margin: 0px;
+	font-family:Arial,Helvetica,sans-serif;
+	height: 30px;
+	Fixed-width: 100px;
 }
 </style>
 <script type="text/javascript">
@@ -436,9 +465,9 @@ function updateTableMembers(members){
     if (members && members.length>0) {
         for (i = 0, l = members.length; i < l; ++i) {
             item = members[i];
-            html[j++] = '<tr><td width="250">';
+            html[j++] = '<tr><td width="300" class="reportsBorderTD">';
             html[j++] = '<a href=\'javascript:showUserProfile('+item.ID+')\' title=\'Click to View Member Detais\'>'+item.name+'</a>';
-            html[j++] = '</td><td align=\'center\' width="100">';
+            html[j++] = '</td><td align=\'center\' width="100" class="reportsBorderTD">';
             html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn>Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
             html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
             html[j++] = '</td></tr>';
@@ -503,9 +532,9 @@ function updateTableActivities(members){
     if (members && members.length>0) {
         for (i = 0, l = members.length; i < l; ++i) {
             item = members[i];
-            html[j++] = '<tr><td width="250">';
+            html[j++] = '<tr><td width="300" class="reportsBorderTD">';
             html[j++] = item.name;
-            html[j++] = '</td ><td align=\'center\' width="100">';
+            html[j++] = '</td ><td align=\'center\' width="100" class="reportsBorderTD">';
             html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn>Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/images/deleteIcon.gif\'/>' + '</a>';
             html[j++] = '</td></tr>';
         }
@@ -988,16 +1017,16 @@ function setHoveredRow(rowId) {
 											<input type="hidden" name="teamName" value=""/>
 											<table  cellspacing="1" cellpadding="2" align="left" width="100%">
 											<tr><td>
-											<div style="width: 100%" class="box-border-nopadding" class="box-border-nopadding">
-											<table  cellspacing="1" cellpadding="2" align="left" width="100%">
+											<div class="reportHead" style="width: 100%px; height: 22px; max-height: 22px; ">
+											<table width="100%" class="reportsBorderTable">																				
 										        <tr class="headTableTr">
-										            <td height="22" align="center" width="300" align="center" class="headTableTd"><digi:trn>Name</digi:trn></td>
-										            <td height="22" align="center" width="100" align="center" class="headTableTd"><digi:trn>Actions</digi:trn></td>
+										            <td align="center" width="300" align="center" class="clsTableTitleCol"><digi:trn>Name</digi:trn></td>
+										            <td align="center" width="100" align="center" class="clsTableTitleCol"><digi:trn>Actions</digi:trn></td>
 										        </tr>
 											</table>
 											</div>
-											<div id="demo" style="overflow: auto; width: 100%; height: 309px; max-height: 309px;" class="box-border-nopadding">
-											    <table id="dataTable"  cellspacing="1" cellpadding="2" align="left" width="100%" >
+											<div id="demo" class="report" style="overflow: auto; width: 100%; height: 309px; max-height: 309px;" class="box-border-nopadding" >																		
+												<table class="box-border-nopadding" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
 											    <tbody>
 											        <tr><td colspan="2"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
 											    </tbody>

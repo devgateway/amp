@@ -93,7 +93,7 @@
 
 </script>
 
-<style type="text/css">
+<style type="text/css" media="screen" >
 		.jcol{												
 		padding-left:10px;												 
 		}
@@ -119,9 +119,13 @@
 		.notHovered {
 			background-color:#FFFFFF;
 		}
+        .scrollable {
+            height: 180px; overflow: auto; width: 100%;
+        }
 		
 </style>
 
+<digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
 <digi:errors/>
 
 
@@ -155,7 +159,9 @@
 					</td>
 				</tr>
                  <tr><td align="left">
+                         <div class="otherLinks">
                         <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                        </div>
                     </td>
                 </tr>
                 <digi:instance property="aimOrgManagerForm" />
@@ -163,7 +169,7 @@
                 <digi:form action="/organisationManager.do" method="post">
 				<tr>
 					<td>
-						<table width="100%">
+						<table width="100%" class="filter">
 							<tr>
 								<td width="30%">
 									<digi:trn key="aim:orgManagerType">Type</digi:trn>:
@@ -219,7 +225,7 @@
 								<!-- Page Logic -->
 									<logic:empty name="aimOrgManagerForm" property="pagedCol">
 									<tr>
-										<td colspan="5">
+										<td>
                                                 		<b><digi:trn key="aim:noOrganization">No organization present</digi:trn>
                                                      </b>
 										</td>
@@ -296,12 +302,12 @@
 													</td>
 												</tr>
 												<tr>
-													<td>
-														<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;" class="report">
+                                                    <td valign="top">
+														<div  class="report scrollable">
 															<table width="100%" cellspacing="0" cellpadding="2" id="dataTable">
                                                                 <tbody class="yui-dt-data">
 																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation" indexId="index">
-                                                           			<tr height="25">
+                                                           			<tr>
 																		<td align="left" width="30%">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="mode" value="resetMode" />
@@ -432,7 +438,9 @@
 					</table>
 				</td>
 				<td vAlign="top" width="25%">
-					<jsp:include page="orgManagerOtherLinks.jsp" />
+                    <div class="otherLinks">
+                        <jsp:include page="orgManagerOtherLinks.jsp" />
+                    </div>
 				</td>
 		</tr>
 	</table>

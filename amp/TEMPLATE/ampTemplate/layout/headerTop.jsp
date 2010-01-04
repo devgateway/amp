@@ -3,6 +3,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<div class="headerTop">
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -111,3 +112,4 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
    </tbody>
 
 </table>
+</div>

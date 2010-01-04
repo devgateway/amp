@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<div class="headerMiddle">
         <!-- Dependencies --> 
 		
 <%@page import="org.digijava.module.aim.helper.Constants"%>
@@ -819,3 +820,4 @@ function onMenuItemClick(p_sType, p_aArgs, p_oValue) {
 
 
 </script>
+</div>

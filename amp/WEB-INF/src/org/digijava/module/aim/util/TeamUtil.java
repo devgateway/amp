@@ -891,7 +891,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            //session.flush();
+
             member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
             member.getDesktopTabSelections().size(); //lazy init
             PersistenceManager.releaseSession(session);

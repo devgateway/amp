@@ -1786,7 +1786,7 @@ public class ImportBuilder {
 		this.hm = hm;
 	}
 
-	
+
 	private void processContactStep(AmpActivity activity,ActivityType activityImported){
 		if (activityImported.getDonorContacts() != null && activityImported.getDonorContacts().size() > 0){
 			ContactType contact = activityImported.getDonorContacts().iterator().next();

@@ -83,7 +83,7 @@ public class ImportAction extends MultiAction {
 		String[] langArray = {"en","fr","es"};
 		if(iform.getLanguages() == null || iform.getLanguages().length < 1) iform.setLanguages(langArray);
 		
-		
+
 		String[] options = {TranslatorWorker.translateText("insert",locale, siteId),TranslatorWorker.translateText("update",locale, siteId)};
 		if(iform.getOptions() == null || iform.getOptions().length < 1) iform.setOptions(options);
 		
@@ -94,9 +94,9 @@ public class ImportAction extends MultiAction {
 		//if(request.getParameter("import")!=null) return modeUploadedFile(mapping, iform, request, response);
 		if(request.getParameter("saveImport")!=null) 
 			return modeSaveImport(mapping, iform, request, response);
-	
-		iform.setActivityStructure(ExportHelper.getActivityStruct("activity","activityStructure","activity",ActivityType.class,true));
 
+		iform.setActivityStructure(ExportHelper.getActivityStruct("activity","activityStructure","activity",ActivityType.class,true));
+	
 		ActionErrors errors = (ActionErrors) session.getAttribute("DEimportErrors");
 		if(errors != null){
 			saveErrors(request, errors);
@@ -197,6 +197,7 @@ public class ImportAction extends MultiAction {
         	tm = (TeamMember) session.getAttribute("currentMember");
         
         ImportBuilder importBuilder = new ImportBuilder();
+
         session.setAttribute("DEimportErrors", null);
         String log = "";
 

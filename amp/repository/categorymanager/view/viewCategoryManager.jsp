@@ -9,7 +9,7 @@
  
 <%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
 
-<style type="text/css">
+<style type="text/css" media="screen" >
 		.jcol{												
 		padding-left:10px;												 
 		}
@@ -35,9 +35,13 @@
 		.notHovered {
 			background-color:#FFFFFF;
 		}
+        div.scrollable {
+            height: 220px; overflow: auto; width: 100%;
+        }
 		
 		
 </style>
+<digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
 <script language="JavaScript">
 
   function setStripsTable(tableId, classOdd, classEven) {
@@ -149,7 +153,9 @@ function confirmDelete() {
 					</td>
 				</tr>
                  <tr><td align="left">
+                        <div class="otherLinks">
                         <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                        </div>
                     </td>
                 </tr>
 				<tr>
@@ -212,7 +218,7 @@ function confirmDelete() {
                          </thead>
 						</table>
 						</div>
-						<div style = "overflow:auto;width:100%;height:220px;max-height:220px;" class="report">
+						<div class="report scrollable">
 						<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable">
                         <tbody class="yui-dt-data">
 						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass">
@@ -298,6 +304,7 @@ function confirmDelete() {
 				</logic:notEmpty>
 				</td>
 				<td valign="top">
+                    <div class="otherLinks">
 					<table cellPadding=0 cellSpacing=0  border=0>
 						<tr>
 							<td bgColor=#999999 class="box-title" style = "color:#000; height:16px;">
@@ -343,10 +350,11 @@ function confirmDelete() {
 							</td>
 						</tr>
 					</table>
+                    </div>
 				</td>
 				</tr>
 				<tr>
-				<td>				
+				<td>
 					<br>
 					<digi:trn key="aim:tablelegend">
 						Legend :

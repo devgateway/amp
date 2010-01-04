@@ -116,7 +116,7 @@ function setHoveredRow(rowId) {
 }
 </script>
 
-<style type="text/css">
+<style type="text/css" media="screen">
 .jcol {
 	padding-left: 10px;
 }
@@ -144,7 +144,12 @@ function setHoveredRow(rowId) {
 .notHovered {
 	background-color: #FFFFFF;
 }
+
+div.scrollable {
+    height: 180px; overflow: auto; width: 100%;
+}
 </style>
+<digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
 
 <table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
 <tr><td>
@@ -181,7 +186,9 @@ function setHoveredRow(rowId) {
 					</td>
 				</tr>
                  <tr><td align="left">
-                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                         <div class="otherLinks">
+                             <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                         </div>
                     </td>
                 </tr>
                 <digi:instance property="aimCurrencyForm" />
@@ -196,7 +203,7 @@ function setHoveredRow(rowId) {
 				<tr>
 					<td noWrap width=75% vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
-							<tr><td>
+							<tr><td class="filter">
 								<!-- Filters to be put here -->
 								<table cellPadding=1 cellSpacing=1 align="left" width="330">
 								<tr>
@@ -269,7 +276,7 @@ function setHoveredRow(rowId) {
 									<c:if test="${!empty aimCurrencyForm.currency}">
 									<tr>
 										<td>
-											<div style="overflow: auto; width: 100%; height: 220px; max-height: 220px;" class="report">
+											<div class="report scrollable">
 												<table width="100%" cellspacing="0" cellpadding="0" id="dataTable">
                                                     <tbody class="yui-dt-data">
 													<c:forEach var="curr" items="${aimCurrencyForm.currency}">
@@ -496,6 +503,7 @@ function setHoveredRow(rowId) {
 						</table>
 					</td>
 					<td valign="top">
+                        <div class="otherLinks">
 									<table align=center cellPadding=0 cellSpacing=0 width="90%"
 												border=0>
 												<tr>
@@ -553,6 +561,7 @@ function setHoveredRow(rowId) {
 													</td>
 												</tr>
 											</table>
+                        </div>
 					</td>
 				</tr>
 			</table>

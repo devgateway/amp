@@ -138,6 +138,14 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 	<div id="popinContent" class="content">
 	</div>
 </div>
+            
+ <style type="text/css" media="print">
+ .yui-skin-sam tr.yui-dt-selected td {
+   border-style:solid;
+   border-color:#000000;
+   }
+ </style>
+ <digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
 
 <style type="text/css">
 	.mask {
@@ -165,7 +173,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 	}
 		
 </style>
-<style type="text/css">
+<style type="text/css" media="screen">
 .jcol {
 	padding-left: 10px;
 }
@@ -231,6 +239,9 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 	font-family:Arial,Helvetica,sans-serif;
 	height: 30px;
 	Fixed-width: 100px;
+}
+div.scrollable {
+    overflow: auto; width: 100%; height: 309px; max-height: 309px;
 }
 </style>
 <script type="text/javascript">
@@ -880,7 +891,9 @@ function setHoveredRow(rowId) {
 					</td>
 				</tr>
 				<tr><td align="left">
+                        <div class="otherLinks">
                     <jsp:include page="/repository/aim/view/exportTable.jsp" />
+                        </div>
                 </td></tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
@@ -901,7 +914,7 @@ function setHoveredRow(rowId) {
 										<digi:form action="/workspaceManager.do?page=1" method="post">
 										<tr><td class="box-title" align="left">
 											<!-- Table title -->
-											<table width="100%" >
+											<table width="100%" class="filter" >
 												<tr>
 						
 													<td>
@@ -982,7 +995,7 @@ function setHoveredRow(rowId) {
 										</tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td class="box-title" align="left">
-											<table width="100%" >
+                                                <table width="100%"  class="filter">
 												<tr>
 												<td>&nbsp;</td>
 													<td align="right">
@@ -1025,7 +1038,7 @@ function setHoveredRow(rowId) {
 										        </tr>
 											</table>
 											</div>
-											<div id="demo" class="report" style="overflow: auto; width: 100%; height: 309px; max-height: 309px;" class="box-border-nopadding" >																		
+											<div id="demo" class="report box-border-nopadding scrollable" >
 												<table class="box-border-nopadding" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
 											    <tbody>
 											        <tr><td colspan="2"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>

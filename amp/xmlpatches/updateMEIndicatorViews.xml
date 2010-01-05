@@ -3,7 +3,7 @@
     <jira>AMP-7526</jira>
     <keyword>indicators</keyword>
     <author>Medea Gugushvili</author>
-    <description>Rewrite old views that used old tables (really weirdo views … why are they using "name" as column name everywhere...).</description>
+    <description>Rewrite old views that used old tables really weirdo views why are they using "name" as column name everywhere</description>
     <apply>
         <script>
             <lang delimiter=";" type="mysql">
@@ -25,7 +25,7 @@
 
                 CREATE OR REPLACE VIEW `v_indicator_description` AS
                 select `con`.`activity_id` AS `amp_activity_id`,`ind`.`description` AS `name`,`ind`.`indicator_id` AS `amp_me_indicator_id` from (`amp_indicator_connection` `con` join `amp_indicator` `ind` )
-                where `ind`.`indicator_id` = `con`.`indicator_id` and `con`.`sub_clazz`='a'  and  `ind`.`description`<> _utf8'';
+                where `ind`.`indicator_id` = `con`.`indicator_id` and `con`.`sub_clazz`='a' ;
 
                 CREATE OR REPLACE VIEW `v_indicator_id` AS
                 select `con`.`activity_id` AS `amp_activity_id`,`ind`.`code` AS `name`,`ind`.`indicator_id` AS `amp_me_indicator_id` from (`amp_indicator_connection` `con` join `amp_indicator` `ind` )

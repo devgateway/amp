@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<project name="ECS Jboss Service" default="build">
+	<property name="src" value="src"/>
+	<property name="classes" value="bin"/>	
+	<property name="lib" value="lib"/>
+
+	<property environment="env"/>
+	
+	<path id="classpath">	
+		<pathelement location="${classes}"/>
+		<pathelement location="${lib}/log4j.jar"/>		
+	</path>	
+
+	<path id="runclasspath">	
+		<pathelement location="${classes}"/>
+		<pathelement location="${lib}/axis-ant.jar"/>		
+		<pathelement location="${lib}/axis.jar"/>
+		<pathelement location="${lib}/commons-discovery.jar"/>		
+		<pathelement location="${lib}/commons-logging.jar"/>
+		<pathelement location="${lib}/jaxrpc.jar"/>
+		<pathelement location="${lib}/log4j-1.2.8.jar"/>
+		<pathelement location="${lib}/saaj.jar"/>		
+		<pathelement location="${lib}/wsdl4j.jar"/>
+	</path>	
+	
+	<target name="init">
+	     <mkdir dir="${classes}"/>
+	</target>
+
+	<target name="build" depends="init">
+		<javac destdir="${classes}">
+			<src path="${src}" />
+			<classpath refid="classpath" />
+		</javac>
+		<jar destfile="ecs-core.jar">
+			<fileset dir="${classes}/" />
+			<fileset dir="ecsClient/" />
+		</jar>
+		<copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-1.14/lib/ecs-core.jar" />
+		<!-- <copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-1.14/server/default/deploy/amp.war/WEB-INF/lib/ecs-core.jar" /> -->
+	</target>
+	
+	<!-- build for all components -->
+	<target name="clean">
+		<delete dir="${classes}" />
+	</target>	
+</project>

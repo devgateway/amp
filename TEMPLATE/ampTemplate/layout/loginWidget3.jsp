@@ -4,13 +4,23 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+
+<style>
+  .inp-upastext {
+    color: grey;
+  }
+  
+  .inp-username {color: grey}
+</style>
 <script type="text/javascript" src="script/jquery-1.3.2.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
+	 
 	$(".inp-username").bind("blur", function(){
 		var uname = $(".inp-username").attr("value");
 		if (uname=="") {
 		$(".inp-username").attr({value: "Username"});
+		$(".inp-username").css({color: "grey"});
 		}
 	});
 
@@ -19,6 +29,7 @@
 		var uname = $(".inp-username").attr("value");
 		if (uname == "Username") {
 		  $(".inp-username").attr({value: ""});
+		  $(".inp-username").css({color: "black"});
 			  
 		}
 	});

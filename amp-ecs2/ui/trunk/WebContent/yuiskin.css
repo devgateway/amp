@@ -1,0 +1,118 @@
+/* basic skin styles */
+.yui-skin-sam .yui-dt table {
+    margin:0;padding:0;
+    font-family:arial;
+    font-size: small;
+    border-collapse:separate;*border-collapse:collapse;border-spacing:0; /* since ie6 and ie7 behave differently */
+    border:1px solid #7F7F7F;
+}
+
+/* styles for this implementation */
+
+
+#startDateDiv{
+	position: absolute;
+	top: 28px;
+	left: 0px;
+	width: 80px;
+	font-size: 8pt;
+}
+#startDateContainer{ 
+	display: none;
+	position: absolute;
+	left: 10px;
+	top: 20px;
+	width: 140px;
+	z-index: 1;
+} 
+#stopDateDiv{
+	position: absolute;
+	top: 28px;
+	left: 80px;
+	width: 80px;
+	font-size: 8pt;
+}
+#stopDateContainer{ 
+	display: none;
+	position: absolute;
+	left: 10px;
+	top: 20px;
+	width: 140px;
+	z-index: 1;
+}
+
+#filterLoginDiv {
+	position: absolute;
+	top: 28px;
+	left: 160px;
+	font-size: 8pt;
+	width:160px;	
+}
+#filterLogin {
+    width:100%; /* set width for widget here */
+    padding-bottom:2em;
+}
+
+#filterLoginContainer{
+	width:30em;
+}
+
+
+#filterServerDiv {
+	position: absolute;
+	top: 28px;
+	left: 325px;
+	font-size: 8pt;
+	width:160px;	
+}
+#filterServer {
+    width:100%; /* set width for widget here */
+    padding-bottom:2em;
+}
+
+#filterServerContainer{
+	width:30em;
+}
+
+#filterCustomDiv {
+	position: absolute;
+	top: 28px;
+	left: 490px;
+	font-size: 8pt;
+	width:160px;	
+}
+#filterCustom {
+    width:100%; /* set width for widget here */
+    padding-bottom:2em;
+}
+
+#filterCustomContainer{
+	width:30em;
+} 
+
+#filterResetDiv {
+	position: absolute;
+	top: 28px;
+	left: 672px;
+	font-size: 8pt;
+	width:80px;	
+}
+#filterReset {
+    width:100%; /* set width for widget here */
+    padding-bottom:2em;
+}
+
+
+#popupHd{
+	font-size: 9pt;
+}
+#popupBd{
+	font-size: 7pt;
+}
+#popupFt{
+	font-size: 8pt;
+}
+#popupError{
+	font: monospace;
+	font-size: 7pt;
+}

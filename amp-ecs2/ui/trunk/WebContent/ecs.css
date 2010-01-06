@@ -1,0 +1,118 @@
+@CHARSET "UTF-8";
+
+
+#header
+{
+	background: #000;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 99.1%;
+	height: 19px;
+  	border: solid 1px gray;
+  	font-family: cursive;
+	text-align: center;
+  	color: aqua;
+}
+
+#filter1
+{
+	background: #fff;
+	position: absolute;
+	top: 21px;
+	left: 0px;
+	width: 80%;
+	height: 70px;
+	border: solid 1px;
+}
+
+#console
+{
+	background: #969696;
+	position: absolute;
+	top: 21px;
+	left: 80.1%;
+	width: 19%;
+	height: 70px;
+	border: solid 1px;
+	text-align: center;
+}
+
+#results
+{
+	background: #ff0;
+	position: absolute;
+	top: 91px;
+	left: 0px;
+	width: 80%;
+	height: 400px;
+}
+		
+#graph
+{
+	position: absolute;
+	background: #969696;
+	top: 92px;
+	left: 80.1%;
+	width: 19%;
+	height: 151px;
+	border: solid 1px;
+}
+	
+#filter2
+{
+	position: absolute;
+	top: 245px;
+	left: 80.1%;
+	width: 19%;
+	height: 250px;
+	font-size: small;
+	border: 1px dashed;
+	background: #6666FF;
+}
+#pagination
+{
+	position: absolute;
+	top: 491px;
+	left: 0px;
+	width: 80%;
+	height: 30px;
+	font-size: small;
+	text-align: center;
+}	
+#extra
+{
+	position: absolute;
+	top: 497px;
+	left: 80.1%;
+	width: 19%;
+	height: 30px;
+	vertical-align: middle;
+	text-align: right;
+}
+#footer
+{
+	background: #000;
+	position: absolute;
+	top: 523px;
+	left: 0px;
+	width: 99.1%;
+	height: 20px;
+  	border: solid 1px gray;
+  	font-family: cursive;
+	text-align: right;
+  	color: aqua;
+  	font-size: 9px;
+}
+
+#pbContainer
+{
+	margin-left: 2px;
+}
+
+.hoverlink A:link {text-decoration: none}
+.hoverlink A:visited {text-decoration: none}
+.hoverlink A:active {text-decoration: none}
+.hoverlink A:hover {text-decoration: underline; color: red; cursor: pointer;}
+
+ 

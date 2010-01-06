@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +21,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.jaxb.AlertTemplateType;
 import org.digijava.module.message.jaxb.Messaging;
 import org.digijava.module.message.jaxb.TemplatesList;
+import org.digijava.module.message.jaxb.JobClassList;
+import org.digijava.module.message.jaxb.JobClassType;
 import org.digijava.module.message.util.AmpMessageUtil;
 
 
@@ -32,6 +38,7 @@ public class ExportAndImportTemplates extends DispatchAction {
 	
 	public static final String ROOT_TAG = "Messaging";
 	public static final String MESSAGES_TAG = "TemplatesList";
+    public static final String TRIGGERS_TAG = "JobClassList";
 	
 	public ActionForward gotoExportImportPage (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		return mapping.findForward("gotoPage");
@@ -39,7 +46,8 @@ public class ExportAndImportTemplates extends DispatchAction {
 	
 	public ActionForward exportTemplates (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {		
 		List<TemplateAlert> templates=AmpMessageUtil.getAllMessages(TemplateAlert.class);
-		String xml=generateXMLString(templates);	
+        Collection<AmpQuartzJobClass> jobClass= QuartzJobClassUtils.getAllJobClasses();
+		String xml=generateXMLString(templates,jobClass);
 		response.setContentType("text/xml");
 	    response.setHeader("content-disposition", "attachment; filename=exportTemplates.xml"); // file neme will generate by date
 	    OutputStreamWriter outputStream = null;
@@ -74,42 +82,56 @@ public class ExportAndImportTemplates extends DispatchAction {
 	    return null;
 	}
 	
-	public ActionForward importTemplates (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
-		AmpMessageForm msgForm=(AmpMessageForm)form;		
-		
-		FormFile myFile=msgForm.getFileUploaded();
-		if(myFile!=null){
-			byte[] fileData    = myFile.getFileData();
-	        InputStream inputStream= new ByteArrayInputStream(fileData);     
-	        
-	        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.message.jaxb");
-	        Unmarshaller m = jc.createUnmarshaller();
-	        Messaging item;
-	        try {
-	        	item = (Messaging) m.unmarshal(inputStream);
-	        	TemplatesList tempList=item.getTemplatesList();
-	        	if(tempList!=null){
-	        		List templates=tempList.getTemplate();
-	        		for (Object obj : templates) {
-	        			AlertTemplateType tempType=(AlertTemplateType)obj;
-	        			TemplateAlert template=new TemplateAlert();
-	        			template.setName(tempType.getName());
-	    				template.setDescription(tempType.getMsgDetails());
-	    				template.setCreationDate(DateConversion.getDate(tempType.getReceived()));
-	    				template.setRelatedTriggerName(tempType.getRelatedTrigger());
-	    				AmpMessageUtil.saveOrUpdateMessage(template);
-					}
-	        	}	        	
-			} catch (Exception ex) {			
-				ex.printStackTrace(System.out);
-			}			
-		}	
-		return mapping.findForward("viewTemplates");
-	}
+	   public ActionForward importTemplates(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        AmpMessageForm msgForm = (AmpMessageForm) form;
+
+        FormFile myFile = msgForm.getFileUploaded();
+        if (myFile != null) {
+            byte[] fileData = myFile.getFileData();
+            InputStream inputStream = new ByteArrayInputStream(fileData);
+
+            JAXBContext jc = JAXBContext.newInstance("org.digijava.module.message.jaxb");
+            Unmarshaller m = jc.createUnmarshaller();
+            Messaging item;
+            try {
+                item = (Messaging) m.unmarshal(inputStream);
+                TemplatesList tempList = item.getTemplatesList();
+                JobClassList jobList = item.getJobClassList();
+                if (tempList != null) {
+                    List templates = tempList.getTemplate();
+                    for (Object obj : templates) {
+                        AlertTemplateType tempType = (AlertTemplateType) obj;
+                        TemplateAlert template = new TemplateAlert();
+                        template.setName(tempType.getName());
+                        template.setDescription(tempType.getMsgDetails());
+                        template.setCreationDate(DateConversion.getDate(tempType.getReceived()));
+                        String relatedTrigger = tempType.getRelatedTrigger().trim();
+                        template.setRelatedTriggerName(relatedTrigger);
+                        AmpMessageUtil.saveOrUpdateMessage(template);
+                    }
+                }
+                if (jobList != null) {
+                    List<JobClassType> jobs = jobList.getJobClass();
+                    for (JobClassType obj : jobs) {
+                        AmpQuartzJobClass jobClass = QuartzJobClassUtils.getJobClassesByClassfullName(obj.getClassFullname());
+                        if (jobClass == null) {
+                            jobClass = new AmpQuartzJobClass();
+                            jobClass.setName(obj.getName());
+                            jobClass.setClassFullname(obj.getClassFullname());
+                            QuartzJobClassUtils.addJobClasses(jobClass);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return mapping.findForward("viewTemplates");
+    }
 	
 	
-	private String generateXMLString(List<TemplateAlert> templates){
+	private String generateXMLString(List<TemplateAlert> templates,Collection<AmpQuartzJobClass> jobClasses){
 		String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		xml += "<" + ROOT_TAG + ">";
 	    xml+="<" + MESSAGES_TAG +">";
@@ -124,7 +146,16 @@ public class ExportAndImportTemplates extends DispatchAction {
                 xml += "</template>";
             }
         }
-		xml+="</" + MESSAGES_TAG +">";
+        xml+="</" + MESSAGES_TAG +">";
+        xml+="<" + TRIGGERS_TAG +">";
+        if(jobClasses!=null){
+           for (AmpQuartzJobClass jobClass : jobClasses) {
+                xml += "<" + "jobClass name=\"" + jobClass.getName() + "\" ";
+                xml += " classFullname=\"" +jobClass.getClassFullname()+ "\"";
+                xml += "/>";
+            }
+        }
+        xml+="</" + TRIGGERS_TAG +">";
 		xml += "</" + ROOT_TAG + ">";
 		return xml;
 	}

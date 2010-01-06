@@ -4,6 +4,32 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<script type="text/javascript" src="script/jquery-1.3.2.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+	$(".inp-username").bind("blur", function(){
+		var uname = $(".inp-username").attr("value");
+		if (uname=="") {
+		$(".inp-username").attr({value: "Username"});
+		}
+	});
+
+	
+	$(".inp-username").click(function(){
+		var uname = $(".inp-username").attr("value");
+		if (uname == "Username") {
+		  $(".inp-username").attr({value: ""});
+			  
+		}
+	});
+
+	$(".inp-upastext").bind("click", function(){
+		$(".inp-upastext").css({display: "none"});
+		$(".inp-upassword").css({display: ""});
+		$(".inp-upassword").focus();
+	});
+});
+</script>
 	<div style="margin: 15px 10px 5px 5px" >
 	 <digi:secure authenticated="true">
 	 <logic:present name="currentMember" scope="session">
@@ -27,21 +53,16 @@
          </digi:secure> 
          <digi:secure authenticated="false">
           <logic:notPresent name="currentMember" scope="session">
-          <div style="background-color:#376091; border: white 1px solid">
+          <div style="background-color:#376091; border: #9d9da7 1px solid; width: 80%">
            <form action="/j_acegi_security_check" method="post"">
-            
-              <table width="100%"  cellspacing="0" cellpadding="0" style=" margin-top: 10px">
+            <%-- 
+              <table width="100%"  cellspacing="0" cellpadding="0" border="0" style=" margin-top: 10px">
                 <tr>
-                  <td align="center" vAlign="middle" style="color: white" width="15%">
-                    <digi:trn >	Username</digi:trn>
-                  </td>
-                  <td  width="25%">
+                  <td  align="center">
                     <input type="text" name="j_username" size="20" class="inp-text"/>
                   </td>
-                  <td align="center" vAlign="middle" style="color: white"  width="15%">
-                    <digi:trn >	Password</digi:trn>
-                  </td>
-                  <td  width="25%">
+
+                  <td align="center">
                     <input type="password" name="j_password" size="20" class="inp-text" />
                   </td>
                   <td align="center">
@@ -49,6 +70,18 @@
                   </td>
                 </tr>
               </table>
+              --%>
+				<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 8px;">
+					<tr>
+					  <td align="center" valign="middle"><input type="text" name="j_username" size="20" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>"/></td>
+					  <td align="center" valign="middle">
+					  	<input type="password" name="j_password" size="20" class="inp-text inp-upassword" style="display: none" />
+					  	<input type="text" name="j_username" size="20" class="inp-text inp-upastext"  value="<digi:trn>Password</digi:trn>"/>
+					  </td>
+					  <td><html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Login</digi:trn></html:submit></td>
+					</tr>
+				</table>
+              
               </form>
                <div style="margin: 0px 5px 0px; 0px;">
                <%-- 

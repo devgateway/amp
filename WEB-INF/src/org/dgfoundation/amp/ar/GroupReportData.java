@@ -372,5 +372,32 @@ public class GroupReportData extends ReportData {
 		}
 		return new ArrayList<Column>(retValue);
 	}
+
+	@Override
+	public int getNumOfHierarchyRows() {
+		int result = 1;
+		if ( this.items != null ) {
+			for (Object o: this.items) {
+				ReportData rd	= (ReportData) o;
+				result 			+= rd.getNumOfHierarchyRows();
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) {
+		int rowspan		= 0;
+		if (items != null) {
+			Iterator<Object> iter	= items.iterator();
+			while ( iter.hasNext() ) {
+				ReportData rd		= (ReportData)iter.next();
+				rd.computeRowSpan(numOfPreviousRows, startRow, endRow);
+				numOfPreviousRows	+= rd.getVisibleRows();
+				rowspan				+= rd.getRowSpan();
+			}
+		}
+		this.setRowSpan(rowspan +1);
+	}
 	
 }

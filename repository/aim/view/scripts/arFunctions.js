@@ -433,3 +433,87 @@ function setPointerhtml(theRow, theRowNum, theAction, theDefaultColor, thePointe
 
     return true;
 } // end of the 'setPointer()' function
+
+
+
+RowSelector.prototype.objectMap	= new Object();
+RowSelector.prototype.uniqueId	= 0;
+function RowSelector(rowEl) {
+	this.rowEl				= rowEl;
+	this.originalColor		= rowEl.style.backgroundColor;
+	this.markerColor		= "lightgreen";
+	this.forever			= false;
+	this.isMarked			= false;
+}
+function getRowSelectorInstance(rowEl){
+	if ( rowEl.id == null || rowEl.id.length==0) {
+		rowEl.id	= "report_row_" + (RowSelector.prototype.uniqueId++);
+	}
+	var rowObj	= RowSelector.prototype.objectMap[rowEl.id];
+	if (rowObj == null) { 
+		rowObj	= new RowSelector(rowEl);
+		RowSelector.prototype.objectMap[rowEl.id]	= rowObj;
+	}
+	return rowObj;
+}
+RowSelector.prototype.colorRow	= function (color) {
+	var children	= this.rowEl.childNodes;
+	if (children!=null && children.length!=null) {
+		for (var i=0; i<children.length; i++) {
+			var child		= children[i];
+			var childYuiEl	= new YAHOOAmp.util.Element(child);
+			if ( child.nodeName.toLowerCase()=="td" && !childYuiEl.hasClass("hierarchyCell") ) {
+				child.style.backgroundColor	= color;
+			}
+		}
+	}
+}
+
+RowSelector.prototype.markRow	= function (forever) {
+	if ( forever ) {
+		this.colorRow( this.markerColor );
+		this.forever	= true;
+	}
+	else 
+		if ( !this.forever ) {
+			this.colorRow( this.markerColor );
+		}
+}
+
+RowSelector.prototype.unmarkRow	= function (forever) {
+	if ( forever ) {
+		this.colorRow("");
+		this.forever	= false;
+	}
+	else 
+		if ( !this.forever ) {
+			this.colorRow("");
+		}
+}
+RowSelector.prototype.toggleRow	= function () {
+	if ( this.isMarked ) {
+		this.unmarkRow(true);
+		this.isMarked	= false;
+	}
+	else { 
+		this.markRow(true);
+		this.isMarked	= true;
+	}
+}
+
+
+function sortHierarchy( columnName ) {
+	alert (columnName + "!!");
+	var subForm				= document.forms["aimAdvancedReportForm"];
+	for ( var i=0; i<subForm.levelPicked.options.length; i++ ) {
+		alert(subForm.levelPicked.options[i].text + "QQ");
+		if (subForm.levelPicked.options[i].text == columnName) { 
+			subForm.levelPicked.selectedIndex	= i;
+			break;
+		}
+	}
+	subForm.levelSorter.selectedIndex			= 0;
+	subForm.levelSortOrder.selectedIndex		= 1;
+	subForm.applySorter.click();
+	
+}

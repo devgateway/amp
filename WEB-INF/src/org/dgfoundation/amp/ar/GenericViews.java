@@ -13,6 +13,7 @@ package org.dgfoundation.amp.ar;
  *
  */
 public final class GenericViews {
+	public static final String HTML2="html2";
 	public static final String HTML="html";
 	public static final String PDF="pdf";
 	public static final String CSV="csv";

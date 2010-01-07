@@ -38,6 +38,7 @@ import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class User
     extends Entity {
@@ -76,7 +77,15 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private Long assignedOrgId;
+    private Set<AmpOrganisation> assignedOrgs;
 
+	public Set<AmpOrganisation> getAssignedOrgs() {
+		return assignedOrgs;
+	}
+
+	public void setAssignedOrgs(Set<AmpOrganisation> assignedOrgs) {
+		this.assignedOrgs = assignedOrgs;
+	}
 
 	public Long getAssignedOrgId() {
 		return assignedOrgId;

@@ -35,6 +35,7 @@
 
         <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/ar/report_html2_view.css" type="text/css" rel="stylesheet" />
 
 
 
@@ -453,6 +454,9 @@ session.setAttribute("progressValue", counter);
                 </c:set>
 
                 <c:forEach var="i" begin="0" end="${visibleRows}" step="${recordsPerPage}">
+                 	<logic:equal name="viewFormat" value="html2">
+                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html2~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+                    </logic:equal>
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>
@@ -612,6 +616,9 @@ session.setAttribute("progressValue", counter);
                 	</c:set>
                 </c:if>
                 <c:forEach var="i" begin="0" end="${visibleRows}" step="${recordsPerPage}">
+                 	<logic:equal name="viewFormat" value="html2">
+                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html2~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+                    </logic:equal>
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>

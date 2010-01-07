@@ -336,6 +336,7 @@ public class ViewNewAdvancedReport extends Action {
 		if(endRow!=null) rd.setEndRow(Integer.parseInt(endRow));
 		rd.setCurrentRowNumber(0);
 		
+		rd.computeRowSpan(0, Integer.parseInt(startRow), Integer.parseInt(endRow) );
 	
 		request.setAttribute("extraTitle",ar.getName());
 		rd.setCurrentView(viewFormat);

@@ -419,6 +419,7 @@ public class ColumnReportData extends ReportData {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
+			//System.out.println("Setting rowspan for: " + element + " || maxDepth is " + maxDepth);
 			element.setRowSpan(maxDepth + 1);
 		}
 	}
@@ -486,6 +487,52 @@ public class ColumnReportData extends ReportData {
 	public List<Column> getColumns(){
 		return items;
 
+	}
+
+
+	@Override
+	public int getNumOfHierarchyRows() {
+		return 1;
+	}
+
+
+	@Override
+	public void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) {
+		this.setRowSpan(0);
+		int realStartRow	= startRow+1;
+		int realEndRow		= endRow+1;
+		//RANGE is [realStartRow, realEndRow]
+		
+		int visibleRows		= this.getVisibleRows();
+		
+		if ( numOfPreviousRows < realEndRow && numOfPreviousRows+visibleRows >= realStartRow ) {
+			// At least some activity rows need to be displayed on this page (there is overlapping)
+			
+			if ( numOfPreviousRows+visibleRows > realEndRow && numOfPreviousRows >= realStartRow) {
+				// partial overlapping end of range
+				this.setRowSpan( realEndRow - numOfPreviousRows + 1 );
+				return;
+			}
+			if ( numOfPreviousRows+visibleRows <= realEndRow && numOfPreviousRows < realStartRow) {
+				// partial overlapping beginning of range
+				this.setRowSpan( numOfPreviousRows+visibleRows - realStartRow + 2 );
+				return;
+			}
+			if ( numOfPreviousRows+visibleRows > realEndRow && numOfPreviousRows < realStartRow) {
+				// full overlapping over both ends of the range
+				this.setRowSpan( realEndRow - realStartRow + 2 );
+				return;
+			}
+			if ( numOfPreviousRows+visibleRows <= realEndRow && numOfPreviousRows >= realStartRow) {
+				// all rows are inside the range
+				this.setRowSpan( visibleRows + 1 );
+				return;
+			}
+			
+		}
+		System.out.println("Shouldn't get here !!! " + this.toString() + " !! prev rows: " + numOfPreviousRows);
+		System.out.println("!! ");
+		
 	}
 	
 }

@@ -14,6 +14,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
@@ -84,26 +85,29 @@ public class RelatedOrgGate extends Gate {
 	if (tm==null) return false; 
 	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
 	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-	PersistenceManager.releaseSession(session);
-	User user = atm.getUser();
+	User user = (User) session.load(User.class, atm.getUser().getId());
 
 	
-	
+
 	
 	// iterate the assigned orgs:
 	if (ampa != null) {	    
 	    if (ampa.getOrgrole() == null)
 		return false;
-	    Iterator i = ampa.getOrgrole().iterator();
-	    while (i.hasNext()) {
-		AmpOrgRole element = (AmpOrgRole) i.next();
-		String roleCode = element.getRole().getRoleCode();
-		if (element.getOrganisation().getAmpOrgId().equals(user.getAssignedOrgId()))
-		    return true;
+	    
+	    for(AmpOrganisation org : user.getAssignedOrgs()) {
+		    Iterator i = ampa.getOrgrole().iterator();
+		    while (i.hasNext()) {
+			AmpOrgRole element = (AmpOrgRole) i.next();
+			String roleCode = element.getRole().getRoleCode();
+			if (element.getOrganisation().getAmpOrgId().equals(org))
+			    return true;
+		    }
 	    }
 	    
 
 	}
+	PersistenceManager.releaseSession(session);
 //	if (a != null) {
 //	    if (a.getRelOrgs() == null)
 //		return false;

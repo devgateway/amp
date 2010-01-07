@@ -1,7 +1,6 @@
 package org.digijava.module.um.form;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -26,6 +25,8 @@ public class ViewEditUserForm extends ActionForm {
 
 	private Long selectedOrgGroupId;
 	private Collection<AmpOrgGroup> orgGroups;
+	
+	
 
 	private String selectedOrgTypeId;
 	private Collection<AmpOrgType> orgTypes;
@@ -33,6 +34,10 @@ public class ViewEditUserForm extends ActionForm {
 	private String selectedOrgName;
 	private Long selectedOrgId;
 	private Collection<AmpOrganisation> orgs;
+	
+	private Collection<AmpOrganisation> assignedOrgs;
+	private Long selAssignedOrgs[];
+
 
 	/* this is the attached org related with gateperm OrgRoleGate */
 	private Long assignedOrgId;
@@ -300,6 +305,22 @@ public class ViewEditUserForm extends ActionForm {
 
 	public void setRoles(Collection<AmpTeamMemberRoles> roles) {
 		this.roles = roles;
+	}
+
+	public Collection<AmpOrganisation> getAssignedOrgs() {
+		return assignedOrgs;
+	}
+
+	public void setAssignedOrgs(Collection<AmpOrganisation> assignedOrgs) {
+		this.assignedOrgs = assignedOrgs;
+	}
+
+	public Long[] getSelAssignedOrgs() {
+		return selAssignedOrgs;
+	}
+
+	public void setSelAssignedOrgs(Long[] selAssignedOrgs) {
+		this.selAssignedOrgs = selAssignedOrgs;
 	}
 
 }

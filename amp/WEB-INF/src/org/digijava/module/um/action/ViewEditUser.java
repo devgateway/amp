@@ -3,12 +3,10 @@ package org.digijava.module.um.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeSet;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,15 +17,16 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -44,11 +43,6 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.security.ResourcePermission;
-import org.digijava.kernel.Constants;
 
 public class ViewEditUser extends Action {
 
@@ -178,6 +172,7 @@ public class ViewEditUser extends Action {
             uForm.setSelectedOrgTypeId(null);
             uForm.setSelectedCountryIso(null);
             uForm.setAssignedOrgId(null);
+            uForm.setAssignedOrgs(new TreeSet<AmpOrganisation>());
 
             uForm.setId(null);
             uForm.setEmail(null);
@@ -201,6 +196,7 @@ public class ViewEditUser extends Action {
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
                 uForm.setAssignedOrgId(user.getAssignedOrgId());
+                uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 if(user.getAssignedOrgId()!=null) {
                     uForm.setOrgs(new ArrayList<AmpOrganisation>());
                     AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
@@ -266,6 +262,9 @@ public class ViewEditUser extends Action {
                     user.setLastName(uForm.getLastName());
                     user.setAddress(uForm.getMailingAddress());
                     user.setOrganizationName(uForm.getSelectedOrgName());
+                    
+                    user.getAssignedOrgs().clear();
+                    user.getAssignedOrgs().addAll(uForm.getAssignedOrgs());
 
                     user.setAssignedOrgId(uForm.getAssignedOrgId());
 
@@ -317,6 +316,18 @@ public class ViewEditUser extends Action {
                     }
              } else if (uForm.getEvent().equalsIgnoreCase("groupSelected")) {
                     uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
+             } else if(uForm.getEvent().equalsIgnoreCase("addOrg")){
+            	 	uForm.setEvent(null);
+            	 	if(uForm.getAssignedOrgId()!=-1) {
+            	 		AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getAssignedOrgId());
+            	 		uForm.getAssignedOrgs().add(organisation);
+            	 	}
+             } else if(uForm.getEvent().equalsIgnoreCase("delOrgs")){
+         	 		uForm.setEvent(null); 
+         	 		for(int i=0;i<uForm.getSelAssignedOrgs().length;i++) {
+         	 			AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getSelAssignedOrgs()[i]);
+         	 			uForm.getAssignedOrgs().remove(organisation);
+         	 		}
              } else if(uForm.getEvent().equalsIgnoreCase("gotoAssignWorkspacePage")){
             	 //clear fields
             	 uForm.setRole(new Long(-1));

@@ -1,7 +1,6 @@
 package org.dgfoundation.ecs.core;
 
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.ecs.keeper.ErrorKeeper;
 import org.dgfoundation.ecs.keeper.ErrorKeeperRAM;
 import org.dgfoundation.ecs.keeper.ErrorReporting;

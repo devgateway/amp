@@ -21,31 +21,36 @@ public class ECSLoggerPlugin implements LoggerPlugin
 	{
 		synchronized (init) {
 			if (init){
-				String fileName = "log4j.xml";
+				String fileName = "log4j.properties";
 				File f = new File(fileName);
+				String serverName=System.getProperty("amp.ecs.serverName");
+				if ((serverName == null) || (serverName.compareTo("") == 0)) 
+					serverName = "root";
+				
+				ECSRepositorySelector.serverName = serverName;
+				
 				System.out.println("............................................................");
-				System.out.println(".........................ecs.system.........................");
+				System.out.println(".......................Ꜿ.ECS.System.........................");
 				System.out.println("............................................................");
 				System.out.println(".....starting up . . .                                 .....");
-				System.out.println(".....searching for config file:                        .....");
+				String outp = ".....server name: " + serverName;
+				for (int i = 0; i < 37 - serverName.length() ; i++){
+					outp += " ";
+				}
+				outp += ".....";
+				System.out.println(outp);
 				if (f.exists()){
-					System.out.println(".....                          found                   .....");
+					System.out.println(".....config file found                                 .....");
 					System.out.println(".....configuring log4j                                 .....");
 					PropertyConfigurator.configureAndWatch(fileName);
+					ECSRepositorySelector.jbossPropertiesFile = f.getAbsolutePath();
 				}
 				else{
-					System.out.println(".....                          not found               .....");
+					System.out.println(".....config file not found                             .....");
 					System.out.println(".....place config file in JBOSS_HOME/bin               .....");
+					ECSRepositorySelector.jbossPropertiesFile = null;
 				}
 				System.out.println(".....initializing ecs                                  .....");
-				/*
-				try {
-					Thread.sleep(4000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				*/
 				
 				try {
 					ECSClientManager.getClient();
@@ -54,7 +59,7 @@ public class ECSLoggerPlugin implements LoggerPlugin
 				}
 				Logger unusedButUsefull = Logger.getLogger("ecs.root.unused.logger.but.usefull");
 				ECSRepositorySelector.init();
-				System.out.println(".....startup successful in                             .....");
+				System.out.println(".....startup successful                                .....");
 				System.out.println("............................................................");
 				init = false;
 			}

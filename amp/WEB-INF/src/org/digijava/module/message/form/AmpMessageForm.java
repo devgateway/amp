@@ -39,6 +39,7 @@ public class AmpMessageForm extends ActionForm {
 	private int tabIndex=0;		//which tab we are viewing(messages tab, alerts, approvals ...)
 	private String childTab; //child tab on tabIndex. used to separate received messages from sent of draft 
 	private MessageHelper forwardedMsg;
+	private MessageHelper repliedMsg;
 	private String objectURL;
 	private int allmsg;
 	private List<ReciverName> receivesrsNameMail;
@@ -64,7 +65,9 @@ public class AmpMessageForm extends ActionForm {
 	private int offset;
     private String removeStateIds;
         
-    private int hiddenMsgCount;      
+    private int hiddenMsgCount;  
+    
+    private String[] contacts;
 	
 	/**
 	 * used to separate different kinds of messages
@@ -592,5 +595,22 @@ public class AmpMessageForm extends ActionForm {
 
 				public void setSetAs(String setAs) {
 					this.setAs = setAs;
+				}
+
+				public MessageHelper getRepliedMsg() {
+					return repliedMsg;
+				}
+
+				public void setRepliedMsg(MessageHelper repliedMsg) {
+					this.repliedMsg = repliedMsg;
+				}
+
+				public String[] getContacts() {
+					return contacts;
+				}
+
+				public void setContacts(String[] contacts) {
+					this.contacts = contacts;
 				}	
+				
 	}

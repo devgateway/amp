@@ -1,9 +1,6 @@
 package org.digijava.module.message.helper;
 
-
-
 public class ReciverName {
-
 	
 	private String teamName;
 	private String userNeme;

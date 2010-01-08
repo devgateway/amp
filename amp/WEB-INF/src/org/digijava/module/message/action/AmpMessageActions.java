@@ -71,6 +71,8 @@ public class AmpMessageActions extends DispatchAction {
     	if(request.getParameter("editingMessage").equals("false")){
     		//load activities
         	messageForm.setRelatedActivities(ActivityUtil.loadRelatedActivities(teamMember));
+        	String[] conts=AmpMessageUtil.buildExternalReceiversFromContacts();
+        	messageForm.setContacts(conts);
     		setDefaultValues(messageForm);
     	}else {
     		Long id=new Long(request.getParameter("msgStateId"));
@@ -396,18 +398,37 @@ public class AmpMessageActions extends DispatchAction {
         temp = name.split(";");
 
         int i=0;
+        //team members
         while(i+1 < temp.length){
         	ReciverName recName = new ReciverName();
-            	 recName.setUserNeme(temp[i]);
-            	recName.setTeamName(temp[i+1]);
+            recName.setUserNeme(temp[i]);
+            recName.setTeamName(temp[i+1]);
             if(messagesForm.getReceivesrsNameMail()==null){
             	messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
             }
             messagesForm.getReceivesrsNameMail().add(recName);
             i+=2;
-
         }
-
+        
+        //external people
+        if(message.getExternalReceivers()!=null && message.getExternalReceivers().length()>0){        	
+            String externalPeople=temp[temp.length-1];
+            String[] externalReceivers=externalPeople.split(",");
+            for(int j=0;j<externalReceivers.length;j++){
+            	ReciverName recName = new ReciverName();
+            	String receiverName=externalReceivers[j];
+            	if(j!=externalReceivers.length-1){
+            		receiverName+=",";
+            	}
+                recName.setUserNeme(receiverName);
+                recName.setTeamName("");
+                if(messagesForm.getReceivesrsNameMail()==null){
+                	messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
+                }
+                messagesForm.getReceivesrsNameMail().add(recName);
+            }
+        }
+        
         return mapping.findForward("viewMessage");
     }
 
@@ -500,40 +521,60 @@ public class AmpMessageActions extends DispatchAction {
 		// return xml
 		outputStream.close();
     	return null;
-    }
-
-   /**
-     * used when user clicks on forward link
+    }  
+    
+    /**
+     * User clicked on reply/forward message
      */
-    public ActionForward forwardMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public ActionForward replyOrForwardMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
         setDefaultValues(messagesForm);
-    	if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){
+    	if( (request.getParameter("reply")!=null && request.getParameter("reply").equals("fillForm")) || ( request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm") ) ){
     		Long stateId=new Long(request.getParameter("msgStateId"));
         	AmpMessageState oldMsgsState=AmpMessageUtil.getMessageState(stateId);
         	AmpMessage msg=oldMsgsState.getMessage();
-
-                // for Bread-crumb Generation. we need to which tab we must return..
-                if (msg instanceof AmpAlert) {
-                    messagesForm.setTabIndex(2);
-                } else {
-                    if (msg instanceof Approval) {
-                        messagesForm.setTabIndex(3);
-                    } else {
-                        if (msg instanceof CalendarEvent) {
-                            messagesForm.setTabIndex(4);
-                        } else {
-                            messagesForm.setTabIndex(1);
-                        }
-                    }
-                }
-
-            messagesForm.setMessageName("FWD: "+ msg.getName());
-        	MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
-        	messagesForm.setForwardedMsg(msgHelper);
-            HttpSession session = request.getSession();
-            TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-            messagesForm.setRelatedActivities(ActivityUtil.loadRelatedActivities(teamMember));
+           // for Bread-crumb Generation. we need to which tab we must return..
+           if (msg instanceof AmpAlert) {
+        	   messagesForm.setTabIndex(2);
+           } else {
+        	   if (msg instanceof Approval) {
+        		   messagesForm.setTabIndex(3);
+               } else {
+            	   if (msg instanceof CalendarEvent) {
+            		   messagesForm.setTabIndex(4);
+                   } else {
+                	   messagesForm.setTabIndex(1);
+                   }
+               }
+           }
+           //RE or FWD
+           MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
+           
+           if(request.getParameter("reply")!=null && request.getParameter("reply").equals("fillForm")){
+        	   messagesForm.setMessageName("RE: "+ msg.getName());
+        	   messagesForm.setRepliedMsg(msgHelper);
+        	   //receiver- The suer who's message we reply(in case of User Message)
+        	   if(msg.getSenderType().equals(MessageConstants.SENDER_TYPE_USER)){
+        		   Long messageCreatorId=msg.getSenderId();
+            	   AmpTeamMember creator=TeamMemberUtil.getAmpTeamMember(messageCreatorId);
+            	   if(creator!=null){
+            		   List<LabelValueBean> receivers=new ArrayList<LabelValueBean>();
+            		   AmpTeam creatorTeam=creator.getAmpTeam();
+            		   LabelValueBean teamLabel=new LabelValueBean("---"+creatorTeam.getName()+"---","t:"+creatorTeam.getAmpTeamId().toString());
+            		   receivers.add(teamLabel);
+            		   LabelValueBean tm=new LabelValueBean(creator.getUser().getFirstNames() + " " + creator.getUser().getLastName(),"m:" + creator.getAmpTeamMemId().toString());
+            		   receivers.add(tm);
+            		   messagesForm.setReceivers(receivers);
+            	   }
+        	   }        	   
+           }else if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){
+        	   messagesForm.setMessageName("FWD: "+ msg.getName());
+        	   messagesForm.setForwardedMsg(msgHelper);
+           }
+           //related activity possibilities
+           HttpSession session = request.getSession();
+           TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+           messagesForm.setRelatedActivities(ActivityUtil.loadRelatedActivities(teamMember));
     	}
     	return loadReceiversList(mapping,messagesForm,request,response);
     }
@@ -784,6 +825,12 @@ public class AmpMessageActions extends DispatchAction {
     	if(messageForm.getForwardedMsg()!=null){
     		message.setForwardedMessage(AmpMessageUtil.getMessage(messageForm.getForwardedMsg().getMsgId()));
     	}
+    	/**
+    	 * This will be filled only when we are replying a message
+    	 */
+    	if(messageForm.getRepliedMsg()!=null){
+    		message.setRepliedMessage(AmpMessageUtil.getMessage(messageForm.getRepliedMsg().getMsgId()));
+    	}
     	//link message to activity if necessary
     	if(messageForm.getSelectedActId()!=null && messageForm.getSelectedActId().longValue()>0){
     		Long actId=messageForm.getSelectedActId();    		
@@ -872,6 +919,39 @@ public class AmpMessageActions extends DispatchAction {
                     }
 
                 }
+                
+                if(receiver.startsWith("c")){ //contacts or people outside AMP
+                	receiver=receiver.substring(2); //we should send email to contacts, regardless setting value in Message Manager
+                	String email=receiver;
+                	if(receiver.indexOf("<")!=-1){
+                		email=receiver.substring(receiver.indexOf("<")+1, receiver.indexOf(">"));
+                	}	
+                	
+                	String receivers = message.getReceivers();
+                    if (receivers == null) {
+                    	receivers = "";
+                    } else {
+                    	if (receivers.length() > 0) {
+                    		receivers += ", ";
+                        }
+                    }
+                    receivers+=receiver;
+                    message.setReceivers(receivers);
+                        
+                    receivers=message.getExternalReceivers();
+                    if (receivers == null) {
+                    	receivers = "";
+                    } else {
+                     	if (receivers.length() > 0) {
+                     		receivers += ", ";
+                     	}
+                    }
+
+                    receivers+=receiver;
+                    message.setExternalReceivers(receivers);                		
+                	
+                	addrCol.add(new InternetAddress(email));
+                }
             }
 
             if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
@@ -899,7 +979,7 @@ public class AmpMessageActions extends DispatchAction {
             else{
 
 		return mapping.findForward("viewMyDesktop");
-	}
+      }
 	}
 
 
@@ -971,6 +1051,7 @@ public class AmpMessageActions extends DispatchAction {
 		 //form.setChildTab("inbox");
 		 form.setSetAs("message");
 		 form.setForwardedMsg(null);
+		 form.setRepliedMsg(null);
 		 form.setPage(null);
 		 form.setAllPages(null);
 		 form.setPagedMessagesForTm(null);
@@ -1013,7 +1094,7 @@ public class AmpMessageActions extends DispatchAction {
                  }
              }
 
-			 form.setReceivers(getMessageRecipients(message.getId()));
+			 form.setReceivers(getMessageRecipients(message));
 			 form.setSelectedActId(null);
 			 form.setRelatedActivityName(null);
 			 //getting related activity if exists
@@ -1084,8 +1165,11 @@ public class AmpMessageActions extends DispatchAction {
                 result += ">";
                 AmpMessage forwarded = state.getMessage().getForwardedMessage();
                 if (forwarded != null) {
-                    result += messages2XML(forwarded,state.getId());
-
+                    result += messages2XML(forwarded,state.getId(),true);
+                }
+                AmpMessage replied = state.getMessage().getRepliedMessage();
+                if(replied!=null){
+                	result += messages2XML(replied,state.getId(),false);
                 }
                 result += "</message>";
             }
@@ -1108,36 +1192,38 @@ public class AmpMessageActions extends DispatchAction {
         result += "</" + ROOT_TAG + ">";
         return result;
     }
-
+ 
     /**
-     * for forward thread generation
-     * @param forwardedMessage
-     * @param parentStateId state id of the newest message
-     * @return forwarded messages
-     * @throws org.digijava.module.aim.exception.AimException
+     * used to build forwarded or replied message xml
      */
-    private String messages2XML(AmpMessage forwardedMessage, Long parentStateId) throws AimException {
+    private String messages2XML(AmpMessage forwardedOrRepliedMessage, Long parentStateId,boolean isForwarded) throws AimException {
 
         String result = "";
-        result += "<" + "forwarded name=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getName()) + "\" ";
-        result += " msgId=\"" + forwardedMessage.getId() + "\"";
-        if(forwardedMessage.getSenderType()!=null && forwardedMessage.getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
-        result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";
+        result += "<" ;
+        if(isForwarded){
+        	result += "forwarded ";
+        }else{
+        	result += "replied ";
+        }
+        result += "name=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getName()) + "\" ";
+        result += " msgId=\"" + forwardedOrRepliedMessage.getId() + "\"";
+        if(forwardedOrRepliedMessage.getSenderType()!=null && forwardedOrRepliedMessage.getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
+        result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getSenderName())+ "\"";
         } else {
             result += " from=\"" + MessageConstants.SENDER_TYPE_SYSTEM + "\"";
         }
-        result += " received=\"" + DateConversion.ConvertDateToString(forwardedMessage.getCreationDate()) + "\"";
-        result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getReceivers()) + "\"";
-        result += " priority=\"" + forwardedMessage.getPriorityLevel() + "\"";
+        result += " received=\"" + DateConversion.ConvertDateToString(forwardedOrRepliedMessage.getCreationDate()) + "\"";
+        result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getReceivers()) + "\"";
+        result += " priority=\"" + forwardedOrRepliedMessage.getPriorityLevel() + "\"";
         //attachments start
-        if(forwardedMessage.getAttachedDocs()!=null){
-        	Sdm attachedDocs=forwardedMessage.getAttachedDocs();
+        if(forwardedOrRepliedMessage.getAttachedDocs()!=null){
+        	Sdm attachedDocs=forwardedOrRepliedMessage.getAttachedDocs();
         	DigiConfig config = DigiConfigManager.getConfig();
 	        String partialURL = config.getSiteDomain().getContent() ;
         	String links="";
         	for (Object item : attachedDocs.getItems()) {
 				SdmItem attachedFile=(SdmItem)item;						
-				links += "<img src=\""+"/TEMPLATE/ampTemplate/imagesSource/common/attachment.png"+"\" border=\""+"0\" />";
+				links += "<img src=\""+"/repository/message/view/images/attachment.png"+"\" border=\""+"0\" />";
 				links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
 				links += attachedFile.getContentTitle();
 				links += "</a>";
@@ -1146,15 +1232,18 @@ public class AmpMessageActions extends DispatchAction {
         	links=links.substring(0, links.length()-1);
         	result += " attachments=\"" +org.digijava.module.aim.util.DbUtil.filter(links) + "\"";
         }
-        result += " objURL=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getObjectURL()) + "\"";
-        String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getDescription());
+        result += " objURL=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getObjectURL()) + "\"";
+        String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getDescription());
         result += " msgDetails=\"" + desc + "\"";
         result+=" read=\""+true+"\"";
         result += " parentStateId=\"" + parentStateId + "\"";
         result += "/>";
-        if (forwardedMessage.getForwardedMessage() != null) {
-            AmpMessage forwarded = forwardedMessage.getForwardedMessage();
-            result += messages2XML(forwarded,parentStateId);
+        if (forwardedOrRepliedMessage.getForwardedMessage() != null) {
+            AmpMessage forwarded = forwardedOrRepliedMessage.getForwardedMessage();
+            result += messages2XML(forwarded,parentStateId,true);
+        }else if(forwardedOrRepliedMessage.getRepliedMessage()!=null){
+        	AmpMessage replied = forwardedOrRepliedMessage.getForwardedMessage();
+            result += messages2XML(replied,parentStateId,false);
         }
         return result;
     }
@@ -1169,7 +1258,7 @@ public class AmpMessageActions extends DispatchAction {
      	 msgHelper.setAttachedDocs(msg.getAttachedDocs());
      	 if(msgHelper.getReceivers()==null){
      		msgHelper.setReceivers(new ArrayList<String>());
-     		List<LabelValueBean> receivers=getMessageRecipients(msg.getId());
+     		List<LabelValueBean> receivers=getMessageRecipients(msg);
      		for (LabelValueBean lvb : receivers) {
  				msgHelper.getReceivers().add(lvb.getLabel());
  			}
@@ -1181,25 +1270,15 @@ public class AmpMessageActions extends DispatchAction {
 	 /**
 	  * used to get message recipients, which will be shown on edit Message Page
 	  */
-	 private static List<LabelValueBean> getMessageRecipients(Long messageId) throws Exception{
-	 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(messageId);
-		List<LabelValueBean> members=null;
+	 private static List<LabelValueBean> getMessageRecipients(AmpMessage message) throws Exception{
+	 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(message.getId());
+		List<LabelValueBean> allReceivers=null;
+		//team members
 		if(msgStates!=null && msgStates.size()>0){
-			members=new ArrayList<LabelValueBean>();
+			allReceivers=new ArrayList<LabelValueBean>();
 			Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
 			Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
 			for (AmpMessageState state : msgStates) {
-//				if(state.getMemberId()!=null){
-//                                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-//                                    if (teamMember != null) {
-//                                        AmpTeam team = teamMember.getAmpTeam();
-//                                        if (!teamList.contains(team)) {
-//                                            teamList.add(team);
-//                                        }
-//                                        memberList.add(teamMember);
-//                                    }
-//
-//				}
 				if(state.getReceiver()!=null){
 					AmpTeamMember teamMember=state.getReceiver();
 					AmpTeam team=teamMember.getAmpTeam();
@@ -1211,15 +1290,23 @@ public class AmpMessageActions extends DispatchAction {
 			}
 			for(AmpTeam team : teamList){
 				LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());
-				members.add(teamLabel);
+				allReceivers.add(teamLabel);
 				for(AmpTeamMember member : memberList){
 					if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
 						LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());
-						members.add(tm);
+						allReceivers.add(tm);
 					}
 				}
 			}
 		}
-		return members;
+		//contacts and external people
+		if(message.getExternalReceivers()!=null){
+			String[] externalReceivers=message.getExternalReceivers().split(",");
+			for (int i = 0; i < externalReceivers.length; i++) {
+				LabelValueBean receiver=new LabelValueBean(externalReceivers[i],"c:" + externalReceivers[i]);
+				allReceivers.add(receiver);
+			}
+		}
+		return allReceivers;
 	 }
 }

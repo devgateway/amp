@@ -21,6 +21,8 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
 <style>
 <!--
@@ -41,12 +43,18 @@
     max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
     _height:16em; /* ie6 */ 
 }
+
+#contactsContainer .yui-ac-content { 
+    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
+    _height:16em; /* ie6 */ 
+} 
 -->
 </style>
 
 <script langauage="JavaScript">
 	var messageHelp='<digi:trn>Message Help</digi:trn>';
 	var relatedActs='<digi:trn>Type first letter of activity to view suggestions</digi:trn>';
+	var extraReceivers='<digi:trn>Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
 
   function MyremoveUserOrTeam(){
   	var orphands=new Array();
@@ -66,13 +74,20 @@
    
   function MyaddUserOrTeam(){
     var list = document.getElementById('selreceivers');
+    var MyContacts=new Array();
 	var orphands=new Array();
-	var orpIndex = 0;
+	var orpIndex = 0; //teams and team members
+	var index = 0; //contact
     for(var i=0; i<list.length;i++){
       if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
          orphands[orpIndex]=list.options[i];
          orpIndex++;
       }
+
+      if(list.options[i].value.indexOf('c')==0){
+        	MyContacts[index]=list.options[i];
+        	index++;
+        }
     }
     if(orpIndex!=0){
        registerOrphanMember(orphands);
@@ -80,6 +95,12 @@
 
 	//add teams and members
   	addUserOrTeam();//fills out the list with teams and members
+
+  	if(index != 0){
+ 	   for(var j=0; j<index; j++){
+ 	      list.options.add(MyContacts[j]);
+ 	   }
+     }
 
   }
 	
@@ -166,6 +187,32 @@
     	return true;
 	}
 
+	function addContact(contact){
+		var list = document.getElementById('selreceivers');
+	    if (list == null || contact == null || contact.value == null || contact.value == "") {
+	      return;
+	    }
+
+		var guestVal=contact.value;
+			
+		if(guestVal.length>0){			
+			addOption(list,guestVal,'c:'+guestVal);
+		}	
+
+		contact.value = "";
+	}
+	
+	function addOption(list, text, value){
+	    if (list == null) {
+	      return;
+	    }
+	    var option = document.createElement("OPTION");
+	    option.value = value;
+	    option.text = text;
+	    list.options.add(option);
+	    return false;
+	  }
+
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
@@ -180,27 +227,39 @@
 	background-color: #ffffff;
 }
 
-#myAutoComplete ul {
+#statesautocomplete ul,
+{
 	list-style: square;
 	padding-right: 0px;
 	padding-bottom: 2px;
 }
 
-#myAutoComplete div {
+#contactsAutocomplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#statesautocomplete div{
 	padding: 0px;
 	margin: 0px; 
 }
 
-#myAutoComplete,
-#myAutoComplete2 {
+#contactsAutocomplete div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+#statesautocomplete,
+#contactsAutocomplete {
     width:15em; /* set width here */
     padding-bottom:2em;
 }
-#myAutoComplete {
+#statesautocomplete,contactsAutocomplete {
     z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
 }
-#myInput,
-#myInput2 {
+#statesinput,
+#contactInput {
     _position:absolute; /* abs pos needed for ie quirks */
 }
 .charcounter {
@@ -480,7 +539,7 @@ div.fakefile2 input{
 																			</div>
 																			<input type="submit" value="upload" class="dr-menu" align="right" onclick="return validateFile()"/>
 																		</td>
-																	</tr>
+																	</tr>															
 																																		
                                                                     <tr>
                                                                     	<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
@@ -492,26 +551,28 @@ div.fakefile2 input{
                                                                                 <html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
                                                                             </html:select>																												                                                																																												
                                                                          </td>
-                                                                    </tr> 
-																	<tr>
+                                                                    </tr>
+                                                                    <tr>
 																		 <field:display name="Set Alert Drop down" feature="Create Message Form">
-																			<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
-																			<td align="left">
-	                                                                        	<html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
-																					<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
-																					<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
+																			<td align="right" valign="top"><digi:trn>Set As</digi:trn></td>
+																			<td align="left"> 
+	                                                                            <html:select property="setAs" styleClass="inp-text" style="width:140px">																							
+																					<html:option value="message"><digi:trn>Message</digi:trn> </html:option>
+																					<html:option value="alert"><digi:trn>Alert</digi:trn> </html:option>
+																					<html:option value="approval"><digi:trn>Approval</digi:trn> </html:option>
 																			  	</html:select>																												                                                																																												
 																			</td>
 																		</field:display>
-																      </tr>	
-                                                                       <tr>
+																    </tr>
+                                                                    	
+                                                                    <tr>
                                                                        		<field:display name="Recievers" feature="Create Message Form">
 																					<td nowrap="nowrap" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>
 																                                <td valign="top">
-																                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px" >
+																                                   <select multiple="multiple" size="6" id="whoIsReceiver"  class="inp-text" style="width:200px;height: 100px;"" >
 																										<logic:empty name="messageForm" property="teamMapValues">
 																											<option value="-1">No receivers</option>
 																										</logic:empty>
@@ -534,17 +595,39 @@ div.fakefile2 input{
 																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
-																                                	<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
-																                                    	<c:if test="${!empty messageForm.receivers}">
-																	                                    	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
-																	                                    </c:if>                
-																                                    </html:select>  
+																                                	<table>
+																                                		<tr height="25px">
+																                                			<td>
+																                                				<div style="width:200px;">
+																			                                		<div id="contactsAutocomplete"">
+																			                                			<html:text property="relatedActivityName" name="messageForm" styleId="contactInput" style="width:200px;font-size:100%"></html:text>																                                			     
+																														<div id="contactsContainer" style="width:200px;"></div>																				 
+																													</div>																													
+																			                                	</div>
+																                                			</td>
+																                                			<td>
+																                                				<html:button property="" onclick="addContact(document.getElementById('contactInput'))">Add</html:button>
+																                                				<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,extraReceivers],Style[15])" onmouseout="htm()"/>
+																                                			</td>
+																                                		</tr>
+																                                		<tr height="75px">
+																                                			<td colspan="2">
+																                                				<div>
+																			                                		<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
+																				                                    	<c:if test="${!empty messageForm.receivers}">
+																					                                    	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
+																					                                    </c:if>                
+																				                                    </html:select>
+																			                                	</div>
+																                                			</td>
+																                                		</tr>
+																                                	</table>
 																                                </td>
 																                            </tr>
 																                        </table>
 																                    </td>
 																                  </field:display>
-																				</tr>																																												
+																				</tr>
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >
@@ -640,7 +723,35 @@ div.fakefile2 input{
 	    };
 	}();
 	
-        
+	var contactsArray= [
+	   <c:forEach var="cont" items="${messageForm.contacts}">
+	   	"<bean:write name="cont" filter="true"/>",
+	   </c:forEach>
+	];
+
+	YAHOO.example.ACJSArray = new function() {
+		for(var i=0;i<contactsArray.length;i++){
+		contactsArray[i]=contactsArray[i].replace("&lt;","<");
+		contactsArray[i]=contactsArray[i].replace("&gt;",">");
+		}
+		// Instantiate JS Array DataSource
+		this.oACDS2 = new YAHOO.widget.DS_JSArray(contactsArray);
+		// Instantiate AutoComplete
+		this.oAutoComp2 = new YAHOO.widget.AutoComplete('contactInput','contactsContainer', this.oACDS2);
+		this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight"; 
+		this.oAutoComp2.useShadow = true;
+		//this.oAutoComp2.forceSelection = true;
+		this.oAutoComp2.maxResultsDisplayed = contactsArray.length; 
+		this.oAutoComp2.formatResult = function(oResultItem, sQuery) {	
+			var sMarkup = oResultItem[0];
+			sMarkup=sMarkup.replace("<","&lt;");
+			sMarkup=sMarkup.replace(">","&gt;");
+			return (sMarkup);
+		};
+	};
+
+	
+	            	
     // attach character counters
     $("#titleMax").charCounter(50,{
 		format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",

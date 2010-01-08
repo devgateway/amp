@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -19,6 +21,7 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageConstants;
+import org.digijava.module.message.helper.RelatedActivity;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -808,4 +811,40 @@ public class AmpMessageUtil {
 		String result = formater.format(date);
 		return result;	
 	}
+	
+	public static String[] buildExternalReceiversFromContacts() throws Exception{ //used in add message form
+		String[] retVal=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List contacts=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select prop.contact, prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail";
+			query=session.createQuery(queryString);
+			query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
+			contacts=query.list();
+		} catch (Exception ex) {
+			logger.error("couldn't load Contacts " + ex.getMessage());	
+			ex.printStackTrace(); 
+		}
+		
+		if(contacts!=null){
+			retVal=new String[contacts.size()];
+			int i=0;
+			for (Object contRow : contacts) {
+				Object[] row = (Object[])contRow;
+				AmpContact contact=(AmpContact)row[0];
+				String contEmail=(String)row[1];
+				
+				if(contact!=null){
+					String contactName=contact.getName() +" "+ contact.getLastname();
+					retVal[i]=contactName + " <" + contEmail + ">";
+				}
+				i++;
+			}
+		}		
+		
+		return retVal;
+	}	 
 }

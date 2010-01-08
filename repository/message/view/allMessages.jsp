@@ -120,6 +120,7 @@ background-color:yellow;
 	var attachmedFiles='<digi:trn>Attached Files</digi:trn>';
     var forwardClick='<digi:trn> Click on this icon to forward message&nbsp;</digi:trn>';
     var editClick='<digi:trn> Click on this icon to edit message&nbsp;</digi:trn>';
+    var replyClick='<digi:trn> Click on this icon to reply message&nbsp;</digi:trn>';
     var deleteClick='<digi:trn> Click on this icon to delete message&nbsp;</digi:trn>';
     var viewMessage='<digi:trn> Click here to view the message</digi:trn>';
     var viewDetails='<digi:trn>Click here to view details</digi:trn>';
@@ -704,7 +705,8 @@ background-color:yellow;
 	
 	
 	//creates table rows with message information
-	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
+	//actionsbuttonVisible= false when we are drawing farwarded message, cos it shouldn't have forward/edit/delete/reply links
+	function createTableRow(tbl,msgTr,message,actionsbuttonVisible){
 	    
 		var msgId=message.getAttribute('id');	//message state id
                 var messageId=message.getAttribute('msgId');
@@ -731,13 +733,14 @@ background-color:yellow;
 		//message name and description
 		var nameTD=document.createElement('TD');				
 		var msgName; 
-                 if(message.childNodes!=null&&message.childNodes.length>0){
-                     msgName="FW: "+message.getAttribute('name');
-                 }
-                 else{
-                      msgName=message.getAttribute('name');
-                 }
-                if(fwdOrEditDel){
+               //  if(message.childNodes!=null&&message.childNodes.length>0){
+               //      msgName="FW: "+message.getAttribute('name');
+               //  }
+               //  else{
+               //       msgName=message.getAttribute('name');               
+               //  }
+               msgName=message.getAttribute('name');
+                if(actionsbuttonVisible){
                     nameTD.width='70%';}
                 else{
                     nameTD.width='95%';
@@ -746,7 +749,7 @@ background-color:yellow;
 		//creating visible div for message name
 		var nameDiv=document.createElement('DIV');
                 var visId;
-                 if(!fwdOrEditDel){
+                 if(!actionsbuttonVisible){
                     visId=newMsgId+'_'+msgId+'_dots'
                 }
                 else{
@@ -938,41 +941,49 @@ background-color:yellow;
         nameTD.appendChild(descDiv);
         msgTr.appendChild(nameTD);
         
-        if(fwdOrEditDel){
-		// forward or edit link
-		fwdOrEditTD=document.createElement('TD');
-		fwdOrEditTD.width='10%';
-		fwdOrEditTD.align='center';
-                fwdOrEditTD.vAlign="top";
-		
-		if(isDraft=='true'){
-                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border=0 hspace="2" /></digi:link>';									
-		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/TEMPLATE/ampTemplate/imagesSource/messages/finalForward.gif" border=0  hspace="2" /></digi:link>';
-		}
-		msgTr.appendChild(fwdOrEditTD);	
-					
-		//delete link
-		var deleteTD=document.createElement('TD');
-		deleteTD.width='10%';
-		deleteTD.align='center';
-                deleteTD.vAlign="top";
-		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0 hspace="2"/></a>';
-		msgTr.appendChild(deleteTD);
-                //delete link
-		var deleteTDCheckbox=document.createElement('TD');
-		deleteTDCheckbox.width='10%';
-		deleteTDCheckbox.align='center';
-                deleteTDCheckbox.vAlign="top";
-                var deleteCheckbox=document.createElement('input');
-                deleteCheckbox.type='checkbox';
-                deleteCheckbox.id='delChkbox_'+msgId;
-		deleteCheckbox.value=msgId;
-                deleteTDCheckbox.appendChild(deleteCheckbox);
-		msgTr.appendChild(deleteTDCheckbox);
-                }
-					
+        if(actionsbuttonVisible){
+        	//reply button
+        	if(isDraft!='true'){
+        		replyTD=document.createElement('TD');
+            	replyTD.width='10%';
+            	replyTD.align='center';
+            	replyTD.vAlign="top";
+            	replyTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&reply=fillForm&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+replyClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/reply.gif" border=0 hspace="2" /></digi:link>';
+            	msgTr.appendChild(replyTD);
+        	}        	
+			// forward or edit link
+			fwdOrEditTD=document.createElement('TD');
+			fwdOrEditTD.width='10%';
+			fwdOrEditTD.align='center';
+	                fwdOrEditTD.vAlign="top";
+			
+			if(isDraft=='true'){
+	            fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
+			}else{
+				fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
+			}
+			msgTr.appendChild(fwdOrEditTD);	
+						
+			//delete link
+			var deleteTD=document.createElement('TD');
+			deleteTD.width='10%';
+			deleteTD.align='center';
+	        deleteTD.vAlign="top";
+			//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
+			deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
+			msgTr.appendChild(deleteTD);
+	        //delete checkbox
+			var deleteTDCheckbox=document.createElement('TD');
+			deleteTDCheckbox.width='10%';
+			deleteTDCheckbox.align='center';
+	                deleteTDCheckbox.vAlign="top";
+	                var deleteCheckbox=document.createElement('input');
+	                deleteCheckbox.type='checkbox';
+	                deleteCheckbox.id='delChkbox_'+msgId;
+			deleteCheckbox.value=msgId;
+	                deleteTDCheckbox.appendChild(deleteCheckbox);
+			msgTr.appendChild(deleteTDCheckbox);
+	    }
 		return msgTr;			
 	
 	}

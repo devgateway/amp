@@ -56,6 +56,8 @@ public class MondrianQuery {
 		QueryThread.setSite(site);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		QueryThread.setLocale(navigationLanguage);
+		QueryThread.setcontext(request.getSession().getServletContext());
+		
 	}
 
 }

@@ -14,13 +14,61 @@ DROP TABLE IF EXISTS `cached_v_regions`;
 CREATE TABLE cached_v_regions AS SELECT * FROM `v_regions_cached`;
 
 DROP TABLE IF EXISTS `cached_v_primary_program`;
-CREATE TABLE cached_v_primary_program AS SELECT * FROM `v_primaryprogram`;
+CREATE TABLE cached_v_primary_program AS SELECT * FROM `v_primaryprogram_level_0`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_1`;
+CREATE TABLE cached_v_primary_program_level_1 AS SELECT * FROM `v_primaryprogram_level_1`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_2`;
+CREATE TABLE cached_v_primary_program_level_2 AS SELECT * FROM `v_primaryprogram_level_2`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_3`;
+CREATE TABLE cached_v_primary_program_level_3 AS SELECT * FROM `v_primaryprogram_level_3`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_4`;
+CREATE TABLE cached_v_primary_program_level_4 AS SELECT * FROM `v_primaryprogram_level_4`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_5`;
+CREATE TABLE cached_v_primary_program_level_5 AS SELECT * FROM `v_primaryprogram_level_5`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_6`;
+CREATE TABLE cached_v_primary_program_level_6 AS SELECT * FROM `v_primaryprogram_level_6`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_7`;
+CREATE TABLE cached_v_primary_program_level_7 AS SELECT * FROM `v_primaryprogram_level_7`;
+DROP TABLE IF EXISTS `cached_v_primary_program_level_8`;
+CREATE TABLE cached_v_primary_program_level_8 AS SELECT * FROM `v_primaryprogram_level_8`;
 
 DROP TABLE IF EXISTS `cached_v_secondary_program`;
-CREATE TABLE cached_v_secondary_program AS SELECT * FROM `v_secondaryprogram`;
+CREATE TABLE cached_v_secondary_program AS SELECT * FROM `v_secondaryprogram_level_0`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_1`;
+CREATE TABLE cached_v_secondary_program_level_1 AS SELECT * FROM `v_secondaryprogram_level_1`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_2`;
+CREATE TABLE cached_v_secondary_program_level_2 AS SELECT * FROM `v_secondaryprogram_level_2`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_3`;
+CREATE TABLE cached_v_secondary_program_level_3 AS SELECT * FROM  `v_secondaryprogram_level_3`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_4`;
+CREATE TABLE cached_v_secondary_program_level_4 AS SELECT * FROM `v_secondaryprogram_level_4`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_5`;
+CREATE TABLE cached_v_secondary_program_level_5 AS SELECT * FROM `v_secondaryprogram_level_5`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_6`;
+CREATE TABLE cached_v_secondary_program_level_6 AS SELECT * FROM `v_secondaryprogram_level_7`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_7`;
+CREATE TABLE cached_v_secondary_program_level_7 AS SELECT * FROM `v_secondaryprogram_level_7`;
+DROP TABLE IF EXISTS `cached_v_secondary_program_level_8`;
+CREATE TABLE cached_v_secondary_program_level_8 AS SELECT * FROM `v_secondaryprogram_level_8`;
 
 DROP TABLE IF EXISTS `cached_v_national_program`;
-CREATE TABLE cached_v_national_program AS SELECT * FROM `v_nationalobjectives_level_1`;
+CREATE TABLE cached_v_national_program AS SELECT * FROM `v_nationalobjectives_level_0`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_1`;
+CREATE TABLE cached_v_national_program_level_1 AS SELECT * FROM `v_nationalobjectives_level_1`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_2`;
+CREATE TABLE cached_v_national_program_level_2 AS SELECT * FROM `v_nationalobjectives_level_2`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_3`;
+CREATE TABLE cached_v_national_program_level_3 AS SELECT * FROM `v_nationalobjectives_level_3`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_4`;
+CREATE TABLE cached_v_national_program_level_4 AS SELECT * FROM `v_nationalobjectives_level_4`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_5`;
+CREATE TABLE cached_v_national_program_level_5 AS SELECT * FROM `v_nationalobjectives_level_5`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_6`;
+CREATE TABLE cached_v_national_program_level_6 AS SELECT * FROM `v_nationalobjectives_level_6`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_7`;
+CREATE TABLE cached_v_national_program_level_7 AS SELECT * FROM `v_nationalobjectives_level_7`;
+DROP TABLE IF EXISTS `cached_v_national_program_level_8`;
+CREATE TABLE cached_v_national_program_level_8 AS SELECT * FROM `v_nationalobjectives_level_8`;
 
 DROP TABLE IF EXISTS `cached_v_sub_sector`;
 CREATE TABLE cached_v_sub_sector AS SELECT * FROM `v_sub_sectors`;
@@ -33,8 +81,6 @@ CREATE TABLE `cached_v_secondary_sector` AS SELECT * FROM `v_secondary_sectors`;
 
 DROP TABLE IF EXISTS `cached_v_sec_sub_sector`;
 CREATE TABLE cached_v_sec_sub_sector AS SELECT * FROM `v_secondary_sub_sectors`;
-
-
 
 CREATE INDEX idx_amp_activity ON `cached_v_status`(amp_activity_id);
 CREATE INDEX idx_st_name ON `cached_v_status`(name);
@@ -55,6 +101,35 @@ CREATE INDEX idx_psub_name ON `cached_v_sub_sector` (sectorname);
 CREATE INDEX idx_psub_id ON `cached_v_sub_sector`(amp_sector_id);
 CREATE INDEX idx_psub_per ON `cached_v_sub_sector`(sector_percentage);
 
+CREATE INDEX idx_np_activity ON `cached_v_national_program` (amp_activity_id);
+CREATE INDEX idx_npl1_activity ON `cached_v_national_program_level_1` (amp_activity_id);
+CREATE INDEX idx_npl2_activity ON `cached_v_national_program_level_2` (amp_activity_id);
+CREATE INDEX idx_npl3_activity ON `cached_v_national_program_level_3` (amp_activity_id);
+CREATE INDEX idx_npl4_activity ON `cached_v_national_program_level_4` (amp_activity_id);
+CREATE INDEX idx_npl5_activity ON `cached_v_national_program_level_5` (amp_activity_id);
+CREATE INDEX idx_npl6_activity ON `cached_v_national_program_level_6` (amp_activity_id);
+CREATE INDEX idx_npl7_activity ON `cached_v_national_program_level_7` (amp_activity_id);
+CREATE INDEX idx_npl8_activity ON `cached_v_national_program_level_8` (amp_activity_id);
+
+CREATE INDEX idx_pp_activity ON `cached_v_primary_program` (amp_activity_id);
+CREATE INDEX idx_ppl1_activity ON `cached_v_primary_program_level_1` (amp_activity_id);
+CREATE INDEX idx_ppl2_activity ON `cached_v_primary_program_level_2` (amp_activity_id);
+CREATE INDEX idx_ppl3_activity ON `cached_v_primary_program_level_3` (amp_activity_id);
+CREATE INDEX idx_ppl4_activity ON `cached_v_primary_program_level_4` (amp_activity_id);
+CREATE INDEX idx_ppl5_activity ON `cached_v_primary_program_level_5` (amp_activity_id);
+CREATE INDEX idx_ppl6_activity ON `cached_v_primary_program_level_6` (amp_activity_id);
+CREATE INDEX idx_ppl7_activity ON `cached_v_primary_program_level_7` (amp_activity_id);
+CREATE INDEX idx_ppl8_activity ON `cached_v_primary_program_level_8` (amp_activity_id);
+
+CREATE INDEX idx_sp_activity ON `cached_v_secondary_program` (amp_activity_id);
+CREATE INDEX idx_spl1_activity ON `cached_v_secondary_program_level_1` (amp_activity_id);
+CREATE INDEX idx_spl2_activity ON `cached_v_secondary_program_level_2` (amp_activity_id);
+CREATE INDEX idx_spl3_activity ON `cached_v_secondary_program_level_3` (amp_activity_id);
+CREATE INDEX idx_spl4_activity ON `cached_v_secondary_program_level_4` (amp_activity_id);
+CREATE INDEX idx_spl5_activity ON `cached_v_secondary_program_level_5` (amp_activity_id);
+CREATE INDEX idx_spl6_activity ON `cached_v_secondary_program_level_6` (amp_activity_id);
+CREATE INDEX idx_spl7_activity ON `cached_v_secondary_program_level_7` (amp_activity_id);
+CREATE INDEX idx_spl8_activity ON `cached_v_secondary_program_level_8` (amp_activity_id);
 
 DROP TABLE IF EXISTS cached_v_donor_funding;
 CREATE TABLE cached_v_donor_funding AS SELECT * FROM `v_donor_funding_cached`;

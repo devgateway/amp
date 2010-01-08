@@ -820,7 +820,8 @@ public class AmpMessageUtil {
 		List contacts=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select prop.contact, prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail";
+			queryString="select prop.contact, prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
+					" and prop.value is not null and trim(prop.value)!=''";
 			query=session.createQuery(queryString);
 			query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
 			contacts=query.list();
@@ -843,8 +844,8 @@ public class AmpMessageUtil {
 				}
 				i++;
 			}
-		}		
+		}
 		
 		return retVal;
-	}	 
+	}
 }

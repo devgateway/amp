@@ -17,6 +17,7 @@
         var  output='';
         var regexp = new RegExp(/\<[^\<]+\>/g);
         var regexpWhiteSpaces = new RegExp(/&nbsp;/g);
+        var regexpListItem = new RegExp(/<li>/g);
         var arrayRows=new Array();
         var m=0;
         for(var i=0;i<rows.length;i++){
@@ -33,7 +34,7 @@
                     }
                 }
                 if(!ignore){
-                    arrayCells[k++]='<cell>'+cells[j].innerHTML.replace(regexp, "").replace(regexpWhiteSpaces," ").trim()+'</cell>';
+                    arrayCells[k++]='<cell>'+cells[j].innerHTML.replace(regexpListItem, '\u2022').replace(regexp, "").replace(regexpWhiteSpaces," ").trim()+'</cell>';
                 }    
             }
             arrayRows[m++]='<row>'+arrayCells.join('')+'</row>';

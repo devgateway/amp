@@ -54,7 +54,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         	elCell.innerHTML = 
         	"<a href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
         	"<a href=/aim/deleteWorkspace.do~event=delete~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-        	"[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+"<digi:trn>Npd Settings</digi:trn>"+"</a>]"
+        	"[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+"<digi:trn>Npd Settings</digi:trn>"+"</a>]"+"<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
         };
         
         this.formatActionsName = function(elCell, oRecord, oColumn, sData) {
@@ -171,6 +171,24 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 	  	color:black;
 	  	font-size:10px;
 	}
+   .toolbar{
+	width: 50px;
+	background: #addadd;
+	background-color: #addadd;
+	padding: 3px 3px 3px 3px;
+	position: relative;
+	top: 10px;
+	left: 10px;
+	bottom: 100px;
+}
+.toolbartable{
+	border-color: #FFFFFF;
+	border-width: 2px;
+	border-bottom-width: 2px;
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-style: solid;
+}
 		
 </style>
 <style type="text/css" media="screen">
@@ -850,7 +868,17 @@ function setHoveredRow(rowId) {
 		cells = null;
 	}
 }
-
+  function exportXSL(){
+    var teams=""
+   $(".teamsOnpage").each(function (i,element){
+       teams+="~team="+element.value;
+   })
+     <digi:context name="exportUrl" property="context/module/moduleinstance/exportWorkspaceManager2XSL.do"/>;
+        document.aimWorkspaceForm.action="${exportUrl}"+teams;
+        document.aimWorkspaceForm.target="_blank";
+        document.aimWorkspaceForm.submit();
+  }
+  
 </script> 
 
 <DIV id="TipLayer"	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -890,10 +918,24 @@ function setHoveredRow(rowId) {
 						<digi:errors />
 					</td>
 				</tr>
-				<tr><td align="left">
-                        <div class="otherLinks">
-                    <jsp:include page="/repository/aim/view/exportTable.jsp" />
-                        </div>
+				<tr><td align="left">              
+                            <div class="otherLinks toolbar" align="center">
+                                <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+                                    <tr>
+                                        <td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
+                                            <a target="_blank" onclick="exportXSL(); return false;">
+                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
+                                            </a>
+                                        </td>
+
+                                        <td noWrap align=left valign="middle">
+                                            <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly"/>
+                                            </digi:link>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                 </td></tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">

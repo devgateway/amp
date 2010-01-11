@@ -130,8 +130,12 @@ public class GroupColumn extends Column {
      * @return a GroupColumn that holds the categorized Data
      */
     private static Column verticalSplitByCateg(CellColumn src,
-        String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
-        Column ret = new GroupColumn(src);
+    	String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
+    	
+    	HashMap<String,String> yearMapping=new HashMap<String, String>();
+    	HashMap<String,String> monthMapping=new HashMap<String, String>();
+    	
+    	Column ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator i = src.iterator();
        
@@ -160,7 +164,18 @@ public class GroupColumn extends Column {
            
             if (element.isRenderizable()) {
         	    metaSet.add(minfo);
-        	}
+        	    
+        	    if (category.equalsIgnoreCase(ArConstants.YEAR)){
+                	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_Y);
+                	yearMapping.put(minfo.getValue().toString(),minfo2.getValue().toString());
+                	
+               }
+        	    if (category.equalsIgnoreCase(ArConstants.MONTH)){
+                	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_M);
+                	monthMapping.put(minfo.getValue().toString(),minfo2.getValue().toString());
+                	
+               }
+            }
         }
       
     	if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) 
@@ -210,7 +225,14 @@ public class GroupColumn extends Column {
                   	}
             	}
             else{
+            	if(category.equalsIgnoreCase(ArConstants.YEAR)){
+            		cc = new AmountCellColumn( yearMapping.get(element.getValue().toString()));
+            	}else if(category.equalsIgnoreCase(ArConstants.MONTH)){
+                		cc = new AmountCellColumn( monthMapping.get(element.getValue().toString()));
+                	}
+            	else{
             	cc = new AmountCellColumn( element.getValue().toString());
+            	}
             }
             ret.getItems().add(cc);
             cc.setParent(ret);
@@ -346,6 +368,7 @@ public class GroupColumn extends Column {
      */
     public Column filterCopy(Cell filter, Set ids) {
         GroupColumn dest = new GroupColumn(this.getName());
+        dest.setContentCategory(this.getContentCategory());
         Iterator i = items.iterator();
         while (i.hasNext()) {
             Column element = (Column) i.next();

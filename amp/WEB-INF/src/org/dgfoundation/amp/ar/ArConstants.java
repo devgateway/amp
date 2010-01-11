@@ -16,7 +16,7 @@ public final class ArConstants {
 	public final static MetaInfo []prefixes=new MetaInfo[] {
 		//PLEASE KEEP THE SAME ORDER IN prefixes AND suffixes !!
 		
-		new MetaInfo(GenericViews.HTML2,"/repository/aim/view/ar/html2/"),
+		//new MetaInfo(GenericViews.HTML2,"/repository/aim/view/ar/html2/"),
 		new MetaInfo(GenericViews.HTML,"/repository/aim/view/ar/html/"),
 		new MetaInfo(GenericViews.XLS,"org.dgfoundation.amp.ar.view.xls."),
 		new MetaInfo(GenericViews.PDF,"org.dgfoundation.amp.ar.view.pdf."),
@@ -26,7 +26,7 @@ public final class ArConstants {
 		};
 
 	public final static MetaInfo []suffixes=new MetaInfo[] {
-		new MetaInfo(GenericViews.HTML2,".jsp"),
+		//new MetaInfo(GenericViews.HTML2,".jsp"),
 		new MetaInfo(GenericViews.HTML,".jsp"),
 		new MetaInfo(GenericViews.XLS,"XLS"),
 		new MetaInfo(GenericViews.PDF,"PDF"),
@@ -44,6 +44,9 @@ public final class ArConstants {
 	public final static String TERMS_OF_ASSISTANCE="Type Of Assistance";
 	public final static String FINANCING_INSTRUMENT="Financing Instrument";	
 	public final static String YEAR="Year";
+	public final static String FISCAL_Y="FISCAL_Y";
+	public final static String FISCAL_M="FISCAL_M";
+	
 	public final static String QUARTER="Quarter";
 	public final static String MONTH="Month";
 	public final static String PROPOSED_COST="Proposed Cost";

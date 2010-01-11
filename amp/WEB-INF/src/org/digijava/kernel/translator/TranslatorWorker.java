@@ -55,7 +55,6 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -1275,7 +1274,7 @@ public class TranslatorWorker {
 
         try {
             //TODO if we add hash codes as keys, then we do not need key case correction method on next line
-        	processKeyCase(message);//DGP-318
+        	//processKeyCase(message);//DGP-318
         	processBodyChars(message);
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
@@ -1585,33 +1584,18 @@ public class TranslatorWorker {
 
     }
 
-    /**
-     * Returns list of all language codes currently used in message table.
-     * @return
-     * @throws WorkerException
-     */
-    @SuppressWarnings("unchecked")
-	public static List<String> getAllUsedLanguages() throws WorkerException{
-    	List<String> result = null;
-    	String oql = "select m.locale from "+Message.class.getName()+" as m group by m.locale";
-    	Session session = null;
-    	try {
-			session = PersistenceManager.getSession();
-			Query query = session.createQuery(oql);
-			result = query.list();
-		} catch (Exception e) {
-			throw new WorkerException(e);
-		}finally{
-			if (session != null){
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception e2) {
-					throw new WorkerException(e2);
-				}
-			}
-		}
-    	return result;
-    }
+	/**
+	 * Converts an Unicode string into UTF-8 string.
+	 * @param original
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String unicodeToUTF8(String original) throws UnsupportedEncodingException{
+		String newString = null;
+		byte[] tempBytes = original.getBytes("UTF8");
+		newString = new String(tempBytes);
+		return newString;
+	}
 
     /**
      * Verify, is on-site translation mode active or not
@@ -1865,16 +1849,4 @@ public class TranslatorWorker {
 		}
 	}
 	
-	/**
-	 * Converts an Unicode string into UTF-8 string.
-	 * @param original
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	public static String unicodeToUTF8(String original) throws UnsupportedEncodingException{
-		String newString = null;
-		byte[] tempBytes = original.getBytes("UTF8");
-		newString = new String(tempBytes);
-		return newString;
-	}
 }

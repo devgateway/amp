@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
@@ -51,6 +52,7 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.entity.PatcherMessageGroup;
+import org.digijava.module.translation.util.ListChangesBuffer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -65,6 +67,39 @@ public class TrnUtil {
     public static final Comparator countryNameComparator;
     public static final Comparator localeNameComparator;
 
+    /**
+     * These are languages that has its own weight for sorting
+     * Weight of the language is array length- its index (position in array)
+     * so first language is heavier then second in this array.
+     * other languages that do not appear here will still have weights but same value.
+     * NOTE: this is fast workaround, it would be better to make this configurable. 
+     */
+    private static String[] locales = {"en", "fr", "sp"};
+    
+    /**
+     * Returns weight of the locale.
+     * uses {@link #locales} array for calculating weight.
+     * If no weight is found null is returned.
+     * @param locale Locale string values like this 'en' 'fr' etc.
+     * @return Integer value which is weight of local, NULL if no weight.
+     */
+	private static Integer getLocaleWeight(String locale){
+		for (int i = 0; i < locales.length; i++) {
+			if (locale.equalsIgnoreCase(locales[i])){
+				return new Integer(i);
+			}
+		}
+		return null;
+		
+//		int w = locales.length;
+//		for (String language : locales) {
+//			if (language.equals(locale)){
+//				break;
+//			}
+//			w--;
+//		}
+//		return new Integer(w);
+	}
 
     /**
      * Returns collection of TrnLocale objects, translated to the given language
@@ -481,6 +516,30 @@ public class TrnUtil {
         return retVal;
     }
 
+    /**
+     * Returns messages for specified set of keys.
+     * This is used when we need to load translations only by keys not looking at site_id and language.
+     * @param keys set of keys to search fore.
+     * @return list of found {@link Message} beans.
+     * @throws DgException
+     */
+    @SuppressWarnings("unchecked")
+	public static List<Message> getMessagesForKeys(Set<String> keys) throws DgException{
+    	List<Message> messages = null;
+		if (keys!=null){
+			StringBuffer buff = new StringBuffer("from ");
+			buff.append(Message.class.getName());
+			buff.append(" as m where m.key in ( :keys )");
+			
+			String oql = buff.toString();
+			Session session = PersistenceManager.getRequestDBSession();
+			Query query = session.createQuery(oql);
+			query.setParameterList("keys", keys);
+			messages = query.list();
+		}
+		return messages;
+    }
+    
 
     /**
      * Returns list of query results sorted according translated sitenames.
@@ -520,18 +579,77 @@ public class TrnUtil {
      * @throws DgException
      */
     public static <E extends MessageGroup> Collection<E> groupByKey(Collection<Message> messages, MessageGroupFactory<E> factory) throws DgException{
+    	return groupByKey(messages, factory, null);
+    }
+
+    /**
+     * Groups translations by keys, also sets scores for the groups.
+     * Scores are some values used for sorting translations, e.g. lucene hit scores.
+     * Which type of message group beans should be created is defined by factory parameter.
+     * @param <E> {@link MessageGroup} or any its offspring. 
+     * @param messages collection of messages which should be grouped by keys.
+     * @param factory factory for creating message group beans.
+     * @param scoresByKey map of scores by keys.
+     * @return list of message group beans.
+     * @throws DgException
+     */
+    public static <E extends MessageGroup> Collection<E> groupByKey(Collection<Message> messages, MessageGroupFactory<E> factory, Map<String, Float> scoresByKey) throws DgException{
     	Map<String, E> groupByKey = new HashMap<String, E>(messages.size());
     	for (Message message : messages) {
+    		//get group for current message (by key)
 			E group = groupByKey.get(message.getKey());
+			//if we do not have group yet
 			if (null == group){
+				//create new group for current message
 				group = factory.createGroup(message.getKey());
+				//put it in map to find next time for same key
 				groupByKey.put(message.getKey(), group);
 			}
+			//add current message to the group.
 			group.addMessage(message);
+			
+			//need to work with scores?
+			if (scoresByKey!=null){
+				//get score for the message
+				Float score = scoresByKey.get(message.getKey());
+				//check if we need to update score value of the group
+				if (score !=null && (group.getScore()==null || group.getScore().floatValue() < score.floatValue())){
+					group.setScore(score);
+				}
+			}
 		}
+    	//return list of the groups
     	return groupByKey.values();
     }
     
+    /**
+     * Returns list of all language codes currently used in message table.
+     * @return
+     * @throws WorkerException
+     */
+    @SuppressWarnings("unchecked")
+	public static List<String> getAllUsedLanguages() throws WorkerException{
+    	List<String> result = null;
+    	String oql = "select m.locale from "+Message.class.getName()+" as m group by m.locale";
+    	Session session = null;
+    	try {
+			session = PersistenceManager.getSession();
+			Query query = session.createQuery(oql);
+			result = query.list();
+		} catch (Exception e) {
+			throw new WorkerException(e);
+		}finally{
+			if (session != null){
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception e2) {
+					throw new WorkerException(e2);
+				}
+			}
+		}
+    	return result;
+    }
+	
     /**
      * Message group object factory
      * @author Irakli Kobiashvili
@@ -621,7 +739,24 @@ public class TrnUtil {
     }
 
     /**
-     * Resolvs ony string key of Message.
+     * Returnse message group store from session.
+     * @param session
+     * @return
+     */
+	@SuppressWarnings("unchecked")
+	public static ListChangesBuffer<String, Message> getBuffer(HttpSession session){
+		String sessionKey = "amp.translations.newAdvancedMode.changesList";
+		ListChangesBuffer<String, Message> result = (ListChangesBuffer<String, Message>)session.getAttribute(sessionKey);
+		if (result == null){
+			result = new ListChangesBuffer<String, Message>(new TrnUtil.MessageShortKeyResolver());
+			session.setAttribute(sessionKey, result);
+		}
+		return result;
+	}
+    
+    
+    /**
+     * Resolves only string key of Message.
      * @author Irakli Kobiashvili
      *
      */
@@ -631,4 +766,44 @@ public class TrnUtil {
 		}
     }
 
+    /**
+     * Compares {@link MessageGroup} by score.
+     * @author Irakli Kobiashvili
+     *
+     */
+    public static class MsgGroupScoreComparator implements Comparator<MessageGroup>{
+		@Override
+		public int compare(MessageGroup m1, MessageGroup m2) {
+			return m2.getScore().compareTo(m1.getScore());
+		}
+    }
+
+    /**
+     * Compares messages by weight of their locals.
+     * If both message locales do not have weights 
+     * then messages are compared simply by locale names.
+     * If only one of the two compared locales has weight
+     * then one with weight is always greater then one without weight.
+     * This guarantees that locales with weight always appear in front.
+     * @author Irakli Kobiashvili
+     * @see TrnUtil#getLocaleWeight(String)
+     * @see MessageGroup#getSortedMessages()
+     *
+     */
+    public static class MessageLocaleWeightComparator implements Comparator<Message>{
+		@Override
+		public int compare(Message m1, Message m2) {
+			Integer w1 = getLocaleWeight(m1.getLocale());
+			Integer w2 = getLocaleWeight(m2.getLocale());
+			if (w1==null && w2==null){
+				//if both do not have weights then compare by string value 
+				return m1.getLocale().compareTo(m2.getLocale());
+			}else if (w1 == null || w2 == null){
+				//if only one has weight than that one wins.
+				if (w1!=null) return -1;
+				if (w2!=null) return 1;
+			}
+			return w1.compareTo(w2);
+		}
+    }
 }

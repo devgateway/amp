@@ -3,6 +3,7 @@ package org.digijava.module.help.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
@@ -28,13 +30,11 @@ import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.help.jaxbi.AmpHelpType;
+import org.digijava.module.help.jaxbi.HelpLang;
 import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.module.help.jaxbi.HelpLang;
-import org.digijava.kernel.translator.TranslatorWorker;
-import java.util.Date;
 
 public class HelpUtil {
 	private static Logger logger = Logger.getLogger(HelpUtil.class);
@@ -783,7 +783,7 @@ System.out.println("lang:"+lang);
 					helpout.setParentId(new Long(0));
 				}
 
-                  List <String> allLang = TranslatorWorker.getAllUsedLanguages();
+                  List <String> allLang = TrnUtil.getAllUsedLanguages();
 
                         Iterator iterato = allLang.iterator();
                              while (iterato.hasNext()){

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
@@ -170,6 +171,7 @@ public class AMPStartupListener extends HttpServlet implements
 			LuceneUtil.checkIndex(sce.getServletContext());
 			LuceneUtil.createHelp(sce.getServletContext());
 			//ampContext.setAttribute(Constants.LUCENE_INDEX, idx); //deprecated
+			LuceneWorker.init(sce.getServletContext());
 
 			PermissionUtil.getAvailableGates(ampContext);
 

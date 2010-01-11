@@ -16,7 +16,11 @@
 <c:set var="categoryYear"><%=ArConstants.YEAR%></c:set>
 <c:set var="categoryQuarter"><%=ArConstants.QUARTER%></c:set>
 
-<%int rowIdx = 2;%>
+<%
+String lastColor="#F2F2F2";
+String color="#F2F2F2";
+HashMap<String,String> colors=new HashMap<String,String>();
+int rowIdx = 2;%>
 
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
@@ -48,9 +52,22 @@
         first=false;
         %>
 		<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
-        <c:set var="reportHeading">
-          <%=subColumn.getName(reportMeta.getHideActivities())%>
-        </c:set>
+       
+          <%
+          String[] headings;
+          if (subColumn.getName(reportMeta.getHideActivities()).indexOf("-") > -1){
+        	  headings=subColumn.getName(reportMeta.getHideActivities()).split(",");%>
+          	<c:set var="reportHeading1">
+        	<%=headings[0]%>
+        	</c:set>
+	        <c:set var="reportHeading">
+	        <%=headings[1]%>
+	        </c:set>
+          <%}else{ %>
+       		 <c:set var="reportHeading1" value="${null}"/>
+	        <c:set var="reportHeading"><%=subColumn.getName(reportMeta.getHideActivities())%></c:set>  
+          <%}%>
+       
         
         <logic:equal name="column" property="columnDepth" value="1">
         	
@@ -66,9 +83,8 @@
 	        		<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortBy", column.getName() ); %>
 	        	<logic:notEqual name="widget" scope="request" value="true">
 	            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" name="linkMap">
-	              		      <digi:trn key="aim:reportBuilder:${reportHeading}">
-                              	<c:out value="${reportHeading}"/>
-                              </digi:trn>
+	              		      
+	              		      <digi:trn><c:out value="${reportHeading}"/></digi:trn>
                               <%
                               if (subColumn.getDescription()!=null){
                               String text=subColumn.getDescription();
@@ -89,25 +105,52 @@
 	            </c:if>
 	         </td>
           </logic:equal>
-          
+       
         <logic:notEqual name="column" property="columnDepth" value="1">
         	<c:choose>
         		<c:when test="${subColumn.width!=1 || subColumn.contentCategory==categoryYear}">
-        		<%
-        			if(subColumn.getName().length()<5){%>
-        				<td style="background-color:#EAEAEA; margin-left: 2px; margin-right: 2px;" class="clsTableTitleColHtml" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
+        		
+        		<% if (subColumn.getContentCategory()!=null){
+        		if (subColumn.getContentCategory().equalsIgnoreCase(ArConstants.YEAR)){
+        			if (lastColor.equalsIgnoreCase("#F2F2F2")){
+        				lastColor="#FBFBFB";
+        			}else{
+        				lastColor="#F2F2F2";
+        			}
+        			color=lastColor;
+        			colors.put(subColumn.getName(reportMeta.getHideActivities()),color);
+        		}
+        		}
+        		%>
+        		<%if(subColumn.getName().length()<5){%>
+        				<td style="background-color:<%=color%>; margin-left: 2px; margin-right: 2px;" class="clsTableTitleColHtml" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+							   <c:if test="${reportHeading1!=null}"><digi:trn><c:out value="${reportHeading1}"/></digi:trn></c:if> <digi:trn><c:out value="${reportHeading}"/></digi:trn>
 					<%}else{%>
-						<td class="clsTableTitleColHtml" style="background-color:#EAEAEA;text-decoration: none;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>	
+						<td class="clsTableTitleColHtml" style="background-color:<%=color%>;text-decoration: none;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+							   <c:if test="${reportHeading1!=null}"><digi:trn><c:out value="${reportHeading1}"/></digi:trn></c:if> <digi:trn><c:out value="${reportHeading}"/></digi:trn>
           		<%}%>
           		</c:when>
           		<c:otherwise>
-	      			<td style="background-color:#EAEAEA;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid; font:9px Arial;" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+          		<% if (subColumn.getContentCategory()!=null){
+        			if (subColumn.getContentCategory().equalsIgnoreCase(ArConstants.MONTH)){
+        				color=colors.get((((org.dgfoundation.amp.ar.Column)subColumn.getParent()).getName(reportMeta.getHideActivities())));
+        			}
+        			
+        			if (subColumn.getContentCategory().equalsIgnoreCase(ArConstants.QUARTER)){
+        				color=colors.get((((org.dgfoundation.amp.ar.Column)subColumn.getParent()).getName(reportMeta.getHideActivities())));
+        			}
+        			
+        			if (subColumn.getContentCategory().equalsIgnoreCase(ArConstants.FUNDING_TYPE)){
+        				org.dgfoundation.amp.ar.Column parent=(org.dgfoundation.amp.ar.Column)subColumn.getParent();
+        				color=colors.get(((org.dgfoundation.amp.ar.Column)parent.getParent()).getName(reportMeta.getHideActivities()));
+        			}
+  				}
+        		%>
+        		
+	      			<td style="background-color:<%=color%>;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid; font:9px Arial;" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+	      				
 	      				<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: black ;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
-	        				<digi:trn key="aim:reportBuilder:${reportHeading}">
-	            				<c:out value="${reportHeading}"/>
-	            			</digi:trn>
+	        				 <digi:trn><c:out value="${reportHeading}"/></digi:trn>
 						</html:link>
 		  			  
 	            

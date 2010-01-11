@@ -21,16 +21,20 @@ public class GregorianBasedWorker implements ICalendarWorker {
 
 	private AmpFiscalCalendar fiscalCalendar = null;
 
+	private int fiscalMonth;
+
 	public GregorianBasedWorker(AmpFiscalCalendar fiscalCalendar) {
 		this.fiscalCalendar = fiscalCalendar;
 	}
-	
+
 	public GregorianBasedWorker(Date date) {
 		setTime(date);
 	}
+
 	public GregorianBasedWorker() {
-		
+
 	}
+
 	public Date getDate() throws Exception {
 
 		return internalCalendar.getTime();
@@ -40,9 +44,11 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		internalTime = time;
 		internalCalendar = new GregorianCalendar();
 		internalCalendar.setTime(time);
-		if (fiscalCalendar!=null){
-		// set offset from fiscal calendar
-			
+		fiscalMonth = internalCalendar.get(GregorianCalendar.MONTH);
+
+		if (fiscalCalendar != null) {
+			// set offset from fiscal calendar
+
 			internalCalendar.add(GregorianCalendar.YEAR, fiscalCalendar.getYearOffset());
 			int toAdd = (fiscalCalendar.getStartMonthNum() - 1);
 			internalCalendar.add(GregorianCalendar.MONTH, toAdd);
@@ -68,7 +74,8 @@ public class GregorianBasedWorker implements ICalendarWorker {
 
 	public Integer getQuarter() throws Exception {
 		checkSetTimeCalled();
-		switch (internalCalendar.get(Calendar.MONTH)) {
+		int month=internalCalendar.get(Calendar.MONTH);
+		switch (month) {
 		case Calendar.JANUARY:
 		case Calendar.FEBRUARY:
 		case Calendar.MARCH:
@@ -103,5 +110,30 @@ public class GregorianBasedWorker implements ICalendarWorker {
 	public Integer getYearDiff(ICalendarWorker worker) throws Exception {
 		return this.getYear().intValue() - worker.getYear().intValue();
 	}
-	
+
+	public Comparable getFiscalMonth() throws Exception {
+		checkSetTimeCalled();
+		if (!this.fiscalCalendar.getIsFiscal()) {
+			return getMonth();
+		} else {
+
+			ComparableMonth cm = monthCache.get(fiscalMonth);
+
+			if (cm == null) {
+				String monthStr = dateFormatSymbols.getMonths()[fiscalMonth];
+				cm = new ComparableMonth(fiscalMonth, monthStr);
+				monthCache.put(fiscalMonth, cm);
+			}
+
+			return cm;
+		}
+	}
+
+	public String getFiscalYear() throws Exception {
+		if (this.fiscalCalendar.getIsFiscal()) {
+			return "Fiscal Year," + this.getYear() + " - " + (this.getYear() + 1);
+		}
+		return this.getYear().toString();
+	}
+
 }

@@ -24,7 +24,7 @@ public class PieChartCustomLabelGenerator implements  PieSectionLabelGenerator  
     public String generateSectionLabel(PieDataset dataset, Comparable key) {
         double total = DatasetUtilities.calculatePieDatasetTotal(dataset);
         String label = "";
-        Number value = dataset.getValue(key.toString());
+        Number value = dataset.getValue(key);
         double percent = 0.0;
         if (value != null) {
             double v = value.doubleValue();

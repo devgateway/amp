@@ -86,11 +86,14 @@
              var areas=responseXML.getElementsByTagName('area');
              for(var i=0;i<areas.length;i++){
              var area=document.createElement('area');
-             area.setAttribute("alt", " ");
-             area.setAttribute("shape", "poly");
+             area.setAttribute("title", areas[i].getAttribute("title"));
+             area.setAttribute("alt", areas[i].getAttribute("alt"));
+             area.setAttribute("shape", areas[i].getAttribute("shape"));
              area.setAttribute("coords", areas[i].getAttribute("coords"));
-             area.setAttribute("href", "javascript:showSectorDonorWidgetReport('"+areas[i].getAttribute("href")+"')");
-             chartImageMap.appendChild(area);
+             if(areas[i].getAttribute("href")!=null){
+                  area.setAttribute("href", "javascript:showSectorDonorWidgetReport('"+areas[i].getAttribute("href")+"')");
+             }
+              chartImageMap.appendChild(area);
               }
               sectorByDonorChartImageLoadDiv.style.display="none";
               sectorByDonorChartImageDiv.style.display="block";

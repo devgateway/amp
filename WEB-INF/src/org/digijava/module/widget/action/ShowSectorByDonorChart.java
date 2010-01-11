@@ -129,7 +129,7 @@ public class ShowSectorByDonorChart extends Action {
         }
 		//WIDTH
 		if (form.getImageWidth() == null){
-        	opt.setWidth(new Integer(420));
+        	opt.setWidth(new Integer(450));
         }else{
         	opt.setWidth(form.getImageWidth());
         }

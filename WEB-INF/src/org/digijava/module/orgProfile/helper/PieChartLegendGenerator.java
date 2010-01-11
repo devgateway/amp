@@ -33,7 +33,7 @@ public class PieChartLegendGenerator implements PieSectionLabelGenerator {
 
     public String generateSectionLabel(PieDataset dataset, Comparable key) {
         String result = "";
-        String newKey = (String) key;
+        String newKey = key.toString();
         BufferedImage image = new BufferedImage(800, 800, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = image.createGraphics();
         Font font = new Font("Arial", Font.PLAIN, 10);

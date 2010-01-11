@@ -434,7 +434,7 @@ public class ChartWidgetUtil {
         PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
-        boolean tooltips = false;
+        boolean tooltips = true;
         boolean urls = true;
         result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
         String donorString = "";
@@ -448,27 +448,41 @@ public class ChartWidgetUtil {
             Font font = new Font(null, 0, 12);
             result.getTitle().setFont(font);
         }
+       String pattern = "{0} = {2}";
+       if (opt.getLabelPattern() != null) {
+               pattern = opt.getLabelPattern();
+        }
 
         if (opt.isShowLabels()) {
-            String pattern = "{0} = {2}";
-            if (opt.getLabelPattern() != null) {
-                pattern = opt.getLabelPattern();
-            }
-            DecimalFormat format = FormatHelper.getDecimalFormat();
-            format.setMaximumFractionDigits(0);
-            PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
-            plot.setLabelGenerator(gen);
+        PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
+        plot.setLabelGenerator(gen);
+        plot.setSimpleLabels(true);
+        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
+        plot.setLabelGap(0);
+        plot.setLabelLinkMargin(0.05);
+        plot.setLabelShadowPaint(null);
+        plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
         } else {
             plot.setLabelGenerator(null);
         }
 
-        //plot.setSectionOutlinesVisible(false);
-        LegendTitle lt = result.getLegend();
-        if (lt != null) {
-            Font labelFont = new Font(null, Font.PLAIN, 9);
-            lt.setItemFont(labelFont);
-            plot.setLabelFont(labelFont);
-        }
+           //plot.setSectionOutlinesVisible(false);
+           LegendTitle lt = result.getLegend();
+           if (lt != null) {
+               Font labelFont = new Font(null, Font.PLAIN, 9);
+               lt.setItemFont(labelFont);
+               plot.setLabelFont(labelFont);
+               lt.setPosition(RectangleEdge.LEFT);
+               lt.setVerticalAlignment(VerticalAlignment.TOP);
+               lt.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+               plot.setLegendItemShape(new Rectangle(10, 10));
+               DecimalFormat format = FormatHelper.getDecimalFormat();
+               format.setMaximumFractionDigits(0);
+               PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
+               plot.setLegendLabelGenerator(genLegend);
+               plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
+
+           }
         DonorSectorPieChartURLGenerator urlGen = new DonorSectorPieChartURLGenerator(url);
         plot.setURLGenerator(urlGen);
         plot.setIgnoreNullValues(true);

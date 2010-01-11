@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -92,37 +94,41 @@ public class LuceneUtil implements Serializable {
     /**
      * 
      */
-    public final static String idField = "id";
+    public final static String ID_FIELD = "id";
 
     /**
-     * LUCENE INDEX PATH: use the luceneBaseDir + new 
+     * LUCENE INDEX PATH: use the LUCENE_BASE_DIR + new 
      * 					  directory for your index
      */
     
     /**
      * lucene base directory
      */
-    public final static String luceneBaseDir = "lucene";
-    public final static String luceneStampExt = ".stamp";
+    public final static String LUCENE_BASE_DIR = "lucene";
+    public final static String LUCENE_STAMP_EXT = ".stamp";
     
     /**
      * name of help index directory
      */
-    public final static String helpIndexSufix = "help";
-    public final static String helpIndexDirectory = luceneBaseDir +"/" + helpIndexSufix;
+    public final static String HELP_INDEX_SUFIX = "help";
+    public final static String HELP_INDEX_DIRECTORY = LUCENE_BASE_DIR +"/" + HELP_INDEX_SUFIX;
+
+    /**
+     * Translations index directory.
+     */
+    public final static String TRN_INDEX_SUFIX = "translation";
+    public final static String TRN_INDEX_DIRECTORY = LUCENE_BASE_DIR +"/" + TRN_INDEX_SUFIX;
     
     /**
      * name of the activity index directory
      * please don't use for other indexes
      * @author Arty
      */
-    public final static String activityIndexSufix = "activity";
-    public final static String activityIndexDirectory = luceneBaseDir + "/" + activityIndexSufix;
+    public final static String ACTIVITY_INDEX_SUFFIX = "activity";
+    public final static String ACTVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX;
 
 	private static final int CHUNK_SIZE = 10000;
-
     
-    @SuppressWarnings("unchecked")
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
 	  	String oql= "select idx from "+AmpLuceneIndexStamp.class.getName()+" idx"+
 	  	  			" where idx.idxName=:theName";
@@ -132,10 +138,85 @@ public class LuceneUtil implements Serializable {
 	  		org.hibernate.Query query=session.createQuery(oql);
 	  		query.setString("theName", name);
 	  		
-	  		return ((AmpLuceneIndexStamp)query.list().get(0));
+	  		return ((AmpLuceneIndexStamp)query.uniqueResult());
 	  	} catch (Exception e) {
 	  		throw new Exception("Cannot get index stamp for:"+name,e);
 	  	}
+    }
+    
+    /**
+     * Deletes all stamps from db with specified name.
+     * @param name
+     * @return true - at least one record has been deleted. false - nothing was deleted.
+     * @throws DgException
+     */
+	@SuppressWarnings("unchecked")
+	public static boolean deleteIdxStamps(String name) throws DgException {
+		String oql = "select idx from " + AmpLuceneIndexStamp.class.getName()
+				+ " idx" + " where idx.idxName=:theName";
+		Transaction transaction = null;
+		boolean oldRecordDeleted = false;
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			org.hibernate.Query query = session.createQuery(oql);
+			query.setString("theName", name);
+			List<AmpLuceneIndexStamp> stamps = query.list();
+			// Delete all fund stamps for this module name.
+			if (stamps != null && stamps.size() > 0) {
+				transaction = session.beginTransaction();
+				for (AmpLuceneIndexStamp stamp : stamps) {
+					session.delete(stamp);
+				}
+				transaction.commit();
+				oldRecordDeleted = true;
+			}
+		} catch (HibernateException e) {
+			if (transaction != null) {
+				try {
+					transaction.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback stamp deletion for "
+							+ name, e1);
+				}
+			}
+			throw new DgException("Cannot delete stams for " + name, e);
+		}
+		return oldRecordDeleted;
+	}
+
+	/**
+	 * Creates new stamp record.
+	 * @param name
+	 * @param timestamp
+	 * @throws DgException
+	 */
+	public static void createStamp(String name, long timestamp) throws DgException {
+		AmpLuceneIndexStamp stamp = new AmpLuceneIndexStamp();
+		stamp.setIdxName(name);
+		stamp.setStamp(timestamp);
+		Session session = PersistenceManager.getRequestDBSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			session.save(stamp);
+			tx.commit();
+		} catch (HibernateException e) {
+			if(tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					logger.error(e1);
+					throw new DgException("Cannot rollback stamp creation for "+name,e1);
+				}
+			}
+			throw new DgException("Cannot create stamp for "+name, e);
+		}
+		
+	}
+	
+    static public boolean deleteDirectory(String path) {
+    	File dir = new File(path);
+    	return deleteDirectory(dir);
     }
     
     static public boolean deleteDirectory(File path) {
@@ -157,8 +238,8 @@ public class LuceneUtil implements Serializable {
     public static void checkIndex(ServletContext sc){
     	logger.info("Lucene startup!");
 
-    	File idxStamp = new File(sc.getRealPath("/") + luceneBaseDir + "/" + activityIndexSufix + luceneStampExt);
-    	File idxDir = new File(sc.getRealPath("/") + activityIndexDirectory);
+    	File idxStamp = new File(sc.getRealPath("/") + LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX + LUCENE_STAMP_EXT);
+    	File idxDir = new File(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY);
     	boolean deleteIndex = false;
     	
     	checkStamp:{
@@ -204,7 +285,7 @@ public class LuceneUtil implements Serializable {
     			//getting DB timestamp
     			long dbStamp = -1;
     			try {
-					dbStamp = getIdxStamp(activityIndexSufix).getStamp();
+					dbStamp = getIdxStamp(ACTIVITY_INDEX_SUFFIX).getStamp();
 				} catch (Exception e) {
 					logger.error(e);
 				}
@@ -267,14 +348,14 @@ public class LuceneUtil implements Serializable {
 				long stopTime = System.currentTimeMillis();
 				
 				try {
-					AmpLuceneIndexStamp currentStamp = getIdxStamp(activityIndexSufix);
+					AmpLuceneIndexStamp currentStamp = getIdxStamp(ACTIVITY_INDEX_SUFFIX);
 					if (currentStamp != null)
-						DbUtil.deleteAllStamps(activityIndexSufix);
+						DbUtil.deleteAllStamps(ACTIVITY_INDEX_SUFFIX);
 				} catch (Exception e1) {
 				}
 				
 				AmpLuceneIndexStamp stamp = new AmpLuceneIndexStamp();
-				stamp.setIdxName(activityIndexSufix);
+				stamp.setIdxName(ACTIVITY_INDEX_SUFFIX);
 				stamp.setStamp(stopTime);
 				
 				try {
@@ -571,7 +652,7 @@ public class LuceneUtil implements Serializable {
 		Document doc = new Document();
 		String all = new String("");
 		if (actId != null){
-			doc.add(new Field(idField, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
+			doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
 			//all = all.concat(" " + actId);
 		}
 		if (projectId != null){
@@ -653,12 +734,12 @@ public class LuceneUtil implements Serializable {
 		ServletContext sc = request.getSession().getServletContext();
 		
 		if (update){
-			deleteActivity(sc.getRealPath("/") + activityIndexDirectory, idField, String.valueOf(id));
+			deleteActivity(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(id));
 		}
 		
 		IndexWriter indexWriter = null;
 		try {
-			indexWriter = new IndexWriter(sc.getRealPath("/") + activityIndexDirectory, LuceneUtil.analyzer, false);
+			indexWriter = new IndexWriter(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -766,7 +847,7 @@ public class LuceneUtil implements Serializable {
      */
     public static void createHelp(ServletContext sc) throws  DgException{
             
-		boolean createDir = LuceneUtil.isDir(sc);
+		boolean createDir = LuceneUtil.checkHelpDir(sc);
 	
 		if(!createDir){
 			logger.info("Building the help");
@@ -798,7 +879,7 @@ public class LuceneUtil implements Serializable {
     	Date date ; 
 
     	try{ 
-    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + helpIndexDirectory);
+    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
 
     		formatter  = new SimpleDateFormat();
     		String leastUpDate = formatter.format(lastLucModDay);
@@ -856,7 +937,7 @@ public class LuceneUtil implements Serializable {
 		Searcher indexSearcher = null;
 		try {
 			if(searchString != null){
-			indexSearcher = new IndexSearcher(sc.getRealPath("/") + helpIndexDirectory);
+			indexSearcher = new IndexSearcher(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
 			searchString = searchString.trim();
 			query = parser.parse("+"+searchString+"*");
 		
@@ -894,7 +975,7 @@ public class LuceneUtil implements Serializable {
      */
     private static Object highlight(Field field, Query query, ServletContext sc) throws IOException {
 
-    	query.rewrite(IndexReader.open(sc.getRealPath("/") + helpIndexDirectory));
+    	query.rewrite(IndexReader.open(sc.getRealPath("/") + HELP_INDEX_DIRECTORY));
     	QueryScorer scorer = new QueryScorer(query);
     	SimpleHTMLFormatter formatter =
     		new SimpleHTMLFormatter("<span class=\"highlight\">",
@@ -954,8 +1035,8 @@ public class LuceneUtil implements Serializable {
      * 
      * @return true if lucene-index directory exists otherwise false
      */
-    public static boolean isDir(ServletContext sc){
-    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + helpIndexDirectory);
+    public static boolean checkHelpDir(ServletContext sc){
+    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
     	return createDir;
     }
 
@@ -971,7 +1052,7 @@ public class LuceneUtil implements Serializable {
     public static void indexHelpDocument(Document document, ServletContext sc) throws IOException {
     	try{
 
-    		boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + helpIndexDirectory);
+    		boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
 
     		if(createDir == false){
     			createDir= true;
@@ -980,7 +1061,7 @@ public class LuceneUtil implements Serializable {
     		}
 
     		StandardAnalyzer analyzer  = new StandardAnalyzer();
-    		IndexWriter writer = new IndexWriter(sc.getRealPath("/") + helpIndexDirectory, analyzer, createDir);
+    		IndexWriter writer = new IndexWriter(sc.getRealPath("/") + HELP_INDEX_DIRECTORY, analyzer, createDir);
     		writer.addDocument(document);
     		writer.optimize();
     		writer.close();
@@ -1000,7 +1081,7 @@ public class LuceneUtil implements Serializable {
     	IndexReader indexReader;
 
     	try {
-    		indexReader = IndexReader.open(sc.getRealPath("/") + helpIndexDirectory);
+    		indexReader = IndexReader.open(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
     		Integer deleted = indexReader.deleteDocuments(term);
     		indexReader.close();
     	} catch (Exception e) {

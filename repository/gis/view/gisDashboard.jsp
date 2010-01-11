@@ -281,7 +281,7 @@
 	</div>
 </div>
 
-<script language="JavaScript" src="/repository/gis/view/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" src="/repository/gis/view/js/gisMap.js"></script>
 
 

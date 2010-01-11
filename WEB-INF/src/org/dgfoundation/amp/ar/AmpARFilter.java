@@ -823,7 +823,7 @@ public class AmpARFilter extends PropertyListable {
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
 
-				hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.activityIndexDirectory, "all", indexText);
+				hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText);
 				logger.info("New lucene search !");
 				if(hits!=null){
 				for (int i = 0; i < hits.length(); i++) {

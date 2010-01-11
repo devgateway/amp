@@ -613,10 +613,15 @@
 		actionImgLoading = true;
 		*/
 		
+		actionImgLoading = true;
+		imageMapLoaded = false;
 		sectorSelected(sec);
 		
+		var newURL = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
+		newURL = modifyUniqueStringURL(newURL);
 		
-		document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
+		//document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
+		document.getElementById("navCursorMap").src = newURL;
 		
 		if (newVal==2) {
 			document.getElementById("reg_district_caption").innerHTML="Region";

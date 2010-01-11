@@ -39,6 +39,16 @@
 		$(".inp-upassword").css({display: ""});
 		$(".inp-upassword").focus();
 	});
+
+	$(".inp-upastext").focus(function(){
+		$(".inp-upastext").css({display: "none"});
+		$(".inp-upassword").css({display: ""});
+		$(".inp-upassword").focus();
+	});
+
+
+	
+	
 });
 </script>
 	<div style="margin: 15px 10px 5px 5px" >

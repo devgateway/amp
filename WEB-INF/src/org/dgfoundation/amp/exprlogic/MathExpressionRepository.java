@@ -81,6 +81,10 @@ public class MathExpressionRepository {
 
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENT = "selectedYearPlannedDisbursement";
 
+	private static final String ACTUAL_PROJECT_DURATION = "actualProjecDuration";
+
+	private static final String PROPOSED_PROJECT_DURATION = "proposedProjectDuration";
+
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
 	/**
@@ -563,5 +567,29 @@ public class MathExpressionRepository {
 			buildTotalCommitment();
 		}
 		return expresions.get(key);
+	}
+
+
+	/**
+	 * 	Actual End Date - Actual Start Date 
+	 */
+	private static void buildActualProjectDuration() {
+		try {
+			MathExpression dateDiff = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.ACTUAL_COMPLETION_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
+			expresions.put(ACTUAL_PROJECT_DURATION, dateDiff);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	/**
+	 * Proposed End Date - Planned Start Date 
+	 */
+	private static void buildProposedProjectDuration() {
+		try {
+			MathExpression dateDiff = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.PROPOSED_COMPLETION_DATE_VALUE, ArConstants.PROPOSED_START_DATE_VALUE);
+			expresions.put(PROPOSED_PROJECT_DURATION, dateDiff);
+		} catch (Exception e) {
+			logger.error(e);
+		}
 	}
 }

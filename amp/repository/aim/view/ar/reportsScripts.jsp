@@ -720,10 +720,11 @@ function validateFormat(){
 			window.setTimeout(call,200);
 		}
 
-var normalStyleOrgValue=null
-var headerStyleOrgValue=null
-var aHrefStyleOrgValue=null
 
+var normalStyleOrgValue=null;
+var headerStyleOrgValue=null;
+var aHrefStyleOrgValue=null;
+	
 function fontResize(param){
 	if (normalStyleOrgValue==null){
 		normalStyleOrgValue=parseFloat($('td.reportsBorderTD').css('font-size'));

@@ -1,6 +1,5 @@
-
-
 package org.digijava.module.aim.uicomponents;
+
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
@@ -13,11 +12,13 @@ public class AddContact extends BodyTagSupport {
     public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
     public static final String STYLE_CLASS_NAME = "CLASS"; //buttons standard class property
     public static final String PARAM_CONTACT_TYPE="CONTACT_TYPE";
+    public static final String ADD_ORG_BUTTON="ADD_ORGANIZATION_BUTTON"; //add/remove organization buttons should be visible or not 
     private String collection = "";
     private Object form;
     private String styleClass="";
     private String contactType=""; //donor,mofed,sector ministry, Project Coordinator , Implementing/Executing Agency
-
+    private String addOrgBtn="";
+    
     public String getStyleClass() {
         return styleClass;
     }
@@ -50,6 +51,16 @@ public class AddContact extends BodyTagSupport {
 		this.contactType = contactType;
 	}
 
+
+
+	public String getAddOrgBtn() {
+		return addOrgBtn;
+	}
+
+	public void setAddOrgBtn(String addOrgBtn) {
+		this.addOrgBtn = addOrgBtn;
+	}
+
 	public int doStartTag() throws JspException {
 		try {
             pageContext.getSession().setAttribute(PARAM_ADD_CONTACT_FORM_NAME, form);
@@ -60,7 +71,7 @@ public class AddContact extends BodyTagSupport {
 				html.append(STYLE_CLASS_NAME);
 				html.append("=");
 				html.append("\""+styleClass+"\"");
-			}			
+			}
 	
 			html.append(" onclick=\"javascript:selectContact('/aim/addAmpContactInfo.do~reset=true~action=create~");
 			if (!"".equalsIgnoreCase(collection)) {
@@ -76,6 +87,12 @@ public class AddContact extends BodyTagSupport {
 				html.append(contactType);
 				html.append("~");
 			}
+			if(!"".equalsIgnoreCase(addOrgBtn)){
+				html.append(ADD_ORG_BUTTON);
+				html.append("=");
+				html.append(addOrgBtn);
+			}
+			
 			html.append("','addContactWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
 
 			out.write(html.toString());

@@ -11,8 +11,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable
-{
+public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable {
 	private Long ampOrgId;
 	private String name ;
 	/**
@@ -45,13 +44,14 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private String acronym;
 	private AmpLevel levelId;
 	private AmpCategoryValueLocations region;
-        private AmpCategoryValue implemLocationLevel;
-        private Set<AmpOrgLocation> locations;
-        private Set<AmpOrgStaffInformation> staffInfos;
-        private AmpCategoryValueLocations country;
-        private Set<AmpOrganisation> recipients;
-        private Set<AmpContact> contacts;
-        private String addressAbroad;
+    private AmpCategoryValue implemLocationLevel;
+    private Set<AmpOrgLocation> locations;
+    private Set<AmpOrgStaffInformation> staffInfos;
+    private AmpCategoryValueLocations country;
+    private Set<AmpOrganisation> recipients;
+        
+        //private Set<AmpContact> contacts;
+    private String addressAbroad;
         private String taxNumber;
         private String primaryPurpose;
         private String minPlanRegNumb;
@@ -59,6 +59,18 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         private Date legalPersonRegDate;
         private Date minPlanRegDate;
         private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
+        
+        private Set<AmpOrganisationContact> organizationContacts;
+        
+        private Set calendar;
+    	
+    	private String segmentCode;
+    	private Set sectors;
+    	
+    	private Set<AmpOrganisationDocument> documents;
+
+    	//Pledges
+    	private Set fundingDetails;
 
         public Set<AmpOrganizationBudgetInformation> getOrganizationBudgetInfos() {
             return organizationBudgetInfos;
@@ -90,14 +102,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         public void setAddressAbroad(String addressAbroad) {
             this.addressAbroad = addressAbroad;
         }
-        public Set<AmpContact> getContacts() {
-            return contacts;
-        }
-
-        public void setContacts(Set<AmpContact> contacts) {
-            this.contacts = contacts;
-        }
-
+       
         public AmpCategoryValueLocations getCountry() {
             return country;
         }
@@ -170,6 +175,16 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         }
        
 	
+	public Set<AmpOrganisationContact> getOrganizationContacts() {
+			return organizationContacts;
+		}
+
+		public void setOrganizationContacts(
+				Set<AmpOrganisationContact> organizationContacts) {
+			this.organizationContacts = organizationContacts;
+		}
+
+
 	private Set survey;	// Collection of AmpAhsurvey dbentity objects 
 	
 	private transient Set surveyByPointOfDeliveryDonor;
@@ -182,15 +197,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.surveyByPointOfDeliveryDonor = surveyByPointOfDeliveryDonor;
 	}
 
-	private Set calendar;
 	
-	private String segmentCode;
-	private Set sectors;
-	
-	private Set<AmpOrganisationDocument> documents;
-
-	//Pledges
-	private Set fundingDetails;
 	
 	//
 	public Set getSectors() {
@@ -561,7 +568,4 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.budgetOrgCode = budgetOrgCode;
 	}
 
-	
-	
-	
 }	

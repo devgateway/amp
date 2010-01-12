@@ -60,6 +60,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -1725,9 +1726,10 @@ public class SaveActivity extends Action {
 	}
 
 	private void fillActivityContactPrimaryField(String[] actContactIds,AmpActivityContact ampActContact) {
+		String actContId=ampActContact.getContact().getId()!=null ? ampActContact.getContact().getId().toString() :  ampActContact.getContact().getTemporaryId();
 		if(actContactIds!=null && actContactIds.length>0){
 			for (int i = 0; i < actContactIds.length; i++) {
-				if(ampActContact.getContact().getTemporaryId().equals(actContactIds[i])){
+				if(actContId.equals(actContactIds[i])){
 					ampActContact.setPrimaryContact(true);
 				}else{
 					ampActContact.setPrimaryContact(false);
@@ -1737,7 +1739,6 @@ public class SaveActivity extends Action {
 			ampActContact.setPrimaryContact(false);
 		}
 	}
-
 	
 	private void processStep9(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;

@@ -69,6 +69,7 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
@@ -883,8 +884,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        */ 
       
       // if activity contains contact,which is not in contact list, we should remove it
-      if(activity.getActivityContacts()!=null && activity.getActivityContacts().size()>0){
-    	  Iterator<AmpActivityContact> iter=activity.getActivityContacts().iterator();
+      List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
+      if(activityDbContacts!=null && activityDbContacts.size()>0){
+    	  Iterator<AmpActivityContact> iter=activityDbContacts.iterator();
     	  while(iter.hasNext()){
     		  AmpActivityContact actContact=iter.next();
     		  int count=0;
@@ -920,17 +922,28 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			ampContact.setCreator(contact.getCreator());
     			ampContact.setShared(true);
     			ampContact.setOfficeaddress(contact.getOfficeaddress());
+    			ampContact.setFunction(contact.getFunction());
     			//remove old properties
-    			if(ampContact.getProperties()!=null){
-    				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
+    			List<AmpContactProperty> dbProperties=ContactInfoUtil.getContactProperties(ampContact);
+    			if(dbProperties!=null){
+    				for (AmpContactProperty dbProperty : dbProperties) {
     					session.delete(dbProperty);
     				}
     			}
-    			ampContact.setProperties(null);
-    			if(ampContact.getOrganizations()!=null){
-    				ampContact.getOrganizations().clear();
+    			ampContact.setProperties(null);    			
+    			//remove old organization contacts
+    			List<AmpOrganisationContact> dbOrgConts=ContactInfoUtil.getContactOrganizations(ampContact.getId());
+    			if(dbOrgConts!=null){
+    				for (AmpOrganisationContact orgCont :dbOrgConts) {
+						session.delete(orgCont);
+					}
     			}
-    			ampContact.setOrganizations(contact.getOrganizations());
+    			//TODOOOOOOO
+//    			if(ampContact.getOrganizations()!=null){
+//    				ampContact.getOrganizations().clear();
+//    			}
+//    			ampContact.setOrganizations(contact.getOrganizations());
+    			ampContact.setOrganizationContacts(null);
     			session.update(ampContact);    			    			
     		}else{
     			session.save(contact);
@@ -946,6 +959,17 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					session.save(formProperty);
 				}
 			}
+    		//save cont. organizations
+    		if(contact.getOrganizationContacts()!=null){
+    			for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
+					if(ampContact!=null){
+						orgCont.setContact(ampContact);
+					}else{
+						orgCont.setContact(contact);
+					}
+					session.save(orgCont);
+				}
+    		}
 
     		//link activity to activityContact
     		if(activityContact.getId()!=null){

@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -252,34 +253,7 @@ html>body #mainEmpty {
 	clear:both;
 	width:752px;
 }
-.clsTableTitleCol {
-	-x-system-font:none;
-	background-color:#B8B8B0;
-	color:#000000;
-	cursor:default;
-	font-family:"Verdana";
-	font-size:7.5pt;
-	font-size-adjust:none;
-	font-stretch:normal;
-	font-style:normal;
-	font-variant:normal;
-	font-weight:bold;
-	line-height:normal;
-	text-align:center;
-	height: 30px;
-}		
-.reportsBorderTable {
-	border-collapse:collapse;
-}
-.reportsBorderTD {
-	cellpadding: 0px;
-	cellspacing: 0px;
-	padding: 0px;
-	margin: 0px;
-	font-family:Arial,Helvetica,sans-serif;
-	height: 30px;
-	Fixed-width: 100px;
-}
+
 </style>
 
 <script type="text/javascript">
@@ -341,7 +315,7 @@ html>body #mainEmpty {
 </script>
 
 
-
+<digi:form action="/addressBook.do?actionType=viewAddressBook" method="post">	
 	<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
 		<tr>
 			<td width="14">&nbsp;</td>
@@ -362,9 +336,6 @@ html>body #mainEmpty {
 						</td>
 						<!-- End navigation -->
 					</tr>
-					<tr><td align="left">
-                    	<jsp:include page="/repository/aim/view/exportTableHeadFixed.jsp" />
-                	</td></tr>					
 					<tr>
 						<td height="16" vAlign="center" width="867" colspan="7">
 							<span class=subtitle-blue><digi:trn>Address Book</digi:trn></span>
@@ -397,7 +368,6 @@ html>body #mainEmpty {
 					</tr>					
 					<tr>
 						<td noWrap width=100% vAlign="top" height="100%">
-						<digi:form action="/addressBook.do?actionType=viewAddressBook" method="post">
 							<div id="main">
 								<table bgColor="#ffffff" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 											<tr bgColor="#ffffff">
@@ -449,12 +419,22 @@ html>body #mainEmpty {
 														<tr><td>&nbsp;</td></tr>
 														<tr>
 															<td>
-<!--																<div style="border:1px solid #999999;width: 865px" >-->
-																		<div class="reportHead" style="width: 865px; height: 30px; max-height: 30px; ">
-																			<table width="865" class="reportsBorderTable">																				
-																				<thead class="fixedHeader">											                            	
+																<div style="border:1px solid #999999;width: 865px" >
+																	<div style= "background-color:#999999; color:#000; font-weight:bold; padding-top:5px; height:15px; width:865px;">
+																		<center>Contact List</center>
+																	</div>										
+																	<div style="overflow:auto;width:865px;height:250px;max-height:220px; " >																		
+																		<table width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
+																			<c:if test="${empty addressbookForm.contactsForPage}">
+													                        	<tr>
+																					<td colspan="5">
+									                                                	<b><digi:trn>No Contacts present</digi:trn></b>
+																					</td>
+																				</tr>
+												                            </c:if>
+												                            <c:if test="${not empty addressbookForm.contactsForPage}">
 												                            	<tr height="100%">																						
-																					<td width="152" class="clsTableTitleCol">
+																					<td width="152">
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy!='nameAscending'}">
 																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=nameAscending&reset=false">
 																								<b><digi:trn>Name</digi:trn></b>
@@ -468,10 +448,25 @@ html>body #mainEmpty {
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy=='nameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='nameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																					</td>
-																					<td width="130" class="clsTableTitleCol">
+																					<td width="100">
 																						<b><digi:trn>Email</digi:trn></b>
-																					</td>
-																					<td width="120" class="clsTableTitleCol">
+																						<!--
+																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='emailAscending'}">
+																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=emailAscending&reset=false">
+																								<b><digi:trn>Email</digi:trn></b>
+																							</digi:link>																					
+																						</c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailAscending'}">
+																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=emailDescending&reset=false">
+																								<b><digi:trn>Email</digi:trn></b>
+																							</digi:link>
+																						</c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if> 
+																						 -->
+																					</td>`
+																					<td width="5px">&nbsp;</td>
+																					<td width="150">
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='orgNameAscending'}">
 																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=orgNameAscending&reset=false">
 																								<b><digi:trn >Organisation Name</digi:trn></b>
@@ -485,7 +480,7 @@ html>body #mainEmpty {
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>																																			
 																					</td>
-																					<td width="100" class="clsTableTitleCol">
+																					<td width="100">
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='titleAscending'}">
 																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=titleAscending&reset=false">
 																								<b><digi:trn>Title</digi:trn></b>
@@ -499,76 +494,61 @@ html>body #mainEmpty {
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																					</td>
-																					<td height="30" width="100" class="clsTableTitleCol">
+																					<td height="30" width="100">
 																						<b><digi:trn>Phone</digi:trn></b>													
 																					</td>
-																					<td height="30" width="100" class="clsTableTitleCol">
+																					<td height="30" width="100">
 																						<b><digi:trn>Fax</digi:trn></b>															
 																					</td>
-																					<td height="30" colspan="2" width="100" class="ignore clsTableTitleCol"><b>
+																					<td height="30" colspan="2" width="100"><b>
 																						<digi:trn>Actions</digi:trn></b>
 																					</td>
 																				</tr>
-																				</thead>
-																		
-																		</table>
-																	</div>
-																	<div class="report" style="overflow:auto;width:865px;height:250px;max-height:220px; " >																		
-																		<table width="100%" id="dataTable" cellspacing="0" cellpadding="1" align="left">
-																			<c:if test="${empty addressbookForm.contactsForPage}">
-													                        	<tr>
-																					<td colspan="5">
-									                                                	<b><digi:trn>No Contacts present</digi:trn></b>
-																					</td>
-																				</tr>
-												                            </c:if>
-												                            <tbody>
-												                            <c:if test="${not empty addressbookForm.contactsForPage}">
 												                            	<c:forEach var="cont" items="${addressbookForm.contactsForPage}" varStatus="stat">
 					                                                           		<c:set var="background">
 																						<c:if test="${stat.index%2==0}">#dbe5f1</c:if>
 																						<c:if test="${stat.index%2==1}">#ffffff</c:if>
 																					</c:set>
-																					
 																					<tr bgcolor="${background}">
-						                                                           		<td width="152" class="reportsBorderTD">
+						                                                           		<td height="30" width="152">
 																						  ${cont.name}&nbsp;${cont.lastname}
 																						</td>
-																						<td width="100" class="reportsBorderTD">
+																						<td height="30" width="100">
 																							<c:forEach var="email" items="${cont.properties}">
 																								<c:if test="${email.name=='contact email'}">
 																									<div>${email.value}</div>
 																								</c:if>
 																							</c:forEach>
 																						</td>
-																						<td class="reportsBorderTD" width="100" align="left">
+																						<td width="5px">&nbsp;</td>																	
+																						<td height="30" width="100">
                                                                                             <ul>
                                                                                                 <c:if test="${not empty cont.organisationName}">
                                                                                                     <li>${cont.organisationName}</li>
                                                                                                    </c:if>
-                                                                                                    <c:forEach var="organization" items="${cont.organizations}">
-                                                                                                    <li>${organization}</li>
+                                                                                                    <c:forEach var="orgCont" items="${cont.organizationContacts}">
+                                                                                                    <li>${orgCont.organisation.name}</li>
                                                                                                 </c:forEach>
                                                                                             </ul>
 																						</td>
-																						<td class="reportsBorderTD" width="100" align="center">
+																						<td height="30" width="100">
 																							${cont.title}
 																						</td>
-																						<td class="reportsBorderTD" width="100">
+																						<td height="30" width="100">
 																							<c:forEach var="phone" items="${cont.properties}">
 																								<c:if test="${phone.name=='contact phone'}">
 																									<div>${phone.value}</div>
 																								</c:if>
 																							</c:forEach>																							
 																						</td>
-																						<td class="reportsBorderTD" width="100">
+																						<td height="30" width="100">
 																							<c:forEach var="fax" items="${cont.properties}">
 																								<c:if test="${fax.name=='contact fax'}">
 																									<div>${fax.value}</div>
 																								</c:if>
 																							</c:forEach>
 																						</td>
-																						<td class="ignore reportsBorderTD" width="100" align="center">
+																						<td height="30" width="100">
 																							<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																							<c:set target="${urlParams}" property="contactId">
 																								<bean:write name="cont" property="id"/>
@@ -576,14 +556,13 @@ html>body #mainEmpty {
 																							<digi:link href="/addressBook.do?actionType=editContact" name="urlParams"><img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" /></digi:link>
 																							<digi:link href="/addressBook.do?actionType=deleteContact" name="urlParams" onclick="return confirmDelete()"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
 																						</td>																			
-					                                                            	</tr>					                                                            	
-																				</c:forEach>																				
+					                                                            	</tr>
+																				</c:forEach>
 												                            </c:if>
-												                            </tbody>
 																			<!-- end page logic -->
 																		</table>
 																	</div>
-<!--																</div>-->
+																</div>
 															</td>
 														</tr>
 														<tr>
@@ -685,7 +664,7 @@ html>body #mainEmpty {
 											</tr>
 										</table>
 								</div>
-							</digi:form>
+							
 						</td>
 					</tr>
 				</table>
@@ -732,4 +711,5 @@ html>body #mainEmpty {
 
 	setHoveredTable("dataTable", false);
 </script>
+</digi:form>
 

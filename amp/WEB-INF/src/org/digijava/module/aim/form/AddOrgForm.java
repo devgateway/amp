@@ -2,16 +2,16 @@ package org.digijava.module.aim.form;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Location;
@@ -84,7 +84,10 @@ public class AddOrgForm extends ActionForm {
     private Long implemLocationLevel;
     private Long[] selLocs;
     private Long parentLocId;
-    private List<AmpContact> contacts;
+   // private List<AmpContact> contacts;
+    private List<AmpOrganisationContact> orgContacts;
+    private String[] primaryOrgContIds;
+    private Boolean resetPrimaryOrgContIds;
     private String selContactId;
     private String type;
     private String addressAbroad;
@@ -219,15 +222,15 @@ public class AddOrgForm extends ActionForm {
         this.type = type;
     }
 
-    public List<AmpContact> getContacts() {
-        return contacts;
-    }
+     public List<AmpOrganisationContact> getOrgContacts() {
+		return orgContacts;
+	}
 
-    public void setContacts(List<AmpContact> contacts) {
-        this.contacts = contacts;
-    }
+	public void setOrgContacts(List<AmpOrganisationContact> orgContacts) {
+		this.orgContacts = orgContacts;
+	}
 
-    public Long getParentLocId() {
+	public Long getParentLocId() {
         return parentLocId;
     }
 
@@ -789,5 +792,21 @@ public class AddOrgForm extends ActionForm {
 
 	public void setSelContactId(String selContactId) {
 		this.selContactId = selContactId;
+	}
+
+	public String[] getPrimaryOrgContIds() {
+		return primaryOrgContIds;
+	}
+
+	public void setPrimaryOrgContIds(String[] primaryOrgContIds) {
+		this.primaryOrgContIds = primaryOrgContIds;
+	}
+
+	public Boolean getResetPrimaryOrgContIds() {
+		return resetPrimaryOrgContIds;
+	}
+
+	public void setResetPrimaryOrgContIds(Boolean resetPrimaryOrgContIds) {
+		this.resetPrimaryOrgContIds = resetPrimaryOrgContIds;
 	}
 }

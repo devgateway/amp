@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
@@ -64,7 +65,14 @@ public class AddContactComponent extends DispatchAction{
 		 String activityContactType=request.getParameter(AddContact.PARAM_CONTACT_TYPE);
 		 if(activityContactType!=null && !activityContactType.equals("")){
 			 createForm.setActivityContactType(activityContactType);
-		 }		 
+		 }
+		 // on org.manager side add/remove organization buttons should be hidden
+		 String orgButtonsState=request.getParameter(AddContact.ADD_ORG_BUTTON);
+	        if(orgButtonsState!=null && orgButtonsState.equals("hidden")){
+	        	createForm.setAddOrgButtonState("hidden");
+	        }else{
+	        	createForm.setAddOrgButtonState("visible");
+	        }
          return mapping.findForward("forward");
     }
 
@@ -92,6 +100,8 @@ public class AddContactComponent extends DispatchAction{
          createForm.setContPhoneNumber(null);
          createForm.setContFaxes(null);
          createForm.setActivityContactType(null);
+         createForm.setActOrOrgTempId(null);
+         createForm.setOrgsToShowOnPage(null);
 	}
 
       public  ActionForward addOrganizations(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -117,6 +127,7 @@ public class AddContactComponent extends DispatchAction{
         AddContactComponentForm createForm = (AddContactComponentForm) form;
         clearForm(createForm);
         String contId = request.getParameter(EditContactLink.PARAM_CONTACT_ID);
+        createForm.setActOrOrgTempId(contId);
         //AmpContact contact= ContactInfoUtil.getContact(contactId);
         HttpSession session = request.getSession();
         Object targetForm = session.getAttribute(EditContactLink.PARAM_EDIT_CONTACT_FORM_NAME);
@@ -125,7 +136,12 @@ public class AddContactComponent extends DispatchAction{
         createForm.setTargetCollection(collection);
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
-        
+        String orgButtonsState=request.getParameter(EditContactLink.ADD_ORG_BUTTON);
+        if(orgButtonsState!=null && orgButtonsState.equals("hidden")){
+        	createForm.setAddOrgButtonState("hidden");
+        }else{
+        	createForm.setAddOrgButtonState("visible");
+        }
         
   		String activityContactType=request.getParameter(EditContactLink.PARAM_CONTACT_TYPE);
   		if(activityContactType!=null && !activityContactType.equals("")){//if we are creating contact from activity's contact step
@@ -139,10 +155,11 @@ public class AddContactComponent extends DispatchAction{
   	        	fillFormFromContact(createForm, contId, contact);
   	        }    
   		}else{
-  			Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
-  	        Iterator<AmpContact> contcatIter = targetCollecion.iterator();
+  			Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target.get(createForm.getTargetForm());
+  	        Iterator<AmpOrganisationContact> contcatIter = targetCollecion.iterator();
   	        while (contcatIter.hasNext()) {
-  	            AmpContact contact = contcatIter.next();
+  	        	AmpOrganisationContact orgContact=contcatIter.next();
+  	            AmpContact contact = orgContact.getContact();
   	            fillFormFromContact(createForm, contId, contact);
   	        }
   		}
@@ -229,11 +246,14 @@ public class AddContactComponent extends DispatchAction{
        	 	target.set(createForm.getTargetForm(), targetCollecion);
        	 	redirectWhere="step8";
         }else{
-        	 Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
+        	 Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target.get(createForm.getTargetForm());
         	 if (contIds != null && contIds.length > 0) { 
                  for (int i = 0; i < contIds.length; i++) {
                      AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
-                     targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, contact, new ContactsComponentHelper.AmpContactCompare());
+                     AmpOrganisationContact orgContact=new AmpOrganisationContact();
+                     orgContact.setContact(contact);
+                     orgContact.setPrimaryContact(false); //it becomes true only from edit organization form by checking check-box 
+                     targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, orgContact, new ContactsComponentHelper.AmpOrganisationContactCompareByContact());                  
                  }
              }
         	 target.set(createForm.getTargetForm(), targetCollecion);
@@ -277,13 +297,18 @@ public class AddContactComponent extends DispatchAction{
 		}else{
 			contact.setOfficeaddress(null);
 		}
-        if (contact.getOrganizations() == null) {
-        	contact.setOrganizations(new HashSet<AmpOrganisation>());
-        }
-        if (createForm.getOrganizations() != null) {
-        	contact.getOrganizations().clear();
-            contact.getOrganizations().addAll(createForm.getOrganizations());
-        }
+				
+		if(contact.getOrganizationContacts()==null){
+			contact.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
+		}
+		if (createForm.getOrganizations() != null) {
+			contact.getOrganizationContacts().clear();
+			for (AmpOrganisation org : createForm.getOrganizations()) {
+				AmpOrganisationContact orgContact=new AmpOrganisationContact(org,contact);
+				orgContact.setPrimaryContact(false);
+				contact.getOrganizationContacts().add(orgContact);
+			}
+		}
         
         Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
         createForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,createForm.getContEmail(),null));
@@ -302,18 +327,59 @@ public class AddContactComponent extends DispatchAction{
         
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
+        //activity form side
         if(createForm.getActivityContactType()!=null && !createForm.getActivityContactType().equals("")){
-        	Collection<AmpActivityContact> targetCollecion = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
-            AmpActivityContact actContact=new AmpActivityContact();	
+        	Collection<AmpActivityContact> targetCollection = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
+        	AmpActivityContact actContact=null;
+        	 boolean newActContact=true;
+             if(createForm.getActOrOrgTempId()!=null && ! createForm.getActOrOrgTempId().equals("")){
+             	if(targetCollection!=null && targetCollection.size()>0){
+             		for (AmpActivityContact ampActContact : targetCollection) {
+             			String contId=ampActContact.getContact().getId()!=null? ampActContact.getContact().getId().toString() : ampActContact.getContact().getTemporaryId();
+ 						if(contId.equalsIgnoreCase(createForm.getActOrOrgTempId()) || contId.equalsIgnoreCase(createForm.getActOrOrgTempId())){
+ 							actContact=ampActContact;
+ 							actContact.setPrimaryContact(ampActContact.getPrimaryContact());
+ 							newActContact=false;
+ 							break;							
+ 						}
+ 					}
+             	}
+             }    
+             if(newActContact){
+            	 actContact=new AmpActivityContact();
+            	 actContact.setPrimaryContact(false);
+             }
+        	//put this contact in session for add amp activity code processing
+            request.getSession().setAttribute("contactToBeReplaced", contact);
     		actContact.setContact(contact);
     		actContact.setContactType(createForm.getActivityContactType());
-    		targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());
-    		target.set(createForm.getTargetForm(), targetCollecion);
+    		targetCollection=ContactsComponentHelper.insertItemIntoCollection(targetCollection, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());
+    		target.set(createForm.getTargetForm(), targetCollection);
     	        
     	    return mapping.findForward("step8");
-        }else{
-            Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
-            targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, contact, new ContactsComponentHelper.AmpContactCompare());
+        }else{ //organization manager side
+            Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target.get(createForm.getTargetForm());
+            AmpOrganisationContact orgContact=null;
+            boolean newOrgContact=true;
+            if(createForm.getActOrOrgTempId()!=null && ! createForm.getActOrOrgTempId().equals("")){
+            	if(targetCollecion!=null && targetCollecion.size()>0){
+            		for (AmpOrganisationContact ampOrganisationContact : targetCollecion) {
+            			String contId=ampOrganisationContact.getContact().getId()!=null? ampOrganisationContact.getContact().getId().toString() : ampOrganisationContact.getContact().getTemporaryId();
+						if(contId.equalsIgnoreCase(createForm.getActOrOrgTempId()) || contId.equalsIgnoreCase(createForm.getActOrOrgTempId())){
+							orgContact=ampOrganisationContact;
+							orgContact.setPrimaryContact(ampOrganisationContact.getPrimaryContact());
+							newOrgContact=false;
+							break;							
+						}
+					}
+            	}
+            }    
+            if(newOrgContact){
+            	orgContact=new AmpOrganisationContact();
+            	orgContact.setPrimaryContact(false); //it becomes true only from edit organization form by checking check-box
+            }
+            orgContact.setContact(contact);            
+            targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, orgContact, new ContactsComponentHelper.AmpOrganisationContactCompareByContact());
             target.set(createForm.getTargetForm(), targetCollecion);
         }
         
@@ -492,7 +558,11 @@ public class AddContactComponent extends DispatchAction{
 		    createForm.setKeyword(null);
 		    createForm.setContacts(null);
 		    createForm.setContactId(contact.getId());
-		    createForm.setTemporaryId(contact.getTemporaryId());
+		    if(contact.getTemporaryId()!=null){
+		    	 createForm.setTemporaryId(contact.getTemporaryId());
+		    }else{		    	
+		    	createForm.setTemporaryId(contact.getId().toString());
+		    }		   
 		    createForm.setLastname(contact.getLastname());
 		    createForm.setFirstName(contact.getName());
 		    createForm.setOrganisationName(contact.getOrganisationName());
@@ -500,10 +570,33 @@ public class AddContactComponent extends DispatchAction{
 		    if (contact.getTitle() != null) {
 		        createForm.setTitle(contact.getTitle().getId());
 		    }
-		    createForm.setOrganizations(new ArrayList<AmpOrganisation>());
-		    if (contact.getOrganizations() != null) {
-		        createForm.getOrganizations().addAll(contact.getOrganizations());
+		    
+		    if(createForm.getActivityContactType()!=null && ! createForm.getActivityContactType().equals("")){
+			    createForm.setOrganizations(new ArrayList<AmpOrganisation>());
+			    if(contact.getOrganizationContacts()!=null){		    	
+			    	for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
+						createForm.getOrganizations().add(orgCont.getOrganisation());
+					}
+			    }
 		    }
+//		    createForm.setOrganizations(new ArrayList<AmpOrganisation>());
+//		    if(contact.getOrganizationContacts()!=null){		    	
+//		    	for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
+//					createForm.getOrganizations().add(orgCont.getOrganisation());
+//				}
+//		    }
+		    
+		    createForm.setOrgsToShowOnPage(new ArrayList<AmpOrganisation>());
+		    if(contact.getId()!=null){
+		    	List<AmpOrganisationContact> orgConts=ContactInfoUtil.getContactOrganizations(contact.getId());
+		    	for (AmpOrganisationContact orgCont : orgConts) {
+					createForm.getOrgsToShowOnPage().add(orgCont.getOrganisation());
+				}
+		    }
+		    
+//		    if (contact.getOrganizations() != null) {
+//		        createForm.getOrganizations().addAll(contact.getOrganizations());
+//		    }
 		    createForm.setFunction(contact.getFunction());
 		    createForm.setOfficeaddress(contact.getOfficeaddress());
 		    

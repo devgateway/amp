@@ -44,10 +44,12 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -61,6 +63,7 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -527,7 +530,7 @@ public class AddAmpActivity extends Action {
         return mapping.findForward("addActivityStep7");
       }
       else if (eaForm.getStep().equals("8")) { // show the step 7 page.
-        return mapping.findForward("addActivityStep8");
+    	  return showStep8(mapping, request, eaForm);
       }
       else if (eaForm.getStep().equals("11")) { // show the step 11 page.
         return mapping.findForward("addActivityStep11");
@@ -559,6 +562,55 @@ public class AddAmpActivity extends Action {
     }
     return null;
   }
+
+private ActionForward showStep8(ActionMapping mapping,HttpServletRequest request, EditActivityForm eaForm) {
+	ActivityContactInfo contactInfo=eaForm.getContactInformation();
+	//if several contact types(donor and mofed for example) contained same contact,then
+	//after editing contact,edited one should be replaced in all contact types.
+	  if(request.getSession().getAttribute("contactToBeReplaced")!=null){
+		
+		  List<AmpActivityContact> allContacts=new ArrayList<AmpActivityContact>();
+			if(contactInfo.getDonorContacts()!=null && contactInfo.getDonorContacts().size()>0){
+				allContacts.addAll(contactInfo.getDonorContacts());
+			}
+			if(contactInfo.getMofedContacts()!=null && contactInfo.getMofedContacts().size()>0){
+				allContacts.addAll(contactInfo.getMofedContacts());
+			}
+			if(contactInfo.getSectorMinistryContacts()!=null && contactInfo.getSectorMinistryContacts().size()>0){
+				allContacts.addAll(contactInfo.getSectorMinistryContacts());
+			}
+			if(contactInfo.getProjCoordinatorContacts()!=null && contactInfo.getProjCoordinatorContacts().size()>0){
+				allContacts.addAll(contactInfo.getProjCoordinatorContacts());
+			}
+			if(contactInfo.getImplExecutingAgencyContacts()!=null && contactInfo.getImplExecutingAgencyContacts().size()>0){
+				allContacts.addAll(contactInfo.getImplExecutingAgencyContacts());
+			}    			
+			
+			
+			AmpContact contact=(AmpContact)request.getSession().getAttribute("contactToBeReplaced");
+	    	
+		  	if(contact!=null && contact.getId()!=null && allContacts!=null){
+		  		replaceOldContactWithNew(contact,allContacts);
+		  	}
+		  	request.getSession().removeAttribute("contactToBeReplaced");
+	  }
+	return mapping.findForward("addActivityStep8");
+}
+  
+  private List<AmpActivityContact> replaceOldContactWithNew(AmpContact contact,List<AmpActivityContact> allContacts){
+		//List<AmpActivityContact> retVal=null;
+		for (AmpActivityContact ampActivityContact : allContacts) {
+			if(ampActivityContact.getContact().getId()!=null && ampActivityContact.getContact().getId().equals(contact.getId())){
+				ampActivityContact.setContact(contact);
+//				if(retVal==null){
+//					retVal=new ArrayList<AmpActivityContact>();
+//				}
+//				retVal.add(ampActivityContact);
+			}
+			
+		}
+		return null;
+	}
 
 /*
 private ActionForward removeComponentes(ActionMapping mapping,

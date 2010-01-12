@@ -26,9 +26,12 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -347,7 +350,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         cell.setCellStyle(style);
 
 
-        if (editForm.getContacts() != null &&editForm.getContacts().size() > 0) {
+        if (editForm.getOrgContacts()!= null &&editForm.getOrgContacts().size() > 0) {
 
             // table header
             row = sheet.createRow(rowNum++);
@@ -395,30 +398,42 @@ public class ExportOrganizationToExcel extends DispatchAction {
             cell.setCellValue(headerTitle);
             cell.setCellStyle(style);
 
-            Iterator<AmpContact> contactInfoIter = editForm.getContacts().iterator();
+            Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
             while (contactInfoIter.hasNext()) {
-                AmpContact contact = contactInfoIter.next();
+            	AmpOrganisationContact orgContact = contactInfoIter.next();
                 cellNum = 0;
                 row = sheet.createRow(rowNum++);
                 cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(contact.getLastname()));
+                cell.setCellValue(new HSSFRichTextString(orgContact.getContact().getLastname()));
                 cell.setCellStyle(style);
                 cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(contact.getName()));
+                cell.setCellValue(new HSSFRichTextString(orgContact.getContact().getName()));
+                cell.setCellStyle(style);
+                String emails="";
+                String phones="";
+                String faxes="";
+                for (AmpContactProperty property : orgContact.getContact().getProperties()) {
+					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+						emails+=property.getValue()+";\n";
+					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+						phones+=property.getValue()+";\n";
+					}else{
+						faxes+=property.getValue()+";\n";
+					}
+				}                
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(emails));
                 cell.setCellStyle(style);
                 cell = row.createCell(cellNum++);
-//                cell.setCellValue(new HSSFRichTextString(contact.getEmail()));
-//                cell.setCellStyle(style);
-//                cell = row.createCell(cellNum++);
-//                cell.setCellValue(new HSSFRichTextString(contact.getPhone()));
-//                cell.setCellStyle(style);
-//                cell = row.createCell(cellNum++);
-//                cell.setCellValue(new HSSFRichTextString(contact.getFax()));
-//                cell.setCellStyle(style);
-//                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(phones));
+                cell.setCellStyle(style);
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(faxes));
+                cell.setCellStyle(style);
+                cell = row.createCell(cellNum++);
                 String title="";
-                if(contact.getTitle()!=null){
-                    title=contact.getTitle().getValue();
+                if(orgContact.getContact().getTitle()!=null){
+                    title=orgContact.getContact().getTitle().getValue();
                 }
                 cell.setCellValue(new HSSFRichTextString(title));
                 cell.setCellStyle(style);

@@ -1,6 +1,5 @@
-
-
 package org.digijava.module.aim.uicomponents;
+
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
@@ -14,10 +13,12 @@ public class EditContactLink extends BodyTagSupport {
     public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
     public static final String PARAM_CONTACT_ID = "PARAM_CONTACT_ID";
     public static final String PARAM_CONTACT_TYPE="CONTACT_TYPE";
+    public static final String ADD_ORG_BUTTON="ADD_ORGANIZATION_BUTTON"; // add/remove organization buttons should be visible or not
     private String collection = "";
     private Object form;
     private String contactId;
     private String contactType="";
+    private String addOrgBtn="";
 
     public String getContactId() {
         return contactId;
@@ -52,6 +53,14 @@ public class EditContactLink extends BodyTagSupport {
 		this.contactType = contactType;
 	}
 
+	public String getAddOrgBtn() {
+		return addOrgBtn;
+	}
+
+	public void setAddOrgBtn(String addOrgBtn) {
+		this.addOrgBtn = addOrgBtn;
+	}
+
 	@Override
     public int doStartTag() throws JspException {
 		try {
@@ -79,6 +88,12 @@ public class EditContactLink extends BodyTagSupport {
 				html.append(contactType);
 				html.append("~");
 			}
+            
+            if(!"".equalsIgnoreCase(addOrgBtn)){
+				html.append(ADD_ORG_BUTTON);
+				html.append("=");
+				html.append(addOrgBtn);
+			}           
 			html.append("','addContactWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
 
 			out.write(html.toString());

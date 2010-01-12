@@ -7,6 +7,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
 
@@ -56,6 +57,9 @@ public class AddressBookForm   extends ActionForm {
 	//for import
 	private FormFile fileUploaded;
     private List<AmpOrganisation> organizations;
+	
+    //private List<AmpOrganisationContact> contactOrganizations;
+    
     private Long[] selOrgs;
 
     public Long[] getSelOrgs() {
@@ -65,15 +69,6 @@ public class AddressBookForm   extends ActionForm {
     public void setSelOrgs(Long[] selOrgs) {
     	this.selOrgs = selOrgs;
     }
-
-    public List<AmpOrganisation> getOrganizations() {
-    	return organizations;
-    }
-
-    public void setOrganizations(List<AmpOrganisation> organizations) {
-    	this.organizations = organizations;
-    }
-	
 	public int getPagesSize() {
 		return pagesSize;
 	}
@@ -260,5 +255,14 @@ public class AddressBookForm   extends ActionForm {
 
 	public void setFaxesSize(int faxesSize) {
 		this.faxesSize = faxesSize;
-	}	
+	}
+
+	public List<AmpOrganisation> getOrganizations() {
+		return organizations;
+	}
+
+	public void setOrganizations(List<AmpOrganisation> organizations) {
+		this.organizations = organizations;
+	}
+	
 }

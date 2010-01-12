@@ -220,8 +220,8 @@
   </div>
 </div>   
 
-<div id="tooltipContainer" width="200" style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2;">
-	<div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
+<div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
+ 	<div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
 	
 	<table class="tableElement" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
 		<tr>
@@ -278,7 +278,7 @@
 			<td id="tooltipIndSrc" style="width:100px; overflow-x: hidden;">&nbsp;</td>
 		</tr>
 	</table>
-	</div>
+	</div> 
 </div>
 
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>

@@ -86,7 +86,7 @@
 	var checkAndClose2=false;	    
 	function initScripts() {
 		var msgIPAPanel='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
-		myPanelIPAContracting.setHeader(msgP5);
+		myPanelIPAContracting.setHeader(msgIPAPanel);
 		myPanelIPAContracting.setBody("");
 		myPanelIPAContracting.beforeHideEvent.subscribe(function() {
 			panelStart=1;

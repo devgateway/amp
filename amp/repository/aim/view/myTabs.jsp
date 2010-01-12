@@ -13,6 +13,7 @@
 </logic:notEmpty>
 
 <script language="JavaScript">
+	
     var continueExecution = true;
     function checkstatus(){
 

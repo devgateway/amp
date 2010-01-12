@@ -20,13 +20,16 @@ public class ComputedDateColWorker extends ColumnWorker {
 
 	private static final String AMP_ACTIVITY_ID = "amp_activity_id";
 	private static final String ACTIVITY_CLOSE_DATE = "activity_close_date";
+	
 	private static final String ACTUAL_START_DATE = "actual_start_date";
-	private static final String ACTUAL_APPROVAL_DATE = "actual_approval_date";
-	private static final String ACTIVITY_APPROVAL_DATE = "activity_approval_date";
-	private static final String PROPOSED_START_DATE = "proposed_start_date";
 	private static final String ACTUAL_COMPLETION_DATE = "actual_completion_date";
+	
+	private static final String PROPOSED_START_DATE = "proposed_start_date";
 	private static final String PROPOSED_COMPLETION_DATE = "proposed_completion_date";
 
+	private static final String ACTUAL_APPROVAL_DATE = "actual_approval_date";
+	private static final String ACTIVITY_APPROVAL_DATE = "activity_approval_date";
+	
 	/**
 	 * @param condition
 	 * @param viewName

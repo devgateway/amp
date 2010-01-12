@@ -159,7 +159,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 
     function checkForduplicateEmail(){ //checks whether such email already exists in db
     	var params='';
-		var emails=$("input[@id^='email_']");
+		var emails=$("input[id^='email_']");
     	if(emails!=null){
         	for(var i=0;i < emails.length; i++){
         		params+= emails[i].value+";";
@@ -206,7 +206,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 			return false;
 		}
 		//check emails. At least one email should exist
-		var emails=$("input[@id^='email_']");
+		var emails=$("input[id^='email_']");
     	if(emails!=null){
         	for(var i=0;i < emails.length; i++){
             	if(emails[i].value==null || emails[i].value==''){
@@ -221,8 +221,8 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
     	}
     	//phone shouldn't be empty and should contain valid characters
     	//also if phone type is filled, number should be filled too and vice versa
-    	var phoneTypes=$("input[@id^='phoneType_']");
-    	var phoneNumbers=$("input[@id^='phoneNum_']");
+    	var phoneTypes=$("input[id^='phoneType_']");
+    	var phoneNumbers=$("input[id^='phoneNum_']");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
         		if(phoneTypes[i].value=='' && phoneNumbers[i].value==''){
@@ -246,7 +246,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
         	}
     	}
     	//check fax
-    	var faxes=$("input[@id^='faxes_']");
+    	var faxes=$("input[id^='faxes_']");
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
             	if(checkNumber(faxes[i].value)==false){
@@ -288,15 +288,15 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	function notAchievedMaxAllowed(dataName){
         var myArray=null;
         var msg='';
-        if(dataName=='email' && $("input[@id^='email_']").length==3){
+        if(dataName=='email' && $("input[id^='email_']").length==3){
             msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
         	alert(msg);
             return false;
-        }else if(dataName=='phone'  && $("input[@id^='phoneNum_']").length==3){
+        }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length==3){
         	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
             alert(msg);
         	return false;
-        }else if(dataName=='fax' && $("input[@id^='faxes_']").length==3){
+        }else if(dataName=='fax' && $("input[id^='faxes_']").length==3){
         	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
             alert(msg);
         	return false;
@@ -376,28 +376,28 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
                 "&organisationName="+document.getElementById('organisationName').value+
                 "&temporaryId="+document.getElementById('temporaryId').value;
 
-            var emails=$("input[@id^='email_']");
+            var emails=$("input[id^='email_']");
         	if(emails!=null){
             	for(var i=0;i < emails.length; i++){
             		params+= "&contEmail="+emails[i].value;
             	}
         	}
         	//get phone types
-        	var phoneTypes=$("input[@id^='phoneType_']");
+        	var phoneTypes=$("input[id^='phoneType_']");
         	if(phoneTypes!=null){
             	for(var i=0;i < phoneTypes.length; i++){
             		params+= "&contPhoneType="+phoneTypes[i].value;
             	}
         	}
         	//get phone numbers
-        	var phoneNums=$("input[@id^='phoneNum_']");
+        	var phoneNums=$("input[id^='phoneNum_']");
         	if(phoneNums!=null){
             	for(var i=0;i < phoneNums.length; i++){
             		params+= "&contPhoneNumber="+phoneNums[i].value;
             	}
         	}
         	//get faxes
-        	var faxes=$("input[@id^='fax_']");
+        	var faxes=$("input[id^='fax_']");
         	if(faxes!=null){
             	for(var i=0;i < faxes.length; i++){
             		params+= "&contFaxes="+faxes[i].value;

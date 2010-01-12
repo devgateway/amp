@@ -39,7 +39,12 @@ public class AddContactComponentForm extends ActionForm {
 	private String[] contPhoneNumber;
 	private String[] contFaxes;
 	
-	private String activityContactType; //Donor contact, Mofed contact, e.t.c.
+	private String activityContactType; // Donor contact, Mofed contact, e.t.c.
+	
+	private String actOrOrgTempId;
+	private String addOrgButtonState; // hidden/visible
+	private List<AmpOrganisation> orgsToShowOnPage; //org that will appear in popin
+	
 
     public Long[] getSelContactOrgs() {
         return selContactOrgs;
@@ -249,6 +254,29 @@ public class AddContactComponentForm extends ActionForm {
 
 	public void setActivityContactType(String activityContactType) {
 		this.activityContactType = activityContactType;
+	}
+
+	public String getActOrOrgTempId() {
+		return actOrOrgTempId;
+	}
+
+	public void setActOrOrgTempId(String actOrOrgTempId) {
+		this.actOrOrgTempId = actOrOrgTempId;
+	}
+
+	public String getAddOrgButtonState() {
+		return addOrgButtonState;
+	}
+
+	public void setAddOrgButtonState(String addOrgButtonState) {
+		this.addOrgButtonState = addOrgButtonState;
+	}
+
+	public List<AmpOrganisation> getOrgsToShowOnPage() {
+		return orgsToShowOnPage;
+	}
+
+	public void setOrgsToShowOnPage(List<AmpOrganisation> orgsToShowOnPage) {
+		this.orgsToShowOnPage = orgsToShowOnPage;
 	}	
-	
 }

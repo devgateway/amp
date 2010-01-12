@@ -69,6 +69,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -85,6 +86,8 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
@@ -119,17 +122,12 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.action.EntityUpdateAction;
-import org.digijava.module.aim.dbentity.EUActivity;
-import org.digijava.module.aim.dbentity.EUActivityContribution;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
         
-           public static String filter(String text) {
-
-		String result = null;
-             
+    public static String filter(String text) {
+		String result = null;             
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
 			result = result.replaceAll(">", "&gt;");
@@ -138,11 +136,9 @@ public class DbUtil {
 			result = result.replaceAll("\"", "&quot;");
 			
 		}
-                
-
 		return result;
 	}
-
+    
 	public static String getDescParsed(String str) {
 		StringBuffer strbuff = new StringBuffer();
 		char[] ch = new char[str.length()];
@@ -2549,6 +2545,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
+            session.clear();
             queryString = " select org from " + AmpOrganisation.class.getName() +" org ";
             if(!includeWeirdOrgs){
                queryString +=  " where org.name not like '%x_%' and org.orgGrpId.orgType.orgTypeCode in ('BIL','MUL','Private') ";
@@ -2872,6 +2869,20 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getRequestDBSession();
             tx = sess.beginTransaction();
+            sess.clear();
+            Set<AmpOrganisationContact> organisationContacts=org.getOrganizationContacts(); //form org contacts
+            if(org.getAmpOrgId()!=null){
+            	org=(AmpOrganisation)sess.get(AmpOrganisation.class, org.getAmpOrgId());
+            	if(org.getOrganizationContacts()!=null){
+            		for (AmpOrganisationContact ampOrganisationContact : org.getOrganizationContacts()) {
+						AmpContact contact=ampOrganisationContact.getContact();
+						contact.getOrganizationContacts().remove(ampOrganisationContact);
+						sess.delete(ampOrganisationContact);
+					}
+            		org.getOrganizationContacts().clear();
+            		
+            	}
+            }
             HashSet sect = new HashSet();
             Iterator i = org.getSectors().iterator();
             while (i.hasNext()) {
@@ -2880,51 +2891,346 @@ public class DbUtil {
 
             }
             org.setSectors(sect);
-            //contacts
-            Set<AmpContact> contacts = org.getContacts();            
-            //save or update contact
-            if(contacts!=null){            	
-            	for (AmpContact contact : contacts) {
-            		AmpContact ampContact=null;
-					if(contact.getId()!=null){
-						ampContact=(AmpContact)sess.get(AmpContact.class, contact.getId());
-						ampContact.setName(contact.getName());
-		    			ampContact.setLastname(contact.getLastname());
-		    			ampContact.setTitle(contact.getTitle());
-		    			ampContact.setOrganisationName(contact.getOrganisationName());
-		    			ampContact.setCreator(contact.getCreator());
-		    			ampContact.setShared(true);
-		    			ampContact.setOfficeaddress(contact.getOfficeaddress());
-		    			//remove old properties
-		    			if(ampContact.getProperties()!=null){
-		    				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
-		    					sess.delete(dbProperty);
-		    				}
-		    			}
-		    			ampContact.setProperties(null);
-		    			if(ampContact.getOrganizations()!=null){
-		    				ampContact.getOrganizations().clear();		    				
-		    			}
-		    			ampContact.setOrganizations(contact.getOrganizations());
-		    			sess.update(ampContact);
-		    		}else{
-		    			sess.save(contact);
-		    		}
-					//save properties
-		    		if(contact.getProperties()!=null){
-						for (AmpContactProperty formProperty : contact.getProperties()) {
-							if(ampContact!=null){
-								formProperty.setContact(ampContact);
-							}else{
-								formProperty.setContact(contact);
-							}
-							sess.save(formProperty);
-						}
-					}
-				}
-            }            
+           /**
+            * contact information
+           */            
+                        
+            if(org.getAmpOrgId()!=null){ //edit
+           	   List<AmpOrganisationContact> orgDBContacts=ContactInfoUtil.getOrganizationContacts(org.getAmpOrgId());
+           	   // if organization contains contact,which is not in form contact list, we should remove it
+           	   if(orgDBContacts!=null && orgDBContacts.size()>0){
+           		   Iterator<AmpOrganisationContact> iter=orgDBContacts.iterator();
+           		   while(iter.hasNext()){
+                  		  AmpOrganisationContact dbOrgContact=iter.next();
+                  		  int count=0;
+                  		  if(organisationContacts!=null){
+                  			  for (AmpOrganisationContact formOrgCont : organisationContacts) {
+              					if(formOrgCont.getId()!=null && formOrgCont.getId().equals(dbOrgContact.getId())){
+              						count++;
+              						break;
+              					}
+              				}
+                  		  }
+                  		  if(count==0){ //if organization contains contact,which is not in contact list, we should remove it
+                  			  AmpOrganisationContact orgCont=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, dbOrgContact.getId());
+                  			  AmpContact cont=orgCont.getContact();
+                  			  sess.delete(orgCont);
+                  			  cont.getOrganizationContacts().remove(orgCont);
+                  			  sess.update(cont);
+                  			  org.getOrganizationContacts().remove(orgCont);
+                  		  }
+                  	  }
+           	   	}
+              }
+            
+             if(organisationContacts!=null){
+             	//this will remove all organisation contact which are linked to this organisation
+             	for (Iterator iterator = organisationContacts.iterator(); iterator.hasNext();) {
+             		AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator.next();
+ 					if(org.getAmpOrgId()!=null){
+ 						if(ampOrganisationContact.getId()!=null){
+ 							AmpContact cont=ampOrganisationContact.getContact();
+ 							AmpOrganisationContact contToBeRemoved=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, ampOrganisationContact.getId()) ;
+ 							if(contToBeRemoved!=null){
+ 								sess.delete(contToBeRemoved);
+ 	 							cont.getOrganizationContacts().remove(contToBeRemoved);
+ 	 							
+ 	 							org.getOrganizationContacts().remove(contToBeRemoved);
+ 							}
+ 							 							
+ 						}
+ 					}
+ 				}
+             	
+             	//now re-save all organisation contacts
+             	for (AmpOrganisationContact organizationContact : organisationContacts) {
+ 					//save or update contact
+             		AmpContact contact=organizationContact.getContact();
+                		AmpContact ampContact=null;
+                		if(contact.getId()!=null){ //contact already exists.
+                			ampContact=(AmpContact)sess.get(AmpContact.class, contact.getId());
+                			ampContact.setName(contact.getName());
+                			ampContact.setLastname(contact.getLastname());
+                			ampContact.setTitle(contact.getTitle());
+                			ampContact.setOrganisationName(contact.getOrganisationName());
+                			ampContact.setCreator(contact.getCreator());
+                			ampContact.setShared(true);
+                			ampContact.setOfficeaddress(contact.getOfficeaddress());
+                			ampContact.setFunction(contact.getFunction());
+                			//remove old properties
+                			if(ampContact.getProperties()!=null){
+                				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
+                					sess.delete(dbProperty);
+                				}
+                			}
+                			ampContact.setProperties(null);
+                			sess.update(ampContact);
+                		}else{
+                			sess.save(contact);
+                		}
+                		
+                		//save properties
+                		if(contact.getProperties()!=null){
+            				for (AmpContactProperty formProperty : contact.getProperties()) {
+            					if(ampContact!=null){
+            						formProperty.setContact(ampContact);
+            					}else{
+            						formProperty.setContact(contact);
+            					}
+            					sess.save(formProperty);
+            				}
+            			}
+                		               		
+                		//link org to cont
+                		AmpOrganisationContact newOrgCont=new AmpOrganisationContact();
+                		organizationContact.setOrganisation(org);
+                		organizationContact.setPrimaryContact(organizationContact.getPrimaryContact());
+            			if(ampContact!=null){
+            				organizationContact.setContact(ampContact);
+            				//sess.update(ampContact);
+    					}else{
+    						organizationContact.setContact(contact);
+    						//sess.update(contact);
+    					}
+                		sess.save(organizationContact);
+                		
+                		
+ 				}
+             }
+          //droebit davakomentarot 
+            /**
+             *  if(org.getAmpOrgId()!=null){ //edit
+         	   List<AmpOrganisationContact> orgDBContacts=ContactInfoUtil.getOrganizationContacts(org.getAmpOrgId());
+         	   // if organization contains contact,which is not in form contact list, we should remove it
+         	   if(orgDBContacts!=null && orgDBContacts.size()>0){
+         		   Iterator<AmpOrganisationContact> iter=orgDBContacts.iterator();
+         		   while(iter.hasNext()){
+                		  AmpOrganisationContact dbOrgContact=iter.next();
+                		  int count=0;
+                		  if(organisationContacts!=null){
+                			  for (AmpOrganisationContact formOrgCont : organisationContacts) {
+            					if(formOrgCont.getId()!=null && formOrgCont.getId().equals(dbOrgContact.getId())){
+            						count++;
+            						break;
+            					}
+            				}
+                		  }
+                		  if(count==0){ //if organization contains contact,which is not in contact list, we should remove it
+                			  AmpOrganisationContact orgCont=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, dbOrgContact.getId());
+                			  AmpContact cont=orgCont.getContact();
+                			  sess.delete(orgCont);
+                			  cont.getOrganizationContacts().remove(orgCont);
+                			  sess.update(cont);
+                			  org.getOrganizationContacts().remove(orgCont);
+                			  sess.update(org);
+                		  }
+                	  }
+         	   }
+            }
+            
+            
+             
+            //add or edit contact and amp contact
+            if(organisationContacts!=null && organisationContacts.size()>0){
+            	List<AmpOrganisationContact> orgContactsToBeRemovedFromOrg=new ArrayList<AmpOrganisationContact>();// line 3064is dasafiqsad aris gaketebuli
+            	for (Iterator<AmpOrganisationContact> orgContIterator = organisationContacts.iterator(); orgContIterator.hasNext();) {
+            		AmpOrganisationContact organizationContact=orgContIterator.next();
+               	   	//save or update contact
+               		AmpContact contact=organizationContact.getContact();
+               		AmpContact ampContact=null;
+               		if(contact.getId()!=null){ //contact already exists.
+               			ampContact=(AmpContact)sess.get(AmpContact.class, contact.getId());
+               			ampContact.setName(contact.getName());
+               			ampContact.setLastname(contact.getLastname());
+               			ampContact.setTitle(contact.getTitle());
+               			ampContact.setOrganisationName(contact.getOrganisationName());
+               			ampContact.setCreator(contact.getCreator());
+               			ampContact.setShared(true);
+               			ampContact.setOfficeaddress(contact.getOfficeaddress());
+               			//remove old properties
+               			if(ampContact.getProperties()!=null){
+               				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
+               					sess.delete(dbProperty);
+               				}
+               			}
+               			ampContact.setProperties(null);    			
+               			//remove old organization contacts 
+               			if(ampContact.getOrganizationContacts()!=null){
+               				Set<AmpOrganisationContact> orgConts=ampContact.getOrganizationContacts();
+               				//ampContact.getOrganizationContacts().clear();
+               				for (Iterator iterator = orgConts.iterator(); iterator.hasNext();) {
+    							AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator.next();
+    							//we should remove this contact from organization too in case of edit, otherwise exception occurs while getting org after save.
+    							//it expects to get this contact, no matter that it doesn't exist in db any more.
+    							if(org.getAmpOrgId()!=null){
+    								Set<AmpOrganisationContact> organisationCont= org.getOrganizationContacts();
+    								for (AmpOrganisationContact ampOrganisationContact2 : organisationCont) {
+    									if(ampOrganisationContact2.getId()!=null && ampOrganisationContact2.getId().equals(ampOrganisationContact.getId())){
+    										//orgContactsToBeRemovedFromOrg.add(ampOrganisationContact2);
+    										//org.getOrganizationContacts().remove(ampOrganisationContact2); 
+    										if(organizationContact.getId()!=null && organizationContact.getId().equals(ampOrganisationContact2.getId())){
+    											orgContactsToBeRemovedFromOrg.add(ampOrganisationContact2);
+    											orgContIterator.remove();
+    										}
+    										break; 
+    									}
+    								}
+    							}
+    							iterator.remove();
+    							sess.delete(ampOrganisationContact);    							
+    						}
+//               			
+               			}          			
+               			//ampContact.setOrganizationContacts(null);
+               			sess.update(ampContact);    			    			
+               		}else{
+               			sess.save(contact);
+               		}
+               		//save properties
+               		if(contact.getProperties()!=null){
+           				for (AmpContactProperty formProperty : contact.getProperties()) {
+           					if(ampContact!=null){
+           						formProperty.setContact(ampContact);
+           					}else{
+           						formProperty.setContact(contact);
+           					}
+           					sess.save(formProperty);
+           				}
+           			}
+               		//save cont. organizations
+               		if(contact.getOrganizationContacts()!=null){
+               			for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
+               				if(ampContact!=null){
+          						orgCont.setContact(ampContact);
+          					}else{
+          						orgCont.setContact(contact);
+          					}
+          					sess.save(orgCont);
+           				}
+               		}
+
+               		//link org to cont
+               		if(organizationContact.getId()!=null){
+               			AmpOrganisationContact ampOrgContact=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, organizationContact.getId());
+               			if(ampOrgContact!=null){
+               				ampOrgContact.setPrimaryContact(organizationContact.getPrimaryContact());
+                   			ampOrgContact.setOrganisation(org);
+                   			sess.update(ampOrgContact);
+               			}
+               		}else{
+               			organizationContact.setOrganisation(org);
+                   		sess.save(organizationContact); 
+               		}
+               	  }
+            	//clear org
+//            	if(orgContactsToBeRemovedFromOrg!=null && orgContactsToBeRemovedFromOrg.size()>0){
+//            		for (AmpOrganisationContact orgContToBeRemoved : orgContactsToBeRemovedFromOrg) {
+//            			if(org.getOrganizationContacts().contains(orgContToBeRemoved)){
+//            				org.getOrganizationContacts().remove(orgContToBeRemoved);
+//                   		}
+//					}               		
+//               	}
+              }
+             */
+          
+            
+            
     		
+            	/**
+            	 * for (AmpOrganisationContact organizationContact : organisationContacts) {
+           	   	//save or update contact
+           		AmpContact contact=organizationContact.getContact();
+           		AmpContact ampContact=null;
+           		if(contact.getId()!=null){ //contact already exists.
+           			ampContact=(AmpContact)sess.get(AmpContact.class, contact.getId());
+           			ampContact.setName(contact.getName());
+           			ampContact.setLastname(contact.getLastname());
+           			ampContact.setTitle(contact.getTitle());
+           			ampContact.setOrganisationName(contact.getOrganisationName());
+           			ampContact.setCreator(contact.getCreator());
+           			ampContact.setShared(true);
+           			ampContact.setOfficeaddress(contact.getOfficeaddress());
+           			//remove old properties
+           			if(ampContact.getProperties()!=null){
+           				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
+           					sess.delete(dbProperty);
+           				}
+           			}
+           			ampContact.setProperties(null);    			
+           			//remove old organization contacts 
+           			if(ampContact.getOrganizationContacts()!=null){
+           				Set<AmpOrganisationContact> orgConts=ampContact.getOrganizationContacts();
+           				//ampContact.getOrganizationContacts().clear();
+           				for (Iterator iterator = orgConts.iterator(); iterator.hasNext();) {
+							AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator.next();
+							//we should remove this contact from organization too in case of edit, otherwise exception occurs while getting org after save.
+							//it expects to get this contact, no matter that it doesn't exist in db any more.
+							if(org.getAmpOrgId()!=null){
+								Set<AmpOrganisationContact> organisationCont= org.getOrganizationContacts();
+								for (AmpOrganisationContact ampOrganisationContact2 : organisationCont) {
+									if(ampOrganisationContact2.getId()!=null && ampOrganisationContact2.getId().equals(ampOrganisationContact.getId())){
+										org.getOrganizationContacts().remove(ampOrganisationContact2);
+										break;
+									}
+								}
+							}
+							iterator.remove();
+							sess.delete(ampOrganisationContact);
+							
+						}
+//           				for (AmpOrganisationContact orgCont : orgConts) {
+//           					//if(organizationContact.getId()!=null && organizationContact.getId().equals(orgCont.getId())){
+//           						ampContact.getOrganizationContacts().remove(orgCont);
+//           						sess.delete(orgCont);
+//           					//}
+//       						//sess.delete(orgCont);
+//       					}
+           			}          			
+           			//ampContact.setOrganizationContacts(null);
+           			sess.update(ampContact);    			    			
+           		}else{
+           			sess.save(contact);
+           		}
+           		//save properties
+           		if(contact.getProperties()!=null){
+       				for (AmpContactProperty formProperty : contact.getProperties()) {
+       					if(ampContact!=null){
+       						formProperty.setContact(ampContact);
+       					}else{
+       						formProperty.setContact(contact);
+       					}
+       					sess.save(formProperty);
+       				}
+       			}
+           		//save cont. organizations
+           		if(contact.getOrganizationContacts()!=null){
+           			for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
+           				if(ampContact!=null){
+      						orgCont.setContact(ampContact);
+      					}else{
+      						orgCont.setContact(contact);
+      					}
+      					sess.save(orgCont);
+       				}
+           		}
+
+           		//link org to cont
+           		if(organizationContact.getId()!=null){
+           			AmpOrganisationContact ampOrgContact=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, organizationContact.getId());
+           			if(ampOrgContact!=null){
+           				ampOrgContact.setPrimaryContact(organizationContact.getPrimaryContact());
+               			ampOrgContact.setOrganisation(org);
+               			sess.update(ampOrgContact);
+           			}
+           		}else{
+           			organizationContact.setOrganisation(org);
+               		sess.save(organizationContact); 
+           		}
+           	  }
+            	 */
+           
             sess.saveOrUpdate(org);
+            sess.flush();
             tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update", e);
@@ -4665,7 +4971,7 @@ public class DbUtil {
         }
         return grp;
     }
-
+    
     public static int getOrgGroupsAmount(String groupName,Long groupId) throws Exception{
     	Session session = null;
     	Query qry =null;
@@ -4822,7 +5128,7 @@ public class DbUtil {
         }
         return ot;
     }
-
+    
     public static int getOrgTypesAmount(String name,Long groupId) throws Exception{
     	Session sess = null;
         Query qry = null;
@@ -5731,7 +6037,7 @@ public class DbUtil {
                 }
             }
     }
-
+    
     public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity) throws DgException {
 		Session session = PersistenceManager.getRequestDBSession();
     	

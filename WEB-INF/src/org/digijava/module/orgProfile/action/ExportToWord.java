@@ -25,6 +25,7 @@ import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -260,7 +261,8 @@ public class ExportToWord extends Action {
                                 int count = 0;
 
                                 //create contacts table
-                                if (organization!= null) {
+                                boolean noContactsToShow=true;
+                                if (organization!= null) {                                	
                                     orgContactsTbl = new Table(6);
 
 
@@ -299,55 +301,58 @@ public class ExportToWord extends Action {
                                     contactTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     contactTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     orgContactsTbl.addCell(contactTitleCell);
-                                    if (organization.getContacts() != null) {
-                                        List<AmpContact> contacts = new ArrayList(organization.getContacts());
-                                        Iterator<AmpContact> contactsIter = contacts.iterator();
+                                    if (organization.getOrganizationContacts() != null) {
+                                    	List<AmpOrganisationContact> orgContacts = new ArrayList(organization.getOrganizationContacts());
+                                        Iterator<AmpOrganisationContact> contactsIter = orgContacts.iterator();
                                         while (contactsIter.hasNext()) {
-                                            AmpContact contact = contactsIter.next();
-                                            RtfCell name = new RtfCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
-                                            RtfCell lastName = new RtfCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
-                                            String emails="";
-                                            String phones="";
-                                            String faxes="";
-                                            for (AmpContactProperty property : contact.getProperties()) {
-												if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-													emails+=property.getValue()+";\n";
-												}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-													phones+=property.getValue()+";\n";
-												}else{
-													faxes+=property.getValue()+";\n";
-												}
-											}
-                                    RtfCell email = new RtfCell(new Paragraph(emails,OrgProfileUtil.PLAINFONT));
-                                    RtfCell phone = new RtfCell(new Paragraph(phones,OrgProfileUtil.PLAINFONT));
-                                    RtfCell fax = new RtfCell(new Paragraph(faxes,OrgProfileUtil.PLAINFONT));
-                                            String contacTitle = "";
-                                            if (contact.getTitle() != null) {
-                                                contacTitle = contact.getTitle().getValue();
-                                            }
-                                            RtfCell title = new RtfCell(new Paragraph(contacTitle, OrgProfileUtil.PLAINFONT));
-                                            if (count % 2 == 0) {
-                                                title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                                lastName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                                name.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                            }
-                                            orgContactsTbl.addCell(lastName);
-                                            orgContactsTbl.addCell(name);
-                                    orgContactsTbl.addCell(email);
-                                    orgContactsTbl.addCell(phone);
-                                    orgContactsTbl.addCell(fax);
-                                            orgContactsTbl.addCell(title);
-                                            count++;
-
+                                        	AmpOrganisationContact orgCont=contactsIter.next();
+                                        	if(orgCont.getPrimaryContact()!=null && orgCont.getPrimaryContact()){
+                                        		noContactsToShow=false;
+                                        		AmpContact contact = orgCont.getContact();
+                                                RtfCell name = new RtfCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
+                                                RtfCell lastName = new RtfCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
+                                                String emails="";
+                                                String phones="";
+                                                String faxes="";
+                                                for (AmpContactProperty property : contact.getProperties()) {
+     												if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+     													emails+=property.getValue()+";\n";
+     												}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+     													phones+=property.getValue()+";\n";
+     												}else{
+     													faxes+=property.getValue()+";\n";
+     												}
+     											}
+     		                                    RtfCell email = new RtfCell(new Paragraph(emails,OrgProfileUtil.PLAINFONT));
+     		                                    RtfCell phone = new RtfCell(new Paragraph(phones,OrgProfileUtil.PLAINFONT));
+     		                                    RtfCell fax = new RtfCell(new Paragraph(faxes,OrgProfileUtil.PLAINFONT));
+                                                String contacTitle = "";
+                                                if (contact.getTitle() != null) {
+                                                     contacTitle = contact.getTitle().getValue();
+                                                }
+                                                RtfCell title = new RtfCell(new Paragraph(contacTitle, OrgProfileUtil.PLAINFONT));
+                                                if (count % 2 == 0) {
+                                                    title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+     		                                        fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+     		                                        phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+     		                                        email.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                    lastName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                    name.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                }
+                                                orgContactsTbl.addCell(lastName);
+                                                orgContactsTbl.addCell(name);
+     		                                    orgContactsTbl.addCell(email);
+     		                                    orgContactsTbl.addCell(phone);
+     		                                    orgContactsTbl.addCell(fax);
+                                                orgContactsTbl.addCell(title);
+                                                count++;
+                                        	}
                                         }
 
                                     }
-
-                                } else {
-                                    RtfCell contactTitleCell = new RtfCell();
+                                } 
+                                if(noContactsToShow==true){
+                                	RtfCell contactTitleCell = new RtfCell();
                                     contactTitleCell.addElement(new Paragraph(TranslatorWorker.translateText("Contact", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
                                     contactTitleCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                     orgSummaryTbl.addCell(contactTitleCell);
@@ -360,6 +365,20 @@ public class ExportToWord extends Action {
                                     contactCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                     orgSummaryTbl.addCell(contactCell);
                                 }
+//                                else {
+//                                    RtfCell contactTitleCell = new RtfCell();
+//                                    contactTitleCell.addElement(new Paragraph(TranslatorWorker.translateText("Contact", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
+//                                    contactTitleCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                    orgSummaryTbl.addCell(contactTitleCell);
+//                                    RtfCell contactCell = new RtfCell();
+//                                    if (filter.getOrgIds() != null && filter.getOrgIds().length > 1) {
+//                                        contactCell.addElement(new Paragraph(multipleSelected, OrgProfileUtil.PLAINFONT));
+//                                    } else {
+//                                        contactCell.addElement(new Paragraph("N/A", OrgProfileUtil.PLAINFONT));
+//                                    }
+//                                    contactCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+//                                    orgSummaryTbl.addCell(contactCell);
+//                                }
 
 
                                 //create largest projects table

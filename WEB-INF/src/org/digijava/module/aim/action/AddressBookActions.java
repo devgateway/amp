@@ -19,9 +19,11 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.form.AddressBookForm;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Constants;
@@ -68,7 +70,15 @@ public class AddressBookActions extends DispatchAction {
     	}
     	
     	List<AmpContact> pagedContacts=null;
-    	pagedContacts=ContactInfoUtil.getPagedContacts(0, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);    	
+    	pagedContacts=ContactInfoUtil.getPagedContacts(0, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);
+//    	if(pagedContacts!=null && pagedContacts.size()>0){
+//    		for (AmpContact ampContact : pagedContacts) {
+//				List<AmpOrganisationContact> orgConts=ContactInfoUtil.getContactOrganizations(ampContact.getId());
+//				Set organizationContacts=new HashSet<AmpOrganisationContact>();
+//				organizationContacts.addAll(orgConts);
+//				ampContact.setOrganizationContacts(organizationContacts);
+//			}
+//    	}
     	
     	//alpha pages
     	if(alpha==null){
@@ -193,8 +203,13 @@ public class AddressBookActions extends DispatchAction {
 				myForm.setFunction(contact.getFunction());
 				myForm.setOfficeaddress(contact.getOfficeaddress());
                 myForm.setOrganizations(new ArrayList<AmpOrganisation>());
-                if(contact.getOrganizations()!=null){
-                	myForm.getOrganizations().addAll(contact.getOrganizations());
+                List<AmpOrganisationContact> contOrgs=ContactInfoUtil.getContactOrganizations(contact.getId());
+                if(contOrgs!=null){
+                	List<AmpOrganisation> organisations=new ArrayList<AmpOrganisation>();
+                	for (AmpOrganisationContact orgContact : contOrgs) {
+                		organisations.add(orgContact.getOrganisation());
+					}
+                	myForm.getOrganizations().addAll(organisations);
                 }
 			}
 		}
@@ -207,8 +222,19 @@ public class AddressBookActions extends DispatchAction {
 			Long contactId=myForm.getContactId();
 			AmpContact contact=ContactInfoUtil.getContact(contactId);
 			if(contact!=null){
+				List<AmpOrganisationContact> contOrgs=ContactInfoUtil.getContactOrganizations(myForm.getContactId());
+	        	if(contOrgs!=null && contOrgs.size()>0){
+	        		for (AmpOrganisationContact ampOrganisationContact : contOrgs) {
+	        			AmpOrganisation org=ampOrganisationContact.getOrganisation();
+	        			org.getOrganizationContacts().remove(ampOrganisationContact);
+	        			DbUtil.update(org);
+						ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
+						
+						contact.getOrganizationContacts().remove(ampOrganisationContact);
+					}
+	        	}
 				ContactInfoUtil.deleteContact(contact);
-			}			
+			}
 		}
 		return viewAddressBook(mapping,myForm,request,response);
 	}
@@ -219,10 +245,9 @@ public class AddressBookActions extends DispatchAction {
             if (ids != null) {
                 for (Long id : ids) {
                     AmpOrganisation organization = DbUtil.getOrganisation(id);
-                    myForm.getOrganizations().remove(organization);
+                    myForm.getOrganizations().remove(organization);                	
                 }
             }
-
             return mapping.findForward("addOrEditContact");
         }
    
@@ -286,9 +311,30 @@ public class AddressBookActions extends DispatchAction {
 			}
 		}
 		
-		//remove old contact and properties
+		//remove old contact and properties and organization contacts
+		List<AmpOrganisation> orgsForWhichContactWasPrimary=new ArrayList<AmpOrganisation>();
+		Set<AmpActivityContact> activityContacts=null;
 		if(myForm.getContactId()!=null){
-			ContactInfoUtil.deleteContact(ContactInfoUtil.getContact(myForm.getContactId()));
+			AmpContact cont=ContactInfoUtil.getContact(myForm.getContactId());
+			List<AmpOrganisationContact> contOrgs=ContactInfoUtil.getContactOrganizations(myForm.getContactId());
+        	if(contOrgs!=null && contOrgs.size()>0){
+        		for (AmpOrganisationContact ampOrganisationContact : contOrgs) {
+        			AmpOrganisation org=ampOrganisationContact.getOrganisation();
+        			//get organisations for which contact was primary.
+        			if(ampOrganisationContact.getPrimaryContact()!=null && ampOrganisationContact.getPrimaryContact()){
+        				orgsForWhichContactWasPrimary.add(org);
+        			}
+        			org.getOrganizationContacts().remove(ampOrganisationContact);
+        			DbUtil.update(org);
+					ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
+					
+					cont.getOrganizationContacts().remove(ampOrganisationContact);
+				}
+        	}
+        	//before removing contact,we should get activity contacts from it
+        	activityContacts=cont.getActivityContacts();
+        	//delete contact
+			ContactInfoUtil.deleteContact(cont);
 		}		
 		
 		contact.setName(myForm.getName().trim());
@@ -310,15 +356,36 @@ public class AddressBookActions extends DispatchAction {
 		if(myForm.getPhones()!=null){
 			contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(myForm.getPhones()));
 		}
-		if (contact.getOrganizations() == null) {
-			contact.setOrganizations(new HashSet<AmpOrganisation>());
-        }
-        if (myForm.getOrganizations() != null) {
-        	contact.getOrganizations().clear();
-            contact.getOrganizations().addAll(myForm.getOrganizations());
-        }
-        //save or update contact
+        
+		//save or update contact
 		ContactInfoUtil.saveOrUpdateContact(contact);
+		
+		//save activity contacts
+		if(activityContacts!=null && activityContacts.size()>0){
+			for (AmpActivityContact ampActivityContact : activityContacts) {
+				AmpActivityContact newActivityContact=new AmpActivityContact();
+				newActivityContact.setContact(contact);
+				newActivityContact.setActivity(ampActivityContact.getActivity());
+				newActivityContact.setPrimaryContact(ampActivityContact.getPrimaryContact());
+				newActivityContact.setContactType(ampActivityContact.getContactType());
+				ContactInfoUtil.saveOrUpdateActivityContact(newActivityContact);
+			}
+		}
+		
+		//save or update contact orgs
+		if(myForm.getOrganizations() != null){
+			for (AmpOrganisation ampOrganisaion : myForm.getOrganizations()) {
+				AmpOrganisationContact orgCont=new AmpOrganisationContact(ampOrganisaion,contact);
+				//if contact was linked to organization as primary we shuoldn't loose this link. if it wasn't linked with org and we linked
+				//if from address book then it's not primary.
+				if(orgsForWhichContactWasPrimary.size()>0 && orgsForWhichContactWasPrimary.contains(ampOrganisaion)){
+					orgCont.setPrimaryContact(true);
+				}else{
+					orgCont.setPrimaryContact(false);
+				}				
+				ContactInfoUtil.saveOrUpdateOrganisationContact(orgCont);
+			}
+		}
 		//save or update contact details
 		for (AmpContactProperty ampContactProperty : contactProperties) {
 			ampContactProperty.setContact(contact);

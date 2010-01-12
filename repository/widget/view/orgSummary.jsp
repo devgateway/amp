@@ -150,39 +150,41 @@
                         </tr>
                     </thead>
 
-                    <c:forEach var="contact" items="${organization.contacts}">
-                        <tr>
-                            <td class="tdClass" nowrap>
-                                ${contact.lastname}
-                            </td>
-                            <td class="tdClass" nowrap>
-                                ${contact.name}
-                            </td>
-                            <td class="tdClass" nowrap>
-                                <c:forEach var="property" items="${contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<div>${property.value}</div>
-									</c:if>
-								</c:forEach>
-                            </td>
-                            <td class="tdClass">
-                            	<c:forEach var="property" items="${contact.properties}">
-									<c:if test="${property.name=='contact phone'}">
-										<div>${property.value}</div>
-									</c:if>
-								</c:forEach>
-                            </td>
-                            <td class="tdClass">
-                            	<c:forEach var="property" items="${contact.properties}">
-									<c:if test="${property.name=='contact fax'}">
-										<div>${property.value}</div>
-									</c:if>
-								</c:forEach>                               
-                            </td>
-                            <td class="tdClass">
-                                ${contact.title}&nbsp;
-                            </td>
-                        </tr>
+                    <c:forEach var="orgContact" items="${organization.organizationContacts}">
+                    	<c:if test="${not empty orgContact.primaryContact && orgContact.primaryContact==true}">
+                    		 <tr>
+	                            <td class="tdClass" nowrap>
+	                                ${orgContact.contact.lastname}
+	                            </td>
+	                            <td class="tdClass" nowrap>
+	                                ${orgContact.contact.name}
+	                            </td>
+	                            <td class="tdClass" nowrap>
+	                                <c:forEach var="property" items="${orgContact.contact.properties}">
+										<c:if test="${property.name=='contact email'}">
+											<div>${property.value}</div>
+										</c:if>
+									</c:forEach>
+	                            </td>
+	                            <td class="tdClass">
+	                            	<c:forEach var="property" items="${orgContact.contact.properties}">
+										<c:if test="${property.name=='contact phone'}">
+											<div>${property.value}</div>
+										</c:if>
+									</c:forEach>
+	                            </td>
+	                            <td class="tdClass">
+	                            	<c:forEach var="property" items="${orgContact.contact.properties}">
+										<c:if test="${property.name=='contact fax'}">
+											<div>${property.value}</div>
+										</c:if>
+									</c:forEach>                               
+	                            </td>
+	                            <td class="tdClass">
+	                                ${orgContact.contact.title}&nbsp;
+	                            </td>
+	                        </tr>
+                    	</c:if>                       
                     </c:forEach>
                 </table>
             </td>

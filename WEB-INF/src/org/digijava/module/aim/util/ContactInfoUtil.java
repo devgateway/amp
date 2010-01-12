@@ -7,6 +7,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.hibernate.Query;
@@ -44,6 +45,9 @@ public class ContactInfoUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();
 			tx=session.beginTransaction();
+			if(contact.getOrganizationContacts()!=null && contact.getOrganizationContacts().size()>0){
+				contact.getOrganizationContacts().clear();
+			}
 			session.delete(contact);
 			tx.commit();
 		}catch(Exception ex) {
@@ -386,6 +390,102 @@ public class ContactInfoUtil {
 			e.printStackTrace();
 		}
 		return emails;
+	}
+	
+	
+	public static void saveOrUpdateOrganisationContact(AmpOrganisationContact orgContact) throws Exception{
+		Session session= null;
+		Transaction tx=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			tx=session.beginTransaction();
+			session.saveOrUpdate(orgContact);
+			tx.commit();
+		}catch(Exception ex) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("update failed",ex);
+		}
+	}
+	
+	public static void deleteOrgContact(AmpOrganisationContact orgContact) throws Exception{
+		Session session= null;
+		Transaction tx=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			tx=session.beginTransaction();
+			session.delete(orgContact);
+			session.flush();
+			tx.commit();
+		}catch(Exception ex) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("delete failed",ex);
+		}
+	}
+	
+	public static List<AmpOrganisationContact> getOrganizationContacts(Long organizatioId){
+		List<AmpOrganisationContact> retVal=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select orgCont from " +AmpOrganisationContact.class.getName()+" orgCont where orgCont.organisation.ampOrgId="+organizatioId ;
+			query=session.createQuery(queryString);
+			retVal=(List<AmpOrganisationContact>) query.list();
+		} catch (Exception e) {
+			logger.error("couldn't load contact organizations" + e.getMessage());	
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+	
+	public static List<AmpOrganisationContact> getContactOrganizations(Long contactId){
+		List<AmpOrganisationContact> retVal=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select contOrg from " + AmpOrganisationContact.class.getName()+" contOrg where contOrg.contact.id="+contactId;
+			query=session.createQuery(queryString);
+			retVal=(List<AmpOrganisationContact>) query.list();
+		} catch (Exception e) {
+			logger.error("couldn't load contact organizations" + e.getMessage());	
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+	
+	public static AmpOrganisationContact getAmpOrganisationContact(Long id){
+		AmpOrganisationContact retVal=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession(); 
+			queryString="select orgCont from " +AmpOrganisationContact.class.getName()+" orgCont where orgCont.id=:orgContactId" ;
+			query=session.createQuery(queryString);
+			query.setLong("orgContactId", id);
+			retVal=(AmpOrganisationContact) query.uniqueResult();
+		} catch (Exception e) {
+			logger.error("couldn't load amp organization contact" + e.getMessage());	
+			e.printStackTrace();
+		}
+		return retVal;
 	}
 		
 }

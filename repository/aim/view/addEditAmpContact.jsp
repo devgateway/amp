@@ -317,7 +317,7 @@ html>body #mainEmpty {
 			return false;
 		}
 		//check emails. At least one email should exist
-		var emails=$("input[@id^='email_']");
+		var emails=$("input[id^='email_']");
     	if(emails!=null){
         	for(var i=0;i < emails.length; i++){
             	if(emails[i].value==null || emails[i].value==''){
@@ -332,8 +332,8 @@ html>body #mainEmpty {
     	}
     	//phone shouldn't be empty and should contain valid characters
     	//also if phone type is filled, number should be filled too and vice versa
-    	var phoneTypes=$("input[@id^='phoneType_']");
-    	var phoneNumbers=$("input[@id^='phoneNum_']");
+    	var phoneTypes=$("input[id^='phoneType_']");
+    	var phoneNumbers=$("input[id^='phoneNum_']");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
         		if(phoneTypes[i].value=='' && phoneNumbers[i].value==''){
@@ -357,7 +357,7 @@ html>body #mainEmpty {
         	}
     	}
     	//check fax
-    	var faxes=$("input[@id^='faxes_']");
+    	var faxes=$("input[id^='faxes_']");
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
             	if(checkNumber(faxes[i].value)==false){
@@ -404,15 +404,15 @@ html>body #mainEmpty {
         function notAchievedMaxAllowed(dataName){
             var myArray=null;
             var msg='';
-            if(dataName=='email' && $("input[@id^='email_']").length==3){
+            if(dataName=='email' && $("input[id^='email_']").length==3){
                 msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
             	alert(msg);
                 return false;
-            }else if(dataName=='phone'  && $("input[@id^='phoneNum_']").length==3){
+            }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length==3){
             	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
                 alert(msg);
             	return false;
-            }else if(dataName=='fax' && $("input[@id^='faxes_']").length==3){
+            }else if(dataName=='fax' && $("input[id^='faxes_']").length==3){
             	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
                 alert(msg);
             	return false;

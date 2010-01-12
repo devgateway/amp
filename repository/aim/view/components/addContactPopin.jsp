@@ -74,37 +74,53 @@
 						<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
                         <td align="left"><html:text property="organisationName" size="30" styleId="organisationName"/></td>
 					</tr>
-                    <tr>
-                    	<td colspan="2" align="center">
-                        	<c:choose>
-                            	<c:when test="${empty aimAddContactForm.organizations}">
-                                	<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimAddContactForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                </c:when>
-							    <c:otherwise>
-                                	<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-                                    	<c:forEach var="organization" items="${aimAddContactForm.organizations}">
-                                        	<tr>
-                                            	<td width="3px">
-                                                	<html:multibox property="selContactOrgs">
-                                                    	<bean:write name="organization" property="ampOrgId" />
-                                                    </html:multibox>
-                                                 </td>
-                                                 <td align="left">
-                                                 	<bean:write name="organization" property="name" />
-                                                 </td>
-                                             </tr>
-                                          </c:forEach>
-                                          <tr>
-                                          	<td colspan="2">
-                                            	<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimAddContactForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                <input type="button" class="dr-menu" onclick="javascript:removeContactOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
-                                            </td>
-                                    	   </tr>
-                                	</table>
-                            	</c:otherwise>
-                        	</c:choose>
-            			</td>
-                    </tr>
+					<c:if test="${not empty aimAddContactForm.addOrgButtonState && aimAddContactForm.addOrgButtonState=='visible'}">
+						<tr>
+	                    	<td colspan="2" align="center">
+	                        	<c:choose>
+	                            	<c:when test="${empty aimAddContactForm.organizations}">
+	                                	<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimAddContactForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+	                                </c:when>
+								    <c:otherwise>
+	                                	<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+	                                    	<c:forEach var="organization" items="${aimAddContactForm.organizations}">
+	                                        	<tr>
+	                                            	<td width="3px">
+	                                                	<html:multibox property="selContactOrgs">
+	                                                    	<bean:write name="organization" property="ampOrgId" />
+	                                                    </html:multibox>
+	                                                 </td>
+	                                                 <td align="left">
+	                                                 	<bean:write name="organization" property="name" />
+	                                                 </td>
+	                                             </tr>
+	                                          </c:forEach>
+	                                          <tr>
+	                                          	<td colspan="2">
+	                                            	<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimAddContactForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+	                                                <input type="button" class="dr-menu" onclick="javascript:removeContactOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
+	                                            </td>
+	                                    	   </tr>
+	                                	</table>
+	                            	</c:otherwise>
+	                        	</c:choose>
+	            			</td>
+	                    </tr>
+					</c:if>
+					<c:if test="${empty aimAddContactForm.addOrgButtonState || aimAddContactForm.addOrgButtonState=='hidden'}">
+						<c:if test="${not empty aimAddContactForm.orgsToShowOnPage}">
+							<tr>
+								<td>&nbsp;</td>
+		                    	<td align="left">		                    		
+	                            	<c:forEach var="organization" items="${aimAddContactForm.orgsToShowOnPage}">
+	                            		<div>
+	                            			<bean:write name="organization" property="name" />
+	                            		</div>
+	                                </c:forEach>
+		                    	</td>
+	                    	</tr>
+						</c:if>
+					</c:if>
                     <tr>
 						<td align="right" valign="top" ><strong><digi:trn>Phone Number</digi:trn></strong></td>
 						<td align="left" nowrap="nowrap">

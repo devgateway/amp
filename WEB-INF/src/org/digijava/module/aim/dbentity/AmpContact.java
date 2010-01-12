@@ -18,16 +18,6 @@ public class AmpContact {
 	private String function;
 	private String officeaddress;
 	private String temporaryId;
-    private Set<AmpOrganisation> organizations;
-    
-    public AmpContact(){
-    	
-    }
-    
-    public AmpContact(String name, String lastName){
-    	this.name=name;
-    	this.lastname=lastName;
-    }
 	
 	/**
 	 * currently these fields are not usable, but will become when we decide 
@@ -37,7 +27,19 @@ public class AmpContact {
 	private AmpTeamMember creator; //who created the contact
 	
 	private Set<AmpActivityContact> activityContacts;
+	private Set<AmpOrganisationContact> organizationContacts;
 	private Set<AmpContactProperty> properties;
+    
+	//private Set<AmpOrganisation> organizations;
+    
+    public AmpContact(){
+    	
+    }
+    
+    public AmpContact(String name, String lastName){
+    	this.name=name;
+    	this.lastname=lastName;
+    }
 	
 	public Long getId() {
 		return id;
@@ -112,12 +114,14 @@ public class AmpContact {
 	}
 	public void setProperties(Set<AmpContactProperty> properties) {
 		this.properties = properties;
-	}	
-	 public Set<AmpOrganisation> getOrganizations() {
-            return organizations;
-        }
+	}
 
-        public void setOrganizations(Set<AmpOrganisation> organizations) {
-            this.organizations = organizations;
-        }
+	public Set<AmpOrganisationContact> getOrganizationContacts() {
+		return organizationContacts;
+	}
+
+	public void setOrganizationContacts(Set<AmpOrganisationContact> organizationContacts) {
+		this.organizationContacts = organizationContacts;
+	}	
+	
 }

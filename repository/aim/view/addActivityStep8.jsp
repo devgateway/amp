@@ -38,8 +38,6 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
-
 <script type="text/javascript">
 <!--
 
@@ -475,7 +473,10 @@ function resetAll()
 									</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn key="aim:editActivity">
+										Edit Activity
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -485,7 +486,23 @@ function resetAll()
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
 							<table cellPadding=0 cellSpacing=0 width="100%">
-								
+								<tr>
+									<td width="100%">
+										<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+											<tr>
+												<td width="13" height="20" background="module/aim/images/left-side.gif">
+												</td>
+												<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+													<digi:trn>
+														Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>${fn:length(aimEditActivityForm.steps)}:
+	                                                <digi:trn key="aim:activity:ContactInformation">Contact Information</digi:trn>
+												</td>
+												<td width="13" height="20" background="module/aim/images/right-side.gif">
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
 								<tr><td width="100%" bgcolor="#f4f4f2">
 									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 										<tr>
@@ -495,9 +512,11 @@ function resetAll()
 													
 													<feature:display name="Donor Contact Information" module="Contact Information">
 														<tr>
-															<td class="separator1" title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+															<td>
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<digi:trn>Donor Contact Information</digi:trn>
+																<a title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<b><digi:trn>Donor Contact Information</digi:trn></b>
+																</a>	
 															</td>
 														</tr>
 														<tr>
@@ -550,7 +569,7 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
-																					 <aim:editContactLink collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${donorContact.contactType}">
+																					 <aim:editContactLink collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${donorContact.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
@@ -565,7 +584,7 @@ function resetAll()
 																	</c:if>
 																	<tr>																		
 																		<td colspan="7" bgcolor="#ffffff">
-																			<aim:addContactButton collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactType="DONOR_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>						
+																			<aim:addContactButton collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactType="DONOR_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>						
 																		</td>
 																	</tr>																	
 																</table>												
@@ -575,9 +594,11 @@ function resetAll()
 													</feature:display>													
 													<feature:display name="Government Contact Information" module="Contact Information">
 														<tr>
-															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+															<td>
 																<IMG alt="Link" height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
-																<digi:trn>MOFED Contact Information</digi:trn>
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<b><digi:trn>MOFED Contact Information</digi:trn></b>
+																</a>	
 															</td>
 														</tr>
 														<tr>
@@ -630,7 +651,7 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
-																					 <aim:editContactLink collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${mofedContact.contactType}">
+																					 <aim:editContactLink collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${mofedContact.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
@@ -645,7 +666,7 @@ function resetAll()
 																	</c:if>
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
-																			<aim:addContactButton collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactType="MOFED_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>
+																			<aim:addContactButton collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactType="MOFED_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>
 																		</td>
 																	</tr>
 																</table>												
@@ -655,9 +676,11 @@ function resetAll()
 													</feature:display>
 													<feature:display name="Project Coordinator Contact Information" module="Contact Information">
 														<tr>
-															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+															<td>
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<digi:trn>Project Coordinator Contact Information</digi:trn>
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<b><digi:trn>Project Coordinator Contact Information</digi:trn></b>
+																</a>	
 															</td>
 														</tr>
 														<tr>
@@ -710,7 +733,7 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
-																					 <aim:editContactLink collection="projCoordinatorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${projCoordinator.contactType}">
+																					 <aim:editContactLink collection="projCoordinatorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${projCoordinator.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
@@ -725,7 +748,7 @@ function resetAll()
 																	</c:if>
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
-																			<aim:addContactButton collection="projCoordinatorContacts" form="${aimEditActivityForm.contactInformation}" contactType="PROJ_COORDINATOR_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>				
+																			<aim:addContactButton collection="projCoordinatorContacts" form="${aimEditActivityForm.contactInformation}" contactType="PROJ_COORDINATOR_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>				
 																		</td>
 																	</tr>
 																</table>												
@@ -735,9 +758,11 @@ function resetAll()
 													</feature:display>
 													<feature:display name="Sector Ministry Contact Information" module="Contact Information">
 														<tr>
-															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+															<td>
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<digi:trn>Sector Ministry Contact Information</digi:trn>
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<b><digi:trn>Sector Ministry Contact Information</digi:trn></b>
+																</a>	
 															</td>
 														</tr>
 														<tr>
@@ -790,7 +815,7 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
-																					 <aim:editContactLink collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${sectorMinistry.contactType}">
+																					 <aim:editContactLink collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${sectorMinistry.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 																					<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
@@ -805,7 +830,7 @@ function resetAll()
 																	</c:if>
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
-																			<aim:addContactButton collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactType="SECTOR_MINISTRY_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>																			
+																			<aim:addContactButton collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactType="SECTOR_MINISTRY_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>																			
 																		</td>
 																	</tr>																	
 																</table>
@@ -816,9 +841,11 @@ function resetAll()
 													<!-- Implementing/Executing agencies -->
 													<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
 														<tr>
-															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+															<td>
 																<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
-																<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>	
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
+																</a>	
 															</td>
 														</tr>
 														<tr>
@@ -871,7 +898,7 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
-																					 <aim:editContactLink collection="implExecutingAgencyContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${implExecAgency.contactType}">
+																					 <aim:editContactLink collection="implExecutingAgencyContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${implExecAgency.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
 						                                        					<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -886,7 +913,7 @@ function resetAll()
 																	</c:if>
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
-																			<aim:addContactButton collection="implExecutingAgencyContacts" form="${aimEditActivityForm.contactInformation}" contactType="IMPL_EXEC_AGENCY_CONT"><digi:trn>Add contact</digi:trn></aim:addContactButton>			
+																			<aim:addContactButton collection="implExecutingAgencyContacts" form="${aimEditActivityForm.contactInformation}" contactType="IMPL_EXEC_AGENCY_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>			
 																		</td>
 																	</tr>
 																</table>												

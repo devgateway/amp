@@ -23,8 +23,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -35,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPledge;
@@ -47,6 +53,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Pledge;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -222,8 +229,22 @@ public class EditOrganisation extends DispatchAction {
         editForm.setAddress(organization.getAddress());
 
         // set contacs
-        if (organization.getContacts() != null) {
-            editForm.setContacts(new ArrayList<AmpContact>(organization.getContacts()));
+        List<AmpOrganisationContact> orgConts=ContactInfoUtil.getOrganizationContacts(organization.getAmpOrgId());
+        if (orgConts!= null) {
+        	for (AmpOrganisationContact orgCont : orgConts) {
+        		if(editForm.getOrgContacts()==null){
+        			editForm.setOrgContacts(new ArrayList<AmpOrganisationContact>());
+				}
+				if(orgCont.getPrimaryContact()!=null && orgCont.getPrimaryContact()){
+					if(editForm.getPrimaryOrgContIds()==null){
+						editForm.setPrimaryOrgContIds(new String[1]);
+					}
+					String idToCompare=orgCont.getContact().getId()!=null ? orgCont.getContact().getId().toString() : orgCont.getContact().getTemporaryId();
+					editForm.getPrimaryOrgContIds()[0]=idToCompare;
+				}					
+				editForm.getOrgContacts().add(orgCont);
+			}
+          //editForm.setOrgContacts(new ArrayList<AmpOrganisationContact>(organization.getOrganizationContacts()));
         }
 
         //set sectors
@@ -361,6 +382,16 @@ public class EditOrganisation extends DispatchAction {
 
             //org.setSurvey(null);
             try {
+            	List<AmpOrganisationContact> orgConts=ContactInfoUtil.getOrganizationContacts(org.getAmpOrgId());
+            	if(orgConts!=null && orgConts.size()>0){
+            		for (AmpOrganisationContact ampOrganisationContact : orgConts) {
+            			AmpContact contact=ampOrganisationContact.getContact();
+            			contact.getOrganizationContacts().remove(ampOrganisationContact);
+            			ContactInfoUtil.saveOrUpdateContact(contact);
+						ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
+						org.getOrganizationContacts().remove(ampOrganisationContact);
+					}
+            	}            	
                 DbUtil.delete(org);
             } catch (JDBCException e) {
                 // this is a quick solution
@@ -679,32 +710,57 @@ public class EditOrganisation extends DispatchAction {
         }
         AddOrgForm editForm = (AddOrgForm) form;
         String selContactId = editForm.getSelContactId();        
-        Long[] selectedContactInfoIds = editForm.getSelectedContactInfoIds();
-        List<AmpContact> oldContacts = editForm.getContacts();
-        List<AmpContact> contactsForRemove = new ArrayList<AmpContact>();
-        Iterator<AmpContact> contactIter = oldContacts.iterator();
-        while (contactIter.hasNext()) {
-            AmpContact contact = contactIter.next();
-            if (selContactId != null) {
+        Long[] selectedContactInfoIds = editForm.getSelectedContactInfoIds(); //passed contact temp ids
+        List<AmpOrganisationContact> odlOrgContacts=editForm.getOrgContacts();
+        List<AmpOrganisationContact> orgContsForRemoval=new ArrayList<AmpOrganisationContact>();
+        Iterator<AmpOrganisationContact> orgContIter=odlOrgContacts.iterator();
+        while(orgContIter.hasNext()){
+        	AmpOrganisationContact orgCont=orgContIter.next();
+        	AmpContact contact=orgCont.getContact();
+        	if (selContactId != null) {
                 if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().toString().equals(selContactId.toString()))) {
-                    contactsForRemove.add(contact);
+                	orgContsForRemoval.add(orgCont);
                     break;
                 }
             } else {
                 if (selectedContactInfoIds != null) {
                     for (Long contactId : selectedContactInfoIds) {
                         if ((contact.getId() != null && contact.getId().equals(contactId))|| (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId.toString()))) {
-                            contactsForRemove.add(contact);
+                        	orgContsForRemoval.add(orgCont);
                         }
                     }
 
                 }
             }
-
         }
+        
+        odlOrgContacts.removeAll(orgContsForRemoval);
+        editForm.setOrgContacts(odlOrgContacts);
+//        List<AmpContact> oldContacts = editForm.getContacts();
+//        List<AmpContact> contactsForRemove = new ArrayList<AmpContact>();
+//        Iterator<AmpContact> contactIter = oldContacts.iterator();
+//        while (contactIter.hasNext()) {
+//            AmpContact contact = contactIter.next();
+//            if (selContactId != null) {
+//                if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().toString().equals(selContactId.toString()))) {
+//                    contactsForRemove.add(contact);
+//                    break;
+//                }
+//            } else {
+//                if (selectedContactInfoIds != null) {
+//                    for (Long contactId : selectedContactInfoIds) {
+//                        if ((contact.getId() != null && contact.getId().equals(contactId))|| (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId.toString()))) {
+//                            contactsForRemove.add(contact);
+//                        }
+//                    }
+//
+//                }
+//            }
+//
+//        }
 
-        oldContacts.removeAll(contactsForRemove);
-        editForm.setContacts(oldContacts);
+//        oldContacts.removeAll(contactsForRemove);
+//        editForm.setContacts(oldContacts);
         editForm.setSelContactId(null);
         editForm.setSelectedContactInfoIds(null);
 
@@ -765,9 +821,7 @@ public class EditOrganisation extends DispatchAction {
     	return mapping.findForward(forwardWhere);
     }
 
-    public ActionForward save(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    public ActionForward save(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (sessionChk(request)) {
             return mapping.findForward("index");
         }
@@ -793,17 +847,31 @@ public class EditOrganisation extends DispatchAction {
         ActionErrors errors = new ActionErrors();
         if (exist) {
             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.saveOrgNameError"));
-            saveErrors(request, errors);
-            return mapping.findForward("forward");
         }
 
-        Collection orgsCol = DbUtil.getOrgByCode(action, editForm.getOrgCode(),
-                editForm.getAmpOrgId());
+        Collection orgsCol = DbUtil.getOrgByCode(action, editForm.getOrgCode(),editForm.getAmpOrgId());
         if (!orgsCol.isEmpty()) { // To check for duplicate org-code
             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.saveOrgCodeError"));
-            saveErrors(request, errors);
+        }
+        //must have max. one primary contact
+        if(editForm.getResetPrimaryOrgContIds()!=null && editForm.getResetPrimaryOrgContIds()){
+        	editForm.setPrimaryOrgContIds(null);
+        }
+        String[] orgContsIds=null;
+        orgContsIds=editForm.getPrimaryOrgContIds();
+        
+        if(orgContsIds!=null && orgContsIds.length>1){ //more then one primary contact is not allowed    				
+    		Long siteId = RequestUtils.getSite(request).getId();
+    		String locale = RequestUtils.getNavigationLanguage(request).getCode();    		
+			errors.add("invalidOrgCont",new ActionError("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));
+			
+		}
+        
+        if(!errors.isEmpty()){
+        	saveErrors(request, errors);
             return mapping.findForward("forward");
         }
+        
         organization.setName(editForm.getName());
         organization.setAcronym(editForm.getAcronym());
         organization.setAddress(editForm.getAddress());
@@ -866,8 +934,7 @@ public class EditOrganisation extends DispatchAction {
         if (editForm.getTaxNumber() != null && !editForm.getTaxNumber().equals("")) {
             organization.setTaxNumber(editForm.getTaxNumber());
         }
-
-      
+     
 
         // recipients
         if (organization.getRecipients() == null) {
@@ -963,15 +1030,57 @@ public class EditOrganisation extends DispatchAction {
         }
         organization.setSectors(sectors);
 
-          // contacts
-        if (organization.getContacts() == null) {
-            organization.setContacts(new HashSet<AmpContact>());
-        } else {
-            organization.getContacts().clear();
+        /**
+         * contacts
+         */
+        if(organization.getAmpOrgId()!=null){
+        	List<AmpOrganisationContact> orgContactList=ContactInfoUtil.getOrganizationContacts(organization.getAmpOrgId());
+        	if(orgContactList!=null){
+//        		for (AmpOrganisationContact ampOrganisationContact : orgContactList) {
+//        			ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
+//        			
+//        			AmpContact contact=ampOrganisationContact.getContact();
+//        			contact.getOrganizationContacts().remove(ampOrganisationContact);
+//        			ContactInfoUtil.saveOrUpdateContact(contact);
+//        			
+////        			AmpOrganisation organisation=ampOrganisationContact.getOrganisation();
+//        			organization.getOrganizationContacts().remove(ampOrganisationContact);
+//        			DbUtil.update(organization);
+//        			organization=DbUtil.getOrganisation(organization.getAmpOrgId());
+//					
+				//}
+        	}
+        } 
+        if(organization.getOrganizationContacts()==null){
+        	organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
+        }else{        	
+        	organization.getOrganizationContacts().clear();
         }
-        if (editForm.getContacts() != null) {
-            organization.getContacts().addAll(editForm.getContacts());
-        }
+        
+        List<AmpOrganisationContact> allContacts=new ArrayList<AmpOrganisationContact>();
+        if(editForm.getOrgContacts()!=null && editForm.getOrgContacts().size()>0){
+			allContacts.addAll(editForm.getOrgContacts());
+		}
+        
+        if(allContacts!=null && allContacts.size()>0){
+			for (AmpOrganisationContact orgContact : allContacts) {				
+				fillOrganizationContactPrimaryField(editForm.getPrimaryOrgContIds(),orgContact);
+			}
+			organization.getOrganizationContacts().addAll(allContacts);
+		}
+        
+//        if(editForm.getOrgContacts()!=null){
+//        	organization.getOrganizationContacts().addAll(editForm.getOrgContacts());
+//        }
+        
+//        if (organization.getContacts() == null) {
+//            organization.setContacts(new HashSet<AmpContact>());
+//        } else {
+//            organization.getContacts().clear();
+//        }
+//        if (editForm.getContacts() != null) {
+//            organization.getContacts().addAll(editForm.getContacts());
+//        }
 
         // locations
         if (organization.getLocations() == null) {
@@ -1039,7 +1148,6 @@ public class EditOrganisation extends DispatchAction {
 
             }
 
-
         }
 
         if (organization.getFundingDetails() == null) {
@@ -1052,7 +1160,7 @@ public class EditOrganisation extends DispatchAction {
         }
 
         this.saveDocuments(request, organization);
-        DbUtil.saveOrg(organization);
+        DbUtil.saveOrg(organization);        
         return mapping.findForward("added");
 
     }
@@ -1145,7 +1253,10 @@ public class EditOrganisation extends DispatchAction {
             Set<AmpCategoryValueLocations> countryLocations = DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
             form.setCountries(countryLocations);
             form.setYears(getYearsBeanList());
-            form.setContacts(null);
+         //   form.setContacts(null);
+            form.setOrgContacts(null);
+            form.setPrimaryOrgContIds(null);
+            form.setResetPrimaryOrgContIds(null);
             form.setOrgInfoAmount(null);
             form.setSelectedContactInfoIds(null);
             form.setSelectedOrgInfoIds(null);
@@ -1240,6 +1351,20 @@ public class EditOrganisation extends DispatchAction {
                 UUIDs.add(iter.next().getUuid());
             }
         }
-
     }
+    
+    private void fillOrganizationContactPrimaryField(String[] orgContactIds,AmpOrganisationContact orgContact) {
+		if(orgContactIds!=null && orgContactIds.length>0){
+			for (int i = 0; i < orgContactIds.length; i++) {
+				String idToCompare=orgContact.getContact().getId()!=null ? orgContact.getContact().getId().toString() : orgContact.getContact().getTemporaryId();  
+				if(idToCompare.equals(orgContactIds[i])){
+					orgContact.setPrimaryContact(true);
+				}else{
+					orgContact.setPrimaryContact(false);
+				}
+			}
+		}else{
+			orgContact.setPrimaryContact(false);
+		}
+	}
 }

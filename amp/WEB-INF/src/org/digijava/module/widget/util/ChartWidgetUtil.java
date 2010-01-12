@@ -472,7 +472,7 @@ public class ChartWidgetUtil {
                Font labelFont = new Font(null, Font.PLAIN, 9);
                lt.setItemFont(labelFont);
                plot.setLabelFont(labelFont);
-               lt.setPosition(RectangleEdge.LEFT);
+               lt.setPosition(RectangleEdge.RIGHT);
                lt.setVerticalAlignment(VerticalAlignment.TOP);
                lt.setHorizontalAlignment(HorizontalAlignment.RIGHT);
                plot.setLegendItemShape(new Rectangle(10, 10));

@@ -17,6 +17,13 @@
 <bean:write name="reportData" property="name"/>
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
+<% if (reportData.getLevelDepth() < 3) { %>
+						<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
+					<% } else { %>	
+						<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
+					<% } %>&nbsp;</td>
+		
+
 <% if (reportData.getLevelDepth() < 3) { %>		
 		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;"  class="reportsBorderTD" nowrap>
 	<% } else { %>	
@@ -68,10 +75,5 @@
 		<c:set var="firstCell" value="${false}"></c:set>
 		</logic:iterate>
 		
-		<% if (reportData.getLevelDepth() < 3) { %>
-						<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
-					<% } else { %>	
-						<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
-					<% } %>&nbsp;</td>
 		
 		</tr>

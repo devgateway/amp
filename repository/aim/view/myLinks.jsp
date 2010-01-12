@@ -12,7 +12,7 @@
         <ul class="yui-nav">
           <li class="">
           <a title='<digi:trn key="aim:ListofRelatedLinks">Frequently Used Links for Desktop</digi:trn>'>
-          <div>
+          <div style="text-align: center;">
             <digi:trn key="aim:resources">Resources</digi:trn>
           </div>
           </a>

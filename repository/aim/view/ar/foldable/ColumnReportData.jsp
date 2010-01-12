@@ -43,6 +43,14 @@
 <bean:define id="bckColor" value="false" toScope="page"/>
 
 <tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#ffffff', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#ffffff', '#a5bcf2', '#FFFF00');" style="<%=display%>">
+	<logic:present name="currentMember" scope="session">
+		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center"">
+			<div id="div_img_<%=rowIdx%>">
+				<img style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/repository/aim/images/reportOptions.png" border="0">
+			</div>
+				</td>
+	</logic:present>
+	
 	<c:if test="${addFakeColumn}">
 			<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
 		</c:if>
@@ -55,18 +63,21 @@
 	</logic:iterate>
 	</td>
 		
-	<logic:present name="currentMember" scope="session">
-		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center"">
-			<div id="div_img_<%=rowIdx%>">
-				<img style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/repository/aim/images/reportOptions.png" border="0">
-			</div>
-				</td>
-		
-	</logic:present>
+	
 </tr>
 <% } else { %>
 <bean:define id="bckColor" value="true" toScope="page"/>
 <tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#dbe5f1', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#dbe5f1', '#a5bcf2', '#FFFF00');" style="<%=display%>">
+	
+	<logic:present name="currentMember" scope="session">
+		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center">
+			<div id="div_img_<%=rowIdx%>">
+				<img  style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/repository/aim/images/reportOptions.png" border="0">
+			</div>
+			
+		</td>
+		
+	</logic:present>
 		<c:if test="${addFakeColumn}">
 				<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
 		</c:if>
@@ -80,15 +91,7 @@
 	</td>	
 	
 	
-	<logic:present name="currentMember" scope="session">
-		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center">
-			<div id="div_img_<%=rowIdx%>">
-				<img  style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/repository/aim/images/reportOptions.png" border="0">
-			</div>
-			
-		</td>
-		
-	</logic:present>
+	
 
 </tr>
 <% 

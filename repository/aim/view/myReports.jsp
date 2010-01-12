@@ -30,7 +30,8 @@ return false;
                         <ul class="yui-nav">
                           <li class="">
                           <a title='<digi:trn key="aim:PortfolioOfReports">Portfolio Reports </digi:trn>'>
-                          <div>
+                    
+                          <div style="text-align: center;">
                           	<digi:trn key="aim:portfolioReports">Reports</digi:trn>
                           </div>
                           </a>

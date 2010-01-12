@@ -379,10 +379,12 @@ var isAlreadySubmitted = false;
 							<field:display name="Funding Status" feature="Funding Information">
 							<tr>
 								<td align="right" bgcolor="#ECF3FD">
-			                	<FONT color=red>*</FONT><b>
+			                	<FONT color=red>*</FONT>
 									<a title="<digi:trn>The status of the funding</digi:trn>">
-									<digi:trn>Funding Status</digi:trn></a>
-									</b>
+				                		<b><font color=black>
+											<digi:trn>Funding Status</digi:trn>
+										</font></b>
+									</a>
 								</td>
 								<td align="left" bgcolor="#ECF3FD">
 									<c:set var="translation">

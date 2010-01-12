@@ -77,12 +77,13 @@
 	
 	
 	function sectorSelected(sec) {
+		
 		var selSector = sec;
 		initIndicatorCombo();
 		initSubgroupCombo();
 		initYearCombo();
 		
-		// setBusy(true);
+		 
 		var mapLevel = getRadioValue("mapLevelRadio");
 		if (mapLevel == null) {
 			mapLevel = 2;
@@ -95,7 +96,9 @@
 		var uniqueStr = (new Date()).getTime();
 		
 		actionImgLoading = true;
+		setBusy(true);
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&indYear=" + indYear + "&sectorId=" + sec + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		
 		
 		if (sec > 0) {
 			getDataForSector(sec);
@@ -250,7 +253,7 @@
 			
 			var requestURL = "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&width=" + canvasWidth + "&height=" + canvasHeight;
 			$.get(requestURL, addImageMap, "xml");
-			
+			actionGetImageMap=false;
 			/*
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
@@ -795,8 +798,8 @@
 	
 	
 	function setBusy(busy) {
-	/*
-			alert (actionImgLoading + " - " +
+	
+			/*alert (actionImgLoading + " - " +
 				   actionGetImageMap  + " - " +
 				   actionSectorData  + " - " +
 				   actionGetIndicators + " - " +

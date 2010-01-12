@@ -209,10 +209,6 @@ var myTabsObject;
 		}
 		return false;
 	}
-
-
-	
-
 </script>
 <script language="JavaScript">
 /*	function addActivity() {
@@ -256,14 +252,13 @@ function toggleSettings(){
 </script>
 	
 <digi:context name="digiContext" property="context" />
-
-
-
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <br />
 <div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
-
+<table border="0"  cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td>
 <ul id="MyTabs" class="yui-nav"">
 <c:set var="counter" value="0"/> 
 <logic:present name="myTabs" scope="session">
@@ -288,8 +283,14 @@ function toggleSettings(){
 					</logic:equal>
 		</logic:iterate>
 </logic:present>
-	
-</ul>									
+</ul>
+</td>
+<td width="60" align="right" class="yui-nav" valign="bottom"> 
+<a style="background-color:#FFFFFF" href="javascript:fontResize('less')">-A</a>&nbsp; <a style="background-color:#FFFFFF" href="javascript:fontResize('reset')">A</a>&nbsp;<a style="background-color:#FFFFFF" href="javascript:fontResize('add')">+A</a>&nbsp;&nbsp;
+</td>
+</tr>
+</table>
+
 <div class="yui-content" style="display:none">
 </div>
 </div>
@@ -323,7 +324,6 @@ DIV.panelList {
 }
 
 </style>
-<div id="debug"></div>
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
 	<logic:present name="myActiveTabs" scope="session">
     	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
@@ -358,3 +358,4 @@ DIV.panelList {
 	YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
 </script>
 </c:if>
+

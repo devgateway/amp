@@ -213,7 +213,8 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
         <ul class="yui-nav">
           <li class="">
             <a title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-            <div>
+          
+            <div style="text-align: center;">
               <digi:trn key="message:myMessages">My Messages</digi:trn>
             </div>
 			</a>

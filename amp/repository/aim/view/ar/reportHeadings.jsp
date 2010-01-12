@@ -22,6 +22,7 @@
   <%for (int curDepth = 0; curDepth <= columnReport
   .getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title="Report Headings">
+  <td  align="center" style="background-color:#999999;color:black;" class="clsTableTitleCol" width="20">&nbsp;</td>
   <%boolean first=true; %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
      <%
@@ -123,7 +124,7 @@
       
     </logic:iterate>
   
- 		<td align="center" style="background-color:#999999;color:black;" class="clsTableTitleCol" width="40">&nbsp;</td>
+ 		
   
   </tr>
 

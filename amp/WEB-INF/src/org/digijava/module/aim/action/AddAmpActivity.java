@@ -597,19 +597,12 @@ private ActionForward showStep8(ActionMapping mapping,HttpServletRequest request
 	return mapping.findForward("addActivityStep8");
 }
   
-  private List<AmpActivityContact> replaceOldContactWithNew(AmpContact contact,List<AmpActivityContact> allContacts){
-		//List<AmpActivityContact> retVal=null;
+  private void replaceOldContactWithNew(AmpContact contact,List<AmpActivityContact> allContacts){
 		for (AmpActivityContact ampActivityContact : allContacts) {
 			if(ampActivityContact.getContact().getId()!=null && ampActivityContact.getContact().getId().equals(contact.getId())){
 				ampActivityContact.setContact(contact);
-//				if(retVal==null){
-//					retVal=new ArrayList<AmpActivityContact>();
-//				}
-//				retVal.add(ampActivityContact);
-			}
-			
+			}			
 		}
-		return null;
 	}
 
 /*

@@ -71,14 +71,6 @@ public class AddressBookActions extends DispatchAction {
     	
     	List<AmpContact> pagedContacts=null;
     	pagedContacts=ContactInfoUtil.getPagedContacts(0, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);
-//    	if(pagedContacts!=null && pagedContacts.size()>0){
-//    		for (AmpContact ampContact : pagedContacts) {
-//				List<AmpOrganisationContact> orgConts=ContactInfoUtil.getContactOrganizations(ampContact.getId());
-//				Set organizationContacts=new HashSet<AmpOrganisationContact>();
-//				organizationContacts.addAll(orgConts);
-//				ampContact.setOrganizationContacts(organizationContacts);
-//			}
-//    	}
     	
     	//alpha pages
     	if(alpha==null){

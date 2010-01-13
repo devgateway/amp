@@ -938,11 +938,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 						session.delete(orgCont);
 					}
     			}
-    			//TODOOOOOOO
-//    			if(ampContact.getOrganizations()!=null){
-//    				ampContact.getOrganizations().clear();
-//    			}
-//    			ampContact.setOrganizations(contact.getOrganizations());
+
     			ampContact.setOrganizationContacts(null);
     			session.update(ampContact);    			    			
     		}else{

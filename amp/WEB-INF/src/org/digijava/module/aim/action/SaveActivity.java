@@ -1726,7 +1726,7 @@ public class SaveActivity extends Action {
 	}
 
 	private void fillActivityContactPrimaryField(String[] actContactIds,AmpActivityContact ampActContact) {
-		String actContId=ampActContact.getContact().getId()!=null ? ampActContact.getContact().getId().toString() :  ampActContact.getContact().getTemporaryId();
+		String actContId=ampActContact.getContact().getTemporaryId()==null ? ampActContact.getContact().getId().toString() :  ampActContact.getContact().getTemporaryId();
 		if(actContactIds!=null && actContactIds.length>0){
 			for (int i = 0; i < actContactIds.length; i++) {
 				if(actContId.equals(actContactIds[i])){

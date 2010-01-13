@@ -267,7 +267,7 @@
 
     function changePrimaryState(contactType){
         if(contactType=='donor'){
-        	var donors= $("input[@id^='donors_']");
+        	var donors= $("input[id^='donors_']");
         	var resetDonors=resetPrimary(donors);
         	if(resetDonors==true){
         		document.getElementById('don').value=true;
@@ -275,7 +275,7 @@
         		document.getElementById('don').value=false;
         	}    
         }else if(contactType=='mofed'){
-        	var mofed= $("input[@id^='mofed_']");
+        	var mofed= $("input[id^='mofed_']");
         	var resetMofed=resetPrimary(mofed);
         	if(resetMofed==true){
         		document.getElementById('mof').value=true;
@@ -283,7 +283,7 @@
         		document.getElementById('mof').value.value=false;
         	}
         }else if(contactType=='proj'){
-        	var projCoord= $("input[@id^='proj_']");
+        	var projCoord= $("input[id^='proj_']");
         	var resetProjCoord=resetPrimary(projCoord);
         	if(resetProjCoord==true){
         		document.getElementById('proj').value=true;
@@ -291,7 +291,7 @@
         		document.getElementById('proj').value=false;
         	}    
         }else if(contactType=='secMin'){
-        	var secMin= $("input[@id^='secMin_']");
+        	var secMin= $("input[id^='secMin_']");
         	var resetSecMin=resetPrimary(secMin);
         	if(resetSecMin==true){
         		document.getElementById('secMin').value=true;
@@ -299,7 +299,7 @@
         		document.getElementById('secMin').value=false;
         	}	
         }else if(contactType=='implExecuting'){
-        	var impl= $("input[@id^='implExecuting']");
+        	var impl= $("input[id^='implExecuting']");
         	var resetEmplEx=resetPrimary(impl);
         	if(resetEmplEx==true){
         		document.getElementById('implExecuting').value=true;

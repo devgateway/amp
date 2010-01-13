@@ -94,10 +94,6 @@
             <description>This service will delete the audit log</description>
     </service>
 
-	<service id="ECSService" class="org.dgfoundation.amp.ecs.ECSService">
-            <description>This service will sync error log with ECS Server</description>
-    </service>
-
 
      <config-bean id="proxyHelperConfig" class="org.digijava.kernel.util.ProxyHelperConfig">
           <property name="initializeUser">false</property>

@@ -621,7 +621,7 @@
 		sectorSelected(sec);
 		
 		var newURL = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
-		newURL = modifyUniqueStringURL(newURL);
+		//newURL = modifyUniqueStringURL(newURL);
 		
 		//document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
 		document.getElementById("navCursorMap").src = newURL;

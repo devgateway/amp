@@ -162,7 +162,7 @@ function validateFunding() {
 		return false;
 
 	}
-
+	
 	return validateFundingDetails(numComm,numDisb,numExp);
 
 }
@@ -443,7 +443,32 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
 
 	var disbIndex = -1, expIndex = -1;
+	
+	
 
+	var numProj = document.getElementById("numProjections").value;
+	
+	for (var h = 0; h < numProj; h++){
+		var projAmount = "mtefProjection[" + h + "].amount";
+		var projDate = "mtefProjection[" + h + "].projectionDateLabel";
+		
+		var amObj = document.getElementsByName(projAmount)[0];
+		var dtObj = document.getElementsByName(projDate)[0];
+		
+		if (checkAmountUsingSymbol(amObj.value) == false) {
+			alert(msgInvalidAmount);
+			amObj.focus();
+			return false;
+		}
+		
+		if (trim(dtObj.value) == "") {
+			alert(msgEnterDate);
+			dtObj.focus();
+			return false;
+		}
+	}
+	
+	
 	for (var j = 0;j < itr;j ++) {
 
 		var amtField = "fundingDetail[" + j + "].transactionAmount";

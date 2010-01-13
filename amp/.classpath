@@ -129,7 +129,6 @@
 	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/ecsClientSide.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.16.jar"/>

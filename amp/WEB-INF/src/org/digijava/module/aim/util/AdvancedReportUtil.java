@@ -32,6 +32,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * AdvancedReportUtil.java
@@ -44,7 +46,8 @@ public final class AdvancedReportUtil {
     
     private static Logger logger = Logger.getLogger(AdvancedReportUtil.class);
     
-	public static void saveReport(AmpReports ampReports,Long ampTeamId,Long ampMemberId,boolean teamLead)
+   
+    public static void saveReport(AmpReports ampReports, TeamMember member)
 	{
 		Session session = null;
 		Transaction tx = null;
@@ -65,14 +68,14 @@ public final class AdvancedReportUtil {
 			}
 				
 			
-			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
+			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class,member.getTeamId());
 			
 			String tempQry = "select teamRep from "
 				+ AmpTeamReports.class.getName()
 				+ " teamRep where (teamRep.team=:tId) and "
 				+ " (teamRep.report=:rId)";
 			Query tmpQry = session.createQuery(tempQry);
-			tmpQry.setParameter("tId",ampTeamId,Hibernate.LONG);
+			tmpQry.setParameter("tId",member.getTeamId(),Hibernate.LONG);
 			tmpQry.setParameter("rId",ampReports.getAmpReportId(),Hibernate.LONG);
 			Iterator tmpItr = tmpQry.list().iterator();
 			if (!tmpItr.hasNext()) {
@@ -112,7 +115,7 @@ public final class AdvancedReportUtil {
 				if(ampReports.getOwnerId()!=null){
 					ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, ampReports.getOwnerId().getAmpTeamMemId());	
 				}else {
-					ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
+					ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, member.getMemberId());	
 				}					
 				Set reportSet = ampTeamMember.getReports();
 				
@@ -155,7 +158,7 @@ public final class AdvancedReportUtil {
 						pageCode = pageCode + ampReports.getName().charAt(j+1);
 			}
 			ampPages.setPageCode(pageCode);
-			ampPages.setAmpTeamId(ampTeamId);
+			ampPages.setAmpTeamId(member.getTeamId());
 			session.save(ampPages);
 			
 			
@@ -192,6 +195,24 @@ public final class AdvancedReportUtil {
 				}
 			}
 			
+			if (ampReports.getDrilldownTab()){
+				//auto save report as tab if there is a free position https://jira.dgfoundation.org/browse/AMP-7472
+			  Collection<AmpDesktopTabSelection> tabs=ampTeamMember.getDesktopTabSelections();
+			  int pos=-1;
+			  if (tabs.isEmpty()){
+				  pos=0;
+			  }else if (tabs.size() < 5){
+				  pos=tabs.size();
+			  }
+			  if (pos != -1){
+				AmpDesktopTabSelection newTab=new AmpDesktopTabSelection();
+			  	newTab.setOwner(ampTeamMember);
+			  	newTab.setReport(ampReports);
+			  	newTab.setIndex(pos);
+			  	ampTeamMember.getDesktopTabSelections().add(newTab);
+			  	session.save(ampTeamMember);
+			  }
+			}
 			tx.commit(); 
 
 		}

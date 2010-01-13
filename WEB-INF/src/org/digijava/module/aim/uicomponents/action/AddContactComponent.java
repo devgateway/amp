@@ -579,12 +579,6 @@ public class AddContactComponent extends DispatchAction{
 					}
 			    }
 		    }
-//		    createForm.setOrganizations(new ArrayList<AmpOrganisation>());
-//		    if(contact.getOrganizationContacts()!=null){		    	
-//		    	for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
-//					createForm.getOrganizations().add(orgCont.getOrganisation());
-//				}
-//		    }
 		    
 		    createForm.setOrgsToShowOnPage(new ArrayList<AmpOrganisation>());
 		    if(contact.getId()!=null){
@@ -594,9 +588,6 @@ public class AddContactComponent extends DispatchAction{
 				}
 		    }
 		    
-//		    if (contact.getOrganizations() != null) {
-//		        createForm.getOrganizations().addAll(contact.getOrganizations());
-//		    }
 		    createForm.setFunction(contact.getFunction());
 		    createForm.setOfficeaddress(contact.getOfficeaddress());
 		    

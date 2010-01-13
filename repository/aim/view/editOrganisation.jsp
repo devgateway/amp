@@ -645,7 +645,7 @@
               }
            
 function changePrimaryState(){
-	var orgConts= $("input[@id^='primary_']");
+	var orgConts= $("input[id^='primary_']");
 	var resetConts=resetPrimary(orgConts);
 	if(resetConts==true){
 		document.getElementById('primaryOrgCont').value=true;

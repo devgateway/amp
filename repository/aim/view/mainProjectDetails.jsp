@@ -320,7 +320,7 @@ html>body #mainEmpty {
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
 	                		<a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
-								<img src="//TEMPLATE/ampTemplate/imagesSource/common/tangopack_edit.png" border="0"></a>&nbsp;
+								<img src="/TEMPLATE/ampTemplate/imagesSource/common/tangopack_edit.png" border="0"></a>&nbsp;
 						</logic:equal>
 					</field:display>
 				</feature:display>

@@ -14,11 +14,8 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.helper.AmpContactsWorker;
-import org.digijava.module.aim.helper.Constants;
 
 public class ActivityContactInformationAction extends Action {
-	
-	public static final String ROOT_TAG = "CONTACTS";
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		EditActivityForm eaForm=(EditActivityForm)form;
@@ -32,69 +29,6 @@ public class ActivityContactInformationAction extends Action {
 		return mapping.findForward("step8");
 	}
 
-	private boolean isPrimaryContactAllowed(EditActivityForm eaForm,String contactType) {
-		boolean retValue=true;
-		List<AmpActivityContact> activityContacts=null;
-		if(contactType.equals(Constants.DONOR_CONTACT)){
-			if(eaForm.getContactInformation().getDonorContacts()!=null && eaForm.getContactInformation().getDonorContacts().size()>0){
-				activityContacts=eaForm.getContactInformation().getDonorContacts();
-				for (AmpActivityContact activityContact : activityContacts) {
-					//if any contact is already primary,then user shouldn't be able to create another primary contact
-					if(activityContact.getPrimaryContact()!=null && activityContact.getPrimaryContact()){
-						retValue=false;
-						break;
-					}
-				}
-			}
-		}else if(contactType.equals(Constants.MOFED_CONTACT)){
-			if(eaForm.getContactInformation().getMofedContacts()!=null && eaForm.getContactInformation().getMofedContacts().size()>0){
-				activityContacts=eaForm.getContactInformation().getMofedContacts();
-				for (AmpActivityContact activityContact : activityContacts) {
-					//if any contact is already primary,then user shouldn't be able to create another primary contact
-					if(activityContact.getPrimaryContact()!=null && activityContact.getPrimaryContact()){
-						retValue=false;
-						break;
-					}
-				}
-			}
-		}else if(contactType.equals(Constants.PROJECT_COORDINATOR_CONTACT)){
-			if(eaForm.getContactInformation().getProjCoordinatorContacts()!=null && eaForm.getContactInformation().getProjCoordinatorContacts().size()>0){
-				activityContacts=eaForm.getContactInformation().getProjCoordinatorContacts();
-				for (AmpActivityContact activityContact : activityContacts) {
-					//if any contact is already primary,then user shouldn't be able to create another primary contact
-					if(activityContact.getPrimaryContact()!=null && activityContact.getPrimaryContact()){
-						retValue=false;
-						break;
-					}
-				}
-			}
-		}else if(contactType.equals(Constants.SECTOR_MINISTRY_CONTACT)){
-			if(eaForm.getContactInformation().getSectorMinistryContacts()!=null && eaForm.getContactInformation().getSectorMinistryContacts().size()>0){
-				activityContacts=eaForm.getContactInformation().getSectorMinistryContacts();
-				for (AmpActivityContact activityContact : activityContacts) {
-					//if any contact is already primary,then user shouldn't be able to create another primary contact
-					if(activityContact.getPrimaryContact()!=null && activityContact.getPrimaryContact()){
-						retValue=false;
-						break;
-					}
-				}
-			}
-		}else if (contactType.equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
-			if(eaForm.getContactInformation().getImplExecutingAgencyContacts()!=null && eaForm.getContactInformation().getImplExecutingAgencyContacts().size()>0){
-				activityContacts=eaForm.getContactInformation().getImplExecutingAgencyContacts();
-				for (AmpActivityContact activityContact : activityContacts) {
-					//if any contact is already primary,then user shouldn't be able to create another primary contact
-					if(activityContact.getPrimaryContact()!=null && activityContact.getPrimaryContact()){
-						retValue=false;
-						break;
-					}
-				}
-			}
-		}
-		return retValue;
-	}
-
-	
 	private void processDelete(EditActivityForm eaForm){
 		ActivityContactInfo contactInfo=eaForm.getContactInformation();
 		String tempId=contactInfo.getTemporaryId();

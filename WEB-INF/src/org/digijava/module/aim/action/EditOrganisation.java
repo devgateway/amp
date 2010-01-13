@@ -736,31 +736,6 @@ public class EditOrganisation extends DispatchAction {
         
         odlOrgContacts.removeAll(orgContsForRemoval);
         editForm.setOrgContacts(odlOrgContacts);
-//        List<AmpContact> oldContacts = editForm.getContacts();
-//        List<AmpContact> contactsForRemove = new ArrayList<AmpContact>();
-//        Iterator<AmpContact> contactIter = oldContacts.iterator();
-//        while (contactIter.hasNext()) {
-//            AmpContact contact = contactIter.next();
-//            if (selContactId != null) {
-//                if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().toString().equals(selContactId.toString()))) {
-//                    contactsForRemove.add(contact);
-//                    break;
-//                }
-//            } else {
-//                if (selectedContactInfoIds != null) {
-//                    for (Long contactId : selectedContactInfoIds) {
-//                        if ((contact.getId() != null && contact.getId().equals(contactId))|| (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId.toString()))) {
-//                            contactsForRemove.add(contact);
-//                        }
-//                    }
-//
-//                }
-//            }
-//
-//        }
-
-//        oldContacts.removeAll(contactsForRemove);
-//        editForm.setContacts(oldContacts);
         editForm.setSelContactId(null);
         editForm.setSelectedContactInfoIds(null);
 
@@ -1033,24 +1008,7 @@ public class EditOrganisation extends DispatchAction {
         /**
          * contacts
          */
-        if(organization.getAmpOrgId()!=null){
-        	List<AmpOrganisationContact> orgContactList=ContactInfoUtil.getOrganizationContacts(organization.getAmpOrgId());
-        	if(orgContactList!=null){
-//        		for (AmpOrganisationContact ampOrganisationContact : orgContactList) {
-//        			ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
-//        			
-//        			AmpContact contact=ampOrganisationContact.getContact();
-//        			contact.getOrganizationContacts().remove(ampOrganisationContact);
-//        			ContactInfoUtil.saveOrUpdateContact(contact);
-//        			
-////        			AmpOrganisation organisation=ampOrganisationContact.getOrganisation();
-//        			organization.getOrganizationContacts().remove(ampOrganisationContact);
-//        			DbUtil.update(organization);
-//        			organization=DbUtil.getOrganisation(organization.getAmpOrgId());
-//					
-				//}
-        	}
-        } 
+
         if(organization.getOrganizationContacts()==null){
         	organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
         }else{        	
@@ -1068,19 +1026,6 @@ public class EditOrganisation extends DispatchAction {
 			}
 			organization.getOrganizationContacts().addAll(allContacts);
 		}
-        
-//        if(editForm.getOrgContacts()!=null){
-//        	organization.getOrganizationContacts().addAll(editForm.getOrgContacts());
-//        }
-        
-//        if (organization.getContacts() == null) {
-//            organization.setContacts(new HashSet<AmpContact>());
-//        } else {
-//            organization.getContacts().clear();
-//        }
-//        if (editForm.getContacts() != null) {
-//            organization.getContacts().addAll(editForm.getContacts());
-//        }
 
         // locations
         if (organization.getLocations() == null) {

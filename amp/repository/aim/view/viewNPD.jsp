@@ -264,29 +264,29 @@ function showFilter(){
 	var progNodeHistory = [];
     var pr;
     var lastTimeStamp;
-	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
-	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
+	var strNoActivities="<digi:trn>No Activities</digi:trn>";
+	var strTotal="<digi:trn>Totals:</digi:trn>";
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-	var strThousands="<digi:trn key='aim:NPD:amountThousandsOfDollarsLabel'>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
+	var strThousands="<digi:trn>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
 </gs:test>
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
 	var strThousands="${aimNPDForm.defCurrency}";
 </gs:test>
-	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
-	var strActual="<digi:trn key='aim:NPD:sumactualCommitments'>Actual Commitments</digi:trn>";
+	var strPlanned="<digi:trn>Planned Commitments</digi:trn>";
+	var strActual="<digi:trn>Actual Commitments</digi:trn>";
     var strActualDisb="<digi:trn>Actual Disbursements</digi:trn>";
-	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
+	var strProposed="<digi:trn>Proposed Project Cost</digi:trn>";
 	var actCurrPage=1;
 	var actMaxPages=0;
-	var pgNext='<digi:trn key="aim:npd:pagination:next">Next</digi:trn>';
-	var pgPrev='<digi:trn key="aim:npd:pagination:prev">Prev</digi:trn>';
-	var pgLast='<digi:trn key="aim:npd:pagination:last">Last</digi:trn>';
-	var pgFirst='<digi:trn key="aim:npd:pagination:first">First</digi:trn>';
-	var pgPagesLabel='<digi:trn key="aim:npd:pagination:pageslabel">Pages:</digi:trn>';
-	var status='<digi:trn key="aim:npd:status">Status</digi:trn>';
-	var title='<digi:trn key="aim:npd:titl">Title</digi:trn>';
-	var strDate='<digi:trn key="aim:npd:strdate">Start Date</digi:trn>';
-	var donor='<digi:trn key="aim:npd:donor">Donor</digi:trn>';
+	var pgNext='<digi:trn>Next</digi:trn>';
+	var pgPrev='<digi:trn>Prev</digi:trn>';
+	var pgLast='<digi:trn>Last</digi:trn>';
+	var pgFirst='<digi:trn>First</digi:trn>';
+	var pgPagesLabel='<digi:trn>Pages:</digi:trn>';
+	var status='<digi:trn>Status</digi:trn>';
+	var title='<digi:trn>Title</digi:trn>';
+	var strDate='<digi:trn>Start Date</digi:trn>';
+	var donor='<digi:trn>Donor</digi:trn>';
 	var plannedComm='<digi:trn>Planned Commitments</digi:trn>';
 
 	function changeOptions(indics,years,locations){
@@ -305,7 +305,7 @@ function showFilter(){
 
     function openOptionsWindow(){
       if(curProgId==null){
-      	var msg='<digi:trn key="aim:plsSelectProgram">please first select program in the tree</digi:trn>';
+      	var msg='<digi:trn>please first select program in the tree</digi:trn>';
         alert(msg);
       }else{
         var url=addActionToURL('npdOptions.do');
@@ -1567,14 +1567,14 @@ function showFilter(){
 	var localIndicators=[];
 
     function selectAllIndicators(){
-        $("input[@name^='selIndicators']").each(
+        $("input[name^='selIndicators']").each(
         function (i){
              this.checked=true;
         } 
     );
     }
     function deselectAllIndicators(){
-    var allChkboxes=$("input[@name^='selIndicators']:checked").each(
+    var allChkboxes=$("input[name^='selIndicators']:checked").each(
     function (i){
         this.checked=false;
     }

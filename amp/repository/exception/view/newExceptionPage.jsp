@@ -95,9 +95,7 @@
         				<br/>
         				<span style="font-size:14px">
 				        	<b><digi:trn key="exception:newErrorText2">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience. </digi:trn></b><br/>
-				        	<c:if test="<%= org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_ECS).compareTo("true") == 0 %>">
-					        	<b><font color="blue"><digi:trn key="exception:errorHandled">This issue has been reported to the technical support team for resolution.</digi:trn></font></b><br/>
-				        	</c:if>
+				        	
 				        	<br/>
 				        	<!-- 
 				        	<u><digi:trn key="exception:issueInformation">Issue Information</digi:trn></u><br/>

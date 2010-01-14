@@ -296,7 +296,8 @@ public class TranslatorWorker {
         WorkerException {
 
         if (siteId == null) {
-            return getByKey(key, locale, new Long(0));
+        	Long defaultSideId=getDefaultSite().getId();
+            return getByKey(key, locale, defaultSideId);
         } else {
             Site site = SiteCache.getInstance().getSite(siteId);
 
@@ -1082,15 +1083,17 @@ public class TranslatorWorker {
      * @param message
      */
     public void processKeyCase(Message message) {
-        if (!isCaseSensitiveKeys()){
-        	message.setKey(processKeyCase(message.getKey()));
-        }
+    	//commented out for speed. We do not need this with hash code keys
+       // if (!isCaseSensitiveKeys()){
+       // 	message.setKey(processKeyCase(message.getKey()));
+       // }
     }
     
     public String processKeyCase(String key) {
-        if (!isCaseSensitiveKeys()){
-        	return key.toLowerCase();
-        }
+    	//commented out for speed. We do not need this with hash code keys
+        //if (!isCaseSensitiveKeys()){
+        //	return key.toLowerCase();
+        //}
         return key;
     }
     
@@ -1101,6 +1104,26 @@ public class TranslatorWorker {
      */
     protected void processBodyChars(Message message){
     	message.setMessage(processSpecialChars(message.getMessage()));
+    }
+
+    /**
+     * Sets original message value to value of message.
+     * This will be done only if original message is null and
+     * key generated from message is same as key field value.
+     * this will mean that key was generated from that same message 
+     * and hence it is the original message.
+     * We need to store this to avoid problems when default translation is changed.
+     * See AMP-6663 for details.
+     * @param message
+     */
+    protected void processOriginalMessage(Message message){
+    	//Temporary solution for AMP-6663 to not write patch which runs more then 5 min.
+    	if (message.getOriginalMessage()==null || "".equals(message.getOriginalMessage().trim())){
+    		//if hash generated from text is same as key then this is the original text from which key was generated.
+    		if (generateTrnKey(message.getMessage()).equals(message.getKey())){
+    			message.setOriginalMessage(message.getMessage());
+    		}
+    	}
     }
     
     /**
@@ -1124,6 +1147,7 @@ public class TranslatorWorker {
     	if (text == null) return null;
     	return text.replaceAll("'","\\\\'").replace("\"", "\\\"");    
     }
+    
     /**
      * Generates hash code from message body and sets it as key.
      * WARN: Use for non-English messages ONLY if there is no English record for same key. 
@@ -1178,10 +1202,8 @@ public class TranslatorWorker {
         	message.setKey(message.getKey().trim());
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
-            //TODO if we add hash codes as keys, then we do not need key case correction method on next line
-            processKeyCase(message);
             processBodyChars(message);
-            //generateHash(message);//TODO what if French translation is current.
+            processOriginalMessage(message);
             
             if (!isKeyExpired(message.getKey())) {
                 message.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
@@ -1273,9 +1295,9 @@ public class TranslatorWorker {
         Transaction tx = null;
 
         try {
-            //TODO if we add hash codes as keys, then we do not need key case correction method on next line
-        	//processKeyCase(message);//DGP-318
         	processBodyChars(message);
+        	processOriginalMessage(message);
+        	
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
             if (!isKeyExpired(message.getKey())) {

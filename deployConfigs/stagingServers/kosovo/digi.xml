@@ -28,6 +28,12 @@
 	</exception-emails>
 	
 	<enable-autologin>true</enable-autologin>
+
+	<!-- ECS Service -->
+	<ecsDisable>true</ecsDisable>
+	<ecsServerName>ampdev.staging.kosovo</ecsServerName>
+	<!-- <propertiesFile></propertiesFile> -->
+	<!--             -->	
 	
 	<service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
             <description>Advanced Database Patcher Module</description>

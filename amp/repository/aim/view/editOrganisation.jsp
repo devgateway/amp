@@ -386,25 +386,7 @@
                     document.aimAddOrgForm.orgPrimaryPurpose.focus();
                     return false;
                 }
-                var regNumbMinPlan= document.aimAddOrgForm.regNumbMinPlan.value;
-                if (regNumbMinPlan == null||regNumbMinPlan.length == 0 ) {
-                    alert('<digi:trn  jsFriendly="true">Please enter Registration Number in MinPlan for this Organization.</digi:trn>');
-                    document.aimAddOrgForm.regNumbMinPlan.focus();
-                    return false;
-                }
-                var minPlanRegDate= document.aimAddOrgForm.minPlanRegDate.value;
-                if (minPlanRegDate == null||minPlanRegDate.length == 0 ) {
-                    alert('<digi:trn  jsFriendly="true">Please enter Registration Date in MinPlan for this Organization.</digi:trn>');
-                    document.aimAddOrgForm.minPlanRegDate.focus();
-                    return false;
-                }
-                var fiscalCalId= document.aimAddOrgForm.fiscalCalId.value;
-                if (fiscalCalId == null||fiscalCalId == '-1') {
-                    alert('<digi:trn  jsFriendly="true">Please Select Fiscal Calendar.</digi:trn>');
-                    document.aimAddOrgForm.fiscalCalId.focus();
-                    return false;
-                }
-
+                                    
                 var selSectors= document.getElementsByName("selSectors");
                 if ( selSectors == null||selSectors.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Select Sectors for this Organization.</digi:trn>');
@@ -423,12 +405,6 @@
                     return false;
                 }
      
-                var orgUrl= document.aimAddOrgForm.orgUrl.value;
-                if (orgUrl == null||orgUrl.length == 0 ) {
-                    alert('<digi:trn  jsFriendly="true">Please Enter URL for this Organization.</digi:trn>');
-                    document.aimAddOrgForm.orgUrl.focus();
-                    return false;
-                }
                 var address= document.aimAddOrgForm.address.value;
                 if (address == null||address.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Enter Address for this Organization.</digi:trn>');
@@ -575,15 +551,15 @@
 		$(divId).hide('fast');
 	}
         function expandAll(){
-                $("img[@id^='img_']"+':visible').slideUp('fast');
-		$("img[@id^='imgh_']"+':hidden').slideDown('fast');;
-		$("div[@id^='div_container_']").slideDown('fast');
+                $("img[id^='img_']"+':visible').slideUp('fast');
+		$("img[id^='imgh_']"+':hidden').slideDown('fast');;
+		$("div[id^='div_container_']").slideDown('fast');
 
          }
          function collapseAll(){
-              $("img[@id^='imgh_']"+':visible').slideUp('fast');
-              $("img[@id^='img_']"+':hidden').slideDown('fast');
-	      $("div[@id^='div_container_']"+':visible').slideUp('fast');
+              $("img[id^='imgh_']"+':visible').slideUp('fast');
+              $("img[id^='img_']"+':hidden').slideDown('fast');
+	      $("div[id^='div_container_']"+':visible').slideUp('fast');
          }
 
          function exportGeneralInfo(){
@@ -613,6 +589,15 @@
                       }
                       if(document.getElementById('minPlanRegDate')!=null){
                     	  params+="&minPlanRegDate="+document.getElementById('minPlanRegDate').value;
+                      }
+                      if(document.getElementById('operFuncApprDate')!=null){
+                    	  params+="&operFuncApprDate="+document.getElementById('operFuncApprDate').value;
+                      }
+                      if(document.getElementById('receiptLegPersonalityAct')!=null){
+                    	  params+="&receiptLegPersonalityAct="+document.getElementById('receiptLegPersonalityAct').value;
+                      }
+                       if(document.getElementById('lineMinRegDate')!=null){
+                    	  params+="&lineMinRegDate="+document.getElementById('lineMinRegDate').value;
                       }
                       if(document.getElementById('fiscalCalId')!=null){
                           params+="&fiscalCalId="+document.getElementById('fiscalCalId').value;
@@ -667,6 +652,7 @@ function resetPrimary(contList){
 
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <digi:instance property="aimAddOrgForm" />
 <digi:context name="digiContext" property="context" />
 <digi:form action="/editOrganisation.do" method="post" onsubmit="changePrimaryState()">
@@ -867,11 +853,11 @@ function resetPrimary(contList){
                                                         <td valign="top" width="50%">
                                                             <table cellpadding="5" cellspacing="5">
                                                                 <tr>
-                                                                    <td nowrap style=" text-align:right" class="tdBoldClass"><digi:trn>Registration Number in MinPlan</digi:trn><font color="red">*</font></td>
+                                                                    <td nowrap style=" text-align:right" class="tdBoldClass"><digi:trn>Registration Number in MinPlan</digi:trn></td>
                                                                     <td><html:text property="regNumbMinPlan" styleId="regNumbMinPlan" /></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Registration Date in MinPlan</digi:trn><font color="red">*</font></td>
+                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Registration Date in MinPlan</digi:trn></td>
                                                                     <td>
                                                                         <html:text property="minPlanRegDate" size="10" styleId="minPlanRegDate" styleClass="inp-text" readonly="true" />
                                                                         <a id="clear1" href='javascript:clearDate(document.getElementById("minPlanRegDate"), "clear1")'>
@@ -882,8 +868,24 @@ function resetPrimary(contList){
                                                                         </a>
                                                                     </td>
                                                                 </tr>
+                                                                  <tr>
+                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Operation approval  date in the country of origin</digi:trn></td>
+                                                                    <td>
+                                                                        <html:text property="operFuncApprDate" size="10" styleId="operFuncApprDate" styleClass="inp-text" readonly="true" />
+                                                                        <a id="clearOperFunc" href='javascript:clearDate(document.getElementById("operFuncApprDate"), "clearOperFunc")'>
+                                                                            <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this "/>
+                                                                        </a>
+                                                                        <a id="dateOperFunc" href='javascript:pickDateWithClear("dateOperFunc",document.getElementById("operFuncApprDate"),"clearOperFunc")'>
+                                                                            <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
                                                                 <tr>
-                                                                    <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Fiscal Calendar</digi:trn><font color="red">*</font></td>
+                                                                    <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Receipt of legal personality act in DRC </digi:trn></td>
+                                                                    <td><html:text property="receiptLegPersonalityAct" styleId="receiptLegPersonalityAct" /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Fiscal Calendar</digi:trn></td>
                                                                     <td>
                                                                         <c:set var="translation">
                                                                             <digi:trn>Select the Fiscal Calendar</digi:trn>
@@ -963,7 +965,7 @@ function resetPrimary(contList){
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Organization website</digi:trn><font color="red">*</font></td>
+                                                                    <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Organization website</digi:trn></td>
                                                                     <td>
                                                                         <html:text property="orgUrl" styleId="orgUrl"/>
                                                                     </td>
@@ -993,7 +995,7 @@ function resetPrimary(contList){
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td nowrap style=" text-align:right" class="tdBoldClass"><digi:trn>Legal Personality Registration Date</digi:trn></td>
+                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Legal personality registration date  in the country of origin</digi:trn></td>
                                                                     <td>
                                                                         <html:text property="legalPersonRegDate" size="10" styleId="legalPersonRegDate" styleClass="inp-text" readonly="true" />
                                                                         <a id="clear2" href='javascript:clearDate(document.getElementById("legalPersonRegDate"), "clear2")'>
@@ -1004,31 +1006,46 @@ function resetPrimary(contList){
                                                                         </a>
                                                                     </td>
                                                                 </tr>
+                                                                 <tr>
+                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Registration date of Line Ministry</digi:trn></td>
+                                                                    <td>
+                                                                        <html:text property="lineMinRegDate" size="10" styleId="lineMinRegDate" styleClass="inp-text" readonly="true" />
+                                                                        <a id="clearLineMin" href='javascript:clearDate(document.getElementById("lineMinRegDate"), "clearLineMin")'>
+                                                                            <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+                                                                        </a>
+                                                                        <a id="dateLineMin" href='javascript:pickDateWithClear("dateLineMin",document.getElementById("lineMinRegDate"),"clearLineMin")'>
+                                                                            <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
                                                                 <tr>
                                                                     <td style=" text-align:right" class="tdBoldClass"><digi:trn>Recipients</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <c:if test="${empty aimAddOrgForm.recipients}">
-                                                                    <aim:addOrganizationButton refreshParentDocument="true" collection="recipients"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                    <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                 </c:if>
                                                                 <c:if test="${not empty aimAddOrgForm.recipients}">
                                                                     <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-                                                                        <c:forEach var="organization" items="${aimAddOrgForm.recipients}">
+                                                                        <c:forEach var="recipients" items="${aimAddOrgForm.recipients}">
                                                                             <tr>
 
                                                                                 <td width="3">
                                                                                     <html:multibox property="selRecipients">
-                                                                                        <bean:write name="organization" property="ampOrgId" />
+                                                                                       	<c:out value="${recipients.organization.ampOrgId}"/>
                                                                                     </html:multibox>
                                                                                 </td>
                                                                                 <td align="left">
-                                                                                    <bean:write name="organization" property="name" />
+                                                                                     ${recipients.organization.name}
                                                                                 </td>
+                                                                                 <td align="left">
+                                                                                     <html:textarea name="recipients" indexed="true" property="description"  cols="40" rows="2"/>
+                                                                                 </td>
 
                                                                             </tr>
                                                                         </c:forEach>
                                                                         <tr>
                                                                             <td colspan="2">
-                                                                        <aim:addOrganizationButton refreshParentDocument="true" collection="recipients"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                         <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                         <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
                                                                         </td>
                                                                         </tr>
@@ -1677,6 +1694,14 @@ function resetPrimary(contList){
         </fieldset>
     </td>
 </tr>
+<c:if test="${aimAddOrgForm.type=='NGO'}">
+    <tr>
+        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Other Information</digi:trn></td>
+        <td>
+            <html:textarea property="otherInformation"  cols="100" rows="4"  styleId="otherInformation"/>
+        </td>
+    </tr>
+</c:if>
 <c:if test="${aimAddOrgForm.type!='NGO'}">
     <tr>
         <td style=" text-align:right" class="tdBoldClass"><digi:trn>Organization URL</digi:trn></td>
@@ -1750,4 +1775,6 @@ function resetPrimary(contList){
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("orgInfosTable"),false);
     setStyle(document.getElementById("table_contact_content"),true);
+    $("#otherInformation").charCounter(256,{format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",pulse: false});
+
 </script>

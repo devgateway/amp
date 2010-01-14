@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
@@ -79,7 +79,7 @@ public class AddOrgForm extends ActionForm {
     private String selectedYear;
     private Long[] selectedStaff;
     private Long selectedStaffId;
-    private List<AmpOrganisation> recipients;
+    private List<AmpOrgRecipient> recipients;
     private Long[] selRecipients;
     private Long implemLocationLevel;
     private Long[] selLocs;
@@ -105,7 +105,42 @@ public class AddOrgForm extends ActionForm {
     private Long selectedOrgInfoId;
     private String orgInfoAmount;
     private Long[] selectedContactInfoIds;
+    private String otherInformation;
+    private String lineMinRegDate;
+    private String operFuncApprDate;
+    private String receiptLegPersonalityAct;
 
+    public String getLineMinRegDate() {
+        return lineMinRegDate;
+    }
+
+    public void setLineMinRegDate(String lineMinRegDate) {
+        this.lineMinRegDate = lineMinRegDate;
+    }
+
+    public String getOperFuncApprDate() {
+        return operFuncApprDate;
+    }
+
+    public void setOperFuncApprDate(String operFuncApprDate) {
+        this.operFuncApprDate = operFuncApprDate;
+    }
+
+    public String getOtherInformation() {
+        return otherInformation;
+    }
+
+    public void setOtherInformation(String otherInformation) {
+        this.otherInformation = otherInformation;
+    }
+
+    public String getReceiptLegPersonalityAct() {
+        return receiptLegPersonalityAct;
+    }
+
+    public void setReceiptLegPersonalityAct(String receiptLegPersonalityAct) {
+        this.receiptLegPersonalityAct = receiptLegPersonalityAct;
+    }
     public Long[] getSelectedContactInfoIds() {
         return selectedContactInfoIds;
     }
@@ -271,11 +306,11 @@ public class AddOrgForm extends ActionForm {
         this.selRecipients = selRecipients;
     }
 
-    public List<AmpOrganisation> getRecipients() {
+    public List<AmpOrgRecipient> getRecipients() {
         return recipients;
     }
 
-    public void setRecipients(List<AmpOrganisation> recipients) {
+    public void setRecipients(List<AmpOrgRecipient> recipients) {
         this.recipients = recipients;
     }
 

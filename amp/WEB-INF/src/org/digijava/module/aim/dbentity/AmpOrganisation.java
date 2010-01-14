@@ -48,7 +48,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     private Set<AmpOrgLocation> locations;
     private Set<AmpOrgStaffInformation> staffInfos;
     private AmpCategoryValueLocations country;
-    private Set<AmpOrganisation> recipients;
+    private Set<AmpOrgRecipient> recipients;
         
         //private Set<AmpContact> contacts;
     private String addressAbroad;
@@ -72,6 +72,43 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     	//Pledges
     	private Set fundingDetails;
 
+        private String otherInformation;
+        private Date lineMinRegDate;
+        private Date operFuncApprDate;
+        private String receiptLegPersonalityAct;
+
+        public Date getLineMinRegDate() {
+            return lineMinRegDate;
+        }
+
+        public void setLineMinRegDate(Date lineMinRegDate) {
+            this.lineMinRegDate = lineMinRegDate;
+        }
+
+        public Date getOperFuncApprDate() {
+            return operFuncApprDate;
+        }
+
+        public void setOperFuncApprDate(Date operFuncApprDate) {
+            this.operFuncApprDate = operFuncApprDate;
+        }
+
+        public String getOtherInformation() {
+            return otherInformation;
+        }
+
+        public void setOtherInformation(String otherInformation) {
+            this.otherInformation = otherInformation;
+        }
+
+        public String getReceiptLegPersonalityAct() {
+            return receiptLegPersonalityAct;
+        }
+
+        public void setReceiptLegPersonalityAct(String receiptLegPersonalityAct) {
+            this.receiptLegPersonalityAct = receiptLegPersonalityAct;
+        }
+        
         public Set<AmpOrganizationBudgetInformation> getOrganizationBudgetInfos() {
             return organizationBudgetInfos;
         }
@@ -142,11 +179,11 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         public void setMinPlanRegDate(Date minPlanRegDate) {
             this.minPlanRegDate = minPlanRegDate;
         }
-        public Set<AmpOrganisation> getRecipients() {
+        public Set<AmpOrgRecipient> getRecipients() {
             return recipients;
         }
 
-        public void setRecipients(Set<AmpOrganisation> recipients) {
+        public void setRecipients(Set<AmpOrgRecipient> recipients) {
             this.recipients = recipients;
         }
 

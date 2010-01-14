@@ -506,10 +506,9 @@ function resetAll()
 								<tr><td width="100%" bgcolor="#f4f4f2">
 									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 										<tr>
-											<td bgColor="#f4f4f2" align="center" vAlign="top">												
+											<td bgColor="#f4f4f2" align="center" vAlign="top">
 												<!-- contents -->
 												<table width="95%" bgcolor="#f4f4f2">													
-													
 													<feature:display name="Donor Contact Information" module="Contact Information">
 														<tr>
 															<td>
@@ -547,7 +546,18 @@ function resetAll()
 																						</c:if>
 																					</c:forEach>
 																				</td>
-																				<td>${donorContact.contact.organisationName}</td>
+																				<td>
+																					 <ul>
+                                                                                        <c:if test="${not empty donorContact.contact.organisationName}">
+                                                                                     		<li>${donorContact.contact.organisationName}</li>
+                                                                                        </c:if>
+                                                                                        <c:if test="${not empty donorContact.contact.organizationContacts}">
+                                                                                        	<c:forEach var="orgCont" items="${donorContact.contact.organizationContacts}">
+	                                                                                        	<li>${orgCont.organisation.name}</li>
+	                                                                                        </c:forEach>
+                                                                                        </c:if>                                                                                        
+                                                                                     </ul>
+																				</td>
 																				<td>
 																					<c:forEach var="phone" items="${donorContact.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
@@ -558,7 +568,7 @@ function resetAll()
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryDonorContIds" styleId="donors_${stat.index}" value="${donorContact.contact.temporaryId}" onchange="changePrimaryState('donor')"/>																					
 																				</td>
-																				<td>	
+																				<td>
 																					<c:set var="ampContactId">
 		                                            									<c:choose>
 		                                                									<c:when test="${empty donorContact.contact.id||donorContact.contact.id==0}">

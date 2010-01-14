@@ -1,6 +1,7 @@
 package org.dgfoundation.ecs;
 
 
+import java.beans.FeatureDescriptor;
 import java.io.File;
 
 import org.apache.log4j.Level;
@@ -21,9 +22,15 @@ public class ECSLoggerPlugin implements LoggerPlugin
 	{
 		synchronized (init) {
 			if (init){
-				String fileName = "log4j.properties";
+				String fileName = "log4j.xml";
 				File f = new File(fileName);
-				String serverName=System.getProperty("amp.ecs.serverName");
+				String serverName = System.getProperty("amp.ecs.serverName");
+				String defaultDisabled = System.getProperty("amp.ecs.defaultDisabled");
+				
+				if ((defaultDisabled != null) && (defaultDisabled.compareTo("true") == 0)){
+					ECSRepositorySelector.defaultDisable = true;
+				}
+				
 				if ((serverName == null) || (serverName.compareTo("") == 0)) 
 					serverName = "root";
 				
@@ -41,14 +48,13 @@ public class ECSLoggerPlugin implements LoggerPlugin
 				System.out.println(outp);
 				if (f.exists()){
 					System.out.println(".....config file found                                 .....");
-					System.out.println(".....configuring log4j                                 .....");
-					PropertyConfigurator.configureAndWatch(fileName);
-					ECSRepositorySelector.jbossPropertiesFile = f.getAbsolutePath();
+					//PropertyConfigurator.configureAndWatch(fileName);
+					ECSRepositorySelector.jbossXMLFile = f.getAbsolutePath();
 				}
 				else{
 					System.out.println(".....config file not found                             .....");
 					System.out.println(".....place config file in JBOSS_HOME/bin               .....");
-					ECSRepositorySelector.jbossPropertiesFile = null;
+					ECSRepositorySelector.jbossXMLFile = null;
 				}
 				System.out.println(".....initializing ecs                                  .....");
 				

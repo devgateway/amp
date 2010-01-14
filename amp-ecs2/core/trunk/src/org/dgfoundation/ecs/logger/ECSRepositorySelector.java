@@ -2,6 +2,9 @@ package org.dgfoundation.ecs.logger;
 
 import org.apache.log4j.spi.RepositorySelector;
 import org.apache.log4j.spi.LoggerRepository;
+import org.apache.log4j.spi.RootCategory;
+import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.log4j.xml.XMLLayout;
 import org.apache.log4j.Hierarchy;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -19,11 +22,14 @@ public class ECSRepositorySelector implements RepositorySelector {
 	private static Map<ClassLoader, LoggerRepository> repositories = new HashMap<ClassLoader, LoggerRepository>();
 	private static Map<ClassLoader, LoggerRepository> repositories2 = new HashMap<ClassLoader, LoggerRepository>();
 	private static LoggerRepository defaultRepository;
+	private static LoggerRepository disabledRepository = null;
 	private static LoggerRepository oldRepository;
 	private static RegularLoggerRepository regularRepository;
 	public static String serverName = "root";
-	public static String jbossPropertiesFile = "log4j.properties";
-
+	//public static String jbossPropertiesFile = "log4j.properties";
+	public static String jbossXMLFile = "log4j.xml";
+	public static boolean defaultDisable = false;
+	
 	public ECSRepositorySelector() {
 	}
 
@@ -34,8 +40,14 @@ public class ECSRepositorySelector implements RepositorySelector {
 			defaultRepository = new ECSLoggerRepository(new ECSLogger("root"));
 			
 			try {
-				PropertyConfigurator pconf = new PropertyConfigurator();
-				pconf.doConfigure(jbossPropertiesFile, defaultRepository);
+				DOMConfigurator conf = new DOMConfigurator();
+				conf.doConfigure(jbossXMLFile, defaultRepository);
+				
+				DOMConfigurator conf2 = new DOMConfigurator();
+				conf2.doConfigure(jbossXMLFile, oldRepository);
+				
+				//PropertyConfigurator pconf = new PropertyConfigurator();
+				//pconf.doConfigure(jbossPropertiesFile, defaultRepository);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -48,7 +60,15 @@ public class ECSRepositorySelector implements RepositorySelector {
 			regularRepository = new RegularLoggerRepository(oldRepository
 					.getLogger("root"));
 
+			try {
+				DOMConfigurator conf = new DOMConfigurator();
+				conf.doConfigure(jbossXMLFile, regularRepository);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			RepositorySelector theSelector = new ECSRepositorySelector();
+			
 			LogManager.setRepositorySelector(theSelector, guard);
 			initialized = true;
 		}
@@ -59,16 +79,18 @@ public class ECSRepositorySelector implements RepositorySelector {
 
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		ECSLoggerRepository ecsRepo = new ECSLoggerRepository(new ECSLogger("root"));
-		LoggerRepository normalRepo = new Hierarchy(new RootCategory(Level.DEBUG)); 
+		LoggerRepository normalRepo = new Hierarchy(new RootCategory(Level.INFO)); 
 		if (propertiesFile == null)
-			propertiesFile = jbossPropertiesFile;
+			propertiesFile = jbossXMLFile;
 		
-		if (propertiesFile != null){ //jbossPropertiesFile can be null
+		if (propertiesFile != null){ //jbossXMLFile can be null
 			File f = new File(propertiesFile);
 			if (f.exists()){
 				try {
-					PropertyConfigurator pconf = new PropertyConfigurator();
-					pconf.doConfigure(propertiesFile, normalRepo);
+					//PropertyConfigurator pconf = new PropertyConfigurator();
+					//pconf.doConfigure(propertiesFile, normalRepo);
+					DOMConfigurator conf = new DOMConfigurator();
+					conf.doConfigure(propertiesFile, normalRepo);
 				} catch (Exception e) {
 					defaultRepository.getLogger(ECSRepositorySelector.class.getCanonicalName()).error("Error while applying properties file", e);
 				}
@@ -92,7 +114,7 @@ public class ECSRepositorySelector implements RepositorySelector {
 
 	public static synchronized void init(Boolean ecsDisable, String serverName, String propertiesFile){
 		LoggerRepository current = LogManager.getLoggerRepository();
-		if ("org.dgfoundation.ecs.logger.ECSLoggerRepository".compareTo(current.getClass().getCanonicalName())==0){//already changed
+		if (current.getClass().getCanonicalName().startsWith("org.dgfoundation.ecs.logger")){//already changed
 			ClassLoader bsLoader = current.getClass().getClassLoader();
 			try {
 				Class bsRepo = bsLoader.loadClass("org.dgfoundation.ecs.logger.ECSRepositorySelector");
@@ -129,7 +151,11 @@ public class ECSRepositorySelector implements RepositorySelector {
 		LoggerRepository repository = (LoggerRepository) repositories
 				.get(loader);
 		if (repository == null) {
-			return defaultRepository;
+			if (defaultDisable){
+				return regularRepository;
+			}
+			else
+				return defaultRepository;
 		} else {
 			return repository;
 		}

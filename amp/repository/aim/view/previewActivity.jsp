@@ -111,18 +111,18 @@ function exportToPdf (actId) {
 
 function expandAll() {
    
-	$("img[@id$='_minus']").show();
-	$("img[@id$='_plus']").hide();	
-	$("div[@id$='_dots']").hide();
-	$("div[@id^='act_']").show('fast');
+	$("img[id$='_minus']").show();
+	$("img[id$='_plus']").hide();	
+	$("div[id$='_dots']").hide();
+	$("div[id^='act_']").show('fast');
 }
 
 function collapseAll() {
 
-	$("img[@id$='_minus']").hide();
-	$("img[@id$='_plus']").show();	
-	$("div[@id$='_dots']").show();
-	$("div[@id^='act_']").hide();
+	$("img[id$='_minus']").hide();
+	$("img[id$='_plus']").show();	
+	$("div[id$='_dots']").show();
+	$("div[id^='act_']").hide();
 }
 -->
 

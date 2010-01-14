@@ -69,15 +69,15 @@
 	}
      
 	function expandAll(){
-                $("img[@id^='img_']"+':visible').slideUp('fast');
-		$("img[@id^='imgh_']"+':hidden').slideDown('fast');;
-		$("div[@id^='div_theme_']").slideDown('fast');
+                $("img[id^='img_']"+':visible').slideUp('fast');
+		$("img[id^='imgh_']"+':hidden').slideDown('fast');;
+		$("div[id^='div_theme_']").slideDown('fast');
                
          }
          function collapseAll(){
-              $("img[@id^='imgh_']"+':visible').slideUp('fast');
-              $("img[@id^='img_']"+':hidden').slideDown('fast');
-	      $("div[@id^='div_theme_']"+':visible').slideUp('fast');
+              $("img[id^='imgh_']"+':visible').slideUp('fast');
+              $("img[id^='img_']"+':hidden').slideDown('fast');
+	      $("div[id^='div_theme_']"+':visible').slideUp('fast');
          }
 	-->
 </script>

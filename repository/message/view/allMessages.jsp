@@ -989,7 +989,7 @@ background-color:yellow;
 	}
 
 	function selectAllCheckboxes(){
-		var allChkboxes=$("input[@id^='delChkbox_']");
+		var allChkboxes=$("input[id^='delChkbox_']");
 		if(allChkboxes!=null && allChkboxes.length>0){
 			for(var i=0;i<allChkboxes.length;i++){
 				allChkboxes[i].checked=true;
@@ -997,7 +997,7 @@ background-color:yellow;
 		}
 	}
 	function deselectAllCheckboxes(){
-		var allChkboxes=$("input[@id^='delChkbox_']");
+		var allChkboxes=$("input[id^='delChkbox_']");
 		if(allChkboxes!=null && allChkboxes.length>0){
 			for(var i=0;i<allChkboxes.length;i++){
 				allChkboxes[i].checked=false;

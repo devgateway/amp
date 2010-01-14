@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
+import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -150,7 +152,17 @@ public class EditOrganisation extends DispatchAction {
                 if (organization.getLegalPersonRegDate() != null) {
                     editForm.setLegalPersonRegDate(FormatHelper.formatDate(organization.getLegalPersonRegDate()));
                 }
-                editForm.setRecipients(new ArrayList(organization.getRecipients()));
+                if (organization.getOperFuncApprDate() != null) {
+                    editForm.setOperFuncApprDate(FormatHelper.formatDate(organization.getOperFuncApprDate()));
+                }
+                if (organization.getLineMinRegDate() != null) {
+                    editForm.setLineMinRegDate(FormatHelper.formatDate(organization.getLineMinRegDate()));
+               }
+               editForm.setReceiptLegPersonalityAct(organization.getReceiptLegPersonalityAct());
+               editForm.setOtherInformation(organization.getOtherInformation());
+               List<AmpOrgRecipient> recipients=new ArrayList<AmpOrgRecipient>(organization.getRecipients());
+                Collections.sort(recipients, new DbUtil.HelperAmpOrgRecipientByOrgName());
+                editForm.setRecipients(recipients);
                 if (organization.getCountry() != null) {
                     editForm.setCountryId(organization.getCountry().getId());
                 }
@@ -658,21 +670,20 @@ public class EditOrganisation extends DispatchAction {
         }
         AddOrgForm editForm = (AddOrgForm) form;
         Long[] selRecipients = editForm.getSelRecipients();
-        List<AmpOrganisation> oldRecipients = editForm.getRecipients();
-        List<AmpOrganisation> removedOrgs = new ArrayList<AmpOrganisation>();
-        Iterator<AmpOrganisation> orgIter = oldRecipients.iterator();
-        while (orgIter.hasNext()) {
-            AmpOrganisation organization = orgIter.next();
-            for (int i = 0; i < selRecipients.length; i++) {
-                if (organization.getAmpOrgId().equals(selRecipients[i])) {
-                    removedOrgs.add(organization);
-                    break;
-                }
-
+        List<AmpOrgRecipient> recipients = editForm.getRecipients();
+        for (int i = 0; i < selRecipients.length; i++) {
+            Iterator<AmpOrgRecipient> iterRecipient = recipients.iterator();
+            while (iterRecipient.hasNext()) {
+              AmpOrgRecipient recipient = iterRecipient.next();
+              if(recipient.getOrganization().getAmpOrgId().equals(selRecipients[i])){
+                  iterRecipient.remove();
+                  break;
+              }
             }
+
         }
-        oldRecipients.removeAll(removedOrgs);
-        editForm.setRecipients(oldRecipients);
+        
+        editForm.setRecipients(recipients);
         editForm.setSelRecipients(null);
         return mapping.findForward("forward");
     }
@@ -782,6 +793,10 @@ public class EditOrganisation extends DispatchAction {
             if (orgType.getClassification() == null || !orgType.getClassification().equals(Constants.ORG_TYPE_REGIONAL)) {
                 editForm.setRegionId(null);
             }
+            editForm.setOtherInformation(null);
+            editForm.setReceiptLegPersonalityAct(null);
+            editForm.setLineMinRegDate(null);
+            editForm.setOperFuncApprDate(null);
         }
         return mapping.findForward("forward");
 
@@ -793,6 +808,13 @@ public class EditOrganisation extends DispatchAction {
     	if(asynchCall!=null && asynchCall.equals("true")){
     	   forwardWhere = null;
     	}
+        else{
+            AddOrgForm editForm = (AddOrgForm) form;
+            if(editForm.getRecipients()!=null){
+            Collections.sort(editForm.getRecipients(), new DbUtil.HelperAmpOrgRecipientByOrgName());
+            }
+        }
+
     	return mapping.findForward(forwardWhere);
     }
 
@@ -892,6 +914,21 @@ public class EditOrganisation extends DispatchAction {
         } else {
             organization.setMinPlanRegNumb(null);
         }
+     
+        if (editForm.getOperFuncApprDate() != null&& !editForm.getOperFuncApprDate().equals("")) {
+            organization.setOperFuncApprDate(FormatHelper.parseDate2(editForm.getOperFuncApprDate()));
+        }
+        else{
+            organization.setOperFuncApprDate(null);
+        }
+        if (editForm.getLineMinRegDate() != null&& !editForm.getLineMinRegDate().equals("")) {
+            organization.setLineMinRegDate(FormatHelper.parseDate2(editForm.getLineMinRegDate()));
+        }
+        else{
+            organization.setLineMinRegDate(null);
+        }
+        organization.setReceiptLegPersonalityAct(editForm.getReceiptLegPersonalityAct());
+        organization.setOtherInformation(editForm.getOtherInformation());
 
         organization.setDescription(editForm.getDescription());
         organization.setOrgGrpId(DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId()));
@@ -913,12 +950,28 @@ public class EditOrganisation extends DispatchAction {
 
         // recipients
         if (organization.getRecipients() == null) {
-            organization.setRecipients(new HashSet<AmpOrganisation>());
-        } else {
-            organization.getRecipients().clear();
-        }
+            organization.setRecipients(new HashSet<AmpOrgRecipient>());
+        } 
         if (editForm.getRecipients() != null) {
-            organization.getRecipients().addAll(editForm.getRecipients());
+            Iterator<AmpOrgRecipient> recipientIter = editForm.getRecipients().iterator();
+            Set<AmpOrgRecipient> recipients = new HashSet<AmpOrgRecipient>();
+            Set<AmpOrgRecipient> recipientsToRetain = new HashSet<AmpOrgRecipient>();
+            while (recipientIter.hasNext()) {
+                AmpOrgRecipient recipient = recipientIter.next();
+                if (recipient.getAmpOrgRecipientId()!=null&&recipient.getAmpOrgRecipientId()!=0) {
+                    AmpOrgRecipient newRecipient = (AmpOrgRecipient) DbUtil.get(AmpOrgRecipient.class, recipient.getAmpOrgRecipientId());
+                    newRecipient.setDescription(recipient.getDescription());
+                    recipientsToRetain.add(newRecipient);
+                    continue;
+                }
+                AmpOrgRecipient newRecipient = new AmpOrgRecipient();
+                newRecipient.setParentOrganization(organization);
+                newRecipient.setOrganization(recipient.getOrganization());
+                newRecipient.setDescription(recipient.getDescription());
+                recipients.add(newRecipient);
+            }
+            organization.getRecipients().retainAll(recipientsToRetain);
+            organization.getRecipients().addAll(recipients);
         }
 
         // staff information
@@ -949,6 +1002,9 @@ public class EditOrganisation extends DispatchAction {
             organization.getStaffInfos().retainAll(infosToRetain);
             organization.getStaffInfos().addAll(infos);
         }
+        else{
+            organization.getStaffInfos().clear();
+        }
 
          // organization information
         if (organization.getOrganizationBudgetInfos() == null) {
@@ -977,6 +1033,9 @@ public class EditOrganisation extends DispatchAction {
             }
             organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
             organization.getOrganizationBudgetInfos().addAll(infosOrg);
+        }
+        else{
+             organization.getOrganizationBudgetInfos().clear();
         }
 
         //Sectors
@@ -1025,7 +1084,7 @@ public class EditOrganisation extends DispatchAction {
 				fillOrganizationContactPrimaryField(editForm.getPrimaryOrgContIds(),orgContact);
 			}
 			organization.getOrganizationContacts().addAll(allContacts);
-		}
+        }
 
         // locations
         if (organization.getLocations() == null) {
@@ -1049,18 +1108,18 @@ public class EditOrganisation extends DispatchAction {
                 }
                 if (newLoc == null) {
                     newLoc = new AmpOrgLocation();
+                    newLoc.setOrganization(organization);
+                    newLoc.setPercent(Float.valueOf(location.getPercent()).doubleValue());
+                    newLoc.setLocation(location.getAmpCVLocation());
+                    locations.add(newLoc);
                 }
-                newLoc.setOrganization(organization);
-                newLoc.setPercent(Float.valueOf(location.getPercent()).doubleValue());
-                newLoc.setLocation(location.getAmpCVLocation());
-                locations.add(newLoc);
+                   
             }
-
         }
-
-
+               
+              
         organization.getLocations().clear();
-        organization.getLocations().addAll(locations);
+            organization.getLocations().addAll(locations);
 
 
         // pledges
@@ -1205,6 +1264,10 @@ public class EditOrganisation extends DispatchAction {
             form.setOrgInfoAmount(null);
             form.setSelectedContactInfoIds(null);
             form.setSelectedOrgInfoIds(null);
+            form.setOtherInformation(null);
+            form.setLineMinRegDate(null);
+            form.setOperFuncApprDate(null);
+            form.setReceiptLegPersonalityAct(null);
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             new DgException(ex);

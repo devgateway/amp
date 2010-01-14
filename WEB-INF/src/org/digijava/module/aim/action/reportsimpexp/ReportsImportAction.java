@@ -130,7 +130,7 @@ public class ReportsImportAction extends MultiAction {
 						 currentReport.setName( currentReport.getName() + " (" + translatedText + ")" ) ;
 					}
 					
-					AdvancedReportUtil.saveReport(currentReport, team.getAmpTeamId(), tLead.getAmpTeamMemId(), true);
+					//AdvancedReportUtil.saveReport(currentReport, team.getAmpTeamId(), tLead.getAmpTeamMemId(), true);
 					ReportWizardAction.duplicateReportData(currentReport);
 				}
 			}

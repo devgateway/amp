@@ -51,6 +51,10 @@ public class DigiConfig {
     private int httpPort;
     private int httpsPort;
     
+    private String ecsDisable;
+    private String ecsServerName;
+    private String propertiesFile;
+    
 	private ParamSafeHTML paramSafehtml;
     private ParamBbTag paramBbTag;
     private ForwardEmails forwardEmails;
@@ -381,4 +385,29 @@ public class DigiConfig {
 		this.httpsPort = httpsPort;
 	}
 
+	public String getEcsDisable() {
+		return ecsDisable;
+	}
+
+	public void setEcsDisable(String ecsDisable) {
+		this.ecsDisable = ecsDisable;
+	}
+
+	public String getEcsServerName() {
+		return ecsServerName;
+	}
+
+	public void setEcsServerName(String ecsServerName) {
+		this.ecsServerName = ecsServerName;
+	}
+
+	public String getPropertiesFile() {
+		return propertiesFile;
+	}
+
+	public void setPropertiesFile(String propertiesFile) {
+		this.propertiesFile = propertiesFile;
+	}
+
+	
 }

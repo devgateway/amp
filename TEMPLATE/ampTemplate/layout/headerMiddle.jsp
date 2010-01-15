@@ -666,6 +666,15 @@ function adminHelp(){
                                         </a>
                                         </li>
                                         </feature:display>
+                                        <feature:display name="My Workspaces" module="Tools">
+                                        <li>
+                                         <a class="yuiampmenuitemlabel" href="/aim/myWorkspaces.do?action=show">
+                                    
+                                        <digi:trn key="aim:workspaceinfo">My Workspaces</digi:trn>
+                                        </a>
+                                        </li>
+                                        </feature:display>
+                                        
                                         <feature:display name="Language Option" module="Tools">
 		                                        <li style="_width:300px">
 		                                        <a class="yuiampmenuitemlabel" href="#">

@@ -27,6 +27,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Constants;
@@ -237,7 +238,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
             cell.setCellStyle(style);
 
             cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Percent", locale, siteId);
+            headerPrefix = TranslatorWorker.translateText("Organization(s)", locale, siteId);
             HSSFRichTextString headerPercent = new HSSFRichTextString(headerPrefix);
             headerPercent.applyFont(fontSubHeader);
             cell.setCellValue(headerPercent);
@@ -267,14 +268,20 @@ public class ExportOrganizationToExcel extends DispatchAction {
                 cell.setCellValue(budgetInfo.getYear());
                 cell.setCellStyle(style);
                 cell = row.createCell(cellNum++);
-                String value = TranslatorWorker.translateText(budgetInfo.getName(), locale, siteId);
+                String value = TranslatorWorker.translateText(budgetInfo.getType().getValue(), locale, siteId);
                 HSSFRichTextString typeValue = new HSSFRichTextString(value);
                 cell.setCellValue(typeValue);
                 cell.setCellStyle(style);
                 cell = row.createCell(cellNum++);
-                if(budgetInfo.getPercent()!=null){
-                     cell.setCellValue(budgetInfo.getPercent());
+                String organizations="";
+                if(budgetInfo.getOrganizations()!=null){
+                    for(AmpOrganisation organisation:budgetInfo.getOrganizations() ){
+                         organizations+=BULLETCHAR+organisation.getName()+NEWLINECHAR;
+
+                    }
                 }
+                HSSFRichTextString organizationsValue = new HSSFRichTextString(organizations);
+                cell.setCellValue(organizationsValue);
                 cell.setCellStyle(style);
                 cell = row.createCell(cellNum++);
                 cell.setCellValue(budgetInfo.getAmount());

@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
@@ -99,7 +100,7 @@ public class AddOrgForm extends ActionForm {
     private List<AmpOrganisationDocument> documents;
     private String orgInfoSelectedYear;
     private Long orgInfoCurrId;
-    private Integer orgInfoType;
+    private Long orgInfoType;
     private String orgInfoPercent;
     private Long[] selectedOrgInfoIds;
     private Long selectedOrgInfoId;
@@ -109,7 +110,24 @@ public class AddOrgForm extends ActionForm {
     private String lineMinRegDate;
     private String operFuncApprDate;
     private String receiptLegPersonalityAct;
+    private List<AmpOrganisation> budgetOrgs;
+    private Long[] selBudgetOrg;
 
+    public Long[] getSelBudgetOrg() {
+        return selBudgetOrg;
+    }
+
+    public void setSelBudgetOrg(Long[] selBudgetOrg) {
+        this.selBudgetOrg = selBudgetOrg;
+    }
+
+    public List<AmpOrganisation> getBudgetOrgs() {
+        return budgetOrgs;
+    }
+
+    public void setBudgetOrgs(List<AmpOrganisation> budgetOrgs) {
+        this.budgetOrgs = budgetOrgs;
+    }
     public String getLineMinRegDate() {
         return lineMinRegDate;
     }
@@ -199,11 +217,11 @@ public class AddOrgForm extends ActionForm {
         this.orgInfoSelectedYear = orgInfoSelectedYear;
     }
 
-    public Integer getOrgInfoType() {
+    public Long getOrgInfoType() {
         return orgInfoType;
     }
 
-    public void setOrgInfoType(Integer orgInfoType) {
+    public void setOrgInfoType(Long orgInfoType) {
         this.orgInfoType = orgInfoType;
     }
 

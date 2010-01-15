@@ -111,8 +111,8 @@
                 <property name="legalPersonNum" column="legal_personality_number" type="java.lang.String" />
                 <property name="legalPersonRegDate" column="legal_personality_reg_date" type="java.util.Date" />
                 <property name="minPlanRegDate" column="min_plan_reg_date" type="java.util.Date" />
-                <property name="primaryPurpose" column="org_primary_purpose" type="java.lang.String" />
-                <property name="otherInformation" column="org_other_info" type="java.lang.String" />
+                <property name="primaryPurpose" column="org_primary_purpose" type="text" />
+                <property name="otherInformation" column="org_other_info" type="text" />
                 <property name="lineMinRegDate" column="org_line_ministry_reg_date" type="java.util.Date" />
                 <property name="operFuncApprDate" column="org_oper_func_approval_date" type="java.util.Date" />
                 <property name="receiptLegPersonalityAct" column="org_rec_leg_per_act" type="java.lang.String" />

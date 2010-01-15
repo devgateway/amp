@@ -2894,9 +2894,7 @@ public class DbUtil {
                 AmpCategoryValueLocations region = org.getRegion();
                 AmpCategoryValue implemLocationLevel = org.getImplemLocationLevel();
                 Set<AmpOrgLocation> locations = org.getLocations();
-                Set<AmpOrgStaffInformation> staffInfos = org.getStaffInfos();
                 AmpCategoryValueLocations country = org.getCountry();
-                Set<AmpOrgRecipient> recipients = org.getRecipients();
                 String addressAbroad = org.getAddressAbroad();
                 String taxNumber = org.getTaxNumber();
                 String primaryPurpose = org.getPrimaryPurpose();
@@ -2904,8 +2902,6 @@ public class DbUtil {
                 String legalPersonNum = org.getLegalPersonNum();
                 Date legalPersonRegDate = org.getLegalPersonRegDate();
                 Date minPlanRegDate = org.getMinPlanRegDate();
-                Set<AmpOrganizationBudgetInformation> organizationBudgetInfos = org.getOrganizationBudgetInfos();
-                Set calendar = org.getCalendar();
                 String segmentCode = org.getSegmentCode();
                 Set sectors = org.getSectors();
                 Set<AmpOrganisationDocument> documents = org.getDocuments();
@@ -2960,50 +2956,6 @@ public class DbUtil {
                              org.getLocations().add(location);
                         }
 
-                    }
-                }
-               
-                if(org.getStaffInfos()==null){
-                    org.setStaffInfos(new HashSet<AmpOrgStaffInformation>());
-                }
-                org.getStaffInfos().clear();
-                if(staffInfos!=null){
-                    Iterator<AmpOrgStaffInformation> stafIter=staffInfos.iterator();
-                    while(stafIter.hasNext()){
-                        AmpOrgStaffInformation staff=stafIter.next();
-                        if(staff.getId()!=null){
-                           AmpOrgStaffInformation oldStaff=(AmpOrgStaffInformation)sess.get(AmpOrgStaffInformation.class, staff.getId());
-                           org.getStaffInfos().add(oldStaff);
-                        }
-                        else{
-                             org.getStaffInfos().add(staff);
-                        }
-                    }
-                }
-
-              /*  if(org.getRecipients()==null){
-                    org.setRecipients(new HashSet<AmpOrgRecipient>());
-                }
-                org.getRecipients().clear();
-                if(recipients!=null){
- 
-                    org.getRecipients().addAll(recipients);
-                }*/
-                if(org.getOrganizationBudgetInfos()==null){
-                    org.setOrganizationBudgetInfos(new HashSet<AmpOrganizationBudgetInformation>());
-                }
-                org.getOrganizationBudgetInfos().clear();
-                if(organizationBudgetInfos!=null){
-                    Iterator<AmpOrganizationBudgetInformation> budgetIter=organizationBudgetInfos.iterator();
-                    while(budgetIter.hasNext()){
-                        AmpOrganizationBudgetInformation budget=budgetIter.next();
-                        if(budget.getId()!=null){
-                           AmpOrganizationBudgetInformation oldBudget=(AmpOrganizationBudgetInformation)sess.get(AmpOrganizationBudgetInformation.class, budget.getId());
-                           org.getOrganizationBudgetInfos().add(oldBudget);
-                        }
-                        else{
-                             org.getOrganizationBudgetInfos().add(budget);
-                        }
                     }
                 }
                

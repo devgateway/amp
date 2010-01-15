@@ -3,22 +3,31 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import org.digijava.module.aim.helper.Constants;
+import java.util.Set;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 
 public class AmpOrganizationBudgetInformation implements Serializable{
     private Long id;
-    private Integer type;
+    private AmpCategoryValue type;
     private Long year;
-    private Double percent;
     private Double amount;
     private AmpCurrency currency;
     private AmpOrganisation organization;
     private boolean newlyCreated;
+    private Set<AmpOrganisation> organizations;
 
 
     public Double getAmount() {
         return amount;
+    }
+
+    public Set<AmpOrganisation> getOrganizations() {
+        return organizations;
+    }
+
+    public void setOrganizations(Set<AmpOrganisation> organizations) {
+        this.organizations = organizations;
     }
 
     public void setAmount(Double amount) {
@@ -57,19 +66,11 @@ public class AmpOrganizationBudgetInformation implements Serializable{
         this.currency = currency;
     }
 
-    public Double getPercent() {
-        return percent;
-    }
-
-    public void setPercent(Double percent) {
-        this.percent= percent;
-    }
-
-    public int getType() {
+    public AmpCategoryValue getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(AmpCategoryValue type) {
         this.type = type;
     }
 
@@ -81,16 +82,5 @@ public class AmpOrganizationBudgetInformation implements Serializable{
         this.year = year;
     }
 
-    public String getName() {
-        String name = "";
-        if (type == Constants.ORG_INFO_TYPE_ANNUAL_BUDGET_ADMIN) {
-            name = "Annual Budget of internal/administrative functioning";
-        } else {
-            if (type == Constants.ORG_INFO_TYPE_ANNUAL_BUDGET_PROGRAM) {
-                name = "Program Annual Budget";
-            }
-        }
-        return name;
-    }
-
+ 
 }

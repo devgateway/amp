@@ -148,7 +148,6 @@
         function addOrgInfo(){
             var year=document.aimAddOrgForm.orgInfoSelectedYear;
             var type=document.aimAddOrgForm.orgInfoType;
-            var percent=document.aimAddOrgForm.orgInfoPercent;
             var amount=document.aimAddOrgForm.orgInfoAmount;
             var currId=document.aimAddOrgForm.orgInfoCurrId;
             var errorMsg;
@@ -164,23 +163,13 @@
                 alert(errorMsg);
                 return false;
             }
-            if(type.value=='-1'){
+            if(type.value=='0'){
                 errorMsg='<digi:trn jsFriendly="true">Please select type!</digi:trn>';
                 alert(errorMsg);
                 return false;
             }
 
-            if(type.value=='2'&&percent.value.trim()==''){
-                errorMsg='<digi:trn jsFriendly="true">Please enter percent!</digi:trn>';
-                alert(errorMsg);
-                return false;
-            }
-            if (!(/^\d*\.?\d*%?$/.test(percent.value))) {
-                errorMsg='<digi:trn jsFriendly="true">Please enter correct percent value!</digi:trn>';
-                alert(errorMsg);
-                percent.value = "";
-                return false;
-            }
+                    
             if (!(/^\d+\.?\d*$/.test(amount.value))) {
                 errorMsg='<digi:trn jsFriendly="true">Please enter correct amount value!</digi:trn>';
                 alert(errorMsg);
@@ -251,6 +240,15 @@
             document.aimAddOrgForm.target = "_self"
             document.aimAddOrgForm.submit();
         }
+        function deleteBudgetOrg(){
+            <digi:context name="remOrgs" property="context/module/moduleinstance/editOrganisation.do" />
+            document.aimAddOrgForm.action = "${remOrgs}";
+            document.aimAddOrgForm.actionFlag.value="removeBudgetOrg";
+            document.aimAddOrgForm.target = "_self"
+            document.aimAddOrgForm.submit();
+        }
+
+
         function selectLocation() {
             var params="implemLocationLevel="+document.getElementsByName("implemLocationLevel")[0].value+"&showLocLevelSelect=false";
             myAddLocation(params);
@@ -668,8 +666,8 @@ function resetPrimary(contList){
 
     <table bgColor=#ffffff cellPadding=5 cellSpacing=1 >
         <tr>
-            <td class=r-dotted-lg width=14>&nbsp;</td>
-            <td align=left class=r-dotted-lg vAlign=top width="800px">
+            <td class=r-dotted-lg width="1%">&nbsp;</td>
+            <td align=left class=r-dotted-lg vAlign=top width="99%">
                 <table bgcolor="#ffffff" cellPadding=5 cellSpacing=0 width="100%">
                     <tr>
                         <!-- Start Navigation -->
@@ -1263,8 +1261,13 @@ function resetPrimary(contList){
                                                                 </html:multibox>
                                                             </td>
                                                             <td class="tdClass" style="width:100px;text-align:center;">${orgInfo.year}</td>
-                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${orgInfo.name}</digi:trn></td>
-                                                            <td class="tdClass" style="width:150px;text-align:center;">${orgInfo.percent}<c:if test="${not empty orgInfo.percent}">%</c:if></td>
+                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${orgInfo.type}</digi:trn></td>
+                                                            <td class="tdClass" style="width:150px;text-align:center;"> <ul>
+                                                                    <c:forEach var="budgetOrganization" items="${orgInfo.organizations}">
+                                                                        <li>${budgetOrganization.name}</li>
+                                                                    </c:forEach>
+                                                                </ul>
+                                                            </td>
                                                             <td class="tdClass" style="width:150px;text-align:center;">${orgInfo.amount}</td>
                                                             <td class="tdClass" style="width:205px;text-align:center;">${orgInfo.currency.currencyCode}</td>
                                                             <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
@@ -1288,10 +1291,10 @@ function resetPrimary(contList){
                                         <digi:trn>Year</digi:trn>
                                     </td>
                                     <td style="width:210px;text-align:center; "  class="tdBoldClass">
-                                        <digi:trn>Type of Organization</digi:trn>
+                                        <digi:trn>Type</digi:trn>
                                     </td>
-                                    <td style="width:150px;text-align:center; "  class="tdBoldClass">
-                                        <digi:trn>Percent</digi:trn>
+                                     <td style="text-align:center">
+                                       <aim:addOrganizationButton refreshParentDocument="true" collection="budgetOrgs"   form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                     </td>
                                     <td style="width:150px;text-align:center;  "  class="tdBoldClass">
                                         <digi:trn>Amount</digi:trn>
@@ -1313,15 +1316,32 @@ function resetPrimary(contList){
                                             <html:optionsCollection name="aimAddOrgForm"  property="years" label="label" value="value"/>
                                         </html:select>
                                     </td>
-                                    <td style="text-align:center">
 
-                                        <html:select property="orgInfoType" name="aimAddOrgForm" styleClass="selectStyle">
-                                            <html:option value="-1">-<digi:trn>Select Type</digi:trn>-</html:option>
-                                            <html:option value="1"><digi:trn>Annual Budget of internal/administrative functioning</digi:trn></html:option>
-                                            <html:option value="2"><digi:trn>Program Annual Budget</digi:trn></html:option>
-                                        </html:select>
+                                    <td style="text-align:center">
+                                            <c:set var="translation">
+                                            <digi:trn>Select Type</digi:trn>
+                                        </c:set>
+                                    <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="orgInfoType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ORGANIZATION_BUDGET_INFO_KEY%>" styleClass="selectStyle" />
                                     </td>
-                                    <td style="text-align:center"><html:text name="aimAddOrgForm" property="orgInfoPercent"  styleClass="inp-text"/></td>
+                                    <td style="text-align:left">
+                                        <table  width="100%" cellspacing="0" cellpadding="0" class="box-border-nopadding">
+                                        <c:forEach var="budgetOrg" items="${aimAddOrgForm.budgetOrgs}">
+                                            <tr>
+                                                <td>
+                                                    <html:multibox property="selBudgetOrg">
+                                                        <c:out value="${budgetOrg.ampOrgId}"/>
+                                                    </html:multibox>
+                                                </td>
+                                                <td>
+                                                    ${budgetOrg.name}
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </table>
+                                        <c:if test="${not empty aimAddOrgForm.budgetOrgs}">
+                                        <input type="button" style="width:80px" onclick="deleteBudgetOrg()" value="<digi:trn>Delete</digi:trn>" />
+                                        </c:if>
+                                    </td>
                                     <td style="text-align:center"><html:text name="aimAddOrgForm" property="orgInfoAmount"  styleClass="inp-text"/></td>
                                     <td style="text-align:center">
                                         <c:set var="translation">

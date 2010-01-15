@@ -85,6 +85,10 @@ public class CategoryConstants {
 	public static final String ORGANIZATION_STAFF_INFO_NAME = "Staff Information Type";
 	public static final String ORGANIZATION_STAFF_INFO_KEY = "staff_information_type";
 
+    // organization budget Information type
+	public static final String ORGANIZATION_BUDGET_INFO_NAME = "NGO Budget Type";
+	public static final String ORGANIZATION_BUDGET_INFO_KEY = "ngo_budget_type";
+
 	// indicator source
 	public static final String INDICATOR_SOURCE_NAME = "Indicator Source";
 	public static final String INDICATOR_SOURCE_KEY = "indicator_source";

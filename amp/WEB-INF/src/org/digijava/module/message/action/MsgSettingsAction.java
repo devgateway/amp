@@ -101,15 +101,14 @@ public class MsgSettingsAction extends DispatchAction {
 			//INBOX
 			membersIds=AmpMessageUtil.getOverflowedMembersIdsForInbox(limit, clazz);
 			if(membersIds!=null && ! membersIds.isEmpty() && membersIds.size()>0){
-				for (Long id : membersIds) {
-					//load hidden messages list for inbox
-					messagesToBeHidden.addAll(AmpMessageUtil.getHiddenInboxMsgs(clazz, id,limit)); // returned list won't be empty,because we have list of users which have extra messages in inbox
-					//load visible messages list for inbox
-					messagesToBeShown.addAll(AmpMessageUtil.getVisibleInboxMsgs(clazz, id,limit));
+				for (Long id : membersIds) {					
+					//update hidden messages to visible if necessary
+			 	 	AmpMessageUtil.updateHiddenInboxMsgsToVisible(clazz, id, limit);
+			 	 	//hide visible messages if necessary
+			 	 	AmpMessageUtil.updateVisibleInboxMsgsToHidden(clazz, id, limit);
 				}
 			}else{//<-- if storage was changed to larger number, then overflowed members may be empty.also some overflowed members may require to become not overflowed. that means hidden messages should be changed to visible
-				//anu tu iseti memberebi ar arseboben, romlebsac axal limitze meti mesiji aqvt,mahin unda vnaxot arsebobs tu ara bazashi hidden mesijebi da tu arsebobs, unda gadavaketot visible-ad,radgan storage-i gaizarda.
-				messagesToBeShown.addAll(AmpMessageUtil.getAllInboxHiddenMessages(clazz));
+				AmpMessageUtil.updateAllHiddenInboxMessagesToVisible(clazz);
 			}
 			
 			//only UserMessage and AmpAlert have sent/draft tabs
@@ -118,46 +117,29 @@ public class MsgSettingsAction extends DispatchAction {
 				membersIds=AmpMessageUtil.getOverflowedMembersIdsForSentOrDraft(limit, clazz, false);
 				if(membersIds!=null && membersIds.size()>0){
 					for (Long id : membersIds) {
-						//load hidden messages list for inbox
-						messagesToBeHidden.addAll(AmpMessageUtil.getHiddenSentOrDraftMsgs(clazz, id,false,limit)); // returned list won't be empty,because we have list of users which have extra messages in inbox
-						//load visible messages list for inbox
-						messagesToBeShown.addAll(AmpMessageUtil.getVisibleSentOrDraftMsgs(clazz, id, false,limit));
+						//update hidden messages to visible if necessary
+				 	 	AmpMessageUtil.updateHiddenSentOrDraftMsgsToVisible(clazz, id, false, limit);
+				 	 	//hide visible messages if necessary
+				 	 	AmpMessageUtil.updateVisibleSentOrDraftMsgsToHidden(clazz, id, false, limit);
 					}
 				}else {
-					messagesToBeShown.addAll(AmpMessageUtil.getAllSentOrDrartHiddenMessages(clazz,false));
+					AmpMessageUtil.updateAllSentOrDrartHiddenMsgsToVisible(clazz, false);
 				}
 				
 				//DRAFT
 				membersIds=AmpMessageUtil.getOverflowedMembersIdsForSentOrDraft(limit, clazz, true);
 				if(membersIds!=null && membersIds.size()>0){
 					for (Long id : membersIds) {
-						//load hidden messages list for inbox
-						messagesToBeHidden.addAll(AmpMessageUtil.getHiddenSentOrDraftMsgs(clazz, id,true,limit));
-						//load visible messages list for inbox
-						messagesToBeShown.addAll(AmpMessageUtil.getVisibleSentOrDraftMsgs(clazz, id, true,limit));
+						//update hidden messages to visible if necessary				 	 	
+						AmpMessageUtil.updateHiddenSentOrDraftMsgsToVisible(clazz, id, true, limit);
+				 	 	//hide visible messages if necessary
+				 	 	AmpMessageUtil.updateVisibleSentOrDraftMsgsToHidden(clazz, id, true, limit);
 					}
 				}else {
-					messagesToBeShown.addAll(AmpMessageUtil.getAllSentOrDrartHiddenMessages(clazz,true));
+					AmpMessageUtil.updateAllSentOrDrartHiddenMsgsToVisible(clazz, true);
 				}
 			}					
-		}
-		
-		//now update hidden messages
-		if(!messagesToBeHidden.isEmpty()){
-			for (AmpMessageState state : messagesToBeHidden) {
-				state.setMessageHidden(true);
-				AmpMessageUtil.saveOrUpdateMessageState(state);			
-			}
-		}
-		
-		//now update visible messages
-		if(!messagesToBeShown.isEmpty()){
-			for (AmpMessageState state : messagesToBeShown) {
-				state.setMessageHidden(false);
-				AmpMessageUtil.saveOrUpdateMessageState(state);			
-			}
-		}		
-		 
+		} 
 	}
 	
 	private AmpMessageForm clearForm(AmpMessageForm form){

@@ -334,7 +334,7 @@ div.fakefile2 input{
     					<table cellpadding="5px" width="100%">
     						<tr>
     							<td width="50%" valign="top">
-    							<div style="border: 1px black solid; padding:5px">
+    							<div style="border: 1px grey solid; padding:5px">
 								<div >							
         									<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
 	        								</digi:trn><br/>
@@ -358,7 +358,7 @@ div.fakefile2 input{
     							</td>
     							
     							<td  width="50%" valign="top" >
-    							<div style="border: 1px black solid; padding:5px">
+    							<div style="border: 1px grey solid; padding:5px">
 		    							<digi:trn key="aim:pleaseChooseKeysForImport"> Please choose the primary keys for import </digi:trn>: <br/>
         									<html:checkbox property="primaryKeys" name="deImportForm" value="title">
         										<digi:trn key="aimm:Title">Title</digi:trn>

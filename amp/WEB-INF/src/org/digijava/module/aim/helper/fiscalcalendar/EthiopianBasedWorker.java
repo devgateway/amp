@@ -54,12 +54,12 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 	public void setTime(Date time) {
 		internalTime = time;
 		
-		fiscalMonth = internalCalendar.get(GregorianCalendar.MONTH);
 		this.fiscalMonth=EthiopianCalendar.getEthiopianDate(time).ethMonth;
 		
 		internalCalendar = new GregorianCalendar();
 		internalCalendar.setTime(time);
-		
+		fiscalMonth = internalCalendar.get(GregorianCalendar.MONTH);
+			
 		
 		// set offset from fiscal calendar
 		internalCalendar.add(GregorianCalendar.YEAR, fiscalCalendar.getYearOffset());

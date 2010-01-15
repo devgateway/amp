@@ -49,7 +49,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 			expTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyExpTransformerFactory", 
 			impTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyImpTransformerFactory"
 	)
-	private Boolean hideActivities;
+	private Boolean hideActivities=Boolean.FALSE;
 
 	public Long getSiteId() {
 		return siteId;
@@ -340,6 +340,9 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	 *            The hideActivities to set.
 	 */
 	public void setHideActivities(Boolean hideActivities) {
+		if (hideActivities==null){
+			hideActivities=Boolean.FALSE;
+		}
 		this.hideActivities = hideActivities;
 	}
 

@@ -46,9 +46,10 @@ public final class AdvancedReportUtil {
     
     private static Logger logger = Logger.getLogger(AdvancedReportUtil.class);
     
-   
-    public static void saveReport(AmpReports ampReports, TeamMember member)
+   public static void saveReport(AmpReports ampReports, AmpTeamMember member)
 	{
+    	
+    	
 		Session session = null;
 		Transaction tx = null;
 		String queryString=null;
@@ -68,14 +69,14 @@ public final class AdvancedReportUtil {
 			}
 				
 			
-			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class,member.getTeamId());
+			AmpTeam ampTeam = member.getAmpTeam();
 			
 			String tempQry = "select teamRep from "
 				+ AmpTeamReports.class.getName()
 				+ " teamRep where (teamRep.team=:tId) and "
 				+ " (teamRep.report=:rId)";
 			Query tmpQry = session.createQuery(tempQry);
-			tmpQry.setParameter("tId",member.getTeamId(),Hibernate.LONG);
+			tmpQry.setParameter("tId",ampTeam.getAmpTeamId(),Hibernate.LONG);
 			tmpQry.setParameter("rId",ampReports.getAmpReportId(),Hibernate.LONG);
 			Iterator tmpItr = tmpQry.list().iterator();
 			if (!tmpItr.hasNext()) {
@@ -115,7 +116,7 @@ public final class AdvancedReportUtil {
 				if(ampReports.getOwnerId()!=null){
 					ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, ampReports.getOwnerId().getAmpTeamMemId());	
 				}else {
-					ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, member.getMemberId());	
+					ampTeamMember = member;	
 				}					
 				Set reportSet = ampTeamMember.getReports();
 				
@@ -158,7 +159,7 @@ public final class AdvancedReportUtil {
 						pageCode = pageCode + ampReports.getName().charAt(j+1);
 			}
 			ampPages.setPageCode(pageCode);
-			ampPages.setAmpTeamId(member.getTeamId());
+			ampPages.setAmpTeamId(ampTeam.getAmpTeamId());
 			session.save(ampPages);
 			
 			

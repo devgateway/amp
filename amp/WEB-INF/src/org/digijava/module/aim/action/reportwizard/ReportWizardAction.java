@@ -357,7 +357,7 @@ public class ReportWizardAction extends MultiAction {
 			if ( ampReport.getAmpReportId()!=null )
 				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
 			
-		AdvancedReportUtil.saveReport(ampReport, teamMember);
+		AdvancedReportUtil.saveReport(ampReport, ampTeamMember);
 		modeReset(mapping, form, request, response);
 		
 		return null;
@@ -403,7 +403,7 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
 		ampReport.setFilterDataSet( AmpFilterData.createFilterDataSet(ampReport, filter) );
 		
-		AdvancedReportUtil.saveReport(ampReport, teamMember );
+		AdvancedReportUtil.saveReport(ampReport, ampTeamMember );
 		
 		//modeReset(mapping, form, request, response);
 		

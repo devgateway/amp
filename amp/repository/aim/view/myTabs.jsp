@@ -260,7 +260,7 @@ function toggleSettings(){
 <table border="0"  cellpadding="0" cellspacing="0" width="100%">
 <tr>
 <td>
-<ul id="MyTabs" class="yui-nav"">
+<ul id="MyTabs" class="yui-nav">
 <c:set var="counter" value="0"/> 
 <logic:present name="myTabs" scope="session">
 		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 

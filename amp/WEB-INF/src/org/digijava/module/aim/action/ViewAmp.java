@@ -74,7 +74,7 @@ public class ViewAmp
         String siteAdmin = (String) session.getAttribute("ampAdmin");
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         
-        Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
+        Collection<AmpTeamMember> members = TeamMemberUtil.getTeamMembers(user.getEmail());
         session.setAttribute(Constants.USER_WORKSPACES, members);
         
         if (tm != null && tm.getTeamId() != null &&
@@ -96,6 +96,13 @@ public class ViewAmp
 
         // No menber info means that we could not set it automatically
         LoginForm lForm = (LoginForm) form; // login form instance
+       for (AmpTeamMember ampTeamMember : members) {
+		if (ampTeamMember.getByDefault()){
+			 request.getSession().setAttribute("j_autoWorkspaceId",ampTeamMember.getAmpTeamMemId().toString());
+			response.sendRedirect("selectTeam.do");
+
+		}
+	}
        
         lForm.setMembers(members);
 

@@ -37,23 +37,50 @@
 					</th>
 				</tr>	
 				</thead>
+				 <tr>
+				 	<td></td>
+				 	<td></td>
+				 	
+				 	<td align="center"><B><digi:trn>Set Default</digi:trn><B></td>
+				 </tr>
 				 <tbody id="offTblBdy">
 						
 				<c:forEach var="members" items="${aimLoginForm.members}">
 					<tr>
-						<td></td>
-						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<IMG height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+						<td>
+						
+						</td>
+						<td><IMG height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
 							<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 							<c:set target="${urlParams}" property="id">
 								<c:out value="${members.ampTeamMemId}"/>
 							</c:set>								
-							<digi:link href="/selectTeam.do" name="urlParams">
-							<c:out value="${members.ampTeam.name}"/></digi:link>
-					</td></tr>
-				</c:forEach>
+								<digi:link href="/selectTeam.do" name="urlParams"><c:out value="${members.ampTeam.name}"/></digi:link>
+								
+						</td>
+					
+						<td align="center">
+							<c:if  test="${members.byDefault==null}">
+								<a href="/aim/myWorkspaces.do?action=default&id=${members.ampTeamMemId}">
+									<img alt="Set ${members.ampTeam.name} as default " src="/repository/aim/images/grayCheckIcon.png" border="0">
+								</a>
+							</c:if>
+							<c:if  test="${members.byDefault==false}">
+								<a href="/aim/myWorkspaces.do?action=default&id=${members.ampTeamMemId}">
+									<img alt="Set ${members.ampTeam.name} as default " src="/repository/aim/images/grayCheckIcon.png" border="0">
+								</a>
+							</c:if>
+							
+							<c:if  test="${members.byDefault==true}">
+								<a href="/aim/myWorkspaces.do?action=default&id=${members.ampTeamMemId}&unset=true">
+								<img alt="Unset ${members.ampTeam.name} as default " src="/repository/aim/images/greenCheckIcon.png" border="0">
+								</a>
+							</c:if>
+						</td>
 				
-				  </tbody>
+					</tr>
+				</c:forEach>
+				 </tbody>
 			</table>
 		</td>
 	</tr>
@@ -62,7 +89,10 @@
 </table>
 
 <script language="javascript">
+$(document).ready(function() {
+	sortTable('offTblBdy', 1, true);
+});
 
-sortTable('offTblBdy', 1, true);
+
 
 </script>

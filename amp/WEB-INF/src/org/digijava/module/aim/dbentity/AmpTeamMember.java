@@ -28,6 +28,10 @@ public class AmpTeamMember implements Serializable, Versionable {
 	private Set logs;
 	private Set<AmpMessageState> messages;
 	private Set<AmpContact> contacts;
+	private Boolean byDefault;
+	
+	
+
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
@@ -40,6 +44,14 @@ public class AmpTeamMember implements Serializable, Versionable {
 
 	public Set getReports() {
 			  return this.reports;
+	}
+
+	public Boolean getByDefault() {
+		return byDefault;
+	}
+
+	public void setByDefault(Boolean byDefault) {
+		this.byDefault = byDefault;
 	}
 
 	/**
@@ -201,26 +213,23 @@ public class AmpTeamMember implements Serializable, Versionable {
 		this.contacts = contacts;
 	}
 
-	@Override
-	public boolean equalsForVersioning(Object obj) {
+
+		public boolean equalsForVersioning(Object obj) {
 		return this.equals(obj);
 	}
 
-	@Override
+
 	public Object getValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	
 	public Output getOutput() {
 		return new Output(null, new String[] { user.getLastName(), ", ", user.getFirstNames() }, new Object[] { "" });
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	
 	
 
+	
 }

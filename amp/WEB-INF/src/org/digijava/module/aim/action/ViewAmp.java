@@ -90,16 +90,13 @@ public class ViewAmp
         	response.sendRedirect("selectTeam.do");
         	return null;
         }
-
-
-
-
-        // No menber info means that we could not set it automatically
+ 
         LoginForm lForm = (LoginForm) form; // login form instance
        for (AmpTeamMember ampTeamMember : members) {
-		if (ampTeamMember.getByDefault()){
+		
+    	   if ((ampTeamMember.getByDefault()!=null)&&(ampTeamMember.getByDefault())){
 			 request.getSession().setAttribute("j_autoWorkspaceId",ampTeamMember.getAmpTeamMemId().toString());
-			response.sendRedirect("selectTeam.do");
+			 response.sendRedirect("selectTeam.do");
 
 		}
 	}

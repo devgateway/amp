@@ -28,7 +28,7 @@ public class AmpTeamMember implements Serializable, Versionable {
 	private Set logs;
 	private Set<AmpMessageState> messages;
 	private Set<AmpContact> contacts;
-	private Boolean byDefault;
+	private Boolean byDefault=Boolean.FALSE;
 	
 	
 

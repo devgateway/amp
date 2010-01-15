@@ -119,59 +119,7 @@ public class ImportAction extends MultiAction {
 		
         return mapping.findForward("forward");
 	}
-//
-//	private ActionForward modeLoadFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
-//		// TODO Auto-generated method stub
-//		
-//		HttpSession session = request.getSession();
-//		ImportForm deImportForm= (ImportForm) form;
-//		
-//		FormFile myFile = deImportForm.getUploadedFile();
-//        byte[] fileData    = myFile.getFileData();
-//        if(fileData == null || fileData.length < 1)
-//        	{
-//        		logger.info("The file is empty or not choosed any file");
-//        		//return error
-//        	}
-//        
-//        InputStream inputStream= new ByteArrayInputStream(fileData);
-//        InputStream inputStream1= new ByteArrayInputStream(fileData);
-//        
-//        OutputStream outputStream = new ByteArrayOutputStream(); 
-//        FileCopyUtils.copy(inputStream1, outputStream);
-//        
-//        TeamMember tm = null;
-//        if (session.getAttribute("currentMember") != null)
-//        	tm = (TeamMember) session.getAttribute("currentMember");
-//        
-//        ImportBuilder importBuilder = new ImportBuilder();
-//        boolean importOk = false;
-//		importOk = importBuilder.splitInChunks(inputStream);
-//		if(!importOk) {
-//			ActionErrors errors = new ActionErrors();
-//			errors.add("title", new ActionError("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
-//			request.setAttribute("loadFile",null);
-//			
-//			if (errors.size() > 0){
-//				session.setAttribute("DEimportErrors", errors);
-//			}
-//			else session.setAttribute("DEimportErrors", null);
-//			return mapping.findForward("forwardError");
-//		}
-//		
-//		//importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
-//        
-//        importBuilder.createActivityTree();
-//        
-//        deImportForm.setActivityTree(importBuilder.getRoot());
-//        
-//        session.setAttribute("DELogGenerated", importBuilder.printLogs());
-//        session.setAttribute("importBuilder", importBuilder);
-//        session.setAttribute("DEfileUploaded", "true");
-//        
-//		return mapping.findForward("afterUploadFile");
-//	}
-//
+
 	private ActionForward modeLoadFileForLog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
 		// TODO Auto-generated method stub
 		

@@ -83,7 +83,7 @@ div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
-	width: 300px;
+	width: 75px;
 	padding: 0;
 	margin: 0;
 	z-index: 1;
@@ -187,7 +187,8 @@ div.fakefile2 input{
 
          //The tree is not created in the DOM until this method is called:
              tree.draw();
-             
+             checkAll();
+             tree.expandAll();
          }
 
 //       var callback = null;
@@ -329,10 +330,51 @@ div.fakefile2 input{
 				<div id="tab_file_selection" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-					<div style="height: 390px;">
+					<div style="height: 500px;">
     					<table cellpadding="5px" width="100%">
     						<tr>
-        						<td width="47%" align="left" valign="top"><br/><br/><br/> 
+    							<td width="50%" valign="top">
+    							<div style="border: 1px black solid; padding:5px">
+								<div >							
+        									<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
+	        								</digi:trn><br/>
+	        								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+												<input id="uploadedFile" name="uploadedFile" type="file" class="file">												
+											</div>  
+	        									<br/>
+	        								<digi:trn key="aim:pleaseChooseTheOption">Please choose the option for import the activities
+	        								</digi:trn><br/>
+        						</div>
+        						<div>
+        							<logic:iterate name="deImportForm" property="options" id="option">
+        								<bean:define id="optionValue">
+                          					<bean:write name="option"/>
+            							</bean:define>
+        								<html:radio property="selectedOptions" value="<%=optionValue%>" styleId="<%=optionValue%>" />
+        								<bean:write name="option"/> <digi:trn>Activity</digi:trn><br/>
+        							</logic:iterate>
+    							</div>
+    							</div>
+    							</td>
+    							
+    							<td  width="50%" valign="top" >
+    							<div style="border: 1px black solid; padding:5px">
+		    							<digi:trn key="aim:pleaseChooseKeysForImport"> Please choose the primary keys for import </digi:trn>: <br/>
+        									<html:checkbox property="primaryKeys" name="deImportForm" value="title">
+        										<digi:trn key="aimm:Title">Title</digi:trn>
+        									</html:checkbox><br/>
+        									<html:checkbox property="primaryKeys" name="deImportForm" value="budgetCode">
+        										<digi:trn key="aimm:BudgetCode">Budget Code</digi:trn>
+        									</html:checkbox><br/>
+        									<html:checkbox property="primaryKeys" name="deImportForm" value="projectId">
+        										<digi:trn key="aimm:projectID">Project ID</digi:trn>
+        									</html:checkbox><br/><br/><br/><br/>
+        									
+        						</div>
+    							</td>
+    						</tr>
+    						<tr>
+        						<td width="47%" align="left" valign="top" colspan="2"> 
         						
         							<div id="expandcontractdiv" align="left" style="width:85%">
 					                    <a id="expand" href="#"><digi:trn>Expand all</digi:trn></a>
@@ -341,46 +383,11 @@ div.fakefile2 input{
 					                    <a id="check" href="#"><digi:trn>Check all</digi:trn></a>
 					                    <a id="uncheck" href="#"><digi:trn>Uncheck all</digi:trn></a>
 			                    	</div>
-        						<div id="source_col_div" class="draglist" style="border-width: 0px; width: 85%;">
+        						<div id="source_col_div" class="draglist" style="border-width: 0px; width: 100%; height: 300px;">
 			                    	<div id="dataImportActivityTree"></div>
 			                    </div>	      																		
         						</td>
-        						<td align="left" >
-        							<br/><br/><br/>
-        							
-        							<table width="70%">
-        								<tr><td>
-        									<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
-	        								</digi:trn><br/>
-	        								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-												<input id="uploadedFile" name="uploadedFile" type="file" class="file">												
-											</div>  
-	        									<br/><br/><br/>
-	        								<digi:trn key="aim:pleaseChooseTheOption">Please choose the option for import the activities
-	        								</digi:trn><br/>
-        								</td></tr>
-        							<logic:iterate name="deImportForm" property="options" id="option">
-        								<tr><td>
-        								<bean:define id="optionValue">
-                          					<bean:write name="option"/>
-            							</bean:define>
-        								<html:radio property="selectedOptions" value="<%=optionValue%>" styleId="<%=optionValue%>" />
-        								<bean:write name="option"/> <digi:trn>Activity</digi:trn><br/>
-        								</td></tr>
-        							</logic:iterate>
-        							<tr><td>
-        								<br/><digi:trn key="aim:pleaseChooseKeysForImport"> Please choose the primary keys for import </digi:trn>: <br/>
-        									<html:checkbox property="primaryKeys" name="deImportForm" value="title">
-        									Title
-        									</html:checkbox>
-        									<html:checkbox property="primaryKeys" name="deImportForm" value="chapitre">
-        									Chapitre Code
-        									</html:checkbox>
-        							</td></tr>
-        							</table>
-        							
-        						</td>
-    						</tr>
+        					</tr>
     					</table>
 					</div>
 				</div>

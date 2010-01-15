@@ -985,6 +985,11 @@
     <action name="aimLoginForm" path="/aim/selectTeam" scope="request" type="org.digijava.module.aim.action.SelectTeam" validate="false">
       <forward name="forward" path="/aim/showDesktop.do" redirect="true" />
     </action>
+    
+    <action name="aimLoginForm" path="/aim/myWorkspaces" scope="request" type="org.digijava.module.aim.action.MyWorkSpaces" validate="false">
+         <forward name="selectTeam" path="/showLayout.do?layout=selectTeam" />
+    </action>
+    
     <action name="aimUpdateAppSettingsForm" path="/aim/defaultSettings" scope="request" type="org.digijava.module.aim.action.UpdateAppSettings" validate="false">
       <forward name="showDefaultSettings" path="/showLayout.do?layout=updateAppSettings" />
       <forward name="index" path="/aim/index.do" redirect="true" />

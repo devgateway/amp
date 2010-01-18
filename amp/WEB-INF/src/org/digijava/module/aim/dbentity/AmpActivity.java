@@ -306,6 +306,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         }
 
 	public Boolean isGovernmentApprovalProcedures() {
+		if (governmentApprovalProcedures == null) governmentApprovalProcedures = false;
 		return governmentApprovalProcedures;
 	}
 
@@ -315,6 +316,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	}
 
 	public Boolean isJointCriteria() {
+		if (jointCriteria == null) jointCriteria = false;
 		return jointCriteria;
 	}
 
@@ -1374,6 +1376,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	
 	public Boolean isHumanitarianAid( ) {
+		if (humanitarianAid == null) this.humanitarianAid = false;
 		return this.humanitarianAid ;
 	}
 
@@ -1382,6 +1385,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	}
 
 	public Boolean getHumanitarianAid() {
+		if (humanitarianAid == null) this.humanitarianAid = false;
 		return humanitarianAid;
 	}
 

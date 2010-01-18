@@ -780,6 +780,46 @@ public class SaveActivity extends Action {
 			activity.setSectors(sectors);
 		}
 
+		Set<AmpActivityProgram> programs = new HashSet<AmpActivityProgram>();
+		if (eaForm.getPrograms().getNationalPlanObjectivePrograms() != null && eaForm.getPrograms().getNationalPlanObjectivePrograms().size()>0){
+			if(eaForm.getPrograms().getNationalPlanObjectivePrograms() != null){
+				Iterator<AmpActivityProgram> itr = eaForm.getPrograms().getNationalPlanObjectivePrograms().iterator();
+
+				while(itr.hasNext()){
+					AmpActivityProgram program = (AmpActivityProgram) itr.next();
+					program.setAmpActivityProgramId(null);
+                    program.setActivity(activity);
+                    programs.add(program);
+				}
+			}
+		}
+		if (eaForm.getPrograms().getPrimaryPrograms() != null && eaForm.getPrograms().getPrimaryPrograms().size()>0){
+			if(eaForm.getPrograms().getPrimaryPrograms() != null){
+				Iterator<AmpActivityProgram> itr = eaForm.getPrograms().getPrimaryPrograms().iterator();
+
+				while(itr.hasNext()){
+					AmpActivityProgram program = (AmpActivityProgram) itr.next();
+					program.setAmpActivityProgramId(null);
+                    program.setActivity(activity);
+                    programs.add(program);
+				}
+			}
+		}
+		if (eaForm.getPrograms().getSecondaryPrograms() != null && eaForm.getPrograms().getSecondaryPrograms().size()>0){
+			if(eaForm.getPrograms().getSecondaryPrograms() != null){
+				Iterator<AmpActivityProgram> itr = eaForm.getPrograms().getSecondaryPrograms().iterator();
+
+				while(itr.hasNext()){
+					AmpActivityProgram program = (AmpActivityProgram) itr.next();
+					program.setAmpActivityProgramId(null);
+                    program.setActivity(activity);
+                    programs.add(program);
+				}
+			}
+		}
+		activity.setActPrograms(programs);
+
+
 //		if (eaForm.getComponents().getActivityComponentes() != null) {
 //			Set componentes = new HashSet();
 //			if (eaForm.getComponents().getActivityComponentes() != null && eaForm.getComponents().getActivityComponentes().size()>0) {
@@ -884,27 +924,6 @@ public class SaveActivity extends Action {
 		}else if (eaForm.getLocation().getSelectedLocs()==null || eaForm.getLocation().getSelectedLocs().size() == 0){
 			if (eaForm.getFunding().getRegionalFundings()!=null) eaForm.getFunding().getRegionalFundings().clear();
 		}
-
-
-		Set programs = new HashSet();
-		List activityNPO = eaForm.getPrograms().getNationalPlanObjectivePrograms();
-		List activityPP = eaForm.getPrograms().getPrimaryPrograms();
-		List activitySP = eaForm.getPrograms().getSecondaryPrograms();
-		if (activityNPO != null) {
-		        programs.addAll(activityNPO);
-		}
-		if (activityPP != null) {
-		        programs.addAll(activityPP);
-		}
-		if (activitySP != null) {
-		        programs.addAll(activitySP);
-		}
-		activity.setActPrograms(programs);
-
-		
-		
-		
-		
 	}
 
 	private void processStep3(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{

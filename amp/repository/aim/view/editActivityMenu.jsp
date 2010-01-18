@@ -78,6 +78,7 @@
         }
         if(document.aimEditActivityForm.step.value=="3"){
             initFundingScript();
+            initImportFundingScript();
         }
         if(document.aimEditActivityForm.step.value=="6"){
         	initDocumentsScript();

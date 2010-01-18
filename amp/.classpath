@@ -90,6 +90,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/odmg.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/olap4j-jdk14.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/olap4j.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/opencsv-2.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.0.2-FINAL-20080204.jar"/>

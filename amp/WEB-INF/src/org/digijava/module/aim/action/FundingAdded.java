@@ -1,5 +1,11 @@
 package org.digijava.module.aim.action;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +22,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -37,6 +44,8 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 public class FundingAdded extends Action {
 
 	private static Logger logger = Logger.getLogger(FundingAdded.class);
@@ -49,6 +58,11 @@ public class FundingAdded extends Action {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+
+		if (eaForm.getFileImport() != null) //If this is an import, means we have to look for the file and parse it
+		{
+			importFunding(eaForm, tm);
+		}
 
 		Iterator fundOrgsItr = eaForm.getFunding().getFundingOrganizations().iterator();
 		FundingOrganization fundOrg = null;
@@ -247,6 +261,49 @@ public class FundingAdded extends Action {
 		return mapping.findForward("forward");
 	}
 	
+	private void importFunding(EditActivityForm eaForm, TeamMember tm) {
+		//Do all the preparation needed for the adding of disb/comm/etc
+		ArrayList<FundingDetail> fundingDetails = new ArrayList<FundingDetail>();
+		FundingDetail fd = null;
+		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
+		FormFile formFile = eaForm.getFileImport();
+		try {
+			InputStreamReader isr = new InputStreamReader(formFile.getInputStream());
+			CSVReader reader = new CSVReader(isr);
+			
+			String [] nextLine;
+			while ((nextLine = reader.readNext()) != null) {
+				if (nextLine.length == 3) //Type, Amount, Date
+				{
+
+					FundingDetail fundingDetail = new FundingDetail();
+					if (nextLine[0].equals("commitment")) fundingDetail.setTransactionType(Constants.COMMITMENT);
+					if (nextLine[0].equals("disbursement")) fundingDetail.setTransactionType(Constants.DISBURSEMENT);
+					if (nextLine[0].equals("expenditure")) fundingDetail.setTransactionType(Constants.EXPENDITURE);
+					fundingDetail.setTransactionAmount(nextLine[1]);
+					fundingDetail.setTransactionDate(nextLine[2]);
+
+					fundingDetail.setClassification("");
+					fundingDetail.setCurrencyCode(currCode);
+					fundingDetail.setAdjustmentType(Constants.ACTUAL);
+					fundingDetail.setIndexId(System.currentTimeMillis());
+					fundingDetail.setIndex(fundingDetails.size());
+					fundingDetails.add(fundingDetail);			
+					
+				}
+			}			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		eaForm.getFunding().setFundingDetails(fundingDetails);
+	}
+
 	private BigDecimal[] getFundingAmounts(EditActivityForm form, TeamMember tm) {
 		BigDecimal totalComms	= new BigDecimal(0);
 		BigDecimal totalDisbs	= new BigDecimal(0);

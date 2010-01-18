@@ -79,7 +79,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private String stepFailureText[];
 	private String step = null;
 	private int pageId;
-	
+	//TODO: FFerreyra. See if this can be put someplace more meaningful, probably it's own form.
+	private FormFile fileImport = null;
+
 	private String currCode;
 	private Collection currencies;
 	private boolean serializeFlag;
@@ -4282,5 +4284,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
     public void setRegFundingPageCurrCode(String regfundingPageCurrCode) {
         this.regFundingPageCurrCode = regfundingPageCurrCode;
     }
+
+	public void setFileImport(FormFile fileImport) {
+		this.fileImport = fileImport;
+	}
+
+	public FormFile getFileImport() {
+		return fileImport;
+	}
 
 }

@@ -1516,6 +1516,13 @@
     <action name="aimMulitlateralbyDonorForm" path="/aim/quarterlyReportByProjectXls" scope="session" type="org.digijava.module.aim.action.QuarterlyReportByProjectXLS" validate="false" />
     <action name="aimMulitlateralbyDonorForm" path="/aim/quarterlyReportBySectorXls" scope="session" type="org.digijava.module.aim.action.QuarterlyReportBySectorXLS" validate="false" />
     <action name="aimMulitlateralbyDonorForm" path="/aim/physicalComponentReportXls" scope="session" type="org.digijava.module.aim.action.PhysicalComponentReportXLS" validate="false" />
+    <action name="aimEditActivityForm" path="/aim/importFunding" scope="session" type="org.digijava.module.aim.action.ImportFunding">
+      <forward name="forward" path="/showLayout.do?layout=aim_fundingImportPopupLayout" />
+    </action>
+    <action name="aimEditActivityForm" path="/aim/importFundingDetail" scope="session" type="org.digijava.module.aim.action.ImportFundingDetail">
+      <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+    </action>
+
     <action name="aimEditActivityForm" path="/aim/addFunding" scope="session" type="org.digijava.module.aim.action.AddFunding">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
     </action>

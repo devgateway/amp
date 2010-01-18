@@ -191,6 +191,7 @@
 	<page page="components/selectOrganization" name="aim_orgComponentPopUp" title="AMP - Select Organization" />
 
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
+	<page page="importFunding" name="aim_fundingImportPopupLayout" title="AMP - Import Funding" />
 	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />
     <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />
     <page page="saveErrors" name="aim_saveErrors" title="AMP - Save Activity" />

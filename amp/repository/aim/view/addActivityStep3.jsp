@@ -20,6 +20,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="addActivityStep3Popin.jsp" flush="true" />
+<jsp:include page="addActivityStep3PopinImport.jsp" flush="true" />
 <jsp:include page="addOrganizationPopin.jsp" flush="true" />
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
@@ -74,6 +75,10 @@
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
 			*/
+	}
+
+	function importFunding(orgId) {
+			myImportFunding(orgId);
 	}
 
     function addPropFunding() {
@@ -932,6 +937,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<td>
 																		<field:display name="Add Donor Funding Button" feature="Funding Information">
 																			<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
+																		</field:display>
+																		<field:display name="Import Donor Funding Button" feature="Funding Information">
+																			<input type="button" class="dr-menu" onclick="importFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:importFunding">Import Funding</digi:trn>' />
 																		</field:display>
 																	</td>
 																</tr>

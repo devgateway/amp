@@ -84,42 +84,18 @@ function chkNumericForProjection(objName)
 
 
 function validateProjection (errorMsg) {
-
 	var numProjections	= document.aimEditActivityForm.numProjections.value;
-
 	var j				= 0;
-
 	var i				= 0;
-
 	for (i=0; i<numProjections; i++) {
-
 		var name		= "mtefProjection[" + i + "].amount";
-
-		//alert(name);
-
-		var elements	= document.aimEditActivityForm.elements;
-
-		for (j=0; j<elements.length; j++) {
-
-			//alert(j);
-
-			if (elements[j].name != null && elements[j].name == name 
-					&& elements[j].value != null && elements[j].value.length > 0 ) {
-
-				//alert("Found " + name + ": " + elements[j].value);
-
-				var x	= chkNumericForProjection(elements[j]);
-
-				if( elements[j].value.length == 0 || x==false) {alert(errorMsg + " " +  i); return false;}
-
+		var projection=document.getElementsByName(name)[0];
+			if (projection != null && projection.value != null && projection.value.length > 0 ) {
+				var x	= chkNumericForProjection(projection);
+				if( projection.value.length == 0 || x==false) {alert(errorMsg + " " +  i); return false;}
 			}
-
-		}
-
 	}
-
 	return true;
-
 }
 
 
@@ -375,54 +351,22 @@ function chkNumeric(objName,comma,period,hyphen) {
 
 
 function validateFundingDetailsExchangeRate(comm,disb,exp)
-
 {
-
 	var itr = comm + disb + exp;
-
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
-
 	var disbIndex = -1, expIndex = -1;
-
 	for (var j = 0;j < itr;j ++) {
-
 		var amtField = "fundingDetail[" + j + "].transactionAmount";
-
 		var dateField = "fundingDetail[" + j + "].transactionDate";
-
 		var transType = "fundingDetail[" + j + "].transactionType";
-
 		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";
-
 		var temp = new Array();
-
 		temp = document.aimEditActivityForm.elements;
-
-
-
-		for (var i = 0;i < temp.length;i ++) {
-
-
-
-			if(temp[i].name != null && temp[i].name == fixedExchangeRate)
-
-			{
-				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
-
-			}
-
-
-
-
-
-		}
-
+		var currExchange=document.getElementsByName(fixedExchangeRate)[0];
+			if(currExchange != null)
+				if(chkNumeric(currExchange,this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
 	}
-
 	return true;
-
-
-
 }
 
 
@@ -438,138 +382,66 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,m
 	var disbIndex = -1, expIndex = -1;
 
 	for (var j = 0;j < itr;j ++) {
-
 		var amtField = "fundingDetail[" + j + "].transactionAmount";
-
 		var dateField = "fundingDetail[" + j + "].transactionDate";
-
 		var transType = "fundingDetail[" + j + "].transactionType";
+		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";	
+		var type = document.getElementsByName(transType);
 
-		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";
-
-		var temp = new Array();
-
-		temp = document.aimEditActivityForm.elements;
-
-
-
-		for (var i = 0;i < temp.length;i ++) {
-
-
-
-			if(temp[i].name != null && temp[i].name == fixedExchangeRate)
-
-			{
-
-				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'-')==false) { 
-					alert(msgEnterRate+"'"+ this.decimalSymbol +"'");
-					return false;
+				var currExchange=document.getElementsByName(fixedExchangeRate)[0];
+				if(currExchange!=null && chkNumeric(currExchange,this.groupSymbol,this.decimalSymbol,'-')==false) { 
+							alert(msgEnterRate+"'"+ this.decimalSymbol +"'");
+							return false;
 				}
-
-			}
-
-
-
-			if (temp[i].name != null && temp[i].name == amtField) {
-
-				if (trim(temp[i].value) == "") {
-
-
-
+		
+				var currAmt=document.getElementsByName(amtField)[0];
+				if (currAmt!=null) {
+					if(trim(currAmt.value) == "") {
 					alert(msgEnterAmount);
-
-					temp[i].focus();
-
-					return false;
-
-				}
-
-
-
-				if (checkAmountUsingSymbol(temp[i].value) == false) {
-
-
-
-					alert(msgInvalidAmount);
-
-					temp[i].focus();
-
-					return false;
-
+							currAmt.focus();
+							return false;
+					}
+	
+					if (checkAmountUsingSymbol(currAmt.value) == false) {
+						alert(msgInvalidAmount);
+						temp[i].focus();
+						return false;
+					}
+					
+					if (msgConfirmFunding != "" && checkAmountLen(currAmt.value,msgConfirmFunding, this.groupSymbol,this.decimalSymbol) == false) {
+						temp[i].focus();
+						return false;
+					}
+					
+					value = parseFloat(currAmt.value);
+					if (isNaN(value)) {
+						alert(msgInvalidAmount);
+						currAmt.focus();
+						return false;
+					} else {
+						if (type.item(0).value == 0)
+							commAmt = commAmt + value;
+						if (type.item(0).value == 1) {
+							disbAmt = disbAmt + value;
+							if (disbIndex == -1)
+								disbIndex = j;
+						}
+						if (type.item(0).value == 2) {
+							expAmt  = expAmt  + value;
+							if (expIndex == -1)
+								expIndex = j;
+						}
+					}
 				}
 				
-				if (msgConfirmFunding != "" && checkAmountLen(temp[i].value,msgConfirmFunding, this.groupSymbol,this.decimalSymbol) == false) {
-
-					temp[i].focus();
-
-					return false;
-
-				}
-
-				var type = document.getElementsByName(transType);
-
-				value = parseFloat(temp[i].value);
-
-				if (isNaN(value)) {
-
-					alert(msgInvalidAmount);
-
-					temp[i].focus();
-
-					return false;
-
-				}
-
-				else {
-
-					if (type.item(0).value == 0)
-
-						commAmt = commAmt + value;
-
-					if (type.item(0).value == 1) {
-
-						disbAmt = disbAmt + value;
-
-						if (disbIndex == -1)
-
-							disbIndex = j;
-
+				var currDate=document.getElementsByName(dateField)[0];
+					if (currDate!=null && trim(currDate.value) == "") {
+						alert(msgEnterDate);
+						currDate.focus();
+						return false;
 					}
-
-					if (type.item(0).value == 2) {
-
-						expAmt  = expAmt  + value;
-
-						if (expIndex == -1)
-
-							expIndex = j;
-
-					}
-
-				}
-
-			}
-
-			if (temp[i].name != null && temp[i].name == dateField) {
-
-				if (trim(temp[i].value) == "") {
-
-					alert(msgEnterDate);
-
-					temp[i].focus();
-
-					return false;
-
-				}
-
-			}
-
-		}
-
 	}
-
 	return true;
-
 }
 
 

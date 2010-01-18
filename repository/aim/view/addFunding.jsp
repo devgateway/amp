@@ -90,8 +90,10 @@ var isAlreadySubmitted = false;
 
 		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
 		var flagProj	= validateProjection(msgInvalidAmountProj);
+
+		//var exchangeRateValid=validateFundingExchangeRate();
 		
-		if ( !flag || !flagProj ) return false;
+		if ( !flag || !flagProj) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
@@ -109,7 +111,6 @@ var isAlreadySubmitted = false;
 
 		var flag = validateFundingExchangeRate();
 		if (flag == false) return false;
-
 		if (type == 0) {
 			
 			document.getElementsByName("funding.event")[0].value = "addCommitments";
@@ -602,7 +603,6 @@ var isAlreadySubmitted = false;
 						    <c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}" varStatus="status">
 						 	<c:if test="${fundingDetail.transactionType==0}">
 									 	<tr>
-									 	
 									 		<c:set var="contentDisabled"><field:display name="Adjustment Type Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
@@ -613,8 +613,7 @@ var isAlreadySubmitted = false;
 														<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
 															<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 														</html:select>
-	                                                </c:if>
-	
+	                                                </c:if>	
 												<c:if test="${aimEditActivityForm.planning.statusId!=1}">
 													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text"  disabled="${contentDisabled}">
 														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
@@ -623,8 +622,6 @@ var isAlreadySubmitted = false;
 												</c:if>
 													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 												</td>
-										
-										
 									 		<c:set var="contentDisabled"><field:display name="Amount Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
@@ -632,19 +629,15 @@ var isAlreadySubmitted = false;
 												<td valign="bottom">
 														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="this.value=trim(this.value);" onclick="checkCurrency(this.name);" size="17" styleClass="amt"/>
 												</td>
-
 									 		<c:set var="contentDisabled"><field:display name="Currency Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-
-											
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text"  disabled="${contentDisabled}" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
-												</html:select>
-												
+												</html:select>		
 											</td>
 											<c:set var="contentDisabled"><field:display name="Date Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
@@ -668,8 +661,6 @@ var isAlreadySubmitted = false;
 													</tr>
 												</table>												
 											</td>
-
-
 											<field:display name="Remove Commitment Link" feature="Commitments">
 												<td align="right">
 														<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
@@ -679,27 +670,12 @@ var isAlreadySubmitted = false;
 											</field:display>
 											</tr>	
 										<tr bgcolor="#ecf3fd">
-											<td>&nbsp;
-												
-											</td>
-											<td align="left">
-												&nbsp;
-											</td>
-											<td colspan="5">
-												<b>
-													<digi:trn key="aim:fixedRate">Fixed Exchange Rate</digi:trn>
-													- <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" />
-												</b>
-											</td>
+											<td>&nbsp;</td>
+											<td align="left">&nbsp;</td>
+											<td colspan="5"><b><digi:trn key="aim:fixedRate">Fixed Exchange Rate</digi:trn> - <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /></b></td>
 										</tr>
-										<tr>
-											<td>&nbsp;
-												
-											</td>
-											<td align="right">
-								
-								
-								
+										<tr><td>&nbsp;</td>
+										<td align="right">
 								<c:set var="contentDisabled"><field:display name="Exchange Rate" feature="Funding Information">false</field:display></c:set>
 								<c:if test="${contentDisabled==''}">
 									<c:set var="contentDisabled">true</c:set>

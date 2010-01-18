@@ -111,6 +111,15 @@ public class AmpMessageForm extends ActionForm {
 	
 	
 	private FormFile fileUploaded;
+    private Boolean emailable;
+
+    public Boolean getEmailable() {
+        return emailable;
+    }
+
+    public void setEmailable(Boolean emailable) {
+        this.emailable = emailable;
+    }
 	
 
 	public List<TemplateAlert> getTemplates() {

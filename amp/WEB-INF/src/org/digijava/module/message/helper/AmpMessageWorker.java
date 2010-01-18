@@ -476,6 +476,7 @@ public class AmpMessageWorker {
             }            
         }
         newApproval.setReceivers(receivers);
+        newApproval.setEmailable(template.getEmailable());
         return newApproval;
     }
 
@@ -489,6 +490,7 @@ public class AmpMessageWorker {
         newAlert.setDraft(false);
         Calendar cal = Calendar.getInstance();
         newAlert.setCreationDate(cal.getTime());
+        newAlert.setEmailable(template.getEmailable());
         return newAlert;
     }
 
@@ -499,6 +501,7 @@ public class AmpMessageWorker {
         newEvent.setDraft(false);        
         Calendar cal = Calendar.getInstance();
         newEvent.setCreationDate(cal.getTime());
+        newEvent.setEmailable(template.getEmailable());
         return newEvent;
     }
 
@@ -666,9 +669,9 @@ public class AmpMessageWorker {
             newState.setMessageHidden(false);
         }
         try {
-            AmpMessageUtil.saveOrUpdateMessageState(newState);           
+            AmpMessageUtil.saveOrUpdateMessageState(newState);
             sendMail(newState,calendarSaveActionWasCalled);
-           
+          
         } catch (AimException e) {
             e.printStackTrace();
         }
@@ -699,9 +702,8 @@ public class AmpMessageWorker {
         //AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
     	AmpTeamMember teamMember=state.getReceiver();
         if (teamMember != null) {
-        	AmpMessageSettings messageSettings = AmpMessageUtil.getMessageSettings();
-            Long sendMail = messageSettings.getEmailMsgs();
-            if(sendMail.intValue() == 1){
+            Boolean emailable = state.getMessage().getEmailable();
+            if(emailable!=null&&emailable){
             	User user = teamMember.getUser();
             	if(calendarSaveActionWasCalled){ // <---means that user created new calendar event. if so, a bit different e-mail should be sent
             		sendMail(state.getSender(),user.getEmail(),state.getMessage().getName(),"UTF8",state.getMessage().getDescription());

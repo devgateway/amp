@@ -31,14 +31,15 @@ public class ViewActivityHistory extends Action {
 			public int compare(Object o1, Object o2) {
 				AmpActivityVersion a1 = (AmpActivityVersion) o1;
 				AmpActivityVersion a2 = (AmpActivityVersion) o2;
-				if (a1.getModifiedDate() == null && a2.getModifiedDate() == null) {
-					return 0;
-				} else if (a1.getModifiedDate() == null) {
-					return 1;
-				} else if (a2.getModifiedDate() == null) {
-					return -1;
-				}
-				return a1.getModifiedDate().compareTo(a2.getModifiedDate());
+				return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
+//				if (a1.getModifiedDate() == null && a2.getModifiedDate() == null) {
+//					return 0;
+//				} else if (a1.getModifiedDate() == null) {
+//					return (a1.getCreatedDate().compareTo(a2.getModifiedDate()));
+//				} else if (a2.getModifiedDate() == null) {
+//					return (a2.getCreatedDate().compareTo(a1.getModifiedDate()));
+//				}
+//				return a1.getModifiedDate().compareTo(a2.getModifiedDate());
 			}
 		};
 

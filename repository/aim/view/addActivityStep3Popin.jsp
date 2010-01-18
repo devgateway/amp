@@ -328,7 +328,7 @@
 		   "&funding.firstSubmit="+document.getElementsByName('funding.firstSubmit')[0].value+
 		   "&totDisbIsBiggerThanTotCom="+document.getElementsByName('totDisbIsBiggerThanTotCom')[0].value+
 		   "&ignoreDistBiggerThanComm="+document.getElementsByName('ignoreDistBiggerThanComm')[0].value+
-		   "&funding.isEditFunfing="+document.getElementsByName('funding.isEditFunfing')[0].value+
+		   "&funding.isEditFunding="+document.getElementsByName('funding.isEditFunding')[0].value+
 		   "&funding.assistanceType="+document.getElementsByName('funding.assistanceType')[0].value+
 		   "&funding.orgFundingId="+document.getElementsByName('funding.orgFundingId')[0].value+
 		   "&funding.modality="+document.getElementsByName('funding.modality')[0].value;

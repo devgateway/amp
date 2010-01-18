@@ -271,7 +271,7 @@ var isAlreadySubmitted = false;
 <html:hidden name="aimEditActivityForm" styleId="totDisbIsBiggerThanTotCom" property="totDisbIsBiggerThanTotCom"/>
 
 
-<input type="hidden" name="funding.isEditFunfing" value="true"/>
+<input type="hidden" name="funding.isEditFunding" value="true"/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
 	<!-- funding -->

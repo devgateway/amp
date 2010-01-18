@@ -32,7 +32,7 @@
 	<ecsDisable>true</ecsDisable>
 	<ecsServerName>ampdev.staging.togo</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
-	<!--             -->	
+	<!--             --><!--	
 
 	    
     <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
@@ -40,6 +40,7 @@
             <property name="patchesDir">patches</property>
     </service>
 	
+	-->
 	&commonEntities;
 	
 </digi-config>

@@ -686,17 +686,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         logger.debug("creating ....");
         if (activity.getMember() == null) {
                 activity.setMember(new HashSet());
-                Set programs = activity.getActPrograms();
-                if (programs != null) {
-                        Iterator iterProgram = programs.iterator();
-                        while (iterProgram.hasNext()) {
-                                AmpActivityProgram program = (
-                                    AmpActivityProgram) iterProgram.next();
-                                program.setActivity(activity);
-                        }
-
-                }
-
         }
 
         activity.getMember().add(activity.getActivityCreator());

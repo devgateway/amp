@@ -62,6 +62,7 @@ public class TemplateAlertActions extends DispatchAction {
 	    	 messagesForm.setMessageName(tempAlert.getName());
 	    	 messagesForm.setDescription(tempAlert.getDescription());
 	    	 messagesForm.setSelectedTrigger(tempAlert.getRelatedTriggerName());
+             messagesForm.setEmailable(tempAlert.getEmailable());
 	    	 //receivers	    	 
 	    	 messagesForm.setReceivers(getMessageRecipients(tempAlert.getId()));
 	     }
@@ -92,6 +93,7 @@ public class TemplateAlertActions extends DispatchAction {
 	    	Calendar cal=Calendar.getInstance();
 	    	newTemplate.setCreationDate(cal.getTime());   	
 	    	newTemplate.setRelatedTriggerName(msgForm.getSelectedTrigger());
+            newTemplate.setEmailable(msgForm.getEmailable());
 	    	        	 	
 	    	//saving template
 	    	AmpMessageUtil.saveOrUpdateMessage(newTemplate);    	
@@ -242,5 +244,6 @@ public class TemplateAlertActions extends DispatchAction {
 		 form.setMsgStateId(null);
 		 form.setReceivers(null);
 		 form.setSelectedTrigger(null);
+         form.setEmailable(null);
 	 }
 }

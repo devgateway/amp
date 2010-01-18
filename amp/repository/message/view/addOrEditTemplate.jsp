@@ -54,6 +54,12 @@
 			alert('Please Select Related Trigger');
 			return false;
 		}
+        var emailable='<digi:trn jsFriendly="true">Please select value</digi:trn>';
+        if(document.getElementById('emailableSelect').value== -1 ){
+			alert(emailable);
+            document.getElementById('emailableSelect').focus();
+			return false;
+		}
 		return true;
 	}
 
@@ -208,7 +214,17 @@
 																							</logic:iterate>
 																						</html:select> 
 																					</td>
-																				</tr>													
+																				</tr>
+                                                                                <tr>
+																					<td align="right"><digi:trn>Email alert</digi:trn><font color="red">*</font></td>
+																					<td align="left">
+																						<html:select property="emailable" name="messageForm" styleClass="inp-text" styleId="emailableSelect">
+                                                                                            <html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
+																							<html:option value="false"><digi:trn>No</digi:trn></html:option>
+                                                                                            <html:option value="true"><digi:trn>Yes</digi:trn></html:option>
+																						</html:select>
+																					</td>
+																				</tr>
 																				<tr>
 																					<td nowrap="nowrap" valign="top" align="right"><digi:trn>Receivers</digi:trn><font color="red">*</font></td>
 																                    <td>

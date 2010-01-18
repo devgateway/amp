@@ -27,7 +27,7 @@
 	var helpForRefreshTime="<digi:trn jsFriendly="true">This indicates the time in minutes the messages count on the user\'s desktop is refreshed.</digi:trn>"
 	var helpForStorage="<digi:trn jsFriendly="true">This indicates the total number of messages that are permissible per type of message <br>i.e. Messages , Alerts , Approvals and Events. Within Messages and Alerts this setting <br>indicates the total number of messages permissible in the Inbox , Sent and Draft messages.</digi:trn>"
 	var helpForAdvanceAlerts='<digi:trn jsFriendly="true">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>'
-	var helpForEmailable="<digi:trn jsFriendly="true">Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>"
+	var helpForEmailable="<digi:trn jsFriendly="true">Set this to true to allow all messages to be forwarded to the user\'s email address</digi:trn>"
 	function validate(record,action,minusAccepted){
 		if(action=='save' && (record==null || record=="" || (minusAccepted==true && record=="-1") )){
 			alert('<digi:trn jsFriendly="true">Please enter data to save</digi:trn>');
@@ -152,7 +152,7 @@
 											</tr>
 											<tr>
 												<td align="center">
-													<digi:trn>Email Alerts</digi:trn>
+													<digi:trn>Email Messages</digi:trn>
 													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">

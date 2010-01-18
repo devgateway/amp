@@ -11,6 +11,7 @@
       <form-property name="templateFeaturesNotActive" type="java.util.Collection" /> 
     </form-bean>
 
+    <form-bean name="aimWelcomePageForm" type="org.digijava.module.aim.form.WelcomePageForm" />
     <form-bean name="aimViewAhSurveisForm" type="org.digijava.module.aim.form.ViewAhSurveisForm" />
     <form-bean name="aimViewAhSurveyFormulasForm" type="org.digijava.module.aim.form.ViewAhSurveyFormulasForm" />
 
@@ -667,6 +668,15 @@
       <forward name="forward" path="/showLayout.do?layout=searchSector" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimWelcomePageForm" path="/aim/firstPagePreview" scope="request" type="org.digijava.module.aim.action.ShowFirstPagePreview" validate="false">
+    	<forward name="forward" path="/showLayout.do?layout=firstPagePreview" />
+    </action>
+    <action name="aimWelcomePageForm" path="/aim/uploadThumbnail" scope="request" type="org.digijava.module.aim.action.UploadThumbnail" validate="false">
+      <forward name="forward" path="/aim/firstPagePreview.do" redirect="true" />
+    </action>
+    <action name="aimWelcomePageForm" path="/aim/displayThumbnail" scope="request" type="org.digijava.module.aim.action.DisplayThumbnail" validate="false" />
+    <action name="aimWelcomePageForm" path="/aim/downloadFileFromHome" type="org.digijava.module.aim.action.DownloadFileFromHome" validate="false" />
+    
     <action path="/aim/setDefaultFlag" scope="request" type="org.digijava.module.aim.action.SetDefaultFlag" validate="false">
       <forward name="forward" path="/aim/flagUploader.do" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />

@@ -393,6 +393,7 @@
 	<page name="parisIndicatorEdit" title=" : Paris Indicator Edit" />
 
 	<!-- Paris Indiacator Manager ends-->
+	<page name="firstPagePreview" title="First Page Preview"/>
 	<page name="flagUploader" title=" - Flag uploader/selector" />
 	<!--
 	<page page="uploadFlag" name="aim_uploadFlag" title=" - Upload Flag" />

@@ -31,7 +31,6 @@
     <page name="waitingUserConfirmation" title=" - Successfully registered user" />
     <page name="addWorkSpaceUser" title=" - Add user to workspace" />
     <page page="assignUserToWorkspace" name="assignToWorkspace" title="Assign User To Workspace" />
-    <page page="firstPagePreview" name="preview_FirstPage" title="First Page Preview"/>
 </secondary-pages>
 
 <module>

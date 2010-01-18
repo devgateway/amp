@@ -12,6 +12,8 @@
 		<action login-required="false" pattern="/logout" />
 		<action login-required="false" pattern="/logoutAction" />
 		<action login-required="false" pattern="/displayFlag" />
+		<action login-required="false" pattern="/displayThumbnail" />
+		<action login-required="false" pattern="/downloadFileFromHome" />
 		<action login-required="false" pattern="/viewNewAdvancedReport" />
 		<action login-required="false" pattern="/reportsFilterPicker" />
 		<action login-required="false" pattern="/pdfExport" />
@@ -106,6 +108,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFeature</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSiteFlag</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpHomeThumbnail</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpExternalMapping</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGlobalSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>

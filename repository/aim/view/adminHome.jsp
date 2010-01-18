@@ -273,7 +273,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:tipUserManager">Click here to edit Welcome screen</digi:trn>
                               </c:set>	
-                               <digi:link module="um" href="/previewFirstPage.do">
+                               <digi:link module="aim" href="/firstPagePreview.do">
                                 <digi:trn key="um:welcomePageEdit">Welcome Screen</digi:trn>
                               </digi:link>                             					      
 						    </td>

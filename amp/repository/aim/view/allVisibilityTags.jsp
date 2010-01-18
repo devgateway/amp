@@ -737,6 +737,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sub-Program" feature="Budget"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Code Chapitre" feature="Budget"></field:display>
+<field:display name="Budgeting Year" feature="Budget"></field:display>
+<field:display name="Description Chapitre" feature="Budget"></field:display>
+<field:display name="Description Imputation" feature="Budget"></field:display>
 <field:display name="Table CSS class" feature="Table Widgets"></field:display> 
 <field:display name="Table Code" feature="Table Widgets"></field:display> 
 <field:display name="Table Column CSS class" feature="Table Widgets"></field:display> 

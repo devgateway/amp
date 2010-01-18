@@ -141,12 +141,13 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityContact</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpContactProperty</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisationContact</hibernate-class>
-                <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgStaffInformation</hibernate-class>
-                <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgStaffInformation</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation</hibernate-class>
-
-                <hibernate-class>org.digijava.module.aim.fmtool.dbentity.AmpFeatureSource</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.fmtool.dbentity.AmpFeatureSource</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroup</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpChapter</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpImputation</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRecipient</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->

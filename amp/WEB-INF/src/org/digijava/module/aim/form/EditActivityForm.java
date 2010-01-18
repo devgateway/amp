@@ -27,9 +27,8 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpChapter;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -41,7 +40,6 @@ import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.ContactPropertyHelper;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.CustomFieldStep;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -56,6 +54,7 @@ import org.digijava.module.aim.util.Step;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class EditActivityForm extends ActionForm implements Serializable {
 
@@ -205,7 +204,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String author;
 		private String clasiNPD;
 		private String[] budgetCodes;
-
+		
+		//code chapitre
+		private Collection<BeanWrapperImpl> chapterCodes;
+		private Collection<BeanWrapperImpl> chapterYears;
+		private String chapterCode;
+		private AmpChapter chapterForPreview;
+		private Integer chapterYear;
+		
 		public String[] getBudgetCodes() {
 			return budgetCodes;
 		}
@@ -677,6 +683,78 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setPreviousApprovalStatus(String previousApprovalStatus) {
 			this.previousApprovalStatus = previousApprovalStatus;
 		}
+	
+		/**
+		 * @return the chapterCode
+		 */
+		public String getChapterCode() {
+			return chapterCode;
+		}
+
+		/**
+		 * @param chapterCode the chapterCode to set
+		 */
+		public void setChapterCode(String chapterCode) {
+			this.chapterCode = chapterCode;
+		}
+
+		/**
+		 * @return the chapterYear
+		 */
+		public Integer getChapterYear() {
+			return chapterYear;
+		}
+
+		/**
+		 * @param chapterYear the chapterYear to set
+		 */
+		public void setChapterYear(Integer chapterYear) {
+			this.chapterYear = chapterYear;
+		}
+
+		/**
+		 * @return the chapterCodes
+		 */
+		public Collection<BeanWrapperImpl> getChapterCodes() {
+			return chapterCodes;
+		}
+
+		/**
+		 * @param chapterCodes the chapterCodes to set
+		 */
+		public void setChapterCodes(Collection<BeanWrapperImpl> chapterCodes) {
+			this.chapterCodes = chapterCodes;
+		}
+
+		/**
+		 * @return the chapterYears
+		 */
+		public Collection<BeanWrapperImpl> getChapterYears() {
+			return chapterYears;
+		}
+
+		/**
+		 * @param chapterYears the chapterYears to set
+		 */
+		public void setChapterYears(Collection<BeanWrapperImpl> chapterYears) {
+			this.chapterYears = chapterYears;
+		}
+
+		/**
+		 * @return the chapterForPreview
+		 */
+		public AmpChapter getChapterForPreview() {
+			return chapterForPreview;
+		}
+
+		/**
+		 * @param chapterForPreview the chapterForPreview to set
+		 */
+		public void setChapterForPreview(AmpChapter chapterForPreview) {
+			this.chapterForPreview = chapterForPreview;
+		}
+
+
 
 	}
 

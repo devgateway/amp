@@ -131,6 +131,9 @@
 		<property name="customField5" column="customField5" type="java.lang.String" />
 		<property name="customField6" column="customField6" type="java.lang.Boolean" />
 		
+		
+		<many-to-one name="chapter" column="chapter_code" class="org.digijava.module.aim.dbentity.AmpChapter" cascade="none" />
+		
 		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="none" />
 		<many-to-one name="ampActivityPreviousVersion" column="amp_activity_previous_version_id"

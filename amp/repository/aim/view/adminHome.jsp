@@ -689,6 +689,15 @@
 							   </digi:link>
                             </td>
                           </tr>
+                          
+                           <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>							   
+							   <digi:link module="dataExchange" href="/importChapters.do" title="Import Chapters" >
+							      <digi:trn>Code Chapitre Importer</digi:trn>
+							   </digi:link>
+                            </td>
+                          </tr>
                         </table>
                       </td>
                     </tr>

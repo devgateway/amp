@@ -80,8 +80,8 @@
 			if(checkboxes[i].checked) selectedVersions.push(checkboxes[i]);
 		}
 		if(selectedVersions.length = 2){
-			document.getElementById("activityOneId").value = selectedVersions[1].value;
-			document.getElementById("activityTwoId").value = selectedVersions[0].value;
+			document.getElementById("activityOneId").value = selectedVersions[0].value;
+			document.getElementById("activityTwoId").value = selectedVersions[1].value;
 			document.aimCompareActivityVersionsForm.submit();
 		}
 	}

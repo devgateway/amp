@@ -42,7 +42,9 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -230,6 +232,8 @@ public class AmpARFilter extends PropertyListable {
 	private Set beneficiaryAgency;
 	private Set<AmpOrganisation> donnorgAgency;
 
+	//measures filters
+	
 	private Set teamAssignedOrgs = null;
 
 	private Set financingInstruments = null;
@@ -306,8 +310,10 @@ public class AmpARFilter extends PropertyListable {
 			ampReportId = request.getParameter("ampReportId");
 		}
 		if (ampReportId == null) {
-			AmpReports ar = (AmpReports) request.getSession().getAttribute(
-			"reportMeta");
+			AmpReports ar = (AmpReports) request.getSession().getAttribute("reportMeta");
+			
+			
+			
 			/* 
 			 * I am adding this check because mondrian use this class and when there is not report in the session object 
 			   a nullpointer exception is throw.
@@ -469,6 +475,69 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 	}
 
+	
+	private String buildDateAndMeasuresFilter(HttpServletRequest request){
+		boolean applyFilter=false;
+		StringBuffer strWhere=new StringBuffer("select f.amp_activity_id from amp_funding f inner join amp_funding_detail fd on f.amp_funding_id=fd.amp_funding_id where 1=1 ");	
+		if (fromDate != null) 
+			if (fromDate.trim().length() > 0){
+				strWhere.append(" AND DATEDIFF(fd.transaction_date,?) >= 0");
+				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getFromDate()).getTime()),java.sql.Types.DATE));
+				applyFilter=true;
+			}
+		if (toDate != null)
+			if (toDate.trim().length() > 0){
+				strWhere.append(" AND DATEDIFF(?, fd.transaction_date) >= 0");
+				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));
+				applyFilter=true;
+			}
+		
+		if (!applyFilter) return "";
+		
+		AmpReports ar = (AmpReports) request.getSession().getAttribute("reportMeta");
+		Set<AmpReportMeasures> measures=ar.getMeasures();
+		StringBuffer strTransactions =new StringBuffer("");
+		
+		if (measures!=null){
+		
+				for (AmpReportMeasures measure : measures) {
+				
+					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Actual Commitments")){
+						strTransactions.append(" (fd.adjustment_type=0 and  fd.transaction_type=0) or");
+					}
+					
+					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Actual Disbursements")){
+						strTransactions.append("  (fd.adjustment_type=0 and  fd.transaction_type=1) or");
+					}
+					
+					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Actual Expenditures")){
+						strTransactions.append(" (fd.adjustment_type=0 and  fd.transaction_type=2) or");	
+					}
+					
+					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Planned Commitments")){
+						strTransactions.append("  (fd.adjustment_type=1 and  fd.transaction_type=0) or");
+					}
+					
+					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Planned Disbursements")){
+						strTransactions.append("  (fd.adjustment_type=1 and  fd.transaction_type=1) or");
+					}
+					
+					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Planned Expenditures")){
+						strTransactions.append("  (fd.adjustment_type=1 and  fd.transaction_type=2) or");
+					}
+			}
+				
+				if (strTransactions.length() > 1){
+					strTransactions.delete(strTransactions.length()-3,strTransactions.length());
+					strWhere.append(" and ( ");
+					strWhere.append(strTransactions);
+					strWhere.append(")");
+				}
+			}
+		return strWhere.toString();
+		
+	}
+	
 	public Hits generateFilterQuery(HttpServletRequest request) {
 		indexedParams=new ArrayList<FilterParam>();
 		Hits hits = null;
@@ -773,7 +842,12 @@ public class AmpARFilter extends PropertyListable {
 		}
 
 		
-		
+		if ((fromDate != null)||(toDate != null)){
+			String strMeasure=buildDateAndMeasuresFilter(request);
+			if (strMeasure.length()> 0)
+				queryAppend(strMeasure);
+		}
+		/*
 		if (fromDate != null) 
 			if (fromDate.trim().length() > 0){
 				String FROM_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
@@ -791,7 +865,7 @@ public class AmpARFilter extends PropertyListable {
 				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));
 				
 			}
-		
+		*/
 		/*
 		 * if (fromYear==null) fromYear = 0;
 		 * 
@@ -943,6 +1017,8 @@ public class AmpARFilter extends PropertyListable {
 					+ ((jointCriteria)?"1":"0");;
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
+		
+		
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
 		

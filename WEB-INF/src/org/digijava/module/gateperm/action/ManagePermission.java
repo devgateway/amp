@@ -61,7 +61,7 @@ public class ManagePermission extends MultiAction {
 
 
 	
-	List<BeanWrapperImpl> actions = Util.createBeanWrapperItemsCollection(ActionUtil.getAvailableActions());
+	List<BeanWrapperImpl> actions = (List<BeanWrapperImpl>) Util.createBeanWrapperItemsCollection(ActionUtil.getAvailableActions());
 
 	pf.set_availableActions(actions);
 

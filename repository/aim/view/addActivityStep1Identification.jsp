@@ -11,6 +11,19 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
+<script language="JavaScript">
+	function  submitAfterSelectingChapterYear()
+	{
+		<digi:context name="nextTarget" property="context/module/moduleinstance/addActivity.do" />
+		
+    	document.aimEditActivityForm.action = "<%= nextTarget %>";
+    	document.aimEditActivityForm.target = "_self";
+    	document.aimEditActivityForm.editKey.value = null;
+  		document.aimEditActivityForm.step.value = "1";
+    	document.aimEditActivityForm.submit();
+	}
+</script>
+
 <%@page import="org.digijava.module.aim.helper.Constants"%><script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete-min.js"/>"></script>
@@ -83,13 +96,7 @@ OnBudgetRules.prototype.check		= function () {
 	}
 }
 
-imputationRules				= new OnBudgetRules ( "ImputationField", "ImputationSpan", <%= Constants.NUM_OF_CHARS_IMPUTATION%> );
-codeChapitreRules			= new OnBudgetRules ( "CodeChapitreField", "CodeChapitreSpan", <%= Constants.NUM_OF_CHARS_CODE_CHAPITRE %> );
 
-function doBudgetRulesCheck() {
-	imputationRules	.check();
-	codeChapitreRules.check();
-}
 
 YAHOOAmp.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
 
@@ -595,7 +602,7 @@ target.style.cursor = "default"
 											
 											<feature:display name="Budget" module="Project ID and Planning">
 											
-											<field:display name="On/Off Budget" feature="Budget">	
+											
 											<tr bgcolor="#ffffff">
 												<td valign="top" align="left">
 
@@ -604,177 +611,45 @@ target.style.cursor = "default"
 													</a>
 												</td>
 											<td>
+											
 											<table cellpadding="7" cellspacing="5">
 
 											 <tr>
+											 
 												<td valign="top" align="left" colspan="9">	
+												<field:display name="On/Off Budget" feature="Budget">	
 													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
 													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
+												</field:display>
 												</td>
 											</tr>
 											 <tr>
-											
-											<field:display name="Imputation" feature="Budget">
-											<td valign="top" id="Imputation" align="center"  >
-												<a title="<digi:trn>Imputation</digi:trn>">
-												<digi:trn>
-													Imputation
-												</digi:trn>
-												</a>
+											 <td>
+											<field:display name="Code Chapitre" feature="Budget">	
+											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
+											 	<html:option value="0">Select Code Year</html:option>
+											 	<html:optionsCollection property="identification.chapterYears" value="wrappedInstance" label="wrappedInstance"/>
+											 </html:select>
+											 
+											<logic:present name="aimEditActivityForm" property="identification.chapterCodes"> 
+											<html:select property="identification.chapterCode">
+											 	<html:option value="0">Select Code Chapitre</html:option>
+											 	<html:optionsCollection property="identification.chapterCodes" value="wrappedInstance" label="wrappedInstance"/>
+											 </html:select>
+											 </logic:present>
+											 </field:display>
 											</td>
-											</field:display>
+											</tr>
+											</table>
 											
-											<field:display name="Code Chapitre" feature="Budget">
-											<td valign="top" id="FY" align="center"  >
-												<a title="<digi:trn>Code Chapitre</digi:trn>">
-												<digi:trn>
-													Code Chapitre
-												</digi:trn>
-												</a>
 											</td>
-											</field:display>
+											</tr>
 											
-											<field:display name="FY" feature="Budget">
-											<td valign="top" id="FY" align="center" >
-												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
-												<digi:trn key="aim:actFY">
-												FY
-												</digi:trn>
-												</a>
-											</td>
-											</field:display>
 											
-										<field:display name="Vote" feature="Budget" >
-											<td valign="top"  id="Vote" align="center" >
-												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
-												<digi:trn key="aim:actVote">
-												Vote
-												</digi:trn>
-												</a>
-											</td>	
-											</field:display>
-											
-											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top" id="Sub-Vote" align="center" >
-												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
-												<digi:trn key="aim:actSub-Vote">
-												Sub-Vote
-												</digi:trn>
-												</a>
-											</td>
-											</field:display>
-											
-	
-											
-									<field:display name="Sub-Program" feature="Budget">
-										<td valign="top" id="Sub-Program" align="center">
-											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
-											<digi:trn key="aim:actSubProgram">
-												Sub-Program
-												</digi:trn>
-												</a>
-										</td>
-									</field:display>
-											
-								<field:display name="Project Code" feature="Budget">
-										<td valign="top" id="ProjectCode" align="center" >
-											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
-											<digi:trn key="aim:actProjectCode">
-												Project Code
-												</digi:trn>
-												</a>
-									</td>
-								</field:display>	
-									<field:display name="Code Chapitre" feature="Budget"></field:display>
-									</tr>
-										<tr>
-											<field:display name="Imputation" feature="Budget">
-												<td valign="top"  id="Imputation1" align="center"  >
-														<html:text property="identification.FY" size="22" styleId="ImputationField" onkeyup="imputationRules.check();"/>
-												</td>
-											</field:display>
-										
-											<field:display name="Code Chapitre" feature="Budget">
-												<td valign="top"  id="CodeChapitre1" align="center">
-														<html:text property="identification.projectCode" size="11" styleId="CodeChapitreField" onkeyup="codeChapitreRules.check();"/>
-												</td>
-											</field:display>
-										
-											<field:display name="FY" feature="Budget">
-												<td valign="top"  id="FY1" align="center"  >
-														<html:text property="identification.FY" size="12"/>
-												</td>
-											</field:display>
-											
-											<field:display name="Vote" feature="Budget">
-												<td valign="top"  id="Vote1" align="center">
-													<html:text property="identification.vote" size="12"/>
-												</td>	
-											</field:display>
-											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top"  id="Sub-Vote1" align="center" >
-												<html:text property="identification.subVote" size="12"/>
-											</td>
-											</field:display>
-											<field:display name="Sub-Program" feature="Budget">
-												<td valign="top" id="Sub-Program1" align="center" >
-													<html:text property="identification.subProgram" size="12"/>
-												</td>
-											</field:display>
-											<field:display name="Project Code" feature="Budget">
-												<td valign="top" id="ProjectCode1" align="center" >
-													<html:text property="identification.projectCode" size="12"/>
-												</td>
-											</field:display>	
-										</tr>
-										<tr>
-											<field:display name="Imputation" feature="Budget">
-												<td valign="top"  id="Imputation2" align="center" >
-														<span id="ImputationSpan">&nbsp;</span>
-												</td>
-											</field:display>
-											
-											<field:display name="Code Chapitre" feature="Budget">
-												<td valign="top"  id="CodeChapitre2" align="center">
-													<span id="CodeChapitreSpan">&nbsp;</span>
-												</td>	
-											</field:display>
-											
-											<field:display name="FY" feature="Budget">
-												<td valign="top"  id="FY2" align="center"  >
-														<span id="FYSpan">&nbsp;</span>
-												</td>
-											</field:display>
-											
-											<field:display name="Vote" feature="Budget">
-												<td valign="top"  id="Vote2" align="center">
-													<span id="VoteSpan">&nbsp;</span>
-												</td>	
-											</field:display>
-											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top"  id="Sub-Vote2" align="center">
-												<span id="SubVoteSpan">&nbsp;</span>
-											</td>
-											</field:display>
-											<field:display name="Sub-Program" feature="Budget">
-												<td valign="top" id="Sub-Program2" align="center">
-													<span id="SubProgramSpan">&nbsp;</span>
-												</td>
-											</field:display>
-											<field:display name="Project Code" feature="Budget">
-												<td valign="top" id="ProjectCode2" align="center">
-													<span id="ProjectCodeSpan">&nbsp;</span>
-												</td>
-											</field:display>	
-										</tr>
-								</table>
-								</td></tr>	
-								</field:display>
 									
-								
-								
+						
 								</feature:display>
 								
 								<field:display name="Financial Instrument" feature="Budget">

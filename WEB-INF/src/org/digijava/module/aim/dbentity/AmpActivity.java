@@ -41,6 +41,9 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	@VersionableFieldTextEditor(fieldTitle = "Contract Details")
 	private String contractDetails;
 	
+	@VersionableFieldTextEditor(fieldTitle = "Chapter Code")
+	private AmpChapter chapter;
+	
 	@VersionableFieldSimple(fieldTitle = "Activity Budget")
     private Boolean budget;
 	@VersionableFieldSimple(fieldTitle = "Government Agreement Number")
@@ -1540,6 +1543,20 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setModifiedBy(AmpTeamMember modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	/**
+	 * @return the chapter
+	 */
+	public AmpChapter getChapter() {
+		return chapter;
+	}
+
+	/**
+	 * @param chapter the chapter to set
+	 */
+	public void setChapter(AmpChapter chapter) {
+		this.chapter = chapter;
 	}
 
 }

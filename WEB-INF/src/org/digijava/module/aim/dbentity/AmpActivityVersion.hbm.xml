@@ -106,6 +106,8 @@
 		<property name="jointCriteria" column="jointCriteria" type="java.lang.Boolean" />
 		<property name="humanitarianAid" column="humanitarianAid" type="java.lang.Boolean" />
 
+		<many-to-one name="chapter" column="chapter_code" class="org.digijava.module.aim.dbentity.AmpChapter" cascade="none" />
+
 		<many-to-one name="themeId" column="amp_theme_id"
 			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />
 		<!-- <many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>  -->

@@ -106,7 +106,7 @@ public final class Util {
 	 * @return the target collection - a list
 	 * @see BeanWrapperImpl
 	 */
-	public static List<BeanWrapperImpl> createBeanWrapperItemsCollection(Collection source) {
+	public static Collection<BeanWrapperImpl> createBeanWrapperItemsCollection(Collection source) {
 		List<BeanWrapperImpl> dest=new ArrayList<BeanWrapperImpl>();
 		Iterator i=source.iterator();
 		while (i.hasNext()) {

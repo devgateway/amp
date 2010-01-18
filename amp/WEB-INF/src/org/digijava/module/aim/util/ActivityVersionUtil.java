@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -165,5 +167,22 @@ public class ActivityVersionUtil {
 		Session session = PersistenceManager.getSession();
 		auxActivity = ((AmpActivityGroup) session.load(AmpActivityGroup.class, groupId)).getAmpActivityLastVersion();
 		return auxActivity;
+	}
+
+	public static void updateActivityView() {
+		logger.info("Updating amp_activity view." );
+		try {
+			Session session = PersistenceManager.getSession();
+			String query = "CREATE OR REPLACE VIEW `amp_activity` AS  "
+					+ "select  amp_activity_version.*  from    "
+					+ "(`amp_activity_version` join `amp_activity_group`)  "
+					+ "where (`amp_activity_version`.`amp_activity_id` = `amp_activity_group`.`amp_activity_last_version_id`)";
+			session.createSQLQuery(query).executeUpdate();
+		} catch (Exception e) {
+			logger.error("Error updating amp_activity view.", e);
+			e.printStackTrace(System.out);
+		}
+		logger.info("Updated amp_activity view." );
+		
 	}
 }

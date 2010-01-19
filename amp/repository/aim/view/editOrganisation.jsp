@@ -832,7 +832,7 @@ function resetPrimary(contList){
                                                 <font size="2" color="#FF0000">*</font>
                                             </td>
                                             <td>
-                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="160" rows="4" styleId="orgPrimaryPurpose"/>
+                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="100" rows="4" styleId="orgPrimaryPurpose"/>
                                             </td>
                                         </tr>
                                         <tr>

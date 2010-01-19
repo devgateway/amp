@@ -25,6 +25,7 @@
 		</table>
 	</div>
 </div>
+<script type="text/javascript" src="script/jquery-1.3.2.min.js"></script>
 
 <script type="text/javascript">
 		YAHOOAmp.namespace("YAHOOAmp.amptab");
@@ -102,7 +103,17 @@
         
         initScripts();
    	});
-		
+
+	$(window).scroll(function()
+	{
+		//$('#scrollingDiv').animate({"marginTop": ($(window).scrollTop()) + "px", "marginBottom": ($(window).scrollBottom()) + "px"}, {queue: false, duration: 350});
+		//alert ($(window).scrollTop());
+		if ($(window).scrollTop() > 70) {
+			$('#scrollingDiv').animate({"marginTop": ($(window).scrollTop()-70) + "px"}, {queue: false, duration: 250});
+        } else {
+        	$('#scrollingDiv').animate({"marginTop": ($(window).scrollTop()) + "px"}, {queue: false, duration: 250});
+        };
+	}); 
 </script>
 <style type="text/css">
 	.mask {
@@ -226,7 +237,7 @@ var draftStatus=document.getElementById("draftFlag");
 
 <!-- To avoid step numbering bug in the future please change getSteps() method
 of ActivityUtil class also when change step visibility module/feature name -->
-
+<div id="scrollingDiv" style="top: 193px;">
 <table width="300" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=1 bordercolor="D2E1FF">
 	<tr>
 		<td align="center" class="editActivityMenuTitle">
@@ -785,3 +796,4 @@ of ActivityUtil class also when change step visibility module/feature name -->
 		</td>
 	</tr>
 </table>
+</div>

@@ -130,7 +130,7 @@
 		<html:hidden name ="newAdvancedTrnForm" property="pageNumber"/>
 		<html:hidden name ="newAdvancedTrnForm" property="changesOpened"/>
 		<div class="pageTitle">
-			<span class="subtitle-blue">Search Translations (Page is under construction)</span>
+			<span class="subtitle-blue">Search Translations</span>
 		</div>
 		<div class="controlPanel">
 			<div class="clearfix">
@@ -216,39 +216,7 @@
 				</div>
 				<div class="changesPanel">
 					<div class="changesContainer">
-						<c:if test="${empty newAdvancedTrnForm.changesList}">
-							No Changes
-						</c:if>
-						<c:if test="${not empty newAdvancedTrnForm.changesList}">
-						
-							<table class="chgangesTable">
-								
-								<tr style="background-color: #dbd6d6;">
-									<th>Undo</th>
-									<th>Oper</th>
-									<th>Transl</th>
-								</tr>
-							
-								<tbody>
-									
-									<c:forEach items="${newAdvancedTrnForm.changesList}" var="changedMsg">
-										<tr>
-											<td>
-												<input type="checkbox" class="changedListItem" value="${changedMsg.element.locale}_${changedMsg.element.key}">
-											</td>
-											<td>
-												${changedMsg.operation}
-											</td>
-											<td>
-												${changedMsg.element.message}
-											</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-							<input id="btnUndoSelected" 	type="button" value="Undo selected"/>
-							<input id="btnSaveAllChanges" 	type="button" value="Save All Changes"/>
-						</c:if>
+						No Changes
 					</div>
 				</div>
 			</div>
@@ -264,8 +232,20 @@
 
 <script type="text/javascript">
 
-	var imgPlus 	= '<digi:file src="images/dhtml/DHTMLSuite_plus.gif"/>';
-	var imgMinus 	= '<digi:file src="images/dhtml/DHTMLSuite_minus.gif"/>';
+	<digi:context name="undoAction" property="context/module/moduleinstance/AdvTranUndoChanges.do" />
+	<digi:context name="addAction" property="context/module/moduleinstance/newAdvTranAdd.do" />
+	<digi:context name="getChanges" property="context/module/moduleinstance/AdvTranGetChanges.do" />
+	<digi:context name="saveChanges" property="context/module/moduleinstance/AdvTranSaveChanges.do" />
+	
+
+	
+	var imgPlus 		= '<digi:file src="images/dhtml/DHTMLSuite_plus.gif"/>';
+	var imgMinus 		= '<digi:file src="images/dhtml/DHTMLSuite_minus.gif"/>';
+	var undoUrl			= '<%=undoAction%>';
+	var saveAllUrl		= '<%=saveChanges%>';
+	var addUrl			= '<%=addAction%>';
+	var getChangesUrl	= '<%=getChanges%>';
+	
 	var arrAvailableLocales = new Array();
 	<c:forEach items="${newAdvancedTrnForm.possibleLocales}" var="lng" varStatus="sts">
 		arrAvailableLocales[${sts.index}] = '${lng}';
@@ -305,8 +285,8 @@
 		);
 		$('.showhide').toggle( 
 				function(){
-					$('div.searchResults').animate({width:'75%'},500);
-					$('div.changesPanel').animate({width: '25%'},500,function(){					
+					$('div.searchResults').animate({width:'75%'},400);
+					$('div.changesPanel').animate({width: '25%'},400,function(){					
 						$('div.changesContainer').fadeIn('slow');
 						$('div.showhide').html('&gt;&gt;');
 					});
@@ -315,8 +295,8 @@
 				},
 				function(){
 					$('div.changesContainer').fadeOut('slow',function(){
-						$('div.searchResults').animate({width : '99%' },500);
-						$('div.changesPanel').animate({width : '1%'},500);
+						$('div.searchResults').animate({width : '99%' },400);
+						$('div.changesPanel').animate({width : '1%'},400);
 						$('div.showhide').html('&lt;&lt;');
 					});
 					var opened = document.getElementsByName('changesOpened')[0];
@@ -329,12 +309,63 @@
 			$('.showhide').toggle();
 		}
 
-		$('#btnUndoSelected').click(function(){
-			alert('Are you sure?');
-		});
+		loadChanges();
 		
 	});//document ready end
 
+	function loadChanges(){
+		var resp=$.ajax({
+			   type: 'GET',
+			   url: getChangesUrl,
+			   cache : false,
+			   success: function(data,msg){
+			     $('div.changesContainer').html(data);
+			     attachChangesButtonEvents();
+			   },
+		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get chages list.');} 
+		}).responseText;
+	}
+
+	function attachChangesButtonEvents(){
+
+		$('#btnUndoSelected').click(function(){
+			var checkboxes = $('input.changedListItem:checked');
+			if (checkboxes!=null && checkboxes.length>0){
+				if (confirm('Are you sure?')){
+					var changes = [];
+					checkboxes.each(function(index){
+						changes[changes.length]=$(this).val();
+					});
+					var resp=$.ajax({
+						   type: 'POST',
+						   url: undoUrl,
+						   data: ({undoChanges : changes}),
+						   cache : false,
+						   success: function(data,msg){
+						     loadChanges();
+						   },
+					   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, undo is not done.');} 
+					}).responseText;
+				}
+			}else{
+				alert('Please select changes to undo.');
+			}
+		});//undo all
+
+		$('#btnSaveAllChanges').click(function(){
+			var resp=$.ajax({
+				   type: 'GET',
+				   url: saveAllUrl,
+				   cache : false,
+				   success: function(data,msg){
+				     loadChanges();
+				   },
+			   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot save changes.');} 
+			}).responseText;
+		});//save all
+		
+	}
+	
 	function addTranslations(but,key,strUsedLocales){
 		var arrUsedLocales = strUsedLocales.split(',');
 		var arrUnusedLocales = getMissingLocales(arrUsedLocales);
@@ -368,6 +399,43 @@
 		newDivHtml+='</div>';
 		//alert(containers.html());
 		containers.append(newDivHtml);
+		$('select#selectedLocale').focus();
+	}
+
+	function saveAddTranslation(but){
+		var container = $(but).parents('div.trnContainer');
+		var selectLocale = container.find('#selectedLocale').val();
+		var key = container.find('input[name="key"]').val()
+		var message = container.find('input[name="message"]').val()
+		
+		sendAddTranslation(selectLocale,message, key);
+
+		container.find('select.selectLocaleToAdd').remove();
+		container.find('td.trnLanguage').html(selectLocale);
+		var closedGroup = container.parents('div.msgGroup').find('div.msgGroupBodyClosed');
+		closedGroup.html(closedGroup.html()+', '+selectLocale);
+		
+
+		container.find('td.tdCancel').remove();
+		container.find('td.tdSave').remove();
+		container.parents('div.msgGroup').find('.addTranslations').removeAttr('disabled');
+		$('#btnDoSearch').removeAttr('disabled');
+	}
+
+	function sendAddTranslation(locale,message, key){
+		var itwasok = false;
+		var resp=$.ajax({
+			   type: 'POST',
+			   url: addUrl,
+			   data: ({addLocale : locale, addMessage : message, addKey : key}),
+			   cache : false,
+			   success: function(data,msg){
+			   		itwasok=true;
+			   		loadChanges();
+			   },
+		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot add.');} 
+		}).responseText;
+		return itwasok;
 	}
 
 	function cancelAddTranslation(but){
@@ -376,19 +444,6 @@
 		$('#btnDoSearch').removeAttr('disabled');
 	}
 
-	function saveAddTranslation(but){
-		var container = $(but).parents('div.trnContainer');
-		container.find('select.selectLocaleToAdd').remove();
-		var selectLocale = container.find('select.trnLanguage').val();
-		alert(selectLocale);
-		container.find('select.trnLanguage').append(selectLocale);
-
-		container.find('input.tdCancel').remove();
-		container.find('input.tdSave').remove();
-		$(but).parents('div.msgGroupBodyOpened').find('input.addTranslations').removeAttr('disabled');
-		$('#btnDoSearch').removeAttr('disabled');
-		
-	}
 	
 	function getMissingLocales(array1){
 		var array2 = arrAvailableLocales;
@@ -408,14 +463,6 @@
 		return array3;
 	}
 
-	function sendAddTranslation(div,locale,message){
-		alert('locale='+locale+' message='+message);
-		appendTranslation(div,locale,message);
-	}
-	function appendTranslation(div,locale,message){
-		var aaa=$(div).attr('class');
-		alert(aaa);
-	}
 	function gotoPage(pageNumber){
 		var el = document.getElementsByName('pageNumber')[0];
 		el.value=pageNumber

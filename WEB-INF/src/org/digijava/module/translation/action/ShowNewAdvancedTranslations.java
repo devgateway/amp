@@ -73,22 +73,13 @@ public class ShowNewAdvancedTranslations extends Action{
 				//Try to find same translation in db
 				Message original = TranslatorWorker.getInstance(key).getByKey(key, locale, site.getId());
 				
-				if (original==null){
-					//save new record if not found in db
-					Message newMessage = new Message();
-					newMessage.setKey(key);
-					newMessage.setLocale(locale);
-					newMessage.setMessage(newText);
-					buffer.operationAdd(newMessage);
-					//TranslatorWorker.getInstance(key).save(newMessage);
-				}else if (original!=null && !original.getMessage().equals(newText)){
-					//update existing
+				//if found and text seems to be changed
+				if (original!=null && !original.getMessage().equals(newText)){
 					Message editedMessage = new Message();
 					editedMessage.setKey(key);
 					editedMessage.setLocale(locale);
 					editedMessage.setMessage(newText);
-					buffer.operationEdit(editedMessage);
-					//TranslatorWorker.getInstance(key).update(original);
+					buffer.operationUpdate(editedMessage);
 				}
 			}
 		}
@@ -143,7 +134,7 @@ public class ShowNewAdvancedTranslations extends Action{
 				//This means that if we found English translation that matches searched text, then its French and Spanish versions will also be loaded.
 				List<Message> lucMessages = TrnUtil.getMessagesForKeys(scoresByKeys.keySet());
 				
-				List<Message> mergedWithBuffer = buffer.marge(lucMessages);
+				List<Message> mergedWithBuffer = buffer.merge(lucMessages);
 				//Group the by keys. use also scores
 				Collection<MessageGroup> lucGroups = TrnUtil.groupByKey(mergedWithBuffer, new TrnUtil.StandardMessageGroupFactory() , scoresByKeys);
 				List<MessageGroup> sortedGroups  = new ArrayList<MessageGroup>(lucGroups);
@@ -182,6 +173,7 @@ public class ShowNewAdvancedTranslations extends Action{
 	}
 
 	private Integer getItemsPerPage(){
+		//TODO this should come from settings.
 		return new Integer(20);
 	}
 	

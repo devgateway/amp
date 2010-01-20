@@ -53,8 +53,11 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.entity.PatcherMessageGroup;
 import org.digijava.module.translation.util.ListChangesBuffer;
+import org.digijava.module.translation.util.ListChangesBuffer.OperationFixer;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class TrnUtil {
 
@@ -708,6 +711,73 @@ public class TrnUtil {
     }
 
 
+    /**
+     * Fixes all changes to translations in db.
+     * @author Irakli Kobiashvili
+     *
+     */
+	public static class TrnDb implements OperationFixer<Message>{
+
+		private Session session = null;
+		private Transaction tx = null;
+		private TranslatorWorker worker = null;
+		
+		public TrnDb() throws DgException{
+			this.session = PersistenceManager.getRequestDBSession();
+			this.worker = TranslatorWorker.getInstance("");
+		}
+
+		@Override
+		public void add(Message element) throws WorkerException {
+			worker.save(element);
+		}
+
+		@Override
+		public void update(Message element) throws WorkerException {
+			worker.update(element);
+		}
+
+		@Override
+		public void delete(Message elemenet) throws WorkerException {
+			worker.delete(elemenet);
+		}
+
+		@Override
+		public void start() throws WorkerException {
+			try {
+				tx = session.beginTransaction();
+			} catch (HibernateException e) {
+				throw new WorkerException("Cannot start trasaction to fix translation changes.");
+			}
+		}
+
+		@Override
+		public void end() throws WorkerException {
+			if (tx!=null){
+				try {
+					tx.commit();
+				} catch (HibernateException e) {
+					throw new WorkerException("Cannot fix buffered changes.",e);
+				}
+			}
+		}
+
+		@Override
+		public void error() throws WorkerException {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e) {
+					throw new WorkerException("Cannot rollback transaction chnages",e);
+				}
+			}
+		}
+		
+		
+	}
+
+    
+    
     static {
         countryNameComparator = new Comparator () {
             public int compare(Object o1, Object o2) {
@@ -748,7 +818,7 @@ public class TrnUtil {
 		String sessionKey = "amp.translations.newAdvancedMode.changesList";
 		ListChangesBuffer<String, Message> result = (ListChangesBuffer<String, Message>)session.getAttribute(sessionKey);
 		if (result == null){
-			result = new ListChangesBuffer<String, Message>(new TrnUtil.MessageShortKeyResolver());
+			result = new ListChangesBuffer<String, Message>(new TrnUtil.MessageKeyLocaleResolver());
 			session.setAttribute(sessionKey, result);
 		}
 		return result;
@@ -763,6 +833,29 @@ public class TrnUtil {
     public static class MessageShortKeyResolver implements KeyResolver<String, Message>{
 		public String resolveKey(Message element) {
 			return element.getKey();
+		}
+    }
+
+    
+    /**
+     * Resolves locale_key as key of the message
+     * @author Irakli Kobiashvili
+     *
+     */
+    public static class MessageKeyLocaleResolver implements KeyResolver<String, Message>{
+		public String resolveKey(Message element) {
+			return element.getLocale()+"_"+element.getKey();
+		}
+    }
+    
+    /**
+     * Resolves locale_siteid_key as key of the message
+     * @author Irakli Kobiashvili
+     *
+     */
+    public static class MessageFullKeyResolver implements KeyResolver<String, Message>{
+		public String resolveKey(Message element) {
+			return element.getLocale()+"_"+element.getSiteId()+"_"+element.getKey();
 		}
     }
 

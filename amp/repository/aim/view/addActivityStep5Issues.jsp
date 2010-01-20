@@ -30,7 +30,45 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
-
+<script language="JavaScript">
+<!--
+	function expandIssue(issueId){
+		var imgId='#img_expI_'+issueId;
+		var imghId='#img_colI_'+issueId;
+		var divId='#div_issue_'+issueId;
+		$(imghId).show();
+		$(imgId).hide();
+		$(divId).show('fast');
+	}       
+	
+	function collapseIssue(issueId){
+		var imgId='#img_expI_'+issueId;
+		var imghId='#img_colI_'+issueId;
+		var divId='#div_issue_'+issueId;
+		$(imghId).hide();
+		$(imgId).show();
+		$(divId).hide('fast');
+	}
+     
+	function expandMeasure(measId){
+		var imgId='#img_expM_'+measId;
+		var imghId='#img_colM_'+measId;
+		var divId='#div_measure_'+measId;
+		$(imghId).show();
+		$(imgId).hide();
+		$(divId).show('fast');
+	}       
+	
+	function collapseMeasure(measId){
+		var imgId='#img_expM_'+measId;
+		var imghId='#img_colM_'+measId;
+		var divId='#div_measure_'+measId;
+		$(imghId).hide();
+		$(imgId).show();
+		$(divId).hide('fast');
+	}
+-->
+</script>
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <digi:instance property="aimEditActivityForm" />
@@ -62,7 +100,10 @@
 															<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
 																<tr class="rowIssue" >
 																	<td width="20%" align="left">
-																	    <IMG src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"/>
+<!--																	    <IMG src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"/>-->
+																			<img id="img_expI_<c:out value="${issues.id}"/>" onclick="expandIssue(<c:out value="${issues.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif"/>
+																			<img id="img_colI_<c:out value="${issues.id}"/>" onclick="collapseIssue(<c:out value="${issues.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif"  style="display : none;"/>
+
 																		<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
 																		<c:out value="${issues.name}"/></a>
 																		 &nbsp;
@@ -89,6 +130,7 @@
 														<field:display feature="Issues" name="Measures Taken">
 														<tr>
 															<td vAlign="center" align="left">
+																<div id="div_issue_<c:out value="${issues.id}"/>" style="display : none;">
 																<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
 																	<logic:notEmpty name="issues" property="measures">
 																	<logic:iterate name="issues" property="measures" id="measure"
@@ -98,7 +140,8 @@
 																			<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
 																		</td>
 																		<td vAlign="center" align="left" width="20%" >
-																		    <IMG src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"/>
+																		    <img id="img_expM_<c:out value="${measure.id}"/>" onclick="expandMeasure(<c:out value="${measure.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif"/>
+																			<img id="img_colM_<c:out value="${measure.id}"/>" onclick="collapseMeasure(<c:out value="${measure.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif"  style="display : none;"/>
 																			<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
 																			<c:out value="${measure.name}"/> </a>
 																			<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
@@ -116,7 +159,8 @@
 																		</td>
 																		<td vAlign="center" align="left" colspan="2">
 																		  <field:display name="Actors" feature="Issues">
-																			<table cellPadding=4 cellSpacing=1 vAlign="top" border=0>
+																			<div id="div_measure_<c:out value="${measure.id}"/>" style="display : none;">
+																				<table cellPadding=4 cellSpacing=1 vAlign="top" border=0>
 																				<logic:notEmpty name="measure" property="actors">
 																				<logic:iterate name="measure" property="actors" id="actor"
 																				 type="org.digijava.module.aim.dbentity.AmpActor">
@@ -139,12 +183,14 @@
 																				</logic:iterate>
 																				</logic:notEmpty>
 																			</table>
+																			</div>
 																		  </field:display>
 																		</td>
 																	</tr>
 																	</logic:iterate>
 																	</logic:notEmpty>
 																</table>
+																</div>
 															</td>
 														</tr>
 														</field:display>

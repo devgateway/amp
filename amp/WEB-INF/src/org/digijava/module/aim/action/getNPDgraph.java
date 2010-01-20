@@ -92,13 +92,23 @@ public class getNPDgraph extends Action {
     		Long teamId=TeamUtil.getCurrentTeam(request).getAmpTeamId();
     		NpdSettings npdSettings=NpdUtil.getCurrentSettings(teamId);            
             Double angle=null;
-            
-            if(npdSettings.getAngle()!=null){
-        		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
-                CategoryAxis categoryaxis = categoryplot.getDomainAxis();
+            CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+            CategoryAxis categoryaxis = categoryplot.getDomainAxis();
+            if(npdSettings.getAngle()!=null){	    
             	angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
                 categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
             }
+
+            List categories = categoryplot.getCategories();
+            if (categories != null) {
+                Iterator iter = categories.iterator();
+                while (iter.hasNext()) {
+                    Comparable category = (Comparable) iter.next();
+                    categoryaxis.addCategoryLabelToolTip(category, category.toString());
+                }
+
+            }
+           
             
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
             		npdSettings.getHeight().intValue(), info);

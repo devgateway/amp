@@ -15,7 +15,7 @@
 </tr>
 <tr>
  <td><hr></td>
-</tr
+</tr>
 <tr>
  <td>You won't get any email until after
  <bean:write name="userUnSubscribeForm" property="selectedMonth" />.
@@ -24,5 +24,5 @@
 </tr>  
 <tr>
  <td><hr></td>
-</tr
+</tr>
 </table>

@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.CustomFieldStep;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -2136,6 +2137,51 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 
 		public List<FundingDetail> getFundingDetails() {
+			return fundingDetails;
+		}
+
+		public List<FundingDetail> getCommitmentsDetails() {
+			if(fundingDetails != null){
+				List<FundingDetail> commitments = new ArrayList<FundingDetail>();
+				for (FundingDetail detail : fundingDetails){
+					if(detail.getTransactionType() == Constants.COMMITMENT) commitments.add(detail);
+				}
+				return commitments;
+			}
+			return fundingDetails;
+		}
+		
+		public List<FundingDetail> getDisbursementsDetails() {
+			if(fundingDetails != null){
+				List<FundingDetail> disbursements = new ArrayList<FundingDetail>();
+				for (FundingDetail detail : fundingDetails){
+					if(detail.getTransactionType() == Constants.DISBURSEMENT) disbursements.add(detail);
+				}
+				return disbursements;
+			}
+			return fundingDetails;
+		}
+		
+		public List<FundingDetail> getDisbursementOrdersDetails() {
+			
+			if(fundingDetails != null){
+				List<FundingDetail> disbursementOrder = new ArrayList<FundingDetail>();
+				for (FundingDetail detail : fundingDetails){
+					if(detail.getTransactionType() == Constants.DISBURSEMENT_ORDER) disbursementOrder.add(detail);
+				}
+				return disbursementOrder;
+			}
+			return fundingDetails;
+		}
+
+		public List<FundingDetail> getExpendituresDetails() {
+			if(fundingDetails != null){
+				List<FundingDetail> expenditures = new ArrayList<FundingDetail>();
+				for (FundingDetail detail : fundingDetails){
+					if(detail.getTransactionType() == Constants.EXPENDITURE) expenditures.add(detail);
+				}
+				return expenditures;
+			}
 			return fundingDetails;
 		}
 

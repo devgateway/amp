@@ -2,6 +2,7 @@ package org.digijava.module.search.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.search.form.SearchForm;
 import org.digijava.module.search.util.SearchUtil;
 
@@ -27,7 +29,7 @@ public class Search extends Action {
 		HttpSession session = request.getSession();
 		ServletContext ampContext = session.getServletContext();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-
+		
 
 		if (request.getParameter("reset") != null
 				&& ((String) request.getParameter("reset"))
@@ -68,27 +70,48 @@ public class Search extends Action {
 			Collection<LoggerIdentifiable> resultReports = new ArrayList<LoggerIdentifiable>();
 			Collection<LoggerIdentifiable> resultTabs = new ArrayList<LoggerIdentifiable>();
 			Collection<LoggerIdentifiable> resultResources = new ArrayList<LoggerIdentifiable>();
+			
+			int dateSelection = searchForm.getDateSelection();
+			String byDateSql = "";
+			
+			Date fromDate = null;
+			Date toDate = null;
+			
+			if (searchForm.isSearchByDate() && searchForm.getFromDate()!=null && searchForm.getToDate()!=null){
+				//if we want to filter by dates
+				fromDate = DateTimeUtil.parseDate(searchForm.getFromDate());
+				toDate = DateTimeUtil.parseDate(searchForm.getToDate());
+				
+				if (dateSelection==1 && searchForm.isSearchByDate()) {
+					byDateSql = " AND (date_updated between '"+fromDate+"' and '"+toDate+"')";
+				} else {
+					byDateSql="";
+				}
+				if (dateSelection==2  && searchForm.isSearchByDate()) {
+					byDateSql = " AND (date_created between '"+fromDate+"' and '"+toDate+"')";
+				} else {
+					byDateSql="";
+				}
+			}
 
+			
+			
+			
 			switch (searchForm.getQueryType()) {
 			case SearchUtil.QUERY_ALL:
-				resultActivities = SearchUtil.getActivities(searchForm
-						.getKeyword(), request, tm);
-				resultReports = SearchUtil.getReports(tm, searchForm
-						.getKeyword());
-				resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
-				resultResources = SearchUtil.getResources(searchForm
-						.getKeyword(), request, tm);
+				resultActivities = SearchUtil.getActivities(searchForm.getKeyword(), searchForm.getActSearchKey(), request, tm, null);
+				resultReports = SearchUtil.getReports(tm, searchForm.getKeyword(), null, null);
+				resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword(), null, null);
+				resultResources = SearchUtil.getResources(searchForm.getKeyword(), request, tm);
 				break;
 			case SearchUtil.ACTIVITIES:
-				resultActivities = SearchUtil.getActivities(searchForm
-						.getKeyword(), request, tm);
+				resultActivities = SearchUtil.getActivities(searchForm.getKeyword(), searchForm.getActSearchKey(),request, tm, byDateSql);
 				break;
 			case SearchUtil.REPORTS:
-				resultReports = SearchUtil.getReports(tm, searchForm
-						.getKeyword());
+				resultReports = SearchUtil.getReports(tm, searchForm.getKeyword(),fromDate,toDate);
 				break;
 			case SearchUtil.TABS:
-				resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
+				resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword(), fromDate, toDate);
 				break;
 			case SearchUtil.RESOURCES:
 				resultResources = SearchUtil.getResources(searchForm

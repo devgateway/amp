@@ -30,6 +30,16 @@
 	background-color:#a5bcf2;
 }
 
+.searchKeyLabel{
+  visibility: hidden;
+}
+
+.searchKey{
+  visibility: hidden;
+}
+.hideParameter{
+ visibility: visible;
+}
 </style>
 
 <script language="javascript">
@@ -130,10 +140,56 @@ $(document).ready(function(){
 		setHoveredTable("dataTable4", false);
 	}
 	catch(e) {}
+
+	var select = $("#searchQuery").val();
+	
+
+	if (select != 0) {
+		$(".searchKeyLabel").css({'visibility' : 'hidden'});
+		$(".searchKey").css({'visibility' : 'hidden'});
+		
+		
+	} else {
+		$(".searchKeyLabel").css({'visibility' : 'visible', 'float': 'left'});
+		$(".searchKey").css({'visibility' : 'visible', 'float': 'left'});
+		
+	}
+
+	
+
+		
+		
+	$("#searchQuery").change(function(){
+
+		var select = $("#searchQuery").val();
+		
+
+		if (select != 0) {
+			$(".searchKeyLabel").css({'visibility' : 'hidden'});
+			$(".searchKey").css({'visibility' : 'hidden'});
+			$(".searchKey").val(0);
+			
+		} else {
+			$(".searchKeyLabel").css({'visibility' : 'visible', 'float': 'left'});
+			$(".searchKey").css({'visibility' : 'visible', 'float': 'left'});
+			$(".searchKey").val(0);
+		}
+
+	});
+
+	
+
+	
 });
 
 </script>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-calendar.js"/>"></script>
+<jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
+<!--
+
+//-->
+</script>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780 >
 	<tr>
 		<td width=14>&nbsp;</td>
 		<td align=left vAlign=top width=750>
@@ -176,6 +232,7 @@ $(document).ready(function(){
 								<td valign="top">
 									<br/>
                                     <digi:form action="/search.do">
+                                    <!--  
                                     <table cellPadding=2 cellSpacing=2 width="100%">
                                    
                                         <tr>
@@ -191,8 +248,8 @@ $(document).ready(function(){
                                                     <html:option value="2"><digi:trn>Tabs</digi:trn></html:option>
                                                     <html:option value="3"><digi:trn>Resources</digi:trn></html:option>
                                                 </html:select>
-                                            </td>
-<!--                                            <td valign="top">
+                                            </td> -->
+                                      <!--  <td valign="top">
                                                 Results per page: 
                                                 <html:select property="resultsPerPage" value="-1">
                                                     <html:option value="-1">ALL</html:option>
@@ -201,15 +258,88 @@ $(document).ready(function(){
                                                     <html:option value="50">50</html:option>
                                                 </html:select>
                                             </td>-->
-                                            <td valign="top">
+                                        <!--     <td valign="top">
                                                 <html:submit><digi:trn>Submit</digi:trn></html:submit>
                                             </td>
                                             <td valign="top">
 	                                            <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/>
                                             </td>
                                         </tr>
+                                    </table>-->
+                                    <table cellPadding=2 cellSpacing=2 width="100%">
+                                      <tr>
+                                        <td valign="top" width="40%"><digi:trn>Keyword</digi:trn>: <html:text property="keyword"></html:text><br/></td>
+                                        <td valign="top" width="20%">
+                                            <digi:trn>Type</digi:trn>: 
+                                                <html:select property="queryType" styleId="searchQuery">
+                                                    <html:option value="-1"><digi:trn>ALL</digi:trn></html:option>
+                                                    <html:option value="0"><digi:trn>Activities</digi:trn></html:option>
+                                                    <html:option value="1"><digi:trn>Reports</digi:trn></html:option>
+                                                    <html:option value="2"><digi:trn>Tabs</digi:trn></html:option>
+                                                    <html:option value="3"><digi:trn>Resources</digi:trn></html:option>
+                                                </html:select>
+                                        </td>
+                                        <td valign="top" width="30%">
+                                           <div class="searchKeyLabel"><digi:trn>Search Key </digi:trn></div>
+                                             <html:select property="actSearchKey" styleId="searchKey" styleClass="searchKey">
+                                               <html:option value="0" ><digi:trn>ALL</digi:trn></html:option>
+                                               <html:option value="1"><digi:trn>Title</digi:trn></html:option>
+                                               <html:option value="2"><digi:trn>Objective</digi:trn></html:option>
+                                               <html:option value="3"><digi:trn>Description</digi:trn></html:option>
+                                               <html:option value="4"><digi:trn>Cris Number</digi:trn></html:option>
+                                               <html:option value="5"><digi:trn>Code Chapitre</digi:trn></html:option>
+                                               <html:option value="6"><digi:trn>Imputation</digi:trn></html:option>
+                                               <html:option value="7"><digi:trn>Project Id</digi:trn></html:option>
+                                             </html:select>
+                                        </td>
+                                        <td valign="top">
+                                          <html:submit><digi:trn>Submit</digi:trn></html:submit><br /><br />
+                                          <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <html:checkbox property="searchByDate" styleId="byDate"><digi:trn>Search By Date</digi:trn></html:checkbox>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td></td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <div id="dateSelection">
+                                        <digi:trn>Date Selection</digi:trn>
+                                        	<html:select property="dateSelection">
+                                        	  <html:option value="1">Last update date</html:option>
+                                        	  <html:option value="2">Creation date</html:option>
+                                        	</html:select>
+                                        </div>
+                                        </td>
+                                        <td>
+                                        <div id="fromDate">
+                                        <digi:trn>from:</digi:trn>
+                                          <html:text property="fromDate" size="10" styleId="selectedFromDate"></html:text>
+                                            <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedFromDate"),"clear1")'>
+			                                   <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+			                                </a>
+                                          </div>
+                                          </td>
+                                        <td>
+                                        <div id="toDate">
+                                        <digi:trn>to:</digi:trn>
+                                          <html:text property="toDate" size="10" styleId="selectedToDate"></html:text>
+                                            <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedToDate"),"clear1")'>
+			                                   <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+			                                </a>
+                                        </div>  
+                                          </td>
+                                        <td></td>
+                                      </tr>
                                     </table>
-                                    </digi:form>
+                                    
+                                  </digi:form>
 
 <logic:notPresent name="resultList" scope="request">
 <c:if test="${param.reset != 'true'}">

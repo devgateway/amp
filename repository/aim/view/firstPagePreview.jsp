@@ -67,8 +67,8 @@ function downloadFile(placeholder) {
 			<digi:edit key="um:welcomeAmp" displayText="Edit Text"></digi:edit>
 		</td>
 		<td  width="5%" />
-		<td width="70%" bgcolor="#89AAE5">
-			<table width="100%" height="400" cellpadding="3" cellspacing="0" style="padding-left:30px;">
+		<td width="70%" bgcolor="#dbe5f1">
+			<table width="100%" height="400" cellpadding="3" cellspacing="0" >
 			    <tr height="47%">
 			        <td valign="middle" align="center" >
 						<a href="javascript:">

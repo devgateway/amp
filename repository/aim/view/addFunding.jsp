@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 
@@ -26,9 +27,38 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
+<digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript">
 
+	//this map will store only the funding items that got changed - they require re-validation
+	var forValidation = {};
+
+	var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
+	var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
+	var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
+	var errmsg4="\n<digi:trn>Funding status not selected</digi:trn>";
+    var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
+	var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+	var msgInvalidAmountProj="\n<digi:trn>Invalid amount entered for projection</digi:trn>";
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+	var msgConfirmFunding="<digi:trn jsFriendly="true" key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
+</gs:test>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+	var msgConfirmFunding="";
+</gs:test>
+	//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
+	var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
+	var msgEnterRate="\n<digi:trn key="aim:addFunding:errmsg:invalidRate">Please enter a valid exchange rate, the decimal symbol is:</digi:trn>";
+	//var msgEnterDate="qsfgqsg";
+
+
+	function addForValidation(item) {
+		if(item==null) return;
+		item.value=trim(item.value);
+		forValidation[item.name]=item;
+	}
+	
 	<!--
 	function useFixedRateClicked(field1,field2) {
 		var fld1 = document.getElementById(field1);
@@ -70,23 +100,6 @@ var isAlreadySubmitted = false;
 	function addFunding() {
 		if(!isAlreadySubmitted)
 		{
-		var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
-		var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
-		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
-		var errmsg4="\n<digi:trn>Funding status not selected</digi:trn>";
-        var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
-		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
-		var msgInvalidAmountProj="\n<digi:trn>Invalid amount entered for projection</digi:trn>";
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-		var msgConfirmFunding="<digi:trn jsFriendly="true" key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
-</gs:test>
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
-		var msgConfirmFunding="";
-</gs:test>
-		//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-		var msgEnterRate="\n<digi:trn key="aim:addFunding:errmsg:invalidRate">Please enter a valid exchange rate, the decimal symbol is:</digi:trn>";
-		//var msgEnterDate="qsfgqsg";
 
 		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
 		var flagProj	= validateProjection(msgInvalidAmountProj);
@@ -109,8 +122,15 @@ var isAlreadySubmitted = false;
 
 	function addFundingDetail(type) {
 
-		var flag = validateFundingExchangeRate();
-		if (flag == false) return false;
+		//var flag = validateFundingExchangeRate();
+		var numComm = document.aimEditActivityForm.numComm.value;
+		var numDisb = document.aimEditActivityForm.numDisb.value;
+		var numExp = document.aimEditActivityForm.numExp.value;
+		
+		var flag2 = validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, msgConfirmFunding);
+		var flagProj	= validateProjection(msgInvalidAmountProj);
+
+		if ( !flagProj || !flag2) return false;
 		if (type == 0) {
 			
 			document.getElementsByName("funding.event")[0].value = "addCommitments";
@@ -202,6 +222,12 @@ var isAlreadySubmitted = false;
 	
 	function load()
 	{
+		//add the last row for forced validation (this ensures we validate new rows )
+		if( ${fn:length(aimEditActivityForm.funding.fundingDetails)} >0) {
+			addForValidation(document.getElementsByName('fundingDetail[${fn:length(aimEditActivityForm.funding.fundingDetails)-1}].transactionAmount')[0]);
+			addForValidation(document.getElementsByName('fundingDetail[${fn:length(aimEditActivityForm.funding.fundingDetails)-1}].transactionDate')[0]);
+			addForValidation(document.getElementsByName('fundingDetail[${fn:length(aimEditActivityForm.funding.fundingDetails)-1}].fixedExchangeRate')[0]);
+		}
 		if (!isTotDisbIsBiggerThanTotCom()) {
 			var Warn="<digi:trn key="aim:addFunding:warn:dup">This information is a duplicate of existing funding information. Do you wish to proceed?</digi:trn>";
 			if (document.getElementById("dupFunding").value == "false")
@@ -248,7 +274,7 @@ var isAlreadySubmitted = false;
 	<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("100000"+FormatHelper.getDecimalSymbol()+"150"))%>
 </c:set>
 
-<digi:instance property="aimEditActivityForm" />
+
 <digi:form action="/addFundingDetail.do" method="post">
 
 <input type="hidden" name="edit" value="true">
@@ -474,7 +500,7 @@ var isAlreadySubmitted = false;
 							<c:set var="contentDisabled">true</c:set>
 						</c:if>
 						<td valign="bottom">
-							<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" onchange="this.value=trim(this.value)" styleClass="amt" disabled="${contentDisabled}"/>
+							<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" onchange="this.value=trim(this.value);" styleClass="amt" disabled="${contentDisabled}"/>
 						</td>
 							
 				 		<c:set var="contentDisabled"><field:display name="Projection Currency Code" feature="MTEF Projections">false</field:display></c:set>
@@ -627,7 +653,7 @@ var isAlreadySubmitted = false;
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 												<td valign="bottom">
-														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="this.value=trim(this.value);" onclick="checkCurrency(this.name);" size="17" styleClass="amt"/>
+														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="addForValidation(this)" onclick="checkCurrency(this.name);" size="17" styleClass="amt"/>
 												</td>
 									 		<c:set var="contentDisabled"><field:display name="Currency Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
@@ -649,7 +675,7 @@ var isAlreadySubmitted = false;
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 															<html:text name="fundingDetail" indexed="true" property="transactionDate"
-															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
+															styleId="<%=tempIndexStr%>" readonly="true" size="10" onchange="addForValidation(this)"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
@@ -700,10 +726,10 @@ var isAlreadySubmitted = false;
 											</td>
 											<td colspan="5">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
-													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" disabled="false" styleId="<%=exchRatefldId%>"/>
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" onchange="addForValidation(this)" styleClass="amt" disabled="false" styleId="<%=exchRatefldId%>"/>
 												</logic:equal>
 												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
-													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" disabled="true" styleId="<%=exchRatefldId%>"/>
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" onchange="addForValidation(this)" styleClass="amt" disabled="true" styleId="<%=exchRatefldId%>"/>
 												</logic:equal>
 												<script type="text/javascript">
 													<!-- check for when editing the page -->
@@ -842,7 +868,7 @@ var isAlreadySubmitted = false;
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td valign="bottom">
-												<html:text name="fundingDetail" disabled="${contentDisabled}" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" disabled="${contentDisabled}" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="addForValidation(this)" size="17" styleClass="amt"/>
 											</td>
 
 											<c:set var="contentDisabled"><field:display name="Currency of Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
@@ -867,7 +893,7 @@ var isAlreadySubmitted = false;
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true"
-															styleId="<%=tempIndexStr%>" size="10"/>
+															styleId="<%=tempIndexStr%>" size="10"  onchange="addForValidation(this)"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
@@ -1057,7 +1083,7 @@ var isAlreadySubmitted = false;
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td valign="bottom">
-												<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="addForValidation(this)" size="17" styleClass="amt"/>
 											</td>
 
 
@@ -1084,7 +1110,7 @@ var isAlreadySubmitted = false;
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true"
-															styleId="<%=tempIndexStr%>" size="10"/>
+															styleId="<%=tempIndexStr%>" size="10" onchange="addForValidation(this)"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
@@ -1277,7 +1303,7 @@ var isAlreadySubmitted = false;
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
 										<td valign="bottom">
-											<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
+											<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="addForValidation(this)" size="17" styleClass="amt"/>
 										</td>
 
 
@@ -1301,7 +1327,7 @@ var isAlreadySubmitted = false;
 												<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
+															<html:text name="fundingDetail" indexed="true" property="transactionDate" styleId="<%=tempIndexStr%>" readonly="true" size="10" onchange="addForValidation(this)"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">

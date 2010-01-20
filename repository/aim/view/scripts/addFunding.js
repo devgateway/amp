@@ -356,12 +356,8 @@ function validateFundingDetailsExchangeRate(comm,disb,exp)
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
 	var disbIndex = -1, expIndex = -1;
 	for (var j = 0;j < itr;j ++) {
-		var amtField = "fundingDetail[" + j + "].transactionAmount";
-		var dateField = "fundingDetail[" + j + "].transactionDate";
-		var transType = "fundingDetail[" + j + "].transactionType";
 		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";
-		var temp = new Array();
-		temp = document.aimEditActivityForm.elements;
+		if(forValidation[fixedExchangeRate]==null) continue;
 		var currExchange=document.getElementsByName(fixedExchangeRate)[0];
 			if(currExchange != null)
 				if(chkNumeric(currExchange,this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
@@ -386,14 +382,17 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,m
 		var dateField = "fundingDetail[" + j + "].transactionDate";
 		var transType = "fundingDetail[" + j + "].transactionType";
 		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";	
-		var type = document.getElementsByName(transType);
-
+			
+		if(forValidation[fixedExchangeRate]!=null) {
 				var currExchange=document.getElementsByName(fixedExchangeRate)[0];
 				if(currExchange!=null && chkNumeric(currExchange,this.groupSymbol,this.decimalSymbol,'-')==false) { 
 							alert(msgEnterRate+"'"+ this.decimalSymbol +"'");
+							currExchange.focus();
 							return false;
 				}
+		}
 		
+		if(forValidation[amtField]!=null) {
 				var currAmt=document.getElementsByName(amtField)[0];
 				if (currAmt!=null) {
 					if(trim(currAmt.value) == "") {
@@ -404,12 +403,12 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,m
 	
 					if (checkAmountUsingSymbol(currAmt.value) == false) {
 						alert(msgInvalidAmount);
-						temp[i].focus();
+						currAmt.focus();
 						return false;
 					}
 					
 					if (msgConfirmFunding != "" && checkAmountLen(currAmt.value,msgConfirmFunding, this.groupSymbol,this.decimalSymbol) == false) {
-						temp[i].focus();
+						currAmt.focus();
 						return false;
 					}
 					
@@ -419,6 +418,7 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,m
 						currAmt.focus();
 						return false;
 					} else {
+						var type = document.getElementsByName(transType);
 						if (type.item(0).value == 0)
 							commAmt = commAmt + value;
 						if (type.item(0).value == 1) {
@@ -433,13 +433,17 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,m
 						}
 					}
 				}
-				
+		}
+		
+		if(forValidation[dateField]!=null) {
 				var currDate=document.getElementsByName(dateField)[0];
 					if (currDate!=null && trim(currDate.value) == "") {
 						alert(msgEnterDate);
 						currDate.focus();
 						return false;
 					}
+		}
+		
 	}
 	return true;
 }

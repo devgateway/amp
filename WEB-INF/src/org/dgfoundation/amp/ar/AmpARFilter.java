@@ -291,12 +291,69 @@ public class AmpARFilter extends PropertyListable {
 	private Boolean sortByAsc						= true;
 	private Collection<String> hierarchySorters		= new ArrayList<String>();
 	private Boolean disbursementOrderRejected;
+	private int activitySearchKey;
+	private String byDateSql;
+	
+
+	public String getByDateSql() {
+		return byDateSql;
+	}
+
+	public void setByDateSql(String byDateSql) {
+		this.byDateSql = byDateSql;
+	}
+
+	public int getActivitySearchKey() {
+		return activitySearchKey;
+	}
+
+	public void setActivitySearchKey(int activitySearchKey) {
+		this.activitySearchKey = activitySearchKey;
+	}
+
+
 	private void queryAppend(String filter) {
 		// generatedFilterQuery+=
 		// (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + "
 		// amp_activity_id IN ("+filter+")";
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
+	
+
+	
+	public void generateActivitySearchKeySql(){
+		String searchStr = "";
+		int searchKey = this.getActivitySearchKey();
+		switch(searchKey){
+		case 0:
+		break;
+		case 1:
+			searchStr = " AND amp_activity.name like '%"+this.getIndexText()+"%'";
+		break;
+		case 2:
+			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_objectives v WHERE v.ebody like '%"+this.getIndexText()+"%') ";
+		break;
+		case 3:
+			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_description v WHERE v.ebody like '%"+this.getIndexText()+"%') ";
+		break;
+		case 4:
+			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_cris_number v WHERE v.cris_number like '%"+this.getIndexText()+"%') ";
+		break;
+		case 5:
+			
+		break;
+		case 6:
+			searchStr = "  ";
+		break;
+		case 7:
+			searchStr = " AND amp_id like '%"+this.getIndexText()+"%' ";
+		break;
+		}
+		generatedFilterQuery+=searchStr + this.getByDateSql();
+		
+	}
+	
+
 
 	public void readRequestData(HttpServletRequest request) {
 		this.generatedFilterQuery = initialFilterQuery;
@@ -475,6 +532,7 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 	}
 
+
 	
 	private String buildDateAndMeasuresFilter(HttpServletRequest request){
 		boolean applyFilter=false;
@@ -540,8 +598,10 @@ public class AmpARFilter extends PropertyListable {
 	
 	public Hits generateFilterQuery(HttpServletRequest request) {
 		indexedParams=new ArrayList<FilterParam>();
-		Hits hits = null;
 		
+		generateActivitySearchKeySql();
+		Hits hits = null;
+						
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="
 				+ (budget != null ? (budget)?"1":"0" : "null")
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
@@ -1727,6 +1787,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setLucene(String luceneIndex) {
 		this.lucene = luceneIndex;
 	}
+
 
 	
 }

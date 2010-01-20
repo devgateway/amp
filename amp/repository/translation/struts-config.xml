@@ -58,7 +58,7 @@
     <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnDeleteTranslation" scope="session" path="/translation/newAdvTranDelete"/>
     <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnGetChanges" scope="session" path="/translation/AdvTranGetChanges"/>
 	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnUndoChange" scope="session" path="/translation/AdvTranUndoChanges"/>
-	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnSaveChanges" scope="session" path="/translation/AdvTranUndoChanges"/>
+	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnSaveChanges" scope="session" path="/translation/AdvTranSaveChanges"/>
     <!-- NEW ADVANCED TRANSLATIONS END-->
     
     <action name="advancedTranslationForm" type="org.digijava.module.translation.action.DeleteKey" scope="session" path="/translation/deleteKey">

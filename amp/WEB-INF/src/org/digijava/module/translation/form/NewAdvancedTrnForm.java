@@ -28,6 +28,7 @@ public class NewAdvancedTrnForm extends ActionForm {
 	private String addKey;
 	private String addLocale;
 	private String addMessage;
+	private String[] undoChanges;
 	
 	public void setSearchTerm(String searchTerm) {
 		this.searchTerm = searchTerm;
@@ -131,6 +132,14 @@ public class NewAdvancedTrnForm extends ActionForm {
 
 	public String getAddMessage() {
 		return addMessage;
+	}
+
+	public void setUndoChanges(String[] undoChanges) {
+		this.undoChanges = undoChanges;
+	}
+
+	public String[] getUndoChanges() {
+		return undoChanges;
 	}
 	
 }

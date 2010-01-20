@@ -55,6 +55,7 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.translation.util.ListChangesBuffer.OperationFixer;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -1270,6 +1271,58 @@ public class TranslatorWorker {
         }
     }
 
+    protected void saveChanges(List<Message> added, List<Message> edited, List<Message> deleted) throws DgException{
+    	Session session = PersistenceManager.getRequestDBSession();
+    	Transaction tx = null;
+    	try {
+			tx = session.beginTransaction();
+			for (Message message : added) {
+				saveDb(session, message);
+			}
+			for (Message message : edited) {
+				updateDb(session, message);
+			}
+			for (Message message : deleted) {
+				deleteDb(session, message);
+			}
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback saveChanges(List,List,List)",e1);
+				}
+			}
+			throw new DgException("Cannot save changes.",e);
+		}
+    }
+    
+	protected void saveDb(Session ses, Message message) {
+		message.setKey(message.getKey().trim());
+		processBodyChars(message);
+		processOriginalMessage(message);
+		// Remove from queue if this message is there because here we are doing same
+		timeStampQueue.remove(message);
+		ses.saveOrUpdate(message);
+	}
+
+	protected void updateDb(Session ses, Message message) {
+		processBodyChars(message);
+		processOriginalMessage(message);
+		message.setLastAccessed(new Timestamp(System.currentTimeMillis()));
+		// Remove from queue if this message is there because here we are doing same
+		timeStampQueue.remove(message);
+		ses.update(message);
+	}
+
+	protected void deleteDb(Session ses, Message message) {
+        //Remove from queue too.
+        timeStampQueue.remove(message);
+        ses.delete(message);
+	}
+	
+	
     /**
      * Updates a particular message in db.
      * @param message
@@ -1840,8 +1893,7 @@ public class TranslatorWorker {
         parameters.put("siteId", message.getSiteId());
         parameters.put("key", DgUtil.encodeString(message.getKey()));
 
-        String urlString = DgUtil.fillPattern(alertConfigBean.getAlertUrl(),
-                                              parameters);
+        String urlString = DgUtil.fillPattern(alertConfigBean.getAlertUrl(),parameters);
         if (urlTouchService == null) {
             UrlTouchService.touchUrl(urlString, alertConfigBean.getUserAgent());
         }

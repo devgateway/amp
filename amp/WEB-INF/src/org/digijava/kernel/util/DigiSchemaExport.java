@@ -55,7 +55,6 @@ public class DigiSchemaExport {
             logger.info("Working for the whole database");
         }
         
-        StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
         DigiConfigManager.initialize("./repository");
         PersistenceManager.initialize(false, moduleName);
         try {

@@ -1,5 +1,6 @@
 package org.digijava.module.message.helper;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -134,6 +135,20 @@ public class AmpMessageWorker {
                         sendMailes(msgStateMap.values());
                     }
                 }
+                String externalReceivers = template.getExternalReceivers();
+                Collection<InternetAddress> addrCol=new ArrayList<InternetAddress>();
+                if (externalReceivers != null) {
+                    String[] exReceivers = externalReceivers.split(",");
+                    for (String email : exReceivers) {
+                        if (email.indexOf("<") != -1) { // for handling contacts in the future...
+                            email = email.substring(email.indexOf("<") + 1, email.indexOf(">"));
+                        }
+                        addrCol.add(new InternetAddress(email));
+                    }
+                    InternetAddress[] addresses = (InternetAddress[]) addrCol.toArray(new InternetAddress[addrCol.size()]);
+                    DgEmailManager.sendMail(addresses, "system@digijava.org", template, null);
+                }
+              
             }
         }
     }
@@ -477,6 +492,7 @@ public class AmpMessageWorker {
         }
         newApproval.setReceivers(receivers);
         newApproval.setEmailable(template.getEmailable());
+        newApproval.setExternalReceivers(template.getExternalReceivers());
         return newApproval;
     }
 
@@ -491,6 +507,7 @@ public class AmpMessageWorker {
         Calendar cal = Calendar.getInstance();
         newAlert.setCreationDate(cal.getTime());
         newAlert.setEmailable(template.getEmailable());
+        newAlert.setExternalReceivers(template.getExternalReceivers());
         return newAlert;
     }
 
@@ -502,6 +519,7 @@ public class AmpMessageWorker {
         Calendar cal = Calendar.getInstance();
         newEvent.setCreationDate(cal.getTime());
         newEvent.setEmailable(template.getEmailable());
+        newEvent.setExternalReceivers(template.getExternalReceivers());
         return newEvent;
     }
 

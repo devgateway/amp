@@ -612,8 +612,8 @@
 				<page>aim_addExchangeRate</page>
 				<page>aim_updateCurrency</page>
 				<page>aim_assignActivitiesJSON</page>
-				<page>aim_updateTeamMembersJSON</page>
-				<page>aim_teamMembersAddFromAdminJSON</page>
+				<page>aim_updateTeamMembersJSON</page> 
+				<!-- <page>aim_teamMembersAddFromAdminJSON</page> -->
 				<page>addNewTheme</page>
 				<page>aim_searchSectorPopupLayout</page>
 				<page>aim_printerFriendlyPreview</page>

@@ -7,154 +7,213 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/datatable.css" />
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/connection-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/element-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/datasource-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/datatable-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/json-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/event-min.js"></script> 
+<script type="text/javascript" src="/repository/xmlpatcher/js/paginator-min.js"></script> 
+<style>
+.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
+color:#000000;
+font-weight:bold;
+font-size: 11px;
+text-decoration:none;
+vertical-align:bottom;
+}
+.yui-skin-sam th.yui-dt-asc, .yui-skin-sam th.yui-dt-desc {
+background:#B8B8B0;
+}
+.yui-skin-sam .yui-dt th {
+background:#B8B8B0;
+}
+.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
+background:transparent url(/repository/aim/images/up.gif) no-repeat scroll right center;
+}
+.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
+background:transparent url(/repository/aim/images/down.gif) no-repeat scroll right center;
+}
+
+</style>
 <script language="JavaScript">
 
-function defaultPermsSelected() {
-	document.aimTeamMemberForm.readPerms.disabled=true;
-	document.aimTeamMemberForm.writePerms.disabled=true;
-	document.aimTeamMemberForm.deletePerms.disabled=true;
-}
-
-function userSpecificPermsSelected() {
-	document.aimTeamMemberForm.readPerms.disabled=false;
-	document.aimTeamMemberForm.writePerms.disabled=false;
-	document.aimTeamMemberForm.deletePerms.disabled=false;
-}
-
-function validate() {
-	if (isEmpty(document.aimTeamMemberForm.email.value) == true) {
-		alert("User id not entered");
-		document.aimTeamMemberForm.email.focus();
-		return false;
+YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
+	function initDynamicTable1() {
+	    YAHOO.example.XHR_JSON = new function() {
+	 
+	        this.myDataSource = new YAHOO.util.DataSource("/aim/searchAvailableUsers.do?");
+	        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+	        //this.myDataSource.connXhrMode = "queueRequests";
+	        this.myDataSource.responseSchema = {
+	            resultsList: "users",
+	            fields: ["ID","name","email","organizations","role","chkBox"],
+	            metaFields: {
+	            	totalRecords: "totalRecords" // Access to value in the server response
+	        	}    
+	        };        
+	        
+	        var myColumnDefs = [
+	            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 150},
+	            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:true, width: 150},
+	            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false, width: 150},
+	            {key:"role", label:"<digi:trn>ROLE</digi:trn>", sortable:false, width: 150},
+	            {key:"chkBox", label:"<digi:trn>SELECT</digi:trn>", sortable:false, width: 30}
+	        ];
+	  
+	        var div = document.getElementById('errors');
+	
+	        var handleSuccess = function(o){
+	        	if(o.responseText != undefined){
+	        		o.argument.oArgs.liner_element.innerHTML=o.responseText;
+	        	}
+	        }
+	
+	        var handleFailure = function(o){
+	        	if(o.responseText !== undefined){
+	        		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
+	        		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
+	        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
+	        	}
+	        }
+	        // Create the Paginator 
+	        var myPaginator = new YAHOO.widget.Paginator({ 
+	        	rowsPerPage:10,
+	        	containers : ["dt-pag-nav"], 
+	        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
+	        	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
+	        	rowsPerPageOptions : [10,25,50,100]
+	        });   
+	        var myConfigs = {
+	            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
+	            dynamicData: true, // Enables dynamic server-driven data
+	            sortedBy : {key:"name", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
+	            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
+	            paginator:myPaginator
+	        };
+	    	 
+	        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
+	        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
+	        this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
+	        this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
+	 		this.myDataTable.subscribe("rowClickEvent", function (ev) {
+					var target = YAHOO.util.Event.getTarget(ev);
+					var record = this.getRecord(target);
+				});
+	        
+	        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+	        // Programmatically bring focus to the instance so arrow selection works immediately 
+	        this.myDataTable.focus(); 
+	
+	        // Update totalRecords on the fly with value from server
+	        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+	           oPayload.totalRecords = oResponse.meta.totalRecords;
+	           return oPayload;
+	       }
+	       
+	    };
+    
 	}
-	if (isEmpty(document.aimTeamMemberForm.role.value) == true) {
-		alert("Role not entered");
-		document.aimTeamMemberForm.role.focus();
-		return false;
-	}		  
-	return true;
-}
-
-function cancel()
-{
-	if(document.aimTeamMemberForm.fromPage.value == 1)
-		document.aimTeamMemberForm.action = "/aim/teamMembers.do?teamId="+document.aimTeamMemberForm.teamId.value;
-	else
-		document.aimTeamMemberForm.action = "/aim/teamMemberList.do";
 	
-	document.aimTeamMemberForm.target = "_self";
-	document.aimTeamMemberForm.submit();
-	return false;
-}
-
-function load()
-{
-	//aimTeamMemberForm.email.value="";
-	alert("aa");
-}
-
-function clearForms()
-{
-  var i;
-//	alert(aimTeamMemberForm.email.value);
- // for (i = 0; (i < document.forms.length); i++) {
- //   document.forms[i].reset();
- // }
- 	aimTeamMemberForm.email.value="";
- 	aimTeamMemberForm.role.value="";
- 	//onLoad="clearForms()"
- //  alert(aimTeamMemberForm.email.value);
-}	
 </script>
-<body  onLoad="clearForms()">
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+
+<script language="JavaScript">
+	function addUsersToWorkspace(){
+		if(validate()==true){
+			//submit form
+			<digi:context name="commentUrl" property="context/module/moduleinstance/assignUsersToWorkspace.do"/>;
+			document.aimTeamMemberForm.action="${commentUrl}?fromPage=1&addedFrom=addedFromUser";
+		    document.aimTeamMemberForm.target="_self";
+		    document.aimTeamMemberForm.submit();
+		}
+	}
+
+	function validate(){
+		//if none of the users are checked, we should show an alert
+		var checkedUsers = $('input.selectedUsers:checked');
+		if(checkedUsers==null || checkedUsers.length==0){
+			alert('Please select at least one user to add');
+			return false;
+		}
+		//if more then one user is selected to be TL,or team already has a manager, we should show alert
+		var selectedRoles=[];
+		checkedUsers.each(function(index){ //get all checkboxes,which are checked			
+			selectedRoles[selectedRoles.length]=$(this).parents('tr').find('select').val();
+		});		
+		
+		var teamHeadRole=document.getElementById('wrkspcManRoleId').value;
+		var teamHeadCount=0; //this field is used to cound how many users were indicated as TL.if it's greater then 1,then we should show error
+		var workspaceManExist=document.getElementById('wrkspcManager').value;
+		if(workspaceManExist=='exists'){
+			teamHeadCount++;
+		}		
+		if(selectedRoles!=null && selectedRoles.length>0){
+			for(var i=0;i<selectedRoles.length;i++){
+				if(selectedRoles[i].indexOf('_')!= -1){
+					selectedRoles[i]=selectedRoles[i].substring(selectedRoles[i].indexOf('_')+1);
+				}
+				if(selectedRoles[i]== -1){ //check whether all checked users have roles
+					alert('Please select role');
+					return false;
+				}
+				if(teamHeadRole==selectedRoles[i]){
+					teamHeadCount++;
+				}
+			}
+		}
+		if(teamHeadCount>1){
+			alert('Wokrspace can not have more then one Manager');
+			return false;
+		}
+
+		return true;
+	}
+</script>
+
+
 <digi:instance property="aimTeamMemberForm" />
+
 <digi:form action="/addTeamMember.do" method="post">
-
-<html:hidden property="teamId" />
-<html:hidden property="fromPage" />
-
-<c:if test="${aimTeamMemberForm.fromPage == 1}">
-<table width="98%" cellSpacing=2 cellPadding=2 align="center" bgcolor="#ffffff">
-<tr><td>
-	<digi:errors />
-</td></tr>
-<tr><td>
-</c:if>
-<c:if test="${aimTeamMemberForm.fromPage != 1}">
-<table width="98%" cellSpacing=2 cellPadding=2 align="center" bgcolor="#f4f4f2">
-<tr><td>
-	<digi:errors />
-</td></tr>
-<tr><td>
-</c:if>
-<table cellSpacing=1 cellPadding=4 align="center" onload="load()" border="0" width="100%">
-<c:if test="${aimTeamMemberForm.fromPage == 1}">
+<html:hidden name="aimTeamMemberForm" property="teamLeaderExists" styleId="wrkspcManager"/>
+<html:hidden name="aimTeamMemberForm" property="workspaceManagerRoleId" styleId="wrkspcManRoleId"/>
+<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<body>
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="450">
+	<tr></tr>
 	<tr>
-		<td align="center" colspan="2" bgcolor="#eeeeee"><b>
-			<digi:trn key="aim:addTeamMembersFor">Add Members for</digi:trn>
-			<bean:write name="aimTeamMemberForm" property="teamName" /></b>
-		</td>
-	</tr>
-</c:if>
-	<tr>
-		<td align="right" valign="top" width="30%">
-			<FONT color="red">*</FONT>
-			<digi:trn key="aim:userId">User Id</digi:trn>&nbsp;
-		</td>
-		<td align="left" width="70%">
-			<html:select property="email" >
-			<c:forEach items="${aimTeamMemberForm.allUser}" var="members">
-				<html:option value="${members.email}">
-				<c:out value="${members.email}"/>
-				</html:option>
-			</c:forEach>
-			</html:select>
-		</td>
-	</tr>
-	<tr>
-		<td align="right">
-			<FONT color="red">*</FONT>		
-			<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;
-		</td>
-		<td align="left">
-			<html:select property="role" styleClass="inp-text">
-				<%@include file="teamMemberRolesDropDown.jsp" %>
-				<%--<html:optionsCollection name="aimTeamMemberForm" property="ampRoles"
-				value="ampTeamMemRoleId" label="role" /> --%>
-			</html:select>
-		</td>
-	</tr>
-	
-	<tr>
-		<td colspan="2">
-			<table width="100%" cellspacing="5">
-				<tr>
-					<td width="50%" align="right">
-						<html:submit  styleClass="dr-menu" property="submitButton" onclick="return validate()">
-							<digi:trn key="btn:save">Save</digi:trn> 
-						</html:submit>
-					</td>
-					<td width="50%" align="left">
-						<html:button  styleClass="dr-menu" property="submitButton" onclick="return cancel();">
-							<digi:trn key="btn:cancel">Cancel</digi:trn> 
-						</html:button>
-
-					</td>
-				</tr>
+		<td vAlign="top" width="100%">
+			<table width="100%" cellspacing="1" cellpadding="0" valign="top" align="center" >
+				<logic:empty name="aimTeamMemberForm" property="allUser">
+					<tr bgcolor="#ffffff">
+						<td colspan="5" align="center"><b>
+							<digi:trn>No users present</digi:trn>
+						</b></td>
+					</tr>
+				</logic:empty>
+				<logic:notEmpty name="aimTeamMemberForm" property="allUser">
+					<tr>						
+						<td bgcolor="#f4f4f2">
+							<div class='yui-skin-sam'>
+                            	<div id="dynamicdata" class="report" align="center"></div>
+                            	<div align="center" style="border: 1px black;"><br><html:button property="" value="Add Selected Memebers" onclick="addUsersToWorkspace()"></html:button> </div>
+								<div id="dt-pag-nav"></div>
+								<div id="errors"></div>
+							</div>
+						</td>
+					</tr>
+				</logic:notEmpty>
+				<!-- end page logic -->
 			</table>
 		</td>
-	</tr>	
-	<tr>
-		<td colspan="2" align="center">
-			<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
-			</B></FONT> are required.</digi:trn>			
-		</td>
-	</tr>		
+	</tr>
 </table>
-
-</td></tr>
-</table>
-
-
 </digi:form>
 </body>

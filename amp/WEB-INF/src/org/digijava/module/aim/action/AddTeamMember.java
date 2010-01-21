@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -35,12 +36,11 @@ public class AddTeamMember extends Action {
 
 	private static Logger logger = Logger.getLogger(AddTeamMember.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws java.lang.Exception {
 
 		TeamMemberForm upMemForm = (TeamMemberForm) form;
 		ActionErrors errors = new ActionErrors();
+		
 		logger.debug("In add members");
 		upMemForm.setSomeError(false);
 		AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
@@ -49,8 +49,7 @@ public class AddTeamMember extends Action {
 		/* check if the user have entered an invalid user id */
 		if (user == null) {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"error.aim.addTeamMember.invalidUser"));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.addTeamMember.invalidUser"));
 			saveErrors(request, errors);
 			upMemForm.setSomeError(true);
 			if (upMemForm.getFromPage() == 1) {
@@ -60,7 +59,7 @@ public class AddTeamMember extends Action {
 			}
 		}
 
-		/* if user havent specified the role for the new member */
+		/* if user haven't specified the role for the new member */
 		if (upMemForm.getRole() == null) {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -79,8 +78,7 @@ public class AddTeamMember extends Action {
 		
 		if (TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()) != null && TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()).getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
-					"error.aim.addTeamMember.teamLeadAlreadyExist"));
+			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamLeadAlreadyExist"));
 			saveErrors(request, errors);
 			upMemForm.setSomeError(true);
 			if (upMemForm.getFromPage() == 1) {
@@ -90,29 +88,50 @@ public class AddTeamMember extends Action {
 			}						
 		}
 		
-		/* check if user is already part of the selected team */
-		if (TeamUtil.isMemberExisting(upMemForm.getTeamId(),upMemForm.getEmail())) {
-			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
-					"error.aim.addTeamMember.teamMemberAlreadyExist"));
-			saveErrors(request, errors);
-			upMemForm.setSomeError(true);
-			logger.debug("Member is already existing");
-			if (upMemForm.getFromPage() == 1) {
-				logger.debug("Forwarding to showAddFromAdmin");
-				return mapping.findForward("showAddFromAdmin");	
-			} else {
-				logger.debug("Forwarding to showAddFromTeam");
-				return mapping.findForward("showAddFromTeam");	
-			}				
-		}
+		/* check if user is already part of the selected team */ 
+//		if (TeamUtil.isMemberExisting(upMemForm.getTeamId(),upMemForm.getEmail())) {
+//			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+//			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
+//					"error.aim.addTeamMember.teamMemberAlreadyExist"));
+//			saveErrors(request, errors);
+//			upMemForm.setSomeError(true);
+//			logger.debug("Member is already existing");
+//			if (upMemForm.getFromPage() == 1) {
+//				logger.debug("Forwarding to showAddFromAdmin");
+//				return mapping.findForward("showAddFromAdmin");	
+//			} else {
+//				logger.debug("Forwarding to showAddFromTeam");
+//				return mapping.findForward("showAddFromTeam");	
+//			}				
+//		}
+		
+		
+		
+		/**
+		 *Incorrect checking, cos admin can have another emails !!!
+		 */	
 		/*check if user is not admin; as admin he can't be part of a workspace*/
-		if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
-			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamMemberIsAdmin"));
-			saveErrors(request, errors);
-			upMemForm.setSomeError(true);
-			logger.debug("Member is already existing");
+//		if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
+//			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+//			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamMemberIsAdmin"));
+//			saveErrors(request, errors);
+//			upMemForm.setSomeError(true);
+//			logger.debug("Member is already existing");
+//			if (upMemForm.getFromPage() == 1) {
+//				logger.debug("Forwarding to showAddFromAdmin");
+//				return mapping.findForward("showAddFromAdmin");	
+//			} else {
+//				logger.debug("Forwarding to showAddFromTeam");
+//				return mapping.findForward("showAddFromTeam");	
+//			}
+//		}
+        Site site = RequestUtils.retreiveSiteDomain(request).getSite();        
+        boolean siteAdmin = UserUtils.isAdmin(user, site);
+        if(siteAdmin){ // should be impossible to ban admin
+        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamMemberIsAdmin"));
+        	saveErrors(request, errors);
+        	upMemForm.setSomeError(true);
+			logger.debug("Member is Admin");
 			if (upMemForm.getFromPage() == 1) {
 				logger.debug("Forwarding to showAddFromAdmin");
 				return mapping.findForward("showAddFromAdmin");	
@@ -120,7 +139,9 @@ public class AddTeamMember extends Action {
 				logger.debug("Forwarding to showAddFromTeam");
 				return mapping.findForward("showAddFromTeam");	
 			}
-		}
+        }
+        
+        
 		
 		AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upMemForm.getRole());
 		if (role != null) {
@@ -155,26 +176,22 @@ public class AddTeamMember extends Action {
 			
 			
 			// add the default application settings for the user  
-			AmpApplicationSettings ampAppSettings = DbUtil
-					.getTeamAppSettings(ampTeam.getAmpTeamId());
+			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
 			AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
 			//newAppSettings.setTeam(ampAppSettings.getTeam());
 			newAppSettings.setTeam(newMember.getAmpTeam());
 			newAppSettings.setMember(newMember);
-			newAppSettings.setDefaultRecordsPerPage(ampAppSettings
-					.getDefaultRecordsPerPage());
+			newAppSettings.setDefaultRecordsPerPage(ampAppSettings.getDefaultRecordsPerPage());
 			newAppSettings.setCurrency(ampAppSettings.getCurrency());
-			newAppSettings.setFiscalCalendar(ampAppSettings
-					.getFiscalCalendar());
+			newAppSettings.setFiscalCalendar(ampAppSettings	.getFiscalCalendar());
 			newAppSettings.setLanguage(ampAppSettings.getLanguage());
 			newAppSettings.setUseDefault(new Boolean(true));
-			Site site = RequestUtils.getSite(request);
+			//Site site = RequestUtils.getSite(request);
 			try{
 				TeamUtil.addTeamMember(newMember,newAppSettings,site);
 			}catch (Exception e){
 					e.printStackTrace();
-					logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "
-							+ newMember.getAmpTeam().getName());
+					logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "+ newMember.getAmpTeam().getName());
 				}
 			
 			upMemForm.setEmail(null);

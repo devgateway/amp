@@ -43,11 +43,11 @@
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" >.</script>
 
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
@@ -188,19 +188,19 @@ saveReportEngine	= null;
 			currentReportId	= ${reportObject.ampReportId};
 		</logic:present>	
 		
-		YAHOOAmp.namespace("YAHOOAmp.amptab");
-		YAHOOAmp.amptab.init = function() {
-		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+		YAHOO.namespace("YAHOO.amptab");
+		YAHOO.amptab.init = function() {
+		    		var tabView = new YAHOO.widget.TabView('tabview_container');
 		};
 
-		YAHOOAmp.amptab.handleCloseAbout = function() {
+		YAHOO.amptab.handleCloseAbout = function() {
 			if(navigator.appName == 'Microsoft Internet Explorer'){
 				//window.location.reload();
 				//history.go(-1);
 			}
 		}
 		
-		YAHOOAmp.amptab.handleClose = function() {
+		YAHOO.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
@@ -208,7 +208,7 @@ saveReportEngine	= null;
 			wrapper.appendChild(filter);
 		};
 
-		YAHOOAmp.amptab.handleCloseShowFormat = function() {
+		YAHOO.amptab.handleCloseShowFormat = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('customFormat');
 			if (filter.parent != null)
@@ -255,7 +255,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 
-		    var myPanel5 = new YAHOOAmp.widget.Panel("new5", {
+		    var myPanel5 = new YAHOO.widget.Panel("new5", {
 				width:"480px",
 			    fixedcenter: true,
 			    constraintoviewport: true,
@@ -265,9 +265,9 @@ saveReportEngine	= null;
 			    modal:true,
 			    draggable:true} );
 	
-	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
-	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
-	myPanel4.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseShowFormat);
+	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+	myPanel5.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseAbout);
+	myPanel4.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseShowFormat);
 		    
 	function initScripts() {
 	
@@ -307,8 +307,8 @@ saveReportEngine	= null;
 	}
 	
 	function showFilter() {
-		YAHOOAmp.amptab.init();
-		YAHOOAmp.amptab.afterFiltersLoad();
+		YAHOO.amptab.init();
+		YAHOO.amptab.afterFiltersLoad();
 		var element = document.getElementById("myFilter");
 		element.style.display 	= "block";
 		element.style.height	= "380px";
@@ -332,7 +332,7 @@ saveReportEngine	= null;
 		
 		
 	}
-	YAHOOAmp.amptab.afterFiltersLoad	= function (){
+	YAHOO.amptab.afterFiltersLoad	= function (){
 		donorsPropertyObj		= new RowManagerProperty(null, "filter_rows_donors", "#ceeeff");
 		relAgenciesPropertyObj	= new RowManagerProperty(null, "filter_rows_rel_agencies", "#ceeeff");
 		sectorsPropertyObj		= new RowManagerProperty(null, "filter_rows_sectors", "#ceeeff");
@@ -340,22 +340,22 @@ saveReportEngine	= null;
 		financingLocPropertyObj		= new RowManagerProperty(null, "filter_rows_finanacing_loc", "#ceeeff");
 		otherCriteriaPropertyObj	= new RowManagerProperty(null, "filter_rows_other_criteria", "#ceeeff");
 
-		YAHOOAmp.amptab.initDisplayOfMemberSelectors("donorsTab");
-		YAHOOAmp.amptab.initDisplayOfMemberSelectors("relAgenciesTab");
-		YAHOOAmp.amptab.initDisplayOfMemberSelectors("sectorsTab");
-		YAHOOAmp.amptab.initDisplayOfMemberSelectors("programsTab");
-		YAHOOAmp.amptab.initDisplayOfMemberSelectors("financingLocTab");
-		YAHOOAmp.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
+		YAHOO.amptab.initDisplayOfMemberSelectors("donorsTab");
+		YAHOO.amptab.initDisplayOfMemberSelectors("relAgenciesTab");
+		YAHOO.amptab.initDisplayOfMemberSelectors("sectorsTab");
+		YAHOO.amptab.initDisplayOfMemberSelectors("programsTab");
+		YAHOO.amptab.initDisplayOfMemberSelectors("financingLocTab");
+		YAHOO.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
 	}
 
-	YAHOOAmp.amptab.initDisplayOfMemberSelectors	= function(bigDivId) {
+	YAHOO.amptab.initDisplayOfMemberSelectors	= function(bigDivId) {
 		var bigDivEl		= document.getElementById(bigDivId);
 		//alert("aici" + bigDivEl);
 		if (bigDivEl != null) {
 			var listOfDivs	= bigDivEl.getElementsByTagName("div");
 			if (listOfDivs != null && listOfDivs.length > 0) {
 				for (var i=0; i<listOfDivs.length; i++) {
-					var divYuiEl	= new YAHOOAmp.util.Element(listOfDivs[i]);
+					var divYuiEl	= new YAHOO.util.Element(listOfDivs[i]);
 					if ( divYuiEl.hasClass("grouping_selector_wrapper") ) {
 						var buttonEl	= listOfDivs[i].getElementsByTagName("button")[0];
 						buttonEl.click();
@@ -378,7 +378,7 @@ saveReportEngine	= null;
 	}
 
 	function showAbout() {
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("customAbout");
 		element.style.display = "inline";
 		myPanel5.setBody(element);
@@ -398,7 +398,7 @@ saveReportEngine	= null;
 	}
 	
 	function showFormat(){
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		initFormatPopup();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";
@@ -455,7 +455,7 @@ saveReportEngine	= null;
 		myPanel2.hide();
 	}
 	function showRange(){
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("myRange");
 		element.style.display = "inline";
 		
@@ -673,7 +673,7 @@ function validateFormat(){
 	
 	
 	function makeScroll (){
-		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
+		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
 		createCookie('report_scrolling',currentReportId,1);
 		showScroll();
 		//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
@@ -691,7 +691,7 @@ function validateFormat(){
 	
 	var enableLink=function(){
 	if (document.getElementById("frezzlink")){
-		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
+		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
 		if (scrolling){
 			//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
 			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
@@ -723,7 +723,7 @@ function validateFormat(){
 		
 	//-----------------------
 	function showScroll(){
-		var wait = new YAHOOAmp.widget.Panel("wait",   
+		var wait = new YAHOO.widget.Panel("wait",   
 	        { width:"240px",  
 	          fixedcenter:true,  
 	          close:false,  
@@ -837,7 +837,7 @@ function reportOptions(element,id){
 		}
 	var itemsUrl='/aim/reportMenuAction.do?action=getOPtions&id='+id;
 
-	var oMenu = new YAHOOAmp.widget.Menu("reportMenu", { fixedcenter: false,srcElement:element,context:[element, "tl", "bl"] }); 
+	var oMenu = new YAHOO.widget.Menu("reportMenu", { fixedcenter: false,srcElement:element,context:[element, "tl", "bl"] }); 
 	//if(oMenu.getItems().length==0){
 		$.get(itemsUrl,'',function(data){
 		for (i=0;i < data.childNodes[0].childNodes.length;i++){
@@ -846,7 +846,7 @@ function reportOptions(element,id){
 				var confirmation=node.getAttribute('confirmation');
 				var text=data.childNodes[0].childNodes[i].childNodes[0].nodeValue
 	
-				var oItem = oMenu.addItem(new YAHOOAmp.widget.MenuItem(text));
+				var oItem = oMenu.addItem(new YAHOO.widget.MenuItem(text));
 				oItem.cfg.setProperty("url",strUrl);
 				oMenu.addItem(oItem);
 				

@@ -42,9 +42,9 @@
 </style>
 <script type="text/javascript">
 <!--
-YAHOOAmp.namespace("YAHOOAmp.amp");
+YAHOO.namespace("YAHOO.amp");
 
- var myPanelContact = new YAHOOAmp.widget.Panel("newpopins3", {
+ var myPanelContact = new YAHOO.widget.Panel("newpopins3", {
  	x:250,
      y:100,
      minWidth:"400px",
@@ -145,7 +145,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
     function selectContact(params1) {
         //myPanelContact.cfg.setProperty("width","800px");
         //myPanelContact.cfg.setProperty("height","500px");
-        YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback1);
+        YAHOO.util.Connect.asyncRequest("POST", params1, callback1);
     }
 
     
@@ -274,7 +274,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
         	 <digi:context name="addCont" property="context/addAmpContactInfo.do?action=addNewData"/>;
              var url="${addCont}&data="+dataName;
              var parameters=getContactParams();
-             YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
+             YAHOO.util.Connect.asyncRequest("POST", url, callback1,parameters);
         }
     }
 
@@ -282,7 +282,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
     	<digi:context name="delCont" property="context/addAmpContactInfo.do?action=removeData"/>
     	var url = "<%=delCont%>&dataName="+propertyType+"&index="+index;
     	var parameters=getContactParams();
-    	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
+    	YAHOO.util.Connect.asyncRequest("POST", url, callback1,parameters);
     }
 
 	function notAchievedMaxAllowed(dataName){
@@ -309,7 +309,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
        <digi:context name="addCont" property="context/addAmpContactInfo.do?action=save"/>;
        var url="${addCont}";
        var params=getContactParams();
-       YAHOOAmp.util.Connect.asyncRequest("POST", url, addContactCallBack , params);
+       YAHOO.util.Connect.asyncRequest("POST", url, addContactCallBack , params);
 	   //var async=new Asynchronous();
        //async.complete=closeContactPopin;
        //async.call(url);
@@ -340,7 +340,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
                 var keyword=document.getElementById('keyword').value;
     			<digi:context name="searchCont" property="context/addAmpContactInfo.do?action=search" />
                 var url = "${searchCont}&keyword="+keyword;
-                YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+                YAHOO.util.Connect.asyncRequest("POST", url, callback1);
                 return true;
             }
             return false;
@@ -361,7 +361,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
             <digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
             checkAndCloseContact=true;
             var url="${addSelCont}"+"&"+getSelectedContactsParams();
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, addContactCallBack);
+			YAHOO.util.Connect.asyncRequest("POST", url, addContactCallBack);
         }
 
         function getContactParams(){
@@ -436,7 +436,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
             }
                 <digi:context name="addCont" property="context/addAmpContactInfo.do?action=removeOrganizations"/>;
                     var url="${addCont}"+"&"+params;
-                    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+                    YAHOO.util.Connect.asyncRequest("POST", url, callback1);
 
                 }
         -->

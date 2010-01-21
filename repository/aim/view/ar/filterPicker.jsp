@@ -19,6 +19,8 @@
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" /> --%>
 
+    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+
 <digi:instance property="aimReportsFilterPickerForm" />
 
 <digi:form action="/reportsFilterPicker.do">
@@ -30,17 +32,17 @@
 
 <div id="tabview_container" class="yui-navset">
 	<ul class="yui-nav">
-		<li class="selected"><a href="#keyword"><div><digi:trn key="rep:filer:tab:KeywordAndCalendar">Keyword & Calendar</digi:trn></div></a> </li>
-		<li><a href="#financing"><div><digi:trn key="rep:filer:tab:FinancingAndLocation">Financing & Location</digi:trn></div></a> </li>
-                <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
-		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
-		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
+		<li class="selected"><a href="#keyword"><div><digi:trn>Keyword & Calendar</digi:trn></div></a> </li>
+		<li><a href="#financing"><div><digi:trn>Financing & Location</digi:trn></div></a> </li>
+                <li><a href="#sectorsprograms"><div><digi:trn>Sectors & Programs</digi:trn></div></a> </li>
+		<li><a href="#donors"><div><digi:trn>Donors & Agencies</digi:trn></div></a> </li>
+		<li><a href="#status"><div><digi:trn>Status & Ministry Rank</digi:trn></div></a> </li>
 		<feature:display name="Computed Columns Filters" module="Filter Section">
 		<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
 		</feature:display>
 	</ul>
 	<div class="yui-content" style="background-color: #EEEEEE">
-		<div id="keyword" >
+		<div id="keyword" class="yui-tab-content">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
 		<tr valign="top"><td align="center">
@@ -241,7 +243,7 @@
 			
 		</table>
 		</div>
-		<div id="financing" style="display: none;">
+		<div id="financing" class="yui-hidden">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 		<tr valign="top">
@@ -395,7 +397,7 @@
 		</tr>
 		</table>
 		</div>
-                <div id="sectorsprograms" style="display: none;">
+                <div id="sectorsprograms" class="yui-hidden">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 		
@@ -507,7 +509,7 @@
 		</table>
           
 		</div>
-		<div id="donors" style="display: none;">
+		<div id="donors" class="yui-hidden">
 			<br/>
 			<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 				<tr valign="top">
@@ -660,7 +662,7 @@
           </td></tr>
           </table>
 		</div>
-		<div id="status" style="display: none;">
+		<div id="status" class="yui-hidden">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 			<tr valign="top">
@@ -697,7 +699,6 @@
                                 <digi:trn key="aim:addActivityStatusFirstLine">Please select a risk from below</digi:trn>
                             </c:set>
                             <category:showoptions   firstLine="${translation}" name="aimReportsFilterPickerForm" property="selectedRisks"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text" multiselect="true" />
-							
 						</td>
 				</tr>
 				</field:display>
@@ -762,7 +763,7 @@
 		</table>
 		</div>
 		<feature:display name="Computed Columns Filters" module="Filter Section">
-		<div id="CCSettings" >
+		<div id="CCSettings" class="yui-hidden">
 			<br>
 			<br>
 			<table width="100%" cellpadding="1" cellspacing="1" >

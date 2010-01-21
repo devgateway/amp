@@ -23,7 +23,7 @@
 		//alert("1");
 		initObj.initialize();
 	}
-	YAHOOAmp.util.Event.addListener(window, "load", init) ;
+	YAHOO.util.Event.addListener(window, "load", init) ;
 
 	function changePage ( showTabs, action ) {
 			var myForm						= document.forms["aimImpExpForm"];

@@ -39,7 +39,7 @@
 	TabManager.prototype.showPanel	= function () {
 		if ( this.panel == null ) {
 			document.getElementById("tabManagerPanel").style.display	= "";
-			this.panel	= new YAHOOAmp.widget.Panel("tabManagerPanel", 
+			this.panel	= new YAHOO.widget.Panel("tabManagerPanel", 
 						{ 	visible:true,
 							width: "400px", 
 							constraintoviewport:true, 
@@ -143,7 +143,7 @@
 	
 	GetDataManager.prototype.getData	= function () {
 		var timestamp		= new Date().getTime();	
-		YAHOOAmp.util.Connect.asyncRequest("GET", "/aim/tabManager.do?get=true&iestamp="+timestamp, this);
+		YAHOO.util.Connect.asyncRequest("GET", "/aim/tabManager.do?get=true&iestamp="+timestamp, this);
 	}
 	
 	function SaveDataManager(destContainerId) {
@@ -184,7 +184,7 @@
 		tabManager.setFooter( "<img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
 	
 		var postString		= this.createPostString();
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/tabManager.do", this, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/tabManager.do", this, postString);
 	}
 
 </script>

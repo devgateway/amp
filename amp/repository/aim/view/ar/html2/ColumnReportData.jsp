@@ -17,7 +17,7 @@
 </c:if>
 
 <c:set var="markerColor" target="page">lightgreen</c:set>
-<c:set var="skippedClass" target="page">hierarchyClass</c:set>
+<c:set var="skippedClass" target="page">hierarchyCell</c:set>
 <c:set var="baseId" target="page">report_row_</c:set>
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
@@ -30,9 +30,9 @@
 		</c:when>
 		<c:otherwise>
 		<!-- printing row tag -->
-			<tr onmousedown="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').toggleRow()" 
-				onMouseover="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').markRow(false)" 
-				onMouseout="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').unmarkRow(false)">
+			<tr onmousedown="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).toggleRow()" 
+				onMouseover="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).markRow(false)" 
+				onMouseout="getRowSelectorInstance(this,  {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).unmarkRow(false)">
 				<jsp:include page="${trailCellsFile}"/>
 		</c:otherwise>
 	</c:choose>
@@ -71,14 +71,14 @@
 
 	<%if (rowIdx%2==0){ %>
 		<tr class="oddActivity" height="16px" 
-			onmousedown="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').toggleRow()" 
-			onMouseover="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').markRow(false)" 
-			onMouseout="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').unmarkRow(false)">
+			onmousedown="getRowSelectorInstance(this,{baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).toggleRow()" 
+			onMouseover="getRowSelectorInstance(this,{baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).markRow(false)" 
+			onMouseout="getRowSelectorInstance(this,{baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).unmarkRow(false)">
 	<%}else{%>
 		<tr height="16px" 
-			onmousedown="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').toggleRow()" 
-			onMouseover="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').markRow(false)" 
-			onMouseout="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').unmarkRow(false)">
+			onmousedown="getRowSelectorInstance(this,{baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).toggleRow()" 
+			onMouseover="getRowSelectorInstance(this,{baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).markRow(false)" 
+			onMouseout="getRowSelectorInstance(this,{baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).unmarkRow(false)">
 	<%}%>
 </c:if>
 

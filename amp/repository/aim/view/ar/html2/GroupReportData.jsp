@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <c:set var="markerColor" target="page">lightgreen</c:set>
-<c:set var="skippedClass" target="page">hierarchyClass</c:set>
+<c:set var="skippedClass" target="page">hierarchyCell</c:set>
 <c:set var="baseId" target="page">report_row_</c:set>
 
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
@@ -39,9 +39,9 @@
 		</c:when>
 		<c:otherwise>
 			<!-- printing row tag -- ${trailCellsFile} -->
-			<tr onmousedown="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').toggleRow()" 
-				onMouseover="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').markRow(false)" 
-				onMouseout="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').unmarkRow(false)">
+			<tr onmousedown="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).toggleRow()" 
+				onMouseover="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).markRow(false)" 
+				onMouseout="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).unmarkRow(false)">
 				<jsp:include page="${trailCellsFile}"/>
 		</c:otherwise>
 	</c:choose>

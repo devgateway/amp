@@ -85,7 +85,7 @@ public class ExportHelper {
 		StringBuffer retValue = new StringBuffer();
 		String nodeVarName = "atn_"+ key;
 		try {
-			retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + 
+			retValue.append("var "+ nodeVarName +" = new YAHOO.widget.TaskNode(\"" + 
 					TranslatorWorker.translateText(node.getName(), RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()) 
 					+ "\", " + parentNode + ", ");
 		} catch (WorkerException e) {

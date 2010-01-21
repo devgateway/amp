@@ -194,7 +194,7 @@ public class FeatureManagerTreeHelper {
 			retValue.append("if (showAll || !"+node.isCorrect()+"){ \n");
 		}
 		
-		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TextNode(\"" + node.getName() + "\", " + parentNode + ", ");
+		retValue.append("var "+ nodeVarName +" = new YAHOO.widget.TextNode(\"" + node.getName() + "\", " + parentNode + ", ");
 		retValue.append("false );");
 		retValue.append("\n");
 		retValue.append(nodeVarName+ ".labelElId = \""+node.getType()+"\"; \n ");

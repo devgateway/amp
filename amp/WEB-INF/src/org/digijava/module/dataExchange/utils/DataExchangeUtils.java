@@ -633,7 +633,7 @@ public class DataExchangeUtils {
 		String result=node.getObjectNameLogged();
 		result = DataExchangeUtils.convertHTMLtoChar(result);
 		
-		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" +
+		retValue.append("var "+ nodeVarName +" = new YAHOO.widget.TaskNode(\"" +
 				result + "\", " + parentNode + ", ");
 		retValue.append("false , false, false,");
 		retValue.append("\""+key+"\"");

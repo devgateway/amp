@@ -21,6 +21,8 @@
 				delete from amp_report_column where columnId in (select columnId from tmp_rep_cont);
 				delete from amp_report_hierarchy where columnId in (select columnId from tmp_rep_cont);
 				delete from amp_columns where columnId in (select columnId from tmp_rep_cont);
+				
+				drop temporary table if exists tmp_rep_cont;
 
 				drop view if exists v_contact_name;
 			</lang>

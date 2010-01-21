@@ -6,6 +6,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<c:set var="markerColor" target="page">lightgreen</c:set>
+<c:set var="skippedClass" target="page">hierarchyClass</c:set>
+<c:set var="baseId" target="page">report_row_</c:set>
+
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 <bean:define id="groupReport" name="viewable" type="org.dgfoundation.amp.ar.GroupReportData" scope="request" toScope="page"/>
 
@@ -35,8 +39,9 @@
 		</c:when>
 		<c:otherwise>
 			<!-- printing row tag -- ${trailCellsFile} -->
-			<tr onmousedown="getRowSelectorInstance(this).toggleRow()" 
-				onMouseover="getRowSelectorInstance(this).markRow(false)" onMouseout="getRowSelectorInstance(this).unmarkRow(false)">
+			<tr onmousedown="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').toggleRow()" 
+				onMouseover="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').markRow(false)" 
+				onMouseout="getRowSelectorInstance(this,'${skippedClass}', '${baseId}', '${markerColor}').unmarkRow(false)">
 				<jsp:include page="${trailCellsFile}"/>
 		</c:otherwise>
 	</c:choose>

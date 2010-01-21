@@ -37,8 +37,8 @@
 .searchKey{
   visibility: hidden;
 }
-.hideParameter{
- visibility: visible;
+.hideDatePanel{
+ visibility: hidden;
 }
 </style>
 
@@ -111,6 +111,7 @@ $(document).ready(function(){
 				alert("<digi:trn keyWords="AMP Search">Please enter a search of more than 2 characters.</digi:trn>");
 				return false;
 			}
+			
 		
 		}
 		return true;
@@ -155,9 +156,24 @@ $(document).ready(function(){
 		
 	}
 
+
 	
 
+	$("#byDate").bind('click', function(){
+		if (this.checked) {
+			$("#dateSelection").css({"visibility": "visible"});
+			$("#fromDate").css({"visibility": "visible"});
+			$("#toDate").css({"visibility": "visible"});
+		} else {
+			$("#dateSelection").css({"visibility": "hidden"});
+			$("#fromDate").css({"visibility": "hidden"});
+			$("#toDate").css({"visibility": "hidden"});
+	}
 		
+		
+	});
+
+	
 		
 	$("#searchQuery").change(function(){
 
@@ -174,11 +190,8 @@ $(document).ready(function(){
 			$(".searchKey").css({'visibility' : 'visible', 'float': 'left'});
 			$(".searchKey").val(0);
 		}
-
+		
 	});
-
-	
-
 	
 });
 
@@ -231,7 +244,7 @@ $(document).ready(function(){
 							<tr>
 								<td valign="top">
 									<br/>
-                                    <digi:form action="/search.do">
+                                    <digi:form action="/search.do" styleId="ampSearchForm" >
                                     <!--  
                                     <table cellPadding=2 cellSpacing=2 width="100%">
                                    
@@ -294,7 +307,8 @@ $(document).ready(function(){
                                         </td>
                                         <td valign="top">
                                           <html:submit><digi:trn>Submit</digi:trn></html:submit><br /><br />
-                                          <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/>
+                                           <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/> 
+                                        
                                         </td>
                                       </tr>
                                       <tr>
@@ -309,7 +323,7 @@ $(document).ready(function(){
                                       </tr>
                                       <tr>
                                         <td>
-                                        <div id="dateSelection">
+                                        <div id="dateSelection" class="hideDatePanel">
                                         <digi:trn>Date Selection</digi:trn>
                                         	<html:select property="dateSelection">
                                         	  <html:option value="1">Last update date</html:option>
@@ -318,18 +332,18 @@ $(document).ready(function(){
                                         </div>
                                         </td>
                                         <td>
-                                        <div id="fromDate">
+                                        <div id="fromDate" class="hideDatePanel">
                                         <digi:trn>from:</digi:trn>
-                                          <html:text property="fromDate" size="10" styleId="selectedFromDate"></html:text>
+                                          <html:text property="fromDate" size="10" styleId="selectedFromDate" disabled="true"></html:text>
                                             <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedFromDate"),"clear1")'>
 			                                   <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 			                                </a>
                                           </div>
                                           </td>
                                         <td>
-                                        <div id="toDate">
+                                        <div id="toDate" class="hideDatePanel">
                                         <digi:trn>to:</digi:trn>
-                                          <html:text property="toDate" size="10" styleId="selectedToDate"></html:text>
+                                          <html:text property="toDate" size="10" styleId="selectedToDate" disabled="true"></html:text>
                                             <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedToDate"),"clear1")'>
 			                                   <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 			                                </a>

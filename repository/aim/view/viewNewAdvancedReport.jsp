@@ -485,8 +485,8 @@ session.setAttribute("progressValue", counter);
 		</logic:equal>
 		<logic:notEqual name="viewFormat" value="print">
 	<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
-				
 			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+			<% System.out.println( "TTTTTT" + ((viewable!=null)?viewable.getViewerPath():"IS NULL !!") ); %>
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
 			
 	</tr>
@@ -574,6 +574,9 @@ session.setAttribute("progressValue", counter);
                         <c:otherwise>
                     <logic:equal name="viewFormat" value="html">
                                 <a class="yui-pg-page yuipaginationsimul"  onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+                    </logic:equal>
+                    <logic:equal name="viewFormat" value="html2">
+                                <a class="yui-pg-page yuipaginationsimul"  onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html2~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>
                     <logic:equal name="viewFormat" value="foldable">
                                     <a   class="yui-pg-page yuipaginationsimul" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">

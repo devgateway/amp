@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
-
+<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <html:javascript formName="aimUpdateWorkspaceForm"/>
 
 
@@ -223,28 +223,28 @@ function update(action) {
   
 function workspaceChangeType(){
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Team"){
-		$("div[@id^='management_']").hide();
-		$("div[@id^='team_']").show('fast');
+		$("div[id^='management_']").hide();
+		$("div[id^='team_']").show('fast');
 		//document.aimUpdateWorkspaceForm.addActivity.checked = true;
 		if(document.aimUpdateWorkspaceForm.computation.checked == true)
-			$("div[@id^='computation_']").show('fast');
-		else $("div[@id^='computation_']").hide();
+			$("div[id^='computation_']").show('fast');
+		else $("div[id^='computation_']").hide();
 	}
 
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
 		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
 		//document.aimUpdateWorkspaceForm.computation.checked = false;
-			$("div[@id^='team_']").hide();
-			$("div[@id^='management_']").show('fast');
-			$("div[@id^='computation_']").hide()
+			$("div[id^='team_']").hide();
+			$("div[id^='management_']").show('fast');
+			$("div[id^='computation_']").hide()
 	}
 
 }
  
 function   computationChange(){
 	if(document.aimUpdateWorkspaceForm.computation.checked == true)
-		$("div[@id^='computation_']").show('fast');
-	else $("div[@id^='computation_']").hide();
+		$("div[id^='computation_']").show('fast');
+	else $("div[id^='computation_']").hide();
 }
   
 function relTeam() { 

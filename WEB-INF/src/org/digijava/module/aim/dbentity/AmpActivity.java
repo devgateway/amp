@@ -41,7 +41,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	@VersionableFieldTextEditor(fieldTitle = "Contract Details")
 	private String contractDetails;
 	
-	@VersionableFieldTextEditor(fieldTitle = "Chapter Code")
+	@VersionableFieldTextEditor(fieldTitle = "Code Chapitre")
 	private AmpChapter chapter;
 	
 	@VersionableFieldSimple(fieldTitle = "Activity Budget")

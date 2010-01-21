@@ -8,11 +8,14 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.digijava.module.aim.util.Output;
+
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  *
  */
-public class AmpChapter implements Serializable {
+public class AmpChapter implements Serializable, Versionable {
+
 	private String code;
 	private Integer year;
 	private String description;
@@ -73,6 +76,19 @@ public class AmpChapter implements Serializable {
 	 */
 	public void setImputations(Set<AmpImputation> imputations) {
 		this.imputations = imputations;
+	}
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		return this.equals(obj);
+	}
+	@Override
+	public Output getOutput() {
+		return new Output(null, new String[] { code }, new Object[] { "" });
+	}
+	@Override
+	public Object getValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

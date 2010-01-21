@@ -11,18 +11,16 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
   <!-- Dependencies --> 
         
-<%@page import="org.digijava.kernel.translator.TranslatorWorker"%><script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+<%@page import="org.digijava.kernel.translator.TranslatorWorker"%>
+		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
         <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/dom-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>

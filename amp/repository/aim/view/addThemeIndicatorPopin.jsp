@@ -28,9 +28,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -41,7 +41,7 @@
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
 		    });
-		var myPanel2 = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel2 = new YAHOO.widget.Panel("newpopins", {
 			width:"550px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -185,7 +185,7 @@
 		showPanelLoading(msg);
 		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
 		var url = "<%=selCreateInd %>?addIndicatorForStep9=true";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		
 	}
 	function addIndicator(id){
@@ -195,7 +195,7 @@
 		showPanelLoading(msg);		
 		<digi:context name="addIndicator" property="context/module/moduleinstance/assignNewIndicator.do" />
 		var url = "<%= addIndicator %>?parentid=" + id + "&type=program";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 
 
@@ -204,7 +204,7 @@
 		showPanelLoading(msg);
 		<digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
 		var url = "<%=viewEditIndicator%>?id=" + id + "&parentid="+parentid+"&type=program&event=edit";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 
 	function addData(id){
@@ -214,7 +214,7 @@
 		showPanelLoading(msg);
 		<digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do" />
 		var url = "<%= addEditIndicator %>?parent=" + id;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 			
 	////////////////
@@ -261,7 +261,7 @@
 		  <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" /> 
 		  var url = "<%=justSubmit%>";  
 		  url += getParamsData();
-		  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);	
+		  YAHOO.util.Connect.asyncRequest("POST", url, callback);	
 	}
 
 	function myclose2(){
@@ -340,7 +340,7 @@
 		var url = "<%= selInd %>"+"?event=assignIndicators";
 		url += "&" + getParamsInd();
 		checkAndClose=true;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	
 	
@@ -400,7 +400,7 @@
 		<digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?edit=true"/>
 		var url = "<%= searchInd %>";
 		url += "&" + getParamsInd();
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		//document.aimThemeFormIndPopin.submit();
 	}	
 	
@@ -416,7 +416,7 @@
 				document.aimThemeFormIndPopin.alpha.value="";
 				var url = "<%= searchInd %>";
 				url += "&"+getParamsInd();
-				YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+				YAHOO.util.Connect.asyncRequest("POST", url, callback);
 				//document.aimThemeFormIndPopin.submit();
 				return true;
 			}
@@ -438,7 +438,7 @@
 			document.aimThemeFormIndPopin.alpha.value=val;
 			document.aimThemeFormIndPopin.selectedindicatorFromPages.value=1;
 			url += "&" + getParamsInd(); 
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+			YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		}
 	}
 	
@@ -453,7 +453,7 @@
 		    var aux= document.aimThemeFormIndPopin.tempNumResults.value;
 		    document.aimThemeFormIndPopin.tempNumResults.value=1000000;
 		    url  += getParamsInd();
-		    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		    YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		    document.aimThemeFormIndPopin.tempNumResults.value=aux;
 			return true;
 		}
@@ -462,7 +462,7 @@
 	function clearform(){
 		<digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=clear"/>
 		var url = "<%= searchInd %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		//document.aimThemeFormIndPopin.submit();
 	}
 	
@@ -471,7 +471,7 @@
 		document.aimThemeFormIndPopin.selectedindicatorFromPages.value=1;
 		document.aimThemeFormIndPopin.alpha.value="";
 		var url = "<%= searchInd %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	function getParamsInd(){
 		var ret="";
@@ -510,7 +510,7 @@ function addNewData(){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
   var url = "<%=addEditIndicator%>";
   url += getParamsData();
-  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+  YAHOO.util.Connect.asyncRequest("POST", url, callback);
 }
 
 
@@ -520,7 +520,7 @@ function deleteData(ind){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=delIndValue" />
   var url = "<%=addEditIndicator%>&index="+ind;
   url += getParamsData();
-  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+  YAHOO.util.Connect.asyncRequest("POST", url, callback);
   }
 }
 
@@ -532,7 +532,7 @@ function saveIndicator(id){
   var url = "<%=addEditIndicator%>";
   url += getParamsData();
   checkAndClose=true;
-  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+  YAHOO.util.Connect.asyncRequest("POST", url, callback);
 }
 
 function selectLocation(index){
@@ -541,7 +541,7 @@ function selectLocation(index){
      <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" />
   var url = "<%=justSubmit%>&index="+index;
   url += getParamsData();
-  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+  YAHOO.util.Connect.asyncRequest("POST", url, callback);
   
   var params="parentIndex="+index+"&implemLocationLevel=&showLocLevelSelect=true";
   params+="&edit=false";
@@ -552,7 +552,7 @@ function selectLocation(index){
 		showPanelLoading2(msg);
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
 		var url = "<%=selectLoc %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2, params);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback2, params);
 }
 
   function locationChanged( selectId ) {
@@ -561,7 +561,7 @@ function selectLocation(index){
                             document.selectLocationForm.parentLocId.value=selectEl.value;
     <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
                                     var url = "<%=selectLoc%>";
-                                    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2, "edit=true&"+generateFieldsLocation());
+                                    YAHOO.util.Connect.asyncRequest("POST", url, callback2, "edit=true&"+generateFieldsLocation());
                                 }
                             }
 
@@ -569,7 +569,7 @@ function  levelChanged() {
      var params="implemLocationLevel="+document.getElementsByName('implemLocationLevel')[0].value;
     <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
       var url = "<%=selectLoc%>";
-      YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2, params);
+      YAHOO.util.Connect.asyncRequest("POST", url, callback2, params);
 }
 
         function generateFieldsLocation(){

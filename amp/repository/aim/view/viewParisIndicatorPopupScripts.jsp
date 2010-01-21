@@ -166,19 +166,19 @@
 </script>
 
 <script type="text/javascript">
-	YAHOOAmp.namespace("YAHOOAmp.amptab");
-	YAHOOAmp.amptab.init = function() {
-		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+	YAHOO.namespace("YAHOO.amptab");
+	YAHOO.amptab.init = function() {
+		var tabView = new YAHOO.widget.TabView('tabview_container');
 	};
 
-	/*YAHOOAmp.amptab.handleCloseAbout = function() {
+	/*YAHOO.amptab.handleCloseAbout = function() {
 		if (navigator.appName == 'Microsoft Internet Explorer') {
 			//window.location.reload();
 			//history.go(-1);
 		}
 	}*/
 
-	YAHOOAmp.amptab.handleClose = function() {
+	YAHOO.amptab.handleClose = function() {
 		//alert('handleClose()');
 		//var wrapper = document.getElementById('myFilterWrapper');
 		var wrapper = document;
@@ -188,7 +188,7 @@
 		wrapper.appendChild(filter);
 	};
 
-	var myPanel1 = new YAHOOAmp.widget.Panel("new", {
+	var myPanel1 = new YAHOO.widget.Panel("new", {
 		width :"700px",
 		fixedcenter :true,
 		constraintoviewport :true,
@@ -199,7 +199,7 @@
 		draggable :true
 	});
 
-	var myPanel2 = new YAHOOAmp.widget.Panel("new2", {
+	var myPanel2 = new YAHOO.widget.Panel("new2", {
 		fixedcenter :true,
 		constraintoviewport :true,
 		underlay :"shadow",
@@ -209,7 +209,7 @@
 		draggable :true
 	});
 
-	var myPanel3 = new YAHOOAmp.widget.Panel("new3", {
+	var myPanel3 = new YAHOO.widget.Panel("new3", {
 		width :"300px",
 		fixedcenter :true,
 		constraintoviewport :true,
@@ -220,7 +220,7 @@
 		draggable :true
 	});
 
-	var myPanel4 = new YAHOOAmp.widget.Panel("new3", {
+	var myPanel4 = new YAHOO.widget.Panel("new3", {
 		width :"450px",
 		fixedcenter :true,
 		constraintoviewport :true,
@@ -231,7 +231,7 @@
 		draggable :true
 	});
 
-	var myPanel5 = new YAHOOAmp.widget.Panel("new5", {
+	var myPanel5 = new YAHOO.widget.Panel("new5", {
 		width :"480px",
 		fixedcenter :true,
 		constraintoviewport :true,
@@ -242,8 +242,8 @@
 		draggable :true
 	});
 
-	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
-	//myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
+	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+	//myPanel5.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseAbout);
 
 	function initScripts() {
 		//alert('initScripts');
@@ -264,7 +264,7 @@
 
 	function showFilter() {
 		//alert('showFilter');
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("myFilter");
 		element.style.display = "inline";
 		//alert(element.innerHTML);
@@ -275,7 +275,7 @@
 
 	function showFilter2() {
 		//alert('showFilter2');
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("myFilter2");
 		element.style.display = "inline";
 		//alert(element.innerHTML);
@@ -297,7 +297,7 @@
 
 	function showFormat() {
 		initFormatPopup();
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";
 		myPanel4.setBody(element);
@@ -353,7 +353,7 @@
 	}
 
 	function showRange() {
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("myRange");
 		element.style.display = "inline";
 
@@ -551,7 +551,7 @@
 
 	//-----------------------
 	function showScroll() {
-		var wait = new YAHOOAmp.widget.Panel("wait", {
+		var wait = new YAHOO.widget.Panel("wait", {
 			width :"240px",
 			fixedcenter :true,
 			close :false,

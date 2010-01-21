@@ -34,9 +34,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"1000px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -47,7 +47,7 @@
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
 		    });
-	var myPanel2 = new YAHOOAmp.widget.Panel("newpopins2", {
+	var myPanel2 = new YAHOO.widget.Panel("newpopins2", {
 		width:"300px",
 		height:"200px",
 		fixedcenter: true,
@@ -290,7 +290,7 @@
 		var urlParams="<%=addFunding%>";
 		var params = "funding.orgId="+ orgId+"&edit=true";
 		
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 	}
 	
 	function getProjectionRows(){
@@ -435,7 +435,7 @@
 		var urlParams="<%=addFunding%>";
 		var params = getParameters();
 		
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 	}
 	function removeMTEFProjection(index) {
 		var flag = confirm("<digi:trn key="aim:addFunding:warn:removeproj">Are you sure you want to remove the selected projection ?</digi:trn>");
@@ -447,7 +447,7 @@
 			var urlParams="<%=addFunding%>";
 			var params = getParameters();
 			
-			YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+			YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 			
 		}
 	}
@@ -471,7 +471,7 @@
 		var urlParams="<%=addFunding%>";
 		var params = getParameters();
 		
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 	 	
 	}
 	function useFixedRateClicked(field1,field2) {
@@ -514,7 +514,7 @@
 			var urlParams="<%=addFunding%>";
 			var params = getParameters();
 			
-			YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+			YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 			
 		}
 	}
@@ -550,7 +550,7 @@
 		var params = getParameters()+"&edit=true";
 		checkAndClose=true;
 		if (validateAmounts()) {
-			YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+			YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 			isAlreadySubmitted = true;
 			
 			return true;
@@ -573,7 +573,7 @@
 		document.aimEditActivityForm.prevOrg.value = orgId;
 		document.getElementById('fundingId').value = fundId;
 
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 	}
 
 	function fnOnDeleteItem(orgId,fundId)	{
@@ -587,7 +587,7 @@
 		var params = getParameters();
 		<digi:context name="editItem" property="context/module/moduleinstance/addDisbOrderToContract.do"/>
 		var urlParams="<%=editItem%>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback2 );
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback2 );
     }
     function addEvent() {
 //    	  document.aimEditActivityForm.event.value = "Add";
@@ -604,7 +604,7 @@
 		showPanelLoading(msg);
 	    <digi:context name="addProposedFunding" property="context/module/moduleinstance/editProposedFunding.do" />
 	    var urlParams="<%=addProposedFunding%>";
-	    YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, callback );
+	    YAHOO.util.Connect.asyncRequest("POST", urlParams, callback );
     }
     function getPropCostParams(){
 		ret="";
@@ -649,7 +649,7 @@
 	      <digi:context name="fundAdded" property="context/module/moduleinstance/addProposedFunding.do" />;
 		    var urlParams="<%=fundAdded%>";
 		    checkAndClose=true;
-		    YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+getPropCostParams(), callback );
+		    YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+getPropCostParams(), callback );
 		    //document.aimEditActivityForm.submit();
 	      return true;
 		}
@@ -667,7 +667,7 @@
 	   }
 	   */
 		function  addOrgPopin(param1, param2, param3){
-			YAHOOAmp.util.Connect.asyncRequest("POST", param1, callback );
+			YAHOO.util.Connect.asyncRequest("POST", param1, callback );
 		}
     -->
 
@@ -682,7 +682,7 @@ function addEvent() {
   //document.aimEditActivityForm.submit();
   //checkAndClose2=true;
   closeWindow2();
-  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback );
+  YAHOO.util.Connect.asyncRequest("POST", url, callback );
  }
 -->
 </script>

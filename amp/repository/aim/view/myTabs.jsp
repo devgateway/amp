@@ -112,7 +112,7 @@ var myTabsObject;
 	function initAllTabs() {
 		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
 		//Initialize all tabs
-		myTabsObject = new YAHOOAmp.widget.TabView("demo"); 
+		myTabsObject = new YAHOO.widget.TabView("demo"); 
 		//Create "More..." tab
 		var objeto = document.createElement("DIV");
 		objeto.innerHTML = "<digi:trn key="aim:moretabs">More Tabs...</digi:trn>";
@@ -121,16 +121,16 @@ var myTabsObject;
 		objeto.id = "moreTabs";
 
 		//Add it to the Tab bar
-		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
+		myTabsObject.addTab( new YAHOO.widget.Tab({ 
 			labelEl: objeto
 			
 		}), myTabsObject.get('tabs').length+1); 
 
 		//Get the position and create the panel
-		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
+		var region = YAHOO.util.Dom.getRegion("moreTabs");
 		var xPos = region.left;
 		var yPos = region.bottom;
-		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
+		allTabsPanel = new YAHOO.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
 		allTabsPanel.setHeader("<digi:trn key="aim:pleaseselect">Please select from the list below</digi:trn>");
 		allTabsPanel.setBody("");
 		allTabsPanel.render(document.body);
@@ -159,7 +159,7 @@ var myTabsObject;
 		objeto.innerHTML = label;
 		objeto.id = "replaceableTab";
 
-		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
+		myTabsObject.addTab( new YAHOO.widget.Tab({ 
 			labelEl: objeto
 			
 		}), myTabsObject.get('tabs').length-1); 
@@ -185,7 +185,7 @@ var myTabsObject;
 		}
 
     function changeTab(e) {  
-		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
+		var region = YAHOO.util.Dom.getRegion("moreTabs");
 		var xPos = region.left;
 		var yPos = region.bottom;
 		allTabsPanel.moveTo(xPos,yPos);
@@ -356,7 +356,7 @@ DIV.panelList {
 </div>
 <c:if test="${showMoreTab}">
 <script language="javascript">
-	YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
+	YAHOO.util.Event.addListener(window, "load", initAllTabs);
 </script>
 </c:if>
 

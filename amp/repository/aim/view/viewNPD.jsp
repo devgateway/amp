@@ -18,17 +18,17 @@
 
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/tree.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/yahoo.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/event.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/treeview.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/yahoo-min.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/treeview-min.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
@@ -47,9 +47,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"700px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -325,7 +325,7 @@ function showFilter(){
         //var win=openURLinResizableWindow(url,600,400);
 		var msg='\n<digi:trn>Change Options</digi:trn>';
 		showPanelLoading(msg);
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);			
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);			
     
       }
     }
@@ -352,7 +352,7 @@ function showFilter(){
 				extraActions = true;
 			}
 			url += params;
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+			YAHOO.util.Connect.asyncRequest("POST", url, callback);
 			//var win = openURLinResizableWindow(url,600,600);
 		}
 	}

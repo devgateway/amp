@@ -22,9 +22,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -155,7 +155,7 @@
 		
 		<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
 		var url = "<%= add %>~doAction=new~closeFlag=false";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 
 	function editCurrency(code) {
@@ -164,7 +164,7 @@
 		<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
 		var url = "<%= add %>~closeFlag=false~doAction=show~currencyCode=";
 		url += code;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	-->
 </script>
@@ -202,7 +202,7 @@ function saveCurrency() {
     var url = "<%= back %>";
     url += "?" + getParams();
     checkAndClose = true;
-    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+    YAHOO.util.Connect.asyncRequest("POST", url, callback);
   }
   return valid;
 

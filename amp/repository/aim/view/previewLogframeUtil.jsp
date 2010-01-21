@@ -8,12 +8,12 @@
 
 
 <script type="text/javascript">
-	YAHOOAmp.namespace("YAHOOAmp.amptab");
-	YAHOOAmp.amptab.init = function() {
-	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+	YAHOO.namespace("YAHOO.amptab");
+	YAHOO.amptab.init = function() {
+	    		var tabView = new YAHOO.widget.TabView('tabview_container');
 	};
 		
-    var myPanelLogframe = new YAHOOAmp.widget.Panel("newmyPLogframe", {
+    var myPanelLogframe = new YAHOO.widget.Panel("newmyPLogframe", {
 		width:"800px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
@@ -87,7 +87,7 @@
 	{
         var postString		= "pageId=1&step=1&action=edit&surveyFlag=true&logframepr=true&activityId=" + id + "&actId=" + id;
         showPLogframe();
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editActivity.do", logframeCallback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/editActivity.do", logframeCallback, postString);
 	}
 	
 	function previewLogFrameClicked() {
@@ -95,7 +95,7 @@
 		if (flag == true) {
 	        var postString		= "edit=true&logframe=true&currentlyEditing=true&step=9&pageId=1";
 	        showPLogframe();
-			YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/previewActivity.do", logframeCallback, postString);
+			YAHOO.util.Connect.asyncRequest("POST", "/aim/previewActivity.do", logframeCallback, postString);
 		}
 	}
 

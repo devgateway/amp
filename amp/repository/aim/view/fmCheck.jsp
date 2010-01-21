@@ -18,9 +18,6 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script>
 
 <script type="text/javascript">
-  if (YAHOOAmp != null){
-    var YAHOO = YAHOOAmp;
-  }
   
   var tree;
   
@@ -74,10 +71,10 @@
       var currentFMEType = null;
       var currentFMEName = null;
       
-  	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchange");
-  	YAHOOAmp.amp.dataExchange.numOfSteps	= 2; // have to be 3 when we include additional fields
+  	YAHOO.namespace("YAHOO.amp.dataExchange");
+  	YAHOO.amp.dataExchange.numOfSteps	= 2; // have to be 3 when we include additional fields
   		
-  	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_tree", "tab_database");
+  	YAHOO.amp.dataExchange.tabLabels	= new Array("tab_tree", "tab_database");
   		
        function navigateTab(value){
        		tabView.set("activeIndex", tabView.get("activeIndex")+value);
@@ -85,7 +82,7 @@
   		
 
       function init() {
-        tabView = new YAHOOAmp.widget.TabView('wizard_container');
+        tabView = new YAHOO.widget.TabView('wizard_container');
         buildRandomTextNodeTree();
       }
       
@@ -120,7 +117,7 @@
           if (showAll == null)
         	  showAll = true;
   		//instantiate the tree:
-          tree = new YAHOOAmp.widget.TreeView("fmTree");
+          tree = new YAHOO.widget.TreeView("fmTree");
 		<bean:define id="tree" name="fmCheckForm" property="fmeTree" type="org.digijava.module.aim.fmtool.types.FMCheckTreeEntry" toScope="page"/>
           	<%= FeatureManagerTreeHelper.renderTree(tree) %>
           
@@ -128,12 +125,12 @@
          // Expand and collapse happen prior to the actual expand/collapse,
          // and can be used to cancel the operation
          tree.subscribe("expand", function(node) {
-//        	 YAHOOAmp.log(node.index + " was expanded", "info", "example");
+//        	 YAHOO.log(node.index + " was expanded", "info", "example");
                 // return false; // return false to cancel the expand
              });
 
          tree.subscribe("collapse", function(node) {
-//        	 YAHOOAmp.log(node.index + " was collapsed", "info", "example");
+//        	 YAHOO.log(node.index + " was collapsed", "info", "example");
              });
 
          // Trees with TextNodes will fire an event for when the label is clicked:
@@ -142,7 +139,7 @@
              currentFMEName = node.label;
              
              getSource(node.labelElId, node.label);
-//        	 YAHOOAmp.log(node.index + " label was clicked", "info", "example");
+//        	 YAHOO.log(node.index + " label was clicked", "info", "example");
              });
 
   		//The tree is not created in the DOM until this method is called:
@@ -205,7 +202,7 @@
               success : function (o) {
                   var messages = [];
                   try {
-                      messages = YAHOOAmp.lang.JSON.parse(o.responseText);
+                      messages = YAHOO.lang.JSON.parse(o.responseText);
                   }
                   catch (x) {
 //                      alert("JSON Parse failed!");
@@ -233,7 +230,7 @@
               },
 
               failure : function (o) {
-                  if (!YAHOOAmp.util.Connect.isCallInProgress(o)) {
+                  if (!YAHOO.util.Connect.isCallInProgress(o)) {
                       alert("Async call failed!");
                   }
               },
@@ -243,10 +240,10 @@
 
           // Make the call to the server for JSON data
           var uri = "/aim/fmCheck.do~method=sourceAjax&fmeType=" + encodeURIComponent(type)+"&fmeName="+encodeURIComponent(name);
-          YAHOOAmp.util.Connect.asyncRequest('GET', uri, callbacks);
+          YAHOO.util.Connect.asyncRequest('GET', uri, callbacks);
       }
                 
-  		YAHOOAmp.util.Event.addListener(window, "load", init) ;
+  		YAHOO.util.Event.addListener(window, "load", init) ;
   	</script>
 
 						<span class="crumb" style="padding-left: 10px;">
@@ -336,7 +333,7 @@
 						</tr>
 					</table>        
 			    </div>
-				<div id="tab_database"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_database"  class="yui-hidden"  style="padding: 0px 0px 1px 0px;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <div style="text-align: center; padding: 10px 10px 10px 50px;">
                       <input type="button" class="dr-menu" onclick="removeFME('fixAll');" value='Fix All'/>

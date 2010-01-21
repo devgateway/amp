@@ -21,6 +21,7 @@
 <!-- dynamic tooltip -->
 
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <style type="text/css"> 
 	#demo .yui-nav li {
@@ -285,7 +286,7 @@ function startClock(){
 									<!-- End - Sorting settings based on its name  -->
 
 								<logic:iterate name="sections"  id="sectionName">
-								<div>
+								<div class="yui-hidden">
 									<font style="color:black;font-size:14pt;font-weight:bold"">									
 									<digi:trn key="aim:global:section:${sectionName}">${sectionName}</digi:trn>
 									</font>
@@ -707,7 +708,7 @@ function setHoveredTable(tableId, hasHeaders) {
 }
 </script>
 <script type="text/javascript">
-	var myTabs = new YAHOOAmp.widget.TabView("demo");
+	var myTabs = new YAHOO.widget.TabView("demo");
 	myTabs.set('activeIndex',<%=aimGlobalSettingsForm.getIndexTab()%>);
 
 	<logic:iterate name="sections"  id="sectionName">

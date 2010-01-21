@@ -41,9 +41,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: true,
@@ -67,7 +67,7 @@
                 panelStrat=0;
 	}
 
-	var myPanelContact = new YAHOOAmp.widget.Panel("newpopins2", { 
+	var myPanelContact = new YAHOO.widget.Panel("newpopins2", { 
         x:250,
         y:100,
         minWidth:"400px",
@@ -164,7 +164,7 @@
         checkAndClose=true;
         var url="${addCont}";
         var parameters=getContactParams();
-        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,parameters);
+        YAHOO.util.Connect.asyncRequest("POST", url, callback1,parameters);
     }
 
     function removeContactOrgs(){
@@ -183,7 +183,7 @@
         }
          <digi:context name="addCont" property="context/addAmpContactInfo.do?action=removeOrganizations"/>;
          var url="${addCont}";         
-         YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1,params);
+         YAHOO.util.Connect.asyncRequest("POST", url, callback1,params);
 
         }
     
@@ -321,7 +321,7 @@
     }
 
     function selectContact(params1) {
-         YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback1);
+         YAHOO.util.Connect.asyncRequest("POST", params1, callback1);
      }
 
     addLoadEvent(delBody);
@@ -506,9 +506,10 @@ function resetAll()
 								<tr><td width="100%" bgcolor="#f4f4f2">
 									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 										<tr>
-											<td bgColor="#f4f4f2" align="center" vAlign="top">
+											<td bgColor="#f4f4f2" align="center" vAlign="top">												
 												<!-- contents -->
 												<table width="95%" bgcolor="#f4f4f2">													
+													
 													<feature:display name="Donor Contact Information" module="Contact Information">
 														<tr>
 															<td>
@@ -568,7 +569,7 @@ function resetAll()
 																				<td align="left">
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryDonorContIds" styleId="donors_${stat.index}" value="${donorContact.contact.temporaryId}" onchange="changePrimaryState('donor')"/>																					
 																				</td>
-																				<td>
+																				<td>	
 																					<c:set var="ampContactId">
 		                                            									<c:choose>
 		                                                									<c:when test="${empty donorContact.contact.id||donorContact.contact.id==0}">

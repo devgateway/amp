@@ -28,9 +28,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -41,7 +41,7 @@
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
 		    });
-		var myPanel2 = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel2 = new YAHOO.widget.Panel("newpopins", {
 			width:"550px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -185,7 +185,7 @@
 		showPanelLoading(msg);
 		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
 		var url = "<%=selCreateInd %>?addIndicatorForStep9=true";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		
 	}
 			
@@ -266,7 +266,7 @@
 	  showPanelLoading(msg);
 	  <digi:context name="addIndicator" property="context/module/moduleinstance/addNewIndicator.do" />
 	  var url = "<%= addIndicator %>";
-	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);	
+	  YAHOO.util.Connect.asyncRequest("POST", url, callback);	
   
 	}
 	
@@ -276,7 +276,7 @@
 	  showPanelLoading(msg);
 	  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
 	  var url = "<%= viewEditIndicator %>?id="+id;
-	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);	  
+	  YAHOO.util.Connect.asyncRequest("POST", url, callback);	  
 	}
 	-->
 
@@ -317,7 +317,7 @@ function saveIndicator(){
 	checkAndClose=true;
 	var url = "<%=addInd%>";
 	url += getParams();	
-	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	YAHOO.util.Connect.asyncRequest("POST", url, callback);
 }
 
 function validate(field) {
@@ -363,7 +363,7 @@ function removeSelSectors() {
 	}
 
 	url += getParams()+getSelectedSectors();
-	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	YAHOO.util.Connect.asyncRequest("POST", url, callback);
 }
 
 function addSectors() {	
@@ -379,7 +379,7 @@ function addSectors() {
 		url = "<%= addSectorAdd %>";
 	}
 	url += getParams();
-	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);
+	YAHOO.util.Connect.asyncRequest("POST", url, callback2);
 }
 function getParams(){
 	var ret="";
@@ -457,7 +457,7 @@ function filterSpecialCharacters(valueToFilter){
 				url = "<%= addSectorAdd %>";
 			}
 			url += getParamsSector();
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+			YAHOO.util.Connect.asyncRequest("POST", url, callback);
 			closeWindow2();
 		}
 	}	
@@ -476,7 +476,7 @@ function filterSpecialCharacters(valueToFilter){
 			url = "<%= selSectorAdd %>";
 		}
 		url += getParamsSector();
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);									
+		YAHOO.util.Connect.asyncRequest("POST", url, callback2);									
 	}	
 	function checkSectorEmpty() {
 		var sectorFlag = true;
@@ -609,7 +609,7 @@ function addNewIndicator(){
 	var url = "<%= addInd %>";
 	url += getParams();
 	checkAndClose=true;
-	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	YAHOO.util.Connect.asyncRequest("POST", url, callback);
 
 }
 

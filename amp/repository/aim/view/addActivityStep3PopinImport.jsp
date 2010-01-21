@@ -18,10 +18,10 @@
 </div>
 
 <script type="text/javascript">
-  YAHOOAmp.namespace("YAHOOAmp.amp");
+  YAHOO.namespace("YAHOO.amp");
 	var panelStartImport;
 
-  var myImportPanel = new YAHOOAmp.widget.Panel("importPopinPanel", {
+  var myImportPanel = new YAHOO.widget.Panel("importPopinPanel", {
 			width:"1000px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -116,7 +116,7 @@
 		var urlParams="<%=importFunding%>";
 		var params = "funding.orgId="+ orgId+"&edit=true";
 		
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callbackImport );
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callbackImport );
 	}
 
 	function importFormFunding() {

@@ -49,9 +49,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -184,20 +184,20 @@
 		
 		<digi:context name="addNewTh" property="context/module/moduleinstance/addTheme.do?event=add"/>
 		var url = "<%=addNewTh%>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		return true;
 	}
     function editProgram(id){
       var msg='\n<digi:trn>Edit Program</digi:trn>';
       <digi:context name="editTh" property="context/module/moduleinstance/addTheme.do?event=edit"/>
       var url = "<%= editTh%>&themeId=" + id;;
-      YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+      YAHOO.util.Connect.asyncRequest("POST", url, callback);
 }
 	function addSubProgram(rutId,id,level,name)
 	{
 		<digi:context name="subProgram" property="context/module/moduleinstance/addTheme.do?event=addSubProgram"/>
 		var url = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	-->
 </script>
@@ -293,7 +293,7 @@
 			var msg='\n<digi:trn>AMP - Add NewProgram</digi:trn>';
 			showPanelLoading(msg);
 			checkAndClose=true;
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+			YAHOO.util.Connect.asyncRequest("POST", url, callback);
 				
 		}
 		return true;

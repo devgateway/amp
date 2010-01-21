@@ -22,9 +22,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newmySectors", {
+		var myPanel = new YAHOO.widget.Panel("newmySectors", {
 			width:"750px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -206,7 +206,7 @@
 			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 			var url = "<%=commentUrl %>";
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
+			YAHOO.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");
@@ -242,8 +242,8 @@
 		var postString		= "edit=true&" + generateFields(1);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		//YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
+		//YAHOO.util.Connect.asyncRequest("POST", url, callback);
   											
 	}	
 
@@ -251,7 +251,7 @@
 		var postString		= generateFields(3);
 		<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
 		var url = "<%=Url %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 		checkAndClose=true;
 	}
 	function checkErrorAndClose(){
@@ -277,7 +277,7 @@
 		postString+="&"+generateFields(4);
 		<digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
 		var url = "<%=commentUrl %>?"+postString;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 
 	}
 	function checkSectorEmpty()
@@ -358,7 +358,7 @@
 	function selectSector() {
 		<digi:context name="selectSec" property="context/aim/selectSectors.do" />
 		var url = "<%= selectSec %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true");
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true");
 	}
 
 	function searchSector() {
@@ -368,7 +368,7 @@
               var postString		= generateFields(2);
 			  <digi:context name="searchSctr" property="context/aim/searchSectors.do" />
 			  var url = "<%= searchSctr %>";
-			  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
+			  YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
 						 
 			 return true;
 			}
@@ -383,7 +383,7 @@
 	  <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
 
 	  var url = "<%=commentUrl %>";
-	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+	  YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 	  
 	}
 	function removeSelSectors(configId) {

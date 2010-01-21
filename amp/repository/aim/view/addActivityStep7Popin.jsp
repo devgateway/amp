@@ -22,9 +22,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -174,7 +174,7 @@
 		showPanelLoading(msg);
 		//<digi:context name="commentUrl" property="/contentrepository/addTemporaryDocument.do" />
 	//	var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback);
+		YAHOO.util.Connect.asyncRequest("POST", params1, callback);
 	}
 
 	-->

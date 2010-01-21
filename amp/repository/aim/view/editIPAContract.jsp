@@ -271,17 +271,17 @@ function generateFields(){
 
 function addDisb() {
 	var postString		= "addFields=true&"+generateFields();
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
 function orgsAdded() {
 	var postString		= generateFields();
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
 function delOrgs() {
 	var postString		= "removeOrgs=true&" + getCheckedFields("selOrgs")+"&"+generateFields();
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
 }
 
 function getCheckedFields(name) {
@@ -306,7 +306,7 @@ function getCheckedFields(name) {
 
 function delDisb() {
 	var postString		= "removeFields=true&" + getCheckedFields("selContractDisbursements")+"&"+generateFields();
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
 
@@ -340,7 +340,7 @@ SaveReportEngine.prototype.saveContract	= function () {
 	var postString		= "save=true&"+generateFields();
 	//alert (postString);
 	
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", this, postString);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", this, postString);
 }
 
 mySaveReportEngine = new SaveReportEngine();

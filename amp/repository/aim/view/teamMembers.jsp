@@ -107,7 +107,7 @@ function addTeamMember(id) {
 	document.aimTeamMemberForm.action = "<%= add %>~teamId="+id+"~fromPage=0";
 	document.aimTeamMemberForm.target = "_self";
 	document.aimTeamMemberForm.submit();
-	return true;
+	return true;		  
 }
 -->
 </script>

@@ -11,15 +11,18 @@
 <link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/connection-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/element-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/datasource-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/datatable-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/json-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/event-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/paginator-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script> 
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datatable-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script> 
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script>
+
 <style>
 .yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
 color:#000000;
@@ -134,7 +137,6 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
     
 	}
 </script>
-
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">
 	</div>
@@ -266,9 +268,9 @@ div.scrollable {
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"450px",
 			height:"250px",
 			fixedcenter: true,
@@ -336,7 +338,7 @@ div.scrollable {
 			myPanel.show();
 			panelStart = 2;
 		}
-		checkErrorAndClose();		
+		checkErrorAndClose();
 	}
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
@@ -377,7 +379,7 @@ div.scrollable {
 		showPanelLoading(msg);
 		<digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>  
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}
 
 	-->
@@ -399,7 +401,7 @@ div.scrollable {
 		<digi:context name="commentUrl" property="context/module/moduleinstance/npdSettingsAction.do"/>  
 		var url = "<%=commentUrl %>";
 		url+='?actionType=viewCurrentSettings&ampTeamId='+ampTeamId
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}
 	function addActionToURL(actionName){
 		var fullURL=document.URL;
@@ -479,7 +481,7 @@ div.scrollable {
         var params="&ampTeamId="+ampTeamId+"&width="+width+"&height="+height+"&angle="+angle+"&pageSize="+pageSize;
 		var url = "${changeSett}"+params+'&timeStamp='+lastTimeStamp;
 		checkAndClose=true;
-		YAHOOAmp.util.Connect.asyncRequest("POST",url+"?"+params, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url+"?"+params, callback, '');
 	}
 </script>
 <script language="JavaScript">
@@ -526,7 +528,7 @@ function memberAction(action, id){
 	<digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;  
 	var url = "<%=commentUrl %>";
 	url += "?action="+action+"&id="+id;
-	YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+	YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 }
 function confirmActionMember(){
 	if(validateAction()){
@@ -540,7 +542,7 @@ function confirmActionMember(){
 		"&userId="+document.getElementsByName('userId')[0].value+
 		"&name="+document.getElementsByName('name')[0].value+
 		"&role="+document.getElementsByName('role')[0].value;
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}	
 }
 
@@ -689,18 +691,6 @@ var jsonCallback =
 };
 
 function assignNewMember(){
-	//var msg='<digi:trn>Assign Member</digi:trn>';
-	//myPanel.cfg.setProperty("width","500px");
-	//myPanel.cfg.setProperty("height","400px"); 
-	//showPanelLoading(msg);
-
-	//<digi:context name="commentUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>  
-	//var url = "<%=commentUrl %>";
-	//url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value;
-	
-
-//	YAHOOAmp.util.Connect.asyncRequest("POST",url, jsonCallback, '');
-
 	<digi:context name="exportUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>;
     document.aimWorkspaceForm.action="${exportUrl}?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value;
     document.aimWorkspaceForm.target="_self";
@@ -714,7 +704,7 @@ function saveAddedMember(){
 		<digi:context name="commentUrl" property="context/module/moduleinstance/addTeamMemberJSON.do"/>;
 		var url = "<%=commentUrl %>";
 		url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value+"&email="+document.getElementsByName('email')[0].value+"&role="+document.getElementsByName('role')[0].value;
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}	
 }
 function validateAddedMember(){
@@ -735,7 +725,7 @@ function addActivities(id){
 	url += "~id="+id;
 	
 
-	YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+	YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 
 }
 
@@ -829,7 +819,7 @@ function assignActivityList(){
 		<digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;  
 		var url = "<%=commentUrl %>";
 		url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}
 	else{
 		alert('<digi:trn>Validation Error</digi:trn>')
@@ -932,7 +922,7 @@ function setHoveredRow(rowId) {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="middle" width="571">
+					<td height="16" vAlign="center" width="571">
                     	<span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
@@ -985,7 +975,8 @@ function setHoveredRow(rowId) {
 													<td>
 													<digi:trn>keyword</digi:trn>:&nbsp;
 										              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
-													</td>													
+													</td>
+													
 													<td align="center">
 														<digi:trn>Type</digi:trn>:&nbsp;
 														<html:select property="workspaceType" styleClass="inp-text">
@@ -1039,11 +1030,13 @@ function setHoveredRow(rowId) {
 										</td>
 										</tr>
 									</table>
+
 								</td>
 							</tr>
 						</table>
 					</td>
-					<!--details-->
+
+<!--details-->
 					<td  width="50%" vAlign="top">
 						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">

@@ -94,7 +94,7 @@
     <digi:context name="addCont" property="context/addAmpContactInfo.do?action=addOrganizations"/>;
             checkAndClose=true;
             var url="${addCont}"+"&"+params;
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+            YAHOO.util.Connect.asyncRequest("POST", url, callback1);
         }
   
     function orgTypeChanged(){

@@ -158,8 +158,10 @@
 	}	
 	function getParams(){
 		ret="";
+		//alert(document.getElementsByName('matchEntireWord')[0].checked);
 		ret+="&selectedOrganisationFromPages="+document.getElementsByName('selectedOrganisationFromPages')[0].value+
 		"&keyword="+document.getElementsByName('keyword')[0].value +
+		"&matchEntireWord="+document.getElementsByName('matchEntireWord')[0].checked +
 		"&ampOrgTypeId="+document.getElementsByName('ampOrgTypeId')[0].value +
 		"&tempNumResults="+document.getElementsByName('tempNumResults')[0].value;
 		//else if (type==3){//add sectors chosen from the list

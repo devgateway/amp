@@ -151,6 +151,7 @@ public class selectOrganizationComponent extends Action {
 			oForm.setFilterDonorGroups(false);
 		}
 		oForm.setTempNumResults(10);
+		
 		return mapping.findForward("forward");
 
 	}
@@ -169,7 +170,7 @@ public class selectOrganizationComponent extends Action {
 		}
 
 		eaForm.setPagesToShow(10);
-
+		boolean matchWord = "true".equals(eaForm.getMatchEntireWord());
 		if (alpha == null || alpha.trim().length() == 0) {
 			//in case of "viewAll" selected organizations shouldn't get lost. in other case(applying above filter), it should be reseted
 			if(request.getParameter("viewAll")==null || ! request.getParameter("viewAll").equalsIgnoreCase("viewAll")){
@@ -187,14 +188,22 @@ public class selectOrganizationComponent extends Action {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for organisations based on the keyword and the
 					// organisation type
-					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+					if(!matchWord)
+						organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+					else organizationResult= DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId(),matchWord);
+					
 				} else {
 					// search for organisations based on organisation type only
-					organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId());
+					
+						organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId());
+					
 				}
 			} else if (eaForm.getKeyword().trim().length() != 0) {
 				// search based on the given keyword only.
-				organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
+				if(!matchWord)
+					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
+				else
+					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(),matchWord);
 			} else {
 				// get all organisations since keyword field is blank and org
 				// type field has 'ALL'.
@@ -237,7 +246,10 @@ public class selectOrganizationComponent extends Action {
 			else{
 			if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
 				if (eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
-					organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+					if(!matchWord)
+						organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+					else
+						organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId(),matchWord);
 				} else{
 					organizationResult = DbUtil.searchForOrganisation(alpha, "", eaForm.getAmpOrgTypeId());
 				}

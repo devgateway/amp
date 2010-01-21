@@ -36,7 +36,7 @@
         <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/ar/report_html2_view.css" type="text/css" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
+        <digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
 
 
 

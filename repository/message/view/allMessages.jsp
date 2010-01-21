@@ -13,7 +13,7 @@
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
+<digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
 <!-- Yahoo Panel --> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>

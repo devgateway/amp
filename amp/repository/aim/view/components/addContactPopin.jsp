@@ -32,14 +32,14 @@
                             </c:set>
                             <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddContactForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
                        </td>
-					</tr>	
+					</tr>
+					<tr>
+						<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
+						<td align="left"><html:text property="firstName" size="30" styleId="name"/></td>
+					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Lastname</digi:trn></strong><font color="red">*</font></td>
 						<td align="left"><html:text property="lastname" size="30" styleId="lastname"/></td>
-					</tr>
-					<tr>						
-						<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
-						<td align="left"><html:text property="firstName" size="30" styleId="name"/></td>
 					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>

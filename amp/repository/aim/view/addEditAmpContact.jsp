@@ -524,13 +524,13 @@ html>body #mainEmpty {
                                                                                                                         </td>
 																													</tr>
 																													<tr>
-																														<td align="right"><strong><digi:trn>Last Name</digi:trn></strong><font color="red">*</font></td>
-																														<td align="left"><html:text property="lastname" styleId="lastname" size="40"/></td>
-																													</tr>
-																													<tr>
 																														<td align="right"><strong><digi:trn>First Name</digi:trn></strong><font color="red">*</font></td>
 																														<td align="left"><html:text property="name" styleId="name" size="40"/></td>
 																													</tr>
+																													<tr>
+																														<td align="right"><strong><digi:trn>Last Name</digi:trn></strong><font color="red">*</font></td>
+																														<td align="left"><html:text property="lastname" styleId="lastname" size="40"/></td>
+																													</tr>																													
 																													<tr>
 																														<td align="right" valign="top"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
 																														<td align="left">

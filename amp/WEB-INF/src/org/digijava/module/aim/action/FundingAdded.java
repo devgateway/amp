@@ -7,9 +7,13 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -272,24 +276,37 @@ public class FundingAdded extends Action {
 			CSVReader reader = new CSVReader(isr);
 			
 			String [] nextLine;
+			Boolean firstLine = true;
 			while ((nextLine = reader.readNext()) != null) {
-				if (nextLine.length == 3) //Type, Amount, Date
+				if(firstLine){
+					firstLine = false;
+				}
+				else
 				{
+					if (nextLine.length == 7) //Type, Amount, Date
+					{
+						//commitment/disbursement/expenditure,actual/planned,amount,currency,day,month,year
+						//     0                             ,      1       ,   2  ,   3    , 4 ,  5  , 6
+						
+						FundingDetail fundingDetail = new FundingDetail();
+						if (nextLine[0].equals("commitment")) fundingDetail.setTransactionType(Constants.COMMITMENT);
+						if (nextLine[0].equals("disbursement")) fundingDetail.setTransactionType(Constants.DISBURSEMENT);
+						if (nextLine[0].equals("expenditure")) fundingDetail.setTransactionType(Constants.EXPENDITURE);
+						if (nextLine[1].equals("actual")) fundingDetail.setAdjustmentType(Constants.ACTUAL);
+						if (nextLine[1].equals("planned")) fundingDetail.setAdjustmentType(Constants.PLANNED);
 
-					FundingDetail fundingDetail = new FundingDetail();
-					if (nextLine[0].equals("commitment")) fundingDetail.setTransactionType(Constants.COMMITMENT);
-					if (nextLine[0].equals("disbursement")) fundingDetail.setTransactionType(Constants.DISBURSEMENT);
-					if (nextLine[0].equals("expenditure")) fundingDetail.setTransactionType(Constants.EXPENDITURE);
-					fundingDetail.setTransactionAmount(nextLine[1]);
-					fundingDetail.setTransactionDate(nextLine[2]);
-
-					fundingDetail.setClassification("");
-					fundingDetail.setCurrencyCode(currCode);
-					fundingDetail.setAdjustmentType(Constants.ACTUAL);
-					fundingDetail.setIndexId(System.currentTimeMillis());
-					fundingDetail.setIndex(fundingDetails.size());
-					fundingDetails.add(fundingDetail);			
-					
+						fundingDetail.setTransactionAmount(nextLine[2]);
+						fundingDetail.setCurrencyCode(nextLine[3]);
+						//Put together the date
+						GregorianCalendar calendar = new GregorianCalendar();
+						calendar.set(Integer.parseInt(nextLine[6]), Integer.parseInt(nextLine[5]), Integer.parseInt(nextLine[4]));
+						fundingDetail.setTransactionDate(FormatHelper.formatDate(calendar.getTime()));
+						fundingDetail.setClassification("");
+						fundingDetail.setIndexId(System.currentTimeMillis());
+						fundingDetail.setIndex(fundingDetails.size());
+						fundingDetails.add(fundingDetail);			
+						
+					}
 				}
 			}			
 			

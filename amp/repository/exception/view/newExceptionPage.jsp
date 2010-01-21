@@ -61,7 +61,7 @@
 	
 	function addContract(){
 	    var postString = 'rand=<bean:write name="exceptionReportForm" property="rand"/>';
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/exception/getConfluenceDocs.do", callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/exception/getConfluenceDocs.do", callback, postString);
 	}
 
 
@@ -95,7 +95,7 @@
         				<br/>
         				<span style="font-size:14px">
 				        	<b><digi:trn key="exception:newErrorText2">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience. </digi:trn></b><br/>
-				        	
+
 				        	<br/>
 				        	<!-- 
 				        	<u><digi:trn key="exception:issueInformation">Issue Information</digi:trn></u><br/>

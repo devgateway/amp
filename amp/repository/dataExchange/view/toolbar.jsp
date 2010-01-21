@@ -20,7 +20,7 @@
           </c:if>
 		  <c:if test="${stepNum!=0}">
             <button id="step${stepNum}_prev_button" type="button" class="toolbar" onclick="navigateTab(-1);">
-    			<img src="//TEMPLATE/ampTemplate/imagesSource/reports/prev.png" class="toolbar" />
+    			<img src="/TEMPLATE/ampTemplate/imagesSource/reports/prev.png" class="toolbar" />
     			<digi:trn key="btn:previous">Previous</digi:trn>
             </button>
           </c:if>

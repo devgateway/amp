@@ -16,10 +16,10 @@
 <digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
 <!-- Yahoo Panel --> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>"></script>
 
 <style>
 <!--
@@ -678,7 +678,7 @@ background-color:yellow;
                     else{
                         paginationTDContent+='<span class="yui-pg-first">&lt;&lt; <digi:trn>first</digi:trn> </span> ';
 						paginationTDContent+='<span class="yui-pg-previous">&lt;<digi:trn>prev</digi:trn> </span>';
-                    }
+					}
 					paginationTDContent+='&nbsp';
 					if(allPages!=null){
 						var fromIndex=1;
@@ -707,7 +707,7 @@ background-color:yellow;
                        paginationTDContent+='<span class="yui-pg-next"><digi:trn jsFriendly="true">Next</digi:trn>&gt;</span>';
                        paginationTDContent+='<span class="yui-pg-last"><digi:trn jsFriendly="true">Last</digi:trn>&gt;&gt;</span>';
 
-                    }
+					}	
 					//paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
 				paginationTD.innerHTML=	paginationTDContent;						
 				paginationTR.appendChild(paginationTD);						

@@ -20,9 +20,9 @@
 <script type="text/javascript" defer="defer">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"320px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -120,7 +120,7 @@
 		showPanelLoading(msg);
 		<digi:context name="showPalete" property="context/calendar/showColorPalete.do" />	  
 		var url = "<%=showPalete %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 
 	function showPanelLoading(msg){

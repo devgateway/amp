@@ -15,15 +15,18 @@
 <%@page import="org.digijava.module.dataExchange.util.ExportHelper"%>
 
 
+
+
+
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script>
-
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
+<script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
 
 <script type="text/javascript">
-  if (YAHOOAmp != null){
-    var YAHOO = YAHOOAmp;
-  }
   
   var tree;
   
@@ -34,11 +37,6 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
 
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
-
-    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
 
 <style type="text/css">
 
@@ -52,8 +50,6 @@
 </style> 
 
 	
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
@@ -65,57 +61,47 @@
 
 	<script type="text/javascript">
     var tabView = null;
-    
-	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchange");
-	YAHOOAmp.amp.dataExchange.numOfSteps	= 2; // have to be 3 when we include additional fields
-		
-	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_select_field", "tab_filter", "tab_logger");
-		
-        function navigateTab(value){
-        	tabView.set("activeIndex", tabView.get("activeIndex")+value);
-        }
-		
-		
-		function initializeDragAndDrop() {
-			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
-			
-			tabView 		= new YAHOOAmp.widget.TabView('wizard_container');
-			tabView.addListener("contentReady", treeInit);
-		}
 
+    
+	YAHOO.namespace("YAHOO.amp.dataExchange");
+	YAHOO.amp.dataExchange.tabLabels	= new Array("tab_select_field", "tab_filter", "tab_logger");
+		
+    function navigateTab(value){
+    	tabView.set("activeIndex", tabView.get("activeIndex")+value);
+    }
 
     function treeInit() {
-      tabView = new YAHOO.widget.TabView('wizard_container');
+      tabView = new YAHOO.widget.TabView("wizard_container");
       buildRandomTaskNodeTree();
     }
     
     //handler for expanding all nodes
-    YAHOOAmp.util.Event.on("expand", "click", function(e) {
+    YAHOO.util.Event.on("expand", "click", function(e) {
       tree.expandAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
     
     //handler for collapsing all nodes
-    YAHOOAmp.util.Event.on("collapse", "click", function(e) {
+    YAHOO.util.Event.on("collapse", "click", function(e) {
       tree.collapseAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
 
     //handler for checking all nodes
-    YAHOOAmp.util.Event.on("check", "click", function(e) {
+    YAHOO.util.Event.on("check", "click", function(e) {
       checkAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
     
     //handler for unchecking all nodes
-    YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
+    YAHOO.util.Event.on("uncheck", "click", function(e) {
       uncheckAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
 
 
-    YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
-      YAHOOAmp.util.Event.preventDefault(e);
+    YAHOO.util.Event.on("getchecked", "click", function(e) {
+      YAHOO.util.Event.preventDefault(e);
     });
 
     //Function  creates the tree and 
@@ -123,7 +109,7 @@
       function buildRandomTaskNodeTree() {
     
       //instantiate the tree:
-          tree = new YAHOOAmp.widget.TreeView("dataExportTree");
+          tree = new YAHOO.widget.TreeView("dataExportTree");
             
           <bean:define id="tree" name="deExportForm" property="activityTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
           <%= ExportHelper.renderActivityTree(tree, request) %>
@@ -137,9 +123,9 @@
 
     function buildRandomTaskBranch(node) {
       if (node.depth < 3) {
-//        YAHOOAmp.log("buildRandomTextBranch: " + node.index);
+//        YAHOO.log("buildRandomTextBranch: " + node.index);
         for ( var i = 0; i < Math.floor(Math.random() * 2) ; i++ ) {
-          var tmpNode = new YAHOOAmp.widget.TaskNode(node.label + "-" + i, node, false);
+          var tmpNode = new YAHOO.widget.TaskNode(node.label + "-" + i, node, false);
                   //tmpNode.onCheckClick = onCheckClick;
           buildRandomTaskBranch(tmpNode);
         }
@@ -273,7 +259,7 @@
             
             imgEl.src   = imgSrc;
             btn.disabled  = false;
-            ( new YAHOOAmp.util.Element(btn) ).replaceClass('toolbar-dis', 'toolbar');
+            ( new YAHOO.util.Element(btn) ).replaceClass('toolbar-dis', 'toolbar');
           }
         }
 
@@ -285,7 +271,7 @@
             imgEl.src   = imgSrc;
             
             btn.disabled  = true;
-            ( new YAHOOAmp.util.Element(btn) ).replaceClass('toolbar', 'toolbar-dis');
+            ( new YAHOO.util.Element(btn) ).replaceClass('toolbar', 'toolbar-dis');
           }
         }
 
@@ -307,7 +293,7 @@
             var tab     = tabView.getTab(tabIndex);
             if ( tab.get("disabled") ) {
               tab.set("disabled", false);
-              var labelEl   = document.getElementById( YAHOOAmp.amp.dataExchange.tabLabels[tabIndex] );
+              var labelEl   = document.getElementById( YAHOO.amp.dataExchange.tabLabels[tabIndex] );
               (new YAHOO.util.Element(labelEl)).replaceClass('disabled', 'unsel');
             }
           
@@ -321,7 +307,7 @@
             var tab     = tabView.getTab(tabIndex);
             if ( !tab.get("disabled") ) {
               tab.set("disabled", true);
-              var labelEl   = document.getElementById( YAHOOAmp.amp.dataExchange.tabLabels[tabIndex] );
+              var labelEl   = document.getElementById( YAHOO.amp.dataExchange.tabLabels[tabIndex] );
               (new YAHOO.util.Element(labelEl)).replaceClass('unsel', 'disabled');
             }
           
@@ -368,7 +354,7 @@
                 success : function (o) {
                     var messages = [];
                     try {
-                        messages = YAHOOAmp.lang.JSON.parse(o.responseText);
+                        messages = YAHOO.lang.JSON.parse(o.responseText);
                     }
                     catch (x) {
 //                        alert("JSON Parse failed!");
@@ -416,7 +402,7 @@
                 },
 
                 failure : function (o) {
-                    if (!YAHOOAmp.util.Connect.isCallInProgress(o)) {
+                    if (!YAHOO.util.Connect.isCallInProgress(o)) {
                         alert("Async call failed!");
                     }
                 },
@@ -425,11 +411,11 @@
             }
 
             // Make the call to the server for JSON data
-            YAHOOAmp.util.Connect.asyncRequest('GET',"/dataExchange/exportWizard.do~method=logAjax", callbacks);
+            YAHOO.util.Connect.asyncRequest('GET',"/dataExchange/exportWizard.do~method=logAjax", callbacks);
         }
 
               
-		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
+		YAHOO.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
 
@@ -500,7 +486,7 @@
                     Select additional fields
 				</div>
 --%>
-				<div id="tab_filter"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_filter" class="yui-hidden">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbar.jsp" />
                     <table cellpadding="15px" width="100%" align="center" border="0" >
@@ -581,7 +567,7 @@
                     
 				</div>
           <c:if test="${deExportForm.tabCount==3}">
-                <div id="tab_logger" class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+                <div id="tab_logger"  class="yui-hidden">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbar.jsp" />
                     <div style="text-align: center; padding: 10px 10px 10px 50px;">

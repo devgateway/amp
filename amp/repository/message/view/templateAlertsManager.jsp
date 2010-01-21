@@ -64,10 +64,10 @@ div.fakefile2 input{
 
 <!-- Yahoo Panel --> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>"></script>
 
 
 <script langauage="JavaScript">

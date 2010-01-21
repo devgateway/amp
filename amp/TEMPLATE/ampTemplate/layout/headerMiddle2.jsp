@@ -13,15 +13,13 @@
 
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
          <script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>       
         <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
@@ -204,7 +202,7 @@ border-right:1px solid white;
 var arrowClicked = false;
 //Run initialization for menu
 
-var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
+var oMenuBar = new YAHOO.widget.MenuBar("mainmenuHeader", { 
 constraintoviewport:false
  });
 

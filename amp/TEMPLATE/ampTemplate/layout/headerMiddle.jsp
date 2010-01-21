@@ -14,15 +14,14 @@
 
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
         
         <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
 <!--<div id="myAboutFilterWrapper" style="display: none;" >-->
@@ -781,7 +780,7 @@ function adminHelp(){
 
 var arrowClicked = false;
 //Run initialization for menu
-var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
+var oMenuBar = new YAHOO.widget.MenuBar("mainmenuHeader", { 
 constraintoviewport:false
  });
 
@@ -793,7 +792,7 @@ oMenuBar.render();
 
 oMenuBar.subscribe("show", function () {
 
-	if (YAHOOAmp.env.ua.ie === 7 && this.parent) {
+	if (YAHOO.env.ua.ie === 7 && this.parent) {
 		this.align();
 		this.align();
 	}

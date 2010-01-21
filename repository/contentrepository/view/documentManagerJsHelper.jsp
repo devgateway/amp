@@ -47,12 +47,12 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datasource-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ajaxconnection/connection-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datatable-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datasource-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/connection-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/menu-amp-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container_core-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 
 

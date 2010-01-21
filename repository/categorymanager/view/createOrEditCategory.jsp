@@ -161,7 +161,7 @@
 	function showLabelOptions(panelId) {
 		
 		if ( labelPanels[panelId] == null ) {
-			labelPanels[panelId]	= new YAHOOAmp.widget.Panel(panelId, 
+			labelPanels[panelId]	= new YAHOO.widget.Panel(panelId, 
 				{ width : "300px",
 				  fixedcenter : true,
 				  visible : true, 

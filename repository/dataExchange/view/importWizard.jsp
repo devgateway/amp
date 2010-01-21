@@ -19,9 +19,6 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
 
 <script type="text/javascript">
-  if (YAHOOAmp != null){
-    var YAHOO = YAHOOAmp;
-  }
   var tree;
   
 </script>
@@ -31,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
     <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
@@ -83,7 +80,7 @@ div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
-	width: 75px;
+	width: 300px;
 	padding: 0;
 	margin: 0;
 	z-index: 1;
@@ -105,26 +102,26 @@ div.fakefile2 input{
 <digi:instance property="deImportForm" />
   
 	<script type="text/javascript">
-	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchangeImport");
-	YAHOOAmp.amp.dataExchangeImport.numOfSteps	= 4;
+	YAHOO.namespace("YAHOO.amp.dataExchangeImport");
+	YAHOO.amp.dataExchangeImport.numOfSteps	= 4;
 		
-	YAHOOAmp.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
+	YAHOO.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
 		
         function navigateTab(value){
-        	YAHOOAmp.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
+        	YAHOO.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
         }
 		
 		
 		function initializeDragAndDrop() {
 			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 			
-			YAHOOAmp.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
-			YAHOOAmp.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
+			YAHOO.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
+			YAHOO.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
 		}
 
 /*
     function treeInit() {
-      YAHOOAmp.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
+      YAHOO.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
      
     }
   */  
@@ -147,32 +144,32 @@ div.fakefile2 input{
        }
        
        //handler for expanding all nodes
-       YAHOOAmp.util.Event.on("expand", "click", function(e) {
+       YAHOO.util.Event.on("expand", "click", function(e) {
          tree.expandAll();
-         YAHOOAmp.util.Event.preventDefault(e);
+         YAHOO.util.Event.preventDefault(e);
        });
        
        //handler for collapsing all nodes
-       YAHOOAmp.util.Event.on("collapse", "click", function(e) {
+       YAHOO.util.Event.on("collapse", "click", function(e) {
          tree.collapseAll();
-         YAHOOAmp.util.Event.preventDefault(e);
+         YAHOO.util.Event.preventDefault(e);
        });
 
        //handler for checking all nodes
-       YAHOOAmp.util.Event.on("check", "click", function(e) {
+       YAHOO.util.Event.on("check", "click", function(e) {
          checkAll();
-         YAHOOAmp.util.Event.preventDefault(e);
+         YAHOO.util.Event.preventDefault(e);
        });
        
        //handler for unchecking all nodes
-       YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
+       YAHOO.util.Event.on("uncheck", "click", function(e) {
          uncheckAll();
-         YAHOOAmp.util.Event.preventDefault(e);
+         YAHOO.util.Event.preventDefault(e);
        });
 
 
-       YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
-         YAHOOAmp.util.Event.preventDefault(e);
+       YAHOO.util.Event.on("getchecked", "click", function(e) {
+         YAHOO.util.Event.preventDefault(e);
        });
 
        //Function  creates the tree and 
@@ -180,24 +177,23 @@ div.fakefile2 input{
          function buildRandomTaskNodeTree() {
        
          //instantiate the tree:
-             tree = new YAHOOAmp.widget.TreeView("dataImportActivityTree");
+             tree = new YAHOO.widget.TreeView("dataImportActivityTree");
                
              <bean:define id="tree" name="deImportForm" property="activityStructure" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
              <%= ExportHelper.renderActivityTree(tree, request) %>
 
          //The tree is not created in the DOM until this method is called:
              tree.draw();
-             checkAll();
-             tree.expandAll();
+             
          }
 
 //       var callback = null;
 
        function buildRandomTaskBranch(node) {
          if (node.depth < 3) {
-//           YAHOOAmp.log("buildRandomTextBranch: " + node.index);
+//           YAHOO.log("buildRandomTextBranch: " + node.index);
            for ( var i = 0; i < Math.floor(Math.random() * 2) ; i++ ) {
-             var tmpNode = new YAHOOAmp.widget.TaskNode(node.label + "-" + i, node, false);
+             var tmpNode = new YAHOO.widget.TaskNode(node.label + "-" + i, node, false);
                      //tmpNode.onCheckClick = onCheckClick;
              buildRandomTaskBranch(tmpNode);
            }
@@ -241,7 +237,7 @@ div.fakefile2 input{
 
        
            
-		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
+		YAHOO.util.Event.addListener(window, "load", treeInit) ;
 </script>
 
 <script type="text/javascript">
@@ -379,7 +375,7 @@ div.fakefile2 input{
         							<div id="expandcontractdiv" align="left" style="width:85%">
 					                    <a id="expand" href="#"><digi:trn>Expand all</digi:trn></a>
 					                    <a id="collapse" href="#"><digi:trn>Collapse all</digi:trn></a>
-					                  
+        							
 					                    <a id="check" href="#"><digi:trn>Check all</digi:trn></a>
 					                    <a id="uncheck" href="#"><digi:trn>Uncheck all</digi:trn></a>
 			                    	</div>
@@ -387,12 +383,12 @@ div.fakefile2 input{
 			                    	<div id="dataImportActivityTree"></div>
 			                    </div>	      																		
         						</td>
-        					</tr>
+    						</tr>
     					</table>
 					</div>
 				</div>
                
-				<div id="tab_log_after_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_log_after_import"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                     <div  style="width:100%;height:250px;overflow:auto;text-align: left">
@@ -403,12 +399,12 @@ div.fakefile2 input{
                     </div>
 				</div>
 				
-				<div id="tab_select_activities"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_select_activities"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                    <div id="dataImportTree"></div>
 				</div>
-				<div id="tab_confirm_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_confirm_import"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px; ">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                     <digi:trn>Step 4 Select additional fields</digi:trn>

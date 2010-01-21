@@ -8,21 +8,21 @@
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 
 <script type="text/javascript">
-		YAHOOAmp.namespace("YAHOOAmp.amptab");
+		YAHOO.namespace("YAHOO.amptab");
 		
-		YAHOOAmp.amptab.handleCloseAbout = function() {
+		YAHOO.amptab.handleCloseAbout = function() {
 			if(navigator.appName == 'Microsoft Internet Explorer'){
 			}
 		}
 		
-		YAHOOAmp.amptab.handleClose = function() {
+		YAHOO.amptab.handleClose = function() {
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
 			filter.parent.removeChild(filter);
 			
 		};
 	
-		var myPanel1 = new YAHOOAmp.widget.Panel("new", {
+		var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"700px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -33,7 +33,7 @@
 		    draggable:true} );
 		    
 		
-	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
 	
 		    
 	function initScripts() {
@@ -46,7 +46,7 @@
 	}
 	
 	function showRecEvent() {
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("myEvent");
 		element.style.display = "inline";
 		

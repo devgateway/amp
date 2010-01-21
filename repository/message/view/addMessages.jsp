@@ -500,7 +500,7 @@ div.fakefile2 input{
 																		<td align="left" nowrap="nowrap">
 																			<div id="myAutoComplete">
 																				<html:text property="relatedActivityName" name="messageForm" styleId="myInput" style="width:320px;font-size:100%"></html:text>
-																				<img alt="" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    
+ 																				<img alt="" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    
 																		    	<div id="myContainer" style="width:315px;"></div>																		    	
 																		   	</div>
 																		   	<html:hidden property="selectedActId" styleId="myHidden"/>
@@ -687,7 +687,8 @@ div.fakefile2 input{
 					</tr>
 </table>
  
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/datasource-min.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/autocomplete-min.js"/>"></script>
 <script type="text/javascript">
 	var myArray = [
 		<c:forEach var="relAct" items="${messageForm.relatedActivities}">

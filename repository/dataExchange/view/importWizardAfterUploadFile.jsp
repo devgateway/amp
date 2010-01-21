@@ -18,9 +18,6 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
 
 <script type="text/javascript">
-  if (YAHOOAmp != null){
-    var YAHOO = YAHOOAmp;
-  }
   var tree;
   
 </script>
@@ -30,7 +27,7 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
     <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNodeImport.js"></script>
@@ -56,56 +53,56 @@
 
   <digi:instance property="deImportForm" />
 	<script type="text/javascript">
-	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchangeImport");
-	YAHOOAmp.amp.dataExchangeImport.numOfSteps	= 4;
+	YAHOO.namespace("YAHOO.amp.dataExchangeImport");
+	YAHOO.amp.dataExchangeImport.numOfSteps	= 4;
 		
-	YAHOOAmp.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
+	YAHOO.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
 		
         function navigateTab(value){
-        	YAHOOAmp.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
+        	YAHOO.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
         }
 		
 		
 		function initializeDragAndDrop() {
 			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 			
-			YAHOOAmp.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
-			YAHOOAmp.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
+			YAHOO.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
+			YAHOO.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
 		}
 
 
     function treeInit() {
-      YAHOOAmp.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
+      YAHOO.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
       buildRandomTaskNodeTree();
     }
     
     //handler for expanding all nodes
-    YAHOOAmp.util.Event.on("expand", "click", function(e) {
+    YAHOO.util.Event.on("expand", "click", function(e) {
       tree.expandAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
     
     //handler for collapsing all nodes
-    YAHOOAmp.util.Event.on("collapse", "click", function(e) {
+    YAHOO.util.Event.on("collapse", "click", function(e) {
       tree.collapseAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
 
     //handler for checking all nodes
-    YAHOOAmp.util.Event.on("check", "click", function(e) {
+    YAHOO.util.Event.on("check", "click", function(e) {
       checkAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
     
     //handler for unchecking all nodes
-    YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
+    YAHOO.util.Event.on("uncheck", "click", function(e) {
       uncheckAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
 
 
-    YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
-      YAHOOAmp.util.Event.preventDefault(e);
+    YAHOO.util.Event.on("getchecked", "click", function(e) {
+      YAHOO.util.Event.preventDefault(e);
     });
 
     //Function  creates the tree and 
@@ -113,7 +110,7 @@
       function buildRandomTaskNodeTree() {
     
       //instantiate the tree:
-          tree = new YAHOOAmp.widget.TreeView("dataImportTree");
+          tree = new YAHOO.widget.TreeView("dataImportTree");
           
           
           <bean:define id="tree" name="deImportForm" property="activityTree" type="org.digijava.module.dataExchange.dbentity.AmpDEImportLog" toScope="page"/>
@@ -194,7 +191,7 @@
            form.submit();
         }
           
-		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
+		YAHOO.util.Event.addListener(window, "load", treeInit) ;
 		
 	</script>
 

@@ -10,15 +10,18 @@
 <link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
 
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/connection-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/element-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/datasource-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/datatable-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/json-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/event-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/paginator-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script> 
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datatable-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script> 
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script> 
+
 <style>
 .yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
 color:#000000;
@@ -131,9 +134,9 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"700px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -272,7 +275,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 		showPanelLoading(msg);
 		<digi:context name="commentUrl" property="context/um/addUser.do"/>  
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}
 
 	-->
@@ -328,7 +331,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 					document.umAddUserForm.target = "_self";
 					//document.umAddUserForm.submit();
 					var url = "<%=selectType %>";
-					YAHOOAmp.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+					YAHOO.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
 				}
 				return false;
 			}
@@ -348,7 +351,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 					document.umAddUserForm.target = "_self";
 					//document.umAddUserForm.submit();
 					var url = "<%=selectGrp %>";
-					YAHOOAmp.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+					YAHOO.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
 					
 				}
 				return false;
@@ -472,13 +475,13 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 		u.setAttribute("autocomplete", "off");
 		
 	}
-	//YAHOOAmp.util.Event.addListener(window, "load", init_addUserForm) ;
+	//YAHOO.util.Event.addListener(window, "load", init_addUserForm) ;
 	function registerNewUser(){
       if(validate()){
         userRegistered = true;
 		<digi:context name="addNewUser" property="context/module/moduleinstance/registerUser.do" />
 		var url = "<%=addNewUser %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
          
       }
     }
@@ -491,7 +494,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 		<digi:context name="selectType" property="context/module/moduleinstance/addWorkSpaceUser.do" />
 		var url = "<%= selectType %>";
 		url += "?"+getParamsWS()+"&teamMemberId="+id+"&actionFlag=deleteWS";
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}
 	function cancelAddWorkSpace()
 	{
@@ -513,7 +516,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 		<digi:context name="commentUrl" property="context/um/addUser.do"/>  
 		var url = "<%=commentUrl %>";
 		url += "?"+ret;
-		YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}
 	function validateWS()
 	{
@@ -566,7 +569,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 			//showPanelLoading(msg);
 			<digi:context name="commentUrl" property="context/um/addWorkSpaceUser.do"/>  
 			var url = "<%=commentUrl %>";
-			YAHOOAmp.util.Connect.asyncRequest("POST",url+"?"+getParamsWS(), callback, '');
+			YAHOO.util.Connect.asyncRequest("POST",url+"?"+getParamsWS(), callback, '');
 		}
 	}
 </script>

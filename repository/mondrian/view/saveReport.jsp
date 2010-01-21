@@ -10,11 +10,11 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" >.</script>
 
 <div id="myContent" style="display: none">
 	<div id="myContentContent" class="content">
@@ -25,9 +25,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("saveCustomReports", {
+		var myPanel = new YAHOO.widget.Panel("saveCustomReports", {
 			width:"400px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -143,7 +143,7 @@
 		showPanelLoading();
 		<digi:context name="saveReport" property="context/module/moduleinstance/SaveHtml.do"/>
 		var url = "<%=saveReport%>?";
-		YAHOOAmp.util.Connect.asyncRequest("GET", url, callback);
+		YAHOO.util.Connect.asyncRequest("GET", url, callback);
 	}
 
 	function showPanelLoading(){
@@ -175,7 +175,7 @@ function save() {
 		var postString = "";
 		<digi:context name="showreport" property="context/module/moduleinstance/SaveHtml.do" />
 		var url = "<%=showreport%>"
-		YAHOOAmp.util.Connect.asyncRequest("GET", url, callback);
+		YAHOO.util.Connect.asyncRequest("GET", url, callback);
 		myclose();
 		reload();
 	}

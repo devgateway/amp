@@ -5,7 +5,7 @@
  * When a task is clicked, the state of the nodes and parent and children
  * are updated, and this behavior cascades.
  *
- * @extends YAHOOAmp.widget.TextNode
+ * @extends YAHOO.widget.TextNode
  * @constructor
  * @param oData    {object}  A string or object containing the data that will
  *                           be used to render this node.
@@ -13,8 +13,8 @@
  * @param expanded {boolean} The initial expanded/collapsed state
  * @param checked  {boolean} The initial checked/unchecked state
  */
-YAHOOAmp.widget.TaskNode = function(oData, oParent, expanded, checked, isMandatory, ident) {
-	YAHOOAmp.widget.TaskNode.superclass.constructor.call(this,oData,oParent,expanded);
+YAHOO.widget.TaskNode = function(oData, oParent, expanded, checked, isMandatory, ident) {
+	YAHOO.widget.TaskNode.superclass.constructor.call(this,oData,oParent,expanded);
     this.setMandatory(isMandatory);
     this.setUpCheck(checked || oData.checked);
     this.setId(ident);
@@ -22,7 +22,7 @@ YAHOOAmp.widget.TaskNode = function(oData, oParent, expanded, checked, isMandato
 };
 
 
-YAHOOAmp.extend(YAHOOAmp.widget.TaskNode, YAHOOAmp.widget.TextNode, {
+YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
 
     /**
      * True if checkstate is 1 (some children checked) or 2 (all children checked),
@@ -79,8 +79,8 @@ YAHOOAmp.extend(YAHOOAmp.widget.TaskNode, YAHOOAmp.widget.TextNode, {
          * implement its own node specific events this way.
          *
          * @event checkClick
-         * @for YAHOOAmp.widget.TreeView
-         * @param {YAHOOAmp.widget.Node} node the node clicked
+         * @for YAHOO.widget.TreeView
+         * @param {YAHOO.widget.Node} node the node clicked
          */
         if (this.tree && !this.tree.hasEvent("checkClick")) {
             this.tree.createEvent("checkClick", this.tree);
@@ -94,7 +94,7 @@ YAHOOAmp.extend(YAHOOAmp.widget.TaskNode, YAHOOAmp.widget.TextNode, {
 
     /**
      * The id of the check element
-     * @for YAHOOAmp.widget.TaskNode
+     * @for YAHOO.widget.TaskNode
      * @type string
      */
     getCheckElId: function() { 
@@ -123,8 +123,8 @@ YAHOOAmp.extend(YAHOOAmp.widget.TaskNode, YAHOOAmp.widget.TextNode, {
      */
     checkClick: function(oArgs) { 
 		var node = oArgs.node;
-		var target = YAHOOAmp.util.Event.getTarget(oArgs.event);
-		if (YAHOOAmp.util.Dom.hasClass(target,'ygtvspacer')) {
+		var target = YAHOO.util.Event.getTarget(oArgs.event);
+		if (YAHOO.util.Dom.hasClass(target,'ygtvspacer')) {
 //	        node.logger.log("previous checkstate: " + node.checkState);
 			if (node.mandatory == false){
 		        if (node.checkState === 0) {
@@ -282,7 +282,7 @@ YAHOOAmp.extend(YAHOOAmp.widget.TaskNode, YAHOOAmp.widget.TextNode, {
 //        this.updateParent();
 
     },
-    // Overrides YAHOOAmp.widget.TextNode
+    // Overrides YAHOO.widget.TextNode
 
     /*
 	getContentHtml: function() { 

@@ -1821,7 +1821,17 @@
 	<action name="fmAdvancedForm" path="/aim/fmAdvancedPopup" type="org.digijava.module.aim.action.FMAdvancedModeAction" scope="session" parameter="method">
 		<forward name="default" path="/showLayout.do?layout=fmAdvancedPopUp"/>
 	</action>
-     <action name="exportTableForm" path="/aim/exportAdminTable"  scope="request" type="org.digijava.module.aim.action.ExportAdminTable"/>
+    <action name="exportTableForm" path="/aim/exportAdminTable"  scope="request" type="org.digijava.module.aim.action.ExportAdminTable"/>
+    
+    <action name="aimTeamMemberForm" path="/aim/searchAvailableUsers" scope="session" type="org.digijava.module.aim.action.GetAvailableUsersForWorkspaceJSON">
+    	 <forward name="addedFromAdmin" path="/aim/teamMembers.do" />
+    </action>
+    
+    <action name="aimTeamMemberForm" path="/aim/assignUsersToWorkspace" scope="session" type="org.digijava.module.aim.action.AssignUsersToWorkspace">
+    	 <forward name="error" path="/aim/showAddTeamMemberJSON.do?fromPage=1" />
+    	  <forward name="addedFromAdmin" path="/aim/workspaceManager.do" />
+    	  <forward name="addedFromUser" path="/aim/teamMemberList.do" />
+    </action>
     
   </action-mappings>
 </struts-config>

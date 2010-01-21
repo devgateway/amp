@@ -134,6 +134,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
     
 	}
 </script>
+
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">
 	</div>
@@ -335,7 +336,7 @@ div.scrollable {
 			myPanel.show();
 			panelStart = 2;
 		}
-		checkErrorAndClose();
+		checkErrorAndClose();		
 	}
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
@@ -670,18 +671,40 @@ function showActivities(id, description){
     });
 }
 
-function assignNewMember(){
-	var msg='<digi:trn>Assign Member</digi:trn>';
-	myPanel.cfg.setProperty("width","500px");
-	myPanel.cfg.setProperty("height","400px"); 
-	showPanelLoading(msg);
+var responseSuccessJson = function(o){
+	//initDynamicTable1();
+	var response = o.responseText; 
+	var content = document.getElementById("popinContent");
+	content.innerHTML = response;
+	showContent();
+}
 
-	<digi:context name="commentUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>  
-	var url = "<%=commentUrl %>";
-	url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value;
+var responseFailureJson = function(o){ 
+	alert("Connection Failure!"); 
+}  
+var jsonCallback = 
+{ 
+	success:responseSuccessJson, 
+	failure:responseFailureJson 
+};
+
+function assignNewMember(){
+	//var msg='<digi:trn>Assign Member</digi:trn>';
+	//myPanel.cfg.setProperty("width","500px");
+	//myPanel.cfg.setProperty("height","400px"); 
+	//showPanelLoading(msg);
+
+	//<digi:context name="commentUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>  
+	//var url = "<%=commentUrl %>";
+	//url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value;
 	
 
-	YAHOOAmp.util.Connect.asyncRequest("POST",url, callback, '');	
+//	YAHOOAmp.util.Connect.asyncRequest("POST",url, jsonCallback, '');
+
+	<digi:context name="exportUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>;
+    document.aimWorkspaceForm.action="${exportUrl}?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value;
+    document.aimWorkspaceForm.target="_self";
+    document.aimWorkspaceForm.submit();	
 }
 function saveAddedMember(){
 	if(validateAddedMember()){
@@ -909,7 +932,7 @@ function setHoveredRow(rowId) {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="center" width="571">
+					<td height="16" vAlign="middle" width="571">
                     	<span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
@@ -962,8 +985,7 @@ function setHoveredRow(rowId) {
 													<td>
 													<digi:trn>keyword</digi:trn>:&nbsp;
 										              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
-													</td>
-													
+													</td>													
 													<td align="center">
 														<digi:trn>Type</digi:trn>:&nbsp;
 														<html:select property="workspaceType" styleClass="inp-text">
@@ -989,9 +1011,7 @@ function setHoveredRow(rowId) {
 										       <digi:trn>Click here to Add Teams</digi:trn>
 										    </c:set>
 											<digi:link href="/createWorkspace.do?dest=admin" title="${translation}" >
-											<digi:trn>
-											Add Team
-											</digi:trn>
+												<digi:trn>Add Team</digi:trn>
 											</digi:link>
 										</td></tr>
 										<tr><td>
@@ -1019,13 +1039,11 @@ function setHoveredRow(rowId) {
 										</td>
 										</tr>
 									</table>
-
 								</td>
 							</tr>
 						</table>
 					</td>
-
-<!--details-->
+					<!--details-->
 					<td  width="50%" vAlign="top">
 						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">

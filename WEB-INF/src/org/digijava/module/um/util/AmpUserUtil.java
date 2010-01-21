@@ -16,6 +16,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
@@ -205,6 +206,25 @@ public class AmpUserUtil {
 			}
 			throw new AimException("Cannot save user extension",e);
 		}
+	}
+	
+	public static Collection<User> getAllUsersNotBelongingToTeam(Long teamId) throws Exception{
+		Collection<User> retVal=null;
+		Session session=null;
+		String queryString=null;
+		Query qry=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString="select u from " +User.class.getName() +" u where u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
+			" tm where tm.ampTeam.ampTeamId=:teamId) order by u.email";
+			qry=session.createQuery(queryString);
+			qry.setLong("teamId", teamId);
+			retVal=qry.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new AimException("Cannot get users", e);
+		}
+		return retVal;
 	}
 
 }

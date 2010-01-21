@@ -1,14 +1,21 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
+import org.digijava.module.aim.util.HierarchyListable;
+import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
 
+import edu.emory.mathcs.backport.java.util.TreeSet;
 
-public class AmpSector implements Serializable, Comparable<AmpSector>, Identifiable, ARDimensionable
+
+public class AmpSector implements Serializable, Comparable<AmpSector>, Identifiable, ARDimensionable, HierarchyListable
 {
 	private Long ampSectorId ;
 	private AmpSector parentSectorId ;
@@ -28,6 +35,7 @@ public class AmpSector implements Serializable, Comparable<AmpSector>, Identifia
 	
 	private transient int level;
 	private transient boolean hasChildren;
+	private transient Collection<AmpSector> transientChildren;
 	
 	public String getSegmentCode() {
 		return segmentCode;
@@ -245,6 +253,33 @@ public void setAmpOrgId(AmpOrganisation org) {
 
 	public void setHasChildren(boolean hasChildren) {
 		this.hasChildren = hasChildren;
+	}
+
+	@Override
+	public int getCountDescendants() {
+		int ret = 1;
+		if ( this.getChildren() != null ) {
+			for ( HierarchyListable hl: this.getChildren() )
+				ret += hl.getCountDescendants();
+		}
+		return ret;
+	}
+
+	@Override
+	public String getLabel() {
+		return this.name;
+	}
+
+	@Override
+	public String getUniqueId() {
+		return this.ampSectorId.toString();
+	}
+
+	@Override
+	public Collection<AmpSector> getChildren() {
+		if (transientChildren == null)
+			transientChildren	= new TreeSet( new HierarchyListableComparator() );
+		return transientChildren;
 	}
 	
 }

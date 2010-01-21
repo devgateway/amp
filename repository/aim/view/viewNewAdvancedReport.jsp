@@ -20,7 +20,8 @@
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/dom-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 
@@ -101,7 +102,7 @@ session.setAttribute("progressValue", counter);
 
 <logic:notEqual name="viewFormat" scope="request" value="print">
 <div id="myFilterWrapper" style="display: none;" >
-	<div id="myFilter" style="display: none;" >
+	<div id="myFilter" style="display: none; height: 85%; overflow: hidden;" >
 			<jsp:include page="/aim/reportsFilterPicker.do" />
 	</div>
 	<div id="myRange" style="display: none">
@@ -423,16 +424,16 @@ session.setAttribute("progressValue", counter);
            		<c:set var="btnVarValue"><digi:trn>Search</digi:trn></c:set>
              	<input type="button" onclick="document.getElementsByName('aimReportsFilterPickerForm')[0].text.value='';document.getElementsByName('aimReportsFilterPickerForm')[0].indexString.value=quikSearch.value;submitFilters()"  value="${btnVarValue}">
              	</td><td align="right"">
-             
+             	
              	</td>
              	</tr>
              	</table>
              	</td>
              </tr>
 			<tr>
-			<logic:notEqual name="viewFormat" value="print">
+            <logic:notEqual name="viewFormat" value="print">
             	<td align="left" height="20">
-            	
+
             		<jsp:include page="legendPopup.jsp"/>
             	</td>
             </logic:notEqual>
@@ -532,13 +533,13 @@ session.setAttribute("progressValue", counter);
                 <logic:equal name="viewFormat" value="foldable">
                     <c:choose>
                         <c:when test="${report.startRow != 0}">
-                            <!-- Go to FIRST PAGE -->
+                    	<!-- Go to FIRST PAGE -->
                          <a class="yui-pg-first yuipaginationsimul"  onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">
                                 << <digi:trn>first</digi:trn>
-                        </a>
+                    	</a>
                         <a class="yui-pg-previous yuipaginationsimul" style="cursor:pointer;text-decoration: underline;color:#0066CC;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">
                             < <digi:trn key="aim:previous">prev</digi:trn>
-                        </a>
+                    	</a>
                         </c:when>
                          <c:otherwise>
                              <span class="yui-pg-first">
@@ -571,14 +572,14 @@ session.setAttribute("progressValue", counter);
                             <span class="yui-pg-current-page yui-pg-page"><fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/></span>
                         </c:when>
                         <c:otherwise>
-                            <logic:equal name="viewFormat" value="html">
+                    <logic:equal name="viewFormat" value="html">
                                 <a class="yui-pg-page yuipaginationsimul"  onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
-                                </logic:equal>
-                                <logic:equal name="viewFormat" value="foldable">
+                    </logic:equal>
+                    <logic:equal name="viewFormat" value="foldable">
                                     <a   class="yui-pg-page yuipaginationsimul" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">
-                                 </logic:equal>
+                    </logic:equal>
                             <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
-                        </c:otherwise>
+                        </c:otherwise>								
                            </a>
                     </c:choose>
              
@@ -592,11 +593,11 @@ session.setAttribute("progressValue", counter);
                         <c:when test="${(report.startRow+recordsPerPage+1) < report.visibleRows}">
                             <a  class="yui-pg-next yuipaginationsimul"  onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">
                                 <digi:trn key="aim:next">Next</digi:trn>>
-                            </a>
+                        </a>
 
                             <a class="yui-pg-last yuipaginationsimul" style="cursor:pointer;text-decoration: underline;color:#0066CC;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">
                                 <digi:trn>Last</digi:trn>>>
-                            </a>
+                        </a>
 
                         </c:when>
                         <c:otherwise>

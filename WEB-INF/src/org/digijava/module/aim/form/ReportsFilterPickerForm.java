@@ -3,17 +3,18 @@
  */
 package org.digijava.module.aim.form;
 
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.HierarchyListable;
+import org.digijava.module.aim.util.filters.GroupingElement;
+import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -26,8 +27,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private static final long serialVersionUID = -8336313984510706274L;
 	private Collection currencies;
 	private Collection calendars;
-	private Collection sectors;
-	private Collection secondarySectors;
+	
+	private Collection<GroupingElement<HierarchyListableImplementation>> sectorElements;
+	private Collection<GroupingElement<AmpTheme>> programElements;
+	private Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
+	private Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements;
+	private Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements;
+	private Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements;
+	
 	
 	private Object[] selectedHistory;
 	
@@ -48,17 +55,17 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<BeanWrapperImpl> countYears;
 	private Collection<BeanWrapperImpl> computedYearsRange;
 	
-	private Collection actRankCollection;
+	//private Collection actRankCollection;
 	private Collection pageSizes; // A0,A1,A2,A3,A4
-	private Collection donorTypes; // Ex: Multilateral, Bilateral, Regional
+	//private Collection donorTypes; // Ex: Multilateral, Bilateral, Regional
 									// Governament
-	private Collection donorGroups;
-	private Collection executingAgency;
-	private Collection<AmpOrganisation> donnorAgency;
+	//private Collection donorGroups;
+	//private Collection executingAgency;
+	//private Collection<AmpOrganisation> donnorAgency;
 	
-	private Collection<AmpOrganisation> responsibleorg;
-	private Collection implementingAgency;
-	private Collection beneficiaryAgency;
+	//private Collection<AmpOrganisation> responsibleorg;
+	//private Collection implementingAgency;
+	//private Collection beneficiaryAgency;
 	private Object[] regionSelected;
 	private Object[] approvalStatusSelected;
 
@@ -80,7 +87,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedProjectCategory;
 	private Object[] selectedresponsibleorg;
 	
-	private Collection regionSelectedCollection;
+	//private Collection regionSelectedCollection;
 	private Collection approvalStatusSelectedCollection;//AMP-3386
 
 	private Long fromYear;
@@ -93,15 +100,15 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long currency;
 	private Long calendar;
 	private Long ampReportId;
-	private Integer lineMinRank;
-	private Integer planMinRank;
+	private Object[] lineMinRanks;
+	private Object[] planMinRanks;
 	private String text;
 	private String indexString;
 	private String pageSize; // the specific page sizes
 
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
-	private Integer selectedBudget = null;
+	private Object[] selectedBudgets = null;
 	private Boolean justSearch = null;
 	
 	private Boolean unallocatedLocation = null;
@@ -111,9 +118,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private boolean isnewreport;
 	private Long countYearFrom;
 
-	private List nationalPlanningObjectives;
-	private List primaryPrograms;
-	private List secondaryPrograms;
+//	private List nationalPlanningObjectives;
+//	private List primaryPrograms;
+//	private List secondaryPrograms;
 
 	private Object[] selectedNatPlanObj;
 	private Object[] selectedPrimaryPrograms;
@@ -146,7 +153,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private Boolean sourceIsReportWizard;
 	
-	private Integer disbursementOrder;
+	private Object[] disbursementOrders;
 	
 	private String CRISNumber;
 	private String budgetNumber;
@@ -270,36 +277,18 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedSecondaryPrograms = selectedSecondaryPrograms;
 	}
 
-	public List getNationalPlanningObjectives() {
-		return nationalPlanningObjectives;
+	/**
+	 * @return the selectedBudgets
+	 */
+	public Object[] getSelectedBudgets() {
+		return selectedBudgets;
 	}
 
-	public void setNationalPlanningObjectives(List nationalPlanningObjectives) {
-		this.nationalPlanningObjectives = nationalPlanningObjectives;
-	}
-
-	public List getPrimaryPrograms() {
-		return primaryPrograms;
-	}
-
-	public void setPrimaryPrograms(List primaryPrograms) {
-		this.primaryPrograms = primaryPrograms;
-	}
-
-	public List getSecondaryPrograms() {
-		return secondaryPrograms;
-	}
-
-	public void setSecondaryPrograms(List secondaryPrograms) {
-		this.secondaryPrograms = secondaryPrograms;
-	}
-
-	public Integer getSelectedBudget() {
-		return selectedBudget;
-	}
-
-	public void setSelectedBudget(Integer selectedBudget) {
-		this.selectedBudget = selectedBudget;
+	/**
+	 * @param selectedBudgets the selectedBudgets to set
+	 */
+	public void setSelectedBudgets(Object[] selectedBudgets) {
+		this.selectedBudgets = selectedBudgets;
 	}
 
 	public Long getDefaultCurrency() {
@@ -318,20 +307,34 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.text = text;
 	}
 
-	public Integer getLineMinRank() {
-		return lineMinRank;
+
+
+	/**
+	 * @return the lineMinRanks
+	 */
+	public Object[] getLineMinRanks() {
+		return lineMinRanks;
 	}
 
-	public void setLineMinRank(Integer lineMinRank) {
-		this.lineMinRank = lineMinRank;
+	/**
+	 * @param lineMinRanks the lineMinRanks to set
+	 */
+	public void setLineMinRanks(Object[] lineMinRanks) {
+		this.lineMinRanks = lineMinRanks;
 	}
 
-	public Integer getPlanMinRank() {
-		return planMinRank;
+	/**
+	 * @return the planMinRanks
+	 */
+	public Object[] getPlanMinRanks() {
+		return planMinRanks;
 	}
 
-	public void setPlanMinRank(Integer planMinRank) {
-		this.planMinRank = planMinRank;
+	/**
+	 * @param planMinRanks the planMinRanks to set
+	 */
+	public void setPlanMinRanks(Object[] planMinRanks) {
+		this.planMinRanks = planMinRanks;
 	}
 
 	public Long getAmpReportId() {
@@ -372,7 +375,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedBeneficiaryAgency = null;
 				this.selectedImplementingAgency = null;
 				this.selectedProjectCategory = null;
-				this.selectedBudget = null;
+				this.selectedBudgets = null;
 				this.governmentApprovalProcedures = null;
 				this.unallocatedLocation = null;
 				this.justSearch=false;
@@ -381,10 +384,11 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedSecondaryPrograms = null;
 				this.selectedresponsibleorg=null;
 				this.approvalStatusSelected = null;
-				this.lineMinRank=null;
-				this.planMinRank=null;
+				this.lineMinRanks=null;
+				this.planMinRanks=null;
 				this.CRISNumber=null;
 				this.budgetNumber=null;
+				
 			}
 		}
 		
@@ -486,14 +490,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.risks = risks;
 	}
 
-	public Collection getSectors() {
-		return sectors;
-	}
-
-	public void setSectors(Collection sectors) {
-		this.sectors = sectors;
-	}
-
 	/*
 	 * public Object[] getSelectedDonors() { return selectedDonors; } public
 	 * void setSelectedDonors(Object[] selectedDonors) { this.selectedDonors =
@@ -555,14 +551,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.calendar = calendar;
 	}
 
-	public Collection getActRankCollection() {
-		return actRankCollection;
-	}
-
-	public void setActRankCollection(Collection actRankCollection) {
-		this.actRankCollection = actRankCollection;
-	}
-
 	public Collection getPageSizes() {
 		return pageSizes;
 	}
@@ -611,14 +599,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.jointCriteria = jointCriteria;
 	}
 
-	public Collection getRegionSelectedCollection() {
-		return regionSelectedCollection;
-	}
-
-	public void setRegionSelectedCollection(Collection regionSelectedCollection) {
-		this.regionSelectedCollection = regionSelectedCollection;
-	}
-
 	public Object[] getRegionSelected() {
 		return regionSelected;
 	}
@@ -635,14 +615,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.indexString = indexString;
 	}
 
-	public Collection getDonorTypes() {
-		return donorTypes;
-	}
-
-	public void setDonorTypes(Collection donorTypes) {
-		this.donorTypes = donorTypes;
-	}
-
 	public Object[] getSelectedDonorTypes() {
 		return selectedDonorTypes;
 	}
@@ -650,53 +622,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setSelectedDonorTypes(Object[] selectedDonorTypes) {
 		this.selectedDonorTypes = selectedDonorTypes;
 	}
-
-	public Collection getDonorGroups() {
-		return donorGroups;
-	}
-
-	public void setDonorGroups(Collection donorGroups) {
-		this.donorGroups = donorGroups;
-	}
-
+	
 	public Object[] getSelectedDonorGroups() {
 		return selectedDonorGroups;
 	}
 
 	public void setSelectedDonorGroups(Object[] selectedDonorGroups) {
 		this.selectedDonorGroups = selectedDonorGroups;
-	}
-
-	public Collection getBeneficiaryAgency() {
-		return beneficiaryAgency;
-	}
-
-	public void setBeneficiaryAgency(Collection beneficiaryAgency) {
-		this.beneficiaryAgency = beneficiaryAgency;
-	}
-
-	public Collection getExecutingAgency() {
-		return executingAgency;
-	}
-
-	public void setExecutingAgency(Collection executingAgency) {
-		this.executingAgency = executingAgency;
-	}
-
-	public Collection getImplementingAgency() {
-		return implementingAgency;
-	}
-
-	public void setImplementingAgency(Collection implementingAgency) {
-		this.implementingAgency = implementingAgency;
-	}
-
-	public Collection<AmpOrganisation> getResponsibleorg() {
-		return responsibleorg;
-	}
-
-	public void setResponsibleorg(Collection<AmpOrganisation> responsibleorg) {
-		this.responsibleorg = responsibleorg;
 	}
 
 	public Object[] getSelectedBeneficiaryAgency() {
@@ -754,14 +686,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public Long getCountYearFrom() {
 		return countYearFrom;
-	}
-
-	public Collection getSecondarySectors() {
-		return secondarySectors;
-	}
-
-	public void setSecondarySectors(Collection secondarySectors) {
-		this.secondarySectors = secondarySectors;
 	}
 
 	public Integer getResetRenderStartYear() {
@@ -848,14 +772,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedDonnorAgency = selectedDonnorAgency;
 	}
 
-	public Collection<AmpOrganisation> getDonnorAgency() {
-		return donnorAgency;
-	}
-
-	public void setDonnorAgency(Collection<AmpOrganisation> donnorAgency) {
-		this.donnorAgency = donnorAgency;
-	}
-
 	public Boolean getJustSearch() {
 		return justSearch;
 	}
@@ -888,10 +804,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.sourceIsReportWizard = sourceIsReportWizard;
 	}
 
-	public void setDisbursementOrder(Integer disbursementOrder) {
-		this.disbursementOrder = disbursementOrder;
-	}
-
 	public String getCRISNumber() {
 		return CRISNumber;
 	}
@@ -908,8 +820,20 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.budgetNumber = budgetNumber;
 	}
 
-	public Integer getDisbursementOrder() {
-		return disbursementOrder;
+	
+
+	/**
+	 * @return the disbursementOrders
+	 */
+	public Object[] getDisbursementOrders() {
+		return disbursementOrders;
+	}
+
+	/**
+	 * @param disbursementOrders the disbursementOrders to set
+	 */
+	public void setDisbursementOrders(Object[] disbursementOrders) {
+		this.disbursementOrders = disbursementOrders;
 	}
 
 	public Boolean getUnallocatedLocation() {
@@ -928,4 +852,98 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.amountinthousands = amountinthousands;
 	}
 
+	/**
+	 * @return the sectorElements
+	 */
+	public Collection<GroupingElement<HierarchyListableImplementation>> getSectorElements() {
+		return sectorElements;
+	}
+
+	/**
+	 * @param sectorElements the sectorElements to set
+	 */
+	public void setSectorElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> sectorElements) {
+		this.sectorElements = sectorElements;
+	}
+
+	/**
+	 * @return the programElements
+	 */
+	public Collection<GroupingElement<AmpTheme>> getProgramElements() {
+		return programElements;
+	}
+
+	/**
+	 * @param programElements the programElements to set
+	 */
+	public void setProgramElements(
+			Collection<GroupingElement<AmpTheme>> programElements) {
+		this.programElements = programElements;
+	}
+
+	/**
+	 * @return the donorElements
+	 */
+	public Collection<GroupingElement<HierarchyListableImplementation>> getDonorElements() {
+		return donorElements;
+	}
+
+	/**
+	 * @param donorElements the donorElements to set
+	 */
+	public void setDonorElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> donorElements) {
+		this.donorElements = donorElements;
+	}
+
+	/**
+	 * @return the relatedAgenciesElements
+	 */
+	public Collection<GroupingElement<HierarchyListableImplementation>> getRelatedAgenciesElements() {
+		return relatedAgenciesElements;
+	}
+
+	/**
+	 * @param relatedAgenciesElements the relatedAgenciesElements to set
+	 */
+	public void setRelatedAgenciesElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements) {
+		this.relatedAgenciesElements = relatedAgenciesElements;
+	}
+
+	/**
+	 * @return the financingLocationElements
+	 */
+	public Collection<GroupingElement<HierarchyListableImplementation>> getFinancingLocationElements() {
+		return financingLocationElements;
+	}
+
+	/**
+	 * @param financingLocationElements the financingLocationElements to set
+	 */
+	public void setFinancingLocationElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements) {
+		this.financingLocationElements = financingLocationElements;
+	}
+
+	/**
+	 * @return the otherCriteriaElements
+	 */
+	public Collection<GroupingElement<HierarchyListableImplementation>> getOtherCriteriaElements() {
+		return otherCriteriaElements;
+	}
+
+	/**
+	 * @param otherCriteriaElements the otherCriteriaElements to set
+	 */
+	public void setOtherCriteriaElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements) {
+		this.otherCriteriaElements = otherCriteriaElements;
+	}
+
+
+	
+	
+	
 }

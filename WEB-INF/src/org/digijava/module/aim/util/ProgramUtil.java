@@ -750,6 +750,30 @@ public class ProgramUtil {
 
         return ret;
     }
+    public static AmpTheme getAmpThemesAndSubThemesHierarchy(AmpTheme parent) {
+
+        try {
+            /* 
+             We must create new program object because if you modify the name of program 
+             the changes will be saved in db even though you don't save collection, strange issue....
+            */
+            AmpTheme parentWithNewName=new AmpTheme();
+            parentWithNewName.setName(parent.getName().toUpperCase());
+            parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
+            
+            List<AmpTheme> dbChildrenReturnSet =
+                    ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
+            
+            parent.getChildren().addAll( dbChildrenReturnSet );
+        
+
+        } catch (DgException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return parent;
+    }
 
                 
                 /**

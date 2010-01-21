@@ -158,6 +158,7 @@ background-color: yellow;
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>" ></script>
 
 <!-- END - For DHTML Tab View of Filters -->
@@ -307,10 +308,13 @@ saveReportEngine	= null;
 	
 	function showFilter() {
 		YAHOOAmp.amptab.init();
+		YAHOOAmp.amptab.afterFiltersLoad();
 		var element = document.getElementById("myFilter");
-		element.style.display = "inline";
+		element.style.display 	= "block";
+		element.style.height	= "380px";
 		
 		myPanel1.setBody(element);
+		myPanel1.cfg.setProperty("height", "400px" );
 		myPanel1.center();
 		myPanel1.show();
 
@@ -327,6 +331,39 @@ saveReportEngine	= null;
 		</field:display>
 		
 		
+	}
+	YAHOOAmp.amptab.afterFiltersLoad	= function (){
+		donorsPropertyObj		= new RowManagerProperty(null, "filter_rows_donors", "#ceeeff");
+		relAgenciesPropertyObj	= new RowManagerProperty(null, "filter_rows_rel_agencies", "#ceeeff");
+		sectorsPropertyObj		= new RowManagerProperty(null, "filter_rows_sectors", "#ceeeff");
+		programsPropertyObj		= new RowManagerProperty(null, "filter_rows_programs", "#ceeeff");
+		financingLocPropertyObj		= new RowManagerProperty(null, "filter_rows_finanacing_loc", "#ceeeff");
+		otherCriteriaPropertyObj	= new RowManagerProperty(null, "filter_rows_other_criteria", "#ceeeff");
+
+		YAHOOAmp.amptab.initDisplayOfMemberSelectors("donorsTab");
+		YAHOOAmp.amptab.initDisplayOfMemberSelectors("relAgenciesTab");
+		YAHOOAmp.amptab.initDisplayOfMemberSelectors("sectorsTab");
+		YAHOOAmp.amptab.initDisplayOfMemberSelectors("programsTab");
+		YAHOOAmp.amptab.initDisplayOfMemberSelectors("financingLocTab");
+		YAHOOAmp.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
+	}
+
+	YAHOOAmp.amptab.initDisplayOfMemberSelectors	= function(bigDivId) {
+		var bigDivEl		= document.getElementById(bigDivId);
+		//alert("aici" + bigDivEl);
+		if (bigDivEl != null) {
+			var listOfDivs	= bigDivEl.getElementsByTagName("div");
+			if (listOfDivs != null && listOfDivs.length > 0) {
+				for (var i=0; i<listOfDivs.length; i++) {
+					var divYuiEl	= new YAHOOAmp.util.Element(listOfDivs[i]);
+					if ( divYuiEl.hasClass("grouping_selector_wrapper") ) {
+						var buttonEl	= listOfDivs[i].getElementsByTagName("button")[0];
+						buttonEl.click();
+						break;
+					}
+				}
+			}
+		}
 	}
 	
 	function addTitleSelect(selectName){

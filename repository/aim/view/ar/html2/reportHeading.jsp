@@ -31,9 +31,28 @@
   <%boolean first=true;
   	if (curDepth == 0) {
   %>
-  	<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" id="repHierarchy" scope="page">
-  		<td class="reportHeader" 
-  		rowspan="${columnReport.maxColumnDepth+1}">${repHierarchy.column.columnName}</td>
+  	<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" 
+  						indexId="hIdx" id="repHierarchy" scope="page">
+  		<c:set var="hSortOrder">descending</c:set>
+  		<c:set var="sortIconPath"></c:set>
+  		<logic:notEmpty name="report" property="levelSorters">
+				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
+					<c:if test="${levelId==hIdx}">
+						<c:set var="hSortOrder">${sorter.value}</c:set>
+						<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/up_red.gif</c:set>
+						<c:if test="${sorter.value=='descending'}">
+							<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/down_red.gif</c:set>
+						</c:if>
+					</c:if>
+				</logic:iterate>
+		</logic:notEmpty>
+  		<td class="reportHeader" onclick="sortHierarchy( '${repHierarchy.column.columnName}', '${hSortOrder}' )"
+  		rowspan="${columnReport.maxColumnDepth+1}">
+  			${repHierarchy.column.columnName} 
+  			<c:if test="${sortIconPath!=''}">
+  				<img src= "${sortIconPath}" align="absmiddle" border="0"/>
+  			</c:if>
+  		</td>
   	</logic:iterate>
   <% } %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">

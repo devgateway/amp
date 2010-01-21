@@ -1,8 +1,10 @@
 package org.digijava.module.search.action;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -82,16 +84,16 @@ public class Search extends Action {
 				fromDate = DateTimeUtil.parseDate(searchForm.getFromDate());
 				toDate = DateTimeUtil.parseDate(searchForm.getToDate());
 				
-				if (dateSelection==1 && searchForm.isSearchByDate()) {
-					byDateSql = " AND (date_updated between '"+fromDate+"' and '"+toDate+"')";
+			
+				SimpleDateFormat  dateForMysql = new SimpleDateFormat("yyyy-MM-dd");	
+				
+			if (dateSelection==1 && searchForm.isSearchByDate()) {
+					byDateSql = " AND (date_updated between '"+dateForMysql.format(fromDate)+" 00:00:00' and '"+dateForMysql.format(toDate)+" 23:59:59')";
+				} else if (dateSelection==2  && searchForm.isSearchByDate()) {
+					byDateSql = " AND (date_created between '"+dateForMysql.format(fromDate)+" 00:00:00' and '"+dateForMysql.format(toDate)+" 23:59:59')";
 				} else {
 					byDateSql="";
-				}
-				if (dateSelection==2  && searchForm.isSearchByDate()) {
-					byDateSql = " AND (date_created between '"+fromDate+"' and '"+toDate+"')";
-				} else {
-					byDateSql="";
-				}
+				} 
 			}
 
 			
@@ -143,7 +145,8 @@ public class Search extends Action {
 				request.setAttribute("resultResources", resultResources);
 		}
 		// TODO: searching documents
-
+		
+		searchForm.setSearchByDate(false);
 		return mapping.findForward("forward");
 	}
 

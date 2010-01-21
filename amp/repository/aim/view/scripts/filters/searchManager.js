@@ -46,7 +46,7 @@ SearchManager.prototype.findNext	= function() {
 				spans[i].style.fontWeight	= "";
 				spans[i].style.color		= "";
 				var spanString	= spans[i].innerHTML.toLowerCase();
-				if ( spanString.indexOf(this.inputEl.value) >= 0 ) {
+				if ( spanString.indexOf(this.inputEl.value.toLowerCase()) >= 0 ) {
 					spans[i].style.fontWeight	= "bold";
 					if ( this.position == numFound ) {
 						spans[i].style.color	= "red";
@@ -75,7 +75,7 @@ SearchManager.prototype.findPrev	= function() {
 			spans[i].style.fontWeight	= "";
 			spans[i].style.color		= "";
 			var spanString	= spans[i].innerHTML.toLowerCase();
-			if ( spanString.indexOf(this.inputEl.value) >= 0 ) {
+			if ( spanString.indexOf(this.inputEl.value.toLowerCase()) >= 0 ) {
 				spans[i].style.fontWeight	= "bold";
 				if ( this.position-2 == numFound ) {
 					spans[i].style.color	= "red";

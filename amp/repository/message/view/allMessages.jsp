@@ -13,6 +13,7 @@
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
 <!-- Yahoo Panel --> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
@@ -667,12 +668,17 @@ background-color:yellow;
 			var paginationParams=paginationTag.childNodes[0];
 			if(paginationParams!=null){
 				var paginationTD=document.createElement('TD');
-				var paginationTDContent=pagesTrn+':';
+                paginationTD.className= "yui-skin-sam";
+				var paginationTDContent='';
 					if(currentPage>1){
 						var prPage=currentPage-1;
-						paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
-						paginationTDContent+='<a href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > &lt; </a>';								
+						paginationTDContent+='<a class="yui-pg-first" href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt;<digi:trn>first</digi:trn></a> ';
+						paginationTDContent+='<a class="yui-pg-previous" href="javascript:goToPage('+prPage+')" title="'+prevPage+'" >&lt;<digi:trn key="aim:previous">prev</digi:trn> </a>';
 					}
+                    else{
+                        paginationTDContent+='<span class="yui-pg-first">&lt;&lt; <digi:trn>first</digi:trn> </span> ';
+						paginationTDContent+='<span class="yui-pg-previous">&lt;<digi:trn>prev</digi:trn> </span>';
+                    }
 					paginationTDContent+='&nbsp';
 					if(allPages!=null){
 						var fromIndex=1;
@@ -688,16 +694,21 @@ background-color:yellow;
 							toIndex=currentPage+2;
 						}
 						for(var i=fromIndex;i<=toIndex;i++){
-							if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>|&nbsp;';}
-							if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
+							if(i<=allPages && i==page) {paginationTDContent+='<span class="yui-pg-current-page yui-pg-page">'+i+'</span>';}
+							if(i<=allPages && i!=page) {paginationTDContent+='<a class="yui-pg-page" href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>'; }
 						}
 					}
 					if(page<allPages){
 						var nextPg=page+1;									
-						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
-						paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
-					}	
-					paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
+						paginationTDContent+='<a class="yui-pg-next" href="javascript:goToPage('+nextPg+')" title="'+nextPage+'"><digi:trn jsFriendly="true">Next</digi:trn>&gt;</a>';
+						paginationTDContent+='<a class="yui-pg-last" href="javascript:goToPage('+allPages+')" title="'+lastPg+'"><digi:trn jsFriendly="true">Last</digi:trn>&gt;&gt;</a>';
+					}
+                    else{
+                       paginationTDContent+='<span class="yui-pg-next"><digi:trn jsFriendly="true">Next</digi:trn>&gt;</span>';
+                       paginationTDContent+='<span class="yui-pg-last"><digi:trn jsFriendly="true">Last</digi:trn>&gt;&gt;</span>';
+
+                    }
+					//paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
 				paginationTD.innerHTML=	paginationTDContent;						
 				paginationTR.appendChild(paginationTD);						
 			}

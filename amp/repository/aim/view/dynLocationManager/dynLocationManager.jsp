@@ -179,7 +179,7 @@
 
 	
 
-	YAHOOAmp.util.Event.addListener(window, "load", initTree) ;
+	YAHOO.util.Event.addListener(window, "load", initTree) ;
 </script>
 <bean:define id="myForm" toScope="request" name="aimDynLocationManagerForm" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="90%" class="box-border-nopadding">

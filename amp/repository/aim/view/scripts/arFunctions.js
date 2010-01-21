@@ -477,7 +477,7 @@ RowSelector.prototype.colorRow	= function (color) {
 	if (children!=null && children.length!=null) {
 		for (var i=0; i<children.length; i++) {
 			var child		= children[i];
-			var childYuiEl	= new YAHOOAmp.util.Element(child);
+			var childYuiEl	= new YAHOO.util.Element(child);
 			if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null || !childYuiEl.hasClass(this.skippedClass) ) ) {
 				child.style.backgroundColor	= color;
 			}

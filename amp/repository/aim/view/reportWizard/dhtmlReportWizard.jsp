@@ -12,18 +12,17 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-    <script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>">.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/animation-min.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
-	<%-- <script type="text/javascript" src=".<digi:file src='module/aim/scripts/logger/logger-min.js'/>">.</script> --%>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/ajaxconnection/connection-min.js'/>" > .</script>
+    <script type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/element-min.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>">.</script>
+	<script type="text/javascript" src="<digi:file src='script/yui/animation-min.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/tabview-min.js'/>" >.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/connection-min.js'/>" > .</script>
 	
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
 	
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
@@ -430,7 +429,7 @@
 					</table>
 					</div>
 				</div>
-				<div id="columns_step_div"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="columns_step_div"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
 					<c:set var="stepNum" value="1"  scope="request" />
 					<jsp:include page="toolbar.jsp" />
 					<div style="height: 370px;">
@@ -486,7 +485,7 @@
 					</table>
 					</div>
 				</div>
-				<div id="hierarchies_step_div"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="hierarchies_step_div"  class="yui-hidden"  style="padding: 0px 0px 1px 0px; ">
 					<c:set var="stepNum" value="2" scope="request" />
 					<jsp:include page="toolbar.jsp" />
 					<div style="height: 370px;">
@@ -530,7 +529,7 @@
 					</table>
 					</div>
 				</div>
-				<div id="measures_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; display: none;" >
+				<div id="measures_step_div" class="yui-hidden" style="padding: 0px 0px 1px 0px; " >
 					<c:set var="stepNum" value="3" scope="request" />
 					<jsp:include page="toolbar.jsp" />
 					<div style="height: 370px;">

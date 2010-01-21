@@ -2,11 +2,13 @@ package org.digijava.module.categorymanager.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.Versionable;
+import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -15,7 +17,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author Alex Gartner
  *
  */
-public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, Versionable {
+public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, Versionable, HierarchyListable {
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
@@ -124,5 +126,25 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 				new Output(null, new String[] { "Class: " }, new Object[] { this.ampCategoryClass.getName() }));
 		out.getOutputs().add(new Output(null, new String[] { " Value: " }, new Object[] { this.value }));
 		return out;
+	}
+
+	@Override
+	public Collection<? extends HierarchyListable> getChildren() {
+		return null;
+	}
+
+	@Override
+	public int getCountDescendants() {
+		return 1;
+	}
+
+	@Override
+	public String getLabel() {
+		return this.value;
+	}
+
+	@Override
+	public String getUniqueId() {
+		return id+"";
 	}
 }

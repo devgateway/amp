@@ -249,8 +249,8 @@ public class AmpARFilter extends PropertyListable {
 	private boolean widget = false;
 	private boolean publicView = false;
 	private Boolean budget = null;
-	private Integer lineMinRank;
-	private Integer planMinRank;
+	private Collection<Integer> lineMinRank;
+	private Collection<Integer> planMinRank;
 	private String fromDate;
 	private String toDate;
 	private Integer fromMonth;
@@ -738,10 +738,10 @@ public class AmpARFilter extends PropertyListable {
 				+ Util.toCSString(regions) + ")";
 		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("
 				+ Util.toCSString(financingInstruments) + ")";
-		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="
-				+ lineMinRank;
-		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="
-				+ planMinRank;
+		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
+				+ Util.toCSString(lineMinRank) + ")";
+		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank IN ("
+				+ Util.toCSString( planMinRank ) + ")";
 		//String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
 		//		+ (regionSelected==null?null:regionSelected.getIdentifier());
 		
@@ -1033,9 +1033,9 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(FINANCING_INSTR_FILTER);
 		if (risks != null && risks.size() > 0)
 			queryAppend(RISK_FILTER);
-		if ((lineMinRank != null) && (lineMinRank !=-1))
+		if ((lineMinRank != null) && (lineMinRank.size() > 0))
 			queryAppend(LINE_MIN_RANK_FILTER);
-		if ((planMinRank != null)&&(planMinRank!=-1))
+		if ((planMinRank != null)&&(planMinRank.size() > 0))
 			queryAppend(PLAN_MIN_RANK_FILTER);
 		//if (regionSelected != null)
 		//	queryAppend(REGION_SELECTED_FILTER);
@@ -1080,8 +1080,6 @@ public class AmpARFilter extends PropertyListable {
 					+ ((jointCriteria)?"1":"0");;
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
-		
-		
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
 		
@@ -1351,19 +1349,19 @@ public class AmpARFilter extends PropertyListable {
 
 	private static final String IGNORED_PROPERTIES = "class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
 	@PropertyListableIgnore
-	public Integer getLineMinRank() {
+	public Collection<Integer> getLineMinRank() {
 		return lineMinRank;
 	}
 
-	public void setLineMinRank(Integer lineMinRank) {
+	public void setLineMinRank(Collection<Integer> lineMinRank) {
 		this.lineMinRank = lineMinRank;
 	}
 	@PropertyListableIgnore
-	public Integer getPlanMinRank() {
+	public Collection<Integer> getPlanMinRank() {
 		return planMinRank;
 	}
 
-	public void setPlanMinRank(Integer planMinRank) {
+	public void setPlanMinRank(Collection<Integer> planMinRank) {
 		this.planMinRank = planMinRank;
 	}
 
@@ -1790,7 +1788,6 @@ public class AmpARFilter extends PropertyListable {
 	public void setLucene(String luceneIndex) {
 		this.lucene = luceneIndex;
 	}
-
 
 	
 }

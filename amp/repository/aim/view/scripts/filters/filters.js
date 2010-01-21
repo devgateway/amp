@@ -26,75 +26,30 @@ function resetFilter(){
 		if (aimReportsFilterPickerForm.toMonth)
 			aimReportsFilterPickerForm.toMonth.selectedIndex=0;
 		
-		if (aimReportsFilterPickerForm.selectedSectors)
-			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedSecondarySectors)
-			aimReportsFilterPickerForm.selectedSecondarySectors.selectedIndex=-1;
-          
-        if (aimReportsFilterPickerForm.selectedNatPlanObj)
-              aimReportsFilterPickerForm.selectedNatPlanObj.selectedIndex=-1;
+		resetElement(aimReportsFilterPickerForm.selectedSectors);
+		resetElement(aimReportsFilterPickerForm.selectedSecondarySectors);
+		resetElement(aimReportsFilterPickerForm.selectedNatPlanObj);
+		resetElement(aimReportsFilterPickerForm.selectedPrimaryPrograms);
+        resetElement(aimReportsFilterPickerForm.selectedSecondaryPrograms);
+        resetElement(aimReportsFilterPickerForm.selectedBudget);
+        resetElement(aimReportsFilterPickerForm.selectedRisks);
+        resetElement(aimReportsFilterPickerForm.regionSelected);
+        resetElement(aimReportsFilterPickerForm.approvalStatusSelected);
+        resetElement(aimReportsFilterPickerForm.lineMinRank);
+        resetElement(aimReportsFilterPickerForm.planMinRank);
+        resetElement(aimReportsFilterPickerForm.selectedStatuses);
+        resetElement(aimReportsFilterPickerForm.selectedFinancingInstruments);
         
-        if (aimReportsFilterPickerForm.selectedPrimaryPrograms)
-              aimReportsFilterPickerForm.selectedPrimaryPrograms.selectedIndex=-1;
-        
-        if (aimReportsFilterPickerForm.selectedSecondaryPrograms)
-              aimReportsFilterPickerForm.selectedSecondaryPrograms.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedBudget)
-			aimReportsFilterPickerForm.selectedBudget.checked=false;
-		
-		/*if (aimReportsFilterPickerForm.selectedDonors)
-			aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1; */
-		
-		if (aimReportsFilterPickerForm.selectedRisks)
-			aimReportsFilterPickerForm.selectedRisks.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.regionSelected)
-			aimReportsFilterPickerForm.regionSelected.selectedIndex=0;
-		
-		if(aimReportsFilterPickerForm.approvalStatusSelected)
-			aimReportsFilterPickerForm.approvalStatusSelected.selectedIndex=0;
-		
-		if(aimReportsFilterPickerForm.selectedresponsibleorg)
-			aimReportsFilterPickerForm.selectedresponsibleorg.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.lineMinRank)
-			aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;
-			
-		if (aimReportsFilterPickerForm.planMinRank)
-			aimReportsFilterPickerForm.planMinRank.selectedIndex=0;
-		
-		if (aimReportsFilterPickerForm.selectedStatuses)
-			aimReportsFilterPickerForm.selectedStatuses.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedFinancingInstruments)
-			aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedTypeOfAssistance)
-			aimReportsFilterPickerForm.selectedTypeOfAssistance.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedDonorGroups)
-			aimReportsFilterPickerForm.selectedDonorGroups.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedDonorTypes)
-			aimReportsFilterPickerForm.selectedDonorTypes.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedProjectCategory)
-			aimReportsFilterPickerForm.selectedProjectCategory.selectedIndex=-1;
+ 		resetElement(aimReportsFilterPickerForm.selectedTypeOfAssistance);
+ 		resetElement(aimReportsFilterPickerForm.selectedDonorGroups);
+ 		resetElement(aimReportsFilterPickerForm.selectedDonorTypes);
+ 		resetElement(aimReportsFilterPickerForm.selectedProjectCategory);
+ 		resetElement(aimReportsFilterPickerForm.selectedBeneficiaryAgency);
+ 		resetElement(aimReportsFilterPickerForm.selectedExecutingAgency);
+ 		resetElement(aimReportsFilterPickerForm.selectedImplementingAgency);
+ 		resetElement(aimReportsFilterPickerForm.selectedDonnorAgency);
 
-		if (aimReportsFilterPickerForm.selectedBeneficiaryAgency)
-			aimReportsFilterPickerForm.selectedBeneficiaryAgency.selectedIndex=-1;
-
-		if (aimReportsFilterPickerForm.selectedExecutingAgency)
-			aimReportsFilterPickerForm.selectedExecutingAgency.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedImplementingAgency)
-			aimReportsFilterPickerForm.selectedImplementingAgency.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedDonnorAgency)
-			aimReportsFilterPickerForm.selectedDonnorAgency.selectedIndex=-1;
-	
+			
 		if (aimReportsFilterPickerForm.jointCriteria){
 			aimReportsFilterPickerForm.jointCriteria.checked=false;
 		}
@@ -107,3 +62,43 @@ function resetFilter(){
 			aimReportsFilterPickerForm.computedYear.selectedIndex=0;
 		}
 	}
+
+function resetElement( elem ) {
+	if (elem != null && elem.length > 1)
+		for (var i=0; i<elem.length; i++)
+			elem[i].checked = false;
+}
+
+function toggleCheckChildren(checkboxEl) {
+	var parentTdEl				= checkboxEl.parentNode;
+	var descendantCheckboxes	= parentTdEl.getElementsByTagName('input');
+	for (var i=0; i<descendantCheckboxes.length; i++ ) {
+		descendantCheckboxes[i].checked	= checkboxEl.checked ;
+	}
+}
+
+
+function DivManager(divId, propertyObj) {
+	this.divEl			= document.getElementById(divId);
+	this.propertyObj	= propertyObj;
+}
+
+DivManager.prototype.onSelect		= function () {
+	if ( this.propertyObj.lastShownDiv	!= null ) 
+		this.propertyObj.lastShownDiv.style.display	= "none";
+	this.divEl.style.display		= "block";
+	this.propertyObj.lastShownDiv	= this.divEl;
+	var parentDiv					= this.divEl
+	var found						= false;
+	for (var i=0; i<4; i++) { //should be more than 5 steps aways
+		parentDiv	= parentDiv.parentNode;
+		if ( parentDiv.nodeName.toLowerCase() == "div" && parentDiv.id.indexOf("Tab") > 0  ){
+			found	= true;
+			break;
+		}
+	}
+	if (found)
+		getSearchManagerInstanceById( parentDiv.id+"_search" ).setDiv(this.divEl);
+	else 
+		alert("Not found");
+}

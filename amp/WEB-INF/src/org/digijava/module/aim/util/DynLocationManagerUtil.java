@@ -603,7 +603,22 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
-	
+	public static AmpCategoryValueLocations getLocationOpenedSession(Long id) {
+		Session dbSession										= null;
+		try {
+			dbSession			= PersistenceManager.getRequestDBSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.id=:id)" ;			
+			Query qry			= dbSession.createQuery(queryString);
+			qry.setLong("id", id);
+			AmpCategoryValueLocations returnLoc		= (AmpCategoryValueLocations)qry.uniqueResult();
+			return returnLoc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
 
 	
 	public static AmpCategoryValueLocations getLocationByIdRequestSession(Long id) {
@@ -652,6 +667,14 @@ public class DynLocationManagerUtil {
 		
 	}
 	
+	
+	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws Exception  {
+		AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(  
+				FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+		country 					= getLocationOpenedSession( country.getId() );
+		
+		return country.getChildLocations();
+	}
 	
 	public static List<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry() throws Exception  {
 		AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(  FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);

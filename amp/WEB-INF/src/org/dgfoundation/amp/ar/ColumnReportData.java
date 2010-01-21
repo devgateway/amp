@@ -530,8 +530,6 @@ public class ColumnReportData extends ReportData {
 			}
 			
 		}
-		System.out.println("Shouldn't get here !!! " + this.toString() + " !! prev rows: " + numOfPreviousRows);
-		System.out.println("!! ");
 		
 	}
 	

@@ -438,21 +438,37 @@ function setPointerhtml(theRow, theRowNum, theAction, theDefaultColor, thePointe
 
 RowSelector.prototype.objectMap	= new Object();
 RowSelector.prototype.uniqueId	= 0;
-function RowSelector(rowEl) {
-	this.rowEl				= rowEl;
-	this.originalColor		= rowEl.style.backgroundColor;
-	this.markerColor		= "lightgreen";
-	this.forever			= false;
-	this.isMarked			= false;
-}
-function getRowSelectorInstance(rowEl){
-	if ( rowEl.id == null || rowEl.id.length==0) {
-		rowEl.id	= "report_row_" + (RowSelector.prototype.uniqueId++);
+function RowSelector(rowEl, propertyObj, callback ) {
+	if (rowEl != null){
+		this.propertyObj		= propertyObj;
+		this.rowEl				= rowEl;
+		this.originalColor		= "white";
+		if ( rowEl.style != null && rowEl.style.backgroundColor != null )
+			this.originalColor		= rowEl.style.backgroundColor;
+		this.markerColor		= propertyObj.markerColor;
+		this.skippedClass		= propertyObj.skippedClass;
+		this.baseId				= propertyObj.baseId;			
+		this.forever			= false;
+		this.isMarked			= false;
+		this.callback			= callback;
 	}
-	var rowObj	= RowSelector.prototype.objectMap[rowEl.id];
+}
+function getRowSelectorInstance(rowEl, propertyObj, callback, unique ){
+	var objectMap		= RowSelector.prototype.objectMap;
+	if (unique != null && unique) {
+		objectMap		= UniqueRowSelector.prototype.objectMap;
+	}
+	if ( rowEl.id == null || rowEl.id.length==0) {
+		rowEl.id	= propertyObj.baseId + (RowSelector.prototype.uniqueId++);
+	}
+	var rowObj	= objectMap[rowEl.id];
 	if (rowObj == null) { 
-		rowObj	= new RowSelector(rowEl);
-		RowSelector.prototype.objectMap[rowEl.id]	= rowObj;
+		if (unique != null && unique) {
+			rowObj	= new UniqueRowSelector(rowEl, propertyObj, callback );
+		}
+		else
+			rowObj	= new RowSelector(rowEl, propertyObj, callback );
+		objectMap[rowEl.id]	= rowObj;
 	}
 	return rowObj;
 }
@@ -462,7 +478,7 @@ RowSelector.prototype.colorRow	= function (color) {
 		for (var i=0; i<children.length; i++) {
 			var child		= children[i];
 			var childYuiEl	= new YAHOOAmp.util.Element(child);
-			if ( child.nodeName.toLowerCase()=="td" && !childYuiEl.hasClass("hierarchyCell") ) {
+			if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null || !childYuiEl.hasClass(skippedClass) ) ) {
 				child.style.backgroundColor	= color;
 			}
 		}
@@ -490,20 +506,68 @@ RowSelector.prototype.unmarkRow	= function (forever) {
 			this.colorRow("");
 		}
 }
+
 RowSelector.prototype.toggleRow	= function () {
 	if ( this.isMarked ) {
 		this.unmarkRow(true);
 		this.isMarked	= false;
+		if (this.callback != null && this.callback.onDeselect != null ) {
+			this.callback.onDeselect();
+		}
 	}
 	else { 
 		this.markRow(true);
 		this.isMarked	= true;
+		if (this.callback != null && this.callback.onSelect != null) {
+			this.callback.onSelect();
+		}
 	}
 }
 
+UniqueRowSelector.prototype				= new RowSelector();
+UniqueRowSelector.prototype.parent		= RowSelector;
+UniqueRowSelector.prototype.constructor	= UniqueRowSelector;
+UniqueRowSelector.prototype.objectMap	= new Object();
+UniqueRowSelector.prototype.lastSelectedRow		= null;
 
-function sortHierarchy( columnName ) {
+function UniqueRowSelector(rowEl, skippedClass, baseId, markerColor, callback ) {
+	this.parent.call(this, rowEl, skippedClass, baseId, markerColor, callback );
+}
+
+UniqueRowSelector.prototype.toggleRow	= function () {
+	if ( this.isMarked ) {
+		this.unmarkRow(true);
+		this.isMarked	= false;
+		if (this.callback != null && this.callback.onDeselect != null ) {
+			this.callback.onDeselect();
+		}
+	}
+	else { 
+		this.markRow(true);
+		this.isMarked	= true;
+		if (this.propertyObj.lastSelectedRow != null) {
+			this.propertyObj.lastSelectedRow.isMarked	= false;
+			this.propertyObj.lastSelectedRow.unmarkRow(true);
+		}
+		this.propertyObj.lastSelectedRow		= this;
+		if (this.callback != null && this.callback.onSelect != null) {
+			this.callback.onSelect();
+		}
+	}
+}
+
+function RowManagerProperty(skippedClass, baseId, markerColor) {
+	this.lastSelectedRow	=  null;
+	this.markerColor		= markerColor;
+	this.skippedClass		= skippedClass;
+	this.baseId				= baseId;
+}
+
+function sortHierarchy( columnName, prevOrder ) {
 	alert (columnName + "!!");
+	var descending			= 1; 
+	if ( prevOrder=="descending" ) 
+		descending			= 0;
 	var subForm				= document.forms["aimAdvancedReportForm"];
 	for ( var i=0; i<subForm.levelPicked.options.length; i++ ) {
 		alert(subForm.levelPicked.options[i].text + "QQ");
@@ -513,7 +577,7 @@ function sortHierarchy( columnName ) {
 		}
 	}
 	subForm.levelSorter.selectedIndex			= 0;
-	subForm.levelSortOrder.selectedIndex		= 1;
+	subForm.levelSortOrder.selectedIndex		= descending;
 	subForm.applySorter.click();
 	
 }

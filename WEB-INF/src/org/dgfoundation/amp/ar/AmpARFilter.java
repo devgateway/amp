@@ -349,6 +349,9 @@ public class AmpARFilter extends PropertyListable {
 			searchStr = " AND amp_id like '%"+this.getIndexText()+"%' ";
 		break;
 		}
+		if (this.getByDateSql()==null) {
+			this.setByDateSql("");
+		}
 		generatedFilterQuery+=searchStr + this.getByDateSql();
 		
 	}

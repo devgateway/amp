@@ -18,6 +18,8 @@ public class selectOrganizationComponentForm extends ActionForm {
 	private int tempNumResults;
 	private int numResults;
 	private String keyword="";
+	private String matchEntireWord="";
+
 	private Collection<AmpOrganisation> allOrganization = null;
 
 	private Collection<AmpOrganisation> organizations = null;
@@ -108,6 +110,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 		this.ampOrgTypeId = null;
 		delegateClass ="";
 		callbackFunction = null;
+		this.matchEntireWord="";
 	}
 
 	private int selectedOrganisationFromPages;
@@ -360,6 +363,13 @@ public class selectOrganizationComponentForm extends ActionForm {
 
 	public void setAllSelectedOrgsIds(List<Long> allSelectedOrgsIds) {
 		this.allSelectedOrgsIds = allSelectedOrgsIds;
+	}
+	public String getMatchEntireWord() {
+		return matchEntireWord;
+	}
+
+	public void setMatchEntireWord(String matchEntireWord) {
+		this.matchEntireWord = matchEntireWord;
 	}
 	
 }

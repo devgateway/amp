@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,12 +71,10 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
-import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -2448,6 +2447,44 @@ public class DbUtil {
         return col;
     }
 
+    public static Collection searchForOrganisation(String keyword, Long orgType, boolean matchExactWord) {
+        Session session = null;
+        Collection col = null;
+        Collection result = new ArrayList();
+        keyword = keyword.toLowerCase();
+        
+        try {
+            session = PersistenceManager.getRequestDBSession();
+//            String queryString = "select distinct org from "
+//                + AmpOrganisation.class.getName() + " org "
+//                + " inner join org.orgGrpId grp "
+//                + "where (lower(acronym) REGEXP '[[:<:]](" + keyword + ")[[:>:]]' or lower(name) REGEXP '[[:<:]](" + keyword + ")[[:>:]]') and grp.orgType=:orgType";
+            String queryString = "select distinct org from "
+                + AmpOrganisation.class.getName() + " org "
+                + " inner join org.orgGrpId grp "
+                + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
+                + keyword + "%') and grp.orgType=:orgType";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("orgType", orgType, Hibernate.LONG);
+            col = qry.list();
+            StringTokenizer st = new StringTokenizer("");
+            for (Iterator it = col.iterator(); it.hasNext();) {
+				AmpOrganisation org = (AmpOrganisation) it.next(); 
+			     st = new StringTokenizer(org.getName().toLowerCase() +" "+org.getAcronym().toLowerCase());
+			     while (st.hasMoreTokens()) {
+			         if(keyword.compareTo(st.nextToken()) == 0)
+			        	 {
+			        	 	result.add(org);
+			        	 	break;
+			        	 }
+			     }
+			}
+        } catch (Exception ex) {
+            logger.error("Unable to search ", ex);
+        }
+        return result;//col;
+    }
+    
     public static Collection searchForOrganisation(String keyword) {
         Session session = null;
         Collection col = null;
@@ -2465,6 +2502,44 @@ public class DbUtil {
             logger.error("Unable to search ", ex);
         }
         return col;
+    }
+    
+    public static Collection searchForOrganisation(String keyword, boolean matchExactWord) {
+        Session session = null;
+        Collection col = null;
+        Collection result = new ArrayList();
+        keyword=keyword.toLowerCase();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+//            String queryString = "select distinct org from "
+//                + AmpOrganisation.class.getName() + " org "
+//                + "where  REGEX(lower(acronym),'[[:<:]](" + keyword + ")[[:>:]]') or  REGEX(lower(name), '[[:<:]](" + keyword + ")[[:>:]]')";
+            String queryString = "select distinct org from "
+                + AmpOrganisation.class.getName() + " org "
+                + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
+                + keyword + "%')";
+
+            Query qry = session.createQuery(queryString);
+            col = qry.list();
+            StringTokenizer st = new StringTokenizer("");
+            for (Iterator it = col.iterator(); it.hasNext();) {
+				AmpOrganisation org = (AmpOrganisation) it.next(); 
+			     st = new StringTokenizer(org.getName().toLowerCase()+org.getAcronym().toLowerCase());
+			     while (st.hasMoreTokens()) {
+			         if(keyword.compareTo(st.nextToken()) == 0)
+			        	 {
+			        	 	result.add(org);
+			        	 	break;
+			        	 }
+			     }
+			}
+
+
+        } catch (Exception ex) {
+            logger.error("Unable to search ", ex);
+        }
+        return result;//col;
     }
 
     /**
@@ -2522,7 +2597,47 @@ public class DbUtil {
         }
         return col;
     }
-    
+
+    public static Collection searchForOrganisation(String namesFirstLetter, String keyword, Long orgType, boolean matchWord) {
+        Session session = null;
+        Collection col = null;
+        Collection result = new ArrayList();
+        if(keyword.length()!=0){
+        	keyword=keyword.toLowerCase();
+        }
+        namesFirstLetter=namesFirstLetter.toLowerCase();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+//            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
+//                    + " inner join org.orgGrpId grp "
+//                + "where grp.orgType=:orgType and ((lower(acronym) REGEXP '[[:<:]](" + keyword + ")[[:>:]]' and lower(name) like '"+namesFirstLetter+"%') or (lower(name) like '"+namesFirstLetter+ "%"
+//                + keyword + "%' and lower(name) REGEXP '[[:<:]](" + keyword + ")[[:>:]]'))";
+            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
+	            + " inner join org.orgGrpId grp "
+		        + "where grp.orgType=:orgType and ((lower(acronym) like '%" + keyword +
+		        "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
+		        + keyword + "%')";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("orgType", orgType, Hibernate.LONG);
+            col = qry.list();
+            StringTokenizer st = new StringTokenizer("");
+            for (Iterator it = col.iterator(); it.hasNext();) {
+				AmpOrganisation org = (AmpOrganisation) it.next(); 
+			     st = new StringTokenizer(org.getName().toLowerCase()+org.getAcronym().toLowerCase());
+			     while (st.hasMoreTokens()) {
+			         if(keyword.compareTo(st.nextToken()) == 0)
+			        	 {
+			        	 	result.add(org);
+			        	 	break;
+			        	 }
+			     }
+			}
+        } catch (Exception ex) {
+            logger.debug("Unable to search " + ex);
+        }
+        return result;//col;
+    }
 
     public static Collection searchForOrganisationByType(Long orgType) {
         Session session = null;

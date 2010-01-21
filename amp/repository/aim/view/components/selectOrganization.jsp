@@ -120,6 +120,7 @@
 		document.aimSelectOrganizationForm.ampOrgTypeId.value=-1;
 		document.aimSelectOrganizationForm.keyword.value="";
 		document.aimSelectOrganizationForm.tempNumResults.value=10;
+		document.aimSelectOrganizationForm.matchEntireWord.checked=false;
 	
 	}
 
@@ -292,6 +293,13 @@
 											Number of results per page</digi:trn></td>
 									<td><html:text property="tempNumResults" size="2"
 										styleClass="inp-text" /></td>
+								</tr>
+
+								<tr>
+									<td><digi:trn key="aim:matchEntireWordOnly">
+											Match Entire Word Only</digi:trn></td>
+									<td><html:checkbox property="matchEntireWord" value="true"></html:checkbox>
+									</td>
 								</tr>
 
 								<tr>

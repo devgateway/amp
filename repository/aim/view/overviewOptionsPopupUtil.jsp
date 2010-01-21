@@ -9,12 +9,12 @@
 <script type="text/javascript">
 	var contentLocal;
 
-	YAHOOAmp.namespace("YAHOOAmp.amptab_2");
-	YAHOOAmp.amptab.init = function() {
-	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container_2');
+	YAHOO.namespace("YAHOO.amptab_2");
+	YAHOO.amptab.init = function() {
+	    		var tabView = new YAHOO.widget.TabView('tabview_container_2');
 	};
 
-	YAHOOAmp.amptab.handleClose = function() {
+	YAHOO.amptab.handleClose = function() {
 		//alert('cierro');
 		//this.reload();
 		//if(navigator.appName == 'Microsoft Internet Explorer'){
@@ -24,7 +24,7 @@
 		//document.getElementById("myPOverviewframe").removeChild(contentLocal);
 	}
 		
-    var myPanelOverviewframe = new YAHOOAmp.widget.Panel("newmyPOverviewframe", {
+    var myPanelOverviewframe = new YAHOO.widget.Panel("newmyPOverviewframe", {
 		width:"700px",
 		height:"500px",
 	    fixedcenter: true,
@@ -38,7 +38,7 @@
 	    }
 	     );
 
-    myPanelOverviewframe.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+    myPanelOverviewframe.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
 	
 	function initScriptsOverviewframe() {
 		//alert('initScriptsOverviewframe');
@@ -129,7 +129,7 @@
         var postString		= "type="+type+"&description="+key;
         //alert(postString);
         showPOverviewframe();
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewProjectDetails.do", OverviewframeCallback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/viewProjectDetails.do", OverviewframeCallback, postString);
 	}
 
 	var currentOverviewframe = window.onload;

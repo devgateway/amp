@@ -26,9 +26,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"800px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -39,7 +39,7 @@
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
 		    });
-		var myPanel2 = new YAHOOAmp.widget.Panel("newpopins2", {
+		var myPanel2 = new YAHOO.widget.Panel("newpopins2", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -202,7 +202,7 @@
 		showPanelLoading(msg);
 		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
 		var url = "<%=selCreateInd %>?addIndicatorForStep9=true";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		
 	}
 	var responseSuccess2 = function(o){
@@ -319,7 +319,7 @@
        <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?showAddIndPage=false" />
 		var url = "<%=searchInd %>";
 		url += getParams();
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
        
     }
     function addIndicatorTL(addbutton){
@@ -334,7 +334,7 @@
            url += getParams();
            
            checkAndClose=true
-           YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+           YAHOO.util.Connect.asyncRequest("POST", url, callback);
         }        
     }
 
@@ -358,7 +358,7 @@
     	        }
         	}
        
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+            YAHOO.util.Connect.asyncRequest("POST", url, callback);
         }
         return valid;
     }
@@ -408,19 +408,19 @@
     function clearform() {
          <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?action=clear"/>
           var url = "<%= searchInd%>";
-          YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+          YAHOO.util.Connect.asyncRequest("POST", url, callback);
       }
 
     function addSectors() {		
         <digi:context name="addSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
         var urladd = "<%=addSector%>";  
-        YAHOOAmp.util.Connect.asyncRequest("POST", urladd, callback2);
+        YAHOO.util.Connect.asyncRequest("POST", urladd, callback2);
         
 
         <digi:context name="justSubmit" property="context/module/moduleinstance/sectorActions.do?actionType=justSubmit" /> 
         var url = "<%=justSubmit%>";  
         url += getParams();
-        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+        YAHOO.util.Connect.asyncRequest("POST", url, callback);
         
     }
 
@@ -441,7 +441,7 @@
                 	}
             	}
             }
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+            YAHOO.util.Connect.asyncRequest("POST", url, callback);
             return true;			
         }
         else {
@@ -477,7 +477,7 @@
        <digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
        var url = "<%=addIndPage%>";		
        url += getParams();
-       YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+       YAHOO.util.Connect.asyncRequest("POST", url, callback);
    }
 
    -->
@@ -494,7 +494,7 @@
 	           "&sectorScheme="+document.getElementsByName('sectorScheme')[0].value+
 	           "&sector="+document.getElementsByName('sector')[0].value;
 	    myclose2();
-	    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	    YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}	
 	
 	function reloadSector(value) {		
@@ -506,7 +506,7 @@
 	    url += "&sectorReset="+document.getElementsByName('sectorReset')[0].value+
 	           "&sectorScheme="+document.getElementsByName('sectorScheme')[0].value+
 	           "&sector="+document.getElementsByName('sector')[0].value;
-	    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);									
+	    YAHOO.util.Connect.asyncRequest("POST", url, callback2);									
 	}	
 	
 	-->

@@ -38,9 +38,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -213,21 +213,21 @@
 		initFileUploads();
 		<digi:context name="commentUrl" property="/contentrepository/addTemporaryDocument.do" />
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	function myAddDocumentsDM(params) {
 		var msg='\n<digi:trn key="aim:addDocuments">Add Documents</digi:trn>';
 		showPanelLoading(msg);
 		<digi:context name="selectLoc" property="/contentrepository/selectDocumentDM.do" />	  
 		var url = "<%=selectLoc %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	function myAddLinks(params){
 		var msg='\n<digi:trn key="aim:addLinks">Add LInks</digi:trn>';
 		showPanelLoading(msg);
 		<digi:context name="selPrg" property="/contentrepository/addTemporaryDocument.do" />	  
 		var url = "<%=selPrg %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	function showPanelLoading(msg){
 		myPanel.setHeader(msg);		
@@ -260,7 +260,7 @@
 			//checkAndClose=true;
 			//<digi:context name="commentUrl" property="/contentrepository/addTemporaryDocument.do" />
 			//var url = "<%=commentUrl %>";
-			//YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, generateFields());
+			//YAHOO.util.Connect.asyncRequest("POST", url, callback, generateFields());
 			document.crDocumentManagerForm.action = "/contentrepository/addTemporaryDocument.do";	
 		    document.crDocumentManagerForm.submit();
 

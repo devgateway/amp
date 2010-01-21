@@ -40,13 +40,13 @@
 
 <script type="text/javascript">
 <!--
-		YAHOOAmp.namespace("YAHOOAmp.amptab");
-		YAHOOAmp.amptab.init = function() {
-		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+		YAHOO.namespace("YAHOO.amptab");
+		YAHOO.amptab.init = function() {
+		    		var tabView = new YAHOO.widget.TabView('tabview_container');
 		};
 		
 		/*
-		YAHOOAmp.amptab.handleClose = function() {
+		YAHOO.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
@@ -55,7 +55,7 @@
 		};
 		*/
 			
-	    var myPanelIPAContracting = new YAHOOAmp.widget.Panel("newmyContract", {
+	    var myPanelIPAContracting = new YAHOO.widget.Panel("newmyContract", {
 			width:"730px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -68,7 +68,7 @@
 		    }
 		     );
 	
-		var myPanel2 = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel2 = new YAHOO.widget.Panel("newpopins", {
 			width:"300px",
 			height:"200px",
 			fixedcenter: true,
@@ -81,7 +81,7 @@
 		    context: ["showbtn", "tl", "bl"]
 		    });
 		
-	//myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+	//myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
 	var panelStart, panelStart2;
 	var checkAndClose2=false;	    
 	function initScripts() {
@@ -235,12 +235,12 @@
     
 	function addContract(){
         var postString		= "new=true";
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 	}
     
     function editContract(indexId) {
         var postString		= "editEU=true&indexId="+indexId;
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
     }
     
     function deleteContract(indexId) {
@@ -354,7 +354,7 @@
 		myPanel2.cfg.setProperty("height","500px");
 		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
 		showPanelLoading(msg);
-		YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback2);
+		YAHOO.util.Connect.asyncRequest("POST", params1, callback2);
 	}
 
 	function checkNumeric(objName,comma,period,hyphen)
@@ -447,7 +447,7 @@
 	    checkAndClose2=true;
 		var urlParams="<%=selOrg%>";
 		var params="edit=true&orgSelReset=false&subAction=organizationSelected&id="+id;
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback2);
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback2);
 		    
 		//return true;
 	}
@@ -466,7 +466,7 @@
 	    checkAndClose2=true;
 		var url = "<%=selOrg %>"
 		var params = "?edit=true&orgSelReset=false&subAction=organizationSelected"+getParams();    
-		YAHOOAmp.util.Connect.asyncRequest("POST", url+params, callback2);
+		YAHOO.util.Connect.asyncRequest("POST", url+params, callback2);
 		
 		return true;
 	}
@@ -490,7 +490,7 @@
 	   document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=page;
 	   var urlParams="<%=searchOrg%>";
 	   var params="edit=true&orgSelReset=false&subAction=selectPage&page="+page;
-	   YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback2);
+	   YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback2);
 	   //document.aimSelectOrganizationForm.submit();
 	   //return true;
 	}	
@@ -524,7 +524,7 @@
 			    //document.aimSelectOrganizationForm.submit();
 			    var url = "<%=searchOrg %>"
 				var params = "?edit=true&subAction=search"+getParams();    
-			    YAHOOAmp.util.Connect.asyncRequest("POST", url+params, callback2);
+			    YAHOO.util.Connect.asyncRequest("POST", url+params, callback2);
 				//return true;
 			}
 		}
@@ -546,7 +546,7 @@
 		     //document.aimSelectOrganizationForm.submit();
 		     var url = "<%=searchOrg %>"
 			 var params = "?alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";    
-			 YAHOOAmp.util.Connect.asyncRequest("POST", url+params, callback2);
+			 YAHOO.util.Connect.asyncRequest("POST", url+params, callback2);
 		     
 			 //return true;
 		}
@@ -566,7 +566,7 @@
 
 			   var urlParams="<%=searchOrg%>";
 			   var params="?edit=true&subAction=search&tempNumResults=1000000";
-			   YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+params, callback2);
+			   YAHOO.util.Connect.asyncRequest("POST", urlParams+params, callback2);
 			      document.aimSelectOrganizationForm.tempNumResults.value=aux;		      
 			  //return true;
 		}

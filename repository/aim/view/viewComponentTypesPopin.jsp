@@ -21,9 +21,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -153,7 +153,7 @@
 		showPanelLoading(msg);
 		<digi:context name="addComponentType" property="context/module/moduleinstance/updateComponentType.do?event=add" />
 		var url = "<%= addComponentType %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 		return true;
 	}
 
@@ -164,7 +164,7 @@
 		<digi:context name="editComponentType" property="context/module/moduleinstance/updateComponentType.do?event=edit" />
 		var url = "<%= editComponentType %>&id="
 		url += id;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	
 	-->
@@ -192,7 +192,7 @@ function updateComponentsType(){
 	var url = "<%=update%>";
 	url += getParams();
 	checkAndClose=true;
-	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	YAHOO.util.Connect.asyncRequest("POST", url, callback);
   }
   
   return temp;

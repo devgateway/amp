@@ -12,9 +12,9 @@
 
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/tree.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/yahoo.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/event.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/treeview.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/yahoo-min.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/treeview-min.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <style type="text/css">

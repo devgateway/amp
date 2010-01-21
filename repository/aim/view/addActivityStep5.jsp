@@ -63,8 +63,8 @@ function checkallIssues() {
 
 ///CONVERT POPUP TO POPIN CODE 
 		//POPIN DEFINITION
-		YAHOOAmp.namespace("YAHOOAmp.amptab");
-			var myPanel1 = new YAHOOAmp.widget.Panel("new", {
+		YAHOO.namespace("YAHOO.amptab");
+			var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"550px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -120,7 +120,7 @@ function checkallIssues() {
 	  function addIssues(){
 	 			 myPanel1.setHeader('<digi:trn key="aim:addIssue">Add Issue</digi:trn>');
 	  			 <digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
- 				var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issueId=-1",callback);
+ 				var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issueId=-1",callback);
         }
        
        
@@ -128,28 +128,28 @@ function checkallIssues() {
        function updateIssues(id) {
      		   myPanel1.setHeader('<digi:trn key="aim:updateIssue">Update Issue</digi:trn>');
 			<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
-			var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issueId="+id,callback);
+			var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issueId="+id,callback);
 		}
         
         
 	function addMeasures(issueId) {
 	 	  myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 		 <digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		 var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId=-1",callback);
+		 var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId=-1",callback);
 	}
 
 
 	function updateMeasures(issueId,measureId) {
 		myPanel1.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
 		<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
+		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
 	}
 	
 	
 	function addActors(issueId,measureId) {
 		myPanel1.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId=-1",callback);
+		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId=-1",callback);
 	}
 
 
@@ -157,7 +157,7 @@ function checkallIssues() {
 	function updateActor(issueId,measureId,actorId) {
 		myPanel1.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
+		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
 	}
 
 //END POPIN
@@ -316,7 +316,7 @@ function addPhyProgess(id,comp) {
 
 		}
 		reusableDialog.setHeader("<digi:trn key="aim:physicalprogress">Physical Progress</digi:trn>");
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', url,callbackDialog);
+		var connectionObject =YAHOO.util.Connect.asyncRequest('GET', url,callbackDialog);
 }
 
        
@@ -825,11 +825,11 @@ function editFunding(id){
 	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
 
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%= addComp %>&fundId="+id,callbackDialog);
+	var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%= addComp %>&fundId="+id,callbackDialog);
 
 	//IE 7 BUG :S
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
-	var cObj = YAHOOAmp.util.Connect.asyncRequest('POST', "<%= addComp %>&fundId="+id, callbackPost);
+	var cObj = YAHOO.util.Connect.asyncRequest('POST', "<%= addComp %>&fundId="+id, callbackPost);
 }
 
 
@@ -838,14 +838,14 @@ function addComponents()
 {
 	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=show" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addComp%>",callbackDialog);
+	var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%=addComp%>",callbackDialog);
 
 }
 
 function postComponentForm(action){
 	var formObject = document.aimAddComponentForm;
-	YAHOOAmp.util.Connect.setForm(formObject);
-	var cObj = YAHOOAmp.util.Connect.asyncRequest('POST', action, callbackPost);
+	YAHOO.util.Connect.setForm(formObject);
+	var cObj = YAHOO.util.Connect.asyncRequest('POST', action, callbackPost);
 }
 
 function addComponent(){
@@ -879,8 +879,8 @@ function validateEnter(e) {
 }
 
 
-YAHOOAmp.namespace("YAHOOAmp.amptab");
-	var reusableDialog = new YAHOOAmp.widget.Dialog("new", {
+YAHOO.namespace("YAHOO.amptab");
+	var reusableDialog = new YAHOO.widget.Dialog("new", {
 	width:"850px",
 	height:"450px",
 	fixedcenter: true,

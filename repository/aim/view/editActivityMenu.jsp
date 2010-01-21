@@ -28,12 +28,12 @@
 <script type="text/javascript" src="script/jquery-1.3.2.min.js"></script>
 
 <script type="text/javascript">
-		YAHOOAmp.namespace("YAHOOAmp.amptab");
-		YAHOOAmp.amptab.init = function() {
-		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+		YAHOO.namespace("YAHOO.amptab");
+		YAHOO.amptab.init = function() {
+		    		var tabView = new YAHOO.widget.TabView('tabview_container');
 		};
 		
-	    var mySavePanel = new YAHOOAmp.widget.Panel("newmySave", {
+	    var mySavePanel = new YAHOO.widget.Panel("newmySave", {
 			width:"500px",
 		    fixedcenter: true,
 		    constraintoviewport: true,

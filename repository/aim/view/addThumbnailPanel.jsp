@@ -1,21 +1,15 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"> 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" >.</script>
 
-
-<!--<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>-->
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<!--<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>-->
-
-<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
 
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src='css/yui/tabview.css'/>">
 
 
 <script type="text/javascript">
@@ -50,7 +44,7 @@
 </script>
 
 <script type="text/javascript">
-    var tabView = new YAHOOAmp.widget.TabView("demo"); 
+    var tabView = new YAHOO.widget.TabView("demo"); 
 </script>    
 
 <script type="text/javascript">

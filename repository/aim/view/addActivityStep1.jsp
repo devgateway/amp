@@ -34,9 +34,9 @@
 <script type="text/javascript">
 <!--
 
-	YAHOOAmp.namespace("YAHOOAmp.amp");
+	YAHOO.namespace("YAHOO.amp");
 	
-	var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+	var myPanel = new YAHOO.widget.Panel("newpopins", {
 		width:"600px",
 		fixedcenter: true,
 	    constraintoviewport: false,
@@ -202,18 +202,18 @@
 		showPanelLoading(msg);
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 
 	function saveComment(){
 		refresh=false;
 		checkAndClose=true;
 		var postString = generateFields("");
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 	 function editDelete() {
 		var postString		= generateFields("edit=true");
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 
 	function message(val1,val2) {

@@ -34,9 +34,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newmyCurrencyRate", {
+		var myPanel = new YAHOO.widget.Panel("newmyCurrencyRate", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -185,14 +185,14 @@
 		var postString		= "reset=true&"+generateFields(1);
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	function myEditExchangeRate(date,code){
 		showPanelLoading();
 		var postString="doAction=showRates&updateCRateCode="+code+"&updateCRateDate="+date+"&reset=false";
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	function showPanelLoading(){
 		  var content = document.getElementById("myContentContent");
@@ -258,7 +258,7 @@ function saveRate() {
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
 		checkAndClose=true;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
+		YAHOO.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
 	}
 	return valid;
 }

@@ -21,9 +21,9 @@
 <script type="text/javascript">
     <!--
 
-    YAHOOAmp.namespace("YAHOOAmp.amp");
+    YAHOO.namespace("YAHOO.amp");
 
-    var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+    var myPanel = new YAHOO.widget.Panel("newpopins", {
         width:"600px",
         fixedcenter: true,
         constraintoviewport: false,
@@ -530,7 +530,7 @@ html>body #mainEmpty {
 																													<tr>
 																														<td align="right"><strong><digi:trn>Last Name</digi:trn></strong><font color="red">*</font></td>
 																														<td align="left"><html:text property="lastname" styleId="lastname" size="40"/></td>
-																													</tr>																													
+																													</tr>
 																													<tr>
 																														<td align="right" valign="top"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
 																														<td align="left">

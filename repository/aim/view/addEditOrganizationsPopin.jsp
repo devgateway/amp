@@ -22,9 +22,9 @@
 <script type="text/javascript">
     <!--
 
-    YAHOOAmp.namespace("YAHOOAmp.amp");
+    YAHOO.namespace("YAHOO.amp");
 
-    var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+    var myPanel = new YAHOO.widget.Panel("newpopins", {
         width:"600px",
         fixedcenter: true,
         constraintoviewport: false,
@@ -39,7 +39,7 @@
     var checkAndClose=false;
 
 
-    var mySectorPanel = new YAHOOAmp.widget.Panel("newpopins", {
+    var mySectorPanel = new YAHOO.widget.Panel("newpopins", {
         width:"600px",
         fixedcenter: true,
         constraintoviewport: false,
@@ -303,7 +303,7 @@
             var postString		= generateFieldsLocation();
     <digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
             var url = "<%=commentUrl%>";
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
+            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
             checkAndClose=true;
             refreshPage();
         }
@@ -338,8 +338,8 @@
             var postString		= "edit=true&" + generateFields(1);
     <digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
             var url = "<%=commentUrl%>";
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
-            //YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
+            //YAHOO.util.Connect.asyncRequest("POST", url, callback);
 
         }
 
@@ -399,7 +399,7 @@
             postString+="&"+generateFields(4);
     <digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
             var url = "<%=commentUrl%>?"+postString;
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
+            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
 
         }
         function checkSectorEmpty()
@@ -479,7 +479,7 @@
         function selectSector() {
     <digi:context name="selectSec" property="context/aim/selectSectors.do" />
             var url = "<%= selectSec%>";
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true");
+            YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true");
         }
 
         function searchSector() {
@@ -489,7 +489,7 @@
                     var postString		= generateFields(2);
                  <digi:context name="searchSctr" property="context/aim/searchSectors.do" />
                     var url = "<%= searchSctr%>";
-                    YAHOOAmp.util.Connect.asyncRequest("POST", url, sectorCallback, "edit=true&"+postString);
+                    YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, "edit=true&"+postString);
 
                     return true;
                 }
@@ -516,14 +516,14 @@
             showPanelLoading(msg);
     <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
             var url = "<%=commentUrl%>";
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, sectorCallback, params);
+            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, params);
         }
         function myAddLocation(params) {
             var msg='\n<digi:trn key="aim:addLocation">Add Location</digi:trn>';
             showPanelLoading(msg);
     <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
             var url = "<%=selectLoc%>";
-            YAHOOAmp.util.Connect.asyncRequest("POST", url, sectorCallback, params);
+            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, params);
         }
 
 
@@ -533,7 +533,7 @@
                 document.selectLocationForm.parentLocId.value=selectEl.value;
     <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
                 var url = "<%=selectLoc%>";
-                YAHOOAmp.util.Connect.asyncRequest("POST", url, sectorCallback, "edit=true&"+generateFieldsLocation());
+                YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, "edit=true&"+generateFieldsLocation());
             }
         }
 

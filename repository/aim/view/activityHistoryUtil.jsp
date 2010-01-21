@@ -7,12 +7,12 @@
 
 
 <script type="text/javascript">
-	YAHOOAmp.namespace("YAHOOAmp.amptab");
-	YAHOOAmp.amptab.init = function() {
-	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+	YAHOO.namespace("YAHOO.amptab");
+	YAHOO.amptab.init = function() {
+	    		var tabView = new YAHOO.widget.TabView('tabview_container');
 	};
 		
-    var myPanelHistory = new YAHOOAmp.widget.Panel("newmyHistory", {
+    var myPanelHistory = new YAHOO.widget.Panel("newmyHistory", {
 		width:"800px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
@@ -121,7 +121,7 @@
 	{
         var postString = "activityId=" + id;
         showHistory();
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewActivityHistory.do", historyCallback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/viewActivityHistory.do", historyCallback, postString);
 	}
 	
 	function previewHistoryClicked() {
@@ -129,7 +129,7 @@
 		if (flag == true) {
 	        var postString		= "edit=true&logframe=true&currentlyEditing=true&step=9&pageId=1";
 	        showHistory();
-			YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewActivityHistory.do", historyCallback, postString);
+			Rutil.Connect.asyncRequest("POST", "/aim/viewActivityHistory.do", historyCallback, postString);
 		}
 	}
 

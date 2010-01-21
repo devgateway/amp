@@ -25,7 +25,7 @@
 		else
 			addLocationButton.disable();
 	}
-	YAHOOAmp.util.Event.on(window, "load", updateAddLocationButton);
+	YAHOO.util.Event.on(window, "load", updateAddLocationButton);
 </script>
 
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">

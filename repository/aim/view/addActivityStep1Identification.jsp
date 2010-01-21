@@ -98,7 +98,7 @@ OnBudgetRules.prototype.check		= function () {
 
 
 
-YAHOOAmp.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
+YAHOO.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
 
 
 function toggleElement ( elementId, show ) {
@@ -611,11 +611,9 @@ target.style.cursor = "default"
 													</a>
 												</td>
 											<td>
-											
 											<table cellpadding="7" cellspacing="5">
 
 											 <tr>
-											 
 												<td valign="top" align="left" colspan="9">	
 												<field:display name="On/Off Budget" feature="Budget">	
 													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
@@ -627,29 +625,29 @@ target.style.cursor = "default"
 											</tr>
 											 <tr>
 											 <td>
-											<field:display name="Code Chapitre" feature="Budget">	
+											<field:display name="Code Chapitre" feature="Budget">
 											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
 											 	<html:option value="0">Select Code Year</html:option>
 											 	<html:optionsCollection property="identification.chapterYears" value="wrappedInstance" label="wrappedInstance"/>
 											 </html:select>
-											 
+											
 											<logic:present name="aimEditActivityForm" property="identification.chapterCodes"> 
 											<html:select property="identification.chapterCode">
 											 	<html:option value="0">Select Code Chapitre</html:option>
 											 	<html:optionsCollection property="identification.chapterCodes" value="wrappedInstance" label="wrappedInstance"/>
 											 </html:select>
 											 </logic:present>
-											 </field:display>
+											</field:display>
 											</td>
-											</tr>
+									</tr>
 											</table>
 											
-											</td>
-											</tr>
-											
+												</td>
+										</tr>
 											
 									
-						
+								
+								
 								</feature:display>
 								
 								<field:display name="Financial Instrument" feature="Budget">

@@ -22,9 +22,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOOAmp.namespace("YAHOOAmp.amp");
+		YAHOO.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -206,7 +206,7 @@
 			<digi:context name="commentUrl" property="context/aim/selectSectorSwitch.do"/>  
 			var url = "<%=commentUrl %>";
 			checkAndClose=true;
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+			YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");
@@ -232,7 +232,7 @@
 		var postString		= generateFieldsLocation();
 		<digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		//document.aimEditActivityForm.submit();
 	}
 
@@ -266,7 +266,7 @@
 		var postString		= "edit=true&" + generateFields(1);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 
   											
 	}	
@@ -276,7 +276,7 @@
 		<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
 		var url = "<%=Url %>";
 		checkAndClose=true;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);		
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);		
 	}
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
@@ -301,7 +301,7 @@
 		postString+="&"+generateFields(4);
 		<digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
 		var url = "<%=commentUrl %>?"+postString;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 
 	}
 	function checkSectorEmpty()
@@ -382,7 +382,7 @@
 	function selectSector() {
 		<digi:context name="selectSec" property="context/aim/selectSectors.do" />
 		var url = "<%= selectSec %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true");
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true");
 	}
 
 	function searchSector() {
@@ -392,7 +392,7 @@
               var postString		= generateFields(2);
 			  <digi:context name="searchSctr" property="context/aim/searchSectors.do" />
 			  var url = "<%= searchSctr %>";
-			  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
+			  YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
 						 
 			 return true;
 		}
@@ -415,7 +415,7 @@
 		showPanelLoading(msg);
 		<digi:context name="commentUrl" property="context/aim/selectSectorAF.do" />
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	function myAddLocation(params) {
 		var msg='\n<digi:trn key="aim:addLocation">Add Location</digi:trn>';
@@ -423,7 +423,7 @@
 		showPanelLoading(msg);
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
 		var url = "<%=selectLoc %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	
 
@@ -434,7 +434,7 @@
 			//selectEl.options[selectEl.selectedIndex].value;
 			<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
 			var url = "<%=selectLoc %>";
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+generateFieldsLocation());
+			YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+generateFieldsLocation());
 		}
 	}
 	
@@ -443,7 +443,7 @@
 		showPanelLoading(msg);
 		<digi:context name="selPrg" property="context/module/moduleinstance/selectProgramAF.do" />	  
 		var url = "<%=selPrg %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+		YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	
     function addNewProgram(pType) {
@@ -470,7 +470,7 @@
         }
 		<digi:context name="selPrg" property="context/module/moduleinstance/selectProgramSwitch.do" />	  
 		var url = "<%=selPrg %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, urlParams);
+		YAHOO.util.Connect.asyncRequest("POST", url, specialCallback, urlParams);
       }
     function reloadProgram(selectedProgram) {
        	<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
@@ -496,12 +496,12 @@
             }
 
         }
-        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, callback);
+        YAHOO.util.Connect.asyncRequest("POST", urlParams, callback);
       }
     function resetResults(){
         <digi:context name="resetPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
         var urlParams="<%=resetPrg%>";
-        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, callback);
+        YAHOO.util.Connect.asyncRequest("POST", urlParams, callback);
     }
     function addDefaultProgram() {
         <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
@@ -509,7 +509,7 @@
         var defaultProgramId = document.getElementsByName("defaultProgramId")[0];
 
         urlParams="<%=selPrg%>&themeid="+defaultProgramId.value+"&op=add";
-        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, specialCallback);
+        YAHOO.util.Connect.asyncRequest("POST", urlParams, specialCallback);
         //document.aimEditActivityForm.submit();
       }
 

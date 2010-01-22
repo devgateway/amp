@@ -119,15 +119,14 @@
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
-			    {key:"v_ver_num",type:"number", text:"${headerVersion}",sortable:true},
-			    {key:"v_type",text:"${headerType}",sortable:true},
-		        {key:"v_file_name",text:"${headerFileName}",sortable:true},
-		        {key:"v_date",text:"${headerDate}",type:"date",sortable:true},
-		        {key:"size",type:"number",text:"${headerFileSize}",sortable:true},
-		        {key:"v_notes",text:"${headerNotes}",sortable:false},
-		        {key:"v_actions",text:"${headerAction}",sortable:false}
+			    {key:"v_ver_num",type:"number", label:"${headerVersion}",sortable:true},
+			    {key:"v_type",label:"${headerType}",sortable:true},
+		        {key:"v_file_name",label:"${headerFileName}",sortable:true},
+		        {key:"v_date",label:"${headerDate}",type:"date",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
+		        {key:"v_size",type:"number",label:"${headerFileSize}",sortable:true},
+		        {key:"v_notes",label:"${headerNotes}",sortable:false},
+		        {key:"v_actions",label:"${headerAction}",sortable:false}
 		    ];
-		    this.columnSetForVersions = new YAHOO.widget.ColumnSet(this.columnHeadersForVersions);
 	      var options					= {
 	                    				rowsPerPage: 7,
 	                    				pageCurrent: 1,
@@ -136,7 +135,30 @@
 	                			};
 		
 		    var versionsDiv = YAHOO.util.Dom.get("versions_div");
-		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnSetForVersions, null, options	);
+
+		    var oConfigs = { 
+	                paginator:new YAHOO.widget.Paginator({ 
+	                	rowsPerPage:5,
+	                	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
+	                	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
+	                	rowsPerPageOptions : [5,10,25,50,100]
+	                }) 
+	        		}; 
+	  
+		    var tableEl						= versionsDiv.getElementsByTagName("table")[0];
+			var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
+			myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE; 
+			myDataSource.responseSchema		= {fields: [{key: "v_ver_num"},
+			                           		         {key: "v_type"},
+					                           		 {key: "v_file_name"},
+					                           		 {key: "v_date", parser: "date"},
+					                           		 {key: "v_size"},
+					                           		 {key: "v_notes"},
+					                           		{key: "v_actions"}
+				                           		     	] 
+			                           		     	};
+		    
+		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnHeadersForVersions, myDataSource, oConfigs	);
 	};
 
 </script>

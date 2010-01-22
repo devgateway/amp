@@ -312,7 +312,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							<tr>
 								<td>
 									<br />
-									<div id="public_markup" align="center" class="all_markup">
+									<div id="public_markup" align="center" class="all_markup yui-skin-sam">
 									<div id="publicDocumentsDiv">&nbsp;</div>
 									</div>
 									<br />
@@ -333,7 +333,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 									<td>
 										<br />
-										<div id="other_markup" align="center" class="all_markup">
+										<div id="other_markup" align="center" class="all_markup yui-skin-sam">
 										<div id="otherDocumentsDiv">&nbsp;</div>
 										</div>
 										<br />

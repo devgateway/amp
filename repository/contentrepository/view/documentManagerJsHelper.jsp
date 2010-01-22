@@ -734,7 +734,7 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 	var divId					= "other_markup" + num;
 	callbackForOtherDocuments	= {
 		success: function(o) {
-					containerElement.innerHTML	= "<div class='all_markup' align='center' id='"+divId+"'>" + o.responseText + "</div>";
+					containerElement.innerHTML	= "<div class='all_markup yui-skin-sam' align='center' id='"+divId+"'>" + o.responseText + "</div>";
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
 					datatable.subscribe("checkboxClickEvent", datatable.onEventSelectRow);
 					//

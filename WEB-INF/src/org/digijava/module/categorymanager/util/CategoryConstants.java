@@ -96,6 +96,9 @@ public class CategoryConstants {
 	// indicator source
 	public static final String CONTACT_TITLE_NAME = "Contact Title";
 	public static final String CONTACT_TITLE_KEY = "contact_title";
+	
+	public static final String LINE_MINISTRY_RANK   = "line_ministry_rank";
+	public static final String MINISTRY_PLANNING_RANK = "ministry_planning_rank";
 
 	public static final long NONE_TYPE = 0;
 	public static final long COUNTRY_TYPE = 1;

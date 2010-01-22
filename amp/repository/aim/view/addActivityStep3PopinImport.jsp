@@ -67,11 +67,21 @@
 
 	var responseFailureImport = function(o){ 
 	}  
+
+	var responseUploadImport = function(o){
+		var response = o.responseText; 
+		var content = document.getElementById("popinImportContent");
+		content.innerHTML = response;
+		showContentImport();
+	}
+
 	var callbackImport = 
 	{ 
+		upload:responseUploadImport, 
 		success:responseSuccessImport, 
 		failure:responseFailureImport 
-	};
+	}
+
 	
 	function showContentImport(){
 		var element = document.getElementById("popinImport");
@@ -120,8 +130,16 @@
 	}
 
 	function importFormFunding() {
-	    document.getElementsByName("aimEditActivityFormPopin")[0].submit();
-	}
+		document.getElementsByName("funding.event")[0].value = "importFundingDetail";
+		<digi:context name="addFunding" property="context/module/moduleinstance/importFundingDetail.do"/>
+		
+		var urlParams="<%=addFunding%>";
+		var params = getParameters();
+		if(!validateImport()) return false;
+		YAHOO.util.Connect.setForm(document.getElementsByName("aimEditActivityFormPopin")[0], true);
+		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callbackImport);
+	    
+}
 
 	function checkErrorAndCloseImport(){
 		if(checkAndCloseImport==true){
@@ -131,6 +149,69 @@
 			}
 			checkAndClose2=false;			
 		}
+	}
+
+//	function importFundingDetail(type) {
+//
+//		var flag = validateFundingExchangeRate();
+//		if (flag == false) return false;
+//
+//		document.getElementsByName("funding.event")[0].value = "importFundingDetail";
+//		<digi:context name="addFunding" property="context/module/moduleinstance/addFundingDetail.do"/>
+//		
+//		var urlParams="<%=addFunding%>";
+//		var params = getParameters();
+//		
+//		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+//	 	
+//	}
+
+	function submitImportForm() {
+		<digi:context name="addFunding" property="context/module/moduleinstance/fundingImported.do"/>
+		var formAction="<%=addFunding%>";
+		document.getElementsByName("aimEditActivityFormPopin")[0].action = formAction;
+		document.getElementsByName("aimEditActivityFormPopin")[0].submit();
+	}	
+	
+	function validateImport(){
+		var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
+		var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
+		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
+		var errmsg4="\n<digi:trn>Funding status not selected</digi:trn>";
+		var errmsg5="\n<digi:trn>No file selected</digi:trn>";
+
+		var fundId = trim(document.getElementById("orgFundingId").value);
+		var assistType = trim(document.getElementsByName("funding.assistanceType")[0].value);
+		var mod=trim(document.getElementsByName("funding.modality")[0].value);
+		var fileImport = document.getElementsByName("fileImport")[0].value
+		var fundStatus		= -1;
+		var fundStatusTemp	= document.getElementsByName("funding.fundingStatus");
+		
+		if ( fundStatusTemp != null && fundStatusTemp.length != null && fundStatusTemp.length > 0 ) {
+			fundStatus	= fundStatusTemp[0].value;
+		}
+	
+		var errmsg='';
+		if (assistType == 0) {
+			errmsg+=errmsg1;
+		}
+	
+		if (mod == 0) {
+			errmsg+=errmsg3;
+		}
+		
+		if (fundStatus == 0) 
+			errmsg+=errmsg4;
+
+		if(fileImport == "")
+			errmsg+=errmsg5;
+	
+		if (errmsg!=''){
+			alert (errmsg);
+			document.getElementById("orgFundingId").focus();
+			return false;
+		}
+		return true;
 	}
 	
 </script>

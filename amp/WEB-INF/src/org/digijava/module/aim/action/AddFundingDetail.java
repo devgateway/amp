@@ -1,6 +1,10 @@
 package org.digijava.module.aim.action;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,13 +16,17 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * @author jose
@@ -41,6 +49,17 @@ public class AddFundingDetail extends Action {
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
 
+		if (event.equals("importFundingDetail") && formBean.getFileImport() != null) //If this is an import, means we have to look for the file and parse it
+		{
+			importFunding(formBean, teamMember);
+			return mapping.findForward("forward");
+		}
+		else if(event.equals("importFundingDetailDone")){
+			return mapping.findForward("confirmed");
+		}
+
+		
+		
 		String currCode = Constants.DEFAULT_CURRENCY;
 		if (teamMember.getAppSettings() != null) {
 			ApplicationSettings appSettings = teamMember.getAppSettings();
@@ -136,4 +155,61 @@ public class AddFundingDetail extends Action {
 		fundingDetail.setIndex(fundingDetails.size());
 		return fundingDetail;
 	}
+
+	private void importFunding(EditActivityForm eaForm, TeamMember tm) {
+		//Do all the preparation needed for the adding of disb/comm/etc
+		ArrayList<FundingDetail> fundingDetails = new ArrayList<FundingDetail>();
+		FundingDetail fd = null;
+		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
+		FormFile formFile = eaForm.getFileImport();
+		try {
+			InputStreamReader isr = new InputStreamReader(formFile.getInputStream());
+			CSVReader reader = new CSVReader(isr);
+			
+			String [] nextLine;
+			Boolean firstLine = true;
+			while ((nextLine = reader.readNext()) != null) {
+				if(firstLine){
+					firstLine = false;
+				}
+				else
+				{
+					if (nextLine.length == 7) //Type, Amount, Date
+					{
+						//commitment/disbursement/expenditure,actual/planned,amount,currency,day,month,year
+						//     0                             ,      1       ,   2  ,   3    , 4 ,  5  , 6
+						
+						FundingDetail fundingDetail = new FundingDetail();
+						if (nextLine[0].equals("commitment")) fundingDetail.setTransactionType(Constants.COMMITMENT);
+						if (nextLine[0].equals("disbursement")) fundingDetail.setTransactionType(Constants.DISBURSEMENT);
+						if (nextLine[0].equals("expenditure")) fundingDetail.setTransactionType(Constants.EXPENDITURE);
+						if (nextLine[1].equals("actual")) fundingDetail.setAdjustmentType(Constants.ACTUAL);
+						if (nextLine[1].equals("planned")) fundingDetail.setAdjustmentType(Constants.PLANNED);
+
+						fundingDetail.setTransactionAmount(nextLine[2]);
+						fundingDetail.setCurrencyCode(nextLine[3]);
+						//Put together the date
+						GregorianCalendar calendar = new GregorianCalendar();
+						calendar.set(Integer.parseInt(nextLine[6]), Integer.parseInt(nextLine[5])-1, Integer.parseInt(nextLine[4]));
+						fundingDetail.setTransactionDate(FormatHelper.formatDate(calendar.getTime()));
+						fundingDetail.setClassification("");
+						fundingDetail.setIndexId(System.currentTimeMillis());
+						fundingDetail.setIndex(fundingDetails.size());
+						fundingDetails.add(fundingDetail);			
+						
+					}
+				}
+			}			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		eaForm.getFunding().setFundingDetails(fundingDetails);
+	}
+
 }

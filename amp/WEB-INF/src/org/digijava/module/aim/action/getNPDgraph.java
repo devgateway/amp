@@ -19,6 +19,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -33,7 +35,6 @@ import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -43,7 +44,7 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CustomCategoryDataset;
-
+import org.digijava.module.aim.helper.CategoryDatasetHelper;
 /**
  * NPD Indicators graph generator action.
  * Generates different (currently only one) types of graphs for specified indicators
@@ -101,10 +102,10 @@ public class getNPDgraph extends Action {
 
             List categories = categoryplot.getCategories();
             if (categories != null) {
-                Iterator iter = categories.iterator();
+                Iterator<CategoryDatasetHelper> iter = categories.iterator();
                 while (iter.hasNext()) {
-                    Comparable category = (Comparable) iter.next();
-                    categoryaxis.addCategoryLabelToolTip(category, category.toString());
+                    CategoryDatasetHelper category = (CategoryDatasetHelper) iter.next();
+                    categoryaxis.addCategoryLabelToolTip(category, category.getFullName());
                 }
 
             }
@@ -157,11 +158,13 @@ public class getNPDgraph extends Action {
                 int pos = Arrays.binarySearch(selectedIndicators, indicator.getIndicatorId().longValue());
 
                 if (pos >= 0) {
-                	String key="aim:NPD:"+indicator.getName();
-                	String displayLabel = CategoryManagerUtil.translate(key, request, indicator.getName());
-                    
+                 
                     
                     try {
+                        Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
+                        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+                        String indicatorNameTranslated = TranslatorWorker.translateText(indicator.getName(), langCode, siteId);
+                        CategoryDatasetHelper category = new CategoryDatasetHelper(indicatorNameTranslated, indicator.getIndicatorId());
                         Collection<AmpIndicatorValue> indValues = item.getValues();  // ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
                        
                         Map<String, AmpIndicatorValue> actualValues = new HashMap<String, AmpIndicatorValue>(); // map to store latest actual values group by year
@@ -336,7 +339,7 @@ public class getNPDgraph extends Action {
                          // create dataset for graph
                             dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear,baseValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(targetValue,targetYear, selectedYear,targetValueSource)});
                             Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
-                            dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
+                            dataset.addValue(realActual.doubleValue(), selectedYear, category);
                             
                             if(realActual.doubleValue()<0D || realActual.doubleValue()>1D){ //in any realActual is less/more then 0/100,then chart range shouldn't be 0-100%
                             	fixedRange=false;

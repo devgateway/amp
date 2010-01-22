@@ -35,6 +35,7 @@ import org.digijava.module.translation.util.ListChangesBuffer;
 
 /**
  * New Advanced translation mode action. AMP-4911
+ * Show translations in groups {@link MessageGroup}.
  * @author Irakli Kobiashvili
  *
  */
@@ -88,22 +89,33 @@ public class ShowNewAdvancedTranslations extends Action{
 
 			//Search by key which is generated from input text. this will show exact match only.
 			String searchKey = TranslatorWorker.generateTrnKey(trnForm.getSearchTerm());
-			logger.info("Searching for "+trnForm.getSearchTerm()+", key generated is "+searchKey+"...");
+			logger.debug("Searching for "+trnForm.getSearchTerm()+", key generated is "+searchKey+"...");
 			Collection<Message> results = TranslatorWorker.getAllTranslationsOfKey(searchKey, site.getId());
 			Collection<MessageGroup> groups = TrnUtil.groupByKey(results);
 			List<MessageGroup> groupsList = new ArrayList<MessageGroup>(groups);
 			trnForm.setResultList(groupsList);
-			logger.info("Finished. \nFound "+results.size()+" results in "+groupsList.size()+ " groups");
+			logger.debug("Finished. \nFound "+results.size()+" results in "+groupsList.size()+ " groups");
 			
 			//Now search by Lucene
 			ServletContext context = request.getSession().getServletContext();
 			
 			//get results from Lucene
 			Hits hits = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context);
-			logger.info("Lucen found "+hits.length()+" records");
+			logger.debug("Lucen found "+hits.length()+" records");
 			if (hits !=null && hits.length()>0){
 				int currentPage = (trnForm.getPageNumber()==null || trnForm.getPageNumber().intValue()==0) ? 0 : trnForm.getPageNumber().intValue()-1;
 				int itemsPerPage = getItemsPerPage().intValue();
+				
+				//compensate list additions and deletions
+//				List<Message> addedMessages 	=  buffer.elements(Operation.ADD);
+//				List<Message> deletedMessages 	=  buffer.elements(Operation.DELETE);
+//				if (addedMessages!=null){
+//					itemsPerPage -= addedMessages.size();
+//				}
+//				if (deletedMessages!=null){
+//					itemsPerPage += deletedMessages.size();
+//				}
+
 				int startItemNo = itemsPerPage * currentPage;
 				int stopItemNo = startItemNo + itemsPerPage;
 				
@@ -123,11 +135,11 @@ public class ShowNewAdvancedTranslations extends Action{
 					}
 //					printDoc(doc, score);
 				}
-				logger.info("Current page: "+currentPage+" of "+totalPages);
-				logger.info("Items per page page: "+itemsPerPage);
-				logger.info("Showing from: "+startItemNo + " to: "+stopItemNo);
+				logger.debug("Current page: "+currentPage+" of "+totalPages);
+				logger.debug("Items per page : "+itemsPerPage);
+				logger.debug("Showing from: "+startItemNo + " to: "+stopItemNo);
 				if (trnForm.getMessage()!=null && trnForm.getLocale()!=null && trnForm.getKey()!=null){
-					logger.info("Submitted keys:"+trnForm.getKey().length + ", locales:" + trnForm.getLocale().length+", messages:"+trnForm.getMessage().length);
+					logger.debug("Submitted keys:"+trnForm.getKey().length + ", locales:" + trnForm.getLocale().length+", messages:"+trnForm.getMessage().length);
 				}
 				
 				//get translations for all languages for found keys. 
@@ -143,7 +155,7 @@ public class ShowNewAdvancedTranslations extends Action{
 				trnForm.setResultList(sortedGroups);
 			}
 		}else{
-			logger.info("Nothing to search for");
+			logger.debug("Nothing to search for");
 		}
 		trnForm.setTotalPages(new Integer((totalPages==0)?1:totalPages));
 		trnForm.setChangesList(buffer.listChanges());

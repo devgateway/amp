@@ -261,7 +261,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							<tr style="display: block;" id="myDocumentstr">
 								<td colspan="3">
 									<br />
-									<div id="my_markup" align="left" class="all_markup">
+									<div id="my_markup" align="left" class="all_markup yui-skin-sam">
 										<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 										<bean:define toScope="request" id="checkBoxToHide" value="true" />
 										<jsp:include page="documentTable.jsp" flush="true" />
@@ -294,7 +294,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						<tr style="display: block;" id="teamDocumentstr">
 							<td colspan="3">
 								<br />
-								<div id="team_markup" align="center" class="all_markup">
+								<div id="team_markup" align="center" class="all_markup yui-skin-sam">
 								<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 								<jsp:include page="documentTable.jsp" flush="true" />
 								</div>

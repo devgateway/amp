@@ -41,7 +41,7 @@ import org.digijava.module.gateperm.core.GatePermConst;
 /**
  * @author fferreyra
  */
-public class ImportFundingDetail extends FundingAdded {
+public class ImportFundingDetail extends AddFundingDetail {
 
 	
 }

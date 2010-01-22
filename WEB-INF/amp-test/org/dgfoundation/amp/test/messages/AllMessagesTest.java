@@ -7,6 +7,7 @@ public class AllMessagesTest {
     public static Test suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(MessageSettingsTest.class);
+		suite.addTestSuite(ExternalReceiversTest.class);
 		return suite;
 	}
 

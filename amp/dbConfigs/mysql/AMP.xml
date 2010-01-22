@@ -26,8 +26,8 @@
 	</Dimension>
 	
 	<Cube name="Donor Funding">
-		<Table name="cached_v_donor_funding">
-			<SQL dialect="mysql"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
+		<Table name="cached_v_m_donor_funding">
+			<SQL dialect="mysql"><![CDATA[cached_v_m_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
 		</Table>
 		<Dimension name="Donor">
 			<Hierarchy hasAll="true" allLevelName="All Donor" caption="#Donor#"
@@ -468,9 +468,9 @@
 		<Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=0
-					and cached_v_donor_funding.adjustment_type=1 then
-					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					case when cached_v_m_donor_funding.transaction_type=0
+					and cached_v_m_donor_funding.adjustment_type=1 then
+					cached_v_m_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -478,9 +478,9 @@
 		<Measure name="Actual Disbursements" aggregator="sum" caption="#Actual_Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=1
-					and cached_v_donor_funding.adjustment_type=1 then
-					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					case when cached_v_m_donor_funding.transaction_type=1
+					and cached_v_m_donor_funding.adjustment_type=1 then
+					cached_v_m_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -488,9 +488,9 @@
 		<Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter" >
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=2
-					and cached_v_donor_funding.adjustment_type=1 then
-					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					case when cached_v_m_donor_funding.transaction_type=2
+					and cached_v_m_donor_funding.adjustment_type=1 then
+					cached_v_m_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -498,9 +498,9 @@
 		<Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=0
-					and cached_v_donor_funding.adjustment_type=0 then
-					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					case when cached_v_m_donor_funding.transaction_type=0
+					and cached_v_m_donor_funding.adjustment_type=0 then
+					cached_v_m_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -508,9 +508,9 @@
 		<Measure name="Planned Disbursements" aggregator="sum" caption="#Planned_Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=1
-					and cached_v_donor_funding.adjustment_type=0 then
-					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					case when cached_v_m_donor_funding.transaction_type=1
+					and cached_v_m_donor_funding.adjustment_type=0 then
+					cached_v_m_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -518,9 +518,9 @@
 		<Measure name="Planned Expenditures" aggregator="sum" caption="#Planned_Expenditures#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=2
-					and cached_v_donor_funding.adjustment_type=0 then
-					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					case when cached_v_m_donor_funding.transaction_type=2
+					and cached_v_m_donor_funding.adjustment_type=0 then
+					cached_v_m_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate)
 					else 0 end
 				</SQL>
 			</MeasureExpression>

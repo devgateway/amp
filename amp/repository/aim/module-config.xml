@@ -28,6 +28,7 @@
 		<action login-required="false" pattern="/feedback" />
 		<action login-required="false" pattern="/confirmRegisteration" />
         <action login-required="true" pattern="/exportAdminTable" />
+        <action login-required="false" pattern="/reportWizard" />
 	</security>
 
 	<!-- AIM classes Begin-->

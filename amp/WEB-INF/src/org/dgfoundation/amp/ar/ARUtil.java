@@ -120,18 +120,38 @@ public final class ARUtil {
 	public static GroupReportData generateReport(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
-
-		String ampReportId = request.getParameter("ampReportId");
-		if (ampReportId == null)
-			ampReportId = (String) request.getAttribute("ampReportId");
 		HttpSession httpSession = request.getSession();
+		String ampReportId = request.getParameter("ampReportId");
+		
+		Boolean ispublicuser = (Boolean) httpSession.getAttribute("publicuser");
+		if (ispublicuser == null) {
+			ispublicuser = false;
+		}
+		TeamMember teamMember = null;
+		AmpReports r = null;
 		Session session = PersistenceManager.getSession();
-
-		TeamMember teamMember = (TeamMember) httpSession
-				.getAttribute("currentMember");
-
-		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
-				ampReportId));
+		if (ispublicuser){
+			if (request.getSession().getAttribute("publicgeneratedreports")!=null && ampReportId !=null){
+				Collection<AmpReports> pgenerated =  (Collection<AmpReports>) request.getSession().getAttribute("publicgeneratedreports");
+				for (Iterator iterator = pgenerated.iterator(); iterator.hasNext();) {
+					AmpReports storedreport = (AmpReports) iterator.next();
+					if (ampReportId!= null && ampReportId.equalsIgnoreCase(storedreport.getId().toString())){
+						r = storedreport;
+						ispublicuser = true;
+						request.getSession().setAttribute("publicuser", true);
+						break;
+					}
+				}
+			}else if (httpSession.getAttribute("newpublicreport")!=null){
+				r = (AmpReports) httpSession.getAttribute("newpublicreport");
+			}
+		}else{
+			if (ampReportId == null){
+				ampReportId = (String) request.getAttribute("ampReportId");
+			}
+			teamMember = (TeamMember) httpSession.getAttribute("currentMember");
+			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+		}
 		
 		// the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);

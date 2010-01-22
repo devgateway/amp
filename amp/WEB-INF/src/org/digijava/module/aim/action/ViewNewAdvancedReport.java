@@ -7,11 +7,14 @@
 package org.digijava.module.aim.action;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
@@ -33,8 +36,12 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -43,8 +50,10 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
 
@@ -119,7 +128,13 @@ public class ViewNewAdvancedReport extends Action {
 		
 		
 		//check currency code:
-		if(httpSession.getAttribute("reportCurrencyCode")==null) httpSession.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
+		if(httpSession.getAttribute("reportCurrencyCode")==null){
+			String currCode		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ) ;
+			if ( currCode == null ) {
+				currCode = Constants.DEFAULT_CURRENCY;
+			}	
+			httpSession.setAttribute("reportCurrencyCode",currCode);
+		}
 		
 		if(httpSession.getAttribute("reportSorters")==null) httpSession.setAttribute("reportSorters",new HashMap());
 		Map sorters=(Map) httpSession.getAttribute("reportSorters");
@@ -131,10 +146,20 @@ public class ViewNewAdvancedReport extends Action {
 		String sortBy=request.getParameter("sortBy");
 		String sortByAsc=request.getParameter("sortByAsc");
 		String applySorter = request.getParameter("applySorter");
-		if(ampReportId==null) 
-			ampReportId=ar.getAmpReportId().toString();
-		Long reportId=new Long(ampReportId);
-		request.setAttribute("ampReportId",ampReportId);
+		Boolean ispublicuser = (Boolean) httpSession.getAttribute("publicuser");
+		if (ispublicuser == null ) {
+			ispublicuser = false;
+		} 
+		
+		Long reportId = null;
+		
+		if(!ispublicuser) {
+			if(ampReportId==null) {
+				ampReportId=ar.getAmpReportId().toString();
+			}
+			reportId=new Long(ampReportId);
+			request.setAttribute("ampReportId",ampReportId);
+		}
 		
 		String startRow=request.getParameter("startRow");
 		String endRow=request.getParameter("endRow");
@@ -145,7 +170,7 @@ public class ViewNewAdvancedReport extends Action {
 		if(cachedStr!=null) cached=Boolean.parseBoolean(cachedStr);
 		
 		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
+		if(!ispublicuser && (filter==null || !reportId.equals(filter.getAmpReportId()))) {
 			if(filter != null && filter.isPublicView())
 			{
 				//This is to avoid resetting the publicView status to allow the right redirection on Public Views
@@ -198,8 +223,56 @@ public class ViewNewAdvancedReport extends Action {
 			rd=ARUtil.generateReport(mapping,form,request,response);
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 			httpSession.setAttribute("progressValue", progressValue); 
-	
-			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			
+			Site site = RequestUtils.getSite(request);
+			Locale locale = RequestUtils.getNavigationLanguage(request);
+			
+			ispublicuser = (Boolean) httpSession.getAttribute("publicuser");
+			if (ispublicuser == null ) {
+				ispublicuser = false;
+			} 
+			
+
+			if (!ispublicuser){
+				ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			}else {
+				if (httpSession.getAttribute("newpublicreport")!=null){
+					ar = (AmpReports) httpSession.getAttribute("newpublicreport");
+				}else{
+					ar=(AmpReports) httpSession.getAttribute("reportMeta");
+				}
+				if (ar.getId() == null){
+					Random r = new Random(); 
+					ar.setAmpReportId(r.nextLong());
+					ar.setName(ar.getId().toString());
+					request.getSession().setAttribute("ampReportId",ar.getId().toString());
+				}
+				
+				if (request.getSession().getAttribute("publicgeneratedreports")!=null){
+					Collection<AmpReports> pgenerated =  (Collection<AmpReports>) request.getSession().getAttribute("publicgeneratedreports");
+					if (!pgenerated.contains(ar)){
+						 pgenerated.add(ar);
+						 request.getSession().setAttribute("publicgeneratedreports",pgenerated);
+						 if (ampReportId!=null){
+							 for (Iterator iterator = pgenerated.iterator(); iterator.hasNext();) {
+								 AmpReports storedreport = (AmpReports) iterator.next();
+								 if (ampReportId.equalsIgnoreCase(storedreport.getId().toString())){
+									 request.getSession().setAttribute("ampReportId",ar.getId().toString());
+									 ar = storedreport;
+								 break;
+								}
+							 }
+						}
+					}
+				}else{
+					Collection<AmpReports> pgenerated = new ArrayList<AmpReports>();
+					pgenerated.add(ar);
+					request.getSession().setAttribute("publicgeneratedreports",pgenerated);
+				}
+				request.getSession().removeAttribute("publicuser");
+				request.getSession().removeAttribute("newpublicreport");
+			}
+			
 			//This is for public views to avoid nullPointerException due to there is no logged user.
 			if(tm != null){
 				saveOrUpdateReportLog(tm, ar);

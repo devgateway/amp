@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +61,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.mondrian.query.MoConstants;
 
 
 /**
@@ -363,22 +366,18 @@ public class AmpARFilter extends PropertyListable {
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
 		this.setAmpTeams(new TreeSet());
-		
+		Boolean ispublicuser = false;
+		if (request.getSession().getAttribute("publicuser")!=null){
+			ispublicuser = (Boolean) request.getSession().getAttribute("publicuser");
+		}
 		String ampReportId = null ;
 		//Check if the reportid is not nut for public mondrian reports
 		if (request.getParameter("ampReportId")!=null){
 			ampReportId = request.getParameter("ampReportId");
 		}
-		if (ampReportId == null) {
+		if (ampReportId == null ) {
 			AmpReports ar = (AmpReports) request.getSession().getAttribute("reportMeta");
-			
-			
-			
-			/* 
-			 * I am adding this check because mondrian use this class and when there is not report in the session object 
-			   a nullpointer exception is throw.
-			*/
-			if (ar != null){
+			if (!ispublicuser && ar != null){
 				ampReportId = ar.getAmpReportId().toString();
 			}
 		}
@@ -404,12 +403,25 @@ public class AmpARFilter extends PropertyListable {
 			if (this.getCurrency() == null)
 				this.setCurrency(tempSettings.getCurrency());
 
-		}
-		else {
-			//Check if the reportid is not nut for public mondrian reports
-			if (ampReportId !=null){
+		} else {
+			//Check if the reportid is not null for public mondrian reports
+			if (!ispublicuser && ampReportId !=null){
 				AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
-			
+				if (ampReport == null){
+					if (request.getSession().getAttribute("publicgeneratedreports")!=null){
+						Collection<AmpReports> pgenerated =  (Collection<AmpReports>) request.getSession().getAttribute("publicgeneratedreports");
+						for (Iterator iterator = pgenerated.iterator(); iterator.hasNext();) {
+							AmpReports storedreport = (AmpReports) iterator.next();
+							if (ampReportId.equalsIgnoreCase(storedreport.getId().toString())){
+								ampReport = storedreport;
+								ispublicuser = true;
+								request.getSession().setAttribute("publicuser", true);
+								break;
+							}
+						}
+					}
+				}
+				
 				//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
 				TreeSet teams=new TreeSet();
 				this.setAccessType("team");
@@ -522,7 +534,9 @@ public class AmpARFilter extends PropertyListable {
 			this.setWidget(new Boolean(widget).booleanValue());
 
 		try {
-			this.setAmpReportId(new Long(ampReportId));
+			if(!ispublicuser){
+				this.setAmpReportId(new Long(ampReportId));
+			}
 		}
 		catch (NumberFormatException e) {
 			logger.info("NumberFormatException:" + e.getMessage());
@@ -604,7 +618,12 @@ public class AmpARFilter extends PropertyListable {
 		
 		generateActivitySearchKeySql();
 		Hits hits = null;
-						
+		
+		Boolean ispublicuser = false;
+		if (request.getSession().getAttribute("publicuser")!=null){
+			ispublicuser = (Boolean) request.getSession().getAttribute("publicuser");
+		}
+		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="
 				+ (budget != null ? (budget)?"1":"0" : "null")
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
@@ -617,25 +636,30 @@ public class AmpARFilter extends PropertyListable {
 		activityStatus.add(Constants.APPROVED_STATUS);
 		activityStatus.add(Constants.EDITED_STATUS);
 		String NO_MANAGEMENT_ACTIVITIES="";
-		if("Management".equals(this.getAccessType()))
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
+		if (!ispublicuser){
+			if("Management".equals(this.getAccessType())){
+				TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				+ Util.toCSString(ampTeams) + ") )";
-		else{
-			
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
+			}else{
+				TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") "
 				+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				+ Util.toCSString(ampTeams) + ") )" ;
-		}
-		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
+			}
+			
+			NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 			+ Util.toCSString(ampTeams)
 			+ ") "
 			+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 			+ Util.toCSString(ampTeams) + ") )" ;
-			
+		}else{
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"+ Constants.APPROVED_STATUS+"' AND (draft is null) OR (draft = 0)";
+			NO_MANAGEMENT_ACTIVITIES = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0)";
+			this.draft = true;
+		}
 
 	// computed workspace filter -- append it to the team filter so normal
 	// team activities are also possible
@@ -664,9 +688,9 @@ public class AmpARFilter extends PropertyListable {
 			
 		int c;
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
+			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",null, publicView )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null, publicView));
 		}
-		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
+		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null, publicView)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null, publicView) );
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 
@@ -1080,16 +1104,22 @@ public class AmpARFilter extends PropertyListable {
 					+ ((jointCriteria)?"1":"0");;
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
-		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
+		
+		
+		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams, publicView);
 		logger.info(this.generatedFilterQuery);
 		
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams, publicView )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams, publicView) );
 		} else { 
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams, publicView)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null, publicView) );
 		}
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
+		
+		if (this.isPublicView()){
+			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
+		}
 		
 		return hits;
 	}
@@ -1160,6 +1190,9 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	@PropertyListableIgnore
 	public String getGeneratedFilterQuery() {
+		if(this.isPublicView()){
+			return getOffLineQuery(generatedFilterQuery);
+		}
 		return generatedFilterQuery;
 	}
 
@@ -1789,5 +1822,11 @@ public class AmpARFilter extends PropertyListable {
 		this.lucene = luceneIndex;
 	}
 
-	
+	public String getOffLineQuery(String query) {
+		String result = query;
+		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
+		Matcher m = p.matcher(result);
+		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
+		return result;
+	}
 }

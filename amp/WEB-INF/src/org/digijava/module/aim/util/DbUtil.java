@@ -119,6 +119,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.mondrian.query.MoConstants;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.hibernate.Hibernate;
@@ -431,7 +432,7 @@ public class DbUtil {
     }
 
     
-    public static int countActivitiesByQuery(String sQuery, ArrayList<FilterParam> params) {
+    public static int countActivitiesByQuery(String sQuery, ArrayList<FilterParam> params,Boolean cached) {
     	
     	Session sess=null;
     	Connection conn=null;
@@ -449,9 +450,12 @@ public class DbUtil {
     		}
     		
     		int ii=0;
-
-    		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
-    				+ sQuery + " ) ";
+    		String query;
+    		if (!cached){
+    			query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("+ sQuery + " ) ";
+    		}else {
+    			query = "SELECT count(*) FROM "+ MoConstants.CACHED_ACTIVITY_TABLE +" WHERE amp_activity_id IN ("+ sQuery + " ) ";
+    		}
     		//System.out.println("MASTER query count activities::: " + query);
     		PreparedStatement ps;
     		

@@ -102,18 +102,26 @@ cursor:pointer;
 				</module:display>
                 <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                 	<div class="bd">                    
-                		<ul>
-            				<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-            					<li class="yuiampmenuitem" style="float:left;">
-                					<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
-                    					<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
-                    				</digi:link>
-                				</li>
-            				</module:display>
-            			</ul>
-            		</div>
-            	</div>
-           	</li>
+                    	<ul>
+                        	<module:display  name="Report Generator" parentModule="REPORTING">
+	                        	<li class="yuiampmenuitem" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+	                            	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false"  onclick="return canExit()">
+	                                	<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
+	                                </a>
+	                            </li>
+	                       </module:display>
+						   <module:display name="Multi-dimensional Reports" parentModule="REPORTING">
+                           	<li class="yuiampmenuitem">
+                           		<a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()">
+                                	<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
+                                </a>
+                          	</li>
+                         	</module:display>
+                       </ul>
+                   </div>
+                </div>              
+            </li>
+                             
            	<feature:display name="Language Option" module="Tools">
 		            <li style="float:left;">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">

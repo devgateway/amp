@@ -194,7 +194,7 @@ public final class ArConstants {
 	public static final String VIEW_COMPONENT_FUNDING="v_component_funding";
 	public static final String VIEW_REGIONAL_FUNDING="v_regional_funding";
 	public static final String VIEW_CONTRIBUTION_FUNDING="v_contribution_funding";
-	
+	public static final String VIEW_PUBLIC_PREFIX = "cached_";
 	//reportsFilter
 	
 	public final static String REPORTS_FILTER="ReportsFilter";

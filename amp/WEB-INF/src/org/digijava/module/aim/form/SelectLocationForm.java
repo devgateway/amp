@@ -77,6 +77,7 @@ public class SelectLocationForm extends ActionForm{
 	private String country;
 	private Long levelId = null;
 	private Long implemLocationLevel = null;
+	private Long implemLevel		= null;
 	private Collection<org.digijava.module.aim.helper.Location> selectedLocs = null;
 	private boolean defaultCountryIsSet;
 	private int pagesSize;
@@ -390,4 +391,19 @@ public class SelectLocationForm extends ActionForm{
 	public boolean isReseted() {
 		return reseted;
 	}
+
+	/**
+	 * @return the implemLevel
+	 */
+	public Long getImplemLevel() {
+		return implemLevel;
+	}
+
+	/**
+	 * @param implemLevel the implemLevel to set
+	 */
+	public void setImplemLevel(Long implemLevel) {
+		this.implemLevel = implemLevel;
+	}
+	
 }

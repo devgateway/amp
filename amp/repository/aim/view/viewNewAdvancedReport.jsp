@@ -484,7 +484,6 @@ session.setAttribute("progressValue", counter);
 		<logic:notEqual name="viewFormat" value="print">
 	<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
-			<% System.out.println( "TTTTTT" + ((viewable!=null)?viewable.getViewerPath():"IS NULL !!") ); %>
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
 			
 	</tr>

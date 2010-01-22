@@ -36,18 +36,18 @@ public class DynLocationSelected extends SelectorSwitchAction {
 	public ActionForward switchStart(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		SelectLocationForm location = (SelectLocationForm) form;
+		SelectLocationForm locationForm = (SelectLocationForm) form;
 
 		
-		if (!location.isReseted()) {
-			location.setReseted(false);
+		if (!locationForm.isReseted()) {
+			locationForm.setReseted(false);
 			logger.info("calling reset");
-			location.reset(mapping, request);
+			locationForm.reset(mapping, request);
 		}
 
 
 		Integer impLevelValue;
-		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( location.getImplemLocationLevel() );
+		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( locationForm.getImplemLocationLevel() );
 		if ( implLocValue == null )
 			implLocValue				= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
 		if (implLocValue != null) {
@@ -56,21 +56,39 @@ public class DynLocationSelected extends SelectorSwitchAction {
 		else
 			impLevelValue 	= new Integer( 1 );
 
-		location.setImpLevelValue( impLevelValue );
+		locationForm.setImpLevelValue( impLevelValue );
 		
 		/* New Region Manager changes */
 		if ( !"true".equals( request.getParameter("edit") ) ) {
-			location.setParentLocId(null);
-			location.getLocationByLayers().clear();
-			location.getSelectedLayers().clear();
+			locationForm.setParentLocId(null);
+			locationForm.getLocationByLayers().clear();
+			locationForm.getSelectedLayers().clear();
 		}
 		String cIso= FeaturesUtil.getDefaultCountryIso();
-		Long parentLocId			= location.getParentLocId();
+		Long parentLocId			= locationForm.getParentLocId();
 		
-		Map<Integer, Collection<KeyValue>> locationByLayers		=  location.getLocationByLayers();
+		Map<Integer, Collection<KeyValue>> locationByLayers		=  locationForm.getLocationByLayers();
 		
+		AmpCategoryValue implLevel		= CategoryManagerUtil.getAmpCategoryValueFromDb( locationForm.getImplemLevel() );
+		if ( implLevel!=null && 
+				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) && 
+				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) )  {
+			Collection<AmpCategoryValueLocations> countries = 
+				DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			if ( countries != null ) {
+				Integer countryIndex	= null;
+				ArrayList<KeyValue> countriesKV				= new ArrayList<KeyValue>();
+				for (AmpCategoryValueLocations country: countries) {
+					countryIndex	= (countryIndex==null)?country.getParentCategoryValue().getIndex():countryIndex;
+					KeyValue countryKV						= new KeyValue(country.getId().toString() , country.getName() );
+					countriesKV.add(countryKV);
+				}
+				locationByLayers.put(countryIndex, countriesKV);
+			}
+			return mapping.findForward("forward");
+		}
         if(cIso!=null && parentLocId == null){ // Setting up the country
-        	location.setDefaultCountryIsSet(true);
+        	locationForm.setDefaultCountryIsSet(true);
         	AmpCategoryValueLocations defCountry		= DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
         	Integer countryLayerIndex						= defCountry.getParentCategoryValue().getIndex();
         	KeyValue countryKV							= new KeyValue(defCountry.getId().toString() , defCountry.getName() );
@@ -84,7 +102,7 @@ public class DynLocationSelected extends SelectorSwitchAction {
         
         while ( parentLocId != null ) {
         	AmpCategoryValueLocations parentLoc					= DynLocationManagerUtil.getLocation(parentLocId, true);
-        	location.getSelectedLayers().put(parentLoc.getParentCategoryValue().getIndex(), parentLoc.getId() );
+        	locationForm.getSelectedLayers().put(parentLoc.getParentCategoryValue().getIndex(), parentLoc.getId() );
         	
         	Iterator<Entry<Integer, Collection<KeyValue>>> entryIter		= locationByLayers.entrySet().iterator();
         	while ( entryIter.hasNext() ) {
@@ -110,8 +128,8 @@ public class DynLocationSelected extends SelectorSwitchAction {
 	        			 * If we are on the last layer that needs to be shown, we have to 
 	        			 * hide locations that are already selected
 	        			 */
-	        			if ( currentLayer == implLocValue.getIndex() && location.getSelectedLocs() != null ) {
-	        				for ( org.digijava.module.aim.helper.Location l: location.getSelectedLocs() ) {
+	        			if ( currentLayer == implLocValue.getIndex() && locationForm.getSelectedLocs() != null ) {
+	        				for ( org.digijava.module.aim.helper.Location l: locationForm.getSelectedLocs() ) {
 	        					if ( child.equals(l.getAmpCVLocation()) ) {
 	        						addLocationAllowed	= false;
 	        						break;

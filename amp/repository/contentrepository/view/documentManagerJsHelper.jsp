@@ -45,7 +45,7 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='css/paginator.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>">
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datatable-min.js'/>" > </script>
@@ -101,7 +101,7 @@
 	/* AJAX Callback object for showing versions*/
 	var callbackForVersions	= {
 		success: function (o) {
-			YAHOO.amp.panels[1].setBody( "<div class='versions_markup' align='center' id='versions_div'>" + o.responseText + "</div>");
+			YAHOO.amp.panels[1].setBody( "<div class='versions_markup yui-skin-sam' align='center' id='versions_div'>" + o.responseText + "</div>");
 			setHeightOfDiv("versions_div", 250, 250);
 			YAHOO.amp.table.enhanceVersionsMarkup();
 			YAHOO.amp.panels[1].setFooter("* ${translation_public_ver_msg}");
@@ -138,10 +138,8 @@
 
 		    var oConfigs = { 
 	                paginator:new YAHOO.widget.Paginator({ 
-	                	rowsPerPage:5,
-	                	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
-	                	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
-	                	rowsPerPageOptions : [5,10,25,50,100]
+	                	rowsPerPage:10,
+	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"  	
 	                }) 
 	        		}; 
 	  
@@ -325,9 +323,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     var oConfigs = { 
 	                paginator:new YAHOO.widget.Paginator({ 
 	                	rowsPerPage:10,
-	                	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
-	                	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
-	                	rowsPerPageOptions : [10,25,50,100]
+	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"
 	                }) 
 	        		}; 
 	  

@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.importers.ImporterWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -98,7 +99,8 @@ public class StandaloneAMPStartup {
 				//EXAMPLE OF A WORKING HIBERNATE SESSION OBJECT:
 				Session session = PersistenceManager.getSession();
 				
-		 
+				ImporterWorker iw=new ImporterWorker("/store/workspace/SVN_amp_head_1_14/importers");
+				iw.start();
 				//generate200k((long)9,session);
 				
 				PersistenceManager.releaseSession(session);

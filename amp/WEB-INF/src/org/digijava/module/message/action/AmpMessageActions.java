@@ -486,9 +486,10 @@ public class AmpMessageActions extends DispatchAction {
 		int calEventType=0;
                 AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
                 int maxStorage = 0;
-                if (settings.getMsgStoragePerMsgType() != null) {
-                    maxStorage = settings.getMsgStoragePerMsgType().intValue();
-                }
+                if(settings!=null)
+                	if (settings.getMsgStoragePerMsgType() != null) {
+                		maxStorage = settings.getMsgStoragePerMsgType().intValue();
+                	}
 		msgType=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false,maxStorage);
 		alertType=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true,false,  maxStorage);
 		approvalType=AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(),true,false,  maxStorage);

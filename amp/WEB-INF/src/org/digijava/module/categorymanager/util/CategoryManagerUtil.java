@@ -263,6 +263,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			{
 				AmpCategoryValue x=(AmpCategoryValue)it.next();
 				return x;
+				
 			}
 		}
 		return null;
@@ -270,6 +271,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	
 	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId) {
 		return getAmpCategoryValueFromDb( valueId, false );
+		
 	}
 	
 	/**

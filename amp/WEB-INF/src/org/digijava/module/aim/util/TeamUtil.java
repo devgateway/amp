@@ -920,7 +920,7 @@ public class TeamUtil {
             String qryStr = "select grp from " + Group.class.getName()
                 + " grp " + "where (grp.key=:key) and (grp.site=:sid)";
             Query qry = session.createQuery(qryStr);
-            qry.setParameter("key", Group.EDITORS, Hibernate.STRING);
+            qry.setParameter("key", Group.MEMBERS, Hibernate.STRING);
             qry.setParameter("sid", site.getId(), Hibernate.LONG);
             Iterator itr = qry.list().iterator();
             Group group = null;

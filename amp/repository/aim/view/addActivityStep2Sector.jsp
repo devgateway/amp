@@ -195,10 +195,7 @@
 		                                                            </field:display>
 		                                                        </td>
                                                        		 	<td> &nbsp;
-<!--                                                                 	<input id="<c:out value="${percentageType}"/>DivideCheck" type="checkbox" onchange="dividePercentages('<c:out value="${percentageType}"/>');" />-->
-<!--                                                                 <html:checkbox name="aimEditActivityForm" property="sectors.sectorDividePercent" onchange="dividePercentages('${percentageType}');" />-->
-<!--                                                                 	<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>   -->
-																	<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('${percentageType}');">
+	                                                               <html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('${percentageType}');">
 																		<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																	</html:button>                                                         
                                                         		</td>

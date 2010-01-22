@@ -112,7 +112,7 @@ public class MsgSettingsAction extends DispatchAction {
 			}
 			
 			//only UserMessage and AmpAlert have sent/draft tabs
-			if(clazz.equals(UserMessage.class)||clazz.equals(AmpAlert.class)){
+			if(clazz.equals(UserMessage.class)||clazz.equals(AmpAlert.class)||clazz.equals(Approval.class)){
 				//SENT
 				membersIds=AmpMessageUtil.getOverflowedMembersIdsForSentOrDraft(limit, clazz, false);
 				if(membersIds!=null && membersIds.size()>0){

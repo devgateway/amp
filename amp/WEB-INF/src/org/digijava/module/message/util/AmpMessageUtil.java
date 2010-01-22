@@ -379,7 +379,7 @@ public class AmpMessageUtil {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false,msgStoragePerMsgType);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false and msg.name order by msg.creationDate";	
+			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			
 			//if max.storage is less then amount ,then we should not show extra messages. We must show the oldest(not newest) max.storage amount messages.

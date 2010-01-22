@@ -35,7 +35,7 @@ public class AmpMessageUtil {
 		List<AmpMessage> returnValue=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();			
-			queryString= "select a from " + clazz.getName()+ " a where a.name ";
+			queryString= "select a from " + clazz.getName()+ " a ";
 			query=session.createQuery(queryString);
 			returnValue=query.list();
 		}catch(Exception ex) {

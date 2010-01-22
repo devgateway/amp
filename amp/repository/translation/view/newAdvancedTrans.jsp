@@ -127,8 +127,8 @@
 
 <div class="advancedTranslations">
 	<digi:form styleId="frmNewAdvancedTrns" action="/showNewAdvancedTranslation.do" method="post">
-		<html:hidden name ="newAdvancedTrnForm" property="pageNumber"/>
-		<html:hidden name ="newAdvancedTrnForm" property="changesOpened"/>
+		<html:hidden styleId="hiddenPageNumber" name ="newAdvancedTrnForm" property="pageNumber"/>
+		<html:hidden styleId="hiidenChangesOpened" name ="newAdvancedTrnForm" property="changesOpened"/>
 		<div class="pageTitle">
 			<span class="subtitle-blue">Search Translations</span>
 		</div>
@@ -176,13 +176,16 @@
 									<div class="trnContainers">
 										<c:forEach items="${msgGroup.sortedMessages}" var="msg">
 											<div class="trnContainer">
-												<html:hidden name="msg" property="locale"/>
-												<html:hidden name="msg" property="key"/>
+												<html:hidden styleClass="hiddenLocale" name="msg" property="locale"/>
+												<html:hidden styleClass="hiddenKey" name="msg" property="key"/>
 												<table>
 													<tr>
 														<td class="trnLanguage">${msg.locale}</td>
 														<td class="trnText">
 															<html:text name="msg" property="message" styleClass="txtTranslation" />
+														</td>
+														<td>
+															<a class="deleteTranslation"><img alt="Delete translation" src="<digi:file src='images/deleteIcon.gif'/>"></a>
 														</td>
 													</tr>
 												</table>
@@ -223,8 +226,8 @@
 		</div>
 		<div class="pagination">Pages:
 			<c:forEach begin="1" end="${newAdvancedTrnForm.totalPages}" var="pageNo">
-				<c:if test="${pageNo==newAdvancedTrnForm.pageNumber+1}"><strong>${pageNo}</strong></c:if>&nbsp;
-				<c:if test="${pageNo!=newAdvancedTrnForm.pageNumber+1}"><a href="javascript: gotoPage(${pageNo})">${pageNo}</a></c:if>&nbsp;
+				<c:if test="${pageNo==newAdvancedTrnForm.pageNumber}"><strong>${pageNo}</strong></c:if>&nbsp;
+				<c:if test="${pageNo!=newAdvancedTrnForm.pageNumber}"><a href="javascript: gotoPage(${pageNo})">${pageNo}</a></c:if>&nbsp;
 			</c:forEach>
 		</div>
 	</digi:form>
@@ -234,16 +237,17 @@
 
 	<digi:context name="undoAction" property="context/module/moduleinstance/AdvTranUndoChanges.do" />
 	<digi:context name="addAction" property="context/module/moduleinstance/newAdvTranAdd.do" />
+	<digi:context name="delAction" property="context/module/moduleinstance/newAdvTranDelete.do" />
 	<digi:context name="getChanges" property="context/module/moduleinstance/AdvTranGetChanges.do" />
 	<digi:context name="saveChanges" property="context/module/moduleinstance/AdvTranSaveChanges.do" />
 	
-
-	
 	var imgPlus 		= '<digi:file src="images/dhtml/DHTMLSuite_plus.gif"/>';
 	var imgMinus 		= '<digi:file src="images/dhtml/DHTMLSuite_minus.gif"/>';
+	var imgLoading		= '<digi:file src="images/amploading.gif"/>';
 	var undoUrl			= '<%=undoAction%>';
 	var saveAllUrl		= '<%=saveChanges%>';
 	var addUrl			= '<%=addAction%>';
+	var delUrl			= '<%=delAction%>';
 	var getChangesUrl	= '<%=getChanges%>';
 	
 	var arrAvailableLocales = new Array();
@@ -285,35 +289,30 @@
 		);
 		$('.showhide').toggle( 
 				function(){
-					$('div.searchResults').animate({width:'75%'},400);
-					$('div.changesPanel').animate({width: '25%'},400,function(){					
-						$('div.changesContainer').fadeIn('slow');
-						$('div.showhide').html('&gt;&gt;');
-					});
-					var opened = document.getElementsByName('changesOpened')[0];
-					opened = true;
+					openChangesList(true);
 				},
 				function(){
-					$('div.changesContainer').fadeOut('slow',function(){
-						$('div.searchResults').animate({width : '99%' },400);
-						$('div.changesPanel').animate({width : '1%'},400);
-						$('div.showhide').html('&lt;&lt;');
-					});
-					var opened = document.getElementsByName('changesOpened')[0];
-					opened = false;
+					openChangesList(false);
 				}
 		);
 
-		var opened = document.getElementsByName('changesOpened')[0];
-		if (opened.value==true){
-			$('.showhide').toggle();
+		$('a.deleteTranslation').click(function(){
+			deleteTranslation(this);
+		});
+		
+		loadChanges();
+
+		var opened = $('#hiidenChangesOpened').val();
+		if (opened=='true'){
+			openChangesList(true);
 		}
 
-		loadChanges();
 		
 	});//document ready end
 
 	function loadChanges(){
+		var imgTag = '<div align="center"><img src="'+imgLoading+'"></div>';
+		$('div.changesContainer').html(imgTag);
 		var resp=$.ajax({
 			   type: 'GET',
 			   url: getChangesUrl,
@@ -326,6 +325,44 @@
 		}).responseText;
 	}
 
+
+	function openChangesList(open){
+		if (open){
+			$('div.searchResults').animate({width:'75%'},300);
+			$('div.changesPanel').animate({width: '25%'},300,function(){					
+				$('div.changesContainer').fadeIn('slow');
+				$('div.showhide').html('&gt;&gt;');
+			});
+			$('#hiidenChangesOpened').val(true);
+		}else{
+			$('div.changesContainer').fadeOut('slow',function(){
+				$('div.searchResults').animate({width : '99%' },300);
+				$('div.changesPanel').animate({width : '1%'},300);
+				$('div.showhide').html('&lt;&lt;');
+			});
+			$('#hiidenChangesOpened').val(false);
+		}
+		
+	}
+	
+	function deleteTranslation(but){
+		if (confirm('Are you sure?')){
+			var key = $(but).parents('div.trnContainer').find('input.hiddenKey').val();
+			var loc = $(but).parents('div.trnContainer').find('input.hiddenLocale').val();
+			var resp=$.ajax({
+				   type: 'POST',
+				   url: delUrl,
+				   data: ({addKey : key, addLocale : loc}),
+				   cache : false,
+				   success: function(data,msg){
+				   		$(but).parents('div.trnContainer').remove();
+						loadChanges();
+				   },
+			   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot delete translation.');} 
+			}).responseText;
+		}
+	}
+	
 	function attachChangesButtonEvents(){
 
 		$('#btnUndoSelected').click(function(){
@@ -464,8 +501,7 @@
 	}
 
 	function gotoPage(pageNumber){
-		var el = document.getElementsByName('pageNumber')[0];
-		el.value=pageNumber
+		$('#hiddenPageNumber').val(pageNumber);
 		var myForm = document.newAdvancedTrnForm;
 		myForm.submit();
 	}

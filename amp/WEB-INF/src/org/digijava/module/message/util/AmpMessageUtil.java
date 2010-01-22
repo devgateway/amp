@@ -35,7 +35,7 @@ public class AmpMessageUtil {
 		List<AmpMessage> returnValue=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();			
-			queryString= "select a from " + clazz.getName()+ " a";
+			queryString= "select a from " + clazz.getName()+ " a where a.name ";
 			query=session.createQuery(queryString);
 			returnValue=query.list();
 		}catch(Exception ex) {
@@ -379,7 +379,7 @@ public class AmpMessageUtil {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false,msgStoragePerMsgType);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false order by msg.creationDate";	
+			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false and msg.name order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			
 			//if max.storage is less then amount ,then we should not show extra messages. We must show the oldest(not newest) max.storage amount messages.
@@ -849,8 +849,8 @@ public class AmpMessageUtil {
 		List contacts=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select prop.contact, prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
-					" and prop.value is not null and trim(prop.value)!=''";
+			queryString="select concat(prop.contact.name,"+"' ',"+"prop.contact.lastname), prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
+					" and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!=''";
 			query=session.createQuery(queryString);
 			query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
 			contacts=query.list();
@@ -864,12 +864,11 @@ public class AmpMessageUtil {
 			int i=0;
 			for (Object contRow : contacts) {
 				Object[] row = (Object[])contRow;
-				AmpContact contact=(AmpContact)row[0];
+				String contact=(String)row[0];
 				String contEmail=(String)row[1];
 				
 				if(contact!=null){
-					String contactName=contact.getName() +" "+ contact.getLastname();
-					retVal[i]=contactName + " <" + contEmail + ">";
+					retVal[i]=contact+ " <" + contEmail + ">";
 				}
 				i++;
 			}

@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +28,9 @@ import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.dataExchange.Exception.AmpImportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.form.ExportForm;
@@ -84,7 +89,7 @@ public class ImportAction extends MultiAction {
 		if(iform.getLanguages() == null || iform.getLanguages().length < 1) iform.setLanguages(langArray);
 		
 
-		String[] options = {TranslatorWorker.translateText("insert",locale, siteId),TranslatorWorker.translateText("update",locale, siteId)};
+		String[] options = {TranslatorWorker.translateText("insert",locale, siteId),TranslatorWorker.translateText("update",locale, siteId),TranslatorWorker.translateText("insert&update",locale, siteId)};
 		if(iform.getOptions() == null || iform.getOptions().length < 1) iform.setOptions(options);
 		
 		if(request.getParameter("loadFile")!=null) {
@@ -96,12 +101,15 @@ public class ImportAction extends MultiAction {
 			return modeSaveImport(mapping, iform, request, response);
 
 		iform.setActivityStructure(ExportHelper.getActivityStruct("activity","activityStructure","activity",ActivityType.class,true));
-	
+
 		ActionErrors errors = (ActionErrors) session.getAttribute("DEimportErrors");
 		if(errors != null){
 			saveErrors(request, errors);
 			session.setAttribute("DEimportErrors", null);
 		}
+		
+		iform.setAllActivitiesFromDB(ActivityUtil.getAllActivitiesByKeys());
+		
 		return mapping.findForward("forward");
 	}
 
@@ -166,6 +174,25 @@ public class ImportAction extends MultiAction {
         }
         
         //importBuilder.splitInChunks(inputStream1);
+        
+        importBuilder.setActivityStructure(deImportForm.getActivityStructure());
+        
+        if(deImportForm.getSelectedOptions() !=null && deImportForm.getSelectedOptions().length>0)
+        	importBuilder.setInsertUpdate(deImportForm.getSelectedOptions()[0]);
+        
+        if(deImportForm.getPrimaryKeys() != null)
+	        for (int i = 0; i < deImportForm.getPrimaryKeys().length; i++) {
+	        	importBuilder.getPrimaryKeys().add(deImportForm.getPrimaryKeys()[i]);
+	        	if(deImportForm.getPrimaryKeys()[i].compareTo("title") == 0)
+	        		importBuilder.setTitleKey(true);
+	        	else if(deImportForm.getPrimaryKeys()[i].compareTo("projectId") == 0)
+	        			importBuilder.setProjectIdKey(true);
+	        			else if(deImportForm.getPrimaryKeys()[i].compareTo("budgetCode") == 0)	
+	        					importBuilder.setBudgetCodeKey(true);
+			}
+        
+        importBuilder.setAllActivitiesFromDB(processActivitiesToTreeSet(deImportForm.getAllActivitiesFromDB(),importBuilder));
+        
         importBuilder.splitInChunks(new ByteArrayInputStream(outputStream.toString().getBytes()));
         importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd",locale, siteId);
         importBuilder.createActivityTree();
@@ -178,6 +205,30 @@ public class ImportAction extends MultiAction {
 		return mapping.findForward("afterUploadFile");
 	}
 	
+	private TreeSet<String> processActivitiesToTreeSet(List allActivitiesFromDB, ImportBuilder importBuilder) {
+		// TODO Auto-generated method stub
+		TreeSet<String> result = new TreeSet<String>();
+		String title = "";
+		String ampId = "";
+		String budgetCode = "";
+		
+		for (Iterator it = allActivitiesFromDB.iterator(); it.hasNext();) {
+			Object[] o = (Object[]) it.next();
+			title = (String)o[0];
+			ampId = (String)o[1];
+			budgetCode = (String)o[2];
+			String s= "";
+			if(importBuilder.isTitleKey())
+				s+=title+"###";
+			if(importBuilder.isProjectIdKey())
+				s+=ampId+"###";
+			if(importBuilder.isBudgetCodeKey())
+				s+=budgetCode+"###";
+			result.add(s);
+		}
+		return result;
+	}
+
 	public ActionForward downloadLog(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	throws Exception {

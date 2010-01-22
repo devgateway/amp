@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +51,6 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -72,7 +72,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -81,7 +80,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -111,6 +109,7 @@ import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
 import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
 import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
+import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.springframework.util.FileCopyUtils;
@@ -125,7 +124,26 @@ public class ImportBuilder {
 	private AmpActivity activity = null;
 	
 	private Activities activities = null;
+	private TreeSet<String> allActivitiesFromDB = null;
 	
+	public TreeSet<String> getAllActivitiesFromDB() {
+		return allActivitiesFromDB;
+	}
+
+	public AmpColumnEntry activityStructure = null;
+
+	public AmpColumnEntry getActivityStructure() {
+		return activityStructure;
+	}
+
+	public void setActivityStructure(AmpColumnEntry activityStructure) {
+		this.activityStructure = activityStructure;
+	}
+
+	public void setAllActivitiesFromDB(TreeSet<String> allActivitiesFromDB) {
+		this.allActivitiesFromDB = allActivitiesFromDB;
+	}
+
 	private static Logger logger = Logger.getLogger(ImportBuilder.class);
 	
 	private HashMap hm = null;
@@ -134,6 +152,93 @@ public class ImportBuilder {
 	private Collection<String> activityList = null; 
 	private AmpDEImportLog root = null;
 	
+	private String insertUpdate="";
+	private ArrayList<String> primaryKeys = new ArrayList(); 
+	
+	private boolean titleKey=false;
+	private boolean projectIdKey=false;
+	private boolean budgetCodeKey = false;
+	
+	public boolean isTitleKey() {
+		return titleKey;
+	}
+
+
+
+
+
+	public void setTitleKey(boolean titleKey) {
+		this.titleKey = titleKey;
+	}
+
+
+
+
+
+	public boolean isProjectIdKey() {
+		return projectIdKey;
+	}
+
+
+
+
+
+	public void setProjectIdKey(boolean projectIdKey) {
+		this.projectIdKey = projectIdKey;
+	}
+
+
+
+
+
+	public boolean isBudgetCodeKey() {
+		return budgetCodeKey;
+	}
+
+
+
+
+
+	public void setBudgetCodeKey(boolean budgetCodeKey) {
+		this.budgetCodeKey = budgetCodeKey;
+	}
+
+
+
+
+
+	public ArrayList<String> getPrimaryKeys() {
+		return primaryKeys;
+	}
+
+
+
+
+
+	public void setPrimaryKeys(ArrayList<String> primaryKeys) {
+		this.primaryKeys = primaryKeys;
+	}
+
+
+
+
+
+	public String getInsertUpdate() {
+		return insertUpdate;
+	}
+
+
+
+
+
+	public void setInsertUpdate(String insertUpdate) {
+		this.insertUpdate = insertUpdate;
+	}
+
+
+
+
+
 	public ImportBuilder(){
 		//activity = new AmpActivity();
 		//request = null;
@@ -1653,14 +1758,18 @@ public class ImportBuilder {
 	private void validateFields(AmpDEImportLog iLog, Activities acts, String locale, Long siteId) {
 		// TODO Auto-generated method stub
 		String error="";
-		if(activities !=null && acts.getActivity() !=null)
+		//if(activities !=null && acts.getActivity() !=null)
+		if(acts.getActivity() !=null)
 			for (Iterator<ActivityType> it = acts.getActivity().iterator(); it.hasNext();) {
 				error = "";
 				ActivityType activityImported = (ActivityType) it.next();
-				
+				String title="", ampId="", budgetCode=""; 
 				//title
 				try {
 					validate(activityImported.getTitle());
+					title=activityImported.getTitle().iterator().next().getValue();
+					ampId=activityImported.getDbKey();
+					budgetCode = ""; //TODO chapitre code or PTIP
 				} catch (AmpImportException e) {
 					try {
 						error = TranslatorWorker.translateText("Title "+e.getMessage(), locale, siteId);
@@ -1685,6 +1794,15 @@ public class ImportBuilder {
 				
 				
 				activityImported.getSectors();
+				String s="";
+				//activity exists?
+				if(this.isTitleKey())
+					s+=title+"###";
+				if(this.isProjectIdKey())
+					s+=ampId+"###";
+				if(this.isBudgetCodeKey())
+					s+=budgetCode+"###";
+				if(this.getAllActivitiesFromDB().contains(s))iLog.setExistingActivity(true);
 			}
 		
 	}

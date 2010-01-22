@@ -3,6 +3,8 @@
  */
 package org.digijava.module.dataExchange.form;
 
+import java.util.List;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
@@ -26,6 +28,16 @@ public class ImportForm extends ActionForm {
 	private String[] options;
 	private String[] selectedOptions;
 	
+	private List allActivitiesFromDB;
+	
+	public List getAllActivitiesFromDB() {
+		return allActivitiesFromDB;
+	}
+
+	public void setAllActivitiesFromDB(List allActivitiesFromDB) {
+		this.allActivitiesFromDB = allActivitiesFromDB;
+	}
+
 	private AmpDEImportLog activityTree = null;
 	
 	private AmpColumnEntry activityStructure = null;

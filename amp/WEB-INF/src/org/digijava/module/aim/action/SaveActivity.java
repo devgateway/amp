@@ -410,7 +410,9 @@ public class SaveActivity extends Action {
 		}
 
 		try {
-			activity.setLineMinRank(Integer.valueOf(eaForm.getPlanning().getLineMinRank()));
+			
+			AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(Long.parseLong(eaForm.getPlanning().getLineMinRank()));
+			activity.setLineMinRank(new Integer(catVal.getValue()));
 			if (activity.getLineMinRank().intValue() < 1 || activity.getLineMinRank().intValue() > 5) {
 				logger.debug("Line Ministry Rank is out of permisible range (1 to 5)");
 				activity.setLineMinRank(null);
@@ -421,8 +423,10 @@ public class SaveActivity extends Action {
 			activity.setLineMinRank(null);
 		}
 		try {
-			activity.setPlanMinRank(Integer.valueOf(eaForm.getPlanning().getPlanMinRank()));
+			AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(Long.parseLong(eaForm.getPlanning().getPlanMinRank()));
+			activity.setPlanMinRank(new Integer(catVal.getValue()));
 			if (activity.getPlanMinRank().intValue() < 1 || activity.getPlanMinRank().intValue() > 5) {
+			//if (Integer.parseInt(catVal.getValue()) < 1 || Integer.parseInt(catVal.getValue()) > 5) {
 				logger.debug("Plan Ministry Rank is out of permisible range (1 to 5)");
 				activity.setPlanMinRank(null);
 			}

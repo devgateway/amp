@@ -671,9 +671,9 @@ html>body #mainEmpty {
 			</td>
 		</tr>
 	</table>
-	
+<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/datasource-min.js"/>"></script>	
 <script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/autocomplete-min.js"/>"></script>
-<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/datasource-min.js"/>"></script>
+
 <script type="text/javascript">
 	var myArray = [
 		<c:forEach var="contName" items="${addressbookForm.contactNames}">

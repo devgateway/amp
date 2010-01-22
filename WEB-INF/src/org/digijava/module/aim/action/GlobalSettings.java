@@ -101,12 +101,15 @@ public class GlobalSettings extends Action {
 		
 		Collection col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
+			try{
 			FeaturesUtil.setGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
 	    	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
 	    	FeaturesUtil.switchLogicInstance();	    	
-	     	
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 	    	ServletContext ampContext = this.getServlet().getServletContext();
 			AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
 			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"));

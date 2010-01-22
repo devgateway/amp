@@ -388,15 +388,18 @@
 		
 		<echo message="Creating Hibernate table structure and keys..."/>
 		<antcall target="database"/>
-	
+		
 		<echo message="Exporting stored functions from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
 			<classpath refid="compile.classpath"/>
-			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,') RETURNS ',returns,' ',body, ';;') FROM proc WHERE db='${clean.source}'</transaction>
+			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,') ', IF( LENGTH(returns)>0 ,' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}'</transaction>
 		</sql>
 		<echo message="Exporting views from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
 			<classpath refid="compile.classpath"/>
+			<transaction>SET foreign_key_checks = 0</transaction>
+			<transaction>drop table if exists ${clean.db}.amp_activity</transaction>
+			<transaction>SET foreign_key_checks = 1</transaction>
 			<transaction>SELECT concat('CREATE OR REPLACE VIEW ',table_name,' AS ',view_definition,';;') FROM views WHERE table_schema='${clean.source}'</transaction>
 		</sql>
 		<replace file="tmp_${clean.db}_ddl_copy.sql" token="`${clean.source}`." value=""/>
@@ -406,7 +409,9 @@
 		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
+			<!-- 
 			<transaction>INSERT IGNORE AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>
+			-->
 			<transaction>INSERT IGNORE amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>
 			<transaction>INSERT IGNORE amp_category_value (SELECT * from ${clean.source}.amp_category_value)</transaction>
 			<transaction>INSERT IGNORE amp_category_value_location (SELECT * from ${clean.source}.amp_category_value_location)</transaction>
@@ -473,7 +478,9 @@
 			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT IGNORE qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>
 			
 			<!-- create cached table mockups -->
+			<!-- 
 			<transaction>CREATE TABLE cached_amp_activity LIKE ${clean.source}.cached_amp_activity</transaction>
+			-->
 			<transaction>CREATE TABLE cached_v_donor_date_hierarchy LIKE ${clean.source}.cached_v_donor_date_hierarchy</transaction>
 			<transaction>CREATE TABLE cached_v_donor_funding LIKE ${clean.source}.cached_v_donor_funding</transaction>
 			<transaction>CREATE TABLE cached_v_national_program LIKE ${clean.source}.cached_v_national_program</transaction>

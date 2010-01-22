@@ -39,6 +39,7 @@ import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.AlertForDonorsTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
@@ -89,6 +90,9 @@ public class AmpMessageWorker {
                 }else if (e.getTrigger().equals(ActivityProposedStartDateTrigger.class)) {
                     newMsg = processActivityProposedStartDateEvent(e, newAlert, template);
                 }
+                else if (e.getTrigger().equals(AlertForDonorsTrigger.class)) {
+                    newMsg = processDonorAlertEvent(e, newAlert, template);
+                }
 
                 AmpMessageUtil.saveOrUpdateMessage(newMsg);
                 /**
@@ -121,6 +125,8 @@ public class AmpMessageWorker {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_TEAM_ID).toString()));
                 }else if(e.getTrigger().equals(ActivityProposedStartDateTrigger.class)) {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_TEAM_ID).toString()));
+                }else if (e.getTrigger().equals(AlertForDonorsTrigger.class)) {
+                    defineReceiversForDonorAlert(template, newMsg);
                 }else{ //<-- currently for else is left user registration or activity disbursement date triggers
                     List<AmpMessageState> statesRelatedToTemplate = null;
                     statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
@@ -135,18 +141,18 @@ public class AmpMessageWorker {
                         sendMailes(msgStateMap.values());
                     }
                 }
+
+                //sending mail to external reciviers
                 String externalReceivers = template.getExternalReceivers();
-                Collection<InternetAddress> addrCol=new ArrayList<InternetAddress>();
                 if (externalReceivers != null) {
                     String[] exReceivers = externalReceivers.split(",");
                     for (String email : exReceivers) {
                         if (email.indexOf("<") != -1) { // for handling contacts in the future...
                             email = email.substring(email.indexOf("<") + 1, email.indexOf(">"));
                         }
-                        addrCol.add(new InternetAddress(email));
+                        sendMail("system@digijava.org",email,template.getName(),"UTF8",template.getDescription());
                     }
-                    InternetAddress[] addresses = (InternetAddress[]) addrCol.toArray(new InternetAddress[addrCol.size()]);
-                    DgEmailManager.sendMail(addresses, "system@digijava.org", template, null);
+                  
                 }
               
             }
@@ -473,6 +479,15 @@ public class AmpMessageWorker {
         return createAlertFromTemplate(template, myHashMap, alert);
     }
 
+    /**
+     *
+     */
+    private static AmpAlert processDonorAlertEvent(Event e, AmpAlert alert, TemplateAlert template) {
+        HashMap<String, String> myHashMap = new HashMap<String, String> ();
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
+        return createAlertFromTemplate(template, myHashMap, alert);
+    }
+
     private static Approval createApprovalFromTemplate(TemplateAlert template, HashMap<String, String> myMap, Approval newApproval, boolean needsApproval) {
         newApproval.setName(DgUtil.fillPattern(template.getName(), myMap));
         newApproval.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
@@ -664,6 +679,19 @@ public class AmpMessageWorker {
             }
         }
     }
+     private static void defineReceiversForDonorAlert(TemplateAlert template, AmpMessage alert) throws Exception {
+        List<AmpMessageState> statesRelatedToTemplate = null;
+        statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
+        if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
+            String receivers= fillTOfieldForReceivers(statesRelatedToTemplate);
+            alert.setReceivers(receivers);
+            alert.setExternalReceivers(template.getExternalReceivers());
+            for (AmpMessageState state : statesRelatedToTemplate) {
+                    createMsgState(state, alert,false);
+                   
+            }          
+        }
+    }
 
     private static void createMsgState(AmpMessageState state, AmpMessage newMsg,boolean calendarSaveActionWasCalled) throws Exception {
         AmpMessageState newState = new AmpMessageState();
@@ -706,6 +734,18 @@ public class AmpMessageWorker {
                     receivers += tm.getMemberName() + " " + "<" + tm.getEmail() + ">;" + tm.getTeamName() + ";" + ", ";
                 }
             }
+        }
+        return receivers;
+    }
+     /*
+     * This function is used to create receivers String, which will be shown on view message page in TO: section
+     */
+    private static String fillTOfieldForReceivers(List<AmpMessageState> states) {
+        String receivers = "";
+        for (AmpMessageState state : states) {
+            AmpTeamMember receiver=state.getReceiver();
+            receivers+=receiver.getUser().getName() + " " + "<" + receiver.getUser().getEmail() + ">;" + receiver.getAmpTeam().getName()+ ";";
+
         }
         return receivers;
     }

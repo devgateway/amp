@@ -14,6 +14,7 @@ import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
+import org.digijava.module.message.triggers.AlertForDonorsTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
  * @author Dare Roinishvili
@@ -38,7 +39,8 @@ public class MessageConstants {
                                                                 ActivityFinalDateForDisbursementsTrigger.class,
                                                                 ActivityProposedApprovalDateTrigger.class,
                                                                 ActivityProposedCompletionDateTrigger.class,
-                                                                ActivityProposedStartDateTrigger.class};
+                                                                ActivityProposedStartDateTrigger.class,
+                                                                AlertForDonorsTrigger.class};
 
     public static final  String[] triggerName=new String[] {"Save Actvity",
                                                             "Activity Disbursement Date",
@@ -53,7 +55,8 @@ public class MessageConstants {
                                                             "Activity Final Date For Disbursements",
                                                             "Activity Proposed Approval Date",
                                                             "Activity Proposed Completion Date",
-                                                            "Activity Proposed Start Date"};
+                                                            "Activity Proposed Start Date",
+                                                            "Alert For Donors"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

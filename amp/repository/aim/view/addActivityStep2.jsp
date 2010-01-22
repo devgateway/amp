@@ -80,6 +80,8 @@ function selectLocation() {
 	var params="levelId="+document.getElementsByName("location.levelId")[0].value;
 	params+="&implemLocationLevel="+document.getElementsByName("location.implemLocationLevel")[0].value;
 	params+="&edit=false";
+	params+="&showLocLevelSelect=false";
+    params+="&implemLevel=" + document.getElementsByName("location.levelId")[0].value;
     params+="&showLocLevelSelect=false";
     params+="&implemLevel=" + document.getElementsByName("location.levelId")[0].value;
 	myAddLocation(params);
@@ -199,6 +201,48 @@ function popupwin(){
   winpopup.document.close();
 }
 
+function dividePercentages(config){
+	var i;
+	var j;
+	var conf=document.getElementById(config+'Config');
+   	if (conf != null){
+   		var rows=conf.getElementsByTagName('tr');
+   		var qty=rows.length;
+   		var percent= ""+100/qty;
+   		if (percent.indexOf('.')!=-1){
+   			var temp = percent.substring(0,percent.indexOf('.'));
+       		percent = temp + percent.substr(percent.indexOf('.'),4);
+   		}
+   		var rest = 0;	
+   		var lastI = 0;
+   		var lastJ = 0;
+    	for ( i = 0; i < rows.length; i++) {
+    		var inputs = rows[i].getElementsByTagName('input');
+			for ( j = 0; j < inputs.length; j++) {
+				if (inputs[j].type == 'text'){
+	    			inputs[j].value = percent;
+			    	//inputs[j].readOnly = true;
+			    	//inputs[j].style.backgroundColor= '#DDDDDD';
+			    	rest = rest + (percent*1);
+			    	lastI = i;
+			    	lastJ = j;
+		    	}
+			}
+		}
+		var restStr = ""+rest;
+		restStr = restStr.substr(0,restStr.indexOf('.')+4);
+		var tempNum = 100 - (restStr*1);
+		restStr = ""+tempNum;
+		var lastValue = (tempNum*1) + (percent*1)
+		var lastValueStr = ""+lastValue;
+    	if (lastValueStr.indexOf('.')!=-1){
+    		temp = lastValueStr.substring(0,lastValueStr.indexOf('.'));
+    		lastValueStr = temp + lastValueStr.substr(lastValueStr.indexOf('.'),4);
+    	}
+    	rows[lastI].getElementsByTagName('input')[lastJ].value = lastValueStr;
+   	}
+}
+
 function validateSectorPercentage(){
   <c:set var="errMsgAddSector">
   <digi:trn key="aim:addSecorErrorMessage">
@@ -303,7 +347,10 @@ function validateSectorPercentage(){
                 sum+=parseFloat(val);
             }
         }
-                 
+        var sumStr = ""+sum;
+    	sumStr = sumStr.substr(0,sumStr.indexOf('.')+4);
+    	sum = sumStr*1; //this line were added to cut the result of sum, because there is a bug in the javascript calculation (45.45 + 9.09 = 54.540000000000006)
+    	         
         if (sum!=100&&sum>0) {
             if(i==1){
                sum_prim_sector=true;    
@@ -433,11 +480,13 @@ function validateLocationPercentage(){
     if(val=="") {
     	val=0;
     }
-    sum = sum + parseFloat(val);
+   	sum = sum + (val*1);
     i = i + 1;
   }
-
-
+	var sumStr = ""+sum;
+	sumStr = sumStr.substr(0,sumStr.indexOf('.')+4);
+	sum = sumStr*1; //this line were added to cut the result of sum, because there is a bug in the javascript calculation (45.45 + 9.09 = 54.540000000000006)
+	
 	if (checkoutSum){
 	 	if (sum!=100){
 	 		 alert("${errMsgSumPercentage}");

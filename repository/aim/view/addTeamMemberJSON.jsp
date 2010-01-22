@@ -11,15 +11,15 @@
 <link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/datatable.css" />
 <link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/connection-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/element-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/datasource-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/datatable-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/json-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/yahoo-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/event-min.js"></script> 
-<script type="text/javascript" src="/repository/xmlpatcher/js/paginator-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datatable-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script> 
 <style>
 .yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
 color:#000000;

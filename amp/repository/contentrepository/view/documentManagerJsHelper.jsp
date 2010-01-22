@@ -44,6 +44,7 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='css/paginator.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
 
 
@@ -53,6 +54,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/menu-amp-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container_core-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/paginator-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 
 
@@ -260,58 +262,78 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	var dt = "<%= dt %>";		
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
     this.columnHeaders = [
-		{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
-	    {key:"type",text:"${trans_headerType}",sortable:true},
-        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
-        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
-        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
-        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+		{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+	    {key:"type",label:"${trans_headerType}",sortable:true},
+        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+        {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
+        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
+        {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
+        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
     ];
 	}
 	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
 		this.columnHeaders = [
-    			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
-    			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
-    		    {key:"type",text:"${trans_headerType}",sortable:true},
-    	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-    	        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
-    	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
-    	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-    	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
-    	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+    			{key:"select",type:"checkbox", label:"${trans_headerSelect}",sortable:false,width:10},
+    			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+    		    {key:"type",label:"${trans_headerType}",sortable:true},
+    	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+    	        {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
+    	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+    	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
+    	        {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
+    	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
     	    ];
 	}else {
 	    this.columnHeaders = [
-      			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
-       		    {key:"type",text:"${trans_headerType}",sortable:true},
-       	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-        	    {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
-	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
-            	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
-	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+      			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+       		    {key:"type",label:"${trans_headerType}",sortable:true},
+       	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+        	    {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
+	   	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+            	{key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
+	            {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
+	            {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
 	    ];
 	}
-    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
+    //this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
     //var datasource				= YAHOO.util.DataSource(markup);
-    var options					= {
-    	    						pageCurrent:1,
-									rowsPerPage:10,
-							        pageLinksLength:2												        
-	                			  };
+    var oConfigs = { 
+	                paginator:new YAHOO.widget.Paginator({ 
+	                	rowsPerPage:10,
+	                	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
+	                	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
+	                	rowsPerPageOptions : [10,25,50,100]
+	                }) 
+	        		}; 
+	  
+    var tableEl						= markup.getElementsByTagName("table")[0];
+	var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
+	myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE; 
+	myDataSource.responseSchema		= {fields: [{key: "resource_title"},
+	                           		         {key: "type"},
+			                           		 {key: "file_name"},
+			                           		 {key: "date", parser: "date"},
+			                           		 {key: "size"},
+			                           		 {key: "cm_doc_type"},
+			                           		 {key: "description"},
+			                           		{key: "actions"}
+		                           		     	] 
+	                           		     	};
+	if ((checkBoxToHide == null) && (dt == "Related Documents")) {
+		myDataSource.responseSchema.fields.unshift({key: "select"});
+	}
 
-	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
+	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
 	
 	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
-		dataTable.showEmptyMessage();
+		//dataTable.showEmptyMessage();
 	}
     return dataTable;
 };

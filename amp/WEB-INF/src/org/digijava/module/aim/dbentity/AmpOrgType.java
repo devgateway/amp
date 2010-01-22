@@ -69,7 +69,8 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	}
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
-
+		if(this.orgType == null) return -1;
+		if(((AmpOrgType)arg0).getOrgType() == null) return 1;
 		return this.orgType.compareTo(((AmpOrgType)arg0).getOrgType());  
 		//return 0;
 	}

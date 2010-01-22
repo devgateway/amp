@@ -210,8 +210,6 @@
 		                                                     		 			</td>
 	                                                     					</field:display>
 																			<td> &nbsp;
-<!--                                                 								<input id="locationDivideCheck" type="checkbox" onchange="dividePercentages('location');" />-->
-<!--                                                 								<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>-->
 																				<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('location');">
 																					<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																				</html:button>                                                            

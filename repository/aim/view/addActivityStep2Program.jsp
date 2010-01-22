@@ -132,8 +132,6 @@
                                          								</field:display>
                                     								</td>
 							                                 		<td> &nbsp;
-<!--							                                           <input id="nationalProgDivideCheck" type="checkbox" onchange="dividePercentages('nationalProg');" />-->
-<!--							                                           <digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>  -->
 																		<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('nationalProg');">
 																			<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																		</html:button>                                                          
@@ -231,8 +229,6 @@
                                                         				</field:display>
 																	</td>
                                                   		 			<td> &nbsp;
-<!--			                                                            <input id="primaryProgDivideCheck" type="checkbox" onchange="dividePercentages('primaryProg');" />-->
-<!--			                                                            <digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>-->
 																		<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('primaryProg');">
 																			<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																		</html:button>                                                            
@@ -333,8 +329,6 @@
 	                                                         			</field:display>
 																	</td>
 																	<td> &nbsp;
-<!--	                                                            		<input id="secondaryProgDivideCheck" type="checkbox" onchange="dividePercentages('secondaryProg');" />-->
-<!--	                                                            		<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>-->
 																		<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('secondaryProg');">
 																			<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																		</html:button>                                                            

@@ -664,7 +664,7 @@ function commentWin(val) {
 																					<c:if test="${!empty activity.locations}">
                                                                                        
                                                                                          <tr>
-                                                                                        	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
+                                                                                        	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
                                                                                         	 	<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
 	                                                                                        	 	<td align="center" bgcolor="#ffffff">
 	                                                                                         		<i>
@@ -748,7 +748,7 @@ function commentWin(val) {
 																							<% pageContext.setAttribute("ancestorMap", DynLocationManagerUtil.getParents(loc)); %>
 																							<tr>
 																							<bean:size id="numOfAncestors" name="ancestorMap"/>
-																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
+																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
 																								<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
 																									<td align="center" bgcolor="#ffffff">
 																									<c:choose>

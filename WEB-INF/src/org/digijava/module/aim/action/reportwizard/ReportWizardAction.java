@@ -75,22 +75,22 @@ public class ReportWizardAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		ReportWizardForm myForm		= (ReportWizardForm) form;
-		
+	
 		myForm.setDuplicateName(false);
-		
 		return this.modeSelect(mapping, form, request, response);
 	}
 	
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
-		
 		if ( request.getParameter("reset")!=null && "true".equals(request.getParameter("reset")) )
 			modeReset(mapping, form, request, response);
 		
 		if (request.getParameter("editReportId") != null ) {
 			return modeEdit(mapping, form, request, response);
+		}
+		if (request.getParameter("runreport") != null ) {
+			return modeRun(mapping, form, request, response);
 		}
 		if (request.getParameter("reportTitle") == null){
 			if ( "true".equals( request.getParameter("tab") ) )
@@ -145,23 +145,28 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setPublicReport(false);
 		myForm.setAllowEmptyFundingColumns(false);
 		myForm.setUseFilters(false);
-		
 		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
 		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
-
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+			ReportWizardForm  myForm = (ReportWizardForm) form;
 		
-		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
 		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList()) );
 		myForm.setAmpMeasures( AdvancedReportUtil.getMeasureList() );
 		
 		if ( request.getParameter("desktopTab")!=null && "true".equals(request.getParameter("desktopTab")) ) {
 			myForm.setDesktopTab( true );
+		}
+		
+		AmpARFilter filter = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
+		if (filter!=null){
+			request.getSession().setAttribute("runreport", filter.isPublicView());
+		}else{
+			request.getSession().setAttribute("runreport", false);
 		}
 		
 		if ( myForm.getDesktopTab() )
@@ -363,6 +368,114 @@ public class ReportWizardAction extends MultiAction {
 		return null;
 	}
 	
+	public ActionForward modeRun(ActionMapping mapping, ActionForm form, 
+			HttpServletRequest request, HttpServletResponse response) throws Exception  {
+		
+		AmpARFilter filter = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
+		
+		if (filter!=null){
+			request.getSession().setAttribute("publicuser", filter.isPublicView());
+		}else{
+			request.getSession().setAttribute("publicuser", false);
+		}
+		
+		ReportWizardForm myForm		= (ReportWizardForm) form;
+		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
+		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();		
+		
+		AmpReports ampReport	= new AmpReports();
+		if ( "donor".equals(myForm.getReportType()) ) 
+				ampReport.setType( new Long(ArConstants.DONOR_TYPE) );
+		if ( "regional".equals(myForm.getReportType()) ) 
+				ampReport.setType( new Long(ArConstants.REGIONAL_TYPE) );
+		if ( "component".equals(myForm.getReportType()) ) 
+				ampReport.setType( new Long(ArConstants.COMPONENT_TYPE) );
+		if ( "contribution".equals(myForm.getReportType()) ) 
+				ampReport.setType( new Long(ArConstants.CONTRIBUTION_TYPE) );
+		
+		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
+		ampReport.setHideActivities( myForm.getHideActivities() );
+		ampReport.setOptions( myForm.getReportPeriod() );
+		ampReport.setReportDescription( myForm.getReportDescription() );
+		ampReport.setName( myForm.getReportTitle().trim() );
+		ampReport.setDrilldownTab( myForm.getDesktopTab() );
+		ampReport.setPublicReport(myForm.getPublicReport());
+		ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );
+		
+		if ( myForm.getReportId() != null ) {
+				if ( myForm.getOriginalTitle()!=null && myForm.getOriginalTitle().equals(myForm.getReportTitle()) )
+						ampReport.setAmpReportId( myForm.getReportId() );
+		}
+		
+		ampReport.setColumns( new HashSet<AmpReportColumn>() );
+		ampReport.setHierarchies( new HashSet<AmpReportHierarchy>() );
+		ampReport.setMeasures( new HashSet<AmpReportMeasures>() );
+		
+		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
+		
+		this.addFields(myForm.getSelectedColumns(), availableCols, ampReport.getColumns(), AmpReportColumn.class, level1);
+		this.addFields(myForm.getSelectedHierarchies(), availableCols, ampReport.getHierarchies(), AmpReportHierarchy.class, level1);
+		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
+		
+		/* If all columns are set as hierarchies we add the Project Title column */
+
+	
+
+		if (  ampReport.getColumns() != null && ampReport.getHierarchies() != null ) {
+			int numOfCols		= ampReport.getColumns().size();
+			int numOfHiers		= ampReport.getHierarchies().size();
+			/* "Cumulative Commitment", and "Cumulative Disbursement" are not treated as columns so if they appear 
+			 * we need to substract them from the total number of cols */
+			for ( AmpReportColumn tempRepCol: ampReport.getColumns() ) {
+				if ( ArConstants.COLUMN_CUMULATIVE_COMMITMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_UNDISB_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+			}
+			if ( numOfCols == numOfHiers ) {
+				for ( AmpColumns tempCol: availableCols ) {
+					if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
+						AmpReportColumn titleCol			= new AmpReportColumn();
+						titleCol.setLevel(level1);
+						titleCol.setOrderId( (ampReport.getColumns().size()+(long)1) );
+						titleCol.setColumn(tempCol); 
+						
+						ampReport.getColumns().add(titleCol);
+						break;
+					}
+				}
+			}
+		}
+		
+		filter	= (AmpARFilter) request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
+		if ( filter == null ){
+			if (request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER )!=null){
+				filter	= (AmpARFilter) request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
+			}else{
+				 filter = new AmpARFilter();
+			}
+			 filter.setPublicView(true);
+		}
+		
+		request.getSession().setAttribute("newpublicreport",ampReport);
+		
+		request.getSession().setAttribute(ArConstants.REPORTS_FILTER,filter);
+		return mapping.findForward("reportView");
+		
+	} 
+	
 	public ActionForward modeDynamicSave(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception { 
 		
@@ -405,7 +518,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		AdvancedReportUtil.saveReport(ampReport, ampTeamMember );
 		
-		//modeReset(mapping, form, request, response);
+		modeReset(mapping, form, request, response);
 		
 		return null;
 	}

@@ -76,7 +76,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
 		return result;
 	}
-
+	
 	private String ApllyVisibility(String schema) {
 		Document schemaxml = Schema2Xml(schema);
 		NodeList dimensions = schemaxml.getElementsByTagName("Dimension");

@@ -93,10 +93,8 @@
  --%>
 <%-- sort properties --%>
 <wcf:render ref="sortform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
-
 <%-- chart properties --%>
 <wcf:render ref="chartform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
-
 <%-- print properties --%>
 <wcf:render ref="printform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
@@ -121,9 +119,9 @@
 <wcf:render ref="query01.drillthroughtable" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
 
 <!-- Chart -->
-<p>
+<div>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
-<p>
+</div>
 <table>
 	<tr>
     	<td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">

@@ -362,11 +362,10 @@
 										<br /><br />
 									</div>
 								</c:if>
-								
+							<logic:present name="member" property="currentMember"> 	
 								<bean:define id="member" name="currentMember" scope="session" />
-                  				
-                  				
-							<c:if test="${ (!myForm.desktopTab) || (member.teamHead==true && member.teamAccessType=='Management')}">
+							</logic:present>
+                  			<c:if test="${ (!myForm.desktopTab) || (member.teamHead==true && member.teamAccessType=='Management')}">
 								<span class="list_header">
 									<digi:trn key="aim:reportBuilder:Options">Options</digi:trn>
 								</span>

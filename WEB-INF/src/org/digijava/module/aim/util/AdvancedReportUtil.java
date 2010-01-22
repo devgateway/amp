@@ -272,16 +272,6 @@ public final class AdvancedReportUtil {
 		{
 			logger.error(e);
 			////System.out.println(" Error in getColumnList()  :  " + e);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				logger.error(e);
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 
 		return coll;

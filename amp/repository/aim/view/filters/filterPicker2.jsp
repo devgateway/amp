@@ -19,6 +19,7 @@
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" /> --%>
 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
 <digi:instance property="aimReportsFilterPickerForm" />
 
@@ -27,7 +28,6 @@
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
-
 <div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 88%;">
 	<ul class="yui-nav" style="height: 10%">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a> </li>
@@ -37,8 +37,8 @@
 		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a> </li>
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a> </li>
 	</ul>
-	<div class="yui-content" style="background-color: #f6faff; display: block; height: 88%;">
-		<div id="donorsTab" style="display: block; height: 91%;">
+	<div class="yui-content" style="background-color: #f6faff; height: 88%;">
+		<div id="donorsTab" style="height: 91%;">
 			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
@@ -46,7 +46,7 @@
 				<jsp:include page="bigFilterTable.jsp"/>
 			</div>
 		</div>
-		<div id="relAgenciesTab" style="display: block; height: 91%;">
+		<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
 			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
@@ -54,7 +54,7 @@
 				<jsp:include page="bigFilterTable.jsp"/>
 			</div>
 		</div>
-		<div id="sectorsTab" style="display: block; height: 91%;">
+		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
 			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
@@ -62,7 +62,7 @@
 				<jsp:include page="bigFilterTable.jsp"/>
 			</div>
 		</div>
-		<div id="programsTab" style="display: block; height: 91%;" >
+		<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
 			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
@@ -70,7 +70,7 @@
 				<jsp:include page="bigFilterTable.jsp"/>
 			</div>
 		</div>
-		<div id="financingLocTab" style="display: block; height: 91%;" >
+		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
 			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
@@ -93,7 +93,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="otherCriteriaTab" style="display: block; height: 91%;">
+		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
 			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="otherCriteriaPropertyObj" />

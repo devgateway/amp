@@ -23,6 +23,7 @@ import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.util.TeamUtil;
 
 // Test
+@Deprecated
 public class GetDonorTeamActivities extends Action {
 	
 	private static Logger logger = Logger.getLogger(GetDonorTeamActivities.class);
@@ -32,7 +33,7 @@ public class GetDonorTeamActivities extends Action {
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
+	/*	
 		TeamActivitiesForm taForm = (TeamActivitiesForm) form;
 		String forward = null;
 		
@@ -56,5 +57,7 @@ public class GetDonorTeamActivities extends Action {
 		taForm.setTeamName(ampTeam.getName());
 		
 		return mapping.findForward(forward);
+	*/
+		return null;
 	}
 }

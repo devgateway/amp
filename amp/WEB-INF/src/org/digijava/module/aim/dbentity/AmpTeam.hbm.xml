@@ -26,13 +26,13 @@
 
 		<many-to-one name="relatedTeamId" column="related_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
-
-		<set name="activityList" table="AMP_TEAM_ACTIVITIES" lazy="true">
+		<!-- 		<set name="activityList" table="AMP_TEAM_ACTIVITIES" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_team_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity"
 				column="amp_activity_id" />
 		</set>
+		 -->
 
 		<set name="organizations" table="AMP_TEAM_ORGS" lazy="true">
 			<cache usage="read-write" />

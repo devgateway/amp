@@ -17,6 +17,7 @@ import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.util.TeamUtil;
 
 // Test
+@Deprecated 
 public class UpdateDonorActivities extends Action {
 	
 	private static Logger logger = Logger.getLogger(UpdateDonorActivities.class);
@@ -28,9 +29,9 @@ public class UpdateDonorActivities extends Action {
 		
 		String action = request.getParameter("actionEvent");
 		if (action != null && action.equalsIgnoreCase("delete")) {
-			TeamUtil.removeActivitiesFromDonor(taForm.getDnrTeamId(),taForm.getSelActivities());
+		//	TeamUtil.removeActivitiesFromDonor(taForm.getDnrTeamId(),taForm.getSelActivities());
 		} else {
-			TeamUtil.assignActivitiesToDonor(taForm.getDnrTeamId(),taForm.getSelActivities());	
+		//	TeamUtil.assignActivitiesToDonor(taForm.getDnrTeamId(),taForm.getSelActivities());	
 		}
 		taForm.setSelActivities(null);
 		return mapping.findForward("forward");

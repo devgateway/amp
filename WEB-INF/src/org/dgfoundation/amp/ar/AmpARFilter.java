@@ -641,22 +641,22 @@ public class AmpARFilter extends PropertyListable {
 		if (!ispublicuser){
 			if("Management".equals(this.getAccessType())){
 				TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams)
-				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams) + ") )";
+				+ Util.toCSString(ampTeams);
+				//+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				//+ Util.toCSString(ampTeams) + ") )";
 			}else{
 				TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") "
-				+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams) + ") )" ;
+				+ ") ";
+				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				//+ Util.toCSString(ampTeams) + ") )" ;
 			}
 			
 			NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 			+ Util.toCSString(ampTeams)
-			+ ") "
-			+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-			+ Util.toCSString(ampTeams) + ") )" ;
+			+ ") ";
+			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+			//+ Util.toCSString(ampTeams) + ") )" ;
 		}else{
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"+ Constants.APPROVED_STATUS+"' AND (draft is null) OR (draft = 0)";
 			NO_MANAGEMENT_ACTIVITIES = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0)";

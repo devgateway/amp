@@ -2874,7 +2874,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
 
   }
-
+/*
   public static boolean canViewActivity(Long actId, TeamMember tm) {
     boolean canView = false;
     Session session = null;
@@ -2929,7 +2929,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     //logger.info("Canview =" + canView);
     return canView;
   }
-
+*/
   public static Collection getDonors(Long actId) {
     Collection col = new ArrayList();
     Session session = null;

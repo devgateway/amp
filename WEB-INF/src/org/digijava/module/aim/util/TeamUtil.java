@@ -971,7 +971,7 @@ public class TeamUtil {
 
         return memberExist;
     }
-
+/*
     public static void removeActivitiesFromDonorTeam(Long activities[],
         Long teamId) {
         Session session = null;
@@ -1022,7 +1022,7 @@ public class TeamUtil {
             }
         }
     }
-
+*/
     public static void removeActivitiesFromTeam(Long activities[],Long teamId) {
         Session session = null;
         Transaction tx = null;
@@ -1036,10 +1036,12 @@ public class TeamUtil {
                 AmpActivity activity = (AmpActivity) session.load(
                     AmpActivity.class, activities[i]);                
                 activity.setTeam(null); 
+              /*
                 if(teamId!=null){
                 	AmpTeam ampTeam=(AmpTeam)session.load(AmpTeam.class,teamId);
                     ampTeam.getActivityList().remove(activity);
-                }                
+                }
+                */
                 Iterator membersItr = activity.getMember().iterator();
                 while(membersItr.hasNext()) {
                     member = (AmpTeamMember) membersItr.next();
@@ -1290,7 +1292,7 @@ public class TeamUtil {
         }
         return col;
     }
-
+/*
     public static Collection getDonorTeamActivities(Long teamId) {
 
         Collection col = new ArrayList();
@@ -1340,7 +1342,7 @@ public class TeamUtil {
         }
         return col;
     }
-
+   
     public static Collection getDonorUnassignedActivities(Long dnrTeamId,
         Long teamId) {
 
@@ -1514,7 +1516,7 @@ public class TeamUtil {
             }
         }
     }
-
+*/
     public static boolean checkForParentTeam(Long ampTeamId) {
         Session session = null;
         Query q = null;

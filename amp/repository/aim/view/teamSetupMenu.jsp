@@ -516,7 +516,43 @@ function putLoading(){
                                      </span>
                                  </div>	
                              </LI>
-                         </c:if>				
+                         </c:if>
+                          <c:if test="${selectedSubTab  == '5'}">
+                             <LI>
+                                     <span>
+                                         <digi:trn>Non-Archived Activities</digi:trn>
+                                     </span>
+                             </LI>
+                         </c:if>
+                         <c:if test="${selectedSubTab != '5'}">
+                             <LI>
+                                 <div title='<digi:trn>Click here to view  activities</digi:trn>'>
+                                     <span>
+                                     <digi:link href="/teamActivityList.do~showArchivedActivities=false" name="urlParams">
+                                         <digi:trn>Non-Archived Activities</digi:trn>
+                                     </digi:link>							
+                                     </span>
+                                 </div>	
+                             </LI>
+                         </c:if>
+                          <c:if test="${selectedSubTab  == '6'}">
+                             <LI>
+                                     <span>
+                                         <digi:trn>Archived Activities</digi:trn>
+                                     </span>
+                             </LI>
+                         </c:if>
+                         <c:if test="${selectedSubTab != '6'}">
+                             <LI>
+                                 <div title='<digi:trn>Click here to view  activities</digi:trn>'>
+                                     <span>
+                                     <digi:link href="/teamActivityList.do~showArchivedActivities=true" name="urlParams">
+                                         <digi:trn>Archived Activities</digi:trn>
+                                     </digi:link>							
+                                     </span>
+                                 </div>	
+                             </LI>
+                         </c:if>					
 					</c:if>
 					<c:if test="${selectedTab  == '3'}">
 						<c:if test="${selectedSubTab  == '0'}">

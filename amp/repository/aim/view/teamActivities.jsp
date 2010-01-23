@@ -5,7 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<style>
+
+<%@page import="org.digijava.module.aim.action.GetTeamActivities"%><style>
 .contentbox_border{
 	border: 	1px solid #666666;
 	width: 		750px;
@@ -105,6 +106,10 @@
 			url = "<%= sel %>?page=" + val ;
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();
+	}
+	function submitArchiveCmd(archive) {
+		document.aimTeamActivitiesForm.removeActivity.value = archive;
+		document.aimTeamActivitiesForm.submit();
 	}
 
 -->
@@ -216,7 +221,9 @@ function setHoveredTable(tableId, hasHeaders) {
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="2" scope="request"/>
-									<c:set var="selectedSubTab" value="0" scope="request"/>
+									<c:if test="${selectedSubTab==null}">
+										<c:set var="selectedSubTab" value="0" scope="request"/>
+									</c:if>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
@@ -312,9 +319,25 @@ function setHoveredTable(tableId, hasHeaders) {
 																<tr>
 																	<td align="center">
                                                                     <br />
-																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
-																			<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
-																		</html:submit>
+                                                                    	<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
+                                                                    	<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
+                                                                    	<c:choose>
+	                                                                    	<c:when test="${selectedSubTab==unarchivedTab}">
+																				<html:submit onclick="submitArchiveCmd('archive')" styleClass="dr-menu" property="submitButton">
+																					<digi:trn>Archive Activities</digi:trn>
+																				</html:submit>
+																			</c:when>
+																			<c:when test="${selectedSubTab==archivedTab}">
+																				<html:submit onclick="submitArchiveCmd('unarchive')" styleClass="dr-menu" property="submitButton">
+																					<digi:trn> Unarchive Activities</digi:trn>
+																				</html:submit>
+																			</c:when>
+																			<c:otherwise>
+																			<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
+																				<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
+																			</html:submit>
+																			</c:otherwise>
+																		</c:choose>
 																	</td>
 																</tr>
 															</table>

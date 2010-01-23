@@ -472,6 +472,26 @@ public class ReportsFilterPicker extends MultiAction {
 							rootplanMinRank, "planMinRanks");
 			filterForm.getOtherCriteriaElements().add(planMinRankElement);
 		}
+		if (true) { //Here needs to be a check to see if the field/feature is enabled
+			Collection<HierarchyListableImplementation> children	= 
+				new ArrayList<HierarchyListableImplementation>();
+			HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation();
+			rootArchivedStatus.setLabel("All");
+			rootArchivedStatus.setUniqueId("0");
+			rootArchivedStatus.setChildren( children );
+			HierarchyListableImplementation unarchivedDO	= new HierarchyListableImplementation();
+			unarchivedDO.setLabel( TranslatorWorker.translateText("Non-archived Activities", locale, siteId) );
+			unarchivedDO.setUniqueId("1");
+			children.add(unarchivedDO);
+			HierarchyListableImplementation archivedDO	= new HierarchyListableImplementation();
+			archivedDO.setLabel( TranslatorWorker.translateText("Archived Activities", locale, siteId) );
+			archivedDO.setUniqueId("2");
+			children.add(archivedDO);
+			GroupingElement<HierarchyListableImplementation> archivedElement	=
+					new GroupingElement<HierarchyListableImplementation>("Archived", "filter_archived_div", 
+							rootArchivedStatus, "selectedArchivedStatus");
+			filterForm.getOtherCriteriaElements().add(archivedElement);
+		}
 		
 //		List<AmpTheme> nationalPlanningObjectives;
 //		AmpActivityProgramSettings natPlanSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
@@ -697,6 +717,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSecondaryPrograms(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedNatPlanObj(null);
+		filterForm.setSelectedArchivedStatus(new Object[]{"1"});
 		HttpSession httpSession = request.getSession();
 		
 		AmpApplicationSettings tempSettings = getAppSetting(request);
@@ -1119,6 +1140,18 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
 		
+		if ( filterForm.getSelectedArchivedStatus() == null || filterForm.getSelectedArchivedStatus().length != 1 ) {
+			arf.setShowArchived(null);
+		}
+		else {
+			String selection 	= (String) filterForm.getSelectedArchivedStatus()[0];
+			if ("1".equals(selection) )
+				arf.setShowArchived(false);
+			else
+				arf.setShowArchived(true);
+		} 
+			
+		
 		if(filterForm.getDisbursementOrders()!=null){
 			if (filterForm.getDisbursementOrders().length == 1) {
 				Integer disbOrder	= Integer.parseInt( (String)filterForm.getDisbursementOrders()[0] );
@@ -1157,6 +1190,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setJustSearch(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedSecondarySectors(null);
+		filterForm.setSelectedArchivedStatus(new Object[]{"1"});
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);
 		if (tempSettings != null) {

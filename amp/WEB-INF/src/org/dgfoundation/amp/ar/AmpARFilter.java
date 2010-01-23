@@ -89,6 +89,8 @@ public class AmpARFilter extends PropertyListable {
 	private String budgetNumber;
 	private String lucene = null;
 	
+	private Boolean showArchived	= false;
+	
 	@PropertyListableIgnore
 	private Integer computedYear;
 
@@ -872,6 +874,11 @@ public class AmpARFilter extends PropertyListable {
 
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSString(donnorgAgency) + ")";
+		
+		String ARCHIVED_FILTER		= "";
+		if ( this.showArchived != null )
+			ARCHIVED_FILTER		= "SELECT amp_activity_id FROM amp_activity WHERE " +
+						((this.showArchived)?"archived=true":"(archived=false or archived is null)");
 
 		/*
 		 * if(fromYear!=null) { AmpARFilterHelper filterHelper =
@@ -1103,6 +1110,9 @@ public class AmpARFilter extends PropertyListable {
 			String JOINT_CRITERIA_FILTER = "SELECT a.amp_activity_id from amp_activity a where jointCriteria="
 					+ ((jointCriteria)?"1":"0");;
 			queryAppend(JOINT_CRITERIA_FILTER);
+		}
+		if (showArchived!=null) {
+			queryAppend(ARCHIVED_FILTER);
 		}
 		
 		
@@ -1820,6 +1830,22 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setLucene(String luceneIndex) {
 		this.lucene = luceneIndex;
+	}
+	
+
+	/**
+	 * @return the showArchived
+	 */
+	@ProperyDescription(description = "Show Archived", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
+	public Boolean getShowArchived() {
+		return showArchived;
+	}
+
+	/**
+	 * @param showArchived the showArchived to set
+	 */
+	public void setShowArchived(Boolean showArchived) {
+		this.showArchived = showArchived;
 	}
 
 	public String getOffLineQuery(String query) {

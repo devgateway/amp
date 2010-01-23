@@ -217,7 +217,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Integer planMinRank;
 	private Collection actRankColl;
 	
-	
+	private Boolean archived;
 	
 	/**
 	 * Indicator connections.
@@ -1559,4 +1559,20 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.chapter = chapter;
 	}
 
+	/**
+	 * @return the archived
+	 */
+	public Boolean getArchived() {
+		return archived;
+	}
+
+	/**
+	 * @param archived the archived to set
+	 */
+	public void setArchived(Boolean archived) {
+		this.archived = archived;
+	}
+
+
+	
 }

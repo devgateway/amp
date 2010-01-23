@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.TeamActivitiesForm;
+import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
@@ -75,6 +76,23 @@ public class UpdateTeamActivities extends Action {
 
 		Long id = null;
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		
+		String archiveCmd	= taForm.getRemoveActivity();
+		if ( archiveCmd != null ) {
+			ArrayList<Long> selectedActivities	= new ArrayList<Long>();
+			if ( taForm.getSelActivities() != null ) 
+				for (int i=0; i<taForm.getSelActivities().length; i++) 
+					selectedActivities.add(taForm.getSelActivities()[i]);
+			if ( "archive".equals(archiveCmd) ) {
+				ActivityUtil.changeActivityArchiveStatus(selectedActivities, true);
+				request.setAttribute(GetTeamActivities.ARCHIVED_PARAMETER, GetTeamActivities.UNARCHIVED_SUB_TAB);
+			}
+			else{
+				ActivityUtil.changeActivityArchiveStatus(selectedActivities, false);
+				request.setAttribute(GetTeamActivities.ARCHIVED_PARAMETER, GetTeamActivities.ARCHIVED_SUB_TAB);
+			}
+			return mapping.findForward("forward");
+		}
 
 		int numRecords = 0;
 		int page = 0;

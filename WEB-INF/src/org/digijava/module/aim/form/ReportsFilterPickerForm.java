@@ -86,6 +86,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedDonnorAgency;
 	private Object[] selectedProjectCategory;
 	private Object[] selectedresponsibleorg;
+	private Object[] selectedArchivedStatus	= new Object[]{"1"};
 	
 	//private Collection regionSelectedCollection;
 	private Collection approvalStatusSelectedCollection;//AMP-3386
@@ -388,6 +389,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.planMinRanks=null;
 				this.CRISNumber=null;
 				this.budgetNumber=null;
+				this.selectedArchivedStatus=new Object[]{"1"};
 				
 			}
 		}
@@ -940,6 +942,20 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setOtherCriteriaElements(
 			Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements) {
 		this.otherCriteriaElements = otherCriteriaElements;
+	}
+
+	/**
+	 * @return the selectedArchivedStatus
+	 */
+	public Object[] getSelectedArchivedStatus() {
+		return selectedArchivedStatus;
+	}
+
+	/**
+	 * @param selectedArchivedStatus the selectedArchivedStatus to set
+	 */
+	public void setSelectedArchivedStatus(Object[] selectedArchivedStatus) {
+		this.selectedArchivedStatus = selectedArchivedStatus;
 	}
 
 

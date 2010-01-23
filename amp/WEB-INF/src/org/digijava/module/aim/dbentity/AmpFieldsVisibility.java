@@ -17,7 +17,6 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
     
     	private final static String [] IMPLEMENTED_ACTIONS=new String[] { GatePermConst.Actions.EDIT, GatePermConst.Actions.VIEW } ;
     	
-	private static final long serialVersionUID = 1255296454545642749L;
 
 
 	public int compareTo(Object arg0) {
@@ -42,7 +41,7 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 		}
 		return false;
 	}
-	
+		
 	public boolean isFieldActive(AmpTreeVisibility atv)
 	{
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
@@ -73,7 +72,6 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 	public String getClusterIdentifier() {
 		return name;
 	}
-
 
 			
 }

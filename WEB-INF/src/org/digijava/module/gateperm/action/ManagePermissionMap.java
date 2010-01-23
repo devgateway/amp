@@ -202,15 +202,15 @@ public class ManagePermissionMap extends MultiAction {
 	
 
 	Session hs = PersistenceManager.getRequestDBSession();
-	Map<Long, String> objectLabels = PermissionUtil.getAllPermissibleObjectLabelsForPermissibleClass(permCatClass);
+	Map<String, String> objectLabels = PermissionUtil.getAllPermissibleObjectLabelsForPermissibleClass(permCatClass);
 
-	Map<Long, PermissionMap> permissionMapsForPermissibleClass = PermissionUtil
+	Map<String, PermissionMap> permissionMapsForPermissibleClass = PermissionUtil
 		.getAllPermissionMapsForPermissibleClass(permCatClass);
 
 	// iterate all permissibles and set the label for the mappings
-	Iterator<Long> i = objectLabels.keySet().iterator();
+	Iterator<String> i = objectLabels.keySet().iterator();
 	while (i.hasNext()) {
-	    Long elementId = (Long) i.next();
+	    String elementId = (String) i.next();
 	    PermissionMap pm = permissionMapsForPermissibleClass.get(elementId);
 	    if (pm != null) {
 		pm.setObjectLabel(objectLabels.get(elementId));

@@ -174,6 +174,8 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			
  		    AmpFieldsVisibility ampFieldFromTree=ampTreeVisibility.getFieldByNameFromRoot(getName());
  		    
+ 		    ampFieldFromTree.setCurrentTemplateId(ampTreeVisibility.getRoot().getId());
+
    			HashMap<String, HttpSession> sessionMap=new HashMap<String, HttpSession>();
    			sessionMap.put("session", pageContext.getSession());
    			

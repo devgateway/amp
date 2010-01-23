@@ -9,7 +9,7 @@ import org.digijava.module.aim.util.Identifiable;
  * @author mihai
  * 
  * Exporting permissions is no cake walk, since the permissions are attached to
- * object that allow permissions to be attached to (called Permissibles), those
+ * objects that allow permissions to be attached to (called Permissibles), those
  * objects need to be "globally" identified by an identifier that is unique in
  * the AMP Network. To be more precise, an identifier for an exportable
  * Permissible needs to remain unchanged from one AMP installation to the other.

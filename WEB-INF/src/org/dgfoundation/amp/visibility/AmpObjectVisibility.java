@@ -30,6 +30,8 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL,Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID})
 	protected String name;
 	
+	protected Long currentTemplateId;
+	
 	protected Set items;
 	protected Set allItems;
 	protected String nameTrimmed;
@@ -38,6 +40,13 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	protected String description;
 
 	private Set sources = null;
+	
+	@Override
+	public Object getIdentifier() {
+		if(currentTemplateId==null) throw new RuntimeException("Identifier cannot be generated. The currentTemplateId property was not set!");
+		return currentTemplateId+"-"+getId();
+	}
+
 	
 	public String getDescription() {
 		return description;
@@ -120,10 +129,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 		return this.name+" - id="+super.toString();
 	}
 
-
-	public Object getIdentifier() {
-	    return id; 
-	}
+	
 	
 	public TreeSet getSortedAlphaItems()
 	{
@@ -200,6 +206,20 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 		
 	public void removeTemplate(AmpObjectVisibility template){
 		removeObjectFromSet(template, this.getTemplates());
+	}
+
+	/**
+	 * @return the currentTemplateId
+	 */
+	public Long getCurrentTemplateId() {
+		return currentTemplateId;
+	}
+
+	/**
+	 * @param currentTemplateId the currentTemplateId to set
+	 */
+	public void setCurrentTemplateId(Long currentTemplateId) {
+		this.currentTemplateId = currentTemplateId;
 	}
 
 	

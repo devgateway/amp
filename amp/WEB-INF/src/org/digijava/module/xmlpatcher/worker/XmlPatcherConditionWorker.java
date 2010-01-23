@@ -79,7 +79,9 @@ public class XmlPatcherConditionWorker extends
 		if (!XmlPatcherConstants.CONDITION_CUSTOM.equals(entity.getType()
 				.value()))
 			throw new XmlPatcherConditionWorkerException(
-					"Condition entity must always be of type 'custom' while processing!");
+					"Condition entity must always be of type 'custom' when reached the processing step!" +
+					" This means the specified condition type ("+entity.getType()
+					.value()+") is not yet implemented into xmlpatcher.xsl.");
 		return true;
 	}
 

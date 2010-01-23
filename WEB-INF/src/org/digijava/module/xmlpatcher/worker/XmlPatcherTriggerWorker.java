@@ -41,6 +41,8 @@ public class XmlPatcherTriggerWorker extends XmlPatcherWorker<Trigger, Patch> {
 			if (!worker.run())
 				return false;
 			Boolean conditionRet = (Boolean) worker.getReturnValue();
+			if(condition.isInverted()) 
+				conditionRet=!conditionRet;
 			if (entityTypeAll && conditionRet == false) {
 				returnValue = false;
 				return true;

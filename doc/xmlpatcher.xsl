@@ -6,19 +6,50 @@
 <!-- author Mihai Postelnicu - mpostelnicu@dgfoundation.org	-->
 <!-- *******************************************************-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<!-- Transform appliedPatch conditions to "custom" condition -->
+
+	<!-- Check if the specified patch has already been found and applied (patch dependency) -->
 	<xsl:template match="condition[@type='appliedPatch']">
 		<condition type="custom">
- 		<script returnVar="p">
-  			<lang type="hql">FROM AmpXmlPatch p WHERE p.patchId='<xsl:value-of select="."/>'</lang>
-		 </script>
- 		<test>p!=null &amp;&amp; p.getState().intValue()==1</test>
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>	
+ 			<script returnVar="p">
+  				<lang type="hql">FROM AmpXmlPatch p WHERE p.patchId='<xsl:value-of select="."/>'</lang>
+		 	</script>
+ 			<test>p!=null &amp;&amp; p.getState().intValue()==1</test>
 		</condition>
 	</xsl:template>		
 	
-	<!-- Transform dbname conditions to "custom" condition -->
+	
+	<!-- Check if table index exists -->
+	<xsl:template match="condition[@type='indexExists']">
+		<condition type="custom">
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>
+ 			<script returnVar="count">
+				<lang type="mysql">
+				SELECT COUNT(index_name) FROM information_schema.statistics WHERE 
+				index_name='<xsl:value-of select="."/>' AND table_schema=database();
+				</lang>
+			</script>
+ 			<test>count.intValue()==1</test>
+		</condition>
+	</xsl:template>
+	
+	
+	<!-- Check if the current database has the given name -->
 	<xsl:template match="condition[@type='dbName']">
 		<condition type="custom">
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>
  			<script returnVar="db">
 				<lang type="mysql">SELECT database()</lang>
 				<lang type="oracle">SELECT sys_context('USERENV', 'CURRENT_SCHEMA') FROM dual</lang>

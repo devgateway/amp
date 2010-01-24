@@ -30,14 +30,15 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	//private String type;
 	private AmpCategoryValue type;
 	
-	private Set activities;
+	private AmpActivity activity;
 	private String Url;
+	private Set<AmpComponentFunding> funding;
 	
-	public Set getActivities() {
-		return activities;
+	public void setActivity(AmpActivity activity) {
+		this.activity = activity;
 	}
-	public void setActivities(Set activities) {
-		this.activities = activities;
+	public AmpActivity getActivity() {
+		return activity;
 	}
 	public Long getAmpComponentId() {
 		return ampComponentId;
@@ -77,6 +78,13 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	public String getUrl() {
 		return Url;
 	}
+	public void setFunding(Set<AmpComponentFunding> funding) {
+		this.funding = funding;
+	}
+	public Set<AmpComponentFunding> getFunding() {
+		return funding;
+	}
+	
 	/**
 	 * A simple string comparison to sort components by title
 	 */
@@ -149,11 +157,15 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 		if (this.Url != null && !this.Url.trim().equals("")) {
 			out.getOutputs().add(new Output(null, new String[] { " URL: " }, new Object[] { this.Url }));
 		}
+		if (this.activity != null ) {
+			out.getOutputs().add(new Output(null, new String[] { " Activity: " }, new Object[] { this.activity }));
+		}
 		return out;
 	}
 	@Override
 	public Object getValue() {
-		String value = " " + this.creationdate + this.description + this.Url + this.code;
+		String value = " " + this.creationdate + this.description + this.Url + this.code + this.activity;
 		return value;
 	}
+	
 }

@@ -4,14 +4,18 @@
 
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
@@ -19,13 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ecs.storage.Array;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -44,7 +50,6 @@ import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -244,7 +249,7 @@ public class ShowAddComponent extends Action {
 		newCompo.setType(type);
 		newCompo.setTitle(name);
 
-		ComponentsUtil.addNewComponent(newCompo);
+		//ComponentsUtil.addNewComponent(newCompo);
 		eaForm.getComponents().setComponentId(newCompo.getAmpComponentId());
 		eaForm.getComponents().setComponentTitle(newCompo.getTitle());
 		eaForm.getComponents().setNewCompoenentName(null);
@@ -260,15 +265,12 @@ public class ShowAddComponent extends Action {
 			List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
 			eaForm.setStep("5");
 			
-			String name 							= eaForm.getComponents().getNewCompoenentName();
+			String name = eaForm.getComponents().getNewCompoenentName();
 			AmpCategoryValue type = ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
-			org.digijava.module.aim.dbentity.AmpComponent ampComp 	= ComponentsUtil.getComponentById( eaForm.getComponents().getComponentId() );
+			org.digijava.module.aim.dbentity.AmpComponent ampComp = new org.digijava.module.aim.dbentity.AmpComponent();
 			ampComp.setTitle( name );
 			ampComp.setType( type );
-			eaForm.getComponents().setComponentTitle(ampComp.getTitle());
-			eaForm.getComponents().setNewCompoenentName(null);
-			ComponentsUtil.updateComponents(ampComp);
-			
+			//ComponentsUtil.updateComponents(ampComp);
 			
 			Components<FundingDetail> compFund = new Components<FundingDetail>();
 			compFund.setType_Id(eaForm.getComponents().getSelectedType());
@@ -455,22 +457,67 @@ public class ShowAddComponent extends Action {
 				}
 				eaForm.getComponents().getSelectedComponents().remove(compFund);
 			}
-
+			Set fundingset = new HashSet();
 			List list = null;
 			if (compFund.getCommitments() != null) {
 				list = new ArrayList(compFund.getCommitments());
+				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					FundingDetail funding = (FundingDetail) iterator.next();
+					AmpComponentFunding compofunding = new AmpComponentFunding();
+					compofunding.setTransactionAmount(new BigDecimal(funding.getTransactionAmount()));
+					compofunding.setTransactionType(funding.getTransactionType());
+					compofunding.setAdjustmentType(funding.getAdjustmentType());
+					compofunding.setTransactionDate(new Date(funding.getTransactionDate()));
+					compofunding.setComponent(ampComp);
+					if (funding.getFormattedRate()!=null){
+						compofunding.setExchangeRate(new Float(funding.getFormattedRate()));
+					}
+					AmpCurrency currency = CurrencyUtil.getCurrencyByCode(funding.getCurrencyCode());
+					compofunding.setCurrency(currency);
+					fundingset.add(compofunding);
+				}
 				Collections.sort(list, FundingValidator.dateComp);
 			}
 			compFund.setCommitments(list);
 			list = null;
 			if (compFund.getDisbursements() != null) {
 				list = new ArrayList(compFund.getDisbursements());
+				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					FundingDetail funding = (FundingDetail) iterator.next();
+					AmpComponentFunding compofunding = new AmpComponentFunding();
+					compofunding.setTransactionAmount(new BigDecimal(funding.getTransactionAmount()));
+					compofunding.setTransactionType(funding.getTransactionType());
+					compofunding.setAdjustmentType(funding.getAdjustmentType());
+					compofunding.setTransactionDate(new Date(funding.getTransactionDate()));
+					compofunding.setComponent(ampComp);
+					AmpCurrency currency = CurrencyUtil.getCurrencyByCode(funding.getCurrencyCode());
+					compofunding.setCurrency(currency);
+					if (funding.getFormattedRate()!=null){
+						compofunding.setExchangeRate(new Float(funding.getFormattedRate()));
+					}
+					fundingset.add(compofunding);
+				}
 				Collections.sort(list, FundingValidator.dateComp);
 			}
 			compFund.setDisbursements(list);
 			list = null;
 			if (compFund.getExpenditures() != null) {
 				list = new ArrayList(compFund.getExpenditures());
+				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					FundingDetail funding = (FundingDetail) iterator.next();
+					AmpComponentFunding compofunding = new AmpComponentFunding();
+					compofunding.setTransactionAmount(new BigDecimal(funding.getTransactionAmount()));
+					compofunding.setTransactionType(funding.getTransactionType());
+					compofunding.setAdjustmentType(funding.getAdjustmentType());
+					compofunding.setTransactionDate(new Date(funding.getTransactionDate()));
+					compofunding.setComponent(ampComp);
+					if (funding.getFormattedRate()!=null){
+						compofunding.setExchangeRate(new Float(funding.getFormattedRate()));
+					}
+					AmpCurrency currency = CurrencyUtil.getCurrencyByCode(funding.getCurrencyCode());
+					compofunding.setCurrency(currency);
+					fundingset.add(compofunding);
+				}
 				Collections.sort(list, FundingValidator.dateComp);
 			}
 			compFund.setExpenditures(list);
@@ -486,8 +533,16 @@ public class ShowAddComponent extends Action {
 					}
 				}
 			}
+			
+			ampComp.setFunding(fundingset);
 			eaForm.getComponents().setCompTotalDisb(totdisbur);
-
+			if (eaForm.getComponents().getCompotosave()!=null){
+				eaForm.getComponents().getCompotosave().add(ampComp);
+			}else{
+				ArrayList<org.digijava.module.aim.dbentity.AmpComponent> array = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>(); 
+				array.add(ampComp);
+				eaForm.getComponents().setCompotosave(array);
+			}
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();

@@ -119,7 +119,7 @@ public class UpdateComponents extends Action {
 				Long id = Long.valueOf(compId);
 				ActionErrors errors = new ActionErrors();
 				AmpComponent cm = ComponentsUtil.getComponentById(id);
-				if (cm == null || cm.getActivities() == null || cm.getActivities().isEmpty()) {
+				if (cm == null || cm.getActivity() == null) {
 					ComponentsUtil.deleteComponent(id);
 				} else {
 					errors.add("Delete", new ActionError("error.aim.componentDelete"));

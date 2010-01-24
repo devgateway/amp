@@ -14,12 +14,14 @@
 		<property column="description" name="description" type="text" />
 		<property column="code" name="code" type="java.lang.String" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />
-
-		<set name="activities" table="AMP_ACTIVITY_COMPONENTS" lazy="true" cascade="none">
+		
+		<many-to-one name="activity" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none"/>
+		<many-to-one name="type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		
+		<set name="funding" table="AMP_COMPONENT_FUNDING" cascade="all-delete-orphan" lazy="false">
 			<cache usage="read-write" />
 			<key column="amp_component_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding"/>
 		</set>
-		<many-to-one name="type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 	</class>
 </hibernate-mapping>

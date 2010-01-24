@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpChapter;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
@@ -1499,8 +1500,17 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String currencyCode;
 		private String componentRepDate;
         private String fundingCurrCode;
+        private Collection<AmpComponent> compotosave;
+       
+        public void setCompotosave(Collection<AmpComponent> compotosave) {
+			this.compotosave = compotosave;
+		}
 
-        public String getFundingCurrCode() {
+		public Collection<AmpComponent> getCompotosave() {
+			return compotosave;
+		}
+
+		public String getFundingCurrCode() {
             return fundingCurrCode;
         }
 

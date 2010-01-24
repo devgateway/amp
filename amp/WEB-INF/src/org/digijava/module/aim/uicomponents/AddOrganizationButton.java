@@ -21,6 +21,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String aditionalRequestParameters = "";
 	private String styleClass=""; //class name
 	private String donorGroupTypes="";
+	private String useLink = "";
 
 	public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
 	public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
@@ -45,7 +46,13 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
-			html.append("<input type=\"button\" ");
+			if (getUseLink().equalsIgnoreCase("true")){
+				html.append("<a ");
+			}
+			else
+			{
+				html.append("<input type=\"button\" ");
+			}
 			if(!"".equalsIgnoreCase(styleClass)){
 				html.append(STYLE_CLASS_NAME);
 				html.append("=");
@@ -144,7 +151,13 @@ public class AddOrganizationButton extends BodyTagSupport {
 	@Override
 	public int doEndTag() throws JspException {
 		try {
-			pageContext.getOut().print("value=\"" + bodyContent.getString() + "\"/>");
+			if (getUseLink().equalsIgnoreCase("true")){
+				pageContext.getOut().print("/>" + bodyContent.getString() + "</a>");
+			}
+			else
+			{
+				pageContext.getOut().print("value=\"" + bodyContent.getString() + "\"/>");
+			}
 		} catch (Exception e) {
 
 		}
@@ -254,6 +267,14 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 	public void setDonorGroupTypes(String donorGroupTypes) {
 		this.donorGroupTypes = donorGroupTypes;
+	}
+
+	public void setUseLink(String useLink) {
+		this.useLink = useLink;
+	}
+
+	public String getUseLink() {
+		return useLink;
 	}
 
 	

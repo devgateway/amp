@@ -46,7 +46,7 @@
 		    modal:true,
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
-		    });
+        		    });
 	var myPanel2 = new YAHOO.widget.Panel("newpopins2", {
 		width:"300px",
 		height:"200px",

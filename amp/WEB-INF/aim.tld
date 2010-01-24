@@ -98,12 +98,19 @@
 				Collection where the selcted organization will be added
 			</description>
 		</attribute>
-
 		<attribute>
 			<name>property</name>
 			<required>false</required>
 			<description>
 				Property that will hold the selected value
+			</description>
+		</attribute>
+
+		<attribute>
+			<name>useLink</name>
+			<required>false</required>
+			<description>
+				Defines if it's going to be a link instead of a button
 			</description>
 		</attribute>
 

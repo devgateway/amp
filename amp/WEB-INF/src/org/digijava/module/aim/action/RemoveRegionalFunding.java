@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -11,7 +12,9 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.RegionalFunding;
 
 public class RemoveRegionalFunding extends Action {
-	
+
+	private static Logger logger = Logger.getLogger(RemoveRegionalFunding.class);
+
 	public ActionForward execute(ActionMapping mapping,
 			ActionForm form,
 			HttpServletRequest request,
@@ -19,13 +22,19 @@ public class RemoveRegionalFunding extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		Long selFund[] = eaForm.getFunding().getSelRegFundings();
-		for (int i = 0;i < selFund.length;i ++) {
-			RegionalFunding rf = new RegionalFunding();
-			rf.setRegionId(selFund[i]);
-			eaForm.getFunding().getRegionalFundings().remove(rf);
+		String regIdStr = request.getParameter("regId");
+		long regId = -1;
+		if (regIdStr != null) {
+			try {
+				regId = Long.parseLong(regIdStr);
+			} catch (NumberFormatException nfe) {
+				logger.error("Invalid region Id :" + regIdStr);
+			}
 		}
-		eaForm.getFunding().setSelRegFundings(null);
+
+		RegionalFunding rf = new RegionalFunding();
+		rf.setRegionId(regId);
+		eaForm.getFunding().getRegionalFundings().remove(rf);
 		return mapping.findForward("forward");
 	}
 }

@@ -398,7 +398,6 @@
 	<!--
 	<page page="uploadFlag" name="aim_uploadFlag" title=" - Upload Flag" />
 	-->
-    <page name="addProposedProjFunding" title="Proposed Project Cost" />
     <page name="printMyDesktop" title="Print Desktop" />
     <page name="addProgramPopup" title="Add Program" />
         <!-- National Planing Dashboard -->

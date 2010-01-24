@@ -147,7 +147,6 @@
 	<classpathentry kind="var" path="JBOSS-LIB/commons-logging.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

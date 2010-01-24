@@ -745,7 +745,7 @@ public class ImportBuilder {
 			}
 			if(found){
 				
-					if(ampComp.getActivities() == null) ampComp.setActivities(new HashSet());
+					//if(ampComp.getActivities() == null) ampComp.setActivities(new HashSet());
 					ampComp = (AmpComponent)DataExchangeUtils.addObjectoToAmp(ampComp);
 					
 					//ampComp.getActivities().add(activity);

@@ -2756,14 +2756,30 @@ public class SaveActivity extends Action {
 	 * @param activity
 	 */
 	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
-		activity.setComponents(new HashSet());
+		activity.setComponents(new HashSet<AmpComponent>());
 		activity.setComponentFundings(new HashSet<AmpComponentFunding>());
+		for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
+			AmpComponent component = (AmpComponent) iterator.next();
+			activity.getComponents().add(component);
+			for (Iterator iterator2 = component.getFunding().iterator(); iterator2.hasNext();) {
+				AmpComponentFunding acf = (AmpComponentFunding) iterator2.next();
+				activity.getComponentFundings().add(acf);
+			}
+		}
+		
 		if (eaForm.getComponents().getSelectedComponents() != null) {
 			Iterator<Components<FundingDetail>> itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				Components<FundingDetail> comp = itr.next();
-				AmpComponent ampComp = ComponentsUtil.getComponentById(comp.getComponentId());
-				activity.getComponents().add(ampComp);
+				AmpComponent ampComp=null;
+				for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
+					AmpComponent componettosave = (AmpComponent ) iterator.next();
+					if (comp.getTitle().equalsIgnoreCase(componettosave.getTitle())){ 
+						ampComp =  componettosave;
+					}
+				}
+				
+				//activity.getComponents().add(ampComp);
 
 				
 				Set<Integer> transactionTypes = new HashSet<Integer>();
@@ -2771,9 +2787,8 @@ public class SaveActivity extends Action {
 				transactionTypes.add(Constants.DISBURSEMENT);
 				transactionTypes.add(Constants.EXPENDITURE);
 				
-				for (Iterator iterator = transactionTypes.iterator(); iterator
-						.hasNext();) {
-					Integer transactionType = (Integer) iterator.next();
+				for (Iterator iterator2 = transactionTypes.iterator(); iterator2.hasNext();) {
+					Integer transactionType = (Integer) iterator2.next();
 				
 					Iterator<FundingDetail> fdIterator = null;
 					if (transactionType.equals(Constants.COMMITMENT)
@@ -2834,7 +2849,7 @@ public class SaveActivity extends Action {
 								.getAdjustmentType()));
 						ampCompFund.setComponent(ampComp);
 						
-						activity.getComponentFundings().add(ampCompFund);
+						//activity.getComponentFundings().add(ampCompFund);
 						
 					}
 				}

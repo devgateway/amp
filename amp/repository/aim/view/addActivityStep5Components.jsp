@@ -114,7 +114,7 @@
 														<tr bgcolor="#fffffc">
 															<td vAlign="center" align="left" width="95%">
 																<html:multibox property="components.selComp"  styleId="selComp">
-																	<c:out value="${selComponents.componentId}"/>
+																	<c:out value="${selComponents.title}"/>
 																</html:multibox>
 																
 																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>

@@ -789,6 +789,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  	  }
           }
       }
+     if(activity.getComponents()!=null) {
+    	  Collection<AmpComponent> components= activity.getComponents();
+	      for (AmpComponent ampComponent : components) {
+	    	  ampComponent.setActivity(activity);
+	    	  session.save(ampComponent);
+	      	}
+	      }
+     
+	      
       if (activity.getClosingDates() != null) {
     	  Collection<AmpActivityClosingDates> newClosingDates = activity.getClosingDates();
     	  // activity.getClosingDates().clear();
@@ -3418,12 +3427,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         /* delete components */
         Set comp = ampAct.getComponents();
         if (comp != null) {
-          Iterator compItr = comp.iterator();
+          /*Iterator compItr = comp.iterator();
           while (compItr.hasNext()) {
             AmpComponent ampComp = (AmpComponent) compItr.next();
             ampComp.getActivities().remove(ampAct);           
             //session.delete(ampComp);
-          }
+          }*/
           ampAct.setComponents(null);
         }
 

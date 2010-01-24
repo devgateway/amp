@@ -317,7 +317,7 @@ function checkAmount(amt)
 function checkAmountLen(amt,msgConfFunding,groupSymbol,decimalSymbol)
 {
 	var amtIntPart = amt.split(decimalSymbol)[0]
-	var amtInt = amt[0].replace(groupSymbol, "");
+	var amtInt = amt.replace(groupSymbol, "");
 
 	if (amtInt.length >= 6 && keepChecking){
 		valid = confirm(msgConfFunding);

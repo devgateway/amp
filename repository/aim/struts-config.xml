@@ -1575,9 +1575,10 @@
        <forward name="callparent" path="/aim/addFundingDetail.do?edit=true" redirect="true"/>
     </action>
 
-    <action name="aimEditActivityForm" path="/aim/remSelFundOrgs" scope="session" type="org.digijava.module.aim.action.RemoveSelFundingOrgs">
+    <action name="aimEditActivityForm" path="/aim/remFundOrg" scope="session" type="org.digijava.module.aim.action.RemoveFundingOrg">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
+
     <action name="aimAdvancedReportForm" path="/aim/advancedReportPieChart" scope="session" type="org.digijava.module.aim.action.AdvancedReportPieChart" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/advancedReportBarChart" scope="session" type="org.digijava.module.aim.action.AdvancedReportBarChart" validate="false" />
     <action name="aimReportWizardForm" path="/aim/reportWizard" scope="session" type="org.digijava.module.aim.action.reportwizard.ReportWizardAction" validate="false">
@@ -1642,9 +1643,6 @@
     </action>
     <action name="aimEditActivityForm" path="/aim/addProposedFunding" scope="session" type="org.digijava.module.aim.action.AddProposedFunding" validate="false">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
-    </action>
-    <action name="aimEditActivityForm" path="/aim/editProposedFunding" scope="session" type="org.digijava.module.aim.action.EditProposedProjectCost" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=addProposedProjFunding" />
     </action>
     <action name="aimEditActivityForm" path="/aim/removeProposedFunding" scope="session" type="org.digijava.module.aim.action.RemoveProposedProjectCost" validate="false">
       <forward name="forward" path="/aim/addActivity.do?edit=true" />

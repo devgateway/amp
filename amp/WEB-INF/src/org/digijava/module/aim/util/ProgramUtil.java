@@ -758,13 +758,18 @@ public class ProgramUtil {
              the changes will be saved in db even though you don't save collection, strange issue....
             */
             AmpTheme parentWithNewName=new AmpTheme();
-            parentWithNewName.setName(parent.getName().toUpperCase());
-            parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
+            if(parent!=null){
+            	if(parent.getName()!=null)
+            		parentWithNewName.setName(parent.getName().toUpperCase());
+            if(parent.getAmpThemeId()!=null)
+            	parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
             
             List<AmpTheme> dbChildrenReturnSet =
                     ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
             
-            parent.getChildren().addAll( dbChildrenReturnSet );
+            if(parent.getChildren()!=null)
+            	parent.getChildren().addAll( dbChildrenReturnSet );
+            }
         
 
         } catch (DgException e) {

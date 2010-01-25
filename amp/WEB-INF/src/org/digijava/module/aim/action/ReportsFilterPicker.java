@@ -194,10 +194,13 @@ public class ReportsFilterPicker extends MultiAction {
 					secondaryProg, "selectedSecondaryPrograms");
 		
 		filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>());
-		filterForm.getProgramElements().add(natPlanProgElement);
-		filterForm.getProgramElements().add(primaryProgElement);
-		filterForm.getProgramElements().add(secondaryProgElement);
-
+		if(nationalPlanningProg!=null)
+			filterForm.getProgramElements().add(natPlanProgElement);
+		if(primaryProg!=null)
+		    filterForm.getProgramElements().add(primaryProgElement);
+		if(secondaryProg!=null)
+		    filterForm.getProgramElements().add(secondaryProgElement);
+		
 		Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
 		Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
 		

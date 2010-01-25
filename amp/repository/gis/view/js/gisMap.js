@@ -413,6 +413,7 @@
 		$("#sectorsMapCombo").change(function(){
 			var sector = $("#sectorsMapCombo option:selected").val();
 			jQuery.fn.sectorSelected(sector);
+			actionImgLoading = false;
 		});
 		$("#indicatorsCombo").change(function(){
 			var inic = $("#indicatorsCombo option:selected").val();
@@ -774,7 +775,7 @@
 	
 	function setBusy(busy) {
 		
-			/*alert (actionImgLoading + " - " +
+		/*	alert (actionImgLoading + " - " +
 				   actionGetImageMap  + " - " +
 				   actionSectorData  + " - " +
 				   actionGetIndicators + " - " +

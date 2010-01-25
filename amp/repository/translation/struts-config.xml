@@ -51,7 +51,7 @@
     </action>
     
     <!-- NEW ADVANCED TRANSLATIONS START-->
-    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.ShowNewAdvancedTranslations" scope="session" path="/translation/showNewAdvancedTranslation">
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.ShowNewAdvancedTranslations" scope="request" path="/translation/showNewAdvancedTranslation">
       <forward name="forward" path="/showLayout.do?layout=newAdvTranslationLayout" />
     </action>
     <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnAddTranslation" scope="session" path="/translation/newAdvTranAdd"/>

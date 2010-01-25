@@ -119,6 +119,10 @@ public class ShowNewAdvancedTranslations extends Action{
 				int startItemNo = itemsPerPage * currentPage;
 				int stopItemNo = startItemNo + itemsPerPage;
 				
+				if(stopItemNo>hits.length()){
+					stopItemNo=hits.length();
+				}
+				
 				totalPages = (int) Math.ceil((hits.length() + groupsList.size()) / itemsPerPage);
 				
 				//Store for keys of all found translations.
@@ -156,6 +160,9 @@ public class ShowNewAdvancedTranslations extends Action{
 			}
 		}else{
 			logger.debug("Nothing to search for");
+		}
+		if(trnForm.getPageNumber()==null){
+			trnForm.setPageNumber(new Integer(1));
 		}
 		trnForm.setTotalPages(new Integer((totalPages==0)?1:totalPages));
 		trnForm.setChangesList(buffer.listChanges());

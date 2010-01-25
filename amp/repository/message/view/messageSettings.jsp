@@ -135,7 +135,7 @@
 											<tr>
 												<td align="center">
 													<digi:trn>Message Storage Per Message Type</digi:trn>
-													<img src="./TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
+													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgStoragePerMsgTypeCurr} </td>
 												<td align="center"><html:text name="messageForm" property="msgStoragePerMsgTypeNew" /> </td>

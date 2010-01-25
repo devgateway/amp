@@ -13,6 +13,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -28,8 +29,11 @@ public class DisplayThumbnail extends Action {
 			try {
 				int temp = Integer.parseInt(placeholder);
 				ServletOutputStream os = response.getOutputStream();
-				os.write(FeaturesUtil.getAmpHomeThumbnail(temp).getThumbnail());
-				os.flush();									
+				AmpHomeThumbnail test= FeaturesUtil.getAmpHomeThumbnail(temp);
+				if(test!=null){
+					os.write(FeaturesUtil.getAmpHomeThumbnail(temp).getThumbnail());
+					os.flush();									
+				}									
 			} catch (NumberFormatException nfe) {
 				logger.error("Trying to parse " + placeholder + " to int");
 			}

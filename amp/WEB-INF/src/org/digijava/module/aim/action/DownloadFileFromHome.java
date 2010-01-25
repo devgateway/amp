@@ -34,17 +34,19 @@ public class DownloadFileFromHome extends Action {
 			try {
 				int temp = Integer.parseInt(placeholder);
 				AmpHomeThumbnail thumbnail = FeaturesUtil.getAmpHomeThumbnail(temp);
-				byte[] file = thumbnail.getOptionalFile();	
-				if (file != null) {
-					OutputStream outServlet = response.getOutputStream();
-		            response.setContentType(thumbnail.getOptionalFileContentType());
-		            response.setHeader("Content-disposition",
-	                        "attachment; filename=" +
-	                        thumbnail.getOptionalFileName());             
-			        outServlet.write(file);
-			        outServlet.close();
+				if(thumbnail!=null)
+				{
+					byte[] file = thumbnail.getOptionalFile();	
+					if (file != null) {
+						OutputStream outServlet = response.getOutputStream();
+			            response.setContentType(thumbnail.getOptionalFileContentType());
+			            response.setHeader("Content-disposition",
+		                        "attachment; filename=" +
+		                        thumbnail.getOptionalFileName());             
+				        outServlet.write(file);
+				        outServlet.close();
+					}
 				}
-
 			} catch (NumberFormatException nfe) {
 				logger.error("Trying to parse " + placeholder + " to int");
 			}

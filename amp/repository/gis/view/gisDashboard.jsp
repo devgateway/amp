@@ -77,24 +77,29 @@
 		<div style="width:100%; height:100%; background:white; filter:alpha(opacity=30); opacity:0.3;"></div>
 	</div>
 	
-		<div title="Zoom 1.0X" onClick="zoomMap (this, 1)" id="mapZoom10" class="navVisible" style="width:30px; position: absolute; top:310px; left:25px;" align="center">1.0X</div>
-		<div title="Zoom 1.5X" onClick="zoomMap (this, 1.5)" id="mapZoom15" class="navHiden" style="width:30px; position: absolute; top:310px; left:60px;" align="center">1.5X</div>
-		<div title="Zoom 2.0X" onClick="zoomMap (this, 2)" id="mapZoom20" class="navHiden" style="width:30px; position: absolute; top:310px; left:95px;" align="center">2.0X</div>
-		<div title="Zoom 3.0X" onClick="zoomMap (this, 3)" id="mapZoom30" class="navHiden" style="width:30px; position: absolute; top:310px; left:130px;" align="center">3.0X</div>
+		<div title="Zoom 1.0X" onClick="" id="mapZoom10" class="navVisible zoomBt" style="width:30px; position: absolute; top:310px; left:25px;" align="center">1.0X</div>
+		<div title="Zoom 1.5X" onClick="" id="mapZoom15" class="navHiden zoomBt" style="width:30px; position: absolute; top:310px; left:60px;" align="center">1.5X</div>
+		<div title="Zoom 2.0X" onClick="" id="mapZoom20" class="navHiden zoomBt" style="width:30px; position: absolute; top:310px; left:95px;" align="center">2.0X</div>
+		<div title="Zoom 3.0X" onClick="" id="mapZoom30" class="navHiden zoomBt" style="width:30px; position: absolute; top:310px; left:130px;" align="center">3.0X</div>
 	
 	
 
 </div>
-
+<!-- 
 <div class="navHiden" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick="showNavigation(this)"><digi:trn>Map navigation</digi:trn></div>
-
-
+ -->
+<div class="navHiden" id="mapNav" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick=""><digi:trn>Map navigation</digi:trn></div>
 
 	
 <table cellpadding="5" cellspacing="1">
 	<tr>
 		<td colspan="2">
+		  <!--
 			<div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="initMouseOverEvt(); getImageMap(); checkIndicatorValues(); actionImgLoading = false; setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
+		 -->
+		
+		 <div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
+		  
 		</td>
 	</tr>
 	
@@ -155,8 +160,13 @@
 	                <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
 	        </td>
 			<td width="90%">
+			 <!-- 
 				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
 				<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
+				-->
+				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked >Region view &nbsp;
+				<input title="District view" type="Radio" value="3" name="mapLevelRadio" >District view
+				
 			</td>
 		</tr>
 		</field:display>
@@ -169,7 +179,8 @@
              <digi:trn>Select Sector</digi:trn>:
         </td>
 		<td>
-			<select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px">
+		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px"> -->
+			<select id="sectorsMapCombo" onChange="" style="width:350px">
 			<option value="-1"><digi:trn>Select sector</digi:trn></option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
@@ -181,7 +192,8 @@
        <td nowrap width="200" style="font-size:12px">
             <digi:trn>Select Indicator</digi:trn>:
 		<td>
-		<select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:350px">
+		<!-- <select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:350px"> -->
+		<select id="indicatorsCombo" onchange="" style="width:350px">	
 			<option value=-1><digi:trn>Select Indicator</digi:trn></option>
 		</select>
 		</td>
@@ -191,7 +203,8 @@
             <digi:trn>Select Subgroup</digi:trn>:
         </td>
 		<td>
-			<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">
+			<!-- <select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">  -->
+			<select id="indicatorSubgroupCombo" onChange="" style="width:350px">
 				<option value="-1"><digi:trn>Select subgroup</digi:trn></option>
 			</select>
 		</td>

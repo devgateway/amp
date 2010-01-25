@@ -2758,14 +2758,14 @@ public class SaveActivity extends Action {
 	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet<AmpComponent>());
 		activity.setComponentFundings(new HashSet<AmpComponentFunding>());
-		if(eaForm.getComponents().getCompotosave()!=null){
-			for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
-				AmpComponent component = (AmpComponent) iterator.next();
-				activity.getComponents().add(component);
-				for (Iterator iterator2 = component.getFunding().iterator(); iterator2.hasNext();) {
-					AmpComponentFunding acf = (AmpComponentFunding) iterator2.next();
-					activity.getComponentFundings().add(acf);
-				}
+		if(eaForm.getComponents()!=null && eaForm.getComponents().getCompotosave()!=null)
+		for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
+			AmpComponent component = (AmpComponent) iterator.next();
+			activity.getComponents().add(component);
+			for (Iterator iterator2 = component.getFunding().iterator(); iterator2.hasNext();) {
+				AmpComponentFunding acf = (AmpComponentFunding) iterator2.next();
+				activity.getComponentFundings().add(acf);
+
 			}
 		}
 		

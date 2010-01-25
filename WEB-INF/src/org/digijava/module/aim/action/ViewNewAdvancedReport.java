@@ -372,7 +372,7 @@ public class ViewNewAdvancedReport extends Action {
 		rd.setGlobalHeadingsDisplayed(new Boolean(false));
 		
 		String viewFormat=request.getParameter("viewFormat");
-		if(viewFormat==null) viewFormat=GenericViews.HTML;
+		if(viewFormat==null) viewFormat=GenericViews.HTML2;
 		request.setAttribute("viewFormat",viewFormat);
 	
 		Integer currentPage = 0;

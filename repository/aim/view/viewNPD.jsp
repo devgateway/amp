@@ -237,7 +237,7 @@ function showFilter(){
 </c:set>
 <html:hidden property="defaultProgram" styleId="defaultProgram"/>
 <script language="javascript" type="text/javascript">
-
+    var filter;
 	var ptree;
 	var curProgId;
 	var curProgNodeIndex;

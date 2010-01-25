@@ -533,6 +533,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                 </td>
                                                               </tr>
                                                               <tr bgcolor="#ffffff">
+                                                                <logic:notEmpty name="aimEditActivityForm" property="funding.proProjCost">
                                                                 <field:display name="Proposed Project Amount" feature="Proposed Project Cost">
                                                                 <td bgcolor="#FFFFFF" align="left" width="25%">
                                                                   <html:text name="aimEditActivityForm" property="funding.proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
@@ -553,6 +554,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                     </a>
                                                                 </td>
                                                                 </field:display>
+                                                                </logic:notEmpty>
                                                               </tr>
                                                             </table>
                                                         </td>

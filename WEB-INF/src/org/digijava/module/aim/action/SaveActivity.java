@@ -950,7 +950,7 @@ public class SaveActivity extends Action {
         }else{
             activity.setFunAmount(FormatHelper.parseBigDecimal( eaForm.getFunding().getProProjCost().getFunAmount()));
             //check for null on bolivia
-            if(eaForm.getFunding().getProProjCost().getFunDate()!=null){
+            if(eaForm.getFunding().getProProjCost().getFunDate()!=null && eaForm.getFunding().getProProjCost().getFunDate().length()>0){
         	activity.setFunDate(FormatHelper.parseDate(eaForm.getFunding().getProProjCost().getFunDate()).getTime());
             }
             activity.setCurrencyCode(eaForm.getFunding().getProProjCost().getCurrencyCode());
@@ -1128,7 +1128,7 @@ public class SaveActivity extends Action {
         }else{
             activity.setFunAmount(FormatHelper.parseBigDecimal(eaForm.getFunding().getProProjCost().getFunAmount()));
             //check null for bolivia
-            if (eaForm.getFunding().getProProjCost().getFunDate()!=null){
+            if (eaForm.getFunding().getProProjCost().getFunDate()!=null && eaForm.getFunding().getProProjCost().getFunDate().length()>0){
                 activity.setFunDate(FormatHelper.parseDate(eaForm.getFunding().getProProjCost().getFunDate()).getTime());
             }
             activity.setCurrencyCode(eaForm.getFunding().getProProjCost().getCurrencyCode());
@@ -2758,14 +2758,17 @@ public class SaveActivity extends Action {
 	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet<AmpComponent>());
 		activity.setComponentFundings(new HashSet<AmpComponentFunding>());
-		for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
-			AmpComponent component = (AmpComponent) iterator.next();
-			activity.getComponents().add(component);
-			for (Iterator iterator2 = component.getFunding().iterator(); iterator2.hasNext();) {
-				AmpComponentFunding acf = (AmpComponentFunding) iterator2.next();
-				activity.getComponentFundings().add(acf);
+		if(eaForm.getComponents().getCompotosave()!=null){
+			for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
+				AmpComponent component = (AmpComponent) iterator.next();
+				activity.getComponents().add(component);
+				for (Iterator iterator2 = component.getFunding().iterator(); iterator2.hasNext();) {
+					AmpComponentFunding acf = (AmpComponentFunding) iterator2.next();
+					activity.getComponentFundings().add(acf);
+				}
 			}
 		}
+		
 		
 		if (eaForm.getComponents().getSelectedComponents() != null) {
 			Iterator<Components<FundingDetail>> itr = eaForm.getComponents().getSelectedComponents().iterator();

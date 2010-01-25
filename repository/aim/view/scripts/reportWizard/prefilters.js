@@ -30,6 +30,12 @@ Filters.prototype.success	= function (o) {
 		this.filterPanel.hide();
 		this.filterPanel.setBody( o.responseText );
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
+		
+		YAHOO.amptab.afterFiltersLoad();
+		
+		
+		this.filterPanel.cfg.setProperty("height", "400px" );
+		
 		this.filterPanel.show();
 		
 		this.saveFilters	= new SaveFilters(this);

@@ -68,6 +68,48 @@ function resetElement( elem ) {
 		for (var i=0; i<elem.length; i++)
 			elem[i].checked = false;
 }
+YAHOO.namespace("YAHOO.amptab");
+
+YAHOO.amptab.afterFiltersLoad	= function (){
+	donorsPropertyObj		= new RowManagerProperty(null, "filter_rows_donors", "#ceeeff");
+	relAgenciesPropertyObj	= new RowManagerProperty(null, "filter_rows_rel_agencies", "#ceeeff");
+	sectorsPropertyObj		= new RowManagerProperty(null, "filter_rows_sectors", "#ceeeff");
+	programsPropertyObj		= new RowManagerProperty(null, "filter_rows_programs", "#ceeeff");
+	financingLocPropertyObj		= new RowManagerProperty(null, "filter_rows_finanacing_loc", "#ceeeff");
+	otherCriteriaPropertyObj	= new RowManagerProperty(null, "filter_rows_other_criteria", "#ceeeff");
+
+	YAHOO.amptab.initDisplayOfMemberSelectors("donorsTab");
+	YAHOO.amptab.initDisplayOfMemberSelectors("relAgenciesTab");
+	YAHOO.amptab.initDisplayOfMemberSelectors("sectorsTab");
+	YAHOO.amptab.initDisplayOfMemberSelectors("programsTab");
+	YAHOO.amptab.initDisplayOfMemberSelectors("financingLocTab");
+	YAHOO.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
+}
+
+YAHOO.amptab.initDisplayOfMemberSelectors	= function(bigDivId) {
+	var bigDivEl		= document.getElementById(bigDivId);
+	//alert("aici" + bigDivEl);
+	if (bigDivEl != null) {
+		var listOfDivs	= bigDivEl.getElementsByTagName("div");
+		if (listOfDivs != null && listOfDivs.length > 0) {
+			for (var i=0; i<listOfDivs.length; i++) {
+				var divYuiEl	= new YAHOO.util.Element(listOfDivs[i]);
+				if ( divYuiEl.hasClass("grouping_selector_wrapper") ) {
+					var buttonEl	= listOfDivs[i].getElementsByTagName("button")[0];
+					buttonEl.click();
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
 
 function toggleCheckChildren(checkboxEl) {
 	var parentTdEl				= checkboxEl.parentNode;

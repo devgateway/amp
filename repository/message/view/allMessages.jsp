@@ -81,6 +81,9 @@
 .userMsg{
 background-color:yellow;
 }
+ .scrollable {
+            height: 400px; overflow: auto; width:100%;
+ }
 
 -->
 </style>
@@ -149,7 +152,7 @@ background-color:yellow;
     }
     
     function closeWindow() {	
-       selectedMessagePanel.destroy();
+       selectedMessagePanel.hide();
     }
     
     /*code below doesn't look good... but still
@@ -200,18 +203,20 @@ background-color:yellow;
         //create div to hold selected message
         var div=document.createElement('DIV');
         div.id="selectedMessagePanel";
+        
         document.body.appendChild(div);
-	
+       
         // create body div to hold selected message
         var divBody=document.createElement('DIV');
         divBody.className="bd";
         divBody.id="msg_bd";
+        divBody.className='scrollable'
         divBody.innerHTML='<digi:img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/><digi:trn>Loading, please wait ...</digi:trn>';
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
-            x:"20",
-            y:"20",
-            constraintoviewport: true, 
+            width: 600,
+            constraintoviewport: true,
+            fixedcenter: true,
             Underlay:"shadow", 
             modal: true,
             close:true, 
@@ -708,7 +713,7 @@ background-color:yellow;
                        paginationTDContent+='<span class="yui-pg-last"><digi:trn jsFriendly="true">Last</digi:trn>&gt;&gt;</span>';
 
 					}	
-					//paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
+					paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
 				paginationTD.innerHTML=	paginationTDContent;						
 				paginationTR.appendChild(paginationTD);						
 			}
@@ -1456,7 +1461,7 @@ $(document).ready(function(){
 										
 										</TD>
 									</TR>			
-								</TABLE>
+								</TABLE>                              
 							</TD>
 						</TR>
                         <TR>                   

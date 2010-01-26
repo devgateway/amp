@@ -105,105 +105,16 @@ public class OrgProfileManager  extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;        
-        AmpWidgetOrgProfile orgProfWidget = null;
-        AmpWidgetOrgProfile orgNewProfWidget = null;
-        List<AmpDaWidgetPlace> oldPlaces = null;
-        List<AmpDaWidgetPlace> oldPlaceso = null;
-        List<AmpDaWidgetPlace> newPlaces = null;
-        AmpDaWidgetPlace widgetPlace = null;
-        Collection<WidgetUpdatePlaceHelper> placesWi = new ArrayList();
-       
-            
-        String[] id = orgForm.getoldId().split(",");
-      String[] selId = orgForm.getSelectedId().split(",");
-     
-      for(int i=1; i<id.length; i++){
-      	
-       String data = id[i];
-       orgForm.setId(new Long(data));
-       orgForm.setType(new Long(i));
-       
-       Long[] placeIDs = new Long[1];
-       
-      for(int j=1; j<selId.length; j++ ){
-  if(j==i){	
-      String d = selId[j];
-      placeIDs[0] = new Long(d);
-     
-      
-      orgForm.setSelPlaces(null);
-      orgForm.setSelPlaces(placeIDs);
-		
-        
-
-        if (orgForm.getId() == null||orgForm.getId()==0) {
-            orgProfWidget = new AmpWidgetOrgProfile();
-        } else {
-        	
-        	widgetPlace = WidgetUtil.getPlace(orgForm.getId());
-            orgProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(widgetPlace.getAssignedWidget().getId());
-            //oldPlaces = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
-            oldPlaceso = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
+        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;          
+        String[] selPlaceId = orgForm.getSelectedId().split(",");
+        for(int i=0;i<selPlaceId.length;i++ ){
+            String placeId=selPlaceId[i];
+            Collection<AmpDaWidgetPlace> places=new ArrayList<AmpDaWidgetPlace>();
+            AmpDaWidgetPlace place=WidgetUtil.getPlace(Long.parseLong(placeId));
+            places.add(place);
+            AmpWidgetOrgProfile widget=orgForm.getOrgProfilePages().get(i);
+            WidgetUtil.updatePlacesWithWidget(places,widget);
         }
-        orgProfWidget.setType(orgForm.getType());
-        /*
-         * Name is used in  the Widget Place Manager,
-         * We could force the user to enter it manually,
-         * but it will be hard  to explain them why we need specify name twice 
-         * cause from user perspective name and type are the same...
-        */
-        String name="";
-        switch(orgForm.getType().intValue()){
-            case WidgetUtil.ORG_PROFILE_SUMMARY: name="Summary"; break;
-             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID: name="Type of Aid"; break;
-              case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB: name="Pledges/Comm/Disb"; break;
-               case WidgetUtil.ORG_PROFILE_ODA_PROFILE: name="ODA Profile"; break;
-                case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN: name="Sector Breakdown"; break;
-                  case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN: name="Regional Breakdown"; break;
-                   case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION: name="Paris Declaration"; break;
-        }
-        orgProfWidget.setName(name);
-        if(OrgProfileUtil.widgetTypeExists(orgProfWidget.getType(),orgProfWidget.getId())){
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.widgetOrgProfile.widgetOrgTypeExist"));
-            saveErrors(request, errors);
-            return mapping.findForward("create");
-        }
-        OrgProfileWidgetUtil.saveWidget(orgProfWidget);
-        if (orgForm.getSelPlaces() != null && orgForm.getSelPlaces().length > 0) {
-        	newPlaces  = WidgetUtil.getPlacesWithID(orgForm.getSelPlaces());
-        	for (AmpDaWidgetPlace place : newPlaces) {
-                orgNewProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(place.getAssignedWidget().getId());
-            }
-            //newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());
-            if (newPlaces != null) {
-                //Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
-                
-                WidgetUpdatePlaceHelper update = new WidgetUpdatePlaceHelper();
-                update.setOldplace(oldPlaceso);
-                update.setOrgNewProfWidget(orgNewProfWidget);
-                placesWi.add(update);
-              
-            } else {
-                WidgetUtil.updatePlacesWithWidget(oldPlaceso, orgNewProfWidget);
-            }
-        } else {
-            WidgetUtil.clearPlacesForWidget(orgProfWidget.getId());
-        }
-   
-    	 }
-      }
-   }
-      for (Iterator<WidgetUpdatePlaceHelper> iter = placesWi.iterator(); iter.hasNext();) {
-    	  
-    	  WidgetUpdatePlaceHelper data = iter.next();
-    	  
-    	   
-    	    WidgetUtil.updatePlacesWithWidget(data.getOldplace(), data.getOrgNewProfWidget());
-    	    
-    	}
-        
        return viewAll(mapping, form, request, response);
 
     }

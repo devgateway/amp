@@ -8,41 +8,23 @@
 <digi:instance property="widgetOrgProfileWidgetForm" />
 <script type="text/javascript"><!--
 
-
+   var selPlaces=new Array();
    function validateDelete(type){
        var msg='<digi:trn jsFriendly="true">Do you want to delete</digi:trn> '+type+" from the org. Profile page?";
        return confirm(msg);
    }
 
-	function validatePlaces(){
-		
-		for(it = 1; it<8; it++){
-		
-	      test = document.getElementById("place"+it);
-	
-			for(j = it+1; j<8; j++){
-	
-				testo = document.getElementById("place"+j);
-	   
-					for(i = 0; i < test.length; i++)
-					{
-					   var link = test.item(i);
-					
-					   	 for(k = 0; k < testo.length; k++)
-						   		{
-						      		var linko = testo.item(k);
-						      			if(link.selected && linko.selected && link.value == linko.value){
-						      			  
-										  return false;
-								  		   
-							      		}
-								      
-						        }
-					 }
-	            }
-	       }
-		return true;
-	}
+function validatePlaces(){
+    $("select[id^='place'] option:selected").each(function(index) {
+        selPlaces[index]=$(this).val();
+    });
+    for(var i = 0; i < selPlaces.length; i++) {
+        for(var j = i + 1 ; j < selPlaces.length; j++){
+            if(selPlaces[j]==selPlaces[i]) return false;
+        }
+    }
+    return true;
+}
 
  function save(){
 	if(validatePlaces()){
@@ -53,17 +35,7 @@
  }
 
    function submitPlaces(){
-
-	   var str = '';
-
-	   var dnl = document.widgetOrgProfileWidgetForm.selPlaces; 
-	   for(i = 0; i < dnl.length; i++)
-	   {
-	      var link = dnl.item(i);
-	      
-	      str+=','+link.value;
-	      
-	   }
+        var str = selPlaces.join(",");
 		document.getElementById('selId').value = str;
        <digi:context name="addEdit" property="/widget/orgProfileManager.do~actType=save" />
         document.widgetOrgProfileWidgetForm.action = "${addEdit}";
@@ -76,7 +48,6 @@
 
 
 <digi:form action="/orgProfileManager.do~actType=viewAll">
-<html:hidden property="oldId" name="widgetOrgProfileWidgetForm" styleId="allOldId"/>
 
 <html:hidden property="selectedId" name="widgetOrgProfileWidgetForm" styleId="selId"/>
 
@@ -570,19 +541,4 @@
 		   </td>
 	</tr>
 </table>
-<script type="text/javascript">
-var string = '';
-
-var dnl = document.widgetOrgProfileWidgetForm.selPlaces; 
-for(i = 0; i < dnl.length; i++)
-{
-   var link = dnl.item(i);
-   
-   string+=','+link.value;
-  
-}
-  var selxtr = document.getElementById('allOldId').value = string;
-
-
-</script>
 </digi:form>

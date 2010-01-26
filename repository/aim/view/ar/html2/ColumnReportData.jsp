@@ -16,7 +16,7 @@
 	<c:set var="trailCellsFile">TrailCells.jsp</c:set>
 </c:if>
 
-<c:set var="markerColor" target="page">lightgreen</c:set>
+<c:set var="markerColor" target="page">#E7E7FF</c:set>
 <c:set var="skippedClass" target="page">hierarchyCell</c:set>
 <c:set var="baseId" target="page">report_row_</c:set>
 

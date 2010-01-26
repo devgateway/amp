@@ -564,7 +564,7 @@ function RowManagerProperty(skippedClass, baseId, markerColor) {
 }
 
 function sortHierarchy( columnName, prevOrder ) {
-	alert (columnName + "!!");
+	//alert (columnName + "!!");
 	var descending			= 1; 
 	if ( prevOrder=="descending" ) 
 		descending			= 0;

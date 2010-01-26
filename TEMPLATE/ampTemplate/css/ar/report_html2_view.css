@@ -1,18 +1,25 @@
 tr.firstLevel, td.firstLevel {
-	background:#CCFFFF; 
+	background:#8DB4E3; 
 	border-bottom: black 1px solid;
+	border-right: none;
+	padding-left: 5px;
+	padding-right: 3px;
 }
 
 tr.secondLevel, td.secondLevel {
-	background: #99CCFF;
+	background: #B6DDE8;
 	border-bottom:#E2E2E2 1px solid;
-	border-right:#99CCFF 1px solid;
+	border-right:#B6DDE8 1px solid;
+	padding-left: 5px;
+	padding-right: 3px;
 }
 
 tr.thirdLevel, td.thirdLevel {
-	background: #CCCCFF;
+	background: #DBEEF3;
 	border-bottom:#E2E2E2 1px solid;
-	border-right:#CCCCFF 1px solid;
+	border-right:#DBEEF3 1px solid;
+	padding-left: 5px;
+	padding-right: 3px;
 }
 
 tr.oddActivity {
@@ -25,12 +32,12 @@ td.hierarchyCell{
 tr.reportHeader, td.reportHeader {
 	background-color: #313131;
 	color: white;
-	border-bottom:#313131 1px solid;
-	border-right:#313131 1px solid;
+	border-bottom:white 1px solid;
+	border-right:white 1px solid;
 	padding-left: 2px; 
 	padding-right: 2px;
 	font-weight: normal;
-	font:9px Arial;
+	font:12px Arial;
 	text-align: center;
 	cursor: pointer;
 	

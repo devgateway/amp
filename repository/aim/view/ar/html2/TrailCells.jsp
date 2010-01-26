@@ -41,10 +41,10 @@
 			</c:if>
 		<c:if test="${firstCell == false || t3}">
 				<c:if test="${reportData.levelDepth == 1}">
-					<td align="center" style="border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold; border-bottom:black 1px solid;">
+					<td align="center" style="border-right: #E0E0E0 1px solid;font-family: Verdana,Arial,Helvetica,sans-serif; font-weight:bold; border-bottom:black 1px solid;">
 				</c:if>
 				<c:if test="${reportData.levelDepth == 2}">
-					<td style="font-weight: bold;font-family: Arial;">
+					<td style="font-family: Verdana,Arial,Helvetica,sans-serif;">
 				</c:if>  
 			
 				<c:if test="${reportData.levelDepth > 2}">

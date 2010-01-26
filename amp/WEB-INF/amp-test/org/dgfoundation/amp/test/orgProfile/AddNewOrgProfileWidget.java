@@ -70,7 +70,7 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
 
     }
         
-       public void testAddWidget() {
+     /*  public void testAddWidget() {
         try {
             OrgProfileWidgetUtil.saveWidget(widget);
             place.setAssignedWidget(widget);
@@ -114,7 +114,7 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
             logger.error("Unable to delete widget place " + ex.getMessage());
             fail("Unable to delete widget place");
         }
-    }
+    }*/
 
 	
 

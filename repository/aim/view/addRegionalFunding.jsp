@@ -91,8 +91,7 @@
 								<td align="right" width="50">
 									<digi:trn key="aim:region">Region</digi:trn>
 								</td>
-								<td align="left">
-								
+								<td align="left">								
 									<c:if test="${aimEditActivityForm.funding.fundingRegionId == -1}">
 										<html:select styleId="fundingRegionId" property="funding.fundingRegionId" styleClass="inp-text">
 											<html:option value="-1">
@@ -102,15 +101,17 @@
 												</digi:trn>
 												 ---
 											</html:option>
-											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" 
-											value="id" label="name" />										
+											<c:if test="${not empty aimEditActivityForm.funding.fundingRegions}">
+												<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" value="id" label="name" />
+											</c:if>																					
 										</html:select>										
 									</c:if>
 									<c:if test="${aimEditActivityForm.funding.fundingRegionId != -1}">
 										<html:select property="funding.fundingRegionId" styleClass="inp-text" styleId="fundingRegionId" disabled="true">
 											<html:option value="-1">--- Select a region ---</html:option>
-											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" 
-											value="id" label="name" />									
+											<c:if test="${not empty aimEditActivityForm.funding.fundingRegions}">
+												<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" value="id" label="name" />
+											</c:if>									
 										</html:select>
 									</c:if>
 								</td>								

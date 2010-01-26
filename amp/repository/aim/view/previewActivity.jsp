@@ -707,17 +707,19 @@ function collapseAll() {
 										</logic:equal>
 										
 										<p/>
-										<digi:trn>Code Chapitre</digi:trn>:
-										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code"/> - 
-										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/>
-										<p/>
-										<digi:trn>Imputations</digi:trn>:
-										<logic:iterate id="imputation" name="aimEditActivityForm" property="identification.chapterForPreview.imputations">
-										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> -
-										<bean:write name="imputation" property="code"/> -
-										<bean:write name="imputation" property="description"/>
-										<br/>
-										</logic:iterate>
+										<c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}">
+											<digi:trn>Code Chapitre</digi:trn>:
+											<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code"/> - 
+											<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/>
+											<p/>
+											<digi:trn>Imputations</digi:trn>:
+											<logic:iterate id="imputation" name="aimEditActivityForm" property="identification.chapterForPreview.imputations">
+												<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> -
+												<bean:write name="imputation" property="code"/> -
+												<bean:write name="imputation" property="description"/>
+												<br/>
+											</logic:iterate>
+										</c:if>
 										
 										<%--
 										<logic:equal name="aimEditActivityForm" property="budget" value="false">

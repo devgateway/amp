@@ -290,7 +290,7 @@ public class AmpMessageUtil {
                             int numUnhidden=unhideMessageStates(clazz,tmId,limit);
                             retValue+=numUnhidden;
                         }
-		}catch(Exception ex) {			
+		}catch(Exception ex) {
 			ex.printStackTrace();
 			throw new AimException("Unable to Load Messages", ex);
 			
@@ -521,20 +521,20 @@ public class AmpMessageUtil {
 		String queryString =null;
 		Query query=null;	
 		
-		try {			
-			session=PersistenceManager.getRequestDBSession();	
+		try {
+			session=PersistenceManager.getRequestDBSession();
 			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=true";	
 			query=session.createQuery(queryString);			
-			query.setParameter("tmId", tmId);			
+			query.setParameter("tmId", tmId);
 			hiddenMsgs=((Integer)query.uniqueResult()).intValue();
 			if(hiddenMsgs>0){
 				full=true;
 			}
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
+			logger.error("couldn't load Messages" + ex.getMessage());
 			ex.printStackTrace();
-			throw new AimException("Unable to Load Messages", ex);			
+			throw new AimException("Unable to Load Messages", ex);
 		}
 		return full;
 	}	

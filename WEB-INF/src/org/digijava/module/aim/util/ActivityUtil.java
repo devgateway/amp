@@ -3247,8 +3247,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getRequestDBSession();
-      String queryString = "select ampAct from " + AmpActivity.class.getName() +
-          " ampAct";
+      //String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct";
+      String queryString ="select group.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" group";
       qry = session.createQuery(queryString);
       col = qry.list();
       logger.debug("the size of the ampActivity : " + col.size());
@@ -4151,22 +4151,22 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                     
                 Set<String> activityStatus = new HashSet<String>();
                 String teamType=member.getTeamType();
-		activityStatus.add(Constants.APPROVED_STATUS);
-		activityStatus.add(Constants.EDITED_STATUS);
+                activityStatus.add(Constants.APPROVED_STATUS);
+                activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
                     Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
-                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
-                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) order by a.name";
-
+                    	queryString ="select group.ampActivityLastVersion.name, group.ampActivityLastVersion.ampActivityId from "+AmpActivityGroup.class.getName()+" group left outer join group.ampActivityLastVersion.orgrole r  left outer join group.ampActivityLastVersion.funding f "+
+                    	" where group.ampActivityLastVersion.team in (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) order by group.ampActivityLastVersion.name";
+                    	
                     } else {
                         // none computed workspace
-                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
+                    	queryString ="select group.ampActivityLastVersion.name, group.ampActivityLastVersion.ampActivityId from " +AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.team in  (" + Util.toCSString(relatedTeams) + ") ";                    	
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                            queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+                            queryString += "  and group.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }
-                        queryString += " order by a.name ";
+                        queryString += " order by group.ampActivityLastVersion.name ";
                     }
     			  			
     			query=session.createQuery(queryString);    			

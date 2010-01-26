@@ -449,35 +449,6 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 				</tr>
 				</feature:display>
-				<feature:display name="Regional Funding" module="Funding">
-				<tr>
-					<c:if test="${aimEditActivityForm.step != 4}">
-					<td nowrap="nowrap">
-						<c:set var="trnClickToAdd6">
-							<digi:trn key="aim:clickToAdd/UpdateRegionalFunding">Add / Update Regional Funding</digi:trn>
-						</c:set>
-						<a href="javascript:gotoStep(4)" id="menuElement" title="${trnClickToAdd6}">
-									<digi:trn key="aim:regionalFunding">
-									Regional Funding</digi:trn>
-						</a>
-					</td>
-					</c:if>
-					<c:if test="${aimEditActivityForm.step == 4}">
-					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
-							<tr>
-								<td bgcolor="#0202F0" height="19">
-								<span class="textalb">
-									<digi:trn key="aim:regionalFunding">
-									Regional Funding</digi:trn>
-								</span>
-								</td>
-							</tr>
-						</table>
-					</td>
-					</c:if>
-				</tr>
-				</feature:display>
 				<feature:display name="Components" module="Components">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 5}">

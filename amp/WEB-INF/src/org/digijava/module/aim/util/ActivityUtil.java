@@ -3372,6 +3372,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  //session.update(ampAct);
     	  auxGroup.getActivities().remove(ampAct);
     	  session.update(auxGroup);
+
+    	  session.update(ampAct);
     	  //session.update(ampAct);
     	  //qry = session.createQuery("UPDATE " + AmpActivityGroup.class.getName() + " SET ampActivityLastVersion = NULL WHERE ampActivityGroupId = " + ampActId);
     	  //qry.setParameter(0, ampActId);
@@ -3606,7 +3608,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	  //qry.setParameter(0, ampActId);
 	  //qry.executeUpdate();
 	  
-	  session.delete(auxGroup);
+//	  session.delete(auxGroup);
 	  session.delete(ampAct);
 	  tx.commit();
       session.flush();

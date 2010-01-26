@@ -461,10 +461,12 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             <table cellSpacing="1" cellPadding="1" width="100%">
                                                               <tr bgcolor="#ffffff">
                                                                 <td bgcolor="#FFFFFF" align="left" width="33%" colspan="3">
-                                                                Change Currency
+                                                                <c:if test="!empty aimEditActivityForm.currCode">
+	                                                                <digi:trn>Change Currency</digi:trn>
                                                                     <html:select name="aimEditActivityForm" property="currCode" styleClass="inp-text" onchange="totalsPage(this);">
                                                                         <html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" label="currencyName"/>
                                                                     </html:select>
+                                                                </c:if>
                                                                 </td>
                                                               </tr>
                                                               <tr bgcolor="#ffffff">
@@ -555,6 +557,28 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                 </td>
                                                                 </field:display>
                                                                 </logic:notEmpty>
+                                                                <logic:empty name="aimEditActivityForm" property="funding.proProjCost">
+                                                                <field:display name="Proposed Project Amount" feature="Proposed Project Cost">
+                                                                <td bgcolor="#FFFFFF" align="left" width="25%">
+                                                                  <html:text name="aimEditActivityForm" property="funding.proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
+                                                                </td>
+                                                                </field:display>
+                                                                <field:display name="Proposed Project Currency" feature="Proposed Project Cost">
+                                                                <td bgcolor="#FFFFFF" align="left" width="25%">
+                                                                    <html:select name="aimEditActivityForm" property="funding.proProjCost.currencyCode" styleClass="inp-text">
+                                                                        <html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode" label="currencyName" style="width:100%;"/>
+                                                                    </html:select>
+                                                                </td>
+                                                                </field:display>
+                                                                <field:display name="Proposed Project Date" feature="Proposed Project Cost">
+                                                                <td bgcolor="#FFFFFF" align="left" width="40%">
+                                                                  <html:text name="aimEditActivityForm" property="funding.proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;vertical-align:middle;"/>
+                                                                    <a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
+                                                                        <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                    </a>
+                                                                </td>
+                                                                </field:display>
+                                                                </logic:empty>
                                                               </tr>
                                                             </table>
                                                         </td>

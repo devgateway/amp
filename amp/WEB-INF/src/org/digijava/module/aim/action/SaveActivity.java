@@ -943,7 +943,7 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-        if(eaForm.getFunding().getProProjCost()==null){
+        if(eaForm.getFunding().getProProjCost()==null || eaForm.getFunding().getProProjCost().getFunAmount() == null){
             activity.setFunAmount(null);
             activity.setFunDate(null);
             activity.setCurrencyCode(null);

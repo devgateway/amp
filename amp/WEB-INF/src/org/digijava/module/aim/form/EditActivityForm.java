@@ -2098,6 +2098,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 
 		public ProposedProjCost getProProjCost() {
+			if(proProjCost == null) proProjCost = new ProposedProjCost();
 			return proProjCost;
 		}
 

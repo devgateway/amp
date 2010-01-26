@@ -11,9 +11,6 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
-import org.dgfoundation.amp.ar.workers.ComputedDateColWorker;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Html2TextCallback;
 
@@ -54,7 +51,8 @@ public class ComputedDateCellXLS extends TextCellXLS {
 		return false;
 	}
 
-	public void generate() {
+@Override
+public void generate() {
 		TextCell c = (TextCell) item;
 		HSSFCell cell = this.getCell(getAmountStyle());
 		String indent = "";
@@ -62,37 +60,7 @@ public class ComputedDateCellXLS extends TextCellXLS {
 			for (int k = 0; k < ((ReportData) c.getColumn().getParent()).getLevelDepth(); k++)
 				indent = indent + Constants.excelIndexString;
 
-		if (c.getColumn().getName().compareTo("Status") == 0) {
-			String actualStatus = c.toString();
-
-			ReportData parent = (ReportData) c.getColumn().getParent();
-			while (parent.getReportMetadata() == null) {
-				parent = parent.getParent();
-			}
-			// when we get to the top of the hierarchy we have access to
-			// AmpReports
-
-			// requirements for translation purposes
-			TranslatorWorker translator = TranslatorWorker.getInstance();
-			Long siteId = new Long(parent.getReportMetadata().getSiteId());
-			String locale = parent.getReportMetadata().getLocale();
-
-			String finalStatus = new String();// the actual text to be added to
-			// the column
-
-			String translatedStatus = null;
-			// String prefix="aim:";
-			try {
-				translatedStatus = TranslatorWorker.translateText(actualStatus, locale, siteId);
-			} catch (WorkerException e) {
-				e.printStackTrace();
-			}
-			if (translatedStatus.compareTo("") == 0)
-				translatedStatus = actualStatus;
-			finalStatus += translatedStatus;
-
-			cell.setCellValue(indent + finalStatus);
-		} else if (columnNeedsHTMLStripping(c.getColumn().getName())) {
+		 if (columnNeedsHTMLStripping(c.getColumn().getName())) {
 			StringReader sr = new StringReader(c.toString());
 			Html2TextCallback h2t = new Html2TextCallback();
 			try {

@@ -84,22 +84,20 @@ public class TrailCellsXLS extends XLSExporter {
 
 			int pos = modifiedName.indexOf(':'); 
 			if (pos >= 0)
-				modifiedName = modifiedName.substring(pos + 1);
-			
-			//requirements for translation purposes
-			Long siteId=new Long(this.getMetadata().getSiteId());
-			String locale=this.getMetadata().getLocale();
-			//Translate already truncated string (AMP-5669)
-			try {
-				modifiedName = TranslatorWorker.translateText(modifiedName, locale, siteId);
-			} catch (WorkerException e) {
-				//We should never get here!
-				logger.warn("Error translating trial cell value, using value without translation. See error below.");
-				logger.error(e);
-			}
-			
-			if (grd.getParent().getParent() == null)
-				modifiedName = "TOTAL";
+				modifiedName = modifiedName.substring(pos + 1);		
+			if (grd.getParent().getParent() == null) {
+                //requirements for translation purposes
+                Long siteId = new Long(this.getMetadata().getSiteId());
+                String locale = this.getMetadata().getLocale();
+                //Translate already truncated string (AMP-5669)
+                try {
+                    modifiedName = TranslatorWorker.translateText("TOTAL", locale, siteId);
+                } catch (WorkerException e) {
+                    //We should never get here!
+                    logger.warn("Error translating trial cell value, using value without translation. See error below.");
+                    logger.error(e);
+                }
+            }
 			
 			if (grd.getReportMetadata().isHideActivities()!=null){
 				if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())

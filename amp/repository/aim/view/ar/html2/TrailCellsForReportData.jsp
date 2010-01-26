@@ -19,8 +19,8 @@
 	
 	
 	<c:if test="${reportData.levelDepth == 2}">
-		<td rowspan="${reportData.rowSpan}" nowrap="nowrap" class="firstLevel hierarchyCell" height="15px" title='<bean:write name="reportData" property="repName"/>' >
-			<span style="font-family: Arial;font-weight: bold;font-size: 10px;padding-left: 5px;padding-right: 3px;">
+		<td rowspan="${reportData.rowSpan}" class="clsTableCellDataHtml firstLevel hierarchyCell" height="15px" title='<bean:write name="reportData" property="repName"/>' >
+			<span>
 				<%if(reportData.getRepName().length()<40){ %>
 					<% if (!("".equals(reportData.getRepName()))){ %>
 					<!-- *************************************************** 
@@ -37,8 +37,8 @@
 		</c:if>
 	
 	<c:if test="${reportData.levelDepth == 3}">
-		<td rowspan="${reportData.rowSpan}" nowrap="nowrap" class="secondLevel hierarchyCell" height="13px" >
-			<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 15px;padding-right: 3px">
+		<td rowspan="${reportData.rowSpan}" class="clsTableCellDataHtml secondLevel hierarchyCell" height="13px" >
+			<span>
 			<% if (!("".equals(reportData.getRepName()))){ %>
 			<!-- *************************************************** 
 					WARNING:
@@ -50,9 +50,9 @@
 		</c:if>
 	
 	<c:if test="${reportData.levelDepth == 4}">
-		<td nowrap="nowrap" class="thirdLevel hierarchyCell" 
+		<td nowrap="nowrap" class="clsTableCellDataHtml thirdLevel hierarchyCell" 
 				height="13px" rowspan="${reportData.rowSpan}" >
-		<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 25px;padding-right: 3px">
+		<span>
 			<% if (!("".equals(reportData.getRepName()))){ %>
 			<!-- *************************************************** 
 					WARNING:

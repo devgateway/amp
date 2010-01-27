@@ -972,14 +972,11 @@ public class AmpMessageActions extends DispatchAction {
 
     	//cleaning form values
     	setDefaultValues(messageForm);
-   	    if (request.getParameter("toDo") != null && request.getParameter("toDo").equals("draft")
-            || message.getForwardedMessage() != null) {
+   	    if (request.getParameter("toDo") != null && request.getParameter("toDo").equals("draft") || message.getForwardedMessage() != null) {
               //  messageForm.setChildTab("draft");
             return mapping.findForward("showAllMessages");
-        }
-            else{
-
-		return mapping.findForward("viewMyDesktop");
+        }else{
+        	return mapping.findForward("viewMyDesktop");
       }
 	}
 
@@ -1017,7 +1014,7 @@ public class AmpMessageActions extends DispatchAction {
 		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
 			maxStorage=setting.getMsgStoragePerMsgType().intValue();
 		}
-		if(AmpMessageUtil.isInboxFull(clazz, receiver.getAmpTeamMemId()) || AmpMessageUtil.getInboxMessagesCount(clazz, receiver.getAmpTeamMemId(),false,false, maxStorage)>=maxStorage){
+		if(AmpMessageUtil.isInboxFull(clazz, receiver.getAmpTeamMemId()) || (maxStorage!= -1 && AmpMessageUtil.getInboxMessagesCount(clazz, receiver.getAmpTeamMemId(),false,false, maxStorage)>=maxStorage ) ){
 			newMessageState.setMessageHidden(true);
 		}else{
 			newMessageState.setMessageHidden(false);

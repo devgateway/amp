@@ -15,6 +15,7 @@ import org.dgfoundation.amp.test.ngomodule.AllNGOModuleTest;
 import org.dgfoundation.amp.test.orgProfile.AllOrgProfileTest;
 import org.dgfoundation.amp.test.parisindicator.AllParisIndicatorsManagerTest;
 import org.dgfoundation.amp.test.reports.AllReportTest;
+import org.dgfoundation.amp.test.search.AllSearchTest;
 import org.dgfoundation.amp.test.sectormanager.AllSectorManagerTests;
 import org.dgfoundation.amp.test.widget.AllWidgetTest;
 import org.dgfoundation.amp.test.workspacemanager.AllWorkspaceManagerTests;
@@ -44,6 +45,7 @@ public class AllTest {
         suite.addTest(AllSelectLocationTest.suite());
         suite.addTest(AllFmCheckTest.suite());
         suite.addTest(AllContactsTest.suite());
+		suite.addTest(AllSearchTest.suite());
 		return suite;
 	}
 

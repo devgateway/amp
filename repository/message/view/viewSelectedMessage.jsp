@@ -23,7 +23,7 @@ background: #FFF;
 </style>
 
 <digi:form action="/messageActions.do">
-			<table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
+			<table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" width="100%" align="center" valign="top">
 				<tr>
 					<td class="r-dotted-lg" width="10"/>
 					<td class="r-dotted-lg" valign="top" align="left">

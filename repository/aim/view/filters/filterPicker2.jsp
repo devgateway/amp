@@ -22,9 +22,9 @@
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
 <digi:instance property="aimReportsFilterPickerForm" />
-
 <digi:form action="/reportsFilterPicker.do">
 
+<bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>

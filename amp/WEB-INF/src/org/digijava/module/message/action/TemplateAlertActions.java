@@ -99,7 +99,7 @@ public class TemplateAlertActions extends DispatchAction {
 	    	AmpMessageUtil.saveOrUpdateMessage(newTemplate);    	
                 	
 	    //the code below is used to create messagesStates in the AmpMessageWorker.java
-			if(messageReceivers!=null && messageReceivers.length>0){				
+			if(messageReceivers!=null && messageReceivers.length>0){
 				for (String receiver : messageReceivers) {				
 					if(receiver.startsWith("m")){			
 					//<--receiver is team member
@@ -111,21 +111,29 @@ public class TemplateAlertActions extends DispatchAction {
 					}
                     else{
                         if (receiver.startsWith("c")) { // people outside AMP
-                            String receivers = newTemplate.getExternalReceivers();
-                            if (receivers == null) {
-                                receivers = "";
+                            String externalreceivers = newTemplate.getExternalReceivers();
+                            if (externalreceivers == null) {
+                                externalreceivers = "";
                             } else {
-                                if (receivers.length() > 0) {
-                                    receivers += ", ";
+                                if (externalreceivers.length() > 0) {
+                                    externalreceivers += ", ";
                                 }
                             }
                             receiver=receiver.substring(2);
-                            receivers += receiver;
-                            newTemplate.setExternalReceivers(receivers);
+                            externalreceivers += receiver;
+                            newTemplate.setExternalReceivers(externalreceivers);
 
                         }
                     }
 				}
+                String receivers=newTemplate.getReceivers();
+                if(receivers==null){
+                    receivers="";
+                }
+                if(newTemplate.getExternalReceivers()!=null){
+                    receivers+=newTemplate.getExternalReceivers();
+                }
+                newTemplate.setReceivers(receivers);
                 //saving template
 	    	AmpMessageUtil.saveOrUpdateMessage(newTemplate);
 			}

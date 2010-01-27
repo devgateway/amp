@@ -65,20 +65,20 @@
 		var divId='#div_theme_'+progId;
 		$(imghId).hide();
 		$(imgId).show();
-		$(divId).hide('fast');
+		$(divId).hide();
 	}
      
 	function expandAll(){
-                $("img[id^='img_']"+':visible').slideUp('fast');
-		$("img[id^='imgh_']"+':hidden').slideDown('fast');;
-		$("div[id^='div_theme_']").slideDown('fast');
-               
-         }
+        $("img[id^='img_']").hide();
+		$("img[id^='imgh_']").show('fast');;
+		$("div[id^='div_theme_']").show('fast');
+
+    }
          function collapseAll(){
-              $("img[id^='imgh_']"+':visible').slideUp('fast');
-              $("img[id^='img_']"+':hidden').slideDown('fast');
-	      $("div[id^='div_theme_']"+':visible').slideUp('fast');
-         }
+        $("img[id^='imgh_']").hide();
+        $("img[id^='img_']").show('fast');
+        $("div[id^='div_theme_']").hide();
+    }
 	-->
 </script>
 

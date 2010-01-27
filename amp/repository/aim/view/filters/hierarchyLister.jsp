@@ -13,15 +13,23 @@
 <bean:define id="entityList" toScope="page" scope="request" name="reqEntityList" />
 <bean:define id="selectedEntityIds" toScope="page" scope="request" name="reqSelectedEntityIds" />
 
+<logic:notEmpty name="reqBeanSetterObject" property="${selectedEntityIds}">
+	<bean:define id="beanSetterArray" toScope="page" scope="request" name="reqBeanSetterObject" property="${selectedEntityIds}" />
+</logic:notEmpty>
 
 
 <logic:notEmpty name="entityList">
 	<ul style="list-style-type: none">
 		<logic:iterate id="entity" name="entityList" scope="page">
+			<c:set var="checked" value="" scope="page" />
+			<c:forEach var="elInArray"  items="${beanSetterArray}">
+				<c:if test="${elInArray==entity.uniqueId}">
+					<c:set var="checked" scope="page" >checked='checked'</c:set>
+				</c:if>
+			</c:forEach>
 			<li>
-				<html:checkbox onchange="toggleCheckChildren(this)" value="${entity.uniqueId}" property="${selectedEntityIds}">
-					<span style="font-family: Arial; font-size: 12px;">${entity.label}</span> 
-				</html:checkbox>
+				<input onchange="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/>
+				<span style="font-family: Arial; font-size: 12px;">${entity.label}</span> 
 				<logic:notEmpty name="entity" property="children">
 					<bean:define id="reqEntityList" toScope="request" name="entity" property="children" ></bean:define>
 					<jsp:include page="hierarchyLister.jsp" />

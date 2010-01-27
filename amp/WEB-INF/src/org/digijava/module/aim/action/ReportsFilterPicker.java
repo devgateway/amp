@@ -412,15 +412,15 @@ public class ReportsFilterPicker extends MultiAction {
 			children.add(newUnvalidatedDO);
 			HierarchyListableImplementation validatedActDO	= new HierarchyListableImplementation();
 			validatedActDO.setLabel( TranslatorWorker.translateText("Validated Activities", locale, siteId) );
-			validatedActDO.setUniqueId("3");
+			validatedActDO.setUniqueId("4");
 			children.add(validatedActDO);
 			HierarchyListableImplementation existingDraftDO	= new HierarchyListableImplementation();
 			existingDraftDO.setLabel( TranslatorWorker.translateText("Existing Draft", locale, siteId) );
-			existingDraftDO.setUniqueId("4");
+			existingDraftDO.setUniqueId("3");
 			children.add(existingDraftDO);
 			HierarchyListableImplementation existingUnvalidatedDO	= new HierarchyListableImplementation();
 			existingUnvalidatedDO.setLabel( TranslatorWorker.translateText("Existing Unvalidated", locale, siteId) );
-			existingUnvalidatedDO.setUniqueId("5");
+			existingUnvalidatedDO.setUniqueId("0");
 			children.add(existingUnvalidatedDO);
 			GroupingElement<HierarchyListableImplementation> approvalStatusElement	=
 					new GroupingElement<HierarchyListableImplementation>("Approval Status", "filter_approval_status_div", 

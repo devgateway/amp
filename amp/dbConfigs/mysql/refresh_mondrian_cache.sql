@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS cached_v_objectives;
 CREATE TABLE cached_v_objectives AS SELECT * FROM v_objectives;
 DROP TABLE IF EXISTS cached_v_amp_id;
 CREATE TABLE cached_v_amp_id AS SELECT * FROM v_amp_id;
+
 DROP TABLE IF EXISTS cached_v_description;
 CREATE TABLE cached_v_description AS SELECT * FROM v_description;
 DROP TABLE IF EXISTS cached_v_components;

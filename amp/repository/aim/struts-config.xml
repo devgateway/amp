@@ -1753,6 +1753,7 @@
     </action>
     <action name="aimViewIndicatorsForm" path="/aim/removeIndicator" scope="session" type="org.digijava.module.aim.action.RemoveIndicator" validate="false">     
      <forward name="viewAll" path="/aim/viewIndicators.do" redirect="true"/>
+      <forward name="error" path="/aim/viewIndicators.do"/>
     </action>
     <action name="aimNewIndicatorForm" path="/aim/selectProgramForIndicator" scope="session" type="org.digijava.module.aim.action.SelectProgramForIndicator" validate="false">
       <forward name="edit" path="/showLayout.do?layout=viewEditIndicator" />

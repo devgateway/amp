@@ -158,6 +158,7 @@
 <digi:instance property="aimViewIndicatorsForm" />
 
 <digi:form action="/viewIndicators.do" method="post">
+
     <html:hidden property="sortBy" styleId="sortBy"/>
     <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=800 border=0>
         <tr>

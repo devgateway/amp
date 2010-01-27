@@ -13,7 +13,9 @@
   <link rel="stylesheet" type="text/css" href="../../../wcf/table/xtable.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/tree/xtree.css">
   
-<html>
+
+<%@page import="org.dgfoundation.amp.ar.AmpARFilter"%>
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%><html>
  <jsp:include page="saveReport.jsp" flush="true" />
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -37,6 +39,15 @@
 
 <jp:chart baseDisplayURL="/aim/DisplayChart.img" id="chart01" query="#{query01}" visible="false" controllerURL="/mondrian/showreport.do"/>
 
+<%
+	AmpARFilter filter = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+	String showsave = "true";
+	if (filter!=null && filter.isPublicView()){
+		showsave = "false";
+	}else{
+		showsave = "true";
+	}
+%>
 
 <wcf:form id="chartform01" xmlUri="/WEB-INF/jpivot/chart/chartpropertiesform.xml" model="#{chart01}" visible="false"/>
 <wcf:table id="query01.drillthroughtable" visible="false" selmode="none" editable="true"/>
@@ -66,7 +77,9 @@
   <wcf:imgbutton id="printpdf" tooltip="toolb.print" img="print" href="../../../Print.out?cube=01&type=1"/>
   <wcf:imgbutton id="printxls" tooltip="toolb.excel" img="excel" href="../../../Print.out?cube=01&type=0"/>
   <wcf:separator/>
-  <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()"/>
+  <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()" visibleRef="<%=showsave%>"/>
+  
+  
  </wcf:toolbar>
 
 <%-- render toolbar --%>

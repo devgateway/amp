@@ -47,7 +47,7 @@
           ppl5.`name` as ppl5_name,
           ppl6.`name` as ppl6_name,
           ppl7.`name` as ppl7_name,
-          ppl8.`name` as ppl7_name,
+          ppl8.`name` as ppl8_name,
          `sp`.`name` AS `secondary_program_name`,
           spl1.`name` as spl1_name,
           spl2.`name` as spl2_name,
@@ -56,18 +56,18 @@
           spl5.`name` as spl5_name,
           spl6.`name` as spl6_name,
           spl7.`name` as spl7_name,
-          spl8.`name` as spl7_name,
+          spl8.`name` as spl8_name,
           sp.`amp_program_id` as sp_id,
          `np`.`name` AS `national_program_name`,
           sp.`amp_program_id` AS np_id,
-          npl1.`name` as spl1_name,
-          npl2.`name` as spl2_name,
-          npl3.`name` as spl3_name,
-          npl4.`name` as spl4_name,
-          npl5.`name` as spl5_name,
-          npl6.`name` as spl6_name,
-          npl7.`name` as spl7_name,
-          npl8.`name` as spl7_name,
+          npl1.`name` as npl1_name,
+          npl2.`name` as npl2_name,
+          npl3.`name` as npl3_name,
+          npl4.`name` as npl4_name,
+          npl5.`name` as npl5_name,
+          npl6.`name` as npl6_name,
+          npl7.`name` as npl7_name,
+          npl8.`name` as npl8_name,
          `psub`.`sectorname` AS `p_sub_sector_name`,
          `ssub`.`sectorname` AS `s_sub_sector_name`,
          `secs`.`sectorname` AS `s_sectorname`,
@@ -84,7 +84,7 @@
        join `cached_v_sectors` `s` on `getParentSectorId`(`sa`.`amp_sector_id`) = `s`.`amp_sector_id`
        left join `cached_v_sub_sector` `psub` on `sa`.`amp_activity_id` = `psub`.`amp_activity_id`
        left join `cached_v_m_regions` `rc` on `f`.`amp_activity_id` = `rc`.`amp_activity_id`
-       
+
        left join `cached_v_primaryprogram_level_0` `pp` on `f`.`amp_activity_id` = `pp`.`amp_activity_id`
        left join `cached_v_primaryprogram_level_1` ppl1 on f.`amp_activity_id` = ppl1.`amp_activity_id`
        left join `cached_v_primaryprogram_level_2` ppl2 on f.`amp_activity_id` = ppl2.`amp_activity_id`
@@ -104,7 +104,7 @@
        left join `cached_v_secondaryprogram_level_6` spl6 on f.`amp_activity_id` = spl6.`amp_activity_id`
        left join `cached_v_secondaryprogram_level_7` spl7 on f.`amp_activity_id` = spl7.`amp_activity_id`
        left join `cached_v_secondaryprogram_level_8` spl8 on f.`amp_activity_id` = spl8.`amp_activity_id`
-       
+
        left join `cached_v_nationalobjectives_level_0` `np` on `f`.`amp_activity_id` = `np`.`amp_activity_id`
        left join `cached_v_nationalobjectives_level_1` `npl1` on `f`.`amp_activity_id` = `npl1`.`amp_activity_id`
        left join `cached_v_nationalobjectives_level_2` `npl2` on `f`.`amp_activity_id` = `npl2`.`amp_activity_id`
@@ -114,11 +114,11 @@
        left join `cached_v_nationalobjectives_level_6` `npl6` on `f`.`amp_activity_id` = `npl6`.`amp_activity_id`
        left join `cached_v_nationalobjectives_level_7` `npl7` on `f`.`amp_activity_id` = `npl7`.`amp_activity_id`
        left join `cached_v_nationalobjectives_level_8` `npl8` on `f`.`amp_activity_id` = `npl8`.`amp_activity_id`
-              
+
        left join `cached_v_secondary_sectors` `secs` on `secs`.`amp_activity_id` =`sa`.`amp_activity_id`
        left join `cached_v_sec_sub_sector` `ssub` on `sa`.`amp_activity_id` =`ssub`.`amp_activity_id`
        left join `amp_sector_scheme` `ss` on `secs`.`amp_sector_scheme_id` = `ss`.`amp_sec_scheme_id`
-       
+
   group by `fd`.`transaction_type`,
            `fd`.`amp_fund_detail_id`,
            `fd`.`disbursement_order_rejected`,

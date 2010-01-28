@@ -199,11 +199,12 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
     }
 
     function addActionToURL(actionName){
+      var timestmp = new Date().getTime();
       var fullURL=document.URL;
       var urlPath=location.pathname;
       var contextPart=fullURL.length-urlPath.length;
       var partialURL=fullURL.substring(0,contextPart);
-      return partialURL+"/"+actionName;
+      return partialURL+"/"+actionName+"&lastTimestamp="+timestmp;
     }
     </script>
     

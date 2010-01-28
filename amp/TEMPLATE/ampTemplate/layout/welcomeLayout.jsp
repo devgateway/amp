@@ -1,6 +1,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<digi:context name="displayThumbnail" property="context/module/moduleinstance/displayThumbnail.do" />
+<digi:context name="displayThumbnail" property="/aim/displayThumbnail.do" />
 
 <script>
 function downloadFile(placeholder) {

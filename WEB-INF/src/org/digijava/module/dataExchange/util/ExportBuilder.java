@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -186,16 +187,26 @@ public class ExportBuilder {
 		} else if (path.equalsIgnoreCase("activity.programs")){
 			if (ampActivity.getActivityPrograms() != null && ampActivity.getActivityPrograms().size() > 0){
 				for (Iterator iterator = ampActivity.getActivityPrograms().iterator(); iterator.hasNext();) {
-					AmpActivityProgram ampProgram = (AmpActivityProgram) iterator.next();
-					if (ampProgram.getProgramPercentage() != 0){
-					parent.getPrograms().add(buildPercentageCodeValue(ampProgram.getProgram().getThemeCode(),
-							ampProgram.getProgram().getName(),
-							ampProgram.getProgramPercentage()));
+					AmpTheme ampTheme = (AmpTheme) iterator.next();
+					float percentage = -1;
+					if (ampActivity.getActPrograms() != null){
+						for (Iterator progIterator = ampActivity.getActPrograms().iterator(); progIterator.hasNext();) {
+							AmpActivityProgram ampActivityProgram = (AmpActivityProgram) progIterator.next();
+							if (ampActivityProgram.getProgram().equals(ampTheme)){
+								percentage = ampActivityProgram.getProgramPercentage();
+								break;
+							}
+						}
+					}
+					if (percentage >= 0){
+							parent.getPrograms().add(buildPercentageCodeValue(ampTheme.getThemeCode(),
+							ampTheme.getName(), percentage));
 					} else {
 						String msg = "Programs.Precent is empty";
 						this.addToLog(ampActivity, msg);
 						throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
+					
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.notes")){

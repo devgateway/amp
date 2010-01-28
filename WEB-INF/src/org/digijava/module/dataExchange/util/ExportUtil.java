@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -60,8 +62,9 @@ public class ExportUtil {
     	
         try {
             session = PersistenceManager.getRequestDBSession();
-            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivityVersion.class.getName() + " as act, ");
-            StringBuffer mainWhere =  new StringBuffer(" where (act.team=:teamId) ");
+            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivityVersion.class.getName() + " as act, " + 
+            		AmpActivityGroup.class.getName() + " as aag, ");
+            StringBuffer mainWhere =  new StringBuffer(" where aag.ampActivityLastVersion = act.ampActivityId and (act.team=:teamId) ");
             
             if ((primarySectors != null && primarySectors.length > 0) ||
             		(secondarySectors != null && secondarySectors.length > 0)){
@@ -180,4 +183,5 @@ public class ExportUtil {
         }    	
     	return retValue;
     }
+   
 }

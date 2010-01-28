@@ -12,6 +12,7 @@ public class AllSearchTest {
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(SearchTest.class);
+		suite.addTestSuite(ResourcesTest.class);
 	    return suite;
 		
 	}

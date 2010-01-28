@@ -71,12 +71,13 @@ function resetElement( elem ) {
 YAHOO.namespace("YAHOO.amptab");
 
 YAHOO.amptab.afterFiltersLoad	= function (){
-	donorsPropertyObj		= new RowManagerProperty(null, "filter_rows_donors", "#ceeeff");
-	relAgenciesPropertyObj	= new RowManagerProperty(null, "filter_rows_rel_agencies", "#ceeeff");
-	sectorsPropertyObj		= new RowManagerProperty(null, "filter_rows_sectors", "#ceeeff");
-	programsPropertyObj		= new RowManagerProperty(null, "filter_rows_programs", "#ceeeff");
-	financingLocPropertyObj		= new RowManagerProperty(null, "filter_rows_finanacing_loc", "#ceeeff");
-	otherCriteriaPropertyObj	= new RowManagerProperty(null, "filter_rows_other_criteria", "#ceeeff");
+	var selColor	= "#BFD2DF";
+	donorsPropertyObj		= new RowManagerProperty(null, "filter_rows_donors", selColor);
+	relAgenciesPropertyObj	= new RowManagerProperty(null, "filter_rows_rel_agencies", selColor);
+	sectorsPropertyObj		= new RowManagerProperty(null, "filter_rows_sectors", selColor);
+	programsPropertyObj		= new RowManagerProperty(null, "filter_rows_programs", selColor);
+	financingLocPropertyObj		= new RowManagerProperty(null, "filter_rows_finanacing_loc", selColor);
+	otherCriteriaPropertyObj	= new RowManagerProperty(null, "filter_rows_other_criteria", selColor);
 
 	YAHOO.amptab.initDisplayOfMemberSelectors("donorsTab");
 	YAHOO.amptab.initDisplayOfMemberSelectors("relAgenciesTab");
@@ -116,6 +117,21 @@ function toggleCheckChildren(checkboxEl) {
 	var descendantCheckboxes	= parentTdEl.getElementsByTagName('input');
 	for (var i=0; i<descendantCheckboxes.length; i++ ) {
 		descendantCheckboxes[i].checked	= checkboxEl.checked ;
+	}
+	
+	if ( ! checkboxEl.checked ) {
+		var tempParent				= parentTdEl.parentNode;
+		while ( tempParent != null && 
+				(tempParent.nodeName.toLowerCase()=="li" || tempParent.nodeName.toLowerCase()=="ul") ) {
+			if ( tempParent.nodeName.toLowerCase()=="li" ) {
+				for ( var i=0; i<tempParent.childNodes.length; i++) {
+					var tempNode	= tempParent.childNodes[i];
+					if ( tempNode.nodeName.toLowerCase()=="input" )
+						tempNode.checked	= false;
+				}
+			}
+			tempParent				= tempParent.parentNode;
+		}
 	}
 }
 

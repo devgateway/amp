@@ -21,7 +21,7 @@
 	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%">
 		<div style="background: #4C6185; margin:0px; color: white; font-weight: bold; font-size: small; padding:2px; height: 7%;
 			border-left: 1px solid black; border-bottom: 1px solid black;border-top: 1px solid black;">
-			<digi:trn>Grouping Selector</digi:trn>
+			&nbsp;<digi:trn>Grouping Selector</digi:trn>
 		</div>
 		<div style="border: 1px solid #b3c5d4; height: 93%; width: 100%; background: white;">		
 					<table style="width: 100%; " >
@@ -44,7 +44,7 @@
 	<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
 		<div style="background: #4C6185; margin:0px; color: white; font-weight: bold; font-size: small; padding:2px; height: 7%;
 			border-right: 1px solid black; border-bottom: 1px solid black;border-top: 1px solid black;">
-				<digi:trn>Member Selector</digi:trn>&nbsp;&nbsp;
+				&nbsp;<digi:trn>Member Selector</digi:trn>&nbsp;&nbsp;
 				<input onkeypress="getSearchManagerInstanceByEl(this).clear()" id="${searchManagerId}" type="text" 
 					style="width: ${searchFieldWidth}; height:18px; vertical-align: middle;font-size: 10px;" />&nbsp; 
 				<button style="padding: 0px; font-size: 10px;" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()" class="buton" type="button">&lt;&lt;</button>&nbsp;

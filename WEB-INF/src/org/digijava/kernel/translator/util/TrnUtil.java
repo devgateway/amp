@@ -615,6 +615,7 @@ public class TrnUtil {
 			if (scoresByKey!=null){
 				//get score for the message
 				Float score = scoresByKey.get(message.getKey());
+				if (score == null) score = new Float(0);
 				//check if we need to update score value of the group
 				if (score !=null && (group.getScore()==null || group.getScore().floatValue() < score.floatValue())){
 					group.setScore(score);

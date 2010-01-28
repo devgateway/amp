@@ -32,7 +32,8 @@ a:link
 
 #linkEditActivityMenu {
 	color: #0000FF;
-	font-size: 13px
+	font-size: 13px;
+	cursor: pointer
 }
 
 .editActivityMenuTitle {

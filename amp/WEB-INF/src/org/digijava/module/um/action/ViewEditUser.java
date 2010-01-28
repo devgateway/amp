@@ -28,6 +28,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -350,10 +351,10 @@ public class ViewEditUser extends Action {
                     	 saveErrors(request, errors);
                     	 return mapping.findForward("assignWorkspace");
             		 }else{
-            			 createTeamMember(uForm.getId(),uForm.getWorkspaceId(),role);
+            			 createTeamMember(uForm.getId(),uForm.getWorkspaceId(),role,curSite);
             		 }
             	 }else{
-            		 createTeamMember(uForm.getId(),uForm.getWorkspaceId(),role);
+            		 createTeamMember(uForm.getId(),uForm.getWorkspaceId(),role,curSite);
             	 }
             	 //update user and workspace in db
             	 uForm.setEvent(null);
@@ -406,7 +407,7 @@ public class ViewEditUser extends Action {
         }
     }
     
-    private void createTeamMember(Long userId, Long teamId, AmpTeamMemberRoles role) throws Exception{
+    private void createTeamMember(Long userId, Long teamId, AmpTeamMemberRoles role, Site site) throws Exception{
     	AmpTeam ampTeam=TeamUtil.getAmpTeam(teamId);
 		AmpTeamMember ampMember = new AmpTeamMember();
 		ampMember.setAmpMemberRole(role);
@@ -415,7 +416,21 @@ public class ViewEditUser extends Action {
         ampMember.setDeletePermission(new Boolean(true));
         ampMember.setUser(UserUtils.getUser(userId));
         ampMember.setAmpTeam(ampTeam);
-        TeamMemberUtil.saveOrUpdateTM(ampMember);
+        // add the default application settings for the user
+		AmpApplicationSettings ampAppSettings = org.digijava.module.aim.util.DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
+		AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
+		newAppSettings.setTeam(ampMember.getAmpTeam());
+		newAppSettings.setMember(ampMember);
+		newAppSettings.setDefaultRecordsPerPage(ampAppSettings.getDefaultRecordsPerPage());
+        newAppSettings.setCurrency(ampAppSettings.getCurrency());
+		newAppSettings.setFiscalCalendar(ampAppSettings	.getFiscalCalendar());
+        newAppSettings.setLanguage(ampAppSettings.getLanguage());
+		newAppSettings.setUseDefault(new Boolean(true));
+		try{
+			TeamUtil.addTeamMember(ampMember,newAppSettings,site);
+		}catch (Exception e){
+					throw e;
+		}
     }
     
     private UserBean buildUserBean(User user){

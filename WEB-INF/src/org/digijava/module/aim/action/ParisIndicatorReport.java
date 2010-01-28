@@ -285,10 +285,10 @@ public class ParisIndicatorReport extends Action {
                     }
                 }
             } catch (NumberFormatException nex) {
-                logger.debug(nex);
+                logger.error(nex);
                 nex.printStackTrace(System.out);
             } catch (Exception ex) {
-                logger.debug(ex);
+                logger.error(ex);
                 ex.printStackTrace(System.out);
             }
 

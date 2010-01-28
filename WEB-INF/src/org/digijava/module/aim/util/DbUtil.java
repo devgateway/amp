@@ -6141,7 +6141,7 @@ public class DbUtil {
                 .list().get(0);
 
         } catch (Exception ex) {
-            logger.debug("Unable to get survey indicator : " + ex.getMessage());
+            logger.error("Unable to get survey indicator : " + ex.getMessage());
             ex.printStackTrace(System.out);
         }
         return indc;

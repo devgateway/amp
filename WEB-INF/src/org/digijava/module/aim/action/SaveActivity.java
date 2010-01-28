@@ -2598,7 +2598,11 @@ public class SaveActivity extends Action {
 			//update lucene index
 			LuceneUtil.addUpdateActivity(request, false, actId);
 			//for logging the activity
-			AuditLoggerUtil.logObject(session, request, activity, "add");
+			if(eaForm.getActivityId() != null && eaForm.getActivityId() != 0) {
+				AuditLoggerUtil.logObject(session, request, activity, "update");
+			} else {
+				AuditLoggerUtil.logObject(session, request, activity, "add");
+			}
 		}
 
 		//If we're adding an activity, create system/admin message

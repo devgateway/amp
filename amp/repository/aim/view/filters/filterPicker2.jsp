@@ -101,7 +101,7 @@
 				<div style="padding: 0px; height: 70%;">
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
-				<div style="width: 45%; height: 30%; padding: 10px; float: left; ">
+				<div style="width: 30%; height: 30%; padding: 10px; float: left; ">
 					<c:set var="tooltip_translation">
 						<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 					</c:set>
@@ -110,9 +110,9 @@
 						src="/TEMPLATE/ampTemplate/imagesSource/common/info.png" alt="Click to View Calendar" border="0" />
 						<br />
 						<br />
-						<html:text property="indexString" style="width: 250px"	styleClass="inp-text"  />
+						<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
 				</div>
-				<div style="margin-left: 50%; width: 45%; height:30%; padding: 10px;">
+				<div style="width: 35%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
 					<br />
 					<table style="font-family: Arial; font-size: 1em;">
@@ -142,6 +142,17 @@
 						</tr>
 					</table>
 				</div>
+				<feature:display name="Computed Columns Filters" module="Filter Section">
+					<div style="margin-left: 70%;width: 25%; height: 30%; padding: 10px; ">
+						<b><digi:trn>Computed Columns</digi:trn> </b>
+							<br />
+							<br />
+							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">
+								<option value="-1"><digi:trn key="aim:filters:currentYear">Current Year</digi:trn></option>
+	                         	<html:optionsCollection property="computedYearsRange" label="wrappedInstance" value="wrappedInstance" />
+							</html:select>
+					</div>
+				</feature:display>
 			</div>
 		</div>
 	</div>

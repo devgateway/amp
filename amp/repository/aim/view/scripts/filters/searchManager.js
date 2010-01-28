@@ -5,14 +5,41 @@ function SearchManager(inputEl) {
 	this.divEl		= null;
 	this.inputId	= inputEl.id;
 	this.lastNumFound	= 0;
+	
+
 }
 SearchManager.prototype.objectMap	= new Object();
+SearchManager.prototype.keyListenerNext	= null;
+SearchManager.prototype.keyListenerPrev	= null;
+
 function getSearchManagerInstanceByEl(inputEl) {
 	var sm	= SearchManager.prototype.objectMap[inputEl.id];
 	if (sm == null) {
 		sm = new SearchManager(inputEl);
 		SearchManager.prototype.objectMap[inputEl.id]	= sm;
 	}
+	
+	var keyListenerNext	= new YAHOO.util.KeyListener(document, {  ctrl:true, keys:190 },  							
+			  { fn:sm.findNext,
+				scope:sm,
+				correctScope:true } );
+	if ( SearchManager.prototype.keyListenerNext != null ) {
+		SearchManager.prototype.keyListenerNext.disable();
+	}
+	keyListenerNext.enable();
+	SearchManager.prototype.keyListenerNext		= keyListenerNext;
+	
+	
+	var keyListenerPrev	= new YAHOO.util.KeyListener(document, {  ctrl:true, keys:188 },  							
+			{ fn:sm.findPrev,
+		scope:sm,
+		correctScope:true } );
+	if ( SearchManager.prototype.keyListenerPrev != null ) {
+		SearchManager.prototype.keyListenerPrev.disable();
+	}
+	keyListenerPrev.enable();
+	SearchManager.prototype.keyListenerPrev		= keyListenerPrev;
+	
 	return sm;
 }
 function getSearchManagerInstanceById(inputId) {

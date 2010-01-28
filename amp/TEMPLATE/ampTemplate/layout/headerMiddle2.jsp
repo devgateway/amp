@@ -23,7 +23,7 @@
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/yui/container.css" type="text/css" rel="stylesheet" />
 
         <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />

@@ -46,10 +46,45 @@ background:transparent url(/repository/aim/images/down.gif) no-repeat scroll rig
 
 </style>
 <script language="JavaScript">
+    var tooltipPanel;
+
+    function showToolTip(id,title){
+        var tooltipid="tooltip"+id;
+        var tooltipDiv=document.getElementById(tooltipid);
+        var tipDiv=document.getElementById("TipLayer");
+        tipDiv.style.display="block";
+        //IE BUG
+        var offset=getTopOffset(tooltipDiv.parentNode);
+        tipDiv.style.top=(offset-50)+"px";
+        tipDiv.style.left="50px";
+        tooltipPanel.setBody(tooltipDiv.innerHTML);
+        tooltipPanel.setHeader(title);
+        tooltipPanel.show();
+    }
+
+    function hideToolTip(){      
+        tooltipPanel.hide()
+    }
+
+    function getTopOffset(element){
+        var offset = 0;
+        while( element != null ) {
+            offset += element.offsetTop;
+            element = element.offsetParent;
+        }
+        return offset;
+    }
 
 YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 	function initDynamicTable() {
-	
+         tooltipPanel = new YAHOO.widget.Panel("TipLayer",{
+                        width:200,
+						close:false,
+						visible:false,
+						draggable:false
+					}
+				);
+			tooltipPanel.render();
     YAHOO.example.XHR_JSON = new function() {
  	
        	         
@@ -64,13 +99,36 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         	elCell.innerHTML = 
         	'<a href="JavaScript:showTeamDetails(' +oRecord.getData( 'ID' )+',  \''+oRecord.getData( 'name' )+'\');" title="<digi:trn>Click here to view Details</digi:trn>">' + oRecord.getData( 'name' ) + '</a>'
         };
+
+        this.formatTeamName = function(elCell, oRecord, oColumn, sData) {
+            var childrenWorkspaces=oRecord.getData( 'childrenWorkspaces' );
+            var children="";
+            if(childrenWorkspaces.length>0){
+                children+='<ul>'
+                for(var i=0;i<childrenWorkspaces.length;i++){
+                    var childrenWorkspace=childrenWorkspaces[i];
+                    children+='<li>'+childrenWorkspace.name+'</li>';
+                }
+                children+='</ul>'
+            }
+         
+            elCell.innerHTML =
+                '<a  onmouseover="showToolTip(' +oRecord.getData( 'ID' )+',\'' +oRecord.getData( 'name' )+'\')" onmouseout="hideToolTip()">' + oRecord.getData( 'name' ) + '</a>'
+                +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
+                '<ul>'+
+                '<li><digi:trn>'+oRecord.getData( 'accessType' )+'</digi:trn></li>'+
+                '<li><digi:trn>Children (Workspaces)</digi:trn>:'+children+'</li>'+
+                '<li><digi:trn>Computation</digi:trn>:<digi:trn>'+oRecord.getData( 'computation' )+'</digi:trn></li>'+
+                 '</ul>'+
+                '</div>'
+        };
  
         this.myDataSource = new YAHOO.util.DataSource("/aim/searchWorkspaces.do?");
         this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         //this.myDataSource.connXhrMode = "queueRequests";
         this.myDataSource.responseSchema = {
             resultsList: "workspaces",
-            fields: ["ID","name"],
+            fields: ["ID","name","accessType","computation","childrenWorkspaces"],
             metaFields: {
             	totalRecords: "totalRecords" // Access to value in the server response
         	}    
@@ -78,7 +136,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         
         
         var myColumnDefs = [
-            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250},
+            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250,formatter:this.formatTeamName},
             {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 150, formatter:this.formatActions,className:"ignore"}
         ];
   
@@ -891,10 +949,10 @@ function setHoveredRow(rowId) {
         document.aimWorkspaceForm.target="_blank";
         document.aimWorkspaceForm.submit();
   }
-  
+
 </script> 
 
-<DIV id="TipLayer"	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+<DIV id="TipLayer"	style="visibility:hidden;position:absolute;z-index:1000;"></DIV>
 
 <digi:instance property="aimWorkspaceForm" />
 <digi:context name="digiContext" property="context" />

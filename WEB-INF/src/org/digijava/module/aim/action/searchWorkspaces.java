@@ -91,6 +91,23 @@ public class searchWorkspaces extends Action {
 			JSONObject jteam = new JSONObject();
 			jteam.put("ID", team.getAmpTeamId());
 			jteam.put("name", team.getName());
+            jteam.put("accessType", team.getAccessType());
+            if(team.getComputation()!=null&&team.getComputation()){
+                 jteam.put("computation", "yes");
+            }
+            else{
+                 jteam.put("computation", "no");
+            }
+           JSONArray jsonChildrenTeamArray = new JSONArray();
+           Collection<AmpTeam> childrenTeams=TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+            if(childrenTeams!=null){
+               for(AmpTeam childteam: childrenTeams){
+                   JSONObject jChildTeam = new JSONObject();
+                   jChildTeam.put("name", childteam.getName());
+                   jsonChildrenTeamArray.add(jChildTeam);
+               }
+            }
+            jteam.put("childrenWorkspaces", jsonChildrenTeamArray);
 			jsonArray.add(jteam);
 
 		}

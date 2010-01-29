@@ -970,11 +970,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     		//link activity to activityContact
     		if(activityContact.getId()!=null){
-    			AmpActivityContact ampActContact=(AmpActivityContact)session.get(AmpActivityContact.class, activityContact.getId());
+    			AmpActivityContact ampActContact= new AmpActivityContact();
+    				//(AmpActivityContact)session.get(AmpActivityContact.class, activityContact.getId());
+    			ampActContact.setContact(activityContact.getContact());
     			ampActContact.setContactType(activityContact.getContactType());
     			ampActContact.setPrimaryContact(activityContact.getPrimaryContact());
     			ampActContact.setActivity(activity);
-    			session.update(ampActContact);
+    			ampActContact.setId(null);
+    			session.save(ampActContact);
     		}else{
     			activityContact.setActivity(activity);
         		session.save(activityContact);
@@ -1856,9 +1859,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
 			session.flush();
-			result = (AmpActivity) session.get(AmpActivity.class, id);
+			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 			session.evict(result);
-			result = (AmpActivity) session.get(AmpActivity.class, id);
+
+			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivity with id=" + id + " not found");
 		} catch (Exception e) {

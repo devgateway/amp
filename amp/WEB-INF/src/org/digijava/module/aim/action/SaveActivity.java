@@ -1728,6 +1728,7 @@ public class SaveActivity extends Action {
 		
 		if(allContacts!=null && allContacts.size()>0){
 			for (AmpActivityContact ampActContact : allContacts) {
+				ampActContact.setActivity(null);
 				if(ampActContact.getContactType().equals(Constants.DONOR_CONTACT)){
 					fillActivityContactPrimaryField(donorContsIds,ampActContact);
 				}else if(ampActContact.getContactType().equals(Constants.MOFED_CONTACT)){
@@ -2601,8 +2602,8 @@ public class SaveActivity extends Action {
 			if(eaForm.getActivityId() != null && eaForm.getActivityId() != 0) {
 				AuditLoggerUtil.logObject(session, request, activity, "update");
 			} else {
-				AuditLoggerUtil.logObject(session, request, activity, "add");
-			}
+			AuditLoggerUtil.logObject(session, request, activity, "add");
+		}
 		}
 
 		//If we're adding an activity, create system/admin message

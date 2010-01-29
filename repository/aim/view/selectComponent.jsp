@@ -24,7 +24,7 @@
 	int indexE = 0;
 %>
 
-
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <digi:instance property="aimEditActivityForm" />
 
 
@@ -208,9 +208,8 @@
 													</select>
 												</td>
 												<td>
-													<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">&nbsp; <a id="date1<%=field4%>" href='javascript:pickDateById_divContent("<%=field4%>","<%=field4%>")'>
-												</td>
-												<td>
+													<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">&nbsp; 
+													<a id="date1<%=field4%>" href='javascript:pickDateById_divContent("<%=field4%>","<%=field4%>")'>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 													</a><input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
 													<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="document.removeCommitment('<%=divName%>')">

@@ -57,7 +57,7 @@
 							<bean:define id="reqSelectedEntityIds" toScope="request">${element.actionFormProperty}</bean:define>
 							<ul style="list-style-type: none;">
 								<li>
-									<input type="checkbox" onchange="toggleCheckChildren(this)"/> 
+									<input type="checkbox" onclick="toggleCheckChildren(this)"/> 
 										<span style="font-family: Arial; font-size: 12px;">
 											<digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span>

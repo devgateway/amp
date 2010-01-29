@@ -28,7 +28,7 @@
 				</c:if>
 			</c:forEach>
 			<li>
-				<input onchange="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/>
+				<input onclick="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/>
 				<span style="font-family: Arial; font-size: 12px;">${entity.label}</span> 
 				<logic:notEmpty name="entity" property="children">
 					<bean:define id="reqEntityList" toScope="request" name="entity" property="children" ></bean:define>

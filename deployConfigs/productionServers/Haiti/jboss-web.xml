@@ -1,9 +1,9 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>kosovo.production.ampdev.net</virtual-host>
+<virtual-host>haiti.production.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
- com.example:loader=amp-kosovo-production.war
+ com.example:loader=amp-haiti-production.war
  <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
  </loader-repository>
  </class-loading>

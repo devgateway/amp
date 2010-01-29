@@ -448,7 +448,7 @@ public class ChartWidgetUtil {
             Font font = new Font(null, 0, 12);
             result.getTitle().setFont(font);
         }
-       String pattern = "{0} = {2}";
+       String pattern = "{0} {1} ({2})";
        if (opt.getLabelPattern() != null) {
                pattern = opt.getLabelPattern();
         }

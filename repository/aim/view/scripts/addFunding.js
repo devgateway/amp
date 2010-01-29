@@ -223,7 +223,7 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgI
 
 	
 
-	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, msgConfirmFunding);
+	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, msgConfirmFunding,decimalSymbol,groupSymbol);
 
 }
 
@@ -369,13 +369,18 @@ function validateFundingDetailsExchangeRate(comm,disb,exp)
 
 
 
-function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,msgEnterDate, msgEnterRate,msgConfirmFunding) {
+function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,msgEnterDate, msgEnterRate,msgConfirmFunding,decimalSymbol,groupSymbol) {
 	
 	var itr = comm + disb + exp;
 
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
 
 	var disbIndex = -1, expIndex = -1;
+	
+	this.decimalSymbol=decimalSymbol;
+	
+	this.groupSymbol=groupSymbol;
+
 
 	for (var j = 0;j < itr;j ++) {
 		var amtField = "fundingDetail[" + j + "].transactionAmount";

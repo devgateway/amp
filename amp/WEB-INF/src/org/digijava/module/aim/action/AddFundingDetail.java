@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -13,10 +14,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -39,11 +47,21 @@ public class AddFundingDetail extends Action {
 
 	private String event;
 
+	private Long siteId;
+	private String locale;
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
 		EditActivityForm formBean = (EditActivityForm) form;
+
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				
+		siteId = site.getId();
+		locale = navigationLanguage.getCode();	
+		
 		formBean.setReset(false);
 		event = formBean.getFunding().getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
@@ -51,7 +69,20 @@ public class AddFundingDetail extends Action {
 
 		if (event.equals("importFundingDetail") && formBean.getFileImport() != null) //If this is an import, means we have to look for the file and parse it
 		{
-			importFunding(formBean, teamMember);
+			String error = importFunding(formBean, teamMember);
+			if (error != null && !error.equals("")){
+				try {
+					ActionErrors errors = new ActionErrors();
+					errors.add("title", new ActionError(
+								"error.aim.addActivity.importFunding.error", TranslatorWorker.translateText("Error in the structure/data of the file. Please review.", locale, siteId)));
+					saveErrors(request, errors);								
+				} catch (WorkerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+
 			return mapping.findForward("forward");
 		}
 		else if(event.equals("importFundingDetailDone")){
@@ -156,15 +187,17 @@ public class AddFundingDetail extends Action {
 		return fundingDetail;
 	}
 
-	private void importFunding(EditActivityForm eaForm, TeamMember tm) {
+	private String importFunding(EditActivityForm eaForm, TeamMember tm) {
 		//Do all the preparation needed for the adding of disb/comm/etc
 		ArrayList<FundingDetail> fundingDetails = new ArrayList<FundingDetail>();
 		FundingDetail fd = null;
 		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
 		FormFile formFile = eaForm.getFileImport();
+		String error = "";
 		try {
 			InputStreamReader isr = new InputStreamReader(formFile.getInputStream());
 			CSVReader reader = new CSVReader(isr);
+			
 			
 			String [] nextLine;
 			Boolean firstLine = true;
@@ -185,8 +218,8 @@ public class AddFundingDetail extends Action {
 						if (nextLine[0].equals("expenditure")) fundingDetail.setTransactionType(Constants.EXPENDITURE);
 						if (nextLine[1].equals("actual")) fundingDetail.setAdjustmentType(Constants.ACTUAL);
 						if (nextLine[1].equals("planned")) fundingDetail.setAdjustmentType(Constants.PLANNED);
-
-						fundingDetail.setTransactionAmount(nextLine[2]);
+						BigDecimal fundingAmount = FormatHelper.parseBigDecimal(nextLine[2]);
+						fundingDetail.setTransactionAmount(fundingAmount.toPlainString());
 						fundingDetail.setCurrencyCode(nextLine[3]);
 						//Put together the date
 						GregorianCalendar calendar = new GregorianCalendar();
@@ -200,16 +233,19 @@ public class AddFundingDetail extends Action {
 					}
 				}
 			}			
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			eaForm.getFunding().setFundingDetails(fundingDetails);
+		} catch (NumberFormatException e)
+		{
+			error = "Number format problem while importing. Please verify the file.";
+			logger.error(error);
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			error = "Error importing file. Please verify that the columns are correct.";
+			logger.error(error);
 			e.printStackTrace();
 		}
 		
-		eaForm.getFunding().setFundingDetails(fundingDetails);
+		return error;
 	}
 
 }

@@ -66,6 +66,11 @@ DIV.red_notice
 
 
 </style>
+
+
+<c:set var="errors"><digi:errors/></c:set>
+${errors}
+
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
 	<!-- funding -->
 	<tr>
@@ -637,7 +642,12 @@ DIV.red_notice
 								</c:if>
 								<c:if test="${!empty aimEditActivityForm.funding.fundingDetails}">
 								<td>
+<c:if test="${empty errors}">
 									<input type="button" value="<digi:trn>Confirm data</digi:trn>" class="inp-text" onClick="submitImportForm()">
+</c:if>
+<c:if test="${!empty errors}">
+									<input type="button" value="<digi:trn>Retry</digi:trn>" class="inp-text" onClick="importFunding('<bean:write name="aimEditActivityForm" property="funding.orgFundingId"/>')">
+</c:if>
 								</td>
 								</c:if>
 								<td>

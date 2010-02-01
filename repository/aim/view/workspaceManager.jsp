@@ -556,7 +556,7 @@ function updateTableMembers(members){
         for (i = 0, l = members.length; i < l; ++i) {
             item = members[i];
             html[j++] = '<tr><td width="300" class="reportsBorderTD">';
-            html[j++] = '<a href=\'javascript:showUserProfile('+item.ID+')\' title=\'Click to View Member Detais\'>'+item.name+'</a>';
+            html[j++] = '<a href=\'javascript:showMemberProfile('+item.ID+')\' title=\'Click to View Member Detais\'>'+item.name+'</a>';
             html[j++] = '</td><td align=\'center\' width="100" class="reportsBorderTD">';
             html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn>Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
             html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
@@ -819,7 +819,7 @@ function showTeamDetails(id, description){
 
 </script>
 <script language=javascript>
-function showUserProfile(id){
+function showMemberProfile(id){
 	var param = "~edit=true~id="+id;
     previewWorkspaceframe('/aim/default/userProfile.do',param);
 	

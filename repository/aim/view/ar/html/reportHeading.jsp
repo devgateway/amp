@@ -92,11 +92,12 @@
           
         <logic:notEqual name="column" property="columnDepth" value="1">
         	<c:choose>
-        		<c:when test="${subColumn.width!=1 || subColumn.contentCategory==categoryYear}">
+        		<c:when test="${subColumn.contentCategory==categoryYear}">
         		<%
         			if(subColumn.getName().length()<5){%>
         				<td style="background-color:#EAEAEA; margin-left: 2px; margin-right: 2px;" class="clsTableTitleColHtml" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
+							
 					<%}else{%>
 						<td class="clsTableTitleColHtml" style="background-color:#EAEAEA;text-decoration: none;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>	

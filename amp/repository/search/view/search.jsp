@@ -47,8 +47,10 @@
 function resetFields() {
 	var keyword = document.getElementsByName("keyword")[0];
 	var queryType = document.getElementsByName("queryType")[0];
+	var actSearchKey = document.getElementsByName("actSearchKey")[0];
 	keyword.value ="";
 	queryType.value = -1;
+	actSearchKey.value= 0;
 	document.getElementById("resultTable").innerHTML="";
 	keyword.focus();
 }
@@ -171,6 +173,7 @@ $(document).ready(function(){
 	}
 		
 		
+		
 	});
 
 	
@@ -192,7 +195,16 @@ $(document).ready(function(){
 		}
 		
 	});
+
+	$("#resetBt").click(function(){
+		$("#selectedFromDate").val("");
+		$("#selectedToDate").val("");
+		$("#searchKey").css({'visibility' : 'hidden'});
+		$(".searchKeyLabel").css({'visibility' : 'hidden'});
+	});
+
 	
+
 });
 
 </script>
@@ -307,7 +319,7 @@ $(document).ready(function(){
                                         </td>
                                         <td valign="top">
                                           <html:submit><digi:trn>Submit</digi:trn></html:submit><br /><br />
-                                           <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/> 
+                                           <input type="button" onclick="resetFields()" id="resetBt" value="<digi:trn>Reset</digi:trn>"/> 
                                         
                                         </td>
                                       </tr>
@@ -334,7 +346,7 @@ $(document).ready(function(){
                                         <td>
                                         <div id="fromDate" class="hideDatePanel">
                                         <digi:trn>from:</digi:trn>
-                                          <html:text property="fromDate" size="10" styleId="selectedFromDate" disabled="true"></html:text>
+                                          <html:text property="fromDate" size="10" styleId="selectedFromDate" ></html:text>
                                             <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedFromDate"),"clear1")'>
 			                                   <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 			                                </a>
@@ -343,7 +355,7 @@ $(document).ready(function(){
                                         <td>
                                         <div id="toDate" class="hideDatePanel">
                                         <digi:trn>to:</digi:trn>
-                                          <html:text property="toDate" size="10" styleId="selectedToDate" disabled="true"></html:text>
+                                          <html:text property="toDate" size="10" styleId="selectedToDate" ></html:text>
                                             <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedToDate"),"clear1")'>
 			                                   <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 			                                </a>

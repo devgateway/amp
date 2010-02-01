@@ -1,6 +1,10 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
@@ -31,7 +35,7 @@ public class ViewActivityHistory extends Action {
 			public int compare(Object o1, Object o2) {
 				AmpActivityVersion a1 = (AmpActivityVersion) o1;
 				AmpActivityVersion a2 = (AmpActivityVersion) o2;
-				return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
+				return a1.getAmpActivityId().compareTo(a2.getAmpActivityId() * -1);
 //				if (a1.getModifiedDate() == null && a2.getModifiedDate() == null) {
 //					return 0;
 //				} else if (a1.getModifiedDate() == null) {
@@ -48,7 +52,20 @@ public class ViewActivityHistory extends Action {
 		Session session = PersistenceManager.getRequestDBSession();
 		AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm.getActivityId());
 		hForm.setActivities(new TreeSet<AmpActivity>(compareVersions));
-		hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
+		
+		// AMP-7706: Filter last 5 versions.
+		List<AmpActivity> auxList = new ArrayList<AmpActivity>(currentActivity.getAmpActivityGroup().getActivities());
+		Collections.sort(auxList, compareVersions);
+		Iterator<AmpActivity> iter = auxList.iterator();
+		int i = 5;
+		while(iter.hasNext()) {
+			AmpActivity auxActivity = iter.next();
+			if(i > 0) {
+				hForm.getActivities().add(auxActivity);
+			}
+			i--;
+		}
+		//hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
 
 		return mapping.findForward("forward");
 	}

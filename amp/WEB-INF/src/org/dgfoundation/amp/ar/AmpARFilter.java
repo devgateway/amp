@@ -990,8 +990,11 @@ public class AmpARFilter extends PropertyListable {
 				ServletContext ampContext = session.getServletContext();
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
+				
+				String realPath = ampContext.getRealPath("/"); //AMP-7680
+				if (realPath == null)	realPath = "";//because realPath in testCase is always null
 
-				hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText);
+				hits = LuceneUtil.search(realPath + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText);
 				logger.info("New lucene search !");
 				if(hits!=null){
 				for (int i = 0; i < hits.length(); i++) {

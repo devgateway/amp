@@ -42,17 +42,17 @@
 }
 </style>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='css/yui/datatable.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='css/yui/menu.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='css/paginator.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>">
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datatable-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datasource-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datatable-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/connection-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/menu-amp-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/menu-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container_core-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/paginator-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
@@ -795,43 +795,9 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		var mItem2="${trans_teamDocuments}";
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj, id:mItem2} )   );
 	</logic:notEmpty>
-	/*
-		var onclickObj 	= {
-			fn					: windowController.populateWithPublicDocs,
-			scope				: windowController
-			
-		};
-		
-	menu.addItem(  new YAHOO.widget.MenuItem("${trans_publicDocuments}", {onclick: onclickObj} )   );
-	
-	var scopeObj	= {
-			mItemDoc			: null,
-			mItemLink			: null
-		};
-	var onclickObj 	= {
-			fn					: windowController.clickedShowOnlyDocs,
-			obj					: scopeObj,
-			scope				: windowController
-			
-	};
-	var showDocItem			= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyDocuments}", {onclick: onclickObj} );
-	scopeObj.mItemDoc		= showDocItem;
-	
-	var onclickObj 	= {
-			fn					: windowController.clickedShowOnlyLinks,
-			obj					: scopeObj,
-			scope				: windowController
-	};
-	var showLinkItem		= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyWebLinks}", {onclick: onclickObj});
-	scopeObj.mItemLink		= showLinkItem;
-	
-	optionsMenu.addItem( showDocItem );
-	optionsMenu.addItem( showLinkItem );
-	
-	menu.addItem(  new YAHOO.widget.MenuItem("${trans_options}", {submenu: optionsMenu})   );
-	*/
+
 	menu.render(containerElement);
-	//menu.show();
+//	menu.show();
 	return menu;
 
 }

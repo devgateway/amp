@@ -16,7 +16,11 @@
 <script type="text/javascript">
   $(document).ready(function(){
 	 
-	$(".inp-username").bind("blur", function(){
+	  $(".inp-username").attr({disabled: ""});
+	  $(".inp-upastext").attr({disabled: ""});
+	  $(".inp-upassword").attr({disabled: ""});
+
+	  $(".inp-username").bind("blur", function(){
 		var uname = $(".inp-username").attr("value");
 		if (uname=="") {
 		$(".inp-username").attr({value: "Username"});
@@ -94,10 +98,10 @@
               --%>
 				<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 8px;">
 					<tr>
-					  <td align="center" valign="middle"><input type="text" name="j_username" size="20" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>"/></td>
+					  <td align="center" valign="middle"><input type="text" name="j_username" size="20" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>" disabled="disabled"/></td>
 					  <td align="center" valign="middle">
-					  	<input type="password" name="j_password" size="20" class="inp-text inp-upassword" style="display: none" />
-					  	<input type="text" name="j_username" size="20" class="inp-text inp-upastext"  value="<digi:trn>Password</digi:trn>"/>
+					  	<input type="password" name="j_password" size="20" class="inp-text inp-upassword" style="display: none" disabled="disabled"/>
+					  	<input type="text" name="j_username" size="20" class="inp-text inp-upastext"  value="<digi:trn>Password</digi:trn>" disabled="disabled"/>
 					  </td>
 					  <td><html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Login</digi:trn></html:submit></td>
 					</tr>

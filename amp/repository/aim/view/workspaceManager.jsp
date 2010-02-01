@@ -55,7 +55,7 @@ background:transparent url(/repository/aim/images/down.gif) no-repeat scroll rig
         tipDiv.style.display="block";
         //IE BUG
         var offset=getTopOffset(tooltipDiv.parentNode);
-        tipDiv.style.top=(offset-50)+"px";
+        tipDiv.style.top=(offset-30)+"px";
         tipDiv.style.left="50px";
         tooltipPanel.setBody(tooltipDiv.innerHTML);
         tooltipPanel.setHeader(title);
@@ -78,7 +78,7 @@ background:transparent url(/repository/aim/images/down.gif) no-repeat scroll rig
 YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 	function initDynamicTable() {
          tooltipPanel = new YAHOO.widget.Panel("TipLayer",{
-                        width:200,
+                        width:300,
 						close:false,
 						visible:false,
 						draggable:false
@@ -122,7 +122,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
                  '</ul>'+
                 '</div>'
         };
- 
+       
         this.myDataSource = new YAHOO.util.DataSource("/aim/searchWorkspaces.do?");
         this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         //this.myDataSource.connXhrMode = "queueRequests";

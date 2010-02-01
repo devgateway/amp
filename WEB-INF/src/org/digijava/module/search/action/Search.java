@@ -147,6 +147,8 @@ public class Search extends Action {
 		// TODO: searching documents
 		
 		searchForm.setSearchByDate(false);
+		searchForm.setFromDate(null);
+		searchForm.setToDate(null);
 		return mapping.findForward("forward");
 	}
 

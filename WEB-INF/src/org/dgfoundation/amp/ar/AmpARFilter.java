@@ -686,7 +686,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 
 		
-		
+		/*
 		if (fromDate != null) 
 			if (fromDate.trim().length() > 0){
 				String FROM_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
@@ -704,6 +704,7 @@ public class AmpARFilter extends PropertyListable {
 				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));
 				
 			}
+			*/
 		
 		/*
 		 * if (fromYear==null) fromYear = 0;

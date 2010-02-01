@@ -13,6 +13,7 @@ public class AllSearchTest {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(SearchTest.class);
 		suite.addTestSuite(ResourcesTest.class);
+		suite.addTestSuite(ActivitySearch.class);
 	    return suite;
 		
 	}

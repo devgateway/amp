@@ -1013,7 +1013,7 @@ function showFilter(){
 				var actTDname = document.createElement('TD');
 				var actAname = document.createElement('a');
 				actAname.innerHTML=actList[i].getAttribute('name');
-				var actURL = addActionToURL('aim/showPrinterFriendlyPage.do~edit=true~activityid=');
+				var actURL = addActionToURL('showPrinterFriendlyPage.do~edit=true~activityid=');
 				actURL+=actList[i].getAttribute('id');
 				actAname.href=actURL;
 				actAname.target='_blank';

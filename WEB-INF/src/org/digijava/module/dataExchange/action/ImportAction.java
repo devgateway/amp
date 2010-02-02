@@ -202,7 +202,8 @@ public class ImportAction extends MultiAction {
         session.setAttribute("importBuilder", importBuilder);
         session.setAttribute("DEfileUploaded", "true");
 		
-		return mapping.findForward("afterUploadFile");
+        //importBuilder.saveActivities(request, tm);
+        return mapping.findForward("afterUploadFile");
 	}
 	
 	private TreeSet<String> processActivitiesToTreeSet(List allActivitiesFromDB, ImportBuilder importBuilder) {

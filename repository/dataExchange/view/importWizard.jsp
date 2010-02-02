@@ -80,7 +80,7 @@ div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
-	width: 300px;
+	width: 200px;
 	padding: 0;
 	margin: 0;
 	z-index: 1;
@@ -183,6 +183,8 @@ div.fakefile2 input{
              <%= ExportHelper.renderActivityTree(tree, request) %>
 
          //The tree is not created in the DOM until this method is called:
+         	tree.expandAll();
+         	checkAll();
              tree.draw();
              
          }
@@ -342,13 +344,9 @@ div.fakefile2 input{
 	        								</digi:trn><br/>
         						</div>
         						<div>
-        							<logic:iterate name="deImportForm" property="options" id="option">
-        								<bean:define id="optionValue">
-                          					<bean:write name="option"/>
-            							</bean:define>
-        								<html:radio property="selectedOptions" value="<%=optionValue%>" styleId="<%=optionValue%>" />
-        								<bean:write name="option"/> <digi:trn>Activity</digi:trn><br/>
-        							</logic:iterate>
+        							<html:radio property="selectedOptions" value="insert"><digi:trn key="aim:insertActivity">Insert Activities (insert not existing activities)</digi:trn></html:radio><br/>
+        							<html:radio property="selectedOptions" value="update"><digi:trn key="aim:insertActivity">Update Activities (only existing activities)</digi:trn></html:radio><br/>
+        							<html:radio property="selectedOptions" value="insert&update"><digi:trn key="aim:insertupdateActivity">Insert & Update Activities (insert non existing, update existing)</digi:trn></html:radio>
     							</div>
     							</div>
     							</td>

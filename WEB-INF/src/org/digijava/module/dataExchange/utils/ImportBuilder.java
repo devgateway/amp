@@ -1400,54 +1400,29 @@ public class ImportBuilder {
 		return acv;
 		}
 	
-//	public void builImportActivitiesToAMP() throws Exception, AMPError{
-//		if(activities !=null && activities.getActivity() !=null)
-//			for (Iterator<ActivityType> it = activities.getActivity().iterator(); it.hasNext();) {
-//				ActivityType activityImported = (ActivityType) it.next();
-//				AmpActivity activity = new AmpActivity();
-//				processPreStep(activity, tm);
-//			//if( !activityExists(activityImported) ){
-//				HashMap hm = creatingImportCacheTree();
-//				processPreStep(activity, tm);
-//				
-//				//identification, assigningOrg
-//				processStep1(activityImported, activity,request, "en",hm);
-//				
-//				//sectors, programs
-//				processStep2(activityImported, activity,request, "en",hm);
-//				
-//				//funding , regional funding
-//				processStep3(activityImported, activity,request, "en",hm);
-//				
-//				//relatedOrg, components
-//				Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
-//				processStep5(activityImported, activity,request, "en",hm, tempComps);
-//				
-//				//documents
-//				processStep6(activityImported, activity,request, "en",hm);
-//				
-//				//contact information
-//				processStep7(activityImported, activity,request, "en",hm);
-//				
-//				DataExchangeUtils.saveComponents(activity, request, tempComps);
-//				DataExchangeUtils.saveActivity(activity, request);
-//				
-//			//}
-//			//else logger.info("Activity was not imported-> pls implement the update step :)");
-//			}
-//	}
+
 	
 	public void saveActivities(HttpServletRequest request, TeamMember tm) {
-		// TODO Auto-generated method stub
 		if(this.getRoot()!=null && this.getRoot().getElements() != null)
 			for (Iterator it = this.getRoot().getElements().iterator(); it.hasNext();) {
 				AmpDEImportLog iLog = (AmpDEImportLog) it.next();
-				if(iLog.isSelect()){
+				//TODO
+				if(iLog.isSelect())
+				{
 					Activities activities = iLog.getActivities();
 					try {
 						//if there are no errors with that activity we can import it
-						if(!iLog.isError())
-							this.builImportActivitiesToAMP(activities, request, tm);
+						//TODO
+						//if(!iLog.isError())
+							{
+								if("insert".equals(this.getInsertUpdate()))
+										this.insertActivities(activities, request, tm, iLog.isExistingActivity());
+								if("update".equals(this.getInsertUpdate()))
+										this.updateActivities(activities, request, tm,iLog.isExistingActivity());
+								if("insert&update".equals(this.getInsertUpdate()))
+										this.insertUpdateActivities(activities, request, tm,iLog.isExistingActivity());
+
+							}
 					} catch (AMPError e) {
 						// TODO Auto-generated catch block
 						logger.info("AMP ERROR : error in saving activity:"+iLog.getObjectNameLogged()+" in AMP db");
@@ -1463,6 +1438,28 @@ public class ImportBuilder {
 			}
 	}
 	
+	private void insertUpdateActivities(Activities activities2, 	HttpServletRequest request, TeamMember tm, boolean b) throws Exception, AMPError{
+		if(!b){
+			this.builImportActivitiesToAMP(activities2, request, tm);
+		}
+		else {
+			//TODO
+			
+		}
+	}
+
+	private void updateActivities(Activities activities2, HttpServletRequest request, TeamMember tm, boolean b) throws Exception, AMPError{
+		if(b){
+			//TODO
+		}
+	}
+
+	private void insertActivities(Activities activities2, HttpServletRequest request, TeamMember tm, boolean b) throws Exception, AMPError{
+		if(!b){
+			this.builImportActivitiesToAMP(activities2, request, tm);
+		}
+	}
+
 	public void builImportActivitiesToAMP(Activities activities,HttpServletRequest request, TeamMember tm) throws Exception, AMPError{
 		if(activities !=null && activities.getActivity() !=null)
 			for (Iterator<ActivityType> it = activities.getActivity().iterator(); it.hasNext();) {
@@ -1497,7 +1494,7 @@ public class ImportBuilder {
 				
 				
 				DataExchangeUtils.saveComponents(activity, request, tempComps);
-				DataExchangeUtils.saveActivity(activity, request);
+				DataExchangeUtils.saveActivity(activity, request,tm);
 				
 				//contact information
 				processContactStep(activity,activityImported);
@@ -1802,7 +1799,7 @@ public class ImportBuilder {
 					s+=ampId+"###";
 				if(this.isBudgetCodeKey())
 					s+=budgetCode+"###";
-				if(this.getAllActivitiesFromDB().contains(s))iLog.setExistingActivity(true);
+				if(this.getAllActivitiesFromDB().contains(s)) iLog.setExistingActivity(true);
 			}
 		
 	}

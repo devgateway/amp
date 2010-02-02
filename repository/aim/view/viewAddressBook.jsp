@@ -453,7 +453,22 @@ html>body #mainEmpty {
 																		<div class="reportHead" style="width: 865px; height: 30px; max-height: 30px; ">
 																			<table width="865" class="reportsBorderTable">																				
 																				<thead class="fixedHeader">											                            	
-												                            	<tr height="100%">																						
+												                            	<tr height="100%">
+												                            																																												<td width="100" class="clsTableTitleCol">
+																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='functionAscending'}">
+																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=functionAscending&reset=false">
+																								<b><digi:trn>Function</digi:trn></b>
+																							</digi:link>																					
+																						</c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='functionAscending'}">
+																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=functionDescending&reset=false">
+																								<b><digi:trn>Function</digi:trn></b>
+																							</digi:link>																					
+																						</c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='functionAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
+																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='functionDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
+																					</td>
+												                            																							
 																					<td width="152" class="clsTableTitleCol">
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy!='nameAscending'}">
 																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=nameAscending&reset=false">
@@ -484,20 +499,6 @@ html>body #mainEmpty {
 																						</c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>																																			
-																					</td>
-																					<td width="100" class="clsTableTitleCol">
-																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='titleAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=titleAscending&reset=false">
-																								<b><digi:trn>Title</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=titleDescending&reset=false">
-																								<b><digi:trn>Title</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
 																					</td>
 																					<td height="30" width="100" class="clsTableTitleCol">
 																						<b><digi:trn>Phone</digi:trn></b>													
@@ -531,6 +532,10 @@ html>body #mainEmpty {
 																					</c:set>
 																					
 																					<tr bgcolor="${background}">
+																						<td class="reportsBorderTD" width="100" align="center">
+																							${cont.function}
+																						</td>
+																					
 						                                                           		<td width="152" class="reportsBorderTD">
 																						  ${cont.name}&nbsp;${cont.lastname}
 																						</td>
@@ -550,9 +555,6 @@ html>body #mainEmpty {
 																										<li>${orgCont.organisation.name}</li>                                                                                                
 																									</c:forEach>
                                                                                             </ul>
-																						</td>
-																						<td class="reportsBorderTD" width="100" align="center">
-																							${cont.title}
 																						</td>
 																						<td class="reportsBorderTD" width="100">
 																							<c:forEach var="phone" items="${cont.properties}">

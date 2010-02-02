@@ -83,7 +83,7 @@ public class searchWorkspaces extends Action {
 
 		Collection tempCol = new ArrayList();
 
-		for (int i = stIndex; i <=edIndex; i++) {
+		for (int i = stIndex; i < edIndex; i++) {
 			tempCol.add(vect.get(i));
 		}
 		for (Iterator it = tempCol.iterator(); it.hasNext();) {

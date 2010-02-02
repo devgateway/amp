@@ -430,7 +430,7 @@ function showFilter(){
 		}
 	}
 
-	function setCurProgData(progId,nodeId){
+	function setCurProgData(progId,nodeId){ 
 		if (curProgId == null || curProgId != progId ){
 			//var newNode=YAHOO.widget.TreeView.getTree('tree').collapseAll();
 			progIdHistory[progIdHistory.length]=curProgId;
@@ -667,16 +667,14 @@ function showFilter(){
 
 		//create TreeView Object for specified with ID HTML object.
 		ptree=new jktreeview("tree");
-
-		//setup click event
-		ptree.labelCkick=treeNodeLabelWasClicked;
-
+    
+	
 		//build nodes
 		buildTree(programList,ptree,"");
-
+      
 		//draw tree
 		ptree.treetop.draw();
-
+         
 		openNodeIter=0;
 
 		//open nodes
@@ -706,7 +704,7 @@ function showFilter(){
 				//prepare node data
 				var prgID=prg.getAttribute("id");
 				var prgName=prg.getAttribute("name");
-				var prgURL="../../aim/nationalPlaningDashboard.do";//URL is not used currently //"javascript:browseProgram('"+prgID+"')";
+				var prgURL="javascript:browseProgram('"+prgID+"')";
 				var prgParent=target;
 				//create tree view node object
 				var thisNode=treeObj.addItem(prgName,prgParent,prgURL);
@@ -720,7 +718,8 @@ function showFilter(){
 				if(prgID==curProgId){
 					curProgNodeIndex=thisNode.index;
 				}
-				thisNode.indicators=getIndicatorsHTML(prg);
+
+                var indNode =new YAHOO.widget.HTMLNode(getIndicatorsHTML(prg), thisNode, false, true);
 				var subNodes=prg.childNodes;
 				//recurs on children programs
 				if(subNodes != null){
@@ -1414,6 +1413,9 @@ function showFilter(){
 							YAHOO.util.Event.addListener(n, "mouseover", eventFunction);
 							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);
 		}
+            $("a[class='ygtvspacer']").each(function(index){
+            jQuery(this).removeAttr('href').css('text-decoration', 'none');
+       });
 	}
 	/* Function that is executed when mouse over an element */
 	function eventFunction(e) {
@@ -1424,7 +1426,7 @@ function showFilter(){
 	/* Extracts the id (database id of AmpTheme) from the href property */
 	function getIdFromHref( href ) {
 		var start	= href.indexOf("('");
-		var end		= href.indexOf("',");
+		var end		= href.indexOf("')");
 		return href.substring(start+2, end);
  	}
  	/* Creates the panel used to show information */
@@ -1911,5 +1913,5 @@ function showFilter(){
 
 </digi:form>
 <script type="text/javascript">
-       addLoadEvent(delBody);
+     addLoadEvent(delBody);
 </script>

@@ -50,6 +50,7 @@ public class ViewSchemeTree extends Action {
 		String event = request.getParameter("event");
 		String parent = request.getParameter("parent");
 		String schemeId = addSectorForm.getRootId();
+		String schemeName = SectorUtil.getAmpSectorScheme(new Long(schemeId)).getSecSchemeName();
 		if(schemeId == null) {
 			schemeId = (String) request.getAttribute("ampSecSchemeIdFromTree");
 		}
@@ -63,6 +64,7 @@ public class ViewSchemeTree extends Action {
 		sectors = SectorUtil.generateLevelHierarchy(sectors);
 		sectors = SectorUtil.generateChildHierarchy(sectors);
 		addSectorForm.setSchemeTree(sectors);
+		addSectorForm.setSecSchemeName(schemeName);
 		
 		return mapping.findForward("forward");
 	}

@@ -117,6 +117,8 @@
           <%= DataExchangeUtils.renderActivityTree(tree) %>
           
       //The tree is not created in the DOM until this method is called:
+      	  tree.expandAll();
+          checkAll();
           tree.draw();
           //alert(tree.getNodeCount());
           
@@ -285,7 +287,7 @@
 					</div>
 				</div>
                
-				<div id="tab_log_after_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_log_after_import"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
 					<div style="width:100%; height:20px;text-align: right;">
@@ -299,7 +301,7 @@
                     </div>
 				</div>
 				
-				<div id="tab_select_activities"  class="yui-tab-content" align="left" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_select_activities"  class="yui-hidden" align="left" style="padding: 0px 0px 1px 0px;">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                     
@@ -313,7 +315,7 @@
                     
                    <div id="dataImportTree"></div>
 				</div>
-				<div id="tab_confirm_import"  class="yui-tab-content" align="left" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_confirm_import"  class="yui-hidden" align="left" style="padding: 0px 0px 1px 0px;">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                     <digi:trn>Step 4 Select additional fields</digi:trn>

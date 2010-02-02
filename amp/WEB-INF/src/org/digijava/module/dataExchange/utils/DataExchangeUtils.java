@@ -6,6 +6,7 @@ package org.digijava.module.dataExchange.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -22,13 +23,16 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
@@ -218,8 +222,9 @@ public class DataExchangeUtils {
 	
 	/**
 	 * @author dan
+	 * @param tm 
 	 */
-	public static void saveActivity(AmpActivity activity, HttpServletRequest request){
+	public static void saveActivity(AmpActivity activity, HttpServletRequest request, TeamMember tm){
 		Session session = null;
 		HttpSession httpSession=request.getSession();
 	    Transaction tx = null;
@@ -237,6 +242,15 @@ public class DataExchangeUtils {
 	        String ampId=ActivityUtil.numericAmpId("00",activityId);//generateAmpId(member.getUser(),activityId );
 	        activity.setAmpId(ampId);
 	        //session.update(activity);
+	        //AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, new Long(6));
+	        AmpActivityGroup newActivityGroup = new AmpActivityGroup();
+			newActivityGroup.setAmpActivityLastVersion(activity);
+			session.save(newActivityGroup);
+			activity.setAmpActivityGroup(newActivityGroup);
+			activity.setModifiedDate(Calendar.getInstance().getTime());
+			activity.setCreatedDate(Calendar.getInstance().getTime());
+			//activity.setModifiedBy(member);
+			session.update(activity);
 	        tx.commit();
 	        
 	    }catch (Exception ex) {

@@ -576,7 +576,7 @@ function adminHelp(){
                                       <ul>
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do"  onclick="return canExit()">
+                                            <a class="yuiampmenuitemlabel" href="/aim/nationalPlaningDashboard.do"  onclick="return canExit()">
                                             <digi:trn key="aim:npd">NPD</digi:trn>
                                             </a>
                                         </li>

@@ -194,7 +194,12 @@ public class ContactInfoUtil {
 				queryString += " order by cont.title";
 			}else if(sortBy.equals("titleDescending")){
 				queryString += " order by cont.title desc";
+			}else if(sortBy.equals("functionAscending")){
+				queryString += " order by cont.function";
+			}else if(sortBy.equals("functionDescending")){
+				queryString += " order by cont.function desc";
 			}
+
 			query=session.createQuery(queryString);
 			query.setFirstResult(fromRecord);
 			if(resultsNum!=-1){

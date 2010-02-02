@@ -62,15 +62,22 @@
 		//alert(document.getElementsByName('aimAddSectorForm')[0].action);
 		document.getElementsByName('aimAddSectorForm')[0].submit();
 	}
-	function deleteNode(id, parent) {
+	function deleteNode(id, parent, children) {
 		<c:set var="translation">
 		   <digi:trn key="aim:ConfirmDelete">Delete this Scheme?</digi:trn>
 		</c:set>
         var flag = confirm("${translation}");
-        if(flag) {
-        	document.getElementsByName('aimAddSectorForm')[0].action = '/aim/deleteSector.do~schemeId='+parent+'~event=delete~treeView=true~ampSectorId='+id+'~rootId='+<%=request.getParameter("rootId")%>;
-        	//alert(document.getElementsByName('aimAddSectorForm')[0].action);
-            document.getElementsByName('aimAddSectorForm')[0].submit();
+        if(flag) {   
+            if(children) {
+            	<c:set var="trn2">
+                     <digi:trn>Please delete all sub-sectors before deleting a sector.</digi:trn>
+                </c:set> 
+                alert("${trn2}");
+            } else {
+	        	document.getElementsByName('aimAddSectorForm')[0].action = '/aim/deleteSector.do~schemeId='+parent+'~event=delete~treeView=true~ampSectorId='+id+'~rootId='+<%=request.getParameter("rootId")%>;
+	        	//alert(document.getElementsByName('aimAddSectorForm')[0].action);
+	            document.getElementsByName('aimAddSectorForm')[0].submit();
+            }
         }
 	}
 	function deleteRootNode(id) {
@@ -175,8 +182,8 @@
 										<tr>
 										<td>
 											<p>
-												&nbsp;&nbsp;[<a onclick="treeObj.expandAll();"><digi:trn>Expand</digi:trn></a>]
-												&nbsp;&nbsp;[<a onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
+												&nbsp;&nbsp;[<a style="cursor: pointer;" onclick="treeObj.expandAll();"><digi:trn>Expand</digi:trn></a>]
+												&nbsp;&nbsp;[<a style="cursor: pointer;" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
 											</p>
 										</td>
 										</tr>
@@ -186,17 +193,17 @@
 											 <font size="2">
 										 		<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
 										 			<li id="rootnode" noDrag="true" noSiblings="true" noDelete="true" noRename="true" >
-										 				<a>Root
-															<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 14px; cursor: pointer;" onclick='newNode(<%=request.getParameter("rootId")%>, 0)'/>
-															<img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" style="height: 14px; cursor: pointer;" onclick="editRootNode(<%=request.getParameter("rootId")%>)"/>
-															<img src="/TEMPLATE/ampTemplate/imagesSource/common/deleteIcon.gif" style="height: 14px; cursor: pointer;" onclick="deleteRootNode(<%=request.getParameter("rootId")%>)"/>
+										 				<a><bean:write name="aimAddSectorForm" property="secSchemeName"/>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 14px; cursor: pointer;" onclick='newNode(<%=request.getParameter("rootId")%>, 0)' title="<digi:trn>Add Sector</digi:trn>"/>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" style="height: 14px; cursor: pointer;" onclick="editRootNode(<%=request.getParameter("rootId")%>)" title="<digi:trn>Edit Sector</digi:trn>"/>
+															<img src="/TEMPLATE/ampTemplate/imagesSource/common/deleteIcon.gif" style="height: 14px; cursor: pointer;" onclick="deleteRootNode(<%=request.getParameter("rootId")%>)" title="<digi:trn>Delete Sector</digi:trn>"/>
 														</a>
 										 				<ul id = "rootNod">
 										 				</ul>
 										 			</li>
 										 		</ul>
 											 	<script type="text/javascript">
-											 		function insertRoot(id, name, level){
+											 		function insertRoot(id, name, level, children){
 											 			var parent = document.getElementById("rootNod");
 														var newItem = document.createElement('li');
 														newItem.setAttribute("id","nod" + id);
@@ -211,21 +218,25 @@
 														newImgAdd.setAttribute("src","/TEMPLATE/ampTemplate/images/green_plus.png");
 														newImgAdd.setAttribute("style","height: 14px; cursor: pointer;");
 														newImgAdd.setAttribute("onclick",'newNode('+id+',1)');
+														newImgAdd.setAttribute("title","<digi:trn>Add Sub-Sector</digi:trn>");
 														newA.appendChild(newImgAdd);
 														var newImgEdit=document.createElement('img');
 														newImgEdit.setAttribute("src","/TEMPLATE/ampTemplate/images/application_edit.png");
 														newImgEdit.setAttribute("style","height: 14px; cursor: pointer;");
 														newImgEdit.setAttribute("onclick",'editNode('+id+','+level+')');
+														newImgEdit.setAttribute("title","<digi:trn>Edit Sector</digi:trn>");
 														newA.appendChild(newImgEdit);
 														var newImgDel=document.createElement('img');
 														newImgDel.setAttribute("src","/TEMPLATE/ampTemplate/images/deleteIcon.gif");
 														newImgDel.setAttribute("style","height: 14px; cursor: pointer;");
-														newImgDel.setAttribute("onclick",'deleteNode('+id+',<%=request.getParameter("rootId")%>)');
+														newImgDel.setAttribute("onclick",'deleteNode('+id+',<%=request.getParameter("rootId")%>'+','+children+')');
+														newImgDel.setAttribute("title","<digi:trn>Delete Sector</digi:trn>");
 														newA.appendChild(newImgDel);
 												 		
 												 		parent.appendChild(newItem);
 											 		}
 													function insertChild(pid, id, name, children, level){
+														//alert(children);
 														var parent = document.getElementById("nod" + pid);
 														var newItem = document.createElement('li');
 														newItem.setAttribute("id","nod" + id);
@@ -235,6 +246,7 @@
 															newItem.setAttribute("class","dhtmlgoodies_sheet.gif");	
 														}
 														var newA = document.createElement('a');
+														newA.setAttribute("id","ida" + id);
 													    newItem.appendChild(newA);
 														var newTxt=document.createTextNode(name);
 														newA.appendChild(newTxt);
@@ -244,17 +256,20 @@
 															newImgAdd.setAttribute("src","/TEMPLATE/ampTemplate/images/green_plus.png");
 															newImgAdd.setAttribute("style","height: 14px; cursor: pointer;");
 															newImgAdd.setAttribute("onclick",'newNode('+id+','+level+')');
+															newImgAdd.setAttribute("title","<digi:trn>Add Sub-Sub-Sector</digi:trn>");
 															newA.appendChild(newImgAdd);
 														}
 														var newImgEdit=document.createElement('img');
 														newImgEdit.setAttribute("src","/TEMPLATE/ampTemplate/images/application_edit.png");
 														newImgEdit.setAttribute("style","height: 14px; cursor: pointer;");
 														newImgEdit.setAttribute("onclick",'editNode('+id+','+level+')');
+														newImgEdit.setAttribute("title","<digi:trn>Edit Sector</digi:trn>");
 														newA.appendChild(newImgEdit);
 														var newImgDel=document.createElement('img');
 														newImgDel.setAttribute("src","/TEMPLATE/ampTemplate/images/deleteIcon.gif");
 														newImgDel.setAttribute("style","height: 14px; cursor: pointer;");
-														newImgDel.setAttribute("onclick",'deleteNode('+id+','+pid+')');
+														newImgDel.setAttribute("onclick",'deleteNode('+id+','+pid+','+children+')');
+														newImgDel.setAttribute("title","<digi:trn>Delete Sector</digi:trn>");
 														newA.appendChild(newImgDel);
 
 														var parentBody = parent.getElementsByTagName("ul");
@@ -272,7 +287,7 @@
 														<logic:iterate name="aimAddSectorForm" property="schemeTree" id="sector"
 																		type="org.digijava.module.aim.dbentity.AmpSector	">
 															<logic:empty name="sector" property="parentSectorId">
-																insertRoot('<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+']','<bean:write name="sector" property="level"/>');
+																insertRoot('<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+']','<bean:write name="sector" property="level"/>','<bean:write name="sector" property="hasChildren"/>');
 															</logic:empty>
 															<logic:notEmpty name="sector" property="parentSectorId">
 																insertChild('<bean:write name="sector" property="parentSectorId.ampSectorId"/>','<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+'] ',<bean:write name="sector" property="hasChildren"/>,'<bean:write name="sector" property="level"/>');

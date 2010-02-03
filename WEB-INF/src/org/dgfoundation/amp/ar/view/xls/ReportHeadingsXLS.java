@@ -165,7 +165,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 					}		
 				}
 				else {
-					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities()))){
+					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities())) && col.getWidth() ==1 ){
 					HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
 					cell.setCellValue(col.getName());
 					makeColSpan(col.getWidth(),true);

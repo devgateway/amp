@@ -74,7 +74,7 @@ function eventType(){
 
 
     if(!Daily && !Weekly && !Monthly && !Yearly){
-   		alert("please choose type of recurreing event");
+   		alert("please choose type of recurring event");
 		return false;
 	}
     

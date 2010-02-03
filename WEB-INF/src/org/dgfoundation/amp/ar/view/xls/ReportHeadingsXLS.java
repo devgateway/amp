@@ -8,6 +8,7 @@ package org.dgfoundation.amp.ar.view.xls;
 import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -84,33 +85,54 @@ public class ReportHeadingsXLS extends XLSExporter {
 						//cellCount++;
 						Column element2 = (Column) ii.next();
 						
+						int medium = 0;
+						int count = 0;
+						Iterator ei = element2.getItems().iterator();
+						while (ei.hasNext()) {
+							Object o = (Object) ei.next();
+							int length = o.toString().length();
+							if (length > 10){ //we're only interested in cells that exceed our minimum cell length
+								medium += length;
+								count++;
+							}
+						}
+						//medium += element2.getName().length();
+						if (count > 0){
+							medium = medium/count;
+							medium += 5;	
+						}
+						
 						if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities()))){
 						
 						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
+						HSSFCellStyle style = cell.getCellStyle();
+						style.setWrapText(true);
+						cell.setCellStyle(style);
 						String cellValue=element2.getName(metadata.getHideActivities());
 						
 						//if (rowId.value == 8){
 						if (rowId.value < 10 && cellValue.length() > 0){
 							//here we set the cell width
-							if (sheet.getColumnWidth((short)colId.value)<cellValue.length()*256){
+							//if (sheet.getColumnWidth((short)colId.value)<cellValue.length()*256){
 								short val;
-								if ((short)((cellValue.length())*256) < 2560)
+								if ((short)(medium*256) < 2560)
 									val = 2560; //at least 10 chars
 								else
-									val = (short)((cellValue.length())*256);
+									val = (short)(medium*256);
+								/*
 								if (rowId.value == 6 && !fundingReached){
 									if (cellValue == "Funding")
 										fundingReached = true;
 									else
 										val *=3;
 								}
+								*/
 								if (colId.value == 0)
 									sheet.setColumnWidth((short)colId.value, (short)10240);
 								else
 									sheet.setColumnWidth((short)colId.value, val);
-							}
+							//}
 
-							
 						}
 						//this value should be translated
 						String translatedCellValue=new String();

@@ -150,7 +150,7 @@ scheduler.addEventNow=function(start,end,e){
 	this._on_mouse_up(e);	
 }
 scheduler._on_dbl_click=function(e,src){
-	src = src||(e.target||e.srcElement);
+	/*src = src||(e.target||e.srcElement);
 	if (this.config.readonly) return;
 	var name = src.className.split(" ")[0];
 	switch(name){
@@ -180,7 +180,7 @@ scheduler._on_dbl_click=function(e,src){
 			var t = this["dblclick_"+name];
 			if (t) t.call(this,e);
 			break;
-	}
+	}*/
 }
 
 scheduler._mouse_coords=function(ev){

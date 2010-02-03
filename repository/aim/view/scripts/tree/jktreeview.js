@@ -13,3 +13,11 @@ jktreeview.prototype.addItem=function(itemText, noderef, href){
 		treebranch.href=href
 	return treebranch
 }
+
+jktreeview.prototype.addHTMLItem=function(itemHTML, noderef, href){
+	var noderef=(typeof noderef!="undefined" && noderef!="")? noderef : this.treetop.getRoot()
+	var treebranch= new YAHOO.widget.HTMLNode(itemHTML,noderef, true, true)
+	if (typeof href!="undefined")
+		treebranch.href=href
+	return treebranch
+}

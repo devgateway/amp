@@ -430,7 +430,7 @@ function showFilter(){
 		}
 	}
 
-	function setCurProgData(progId,nodeId){ 
+	function setCurProgData(progId,nodeId){
 		if (curProgId == null || curProgId != progId ){
 			//var newNode=YAHOO.widget.TreeView.getTree('tree').collapseAll();
 			progIdHistory[progIdHistory.length]=curProgId;
@@ -674,6 +674,7 @@ function showFilter(){
       
 		//draw tree
 		ptree.treetop.draw();
+        ptree.treetop.collapseAll();
          
 		openNodeIter=0;
 
@@ -686,6 +687,9 @@ function showFilter(){
 		setNumOfPrograms(myXML);
 		addRootListener();
 		addEventListeners();
+        $("a[class='ygtvspacer']").each(function(index){
+    jQuery(this).removeAttr('href').css('text-decoration', 'none');
+     });
 
 		createPanel("Info","<i>info</i>");
 
@@ -707,9 +711,9 @@ function showFilter(){
 				var prgURL="javascript:browseProgram('"+prgID+"')";
 				var prgParent=target;
 				//create tree view node object
-				var thisNode=treeObj.addItem(prgName,prgParent,prgURL);
-				//set new field, this is used in node HTML geeration
-				thisNode.programId=prgID;
+                var progHTML="<div><a href=\""+prgURL+"\" id=\"prog_"+prgID+"\" class=\"ygtvlabel\">"+prgName+"</a></div><div id=\"indTreeList"+prgID+"\" style=\"display:none\">"+getIndicatorsHTML(prg)+"</div>"
+				var thisNode=treeObj.addHTMLItem(progHTML,prgParent,prgURL);
+
 				//save node if it is parent of current or current program
 				if(toBeOpened(prgID)==true){
 					openNodes[openNodes.length]=thisNode;
@@ -718,8 +722,7 @@ function showFilter(){
 				if(prgID==curProgId){
 					curProgNodeIndex=thisNode.index;
 				}
-
-                var indNode =new YAHOO.widget.HTMLNode(getIndicatorsHTML(prg), thisNode, false, true);
+    
 				var subNodes=prg.childNodes;
 				//recurs on children programs
 				if(subNodes != null){
@@ -1408,13 +1411,9 @@ function showFilter(){
 	}
 	/* Adds listeners for all elemets in the tree */
 	function addEventListeners () {
-		for(var j=1;j<=numOfPrograms;j++){
-							var n	= document.getElementById('ygtvlabelel'+j);
-							YAHOO.util.Event.addListener(n, "mouseover", eventFunction);
-							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);
-		}
-            $("a[class='ygtvspacer']").each(function(index){
-            jQuery(this).removeAttr('href').css('text-decoration', 'none');
+         $("a[id^='prog_']").each(function(index){
+							YAHOO.util.Event.addListener(jQuery(this), "mouseover", eventFunction);
+							YAHOO.util.Event.addListener(jQuery(this), "mouseout", hidePanel);
        });
 	}
 	/* Function that is executed when mouse over an element */

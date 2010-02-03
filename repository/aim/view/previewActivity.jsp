@@ -406,8 +406,7 @@ function collapseAll() {
                                   
                                     
                                     <!--Begin Objectives --->
-			     					<field:display feature="Identification" name="Objectives">
-			      					<field:display feature="Identification" name="Objective">
+			     					<field:display feature="Identification" name="Objective">
 								 	<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:objectives">Objectives</digi:trn>										
@@ -465,8 +464,7 @@ function collapseAll() {
 										</logic:iterate>										
 										</td>
 									</tr>
-									</logic:present>
-									</field:display>  						
+									</logic:present>						
 									<!--END Objectives --->
  
 						 			<field:display feature="Identification" name="Description">

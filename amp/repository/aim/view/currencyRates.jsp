@@ -443,25 +443,25 @@ function fnSubmit() {
 							<tr>
                             <td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Exchange rates table -->
-								<table width="600" class="reportsBorderTable">
+								<table width="700px" class="reportsBorderTable">
 								<thead class="fixedHeader">
 									<tr>
 										<td align="center" width="23" class="clsTableTitleCol">
 											<input type="checkbox" name="checkAll" onclick="checkall()">
 										</td>
-										<td align="center" width="45" class="clsTableTitleCol">
+										<td align="center" width="62" class="clsTableTitleCol">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
 										</td>
-										<td align="center" width="150" class="clsTableTitleCol">
+										<td align="center" width="167" class="clsTableTitleCol">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
-										<td align="center" width="55" class="clsTableTitleCol">
+										<td align="center" width="72" class="clsTableTitleCol">
 											<b><digi:trn> Source Currency Code</digi:trn></b>
 										</td>
-										<td align="center" width="150" class="clsTableTitleCol">
+										<td align="center" width="167" class="clsTableTitleCol">
 											<b><digi:trn>Source Currency Name</digi:trn></b>
 										</td>
-										<td align="center" width="85" class="clsTableTitleCol">
+										<td align="center" width="102" class="clsTableTitleCol">
 											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
 										</td>
 										<td align="center" width="65" class="clsTableTitleCol">
@@ -470,7 +470,7 @@ function fnSubmit() {
 									</tr>
 									</thead>
 								</table>
-								<div id="demo" style="overflow: auto; width: 600px; height: 309px; max-height: 309px;" class="box-border-nopadding">
+								<div id="demo" style="overflow: auto; width: 700px; height: 309px; max-height: 309px;" class="box-border-nopadding">
 								<table id="dataTable" class="reportsBorderTable" width="100%" cellspacing="0" cellpadding="1" style="visibility: visible;">
 									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
 									<tr bgcolor="#f4f4f2">
@@ -494,19 +494,19 @@ function fnSubmit() {
 												<c:out value="${cRates.id}"/>
 											</html:multibox>
 										</td>
-										<td align="left" width="45" class="reportsBorderTD">
+										<td align="left" width="62" class="reportsBorderTD">
                                           <digi:trn>${cRates.currencyCode}</digi:trn>
 										</td>
-										<td align="left" width="150" class="reportsBorderTD">
+										<td align="left" width="167" class="reportsBorderTD">
 											<c:out value="${cRates.currencyName}"/>
 										</td>
-										<td align="center" width="55" class="reportsBorderTD">
+										<td align="center" width="72" class="reportsBorderTD">
                                          	${cRates.fromCurrencyCode}
 										</td>
-										<td align="center" width="150" class="reportsBorderTD">
+										<td align="center" width="167" class="reportsBorderTD">
 											<c:out value="${cRates.fromCurrencyName}"/>
 										</td>
-										<td align="center" width="85" class="reportsBorderTD">
+										<td align="center" width="102" class="reportsBorderTD">
 											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
 											<c:out value="${cRates.exchangeRateDate}"/>
 											</a>

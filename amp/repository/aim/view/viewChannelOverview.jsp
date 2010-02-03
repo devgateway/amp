@@ -870,8 +870,7 @@ function commentWin(val) {
 																			</c:if>
 																			<br />
 																		</field:display>
-																		<field:display feature="Identification" name="Objectives">
-																			<field:display feature="Identification" name="Objective">
+																		<field:display feature="Identification" name="Objective">
 																			<i><b><digi:trn key="aim:programObjective">
 																				Objective
 																			</digi:trn></b></i>:
@@ -914,8 +913,6 @@ function commentWin(val) {
 																					</field:display>
 																				</c:forEach>
 																			</ul>
-																			</field:display>
-
 																		<field:display name="Lessons Learned" feature="Identification">
 																			<TR>
 																				<TD bgcolor="#ffffff">

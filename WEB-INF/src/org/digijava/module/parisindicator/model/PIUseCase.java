@@ -261,9 +261,16 @@ public class PIUseCase {
 			// Set the query to return AmpAhSurvey objects.
 			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
 			criteria.createAlias("pointOfDeliveryDonor", "podd1");
-			criteria.createAlias("pointOfDeliveryDonor.orgTypeId", "podd2");
+			
+			// Explanation: Hibernate will automatically detect prior alias 'podd1' to amp_organisation 
+			// and use it to link with amp_org_group to create alias 'podd2', then using the same logic
+			// will link 'podd2' to create 'podd3', and thats the alias I can use to access amp_org_type.
+			// Trying to use podd2 to access amp_org_type fields will fail!!!
+			criteria.createAlias("pointOfDeliveryDonor.orgGrpId", "podd2");
+			criteria.createAlias("pointOfDeliveryDonor.orgGrpId.orgType", "podd3");
+			
 			// Set the filter for Multilateral and Bilateral PoDDs.
-			criteria.add(Restrictions.in("podd2.orgTypeCode", new String[] { PIConstants.ORG_GRP_MULTILATERAL,
+			criteria.add(Restrictions.in("podd3.orgTypeCode", new String[] { PIConstants.ORG_GRP_MULTILATERAL,
 					PIConstants.ORG_GRP_BILATERAL }));
 			// If needed, filter for organizations.
 			if (filterDonors != null) {

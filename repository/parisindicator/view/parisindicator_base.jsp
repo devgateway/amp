@@ -147,18 +147,18 @@
 								<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
 									<tr>
                                         <td noWrap="nowrap" align="left" valign="center">
-									       <a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank">
-									           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
+									       <a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Export to PDF</digi:trn>">
+									           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" />
                                            </a>
                                         </td>
 										<td noWrap="nowrap" align="left" valign="center">
-									       <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank">
-									           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
+									       <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
+									           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" />
 									       </a>
 									    </td>
 										<td noWrap="nowrap" align="left" valign="center">
-										   <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank">
-										      <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" /> 
+										   <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Printer Friendly</digi:trn>">
+										      <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" /> 
 										   </a>
 										</td>
 									</tr>

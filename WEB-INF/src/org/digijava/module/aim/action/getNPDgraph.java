@@ -234,7 +234,6 @@ public class getNPDgraph extends Action {
                            // show data restrict to selected date range, here we choose target and base values.
                            if (selectedYears!=null){
                         for (String selectedYear : selectedYears) {
-                          
                             AmpIndicatorValue actValue = actualValues.get(selectedYear);
                             AmpIndicatorValue targValue = null;
                             AmpIndicatorValue basValue = null;
@@ -258,6 +257,11 @@ public class getNPDgraph extends Action {
                             Integer targetYear=null;
                             Integer baseYear=null;
                             AmpCategoryValue indicatorSource = null;
+                            if (actValue == null) {
+                                actualValue = new Double(0);
+                            } else {
+                                actualValue = actValue.getValue();
+                            }
                             for (Integer year : years) {
                                 if (Integer.parseInt(selectedYear) <= year) {
                                     ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);

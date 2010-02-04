@@ -86,16 +86,14 @@ public class AmpReportGenerator extends ReportGenerator {
 			else {
 				ret.add(ArConstants.FINANCING_INSTRUMENT);
 			}
-			Iterator i = reportMetadata.getShowAblesColumns().iterator();
-			while (i.hasNext()) {
-				AmpReportColumn element = (AmpReportColumn) i.next();
-				if (element.getColumn().getColumnName().equals(
-						"Type Of Assistance")) {
-					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
-					break;
-				}
+
+			//split column for type of assistance ONLY when TOA is added as column
+			if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
+					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
+				ret.add(ArConstants.TERMS_OF_ASSISTANCE);											
 			}
 
+			
 		}
 		return ret;
 	}

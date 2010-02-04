@@ -5287,8 +5287,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select o from " + AmpComments.class.getName()
-                + " o "
-                + "where (o.ampActivityId=:aid)";
+                + " o where o.ampActivityId=:aid";
             qry = session.createQuery(queryString);
             qry.setParameter("aid", aid, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -7051,9 +7050,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select com from " + AmpComments.class.getName()
-                + " com " + " where (com.ampActivityId=:ampActId)";
+                + " com  where com.ampActivityId.ampActivityId=:ampActId";
             qry = session.createQuery(queryString);
-            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+            qry.setLong("ampActId", ampActId);
             col = qry.list();
         } catch (Exception e1) {
             logger.error("could not retrieve AmpComments " + e1.getMessage());
@@ -7063,7 +7062,7 @@ public class DbUtil {
     }
 
     /* get ampActivity physical component report of a particular activity specified by ampActId */
-    public static Collection getActivityPhysicalComponentReport(Long ampActId) {
+    public static Collection<AmpPhysicalComponentReport> getActivityPhysicalComponentReport(Long ampActId) {
         Session session = null;
         Collection col = null;
         Query qry = null;
@@ -7086,7 +7085,7 @@ public class DbUtil {
    
 
     /* get amp report location of a particular activity specified by ampActId */
-    public static Collection getActivityReportLocation(Long ampActId) {
+    public static Collection<AmpReportLocation> getActivityReportLocation(Long ampActId) {
         Session session = null;
         Collection col = null;
         Query qry = null;
@@ -7109,7 +7108,7 @@ public class DbUtil {
 
 
     /* get amp ME indicator value of a particular activity specified by ampActId */
-    public static Collection getActivityMEIndValue(Long ampActId) {
+    public static Collection<IndicatorActivity> getActivityMEIndValue(Long ampActId) {
 		try {
 
 			Collection<IndicatorActivity> activityInd = null;

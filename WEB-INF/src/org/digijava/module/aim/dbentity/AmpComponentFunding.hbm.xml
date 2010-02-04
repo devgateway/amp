@@ -17,7 +17,7 @@
 		<property name="expenditureCategory" column="exp_category" type="java.lang.String" />
 		<property name="exchangeRate" column="exchange_rate" type="java.lang.Float" />
 
-		<many-to-one name="activity" column="activity_id" class="org.digijava.module.aim.dbentity.AmpActivity" cascade="all" />
+		<many-to-one name="activity" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="save-update" />
 		<many-to-one name="reportingOrganization" column="rep_organization_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="currency" column="currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="component" column="amp_component_id" class="org.digijava.module.aim.dbentity.AmpComponent" />

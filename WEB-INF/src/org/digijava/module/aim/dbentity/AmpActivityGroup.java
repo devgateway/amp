@@ -6,7 +6,7 @@ public class AmpActivityGroup {
 
 	private Long ampActivityGroupId;
 	private AmpActivity ampActivityLastVersion;
-	private Set<AmpActivity> activities;
+	private Set<AmpActivityVersion> activities;
 
 	public Long getAmpActivityGroupId() {
 		return ampActivityGroupId;
@@ -24,11 +24,11 @@ public class AmpActivityGroup {
 		this.ampActivityLastVersion = ampActivityLastVersion;
 	}
 
-	public Set<AmpActivity> getActivities() {
+	public Set<AmpActivityVersion> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(Set<AmpActivity> activities) {
+	public void setActivities(Set<AmpActivityVersion> activities) {
 		this.activities = activities;
-	}
+	}	
 }

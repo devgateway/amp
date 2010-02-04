@@ -33,6 +33,7 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.RequestProcessor;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
@@ -2516,7 +2517,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       session = PersistenceManager.getRequestDBSession();
       String qryStr = "select a from " + AmpComponentFunding.class.getName() +
-          " a where activity_id = '" + activityId + "'";
+          " a where amp_activity_id = '" + activityId + "'";
       Query qry = session.createQuery(qryStr);
       col = qry.list();
     }
@@ -3264,6 +3265,42 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     return col;
   }
   
+  public static List<HelperActivity> getAllActivities(){
+	  List<HelperActivity> retVal=null;
+	  List col=null;
+	  Session session = null;
+	  Query qry = null;
+	  String queryString=null;
+	  try {
+	      session = PersistenceManager.getRequestDBSession();	      
+	      queryString ="select group.ampActivityLastVersion.ampActivityId,group.ampActivityLastVersion.name,group.ampActivityLastVersion.ampId,group.ampActivityLastVersion.team from "+ AmpActivityGroup.class.getName()+" group";
+	      qry = session.createQuery(queryString);
+	      col = qry.list();
+	    }
+	    catch (Exception e1) {
+	      logger.error("Could not retrieve the activities list");
+	      e1.printStackTrace(System.out);
+	    }
+	    
+	    if(col!=null){
+	    	retVal=new ArrayList<HelperActivity>(col.size());
+	    	for (Object object : col) {
+	    		Object[] row = (Object[])object;
+	    		Long idRow=(Long)row[0];
+				String nameRow=(String)row[1];
+				String ampIdRow=(String)row[2];
+				AmpTeam teamRow=null;
+				if(row[3]!=null){
+					teamRow=(AmpTeam)row[3];
+				}
+				
+				HelperActivity helperActivity= new HelperActivity(idRow,nameRow,ampIdRow,teamRow);
+				retVal.add(helperActivity);
+			}
+	    }
+	  return retVal;
+  }
+  
   /**
    * @author dan
    * @return
@@ -3341,6 +3378,59 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return col;
   }
+  
+  public static List<HelperActivity> getAllHelperActivitiesByName(String name) {
+	    List col = null;
+	    Session session = null;
+	    Query qry = null;
+	    List<HelperActivity> retVal=null;
+
+		try {
+		      session = PersistenceManager.getRequestDBSession();	      
+		      String queryString ="select group.ampActivityLastVersion.ampActivityId,group.ampActivityLastVersion.name,group.ampActivityLastVersion.ampId,group.ampActivityLastVersion.team from "+ AmpActivityGroup.class.getName()+" group "+
+		      " where upper(group.ampActivityLastVersion.name) like upper(:name)";
+		      qry = session.createQuery(queryString);
+		      qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
+		      col = qry.list();
+		}catch (Exception e1) {
+		      logger.error("Could not retrieve the activities list");
+		      e1.printStackTrace(System.out);
+		}
+		    
+		if(col!=null){
+			retVal=new ArrayList<HelperActivity>(col.size());
+		    for (Object object : col) {
+		    	Object[] row = (Object[])object;
+		    	Long idRow=(Long)row[0];
+				String nameRow=(String)row[1];
+				String ampIdRow=(String)row[2];
+				AmpTeam teamRow=null;
+				if(row[3]!=null){
+					teamRow=(AmpTeam)row[3];
+				}
+					
+				HelperActivity helperActivity= new HelperActivity(idRow,nameRow,ampIdRow,teamRow);
+				retVal.add(helperActivity);
+			}
+		}	    
+	    return retVal;
+	  }
+  
+  public static List <AmpActivityGroup> getActivityGroups(Long actId){
+	  List <AmpActivityGroup> retVal=null;
+	  Session session = null;
+	  Query qry = null;
+	  try {
+		  session = PersistenceManager.getRequestDBSession();	      
+	      String queryString ="select group from "+ AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.ampActivityId="+actId;
+	      qry = session.createQuery(queryString);
+	      retVal = qry.list();
+	} catch (Exception e) {
+		logger.error("Could not retrieve groups list");
+	    e.printStackTrace(System.out);
+	}
+	  return retVal;
+  }
 
   /* functions to DELETE an activity by Admin start here.... */
   public static void deleteActivity(Long ampActId) {
@@ -3350,34 +3440,49 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Transaction tx = null;
 
     try {
-      session = PersistenceManager.getSession();
-      tx = session.beginTransaction();
+    	session = PersistenceManager.getRequestDBSession();
+    	tx = session.beginTransaction();
 
-      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(
-          AmpActivityVersion.class, ampActId);
-      AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
+    	AmpActivityVersion ampAct = (AmpActivityVersion) session.get(AmpActivityVersion.class, ampActId);
+    	AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
 
-      if (ampAct == null)
-        logger.debug("ActivityVersion is null. Hence no activity with id : " +
-                     ampActId);
-      else {
-    	 
+    	if (ampAct == null){
+    	  logger.debug("ActivityVersion is null. Hence no activity with id : " +ampActId);  
+    	}else {    	 
     	 //Delete access info.
-    	  Query qry = session.createSQLQuery("DELETE FROM amp_activity_access WHERE amp_activity_id = ?");
-    	  qry.setParameter(0, ampActId);
-    	  qry.executeUpdate();
+    	 Query qry = session.createSQLQuery("DELETE FROM amp_activity_access WHERE amp_activity_id = ?");
+    	 qry.setParameter(0, ampActId);
+    	 qry.executeUpdate();
     	  
-    	// Delete group info.
-    	  
-    	  //qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName() + " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = "+ampActId);
-    	  //qry.setParameter(0, ampActId);
-    	  //qry.executeUpdate();
+    	   	
+    	 //qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName() + " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = "+ampActId);
+    	 //qry.setParameter(0, ampActId);
+    	 //qry.executeUpdate();
     	  ampAct.setAmpActivityGroup(null);
-    	  //session.update(ampAct);
+    	  session.update(ampAct);
     	  auxGroup.getActivities().remove(ampAct);
     	  session.update(auxGroup);
 
     	  session.update(ampAct);
+    	  
+    	  
+    	// Delete group info.
+      	List<AmpActivityGroup> groups=getActivityGroups(ampAct.getAmpActivityId());
+      	if(groups!=null && groups.size()>0){
+      		for (AmpActivityGroup ampActivityGroup : groups) {
+      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
+      			if(activityversions!=null && activityversions.size()>0){
+      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
+      					AmpActivityVersion ampActivityVersion=iterator.next();
+      					ampActivityVersion.setAmpActivityGroup(null);
+      					session.update(ampActivityVersion);
+					}
+      			}
+  				session.delete(ampActivityGroup);
+  			}
+      	}
+    	  
+    	  
     	  //session.update(ampAct);
     	  //qry = session.createQuery("UPDATE " + AmpActivityGroup.class.getName() + " SET ampActivityLastVersion = NULL WHERE ampActivityGroupId = " + ampActId);
     	  //qry.setParameter(0, ampActId);
@@ -3553,19 +3658,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             
           }
         }
-       
-        //	 delete all previous comments
-        ArrayList col = org.digijava.module.aim.util.DbUtil.
-            getAllCommentsByActivityId(ampAct.getAmpActivityId());
-        logger.debug("col.size() [Inside deleting]: " + col.size());
-        if (col != null) {
-          Iterator itr = col.iterator();
-          while (itr.hasNext()) {
-            AmpComments comObj = (AmpComments) itr.next();
-            session.delete(comObj);
-          }
-        }
-        logger.debug("comments deleted");
         
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
@@ -3598,38 +3690,34 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
       }
       
-    //Section moved here from ActivityManager.java because it didn't worked there.
-	ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
-	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
-	//ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
-	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+   
+	/**
+	 *  //Section moved here from ActivityManager.java because it didn't worked there.
+	 *  ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
+		ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session); 
+		ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+		//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+		ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
+	 */
+    
+	//ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);	
 	//ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
 	//ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
-	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
-	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
       
 	//Query qry = session.createQuery("DELETE " + AmpActivityGroup.class.getName() + " WHERE ampActivityLastVersion = "+ampActId);
 	  //qry.setParameter(0, ampActId);
 	  //qry.executeUpdate();
 	  
 //	  session.delete(auxGroup);
-	  session.delete(ampAct);
-	  tx.commit();
-      session.flush();
+    
+	ampAct = (AmpActivityVersion) session.get(AmpActivityVersion.class, ampActId);
+	session.delete(ampAct);  
+	tx.commit();
+    session.flush();
     }
     catch (Exception e1) {
       logger.error("Could not delete the activity with id : " + ampActId);
       e1.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception e2) {
-          logger.error("Release session failed");
-        }
-      }
     }
     logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
   }
@@ -3675,8 +3763,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 
   public static void deleteActivityIndicators(Collection activityInd, AmpActivity activity, Session session) throws Exception {
-    
-			if (activityInd != null && activityInd.size() > 0) {
+    if(session == null){
+    	session=PersistenceManager.getRequestDBSession();
+    }
+	
+    if (activityInd != null && activityInd.size() > 0) {
 				for (Object indAct : activityInd) {
 
 					AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, ((IndicatorActivity) indAct).getIndicator().getIndicatorId());
@@ -3695,7 +3786,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					result = (IndicatorActivity) query.uniqueResult();
 					session.delete(result);*/
 				}
-			}
+	}
   }
 
   /* functions to DELETE an activity by Admin end here.... */
@@ -4402,4 +4493,50 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			e.printStackTrace();
 		}
     }  
+    
+    public static class HelperActivity{
+		//List<HelperActivity> activities;
+		Long activityId;
+		String name;
+		String ampId;
+		AmpTeam team;
+
+		public HelperActivity () {}
+		
+		public HelperActivity (Long actId,String actName,String ampId,AmpTeam team) {
+			this.activityId=actId;
+			this.name=actName;
+			this.ampId=ampId;
+			this.team=team;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getAmpId() {
+			return ampId;
+		}
+		public void setAmpId(String ampId) {
+			this.ampId = ampId;
+		}
+
+		public AmpTeam getTeam() {
+			return team;
+		}
+
+		public void setTeam(AmpTeam team) {
+			this.team = team;
+		}
+
+		public Long getActivityId() {
+			return activityId;
+		}
+		public void setActivityId(Long activityId) {
+			this.activityId = activityId;
+		}	
+		
+	}
 } // End

@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -54,7 +55,18 @@
 		<td width="90%">
 			<html:select style="width:420px;" name="gisSectorByDonorTeaserForm" property="selectedDonor" onchange="donorChanged()">
 				<html:option value="-1"><digi:trn key="widget:piechart:allDonorsItem">All Donors</digi:trn></html:option>
-				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="donors" label="name" value="ampOrgId"/>
+                <c:forEach var="donor" items="${gisSectorByDonorTeaserForm.donors}">
+                    <option value="${donor.ampOrgId}" title="${donor.name}">
+                        <c:choose>
+                            <c:when test="${fn:length(donor.name)>60}">
+                                <c:out value="${fn:substring(donor.name,0,60)}"/>...
+                            </c:when>
+                            <c:otherwise>
+                                 ${donor.name}
+                            </c:otherwise>
+                        </c:choose>
+                    </option>
+                </c:forEach>
 			</html:select>
 		</td>
 		<%-- 

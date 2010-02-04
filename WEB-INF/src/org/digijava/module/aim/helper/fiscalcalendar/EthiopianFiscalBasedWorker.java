@@ -1,3 +1,9 @@
+/**
+ * EthiopianFiscalBasedWorker.java
+ * (c) 2009 Development Gateway Foundation
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ * @since Feb 3, 2010
+ */
 package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Date;
@@ -7,7 +13,12 @@ import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
-public class EthiopianBasedWorker implements ICalendarWorker {
+/**
+ * EthiopianFiscalBasedWorker
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ * @since Feb 3, 2010
+ */
+public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 
 	protected Map<Integer, ComparableMonth> monthCache = new HashMap<Integer, ComparableMonth>();
 
@@ -19,7 +30,7 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 
 	private AmpFiscalCalendar fiscalCalendar = null;
 
-	public EthiopianBasedWorker(AmpFiscalCalendar calendar) {
+	public EthiopianFiscalBasedWorker(AmpFiscalCalendar calendar) {
 		this.fiscalCalendar = calendar;
 	}
 
@@ -41,12 +52,12 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 
 	public Integer getQuarter() throws Exception {
 		checkSetTimeCalled();
-		return internalEthiopianCalendar.ethQtr;
+		return internalEthiopianCalendar.ethFiscalQrt;
 	}
 
 	public Integer getYear() throws Exception {
 		checkSetTimeCalled();
-		return internalEthiopianCalendar.ethYear;
+		return internalEthiopianCalendar.ethFiscalYear;
 	}
 
 	public void setTime(Date time) {
@@ -63,6 +74,7 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 
 	}
 
+
 	private void checkSetTimeCalled() throws Exception {
 		if (internalTime == null)
 			throw new Exception("Should call to setime first");
@@ -73,4 +85,5 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 			return this.getYear().intValue() - worker.getYear().intValue();
 		
 	}
+
 }

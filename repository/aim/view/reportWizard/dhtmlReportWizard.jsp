@@ -367,16 +367,18 @@
 								</span>
 								<div align="center" id="optionsDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
 									<table>
-										<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-										<tr>
-										<td>
-		                                    <html:checkbox property="publicReport"/>
-		                                    <digi:trn key="aim:makePublic">
-		                                        Make public
-		                                    </digi:trn>
-                                    	</td>
-                                    	</tr>
-                                    	</c:if>
+										<feature:display  name="Public View Checkbox" module="Report and Tab Options">
+											<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
+											<tr>
+											<td>
+			                                    <html:checkbox property="publicReport"/>
+			                                    <digi:trn key="aim:makePublic">
+			                                        Make public
+			                                    </digi:trn>
+	                                    	</td>
+	                                    	</tr>
+	                                    	</c:if>
+                                    	</feature:display>
                                     	<c:if test="${!myForm.desktopTab}">
                                     	<tr>
                                     	<td>

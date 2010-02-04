@@ -141,6 +141,7 @@
 <feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
+<feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 

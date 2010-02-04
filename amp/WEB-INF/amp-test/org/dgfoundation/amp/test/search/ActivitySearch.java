@@ -61,22 +61,29 @@ public class ActivitySearch extends BasicActionTestCaseAdapter{
 		super.tearDown();
 	} 
 	
-	public void testActivitySearch(){
-		 searchForm.setActSearchKey(1);
-		 searchForm.setKeyword("test");
-		 searchForm.setQueryType(0);
-		actionPerform(Search.class, searchForm);
-		verifyNoActionErrors();
-		verifyNoActionMessages();
-		verifyForward("forward");
-		
+	
+	
+	int activitySearchKey[] = {0,1,2,3,4,5,6,7};
+	
+	public void testSearchActivity(){
+		for (int i = 0; i < activitySearchKey.length; i++) {
+		   searchForm.setActSearchKey(activitySearchKey[i]);
+		   searchForm.setKeyword("test");
+		   searchForm.setQueryType(0);
+			actionPerform(Search.class, searchForm);
+			verifyNoActionErrors();
+			verifyNoActionMessages();
+			verifyForward("forward");
+		}
 	}
+	
+	
 	
 	public void testActivitySearchByDate(){
 		 searchForm.setActSearchKey(1);
 		 searchForm.setKeyword("test");
 		 searchForm.setQueryType(0);
-		 searchForm.setSearchByDate(false);
+		 searchForm.setSearchByDate(true);
 		 searchForm.setToDate("01/01/2010");
 		 searchForm.setFromDate("01/01/2009");
 			actionPerform(Search.class, searchForm);
@@ -84,5 +91,7 @@ public class ActivitySearch extends BasicActionTestCaseAdapter{
 			verifyNoActionMessages();
 			verifyForward("forward");
 	}
+
+	
 
 }

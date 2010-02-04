@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -15,19 +16,21 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
+import org.digijava.module.aim.dbentity.AmpReportLocation;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.help.dbentity.HelpTopic;
-import org.digijava.module.help.util.HelpUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.ActivityUtil.HelperActivity;
 
 public class ActivityManager extends Action {
 	private static Logger logger = Logger.getLogger(ActivityManager.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
 
@@ -41,29 +44,18 @@ public class ActivityManager extends Action {
 
 		ActivityForm actForm = (ActivityForm) form;
 		
-		List<AmpActivity> allActivities = ActivityUtil.getAllActivitiesList();
+		//List<AmpActivity> allActivities = ActivityUtil.getAllActivitiesList();
+		List<HelperActivity> allActivities=ActivityUtil.getAllActivities();
 		
-		if (actForm.getType() == 0){
-			for (Iterator iterator = allActivities.iterator(); iterator.hasNext();) {
-				AmpActivity ampActivity = (AmpActivity) iterator.next();
-				if (ampActivity.getTeam() == null) {
-					iterator.remove();
-				}
-				
+		for (Iterator<HelperActivity> iterator = allActivities.iterator(); iterator.hasNext();) {
+			HelperActivity helperActivity = (HelperActivity) iterator.next();
+			if(actForm.getType() == 0 && helperActivity.getTeam() == null){
+				iterator.remove();
+			}else if(actForm.getType() == 1 && helperActivity.getTeam() != null){
+				iterator.remove();
 			}
-		}		
-		
-		if (actForm.getType() == 1){
-			for (Iterator iterator = allActivities.iterator(); iterator.hasNext();) {
-				AmpActivity ampActivity = (AmpActivity) iterator.next();
-				if (ampActivity.getTeam() != null) {
-					iterator.remove();
-				}
-				
-			}
-		}	
-		
-		actForm.setAllActivityList(allActivities);
+		}
+		actForm.setActivities(allActivities);
 		//AMP-5518
 		if ((action != null) && (action.equals("search")) && (actForm.getKeyword() != null) && (actForm.getLastKeyword() != null) && (!actForm.getKeyword().equals(actForm.getLastKeyword())) && ("".equals(actForm.getKeyword().replaceAll(" ", "")))){
 			action="reset";
@@ -98,7 +90,8 @@ public class ActivityManager extends Action {
 	}
 
 	private void reset(ActivityForm actForm, HttpServletRequest request) {
-		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
+		//actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
+		actForm.setActivities(ActivityUtil.getAllActivities());
 		actForm.setKeyword(null);
 		actForm.setLastKeyword(null);
 		actForm.setSortByColumn(null);
@@ -106,12 +99,17 @@ public class ActivityManager extends Action {
 	}
 
 	private void doPagination(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivity> allActivities = actForm.getAllActivityList();
-		List<AmpActivity> pageList = actForm.getActivityList();
+		//List<AmpActivity> allActivities = actForm.getAllActivityList();
+		//List<AmpActivity> pageList = actForm.getActivityList();
+		List<HelperActivity>allActivities = actForm.getActivities();
+		List<HelperActivity>pageList = actForm.getActivitiesForPage();
+		
 		int pageSize = actForm.getTempNumResults();
 		if (pageList == null) {
-			pageList = new ArrayList<AmpActivity>();
-			actForm.setActivityList(pageList);
+			//pageList = new ArrayList<AmpActivity>();
+			//actForm.setActivityList(pageList);
+			pageList = new ArrayList<HelperActivity>();
+			actForm.setActivitiesForPage(pageList);
 		}
 
 		pageList.clear();
@@ -129,16 +127,15 @@ public class ActivityManager extends Action {
 		
 		actForm.setPageSize(pageSize);
 
-		Double totalPages = 0.0;
+		Double totalPages = 0.0;		
 		if(pageSize != -1){
-			for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
-					iterator.hasNext() && i < pageSize; i++) {
+			for (Iterator<HelperActivity> iterator = allActivities.listIterator(idx);iterator.hasNext() && i < pageSize; i++) {
 				pageList.add(iterator.next());
 			}
         	totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
 		}
 		else{
-			for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
+			for (Iterator<HelperActivity> iterator = allActivities.listIterator(idx);
 				iterator.hasNext(); i++) {
 				pageList.add(iterator.next());
 	       }
@@ -149,13 +146,16 @@ public class ActivityManager extends Action {
 	}
 
 	private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivity> activities = ActivityUtil.getAllActivitiesByName(actForm.getKeyword());
-		actForm.setAllActivityList(activities);
+		//List<AmpActivity> activities = ActivityUtil.getAllActivitiesByName(actForm.getKeyword());
+		//actForm.setAllActivityList(activities);
+		List<HelperActivity> activities=ActivityUtil.getAllHelperActivitiesByName(actForm.getKeyword());;
+		actForm.setActivities(activities);
 		sortActivities(actForm,request);
 	}
 
 	private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivity> activities = actForm.getAllActivityList();
+		//List<AmpActivity> activities = actForm.getAllActivityList();
+		List<HelperActivity> activities = actForm.getActivities();
 
 		int sortBy = 0;
 		if("activityName".equals(actForm.getSortByColumn())){
@@ -167,68 +167,61 @@ public class ActivityManager extends Action {
 		}
 
 		switch (sortBy) {
-		case 1:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) {
-					String s1	= a1.getName();
-					String s2	= a2.getName();
-					if ( s1 == null )
-						s1	= "";
-					if ( s2 == null )
-						s2	= "";
-					
-					return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
-					//return a1.getName().compareTo(a2.getName());
-				}
-			});
-			break;
-		case 2:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) 
-				{
-					//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
-					String c1="";
-					String c2="";
-					if(a1.getAmpId()!=null) c1=a1.getAmpId();
-					if(a2.getAmpId()!=null) c2=a2.getAmpId();
-					
-					return c1.compareTo(c2);
-				}
-			});
-			break;
-		case 3:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) {
-                                String s1 = "";
-                                String s2 = "";
-                                if (a1.getTeam() != null) {
-                                    s1 = a1.getTeam().getName();
-
-                                }
-                                if (a2.getTeam() != null) {
-                                    s2 = a2.getTeam().getName();
-
-                                }
-
-
-                                if (s1 == null) {
-                                    s1 = "";
-                                }
-                                if (s2 == null) {
-                                    s2 = "";
-                                }
-                                return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
-                            //return a1.getName().compareTo(a2.getName());
-                            }
-			});
-			break;
-		default:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) {
-					return a1.getName().compareTo(a2.getName());
-				}
-			});
-			break;
+			case 1:
+				Collections.sort(activities, new Comparator<HelperActivity>(){
+					public int compare(HelperActivity a1, HelperActivity a2) {
+						String s1	= a1.getName();
+						String s2	= a2.getName();
+						if ( s1 == null )
+							s1	= "";
+						if ( s2 == null )
+							s2	= "";
+						
+						return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+					}
+				});
+				break;
+			case 2:
+				Collections.sort(activities, new Comparator<HelperActivity>(){
+					public int compare(HelperActivity a1, HelperActivity a2){
+						
+						String c1="";
+						String c2="";
+						if(a1.getAmpId()!=null) c1=a1.getAmpId();
+						if(a2.getAmpId()!=null) c2=a2.getAmpId();
+						
+						return c1.compareTo(c2);
+					}
+				});
+				break;
+			case 3:
+				Collections.sort(activities, new Comparator<HelperActivity>(){
+					public int compare(HelperActivity a1, HelperActivity a2) {
+						String s1 = "";
+	                    String s2 = "";
+	                    if (a1.getTeam() != null) {
+	                    	s1 = a1.getTeam().getName();
+	                    }
+	                    if (a2.getTeam() != null) {
+	                    	s2 = a2.getTeam().getName();
+	                    }
+	                    if (s1 == null) {
+	                    	s1 = "";
+	                    }
+	                    if (s2 == null) {
+	                    	s2 = "";
+	                    }
+	                    return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());	                    
+	                }
+				});
+				break;
+			default:
+				Collections.sort(activities, new Comparator<HelperActivity>(){
+					public int compare(HelperActivity a1, HelperActivity a2) {
+						return a1.getName().compareTo(a2.getName());
+					}
+				});
+				break;
 		}
 	}
 
@@ -238,17 +231,45 @@ public class ActivityManager extends Action {
 	 * @param request
 	 * @param session
 	 */
-	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) {
+	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws Exception{
 		HttpSession session = request.getSession();
 		//Long ampActId = new Long(Long.parseLong(request.getParameter("id")));
 		String tIds=request.getParameter("tIds");
 		List<Long> topicsIds=getActsIds(tIds.trim());
 		for (Long id : topicsIds) {
-			AmpActivity activity = ActivityUtil.getAmpActivity(id);
+			AmpActivityVersion activity = ActivityUtil.getAmpActivityVersion(id);
 			AuditLoggerUtil.logObject(session, request, activity, "delete");
+			//delete comments
+			Collection<AmpComments> comments= DbUtil.getActivityAmpComments(id);
+			if(comments!=null && comments.size()>0){
+				for (AmpComments ampComment : comments) {
+					DbUtil.delete(ampComment);
+				}
+			}
+			//amp physical component report
+			Collection<AmpPhysicalComponentReport> ampPhysicalCompReports=DbUtil.getActivityPhysicalComponentReport(id);
+			if(ampPhysicalCompReports!=null && ampPhysicalCompReports.size()>0){
+				for (AmpPhysicalComponentReport ampPhysCompReport : ampPhysicalCompReports) {
+					DbUtil.delete(ampPhysCompReport);
+				}
+			}
+			//report location
+			Collection<AmpReportLocation> repLocations=DbUtil.getActivityReportLocation(id);
+			if(repLocations!=null && repLocations.size()>0){
+				for (AmpReportLocation repLocation : repLocations) {
+					DbUtil.delete(repLocation);
+				}
+			}
+			//indicators
+			Collection<IndicatorActivity> indicators=DbUtil.getActivityMEIndValue(id); 
+			if(indicators!=null && indicators.size()>0){
+				ActivityUtil.deleteActivityIndicators(indicators, activity, null);
+			}
+			
 			ActivityUtil.deleteActivity(id);
 		}		
-		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
+		//actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
+		actForm.setActivities(ActivityUtil.getAllActivities());
 	}
 	
 	private List<Long> getActsIds(String ids){

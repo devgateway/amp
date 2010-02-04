@@ -278,7 +278,7 @@
 										<tr>
                                             <td>
 											<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" >
-												<logic:notEmpty name="aimActivityForm" property="activityList">
+												<logic:notEmpty name="aimActivityForm" property="activitiesForPage">
 													<tr>
                                                         <td class="report">
 														<table width="100%" height="30" cellpadding="0" cellspacing="0" >
@@ -327,32 +327,32 @@
 														<div style="overflow: auto; width: 100%; height: 200px; max-height: 220px;" class="report">
 														<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" >
                                                             <tbody class="yui-dt-data">
-															<logic:iterate name="aimActivityForm" property="activityList" id="activities" type="org.digijava.module.aim.dbentity.AmpActivity">
+															<logic:iterate name="aimActivityForm" property="activitiesForPage" id="activity">
 																<tr height="20">
-																	<logic:notEmpty name="activities" property="team">
+																	<logic:notEmpty name="activity" property="team">
 																		<td width="3%" height="15" class="ignore">
 																			<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
 																		</td>
 																	</logic:notEmpty>
-																	<logic:empty name="activities" property="team">
+																	<logic:empty name="activity" property="team">
 																		<td width="3%" height="15" class="ignore">
 																			<img src="/TEMPLATE/ampTemplate/imagesSource/common/start_button.gif" border=0>
 																		</td>
 																	</logic:empty>
 																	<td width="57%" align="left">
-																		<bean:write name="activities" property="name" />
+																		<bean:write name="activity" property="name" />
 																	</td>
 																	<td width="20%" align="center">
-																		<logic:notEmpty name="activities" property="team">
-																			<bean:write name="activities" property="team.name" />
+																		<logic:notEmpty name="activity" property="team">
+																			<bean:write name="activity" property="team.name" />
 																		</logic:notEmpty>
 																	</td>
 																	<td width="17%" align="center">
-																		<bean:write name="activities" property="ampId" />
+																		<bean:write name="activity" property="ampId" />
 																	</td>
 																	<td width="3%" align="center" class="ignore">
 																		<c:set var="actId">
-																			<bean:write name="activities" property="ampActivityId" />
+																			<bean:write name="activity" property="activityId" />
 																		</c:set> 
 																		<input type="checkbox" value="${actId}" />
 																	</td>
@@ -364,7 +364,7 @@
 														</td>
 													</tr>
 												</logic:notEmpty>
-												<logic:empty name="aimActivityForm" property="activityList">
+												<logic:empty name="aimActivityForm" property="activitiesForPage">
 													<tr align="center" bgcolor="#ffffff">
 														<td><b> <digi:trn>No activities present</digi:trn></b></td>
 													</tr>
@@ -387,7 +387,7 @@
 										<tr>
 											<td width="60%">
 											<table>
-												<logic:notEmpty name="aimActivityForm" property="activityList">
+												<logic:notEmpty name="aimActivityForm" property="activitiesForPage">
 													<tr bgcolor="#ffffff" id="rowHighlight">
 															<%
 																ActivityForm aimActivityForm = (ActivityForm) pageContext.getAttribute("aimActivityForm");
@@ -480,7 +480,8 @@
 															<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 															</td>
 															<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-																<c:out value="<%=aimActivityForm.getAllActivityList().size()%>"></c:out>
+															<%--<c:out value="<%=aimActivityForm.getAllActivityList().size()%>"></c:out> --%>
+																<c:out value="<%=aimActivityForm.getActivities().size()%>"></c:out>
 																<digi:trn key="aim:records">Records</digi:trn>
 															</td>
 													</tr>

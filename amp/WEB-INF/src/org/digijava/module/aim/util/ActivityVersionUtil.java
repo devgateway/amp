@@ -138,8 +138,8 @@ public class ActivityVersionUtil {
 		Iterator<AmpActivityGroup> iterGroups = groups.iterator();
 		while (iterGroups.hasNext()) {
 			AmpActivityGroup auxGroup = iterGroups.next();
-			Set<AmpActivity> activitiesFromGroup = auxGroup.getActivities();
-			List<AmpActivity> sortedActivitiesFromGroup = new ArrayList(activitiesFromGroup);
+			Set<AmpActivityVersion> activitiesFromGroup = auxGroup.getActivities();
+			List<AmpActivityVersion> sortedActivitiesFromGroup = new ArrayList(activitiesFromGroup);
 			Collections.sort(sortedActivitiesFromGroup, VersionActivityComparator);
 			for (int i = 0; i < sortedActivitiesFromGroup.size(); i++) {
 				if (i < numberOfVersions) {

@@ -269,12 +269,10 @@ public class getNPDgraph extends Action {
                                         if (targValue == null || targValue.getValueDate().after(value.getValueDate())) {
                                             if (actValue == null) {
                                                 targValue = value;
-                                                actualValue = new Double(0);
                                                 targetYear=year;
                                             } else {
                                                 if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
                                                     targValue = value;
-                                                    actualValue = actValue.getValue();
                                                     indicatorSource=actValue.getIndicatorSource();
                                                     if(indicatorSource!=null){
                                                         actualValueSource=indicatorSource.getValue();

@@ -33,6 +33,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
@@ -84,7 +85,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 7L;
+	private static final long serialVersionUID = 8L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -96,6 +97,8 @@ public class LuceneUtil implements Serializable {
      */
     public final static String ID_FIELD = "id";
 
+    public final static String TITLE_FIELD = "title";
+    
     /**
      * LUCENE INDEX PATH: use the LUCENE_BASE_DIR + new 
      * 					  directory for your index
@@ -660,7 +663,9 @@ public class LuceneUtil implements Serializable {
 			all = all.concat(" " + projectId);
 		}
 		if (title != null){
-			doc.add(new Field("title", title, Field.Store.NO, Field.Index.TOKENIZED));
+			Field titleField = new Field(TITLE_FIELD, title, Field.Store.NO, Field.Index.TOKENIZED);
+			titleField.setBoost(30);
+			doc.add(titleField);
 			all = all.concat(" " + title);
 		}
 		if (description != null && description.length()>0){
@@ -680,7 +685,7 @@ public class LuceneUtil implements Serializable {
 			all = all.concat(" " + results);
 		}
 		
-		//
+		
 		if (numcont != null && numcont.length()>0){
 			doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + numcont);
@@ -802,7 +807,20 @@ public class LuceneUtil implements Serializable {
 	 * @return a Hits object that contains the results
 	 */
 	public static Hits search(String index, String field, String searchString){
-		QueryParser parser = new QueryParser(field, analyzer);
+		return search(index, new String[]{field}, searchString);
+	}
+
+	/**
+	 * Runs a search in the index and returns the results
+	 * 
+	 * @param index the index where the search will be done
+	 * @param fields the field's array where you do the search
+	 * @param searchString
+	 * 
+	 * @return a Hits object that contains the results
+	 */	
+    public static Hits search(String index, String[] fields, String searchString){
+    	MultiFieldQueryParser parser = new MultiFieldQueryParser(fields, analyzer);
 		Query query = null;
 		Hits hits = null;
 		

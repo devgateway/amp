@@ -994,7 +994,7 @@ public class AmpARFilter extends PropertyListable {
 				String realPath = ampContext.getRealPath("/"); //AMP-7680
 				if (realPath == null)	realPath = "";//because realPath in testCase is always null
 
-				hits = LuceneUtil.search(realPath + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText);
+				hits = LuceneUtil.search(realPath + LuceneUtil.ACTVITY_INDEX_DIRECTORY, new String[]{"all", LuceneUtil.TITLE_FIELD}, indexText);
 				logger.info("New lucene search !");
 				if(hits!=null){
 				for (int i = 0; i < hits.length(); i++) {

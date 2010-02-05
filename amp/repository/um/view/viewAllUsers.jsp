@@ -369,11 +369,11 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 		return false;
 	}
 	function isVoid(name){
-        if (name == "" || name == null || !isNaN(name) || name.charAt(0) == ' '){
+        if (name.trim() == "" || name == null || name.charAt(0) == ' '){
         	return true;
+            }
+		return false;
         }		
-		return false;		
-	}
 	function validate(){
         name = document.umAddUserForm.firstNames.value;
         lastname = document.umAddUserForm.lastName.value;
@@ -382,7 +382,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         selectedOrgType = document.umAddUserForm.selectedOrgType.value;
         selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
         selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
-        
+        var reg =/[0-9]+/ ;
         if (isVoid(name))
         {
 			<c:set var="translation">
@@ -391,10 +391,24 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 			alert("${translation}");
         	return false;
         }
+        if(reg.test(name)){
+            <c:set var="translation">
+			<digi:trn>You have incorrect value in First Name field</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
         if (isVoid(lastname))
         {
 			<c:set var="translation">
 			<digi:trn key="error.registration.LastNameBlank">LastName is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(reg.test(lastname)){
+            <c:set var="translation">
+			<digi:trn>You have incorrect value in lastName field</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;
@@ -412,6 +426,13 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         if(password != passwordConfirmation){
 			<c:set var="translation">
 			<digi:trn key="error.registration.NoPasswordMatch">Passwords in both fields must be the same</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+         if(!isNaN(password)){
+			<c:set var="translation">
+			<digi:trn>The passwords fields must not contain only digits</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;

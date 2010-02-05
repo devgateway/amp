@@ -37,7 +37,7 @@
 	function showPLogframe() {
 		var content = document.getElementById("myPLogframeContent");
 		var element5 = document.getElementById("myPLogframe"); 
-		var loading='\n<digi:trn>Loading...</digi:trn>';
+		var loading='\n<digi:trn>Loading, please wait...</digi:trn>';
 		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>'+loading+'</b></font></p>';
 		//if (panelFirstShow == 1){ 
 			element5.style.display = "inline";

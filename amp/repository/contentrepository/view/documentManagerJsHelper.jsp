@@ -275,26 +275,29 @@ YAHOO.namespace("YAHOO.amp.table");
 
 /* Function for creating YAHOO datatable for all documents*/
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
-	var checkBoxToHide = document.getElementById("checkBoxToHide");
+	var checkBoxToHide 	= false;
+	<c:if test="${checkBoxToHide == null || checkBoxToHide == 'true' }">
+	checkBoxToHide		= true;
+	</c:if>
 	<%
     	String dt = request.getParameter("documentsType");		
 	%>
 	var dt = "<%= dt %>";		
-	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
-    this.columnHeaders = [
-		{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
-	    {key:"type",label:"${trans_headerType}",sortable:true},
-        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
-        {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
-        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
-        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-        {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
-        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
-    ];
+	if( checkBoxToHide ){
+	    this.columnHeaders = [
+			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+		    {key:"type",label:"${trans_headerType}",sortable:true},
+	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+	        {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
+	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
+	        {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
+	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
+	    ];
 	}
-	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
+	else {
 		this.columnHeaders = [
-    			{key:"select",type:"checkbox", label:"${trans_headerSelect}",sortable:false,width:10},
+    			{key:"select",formatter:"checkbox", label:"${trans_headerSelect}",sortable:false,width:40},
     			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
     		    {key:"type",label:"${trans_headerType}",sortable:true},
     	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
@@ -304,17 +307,6 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     	        {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
     	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
     	    ];
-	}else {
-	    this.columnHeaders = [
-      			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
-       		    {key:"type",label:"${trans_headerType}",sortable:true},
-       	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
-        	    {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
-	   	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
-            	{key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-	            {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
-	            {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
-	    ];
 	}
     //this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 
@@ -326,7 +318,8 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"
 	                }) 
 	        		}; 
-	  
+
+    //alert (this.columnHeaders);	 
     var tableEl						= markup.getElementsByTagName("table")[0];
 	var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
 	myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE; 
@@ -340,12 +333,11 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 			                           		{key: "actions"}
 		                           		     	] 
 	                           		     	};
-	if ((checkBoxToHide == null) && (dt == "Related Documents")) {
+	if (!checkBoxToHide) {
 		myDataSource.responseSchema.fields.unshift({key: "select"});
 	}
 
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);
-	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
@@ -504,17 +496,25 @@ function WindowControllerObject(bodyContainerEl) {
 						parameters	+= "&showOnlyLinks=" + this.showOnlyLinks;
 				if ( this.showOnlyDocs ) 
 						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
+				
+				if ( obj.otherProp != null ) {
+					if ( obj.otherProp.checkBoxToHide != null)
+						parameters	+= "&checkBoxToHide=" + obj.otherProp.checkBoxToHide;
+				}
 				//alert(parameters);
 				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' /> </div>";
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};
 				
-	this.populateWithSelDocs	= function (documentsType, rights) {
+	this.populateWithSelDocs	= function (documentsType, rights, otherProp) {
 									var o				= new Object();
 									o.docListInSession	= documentsType;
 									if (rights != null) {
 										o.rights	= rights;
+									}
+									if ( otherProp!= null ) {
+										o.otherProp	= otherProp;
 									}
 									this.populateCallback (null, null, o);
 								}
@@ -707,7 +707,7 @@ function getSelectedDocumentsFromDatatable(datatable, vec) {
 	else
 		result	= new Array();
 	//alert (datatable);
-	trEls	= datatable.getSelectedRows();
+	var trEls	= datatable.getSelectedTrEls();
 	//alert("Rows Selected: " + trEls.length);
 	
 	var vector_length		= result.length;

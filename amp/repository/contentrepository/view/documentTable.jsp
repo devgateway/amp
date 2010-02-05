@@ -9,18 +9,14 @@
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
 
-<logic:notEmpty name="checkBoxToHide" scope="request">
-	<bean:define id="checkBoxToHideLocal" value="true"></bean:define>
-</logic:notEmpty> 
-<logic:empty name="checkBoxToHide" scope="request">
-	<bean:define id="checkBoxToHideLocal" value="false"></bean:define>
-</logic:empty> 
+<% request.setAttribute("checkBoxToHide", request.getParameter("checkBoxToHide") );%>
+
 <table id="team_table" bgcolor="white">
 						<thead>
 							<tr>
-								<logic:equal name="checkBoxToHideLocal" value="false">
+								<c:if test="${checkBoxToHide != null && checkBoxToHide == 'false'}">
 									<th><digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn></th>
-								</logic:equal>
+								</c:if>
 								<th><digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
 									<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
 								<th>
@@ -61,11 +57,11 @@
 								</c:set>
 							</logic:equal>
 							<tr>
-								<logic:equal name="checkBoxToHideLocal" value="false">
+								<c:if test="${checkBoxToHide != null && checkBoxToHide == 'false'}">
 									<td>
 	                                    &nbsp;                                                          
 		                              </td>
-		                        </logic:equal>
+		                        </c:if>
 								<td>
 									<bean:write name='documentData' property='title'/>
 									<%-- <script type="text/javascript">

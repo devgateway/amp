@@ -57,8 +57,9 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
             //elCell.innerHTML +="&nbsp;&nbsp;<a onclick='return banUser();' title='Ban User' href=/um/viewEditUser.do~id=" +sData+"~ban=true>" +"<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/images/deleteIcon.gif'/>" + "</a>";
         	elCell.innerHTML = "<a href=JavaScript:showUserProfile('"+oRecord.getData( 'email' )+"')  title='<digi:trn>Edit User</digi:trn>'>" + sData + "</a>";
         };
+        var lastTimeStamp = new Date().getTime();
  
-        this.myDataSource = new YAHOO.util.DataSource("/um/userSearch.do?");
+        this.myDataSource = new YAHOO.util.DataSource("/um/userSearch.do?lastTimeStamp"+lastTimeStamp);
         this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         //this.myDataSource.connXhrMode = "queueRequests";
         this.myDataSource.responseSchema = {

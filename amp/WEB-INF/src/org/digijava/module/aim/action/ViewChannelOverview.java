@@ -555,7 +555,7 @@ public class ViewChannelOverview extends TilesAction {
 		}
 	}
 	  private ChannelOverviewForm setSectorsToForm(ChannelOverviewForm form, AmpActivity activity) {
-			Collection sectors = activity.getSectors();
+			Collection sectors =ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId()); // activity.getSectors();
 
 			if (sectors != null && sectors.size() > 0) {
 				List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();

@@ -240,7 +240,7 @@
 	padding: 2px 4px 2px 4px;
 }
 html>body #main {
-	width:867px;
+	width:969px;
 }
 
 #mainEmpty {

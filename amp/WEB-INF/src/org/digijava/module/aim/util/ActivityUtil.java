@@ -3384,13 +3384,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    Session session = null;
 	    Query qry = null;
 	    List<HelperActivity> retVal=null;
-
 		try {
-		      session = PersistenceManager.getRequestDBSession();	      
-		      String queryString ="select group.ampActivityLastVersion.ampActivityId,group.ampActivityLastVersion.name,group.ampActivityLastVersion.ampId,group.ampActivityLastVersion.team from "+ AmpActivityGroup.class.getName()+" group "+
-		      " where upper(group.ampActivityLastVersion.name) like upper(:name)";
+		      session = PersistenceManager.getRequestDBSession();		      					  
+		      String queryString ="select grp.ampActivityLastVersion.ampActivityId,grp.ampActivityLastVersion.name,grp.ampActivityLastVersion.ampId,grp.ampActivityLastVersion.team from "+ AmpActivityGroup.class.getName()+" grp "+
+		      " where upper(grp.ampActivityLastVersion.name) like upper('%"+name+"%')";
 		      qry = session.createQuery(queryString);
-		      qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
 		      col = qry.list();
 		}catch (Exception e1) {
 		      logger.error("Could not retrieve the activities list");
@@ -4305,7 +4303,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		String name=null;
     		try {
     			session=PersistenceManager.getRequestDBSession();
-    			queryString= "select a.name  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			queryString= "select group.ampActivityLastVersion.name  from " + AmpActivityGroup.class.getName()+ " group where group.ampActivityLastVersion.ampActivityId="+actId;
     			query=session.createQuery(queryString);    			
     			name=(String)query.uniqueResult();    			
     		}catch(Exception ex) { 

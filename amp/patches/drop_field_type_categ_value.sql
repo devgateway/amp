@@ -1,0 +1,1 @@
+alter table amp_category_value drop field_type;

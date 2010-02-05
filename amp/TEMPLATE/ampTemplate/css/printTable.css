@@ -1,0 +1,12 @@
+div.scrollable  {
+ height: auto; 
+}
+
+.crumb, .filter, .otherLinks, .footerText,.headerMiddle, .loginWidget, .headerTop{
+  display : none;
+}
+
+
+
+
+

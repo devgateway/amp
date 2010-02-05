@@ -14,9 +14,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-function edit(key) {
+function edit(key,fieldName) {
 	<digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do"/>
-    document.aimEditActivityForm.action = "<%= nextSetp %>";
+    document.aimEditActivityForm.action = "<%= nextSetp %>?fieldName="+fieldName;
     document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.editKey.value = key;
   	document.aimEditActivityForm.step.value = "2.2";
@@ -44,9 +44,7 @@ function edit(key) {
                                           <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15 />
                                           <a title="<digi:trn key="aim:crossCuttingIssuesTitle">Cross Cutting Issues</digi:trn>">
                                           <b>
-                                            <digi:trn key="aim:crossCuttingIssues">
-                                              Cross Cutting Issues
-                                            </digi:trn>
+                                            <digi:trn>Cross Cutting Issues</digi:trn>
                                           </b>
 										  </a>
                                         </td>
@@ -58,7 +56,7 @@ function edit(key) {
                                             <tr>
                                               <td align="left">
                                                 <b>
-            		                                <digi:trn key="aim:crossCuttingIssues">
+            		                                <digi:trn>
 	    	                                          Cross Cutting Issues
 		                                            </digi:trn>
                                                 </b>
@@ -77,45 +75,40 @@ function edit(key) {
                                                       <table cellSpacing="1" cellPadding="5" border="0"  width="40%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
 														<c:if test="${!empty aimEditActivityForm.crossIssues.equalOpportunity}" >
-                                                                                                                            <bean:define id="eqOppKey">
-																	   <c:out value="${aimEditActivityForm.crossIssues.equalOpportunity}"/>
-																</bean:define>
-                                                        <tr>
-															<td>
-															  <digi:trn key="aim:equalOportunity">Equal Opportunity:</digi:trn>
-															</td>
-															
-															<td>
-																
-																<a href="javascript:edit('<%=eqOppKey%>')">
-																	<digi:trn key="aim:edit">Edit</digi:trn>
-																</a>
-															</td>
-                                                                                                                         <td>
-																
-																<digi:edit key="<%=eqOppKey%>"/>
-															</td>
-														</tr>
+                                                        	<bean:define id="eqOppKey">
+															   <c:out value="${aimEditActivityForm.crossIssues.equalOpportunity}"/>
+															</bean:define>
+                                                        	<tr>
+																<td>
+																  <digi:trn>Equal Opportunity:</digi:trn>
+																</td>															
+																<td>																
+																	<a href="javascript:edit('<%=eqOppKey%>','Equal Opportunity')">
+																		<digi:trn>Edit</digi:trn>
+																	</a>
+																</td>
+	                                                            <td>
+																	<digi:edit key="<%=eqOppKey%>"/>
+																</td>
+															</tr>
 														</c:if>
 														</field:display>
 														<field:display name="Environment" feature="Cross Cutting Issues">
 														<c:if test="${!empty aimEditActivityForm.crossIssues.environment}" >
-                                                        <tr>                                                                    <bean:define id="envKey">
-																	<c:out value="${aimEditActivityForm.crossIssues.environment}"/>
-																</bean:define>
+                                                        <tr>
+                                                        	<bean:define id="envKey">
+																<c:out value="${aimEditActivityForm.crossIssues.environment}"/>
+															</bean:define>
 															<td>
-															 <digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
-															</td>
-															
+																<digi:trn> Environment:</digi:trn>&nbsp;&nbsp;
+															</td>															
 															<td>
-																<a href="javascript:edit('<%=envKey%>')">
-																	<digi:trn key="aim:edit">Edit</digi:trn>
+																<a href="javascript:edit('<%=envKey%>','Environment')">
+																	<digi:trn>Edit</digi:trn>
 																</a>
 															</td>
-                                                                                                                         <td>
-																
+                                                            <td>
 																<digi:edit key="<%=envKey%>"/>
-															
 															</td>
 														</tr>
 														</c:if>
@@ -123,26 +116,22 @@ function edit(key) {
 														
 														<field:display name="Minorities" feature="Cross Cutting Issues">
 														<c:if test="${!empty aimEditActivityForm.crossIssues.minorities}" >
-                                                                                                                     <bean:define id="minKey">
-																	<c:out value="${aimEditActivityForm.crossIssues.minorities}"/>
-																</bean:define>
-																
-                                                        <tr>
-															<td>
-															  <digi:trn key="aim:monitories"> Minorities:</digi:trn>
-															</td>
-									
-															<td>
-																<a href="javascript:edit('<%=minKey%>')">
-																	<digi:trn key="aim:edit">Edit</digi:trn>
-																</a>
-                                                                                                                               
-                                                                                                                                 
-															</td>
-                                                                                                                        <td>
-                                                                                                                          <digi:edit key="<%=minKey%>"/>
-                                                                                                                      </td>
-														</tr>
+                                                        	<bean:define id="minKey">
+																<c:out value="${aimEditActivityForm.crossIssues.minorities}"/>
+															</bean:define>																
+	                                                        <tr>
+																<td>
+																  <digi:trn>Minorities:</digi:trn>
+																</td>										
+																<td>
+																	<a href="javascript:edit('<%=minKey%>','Minorities')">
+																		<digi:trn>Edit</digi:trn>
+																	</a>	                                                                                                                                 
+																</td>
+	                                                            <td>
+	                                                            	<digi:edit key="<%=minKey%>"/>
+	                                                            </td>
+															</tr>
 														</c:if>
 														</field:display>
                                                       </table>
@@ -154,7 +143,6 @@ function edit(key) {
                                           </table>
                                         </td>
                                       </tr>
-                                      
 								</table>
 							</td>
 						</tr>

@@ -66,6 +66,7 @@ import org.digijava.module.help.util.HelpUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.jfree.util.Log;
 
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -85,7 +86,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 8L;
+	private static final long serialVersionUID = 9L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -586,9 +587,9 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 		    	int currActId = rs.getInt("amp_activity_id");
 		    	x = (Items) list.get(currActId);
-		    	if (rs.getString("code")!=null){
-		    	    x.componentcode.add(rs.getString("code"));
-		    	}
+	    		if (x != null && rs.getString("code")!=null){
+	    			x.componentcode.add(rs.getString("code"));
+	    		}
 				isNext = rs.next();
 			}
 			

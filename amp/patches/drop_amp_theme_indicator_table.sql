@@ -1,1 +1,0 @@
-DROP  TABLE amp_theme_indicator;

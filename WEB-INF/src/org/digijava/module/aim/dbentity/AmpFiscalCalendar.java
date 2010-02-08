@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianFiscalBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.Identifiable;
@@ -110,6 +111,9 @@ public class AmpFiscalCalendar implements Serializable, Identifiable
 		if (this.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
 			return new GregorianBasedWorker(this);
 		} else {
+			if(isFiscal)
+			return new EthiopianFiscalBasedWorker(this);
+			else
 			return new EthiopianBasedWorker(this);
 		}
 

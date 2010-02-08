@@ -1,3 +1,9 @@
+/**
+ * EthiopianFiscalBasedWorker.java
+ * (c) 2009 Development Gateway Foundation
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ * @since Feb 3, 2010
+ */
 package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Date;
@@ -7,21 +13,24 @@ import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
-public class EthiopianBasedWorker implements ICalendarWorker {
+/**
+ * EthiopianFiscalBasedWorker
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ * @since Feb 3, 2010
+ */
+public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 
 	protected Map<Integer, ComparableMonth> monthCache = new HashMap<Integer, ComparableMonth>();
 
 	private GregorianCalendar internalCalendar = null;
 
 	private EthiopianCalendar internalEthiopianCalendar = null;
-	
-	private int fiscalMonth;
-	
+
 	private Date internalTime = null;
 
 	private AmpFiscalCalendar fiscalCalendar = null;
 
-	public EthiopianBasedWorker(AmpFiscalCalendar calendar) {
+	public EthiopianFiscalBasedWorker(AmpFiscalCalendar calendar) {
 		this.fiscalCalendar = calendar;
 	}
 
@@ -43,24 +52,18 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 
 	public Integer getQuarter() throws Exception {
 		checkSetTimeCalled();
-		return internalEthiopianCalendar.ethQtr;
+		return internalEthiopianCalendar.ethFiscalQrt;
 	}
 
 	public Integer getYear() throws Exception {
 		checkSetTimeCalled();
-		return internalEthiopianCalendar.ethYear;
+		return internalEthiopianCalendar.ethFiscalYear;
 	}
 
 	public void setTime(Date time) {
 		internalTime = time;
-		
-		this.fiscalMonth=EthiopianCalendar.getEthiopianDate(time).ethMonth;
-		
 		internalCalendar = new GregorianCalendar();
 		internalCalendar.setTime(time);
-		fiscalMonth = internalCalendar.get(GregorianCalendar.MONTH);
-			
-		
 		// set offset from fiscal calendar
 		internalCalendar.add(GregorianCalendar.YEAR, fiscalCalendar.getYearOffset());
 		int toAdd = -(fiscalCalendar.getStartMonthNum() - 1);
@@ -70,6 +73,7 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 		internalEthiopianCalendar = EthiopianCalendar.getEthiopianDate(internalCalendar);
 
 	}
+
 
 	private void checkSetTimeCalled() throws Exception {
 		if (internalTime == null)
@@ -82,33 +86,14 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 		
 	}
 
-	public String getFiscalYearLabel() throws Exception {
-		// TODO Auto-generated method stub
-		return this.getYear().toString();
-	}
-
+	@Override
 	public Comparable getFiscalMonth() throws Exception {
-		checkSetTimeCalled();
-		if (!this.fiscalCalendar.getIsFiscal()) {
-			return getMonth();
-		} else {
-			checkSetTimeCalled();
-			int monthId = internalEthiopianCalendar.ethMonth;
-			ComparableMonth cm = monthCache.get(monthId);
-			if (cm == null) {
-				String monthStr = internalEthiopianCalendar.ethMonthName;
-				cm = new ComparableMonth(monthId, monthStr);
-				monthCache.put(monthId, cm);
-			}
-			return cm;
-			
-		}
+		return getMonth();
 	}
 
+	@Override
 	public String getFiscalYear() throws Exception {
-		if (this.fiscalCalendar.getIsFiscal()) {
-			return "Fiscal Year," + this.getYear() + " - " + (this.getYear() + 1);
-		}
-		return this.getYear().toString();
+		return getYear().toString();
 	}
+
 }

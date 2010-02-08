@@ -244,7 +244,7 @@ div.scrollable {
 							</logic:equal>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Currency list table -->
-								<table cellSpacing="0" cellPadding="0" vAlign="top" align="left" width="85%">
+								<table cellSpacing="0" cellPadding="0" vAlign="top" align="left" width="100%">
 									<tr>
 										<td class="report">
 											<table width="100%" height="30" cellpadding="0" cellspacing="0">
@@ -505,7 +505,7 @@ div.scrollable {
 					<td valign="top">
                         <div class="otherLinks">
 									<table align=center cellPadding=0 cellSpacing=0 width="90%"
-												border=0>
+												border=0 style="margin-top: 36px;">
 												<tr>
 													<td><!-- Other Links -->
 													<table cellPadding=0 cellSpacing=0 width=100>

@@ -42,11 +42,12 @@
 	var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
 	var msgInvalidAmountProj="\n<digi:trn>Invalid amount entered for projection</digi:trn>";
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-	var msgConfirmFunding="<digi:trn jsFriendly="true" key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
+//	var msgConfirmFunding="<digi:trn jsFriendly="true" key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
 </gs:test>
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
-	var msgConfirmFunding="";
+//	var msgConfirmFunding="";
 </gs:test>
+	var msgConfirmFunding="";
 	//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 	var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 	var msgEnterRate="\n<digi:trn key="aim:addFunding:errmsg:invalidRate">Please enter a valid exchange rate, the decimal symbol is:</digi:trn>";
@@ -127,7 +128,7 @@ var isAlreadySubmitted = false;
 		var numDisb = document.aimEditActivityForm.numDisb.value;
 		var numExp = document.aimEditActivityForm.numExp.value;
 		
-		var flag2 = validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, msgConfirmFunding);
+		var flag2 = validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, msgConfirmFunding,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>");
 		var flagProj	= validateProjection(msgInvalidAmountProj);
 
 		if ( !flagProj || !flag2) return false;

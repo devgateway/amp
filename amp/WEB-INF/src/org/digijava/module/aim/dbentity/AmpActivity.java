@@ -300,6 +300,12 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 			this.ampId=ampid;
 		}
         
+        public AmpActivity(Long ampActivityId, String name, String ampid) {
+        	this.ampActivityId=ampActivityId;
+			this.name=name;
+			this.ampId=ampid;
+		}
+        
         public boolean isCreatedAsDraft() {
             return createdAsDraft;
         }

@@ -1733,8 +1733,7 @@ public class TeamUtil {
 
 			String queryString = "";
 			Query qry = null;
-			queryString = "select act from "+ AmpActivity.class.getName()	
-						+ " act left join act.updatedBy  left join act.orgrole role  ";
+			queryString = "select act.ampActivityId, act.name, act.ampId from "+ AmpActivity.class.getName()	+ " act  ";
 			if(teamId!=null){
 				queryString+="where act.team="+teamId;
 			}else{
@@ -1749,11 +1748,10 @@ public class TeamUtil {
 			HashMap<Long, AmpActivity> holder = new HashMap<Long, AmpActivity>();
 			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
 			while (itr.hasNext()) {
-
-				//Object[] act = (Object[]) itr.next();
+				Object[] act = (Object[]) itr.next();
 				//AmpActivity act = (AmpActivity) itr.next();
-				//AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
-				AmpActivity activity = (AmpActivity)itr.next();
+				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (String) act[2] );
+				//AmpActivity activity = (AmpActivity)itr.next();
 				AmpActivity tmp = holder.get(activity.getAmpActivityId());
 				if (tmp==null){
 					holder.put(activity.getAmpActivityId().longValue(), activity);

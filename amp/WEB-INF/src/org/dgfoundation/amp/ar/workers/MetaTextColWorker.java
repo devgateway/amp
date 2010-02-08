@@ -50,8 +50,8 @@ public class MetaTextColWorker extends TextColWorker {
 			if(!rs.wasNull()){
 				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,percentage));	
 			}
-		} else if( ( columnName.equals(ArConstants.COLUMN_REGION) || columnName.equals(ArConstants.COLUMN_ZONE) || columnName.equals(ArConstants.COLUMN_DISTRICT) ) && 
-				(generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE)){
+		} else if( ( columnName.equals(ArConstants.COLUMN_REGION) || columnName.equals(ArConstants.COLUMN_ZONE) || columnName.equals(ArConstants.COLUMN_DISTRICT) )
+			&&  rs.getString(4)!=null && (generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE)){
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
 		}	
 		else if(columnName.equals("Componente")){

@@ -112,6 +112,9 @@
 						<digi:errors/>
 					</td>
 				</tr>
+                <tr>
+                    <td><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></td>
+                </tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1>
@@ -126,6 +129,7 @@
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
 										<table bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+                                           
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
@@ -138,21 +142,21 @@
 																	<b><digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn></b>
 																</logic:equal>
 															</td>
-														</tr>
+														</tr>                                      
 														<!-- Page Logic -->
 														<tr>
 															<td width="100%">
 																<table width="100%" cellPadding=3 cellSpacing=3 border=0 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
-																		<digi:trn key="aim:orgTypeName">Name</digi:trn>	</td>
+																		<font size="2" color="#FF0000">*</font><digi:trn key="aim:orgTypeName">Name</digi:trn>	</td>
 																	    <td width="30%" >
 																	          <html:text property="orgType" size="35" />
 																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgTypeCode">Type
+																	       <font size="2" color="#FF0000">*</font><digi:trn key="aim:orgTypeCode">Type
                                                                             Code</digi:trn>
 																		</td>
 																		<td width="30%">

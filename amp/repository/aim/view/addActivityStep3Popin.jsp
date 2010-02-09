@@ -20,17 +20,6 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFundingPopin.js"/>"></script>
 
-<div id="popin" style="display: none" >
-	<div id="popinContent" class="content" ">
-	</div>
-</div>
-
-
-<div id="popin2" style="display: none">
-	<div id="popinContent2" class="content">
-	</div>
-</div>
-
 <script type="text/javascript">
 <!--
 
@@ -687,3 +676,13 @@ function addEvent() {
 -->
 </script>
 
+<div id="popin" style="display: none" >
+	<div id="popinContent" class="content">
+	</div>
+</div>
+
+
+<div id="popin2" style="display: none">
+	<div id="popinContent2" class="content">
+	</div>
+</div>

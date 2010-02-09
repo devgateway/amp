@@ -26,7 +26,7 @@
 			<tr>
 			<c:if test="${item.modifiedBy eq null}">
 				<td>
-				<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()"/>
+				<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 				</td>
 				<td>
 					${item.activityCreator.user.firstNames} ${item.activityCreator.user.lastName}
@@ -44,7 +44,7 @@
 			</c:if>
 			<c:if test="${item.modifiedBy ne null}">
 				<td>
-				<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()"/>
+				<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 				</td>
 				<td>
 					${item.modifiedBy.user.firstNames} 

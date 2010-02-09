@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ taglib uri="/taglib/aim"prefix="aim"%>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -315,8 +315,17 @@
             document.aimAddOrgForm.submit();
 
         }
+
+        function removeSelectedContacts(){
+        	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
+            document.aimAddOrgForm.action = "${remConts}";
+            document.aimAddOrgForm.target = "_self"
+            document.aimAddOrgForm.actionFlag.value="deleteContact";
+            document.aimAddOrgForm.submit();
+        }
+
         function addPledge() {
-    <digi:context name="addPledge" property="context/module/moduleinstance/editOrganisation.do" />
+    		<digi:context name="addPledge" property="context/module/moduleinstance/editOrganisation.do" />	
             document.aimAddOrgForm.action = "${addPledge}"
             document.aimAddOrgForm.actionFlag.value="addPledge";
             document.aimAddOrgForm.target = "_self";
@@ -1702,7 +1711,7 @@ function resetPrimary(contList){
                         </td>
                     </tr>
                       <tr>
-                        <td colspan="2" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedContactInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="removeContact()" value="<digi:trn>Delete</digi:trn>"></td>
+                        <td colspan="2" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedContactInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="removeSelectedContacts()" value="<digi:trn>Delete</digi:trn>"></td>
                     </tr>
                 </c:if>
                 <tr>

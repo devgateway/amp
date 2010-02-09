@@ -41,6 +41,23 @@
 		</condition>
 	</xsl:template>
 	
+	<!-- Check if table constraint exists -->
+	<xsl:template match="condition[@type='constraintExists']">
+		<condition type="custom">
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>
+ 			<script returnVar="count">
+				<lang type="mysql">
+				SELECT COUNT(constraint_name) FROM information_schema.table_constraints WHERE 
+				constraint_name='<xsl:value-of select="."/>' AND table_schema=database();
+				</lang>
+			</script>
+ 			<test>count.intValue()==1</test>
+		</condition>
+	</xsl:template>	
 	
 	<!-- Check if the current database has the given name -->
 	<xsl:template match="condition[@type='dbName']">

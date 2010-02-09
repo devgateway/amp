@@ -755,9 +755,9 @@ public class EditOrganisation extends DispatchAction {
         while(orgContIter.hasNext()){
         	AmpOrganisationContact orgCont=orgContIter.next();
         	AmpContact contact=orgCont.getContact();
-        	if (selContactId != null) {
+        	if (selContactId != null && selContactId.length()>0) {
                 if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().toString().equals(selContactId.toString()))) {
-                	orgContsForRemoval.add(orgCont);
+                	orgContsForRemoval.add(orgCont); 
                     break;
                 }
             } else {

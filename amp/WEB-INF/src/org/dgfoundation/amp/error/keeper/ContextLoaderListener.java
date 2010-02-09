@@ -117,9 +117,23 @@ public class ContextLoaderListener implements ServletContextListener {
 	
 	public static synchronized void destroy() {
 		//removeFromRepository();
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		// TODO: disable threads etc
-		// WARN: implement destroy in ECSRepositorySelector as init(boolean);
+
+		LoggerRepository current = LogManager.getLoggerRepository();
+		if (current.getClass().getCanonicalName().startsWith("org.dgfoundation.ecs.logger")){//already changed
+			ClassLoader bsLoader = current.getClass().getClassLoader();
+			try {
+				Class bsRepo = bsLoader.loadClass("org.dgfoundation.ecs.logger.ECSRepositorySelector");
+				Object repoInstance = bsRepo.newInstance();
+
+				String methName;
+				methName = "destroy";
+				
+				Method method = repoInstance.getClass().getMethod(methName);
+				method.invoke(method);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 }

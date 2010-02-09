@@ -35,6 +35,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -415,7 +416,9 @@ public class OrgProfileUtil {
             /* pick all activities of the organization in the selected year ordered
             by their amounts in USD
             alas that "Limit" does not work in the query...  */
-            queryString = " select act.ampActivityId from " + AmpActivity.class.getName() + " act  ";
+            queryString = " select act from " + AmpActivityGroup.class.getName() + " actGrp  ";
+
+            queryString += " inner join actGrp.ampActivityLastVersion act " ;
 
             queryString += " inner join act.funding f " +
                     " inner join f.fundingDetails fd ";
@@ -432,7 +435,7 @@ public class OrgProfileUtil {
             }
             queryString += " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate  ";
             queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
-            queryString +=" group by act.ampActivityId order by sum(fd.transactionAmountInBaseCurrency) desc ";
+            queryString +=" group by act order by sum(fd.transactionAmountInBaseCurrency) desc ";
 
             Query query = session.createQuery(queryString);
             query.setDate("startDate", startDate);
@@ -450,11 +453,10 @@ public class OrgProfileUtil {
             }
 
 
-            Iterator<Long> activityIter = result.iterator();
+            Iterator<AmpActivity> activityIter = result.iterator();
             // converting funding to selected currency amount and creating projects
             while (activityIter.hasNext()) {
-                Long activityId = activityIter.next();
-                AmpActivity activity=ActivityUtil.getAmpActivity(activityId);
+                AmpActivity activity=activityIter.next();
                 queryString = "select fd from " + AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";
                 queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1  ";
                 if (orgIds == null) {
@@ -500,6 +502,7 @@ public class OrgProfileUtil {
 
             }
         } catch (Exception e) {
+            logger.error("error",e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }

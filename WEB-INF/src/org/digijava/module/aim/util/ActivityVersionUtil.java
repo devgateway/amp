@@ -175,7 +175,7 @@ public class ActivityVersionUtil {
 			Session session = PersistenceManager.getSession();
 			String query = "CREATE OR REPLACE VIEW `amp_activity` AS  "
 					+ "select  amp_activity_version.*  from    "
-					+ "(`amp_activity_version` join `amp_activity_group`)  "
+					+ "(`amp_activity_version` join `amp_activity_group` on `amp_activity_version`.`amp_activity_group_id` = `amp_activity_group`.`amp_activity_group_id`)  "
 					+ "where (`amp_activity_version`.`amp_activity_id` = `amp_activity_group`.`amp_activity_last_version_id`)";
 			session.createSQLQuery(query).executeUpdate();
 		} catch (Exception e) {

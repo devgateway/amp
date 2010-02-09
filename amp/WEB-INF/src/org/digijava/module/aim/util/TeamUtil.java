@@ -28,6 +28,7 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -1587,11 +1588,13 @@ public class TeamUtil {
             String queryString = "";
             Query qry = null;
             if(teamId == null) {
-            	queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
+            	//queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
+            	queryString ="select g.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" g where g.ampActivityLastVersion.team is null";
             	qry=session.createQuery(queryString);
             }
             else{
-            	queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
+            	//queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
+            	queryString ="select g.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" g where (g.ampActivityLastVersion.team=:teamId)";
             	qry=session.createQuery(queryString);
             	qry.setParameter("teamId", teamId, Hibernate.LONG);
             }
@@ -1722,7 +1725,25 @@ public class TeamUtil {
         return col;
     }
 
- 
+    public static List<AmpActivity> getAllActivitiesList() {
+        List col = null;
+        Session session = null;
+        Query qry = null;
+
+        try {
+          session = PersistenceManager.getRequestDBSession();
+          //String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct";
+          String queryString ="select group.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" group";
+          qry = session.createQuery(queryString);
+          col = qry.list();
+          logger.debug("the size of the ampActivity : " + col.size());
+        }
+        catch (Exception e1) {
+          logger.error("Could not retrieve the activities list from getallactivitieslist");
+          e1.printStackTrace(System.out);
+        }
+        return col;
+      }
     
     public static Collection getAllTeamActivities(Long teamId) {
     	Session session = null;
@@ -1733,11 +1754,15 @@ public class TeamUtil {
 
 			String queryString = "";
 			Query qry = null;
-			queryString = "select act.ampActivityId, act.name, act.ampId from "+ AmpActivity.class.getName()	+ " act  ";
+			//queryString = "select act.ampActivityId, act.name, act.ampId from "+ AmpActivity.class.getName()	+ " act  ";
+			queryString ="select group.ampActivityLastVersion.ampActivityId, group.ampActivityLastVersion.name, group.ampActivityLastVersion.ampId, from "
+				 + AmpActivityGroup.class.getName()+" group";
 			if(teamId!=null){
-				queryString+="where act.team="+teamId;
+				//queryString+="where act.team="+teamId;
+				queryString+="where group.ampActivityLastVersion.team="+teamId;
 			}else{
-				queryString+="where act.team is null";
+				//queryString+="where act.team is null";
+				queryString+="where group.ampActivityLastVersion.team is null";
 			}
 			qry = session.createQuery(queryString);
 			
@@ -1764,7 +1789,8 @@ public class TeamUtil {
 				if(activity.getOrgrole()!=null){
 					for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
 						AmpOrgRole aor = (AmpOrgRole) it.next();
-						name=aor.getOrganisation().getName();
+						if(aor.getOrganisation().getName()!=null)
+							name=aor.getOrganisation().getName();
 						if(aor.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name)){
 							donnorList.add(name);
 						}

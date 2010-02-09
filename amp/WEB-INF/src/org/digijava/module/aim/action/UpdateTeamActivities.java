@@ -83,15 +83,17 @@ public class UpdateTeamActivities extends Action {
 			if ( taForm.getSelActivities() != null ) 
 				for (int i=0; i<taForm.getSelActivities().length; i++) 
 					selectedActivities.add(taForm.getSelActivities()[i]);
-			if ( "archive".equals(archiveCmd) ) {
+			if ( GetTeamActivities.ARCHIVE_COMMAND.equals(archiveCmd) ) {
 				ActivityUtil.changeActivityArchiveStatus(selectedActivities, true);
 				request.setAttribute(GetTeamActivities.ARCHIVED_PARAMETER, GetTeamActivities.UNARCHIVED_SUB_TAB);
+				return mapping.findForward("forward");
 			}
-			else{
+			if ( GetTeamActivities.UNARCHIVE_COMMAND.equals(archiveCmd) ) {
 				ActivityUtil.changeActivityArchiveStatus(selectedActivities, false);
 				request.setAttribute(GetTeamActivities.ARCHIVED_PARAMETER, GetTeamActivities.ARCHIVED_SUB_TAB);
+				return mapping.findForward("forward");
 			}
-			return mapping.findForward("forward");
+			
 		}
 
 		int numRecords = 0;

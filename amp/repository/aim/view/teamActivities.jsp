@@ -323,12 +323,12 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                     	<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
                                                                     	<c:choose>
 	                                                                    	<c:when test="${selectedSubTab==unarchivedTab}">
-																				<html:submit onclick="submitArchiveCmd('archive')" styleClass="dr-menu" property="submitButton">
+																				<html:submit onclick="submitArchiveCmd('<%=GetTeamActivities.ARCHIVE_COMMAND%>')" styleClass="dr-menu" property="submitButton">
 																					<digi:trn>Archive Activities</digi:trn>
 																				</html:submit>
 																			</c:when>
 																			<c:when test="${selectedSubTab==archivedTab}">
-																				<html:submit onclick="submitArchiveCmd('unarchive')" styleClass="dr-menu" property="submitButton">
+																				<html:submit onclick="submitArchiveCmd('<%=GetTeamActivities.UNARCHIVE_COMMAND%>')" styleClass="dr-menu" property="submitButton">
 																					<digi:trn> Unarchive Activities</digi:trn>
 																				</html:submit>
 																			</c:when>

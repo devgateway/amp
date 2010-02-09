@@ -7382,7 +7382,7 @@ public class DbUtil {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
 
-            int result = collator.compare(o1.getOrgType(), o2.getOrgType());
+            int result = (o1.getOrgType()==null ||  o2.getOrgType()==null)?0:collator.compare(o1.getOrgType(), o2.getOrgType());
             return result;
         }
     }

@@ -1297,7 +1297,7 @@ public class EditOrganisation extends DispatchAction {
             form.setReceiptLegPersonalityAct(null);
             form.setBudgetOrgs(null);
         } catch (Exception ex) {
-            logger.error(ex.getMessage());
+            logger.error("error",ex);
             new DgException(ex);
         }
     }

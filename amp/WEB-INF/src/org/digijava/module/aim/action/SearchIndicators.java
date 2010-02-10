@@ -37,6 +37,7 @@ public class SearchIndicators extends Action {
 			indForm.setSelectedSectorsForInd(null);
 			indForm.setShowAddInd(false);
 			indForm.setSelectedIndicators(null);
+            indForm.setSectorId(null);
 		}
 		
 		Collection searchResult = null;
@@ -65,8 +66,8 @@ public class SearchIndicators extends Action {
 		
 		
 		if((indForm.getSearchkey()!=null && indForm.getSearchkey().trim().length() > 0) || 
-			(indForm.getSectorName()!=null && indForm.getSectorName().trim().length()>0 && !indForm.getSectorName().trim().equals("-1"))){
-			searchInd = IndicatorUtil.searchIndicators(indForm.getSearchkey(),indForm.getSectorName());
+			(indForm.getSectorId()!=null  && !indForm.getSectorId().equals(1l))){
+			searchInd = IndicatorUtil.searchIndicators(indForm.getSearchkey(),indForm.getSectorId());
 		}else {
 			searchInd = IndicatorUtil.getAmpIndicator();
 		}

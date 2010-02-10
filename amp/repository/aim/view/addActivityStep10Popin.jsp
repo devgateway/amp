@@ -297,7 +297,8 @@
         var ret=""
         ret="&activityId="+document.getElementsByName('activityId')[0].value+
         	"&addswitch="+document.getElementsByName('addswitch')[0].value+
-        	"&sectorName="+document.getElementsByName('sectorName')[0].value;
+            "&searchkey="+document.getElementsByName('searchkey')[0].value+
+        	"&sectorId="+document.getElementsByName('sectorId')[0].value;
     	if(document.getElementsByName('selectedIndicators')[0]!=null){
 	    	var indicators = document.getElementsByName('selectedIndicators')[0].options.length;
 	    	for(var i=0; i<indicators; i++ ){

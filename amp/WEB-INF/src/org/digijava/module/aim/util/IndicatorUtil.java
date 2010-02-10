@@ -1303,6 +1303,35 @@ public class IndicatorUtil {
 			}
 			return (ArrayList)retValue;
 		}
+
+
+	  public static List<AmpIndicator> searchIndicators(String keyWord,Long sectorId) throws DgException{
+			Session session = null;
+			Query qry = null;
+			List<AmpIndicator> indicators=new ArrayList<AmpIndicator>();
+			try{
+				session=PersistenceManager.getRequestDBSession();
+				String queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where 1=1 ";
+
+				if (keyWord!=null && keyWord.length()>0){
+                   queryString+=" and ind.name like '%" + keyWord + "%'";
+                }
+                if(sectorId!=null &&  !sectorId.equals(-1l)){
+                    queryString+=" and sec.ampSectorId=:sectorId";
+                }
+				
+				qry = session.createQuery(queryString);
+                if(sectorId!=null &&  !sectorId.equals(-1l)){
+                   qry.setLong("sectorId", sectorId);
+                }
+				indicators=qry.list();
+				
+			}catch (Exception ex) {
+				logger.debug("Unable to search " + ex);
+				throw new DgException(ex);
+			}
+			return indicators;
+		}
 	  
 	  public static void deleteIndsector(Long sectorid,Long indid){
 		

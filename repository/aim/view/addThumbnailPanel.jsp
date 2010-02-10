@@ -22,7 +22,7 @@
 					width:"600px", 
 					fixedcenter: true, 
 					constraintoviewport: true, 
-					underlay:"shadow", 
+					underlay:"none", 
 					modal: true,
 					close:true, 
 					visible:false, 

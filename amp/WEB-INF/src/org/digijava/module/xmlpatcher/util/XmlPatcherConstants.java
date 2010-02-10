@@ -57,6 +57,16 @@ public final class XmlPatcherConstants {
 		 */
 		public static final short DEPRECATED = 3;
 
+		
+		public static String toString(short state) {
+			switch(state) {
+			case OPEN: return "OPEN";
+			case CLOSED: return "CLOSED";
+			case FAILED: return "FAILED";
+			case DEPRECATED: return "DEPRECATED";
+			}
+			return "UNKNOWN";
+		}
 	}
 
 	/**

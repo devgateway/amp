@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
+import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 
 /**
@@ -27,7 +28,7 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
  * 
  */
 public class XmlPatchesJSON extends Action {
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -36,36 +37,41 @@ public class XmlPatchesJSON extends Action {
 		
 		String startIndex=request.getParameter("startIndex");
 		String results=request.getParameter("results");
+		String sort="patchId";
+		String dir="";
 		int startIndexInt=0;
 		int resultsInt=10;
+	
 		if(startIndex!=null) startIndexInt=Integer.parseInt(startIndex);
 		if(results!=null) resultsInt=Integer.parseInt(results);
-	
+		if(request.getParameter("sort")!=null) sort=request.getParameter("sort");
+		if(request.getParameter("dir")!=null) dir=request.getParameter("dir");
         JSONObject json = new JSONObject();
     
         JSONArray jsonArray = new JSONArray();
         
-        List<AmpXmlPatch> allDiscoveredPatches = XmlPatcherUtil.getAllDiscoveredPatches(startIndexInt,resultsInt);
-        for( AmpXmlPatch patch : allDiscoveredPatches) {
+        List<Object[]> allDiscoveredPatches = XmlPatcherUtil.getAllDiscoveredPatches(startIndexInt,resultsInt,sort,dir);
+        for( Object[] patch : allDiscoveredPatches) {
         	 JSONObject jsonPatch = new JSONObject();
-        	 jsonPatch.put("ID", patch.getPatchId());
-        	 jsonPatch.put("Discovered", sdf.format(patch.getDiscovered()));
-        	 jsonPatch.put("Location", patch.getLocation());
-        	 jsonPatch.put("State", patch.getState());       	 
+        	 jsonPatch.put("patchId", patch[0]);
+        	 jsonPatch.put("discovered", sdf.format(patch[1]));
+        	 jsonPatch.put("location", patch[2]);
+        	 jsonPatch.put("state", XmlPatcherConstants.PatchStates.toString((Short)patch[3]));       
+        	 jsonPatch.put("attempts",patch[4]);
         	 jsonArray.add(jsonPatch);
         }
         
         Integer totalRecords=XmlPatcherUtil.countAllDiscoveredPatches();
-        json.put("recordsReturned",allDiscoveredPatches.size());
-        json.put("totalRecords",totalRecords);
-        json.put("startIndex",startIndexInt);
-        json.put("sort",null);
-        json.put("dir","asc");
-        json.put("pageSize", 10);
+        json.put("totalRecords",totalRecords.toString());
+        json.put("startIndex",Integer.toString(startIndexInt));
+        json.put("pageSize", results);
+        //json.put("recordsReturned",allDiscoveredPatches.size());
+        json.put("sort",sort);
+        json.put("dir",dir);
         
         json.put("items",jsonArray);
         
-		response.setContentType("text/json-comment-filtered");
+		response.setContentType("text/html");
 		OutputStreamWriter outputStream =  null;
         
         try {

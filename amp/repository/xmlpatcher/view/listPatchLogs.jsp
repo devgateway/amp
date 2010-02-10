@@ -7,7 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<table>
+
+
+<table cellpadding="3" cellspacing="1" rules="all" frame="border" style="margin-left: 5px;border-color:#999999;">
 <tr>
 <th>Idx</th>
 <th>Exception</th>
@@ -21,7 +23,7 @@
 <td><b><bean:write name="idx"/></b></td>
 <td>
 <logic:notEmpty name="log" property="log">
-<a style='text-decoration: underline' onclick=loadLogBody(${log.id})>${log.logLabel}</a>;
+<a style='text-decoration: underline' onclick="loadLogBody(${log.id})">${log.logLabel}</a>;
 </logic:notEmpty>
 <logic:empty name="log" property="log">
 [none]

@@ -22,6 +22,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script> 
+<script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script> 
 
 <link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/rowexpand.css"/>
@@ -36,12 +38,12 @@
 
 
 
-        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
+ 
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
         <!-- Source File -->
         <script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+
         <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 
         <!-- Core + Skin CSS -->
@@ -135,7 +137,15 @@ YAHOO.util.Event.addListener(window, "load", function() {
             initialRequest: "sort=ID&dir=asc&startIndex=0&results=10", // Initial request for first page of data
             dynamicData: true, // Enables dynamic server-driven data
             sortedBy : {key:"ID", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
-            paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }), // Enables pagination
+            paginator: new YAHOO.widget.Paginator({ rowsPerPage:10, containers:'pagination'}), // Enables pagination
+			generateRequest : function(state, dt){
+				result = "";
+				result = result + 'sort='+ state.sortedBy.key;
+				result = result + '&dir='+ ((state.sortedBy && state.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc");
+				result = result + '&startIndex=' + state.pagination.recordOffset; 
+				result = result + '&results=' + state.pagination.rowsPerPage; 
+				return result;
+			},	
             rowExpansionTemplate:expansionTemplate 
         };
             
@@ -240,6 +250,8 @@ function loadLogBody( patchLogId ){
 }
 </script>
 
+
+
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=760px>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -273,6 +285,10 @@ function loadLogBody( patchLogId ){
 </div>
 
 <div id="logContent" style="display: none">
+</div>
+
+<div id="pagination">
+		Pagination
 </div>
 
 <a href="/aim/ListAppliedPatches.do">Old Applied Patches List</a>

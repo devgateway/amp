@@ -47,6 +47,7 @@ background:transparent url(/repository/aim/images/down.gif) no-repeat scroll rig
 </style>
 <script language="JavaScript">
     var tooltipPanel;
+    var viewTeamDetails='';
 
     function showToolTip(id,title){
         var tooltipid="tooltip"+id;
@@ -90,8 +91,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
        	         
         this.formatActions = function(elCell, oRecord, oColumn, sData) {
         	elCell.innerHTML = 
-        	"<a href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-        	"<a href=/aim/deleteWorkspace.do~event=delete~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+        	"<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+        	"<a onclick='setViewTemDetails()' href=/aim/deleteWorkspace.do~event=delete~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
         	"[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+"<digi:trn>Npd Settings</digi:trn>"+"</a>]"+"<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
         };
         
@@ -193,6 +194,10 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
        
     };
     
+	}
+
+	function setViewTemDetails() {
+		viewTeamDetails='false';
 	}
 </script>
 <div id="popin" style="display: none">
@@ -808,13 +813,18 @@ function showTeamDetails(id, description){
 	document.getElementsByName('teamId')[0].value=id;
 	document.getElementsByName('teamName')[0].value=description;
 	
-	value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
-	if(value==0){
-		showTeamMembers(id, description);			
+	if(viewTeamDetails!='false'){
+		value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
+		if(value==0){
+			showTeamMembers(id, description);			
+		}
+		else{
+			showActivities(id, description);		
+		}
+	}else{
+		viewTeamDetails='true';
 	}
-	else{
-		showActivities(id, description);		
-	}
+	
 }
 
 </script>

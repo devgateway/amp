@@ -53,13 +53,38 @@
 
 </div>
 
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 >
+	<tr>
+		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td align=left class=r-dotted-lg vAlign=top>
 
-<table cellpadding="3" cellspacing="1" style="border-color:#999999;border-spacing:2">
+<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+			<tr>
+				<!-- Start Navigation -->
+				<td height=33>
+				<a href="/aim/admin.do" styleClass="comment"
+					title="${translation}">
+					<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+				</a>
+				&nbsp;&gt;&nbsp; <a href="/xmlpatcher/xmlpatches.do?mode=listPatches"
+					class="comment" title="${translation}">
+					<digi:trn key="aim:dbpatches">Database Patches</digi:trn>
+				</a>&nbsp;&gt;&nbsp; <digi:trn key="aim:dbpatches">Database Patches</digi:trn></td>
+				<!-- End navigation -->
+			</tr>
+		</table>
+	<table cellpadding="3" cellspacing="1" style="border-color:#999999;border-spacing:2">
 <tr><td bgcolor="#05528b" align="center" style="color: #ffffff; font-size: larger;" width="700px">Discovered Patches</td><td align="center" bgcolor="#05528b" style="color: #ffffff; font-size: larger;" width="400px">Patch Details</td></tr>
 <tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBody"  style="height:400px;overflow:auto;"></div> </td></tr>
 <tr><td bgcolor="#05528b" align="center" style="color: #ffffff; font-size: larger;" width="700px">Patch Logs</td></tr>
 <tr><td><div id="patchLogs" style="height:400px;overflow:auto;"></div></td></tr>	
-</table>
+</table>	
+		</td>
+		</tr>
+		</table>
+		
+
+
 
 
 </body>

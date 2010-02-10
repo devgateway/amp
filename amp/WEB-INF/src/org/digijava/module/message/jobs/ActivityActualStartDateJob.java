@@ -36,7 +36,7 @@ public class ActivityActualStartDateJob implements StatefulJob {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String exDt=sdf.format(dateAfterDays);
-        List<AmpActivity> actList=ActivityUtil.getAllActivitiesList();
+        List<AmpActivity> actList=ActivityUtil.getAllActivitiesList(false);
         if(actList!=null){
             for (AmpActivity act : actList) {
                 if (act.getActualStartDate() != null) {

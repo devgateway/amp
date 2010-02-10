@@ -112,14 +112,25 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
                 }
                 children+='</ul>'
             }
-         
+            var childrenOrganizations=oRecord.getData( 'childrenOrganizations' );
+            var compOrgs='';
+            if(childrenOrganizations.length>0){
+                compOrgs='<br/><digi:trn jsFriendly="true">Children Organization(s)</digi:trn>';
+                compOrgs+='<ul>'
+                for(var i=0;i<childrenOrganizations.length;i++){
+                    var childOrg=childrenOrganizations[i];
+                    compOrgs+='<li>'+childOrg.name+'</li>';
+                }
+                compOrgs+='</ul>'
+            }
+         var name=oRecord.getData( 'name' ).replace("\'", "\\'");
             elCell.innerHTML =
-                '<a  onmouseover="showToolTip(' +oRecord.getData( 'ID' )+',\'' +oRecord.getData( 'name' )+'\')" onmouseout="hideToolTip()">' + oRecord.getData( 'name' ) + '</a>'
+                '<a  onmouseover="showToolTip(' +oRecord.getData( 'ID' )+',\'' +name+'\')" onmouseout="hideToolTip()">' + oRecord.getData( 'name' ) + '</a>'
                 +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
                 '<ul>'+
                 '<li><digi:trn>'+oRecord.getData( 'accessType' )+'</digi:trn></li>'+
                 '<li><digi:trn>Children (Workspaces)</digi:trn>:'+children+'</li>'+
-                '<li><digi:trn>Computation</digi:trn>:<digi:trn>'+oRecord.getData( 'computation' )+'</digi:trn></li>'+
+                '<li><digi:trn>Computation</digi:trn>:<digi:trn>'+oRecord.getData( 'computation' )+compOrgs+'</digi:trn></li>'+
                  '</ul>'+
                 '</div>'
         };
@@ -129,7 +140,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
         //this.myDataSource.connXhrMode = "queueRequests";
         this.myDataSource.responseSchema = {
             resultsList: "workspaces",
-            fields: ["ID","name","accessType","computation","childrenWorkspaces"],
+            fields: ["ID","name","accessType","computation","childrenOrganizations","childrenWorkspaces"],
             metaFields: {
             	totalRecords: "totalRecords" // Access to value in the server response
         	}    

@@ -403,14 +403,15 @@ public final class XmlPatcherUtil {
 	 * @throws HibernateException
 	 * @throws SQLException
 	 */
-	public static List<AmpXmlPatch> getAllDiscoveredPatches(int startIndexInt,int recordsInt)
+	public static List<Object[]> getAllDiscoveredPatches(int startIndexInt,int recordsInt,String sortBy,String dir)
 			throws DgException, HibernateException, SQLException {
 		Session session = PersistenceManager.getRequestDBSession();
+		if(sortBy.equals("attempts")) sortBy="size(logs)";
 		Query query = session
-				.createQuery("from " + AmpXmlPatch.class.getName());
+				.createQuery("SELECT patchId,discovered,location,state,size(logs) FROM " + AmpXmlPatch.class.getName()+ " group by patchId order by "+sortBy+" "+dir);
 		query.setFirstResult(startIndexInt);
 		query.setMaxResults(recordsInt);
-		List<AmpXmlPatch> list = query.list();
+		List<Object[]> list = query.list();
 		PersistenceManager.releaseSession(session);
 		return list;
 	}

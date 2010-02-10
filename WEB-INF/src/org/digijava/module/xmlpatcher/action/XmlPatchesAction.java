@@ -108,6 +108,7 @@ public class XmlPatchesAction extends MultiAction {
 		      ex.printStackTrace();
 		    }
 		
+		request.setAttribute("patch", patch);
 		request.setAttribute("patchContents", contents.toString());
 		
 		return mapping.findForward("patchContents");

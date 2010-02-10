@@ -1322,7 +1322,7 @@ public class ExportActivityToPDF extends Action {
 					totalsConvertedCell.setBackgroundColor(new Color(255,255,255));
 					costingInnerTable.addCell(totalsConvertedCell);
 					//totalContributionsConverted
-					Double totalContributionsConverted=new Double(new DecimalFormat("###,###,###.##").format(euActivity.getTotalContributionsConverted()));
+					Double totalContributionsConverted=new Double(new DecimalFormat("### ### ###.##").format(euActivity.getTotalContributionsConverted()));
 					p1=new Paragraph(totalContributionsConverted.toString(),plainFont);
 					p1.setAlignment(Element.ALIGN_RIGHT);
 					PdfPCell totalContConvertedCell=new PdfPCell(p1);

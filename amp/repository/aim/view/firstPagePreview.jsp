@@ -17,7 +17,60 @@
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 <%@include file="addThumbnailPanel.jsp" %>
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
 
+input.file {
+	width: 300px;
+	margin: 0;
+}
+
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 175px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 2px;
+	left: 178px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
 <script type="text/javascript">
 
 function configPanel(panelNum){
@@ -103,18 +156,30 @@ function downloadFile(placeholder) {
 						<tr id="tr_path_thumbnail">
 						<td><strong><digi:trn key="selectThumbnail">Select Thumbnail to upload:</digi:trn><font color="red">*</font></strong></td>
 						<td>
-			                             <div class="fileinputs"> 
-							
-						<input id="thumbnail" name="thumbnail" type="file" class="file buton">
-			                        </div></td>
+							<div class="fileinputs"> 
+								<input id="thumbnail" name="thumbnail" type="file" class="file hidden">
+								<div class="fakefile">
+									<input>
+									<div class="fakefile2">
+									<input type="button" class="buton" value="Browse...">
+									</div>
+								</div>
+							</div>
+						</td>
 						</tr>
 						<tr id="tr_path_optional">
 						<td><strong><digi:trn key="selectOptionalFile">Select Optional File to upload:</digi:trn><font color="red"></font></strong></td>
 						<td>
-			                             <div class="fileinputs"> 
-							
-						<input id="optionalFile" name="optionalFile" type="file" class="file buton">
-			                        </div></td>
+							<div class="fileinputs"> 
+								<input id="optionalFile" name="optionalFile" type="file" class="file hidden">
+								<div class="fakefile">
+									<input>
+									<div class="fakefile2">
+									<input type="button" class="buton" value="Browse...">
+									</div>
+								</div>
+							</div>
+						</td>
 						</tr>
 						<tr>
 							<td> 

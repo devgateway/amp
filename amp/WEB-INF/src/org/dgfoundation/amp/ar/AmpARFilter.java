@@ -1426,10 +1426,11 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void setText(String text) {
-		if (text.trim().length() == 0)
-			this.text = null;
-		this.text = text;
-
+		if (text != null) {
+			if (text.trim().length() == 0)
+				this.text = null;
+			this.text = text;
+		}
 	}
 
 	public void setFromMonth(Integer fromMonth) {

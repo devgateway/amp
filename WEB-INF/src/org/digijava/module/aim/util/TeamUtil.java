@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +28,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -1034,8 +1034,7 @@ public class TeamUtil {
             tx = session.beginTransaction();
 
             for(int i = 0; i < activities.length; i++) {
-                AmpActivity activity = (AmpActivity) session.load(
-                    AmpActivity.class, activities[i]);                
+            	AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activities[i]);                
                 activity.setTeam(null); 
               /*
                 if(teamId!=null){
@@ -1043,12 +1042,12 @@ public class TeamUtil {
                     ampTeam.getActivityList().remove(activity);
                 }
                 */
-                Iterator membersItr = activity.getMember().iterator();
-                while(membersItr.hasNext()) {
-                    member = (AmpTeamMember) membersItr.next();
-                    member.getActivities().remove(activity);
-                    session.update(member);
-                }
+//                Iterator membersItr = activity.getMember().iterator();
+//                while(membersItr.hasNext()) {
+//                    member = (AmpTeamMember) membersItr.next();
+//                    member.getActivities().remove(activity);
+//                    session.update(member);
+//                }
                 activity.setMember(null);
                 session.update(activity);               
                // session.flush();

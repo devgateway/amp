@@ -486,7 +486,7 @@ DIV.red_notice
 				</tr>
 			</table>
 			<br>
-			<table width="98%" cellPadding="1" cellspacing="0" bgcolor="#ffffff">
+			<table width="98%" cellPadding="1" cellspacing="0" bgcolor="#ffffff" id="MTEFTable">
 				<c:if test="${empty aimEditActivityForm.funding.fundingMTEFProjections}">
 					<digi:trn>No MTEF projections found</digi:trn>
 				</c:if>

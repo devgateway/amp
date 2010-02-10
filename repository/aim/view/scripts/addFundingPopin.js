@@ -446,7 +446,9 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 	
 	
 
-	var numProj = document.getElementById("numProjections").value;
+	//var numProj = document.getElementById("numProjections").value;
+	var numProj = (document.getElementById("MTEFTable").getElementsByTagName('tr').length - 1 ) / 2;
+	//alert(numProj);
 	
 	for (var h = 0; h < numProj; h++){
 		var projAmount = "mtefProjection[" + h + "].amount";

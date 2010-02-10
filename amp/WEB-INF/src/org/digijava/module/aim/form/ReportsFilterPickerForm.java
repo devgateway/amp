@@ -464,6 +464,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.toYears = toYears;
 	}
 
+	public int getCalendarsSize() {
+		if ( calendars == null )
+			return 0;
+		return calendars.size();
+	}
+	
 	public Collection getCalendars() {
 		return calendars;
 	}

@@ -234,16 +234,6 @@ saveReportEngine	= null;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
-
-		var myPanel3 = new YAHOO.widget.Panel("new3", {
-			width:"300px",
-		    fixedcenter: true,
-		    constraintoviewport: true,
-		    underlay:"none",
-		    close:true,
-		    visible:false,
-		    modal:true,
-		    draggable:true} );
 		    
 		    var myPanel4 = new YAHOO.widget.Panel("new4", {
 			width:"450px",
@@ -283,12 +273,7 @@ saveReportEngine	= null;
 		myPanel2.render(document.body);
 		myPanel2EmptyBody	= true;
 		
-		var msgP3='\n<digi:trn key="rep:filter:selectRange">Please select range</digi:trn>';
-		myPanel3.setHeader(msgP3);
-		myPanel3.setBody("");
-		myPanel3.render(document.body);
-		
-		var msgP4='\n<digi:trn key="rep:filter:SetFormat">Please select format</digi:trn>';
+		var msgP4='\n<digi:trn >Please select report settings</digi:trn>';
 		myPanel4.setHeader(msgP4);
 		myPanel4.setBody("");
 		myPanel4.render(document.body);
@@ -421,18 +406,6 @@ saveReportEngine	= null;
 	function hideSorter() {
 		myPanel2.hide();
 	}
-	function showRange(){
-		YAHOO.amptab.init();
-		var element = document.getElementById("myRange");
-		element.style.display = "inline";
-		
-		myPanel3.setBody(element);
-		myPanel3.center();
-		myPanel3.show();	
-	}
-	function hideRange() {
-		myPanel3.hide();
-	}
 	
 	function hideFilter() {
 		myPanel1.hide();
@@ -474,6 +447,10 @@ function ResetCustom() {
 	aimReportsFilterPickerForm3.customGroupSize.value = 3;
 	aimReportsFilterPickerForm3.amountinthousands.checked = "false";
 	initFormatPopup();
+	document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
+	document.aimReportsFilterPickerForm3.renderEndYear.value=-1;
+	if (aimReportsFilterPickerForm3.currency)
+		aimReportsFilterPickerForm3.currency.value=aimReportsFilterPickerForm3.defaultCurrency.value;
 }
 
 function initFormatPopup(){

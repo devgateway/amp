@@ -363,7 +363,7 @@
 			<Level name="National Planning Objectives Level 1" column="npl1_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl1,'#No_Data#')
+						IFNULL(npl1_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -374,7 +374,7 @@
 			<Level name="National Planning Objectives Level 2" column="npl2_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl2,'#No_Data#')
+						IFNULL(npl2_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -385,7 +385,7 @@
 			<Level name="National Planning Objectives Level 3" column="npl3_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl3,'#No_Data#')
+						IFNULL(npl3_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -396,7 +396,7 @@
 			<Level name="National Planning Objectives Level 4" column="npl4_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl4,'#No_Data#')
+						IFNULL(npl4_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -407,7 +407,7 @@
 			<Level name="National Planning Objectives Level 5" column="npl5_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl5,'#No_Data#')
+						IFNULL(npl5_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -418,7 +418,7 @@
 			<Level name="National Planning Objectives Level 6" column="npl6_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl6,'#No_Data#')
+						IFNULL(npl6_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -429,7 +429,7 @@
 			<Level name="National Planning Objectives Level 7" column="npl7_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl7,'#No_Data#')
+						IFNULL(npl7_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -440,7 +440,7 @@
 			<Level name="National Planning Objectives Level 8" column="npl8_name">
 				<NameExpression>
 					<SQL dialect="mysql">
-						IFNULL(npl8,'#No_Data#')
+						IFNULL(npl8_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>

@@ -140,7 +140,6 @@ addLoadEvent(addpanel);
 <style>
 <!--
 .toolbar{
-	width: 90px;
 	background: #addadd; 
 	background-color: #addadd; 
 	padding: 3px 3px 3px 3px; 
@@ -148,6 +147,7 @@ addLoadEvent(addpanel);
 	top: 10px; 
 	left: 10px;
 	bottom: 100px;		
+	width: 450px;
 }
 .toolbartable{
 	border-color: #FFFFFF;
@@ -156,6 +156,13 @@ addLoadEvent(addpanel);
 	border-right-width: 2px;"
 	border-left-width: 2px;
 	border-style: solid;
+	width: 100%;
+}
+.toolbartable a img{
+	vertical-align: middle;
+}
+.toolbartable a {
+	text-decoration: none;
 }
 -->
 </style>
@@ -197,24 +204,29 @@ addLoadEvent(addpanel);
 		<td noWrap align=left valign="center">		
 			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
 				<digi:img width="17" height="20" hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
+				<digi:trn>Export to PDF</digi:trn>
 			</a>
+			
 		</td>
 
 		<td noWrap align=left valign="center">
 			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
 				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
+				<digi:trn>Export to Excel</digi:trn>
 			</a>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/csv.gif" border="0" alt="Export to CSV" />
+				<digi:trn>Export to CSV</digi:trn>
 			</digi:link>
 		</td>
 		
 		<td noWrap align=left valign="center">
 			<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
 				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
+				<digi:trn>Print</digi:trn>
 			</digi:link>
 		</td>
 	</tr>
@@ -366,4 +378,4 @@ function openPrinter(){
 			</digi:form>
 		</div>			        
 	</div>		        
-</div>
+</span>

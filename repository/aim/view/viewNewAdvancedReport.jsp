@@ -103,9 +103,6 @@ session.setAttribute("progressValue", counter);
 	<div id="myFilter" style="display: none; height: 85%; overflow: hidden;" >
 			<jsp:include page="/aim/reportsFilterPicker.do" />
 	</div>
-	<div id="myRange" style="display: none">
-	          <jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
-	</div>
 	<div id="customFormat" style="display: none">
 	          <jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 	</div>
@@ -231,13 +228,10 @@ session.setAttribute("progressValue", counter);
                 </a>
                 <%} %>  	
                       	
-           	|<a class="settingsLink" onClick="showRange(); " >
-               		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
-                 </a>
               </logic:notEqual>
                 
                 |<a  class="settingsLink" onClick="showFormat(); " >
-                <digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn>
+                <digi:trn>Report Settings</digi:trn>
                 </a>
            
             </span>
@@ -310,13 +304,10 @@ session.setAttribute("progressValue", counter);
 					</script>
                 </a>
            	  
-            	|<a class="settingsLink" onClick="showRange(); " >
-               		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
-                 </a>
               </logic:notEqual>
                 
                 |<a  class="settingsLink" onClick="showFormat(); " >
-                <digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn>
+                <digi:trn key="rep:pop:ChangeFormat">Report Settings</digi:trn>
                 </a>
            
             </span>

@@ -102,7 +102,7 @@ public class FundingAdded extends Action {
 			}
 		}
 		EditActivityForm.Funding currentFunding = null;
-		if (!isBigger) {
+	//	if (!isBigger) {
 			currentFunding = eaForm.getFunding();
 			//
 			Funding newFund = new Funding();
@@ -238,7 +238,7 @@ public class FundingAdded extends Action {
 			}
 			//
 			this.updateTotals(eaForm, tm);
-		}	
+		//}	
 		//
 		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
 		eaForm.setCurrCode( currCode );

@@ -39,10 +39,10 @@
                                                     <tr>
                                                         <td><digi:trn key="aim:selsector">Select Sector</digi:trn></td>
                                                         <td>
-                                                            <html:select property="sectorName" styleClass="inp-text">
+                                                            <html:select property="sectorId" styleClass="inp-text">
                                                                 <html:option value="-1">-<digi:trn key="aim:selsector">Select sector</digi:trn>-</html:option>
                                                                 <c:if test="${!empty aimIndicatorForm.allSectors}">
-                                                                    <html:optionsCollection name="aimIndicatorForm" property="allSectors" value="name" label="name" />						
+                                                                    <html:optionsCollection name="aimIndicatorForm" property="allSectors" value="ampSectorId" label="name" />
                                                                 </c:if>
                                                             </html:select>	
                                                         </td>

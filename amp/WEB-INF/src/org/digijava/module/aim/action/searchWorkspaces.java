@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,18 +21,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.WorkspaceForm;
-import org.digijava.module.aim.helper.UserBean;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.RepairDbUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.um.action.UserSearch;
-import org.digijava.module.um.form.ViewAllUsersForm;
-import org.digijava.module.um.util.AmpUserUtil;
 
 public class searchWorkspaces extends Action {
 	private static Logger logger = Logger.getLogger(searchWorkspaces.class);
@@ -98,6 +90,16 @@ public class searchWorkspaces extends Action {
             else{
                  jteam.put("computation", "no");
             }
+           JSONArray jsonOrganizationArray = new JSONArray();
+           Set<AmpOrganisation>   organizations=team.getOrganizations();
+             if(organizations!=null){
+               for(AmpOrganisation childOrg: organizations){
+                   JSONObject jChildOrg = new JSONObject();
+                   jChildOrg.put("name", childOrg.getName());
+                   jsonOrganizationArray.add( jChildOrg);
+               }
+            }
+
            JSONArray jsonChildrenTeamArray = new JSONArray();
            Collection<AmpTeam> childrenTeams=TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
             if(childrenTeams!=null){
@@ -107,6 +109,7 @@ public class searchWorkspaces extends Action {
                    jsonChildrenTeamArray.add(jChildTeam);
                }
             }
+            jteam.put("childrenOrganizations", jsonOrganizationArray);
             jteam.put("childrenWorkspaces", jsonChildrenTeamArray);
 			jsonArray.add(jteam);
 

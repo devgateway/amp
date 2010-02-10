@@ -3243,9 +3243,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   	
   /*
    * get the list of all the activities
-   * to display in the activity manager of Admin
+   * includeUnassigned defines whether we we sohuld get unassigned activities too or just the ones that are assigned to a team
    */
-  public static List<AmpActivity> getAllActivitiesList() {
+  public static List<AmpActivity> getAllActivitiesList(boolean includeUnassigned) {
     List col = null;
     Session session = null;
     Query qry = null;
@@ -3253,7 +3253,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       session = PersistenceManager.getRequestDBSession();
       //String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct";
-      String queryString ="select group.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" group";
+      String queryString ="select grp.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" grp";
+      if(!includeUnassigned){
+    	  queryString+=" where grp.ampActivityLastVersion.team is not null";
+      }
       qry = session.createQuery(queryString);
       col = qry.list();
       logger.debug("the size of the ampActivity : " + col.size());

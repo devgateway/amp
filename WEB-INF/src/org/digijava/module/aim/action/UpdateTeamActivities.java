@@ -244,7 +244,7 @@ public class UpdateTeamActivities extends Action {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
 			Collection actDocList = new ArrayList(); 
 			//
-			List<AmpActivity> aal = ActivityUtil.getAllActivitiesList();
+			List<AmpActivity> aal = ActivityUtil.getAllActivitiesList(true);
 			Iterator<AmpActivity> aait = aal.iterator();
 			AmpActivity aa = null;
 			//

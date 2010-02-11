@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -3210,7 +3211,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  
 		  BigDecimal execRate=new BigDecimal(0);
 		  if(finalAmount1.doubleValue()!=0)
-			  execRate=c.getFundingTotalDisbursements().divide(finalAmount1);
+			  execRate=c.getFundingTotalDisbursements().divide(finalAmount1, 10, RoundingMode.UP);
 		  c.setExecutionRate(execRate);
 		  return execRate;
   	}
@@ -3235,7 +3236,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  
 			BigDecimal execRate=new BigDecimal(0);
 		  if(finalAmount1.doubleValue()!=0)
-			  execRate=c.getTotalDisbursements().divide(finalAmount1);
+			  execRate=c.getTotalDisbursements().divide(finalAmount1, 10, RoundingMode.UP);
 		  c.setExecutionRate(execRate);
 		  return execRate;
   	}

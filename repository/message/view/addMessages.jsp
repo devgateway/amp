@@ -47,7 +47,7 @@
 #contactsContainer .yui-ac-content { 
     max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
     _height:16em; /* ie6 */ 
-} 
+}
 -->
 </style>
 
@@ -227,7 +227,7 @@
 	background-color: #ffffff;
 }
 
-#statesautocomplete ul,
+#myAutoComplete ul,
 {
 	list-style: square;
 	padding-right: 0px;
@@ -240,7 +240,7 @@
 	padding-bottom: 2px;
 }
 
-#statesautocomplete div{
+#myAutoComplete div{
 	padding: 0px;
 	margin: 0px; 
 }
@@ -250,15 +250,15 @@
 	margin: 0px; 
 }
 
-#statesautocomplete,
+#myAutoComplete,
 #contactsAutocomplete {
     width:15em; /* set width here */
     padding-bottom:2em;
 }
-#statesautocomplete,contactsAutocomplete {
+#myAutoComplete,contactsAutocomplete {
     z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
 }
-#statesinput,
+#myInput,
 #contactInput {
     _position:absolute; /* abs pos needed for ie quirks */
 }
@@ -501,7 +501,7 @@ div.fakefile2 input{
 																			<div id="myAutoComplete">
 																				<html:text property="relatedActivityName" name="messageForm" styleId="myInput" style="width:320px;font-size:100%"></html:text>
  																				<img alt="" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    
-																		    	<div id="myContainer" style="width:315px;"></div>																		    	
+																		    	<div id="myContainer" style="width:315px;z-index: 100"></div>																		    	
 																		   	</div>
 																		   	<html:hidden property="selectedActId" styleId="myHidden"/>
                                                                             <div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; left:400px;  border: 1px solid silver;">
@@ -511,7 +511,7 @@ div.fakefile2 input{
                                                                                     </TABLE>
                                                                             </div>
 																		</td>
-																	  </field:display>																			
+																	  </field:display>
 																	</tr>
 																	<c:if test="${not empty messageForm.sdmDocument}">
 																		<c:forEach var="attachedDoc" items="${messageForm.sdmDocument.items}">
@@ -545,10 +545,10 @@ div.fakefile2 input{
                                                                     	<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
                                                                         <td align="left"> 
                                                                         	<html:select property="priorityLevel" styleClass="inp-text" style="width:140px">                                         
-                                                                        		<html:option value="0"><digi:trn key="message:priorityLevel:none">none</digi:trn> </html:option>                                       
-                                                                                <html:option value="1"><digi:trn key="message:priorityLevel:low">low</digi:trn> </html:option>
-                                                                                <html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
-                                                                                <html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
+                                                                        		<html:option value="0"><digi:trn>none</digi:trn> </html:option>                                       
+                                                                                <html:option value="1"><digi:trn>low</digi:trn> </html:option>
+                                                                                <html:option value="2"><digi:trn>Medium</digi:trn> </html:option>
+                                                                                <html:option value="3"><digi:trn>Critical</digi:trn> </html:option>																							
                                                                             </html:select>																												                                                																																												
                                                                          </td>
                                                                     </tr>
@@ -567,7 +567,7 @@ div.fakefile2 input{
                                                                     	
                                                                     <tr>
                                                                        		<field:display name="Recievers" feature="Create Message Form">
-																					<td nowrap="nowrap" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
+																					<td nowrap="nowrap" align="right"><digi:trn>Receivers</digi:trn></td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>
@@ -732,25 +732,26 @@ div.fakefile2 input{
 
 	YAHOO.example.ACJSArray = new function() {
 		for(var i=0;i<contactsArray.length;i++){
-		contactsArray[i]=contactsArray[i].replace("&lt;","<");
-		contactsArray[i]=contactsArray[i].replace("&gt;",">");
+			if(contactsArray[i]!= undefined ){
+				contactsArray[i]=contactsArray[i].replace("&lt;","<");
+				contactsArray[i]=contactsArray[i].replace("&gt;",">");	
+			}
 		}
 		// Instantiate JS Array DataSource
 		this.oACDS2 = new YAHOO.widget.DS_JSArray(contactsArray);
 		// Instantiate AutoComplete
 		this.oAutoComp2 = new YAHOO.widget.AutoComplete('contactInput','contactsContainer', this.oACDS2);
-		this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight"; 
+		this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
 		this.oAutoComp2.useShadow = true;
 		//this.oAutoComp2.forceSelection = true;
-		this.oAutoComp2.maxResultsDisplayed = contactsArray.length; 
-		this.oAutoComp2.formatResult = function(oResultItem, sQuery) {	
+		this.oAutoComp2.maxResultsDisplayed = contactsArray.length;
+		this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
 			var sMarkup = oResultItem[0];
 			sMarkup=sMarkup.replace("<","&lt;");
 			sMarkup=sMarkup.replace(">","&gt;");
 			return (sMarkup);
 		};
 	};
-
 	
 	            	
     // attach character counters

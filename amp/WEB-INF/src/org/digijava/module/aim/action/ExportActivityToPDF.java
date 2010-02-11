@@ -564,13 +564,15 @@ public class ExportActivityToPDF extends Action {
 			
 			String outputValue=TranslatorWorker.translateText("Line Ministry Rank", locale, siteId)+ "\t: ";
 			if(activity.getLineMinRank()!=null){
-				outputValue+=activity.getLineMinRank().intValue()+"\n";
+				AmpCategoryValue cv = CategoryManagerUtil.getAmpCategoryValueFromDb( activity.getLineMinRank().longValue() );
+				outputValue+=(cv.getValue()+1)+"\n";
 			}else{
 				outputValue+="\n";
 			}
 			outputValue+=TranslatorWorker.translateText("Ministry of Planning Rank", locale, siteId)+ "\t: ";
 			if(activity.getPlanMinRank()!=null){
-				outputValue+=activity.getPlanMinRank().intValue()+"\n";
+				AmpCategoryValue cv = CategoryManagerUtil.getAmpCategoryValueFromDb( activity.getPlanMinRank().longValue() );
+				outputValue+=(cv.getIndex()+1)+"\n";
 			}else{
 				outputValue+="\n";
 			}

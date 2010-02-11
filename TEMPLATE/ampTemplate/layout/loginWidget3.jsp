@@ -98,10 +98,10 @@
               --%>
 				<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 8px;">
 					<tr>
-					  <td align="center" valign="middle"><input type="text" name="j_username" size="20" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>" disabled="disabled"/></td>
+					  <td align="center" valign="middle"><input type="text" name="j_username" style="width: 150px; height: 20px;" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>" disabled="disabled"/></td>
 					  <td align="center" valign="middle">
-					  	<input type="password" name="j_password" size="20" class="inp-text inp-upassword" style="display: none" disabled="disabled"/>
-					  	<input type="text" name="j_username" size="20" class="inp-text inp-upastext"  value="<digi:trn>Password</digi:trn>" disabled="disabled"/>
+					  	<input type="password" name="j_password" class="inp-text inp-upassword" style="width: 150px; height: 20px; display: none;" disabled="disabled"/>
+					  	<input type="text" name="j_username" class="inp-text inp-upastext" style="width: 150px; height: 20px;" value="<digi:trn>Password</digi:trn>" disabled="disabled"/>
 					  </td>
 					  <td><html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Login</digi:trn></html:submit></td>
 					</tr>

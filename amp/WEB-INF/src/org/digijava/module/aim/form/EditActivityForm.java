@@ -1495,7 +1495,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long componentId;
 		private double compTotalDisb;
 		private Collection<Components<FundingDetail>> selectedComponents;
-		private Long[] selComp;
+		private String[] selComp;
 		private Long[] selCompSectors;
 		private String currencyCode;
 		private String componentRepDate;
@@ -1542,11 +1542,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selectedComponents = selectedComponents;
 		}
 
-		public Long[] getSelComp() {
+		public String[] getSelComp() {
 			return selComp;
 		}
 
-		public void setSelComp(Long[] selComp) {
+		public void setSelComp(String[] selComp) {
 			this.selComp = selComp;
 		}
 

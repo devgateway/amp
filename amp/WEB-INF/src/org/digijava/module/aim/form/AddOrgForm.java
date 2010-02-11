@@ -105,7 +105,7 @@ public class AddOrgForm extends ActionForm {
     private Long[] selectedOrgInfoIds;
     private Long selectedOrgInfoId;
     private String orgInfoAmount;
-    private Long[] selectedContactInfoIds;
+    private String[] selectedContactInfoIds;
     private String otherInformation;
     private String lineMinRegDate;
     private String operFuncApprDate;
@@ -159,15 +159,16 @@ public class AddOrgForm extends ActionForm {
     public void setReceiptLegPersonalityAct(String receiptLegPersonalityAct) {
         this.receiptLegPersonalityAct = receiptLegPersonalityAct;
     }
-    public Long[] getSelectedContactInfoIds() {
-        return selectedContactInfoIds;
-    }
 
-    public void setSelectedContactInfoIds(Long[] selectedContactInfoIds) {
-        this.selectedContactInfoIds = selectedContactInfoIds;
-    }
+    public String[] getSelectedContactInfoIds() {
+		return selectedContactInfoIds;
+	}
 
-    public String getOrgInfoAmount() {
+	public void setSelectedContactInfoIds(String[] selectedContactInfoIds) {
+		this.selectedContactInfoIds = selectedContactInfoIds;
+	}
+
+	public String getOrgInfoAmount() {
         return orgInfoAmount;
     }
 

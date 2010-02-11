@@ -742,14 +742,14 @@ addLoadEvent(delBody);
 			                                                <td>
 			                                                &nbsp;
 			                                                </td>
-			                                                <td>
+			                                                <!-- <td>
 			                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
 			                                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 			                                                  </a>
 			                                                </td>
 			                                                <td>
 			                                                &nbsp;
-			                                                </td>
+			                                                </td> -->
 			                                                <td>
 			                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
 			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -875,14 +875,14 @@ addLoadEvent(delBody);
 			                                                <td>
 			                                                &nbsp;
 			                                                </td>
-			                                                <td>
+			                                                <!-- <td>
 			                                                  <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
 			                                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 			                                                  </a>
 			                                                </td>
 			                                                <td>
 			                                                &nbsp;
-			                                                </td>
+			                                                </td>-->
 			                                                <td>
 			                                                  <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
 			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>

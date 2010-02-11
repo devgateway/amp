@@ -77,19 +77,22 @@ function eventType(){
    		alert("please choose type of recurring event");
 		return false;
 	}
+
+	var periodValid = true;
     
     if(Yearly){
         
-    	var yearlyMonth = document.getElementById("selectedStartYearlyMonth").value;
-
-    	if(!validateDuration(yearlyMonth,month_occurance_duration)){
-            return false;
-   		}else{
+    	//var yearlyMonth = document.getElementById("selectedStartYearlyMonth").value;
         
-    	var rec = document.getElementById("Yearly").value;
-        document.getElementById("type").value = 'Yearly';
-        document.getElementById("hiddenYearMonth").value = yearlyMonth;
-        document.getElementById("hiddenMonth").value = yearlyMonth;
+    	if(document.getElementById("recurrYearly").value=='' || document.getElementById("recurrYearly").value=='0'){
+            alert ("Recurring period should be higher than 0");
+            periodValid = false;
+   		}else{
+   	    var rec = document.getElementById("recurrYearly").value;
+        document.getElementById("type").value = 'year';
+        //document.getElementById("hiddenYearMonth").value = yearlyMonth;
+        document.getElementById("hiddenMonth").value = '';
+        document.getElementById("weekDays").value = '';
 		document.getElementById("hidden").value = rec;
 	 }
    }
@@ -98,28 +101,25 @@ function eventType(){
 	
 	if(Monthly){
 		 var month = document.getElementById("selectedStartMonth").value;
-		if(!validateDuration(month,month_occurance_duration)){
-            return false;
-   		}else{
-            document.getElementById("hidden").value = month;
+		 if(document.getElementById("selectedStartMonth").value=='' || document.getElementById("selectedStartMonth").value=='0'){
+	            alert ("Recurring period should be higher than 0");
+	            periodValid = false;
+	   	}else{
+	   	    document.getElementById("hidden").value = month;
 	        document.getElementById("type").value = 'month';
 	        document.getElementById("hiddenMonth").value = month;
 	        document.getElementById("weekDays").value = '';
-	      
 	       
 		}
 	}
 
 	if(Daily){
         var rec = document.getElementById("recurrDaily").value; 
-
-        if(!validateDuration(rec,daily_occurance_duration)){
-
-                 return false;
-
-        }else{
-
-        document.getElementById("hidden").value = rec;
+        if(document.getElementById("recurrDaily").value=='' || document.getElementById("recurrDaily").value=='0'){
+            alert ("Recurring period should be higher than 0");
+            periodValid = false;
+   		}else{
+   	    document.getElementById("hidden").value = rec;
         document.getElementById("type").value = 'day';
         document.getElementById("hiddenMonth").value = '';
         document.getElementById("weekDays").value = '';
@@ -129,39 +129,85 @@ function eventType(){
 	if(Weekly){
 
 		 var rec = document.getElementById("recurrWeekly").value;
-		   
 
-	        if(!validateDuration(rec,daily_occurance_duration)){
-	            return false;
-	            
-	        }else{     
-		        
-		var result = "";
+		 if(document.getElementById("recurrWeekly").value=='' || document.getElementById("recurrWeekly").value=='0'){
+	            alert ("Recurring period should be higher than 0");
+	            periodValid = false;
+	   		}else{
+				var result = "";
+			    document.getElementById("type").value = 'week';
+		        document.getElementById("hidden").value = rec;
+		        document.getElementById("hiddenMonth").value = '';
 		
-	
-	    document.getElementById("type").value = 'week';
-        document.getElementById("hidden").value = rec;
-        document.getElementById("hiddenMonth").value = '';
-
-   
-        for(i=0; i<document.getElementsByName("occurrWeekDays").length; i++){
-
-				if(document.getElementsByName("occurrWeekDays")[i].checked == true){
-						
-					var day = document.getElementsByName("occurrWeekDays")[i].value;
-
-							result += day;
-							}
-
+		        for(i=0; i<document.getElementsByName("occurrWeekDays").length; i++){
+		
+					if(document.getElementsByName("occurrWeekDays")[i].checked == true){
+						var day = document.getElementsByName("occurrWeekDays")[i].value;
+						result += day;
 					}
-
+				}
 				document.getElementById("weekDays").value = result;
 	    	}
 	}
+	if (periodValid){
+		submit();
+	}
+}
+
+
+function disableInputs(){
+
+	var Daily = document.getElementById("Daily").checked;
+	var Weekly = document.getElementById("Weekly").checked;
+	var Monthly = document.getElementById("Monthly").checked;
+	var Yearly = document.getElementById("Yearly").checked;
+
 	
-   		submit();
+	if (Daily){
+		for(var i=1; i<8; i++){
+			var checkId = "checkDay" + i;
+			document.getElementById(checkId).disabled = "disabled";
+		}
+		document.getElementById("recurrDaily").disabled = "";
+		document.getElementById("recurrWeekly").disabled = "disabled";
+		document.getElementById("recurrYearly").disabled = "disabled";
+		document.getElementById("selectedStartMonth").disabled = "disabled";
 	}
 
+	if (Weekly){
+		for(var i=1; i<8; i++){
+			var checkId = "checkDay" + i;
+			document.getElementById(checkId).disabled = "";
+		}
+		document.getElementById("recurrWeekly").disabled = "";
+		document.getElementById("recurrDaily").disabled = "disabled";
+		document.getElementById("recurrYearly").disabled = "disabled";
+		document.getElementById("selectedStartMonth").disabled = "disabled";
+	}
+
+	if (Monthly){
+		for(var i=1; i<8; i++){
+			var checkId = "checkDay" + i;
+			document.getElementById(checkId).disabled = "disabled";
+		}
+		document.getElementById("recurrYearly").disabled = "disabled";
+		document.getElementById("recurrWeekly").disabled = "disabled";
+		document.getElementById("recurrDaily").disabled = "disabled";
+		document.getElementById("selectedStartMonth").disabled = "";
+	}
+
+	if (Yearly){
+		for(var i=1; i<8; i++){
+			var checkId = "checkDay" + i;
+			document.getElementById(checkId).disabled = "disabled";
+		}
+		document.getElementById("recurrYearly").disabled = "";
+		document.getElementById("recurrWeekly").disabled = "disabled";
+		document.getElementById("recurrDaily").disabled = "disabled";
+		document.getElementById("selectedStartMonth").disabled = "disabled";
+	}
+	
+}
 </script>
 
 <digi:form action="/showCalendarEvent.do">
@@ -181,41 +227,36 @@ function eventType(){
 		<td>
 		 <table border="0" cellpadding="10" width="100%" style="border-style:solid;border-color:#1C5180;border-width: 1px" >
 		 	<tr>
-		 		<td rowspan="2" >
+		 		<td>
 			 		<table  border="0" width="100%">
 					 		<tr bgcolor="white">
-					 			<td colspan="3">
-					 				<input type="radio" name="typeofOccurrence" value="Daily" id="Daily"/><digi:trn>Dailly</digi:trn>
+					 			<td>
+					 				<input type="radio" name="typeofOccurrence" value="day" id="Daily" onclick="disableInputs();"/><digi:trn>Daily</digi:trn>
 					 			</td>
 					 		</tr>
 					 		<tr>
 					 			<td>
-					 			 <table bgcolor="#F5F5F5" align="center" width="320px" cellpadding="7"  style="border-style:solid;border-color:#1C5180;border-width: 1px">
+					 			 <table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7"  style="border-style:solid;border-color:#1C5180;border-width: 1px">
 					 			 	<tr>
-							 		 	<td width="12px"><digi:trn>Every</digi:trn></td>
-							 	 		<td width="12px">
-							 	 			<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrDaily" /> 
+							 		 	<td><digi:trn>Every</digi:trn></td>
+							 	 		<td>
+											<html:hidden  property="recurrPeriod" name="calendarEventForm"  styleId="testRecPer"/>
+							 	 			<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrDaily"/>
 							 	 		</td>
-							 	 		<td align=""><digi:trn>Day(s)</digi:trn></td>
+							 	 		<td align="left"><digi:trn>Day(s)</digi:trn></td>
 					 			 	</tr>
 					 			 </table>
 					 			</td>
 					 		</tr>
 					 		<tr><td height="20px">&nbsp;</td></tr>
 					 		<tr>
-							 	<td bgcolor="white">
-							 			<table border="0" cellPadding=1 cellSpacing=1>
-									 		<tr bgcolor="white">
-										 		<td colspan="5">
-										 			<input type="radio"  name="typeofOccurrence" value="Monthly" id="Monthly"/><digi:trn>Monthly</digi:trn>
-										 		</td>
-									 		</tr>
-							 		 </table>
+							 	<td>
+									<input type="radio"  name="typeofOccurrence" value="month" id="Monthly" onclick="disableInputs();"/><digi:trn>Monthly</digi:trn>
 								 </td>
 							   </tr>
 					 		<tr>
 				 			<td>
-				 				<table bgcolor="#F5F5F5" cellpadding="3" align="center" width="320px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
+				 				<table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7" style="border-style:solid;border-color:#1C5180;border-width: 1px">
 				 				<!-- 	
 				 					<tr>
 							 	 		<td width="95px"><digi:trn>Recover Every Day</digi:trn></td>
@@ -223,12 +264,13 @@ function eventType(){
 							 	 	</tr>
 							 	-->
 							 	 	<tr>	
-							 	 		<td width="95px"><digi:trn>Off Every</digi:trn></td>
-							 	 		<td width="12px">
-							 	 		<html:select property="selectedStartMonth" name="calendarEventForm" styleId="selectedStartMonth">
-							 	 		 			<c:forEach var="hour" begin="1" end="12">
-			                                                     	<html:option value="${hour}">${hour}</html:option>
-			                                        </c:forEach>
+							 	 		<td ><digi:trn>Every</digi:trn></td>
+							 	 		<td>
+							 	 		<html:select property="selectedStartMonth" name="calendarEventForm" styleId="selectedStartMonth" >
+							 	 		 			<c:forEach var="month" begin="1" end="12">
+                                                		<c:if test="${month < 10}"><c:set var="month" value="0${month}"/></c:if>
+                                                         	<html:option value="${month}">${month}</html:option>
+                               				 		</c:forEach>
 							 	 		
 							 	 		</html:select>
 								 	 		
@@ -245,111 +287,60 @@ function eventType(){
 			 		<td>
 				 		<table  bgcolor="#F5F5F5">
 						 		<tr bgcolor="white">
-						 			<td><input type="radio" name="typeofOccurrence" value="Weekly" id="Weekly"/><digi:trn>Weekly</digi:trn></td>
-						 			<td></td>
-						 			
-						 			<td></td>
+						 			<td><input type="radio" name="typeofOccurrence" value="week" id="Weekly" onclick="disableInputs();"/><digi:trn>Weekly</digi:trn></td>
 						 		</tr>
 								<tr>
 									<td>
 									<html:hidden  property="occurrWeekDays" name="calendarEventForm"  styleId="daysOfWeek"/>
-								
-								
-									  <table cellpadding="2" width="240px" style="border-style:solid;border-color:#1C5180;border-width: 1px">		
+									  <table bgcolor="#F5F5F5" align="center" height="100px" width="300px" cellpadding="5" style="border-style:solid;border-color:#1C5180;border-width: 1px">		
 									 		<tr>
-									 	 		<td><digi:trn>Recurr every</digi:trn></td>
-									 	 		<td><input type="text"  size="7px" name="recurrPeriod" id="recurrWeekly" value=""/></td>
+									 	 		<td><digi:trn>Every</digi:trn></td>
+									 	 		<td>
+													<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrWeekly"/> 
+													<!--<input type="text"  size="7px" name="recurrPeriod" id="recurrWeekly"/>-->
+												</td>
 									 	 		<td><digi:trn>Week (s)</digi:trn></td>
 									 		</tr>
 									 		<tr> 
-									 			<td><input type="checkbox" name="occurrWeekDays" value="7"/><digi:trn>Sun</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="3"/><digi:trn>Wed</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="6"/><digi:trn>Saturday</digi:trn></td>
+									 			<td><input id="checkDay7" type="checkbox" name="occurrWeekDays" value="7" /><digi:trn>Sun</digi:trn></td>
+									 			<td><input id="checkDay3" type="checkbox" name="occurrWeekDays" value="3" /><digi:trn>Wed</digi:trn></td>
+									 			<td><input id="checkDay6" type="checkbox" name="occurrWeekDays" value="6" /><digi:trn>Saturday</digi:trn></td>
 									 		</tr>
 									 		<tr>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="1"/><digi:trn>Monday</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="4"/><digi:trn>Thur</digi:trn></td>
+									 			<td><input id="checkDay1" type="checkbox" name="occurrWeekDays" value="1" /><digi:trn>Monday</digi:trn></td>
+									 			<td><input id="checkDay4" type="checkbox" name="occurrWeekDays" value="4" /><digi:trn>Thur</digi:trn></td>
 									 			<td>
 									 		</tr>
 									 		<tr>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="2"/><digi:trn>Tuesday</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="5"/><digi:trn>Friday</digi:trn></td>
+									 			<td><input id="checkDay2" type="checkbox" name="occurrWeekDays" value="2" /><digi:trn>Tuesday</digi:trn></td>
+									 			<td><input id="checkDay5" type="checkbox" name="occurrWeekDays" value="5" /><digi:trn>Friday</digi:trn></td>
 									 		</tr>
 								 		</table>
 						 			</td>
 						 		</tr>
-				 		</table>
-			 		 </td>
-		 		   <td>
-		 		 </td>
-		 	</tr>
-		 		<c:if test="${calendarEventForm.typeofOccurrence == 'Weekly'}">
-					<script language="JavaScript" type="text/javascript">
-					
-						document.getElementById("recurrDaily").value = "";
-						
-						
-						var allselectedDays = document.getElementById("daysOfWeek").value;
-						
-						array = allselectedDays.split(",");
-											for(i=0; i<document.getElementsByName("weekDays").length; i++){
-
-							var allDays = document.getElementsByName("weekDays")[i].value;
-								
-								   for(j=0; j<array.length; j++){
-
-									   var selectedWeekDays = array[j];
-									
-										if(allDays == selectedWeekDays){
-												document.getElementsByName("weekDays")[selectedWeekDays].checked = true;
-											
-										}
-									}
-								}											
-					
-					</script>
-				</c:if>
-				${calendarEventForm.typeofOccurrence}
-				<c:if test="${calendarEventForm.typeofOccurrence == 'Daily' 
-				|| calendarEventForm.typeofOccurrence == 'month'
-				|| calendarEventForm.typeofOccurrence == 'Yearly'}">
-					<script language="JavaScript" type="text/javascript">
-						document.getElementById("recurrWeekly").value = "";
-						document.getElementById("weekDays").value = "";
-						document.getElementById("recurrDaily").value = "";
-					</script>
-				</c:if>
-		 	    <td>
-			 	    <table border="0" bgcolor="#F5F5F5" >
-					 		<tr bgcolor="white">
-					 			<td colspan="4">
-					 				<input type="radio" name="typeofOccurrence" value="Yearly" id="Yearly"/><digi:trn>Yearly</digi:trn>
-					 			</td>
-					 		</tr>
-					 		<tr>
-					 			<td>
-					 				<table cellpadding="6" width="240px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
-					 				 	<tr>
+				 		 		<tr bgcolor="white">
+					 				<td colspan="4">
+					 					<input type="radio" name="typeofOccurrence" value="year" id="Yearly" onclick="disableInputs();"/><digi:trn>Yearly</digi:trn>
+					 				</td>
+					 			</tr>
+					 			<tr>
+					 			  <td>
+					 				<table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7" style="border-style:solid;border-color:#1C5180;border-width: 1px">		
+									  	<tr>
 					 						<td><digi:trn>Every</digi:trn></td>
-							 	 			<td>
-								 	 		
-													<html:select property="selectedStartYear" name="calendarEventForm"  styleId="selectedStartYearlyMonth">
-
-			                                                     	  <c:forEach var="month" begin="1" end="12">
-                                                                            <c:if test="${month < 10}"><c:set var="hour" value="0${month}"/></c:if>
-                                                                     				<html:option value="${month}">${month}</html:option>
-			                                        				 </c:forEach>
-
+							 	 			<!--<td>
+								 	 			<html:select property="selectedStartYear" name="calendarEventForm"  styleId="selectedStartYearlyMonth">
+                                           	 		<c:forEach var="month" begin="1" end="12">
+                                                		<c:if test="${month < 10}"><c:set var="month" value="0${month}"/></c:if>
+                                                         	<html:option value="${month}">${month}</html:option>
+                               				 		</c:forEach>
 												</html:select>
-												
-												
-												
-							 	 
-								 	 		
 						 	 		    	</td>
-							 	 			 
-							 	 			<td><input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/></td>
-							 	 			<td><digi:trn>Day(s)</digi:trn></td>
+							 	 			--><td>
+												<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrYearly"/> 
+												<!--<input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/>-->
+											</td>
+							 	 			<td><digi:trn>Year(s)</digi:trn></td>
 							 	 			 
 							 	 	    </tr>
 							  	   </table>
@@ -357,7 +348,54 @@ function eventType(){
 				 		  </tr>
 			 		</table>
 			 	</td>
-		 
+				</tr>
+		 		<c:if test="${calendarEventForm.typeofOccurrence == 'week'}">
+					<script language="JavaScript" type="text/javascript">
+						document.getElementById("Weekly").checked = true;
+						document.getElementById("recurrDaily").value = "";
+						document.getElementById("recurrYearly").value = "";
+						disableInputs();
+						
+						var allselectedDays = document.getElementById("daysOfWeek").value;
+						var days = allselectedDays.split("",allselectedDays.length);
+						
+						for(i=0; i<days.length; i++){
+							var checkId = "checkDay" + days[i];
+							document.getElementById(checkId).checked = true;
+						}					
+					</script>
+				</c:if>
+				<c:if test="${calendarEventForm.typeofOccurrence == 'day'}">
+					<script language="JavaScript" type="text/javascript">
+						document.getElementById("Daily").checked = true;
+						document.getElementById("recurrWeekly").value = "";
+						document.getElementById("weekDays").value = "";
+						document.getElementById("recurrYearly").value = "";
+						disableInputs();
+						
+					</script>
+				</c:if>
+		 	    <c:if test="${calendarEventForm.typeofOccurrence == 'year'}">
+					<script language="JavaScript" type="text/javascript">
+						document.getElementById("Yearly").checked = true;
+						document.getElementById("recurrWeekly").value = "";
+						document.getElementById("weekDays").value = "";
+						document.getElementById("recurrDaily").value = "";
+						disableInputs();
+						
+					</script>
+				</c:if>
+		 	   <c:if test="${calendarEventForm.typeofOccurrence == 'month'}">
+					<script language="JavaScript" type="text/javascript">
+						document.getElementById("Monthly").checked = true;
+						document.getElementById("recurrWeekly").value = "";
+						document.getElementById("weekDays").value = "";
+						document.getElementById("recurrDaily").value = "";
+						document.getElementById("recurrYearly").value = "";
+						disableInputs();
+						
+					</script>
+				</c:if>
 		 </table>
 		</td>
 	</tr>
@@ -387,7 +425,7 @@ function eventType(){
                                    
 							</td>
 				 	 		-->
-				 	 		<td><digi:trn>End TIme</digi:trn></td>
+				 	 		<td><digi:trn>End Time</digi:trn></td>
 				 	 		<td>
 				 	 			<select id="selectedEndHour">
                                                     <c:forEach var="hour" begin="0" end="23">
@@ -400,7 +438,7 @@ function eventType(){
                                 <select id="selectedEndMinute">
                                       <c:forEach var="minute" begin="0" end="59">
                                         <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-                                        <option value="${minute}" class="inp-text">${minute}</option>
+                                        <option value="${minute}" >${minute}</option>
                                       </c:forEach>
 			                      </select>
                       	    </td>
@@ -445,12 +483,12 @@ function eventType(){
                                              <td>
             	                                 &nbsp;
                                              </td>
-                                             <td>
+                                             <!--<td>
                                                <a id="clear2" href="javascript:clearDate(document.getElementById('recurrSelectedEndDate'),'clear2')">
                                                  <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
                                                </a>
                                              </td>
-                                             <td>
+                                             --><td>
                 	                             &nbsp;
                                              </td>
                                              <td>
@@ -471,7 +509,7 @@ function eventType(){
 	</tr>
 	<tr>
 		<td align="center">
-			<input type="button" onclick="eventType();" value="<digi:trn>Save And CLose</digi:trn>"/>
+			<input type="button" onclick="eventType();" value="<digi:trn>Save And Close</digi:trn>"/>
 		</td>
 	</tr>
 </table>

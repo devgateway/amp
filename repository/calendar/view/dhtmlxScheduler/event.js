@@ -319,11 +319,12 @@ scheduler._pre_render_events_table=function(evs,hold){ // max - max height of we
 			copy._length=7-ev._sday;
 			copy._eday=7; copy._sday=ev._sday;
 			copy._sweek=ev._sweek; copy._sorder=ev._sorder;
-			copy.end_date=this.date.add(sd,copy._length,"day");
+			//copy.end_date=this.date.add(sd,copy._length,"day");
+			copy.end_date=ev.end_date;
 			
 			out.push(copy);
 			stack.push(copy);
-			start_date=copy.end_date;
+			start_date=this.date.add(sd,copy._length,"day");
 			i--; continue;  //repeat same step
 		}
 	};

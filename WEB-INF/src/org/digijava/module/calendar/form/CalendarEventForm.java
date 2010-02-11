@@ -1,6 +1,7 @@
 package org.digijava.module.calendar.form;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -409,7 +410,11 @@ public class CalendarEventForm
         selectedEndTime="00:00";
         endDate=null;
         endDateBreakDown=null;
-
+        Calendar recEndDate = Calendar.getInstance();
+        recEndDate.add(Calendar.DATE,1);
+        recurrEndDate=sdf.format(recEndDate.getTime());
+        recurrSelectedEndTime="00:00";
+        
 //        eventOrganisations=null;
 //        selectedEventOrganisations=null;
 //        selectedEventOrganisationsCol=null;

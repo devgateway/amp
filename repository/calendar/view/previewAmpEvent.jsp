@@ -231,25 +231,32 @@ function getWeekdays(){
 					                <digi:trn>Recurring Event</digi:trn>:
 					              </td>
 					              <td style="font-family: Tahoma;font-size: 12px;">
-					         each
+					         		<html:hidden name="calendarEventForm" property="typeofOccurrence" value="${calendarEventForm.typeofOccurrence}"/>
+									<html:hidden name="calendarEventForm" property="recurrPeriod" value="${calendarEventForm.recurrPeriod}"/>
+									<html:hidden name="calendarEventForm" property="occurrWeekDays" value="${calendarEventForm.occurrWeekDays}"/>
+				                	<html:hidden name="calendarEventForm" property="selectedStartMonth" value="${calendarEventForm.selectedStartMonth}"/>
+									<html:hidden name="calendarEventForm" property="selectedStartYear" value="${calendarEventForm.selectedStartYear}"/>
+									<html:hidden name="calendarEventForm" property="recurrStartDate" value="${calendarEventForm.recurrStartDate}"/>
+				                each 
 					               ${calendarEventForm.recurrPeriod} 
 					               ${calendarEventForm.typeofOccurrence}
 					               <input type="hidden" value="${calendarEventForm.occurrWeekDays}" id="weekDays"/>
 					               <script language="javascript">
 					               document.write(getWeekdays());
 						             </script>
-					                 <c:if test="${calendarEventForm.selectedStartMonth != 0}"> ${calendarEventForm.selectedStartMonth}</c:if>
+					                 <!--<c:if test="${calendarEventForm.selectedStartMonth != 0}"> ${calendarEventForm.selectedStartMonth}</c:if>
 					                  <c:if test="${calendarEventForm.selectedStartYear != 0}"> ${calendarEventForm.selectedStartYear}</c:if>
 					                 <c:if test="${calendarEventForm.recurrStartDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
 					                  
-					              </td>
+					              --></td>
 					            </tr>
 					            <tr>
 					            <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 					                <digi:trn>Recurring Event End Date</digi:trn>:
 					              </td>
 					               <td style="font-family: Tahoma;font-size: 12px;">
-					               		 <c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrEndDate}</c:if>
+				                		<html:hidden name="calendarEventForm" property="recurrEndDate" value="${calendarEventForm.recurrEndDate}"/>
+				                		<c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrEndDate}</c:if>
 					               </td>
 					            </tr>
 				            </c:if>

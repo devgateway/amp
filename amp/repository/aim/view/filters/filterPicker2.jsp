@@ -21,6 +21,11 @@
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2.css'/>">
+<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2_IE_.css'/>">
+<![endif]-->
+
 <digi:instance property="aimReportsFilterPickerForm" />
 <digi:form action="/reportsFilterPicker.do">
 
@@ -39,7 +44,7 @@
 	</ul>
 	<div class="yui-content" style="background-color: #f6faff; height: 88%;">
 		<div id="donorsTab" style="height: 91%;">
-			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
+			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="donorsTab_search" />
@@ -47,7 +52,7 @@
 			</div>
 		</div>
 		<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
-			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
+			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
@@ -55,7 +60,7 @@
 			</div>
 		</div>
 		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
-			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
+			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="sectorsTab_search" />
@@ -63,7 +68,7 @@
 			</div>
 		</div>
 		<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
-			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
+			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="programsTab_search" />
@@ -71,7 +76,7 @@
 			</div>
 		</div>
 		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
-			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
+			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
@@ -94,11 +99,11 @@
 			</div>
 		</div>
 		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
-			<div style="margin: 10px; padding: 8px; border: 1px solid #e5e8e6; height: 100%;">
+			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="otherCriteriaPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="otherCriteriaTab_search" />
-				<div style="padding: 0px; height: 70%;">
+				<div class="otherCriteriaBigTable">
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
 				<div style="width: 30%; height: 30%; padding: 10px; float: left; ">
@@ -144,7 +149,7 @@
 				</div>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
 					<div style="margin-left: 70%;width: 25%; height: 30%; padding: 10px; ">
-						<b><digi:trn>Computed Columns</digi:trn> </b>
+						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
 							<br />
 							<br />
 							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">

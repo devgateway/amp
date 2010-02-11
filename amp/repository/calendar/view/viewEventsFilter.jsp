@@ -48,7 +48,14 @@ if(view!= null)
 }
 
 function changeDonorsState(){	
-	var donors= $("input[@id^='donors_']");
+	var donors = new Array();
+	var inputs = document.getElementsByTagName("input");
+	var j = 0;
+	for (var i = 0; i < inputs.length; i++) {
+		if(inputs[i].id.indexOf("donors_") == 0){
+			donors[j++]=inputs[i];
+		}
+	}
 	var resetDonors=true;
 	for(var i=0;i<donors.length;i++){
 		if(donors[i].checked){
@@ -64,7 +71,14 @@ function changeDonorsState(){
 }
 
 function changeEventTypesState(){
-	var evntTypes= $("input[@id^='evType_']");
+	var evntTypes = new Array();
+	var inputs = document.getElementsByTagName("input");
+	var j = 0;
+	for (var i = 0; i < inputs.length; i++) {
+		if(inputs[i].id.indexOf("evType_") == 0){
+			evntTypes[j++]=inputs[i];
+		}
+	}
 	var resetEventTypes=true;
 	for(var i=0;i<evntTypes.length;i++){
 		if(evntTypes[i].checked){

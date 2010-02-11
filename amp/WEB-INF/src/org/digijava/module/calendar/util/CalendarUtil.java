@@ -226,7 +226,7 @@ public class CalendarUtil {
 											 Iterator itrrecc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().iterator();
 											 while(itrrecc.hasNext()){
 												 RecurrCalEvent recurrCalEvent = (RecurrCalEvent) itrrecc.next(); 
-												 if(recurrCalEvent.getTypeofOccurrence().equals("day")){
+												 if(recurrCalEvent.getTypeofOccurrence().equals("day")||recurrCalEvent.getTypeofOccurrence().equals("year")){
 												 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod() +"</rec_type>";
 												 }else if(recurrCalEvent.getTypeofOccurrence().equals("month")){
 													 

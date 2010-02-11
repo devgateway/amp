@@ -229,14 +229,13 @@ public class ShowCalendarView extends Action {
             
         }else{
         	 if (filter.getSelectedDonors().length ==0){
-        		 int index = 0;
-        		 String[] selectedDonors = new String[filter.getDonors().size() + 1];
-        		 selectedDonors[index++] = "None";
-        		 it = filter.getDonors().iterator();
+        		 String[] selectedDonors = new String[1];
+        		 selectedDonors[0] = "None";
+        		 /*it = filter.getDonors().iterator();
                  while (it.hasNext()) {
                      LabelValueBean lvb = (LabelValueBean) it.next();
                      selectedDonors[index++] = lvb.getValue();
-                 }
+                 }*/
                  filter.setSelectedDonors(selectedDonors);
              }
         }

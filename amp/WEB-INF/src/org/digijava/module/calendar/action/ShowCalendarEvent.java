@@ -575,6 +575,7 @@ public class ShowCalendarEvent extends Action {
 
                 DateBreakDown startDateBreakDown = null;
                 DateBreakDown endDateBreakDown = null;
+                DateBreakDown endRecurrDateBreakDown = null;
                 
              
                 	
@@ -582,16 +583,19 @@ public class ShowCalendarEvent extends Action {
                 	while(iterRecevent.hasNext()){
                 		RecurrCalEvent rec = (RecurrCalEvent) iterRecevent.next();
                 		if(rec.getRecurrEndDate() != null){
-		                		 ceform.setRecurrEndDate(rec.getRecurrEndDate().toString());
+                			GregorianCalendar endRecurrDate = new GregorianCalendar();
+                			endRecurrDate.setTime(rec.getRecurrEndDate());
+                			endRecurrDateBreakDown = new DateBreakDown(endRecurrDate, ceform.getSelectedCalendarTypeId().intValue(),request);
+                			ceform.setRecurrEndDate(endRecurrDateBreakDown.formatDateString());
                 		}
                 		ceform.setRecurrPeriod(rec.getRecurrPeriod());
                 		ceform.setTypeofOccurrence(rec.getTypeofOccurrence());
                 		ceform.setOccurrWeekDays(rec.getOccurrWeekDays());
                 		
-                		if(rec.getTypeofOccurrence().equals( "Yearly")){
+                		if(rec.getTypeofOccurrence().equals( "year")){
                 		ceform.setSelectedStartMonth("");
                 		ceform.setSelectedStartYear(rec.getSelectedStartMonth());
-                		}else if(rec.getTypeofOccurrence().equals( "Monthly")){
+                		}else if(rec.getTypeofOccurrence().equals( "month")){
                 			ceform.setSelectedStartYear("");
                 			ceform.setSelectedStartMonth(rec.getSelectedStartMonth());
                 		}else{

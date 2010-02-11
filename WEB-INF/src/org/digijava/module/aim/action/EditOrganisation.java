@@ -748,7 +748,7 @@ public class EditOrganisation extends DispatchAction {
         }
         AddOrgForm editForm = (AddOrgForm) form;
         String selContactId = editForm.getSelContactId();        
-        Long[] selectedContactInfoIds = editForm.getSelectedContactInfoIds(); //passed contact temp ids
+        String[] selectedContactInfoIds = editForm.getSelectedContactInfoIds(); //passed contact temp ids
         List<AmpOrganisationContact> odlOrgContacts=editForm.getOrgContacts();
         List<AmpOrganisationContact> orgContsForRemoval=new ArrayList<AmpOrganisationContact>();
         Iterator<AmpOrganisationContact> orgContIter=odlOrgContacts.iterator();
@@ -756,15 +756,16 @@ public class EditOrganisation extends DispatchAction {
         	AmpOrganisationContact orgCont=orgContIter.next();
         	AmpContact contact=orgCont.getContact();
         	if (selContactId != null && selContactId.length()>0) {
-                if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().toString().equals(selContactId.toString()))) {
+                if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(selContactId))) {
                 	orgContsForRemoval.add(orgCont); 
                     break;
                 }
             } else {
                 if (selectedContactInfoIds != null) {
-                    for (Long contactId : selectedContactInfoIds) {
-                        if ((contact.getId() != null && contact.getId().equals(contactId))|| (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId.toString()))) {
+                    for (String contactId : selectedContactInfoIds) {
+                        if ((contact.getId() != null && !contactId.startsWith("_") && contact.getId().equals(new Long(contactId))) || (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId))) {
                         	orgContsForRemoval.add(orgCont);
+                        	break;
                         }
                     }
 

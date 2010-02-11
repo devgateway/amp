@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
 
@@ -874,7 +875,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 ${contract.totalAmount}
+			                                                 <aim:formatNumber value="${contract.totalAmount}" />
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -885,7 +886,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:contractTotalValue">Contract Total Value</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 ${contract.contractTotalValue}
+			                                                <aim:formatNumber value="${contract.contractTotalValue}" /> 
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -903,7 +904,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                  ${contract.totalECContribIBAmount}
+			                                                 <aim:formatNumber value="${contract.totalECContribIBAmount}" />
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -914,7 +915,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 ${contract.totalECContribINVAmount}
+			                                                 <aim:formatNumber value="${contract.totalECContribINVAmount}" />
 			                                                ${contract.totalAmountCurrency}
 			                                             </td>
 			                                         </tr>   
@@ -932,7 +933,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 ${contract.totalNationalContribCentralAmount}
+			                                                 <aim:formatNumber value="${contract.totalNationalContribCentralAmount}" />
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -943,7 +944,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 ${contract.totalNationalContribRegionalAmount} 
+			                                                 <aim:formatNumber value="${contract.totalNationalContribRegionalAmount}" /> 
 				                                               ${contract.totalAmountCurrency}
 			                                              </td>
 			                                          </tr>
@@ -954,7 +955,7 @@
 			                                                  <b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			                                                  ${contract.totalNationalContribIFIAmount}
+			                                                  <aim:formatNumber value="${contract.totalNationalContribIFIAmount}" />
 			                                                 ${contract.totalAmountCurrency}
 			                                              </td>
 			                                          </tr>
@@ -970,7 +971,7 @@
 			                                                  <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			                                                  ${contract.totalPrivateContribAmount}
+			                                                  <aim:formatNumber value="${contract.totalPrivateContribAmount}" />
 			                                                  ${contract.totalAmountCurrency}
 			                                              </td>
 			                                          </tr>
@@ -982,9 +983,9 @@
 			                                                  <b><digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              									${contract.totalDisbursements} &nbsp;
+			              									<aim:formatNumber value="${contract.totalDisbursements}" /> &nbsp;
 			              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-			              										&nbsp; ${contract.totalAmountCurrency}
+			              										&nbsp; ${contract.totalAmountCurrency}"
 			              									</logic:empty>
 			              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
 			              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
@@ -1008,7 +1009,7 @@
 			                                                  <b><digi:trn key="aim:IPA:popup:totalFundingDisbursements">Total Funding Disbursements</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              									${contract.fundingTotalDisbursements} &nbsp;
+			              									<aim:formatNumber value="${contract.fundingTotalDisbursements}" /> &nbsp;
 			              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
 			              										&nbsp; ${contract.totalAmountCurrency}
 			              									</logic:empty>
@@ -1058,7 +1059,7 @@
 			                                                                       </c:if>
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
-			                                                                       ${disbursement.amount}
+			                                                                       <aim:formatNumber value="${disbursement.amount}" />
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                      ${disbursement.currency.currencyName} 
@@ -1105,7 +1106,7 @@
 			                                                                       </c:if>
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
-			                                                                       ${fundingDetail.transactionAmount}
+			                                                                      <aim:formatNumber value="${fundingDetail.transactionAmount}" />
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                      ${fundingDetail.currencyCode} 

@@ -73,7 +73,7 @@
 
 
 
-					<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;" border="0">
+					<table width="100%" cellpadding="0" cellspacing="0" cellpadding="0" cellspacing="0" style="width:100%;height:100%" border="0">
 						<thead>
 
 						<tr>
@@ -145,9 +145,9 @@
                                               
 						<logic:iterate name="sectorDonorWidgetReportForm" property="actSectorDonorFundingInfo" id="activitySectorDonorFunding">
 							<tr>
-								<td width="30%"  height="40px">
+								<td width="30%">
                                     <div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal"  style="overflow: auto">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 											<a title="<bean:write name="activitySectorDonorFunding" property="activity.name"/>" href="javascript:showSelActivity(<bean:write name="activitySectorDonorFunding" property="activity.ampActivityId"/>);">
 												<bean:write name="activitySectorDonorFunding" property="activity.name"/>
 											</a>
@@ -155,9 +155,9 @@
 									</div>
 								</td>
 							
-								<td width="20%" align="left" height="40px">
+								<td width="20%" align="left">
 									<div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" style="overflow: auto">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" >
 											<logic:present name="activitySectorDonorFunding" property="sectors">
 												<logic:notEmpty name="activitySectorDonorFunding" property="sectors">
 													<ul>
@@ -173,9 +173,9 @@
 										</div>
 									</div>
 								</td>
-                                <td width="20%" align="left"  height="40px" >
+                                <td width="20%" align="left">
 									<div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" style="overflow: auto">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" >
 											<logic:present name="activitySectorDonorFunding" property="donorOrgs">
 												<logic:notEmpty name="activitySectorDonorFunding" property="donorOrgs">
 													<ul>
@@ -190,7 +190,7 @@
 										</div>
 									</div>
 								</td>
-								<td width="10%" height="40px">
+								<td width="10%">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
 									<logic:present name="activitySectorDonorFunding" property="fmtCommitment">
@@ -205,7 +205,7 @@
 
 									</div>
 								</td>
-								<td width="10%"  height="40px">
+								<td width="10%">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
 									<logic:present  name="activitySectorDonorFunding" property="fmtDisbursement">
@@ -219,7 +219,7 @@
 									</div>
 									</div>
 								</td>
-								<td width="10%"  height="40px">
+								<td width="10%">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
 									<logic:present name="activitySectorDonorFunding" property="fmtExpenditure">

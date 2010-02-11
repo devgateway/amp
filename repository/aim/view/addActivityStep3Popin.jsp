@@ -320,7 +320,8 @@
 		   "&funding.isEditFunding="+document.getElementsByName('funding.isEditFunding')[0].value+
 		   "&funding.assistanceType="+document.getElementsByName('funding.assistanceType')[0].value+
 		   "&funding.orgFundingId="+document.getElementsByName('funding.orgFundingId')[0].value+
-		   "&funding.modality="+document.getElementsByName('funding.modality')[0].value;
+		   "&funding.modality="+document.getElementsByName('funding.modality')[0].value+
+		   "&funding.fundingStatus="+document.getElementsByName('funding.fundingStatus')[0].value;
 		var rows = getProjectionRows();
 		for(i=0; rows!=0 && i<rows; i++){
 			var projLabel="mtefProjection["+i+"].projected";

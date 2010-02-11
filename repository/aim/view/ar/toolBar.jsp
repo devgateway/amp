@@ -138,7 +138,6 @@ addLoadEvent(addpanel);
 	}
 </script>
 <style>
-<!--
 .toolbar{
 	background: #addadd; 
 	background-color: #addadd; 
@@ -158,13 +157,6 @@ addLoadEvent(addpanel);
 	border-style: solid;
 	width: 100%;
 }
-.toolbartable a img{
-	vertical-align: middle;
-}
-.toolbartable a {
-	text-decoration: none;
-}
--->
 </style>
 <% String ampReportId=request.getParameter("ampReportId");
 	if(ampReportId==null) ampReportId=(String)request.getAttribute("ampReportId");
@@ -202,30 +194,34 @@ addLoadEvent(addpanel);
 		-->
 
 		<td noWrap align=left valign="center">		
-			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
+			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
+				<digi:img style="vertical-align: middle;" width="17" height="20" 
+							hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
 				<digi:trn>Export to PDF</digi:trn>
 			</a>
 			
 		</td>
 
 		<td noWrap align=left valign="center">
-			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
+			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
+				<digi:img style="vertical-align: middle;" width="17" height="20" 
+							hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
 				<digi:trn>Export to Excel</digi:trn>
 			</a>
 		</td>
 
 		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/csv.gif" border="0" alt="Export to CSV" />
+			<digi:link style="text-decoration: none;" href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+				<digi:img style="vertical-align: middle;" width="17" height="20" 
+							hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/csv.gif" border="0" alt="Export to CSV" />
 				<digi:trn>Export to CSV</digi:trn>
 			</digi:link>
 		</td>
 		
 		<td noWrap align=left valign="center">
-			<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
+			<digi:link style="text-decoration: none;" href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
+				<digi:img style="vertical-align: middle;" width="17" height="20" 
+						hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
 				<digi:trn>Print</digi:trn>
 			</digi:link>
 		</td>

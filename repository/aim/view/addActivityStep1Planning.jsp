@@ -29,7 +29,14 @@ function myclearDate(editBox, clearLink, checkboxId){
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-										<field:display name="Line Ministry Rank" feature="Planning">
+											<field:display name="Line Ministry Rank" feature="Planning"></field:display>
+											<bean:define id="contentDisabled">false</bean:define>
+											<c:set var="contentDisabled">
+											<field:display name="Line Ministry Rank" feature="Planning">false</field:display>
+											</c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>											
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">&nbsp;
@@ -40,28 +47,31 @@ function myclearDate(editBox, clearLink, checkboxId){
 													<table cellPadding=0 cellSpacing=0>
 														<tr>
 															<td>
+																<c:set var="translation">
+																	<digi:trn key="aim:addActivityStatusFirstLine">-Select Rank-</digi:trn>
+																</c:set>
 																<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">
-																	<html:select name="aimEditActivityForm" property="planning.lineMinRank" styleClass="inp-text">
-																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
-																		<c:forEach var="lmr" items="${aimEditActivityForm.planning.actRankCollection}" >
-																			<c:choose>
-																				<c:when test="${lmr == aimEditActivityForm.planning.lineMinRank}">
-																					<option value='<c:out value="${lmr}" />' selected><c:out value="${lmr}"/></option>
-																				</c:when>
-																				<c:otherwise>
-																					<option value='<c:out value="${lmr}" />'><c:out value="${lmr}"/></option>
-																				</c:otherwise>
-																			</c:choose>
-																		</c:forEach>
-																	</html:select>
+																	<c:if test="${contentDisabled=='true'}">
+					                                                	<category:showoptions   firstLine="${translation}"  name="aimEditActivityForm" property="planning.lineMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.LINE_MINISTRY_RANK_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
+					                                                </c:if>
+					                                                <c:if test="${contentDisabled=='false'}">
+					                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.lineMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.LINE_MINISTRY_RANK_KEY %>" styleClass="inp-text" />
+					                                                </c:if>
 																</a>
 															</td>
 														</tr>
 													</table>
 												</td>
 											</tr>
-										</field:display>
-										<field:display name="Ministry of Planning Rank" feature="Planning">
+											<field:display name="Ministry of Planning Rank" feature="Planning"></field:display>
+											<bean:define id="contentDisabled">false</bean:define>
+											<c:set var="contentDisabled">
+											<field:display name="Ministry of Planning Rank" feature="Planning">false</field:display>
+											</c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>											
+
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">&nbsp;
@@ -73,30 +83,18 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
-																	<html:select property="planning.planMinRank" styleClass="inp-text">
-																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
-							<c:forEach var="mpr"
-								items="${aimEditActivityForm.planning.actRankCollection}">
-								<c:choose>
-									<c:when
-										test="${mpr == aimEditActivityForm.planning.planMinRank}">
-										<option value='<c:out value="${mpr}" />' selected><c:out
-											value="${mpr}" /></option>
-									</c:when>
-									<c:otherwise>
-										<option value='<c:out value="${mpr}" />'><c:out
-											value="${mpr}" /></option>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-						</html:select>
+																	<c:if test="${contentDisabled=='true'}">
+					                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.planMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.MINISTRY_PLANNING_RANK_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
+					                                                </c:if>
+					                                                <c:if test="${contentDisabled=='false'}">
+					                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.planMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.MINISTRY_PLANNING_RANK_KEY %>"  styleClass="inp-text" />
+					                                                </c:if>
 																</a>
 															</td>
 														</tr>
 													</table>
 												</td>
 											</tr>
-											</field:display>
 											<field:display name="Overall Cost" feature="Planning">
 											<logic:present name="aimEditActivityForm" property="overallCost">
 											<tr>

@@ -763,8 +763,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public class Planning {
 
 		private Collection actRankCollection;
-		private String lineMinRank;
-		private String planMinRank;
+		private Long lineMinRank;
+		private Long planMinRank;
 		private String originalAppDate;
 		private String revisedAppDate;
 		private String originalStartDate;
@@ -795,19 +795,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.activityCloseDates = activityCloseDates;
 		}
 
-		public String getLineMinRank() {
+		public Long getLineMinRank() {
 			return lineMinRank;
 		}
 
-		public void setLineMinRank(String lineMinRank) {
+		public void setLineMinRank(Long lineMinRank) {
 			this.lineMinRank = lineMinRank;
 		}
 
-		public String getPlanMinRank() {
+		public Long getPlanMinRank() {
 			return planMinRank;
 		}
 
-		public void setPlanMinRank(String planMinRank) {
+		public void setPlanMinRank(Long planMinRank) {
 			this.planMinRank = planMinRank;
 		}
 

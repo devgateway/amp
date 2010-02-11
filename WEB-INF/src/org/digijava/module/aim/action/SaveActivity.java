@@ -410,22 +410,22 @@ public class SaveActivity extends Action {
 		}
 
 		try {
-			activity.setLineMinRank(Integer.valueOf(eaForm.getPlanning().getLineMinRank()));
-			if (activity.getLineMinRank().intValue() < 1 || activity.getLineMinRank().intValue() > 5) {
-				logger.debug("Line Ministry Rank is out of permisible range (1 to 5)");
-				activity.setLineMinRank(null);
-			}
+			activity.setLineMinRank(eaForm.getPlanning().getLineMinRank().intValue());
+//			if (activity.getLineMinRank().intValue() < 1 || activity.getLineMinRank().intValue() > 5) {
+//				logger.debug("Line Ministry Rank is out of permisible range (1 to 5)");
+//				activity.setLineMinRank(null);
+//			}
 		}
 		catch (NumberFormatException nex) {
 			logger.debug("Line Ministry Rank is not a number : " + nex);
 			activity.setLineMinRank(null);
 		}
 		try {
-			activity.setPlanMinRank(Integer.valueOf(eaForm.getPlanning().getPlanMinRank()));
-			if (activity.getPlanMinRank().intValue() < 1 || activity.getPlanMinRank().intValue() > 5) {
-				logger.debug("Plan Ministry Rank is out of permisible range (1 to 5)");
-				activity.setPlanMinRank(null);
-			}
+			activity.setPlanMinRank(eaForm.getPlanning().getPlanMinRank().intValue());
+//			if (activity.getPlanMinRank().intValue() < 1 || activity.getPlanMinRank().intValue() > 5) {
+//				logger.debug("Plan Ministry Rank is out of permisible range (1 to 5)");
+//				activity.setPlanMinRank(null);
+//			}
 		}
 		catch (NumberFormatException nex) {
 			logger.debug("Plan Ministry Rank is not a number : " + nex);

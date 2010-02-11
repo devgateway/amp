@@ -243,15 +243,13 @@ public class ShowActivityPrintPreview
                 eaForm.getPlanning().setStatusReason(activity.getStatusReason());
 
                 if(null != activity.getLineMinRank())
-                    eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().
-                                          toString());
+                    eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().longValue());
                 else
-                    eaForm.getPlanning().setLineMinRank("-1");
+                    eaForm.getPlanning().setLineMinRank(new Long(-1));
                 if(null != activity.getPlanMinRank())
-                    eaForm.getPlanning().setPlanMinRank(activity.getPlanMinRank().
-                                          toString());
+                    eaForm.getPlanning().setPlanMinRank(activity.getPlanMinRank().longValue());
                 else
-                    eaForm.getPlanning().setPlanMinRank("-1");
+                    eaForm.getPlanning().setPlanMinRank(new Long(-1));
                 
                 eaForm.getPlanning().setActRankCollection(new ArrayList());
                 for(int i = 1; i < 6; i++) {

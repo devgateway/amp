@@ -142,10 +142,10 @@ function confirmFunc() {
                 <td>
                 <c:set var="reportNumber" value="${fn:length(aimTeamReportsForm.reports)}">
                   </c:set>
-                  <c:if test="${reportNumber != 0}">
                   <table cellpadding="3" cellspacing="3" border="0" width="100%" height="20">
                     <tr>
                         <td class="yui-skin-sam">
+                        <c:if test="${reportNumber != 0}">
                         <%
                             ReportsForm aimTeamReportsForm = (ReportsForm) pageContext.getAttribute("aimTeamReportsForm");
                           java.util.List pagelist = new java.util.ArrayList();
@@ -263,6 +263,7 @@ function confirmFunc() {
                         </c:otherwise>
                          </c:choose>
                         <c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>
+                         </c:if>
                       </td>
 					  <digi:form action="/viewTeamReports.do" method="post">
                       <td align="right">
@@ -301,7 +302,7 @@ function confirmFunc() {
 					</digi:form>
                     </tr>
                   </table>
-                  </c:if>
+                 
                 </td>
               </tr>
               <tr bgColor=#f4f4f2>

@@ -12,17 +12,17 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-    <script type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>">.</script>
+    <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>">.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>">.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/element-min.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>">.</script>
-	<script type="text/javascript" src="<digi:file src='script/yui/animation-min.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/animation-min.js'/>" >.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>">.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/tabview-min.js'/>" >.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/connection-min.js'/>" > .</script>
 	
-	<script type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
 	
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
@@ -204,15 +204,16 @@
 			}
 			tab2	= YAHOO.amp.reportwizard.tabView.getTab(2);
 			tab2.addListener("beforeActiveChange", generateHierarchies);
-			
-			ColumnsDragAndDropObject.selectObjsByDbId ("source_col_div", "dest_col_ul", selectedCols);
-			generateHierarchies();
-			MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
-			MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
-			
+
 			repFilters					= new Filters("${filterPanelName}", "${failureMessage}", "${filterProblemsMessage}", 
 												"${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}");
 			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
+			
+			ColumnsDragAndDropObject.selectObjsByDbId("source_col_div", "dest_col_ul", selectedCols);
+			generateHierarchies();
+			MyDragAndDropObject.selectObjsByDbId("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
+			MyDragAndDropObject.selectObjsByDbId("source_measures_ul", "dest_measures_ul", selectedMeas);
+			
 			
 			var dg			= document.getElementById("DHTMLSuite_treeNode1");
 			var cn			= dg.childNodes;

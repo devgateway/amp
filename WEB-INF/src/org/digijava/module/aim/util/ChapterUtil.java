@@ -23,7 +23,7 @@ public class ChapterUtil {
 	public static AmpChapter getChapterByCode(String chapterCode)
 			throws DgException, HibernateException, SQLException {
 		AmpChapter chapter = null;
-		if (chapterCode != null && chapterCode.equals("")){
+		if (chapterCode != null && !chapterCode.isEmpty()){
 			Session hs = PersistenceManager.getRequestDBSession();
 			chapter = (AmpChapter) hs.get(AmpChapter.class, chapterCode);
 			PersistenceManager.releaseSession(hs);

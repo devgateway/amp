@@ -7,9 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/datatable.css" />
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/datatable.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/paginator.css" />
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script> 

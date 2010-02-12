@@ -5,9 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/datatable.css" />
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/paginator.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/datatable.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/paginator.css" />
 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script> 

@@ -53,6 +53,16 @@
 }
 
 
+.yui-skin-sam .yui-dt tr.deprecatedmark,
+.yui-skin-sam .yui-dt tr.deprecatedmark td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.deprecatedmark td.yui-dt-desc,
+.yui-skin-sam .yui-dt tr.deprecatedmark td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.deprecatedmark td.yui-dt-desc {
+    color: #D6D6D6
+}
+
+
+
 </style>
 
 <body class="yui-skin-sam">
@@ -160,6 +170,10 @@ YAHOO.example.DynamicData = function() {
 
        if (oRecord.getData('state') == 'DELETED') {
            YAHOO.util.Dom.addClass(elTr, 'deletedmark');
+       }
+
+       if (oRecord.getData('state') == 'DEPRECATED') {
+           YAHOO.util.Dom.addClass(elTr, 'deprecatedmark');
        }
         return true;
     }; 

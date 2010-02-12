@@ -117,7 +117,7 @@
                                               					<td>&nbsp;
                                                 					<c:if test="${!empty aimEditActivityForm.programs.nationalSetting.defaultHierarchy.name && (aimEditActivityForm.programs.nationalSetting.allowMultiple||empty aimEditActivityForm.programs.nationalPlanObjectivePrograms)}">
                                    										<field:display name="Add Programs Button - National Plan Objective" feature="Program">
-                                      										<html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(1);">
+                                      										<html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(1,${aimEditActivityForm.programs.nationalSetting.ampProgramSettingsId});">
 																			<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
 																			</html:button>
                                     									</field:display>
@@ -214,7 +214,7 @@
 																<td>&nbsp;
                                                       				<c:if test="${!empty aimEditActivityForm.programs.primarySetting.defaultHierarchy&&(aimEditActivityForm.programs.primarySetting.allowMultiple||empty aimEditActivityForm.programs.primaryPrograms)}">
 				                                                       <field:display name="Add Programs Button - Primary Programs" feature="Program">
-					                                                       <html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(2);">
+					                                                       <html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(2,${aimEditActivityForm.programs.primarySetting.ampProgramSettingsId});">
 																			<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
 																			</html:button>
                                                        					</field:display>
@@ -314,7 +314,7 @@
 																<td>&nbsp;
 			                                                       <c:if test="${!empty aimEditActivityForm.programs.secondarySetting.defaultHierarchy&&(aimEditActivityForm.programs.secondarySetting.allowMultiple||empty aimEditActivityForm.programs.secondaryPrograms)}">
 				                                                       <field:display name="Add Programs Button - Secondary Programs" feature="Program">
-				                                                       <html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(3);">
+				                                                       <html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(3,${aimEditActivityForm.programs.secondarySetting.ampProgramSettingsId});">
 																			<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
 																		</html:button>
 				                                                      	</field:display>

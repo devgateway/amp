@@ -29,6 +29,21 @@ public class SelectProgramAF extends SelectorAction{
 		String selectedThemeId = request.getParameter("themeid");
 		int settingsId = pgForm.getProgramType();
 	    AmpActivityProgramSettings parent=null;
+	    
+	    Long programSettingsId=null;
+	    if(request.getParameter("programSettingsId")!=null){
+	    	programSettingsId=new Long (request.getParameter("programSettingsId"));
+	    }
+	    if(programSettingsId!=null){
+	    	AmpActivityProgramSettings programSetting=ProgramUtil.getAmpActivityProgramSettingsById(programSettingsId);
+	    	switch(settingsId){
+	        	case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: pgForm.setNationalSetting(programSetting); break;
+	            case ProgramUtil.PRIMARY_PROGRAM_KEY: pgForm.setPrimarySetting(programSetting); break;
+	            case ProgramUtil.SECONDARY_PROGRAM_KEY: pgForm.setSecondarySetting(programSetting); break;
+	    	}
+	    	
+	    }
+	    
 	    switch(settingsId){
 	      case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: parent=eaForm.getPrograms().getNationalSetting(); break;
 	      case ProgramUtil.PRIMARY_PROGRAM_KEY: parent=eaForm.getPrograms().getPrimarySetting(); break;

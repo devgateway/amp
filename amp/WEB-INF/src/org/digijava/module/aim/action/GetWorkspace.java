@@ -152,7 +152,12 @@ public class GetWorkspace extends Action {
 			}
 			logger.debug("uwForm.getRelatedTeamFlag() : " + uwForm.getRelatedTeamFlag());
 			
-			uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
+			if(request.getSession().getAttribute("overwriteChildWorkspaces")==null || ! request.getSession().getAttribute("overwriteChildWorkspaces").equals("no")){
+				uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
+			}else{
+				request.getSession().removeAttribute("overwriteChildWorkspaces");
+			}
+			
 			uwForm.setActionEvent("edit");
 		}			
 

@@ -228,7 +228,7 @@ public class ShowCalendarView extends Action {
             }*/
             
         }else{
-        	 if (filter.getSelectedDonors().length ==0){
+        	 if (filter.getSelectedDonors().length ==0 && calendarViewForm.getResetDonors()!=null && ! calendarViewForm.getResetDonors()){
         		 String[] selectedDonors = new String[1];
         		 selectedDonors[0] = "None";
         		 /*it = filter.getDonors().iterator();

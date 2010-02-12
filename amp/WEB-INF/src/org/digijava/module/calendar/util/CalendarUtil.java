@@ -179,84 +179,69 @@ public class CalendarUtil {
 	}
 	
 	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String[] selectedEventTypeIdsIds,String instanceId,Long userId) throws ParseException{
-		 String xml="";
-					try {
-						
-						     Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(member, filter,selectedDonorIds,selectedEventTypeIdsIds, null, null);
-						
-							//List events = DbUtil.getCalendarEvents(siteId, instanceId, userId);
-							if(!ampCalendarEvents.isEmpty()){
-								
-						Iterator iter = ampCalendarEvents.iterator();
-						while (iter.hasNext()) {
-							 AmpCalendar ampCalendar = (AmpCalendar) iter.next();
-							 
-							 Iterable recc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent();
-							 
-								
-						
-								
-							 xml+="<event id=\"" +ampCalendar.getCalendarPK().getCalendar().getId()+"\">";
-							if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
-								xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
-								xml+="<end_date>"+ampCalendar.getCalendarPK().getRecurrEndDate()+"</end_date>";
-							}else{
-								
-								 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
-						         xml+="<end_date>"+ampCalendar.getCalendarPK().getCalendar().getEndDate()+"</end_date>";
-							}
-									Iterator itritm = ampCalendar.getCalendarPK().getCalendar().getCalendarItem().iterator();
-										while(itritm.hasNext()){
-											CalendarItem calItme = (CalendarItem) itritm.next();
-											 xml+="<text>"+calItme.getTitle()+"</text>";
-											 	if(calItme.getDescription() != null){
-											 		xml+="<details>"+calItme.getDescription()+"</details>";
-											 }else{
-												 	xml+="<details>"+"No Description"+"</details>";
-											 }
-										}
+		String xml="";
+		Collection ampCalendarEvents=null;
+		try {
+			 if(selectedDonorIds!=null && selectedDonorIds.length>0 && selectedEventTypeIdsIds!=null && selectedEventTypeIdsIds.length>0){
+				 ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(member, filter,selectedDonorIds,selectedEventTypeIdsIds, null, null);
+			 }		     
+			//List events = DbUtil.getCalendarEvents(siteId, instanceId, userId);
+			if(ampCalendarEvents!=null && !ampCalendarEvents.isEmpty()){
+				Iterator iter = ampCalendarEvents.iterator();
+				while (iter.hasNext()) {
+					 AmpCalendar ampCalendar = (AmpCalendar) iter.next();
+					 Iterable recc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent();
+					 xml+="<event id=\"" +ampCalendar.getCalendarPK().getCalendar().getId()+"\">";
+					 if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
+						 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+						 xml+="<end_date>"+ampCalendar.getCalendarPK().getRecurrEndDate()+"</end_date>";
+					 }else{
+						 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+						 xml+="<end_date>"+ampCalendar.getCalendarPK().getCalendar().getEndDate()+"</end_date>";
+					 }
+					 Iterator itritm = ampCalendar.getCalendarPK().getCalendar().getCalendarItem().iterator();
+					 while(itritm.hasNext()){
+						 CalendarItem calItme = (CalendarItem) itritm.next();
+						 xml+="<text>"+calItme.getTitle()+"</text>";
+						 if(calItme.getDescription() != null){
+							 xml+="<details>"+calItme.getDescription()+"</details>";
+						 }else{
+						 	xml+="<details>"+"No Description"+"</details>";
+						 }
+					}
 										//AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
 										//id.getEventType().getId();
-										if(ampCalendar.getEventsType() != null){
-										xml+="<type>"+ampCalendar.getEventsType().getId()+"</type>";
-										}else{
-											xml+="<type>"+0+"</type>";
-										}
-										 if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
-											 Iterator itrrecc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().iterator();
-											 while(itrrecc.hasNext()){
-												 RecurrCalEvent recurrCalEvent = (RecurrCalEvent) itrrecc.next(); 
-												 if(recurrCalEvent.getTypeofOccurrence().equals("day")||recurrCalEvent.getTypeofOccurrence().equals("year")){
-												 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod() +"</rec_type>";
-												 }else if(recurrCalEvent.getTypeofOccurrence().equals("month")){
-													 
-													 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getSelectedStartMonth()+"</rec_type>";
-															 
-												 }else if(recurrCalEvent.getTypeofOccurrence().equals("week")){
-													 
-													String weekdays = sortingWeekDays(recurrCalEvent.getOccurrWeekDays().toCharArray());
-													   
-													 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod()+"___"+weekdays+"</rec_type>";
-														
-												 }
-												Date SartDate = ampCalendar.getCalendarPK().getCalendar().getStartDate();
-												Date EndDate = ampCalendar.getCalendarPK().getCalendar().getEndDate();
-												int  eventLengths = getEventlength(SartDate,EndDate);
-											
-											   xml+="<event_length>"+eventLengths/1000+"</event_length>";
-											  }
-											}	
-										
-										
-										xml+="</event>";	
-								}
-						
-							}
-							
-					} catch (CalendarException e) {
-						e.printStackTrace();
+					if(ampCalendar.getEventsType() != null){
+						xml+="<type>"+ampCalendar.getEventsType().getId()+"</type>";
+					}else{
+						xml+="<type>"+0+"</type>";
 					}
-			 return xml;
+					
+					if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
+						 Iterator itrrecc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().iterator();
+						 while(itrrecc.hasNext()){
+							 RecurrCalEvent recurrCalEvent = (RecurrCalEvent) itrrecc.next(); 
+							 if(recurrCalEvent.getTypeofOccurrence().equals("day")||recurrCalEvent.getTypeofOccurrence().equals("year")){
+								 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod() +"</rec_type>";
+							 }else if(recurrCalEvent.getTypeofOccurrence().equals("month")){
+								 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getSelectedStartMonth()+"</rec_type>";
+							 }else if(recurrCalEvent.getTypeofOccurrence().equals("week")){
+								String weekdays = sortingWeekDays(recurrCalEvent.getOccurrWeekDays().toCharArray());
+								xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod()+"___"+weekdays+"</rec_type>";
+							 }
+							 Date SartDate = ampCalendar.getCalendarPK().getCalendar().getStartDate();
+							 Date EndDate = ampCalendar.getCalendarPK().getCalendar().getEndDate();
+							 int  eventLengths = getEventlength(SartDate,EndDate);
+							 xml+="<event_length>"+eventLengths/1000+"</event_length>";
+						}
+					}	
+					xml+="</event>";	
+				}
+			}
+		} catch (CalendarException e) {
+			e.printStackTrace();
+		}
+		return xml;
 	}
 	
 

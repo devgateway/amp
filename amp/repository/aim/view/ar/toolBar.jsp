@@ -171,11 +171,12 @@ addLoadEvent(addpanel);
 %>
 <script type="text/javascript">
 	function toggleActionForm(type) {
+		var exportFormEl	= document.getElementById('exportForm');
 		if (type == null) return false;
 		if (type == "xls") {
-			document.forms[4].action = "/aim"+"<%=viewParamXLS%>";
+			exportFormEl.action = "/aim"+"<%=viewParamXLS%>";
 		} else if (type == "pdf") {
-			document.forms[4].action = "/aim"+"<%=viewParamPDF%>";
+			exportFormEl.action = "/aim"+"<%=viewParamPDF%>";
 		}
 		showMyPanel(0, 'logoStatement');
 	}
@@ -288,7 +289,7 @@ function openPrinter(){
 
 <div id="logoStatement" style="display: none">
 	<div align="center">
-			<digi:form action="<%=viewParamPDF%>" method="post">			
+			<digi:form action="<%=viewParamPDF%>" method="post" styleId="exportForm">			
 				<input type="hidden" name="viewParam" value="<%=viewParam%>" />
 				<input type="hidden" name="ampReportId" value="<%=ampReportId%>" />
 				<table cellpadding="5" cellspacing="5" border="0" width="100%">

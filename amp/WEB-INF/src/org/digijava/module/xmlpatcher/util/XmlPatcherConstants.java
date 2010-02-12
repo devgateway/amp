@@ -56,6 +56,11 @@ public final class XmlPatcherConstants {
 		 * The patch has been deprecated by another newer patch.
 		 */
 		public static final short DEPRECATED = 3;
+		
+		/**
+		 * The pach is no longer available (file was deleted) and was marked deleted
+		 */
+		public static final short DELETED=4;
 
 		
 		public static String toString(short state) {
@@ -64,6 +69,7 @@ public final class XmlPatcherConstants {
 			case CLOSED: return "CLOSED";
 			case FAILED: return "FAILED";
 			case DEPRECATED: return "DEPRECATED";
+			case DELETED: return "DELETED";
 			}
 			return "UNKNOWN";
 		}

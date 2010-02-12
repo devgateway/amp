@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -109,9 +110,20 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
 			logger.info("Reading patch: "+ampPatch.getPatchId());
 			try {
-				log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
+				File f=new File(
 						XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
-								serviceContext))));
+								serviceContext));
+				if(!f.exists()) {
+					//mark file as deleted
+					log.appendToLog("Patch file deleted");
+					logger.info("Marking patch "+ampPatch.getPatchId()+" as deleted");
+					XmlPatcherUtil.addLogToPatch(ampPatch, log);
+					ampPatch.setState(XmlPatcherConstants.PatchStates.DELETED);
+					DbUtil.update(ampPatch);
+					iterator.remove();
+					continue;
+				}
+				log.setFileChecksum(XmlPatcherUtil.getFileMD5(f));
 				Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
 						ampPatch, null); //we don't record unmarshalling logs here. we do that when we run the patch
 				
@@ -257,7 +269,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	 * Discovers new patches in the known locations (Digi modules directories or
 	 * the generic patch directory).
 	 * 
-	 * @param serviceContext
+	 * @param  appPath the application Path - usually serviceContext.getRealPath("/")
 	 * @throws DgException
 	 * @throws SQLException
 	 * @throws HibernateException
@@ -271,12 +283,13 @@ public class XmlPatcherService extends AbstractServiceImpl {
 		// get a full list of known patch files from the database
 		Set<String> allDiscoveredPatchNames = XmlPatcherUtil
 				.getAllDiscoveredPatchNames();
+		Map<String, AmpXmlPatch> patchesMap = XmlPatcherUtil.getAllDiscoveredPatchesMap();
 
 		Iterator<File> i = patchDirs.iterator();
 		while (i.hasNext()) {
 			File dir = i.next();
 			XmlPatcherUtil.recordNewPatchesInDir(appPath, dir,
-					allDiscoveredPatchNames);
+					allDiscoveredPatchNames,patchesMap);
 		}
 	}
 

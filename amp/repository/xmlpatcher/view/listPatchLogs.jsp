@@ -18,6 +18,7 @@
 <th>Checksum</th>
 <th>Elapsed (ms)</th>
 </tr>
+<logic:notEmpty name="patchLogs">
 <logic:iterate id="log" name="patchLogs" scope="request" indexId="idx">
 <tr>
 <td><b><bean:write name="idx"/></b></td>
@@ -35,4 +36,5 @@
 <td><bean:write name="log" property="elapsed"/></td>
 </tr>
 </logic:iterate>
+</logic:notEmpty>
 </table>

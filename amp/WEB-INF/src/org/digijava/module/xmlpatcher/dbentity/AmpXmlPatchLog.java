@@ -107,7 +107,9 @@ public class AmpXmlPatchLog implements Serializable {
 	
 	public String getLogLabel() {
 		String ls=log.toString();
+		if(ls.indexOf(':')!=-1)
 		return ls.substring(0,ls.indexOf(':'));
+		else return ls;
 	}
 
 	public void setLog(String log) {

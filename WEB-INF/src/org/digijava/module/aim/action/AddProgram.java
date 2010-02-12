@@ -42,11 +42,26 @@ public class AddProgram
     	settingsId = pType.intValue();
     	pgForm.setProgramType(settingsId);
     }
+    
+    Long programSettingsId=null;
+    if(request.getParameter("programSettingsId")!=null){
+    	programSettingsId=new Long (request.getParameter("programSettingsId"));
+    }
+    if(programSettingsId!=null){
+    	AmpActivityProgramSettings programSetting=ProgramUtil.getAmpActivityProgramSettingsById(programSettingsId);
+    	switch(settingsId){
+        	case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: pgForm.setNationalSetting(programSetting); break;
+            case ProgramUtil.PRIMARY_PROGRAM_KEY: pgForm.setPrimarySetting(programSetting); break;
+            case ProgramUtil.SECONDARY_PROGRAM_KEY: pgForm.setSecondarySetting(programSetting); break;
+    	}
+    	
+    }
+    
     AmpActivityProgramSettings parent=null;
     switch(settingsId){
       case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: parent=pgForm.getNationalSetting(); break;
-          case ProgramUtil.PRIMARY_PROGRAM_KEY: parent=pgForm.getPrimarySetting(); break;
-              case ProgramUtil.SECONDARY_PROGRAM_KEY: parent=pgForm.getSecondarySetting(); break;
+      case ProgramUtil.PRIMARY_PROGRAM_KEY: parent=pgForm.getPrimarySetting(); break;
+      case ProgramUtil.SECONDARY_PROGRAM_KEY: parent=pgForm.getSecondarySetting(); break;
     }
     if (selectedThemeId == null && opStatus == null && strLevel == null) {
 

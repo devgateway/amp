@@ -1023,7 +1023,22 @@ public class ProgramUtil {
                     throw new DgException(ex);
                     }
             return programSettings;
-    }
+        }
+        
+        public static AmpActivityProgramSettings getAmpActivityProgramSettingsById(Long id) throws DgException {
+            Session session = null;
+            AmpActivityProgramSettings programSettings=null;
+            try {
+            	session = PersistenceManager.getRequestDBSession();
+                String queryString = "select ap from " + AmpActivityProgramSettings.class.getName()+ " ap where ap.ampProgramSettingsId="+id;
+                Query qry = session.createQuery(queryString);
+                programSettings=(AmpActivityProgramSettings)qry.uniqueResult();
+            } catch (Exception ex) {
+                logger.debug("Unable to search " + ex);
+                throw new DgException(ex);
+           }
+            return programSettings;
+        }
 
 
       public static List getAmpActivityProgramSettingsList() throws DgException {

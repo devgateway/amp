@@ -3235,7 +3235,7 @@ public class DbUtil {
         }
     }
 
-    public static void delete(Object object) throws JDBCException {
+    public static void delete(Object object) {
         Session sess = null;
         Transaction tx = null;
 
@@ -3246,9 +3246,9 @@ public class DbUtil {
             sess.delete(object);
             //sess.flush();
             tx.commit();
+            PersistenceManager.releaseSession(sess);
         } catch (Exception e) {
-            if (e instanceof JDBCException)
-                throw (JDBCException) e;
+        	e.printStackTrace();
             logger.error("Exception " + e.toString());
             try {
                 tx.rollback();

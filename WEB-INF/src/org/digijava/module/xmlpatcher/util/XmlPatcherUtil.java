@@ -15,9 +15,11 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -61,10 +63,11 @@ public final class XmlPatcherUtil {
 	 *            the existing patch names
 	 * @throws DgException
 	 * @param appPath
-	 *            the application path
+	 *            the application Path - usually serviceContext.getRealPath("/")
+	 * @param patchesMap the already discovered patches
 	 */
 	public static void recordNewPatchesInDir(String appPath, File dir,
-			Set<String> patchNames) throws DgException {
+			Set<String> patchNames, Map<String, AmpXmlPatch> patchesMap) throws DgException {
 		if (!dir.isDirectory())
 			throw new RuntimeException(
 					"Patch discovery location is not a directory!");
@@ -74,15 +77,21 @@ public final class XmlPatcherUtil {
 			// directories ignored in xmlpatch dir
 			if (f.isDirectory()){
 				if (f.getName().compareTo(".svn") != 0)
-					recordNewPatchesInDir(appPath,f,patchNames);
+					recordNewPatchesInDir(appPath,f,patchNames, patchesMap);
 				continue;
 			}
-			if (patchNames.contains(f.getName()))
-				continue;
+			if (patchNames.contains(f.getName())) {
+				
+				AmpXmlPatch patch = patchesMap.get(f.getName());				
+				//if no recorded patch is found, then there are two unrecorded patches with same name=>fail
+				//if there is a recorded patch but its path is different than the current file=>fail
+				if(patch==null || !patch.getLocation().equals(computePatchFileLocation(f,appPath))) {
+					throw new DgException("Patch duplication detected! The name "+f.getName()+" is used by two or more patches." +
+							" Remove duplicates and restart the server.\n You are not allowed to use one patch name twice even if the older patch has been deleted.");
+				}
+			}
 			else {
-				String location = f.getAbsolutePath().substring(
-						appPath.length(),
-						f.getAbsolutePath().length() - f.getName().length());
+				String location=computePatchFileLocation(f, appPath);
 				AmpXmlPatch patch = new AmpXmlPatch(f.getName(), location);
 				DbUtil.add(patch);
 				patchNames.add(f.getName());
@@ -91,6 +100,19 @@ public final class XmlPatcherUtil {
 		}
 	}
 
+	/**
+	 * Gets the location parameter saved with AmpXmlPatch based on the patch File and the appPath
+	 * @param patchFile the File object for the patch as it has been found
+	 * @param appPath the application Path - usually serviceContext.getRealPath("/")
+	 * @return
+	 */
+	public static String computePatchFileLocation(File patchFile, String appPath) {
+		return patchFile.getAbsolutePath().substring(
+				appPath.length(),
+				patchFile.getAbsolutePath().length() - patchFile.getName().length());
+		
+	}
+	
 	/**
 	 * Checks if the jdbc connection is compatible with the given language type.
 	 * This will check if the language type is part of the URL of the
@@ -350,7 +372,7 @@ public final class XmlPatcherUtil {
 		Query query = session
 				.createQuery("from " + AmpXmlPatch.class.getName()
 						+ " p WHERE p.state NOT IN ("
-						+ XmlPatcherConstants.PatchStates.CLOSED+","+XmlPatcherConstants.PatchStates.DEPRECATED+")");
+						+ XmlPatcherConstants.PatchStates.CLOSED+","+XmlPatcherConstants.PatchStates.DEPRECATED+","+XmlPatcherConstants.PatchStates.DELETED+")");
 		List<AmpXmlPatch> list = query.list();
 		PersistenceManager.releaseSession(session);
 		return list;
@@ -392,6 +414,24 @@ public final class XmlPatcherUtil {
 		List<AmpXmlPatch> list = query.list();
 		PersistenceManager.releaseSession(session);
 		return list;
+	}
+	
+	
+	/**
+	 * Creates a map with the key patchId and the value AmpXmlPatch based on {@link #getAllDiscoveredPatches()}
+	 * @return the map
+	 * @throws HibernateException
+	 * @throws DgException
+	 * @throws SQLException
+	 * @see {@link #getAllDiscoveredPatches()}
+	 */
+	public static Map<String,AmpXmlPatch> getAllDiscoveredPatchesMap() throws HibernateException, DgException, SQLException {
+		List<AmpXmlPatch> discoveredPatches = getAllDiscoveredPatches();
+		Map<String,AmpXmlPatch> ret=new HashMap<String,AmpXmlPatch>();
+		for(AmpXmlPatch patch: discoveredPatches) {
+			ret.put(patch.getPatchId(), patch);
+		}
+		return ret;
 	}
 	
 	/**

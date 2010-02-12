@@ -44,6 +44,14 @@
     color: #0;
 }
 
+.yui-skin-sam .yui-dt tr.deletedmark,
+.yui-skin-sam .yui-dt tr.deletedmark td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.deletedmark td.yui-dt-desc,
+.yui-skin-sam .yui-dt tr.deletedmark td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.deletedmark td.yui-dt-desc {
+    text-decoration: line-through;
+}
+
 
 </style>
 
@@ -148,6 +156,10 @@ YAHOO.example.DynamicData = function() {
         }
        if (oRecord.getData('state') == 'OPEN') {
            YAHOO.util.Dom.addClass(elTr, 'ymark');
+       }
+
+       if (oRecord.getData('state') == 'DELETED') {
+           YAHOO.util.Dom.addClass(elTr, 'deletedmark');
        }
         return true;
     }; 

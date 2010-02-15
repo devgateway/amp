@@ -109,7 +109,7 @@ public final class XmlPatcherUtil {
 	public static String computePatchFileLocation(File patchFile, String appPath) {
 		return patchFile.getAbsolutePath().substring(
 				appPath.length(),
-				patchFile.getAbsolutePath().length() - patchFile.getName().length());
+				patchFile.getAbsolutePath().length() - patchFile.getName().length()).replaceAll("\\\\", "/");
 		
 	}
 	

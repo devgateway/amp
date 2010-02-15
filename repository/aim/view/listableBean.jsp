@@ -68,6 +68,9 @@
 <logic:equal name="style" value="settingsList">
 	<logic:iterate id="prop" name="pMap">
 		<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
+		
+
+		
 	        <c:set var="description">
 	          	<c:if test="${prop.value.showDescription==true}">
 	        		<digi:trn>${prop.value.description}</digi:trn>
@@ -76,7 +79,19 @@
 	       
 	        <c:set var="value">
 		        <c:if test="${prop.value.hiddenValue!=true}">
+		        <c:if test="${prop.key=='donorGroups'}">
+		      		Donors Group: <digi:trn>${prop.value.value}</digi:trn>
+		   		 </c:if>
+		   		 <c:if test="${prop.key=='donnorgAgency'}">
+		      		Donor Agency: <digi:trn>${prop.value.value}</digi:trn>
+		   		 </c:if>
+		   		 <c:if test="${prop.key=='donorTypes'}">
+		      		Donor Types: <digi:trn>${prop.value.value}</digi:trn>
+		   		 </c:if>
+		   		 
+		   		 <c:if test="${prop.key!='donorGroups' && prop.key!='donnorgAgency' && prop.key!='donorTypes'}">
 		        	<digi:trn>${prop.value.value}</digi:trn> 
+		        </c:if>
 		        </c:if>
 	        </c:set>
 	  

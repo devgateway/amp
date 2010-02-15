@@ -486,18 +486,7 @@ html>body #mainEmpty {
 																						<b><digi:trn>Email</digi:trn></b>
 																					</td>
 																					<td width="120" class="clsTableTitleCol">
-																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='orgNameAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=orgNameAscending&reset=false">
-																								<b><digi:trn >Organisation Name</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=orgNameDescending&reset=false">
-																								<b><digi:trn >Organisation Name</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>																																			
+																						<b><digi:trn>Organizations</digi:trn></b>																																			
 																					</td>
 												                            		<td width="100" class="clsTableTitleCol">
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='functionAscending'}">

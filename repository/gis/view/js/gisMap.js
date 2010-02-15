@@ -61,13 +61,14 @@
 		
 		jQuery.fn.getImageMap = function() {
 			var mapLevel = jQuery.fn.getRadioValue();
+			if (mapLevel == null) {
+				mapLevel = 2;
+			}
 			var indYear = $("#indicatorYearCombo").val();
 			var requestURL = "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&width=" + canvasWidth + "&height=" + canvasHeight;
 			if (!imageMapLoaded) {
 				actionGetImageMap = true;
-				if (mapLevel == null) {
-					mapLevel = 2;
-				}
+
 				$.get(requestURL, addImageMap, "xml");
 				imageMapLoaded = false;
 			}
@@ -83,11 +84,12 @@
 		
 		jQuery.fn.geIndicatorsValues = function() {
 			var mapLevel = jQuery.fn.getRadioValue();
-			var indYear = $("#indicatorYearCombo").val();
-			var requestURL = "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear;
 			if (mapLevel == null) {
 				mapLevel = 2;
 			}
+			var indYear = $("#indicatorYearCombo").val();
+			var requestURL = "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear;
+
 			$.get(requestURL, jQuery.fn.indicatorsValuesReady, "xml");
 			actionGetIndicatorValues = true;
 		}

@@ -193,14 +193,15 @@
 		scheduler.templates.event_text=function(start_date,end_date,ev){
 			return "Text:<b> "+ev.text+"</b><br>"+"Descr."+ev.details;
 		}
-		scheduler.load("/calendar/showEvents.do");
+         var lastTimeStamp=new Date().getTime();
+		scheduler.load("/calendar/showEvents.do?lastTimeStamp="+lastTimeStamp);
 		scheduler.templates.event_class=function(start_date,end_date,ev){
 			if(ev.type != 0){
 						return "event_"+ev.type;
 				}
 		  }
-		
-		 
+ 
+				 
 		scheduler.attachEvent("onViewChange", function (mode , date){
 			   document.getElementById("printView").value = mode;
 			   document.getElementById("printDate").value = date;

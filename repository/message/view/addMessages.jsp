@@ -55,6 +55,7 @@
 	var messageHelp='<digi:trn>Message Help</digi:trn>';
 	var relatedActs='<digi:trn>Type first letter of activity to view suggestions</digi:trn>';
 	var extraReceivers='<digi:trn>Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
+	var tmHelp='<digi:trn>A user may appear in more than one workspace.\n Be sure to choose the correct workspace and user within the workspace.</digi:trn>';
 
   function MyremoveUserOrTeam(){
   	var orphands=new Array();
@@ -567,12 +568,15 @@ div.fakefile2 input{
                                                                     	
                                                                     <tr>
                                                                        		<field:display name="Recievers" feature="Create Message Form">
-																					<td nowrap="nowrap" align="right"><digi:trn>Receivers</digi:trn></td>
+																					<td nowrap="nowrap" align="right">
+																						<digi:trn>Receivers</digi:trn>
+																						<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
+																					</td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>
 																                                <td valign="top">
-																                                   <select multiple="multiple" size="6" id="whoIsReceiver"  class="inp-text" style="width:200px;height: 100px;"" >
+																                                   <select multiple="multiple" size="12" id="whoIsReceiver"  class="inp-text" style="width:220px;" >
 																										<logic:empty name="messageForm" property="teamMapValues">
 																											<option value="-1">No receivers</option>
 																										</logic:empty>
@@ -598,14 +602,14 @@ div.fakefile2 input{
 																                                	<table>
 																                                		<tr height="25px">
 																                                			<td>
-																                                				<div style="width:200px;">
+																                                				<div style="width:220px;">
 																			                                		<div id="contactsAutocomplete"">
-																			                                			<html:text property="relatedActivityName" name="messageForm" styleId="contactInput" style="width:200px;font-size:100%"></html:text>																                                			     
-																														<div id="contactsContainer" style="width:200px;"></div>																				 
+																			                                			<input type="text" id="contactInput" style="width:220px;font-size:100%">																                                			     
+																														<div id="contactsContainer" style="width:220px;"></div>																				 
 																													</div>																													
 																			                                	</div>
 																                                			</td>
-																                                			<td>
+																                                			<td nowrap="nowrap">
 																                                				<html:button property="" onclick="addContact(document.getElementById('contactInput'))">Add</html:button>
 																                                				<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,extraReceivers],Style[15])" onmouseout="htm()"/>
 																                                			</td>
@@ -613,7 +617,7 @@ div.fakefile2 input{
 																                                		<tr height="75px">
 																                                			<td colspan="2">
 																                                				<div>
-																			                                		<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
+																			                                		<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="10" styleClass="inp-text" style="width:220px">
 																				                                    	<c:if test="${!empty messageForm.receivers}">
 																					                                    	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
 																					                                    </c:if>                

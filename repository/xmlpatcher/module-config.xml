@@ -4,6 +4,7 @@
 	
 	<security>
 		<action login-required="true" pattern="/xmlpatchesjson">ADMIN</action>
+		<action login-required="true" pattern="/xmlpatches">ADMIN</action>
 	</security>		
 	
 	<hibernate-classes required="true">

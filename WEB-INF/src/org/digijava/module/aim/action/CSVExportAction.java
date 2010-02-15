@@ -29,6 +29,7 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -68,6 +69,7 @@ public class CSVExportAction
 	    response.setContentType("application/vnd.ms-excel");
 	    response.setHeader("Content-Disposition",
 	                       "inline; filename=data.csv ");
+        XLSExporter.resetStyles();
 	
 	    HSSFWorkbook wb = new HSSFWorkbook();
 	

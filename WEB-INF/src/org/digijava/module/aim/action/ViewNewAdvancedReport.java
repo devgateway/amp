@@ -260,9 +260,8 @@ public class ViewNewAdvancedReport extends Action {
 					Collection<AmpReports> pgenerated = new ArrayList<AmpReports>();
 					pgenerated.add(ar);
 					request.getSession().setAttribute("publicgeneratedreports",pgenerated);
-				}
-				request.getSession().removeAttribute("publicuser");
-				request.getSession().removeAttribute("newpublicreport");
+				}				
+				
 			}
 			
 			//This is for public views to avoid nullPointerException due to there is no logged user.

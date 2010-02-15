@@ -1754,14 +1754,14 @@ public class TeamUtil {
 			String queryString = "";
 			Query qry = null;
 			//queryString = "select act.ampActivityId, act.name, act.ampId from "+ AmpActivity.class.getName()	+ " act  ";
-			queryString ="select group.ampActivityLastVersion.ampActivityId, group.ampActivityLastVersion.name, group.ampActivityLastVersion.ampId, from "
-				 + AmpActivityGroup.class.getName()+" group";
+			queryString ="select grp.ampActivityLastVersion.ampActivityId, grp.ampActivityLastVersion.name, grp.ampActivityLastVersion.ampId from "
+				 + AmpActivityGroup.class.getName()+" grp ";
 			if(teamId!=null){
 				//queryString+="where act.team="+teamId;
-				queryString+="where group.ampActivityLastVersion.team="+teamId;
+				queryString+=" where grp.ampActivityLastVersion.team="+teamId;
 			}else{
 				//queryString+="where act.team is null";
-				queryString+="where group.ampActivityLastVersion.team is null";
+				queryString+=" where grp.ampActivityLastVersion.team is null";
 			}
 			qry = session.createQuery(queryString);
 			

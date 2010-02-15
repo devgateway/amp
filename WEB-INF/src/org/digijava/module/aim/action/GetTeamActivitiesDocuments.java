@@ -126,12 +126,12 @@ public class GetTeamActivitiesDocuments extends Action {
 							while (it.hasNext()) {
 								activity = (AmpActivity) it.next();
 								uuids = new ArrayList<String>();
-								Iterator i = activity.getActivityDocuments()
-										.iterator();
-								while (i.hasNext()) {
-									uuids.add(((AmpActivityDocument) i.next())
-											.getUuid());
-								}
+								if(activity.getActivityDocuments()!=null && activity.getActivityDocuments().size()>0){
+									Iterator i = activity.getActivityDocuments().iterator();
+									while (i.hasNext()) {
+										uuids.add(((AmpActivityDocument) i.next()).getUuid());
+									}
+								}								
 								collection.addAll(getDocuments(getDocuments(uuids, request), activity));
 							}
 						} else if (ampTeam.getTeamCategory() != null) {
@@ -142,11 +142,11 @@ public class GetTeamActivitiesDocuments extends Action {
 							while (it.hasNext()) {
 								activity = (AmpActivity) it.next();
 								uuids = new ArrayList<String>();
-								Iterator i = activity.getActivityDocuments()
-										.iterator();
-								while (i.hasNext()) {
-									uuids.add(((AmpActivityDocument) i.next())
-											.getUuid());
+								if(activity.getActivityDocuments()!=null && activity.getActivityDocuments().size()>0){
+									Iterator i = activity.getActivityDocuments().iterator();
+									while (i.hasNext()) {
+										uuids.add(((AmpActivityDocument) i.next()).getUuid());
+									}
 								}
 								collection.addAll(getDocuments(getDocuments(uuids, request), activity));
 							}
@@ -158,11 +158,11 @@ public class GetTeamActivitiesDocuments extends Action {
 							while (it.hasNext()) {
 								activity = (AmpActivity) it.next();
 								uuids = new ArrayList<String>();
-								Iterator i = activity.getActivityDocuments()
-										.iterator();
-								while (i.hasNext()) {
-									uuids.add(((AmpActivityDocument) i.next())
-											.getUuid());
+								if(activity.getActivityDocuments()!=null && activity.getActivityDocuments().size()>0){
+									Iterator i = activity.getActivityDocuments().iterator();
+									while (i.hasNext()) {
+										uuids.add(((AmpActivityDocument) i.next()).getUuid());
+									}
 								}
 								collection.addAll(getDocuments(getDocuments(uuids, request), activity));
 							}
@@ -175,11 +175,11 @@ public class GetTeamActivitiesDocuments extends Action {
 						while (it.hasNext()) {
 							activity = (AmpActivity) it.next();
 							uuids = new ArrayList<String>();
-							Iterator i = activity.getActivityDocuments()
-									.iterator();
-							while (i.hasNext()) {
-								uuids.add(((AmpActivityDocument) i.next())
-										.getUuid());
+							if(activity.getActivityDocuments()!=null && activity.getActivityDocuments().size()>0){
+								Iterator i = activity.getActivityDocuments().iterator();
+								while (i.hasNext()) {
+									uuids.add(((AmpActivityDocument) i.next()).getUuid());
+								}
 							}
 							collection.addAll(getDocuments(getDocuments(uuids, request), activity));
 						}

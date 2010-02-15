@@ -41,9 +41,10 @@ public class ShowTeamReports extends Action {
 			throws java.lang.Exception {
 
 		String forwardName	= "forward";
-		
+
 		List dbReturnSet = null;
 		HttpSession session = request.getSession();
+        session.removeAttribute("publicuser");
 		String action = request.getParameter("action");
 		
 		boolean appSettingSet = false;

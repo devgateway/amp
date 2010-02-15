@@ -70,6 +70,7 @@ public class ViewAmp
         HttpSession session = request.getSession();
         session.setAttribute("isUserLogged",
                 new String("true"));
+        session.removeAttribute("publicuser");
         
         String siteAdmin = (String) session.getAttribute("ampAdmin");
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");

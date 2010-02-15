@@ -159,8 +159,6 @@ addLoadEvent(addpanel);
 }
 </style>
 <% String ampReportId=request.getParameter("ampReportId");
-	if(ampReportId==null) ampReportId=(String)request.getAttribute("ampReportId");
-	 request.setAttribute("ampReportId",ampReportId);
    String viewParam="";
    if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";
    String viewParamXLS="/xlsExport.do";      
@@ -170,8 +168,9 @@ addLoadEvent(addpanel);
    String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
 %>
 <script type="text/javascript">
-	function toggleActionForm(type) {
+	function toggleActionForm(type,reportId) {
 		var exportFormEl	= document.getElementById('exportForm');
+        exportFormEl.ampReportId.value=reportId;
 		if (type == null) return false;
 		if (type == "xls") {
 			exportFormEl.action = "/aim"+"<%=viewParamXLS%>";
@@ -195,7 +194,7 @@ addLoadEvent(addpanel);
 		-->
 
 		<td noWrap align=left valign="center">		
-			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
+			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('pdf','${ampReportId}'); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
 							hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
 				<digi:trn>Export to PDF</digi:trn>
@@ -204,7 +203,7 @@ addLoadEvent(addpanel);
 		</td>
 
 		<td noWrap align=left valign="center">
-			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
+			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('xls','${ampReportId}'); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
 							hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
 				<digi:trn>Export to Excel</digi:trn>

@@ -1118,6 +1118,7 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
         			SurveyFunding auxSurveyFunding = new SurveyFunding();
         			AmpOrganisation auxOrganization = DbUtil.getOrganisation(fundingOrganization.getAmpOrgId());
         			auxSurveyFunding.setAcronim(auxOrganization.getOrgCode());
+        			auxSurveyFunding.setOrgID(fundingOrganization.getAmpOrgId());
         			//TODO: Check if the user entered a second time and changed the Point of Delivery Donor.
         			auxSurveyFunding.setDeliveryDonorName(auxOrganization.getName());
         			auxSurveyFunding.setFundingOrgName(auxOrganization.getName());

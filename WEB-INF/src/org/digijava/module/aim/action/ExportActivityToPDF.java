@@ -563,14 +563,14 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(planningCell1);
 			
 			String outputValue=TranslatorWorker.translateText("Line Ministry Rank", locale, siteId)+ "\t: ";
-			if(activity.getLineMinRank()!=null){
+			if(activity.getLineMinRank()!=null && activity.getLineMinRank().intValue()>0){
 				AmpCategoryValue cv = CategoryManagerUtil.getAmpCategoryValueFromDb( activity.getLineMinRank().longValue() );
 				outputValue+=(cv.getValue()+1)+"\n";
 			}else{
 				outputValue+="\n";
 			}
 			outputValue+=TranslatorWorker.translateText("Ministry of Planning Rank", locale, siteId)+ "\t: ";
-			if(activity.getPlanMinRank()!=null){
+			if(activity.getPlanMinRank()!=null && activity.getPlanMinRank().intValue()>0){
 				AmpCategoryValue cv = CategoryManagerUtil.getAmpCategoryValueFromDb( activity.getPlanMinRank().longValue() );
 				outputValue+=(cv.getIndex()+1)+"\n";
 			}else{

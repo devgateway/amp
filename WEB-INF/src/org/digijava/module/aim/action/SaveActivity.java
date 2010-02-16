@@ -410,7 +410,11 @@ public class SaveActivity extends Action {
 		}
 
 		try {
-			activity.setLineMinRank(eaForm.getPlanning().getLineMinRank().intValue());
+			if(eaForm.getPlanning().getLineMinRank().intValue()>0){
+				activity.setLineMinRank(eaForm.getPlanning().getLineMinRank().intValue());
+			}else{
+				activity.setLineMinRank(null);
+			}
 //			if (activity.getLineMinRank().intValue() < 1 || activity.getLineMinRank().intValue() > 5) {
 //				logger.debug("Line Ministry Rank is out of permisible range (1 to 5)");
 //				activity.setLineMinRank(null);
@@ -421,7 +425,12 @@ public class SaveActivity extends Action {
 			activity.setLineMinRank(null);
 		}
 		try {
-			activity.setPlanMinRank(eaForm.getPlanning().getPlanMinRank().intValue());
+			if(eaForm.getPlanning().getPlanMinRank().intValue()>0){
+				activity.setPlanMinRank(eaForm.getPlanning().getPlanMinRank().intValue());
+			}else{
+				activity.setPlanMinRank(null);
+			}
+			
 //			if (activity.getPlanMinRank().intValue() < 1 || activity.getPlanMinRank().intValue() > 5) {
 //				logger.debug("Plan Ministry Rank is out of permisible range (1 to 5)");
 //				activity.setPlanMinRank(null);
@@ -1871,7 +1880,7 @@ public class SaveActivity extends Action {
 	
 	private void processPostStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm){
 		
-		if (eaForm.isEditAct()) {
+		if (eaForm.isEditAct() || eaForm.getActivityId()!=null) {
 		
 			//AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
 			// Setting approval status of activity

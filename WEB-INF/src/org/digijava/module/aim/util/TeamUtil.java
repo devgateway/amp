@@ -1670,7 +1670,7 @@ public class TeamUtil {
                     }
                     params += id;
                 }
-                queryString = "select a from " + AmpActivity.class.getName()+" a where a.team in ("+params+")";
+                queryString = "select grp.ampActivityLastVersion from " + AmpActivityGroup.class.getName()+" grp where grp.ampActivityLastVersion.team in ("+params+")";
                 qry = session.createQuery(queryString);
 
                 itr = qry.list().iterator();

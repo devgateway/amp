@@ -614,8 +614,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 			  eaForm.getIdentification().setApprovedBy(teamMember);
 			  eaForm.getIdentification().setApprovalDate(new Date());
-			  //eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
-			  eaForm.getIdentification().setApprovalStatus(actApprovalStatus);
+			  eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
+			  //eaForm.getIdentification().setApprovalStatus(actApprovalStatus);
 			  }
 
             else{

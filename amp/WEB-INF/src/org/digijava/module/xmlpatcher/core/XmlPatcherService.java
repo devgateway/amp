@@ -208,7 +208,8 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			if (success) {
 				logger.info("Succesfully applied patch "
 						+ ampPatch.getPatchId());
-				ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED);
+				if(patch.isCloseOnSuccess()) ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED);
+				else ampPatch.setState(XmlPatcherConstants.PatchStates.OPEN);
 				iterator.remove();
 				
 			} else if (log.getError()) {
@@ -220,7 +221,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 						+ " due to conditions not met.");
 
 			log.setElapsed(System.currentTimeMillis() - timeStart);
-			XmlPatcherUtil.addLogToPatch(ampPatch, log);
+			if(success || log.getError()) XmlPatcherUtil.addLogToPatch(ampPatch, log);
 			DbUtil.update(ampPatch);
 		}
 		logger.info(scheduledPatches.size()+" patches left unexecuted");

@@ -59,6 +59,40 @@
 		</condition>
 	</xsl:template>	
 	
+	<!-- Check if table or view exists -->
+	<xsl:template match="condition[@type='tableOrViewExists']">
+		<condition type="custom">
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>
+ 			<script returnVar="count">
+				<lang type="mysql">
+				SELECT count(table_name) from information_schema.tables where table_schema=database() AND table_name='<xsl:value-of select="."/>';
+				</lang>
+			</script>
+ 			<test>count.intValue()==1</test>
+		</condition>
+	</xsl:template>
+	
+	<!-- Check if table is empty -->
+	<xsl:template match="condition[@type='tableEmpty']">
+		<condition type="custom">
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>
+ 			<script returnVar="count">
+				<lang type="sql">
+				SELECT count(*) FROM <xsl:value-of select="."/>;
+				</lang>
+			</script>
+ 			<test>count.intValue()==0</test>
+		</condition>
+	</xsl:template>	
+	
 	<!-- Check if the current database has the given name -->
 	<xsl:template match="condition[@type='dbName']">
 		<condition type="custom">

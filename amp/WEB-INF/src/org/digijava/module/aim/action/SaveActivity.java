@@ -2772,7 +2772,7 @@ public class SaveActivity extends Action {
 	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet<AmpComponent>());
 		activity.setComponentFundings(new HashSet<AmpComponentFunding>());
-		if(eaForm.getComponents()!=null && eaForm.getComponents().getCompotosave()!=null)
+		/*if(eaForm.getComponents()!=null && eaForm.getComponents().getCompotosave()!=null)
 		for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
 			AmpComponent component = (AmpComponent) iterator.next();
 			activity.getComponents().add(component);
@@ -2781,7 +2781,38 @@ public class SaveActivity extends Action {
 				activity.getComponentFundings().add(acf);
 
 			}
+		}*/
+		
+		if(eaForm.getComponents().getCompotosave() == null) {
+			eaForm.getComponents().setCompotosave(new HashSet());
 		}
+		//eaForm.getComponents().getCompotosave().addAll(ActivityUtil.getComponents(activity.getAmpActivityId()));
+		
+		//eaForm.getComponents().setCompotosave(ActivityUtil.getComponents(activity.getAmpActivityId()));
+		/*Iterator<Components<FundingDetail>> iSelectedComponents = eaForm.getComponents().getSelectedComponents().iterator();
+		while(iSelectedComponents.hasNext()) {
+			Components auxComponents = iSelectedComponents.next();
+			Iterator<AmpComponent> iCompotosave = eaForm.getComponents().getCompotosave().iterator();
+			boolean add = true;
+			while(iCompotosave.hasNext()) {
+				AmpComponent auxComponent = iCompotosave.next();
+				if(auxComponents.getTitle().equalsIgnoreCase(auxComponent.getTitle())) {
+					add = false;
+				}
+			}
+			if(add) {
+				AmpComponent newAmpComponent = new AmpComponent();
+				newAmpComponent.setActivity(activity);
+				newAmpComponent.setCode(auxComponents.getCode());
+				//newAmpComponent.setCreationdate(auxComponents.getReportingDate());
+				newAmpComponent.setDescription(auxComponents.getDescription());
+				newAmpComponent.setTitle(auxComponents.getTitle());
+				//newAmpComponent.setType(auxComponents.getType_Id());
+				newAmpComponent.setUrl(auxComponents.getUrl());
+				//newAmpComponent.setFunding(auxComponents.get);
+				eaForm.getComponents().getCompotosave().add(newAmpComponent);
+			}
+		}*/
 		
 		
 		if (eaForm.getComponents().getSelectedComponents() != null) {

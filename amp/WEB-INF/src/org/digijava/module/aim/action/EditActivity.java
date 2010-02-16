@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -2076,6 +2077,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 		}
 
 		eaForm.getComponents().setSelectedComponents(selectedComponents);
+		
+		// Add components saved before.
+		if(eaForm.getComponents().getCompotosave() == null) {
+			eaForm.getComponents().setCompotosave(new HashSet());
+		}
+		eaForm.getComponents().getCompotosave().addAll(ActivityUtil.getComponents(activity.getAmpActivityId()));
 	}
 
 	private BigDecimal getAmountInDefaultCurrency(FundingDetail fundDet, String toCurrCode ) {

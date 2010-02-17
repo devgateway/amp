@@ -1250,45 +1250,45 @@ public class ShowActivityPrintPreview
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
 
-			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), actId);
-			Iterator cItr = fundingComponentActivity.iterator();
-			while (cItr.hasNext()) {
-				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
-						.next();
+			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(tempComp.getComponentId(), actId);
+			if(fundingComponentActivity!=null && fundingComponentActivity.size()>0){
+				Iterator cItr = fundingComponentActivity.iterator();
+				while (cItr.hasNext()) {
+					AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
+							.next();
 
-				double disb = 0;
-				if (ampCompFund.getAdjustmentType().intValue() == 1
-					&& ampCompFund.getTransactionType().intValue() == 1)
-					disb = ampCompFund.getTransactionAmount().doubleValue();
+					double disb = 0;
+					if (ampCompFund.getAdjustmentType().intValue() == 1
+						&& ampCompFund.getTransactionType().intValue() == 1)
+						disb = ampCompFund.getTransactionAmount().doubleValue();
 
-				eaForm.getComponents().setCompTotalDisb(eaForm.getComponents().getCompTotalDisb() + disb);
-				FundingDetail fd = new FundingDetail();
-				fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
-				if (fd.getAdjustmentType() == 1) {
-					fd.setAdjustmentTypeName("Actual");
-				} else if (fd.getAdjustmentType() == 0) {
-					fd.setAdjustmentTypeName("Planned");
+					eaForm.getComponents().setCompTotalDisb(eaForm.getComponents().getCompTotalDisb() + disb);
+					FundingDetail fd = new FundingDetail();
+					fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
+					if (fd.getAdjustmentType() == 1) {
+						fd.setAdjustmentTypeName("Actual");
+					} else if (fd.getAdjustmentType() == 0) {
+						fd.setAdjustmentTypeName("Planned");
+					}
+					fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
+					fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
+					fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
+					fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
+					fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
+					fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+					if (fd.getTransactionType() == 0) {
+						tempComp.getCommitments().add(fd);
+					} else if (fd.getTransactionType() == 1) {
+						tempComp.getDisbursements().add(fd);
+					} else if (fd.getTransactionType() == 2) {
+						tempComp.getExpenditures().add(fd);
+					}
 				}
-				fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
-				fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
-				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
-				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
-				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
-				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
-				if (fd.getTransactionType() == 0) {
-					tempComp.getCommitments().add(fd);
-				} else if (fd.getTransactionType() == 1) {
-					tempComp.getDisbursements().add(fd);
-				} else if (fd.getTransactionType() == 2) {
-					tempComp.getExpenditures().add(fd);
-				}
+				ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
 			}
+			
 
-			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
-
-			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
-						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), actId);
+			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil.getPhysicalProgressComponentActivity(tempComp.getComponentId(), actId);
 
 			if (phyProgress != null && phyProgress.size() > 0) {
 				Collection physicalProgress = new ArrayList();

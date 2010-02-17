@@ -72,33 +72,20 @@ function setHoveredTable(tableId, hasHeaders) {
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>			
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript">
 <!--
 
 function checkSelMembers() {
 	var msg='';
-	if (document.aimTeamMemberForm.selMembers.checked != null) { 
-		if (document.aimTeamMemberForm.selMembers.checked == false) {
-			msg+='\n <digi:trn key="aim:members:selectMembersToRemove">Please choose a member to remove</digi:trn>';
-			alert(msg);
-			return false;
-		}
-	} else { // 
-		var length = document.aimTeamMemberForm.selMembers.length;	  
-		var flag = 0;
-		for (i = 0;i < length;i ++) {
-			if (document.aimTeamMemberForm.selMembers[i].checked == true) {
-				flag = 1;
-				break;
-			}
-		}
-
-		if (flag == 0) {
-			msg+='\n <digi:trn key="aim:members:selectMembersToRemove">Please choose a member to remove</digi:trn>';
-			alert(msg);
-			return false;					  
-		}
+	//if none of the users are checked, we should show an alert
+	var checkedUsers = $('input.selMembersCheckbox:checked');
+	if(checkedUsers==null || checkedUsers.length==0){
+		msg+='\n <digi:trn>Please choose a member to remove</digi:trn>';
+		alert(msg);
+		return false;
 	}
+	
 	return true;
 }	
 
@@ -263,7 +250,7 @@ function addTeamMember(id) {
 																<c:if test="${mem.teamHead == false}">
 																<tr>
 																	<td width="3">
-																		<html:multibox property="selMembers" >
+																		<html:multibox property="selMembers" styleClass="selMembersCheckbox">
 																			<c:out value="${mem.memberId}"/>
 																		</html:multibox>																
 																	</td>

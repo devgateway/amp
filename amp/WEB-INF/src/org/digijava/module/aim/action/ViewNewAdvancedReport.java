@@ -118,7 +118,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 
 			if( ampAppSettings.getDefaultViewablePages() != null && ampAppSettings.getDefaultViewablePages().intValue() != 0){
-				request.setAttribute("viewablePages", ampAppSettings.getDefaultViewablePages()-1);
+				request.setAttribute("viewablePages", ampAppSettings.getDefaultViewablePages());
 			}else{
 				request.setAttribute("viewablePages", Constants.VIEWABLE_PAGES);
 			}

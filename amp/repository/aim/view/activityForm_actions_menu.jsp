@@ -31,7 +31,7 @@
 			</feature:display>
 			<feature:display name="Logframe" module="Previews">
 				<field:display name="Logframe Preview Button" feature="Logframe" >			
-					<a id="linkEditActivityMenu" onclick="previewLogFrameClicked()">
+					<a id="linkEditActivityMenu" onclick="previewClicked()">
 						<digi:trn>Preview</digi:trn>&nbsp;|&nbsp;
 					</a>
 				</field:display>

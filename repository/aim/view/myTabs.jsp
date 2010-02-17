@@ -14,6 +14,7 @@
 
 <script language="JavaScript">
 	
+    var  moreSettingsPanel = null;
     var continueExecution = true;
     function checkstatus(){
 
@@ -212,10 +213,49 @@ var myTabsObject;
 	}
 </script>
 <script language="JavaScript">
-/*	function addActivity() {
-		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
-	}
-	*/
+	
+function showDiv(){
+    if(moreSettingsPanel!=null){
+        moreSettingsPanel.destroy();
+    }
+    /* 
+     * some messages need long time to load, 
+     * that is why we create blank panel here, so user will see blank panel
+     * before function call is completed
+     */
+    
+    //create div to hold selected message
+    var div=document.createElement('DIV');
+    div.id="moreSettingsPanel";
+    
+    document.body.appendChild(div);
+   
+    // create body div to hold selected message
+    var divBody=document.createElement('DIV');
+    divBody.style.padding="5";
+    divBody.className="bd";
+	divBody.overflow="auto",
+    
+    divBody.id="msg_bd";
+    divBody.className='scrollable'
+    var moreDiv = document.getElementById('morePropId');
+    divBody.innerHTML=moreDiv.innerHTML;
+    div.appendChild(divBody);
+    
+    moreSettingsPanel = new YAHOO.widget.Panel("moreSettingsPanel",{
+        width: 600,
+        constraintoviewport: true,
+        fixedcenter: true,
+        Underlay:"shadow", 
+        modal: true,
+        close:true, 
+        visible:true, 
+        draggable:true} );
+    moreSettingsPanel.render();
+
+    
+}
+
 
 function toggleSettings(){
 	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
@@ -323,7 +363,10 @@ DIV.panelList {
 	color:black;
 	background-color:white;
 }
-
+	
+ .scrollable {
+            height: 400px; overflow: auto;
+ }	
 </style>
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
 	<logic:present name="myActiveTabs" scope="session">

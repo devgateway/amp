@@ -31,9 +31,9 @@
 <digi:form action="/showAddComponent.do" method="post" name="aimAddComponentForm" type="EditActivityForm">
 	<html:hidden property="componentReset" value="false" />
 	<logic:notEmpty name="aimEditActivityForm" property="components.componentId">
-		<logic:greaterThan name="aimEditActivityForm" property="components.componentId" value="0">
+		
 		<html:hidden property="components.componentId" />
-		</logic:greaterThan>
+		
 	</logic:notEmpty>
 
 	<input type="hidden" name="selectedDate">

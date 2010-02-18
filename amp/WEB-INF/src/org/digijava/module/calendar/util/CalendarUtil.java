@@ -258,7 +258,9 @@ public class CalendarUtil {
 					AmpEventType item = (AmpEventType) iter.next();
 					
 					css+=".dhx_cal_event_line.event_"+item.getId()+"{";
-					css+="background-color:"+item.getColor()+";";
+					css+="background-color:"+item.getColor()+";}";
+                    
+                    css+=".dhx_cal_event_line.event_"+item.getId()+" span {";
 					css+="color:white;}";
 					
 					css+=".dhx_cal_event.event_"+item.getId()+" div{";
@@ -266,7 +268,11 @@ public class CalendarUtil {
 					css+="color:white;}";
 					
 					css+=".dhx_cal_event_clear.event_"+item.getId()+"{";
-					css+="color:"+item.getColor()+";}";
+                    css+="background-color:"+item.getColor()+";";
+					css+="color:white;}";
+
+                    css+=".dhx_cal_event_clear.event_"+item.getId()+" span {";
+					css+="color:white;}";
 				}
 				
 				

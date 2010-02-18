@@ -2007,7 +2007,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 				
 				fd.setCurrencyCode(toCurrCode);
-				fd.setTransactionAmount(FormatHelper.formatNumber( amt.getValue()));
+				//TODO: Remove the hardcoded multiplication.
+				fd.setTransactionAmount(FormatHelper.formatNumber( amt.getValue().multiply(new BigDecimal(1000))));
 				
 				
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());

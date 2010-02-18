@@ -242,7 +242,7 @@
 			var isDotted = ev.text.length >20 ? dotted : "";
 		    var text = ev.text.substr(0,20)+isDotted;
 	        var img = '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
-	        return "<span style=\"color:  #000000\" title='"+"Title: "+text+" "+" StartDate: "+start_date+" EndDate: "+end_date+"'>"+img+""+text+"</span>";
+	        return "<span  title='"+"Title: "+text+" "+" StartDate: "+start_date+" EndDate: "+end_date+"'>"+img+""+text+"</span>";
 		 }
 	 }else{
 

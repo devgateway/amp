@@ -83,6 +83,7 @@ public class ShowAddComponent extends Action {
 			// default action
 			return showCompoenents(mapping, form, request, response);
 		} catch (Exception e) {
+			logger.error(e);
 			return null;
 		}
 
@@ -247,6 +248,7 @@ public class ShowAddComponent extends Action {
 
 		newCompo.setType(type);
 		newCompo.setTitle(name);
+		newCompo.setAmpComponentId(new Long(System.currentTimeMillis() * -1));
 
 		//ComponentsUtil.addNewComponent(newCompo);
 		eaForm.getComponents().setComponentId(newCompo.getAmpComponentId());
@@ -269,6 +271,13 @@ public class ShowAddComponent extends Action {
 			org.digijava.module.aim.dbentity.AmpComponent ampComp = new org.digijava.module.aim.dbentity.AmpComponent();
 			ampComp.setTitle( name );
 			ampComp.setType( type );
+			
+			ampComp.setAmpComponentId(eaForm.getComponents().getComponentId());
+			/*String id = request.getParameter("fundId");
+			long cId = Long.parseLong(id);
+			if (cId > 0) {
+				ampComp.setActivity(ActivityUtil.getAmpActivity(eaForm.getActivityId()));
+			}*/
 			//ComponentsUtil.updateComponents(ampComp);
 			
 			Components<FundingDetail> compFund = new Components<FundingDetail>();
@@ -464,7 +473,7 @@ public class ShowAddComponent extends Action {
 					FundingDetail funding = (FundingDetail) iterator.next();
 					AmpComponentFunding compofunding = new AmpComponentFunding();
 					compofunding.setTransactionAmount(new BigDecimal(funding.getTransactionAmount()));
-					compofunding.setTransactionType(funding.getTransactionType());
+					compofunding.setTransactionType(Constants.COMMITMENT);
 					compofunding.setAdjustmentType(funding.getAdjustmentType());
 					compofunding.setTransactionDate(new Date(funding.getTransactionDate()));
 					compofunding.setComponent(ampComp);
@@ -485,7 +494,7 @@ public class ShowAddComponent extends Action {
 					FundingDetail funding = (FundingDetail) iterator.next();
 					AmpComponentFunding compofunding = new AmpComponentFunding();
 					compofunding.setTransactionAmount(new BigDecimal(funding.getTransactionAmount()));
-					compofunding.setTransactionType(funding.getTransactionType());
+					compofunding.setTransactionType(Constants.DISBURSEMENT);
 					compofunding.setAdjustmentType(funding.getAdjustmentType());
 					compofunding.setTransactionDate(new Date(funding.getTransactionDate()));
 					compofunding.setComponent(ampComp);
@@ -506,7 +515,7 @@ public class ShowAddComponent extends Action {
 					FundingDetail funding = (FundingDetail) iterator.next();
 					AmpComponentFunding compofunding = new AmpComponentFunding();
 					compofunding.setTransactionAmount(new BigDecimal(funding.getTransactionAmount()));
-					compofunding.setTransactionType(funding.getTransactionType());
+					compofunding.setTransactionType(Constants.EXPENDITURE);
 					compofunding.setAdjustmentType(funding.getAdjustmentType());
 					compofunding.setTransactionDate(new Date(funding.getTransactionDate()));
 					compofunding.setComponent(ampComp);
@@ -535,12 +544,29 @@ public class ShowAddComponent extends Action {
 			
 			ampComp.setFunding(fundingset);
 			eaForm.getComponents().setCompTotalDisb(totdisbur);
-			if (eaForm.getComponents().getCompotosave()!=null){
+			
+			if (eaForm.getComponents().getCompotosave()==null){
+				eaForm.getComponents().setCompotosave(new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>());
+			}
+			// Add the AmpComponent or replace it in collection compotosave.
+			boolean add = true;
+			Iterator<org.digijava.module.aim.dbentity.AmpComponent> iCompotosave = eaForm.getComponents().getCompotosave().iterator();
+			while(iCompotosave.hasNext()) {
+				org.digijava.module.aim.dbentity.AmpComponent auxComponent = iCompotosave.next();
+				// Case 1: I'm editing an existing (previously saved) component. 
+				if(ampComp.getAmpComponentId().equals(auxComponent.getAmpComponentId())) {
+					add = false;
+					eaForm.getComponents().getCompotosave().remove(auxComponent);
+					eaForm.getComponents().getCompotosave().add(ampComp);
+					
+				} else if(auxComponent.getTitle() != null && auxComponent.getTitle().equals(ampComp.getTitle())) {
+					// Case 2: I'm editing a new component not yet saved.
+					//TODO: if title changes then is considered a different component, this should be changed.
+					add = false;
+				}
+			}
+			if(add) {
 				eaForm.getComponents().getCompotosave().add(ampComp);
-			}else{
-				ArrayList<org.digijava.module.aim.dbentity.AmpComponent> array = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>(); 
-				array.add(ampComp);
-				eaForm.getComponents().setCompotosave(array);
 			}
 		} catch (Exception e) {
 			logger.error(e);

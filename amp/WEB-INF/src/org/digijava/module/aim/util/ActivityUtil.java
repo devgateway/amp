@@ -4534,6 +4534,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}
     }  
     
+    public static Long getActivityNextVersionId(Long previousVersionId) throws Exception{
+    	Long retVal=null;
+    	Session session=null;
+    	Query qry=null;
+    	String queryString=null;
+    	try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select act.ampActivityId from " + AmpActivityVersion.class.getName() +" act where act.ampActivityPreviousVersion.ampActivityId="+previousVersionId;
+			qry=session.createQuery(queryString);
+			retVal=(Long)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+    	return retVal;
+    }
+    
     public static class HelperActivity{
 		//List<HelperActivity> activities;
 		Long activityId;

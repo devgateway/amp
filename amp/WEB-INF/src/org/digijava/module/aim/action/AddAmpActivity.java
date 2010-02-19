@@ -910,11 +910,14 @@ private ActionForward showStep9(ActionMapping mapping,
 	        // EUActivities = same as Costs
 	        request.setAttribute("costs", euActs);
 	        request.setAttribute("actId", eaForm.getActivityId());
-	        int risk = IndicatorUtil.getOverallRisk(eaForm.getActivityId());
-	        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
-	        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
-	        request.setAttribute("overallRisk", riskName);
-	        request.setAttribute("riskColor", rskColor);
+	        if(eaForm.getActivityId()!=null){
+	        	int risk = IndicatorUtil.getOverallRisk(eaForm.getActivityId());
+		        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
+		        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
+		        request.setAttribute("overallRisk", riskName);
+		        request.setAttribute("riskColor", rskColor);
+	        }	        
+	        
 	
 	        Long prev = new Long( -1);
 	        Long next = new Long( -1);

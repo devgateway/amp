@@ -109,14 +109,26 @@
 	// response object's properties.
 		//alert("Connection Failure!"); 
 	} 
-    var specialResponseSuccess = function(o){
+    var specialResponseSuccess2 = function(o){
     	myclose();
     	document.aimEditActivityForm.submit();
    	}
+    var specialResponseSuccess = function(o){
+    	var postString		= "edit=true&" + generateFields(1);
+   	 	<digi:context name="commentUrl" property="context/aim/selectSectorSwitch.do"/>  
+   		var url = "<%=commentUrl %>";
+   		checkAndClose=true;
+   		YAHOO.util.Connect.asyncRequest("POST", url, specialCallback2, postString);
+   	}
 
-	var specialCallback =
+    var specialCallback =
 	{
 			success:specialResponseSuccess, 
+			failure:responseFailure 
+	}
+	var specialCallback2 =
+	{
+			success:specialResponseSuccess2, 
 			failure:responseFailure 
 	}
 	var callback = 
@@ -203,7 +215,8 @@
 	function buttonAdd(){
 		if(document.aimSelectSectorForm.sector.value != -1){
 			var postString		= "edit=true&" + generateFields(1);
-			<digi:context name="commentUrl" property="context/aim/selectSectorSwitch.do"/>  
+
+			 <digi:context name="commentUrl" property="context/aim/selectSectors.do"/>  
 			var url = "<%=commentUrl %>";
 			checkAndClose=true;
 			YAHOO.util.Connect.asyncRequest("POST", url, specialCallback, postString);

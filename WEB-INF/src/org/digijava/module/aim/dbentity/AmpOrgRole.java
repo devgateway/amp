@@ -93,9 +93,17 @@ public class AmpOrgRole implements Serializable, Versionable
 		if (activity==null){
 			//this is a new role added to an unsaved activity
 			return (orgRole.getAmpOrgRoleId().equals(this.ampOrgRoleId));
-		}else{
-		return (orgRole.getActivity().getAmpActivityId().equals(activity.getAmpActivityId()) &&orgRole.getOrganisation().getAmpOrgId().equals(organisation.getAmpOrgId()) && orgRole.getRole().getAmpRoleId().equals(role.getAmpRoleId()));
 		}
+        else{
+            if(organisation==null||orgRole.getOrganisation()==null){
+                return false;
+            }
+          
+         else {
+                return (orgRole.getActivity().getAmpActivityId().equals(activity.getAmpActivityId()) && orgRole.getOrganisation().getAmpOrgId().equals(organisation.getAmpOrgId()) && orgRole.getRole().getAmpRoleId().equals(role.getAmpRoleId()));
+            }
+        }
+
 		}
 	
 	@Override

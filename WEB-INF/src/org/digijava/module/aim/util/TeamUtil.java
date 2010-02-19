@@ -1697,7 +1697,9 @@ public class TeamUtil {
                             if(donors.trim().length() > 0) {
                                 donors += ", ";
                             }
-                            donors += orgRole.getOrganisation().getName();
+                            if(orgRole.getOrganisation()!=null){
+                                donors += orgRole.getOrganisation().getName();
+                            }
                         }
                     }
 

@@ -1075,8 +1075,14 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setSenderId(message.getSenderId());
 			 form.setCreationDate(DateConversion.ConvertDateToString(message.getCreationDate()));
 			 form.setClassName(message.getClassName());
-			 form.setObjectURL(message.getObjectURL());
-             form.setReceiver(message.getReceivers());
+			 /**
+			  * change object url if necessary
+			  */
+			 String objectUrl=message.getObjectURL();
+			 objectUrl = updateObjectURLIfNeeded(objectUrl);
+			 form.setObjectURL(objectUrl);
+			 
+			 form.setReceiver(message.getReceivers());
 	         if(message.getSenderType().equalsIgnoreCase("User")){
 	        	 form.setSender(message.getSenderName());
 	         } else{
@@ -1119,7 +1125,7 @@ public class AmpMessageActions extends DispatchAction {
 	 /**
 	 * Constructs XML from Messages
 	 */
-    private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws AimException {
+    private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws Exception {
 
         String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         result += "<" + ROOT_TAG + ">";
@@ -1159,6 +1165,7 @@ public class AmpMessageActions extends DispatchAction {
                 result += " read=\"" + state.getRead() + "\"";
                 result += " isDraft=\"" + state.getMessage().getDraft() + "\"";
                 String objUrl=org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getObjectURL());
+                objUrl = updateObjectURLIfNeeded(objUrl);
                 result += " objURL=\"" + objUrl + "\"";
                 result += ">";
                 AmpMessage forwarded = state.getMessage().getForwardedMessage();
@@ -1190,6 +1197,34 @@ public class AmpMessageActions extends DispatchAction {
         result += "</" + ROOT_TAG + ">";
         return result;
     }
+    /**
+     * In case if message(approval type) references activity, then while getting reference URL , we have to change url's activityId to the correct activityId if needed.
+     * It may become needed if the versioning is on and for this activity we already have new version(In this case old version is already useless for messaging).
+     * We have to load the last version of activity
+     * @param objUrl
+     * @return Updated Object Url
+     * @throws Exception
+     */
+	private String updateObjectURLIfNeeded(String objUrl) throws Exception {
+		if(objUrl!=null){
+			 if(objUrl.indexOf("ampActivityId=")!=-1){ //message references to some activity
+				 Long activityId=new Long(objUrl.substring(objUrl.lastIndexOf("=")+1));
+				 Long nextVersionId=null;
+				 Long lastVersionId=activityId;
+			
+				 nextVersionId = ActivityUtil.getActivityNextVersionId(activityId);
+				 if(nextVersionId!=null){
+					 while(nextVersionId!=null){
+						 lastVersionId=nextVersionId;
+						 nextVersionId=ActivityUtil.getActivityNextVersionId(lastVersionId);
+			    	}
+			    }
+				//change objectURL to reference correct activityId
+				objUrl=objUrl.substring(0,objUrl.lastIndexOf("=")+1)+lastVersionId;
+			 }				 
+		}
+		return objUrl;
+	}
  
     /**
      * used to build forwarded or replied message xml

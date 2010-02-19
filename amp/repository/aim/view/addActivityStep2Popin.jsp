@@ -206,7 +206,7 @@
 			<digi:context name="commentUrl" property="context/aim/selectSectorSwitch.do"/>  
 			var url = "<%=commentUrl %>";
 			checkAndClose=true;
-			YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
+			YAHOO.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");

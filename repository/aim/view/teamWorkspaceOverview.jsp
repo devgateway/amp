@@ -43,6 +43,12 @@ function removeChildWorkspace(id) {
 }
 
 function update(action) {
+    if(document.aimUpdateWorkspaceForm.teamName.value.trim()==''){
+        var message="<digi:trn jsFriendly="true">Please enter name</digi:trn>";
+        alert(message)
+        document.aimUpdateWorkspaceForm.teamName.focus();
+        return false;
+    }
 	var id = document.aimUpdateWorkspaceForm.teamId.value;
 	<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
 	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
@@ -163,6 +169,7 @@ function updateChild(action) {
 																<digi:trn key="aim:teamName">
 																Team Name
 																</digi:trn>
+                                                                 <font size="2" color="#FF0000">*</font>
 															</td>
 															<td align="left">
 																<html:text property="teamName" size="50" styleClass="inp-text" />

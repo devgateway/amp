@@ -371,6 +371,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedFinancingInstruments = null;
 				this.selectedTypeOfAssistance = null;
 				this.selectedDonorTypes = null;
+				this.regionSelected = null;
 				this.selectedDonorGroups = null;
 				this.selectedExecutingAgency = null;
 				this.selectedBeneficiaryAgency = null;

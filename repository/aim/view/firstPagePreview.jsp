@@ -198,7 +198,7 @@ function downloadFile(placeholder) {
 							</td>
 							<td align="left">
 								&nbsp;
-								<button class="dr-menu buton" type="button" style="padding-bottom: 1px; padding-top: 1px;"  
+								<button class="dr-menu buton" type="button" style="padding-bottom: 2px; padding-top: 2px;"  
 								onClick="hidePanel(0)">
 									<digi:trn key="cancel">Cancel</digi:trn>
 								</button>

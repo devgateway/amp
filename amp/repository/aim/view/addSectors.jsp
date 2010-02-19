@@ -206,7 +206,9 @@
 			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 			var url = "<%=commentUrl %>";
-			YAHOO.util.Connect.asyncRequest("POST", url, specialCallback, postString);
+			
+			YAHOO.util.Connect.asyncRequest("POST", url, 
+					specialCallback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");

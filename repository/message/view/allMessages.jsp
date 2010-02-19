@@ -251,25 +251,20 @@ background-color:yellow;
         divBody.innerHTML=responseText;
 	}
         
-       function unCheckMessages() {
-            var chk=document.messageForm.getElementsByTagName('input');
-            for(var i=0;i<chk.length;i++){
-                if(chk[i].type == 'checkbox'&&chk[i].checked){
-                    var msg='<digi:trn>Please uncheck or delete selected message(s)</digi:trn>';
-                    alert(msg);
-                    return false;
-                }
-            }
-            return true;
+    function unCheckMessages() {
+        var chk= $("input[id^='delChkbox_']:checked");
+        if(chk.length>0){
+            var msg='<digi:trn>Please uncheck or delete selected message(s)</digi:trn>';
+            alert(msg);
+            return false;
         }
+        return true;
+    }
         function getSelectedMessagesIds() {
-            var chk=document.messageForm.getElementsByTagName('input');
             var msgIds='';
-            for(var i=0;i<chk.length;i++){
-                if(chk[i].type == 'checkbox'&&chk[i].checked){
-                    msgIds+=chk[i].value+',';
-                }
-            }
+           $("input[id^='delChkbox_']:checked").each(function(){
+                msgIds+=this.value+',';
+            })            
            if(msgIds.length>0){
                msgIds=msgIds.substring(0,msgIds.length-1);
            }

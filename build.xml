@@ -383,7 +383,8 @@
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>	
-			<transaction>CREATE DATABASE ${clean.db}</transaction>		
+			<transaction>CREATE DATABASE ${clean.db}</transaction>
+			<transaction>CREATE VIEW ${clean.db}.amp_activity (mycol) AS SELECT 'abc'</transaction>
 		</sql>
 		
 		<echo message="Creating Hibernate table structure and keys..."/>
@@ -398,7 +399,7 @@
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>SET foreign_key_checks = 0</transaction>
-			<transaction>drop table if exists ${clean.db}.amp_activity</transaction>
+			<transaction>drop view if exists ${clean.db}.amp_activity</transaction>
 			<transaction>SET foreign_key_checks = 1</transaction>
 			<transaction>SELECT concat('CREATE OR REPLACE VIEW ',table_name,' AS ',view_definition,';;') FROM views WHERE table_schema='${clean.source}'</transaction>
 		</sql>

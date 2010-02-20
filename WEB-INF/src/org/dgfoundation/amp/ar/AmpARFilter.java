@@ -644,7 +644,8 @@ public class AmpARFilter extends PropertyListable {
 		if (!ispublicuser){
 			if("Management".equals(this.getAccessType())){
 				TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams);
+				+ Util.toCSString(ampTeams)
+				+ ") ";
 				//+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				//+ Util.toCSString(ampTeams) + ") )";
 			}else{

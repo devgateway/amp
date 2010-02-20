@@ -652,7 +652,7 @@ public final class PermissionUtil {
 	    Iterator i = list.iterator();
 	    while (i.hasNext()) {
 		Object[] element = (Object[]) i.next();
-		ret.put((String) element[0], (String) element[1]);
+		ret.put( element[0].toString(), (String) element[1]);
 	    }
 	    return ret;
 

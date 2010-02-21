@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.widget.dbentity.AmpDaWidgetPlace" table="AMP_WIDGET_PLACE">
+		<cache usage="read-write" />
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">AMP_WIDGET_PLACE_seq</param>
+			</generator>
+		</id>
+
+		<property name="name" column="place_name" type="java.lang.String" />
+		<property name="code" column="place_code" type="java.lang.String" />
+		<property name="module" column="module_name" type="java.lang.String" />
+		<property name="moduleInstance" column="module_instance" type="java.lang.String" />
+		<property name="lastRendered" column="last_rendered" type="java.util.Date" />
+		<property name="placeType" column="place_type" type="java.lang.Integer" />
+
+
+		<many-to-one name="assignedWidget" class="org.digijava.module.widget.dbentity.AmpWidget"
+			column="assigned_widget_id" cascade="none" />
+
+	</class>
+</hibernate-mapping>

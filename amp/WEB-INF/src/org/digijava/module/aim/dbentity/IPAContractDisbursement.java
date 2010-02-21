@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -22,6 +23,7 @@ public class IPAContractDisbursement implements Serializable {
 	private Long id;
 	private Integer adjustmentType;
 	private BigDecimal amount;
+	private transient String stringAmount;
 	private AmpCurrency currency;
 	private Date date;
         private IPAContract contract;
@@ -94,5 +96,14 @@ public class IPAContractDisbursement implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getStringAmount() {
+		return FormatHelper.formatNumber(this.amount);
+	}
+
+	public void setStringAmount(String stringAmount) {
+		this.stringAmount = stringAmount;
+		this.amount = FormatHelper.parseBigDecimal(stringAmount);
 	}
 }

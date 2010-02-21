@@ -824,7 +824,7 @@ addLoadEvent(autosum);
 								<html:option value="1"><digi:trn key="aim:ipa:popup:planned">Planned</digi:trn></html:option>							
 							</html:select>
 							&nbsp;
-							<html:text indexed="true" name="contractDisbursement" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
+							<html:text indexed="true" name="contractDisbursement" property="stringAmount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
 							&nbsp;
 							<html:select name="contractDisbursement" indexed="true" property="currCode" styleClass="inp-text">
 								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>

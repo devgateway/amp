@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.IPAContractForm;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -207,16 +208,16 @@ public class EditIPAContract extends MultiAction {
         else euaf.setContractCompletion("");
         
         if (contract.getTotalECContribIBAmount() != null) {
-            euaf.setTotalECContribIBAmount(String.valueOf(contract.getTotalECContribIBAmount()));
+            euaf.setTotalECContribIBAmount(FormatHelper.formatNumber(contract.getTotalECContribIBAmount()));
         }
         
         if (contract.getTotalAmount() != null) {
-            euaf.setTotalAmount(String.valueOf(contract.getTotalAmount()));
+            euaf.setTotalAmount(FormatHelper.formatNumber(contract.getTotalAmount()));
         }
         else euaf.setTotalAmount("");
         
         if (contract.getContractTotalValue() != null) {
-            euaf.setContractTotalValue(String.valueOf(contract.getContractTotalValue()));
+            euaf.setContractTotalValue(FormatHelper.formatNumber(contract.getContractTotalValue()));
         }
         else euaf.setContractTotalValue("");
         
@@ -233,29 +234,29 @@ public class EditIPAContract extends MultiAction {
         else euaf.setDibusrsementsGlobalCurrency((long)0);
                 
         if (contract.getTotalECContribINVAmount() != null) {
-            euaf.setTotalECContribINVAmount(String.valueOf(contract.getTotalECContribINVAmount()));
+            euaf.setTotalECContribINVAmount(FormatHelper.formatNumber(contract.getTotalECContribINVAmount()));
         }
         else euaf.setTotalECContribINVAmount("");
         
         if (contract.getTotalNationalContribCentralAmount() != null) {
-            euaf.setTotalNationalContribCentralAmount(String.valueOf(contract.getTotalNationalContribCentralAmount()));
+            euaf.setTotalNationalContribCentralAmount(FormatHelper.formatNumber(contract.getTotalNationalContribCentralAmount()));
         }
         else  euaf.setTotalNationalContribCentralAmount("");
         
         if (contract.getTotalNationalContribRegionalAmount() != null) {
-            euaf.setTotalNationalContribRegionalAmount(String.valueOf(contract.getTotalNationalContribRegionalAmount()));
+            euaf.setTotalNationalContribRegionalAmount(FormatHelper.formatNumber(contract.getTotalNationalContribRegionalAmount()));
         }
         else euaf.setTotalNationalContribRegionalAmount("");
         
         
         if (contract.getTotalNationalContribIFIAmount() != null) {
-            euaf.setTotalNationalContribIFIAmount(String.valueOf(contract.getTotalNationalContribIFIAmount()));
+            euaf.setTotalNationalContribIFIAmount(FormatHelper.formatNumber(contract.getTotalNationalContribIFIAmount()));
         }
         else euaf.setTotalNationalContribIFIAmount("");
         
         if (contract.getTotalPrivateContribAmount() != null) {
 
-            euaf.setTotalPrivateContribAmount(String.valueOf(contract.getTotalPrivateContribAmount()));
+            euaf.setTotalPrivateContribAmount(FormatHelper.formatNumber(contract.getTotalPrivateContribAmount()));
         }
         else euaf.setTotalPrivateContribAmount("");
         
@@ -291,7 +292,7 @@ public class EditIPAContract extends MultiAction {
       	  	}
       	  	
       	  	//eaf.getCurrCode();
-      	  	euaf.setTotalDisbursements(td);
+      	  	euaf.setTotalDisbursements(FormatHelper.formatNumber(td));
             euaf.setContractDisbursements(disbs);
         }
 
@@ -580,14 +581,14 @@ public class EditIPAContract extends MultiAction {
         }
         
         if (euaf.getTotalECContribIBAmount() != null&&!euaf.getTotalECContribIBAmount().equals("")) {
-            eua.setTotalECContribIBAmount(new BigDecimal(Double.parseDouble(euaf.getTotalECContribIBAmount())));
+            eua.setTotalECContribIBAmount(FormatHelper.parseBigDecimal(euaf.getTotalECContribIBAmount()));
         }
         if (euaf.getTotalAmount() != null && !euaf.getTotalAmount().equals("")) {
-            eua.setTotalAmount(new BigDecimal(Double.parseDouble(euaf.getTotalAmount())));
+            eua.setTotalAmount(FormatHelper.parseBigDecimal(euaf.getTotalAmount()));
         }
         
         if (euaf.getContractTotalValue() != null && !euaf.getContractTotalValue().equals("")) {
-            eua.setContractTotalValue(new BigDecimal(Double.parseDouble(euaf.getContractTotalValue())));
+            eua.setContractTotalValue(FormatHelper.parseBigDecimal(euaf.getContractTotalValue()));
         }
         
         if (euaf.getTotalAmountCurrency() != null && !euaf.getTotalAmountCurrency().equals("") && !euaf.getTotalAmountCurrency().equals(new Long(-1))) {
@@ -603,24 +604,24 @@ public class EditIPAContract extends MultiAction {
         
         if (euaf.getTotalECContribINVAmount() != null&&!euaf.getTotalECContribINVAmount().equals("")) {
 
-            eua.setTotalECContribINVAmount(new BigDecimal(Double.parseDouble(euaf.getTotalECContribINVAmount())));
+            eua.setTotalECContribINVAmount(FormatHelper.parseBigDecimal(euaf.getTotalECContribINVAmount()));
         }
       
         if (euaf.getTotalNationalContribCentralAmount() != null&&!euaf.getTotalNationalContribCentralAmount().equals("")) {
-            eua.setTotalNationalContribCentralAmount(new BigDecimal(Double.parseDouble(euaf.getTotalNationalContribCentralAmount())));
+            eua.setTotalNationalContribCentralAmount(FormatHelper.parseBigDecimal(euaf.getTotalNationalContribCentralAmount()));
         }
         
         if (euaf.getTotalNationalContribRegionalAmount() != null&&!euaf.getTotalNationalContribRegionalAmount().equals("")) {
 
-            eua.setTotalNationalContribRegionalAmount(new BigDecimal(Double.parseDouble(euaf.getTotalNationalContribRegionalAmount())));
+            eua.setTotalNationalContribRegionalAmount(FormatHelper.parseBigDecimal(euaf.getTotalNationalContribRegionalAmount()));
         }
        
         if (euaf.getTotalNationalContribIFIAmount() != null&&!euaf.getTotalNationalContribIFIAmount().equals("")) {
-            eua.setTotalNationalContribIFIAmount(new BigDecimal((Double.parseDouble(euaf.getTotalNationalContribIFIAmount()))));
+            eua.setTotalNationalContribIFIAmount(FormatHelper.parseBigDecimal(euaf.getTotalNationalContribIFIAmount()));
         }
         
         if (euaf.getTotalPrivateContribAmount() != null&&!euaf.getTotalPrivateContribAmount().equals("")) {
-            eua.setTotalPrivateContribAmount(new BigDecimal(Double.parseDouble(euaf.getTotalPrivateContribAmount())));
+            eua.setTotalPrivateContribAmount(FormatHelper.parseBigDecimal(euaf.getTotalPrivateContribAmount()));
         }
        
          if (eaf.getContracts().getContracts() == null) {

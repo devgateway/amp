@@ -94,7 +94,7 @@ public class IPAContractForm extends ActionForm  {
 	private String totalPrivateContribAmount;
 	private String totalPrivateContribAmountDate;
 
-	private BigDecimal totalDisbursements;
+	private String totalDisbursements;
     private BigDecimal executionRate;
 	
 	private List disbursements;
@@ -380,11 +380,11 @@ public class IPAContractForm extends ActionForm  {
 		this.dibusrsementsGlobalCurrency = dibusrsementsGlobalCurrency;
 	}
 
-	public BigDecimal getTotalDisbursements() {
+	public String getTotalDisbursements() {
 		return totalDisbursements;
 	}
 
-	public void setTotalDisbursements(BigDecimal totalDisbursements) {
+	public void setTotalDisbursements(String totalDisbursements) {
 		this.totalDisbursements = totalDisbursements;
 	}
 

@@ -80,12 +80,12 @@
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
-				<bean:define id="reqSearchFieldWidth" toScope="request" value="90px" />
-				<div style="width: 70%; height: 100%; padding: 0px; float: left;">
+				<bean:define id="reqSearchFieldWidth" toScope="request" value="80px" />
+				<div style="width: 76%; height: 100%; padding: 0px; float: left;">
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
-				<div style="width: 30%; margin-left: 70%; height: 100%;">
+				<div style="width: 24%; margin-left: 76%; height: 100%;">
 					<field:display name="Joint Criteria" feature="Budget">
 							<html:checkbox property="jointCriteria" value="true" /> &nbsp;
 							<digi:trn>Display Only Projects Under Joint Criteria.</digi:trn>
@@ -100,12 +100,14 @@
 		</div>
 		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
 			<div class="grayBorder">
+				<c:set var="reqSelectorHeaderSize" scope="request" value="13" />
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="otherCriteriaPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="otherCriteriaTab_search" />
 				<div class="otherCriteriaBigTable">
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
+				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
 				<div style="width: 30%; height: 30%; padding: 10px; float: left; ">
 					<c:set var="tooltip_translation">
 						<digi:trn>Specify keywords to look for in the project data.</digi:trn>

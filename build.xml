@@ -419,7 +419,9 @@
 			<transaction>INSERT IGNORE amp_columns (SELECT * from ${clean.source}.amp_columns)</transaction>
 			<transaction>INSERT IGNORE amp_columns_order (SELECT * from ${clean.source}.amp_columns_order)</transaction>
 			<transaction>INSERT IGNORE amp_columns_filters (SELECT * from ${clean.source}.amp_columns_filters)</transaction>
+			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
 			<transaction>INSERT IGNORE amp_currency (SELECT * from ${clean.source}.amp_currency)</transaction>
+			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
 			<transaction>INSERT IGNORE amp_global_settings (SELECT * from ${clean.source}.amp_global_settings)</transaction>
 			<transaction>INSERT IGNORE amp_level (SELECT * from ${clean.source}.amp_level)</transaction>
 			<transaction>INSERT IGNORE amp_measures (SELECT * from ${clean.source}.amp_measures)</transaction>
@@ -464,6 +466,18 @@
 			<transaction>INSERT IGNORE amp_theme (SELECT * from ${clean.source}.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  ${clean.source}.amp_theme at,  ${clean.source}.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>
 			<transaction>INSERT IGNORE amp_program_settings (SELECT * from ${clean.source}.amp_program_settings WHERE default_hierarchy=2)</transaction>
 			<transaction>INSERT IGNORE amp_field (SELECT * from ${clean.source}.amp_field)</transaction>
+			
+			<!-- populating the db -->
+			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
+			<transaction>INSERT IGNORE amp_role (SELECT * from ${clean.source}.amp_role)</transaction>
+			<transaction>INSERT IGNORE amp_org_type (SELECT * from ${clean.source}.amp_org_type)</transaction>
+			<transaction>INSERT IGNORE amp_org_group (SELECT * from ${clean.source}.amp_org_group)</transaction>
+			<transaction>INSERT IGNORE amp_organisation (SELECT * from ${clean.source}.amp_organisation)</transaction>
+			<transaction>INSERT IGNORE amp_sector (SELECT * from ${clean.source}.amp_sector)</transaction>
+			<transaction>INSERT IGNORE amp_theme (SELECT * from ${clean.source}.amp_theme)</transaction>
+			<transaction>INSERT IGNORE amp_program_settings (SELECT * from ${clean.source}.amp_program_settings)</transaction>
+			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
+			<!-- END populating the db -->
 			<transaction>CREATE TABLE util_global_settings_possible_ LIKE ${clean.source}.util_global_settings_possible_</transaction><transaction>INSERT IGNORE util_global_settings_possible_ (SELECT * from ${clean.source}.util_global_settings_possible_)</transaction>
 			<transaction>CREATE TABLE qrtz_blob_triggers LIKE ${clean.source}.qrtz_blob_triggers</transaction><transaction>INSERT IGNORE qrtz_blob_triggers (SELECT * from ${clean.source}.qrtz_blob_triggers)</transaction>
 			<transaction>CREATE TABLE qrtz_calendars LIKE ${clean.source}.qrtz_calendars</transaction><transaction> INSERT IGNORE qrtz_calendars (SELECT * from ${clean.source}.qrtz_calendars)</transaction>
@@ -482,6 +496,8 @@
 			<!-- 
 			<transaction>CREATE TABLE cached_amp_activity LIKE ${clean.source}.cached_amp_activity</transaction>
 			-->
+			<transaction>CREATE TABLE amp_activity_access LIKE ${clean.source}.amp_activity_access</transaction>
+			
 			<transaction>CREATE TABLE cached_v_donor_date_hierarchy LIKE ${clean.source}.cached_v_donor_date_hierarchy</transaction>
 			<transaction>CREATE TABLE cached_v_donor_funding LIKE ${clean.source}.cached_v_donor_funding</transaction>
 			<transaction>CREATE TABLE cached_v_national_program LIKE ${clean.source}.cached_v_national_program</transaction>

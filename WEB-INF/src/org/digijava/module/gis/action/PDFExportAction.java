@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.convert.BigDecimalConverter;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -40,17 +42,22 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
@@ -63,15 +70,25 @@ import org.digijava.module.gis.util.GisUtil;
 import org.digijava.module.gis.util.HilightData;
 import org.digijava.module.gis.util.SegmentData;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
+import org.digijava.module.widget.dbentity.AmpParisIndicatorBaseTargetValues;
+import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
+import org.digijava.module.widget.dbentity.AmpSectorOrder;
+import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
+import org.digijava.module.widget.dbentity.AmpSectorTableYear;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
+import org.digijava.module.widget.form.ShowParisIndicatorTableForm;
 import org.digijava.module.widget.helper.ChartOption;
+import org.digijava.module.widget.helper.SectorTableHelper;
+import org.digijava.module.widget.helper.TopDonorGroupHelper;
 import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.WiRow;
 import org.digijava.module.widget.table.WiTable;
 import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
 import org.digijava.module.widget.util.ChartWidgetUtil;
+import org.digijava.module.widget.util.ParisIndicatorTableWidgetUtil;
+import org.digijava.module.widget.util.SectorTableWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -93,6 +110,7 @@ import com.lowagie.text.pdf.PdfPCellEvent;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEvent;
 import com.lowagie.text.pdf.PdfWriter;
+import com.sun.org.apache.xerces.internal.impl.dv.xs.DecimalDV;
 
 public class PDFExportAction extends Action implements PdfPageEvent {
 	protected static Logger logger = Logger.getLogger(PDFExportAction.class);
@@ -108,6 +126,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	private Long[] columnId = null;
 	private Long[] itemId = null;
 	private Long siteId;
+	private Integer selectedFromYear = null;
+	private Integer selectedTotYear = null;
+	private Long donorId;
 
 	public PDFExportAction(HttpSession session, String locale, Site site, HttpServletResponse response) {
 		this.session = session;
@@ -139,8 +160,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		// This sets up default values for options in the dashboard
 		Long selectedDonor = null;
-		Integer selectedFromYear = null;
-		Integer selectedTotYear = null;
+
 		Boolean showLabels = true;
 		Boolean showLegends = true;
 		String selectedDonorName = "";
@@ -164,6 +184,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		}
 		if (request.getParameter("showLegends") != null && !request.getParameter("showLegends").equals("-1")) {
 			showLegends = Boolean.parseBoolean(request.getParameter("showLegends"));
+		}
+		
+		if (request.getParameter("donorId") !=null && !request.getParameter("donorId").equals("-1")) {
+			donorId = Long.parseLong(request.getParameter("donorId"));
 		}
 
 		ByteArrayOutputStream outChartByteArray = getChartImage(request, selectedDonor, selectedFromYear, selectedTotYear, showLegends, showLabels);
@@ -301,7 +325,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		// imagesTable.addCell(" ");
 
 		// First batch of widgets
-		float[] layoutWidths = { 2f, 1f };
+		float[] layoutWidths = {  1f };
+		
 		PdfPTable layoutTable1 = new PdfPTable(layoutWidths);
 		layoutTable1.setExtendLastRow(false);
 		layoutTable1.setWidthPercentage(100);
@@ -572,7 +597,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutAEIndicators.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		layoutAEIndicators.setWidthPercentage(100);
 
-		PdfPTable table1AEIndicators = getWidgetTable("table_place1");
+	//	PdfPTable table1AEIndicators = getWidgetTable("table_place1");
+		PdfPTable table1AEIndicators = getAEPIndicators("table_place1");
 		PdfPTable table2AEIndicators = getWidgetTable("table_place2");
 		PdfPTable table3AEIndicators = getWidgetTable("table_place3");
 
@@ -591,6 +617,86 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(layoutCell);
 
 		return generalBox;
+	}
+	
+	private PdfPTable getAEPIndicators(String codePlace) {
+		try {
+
+			AmpDaWidgetPlace place = WidgetUtil.getPlace(codePlace);
+			AmpWidget widget = place.getAssignedWidget();
+			AmpParisIndicatorTableWidget table=ParisIndicatorTableWidgetUtil.getAmpParisIndicatorTableWidget(widget.getId());
+			
+			
+			List<AmpParisIndicatorBaseTargetValues> pInd = table.getParisIndicators();
+			
+			
+			PdfPTable pdfTable = new PdfPTable(4);
+			pdfTable.setExtendLastRow(false);
+			Font fontHeader = new Font();
+			fontHeader.setSize(5);
+			fontHeader.setStyle(Font.BOLD);
+			fontHeader.setColor(new Color(255, 255, 255));
+			Font fontCell = new Font();
+			fontCell.setSize(4);
+			PdfPCell cell1 = new PdfPCell(new Phrase("", fontHeader));
+			PdfPCell cell2 = new PdfPCell(new Phrase("Paris Declaration Indicators: ", fontHeader));
+			PdfPCell cell3 = new PdfPCell(new Phrase("2005 Baseline", fontHeader));
+			PdfPCell cell4 = new PdfPCell(new Phrase("2010 Target", fontHeader));
+			//PdfPCell cell5 = new PdfPCell(new Phrase("", fontHeader));
+			
+			
+			
+			cell1.setBackgroundColor(new Color(34, 46, 93));
+			cell2.setBackgroundColor(new Color(34, 46, 93));
+			cell3.setBackgroundColor(new Color(34, 46, 93));
+			cell4.setBackgroundColor(new Color(34, 46, 93));
+			//cell5.setBackgroundColor(new Color(34, 46, 93));
+			
+			
+			
+			pdfTable.addCell(cell1);
+			pdfTable.addCell(cell2);
+			pdfTable.addCell(cell3);
+			pdfTable.addCell(cell4);
+			//pdfTable.addCell(cell5);
+			
+
+			Iterator<AmpParisIndicatorBaseTargetValues> pIndIter = pInd.iterator();
+
+			int counter = 1;
+			while (pIndIter.hasNext()) {
+				AmpParisIndicatorBaseTargetValues pIndVal = (AmpParisIndicatorBaseTargetValues) pIndIter.next();
+				Color cellColor;
+				if (counter % 2 == 0)
+					cellColor = new Color(255, 255, 255);
+				else
+					cellColor = new Color(219, 229, 241);
+				PdfPCell indCell = new PdfPCell(new Phrase("Indicator " + pIndVal.getParisIndicator().getIndicatorCode(), fontCell));
+				PdfPCell nameCell =  new PdfPCell(new Phrase(pIndVal.getParisIndicator().getName(), fontCell));
+				PdfPCell baseCell =  new  PdfPCell(new Phrase(pIndVal.getBaseValue(), fontCell));
+				PdfPCell targetCell =  new PdfPCell(new Phrase(pIndVal.getTargetValue(), fontCell));
+				//PdfPCell donorCell = new PdfPCell(new Phrase("", fontCell));
+				indCell.setBackgroundColor(cellColor);
+				nameCell.setBackgroundColor(cellColor);
+				baseCell.setBackgroundColor(cellColor);
+				targetCell.setBackgroundColor(cellColor);
+				//donorCell.setBackgroundColor(cellColor);
+				
+				pdfTable.addCell(indCell);
+				pdfTable.addCell(nameCell);
+				pdfTable.addCell(baseCell);
+				pdfTable.addCell(targetCell);
+				//pdfTable.addCell(donorCell);
+				counter++;
+			}
+				
+			
+		return 	pdfTable;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 
 	private PdfPTable getEAResourcesBox() throws WorkerException {
@@ -642,12 +748,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.setPadding(2);
 		layoutCell.setBackgroundColor(new Color(206, 226, 251));
 
-		float[] layoutExAidResourcesWidths = { 1f, 1f };
+		float[] layoutExAidResourcesWidths = { 1f };
 		PdfPTable layoutExAidResources = new PdfPTable(layoutExAidResourcesWidths);
 		layoutExAidResources.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		layoutExAidResources.setWidthPercentage(100);
 
-		PdfPTable table1ExAidResources = getWidgetTable("table_place5");
+		PdfPTable table1ExAidResources = getExternalAidResurces("table_place5");
 		layoutExAidResources.addCell(table1ExAidResources);
 
 		layoutExAidResources.addCell(" ");
@@ -660,6 +766,217 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(layoutCell);
 
 		return generalBox;
+	}
+	
+	private PdfPTable getExternalAidResurces(String placeCode) {
+		try {
+					      
+		        String headingUSMil = TranslatorWorker.translateText("US$ millions", locale, siteId);
+		        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+		        String headingPercent = TranslatorWorker.translateText("Of", locale, siteId);
+		        String headingOther = TranslatorWorker.translateText("Other", locale, siteId);
+		        String headingTotal = TranslatorWorker.translateText("Total", locale, siteId);
+		        String headingSector = TranslatorWorker.translateText("Sector", locale, siteId);
+
+		        List<String> yearsHeader = new ArrayList<String>();
+		        List<SectorTableHelper> sectorsInfo = new ArrayList<SectorTableHelper>();
+		        ArrayList<String> totalValues = new ArrayList<String>();
+		        ArrayList<String> otherValues = new ArrayList<String>();
+		        String fiscalCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		        AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(fiscalCalendarId));
+		       
+				AmpDaWidgetPlace place = WidgetUtil.getPlace(placeCode);
+				AmpWidget widget = place.getAssignedWidget();
+		        
+		        
+		        AmpSectorTableWidget secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(widget.getId());
+		 
+		        List<AmpSectorTableYear> sectorTableYears = new ArrayList(secTableWidget.getYears());
+		        List<AmpSectorOrder> sectorOrders = new ArrayList(secTableWidget.getSectorsColumns());
+		        Iterator<AmpSectorOrder> sectorOrderIter = sectorOrders.iterator();
+		        SectorTableHelper sectorTableRowOther = new SectorTableHelper();
+		        sectorTableRowOther.setSectorName(headingOther);
+		        sectorTableRowOther.setSectorId(SectorTableHelper.OTHER_ROW_SECTOR_ID);
+
+		        SectorTableHelper sectorTableRowTotal = new SectorTableHelper();
+		        sectorTableRowTotal.setSectorName(headingTotal);
+		        sectorTableRowTotal.setApplyStyle(true);
+		        sectorTableRowTotal.setSectorId(SectorTableHelper.TOTAL_ROW_SECTOR_ID);
+
+		        List<Long> wholeAmounts = new ArrayList<Long>();
+
+
+		        List<Long> otherAmounts = new ArrayList<Long>();
+
+		        List<Long> otherPercents = new ArrayList<Long>();
+
+		        boolean isTotalsCalcualted = false;
+		        while (sectorOrderIter.hasNext()) {
+		            AmpSectorOrder sectorOrder = sectorOrderIter.next();
+
+		            SectorTableHelper sectorTableRow = new SectorTableHelper();
+		            AmpSector sector = sectorOrder.getSector();
+		            Long sectorId = sector.getAmpSectorId();
+		            sectorTableRow.setSectorId(sectorId);
+		            sectorTableRow.setSectorName(sector.getName());
+		            ArrayList<String> cells = new ArrayList<String>();
+		            Iterator<AmpSectorTableYear> totalYearIter = sectorTableYears.iterator();
+
+		            int index = 0;
+		            while (totalYearIter.hasNext()) {
+		                AmpSectorTableYear sectorTableYear = totalYearIter.next();
+		                Long year = sectorTableYear.getYear();
+		                Date startDate = ChartWidgetUtil.getStartOfYear(year.intValue(), calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
+		                int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+		                Date endDate = new Date(ChartWidgetUtil.getStartOfYear(year.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
+		                Long amount = SectorTableWidgetUtil.calculateFunding(null, new Long[]{sectorId}, startDate, endDate);
+		                Long wholeAmount = null;
+		                if (wholeAmounts.size() <= index) {
+		                    wholeAmount = SectorTableWidgetUtil.calculateFunding(null, null, startDate, endDate);
+		                    wholeAmounts.add(wholeAmount);
+		                } else {
+		                    wholeAmount = wholeAmounts.get(index);
+		                }
+		                Long allExceptOthersAmount = null;
+
+		                if (otherAmounts.size() <= index) {
+		                    allExceptOthersAmount = amount;
+		                    otherAmounts.add(allExceptOthersAmount);
+		                } else {
+		                    allExceptOthersAmount = otherAmounts.get(index) + amount;
+		                    otherAmounts.remove(index);
+		                    otherAmounts.add(index, allExceptOthersAmount);
+		                }
+
+		                String heading = "";
+		                if (sectorTableYear.getType().equals(AmpSectorTableYear.TOTAL_TYPE_YEAR)) {
+		                    if (calendar.getIsFiscal()) {
+		                        heading = headingFY + " " + year + "/" + (year + 1) + " (" + headingUSMil + ")";
+		                    } else {
+		                        heading = year + " (" + headingUSMil + ")";
+		                    }
+		                    if (!isTotalsCalcualted) {
+		                        totalValues.add(wholeAmount + "");
+		                    }
+		                    if (otherValues.size() <= index) {
+		                        otherValues.add((wholeAmount.longValue() - allExceptOthersAmount.longValue()) + "");
+		                    } else {
+		                        otherValues.remove(index);
+		                        otherValues.add(index, (wholeAmount.longValue() - allExceptOthersAmount.longValue()) + "");
+		                    }
+
+		                    cells.add(amount + "");
+		                    if (otherPercents.size() <= index) {
+		                        otherPercents.add(0l);
+		                    }
+		                } else {
+		                    if (calendar.getIsFiscal()) {
+		                        heading = headingFY + " % " + headingPercent + " " + year + "/" + (year + 1);
+		                    } else {
+		                        heading = " % " + headingPercent + " " + year;
+		                    }
+		                    long percent = 0;
+		                    long allExcludeOthersPercent = 0;
+		                    if (wholeAmount != 0) {
+		                        percent = Math.round(1.0 * amount / wholeAmount * 100);
+		                    }
+		                    if (otherPercents.size() <= index) {
+		                        allExcludeOthersPercent = percent;
+		                        otherPercents.add(allExcludeOthersPercent);
+		                    } else {
+		                        allExcludeOthersPercent = otherPercents.get(index).longValue() + percent;
+		                        otherPercents.remove(index);
+		                        otherPercents.add(index, allExcludeOthersPercent);
+
+		                    }
+		                    long wholePercent = 0;
+		                    if (wholeAmount != 0) {
+		                        wholePercent = 100;
+		                    }
+		                    if (otherValues.size() <= index) {
+		                        otherValues.add((wholePercent - allExcludeOthersPercent) + "%");
+		                    } else {
+		                        otherValues.remove(index);
+		                        otherValues.add(index, (wholePercent - allExcludeOthersPercent) + "%");
+		                    }
+		                    if (!isTotalsCalcualted) {
+		                        totalValues.add(wholePercent + "%");
+		                    }
+		                    cells.add(percent + "%");
+		                }
+		                if (!isTotalsCalcualted) {
+		                    yearsHeader.add(heading);
+		                }
+		                index++;
+		            }
+		            isTotalsCalcualted = true;
+		            sectorTableRow.setValues(cells);
+		            sectorsInfo.add(sectorTableRow);
+		        }
+		      
+		        sectorTableRowTotal.setValues(totalValues);
+		        sectorTableRowOther.setValues(otherValues);
+		        sectorsInfo.add(sectorTableRowOther);
+		        sectorsInfo.add(sectorTableRowTotal);
+				
+		        PdfPTable pdfTable = new PdfPTable(5);
+				pdfTable.setExtendLastRow(false);
+				Font fontHeader = new Font();
+				fontHeader.setSize(5);
+				fontHeader.setStyle(Font.BOLD);
+				fontHeader.setColor(new Color(255, 255, 255));
+				Font fontCell = new Font();
+				fontCell.setSize(4);
+				PdfPCell secCell = new PdfPCell(new Phrase(headingSector, fontHeader));
+				secCell.setBackgroundColor(new Color(34, 46, 93));
+				pdfTable.addCell(secCell);
+				
+				
+				Iterator<String> headerYear = yearsHeader.iterator();
+				
+				while (headerYear.hasNext()) {
+				 String hYear =	headerYear.next();
+				 PdfPCell yearCell = new PdfPCell(new Phrase(hYear , fontHeader));
+				 yearCell.setBackgroundColor(new Color(34, 46, 93));
+				 pdfTable.addCell(yearCell);
+				}
+				//PdfPCell selCell = new PdfPCell(new Phrase("", fontHeader));
+				//selCell.setBackgroundColor(new Color(34, 46, 93));
+				//pdfTable.addCell(selCell);
+				
+				Iterator <SectorTableHelper> sectors = sectorsInfo.iterator();
+				int counter = 1;
+				while (sectors.hasNext()) {
+					Color cellColor;
+					if (counter % 2 == 0)
+						cellColor = new Color(255, 255, 255);
+					else
+						cellColor = new Color(219, 229, 241);
+					SectorTableHelper sectorTable = (SectorTableHelper) sectors.next();
+					PdfPCell dataCell = new PdfPCell(new Phrase(sectorTable.getSectorName(),fontCell));
+					dataCell.setBackgroundColor(cellColor);
+					pdfTable.addCell(dataCell);
+					Iterator<String> secValues = sectorTable.getValues().iterator();
+					while (secValues.hasNext()) {
+						String val = secValues.next();
+						PdfPCell valCell = new PdfPCell(new Phrase(val, fontCell));
+						valCell.setBackgroundColor(cellColor);
+						pdfTable.addCell(valCell);
+					}
+					//PdfPCell testCell = new PdfPCell(new Phrase("", fontCell));
+					//testCell.setBackgroundColor(cellColor);
+					//pdfTable.addCell(testCell);
+					counter++;
+					
+				}
+				
+			return pdfTable;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
 	}
 
 	private PdfPTable getImageChart(Image imgChart, String selectedDonorName, Integer selectedStartYear, Integer selectedEndYear) throws WorkerException {
@@ -1041,7 +1358,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.setPadding(2);
 		layoutCell.setBackgroundColor(new Color(206, 226, 251));
 
-		float[] resourcesAtAGlanceWidths = { 2f, 1f };
+		float[] resourcesAtAGlanceWidths = { 1f, 1f };
 		PdfPTable layoutResourcesAtAGlance = new PdfPTable(resourcesAtAGlanceWidths);
 		layoutResourcesAtAGlance.setWidthPercentage(100f);
 		layoutResourcesAtAGlance.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
@@ -1050,7 +1367,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		PdfPTable layoutResourcesAtAGlanceTable1 = getWidgetTable("atGlanceTable_Place1");
 		PdfPTable layoutResourcesAtAGlanceTable2 = getWidgetTable("atGalnceTable_Place2");
-		PdfPTable layoutResourcesAtAGlanceTable3 = getWidgetTable("atGlanceTable_Place3");
+		//PdfPTable layoutResourcesAtAGlanceTable3 = getWidgetTable("atGlanceTable_Place3");
+		
+		PdfPTable layoutResourcesAtAGlanceTable3 = getTopTenDonors();
 
 		PdfPTable layoutResourcesAtAGlanceTable1and2 = new PdfPTable(1);
 		layoutResourcesAtAGlanceTable1and2.setExtendLastRow(false);
@@ -1068,11 +1387,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
                     layoutResourcesAtAGlanceTable3alone.addCell(
                             layoutResourcesAtAGlanceTable3);
 
-                    layoutResourcesAtAGlance.addCell(
-                            layoutResourcesAtAGlanceTable3alone);
+                    layoutResourcesAtAGlance.addCell(layoutResourcesAtAGlanceTable3alone);
                 }
-        layoutResourcesAtAGlanceTable3alone.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
-		layoutResourcesAtAGlanceTable3alone	.addCell(layoutResourcesAtAGlanceTable3);
+      //  layoutResourcesAtAGlanceTable3alone.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+	//	layoutResourcesAtAGlanceTable3alone	.addCell(layoutResourcesAtAGlanceTable3);
 		layoutCell.addElement(layoutResourcesAtAGlance);
 		// widget:SourceOECD
 
@@ -1082,6 +1400,64 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		// Make the innerLayout
 		return generalBox;
+	}
+	
+	
+	private PdfPTable getTopTenDonors() {
+	 
+		try {
+			List<TopDonorGroupHelper> donorGroups=WidgetUtil.getTopTenDonorGroups(selectedFromYear, selectedTotYear);
+			PdfPTable pdfTable = new PdfPTable(3);
+			pdfTable.setExtendLastRow(false);
+			Font fontHeader = new Font();
+			fontHeader.setSize(5);
+			fontHeader.setStyle(Font.BOLD);
+			fontHeader.setColor(new Color(255, 255, 255));
+			Font fontCell = new Font();
+			fontCell.setSize(4);
+			PdfPCell cell1 = new PdfPCell(new Phrase("", fontHeader));
+			PdfPCell cell2 = new PdfPCell(new Phrase("Top 10 Donors", fontHeader));
+			PdfPCell cell3 = new PdfPCell(new Phrase("Commitments in USD Millions for", fontHeader));
+			
+			cell1.setBackgroundColor(new Color(34, 46, 93));
+			cell2.setBackgroundColor(new Color(34, 46, 93));
+			cell3.setBackgroundColor(new Color(34, 46, 93));
+			
+			
+			pdfTable.addCell(cell1);
+			pdfTable.addCell(cell2);
+			pdfTable.addCell(cell3);
+			
+			Iterator<TopDonorGroupHelper> donorGroupIter=donorGroups.iterator();
+			int order =1;
+			int counter = 1;
+			while (donorGroupIter.hasNext()) {
+				TopDonorGroupHelper donorGroup=donorGroupIter.next();
+				Color cellColor;
+				if (counter % 2 == 0)
+					cellColor = new Color(255, 255, 255);
+				else
+					cellColor = new Color(219, 229, 241);
+				counter++;
+				PdfPCell ordCell = new PdfPCell(new Phrase(Integer.toString(order), fontCell));
+				PdfPCell nameCell = new PdfPCell(new Phrase(donorGroup.getName(), fontCell));
+				PdfPCell valCell = new PdfPCell(new Phrase( donorGroup.getValue().toString(), fontCell));
+				ordCell.setBackgroundColor(cellColor);
+				nameCell.setBackgroundColor(cellColor);
+				valCell.setBackgroundColor(cellColor);
+				
+				pdfTable.addCell(ordCell);
+				pdfTable.addCell(nameCell);
+				pdfTable.addCell(valCell);
+				order++;
+			}
+		return pdfTable;
+			
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		
+		return null;
 	}
 
 	private PdfPTable getWidgetTable(String codePlace) {

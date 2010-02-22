@@ -47,6 +47,7 @@
 	var selectedToYear = document.getElementsByName("selectedToYear")[0].value;
 	var showLabels = document.getElementsByName("showLabels")[0].checked;
 	var showLegends = document.getElementsByName("showLegends")[0].checked;
+	var donorId = document.getElementsByName("parisInd")[0].value;
 
 	//Get donor name also
 	var selectDonors = document.getElementsByName("selectedDonor")[0];
@@ -62,7 +63,7 @@
 	var subgroup = 	document.getElementById("indicatorSubgroupCombo").value;
 	var timeInterval = document.getElementById("indicatorYearCombo").value;
   
-	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&subgroupId=" + subgroup + "&indYear=" + timeInterval, 780, 500);
+	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&subgroupId=" + subgroup + "&indYear=" + timeInterval + "&donorId=" + donorId, 780, 500);
   }
 function resizeDivs(){
 	var tables = document.getElementsByTagName("table");

@@ -6,8 +6,12 @@
 	<keyword>keyword</keyword>
 	<author>Diego Dimunzio</author>
 	<description>
+  	</description>
   	
-  </description>
+  	<trigger type="all">
+		<condition type="dbName" inverted="true">amp_testing</condition>
+	</trigger>
+  	
 	<apply>
 		<script>
 			<lang delimiter=";" type="mysql">

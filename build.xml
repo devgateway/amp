@@ -496,19 +496,42 @@
 			<!-- 
 			<transaction>CREATE TABLE cached_amp_activity LIKE ${clean.source}.cached_amp_activity</transaction>
 			-->
-			<transaction>CREATE TABLE amp_activity_access LIKE ${clean.source}.amp_activity_access</transaction>
-			
 			<transaction>CREATE TABLE cached_v_donor_date_hierarchy LIKE ${clean.source}.cached_v_donor_date_hierarchy</transaction>
 			<transaction>CREATE TABLE cached_v_donor_funding LIKE ${clean.source}.cached_v_donor_funding</transaction>
-			<transaction>CREATE TABLE cached_v_national_program LIKE ${clean.source}.cached_v_national_program</transaction>
-			<transaction>CREATE TABLE cached_v_primary_program LIKE ${clean.source}.cached_v_primary_program</transaction>	
-			<transaction>CREATE TABLE cached_v_primary_sector LIKE ${clean.source}.cached_v_primary_sector</transaction>
-			<transaction>CREATE TABLE cached_v_regions LIKE ${clean.source}.cached_v_regions</transaction>
-			<transaction>CREATE TABLE cached_v_sec_sub_sector LIKE ${clean.source}.cached_v_sec_sub_sector</transaction>
-			<transaction>CREATE TABLE cached_v_secondary_program LIKE ${clean.source}.cached_v_secondary_program</transaction>
-			<transaction>CREATE TABLE cached_v_secondary_sector LIKE ${clean.source}.cached_v_secondary_sector</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_0 LIKE ${clean.source}.cached_v_nationalobjectives_level_0</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_1 LIKE ${clean.source}.cached_v_nationalobjectives_level_1</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_2 LIKE ${clean.source}.cached_v_nationalobjectives_level_2</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_3 LIKE ${clean.source}.cached_v_nationalobjectives_level_3</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_4 LIKE ${clean.source}.cached_v_nationalobjectives_level_4</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_5 LIKE ${clean.source}.cached_v_nationalobjectives_level_5</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_6 LIKE ${clean.source}.cached_v_nationalobjectives_level_6</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_7 LIKE ${clean.source}.cached_v_nationalobjectives_level_7</transaction>
+			<transaction>CREATE TABLE cached_v_nationalobjectives_level_8 LIKE ${clean.source}.cached_v_nationalobjectives_level_8</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_0 LIKE ${clean.source}.cached_v_primaryprogram_level_0</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_1 LIKE ${clean.source}.cached_v_primaryprogram_level_1</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_2 LIKE ${clean.source}.cached_v_primaryprogram_level_2</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_3 LIKE ${clean.source}.cached_v_primaryprogram_level_3</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_4 LIKE ${clean.source}.cached_v_primaryprogram_level_4</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_5 LIKE ${clean.source}.cached_v_primaryprogram_level_5</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_6 LIKE ${clean.source}.cached_v_primaryprogram_level_6</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_7 LIKE ${clean.source}.cached_v_primaryprogram_level_7</transaction>
+			<transaction>CREATE TABLE cached_v_primaryprogram_level_8 LIKE ${clean.source}.cached_v_primaryprogram_level_8</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_0 LIKE ${clean.source}.cached_v_secondaryprogram_level_0</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_1 LIKE ${clean.source}.cached_v_secondaryprogram_level_1</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_2 LIKE ${clean.source}.cached_v_secondaryprogram_level_2</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_3 LIKE ${clean.source}.cached_v_secondaryprogram_level_3</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_4 LIKE ${clean.source}.cached_v_secondaryprogram_level_4</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_5 LIKE ${clean.source}.cached_v_secondaryprogram_level_5</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_6 LIKE ${clean.source}.cached_v_secondaryprogram_level_6</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_7 LIKE ${clean.source}.cached_v_secondaryprogram_level_7</transaction>
+			<transaction>CREATE TABLE cached_v_secondaryprogram_level_8 LIKE ${clean.source}.cached_v_secondaryprogram_level_8</transaction>
+			<transaction>CREATE TABLE cached_v_sectors LIKE ${clean.source}.cached_v_sectors</transaction>
+			<transaction>CREATE TABLE cached_v_sub_sectors LIKE ${clean.source}.cached_v_sub_sectors</transaction>
+			<transaction>CREATE TABLE cached_v_m_regions LIKE ${clean.source}.cached_v_m_regions</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_sectors LIKE ${clean.source}.cached_v_secondary_sectors</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_sub_sectors LIKE ${clean.source}.cached_v_secondary_sub_sectors</transaction>
 			<transaction>CREATE TABLE cached_v_status LIKE ${clean.source}.cached_v_status</transaction>
-			<transaction>CREATE TABLE cached_v_sub_sector LIKE ${clean.source}.cached_v_sub_sector</transaction>
+		
 			
 			<!-- mandatory custom indexes -->
 			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>

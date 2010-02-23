@@ -411,6 +411,7 @@
 		$("input[name='mapLevelRadio']").click(function(){
 			var mapLevel = $("input[name='mapLevelRadio']:checked").val();
 			jQuery.fn.mapLevelChange(mapLevel);
+			$("#testMap").getImageMap();
 		});
 		$("#sectorsMapCombo").change(function(){
 			var sector = $("#sectorsMapCombo option:selected").val();

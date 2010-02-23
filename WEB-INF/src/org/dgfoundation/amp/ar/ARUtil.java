@@ -53,6 +53,8 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -231,6 +233,9 @@ public final class ARUtil {
 			}
 			ret.add(grp);
 		}
+		
+		Collections.sort((List)ret, new DbUtil.HelperAmpOrgGroupNameComparator());
+		
 		return ret;
 	}
 

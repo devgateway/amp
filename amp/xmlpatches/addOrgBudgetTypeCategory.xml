@@ -5,6 +5,16 @@
   <keyword>Budget</keyword>
   <author>Medea Gugushvili</author>
   <description>description</description>
+
+  <trigger type="all">
+      <condition type="custom">
+          <script returnVar="y">
+              <lang type="sql">SELECT count(*) from amp_category_class where keyName='ngo_budget_type'</lang>
+          </script>
+          <test>y.intValue()==0</test>
+      </condition>
+  </trigger>
+
   <apply>
     <script>
     <lang delimiter=";" type="mysql">

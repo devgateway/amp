@@ -154,30 +154,53 @@
 	function generateFields(type){
 		var ret="";
 		if(type==1){//add sector  or reload sectors
-			ret=
-				"sectorReset="    	+document.getElementsByName("sectorReset")[0].value+"&"+
-				"sectorScheme="   	+document.getElementsByName("sectorScheme")[0].value+"&"+
-				"sector="         	+document.getElementsByName("sector")[0].value+"&";
+			//alert('3');
+			if(document.getElementsByName("sectorReset")[0]!=null){
+				ret+="sectorReset="    	+document.getElementsByName("sectorReset")[0].value+"&";
+			}
+			if(document.getElementsByName("sectorScheme")[0]!=null){
+				ret+="sectorScheme="   	+document.getElementsByName("sectorScheme")[0].value+"&";
+			}
+			if(document.getElementsByName("sector")[0]!=null){
+				ret+="sector="         	+document.getElementsByName("sector")[0].value+"&";
+			}
+			
 			if(document.getElementsByName("subsectorLevel1")[0]!=null){
 				ret+="subsectorLevel1="	+document.getElementsByName("subsectorLevel1")[0].value+"&";
 			}
 			if(document.getElementsByName("subsectorLevel2")[0]!=null){
 				ret+="subsectorLevel2="	+document.getElementsByName("subsectorLevel2")[0].value+"&";
 			}
-			ret+=
-				"addButton="		+document.getElementsByName("addButton")[0].value+"&"+
-				"keyword="          +document.getElementsByName("keyword")[0].value;
+			if(document.getElementsByName("addButton")[0]!=null){
+				ret+=
+					"addButton="		+document.getElementsByName("addButton")[0].value+"&";
+			}
+			if(document.getElementsByName("keyword")[0]!=null){
+				ret+=
+					"keyword="          +document.getElementsByName("keyword")[0].value;
+			}
 		}
 		else if (type==2){
-		  ret=
-			"keyword="          +document.getElementsByName("keyword")[0].value+"&"+	
-			"tempNumResults="   +document.getElementsByName("tempNumResults")[0].value+"&"+
-			"sectorReset="      +document.getElementsByName("sectorReset")[0].value;
+			if(document.getElementsByName("keyword")[0]!=null){
+				ret+="keyword="          +document.getElementsByName("keyword")[0].value+"&";
+			}
+			if(document.getElementsByName("tempNumResults")[0]!=null){
+				ret+="tempNumResults="   +document.getElementsByName("tempNumResults")[0].value+"&";
+			}
+			if(document.getElementsByName("sectorReset")[0]!=null){
+				ret+="sectorReset="      +document.getElementsByName("sectorReset")[0].value;
+			}
 		}
 		else if (type==3){//add sectors chosen from the list
-			ret+="sectorReset="+document.getElementsByName("sectorReset")[0].value+"&"+
-				 "addButton="  +document.getElementsByName("addButton")[0].value+"&"+
-				 "edit="       +document.getElementsByName("edit")[0].value	;
+			if(document.getElementsByName("sectorReset")[0]!=null){
+				ret+="sectorReset="+document.getElementsByName("sectorReset")[0].value+"&";
+			}
+			if(document.getElementsByName("addButton")[0]!=null){
+				ret+="addButton="  +document.getElementsByName("addButton")[0].value+"&";
+			}
+			if(document.getElementsByName("edit")[0]!=null){
+				ret+="edit="       +document.getElementsByName("edit")[0].value;
+			}
 			if(document.getElementsByName("selSectors")!=null){
 				var sectors = document.getElementsByName("selSectors").length;
 				for(var i=0; i< sectors; i++){
@@ -188,11 +211,17 @@
 			}
 		}
 		else if (type==4){// when changing the page from button links
-			ret+="sectorReset="+document.getElementsByName("sectorReset")[0].value+"&"+
-			 "addButton="  +document.getElementsByName("addButton")[0].value+"&"+
-			 "edit="       +document.getElementsByName("edit")[0].value	;
-		
+			if(document.getElementsByName("sectorReset")[0]!=null){
+				ret+="sectorReset="+document.getElementsByName("sectorReset")[0].value+"&";
+			}
+			if(document.getElementsByName("addButton")[0]!=null){
+				ret+="addButton="  +document.getElementsByName("addButton")[0].value+"&";
+			}
+			if(document.getElementsByName("edit")[0]!=null){
+				ret+="edit="       +document.getElementsByName("edit")[0].value;
+			}
 		}
+		//alert(ret);
 		return ret;
 	}
 	function myclose(){
@@ -460,6 +489,7 @@
 	}
 	
     function addNewProgram(pType) {
+    	//alert('4');
         var prgSels=document.getElementsByName("selPrograms");
         var urlParams;
         var flag=false;

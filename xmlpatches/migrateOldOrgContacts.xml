@@ -15,7 +15,7 @@
 	
 	<apply>
 		<script>			
-			<lang type="mysql" delimiter=";">
+			<lang type="sql" delimiter=";">
 				insert into amp_org_contact(is_primary_contact,amp_org_id,contact_id) 
 				select false,amp_org_id,contact_id from amp_org_contacts;
 

@@ -1,10 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:patch closeOnSuccess="true" retryOnFail="false" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>AMP-7517</jira>
     <keyword>contacts</keyword>
     <keyword>organizations</keyword>
     <author>Medea Gugushvili</author>
     <description>Migrate old contact data and remove old contact fields from organization.</description>
+    
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="name">
+                <lang type="mysql">Select count(*) from information_schema.COLUMNS c where  c.TABLE_NAME="amp_organisation" and c.TABLE_SCHEMA=database() and COLUMN_NAME like "contact_person_name"</lang>
+            </script>
+            <test>name.intValue()==1</test>
+        </condition>
+         <condition type="custom">
+            <script returnVar="title">
+                <lang type="mysql">Select count(*)  from information_schema.COLUMNS c where  c.TABLE_NAME="amp_organisation" and c.TABLE_SCHEMA=database() and COLUMN_NAME like "contact_person_title"</lang>
+            </script>
+            <test>title.intValue()==1</test>
+        </condition>
+         <condition type="custom">
+            <script returnVar="email">
+                <lang type="mysql">Select count(*)  from information_schema.COLUMNS c where  c.TABLE_NAME="amp_organisation" and c.TABLE_SCHEMA=database() and COLUMN_NAME like "email"</lang>
+            </script>
+            <test>email.intValue()==1</test>
+        </condition>
+         <condition type="custom">
+            <script returnVar="phone">
+                <lang type="mysql">Select count(*) from information_schema.COLUMNS c where  c.TABLE_NAME="amp_organisation" and c.TABLE_SCHEMA=database() and COLUMN_NAME like "phone"</lang>
+            </script>
+            <test>phone.intValue()==1</test>
+        </condition>
+         <condition type="custom">
+            <script returnVar="fax">
+                <lang type="mysql">Select count(*) from information_schema.COLUMNS c where  c.TABLE_NAME="amp_organisation" and c.TABLE_SCHEMA=database() and COLUMN_NAME like "fax"</lang>
+            </script>
+            <test>fax.intValue()==1</test>
+        </condition>
+    </trigger>
+
+
     <apply>
         <script>
           <lang delimiter=";" type="mysql">

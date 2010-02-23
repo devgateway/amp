@@ -13,6 +13,10 @@
 		5th script removes FK-s(event_type_id) from amp_calendar,then removes event_type_id column and after that drops unused amp_event_type table
 	</description>	
 	
+	<trigger type="all">
+		<condition type="tableOrViewExists">amp_event_type</condition>
+	</trigger>
+	
 	<apply>
 		<script>			
 			<lang type="mysql" delimiter=";">

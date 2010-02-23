@@ -5,6 +5,11 @@
     <keyword>risks</keyword>
     <author>Medea Gugushvili</author>
     <description>remove old risk column and drop unused amp_indicator_risk_ratings table.</description>
+
+    <trigger type="all">
+         <condition type="tableOrViewExists">amp_indicator_risk_ratings</condition>
+    </trigger>
+
     <apply>
         <script>
               <lang type="mysql" delimiter=";">

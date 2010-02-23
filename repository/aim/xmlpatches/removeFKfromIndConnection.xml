@@ -11,6 +11,7 @@
 	
 	<trigger type="all">
 		<condition type="dbName">amp_testing</condition>
+		<condition type="constraintExists">FK29AA02E98B8CFB81</condition>
 	</trigger>
 	
 	<apply>

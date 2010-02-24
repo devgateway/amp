@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.jfree.chart.ChartFactory;
@@ -93,7 +95,7 @@ public class ChartGenerator {
 	}
 
 	public static String getActivityRiskChartFileName(Long actId,HttpSession session,PrintWriter pw,int chartWidth,int chartHeight,String url, HttpServletRequest request) throws Exception{
-		ArrayList<AmpCategoryValue> risks = getActivityRisks(actId);
+		Collection<AmpCategoryValue> risks = IndicatorUtil.getRisks(actId);
 
 		/*ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
         for (Iterator<AmpIndicatorRiskRatings> riskIter = risks.iterator(); riskIter.hasNext(); ) {
@@ -118,9 +120,14 @@ public class ChartGenerator {
 		return generateRiskChart(cp,request);
 	}
 
+    /*
+     *
+     * TODO remove this method we have same method in IndicatorUtil getRisks()...
+     */
+    @Deprecated
 	public static ArrayList<AmpCategoryValue> getActivityRisks(Long actId)	throws DgException {
 		ArrayList<AmpCategoryValue> risks=new ArrayList<AmpCategoryValue>();
-		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+		List<IndicatorActivity> valuesActivity=IndicatorUtil.getIndicatorActivities(actId);
 		if(valuesActivity!=null && valuesActivity.size()>0){
 			Iterator<IndicatorActivity> it=valuesActivity.iterator();
 			while(it.hasNext()){
@@ -196,9 +203,8 @@ public class ChartGenerator {
 	public static String getActivityPerformanceChartFileName(Long actId,HttpSession session,PrintWriter pw,
 			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) throws Exception{
 
-		AmpActivity activity=ActivityUtil.loadActivity(actId);
-		Set<IndicatorActivity> values=activity.getIndicators();
-
+		
+		List<IndicatorActivity> values=IndicatorUtil.getIndicatorActivities(actId);;
 
 //		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
 //			if(valuesActivity!=null && valuesActivity.size()>0){

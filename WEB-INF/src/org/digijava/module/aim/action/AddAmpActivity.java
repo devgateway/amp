@@ -234,7 +234,7 @@ public class AddAmpActivity extends Action {
       
       
        if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0 && eaForm.getIndicator().getIndicatorsME()==null){
-              List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());                                        
+              List indicators=IndicatorUtil.getActivityIndHelperBeans(eaForm.getActivityId());
               eaForm.getIndicator().setIndicatorsME(indicators);            
        }
 

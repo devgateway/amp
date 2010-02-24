@@ -100,6 +100,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
+import org.digijava.module.aim.util.IndicatorUtil;
 
 public class ExportActivityToPDF extends Action {
 	
@@ -1167,7 +1168,7 @@ public class ExportActivityToPDF extends Action {
 			ByteArrayOutputStream outByteStream1 = new ByteArrayOutputStream();
 			PdfPCell riskCell2 = new PdfPCell();
 			riskCell2.setBorder(0);
-			ArrayList<AmpCategoryValue> risks=ChartGenerator.getActivityRisks(actId);
+			Collection<AmpCategoryValue> risks=IndicatorUtil.getRisks(actId);
 			ChartParams rcp = new ChartParams();		
 			rcp.setData(risks);
 			rcp.setTitle("");

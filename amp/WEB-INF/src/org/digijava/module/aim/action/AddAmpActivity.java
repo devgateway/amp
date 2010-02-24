@@ -204,10 +204,19 @@ public class AddAmpActivity extends Action {
 
      //set the contracts, if available
      //eaForm.getCurrCode()
-    if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null)){
-           List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
-           eaForm.getContracts().setContracts(contracts);
-     }
+    	if(eaForm.getActivityId()!=null) {
+    		if(eaForm.getContracts().getContracts()==null) {
+	    		List<IPAContract> contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
+	    		eaForm.getContracts().setContracts(contracts);
+	    		Iterator<IPAContract> iIPA = eaForm.getContracts().getContracts().iterator();
+	    		while(iIPA.hasNext()) {
+	    			Iterator<AmpOrganisation> iOrg = iIPA.next().getOrganizations().iterator();
+	    			while(iOrg.hasNext()) {
+	    				iOrg.next().getAmpOrgId();
+	    			}	    			
+	    		}
+    		}
+    	}
 
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());

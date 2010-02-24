@@ -1176,127 +1176,82 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
       }
       
-        String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity.ampActivityId=" + activityId;
-      	IPAContract ipaAux = (IPAContract) session.get(IPAContract.class, activityId);
-        String ids = "";
-        if (contracts != null) {
+        	if (contracts != null) {
+				Iterator<IPAContract> ipaConIter = contracts.iterator();
+				while (ipaConIter.hasNext()) {
+					IPAContract auxContract = ipaConIter.next();
+					IPAContract newContract = new IPAContract();
+					newContract.setActivity(activity);
+					newContract.setContractName(auxContract.getContractName());
+					newContract.setDescription(auxContract.getDescription());
+					newContract.setContractingOrganizationText(auxContract.getContractingOrganizationText());
+					newContract.setActivityCategory(auxContract.getActivityCategory());
+					newContract.setStartOfTendering(auxContract.getStartOfTendering());
+					newContract.setSignatureOfContract(auxContract.getSignatureOfContract());
+					newContract.setContractValidity(auxContract.getContractValidity());
+					newContract.setContractCompletion(auxContract.getContractCompletion());
 
-            Iterator<IPAContract> ipaConIter = contracts.iterator();
-            while (ipaConIter.hasNext()) {
-                IPAContract contract = ipaConIter.next();
-                contract.setActivity(activity);
-                if (contract.getId() != null) {
-                    IPAContract oldContract = (IPAContract) session.get(IPAContract.class, contract.getId());
-                    oldContract.setContractName(contract.getContractName());
-                    oldContract.setDescription(contract.getDescription());
-                    oldContract.setContractingOrganizationText(contract.getContractingOrganizationText());
-                    oldContract.setActivityCategory(contract.getActivityCategory());
-                    oldContract.setStartOfTendering(contract.getStartOfTendering());
-                    oldContract.setSignatureOfContract(contract.getSignatureOfContract());
-                    oldContract.setContractValidity(contract.getContractValidity());
-                    oldContract.setContractCompletion(contract.getContractCompletion());
+					newContract.setTotalPrivateContribAmountDate(auxContract.getTotalPrivateContribAmountDate());
+					newContract
+							.setTotalNationalContribIFIAmountDate(auxContract.getTotalNationalContribIFIAmountDate());
+					newContract.setTotalNationalContribRegionalAmountDate(auxContract
+							.getTotalNationalContribRegionalAmountDate());
+					newContract.setTotalNationalContribCentralAmountDate(auxContract
+							.getTotalNationalContribCentralAmountDate());
+					newContract.setTotalECContribINVAmountDate(auxContract.getTotalECContribINVAmountDate());
+					newContract.setTotalECContribIBAmountDate(auxContract.getTotalECContribIBAmountDate());
 
-                    oldContract.setTotalPrivateContribAmountDate(contract.getTotalPrivateContribAmountDate());
-                    oldContract.setTotalNationalContribIFIAmountDate(contract.getTotalNationalContribIFIAmountDate());
-                    oldContract.setTotalNationalContribRegionalAmountDate(contract.getTotalNationalContribRegionalAmountDate());
-                    oldContract.setTotalNationalContribCentralAmountDate(contract.getTotalNationalContribCentralAmountDate());
-                    oldContract.setTotalECContribINVAmountDate(contract.getTotalECContribINVAmountDate());
-                    oldContract.setTotalECContribIBAmountDate(contract.getTotalECContribIBAmountDate());
-                    
-                    oldContract.setTotalECContribIBAmount(contract.getTotalECContribIBAmount());
-                    oldContract.setTotalAmount(contract.getTotalAmount());
-                    oldContract.setContractTotalValue(contract.getContractTotalValue());
-                    oldContract.setTotalAmountCurrency(contract.getTotalAmountCurrency());
-                    oldContract.setDibusrsementsGlobalCurrency(contract.getDibusrsementsGlobalCurrency());
-                    oldContract.setExecutionRate(contract.getExecutionRate());
-                    oldContract.setTotalECContribINVAmount(contract.getTotalECContribINVAmount());
-                    oldContract.setTotalNationalContribCentralAmount(contract.getTotalNationalContribCentralAmount());
-                    oldContract.setTotalNationalContribRegionalAmount(contract.getTotalNationalContribRegionalAmount());
-                    oldContract.setTotalNationalContribIFIAmount(contract.getTotalNationalContribIFIAmount());
-                    oldContract.setTotalPrivateContribAmount(contract.getTotalPrivateContribAmount());
-                    oldContract.setOrganization(contract.getOrganization());
-                    oldContract.setStatus(contract.getStatus());
-                    oldContract.setType(contract.getType());
-                    oldContract.setContractType(contract.getContractType());
-                    //oldContract.getDisbursements().clear();
-                    Set toRetain=new HashSet();
+					newContract.setTotalECContribIBAmount(auxContract.getTotalECContribIBAmount());
+					newContract.setTotalAmount(auxContract.getTotalAmount());
+					newContract.setContractTotalValue(auxContract.getContractTotalValue());
+					newContract.setTotalAmountCurrency(auxContract.getTotalAmountCurrency());
+					newContract.setDibusrsementsGlobalCurrency(auxContract.getDibusrsementsGlobalCurrency());
+					newContract.setExecutionRate(auxContract.getExecutionRate());
+					newContract.setTotalECContribINVAmount(auxContract.getTotalECContribINVAmount());
+					newContract
+							.setTotalNationalContribCentralAmount(auxContract.getTotalNationalContribCentralAmount());
+					newContract.setTotalNationalContribRegionalAmount(auxContract
+							.getTotalNationalContribRegionalAmount());
+					newContract.setTotalNationalContribIFIAmount(auxContract.getTotalNationalContribIFIAmount());
+					newContract.setTotalPrivateContribAmount(auxContract.getTotalPrivateContribAmount());
+					newContract.setOrganization(auxContract.getOrganization());
+					newContract.setStatus(auxContract.getStatus());
+					newContract.setType(auxContract.getType());
+					newContract.setContractType(auxContract.getContractType());
+					// oldContract.getDisbursements().clear();
+					Set toRetain = new HashSet();
 
-                    Set newOrgs = contract.getOrganizations();
-                    if (newOrgs != null && newOrgs.size() > 0) {
-                        Iterator<AmpOrganisation> iter = newOrgs.iterator();
-                        while (iter.hasNext()) {
-                            AmpOrganisation newOrg = iter.next();
-                            if (newOrg.getAmpOrgId() != null) {
-                                AmpOrganisation oldDisb = (AmpOrganisation) session.load(AmpOrganisation.class,
-                                        newOrg.getAmpOrgId());
-                                toRetain.add(oldDisb);
-                            } else {
-                                if (oldContract.getOrganization() == null) {
-                                    oldContract.setOrganizations(new HashSet());
-                                }
-                                oldContract.getOrganizations().add(newOrg);
-                                toRetain.add(newOrg);
-                                
-                            }
-                        }
-                        oldContract.getOrganizations().addAll(toRetain);
-                    }
-                    else{
-                        if(oldContract.getOrganizations()!=null){
-                        oldContract.getOrganizations().clear();
-                        }
-                    }
-                    
-                    
-                    Set newDisbs = contract.getDisbursements();
-                    if (newDisbs != null && newDisbs.size() > 0) {
-                        Iterator<IPAContractDisbursement> iterNewDisb = newDisbs.iterator();
-                        while (iterNewDisb.hasNext()) {
-                            IPAContractDisbursement newDisb = iterNewDisb.next();
-                            if (newDisb.getId() != null) {
-                                IPAContractDisbursement oldDisb = (IPAContractDisbursement) session.load(IPAContractDisbursement.class,
-                                        newDisb.getId());
-                                oldDisb.setAdjustmentType(newDisb.getAdjustmentType());
-                                oldDisb.setAmount(newDisb.getAmount());
-                                oldDisb.setCurrency(newDisb.getCurrency());
-                                oldDisb.setDate(newDisb.getDate());
-                                toRetain.add(oldDisb);
-                            } else {
-                                if (oldContract.getDisbursements() == null) {
-                                    oldContract.setDisbursements(new HashSet());
-                                }
-                                newDisb.setContract(oldContract);
-                                oldContract.getDisbursements().add(newDisb);
-                                toRetain.add(newDisb);
-                                
-                            }
-                        }
-                        oldContract.getDisbursements().retainAll(toRetain);
-                    }
-                    else{
-                        if(oldContract.getDisbursements()!=null){
-                        oldContract.getDisbursements().clear();
-                        }
-                    }
+					Set newOrgs = auxContract.getOrganizations();
+					if (newOrgs != null) {
+						newContract.setOrganizations(new HashSet<AmpOrganisation>());
+						Iterator<AmpOrganisation> iter = newOrgs.iterator();
+						while (iter.hasNext()) {
+							AmpOrganisation auxOrg = iter.next();
+							//auxOrg = (AmpOrganisation) session.load(AmpOrganisation.class, auxOrg.getAmpOrgId());
+							newContract.getOrganizations().add(auxOrg);
+						}
+					}
 
-                    contract=oldContract;
+					Set<IPAContractDisbursement> newDisbs = auxContract.getDisbursements();
+					if (newDisbs != null) {
+						newContract.setDisbursements(new HashSet<IPAContractDisbursement>());
+						Iterator<IPAContractDisbursement> iterNewDisb = newDisbs.iterator();
+						while (iterNewDisb.hasNext()) {
+							IPAContractDisbursement auxDisb = iterNewDisb.next();
+							//IPAContractDisbursement oldDisb = (IPAContractDisbursement) session.load(IPAContractDisbursement.class, auxDisb.getId());
+							IPAContractDisbursement newDisb = new IPAContractDisbursement();
+							newDisb.setAdjustmentType(auxDisb.getAdjustmentType());
+							newDisb.setAmount(auxDisb.getAmount());
+							newDisb.setCurrency(auxDisb.getCurrency());
+							newDisb.setDate(auxDisb.getDate());
+							newContract.getDisbursements().add(newDisb);
+						}
+					}
+					
+					session.save(newContract);
+				}
+			}
 
-                }
-                session.saveOrUpdate(contract);
-                ids += contract.getId() + ", ";
-            }
-            if(ids.length()>2)
-            ids = ids.substring(0, ids.length() - 2);
-
-
-
-        }
-        if (ids.length() != 0) {
-            queryString += " and con.id not in (" + ids + ")";
-        }
-       if(ipaAux != null){//if no row is returned there is an Hibernate exception.
-    	   //session.delete(queryString); This method has been moved to hibernate.classic.Session.delete() and it's Deprecated
-       }
         
        session.flush();
        if (alwaysRollback == false)

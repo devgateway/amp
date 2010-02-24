@@ -859,8 +859,57 @@ public class IndicatorUtil {
 		
 		return result;
 	}
-	
-	/**
+     
+	   /**
+     * Returns set of indicator helper beans for activity.
+     * @param activityId
+     * @return
+     * @throws DgException
+     */
+    public static List<ActivityIndicator> getActivityIndHelperBeans(Long activityId) throws DgException {
+        List<ActivityIndicator> result = null;
+
+        List<IndicatorActivity> indicators = getIndicatorActivities(activityId);
+
+        if (indicators != null && indicators.size() > 0) {
+            result = new ArrayList<ActivityIndicator>();
+            for (IndicatorActivity connection : indicators) {
+                ActivityIndicator helper = new ActivityIndicator();
+
+                helper = createIndicatorHelperBean(connection);
+
+                result.add(helper);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns list of indicator activities beans for activity.
+     * @param activityId
+     * @return
+     * @throws DgException
+     */
+    public static List<IndicatorActivity> getIndicatorActivities(Long activityId) throws DgException {
+        List<IndicatorActivity> indicators = null;
+        if (activityId == null) {
+            return null;
+        }
+        Session sesison = PersistenceManager.getRequestDBSession();
+        String oql = "select con from " + IndicatorConnection.class.getName() + " con inner join con.activity act ";
+        oql += " where act.ampActivityId =:actId ";
+        try {
+            Query query = sesison.createQuery(oql);
+            query.setLong("actId", activityId);
+            indicators = query.list();
+
+        } catch (HibernateException e) {
+            throw new DgException("Cannot load indicators for Activity with id " + activityId, e);
+        }
+        return indicators;
+    }
+
+   	/**
 	 * Compares {@link AmpIndicator} objects by 'name' property
 	 * @author Irakli Kobiashvili
 	 *
@@ -1435,7 +1484,7 @@ public class IndicatorUtil {
 	 public static Collection<AmpCategoryValue> getRisks(Long actId) throws Exception{
 		 ArrayList<AmpCategoryValue> risks=new ArrayList<AmpCategoryValue>();
 		 try {
-			 Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+			 List<IndicatorActivity> valuesActivity=IndicatorUtil.getIndicatorActivities(actId);
 				if(valuesActivity!=null && valuesActivity.size()>0){
 					Iterator<IndicatorActivity> it=valuesActivity.iterator();
 					while(it.hasNext()){

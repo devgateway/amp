@@ -1027,8 +1027,6 @@ public class TeamUtil {
     public static void removeActivitiesFromTeam(Long activities[],Long teamId) {
         Session session = null;
         Transaction tx = null;
-        AmpTeamMember member = null;
-
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();

@@ -3654,17 +3654,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }
         
-        //Delete the connection with Team.
-        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+
         Connection con = session.connection();
         Statement stmt = con.createStatement();
-        int deletedRows = stmt.executeUpdate(deleteActivityTeam);
         
         //Delete the connection with amp_physical_performance.
         String deletePhysicalPerformance = "DELETE FROM amp_physical_performance WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         con = session.connection();
         stmt = con.createStatement();
-        deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
+        int deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
         
         //Delete the connection with Indicator Project.
         //String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();

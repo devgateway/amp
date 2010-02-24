@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -17,6 +18,8 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class FundingCalculationsHelper {
+	
+	private static Logger logger = Logger.getLogger(FundingCalculationsHelper.class);
 
 	List<FundingDetail> fundDetailList = new ArrayList<FundingDetail>();
 
@@ -106,6 +109,11 @@ public class FundingCalculationsHelper {
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
 
 			double frmExRt = fundDet.getFixedExchangeRate() != null ? fundDet.getFixedExchangeRate() : Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
+			
+			if(frmExRt == 0.0) {
+				frmExRt = 1;
+				logger.warn("frmExRt was 0, changed to 1 or divide operation will fail!!!");
+			}
 
 			if (userCurrencyCode != null)
 				toCurrCode = userCurrencyCode;

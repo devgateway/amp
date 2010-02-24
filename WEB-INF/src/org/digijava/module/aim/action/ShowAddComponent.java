@@ -139,7 +139,10 @@ public class ShowAddComponent extends Action {
 			e1.printStackTrace();
 		}
 		eaForm.getComponents().setAllCompsType(componentstype);
-		eaForm.getComponents().setComponentId(new Long(-1));
+		/*if(eaForm.getComponents().getComponentId()==null) {
+			eaForm.getComponents().setComponentId(new Long(-1));
+		}*/
+		eaForm.getComponents().setComponentId(null);
 		eaForm.getComponents().setComponentTitle(null);
 		eaForm.getComponents().setComponentDesc(null);
 		eaForm.getComponents().setNewCompoenentName(null);
@@ -558,6 +561,7 @@ public class ShowAddComponent extends Action {
 					add = false;
 					eaForm.getComponents().getCompotosave().remove(auxComponent);
 					eaForm.getComponents().getCompotosave().add(ampComp);
+					break;
 					
 				} else if(auxComponent.getTitle() != null && auxComponent.getTitle().equals(ampComp.getTitle())) {
 					// Case 2: I'm editing a new component not yet saved.

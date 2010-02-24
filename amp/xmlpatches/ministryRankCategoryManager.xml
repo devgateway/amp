@@ -4,21 +4,42 @@
   <keyword>ministryRank</keyword>
   <author>Marcelo Sotero</author>
   <description>description</description>
+  <trigger type="all">
+      <condition type="custom">
+          <script returnVar="y">
+              <lang type="sql">SELECT count(*) from amp_category_class where keyName='line_ministry_rank' or keyName='ministry_planning_rank'</lang>
+          </script>
+          <test>y.intValue()==0</test>
+      </condition>
+  </trigger>  
   <apply>
     <script>
     <lang delimiter=";" type="mysql">
-insert INTO amp_category_class(category_name,is_multiselect,is_ordered, keyName) SELECT 'Line Ministry Rank', b'0', b'0', 'line_ministry_rank' FROM dual where (select count(category_name) from amp_category_class cat where cat.keyName='line_ministry_rank')=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '1',acc.id,0 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=0)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '2',acc.id,1 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=1)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '3',acc.id,2 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=2)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '4',acc.id,3 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=3)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '5',acc.id,4 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=4)=0;
-insert INTO amp_category_class(category_name,is_multiselect,is_ordered, keyName) SELECT 'Ministry Planning Rank', b'0', b'0', 'ministry_planning_rank' FROM dual where (select count(category_name) from amp_category_class cat where cat.keyName='ministry_planning_rank')=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '1',acc.id,0 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=0)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '2',acc.id,1 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=1)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '3',acc.id,2 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=2)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '4',acc.id,3 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=3)=0;
-insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) SELECT '5',acc.id,4 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank' and (select count(cat.category_value) from amp_category_value cat where cat.amp_category_class_id=acc.id and cat.index_column=4)=0;
+		insert INTO amp_category_class(category_name,is_multiselect,is_ordered, keyName) 
+			VALUES('Line Ministry Rank', b'0', b'0', 'line_ministry_rank');
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '1',acc.id,0 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank'); 
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '2',acc.id,1 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank'); 
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '3',acc.id,2 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank'); 		
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '4',acc.id,3 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank'); 		
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '5',acc.id,4 FROM amp_category_class acc WHERE acc.keyName='line_ministry_rank'); 		
+		insert INTO amp_category_class(category_name,is_multiselect,is_ordered, keyName) 
+			VALUES('Ministry Planning Rank', b'0', b'0', 'ministry_planning_rank');
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '1',acc.id,0 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank'); 
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '2',acc.id,1 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank'); 
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '3',acc.id,2 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank'); 		
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '4',acc.id,3 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank'); 		
+		insert INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
+			(SELECT '5',acc.id,4 FROM amp_category_class acc WHERE acc.keyName='ministry_planning_rank'); 		
+
 	</lang>
     </script>
   </apply>

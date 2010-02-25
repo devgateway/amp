@@ -1534,8 +1534,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select f from "
-                + AmpFiscalCalendar.class.getName() + " f";
+            String queryString = "select f from " + AmpFiscalCalendar.class.getName() + " f where f.name is not null";
             qry = session.createQuery(queryString);
             fisCals = qry.list();
         } catch (Exception e) {

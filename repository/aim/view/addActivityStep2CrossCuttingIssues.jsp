@@ -72,22 +72,22 @@ function edit(key,fieldName) {
 
                                                   <tr>
                                                     <td>
-                                                      <table cellSpacing="1" cellPadding="5" border="0"  width="40%">
+                                                      <table cellSpacing="1" cellPadding="5" border="0"  width="100%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
 														<c:if test="${!empty aimEditActivityForm.crossIssues.equalOpportunity}" >
                                                         	<bean:define id="eqOppKey">
 															   <c:out value="${aimEditActivityForm.crossIssues.equalOpportunity}"/>
 															</bean:define>
                                                         	<tr>
-																<td>
+                                                                <td width="15%">
 																  <digi:trn>Equal Opportunity:</digi:trn>
 																</td>															
-																<td>																
-																	<a href="javascript:edit('<%=eqOppKey%>','Equal Opportunity')">
+																<td width="8%">
+                                                                    <a href="javascript:edit('<%=eqOppKey%>','Equal Opportunity')">
 																		<digi:trn>Edit</digi:trn>
 																	</a>
 																</td>
-	                                                            <td>
+                                                                <td align="left">
 																	<digi:edit key="<%=eqOppKey%>"/>
 																</td>
 															</tr>

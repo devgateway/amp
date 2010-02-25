@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -31,6 +32,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.reportsimpexp.ReportsImpExpConstants;
 
 public class ReportsImportAction extends MultiAction {
+	
+	private static Logger logger = Logger.getLogger(ReportsImportAction.class);
 
 	@Override
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
@@ -59,66 +62,67 @@ public class ReportsImportAction extends MultiAction {
 	}
 
 	@Override
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		String action		= request.getParameter(ReportsImpExpConstants.ACTION);
+	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+		String action	= request.getParameter(ReportsImpExpConstants.ACTION);
 		if ( ReportsImpExpConstants.ACTION_IMPORT_FILE.equals(action) ) {
 			return modeProcessImportFile(mapping, form, request, response);
 		}
-		else if ( ReportsImpExpConstants.ACTION_IMPORT.equals(action) )
+		else if ( ReportsImpExpConstants.ACTION_IMPORT.equals(action) ){
 			return modeProcessImport(mapping, form, request, response);
+		}			
 		return modeShow(mapping, form, request, response);
 	}
 	
-	public ActionForward modeShow(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeShow(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		return mapping.findForward("forward");
 		
 	}
-	public ActionForward modeProcessImportFile(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeProcessImportFile(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)	throws Exception {
 		
-		ImpExpForm myForm					= (ImpExpForm) form;
-		FormFile formFile							= null;
+		ImpExpForm myForm= (ImpExpForm) form;
+		FormFile formFile= myForm.getFormFileReportsOrTabs();
 		
-		if ( myForm.getShowTabs() )
-			formFile		= myForm.getFormFileTabs();
-		else 
-			formFile		= myForm.getFormFileReports();
+//		if ( myForm.getShowTabs() ){
+//			formFile = myForm.getFormFileTabs();
+//		} else{
+//			formFile= myForm.getFormFileReports();
+//		}			
 		
-		if ( formFile != null ) {
-				ReportsImpTransformerMain mainTransformer 	= new ReportsImpTransformerMain();
+		if (formFile != null ) {
+			ReportsImpTransformerMain mainTransformer 	= new ReportsImpTransformerMain();
+			try {
 				mainTransformer.unmarshall( formFile.getInputStream() );
-				myForm.setReportsList( mainTransformer.transform() ); 
+			} catch (Exception e) {
+				//show error on pages
+				logger.error("Exception : " + e.getMessage());
+				e.printStackTrace(System.out);
+				ActionErrors errors = new ActionErrors();
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.importErrorFileContentReports"));				
+				saveErrors(request, errors);
+				return mapping.findForward("forward");
+			}
+			
+			myForm.setReportsList( mainTransformer.transform()); 
 		}
 		return modeShow(mapping, form, request, response);
 	}
-	public ActionForward modeProcessImport(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeProcessImport(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)	throws Exception {
 		
-		ActionErrors errors						= new ActionErrors();
-		ImpExpForm myForm					= (ImpExpForm) form;
+		ActionErrors errors	= new ActionErrors();
+		ImpExpForm myForm	= (ImpExpForm) form;
 		
 		if ( myForm.getImportReportIndexes() != null && myForm.getImportTeamIds() != null ) {
 			for ( int i=0; i<myForm.getImportReportIndexes().length; i++ ) {
 				AmpReports currentReport			= myForm.getReportsList().get( myForm.getImportReportIndexes()[i] );
 				String reportName						= currentReport.getName();
 				for ( int j=0; j<myForm.getImportTeamIds().length; j++ ) {
-					AmpTeamMember tLead		= TeamMemberUtil.getAmpTeamMember( myForm.getImportTeamIds()[j] );
-					AmpTeam team						= tLead.getAmpTeam();
-					
+					AmpTeamMember tLead		= TeamMemberUtil.getAmpTeamMember( myForm.getImportTeamIds()[j] );					
 					currentReport.setName(reportName);
 					currentReport.setOwnerId(tLead);
 					
 					if ( AdvancedReportUtil.checkDuplicateReportName(currentReport.getName(), tLead.getAmpTeamMemId(), null) ) {
 						 Site site = RequestUtils.getSite(request);
-						 //
 						 //requirements for translation purposes
-						 TranslatorWorker translator = TranslatorWorker.getInstance();
 						 Long siteId = site.getId();
 						 String locale = RequestUtils.getNavigationLanguage(request).getCode();
 						 String translatedText = "imported";
@@ -134,11 +138,11 @@ public class ReportsImportAction extends MultiAction {
 					ReportWizardAction.duplicateReportData(currentReport);
 				}
 			}
-			ActionError error					= new ActionError("error.aim.reportsimpexp.importDone");
+			ActionError error	= new ActionError("error.aim.reportsimpexp.importDone");
 			errors.add( "title", error );
 		}
 		else {
-			ActionError error					= new ActionError("error.aim.reportsimpexp.errorDuringImport");
+			ActionError error	= new ActionError("error.aim.reportsimpexp.errorDuringImport");
 			errors.add( "title", error );
 		}
 	

@@ -22,74 +22,72 @@ import org.digijava.module.aim.util.reportsimpexp.ReportsImpExpConstants;
  */
 public class ImpExpForm extends ActionForm {
 	
-		private List<AmpReports> reportsList						= null;
-		private String includedJsp											= null;
+		private List<AmpReports> reportsList= null;
+		private String includedJsp = null;
 		
 		/**
 		 * This one has no role. Just here to fool and html:select tag
 		 */
-		private Object[] fakeIds												= null;
+		private Object[] fakeIds= null;
 		
 		/* Export Fields */
-		private boolean showTabs											= false;
+		private boolean showTabs= false;
 		
-		private Map<Long, AmpReports> selectedReports		= null;
-		private Long[] selectedReportIds								= null;
-		private String selectedReportsString							= "";
-		private Long[] displayedReportIds								= null;
+		private Map<Long, AmpReports> selectedReports= null;
+		private Long[] selectedReportIds= null;
+		private String selectedReportsString= "";
+		private Long[] displayedReportIds= null;
 		
-		private Set<KeyValue> availableTeams						= null;
-		private Long[] selectedTeamIds									= null;
+		private Set<KeyValue> availableTeams= null;
+		private Long[] selectedTeamIds	= null;
 		
-		private Set<KeyValue> availableUsers						= null;
-		private Long[] selectedUserIds									= null;
+		private Set<KeyValue> availableUsers= null;
+		private Long[] selectedUserIds	= null;
 		
-		private String exportReportsClass								= ReportsImpExpConstants.CSS_CLASS_ENABLED;
-		private String exportTabsClass									= ReportsImpExpConstants.CSS_CLASS_ENABLED;
+		private String exportReportsClass= ReportsImpExpConstants.CSS_CLASS_ENABLED;
+		private String exportTabsClass	= ReportsImpExpConstants.CSS_CLASS_ENABLED;
 		
-		private String exportReportsAction							= ReportsImpExpConstants.ACTION_NEW;
-		private String exportTabsAction									= ReportsImpExpConstants.ACTION_NEW;
+		private String exportReportsAction	= ReportsImpExpConstants.ACTION_NEW;
+		private String exportTabsAction		= ReportsImpExpConstants.ACTION_NEW;
 		
 		/* Import Fields */
-		private FormFile formFileReports								= null;
-		private FormFile formFileTabs									= null;
-		private Integer [] importReportIndexes						= null;
-		private Long [] importTeamIds									= null;
-		private Set<KeyValue> allAvailableTeams					= null;
+		private FormFile formFileReportsOrTabs=null;
 		
-		private String importClass											= ReportsImpExpConstants.CSS_CLASS_ENABLED;
+		private Integer [] importReportIndexes	= null;
+		private Long [] importTeamIds= null;
+		private Set<KeyValue> allAvailableTeams	= null;
+		
+		private String importClass	= ReportsImpExpConstants.CSS_CLASS_ENABLED;
 		@Override
 		public void reset(ActionMapping mapping, HttpServletRequest request) {
 			
-			String action		= request.getParameter(ReportsImpExpConstants.ACTION);
+			String action = request.getParameter(ReportsImpExpConstants.ACTION);
 			if ( ReportsImpExpConstants.ACTION_NEW.equals(action) ) {
-				this.reportsList													= null;
-				this.selectedReports											= null;
-				this.selectedReportsString									= "";
-				this.selectedReportIds										= null;
+				this.reportsList= null;
+				this.selectedReports= null;
+				this.selectedReportsString= "";
+				this.selectedReportIds = null;
 				
-				this.selectedReports											= null;
-				this.selectedTeamIds											= null;
-				this.selectedUserIds											= null;
-				this.displayedReportIds										= null;
+				this.selectedReports = null;
+				this.selectedTeamIds = null;
+				this.selectedUserIds = null;
+				this.displayedReportIds	= null;
 				
-				this.exportReportsClass									= ReportsImpExpConstants.CSS_CLASS_ENABLED;
-				this.exportTabsClass										= ReportsImpExpConstants.CSS_CLASS_ENABLED;
-				this.importClass											= ReportsImpExpConstants.CSS_CLASS_ENABLED;
+				this.exportReportsClass	= ReportsImpExpConstants.CSS_CLASS_ENABLED;
+				this.exportTabsClass = ReportsImpExpConstants.CSS_CLASS_ENABLED;
+				this.importClass = ReportsImpExpConstants.CSS_CLASS_ENABLED;
 				
-				this.exportReportsAction								= ReportsImpExpConstants.ACTION_NEW;
-				this.exportTabsAction									= ReportsImpExpConstants.ACTION_NEW;
+				this.exportReportsAction = ReportsImpExpConstants.ACTION_NEW;
+				this.exportTabsAction = ReportsImpExpConstants.ACTION_NEW;
 				
-				
-				this.formFileTabs												= null;
-				this.formFileReports											= null;
-				this.importReportIndexes										= null;
-				this.importTeamIds											= null;
+				this.formFileReportsOrTabs = null;
+				this.importReportIndexes = null;
+				this.importTeamIds = null;
 			}
 			if ( ReportsImpExpConstants.ACTION_SELECTION_STEP.equals(action) ) {
-				this.selectedTeamIds											= null;
-				this.selectedUserIds											= null;
-				this.displayedReportIds										= null;
+				this.selectedTeamIds = null;
+				this.selectedUserIds = null;
+				this.displayedReportIds	= null;
 			}
 			
 		}
@@ -307,37 +305,6 @@ public class ImpExpForm extends ActionForm {
 			this.displayedReportIds = displayedReportIds;
 		}
 
-
-		/**
-		 * @return the formFileReports
-		 */
-		public FormFile getFormFileReports() {
-			return formFileReports;
-		}
-
-		/**
-		 * @param formFileReports the formFileReports to set
-		 */
-		public void setFormFileReports(FormFile formFileReports) {
-			this.formFileReports = formFileReports;
-		}
-
-		/**
-		 * @return the formFileTabs
-		 */
-		public FormFile getFormFileTabs() {
-			return formFileTabs;
-		}
-
-		/**
-		 * @param formFileTabs the formFileTabs to set
-		 */
-		public void setFormFileTabs(FormFile formFileTabs) {
-			this.formFileTabs = formFileTabs;
-		}
-
-	
-
 		/**
 		 * @return the importReportIndexes
 		 */
@@ -357,6 +324,14 @@ public class ImpExpForm extends ActionForm {
 		 */
 		public Long[] getImportTeamIds() {
 			return importTeamIds;
+		}
+
+		public FormFile getFormFileReportsOrTabs() {
+			return formFileReportsOrTabs;
+		}
+
+		public void setFormFileReportsOrTabs(FormFile formFileReportsOrTabs) {
+			this.formFileReportsOrTabs = formFileReportsOrTabs;
 		}
 
 		/**
@@ -406,8 +381,5 @@ public class ImpExpForm extends ActionForm {
 		 */
 		public void setFakeIds(Object[] fakeIds) {
 			this.fakeIds = fakeIds;
-		}
-		
-		
-		
+		}		
 }

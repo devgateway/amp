@@ -252,6 +252,7 @@ public class AddressBookActions extends DispatchAction {
 		boolean validateData=false;
 		AmpContact contact=new AmpContact();
 		Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
+		Set<ContactPropertyHelper> emailsToLookFor=new HashSet<ContactPropertyHelper>();
 		if(myForm.getContactId()!=null){
 			//get contact emails
 			List<AmpContactProperty> properties=ContactInfoUtil.getContactProperties(myForm.getContactId());
@@ -269,18 +270,21 @@ public class AddressBookActions extends DispatchAction {
 			for (ContactPropertyHelper property : myForm.getEmails()) {
 				if(!contactEmails.contains(property)){
 					validateData=true;
-					break;
+					emailsToLookFor.add(property);					
 				}
 			}
 		}else{			
 			validateData=true;
+			for (ContactPropertyHelper currentEmail : myForm.getEmails()) {
+				emailsToLookFor.add(currentEmail);
+			}
 		}		
 		
 		//check unique email 
 		if(validateData){
 			ActionErrors errors= new ActionErrors();
 			int contactWithSameEmail=0;
-			for (ContactPropertyHelper email : myForm.getEmails()) {
+			for (ContactPropertyHelper email : emailsToLookFor) {
 				contactWithSameEmail=ContactInfoUtil.getContactsCount(email.getValue().trim(),null);
 				if(contactWithSameEmail!=0){
 					break;

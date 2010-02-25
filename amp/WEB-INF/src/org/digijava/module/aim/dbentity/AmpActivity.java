@@ -141,7 +141,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	//@VersionableCollection(fieldTitle = "Members")
 	private Set member;
 	
-	private String contactName;
+	//private String contactName;
 	private AmpTeamMember updatedBy;
 
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
@@ -718,10 +718,10 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @return
 	 */
-	public String getContactName() {
+/*	public String getContactName() {
 		return contactName;
 	}
-
+*/
 	/**
 	 * @param string
 	 */
@@ -732,9 +732,11 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @param string
 	 */
+	/* this field was removed from amp_activity table
 	public void setContactName(String string) {
 		contactName = string;
 	}
+	*/
 	public Set<AmpActivityContact> getActivityContacts() {
 		return activityContacts;
 	}

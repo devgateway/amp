@@ -46,7 +46,7 @@
 
 		<property name="calType" column="cal_type" type="java.lang.String" />
 		<property name="activityApprovalDate" column="activity_approval_date" type="java.util.Date" />
-		<!-- defunct -->
+			
 		<property name="activityStartDate" column="activity_start_date" type="java.util.Date" />
 		<!-- defunct -->
 		<property name="activityCloseDate" column="activity_close_date" type="java.util.Date" />
@@ -57,9 +57,10 @@
 		<property name="disbursmentsDate" column="disbursments_date" type="java.util.Date" />
 		<!-- defunct -->
 		<property name="condition" column="condition_" type="text" />
-
-		<property name="contactName" column="contact_name" type="java.lang.String" /><!-- defunct -->
-		
+		<!-- defunct -->
+		<!--
+		<property name="contactName" column="contact_name" type="java.lang.String" />
+		-->
 		<property name="comments" column="comments" type="text" />
 		<property name="statusReason" column="status_reason" type="text" />
 

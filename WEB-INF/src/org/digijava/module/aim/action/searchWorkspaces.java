@@ -67,7 +67,7 @@ public class searchWorkspaces extends Action {
 		
 		Collection<AmpTeam> ampWorkspaces = (Collection<AmpTeam>) vwForm.getWorkspaces();
 		int stIndex = startIndexInt;
-		int edIndex = (startIndexInt + resultsInt)>ampWorkspaces.size()?ampWorkspaces.size()-1:(startIndexInt + resultsInt);
+		int edIndex = (startIndexInt + resultsInt)>ampWorkspaces.size()?ampWorkspaces.size():(startIndexInt + resultsInt);
 
 		Vector vect = new Vector();
 

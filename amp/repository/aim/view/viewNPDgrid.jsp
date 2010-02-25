@@ -19,7 +19,7 @@
 								<tr>
 									<td valign="top">
 										<table cellPadding="5" cellSpacing="5" width="100%">
-											<tr>
+											<tr class="otherLinks">
 												<td align="left">
 													<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParamsSort}" property="selYears" value="${aimNPDForm.selYears}"/>
@@ -60,7 +60,7 @@
 					
 						<c:if test="${aimNPDForm.mode != 1}">
 							<td align="left">
-								<table>
+								<table class="otherLinks">
 									<tr>
 										<td align="left">
 											<jsp:useBean id="urlParamsSort1" type="java.util.Map" class="java.util.HashMap"/>

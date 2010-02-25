@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -31,18 +30,15 @@ import org.digijava.module.aim.util.reportsimpexp.ReportsImpExpConstants;
 
 public class ReportsExportAction extends MultiAction {
 	
-	private static Logger logger 		= Logger.getLogger(ReportsExportAction.class);
+	private static Logger logger = Logger.getLogger(ReportsExportAction.class);
 	
 	@Override
-	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 			
 		HttpSession session = request.getSession();
 		if (!RequestUtils.isAdmin(response, session, request)) {
 			return null;
-		}
-		
+		}		
 		ImpExpForm myForm					= (ImpExpForm) form;
 		String action		= request.getParameter(ReportsImpExpConstants.ACTION);
 		if ( ReportsImpExpConstants.ACTION_NEW.equals(action) ) {
@@ -53,29 +49,23 @@ public class ReportsExportAction extends MultiAction {
 		return modeSelect(mapping, form, request, response);
 	}
 	@Override
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
+	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {		
 		HttpSession session = request.getSession();
 		if (!RequestUtils.isAdmin(response, session, request)) {
 			return null;
-		}
-		
+		}		
 		String action		= request.getParameter(ReportsImpExpConstants.ACTION);
 		
 		if ( ReportsImpExpConstants.ACTION_NEW.equals(action) || ReportsImpExpConstants.ACTION_SELECTION_STEP.equals(action)  ) 
 			return modeShow(mapping, form, request, response);
-		else if ( ReportsImpExpConstants.ACTION_ADD_STEP.equals(action) ) 
-			return modeProcess(mapping, form, request, response);
+//		else if ( ReportsImpExpConstants.ACTION_ADD_STEP.equals(action) ) 
+//			return modeProcess(mapping, form, request, response);
 		else if ( ReportsImpExpConstants.ACTION_EXPORT.equals(action) ) 
 			return modeExport(mapping, form, request, response);
 		return null;
 	}
 	
-	public ActionForward modeShow(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeShow(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		
 		HttpSession session = request.getSession();
 		if (!RequestUtils.isAdmin(response, session, request)) {
@@ -89,10 +79,10 @@ public class ReportsExportAction extends MultiAction {
 		List<Long> userIds					= null;
 		
 		if ( myForm.getSelectedTeamIds() != null  && myForm.getSelectedTeamIds().length > 0 )
-			teamIds									= Arrays.asList( myForm.getSelectedTeamIds() );
+			teamIds	= Arrays.asList( myForm.getSelectedTeamIds() );
 		
 		if ( myForm.getSelectedUserIds() != null && myForm.getSelectedUserIds().length > 0 ) 
-			userIds									= Arrays.asList( myForm.getSelectedUserIds() );
+			userIds	= Arrays.asList( myForm.getSelectedUserIds() );
 		
 		
 		ReportsAccess reportsAccess		= new ReportsAccess(myForm.getShowTabs(), teamIds, userIds);
@@ -119,7 +109,7 @@ public class ReportsExportAction extends MultiAction {
 				}
 				myForm.setAvailableTeams(teamsKV);
 				
-				TreeSet<KeyValue> usersKV		= new TreeSet<KeyValue>( KeyValue.valueComparator );
+				TreeSet<KeyValue> usersKV= new TreeSet<KeyValue>( KeyValue.valueComparator );
 				for ( User u: users ) {
 					usersKV.add( new KeyValue(u.getId()+"", u.getName()) );
 				}
@@ -149,60 +139,44 @@ public class ReportsExportAction extends MultiAction {
 			
 		}
 		
-		
 		return mapping.findForward("forward");
 	}
+
 	
-	public ActionForward modeProcess(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeExport(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)throws Exception {
 		
 		HttpSession session = request.getSession();
 		if (!RequestUtils.isAdmin(response, session, request)) {
 			return null;
 		}
 		
-		ImpExpForm myForm					= (ImpExpForm) form;
+		ImpExpForm myForm= (ImpExpForm) form;
+		//get selected reports
 		if ( myForm.getSelectedReportIds() != null && myForm.getSelectedReportIds().length > 0 ) {
-			if ( myForm.getSelectedReports()  == null )
+			if ( myForm.getSelectedReports()  == null ){
 				myForm.setSelectedReports( new HashMap<Long, AmpReports>() );
+			}				
 			
 			if ( myForm.getDisplayedReportIds() != null ) {
 				for ( int i=0; i<myForm.getDisplayedReportIds().length; i++ ) {
 					myForm.getSelectedReports().remove( myForm.getDisplayedReportIds()[i] );
 				}
 			}
-			if ( myForm.getSelectedReportIds() != null )
+			
+			if ( myForm.getSelectedReportIds() != null ){
 				for ( int i=0; i<myForm.getSelectedReportIds().length; i++ ) {
-					AmpReports r		= 
-						ReportsExportAction.getReportWithIdFromCollection(myForm.getSelectedReportIds()[i], myForm.getReportsList() );
-					if ( r != null)
+					AmpReports r = ReportsExportAction.getReportWithIdFromCollection(myForm.getSelectedReportIds()[i], myForm.getReportsList() );
+					if ( r != null){
 						myForm.getSelectedReports().put(r.getAmpReportId(), r);
+					}						
 				}
-		}
-		TreeSet<String> reportNames		= new TreeSet<String>();
-		if ( myForm.getSelectedReports() != null && myForm.getSelectedReports().size()>0 ) {
-			for ( AmpReports r: myForm.getSelectedReports().values() ) {
-				reportNames.add( r.getName() );
-			}
-		}
-		myForm.setSelectedReportsString( Util.collectionToString(reportNames) );
-		return modeShow(mapping, form, request, response);
-	}
-	
-	public ActionForward modeExport(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
+			}				
+		}		
 		
-		HttpSession session = request.getSession();
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}
-		
-		ImpExpForm myForm					= (ImpExpForm) form;
-		String filename								= "reportsExport.xml";
-		if ( myForm.getShowTabs() )
-			filename									= "tabsExport.xml";
+		String filename	= "reportsExport.xml";
+		if ( myForm.getShowTabs() ){
+			filename= "tabsExport.xml";
+		}			
 		
 		response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=" + filename);
@@ -215,7 +189,7 @@ public class ReportsExportAction extends MultiAction {
 	}
 	
 	private static AmpReports getReportWithIdFromCollection(Long id, Collection<AmpReports> coll) {
-		Iterator<AmpReports> iter			= coll.iterator();
+		Iterator<AmpReports> iter	= coll.iterator();
 		while ( iter.hasNext() ) {
 			AmpReports r	= iter.next();
 			if ( r.getAmpReportId().equals(id) ) 

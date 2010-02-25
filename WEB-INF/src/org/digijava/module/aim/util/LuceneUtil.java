@@ -777,7 +777,7 @@ public class LuceneUtil implements Serializable {
 					Util.getEditorBody(site,act.getObjective(),navigationLanguage), 
 					Util.getEditorBody(site,act.getPurpose(),navigationLanguage), 
 					Util.getEditorBody(site,act.getResults(),navigationLanguage),
-					Util.getEditorBody(site,act.getContactName(),navigationLanguage),
+					/*Util.getEditorBody(site,act.getContactName(),navigationLanguage)*/null,
 			 	 	componentsCode,
 			 	 	act.getCrisNumber(),
 			 	 	act.getBudgetCodeProjectID()

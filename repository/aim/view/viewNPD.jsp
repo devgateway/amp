@@ -1652,7 +1652,22 @@ function showFilter(){
 		return true;
 	}
 </script>
-
+<digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
+<style type="text/css" media="print">
+#newpopins{
+     height: 100%;
+     width: 100%;
+     border: none;
+}
+#newpopins .content{
+     height: auto;
+     width: auto;
+}
+#newpopins_h,.noPrint,.dr-dialogmenu {
+  display : none;
+}
+</style>
+<div class="noPrint">
 <input type="hidden" id="hdYears" value=""/>
 <input type="hidden" id="hdIndicators" value=""/>
 <c:forEach var="sys" items="${aimNPDForm.selYears}">
@@ -1914,3 +1929,4 @@ function showFilter(){
 <script type="text/javascript">
      addLoadEvent(delBody);
 </script>
+</div>

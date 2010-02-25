@@ -703,7 +703,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         activityId = activity.getAmpActivityId();
         String ampId=generateAmpId(member.getUser(),activityId, session);
 
-        if (oldActivity != null && oldActivity.getAmpId()==null){
+        if (activity.getAmpId()==null){
             activity.setAmpId(ampId);
         }
         session.update(activity);

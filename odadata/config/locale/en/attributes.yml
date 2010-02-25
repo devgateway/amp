@@ -38,9 +38,9 @@ en:
         end: 
           label: End Date
         implementing_agencies: 
-          label: Implementing Agencies
+          label: Channel of Delivery
         contracted_agencies: 
-          label: Contracted Agencies
+          label: Extending Agencies
         national_regional: 
           label: National / Regional
         type_of_implementation: 

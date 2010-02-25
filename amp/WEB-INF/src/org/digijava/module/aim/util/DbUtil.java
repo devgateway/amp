@@ -2527,8 +2527,8 @@ public class DbUtil {
             col = qry.list();
             StringTokenizer st = new StringTokenizer("");
             for (Iterator it = col.iterator(); it.hasNext();) {
-				AmpOrganisation org = (AmpOrganisation) it.next(); 
-			     st = new StringTokenizer(org.getName().toLowerCase()+org.getAcronym().toLowerCase());
+				AmpOrganisation org = (AmpOrganisation) it.next();
+			     st = new StringTokenizer(org.getName().toLowerCase()+" "+org.getAcronym().toLowerCase());
 			     while (st.hasMoreTokens()) {
 			         if(keyword.compareTo(st.nextToken()) == 0)
 			        	 {
@@ -2537,7 +2537,7 @@ public class DbUtil {
 			        	 }
 			     }
 			}
-
+           
 
         } catch (Exception ex) {
             logger.error("Unable to search ", ex);

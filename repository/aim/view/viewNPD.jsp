@@ -1654,10 +1654,14 @@ function showFilter(){
 </script>
 <digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
 <style type="text/css" media="print">
+#newpopins_c{
+     top:50px !important;
+     left:50px !important;
+}
 #newpopins{
      height: 100%;
      width: 100%;
-     border: none;
+     border: none; 
 }
 #newpopins .content{
      height: auto;

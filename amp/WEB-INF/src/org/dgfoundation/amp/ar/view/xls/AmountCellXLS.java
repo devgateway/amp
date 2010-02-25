@@ -72,7 +72,7 @@ public class AmountCellXLS extends XLSExporter {
 		//DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 		//mf.setMaximumFractionDigits(2);
 		BigDecimal tempAm = ac.getAmount();
-		tempAm = tempAm.setScale(2, BigDecimal.ROUND_UP);
+		tempAm = tempAm.setScale(2, BigDecimal.ROUND_DOWN);
 		cell.setCellValue(new Double(tempAm.doubleValue()));
 		colId.inc();
 	}

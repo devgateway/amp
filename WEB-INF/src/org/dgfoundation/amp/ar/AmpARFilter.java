@@ -348,7 +348,7 @@ public class AmpARFilter extends PropertyListable {
 			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_cris_number v WHERE v.cris_number like '%"+this.getIndexText()+"%') ";
 		break;
 		case 5:
-			
+			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_code_chapitre v WHERE v.code like '%"+this.getIndexText()+"%') ";
 		break;
 		case 6:
 			searchStr = "  ";

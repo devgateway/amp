@@ -41,7 +41,7 @@
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
 		    });
-		var myPanel2 = new YAHOO.widget.Panel("newpopins", {
+		var myPanel2 = new YAHOO.widget.Panel("newpopins2", {
 			width:"550px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -208,7 +208,7 @@
 	}
 
 	function addData(id){
-		myPanel.cfg.setProperty("width","800px");
+		myPanel.cfg.setProperty("width","840px");
 		//myPanel.cfg.setProperty("height","200px");
 		var msg='\n<digi:trn>AMP Add/Edit data</digi:trn>';
 		showPanelLoading(msg);

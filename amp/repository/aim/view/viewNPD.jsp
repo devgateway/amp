@@ -1660,7 +1660,7 @@ function showFilter(){
 }
 #newpopins{
      height: 100%;
-     width: 100%;
+     width: 100% !important;
      border: none; 
 }
 #newpopins .content{

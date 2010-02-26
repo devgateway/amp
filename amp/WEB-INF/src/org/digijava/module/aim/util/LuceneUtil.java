@@ -793,7 +793,7 @@ public class LuceneUtil implements Serializable {
 					/*Util.getEditorBody(site,act.getContactName(),navigationLanguage)*/null,
 			 	 	componentsCode,
 			 	 	act.getCrisNumber(),
-			 	 	act.getBudgetCodeProjectID()
+			 	 	act.getChapter().getCode()
 			);
 		} catch (EditorException e1) {
 			// TODO Auto-generated catch block

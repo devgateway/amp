@@ -93,7 +93,7 @@
 		</table>
 	<table cellpadding="3" cellspacing="1" style="border-color:#999999;border-spacing:2">
 <tr><td bgcolor="#05528b" align="center" style="color: #ffffff; font-size: larger;" width="700px">Discovered Patches</td><td align="center" bgcolor="#05528b" style="color: #ffffff; font-size: larger;" width="400px">Patch Details</td></tr>
-<tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBody"  style="height:400px;overflow:auto;"></div> </td></tr>
+<tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBodyParent" style="height:400px;overflow:auto;width:540px"><div id="patchBody"></div></div></td></tr>
 <tr><td bgcolor="#05528b" align="center" style="color: #ffffff; font-size: larger;" width="700px">Patch Logs</td></tr>
 <tr><td><div id="patchLogs" style="height:400px;overflow:auto;"></div></td></tr>	
 </table>	

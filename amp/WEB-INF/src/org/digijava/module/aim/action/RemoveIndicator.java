@@ -21,7 +21,7 @@ public class RemoveIndicator extends Action {
 		 String id = request.getParameter("indicatorId");
 		 if (id != null){ 
 			 AmpIndicator indicator=IndicatorUtil.getIndicator(new Long(id));
-			 if(indicator.getValuesActivity()!=null){
+			 if(indicator.getValuesActivity()!=null && indicator.getValuesActivity().size()>0){
 				ActionErrors errors=new ActionErrors();
 				Long siteId = RequestUtils.getSite(request).getId();
 				String locale = RequestUtils.getNavigationLanguage(request).getCode();

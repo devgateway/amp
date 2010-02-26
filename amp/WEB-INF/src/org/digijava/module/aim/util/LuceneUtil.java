@@ -780,7 +780,10 @@ public class LuceneUtil implements Serializable {
 			 	   componentsCode.add(c.getCode());
 			 	}
 		 	}
-				
+			String code=null;
+            if(act.getChapter()!=null){
+                code=act.getChapter().getCode();
+            }
 			
 			doc = activity2Document(
 					String.valueOf(act.getAmpActivityId()), 
@@ -793,7 +796,8 @@ public class LuceneUtil implements Serializable {
 					/*Util.getEditorBody(site,act.getContactName(),navigationLanguage)*/null,
 			 	 	componentsCode,
 			 	 	act.getCrisNumber(),
-			 	 	act.getChapter().getCode()
+                    code
+			 	 	
 			);
 		} catch (EditorException e1) {
 			// TODO Auto-generated catch block

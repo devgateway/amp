@@ -713,27 +713,29 @@ public class ExportActivityToPDF extends Action {
 			
 			List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
 			for (AmpClassificationConfiguration configuration : classificationConfigs) {
-				for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
-					String val="";
-					if(actSect.getSectorName()!=null && actSect.getSectorName().length()>0){
-						val+=actSect.getSectorName();
-					}
-					if(actSect.getSubsectorLevel1Name()!=null && actSect.getSubsectorLevel1Name().length()>0){
-						val+="["+actSect.getSubsectorLevel1Name()+"]";
-					}
-					if(actSect.getSubsectorLevel2Name()!=null && actSect.getSubsectorLevel2Name().length()>0){
-						val+="["+actSect.getSubsectorLevel2Name()+"]";
-					}
-					val+="  ("+actSect.getSectorPercentage()+")% \n";
-					//is primary or secondary sector
-					if(actSect.getConfigId().equals(configuration.getId())){
-						if(configuration.isPrimary()){							
-							primary+=val;
-						}else{
-							secondary+=val;
+				if(myForm.getSectors().getActivitySectors()!=null){
+					for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
+						String val="";
+						if(actSect.getSectorName()!=null && actSect.getSectorName().length()>0){
+							val+=actSect.getSectorName();
+						}
+						if(actSect.getSubsectorLevel1Name()!=null && actSect.getSubsectorLevel1Name().length()>0){
+							val+="["+actSect.getSubsectorLevel1Name()+"]";
+						}
+						if(actSect.getSubsectorLevel2Name()!=null && actSect.getSubsectorLevel2Name().length()>0){
+							val+="["+actSect.getSubsectorLevel2Name()+"]";
+						}
+						val+="  ("+actSect.getSectorPercentage()+")% \n";
+						//is primary or secondary sector
+						if(actSect.getConfigId().equals(configuration.getId())){
+							if(configuration.isPrimary()){							
+								primary+=val;
+							}else{
+								secondary+=val;
+							}
 						}
 					}
-				}
+				}				
 			}
 			output=primary+"\n"+secondary;
 			PdfPCell sectorCell2=new PdfPCell();

@@ -109,8 +109,8 @@
 
 
 <script type="text/javascript">
-
-popup = new YAHOO.widget.Panel("popup", { visible:false, constraintoviewport:true, draggable:true , height: "300px", width: "550px"} );
+YAHOO.namespace("YAHOO.amp");
+var popup = new YAHOO.widget.Panel("popup", { visible:false, constraintoviewport:true, draggable:true , height: "300px", width: "550px"} );
 popup.render();
 
 var handleFailure = function(o){

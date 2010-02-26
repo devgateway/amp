@@ -86,7 +86,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 9L;
+	private static final long serialVersionUID = 10L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -594,7 +594,7 @@ public class LuceneUtil implements Serializable {
 			}
 			
 			//New fields for Senegal.
-			qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart
+			qryStr = "select * from v_cris_number where amp_activity_id >= " + chunkStart
 					+ " and amp_activity_id < " + chunkEnd + " ";
 			rs = st.executeQuery(qryStr);
 			rs.last();
@@ -605,7 +605,20 @@ public class LuceneUtil implements Serializable {
 				int currActId = rs.getInt("amp_activity_id");
 				x = (Items) list.get(currActId);
 				x.CRIS = rs.getString("cris_number");
-				x.budgetNumber = rs.getString("budget_number");
+				isNext = rs.next();
+			}
+
+			qryStr = "select * from v_code_chapitre where amp_activity_id >= " + chunkStart
+					+ " and amp_activity_id < " + chunkEnd + " ";
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " code chapitre!");
+			isNext = rs.first();
+
+			while (isNext) {
+				int currActId = rs.getInt("amp_activity_id");
+				x = (Items) list.get(currActId);
+				x.budgetNumber = rs.getString("code");
 				isNext = rs.next();
 			}
 			

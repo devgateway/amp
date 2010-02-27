@@ -1,4 +1,8 @@
 <?xml version="1.0"?>
+<!DOCTYPE page [
+<!ENTITY ampVersion "1.14.3">
+<!ENTITY buildDate "27.Feb.2010">
+]>
 <site-config>
 	<site-layout>
             <layout name="orgProfileLayout" extends="default" file="orgProfileLayout.jsp">
@@ -117,8 +121,8 @@
 		</layout>
 
 		<layout name="headerMiddleLayout2" file="headerMiddle2.jsp">
-	    	<put name="version">1.14.2</put>
-			<put name="build_version">21.Feb.2010</put>
+	    	<put name="version">&ampVersion;</put>
+			<put name="build_version">&buildDate;</put>
 	    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
@@ -127,8 +131,8 @@
 		</layout>
 		
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
-	    	<put name="version">1.14.2</put>
-			<put name="build_version">21.Feb.2010</put>
+	    	<put name="version">&ampVersion;</put>
+			<put name="build_version">&buildDate;</put>
 	    	<put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
@@ -137,8 +141,8 @@
 		</layout>
 		
 		<layout name="footerLayout" file="footerLayout.jsp">
-			<put name="version">1.14.1</put>
-			<put name="build_version">05.Feb.2010</put>
+			<put name="version">&ampVersion;</put>
+			<put name="build_version">&buildDate;</put>
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>

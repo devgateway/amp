@@ -1,0 +1,73 @@
+
+function getAddLinksWindowString(id) {
+	str = '<HTML><HEAD><TITLE>Add Links</TITLE>';
+	str += '<style type="text/css">';
+	str += '.label';
+	str += '{ FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #666666; ';
+	str += '  FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif }';
+	str += '.inp-text { FONT-SIZE: 11px; FONT-FAMILY: Verdana, Arial, ';
+	str += 'Helvetica, sans-serif; COLOR: #000000 }';
+	str += '</style>';
+	str += '<SCRIPT LANGUAGE="JavaScript">';
+	str += 'function addLink() {';
+	str += 'document.addLinkForm.id.value = '+id + ';';
+	str += 'document.addLinkForm.target = opener.name;';
+	str += 'document.addLinkForm.submit();';
+	str += 'window.close(); }';
+	str += 'function load() {';
+	str += 'document.addLinkForm.ln.value="http://";';
+	str += 'document.addLinkForm.nm.focus();}';
+	str += '</SCRIPT></HEAD>';
+	str += '<BODY BGCOLOR="#FFFFFF" onload="load()" left-margin="0" top-margin="0">';
+	str += '<FORM name="addLinkForm" action="/aim/updateQuickLink.do">';
+	str += '<input type="hidden" name="id">';
+	str += '<input type="hidden" name="factn" value="add">';
+	str += '<TABLE bgcolor="#dddddd" width="400" border=1>';
+	str += '<TR><TD width="90" class="label">Link Name</TD>';
+	str += '<TD><input type="text" name="nm" size="45" class="inp-text"></TD></TR>';
+	str += '<TR><TD width="90" class="label">Link</TD>';
+	str += '<TD><input type="text" name="ln" size="45" class="inp-text"></TD></TR>';
+	str += '<TR><TD colspan="2" align="center">';
+	str += '<input type="button" value="Add" onclick="addLink()" class="inp-text">&nbsp;&nbsp;';
+	str += '<input type="button" value="Close" onclick="window.close()" class="inp-text">';
+	str += '</TD></TR>';
+	str += '</TABLE></FORM></BODY></HTML>';
+	return str;
+}
+
+function getEditLinksWindowString(id,nm,ln) {
+	str = '<HTML><HEAD><TITLE>Edit Links</TITLE>';
+	str += '<style type="text/css">';
+	str += '.label';
+	str += '{ FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #666666; ';
+	str += '  FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif }';
+	str += '.inp-text { FONT-SIZE: 11px; FONT-FAMILY: Verdana, Arial, ';
+	str += 'Helvetica, sans-serif; COLOR: #000000 }';
+	str += '</style>';
+	str += '<SCRIPT LANGUAGE="JavaScript">';
+	str += 'function addLink() {';
+	str += 'document.addLinkForm.id.value = '+id + ';';
+	str += 'document.addLinkForm.target = opener.name;';
+	str += 'document.addLinkForm.submit();';
+	str += 'window.close(); }';
+	str += 'function load() {';
+	str += 'document.addLinkForm.ln.value="' + ln + '";';
+	str += 'document.addLinkForm.nm.value="' + nm + '";';
+	str += 'document.addLinkForm.nm.focus();}';
+	str += '</SCRIPT></HEAD>';
+	str += '<BODY BGCOLOR="#FFFFFF" onload="load()" left-margin="0" top-margin="0">';
+	str += '<FORM name="addLinkForm" action="/aim/updateQuickLink.do">';
+	str += '<input type="hidden" name="id" value="' + id + '">';
+	str += '<input type="hidden" name="factn" value="edit">';
+	str += '<TABLE bgcolor="#dddddd" width="400" border=1>';
+	str += '<TR><TD width="90" class="label">Link Name</TD>';
+	str += '<TD><input type="text" name="nm" size="45" class="inp-text"></TD></TR>';
+	str += '<TR><TD width="90" class="label">Link</TD>';
+	str += '<TD><input type="text" name="ln" size="45" class="inp-text"></TD></TR>';
+	str += '<TR><TD colspan="2" align="center">';
+	str += '<input type="button" value="Update" onclick="addLink()" class="inp-text">&nbsp;&nbsp;';
+	str += '<input type="button" value="Close" onclick="window.close()" class="inp-text">';
+	str += '</TD></TR>';
+	str += '</TABLE></FORM></BODY></HTML>';
+	return str;
+}

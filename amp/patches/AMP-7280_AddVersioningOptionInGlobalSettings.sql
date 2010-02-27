@@ -1,0 +1,2 @@
+INSERT INTO amp_global_settings (settingsName, settingsValue, possibleValues, description, section) VALUES ('Activity Versions Queue Size', '5', 't_Integer', 'Max. number of versions for each activity, if 0 then versioning is disabled.', 'general');
+INSERT INTO amp_quartz_job_class (jc_name, jc_class_fullname) VALUES('Activity Version Deletion', 'org.digijava.module.message.jobs.ActivityVersionDeletionJob');

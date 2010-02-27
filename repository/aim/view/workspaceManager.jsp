@@ -134,9 +134,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
                  '</ul>'+
                 '</div>'
         };
-         var lastTimeStamp = new Date().getTime();
        
-        this.myDataSource = new YAHOO.util.DataSource("/aim/searchWorkspaces.do?lastTimeStamp"+lastTimeStamp);
+        this.myDataSource = new YAHOO.util.DataSource("/aim/searchWorkspaces.do?");
         this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         //this.myDataSource.connXhrMode = "queueRequests";
         this.myDataSource.responseSchema = {

@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -285,15 +286,15 @@
 	}
 
 	function saveProgram(){
-		var temp = validateAdd();
+		var temp = validateAdd();		
 		if (temp == true){
-			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do?"/>
+			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
 			var url = "<%=addThm%>";
-			url += getParams();
+			var params = getParams();			
 			var msg='\n<digi:trn>AMP - Add NewProgram</digi:trn>';
 			showPanelLoading(msg);
 			checkAndClose=true;
-			YAHOO.util.Connect.asyncRequest("POST", url, callback);
+			YAHOO.util.Connect.asyncRequest("POST", url, callback,params);
 				
 		}
 		return true;

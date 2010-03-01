@@ -55,7 +55,7 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Ve
 	private transient Collection<AmpTheme> transientChildren;
 	
 	private String programviewname;
-        private Set programSettings;
+    //    private Set programSettings;
 
 	public Set getActivities() {
 		return activities;
@@ -290,17 +290,17 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Ve
 		return encodeName;
 	}
 
-        public Set getProgramSettings() {
-                return programSettings;
-        }
-
-        public void setEncodeName(String encodeName) {
-		this.encodeName = encodeName;
-	}
-
-        public void setProgramSettings(Set programSettings) {
-                this.programSettings = programSettings;
-        }
+//        public Set getProgramSettings() {
+//                return programSettings;
+//        }
+//
+//        public void setEncodeName(String encodeName) {
+//		this.encodeName = encodeName;
+//	}
+//
+//        public void setProgramSettings(Set programSettings) {
+//                this.programSettings = programSettings;
+//        }
 
         public Object getIdentifier() {
            return this.getAmpThemeId();

@@ -4066,8 +4066,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	
 	public static Collection getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
 		  try {
-	            String queryStr	= "SELECT a FROM " + AmpActivity.class.getName() + " a left join a.member m WHERE " +
-	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)";
+	            String queryStr	= "SELECT a FROM " + AmpActivityVersion.class.getName() + " a left join a.member m WHERE " +
+	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId) OR (a.modifiedBy=:atmId)";
 	            Query qry = session.createQuery(queryStr);
 	            qry.setLong("atmId", ampTeamMemberId);
 	            

@@ -1727,6 +1727,9 @@ public class TeamMemberUtil {
     		if ( act.getActivityCreator() != null && act.getActivityCreator().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			act.setActivityCreator(null);
     		}
+            if ( act.getModifiedBy() != null && act.getModifiedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    			act.setModifiedBy(null);
+    		}
     		if ( act.getApprovedBy() != null && act.getApprovedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			//if we are deleting the team leader we shouldn't set him as TL
     			if ((teamHead!=null) && (!atm.equals(teamHead))){

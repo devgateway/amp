@@ -4399,7 +4399,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  Session session=null;
     	  try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString=" select act.updatedBy from " + AmpActivity.class.getName()+" act where act.ampActivityId="+actId;
+			queryString=" select act.modifiedBy from " + AmpActivity.class.getName()+" act where act.ampActivityId="+actId;
 			query=session.createQuery(queryString);
 			updator=(AmpTeamMember)query.uniqueResult();
 		} catch (Exception e) {

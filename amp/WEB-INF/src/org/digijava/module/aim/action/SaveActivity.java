@@ -2591,12 +2591,15 @@ public class SaveActivity extends Action {
 
 			actId = recoverySave(rsp);			
 			activity = rsp.getActivity();
+			
+			//get member, who previously edited activity. Needed for approved activity trigger
+        	AmpTeamMember previouslyUpdatedBy=ActivityUtil.getActivityUpdator(eaForm.getActivityId());
                         
             if(activity.getDraft()!=null && !activity.getDraft()){
             	if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
             		if(TeamMemberUtil.getTeamHead(activity.getActivityCreator().getAmpTeam().getAmpTeamId())!=null && 
             				! TeamMemberUtil.getTeamHead(activity.getActivityCreator().getAmpTeam().getAmpTeamId()).getAmpTeamMemId().equals(activity.getActivityCreator().getAmpTeamMemId())){
-            			new ApprovedActivityTrigger(activity,null); //if TL created activity, then no Trigger is needed
+            			new ApprovedActivityTrigger(activity,previouslyUpdatedBy); //if TL created activity, then no Trigger is needed
             		}
             	}else{
             		new NotApprovedActivityTrigger(activity);

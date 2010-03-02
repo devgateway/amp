@@ -1,6 +1,7 @@
 package org.digijava.module.aim.util;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
@@ -7644,4 +7645,41 @@ public class DbUtil {
         }
     }
 
-                }
+     /**
+	 * Calls all getter methods inside a given object that return a Set or
+	 * Collection intance, In case of an Hibernate object this will cause the
+	 * collections to populate and avoid later a LazyInizializationException.
+	 * 
+	 * @param object
+	 * @param refresh Call session.refresh if true.
+	 * @return The same object.
+	 * @throws Exception
+	 */
+     public static Object populateCollections(Object object, boolean refresh) throws Exception {
+		if (refresh) {
+			Session session = PersistenceManager.getRequestDBSession();
+			session.refresh(object);
+		}
+		Method[] methods = object.getClass().getMethods();
+		for (int i = 0; i < methods.length; i++) {
+			Method auxMethod = methods[i];
+			Class returnType = auxMethod.getReturnType();
+			if (returnType != null
+					&& auxMethod.getName().startsWith("get")
+					&& (returnType.toString().equals("interface java.util.Collection") || returnType.toString().equals(
+							"interface java.util.Set"))) {
+				try {
+					Object result = auxMethod.invoke(object, null);
+					if (result != null && result.getClass().getName().equals("org.hibernate.collection.PersistentSet")) {
+						// This line will popupate the collection.
+						logger.warn("invoke method: " + auxMethod + " - " + ((Set) result).size());
+					}
+				} catch (Exception e) {
+					logger.error(auxMethod);
+					logger.error(e);
+				}
+			}
+		}
+		return object;
+	}
+}

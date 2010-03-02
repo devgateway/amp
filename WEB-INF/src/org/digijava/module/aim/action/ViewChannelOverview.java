@@ -158,6 +158,14 @@ public class ViewChannelOverview extends TilesAction {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			try {
+				DbUtil.populateCollections(activity, true);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				logger.error(e1);
+				e1.printStackTrace();
+			}
 
 			//Lazy init Locations so JSP can display
 			Set loc = activity.getLocations();

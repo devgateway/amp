@@ -3,6 +3,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>	
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
@@ -181,6 +185,8 @@ addLoadEvent(addpanel);
 	}
 </script>
 <div class="toolbar" align="center">
+<module:display name="Exports" parentModule="REPORTING"></module:display>
+
 <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
 	<tr>
 		<!-- 
@@ -192,7 +198,7 @@ addLoadEvent(addpanel);
 				<digi:img src="module/aim/images/reload.gif" border="0" alt="Reload Report"/>
 			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
 		-->
-
+		<feature:display name="Export to PDF" module="Exports">
 		<td noWrap align=left valign="center">		
 			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('pdf','${ampReportId}'); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
@@ -201,7 +207,9 @@ addLoadEvent(addpanel);
 			</a>
 			
 		</td>
+		</feature:display>
 
+		<feature:display name="Export to Excel" module="Exports">
 		<td noWrap align=left valign="center">
 			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('xls','${ampReportId}'); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
@@ -209,7 +217,9 @@ addLoadEvent(addpanel);
 				<digi:trn>Export to Excel</digi:trn>
 			</a>
 		</td>
+		</feature:display>
 
+		<feature:display name="Export to CSV" module="Exports">
 		<td noWrap align=left valign="center">
 			<digi:link style="text-decoration: none;" href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
@@ -217,7 +227,9 @@ addLoadEvent(addpanel);
 				<digi:trn>Export to CSV</digi:trn>
 			</digi:link>
 		</td>
+		</feature:display>
 		
+		<feature:display name="Printer Friendly" module="Exports">
 		<td noWrap align=left valign="center">
 			<digi:link style="text-decoration: none;" href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
@@ -225,6 +237,7 @@ addLoadEvent(addpanel);
 				<digi:trn>Print</digi:trn>
 			</digi:link>
 		</td>
+		</feature:display>
 	</tr>
 </table>
 </div>

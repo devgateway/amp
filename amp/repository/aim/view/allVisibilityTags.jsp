@@ -40,6 +40,7 @@
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
+<module:display name="Exports" parentModule="REPORTING"></module:display> 
 <module:display name="Messages" parentModule="Messaging System"></module:display> 
 <module:display name="Messaging System"></module:display> 
 <module:display name="My Desktop" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -140,6 +141,9 @@
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
+<feature:display name="Export to PDF" module="Exports"></feature:display>
+<feature:display name="Export to Excel" module="Exports"></feature:display>
+<feature:display name="Export to CSV" module="Exports"></feature:display>
 <feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
@@ -178,6 +182,7 @@
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
+<feature:display name="Printer Friendly" module="Exports"></feature:display>
 <feature:display name="Program" module="Program"></feature:display> 
 <feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Project Fiche" module="Previews"></feature:display> 

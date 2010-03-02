@@ -238,7 +238,8 @@ insert into cached_v_donor_date_hierarchy SELECT * FROM v_donor_date_hierarchy;
 DROP TABLE IF EXISTS `cached_v_m_regions`;
 CREATE TABLE cached_v_m_regions AS SELECT * FROM `v_regions_cached`;
 
-
+CREATE INDEX idx_amp_activity ON `cached_v_m_regions`(amp_activity_id);
+CREATE INDEX idx_region_id ON `cached_v_m_regions`(region_id);
 
 CREATE INDEX idx_amp_activity ON `cached_v_status`(amp_activity_id);
 CREATE INDEX idx_st_name ON `cached_v_status`(name);
@@ -289,14 +290,72 @@ CREATE INDEX idx_spl6_activity ON `cached_v_secondaryprogram_level_6` (amp_activ
 CREATE INDEX idx_spl7_activity ON `cached_v_secondaryprogram_level_7` (amp_activity_id);
 CREATE INDEX idx_spl8_activity ON `cached_v_secondaryprogram_level_8` (amp_activity_id);
 
+
+CREATE INDEX idx_npidl0_pidid ON `cached_v_nationalobjectives_level_0` (amp_program_id);
+CREATE INDEX idx_npidl1_pid ON `cached_v_nationalobjectives_level_1` (amp_program_id);
+CREATE INDEX idx_npidl2_pid ON `cached_v_nationalobjectives_level_2` (amp_program_id);
+CREATE INDEX idx_npidl3_pid ON `cached_v_nationalobjectives_level_3` (amp_program_id);
+CREATE INDEX idx_npidl4_pid ON `cached_v_nationalobjectives_level_4` (amp_program_id);
+CREATE INDEX idx_npidl5_pid ON `cached_v_nationalobjectives_level_5` (amp_program_id);
+CREATE INDEX idx_npidl6_pid ON `cached_v_nationalobjectives_level_6` (amp_program_id);
+CREATE INDEX idx_npidl7_pid ON `cached_v_nationalobjectives_level_7` (amp_program_id);
+CREATE INDEX idx_npidl8_pid ON `cached_v_nationalobjectives_level_8` (amp_program_id);
+
+CREATE INDEX idx_pidpidl0_pid ON `cached_v_primaryprogram_level_0` (amp_program_id);
+CREATE INDEX idx_pidpidl1_pid ON `cached_v_primaryprogram_level_1` (amp_program_id);
+CREATE INDEX idx_pidpidl2_pid ON `cached_v_primaryprogram_level_2` (amp_program_id);
+CREATE INDEX idx_pidpidl3_pid ON `cached_v_primaryprogram_level_3` (amp_program_id);
+CREATE INDEX idx_pidpidl4_pid ON `cached_v_primaryprogram_level_4` (amp_program_id);
+CREATE INDEX idx_pidpidl5_pid ON `cached_v_primaryprogram_level_5` (amp_program_id);
+CREATE INDEX idx_pidpidl6_pid ON `cached_v_primaryprogram_level_6` (amp_program_id);
+CREATE INDEX idx_pidpidl7_pid ON `cached_v_primaryprogram_level_7` (amp_program_id);
+CREATE INDEX idx_pidpidl8_pid ON `cached_v_primaryprogram_level_8` (amp_program_id);
+
+CREATE INDEX idx_spidl0_pid ON `cached_v_secondaryprogram_level_0` (amp_program_id);
+CREATE INDEX idx_spidl1_pid ON `cached_v_secondaryprogram_level_1` (amp_program_id);
+CREATE INDEX idx_spidl2_pid ON `cached_v_secondaryprogram_level_2` (amp_program_id);
+CREATE INDEX idx_spidl3_pid ON `cached_v_secondaryprogram_level_3` (amp_program_id);
+CREATE INDEX idx_spidl4_pid ON `cached_v_secondaryprogram_level_4` (amp_program_id);
+CREATE INDEX idx_spidl5_pid ON `cached_v_secondaryprogram_level_5` (amp_program_id);
+CREATE INDEX idx_spidl6_pid ON `cached_v_secondaryprogram_level_6` (amp_program_id);
+CREATE INDEX idx_spidl7_pid ON `cached_v_secondaryprogram_level_7` (amp_program_id);
+CREATE INDEX idx_spidl8_pid ON `cached_v_secondaryprogram_level_8` (amp_program_id);
+
+CREATE INDEX idx_npl0_p ON `cached_v_nationalobjectives_level_0` (program_percentage);
+CREATE INDEX idx_npl1_p ON `cached_v_nationalobjectives_level_1` (program_percentage);
+CREATE INDEX idx_npl2_p ON `cached_v_nationalobjectives_level_2` (program_percentage);
+CREATE INDEX idx_npl3_p ON `cached_v_nationalobjectives_level_3` (program_percentage);
+CREATE INDEX idx_npl4_p ON `cached_v_nationalobjectives_level_4` (program_percentage);
+CREATE INDEX idx_npl5_p ON `cached_v_nationalobjectives_level_5` (program_percentage);
+CREATE INDEX idx_npl6_p ON `cached_v_nationalobjectives_level_6` (program_percentage);
+CREATE INDEX idx_npl7_p ON `cached_v_nationalobjectives_level_7` (program_percentage);
+CREATE INDEX idx_npl8_p ON `cached_v_nationalobjectives_level_8` (program_percentage);
+
+CREATE INDEX idx_ppl0_p ON `cached_v_primaryprogram_level_0` (program_percentage);
+CREATE INDEX idx_ppl1_p ON `cached_v_primaryprogram_level_1` (program_percentage);
+CREATE INDEX idx_ppl2_p ON `cached_v_primaryprogram_level_2` (program_percentage);
+CREATE INDEX idx_ppl3_p ON `cached_v_primaryprogram_level_3` (program_percentage);
+CREATE INDEX idx_ppl4_p ON `cached_v_primaryprogram_level_4` (program_percentage);
+CREATE INDEX idx_ppl5_p ON `cached_v_primaryprogram_level_5` (program_percentage);
+CREATE INDEX idx_ppl6_p ON `cached_v_primaryprogram_level_6` (program_percentage);
+CREATE INDEX idx_ppl7_p ON `cached_v_primaryprogram_level_7` (program_percentage);
+CREATE INDEX idx_ppl8_p ON `cached_v_primaryprogram_level_8` (program_percentage);
+
+CREATE INDEX idx_spl0_p ON `cached_v_secondaryprogram_level_0` (program_percentage);
+CREATE INDEX idx_spl1_p ON `cached_v_secondaryprogram_level_1` (program_percentage);
+CREATE INDEX idx_spl2_p ON `cached_v_secondaryprogram_level_2` (program_percentage);
+CREATE INDEX idx_spl3_p ON `cached_v_secondaryprogram_level_3` (program_percentage);
+CREATE INDEX idx_spl4_p ON `cached_v_secondaryprogram_level_4` (program_percentage);
+CREATE INDEX idx_spl5_p ON `cached_v_secondaryprogram_level_5` (program_percentage);
+CREATE INDEX idx_spl6_p ON `cached_v_secondaryprogram_level_6` (program_percentage);
+CREATE INDEX idx_spl7_p ON `cached_v_secondaryprogram_level_7` (program_percentage);
+CREATE INDEX idx_spl8_p ON `cached_v_secondaryprogram_level_8` (program_percentage);
+
+
+
 DROP TABLE IF EXISTS cached_v_m_donor_funding;
 CREATE TABLE cached_v_m_donor_funding AS SELECT * FROM `v_donor_funding_cached`;
 
-CREATE INDEX idx_amp_activity ON cached_v_donor_date_hierarchy(amp_activity_id);
-CREATE INDEX idx_fund_det_id ON cached_v_donor_date_hierarchy(amp_fund_detail_id);
-CREATE INDEX idx_year ON cached_v_donor_date_hierarchy(year);
-CREATE INDEX idx_month ON cached_v_donor_date_hierarchy(month);
-CREATE INDEX idx_quarter ON cached_v_donor_date_hierarchy(quarter);
 CREATE INDEX idx_amp_activity ON `cached_v_m_donor_funding`(amp_activity_id);
 CREATE INDEX idx_donor_name ON `cached_v_m_donor_funding`(donor_name);
 CREATE INDEX idx_curr_code ON `cached_v_m_donor_funding`(currency_code);

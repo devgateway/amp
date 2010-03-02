@@ -1040,25 +1040,51 @@ public class ChartWidgetUtil {
 
             }
             sectors = query.list();
-            // calculate funding for all sectors
-            DecimalWraper totAllSeqtors= getSectorFunding(startDate,endDate,orgIds,orgGroupId,transactionType,null,currCode, tm);;
+             // to calculate funding for all sectors
+            BigDecimal totAllSectors = BigDecimal.ZERO;
             Iterator<AmpSector> sectorIter = sectors.iterator();
-            double others=0;
+            BigDecimal others = BigDecimal.ZERO;
+            Map<Long, DonorSectorFundingHelper> sectorsMap = new HashMap<Long, DonorSectorFundingHelper>();
             while (sectorIter.hasNext()) {
                 AmpSector sector = sectorIter.next();
                 // calculate funding for each sector
-                DecimalWraper total=getSectorFunding(startDate,endDate,orgIds,orgGroupId,transactionType,sector.getAmpSectorId(),currCode, tm);
-                double percent=total.doubleValue()/totAllSeqtors.doubleValue();
-                // the sectors which percent is less then 5% should be group in "Others"
-                if (percent > 0.05) {
-                    ds.setValue(sector.getName(), total.doubleValue());
-                } else {
-                    others+=total.doubleValue();
+                DecimalWraper amount = getSectorFunding(startDate, endDate, orgIds, orgGroupId, transactionType, sector.getAmpSectorId(), currCode, tm);
+                AmpSector topLevelSector = SectorUtil.getTopLevelParent(sector);
+                Long topSectorId = topLevelSector.getAmpSectorId();
+                // getting object from map
+                DonorSectorFundingHelper sectorFundngObj = sectorsMap.get(topSectorId);
+                //if not create and add to map
+                if (sectorFundngObj == null) {
+                    sectorFundngObj = new DonorSectorFundingHelper(topLevelSector);
+                    sectorsMap.put(topSectorId, sectorFundngObj);
+                }
+                if(amount!=null){
+                    BigDecimal amt=new BigDecimal(amount.doubleValue());
+                    //add amount to sector
+                    sectorFundngObj.addFunding(amt);
+                     // adding to total funding amount
+                    totAllSectors=totAllSectors.add(amt);
                 }
 
+
             }
-            if(others>0){
-                  ds.setValue("Others", others);
+            if (!sectorsMap.isEmpty()) {
+                Collection<DonorSectorFundingHelper> secFundCol = sectorsMap.values();
+                Iterator<DonorSectorFundingHelper> secFundColIter = secFundCol.iterator();
+                while (secFundColIter.hasNext()) {
+                    DonorSectorFundingHelper sectorFunding = secFundColIter.next();
+                    Double percent = sectorFunding.getFounding().divide(totAllSectors,3,RoundingMode.HALF_UP).doubleValue();
+                    // if percent is less than 5, group in "others"
+                    if (percent>0.05) {
+                        ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding());
+                    } else {
+                        others=others.add(sectorFunding.getFounding());
+
+                    }
+                }
+            }
+            if (others.doubleValue()>0) {
+                ds.setValue("Others", others);
             }
         } catch (Exception e) {
             logger.error(e);

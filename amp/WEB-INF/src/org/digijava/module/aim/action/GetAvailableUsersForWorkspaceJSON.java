@@ -90,7 +90,7 @@ public class GetAvailableUsersForWorkspaceJSON extends Action {
 			User user = (User) it.next();
 			JSONObject juser = new JSONObject();
 			juser.put("ID", user.getId());
-			juser.put("name", user.getName()+user.getLastName());
+			juser.put("name", user.getName());
 			juser.put("email", user.getEmail());
 			String orgs="";
 			if(user.getAssignedOrgs()!=null && user.getAssignedOrgs().size()>0){

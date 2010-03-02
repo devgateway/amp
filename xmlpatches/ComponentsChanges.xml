@@ -7,14 +7,10 @@
 	<author>Diego Dimunzio</author>
 	<description>
   	</description>
-  	
-  	<trigger type="all">
-		<condition type="dbName" inverted="true">amp_testing</condition>
-	</trigger>
-  	
-	<apply>
+   <apply>
 		<script>
 			<lang delimiter=";" type="mysql">
+			UPDATE amp_category_class SET category_name = 'Components Type' WHERE category_name like 'Components_Type_Key';
 			DELETE FROM amp_category_value WHERE amp_category_class_id =( SELECT id FROM amp_category_class WHERE category_name like 'Components Type');
 			DELETE FROM amp_category_class WHERE category_name like 'Components Type';
 		
@@ -51,7 +47,6 @@
 		<script>
 			<lang delimiter=";" type="mysql">
     		UPDATE `amp_components` co, `amp_category_value` cv SET co.`type` = cv.`id` where cv.`category_value` IN (Select name from `amp_component_type` ct where ct.`type_id` = co.`type`);
-			DROP TABLE `amp_component_type`;
 			</lang>
 		</script>
 	</apply>

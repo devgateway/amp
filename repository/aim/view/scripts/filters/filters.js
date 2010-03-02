@@ -48,6 +48,7 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.selectedExecutingAgency);
  		resetElement(aimReportsFilterPickerForm.selectedImplementingAgency);
  		resetElement(aimReportsFilterPickerForm.selectedDonnorAgency);
+ 		resetElement(aimReportsFilterPickerForm.selectedresponsibleorg);
 
 			
 		if (aimReportsFilterPickerForm.jointCriteria){
@@ -67,6 +68,10 @@ function resetElement( elem ) {
 	if (elem != null && elem.length > 1)
 		for (var i=0; i<elem.length; i++)
 			elem[i].checked = false;
+	else 
+		if (elem!=null){
+			elem.checked	= false;
+		}
 }
 YAHOO.namespace("YAHOO.amptab");
 

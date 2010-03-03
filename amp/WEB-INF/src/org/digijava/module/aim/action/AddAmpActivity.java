@@ -265,7 +265,7 @@ public class AddAmpActivity extends Action {
 							eaForm.setSurvey(null);
 						}
 						eaForm.setActivityId(null);
-						
+						eaForm.getMessages().clear();
                         SelectDocumentDM.clearContentRepositoryHashMap(request);
                         eaForm.getPrograms().setActPrograms(null);
                         eaForm.setEditAct(false);

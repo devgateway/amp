@@ -41,7 +41,7 @@
 														  
 																<field:display name="Responsible Organization Department/Division"  feature="Responsible Organization">
 															<td width="49%">
-																	<digi:trn>Department/Division: </digi:trn><html:text size="30" property="agencies.respOrgToInfo(${repOrganisation.ampOrgId})"></html:text>
+																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.respOrgToInfo(${repOrganisation.ampOrgId})"></html:text>
 															</td>
 														</field:display>
 														</tr>

@@ -250,6 +250,38 @@ public class AddAmpActivity extends Action {
     					}
     			}
       }
+      if (eaForm.getAgencies().getExecutingAgencies() == null) {
+          eaForm.getAgencies().setExecutingAgencies(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setExecutingOrgToInfo(new HashMap<String, String>());
+      }
+      if (eaForm.getAgencies().getImpAgencies() == null) {
+          eaForm.getAgencies().setImpAgencies(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setImpOrgToInfo(new HashMap<String, String>());
+      }
+      if (eaForm.getAgencies().getBenAgencies() == null) {
+          eaForm.getAgencies().setBenAgencies(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setBenOrgToInfo(new HashMap<String, String>());
+      }
+      if (eaForm.getAgencies().getConAgencies() == null) {
+          eaForm.getAgencies().setConAgencies(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setConOrgToInfo(new HashMap<String, String>());
+      }
+      if (eaForm.getAgencies().getReportingOrgs() == null) {
+          eaForm.getAgencies().setReportingOrgs(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setRepOrgToInfo(new HashMap<String, String>());
+      }
+      if (eaForm.getAgencies().getSectGroups() == null) {
+          eaForm.getAgencies().setSectGroups(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setSectOrgToInfo(new HashMap<String, String>());
+      }
+      if (eaForm.getAgencies().getRegGroups() == null) {
+          eaForm.getAgencies().setRegGroups(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setRegOrgToInfo(new HashMap<String, String>());
+      }
+      if (eaForm.getAgencies().getRespOrganisations() == null) {
+          eaForm.getAgencies().setRespOrganisations(new ArrayList<AmpOrganisation>());
+          eaForm.getAgencies().setRespOrgToInfo(new HashMap<String, String>());
+      }
 
 
 

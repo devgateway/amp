@@ -42,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.ReportsCollection;
@@ -129,8 +130,8 @@ public class TeamUtil {
         return col;
     }
 
-    public static Set getRelatedTeamsForMember(TeamMember tm) {
-    	Set teams=new TreeSet();
+    public static Set<AmpTeam> getRelatedTeamsForMember(TeamMember tm) {
+    	Set<AmpTeam> teams=new TreeSet<AmpTeam>();
     	AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 	    
 		teams.add(ampTeam);
@@ -500,7 +501,7 @@ public class TeamUtil {
                 qry = session.createQuery(qryStr);
                 qry.setParameter("teamId", team.getAmpTeamId(), Hibernate.LONG);
                 itr1 = qry.list().iterator();
-                Collection childWorkspaces = new ArrayList();
+                Collection<AmpTeam> childWorkspaces = new ArrayList<AmpTeam>();
                 while(itr1.hasNext()) {
                     AmpTeam childTeam = (AmpTeam) itr1.next();
                     childWorkspaces.add(childTeam);
@@ -1108,15 +1109,15 @@ public class TeamUtil {
 
     }
 
-    public static Collection getAllDonorsToDesktop(Long teamId) {
+    public static Collection<AmpOrganisation> getAllDonorsToDesktop(Long teamId) {
         Session session = null;
         Query qry = null;
-        Collection donors = new ArrayList();
+        Collection<AmpOrganisation> donors = new ArrayList<AmpOrganisation>();
 
         try {
             session = PersistenceManager.getSession();
-            Vector teams = new Vector();
-            Vector temp = new Vector();
+            Vector<Long> teams = new Vector<Long>();
+            Vector<Long> temp = new Vector<Long>();
 
             teams.add(teamId);
             temp.add(teamId);
@@ -1124,13 +1125,13 @@ public class TeamUtil {
             Long tId = new Long(0);
             String inclause = "";
 
-            ArrayList dbReturnSet = (ArrayList) getAmpLevel0TeamIds(teamId);
+            ArrayList<Long> dbReturnSet = (ArrayList<Long>) getAmpLevel0TeamIds(teamId);
             if(dbReturnSet.size() == 0)
                 inclause = "'" + teamId + "'";
             else {
-                Iterator iter = dbReturnSet.iterator();
+                Iterator<Long> iter = dbReturnSet.iterator();
                 while(iter.hasNext()) {
-                    tId = (Long) iter.next();
+                    tId = iter.next();
                     if(inclause == null || inclause.trim().length() == 0) {
                         inclause = "'" + tId + "'";
                     } else {
@@ -1189,6 +1190,27 @@ public class TeamUtil {
         return donors;
     }
 
+    public static List<AmpTeam> getTeamByOrg(Long orgId) {
+        List<AmpTeam> retValue = new ArrayList<AmpTeam>();
+    	if (orgId != null ){
+	    	
+	        
+	        Collection<AmpTeam> teams = getAllTeams();
+	        
+	        for (AmpTeam ampTeam : teams) {
+	        	for (Iterator iterator = ampTeam.getOrganizations().iterator(); iterator.hasNext();) {
+					AmpOrganisation org = (AmpOrganisation) iterator.next();
+					if (org.getAmpOrgId().equals(orgId)){
+						retValue.add(ampTeam);
+						break;
+					}
+				}
+			}
+	        
+    	}
+    	return retValue;
+    }
+    
     public static void updateTeamPageConfiguration(Long teamId, Long pageId,
         Long filters[]) {
         Session session = null;
@@ -1244,11 +1266,11 @@ public class TeamUtil {
         }
     }
 
-    public static Collection getDonorTeams(Long teamId) {
+    public static Collection<DonorTeam> getDonorTeams(Long teamId) {
         // Check whether the team whose donor teams need to be found is a
         // MOFED team
 
-        Collection col = new ArrayList();
+        Collection<DonorTeam> col = new ArrayList<DonorTeam>();
         Session session = null;
 
         try {
@@ -1648,9 +1670,9 @@ public class TeamUtil {
         return flag;
     }
 
-    public static Collection getManagementTeamActivities(Long teamId) {
+    public static Collection<AmpActivity> getManagementTeamActivities(Long teamId) {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection<AmpActivity> col = new ArrayList<AmpActivity>();
         String queryString = "";
         Query qry = null;
 
@@ -1676,7 +1698,7 @@ public class TeamUtil {
 
                     AmpActivity activity = (AmpActivity) itr.next();
                     Collection temp1 = activity.getOrgrole();
-                    Collection temp2 = new ArrayList();
+                    Collection<AmpOrgRole> temp2 = new ArrayList<AmpOrgRole>();
                     Iterator temp1Itr = temp1.iterator();
                     while(temp1Itr.hasNext()) {
                         AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
@@ -1684,12 +1706,12 @@ public class TeamUtil {
                             temp2.add(orgRole);
                     }
 
-                    Iterator orgItr = temp2.iterator();
+                    Iterator<AmpOrgRole> orgItr = temp2.iterator();
 
                     String donors = "";
 
                     while(orgItr.hasNext()) {
-                        AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+                        AmpOrgRole orgRole = orgItr.next();
                         if(orgRole.getRole().getRoleCode().equals(
                             Constants.FUNDING_AGENCY)) {
                             if(donors.trim().length() > 0) {
@@ -1744,9 +1766,9 @@ public class TeamUtil {
         return col;
       }
     
-    public static Collection getAllTeamActivities(Long teamId) {
+    public static Collection<AmpActivity> getAllTeamActivities(Long teamId) {
     	Session session = null;
-		Collection col = new ArrayList();
+		Collection<AmpActivity> col = new ArrayList<AmpActivity>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -1828,9 +1850,9 @@ public class TeamUtil {
     /*
      * return ReportsCollection Object
      */
-    public static Collection getTeamReportsCollection(Long teamId, Boolean tabs) {
+    public static Collection<ReportsCollection> getTeamReportsCollection(Long teamId, Boolean tabs) {
         Session session = null;
-        ArrayList col = null;
+        ArrayList<ReportsCollection> col = null;
         try {
             session = PersistenceManager.getSession();
             String queryString = "select tr from "
@@ -1839,7 +1861,7 @@ public class TeamUtil {
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
-            col = new ArrayList();
+            col = new ArrayList<ReportsCollection>();
             while(itr.hasNext()) {
                 AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
                 
@@ -2353,7 +2375,7 @@ public class TeamUtil {
     public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {
         Session session = null;
         Collection col = null;
-        Collection col1 = null;
+        Collection<AmpReports> col1 = null;
 
         try {
 
@@ -2366,7 +2388,7 @@ public class TeamUtil {
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", id, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
-            col1 = new ArrayList();
+            col1 = new ArrayList<AmpReports>();
             while(itr.hasNext()) {
                 AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
                 if(ampTeamRep.getReport()!=null){
@@ -2394,10 +2416,10 @@ public class TeamUtil {
             	}
             }
 
-            Iterator itr2 = col1.iterator();
+            Iterator<AmpReports> itr2 = col1.iterator();
 
             while(itr2.hasNext()) {
-                AmpReports rep = (AmpReports) itr2.next();
+                AmpReports rep = itr2.next();
                 Iterator itr1 = col.iterator();
                 while(itr1.hasNext()) {
                     AmpReports tempRep = (AmpReports) itr1.next();
@@ -2492,9 +2514,9 @@ public class TeamUtil {
         return teams;
     }
 
-    public static Set getAmpLevel0Teams(Long ampTeamId) {
+    public static Set<AmpTeam> getAmpLevel0Teams(Long ampTeamId) {
         Session session = null;
-        Set teams = new TreeSet();
+        Set<AmpTeam> teams = new TreeSet<AmpTeam>();
 
         try {
             logger.debug("Team Id:" + ampTeamId);
@@ -2544,12 +2566,12 @@ public class TeamUtil {
         return teams;
     }
 
-    public static Collection getAmpLevel0TeamIds(Long ampTeamId) {
-        Set teams = getAmpLevel0Teams(ampTeamId);
-        Collection ret = new ArrayList();
-        Iterator i = teams.iterator();
+    public static Collection<Long> getAmpLevel0TeamIds(Long ampTeamId) {
+        Set<AmpTeam> teams = getAmpLevel0Teams(ampTeamId);
+        Collection<Long> ret = new ArrayList<Long>();
+        Iterator<AmpTeam> i = teams.iterator();
         while(i.hasNext()) {
-            AmpTeam element = (AmpTeam) i.next();
+            AmpTeam element = i.next();
             ret.add(element.getAmpTeamId());
         }
         return ret;

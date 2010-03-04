@@ -2511,9 +2511,8 @@ function collapseAll() {
                                                                                             <td>&nbsp;
                                                                                             </td>
                                                                                             <td>
-                                                                                               
-                                                                                    
-                                                                                                    <logic:notEmpty name="aimEditActivityForm" property="allFundingDetails">
+                                                                                            
+                                                                                             <logic:notEmpty name="funding" property="fundingDetails">
 										                                                           <table width="100%">
 																								    <tr>
 																										<td><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></td>
@@ -2522,7 +2521,7 @@ function collapseAll() {
 																										<td><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></td>
 																										
 																									</tr>
-											                                                           <c:forEach  items="${aimEditActivityForm.funding.allFundingDetails}" var="fundingDetail" >
+											                                                           <c:forEach  items="${aimEditActivityForm.funding.fundingDetails}" var="fundingDetail" >
 											                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
 											                                                           		<c:if test="${fundingDetail.transactionType == 1}">
 											                                                               <tr>
@@ -2548,16 +2547,11 @@ function collapseAll() {
 											                                                               </logic:equal>
 											                                                           </c:forEach>
 										                                                           </table>
-										                                                       </logic:notEmpty>					
-                                                                                                		
+										                                                       </logic:notEmpty>
+                                                                                            
                                                                                             </td>		
-                                                                                        </tr>		
-                                                                                        
-                                                                                        
+                                                                                        </tr>
                                                                                     </table>
-                                                                                    
-                                                                                    
-                                                                             
                                                                                    </td></tr>
                                                                                   
                                                                                 </c:forEach>

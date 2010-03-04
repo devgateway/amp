@@ -210,8 +210,10 @@ public final class AdvancedReportUtil {
 			  	newTab.setOwner(ampTeamMember);
 			  	newTab.setReport(ampReports);
 			  	newTab.setIndex(pos);
-			  	ampTeamMember.getDesktopTabSelections().add(newTab);
-			  	session.save(ampTeamMember);
+			  	if ( !tabs.contains(newTab) ) {
+				  	ampTeamMember.getDesktopTabSelections().add(newTab);
+				  	session.save(ampTeamMember);
+			  	}
 			  }
 			}
 			tx.commit(); 

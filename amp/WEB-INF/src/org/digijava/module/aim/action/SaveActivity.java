@@ -1130,7 +1130,7 @@ public class SaveActivity extends Action {
 		}
 		activity.setFunding(fundings);
 
-		if(eaForm.getFunding().getProProjCost()==null){
+		if(eaForm.getFunding().getProProjCost()==null||eaForm.getFunding().getProProjCost().getFunAmount() ==null){
             activity.setFunAmount(null);
             activity.setFunDate(null);
             activity.setCurrencyCode(null);

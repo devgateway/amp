@@ -47,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Constants;
@@ -62,6 +63,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ParisUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -380,6 +382,13 @@ public class EditOrganisation extends DispatchAction {
 
             }
 
+            List<AmpTeam> releatedTeams = TeamUtil.getTeamByOrg(editForm.getAmpOrgId());
+            if (releatedTeams != null && !releatedTeams.isEmpty()){
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.deleteOrgTeamError"));
+                saveErrors(request, errors);
+                editForm.setActionFlag("edit");
+                return mapping.findForward("forward");
+            }
 
             for (Iterator<AmpAhsurvey> it = org.getSurvey().iterator(); it.hasNext();) {
                 AmpAhsurvey ahsurvey = it.next();

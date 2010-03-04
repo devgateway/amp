@@ -2044,7 +2044,424 @@
                                       </tr>
 									</feature:display>
 								  </logic:present>
-									        
+									
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b><digi:trn>IPA Contracting</digi:trn></b>
+										</td>
+										<td bgcolor="#ffffff">
+											<logic:notEmpty name="aimEditActivityForm" property="contracts">
+                                                        	<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+                                                                 <c:forEach items="${aimEditActivityForm.contracts.contracts}" var="contract" varStatus="idx">
+                                                                       <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+                                                            	           <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
+                                                            	           		<field:display name="Contract Name" feature="Contracting">
+                                                                               <tr>
+                                                                                  <td align="left">
+                                                                                     <b><digi:trn>Contract name:</digi:trn></b>
+                                                                                   </td>
+                                                                                   <td>
+                                                                	                  ${contract.contractName}
+                                                                                   </td>
+                                                                                </tr>
+                                                                                </field:display>
+                                                                                
+                                                                                <field:display name="Contract Description" feature="Contracting">
+                                                                                 <tr>
+                                                                                    <td align="left">
+                                                                                       <b><digi:trn>Description:</digi:trn></b>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                       ${contract.description}
+                                                                                     </td>
+                                                                                  </tr> 
+                                                                                  </field:display>
+                                                                                  
+                                                                                  <field:display name="Contracting Activity Category" feature="Contracting">
+                                                                                   <tr>
+                                                                                     <td align="left">
+                                                                                  	     <b><digi:trn>Activity Category:</digi:trn></b>
+                                                                                      </td>
+                                                                                       <td>
+                                                                                          <c:if test ="${not empty contract.activityCategory}">${contract.activityCategory.value}</c:if>
+                                                                                       </td>
+                                                                                    </tr>
+                                                                                    </field:display>
+                                                                                    
+                                                                                    <field:display name="Contract type" feature="Contracting">
+                                                                                     <tr>
+                                                                                     <td align="left">
+                                                                                  	     <b><digi:trn>Type</digi:trn>:</b>
+                                                                                      </td>
+                                                                                       <td>
+                                                                                          <c:if test ="${not empty contract.type}">${contract.type.value}</c:if>
+                                                                                       </td>
+                                                                                    </tr>
+                                                                                    </field:display>
+                                                                                    
+                                                                                    <field:display name="Contracting Start of Tendering" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Start of Tendering:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.formattedStartOfTendering}
+                                                                                           </td>                                                                                            
+                                                                                        </tr>
+                                                                                        </field:display>	
+                                                                                        
+                                                                                        <field:display name="Signature of Contract" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Signature of Contract:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.formattedSignatureOfContract}
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contract Organization" feature="Contracting">
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Contract Organization:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <c:if test="${not empty contract.organization}">
+                                                                                                     ${contract.organization.name}
+                                                                                                </c:if>
+                                                                                                
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting Contractor Name" feature="Contracting">
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Contract Organization</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                     ${contract.contractingOrganizationText}
+                                                                                                
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contract Completion" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Contract Completion:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.formattedContractCompletion}
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting Status" feature="Contracting">
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Status:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                
+                                                                                                <c:if test ="${not empty contract.status}">
+                                                                                 
+                                                                                                    ${contract.status.value}
+                                                                                                </c:if>
+                                                                                                
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Total Amount" feature="Contracting">
+                                                                                        	<tr>
+                                                                                            	<td align="left">
+                                                                                                	<b><digi:trn>Total Amount</digi:trn>:</b>
+                                                                                            	</td>
+                                                                                            	<td>
+                                                                                                	 ${contract.totalAmount}
+                                                                               	                 ${contract.totalAmountCurrency} 
+                                                                                	            </td>
+                                                                                        	</tr>
+                                                                                    	</field:display>
+                                                                                        
+                                                                                        <field:display name="Total EC Contribution" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left" colspan="2">
+                                                                                                <b><digi:trn>Total EC Contribution:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting IB" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>IB</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.totalECContribIBAmount}
+                                                                                                ${contract.totalAmountCurrency} 
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting INV" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>INV:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalECContribINVAmount}
+                                                                                               ${contract.totalAmountCurrency}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        <field:display name="Contracting Total National Contribution" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left" colspan="2">
+                                                                                                <b><digi:trn>Total National Contribution:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting Central Amount" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Central</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalNationalContribCentralAmount}
+                                                                                                ${contract.totalAmountCurrency} 
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting Regional Amount" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Regional</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalNationalContribRegionalAmount} 
+                                                                                              ${contract.totalAmountCurrency}
+                                                                                   
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting IFIs" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>IFIs</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalNationalContribIFIAmount}
+                                                                                               ${contract.totalAmountCurrency}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        
+                                                                                        <field:display name="Total Private Contribution" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left" colspan="2">
+                                                                                                <b><digi:trn>Total Private Contribution:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Contracting IB" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>IB:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalPrivateContribAmount}
+                                                                                                ${contract.totalAmountCurrency}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        <field:display name="Total Disbursements of Contract" feature="Contracting">
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Total Disbursements</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                            									${contract.totalDisbursements} &nbsp; 
+                                                            									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
+                                                            										&nbsp; ${aimEditActivityForm.currCode}
+                                                            									</logic:empty>
+                                                            									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
+                                                            										&nbsp; ${contract.dibusrsementsGlobalCurrency}
+                                                            									</logic:notEmpty>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </field:display>  
+                                                                                    <field:display name="Total Funding Disbursements of Contract" feature="Contracting">
+											                                          <tr>
+											                                              <td align="left">
+											                                                  <b><digi:trn>Total Funding Disbursements</digi:trn>:</b>
+											                                              </td>
+											                                              <td>
+											              									${contract.fundingTotalDisbursements} &nbsp;
+											              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
+											              										&nbsp; ${contract.totalAmountCurrency}
+											              									</logic:empty>
+											              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
+											              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
+											              									</logic:notEmpty>
+											                                              </td>
+											                                          </tr>
+											                                      </field:display>  
+                                                                                    <field:display name="Contract Execution Rate" feature="Contracting">
+                                                                                
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn>Contract Execution Rate</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                            										&nbsp; ${contract.executionRate}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </field:display>
+                                                                                    
+                                                                                    <field:display name="Contract Funding Execution Rate" feature="Contracting">
+											                                          <tr>
+											                                              <td align="left">
+											                                                  <b><digi:trn>Contract Execution Rate</digi:trn>:</b>
+											                                              </td>
+											                                              <td>
+											              										&nbsp; ${contract.fundingExecutionRate}
+											                                              </td>
+											                                          </tr>
+											                                      </field:display>   
+                                                                                        
+                                                                                        <field:display name="Disbursements" feature="Contracting">
+                                                                                        <tr>
+                                                                                    
+                                                                                            <td colspan="2">
+                                                                                                <b><digi:trn>Disbursements:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td>&nbsp;
+                                                                                            </td>
+                                                                                            <td>
+                                                                                               
+                                                                                    
+                                                                                                    <logic:notEmpty name="contract" property="disbursements">
+                                                                                                         <table>
+                                                                                              
+                                                                                                        <c:forEach  items="${contract.disbursements}" var="disbursement" >
+                                                                                                            <tr>
+                                                                                          
+                                                                                                                <td align="left" valign="top">
+                                                                                                                    <c:if test="${disbursement.adjustmentType==0}">
+                                                                                                                          <digi:trn>Actual</digi:trn>
+                                                                                                                   </c:if>
+                                                                                                                    <c:if test="${disbursement.adjustmentType==1}">
+                                                                                                                          <digi:trn>Planned</digi:trn>
+                                                                                                                   </c:if>
+                                                                                                    
+                                                                                                                </td>
+                                                                                                                <td align="left" valign="top">
+                                                                                                                    ${disbursement.amount}
+                                                                                                                </td>
+                                                                                                                <td align="left" valign="top">
+                                                                                                                   ${disbursement.currency.currencyName} 
+                                                                                                                </td>
+                                                                                                                <td align="left" valign="top">
+                                                                                                                    ${disbursement.disbDate}
+                                                                                                                    
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </c:forEach>
+                                                                                                        </table>
+                                                                                                        
+                                                                                                    </logic:notEmpty>						
+                                                                                                		
+                                                                                            </td>		
+                                                                                        </tr>		
+                                                                                        
+                                                                                        
+                                                                                        <field:display name="Contracting Funding Disbursements" feature="Contracting">
+                                                                                        <tr>
+                                                                                    
+                                                                                            <td colspan="2">
+                                                                                                <b><digi:trn>Funding Disbursements:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td>&nbsp;
+                                                                                            </td>
+                                                                                            <td>
+                                                                                            
+                                                                                             <logic:notEmpty name="funding" property="fundingDetails">
+										                                                           <table width="100%">
+																								    <tr>
+																										<td><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn>Adjustment Type Disbursement</digi:trn></field:display></td>
+																										<td><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn>Amount Disbursement</digi:trn></field:display></td>
+																										<td><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn>Currency Disbursement</digi:trn></field:display></td>
+																										<td><field:display name="Date Disbursement" feature="Disbursement"><digi:trn>Date Disbursement</digi:trn></field:display></td>
+																										
+																									</tr>
+											                                                           <c:forEach  items="${aimEditActivityForm.funding.fundingDetails}" var="fundingDetail" >
+											                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
+											                                                           		<c:if test="${fundingDetail.transactionType == 1}">
+											                                                               <tr>
+											                                                                   <td align="center" valign="top">
+											                                                                       <c:if test="${fundingDetail.adjustmentType==0}">
+										                                                                             <digi:trn>Actual</digi:trn>
+											                                                                       </c:if>
+											                                                                       <c:if test="${fundingDetail.adjustmentType==1}">
+										                                                                             <digi:trn>Planned</digi:trn>
+											                                                                       </c:if>
+											                                                                   </td>
+											                                                                   <td align="center" valign="top">
+											                                                                       ${fundingDetail.transactionAmount}
+											                                                                   </td>
+											                                                                   <td align="center" valign="top">
+											                                                                      ${fundingDetail.currencyCode} 
+											                                                                   </td>
+											                                                                   <td align="center" valign="top">
+											                                                                       ${fundingDetail.transactionDate}
+											                                                                   </td>
+											                                                               </tr>
+											                                                               </c:if>
+											                                                               </logic:equal>
+											                                                           </c:forEach>
+										                                                           </table>
+										                                                       </logic:notEmpty>
+                                                                                            
+                                                                                            </td>		
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                   </td></tr>
+                                                                                  
+                                                                                </c:forEach>
+                                                                                </table>
+                                                                                
+                                                                            </logic:notEmpty>
+										</td>
+									</tr>
+								        
                            		
 													
 

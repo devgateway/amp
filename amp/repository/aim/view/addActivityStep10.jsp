@@ -253,7 +253,7 @@
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td>
-								<span class=crumb>
+								<span class=crumb style="visibility: hidden">
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home ">
 										<digi:trn key="aim:AmpAdminHome">

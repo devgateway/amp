@@ -284,7 +284,7 @@
 
 							<td>
 
-								<span class=crumb>
+								<span class=crumb style="visibility: hidden">
 
 								<c:set var="translation">
 

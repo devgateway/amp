@@ -668,7 +668,7 @@ function remProgram(programType) {
                     <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
                       <tr>
                         <td>
-                          <span class=crumb>
+                          <span class=crumb style="visibility: hidden">
                             <c:if test="${aimEditActivityForm.pageId == 0}">
                               <c:set property="translation" var="trans" >
                                 <digi:trn key="aim:clickToViewAdmin">

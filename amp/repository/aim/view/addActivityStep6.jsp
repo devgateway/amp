@@ -323,7 +323,7 @@ function removeSelLinks() {
 
 							<td>
 
-								<span class=crumb>
+								<span class=crumb style="visibility: hidden">
 
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 

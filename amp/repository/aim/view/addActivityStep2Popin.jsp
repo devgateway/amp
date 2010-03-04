@@ -305,6 +305,9 @@
 				document.aimSelectSectorForm.subsectorLevel2.value = -1;
 			}
 		}
+       var addButton=document.getElementById("sectorAddButton");
+        addButton.disabled=true;
+        addButton.style.color="lightgray";
 		var postString		= "edit=true&" + generateFields(1);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
@@ -326,7 +329,7 @@
 				myclose();
 				addSector();
 			}
-			checkAndClose=false;			
+			checkAndClose=false;
 		}
 	}
 	function selectPageSectors(pagedata){

@@ -348,7 +348,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											<table cellPadding=5>
 												<tr>
 													<td> 
-														<html:button styleClass="dr-menu"  property="addButton" onclick="buttonAdd()">
+                                                        <html:button styleClass="dr-menu"  property="addButton" styleId="sectorAddButton" onclick="buttonAdd()">
 															<digi:trn key="btn:add">Add</digi:trn> 
 														</html:button>
 														

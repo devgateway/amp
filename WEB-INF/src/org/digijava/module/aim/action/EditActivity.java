@@ -297,16 +297,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       eaForm.setActivityId(activityId);
       eaForm.setReset(false);
 
-      ProposedProjCost propProjCost = null;
-      if (eaForm.getFunding().getProProjCost() != null) {
-        propProjCost = new ProposedProjCost();
-        propProjCost = eaForm.getFunding().getProProjCost();
-        if (propProjCost.getCurrencyCode() == null &&
-            propProjCost.getFunAmount() == null &&
-            propProjCost.getFunDate() == null) {
-          eaForm.getFunding().setProProjCost(null);
-        }
-      }
       List nationalPlanObjectivePrograms=new ArrayList();
       List primaryPrograms=new ArrayList();
       List secondaryPrograms=new ArrayList();
@@ -332,6 +322,18 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
               eaForm.setRegFundingPageCurrCode(currCode);
           }
       }
+      ProposedProjCost propProjCost=null;
+      if (eaForm.getFunding().getProProjCost() != null) {
+         propProjCost = eaForm.getFunding().getProProjCost();
+        if (propProjCost.getCurrencyCode() == null) {
+           propProjCost.setCurrencyCode(eaForm.getCurrCode());
+        }
+      }
+      else{
+          propProjCost =new ProposedProjCost();
+          propProjCost.setCurrencyCode(eaForm.getCurrCode());
+      }
+       eaForm.getFunding().setProProjCost(propProjCost);
 
       /*List prLst = new ArrayList();
       if (eaForm.getActPrograms() == null) {

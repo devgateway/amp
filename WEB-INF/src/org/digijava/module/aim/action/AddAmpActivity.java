@@ -318,15 +318,18 @@ public class AddAmpActivity extends Action {
 	*/
 
     //eaForm.setAllComps(ActivityUtil.getAllComponentNames());
-    ProposedProjCost propProjCost = null;
-    if (eaForm.getFunding().getProProjCost() != null) {
-      propProjCost = eaForm.getFunding().getProProjCost();
-      if (propProjCost.getCurrencyCode() == null &&
-          propProjCost.getFunAmount() == null &&
-          propProjCost.getFunDate() == null) {
-        eaForm.getFunding().setProProjCost(null);
+    ProposedProjCost propProjCost=null;
+      if (eaForm.getFunding().getProProjCost() != null) {
+         propProjCost = eaForm.getFunding().getProProjCost();
+        if (propProjCost.getCurrencyCode() == null) {
+           propProjCost.setCurrencyCode(eaForm.getFundingCurrCode());
+        }
       }
-    }
+      else{
+          propProjCost =new ProposedProjCost();
+          propProjCost.setCurrencyCode(eaForm.getFundingCurrCode());
+      }
+     eaForm.getFunding().setProProjCost(propProjCost);
 
     try {
 

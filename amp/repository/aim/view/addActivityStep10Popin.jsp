@@ -15,7 +15,7 @@
 
 
 <div id="popin" style="display: none">
-	<div id="popinContent" class="content">
+	<div id="popinContent">
 	</div>
 </div>
 <div id="popin2" style="display: none">
@@ -30,6 +30,7 @@
 
 		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"800px",
+			height:"500px",
 			fixedcenter: true,
 		    constraintoviewport: false,
 		    underlay:"none",
@@ -150,7 +151,15 @@
 
 	function showContent(){
 		var element = document.getElementById("popin");
-		element.style.display = "inline";
+		if(element.style.display == "inline"){
+			element.style.display = "";
+		}
+		else if (element.style.display == "none"){
+			element.style.display = "inline";
+		}
+		element.style.width="100%"
+		element.style.height="100%";
+		element.style.overflow="scroll";
 		if (panelStart < 1){
 			myPanel.setBody(element);
 		}

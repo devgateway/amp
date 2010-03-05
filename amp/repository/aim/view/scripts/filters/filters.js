@@ -1,4 +1,5 @@
 function resetFilter(){
+		resetRootCheckboxes();
 		if (aimReportsFilterPickerForm.text)
 			aimReportsFilterPickerForm.text.value="";
 
@@ -49,6 +50,17 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.selectedImplementingAgency);
  		resetElement(aimReportsFilterPickerForm.selectedDonnorAgency);
  		resetElement(aimReportsFilterPickerForm.selectedresponsibleorg);
+ 		
+ 		resetElement(aimReportsFilterPickerForm.disbursementOrders);
+ 		resetElement(aimReportsFilterPickerForm.selectedBudgets);
+ 		resetElement(aimReportsFilterPickerForm.lineMinRanks);
+ 		resetElement(aimReportsFilterPickerForm.planMinRanks);
+ 		resetElement(aimReportsFilterPickerForm.selectedArchivedStatus);
+ 		for (var i=0; i<aimReportsFilterPickerForm.selectedArchivedStatus.length; i++) {
+ 			var inputEl	= aimReportsFilterPickerForm.selectedArchivedStatus[i];
+ 			if (inputEl.value==1)
+ 				inputEl.checked = true;
+ 		}
 
 			
 		if (aimReportsFilterPickerForm.jointCriteria){
@@ -73,6 +85,17 @@ function resetElement( elem ) {
 			elem.checked	= false;
 		}
 }
+
+function resetRootCheckboxes() {
+	var allCheckboxes	= document.getElementsByTagName("input");
+	for (var i=0; i<allCheckboxes.length; i++) {
+		var inputYuiEl	= new YAHOO.util.Element(allCheckboxes[i]);
+		if ( inputYuiEl.hasClass("root_checkbox") ) {
+			allCheckboxes[i].checked = false;
+		}
+	}
+}
+
 YAHOO.namespace("YAHOO.amptab");
 
 YAHOO.amptab.afterFiltersLoad	= function (){

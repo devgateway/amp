@@ -11,7 +11,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
@@ -210,36 +212,7 @@ function setHoveredTable(tableId, hasHeaders) {
 											<digi:errors />
 
 										</td></tr>
-										<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-
-										<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
-
-											<tr>
-
-												<td height="20">
-
-														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
-													  	<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
-														<% if (currPage.equals(pages)) { %>
-																<%=pages%>
-														<%	} else { %>
-															<c:set var="translation">
-																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-															</c:set>
-															<c:set target="${urlParams1}" property="page">
-																<%=pages%>
-															</c:set>
-															<digi:link href="/getTeamActivities.do" name="urlParams1">
-																<%=pages%>
-                                                            </digi:link>
-														<% } %>
-														|
-														</logic:iterate>
-												</td>
-
-											</tr>
-
-										</logic:notEmpty>											
+																			
 										<tr>
 
 											<td bgColor=#ffffff valign="top">
@@ -349,35 +322,88 @@ function setHoveredTable(tableId, hasHeaders) {
 											</td>
 										</tr>
                                         <tr>
-	                                        <td>
-                                        		<table style="float:left;" >
+                                            <td>
+                                                <jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 
-                                                    <logic:notEmpty name="aimTeamActivitiesForm" property="pages">
+                                                <logic:notEmpty name="aimTeamActivitiesForm" property="pages">
+                                                    <c:set var="lastPage">
+                                                        ${fn:length(aimTeamActivitiesForm.pages)}
+                                                    </c:set>
+                                                    <table style="float:left;" >
                                                         <tr>
-                                                            <td>
-                                                                    <logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
-                                                                    <bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
-                                                                    <% if (currPage.equals(pages)) { %>
-                                                                            <%=pages%>
-                                                                    <%	} else { %>
-                                                                        <c:set var="translation">
-                                                                            <digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-                                                                        </c:set>
+                                                            <td class="yui-skin-sam">
+                                                                <c:choose>
+                                                                    <c:when test="${aimTeamActivitiesForm.currentPage>1}">
                                                                         <c:set target="${urlParams1}" property="page">
-                                                                            <%=pages%>
+																1
                                                                         </c:set>
-                                                                        <digi:link href="/getTeamActivities.do" name="urlParams1">
-                                                                            <%=pages%>
+                                                                        <digi:link href="/getTeamActivities.do" name="urlParams1" styleClass="yui-pg-first">
+                                                                            << <digi:trn>first</digi:trn>
                                                                         </digi:link>
-                                                                    <% } %>
-                                                                    |
-                                                                    </logic:iterate>
+                                                                        <c:set target="${urlParams1}" property="page">
+                                                                            ${aimTeamActivitiesForm.currentPage-1}
+                                                                        </c:set>
+                                                                        <digi:link href="/getTeamActivities.do" name="urlParams1" styleClass="yui-pg-previous">
+                                                                            < <digi:trn>prev</digi:trn>
+                                                                        </digi:link>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <span class="yui-pg-first">
+                                                                            << <digi:trn>first</digi:trn>
+                                                                        </span>
+                                                                        <span class="yui-pg-previous ">
+                                                                            < <digi:trn key="aim:previous">prev</digi:trn>
+                                                                        </span>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                                <logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
+                                                                    <bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
+
+                                                                    <% if (currPage.equals(pages)) {%>
+                                                                    <span class="yui-pg-current-page yui-pg-page"><%=pages%></span>
+                                                                    <%	} else {%>
+                                                                    <c:set target="${urlParams1}" property="page">
+                                                                        <%=pages%>
+                                                                    </c:set>
+                                                                    <digi:link href="/getTeamActivities.do" name="urlParams1" styleClass="yui-pg-page yuipaginationsimul">
+                                                                        <%=pages%>
+                                                                    </digi:link>
+                                                                    <% }%>
+
+                                                                </logic:iterate>
+                                                                <c:choose>
+                                                                    <c:when test="${aimTeamActivitiesForm.currentPage<lastPage}">
+                                                                        <c:set target="${urlParams1}" property="page">
+                                                                            ${aimTeamActivitiesForm.currentPage+1}
+                                                                        </c:set>
+                                                                        <digi:link href="/getTeamActivities.do" name="urlParams1" styleClass="yui-pg-next">
+                                                                            <digi:trn>Next</digi:trn> &gt;
+                                                                        </digi:link>
+                                                                        <c:set target="${urlParams1}" property="page">
+                                                                            ${lastPage}
+                                                                        </c:set>
+                                                                        <digi:link href="/getTeamActivities.do" name="urlParams1" styleClass="yui-pg-last">
+                                                                            <digi:trn key="aim:previous">Last</digi:trn>&gt;&gt;
+                                                                        </digi:link>
+
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <span class="yui-pg-next">
+                                                                            <digi:trn>Next</digi:trn> &gt;
+                                                                        </span>
+                                                                        <span class="yui-pg-last">
+                                                                            <digi:trn>Last</digi:trn> &gt;&gt;
+                                                                        </span>
+                                                                    </c:otherwise>
+                                                                </c:choose>
                                                             </td>
+
                                                         </tr>
-                                                    </logic:notEmpty>											
-												</table>
-												<a style="float:right;cursor:pointer;" onclick="window.scrollTo(0,0); return false">
-                                                <digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span>
+                                                    </table>
+                                                </logic:notEmpty>
+
+                                                <a style="float:right;cursor:pointer;" onclick="window.scrollTo(0,0); return false">
+                                                    <digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span>
                                                 </a>
                                             </td>
                                         </tr>

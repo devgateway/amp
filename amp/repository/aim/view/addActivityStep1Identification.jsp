@@ -613,17 +613,17 @@ target.style.cursor = "default"
 											<td>
 											<table cellpadding="7" cellspacing="5">
 
+												<field:display name="On/Off Budget" feature="Budget">	
 											 <tr>
 												<td valign="top" align="left" colspan="9">	
-												<field:display name="On/Off Budget" feature="Budget">	
 													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
 													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
-												</field:display>
+												
 												</td>
 											</tr>
-											 <tr>
+											 <tr id="CodeChapitre">
 											 <td>
 											<field:display name="Code Chapitre" feature="Budget">
 											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
@@ -640,6 +640,7 @@ target.style.cursor = "default"
 											</field:display>
 											</td>
 									</tr>
+									</field:display>
 											</table>
 											
 												</td>

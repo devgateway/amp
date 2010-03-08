@@ -12,7 +12,6 @@
 <bean:define id="myForm" name="crDocumentManagerForm" toScope="page"
 	type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
 	
-	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">
 	<bean:define name="crDocumentManagerForm" property="otherDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 	<jsp:include flush="true" page="documentTable.jsp" />
 	<%-- <table id="team_table">
@@ -104,5 +103,4 @@
 					</table> --%>
 					</div>
 					<br />
-				</logic:notEmpty>
 				

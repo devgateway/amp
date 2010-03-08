@@ -72,10 +72,10 @@ public class TrailCellsXLS extends XLSExporter {
 //			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
 		
-			HSSFCellStyle hierarchyStyle;
-			if(grd.getLevelDepth()==2) 
-				hierarchyStyle = this.getHierarchyLevel1Style(true);
-			else hierarchyStyle=this.getHierarchyOtherStyle(true);
+			HSSFCellStyle hierarchyStyle = this.getHierarchyStyle(true, grd.getLevelDepth()-1 );
+//			if(grd.getLevelDepth()==2) 
+//				hierarchyStyle = this.getHierarchyLevel1Style(true);
+//			else hierarchyStyle=this.getHierarchyOtherStyle(true);
 			
 			
 			HSSFCell cell = this.getCell(hierarchyStyle);

@@ -141,7 +141,12 @@ YAHOO.amptab.initDisplayOfMemberSelectors	= function(bigDivId) {
 
 
 function toggleCheckChildren(checkboxEl) {
+	
 	var parentTdEl				= checkboxEl.parentNode;
+	for (var i=0; i<=5; i++) {
+		if (parentTdEl.nodeName.toLowerCase()=="li") break;
+		parentTdEl		= parentTdEl.parentNode;
+	}
 	var descendantCheckboxes	= parentTdEl.getElementsByTagName('input');
 	for (var i=0; i<descendantCheckboxes.length; i++ ) {
 		descendantCheckboxes[i].checked	= checkboxEl.checked ;
@@ -149,16 +154,23 @@ function toggleCheckChildren(checkboxEl) {
 	
 	if ( ! checkboxEl.checked ) {
 		var tempParent				= parentTdEl.parentNode;
+		var nodeName				= tempParent.nodeName.toLowerCase();
 		while ( tempParent != null && 
-				(tempParent.nodeName.toLowerCase()=="li" || tempParent.nodeName.toLowerCase()=="ul") ) {
-			if ( tempParent.nodeName.toLowerCase()=="li" ) {
+				(nodeName=="li" || nodeName=="ul" || 
+						nodeName=="td" || nodeName=="tr" ||	
+							nodeName=="table") ) {
+			
+			if ( nodeName=="li" ) {
 				for ( var i=0; i<tempParent.childNodes.length; i++) {
 					var tempNode	= tempParent.childNodes[i];
+					if ( tempNode.nodeName.toLowerCase()=="table" )
+						tempNode.getElementsByTagName("input")[0].checked	= false;
 					if ( tempNode.nodeName.toLowerCase()=="input" )
 						tempNode.checked	= false;
 				}
 			}
 			tempParent				= tempParent.parentNode;
+			nodeName				= tempParent.nodeName.toLowerCase();
 		}
 	}
 }

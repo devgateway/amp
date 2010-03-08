@@ -50,7 +50,7 @@
 		</c:if>
 	
 	<c:if test="${reportData.levelDepth == 4}">
-		<td nowrap="nowrap" class="clsTableCellDataHtml thirdLevel hierarchyCell" 
+		<td class="clsTableCellDataHtml thirdLevel hierarchyCell" 
 				height="13px" rowspan="${reportData.rowSpan}" >
 		<span>
 			<% if (!("".equals(reportData.getRepName()))){ %>

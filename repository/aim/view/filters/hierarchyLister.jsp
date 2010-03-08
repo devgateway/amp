@@ -28,8 +28,12 @@
 				</c:if>
 			</c:forEach>
 			<li>
-				<input onclick="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/>
-				<span style="font-family: Arial; font-size: 12px;">${entity.label}</span> 
+				<table>
+					<tr>
+						<td valign="top"><input onclick="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/></td>
+						<td><span style="font-family: Arial; font-size: 12px;">${entity.label}</span></td>
+					</tr>
+				</table> 
 				<logic:notEmpty name="entity" property="children">
 					<bean:define id="reqEntityList" toScope="request" name="entity" property="children" ></bean:define>
 					<jsp:include page="hierarchyLister.jsp" />

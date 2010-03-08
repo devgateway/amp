@@ -261,12 +261,14 @@ function toggleSettings(){
 	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
-		currentDisplaySettings.style.display = "none";
+		currentDisplaySettings.style.display 	= "none";
+		displaySettingsButton.style.color 		= "black";
 		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
 	}
 	else
 	{
-		currentDisplaySettings.style.display = "block";
+		currentDisplaySettings.style.display 	= "block";
+		displaySettingsButton.style.color 		= "3569c1";
 		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
 	}
 }

@@ -59,9 +59,10 @@ public class AmountCellXLS extends XLSExporter {
 		HSSFCellStyle amountStyle;
 		
 		if(parent instanceof TrailCellsXLS)
-		if(parent.getItem().getNearestReportData().getLevelDepth()==2) 
-			amountStyle = this.getAmountHierarchyLevel1Style();
-		 else amountStyle = this.getAmountHierarchyOtherStyle();
+			amountStyle		= this.getAmountHierarchyStyle(parent.getItem().getNearestReportData().getLevelDepth()-1);
+//			if(parent.getItem().getNearestReportData().getLevelDepth()==2) 
+//				amountStyle = this.getAmountHierarchyLevel1Style();
+//			 else amountStyle = this.getAmountHierarchyOtherStyle();
 		else
 			amountStyle=this.getAmountStyle();
 		

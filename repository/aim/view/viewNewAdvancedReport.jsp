@@ -69,10 +69,12 @@ function toggleSettings(){
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
 		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
+		displaySettingsButton.style.color 		= "black";
 	}
 	else
 	{
-		currentDisplaySettings.style.display = "block";
+		currentDisplaySettings.style.display 	= "block";
+		displaySettingsButton.style.color 		= "3569c1";
 		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
 	}
 }
@@ -196,7 +198,6 @@ session.setAttribute("progressValue", counter);
 	<tr>
 		<td>
 		<div style="margin-left:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
 	        
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
@@ -232,9 +233,9 @@ session.setAttribute("progressValue", counter);
                 
                 |<a  class="settingsLink" onClick="showFormat(); " >
                 <digi:trn>Report Settings</digi:trn>
-                </a>
-           
+                </a> | &nbsp;
             </span>
+	        <span style="cursor:pointer;font-style: italic;float:left;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
              &nbsp;<br>
              <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">

@@ -200,7 +200,7 @@ addLoadEvent(addpanel);
 		-->
 		<feature:display name="Export to PDF" module="Exports">
 		<td noWrap align=left valign="center">		
-			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('pdf','${ampReportId}'); return false;">
+			<a class="settingsLink" href="#" target="_blank" onclick="toggleActionForm('pdf','${ampReportId}'); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
 							hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
 				<digi:trn>Export to PDF</digi:trn>
@@ -211,7 +211,7 @@ addLoadEvent(addpanel);
 
 		<feature:display name="Export to Excel" module="Exports">
 		<td noWrap align=left valign="center">
-			<a style="text-decoration: none;" href="#" target="_blank" onclick="toggleActionForm('xls','${ampReportId}'); return false;">
+			<a class="settingsLink" href="#" target="_blank" onclick="toggleActionForm('xls','${ampReportId}'); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
 							hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
 				<digi:trn>Export to Excel</digi:trn>
@@ -221,7 +221,7 @@ addLoadEvent(addpanel);
 
 		<feature:display name="Export to CSV" module="Exports">
 		<td noWrap align=left valign="center">
-			<digi:link style="text-decoration: none;" href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+			<digi:link styleClass="settingsLink" href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
 							hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/csv.gif" border="0" alt="Export to CSV" />
 				<digi:trn>Export to CSV</digi:trn>
@@ -231,7 +231,7 @@ addLoadEvent(addpanel);
 		
 		<feature:display name="Printer Friendly" module="Exports">
 		<td noWrap align=left valign="center">
-			<digi:link style="text-decoration: none;" href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
+			<digi:link styleClass="settingsLink" href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
 				<digi:img style="vertical-align: middle;" width="17" height="20" 
 						hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
 				<digi:trn>Print</digi:trn>

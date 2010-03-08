@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -34,20 +36,24 @@ public abstract class XLSExporter extends Exporter {
         regularStyle = null;
         amountStyle = null;
         highlightedStyle = null;
-        hierarchyLevel1Style=null;
-        hierarchyOtherStyle=null;
-        amountHierarchyLevel1Style=null;
-        amountHierarchyOtherStyle=null;
+        //hierarchyLevel1Style=null;
+        //hierarchyOtherStyle=null;
+        hierarchyLevelStyles.clear();
+        //amountHierarchyLevel1Style=null;
+        //amountHierarchyOtherStyle=null;
+        amountHierarchyStyles.clear();
 	}
 	
 	private boolean autoSize = true;
 	protected static HSSFCellStyle regularStyle = null;
 	protected static HSSFCellStyle amountStyle = null;
 	protected static HSSFCellStyle highlightedStyle = null;
-	protected static HSSFCellStyle hierarchyLevel1Style = null;
-	protected static HSSFCellStyle hierarchyOtherStyle = null;
-	protected static HSSFCellStyle amountHierarchyLevel1Style = null;
-	protected static HSSFCellStyle amountHierarchyOtherStyle = null;
+	//protected static HSSFCellStyle hierarchyLevel1Style = null;
+	//protected static HSSFCellStyle hierarchyOtherStyle = null;
+	protected static HashMap<Integer, HSSFCellStyle> hierarchyLevelStyles = new HashMap<Integer, HSSFCellStyle>();
+	//protected static HSSFCellStyle amountHierarchyLevel1Style = null;
+	//protected static HSSFCellStyle amountHierarchyOtherStyle = null;
+	protected static HashMap<Integer, HSSFCellStyle> amountHierarchyStyles = new HashMap<Integer, HSSFCellStyle>();
 	
 
 	protected IntWrapper rowId;
@@ -121,52 +127,67 @@ public abstract class XLSExporter extends Exporter {
 	}
 
 	
-	protected HSSFCellStyle getAmountHierarchyLevel1Style() {
-		if (amountHierarchyLevel1Style == null) {
-			HSSFCellStyle cs = wb.createCellStyle();
+	protected HSSFCellStyle getAmountHierarchyStyle(int level) {
+		HSSFCellStyle amountHierarchyStyle	= amountHierarchyStyles.get(level);
+		short color;
+		switch (level) {
+		case 1:
+			color	= HSSFColor.GOLD.index;
+			break;
+		case 2:
+			color	= HSSFColor.YELLOW.index;
+			break;
+
+		default:
+			color	= HSSFColor.LIGHT_YELLOW.index;
+			break;
+		}
+		if (amountHierarchyStyle == null) {
+			amountHierarchyStyle = wb.createCellStyle();
 			HSSFFont font= wb.createFont();
-			cs.setFillForegroundColor(HSSFColor.TURQUOISE.index);
-			cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+			amountHierarchyStyle.setFillForegroundColor( color );
+			amountHierarchyStyle.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
 			font.setFontName(HSSFFont.FONT_ARIAL);
 			font.setColor( HSSFColor.BLUE.index );
-			cs.setBorderBottom(HSSFCellStyle.BORDER_HAIR);
-			cs.setBorderLeft(HSSFCellStyle.BORDER_HAIR);
-			cs.setBorderRight(HSSFCellStyle.BORDER_HAIR);
-			cs.setBorderTop(HSSFCellStyle.BORDER_HAIR);
+			amountHierarchyStyle.setBorderBottom(HSSFCellStyle.BORDER_HAIR);
+			amountHierarchyStyle.setBorderLeft(HSSFCellStyle.BORDER_HAIR);
+			amountHierarchyStyle.setBorderRight(HSSFCellStyle.BORDER_HAIR);
+			amountHierarchyStyle.setBorderTop(HSSFCellStyle.BORDER_HAIR);
 			HSSFDataFormat df = wb.createDataFormat();
-			cs.setDataFormat(df.getFormat("General"));
+			amountHierarchyStyle.setDataFormat(df.getFormat("General"));
 		
-			cs.setFont(font);
-			cs.setWrapText(true);
-			cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-			amountHierarchyLevel1Style = cs;
+			amountHierarchyStyle.setFont(font);
+			amountHierarchyStyle.setWrapText(true);
+			amountHierarchyStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+			
+			amountHierarchyStyles.put(level, amountHierarchyStyle);
 		}
-		return amountHierarchyLevel1Style;
+		return amountHierarchyStyle;
 	}
 
 	
-	protected HSSFCellStyle getAmountHierarchyOtherStyle() {
-		if (amountHierarchyOtherStyle == null) {
-			HSSFCellStyle cs = wb.createCellStyle();
-			HSSFFont font= wb.createFont();
-			cs.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
-			font.setFontName(HSSFFont.FONT_ARIAL);
-			font.setColor( HSSFColor.BLUE.index );
-			cs.setBorderBottom(HSSFCellStyle.BORDER_HAIR);
-			cs.setBorderLeft(HSSFCellStyle.BORDER_HAIR);
-			cs.setBorderRight(HSSFCellStyle.BORDER_HAIR);
-			cs.setBorderTop(HSSFCellStyle.BORDER_HAIR);
-			HSSFDataFormat df = wb.createDataFormat();
-			cs.setDataFormat(df.getFormat("General"));
-		
-			cs.setFont(font);
-			cs.setWrapText(true);
-			cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-			amountHierarchyOtherStyle = cs;
-		}
-		return amountHierarchyOtherStyle;
-	}
+//	protected HSSFCellStyle getAmountHierarchyOtherStyle() {
+//		if (amountHierarchyOtherStyle == null) {
+//			HSSFCellStyle cs = wb.createCellStyle();
+//			HSSFFont font= wb.createFont();
+//			cs.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+//            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+//			font.setFontName(HSSFFont.FONT_ARIAL);
+//			font.setColor( HSSFColor.BLUE.index );
+//			cs.setBorderBottom(HSSFCellStyle.BORDER_HAIR);
+//			cs.setBorderLeft(HSSFCellStyle.BORDER_HAIR);
+//			cs.setBorderRight(HSSFCellStyle.BORDER_HAIR);
+//			cs.setBorderTop(HSSFCellStyle.BORDER_HAIR);
+//			HSSFDataFormat df = wb.createDataFormat();
+//			cs.setDataFormat(df.getFormat("General"));
+//		
+//			cs.setFont(font);
+//			cs.setWrapText(true);
+//			cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+//			amountHierarchyOtherStyle = cs;
+//		}
+//		return amountHierarchyOtherStyle;
+//	}
 	
 	protected HSSFCellStyle getHighlightedStyle(boolean border) {
         if (highlightedStyle == null) {
@@ -195,59 +216,73 @@ public abstract class XLSExporter extends Exporter {
 		return highlightedStyle;
 	}
 
-	protected HSSFCellStyle getHierarchyLevel1Style(boolean border) {
-        if (hierarchyLevel1Style == null) {
-            HSSFCellStyle cs = wb.createCellStyle();
-            cs.setFillForegroundColor(HSSFColor.TURQUOISE.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+	protected HSSFCellStyle getHierarchyStyle(boolean border, int level) {
+		HSSFCellStyle hierarchyLevelStyle	= hierarchyLevelStyles.get(level);
+		short color;
+		switch (level) {
+		case 1:
+			color	= HSSFColor.GOLD.index;
+			break;
+		case 2:
+			color	= HSSFColor.YELLOW.index;
+			break;
+		default:
+			color	= HSSFColor.LIGHT_YELLOW.index;
+			break;
+		}
+		
+        if (hierarchyLevelStyle == null) {
+            hierarchyLevelStyle = wb.createCellStyle();
+            hierarchyLevelStyle.setFillForegroundColor(color);
+            hierarchyLevelStyle.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
             HSSFFont font = wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-            cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            hierarchyLevelStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
             if (border) {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+                      hierarchyLevelStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+                      hierarchyLevelStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+                      hierarchyLevelStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+                      hierarchyLevelStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
             } else {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
+                      hierarchyLevelStyle.setBorderBottom(HSSFCellStyle.BORDER_NONE);
+                      hierarchyLevelStyle.setBorderLeft(HSSFCellStyle.BORDER_NONE);
+                      hierarchyLevelStyle.setBorderRight(HSSFCellStyle.BORDER_NONE);
+                      hierarchyLevelStyle.setBorderTop(HSSFCellStyle.BORDER_NONE);
             }
-            cs.setFont(font);
-            hierarchyLevel1Style = cs;
+            hierarchyLevelStyle.setFont(font);
+            hierarchyLevelStyles.put(level, hierarchyLevelStyle);
         }
 		
-		return hierarchyLevel1Style;
+		return hierarchyLevelStyle;
 	}
 	
-	protected HSSFCellStyle getHierarchyOtherStyle(boolean border) {
-        if (hierarchyOtherStyle == null) {
-            HSSFCellStyle cs = wb.createCellStyle();
-            cs.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
-            HSSFFont font = wb.createFont();
-            font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-            cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-            if (border) {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
-            } else {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
-            }
-            cs.setFont(font);
-            hierarchyOtherStyle = cs;
-        }
-		
-		return hierarchyOtherStyle;
-	}
+//	protected HSSFCellStyle getHierarchyOtherStyle(boolean border) {
+//        if (hierarchyOtherStyle == null) {
+//            HSSFCellStyle cs = wb.createCellStyle();
+//            cs.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+//            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+//            HSSFFont font = wb.createFont();
+//            font.setFontName(HSSFFont.FONT_ARIAL);
+//            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+//            cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+//            if (border) {
+//                      cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//                      cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+//                      cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
+//                      cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+//            } else {
+//                      cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
+//                      cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
+//                      cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
+//                      cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
+//            }
+//            cs.setFont(font);
+//            hierarchyOtherStyle = cs;
+//        }
+//		
+//		return hierarchyOtherStyle;
+//	}
 	
 	
 	public void makeColSpan(int size,Boolean border) {

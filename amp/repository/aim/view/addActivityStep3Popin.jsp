@@ -27,6 +27,7 @@
 
 		var myPanel = new YAHOO.widget.Panel("newpopins", {
 			width:"1000px",
+			height:"500px",
 			fixedcenter: true,
 		    constraintoviewport: false,
 		    underlay:"none",
@@ -183,9 +184,16 @@
 	
 	function showContent(){
 		var element = document.getElementById("popin");
+		if(element.style.display == "inline"){
+			element.style.display = "";
+		}
+		else if (element.style.display == "none"){
+			element.style.display = "inline";
+		}
+		element.style.width="100%"
+		element.style.height="100%";
+		element.style.overflow="scroll";		
 		
-		
-		element.style.display = "inline";
 		if (panelStart < 1){
 			myPanel.setBody(element);
 		}
@@ -678,7 +686,7 @@ function addEvent() {
 </script>
 
 <div id="popin" style="display: none" >
-	<div id="popinContent" class="content">
+	<div id="popinContent">
 	</div>
 </div>
 

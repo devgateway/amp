@@ -268,6 +268,10 @@
 	<digi:trn>Please wait a moment...</digi:trn>
 </c:set>
 
+<c:set var="trans_no_resources">
+	<digi:trn>No resources found here.</digi:trn>
+</c:set>
+
 
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
@@ -309,14 +313,14 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     	    ];
 	}
     //this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
-
     var markup	 				= YAHOO.util.Dom.get(markupName);
     //var datasource				= YAHOO.util.DataSource(markup);
     var oConfigs = { 
 	                paginator:new YAHOO.widget.Paginator({ 
 	                	rowsPerPage:10,
 	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"
-	                }) 
+	                }),
+	                MSG_EMPTY: "${trans_no_resources}" 
 	        		}; 
 
     //alert (this.columnHeaders);	 
@@ -341,10 +345,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
-	
-	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
-		//dataTable.showEmptyMessage();
-	}
+
     return dataTable;
 };
 

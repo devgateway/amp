@@ -54,6 +54,7 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
@@ -66,7 +67,6 @@ import org.digijava.module.help.util.HelpUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.jfree.util.Log;
 
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -800,7 +800,6 @@ public class LuceneUtil implements Serializable {
 			 	 	
 			);
 		} catch (EditorException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		if (doc != null){
@@ -881,7 +880,7 @@ public class LuceneUtil implements Serializable {
      * @throws org.digijava.kernel.exception.DgException
      * 
      */
-    public static void createHelp(ServletContext sc) throws  DgException{
+    public static void createHelpAAAA(ServletContext sc) throws  DgException{
             
 		boolean createDir = LuceneUtil.checkHelpDir(sc);
 	
@@ -907,6 +906,7 @@ public class LuceneUtil implements Serializable {
      * @throws org.digijava.kernel.exception.DgException
      * 
      * @see org.digijava.module.help.helper.HelpSearchData
+     * @deprecated 1) bad name - if t does not add/update but recreates whole help index. 2) 
      */
     public static void addUpdatehelp(boolean update, ServletContext sc) throws DgException {
 
@@ -935,6 +935,7 @@ public class LuceneUtil implements Serializable {
     			// Converts html formatted help topics body to plain text format.
     			String newCode = article.replaceAll("\\<.*?\\>","");
 
+    			//greatest if + else-if ever!!!
     			if(update){
     					if(item.getLastModDate().after(date)){
 	    					deleteHelp("title",title, sc);
@@ -1029,14 +1030,9 @@ public class LuceneUtil implements Serializable {
 
 
     /**
-     * Creates {@link Document} using {@link createDocument(String,String,String)}.
-     * Adds newly created document to lucene help directory
-     *  
-     * @param article body of help topic
-     * @param title title of help topic
-     * @param titTrnKey translation key used to translate title
-     * @throws java.lang.Exception
+     * @deprecated instead use {@link LuceneWorker#addItemToIndex(Object, ServletContext, String)} method
      */
+    @Deprecated
     public static void indexArticle(String article, String title,String titTrnKey, String lang,ServletContext sc)
     throws Exception {
     	Document document = LuceneUtil.createHelpDocument(article,title,titTrnKey,lang);
@@ -1110,7 +1106,9 @@ public class LuceneUtil implements Serializable {
      * 
      * @param field
      * @param search
+     * @deprecated instead of this {@link LuceneWorker#deleteItemFromIndex(Object, ServletContext, String)} is used
      */
+    @Deprecated
     public static void deleteHelp(String field, String search, ServletContext sc){
     	Term term = new Term(field,search);
     	Directory directory;

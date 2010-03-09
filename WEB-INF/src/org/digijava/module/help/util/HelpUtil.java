@@ -3,17 +3,25 @@ package org.digijava.module.help.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.bouncycastle.ocsp.Req;
+import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LucModule;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -28,10 +36,14 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpSearchData;
+import org.digijava.module.help.helper.HelpTopicHelper;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.HelpLang;
 import org.digijava.module.help.jaxbi.ObjectFactory;
+import org.digijava.module.help.lucene.LucHelpModule;
+import org.digijava.module.translation.lucene.LangSupport;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -275,28 +287,30 @@ public class HelpUtil {
 		return false;
 	}
 
-	public static void saveOrUpdateHelpTopic(HelpTopic topic) throws AimException{
+	public static void saveOrUpdateHelpTopic(HelpTopic topic, HttpServletRequest request) throws AimException{
 		Session session = null;
 		Transaction tx = null;
+		boolean update = topic.getHelpTopicId() != null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(topic);
 			tx.commit();
+			saveOrUpdateFromLucene(topic, request, update);
 		} catch (Exception e) {
 			if (tx != null) {
 				try {
 					tx.rollback();
 				} catch (Exception ex) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", ex);
+					logger.error("!!Help topic rollback failed!!");
+					throw new AimException("Can't rollback saveOrUpdate of help topic", ex);
 				}
 			}
 			throw new AimException("Can't update help topic", e);
 		}
 	}
 	
-	public static void deleteHelpTopic(HelpTopic topic) throws AimException{
+	public static void deleteHelpTopic(HelpTopic topic, HttpServletRequest request) throws AimException{
 		Session session = null;
 		Transaction tx = null;
 		try {
@@ -304,6 +318,7 @@ public class HelpUtil {
 			tx = session.beginTransaction();
 			session.delete(topic);			
 			tx.commit();
+			removeFromLucene(topic, request);
 		} catch (Exception e) {
 			if (tx != null) {
 				try {
@@ -316,6 +331,32 @@ public class HelpUtil {
 			throw new AimException("Can't remove help topic", e);
 		}
 	}
+	
+	public static void saveOrUpdateFromLucene(HelpTopic topic, HttpServletRequest request, boolean update) throws DgException{
+		String moduleInstanceName = RequestUtils.getRealModuleInstance(request).getInstanceName();
+		ServletContext context = request.getSession().getServletContext();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		HelpTopicHelper item = new HelpTopicHelper(topic);
+		String suffix = moduleInstanceName + "_" + locale;
+		String msg = "New help topic added to lucene index";
+		if (update){
+			LuceneWorker.deleteItemFromIndex(item, context, suffix);
+			msg = "Existing help topic updated in lucene index";
+		}
+		LuceneWorker.addItemToIndex(item, context, suffix);
+		logger.info(msg);//TODO change to logger.debug()
+	}
+	
+	public static void removeFromLucene(HelpTopic topic, HttpServletRequest request) throws DgException{
+		String moduleInstanceName = RequestUtils.getRealModuleInstance(request).getInstanceName();
+		ServletContext context = request.getSession().getServletContext();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		HelpTopicHelper item = new HelpTopicHelper(topic);
+		String suffix = moduleInstanceName + "_" + locale;
+		LuceneWorker.deleteItemFromIndex(item, context, suffix);
+		logger.info("Help topic removed from lucene index");//TODO convert to logger.debug()
+	}
+	
 	public static List<HelpTopic> getFirstLevelTopics(String siteId,String moduleInstance,String key)throws AimException{
 		Session session = null;
 		Query query = null;
@@ -1076,4 +1117,174 @@ System.out.println("lang:"+lang);
     	  return t;
     	  }
 
+    /**
+     * Returns list of required lucene modules for help.
+     * Groups by module instance and language to separate search areas and indexes.
+     * @return list of lucene modules for help
+     */
+    public static List<LucModule<?>> getLuceneModules(){
+    	//search db
+		List<String> rows = null;
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			//Group by module instances.
+			//Instead of such grouping we may have hardcoded admin and default instances.
+			String oql = "select h.moduleInstance ";
+			oql += " from "+HelpTopic.class.getName() + " as h";
+			oql += " group by h.moduleInstance";
+			Query query = session.createQuery(oql);
+			rows = query.list();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} catch (DgException e) {
+			e.printStackTrace();
+		}finally{
+			if (rows == null){
+				//TODO bad recover, find other solution or throw exception and process outside.
+				rows = new ArrayList<String>();
+				rows.add("default");
+				rows.add("admin");
+			}
+		}
+    	//prepare results
+    	List<LucModule<?>> results = new ArrayList<LucModule<?>>();
+    	//get supported languages
+    	List<LangSupport> languages = LangSupport.supported();
+    	//for all module instances
+    	for (String moduleInstance : rows) {
+    		for (LangSupport lang : languages) {
+    			//add for module instance + each supported languages
+    			results.add(new LucHelpModule(moduleInstance,lang));
+			}
+    		//add for module instance + English and all unsupported languages
+    		results.add(new LucHelpModule(moduleInstance));
+		}
+    	return results;
+    }
+    
+    
+    
+    /**
+     * Returns list of {@link HelpTopicHelper} beans for specified parameters. 
+     * @param siteId can be null in which case it will not filter by siteId.
+     * @param moduleInstance can be null in which case it will not filter by module instances
+     * @param langs can be null in which case it will not filter by languages of help topic body
+     * @param exclude can be null which means false. If true language match is inverted. 
+     * @return list of help topic helpers {@link HelpTopicHelper}
+     * @throws DgException
+     */
+    @SuppressWarnings("unchecked")
+	public static List<HelpTopicHelper> getHelpItems(String siteId,String moduleInstance, Set<LangSupport> langs, Boolean exclude) throws DgException{
+    	
+    	List<String> langISOs = null;
+    	if (langs!=null && langs.size() > 0){
+    		langISOs = new ArrayList<String>(langs.size());
+    		for (LangSupport lang : langs) {
+				langISOs.add(lang.getLangCode());
+			}
+    	}
+    	
+    	String oql = "select new org.digijava.module.help.helper.HelpTopicHelper(h.helpTopicId, h.topicKey, e.body, h.siteId, h.moduleInstance, e.language, h.titleTrnKey, h.bodyEditKey) "; 
+    	oql += " from "+HelpTopic.class.getName()+" as h, "+Editor.class.getName()+" as e where ";
+    	oql += " h.bodyEditKey = e.editorKey ";
+    	if (siteId != null){
+    		oql += " and (h.siteId = :siteID) ";
+    	}
+    	if (moduleInstance != null){
+    		oql += " and (h.moduleInstance like :modInst) ";
+    	}
+    	if (langISOs != null){
+    		if (exclude){
+        		oql += " and (e.language not in (:langISOs)) ";
+    		}else{
+        		oql += " and (e.language in (:langISOs)) ";
+    		}
+    	}
+    	
+    	System.out.println(oql);//TODO remove
+    	System.out.println("siteId="+siteId+", module Instance="+moduleInstance+", langs="+langISOs.get(0));
+    	Session session = PersistenceManager.getRequestDBSession();
+    	Query query = session.createQuery(oql);
+    	
+    	if (siteId != null){
+    		query.setString("siteID", siteId);
+    	}
+    	if (moduleInstance != null){
+    		query.setString("modInst", moduleInstance);
+    	}
+    	if (langISOs != null){
+        	query.setParameterList("langISOs", langISOs);
+    	}
+    	
+    	List<HelpTopicHelper> result = (List<HelpTopicHelper>) query.list();
+
+    	System.out.println("HelpItems count="+result.size());//TODO remove
+    	return result;
+    }
+    
+    /**
+     * Removes all HTML tags leaving only text usable for Lucene.
+     * Any content inside HTML comment, head, script, style and other specific tags will be removed completely.
+     * For other tags only tag portions will be removed.
+     * Also multiple white spaces will be replaced with one space character.
+     * @param text text that contains HTML tags. can be null.
+     * @return text without tags, or null if parameter is null.
+     */
+	public static String stripOutHTML(String text) {
+		if (text == null) return null;
+		
+		String stripComments ="<!--(.|[\\n\\r])+?-->";
+		text = text.replaceAll(stripComments, " ");
+		
+		String stripClosedBadTags = "<(\\s+)?(link|br|hr|input|script|style|link|head|meta)(.|[\\n\\r])+?\\2(\\s+)?>";
+		text = text.replaceAll(stripClosedBadTags, " ");
+
+		String stripOpenedBadTags = "<(\\\\s+)?(link|br|hr|input|script|style|link|head|meta|img|!)(.|[\\\\n\\\\r])+?>";
+		text = text.replaceAll(stripOpenedBadTags, "");
+
+		String stripTagBegginings = "<(\\s+)?[a-z]+(:[a-z]+)?(.|[\\n\\r])+?>";
+		text = text.replaceAll(stripTagBegginings, " ");
+
+		String stripTagEndings = "</[a-z]+([0-9]+)?(:[a-z]+)?>";
+		text = text.replaceAll(stripTagEndings, " ");
+		
+		String multiSpaceChars = "\\s{2,}";
+		text = text.replaceAll(multiSpaceChars, " ");
+		
+		return text;
+	}
+
+	/**
+	 * Compares two {@link HelpTopicHelper} by its sort index field.
+	 * this field is also used by lucene to set score values.
+	 * @author Irakli Kobiashvili
+	 *
+	 */
+    public static class HelpTopicHelperScoreComparator implements Comparator<HelpTopicHelper>{
+		@Override
+		public int compare(HelpTopicHelper o1, HelpTopicHelper o2) {
+			Float f1 = o1.getSortIndex();
+			Float f2 = o2.getSortIndex();
+			if (f1!=null && f2 != null){
+				return f2.compareTo(f1);
+			}else if (f1 != null && f2 == null){
+				return -11;
+			} else if (f1 == null && f2 !=null){
+				return 1;
+			}
+			return 0;
+		}
+    }
+
+    /**
+     * Resolves key of {@link HelpTopicHelper} bean.
+     *
+     */
+    public static class HelpTopicHelperKeyResolver implements KeyResolver<Long, HelpTopicHelper>{
+		@Override
+		public Long resolveKey(HelpTopicHelper element) {
+			return element.getId();
+		}
+    }
+    
 }

@@ -22,18 +22,17 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.lucene.impl.org.LucOrganisationModule;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.help.util.HelpUtil;
 import org.digijava.module.translation.lucene.LucTranslationModule;
 
 /**
@@ -64,12 +63,12 @@ public class LuceneWorker {
     /**
      * Stores all modules by class name they work with.
      */
-	private static final Map<String, LucModule<?>> modulesByClass = new HashMap<String, LucModule<?>>();
-
-	static {
-		modulesByClass.put(Message.class.getName(), new LucTranslationModule());
-		modulesByClass.put(AmpOrganisation.class.getName(), new LucOrganisationModule());
-	}
+	private static Map<String, LucModule<?>> modulesByClass = null;//new HashMap<String, LucModule<?>>();
+	
+	/**
+	 * Seperates suffix from module name or key.
+	 */
+	private static final String SUFFIX_SEPARATOR = "_";
 	
 	/**
 	 * Is worker initialized or not.
@@ -92,11 +91,21 @@ public class LuceneWorker {
 			initLock.unlock();
 			throw new RuntimeException("LuceneWorker already initialized!");
 		}
-		checkAllModulesNames();
+		loadModules();
+		checkModuleIndexes(context);
+		initialized = true;
+		initLock.unlock();
+	}
+
+	/**
+	 * Checks each module index and rebuilds it if required.
+	 * @param context
+	 */
+	private static void checkModuleIndexes(ServletContext context) {
 		boolean rebuildAllIndexes = needToRebuilAllIndexes();
+		if (rebuildAllIndexes) logInfo(null,"Forced all indexes to rebuild");
 		Collection<LucModule<?>> modules = getAllKnownModules();
 		for (LucModule<?> module : modules) {
-			logger.info(module.getName()+": Checking index");
 			if (rebuildAllIndexes || needIndexRebuild(module, context)){
 				try {
 					recreateIndext(module, context);
@@ -105,50 +114,39 @@ public class LuceneWorker {
 				}
 				//Instead we can put modules in queue and create indexes later or in seperate thread.
 			}else{
-				logger.info(module.getName()+": Index ok.");
+				logInfo(module,"Index ok.");
 			}
 		}
-		initialized = true;
-		initLock.unlock();
+	}
+	
+	/**
+	 * Loads all lucene module implementations to map.
+	 * TODO module names should come from configuration or must be annotated
+	 */
+	private static void loadModules(){
+		if (modulesByClass != null) throw new RuntimeException("modules map already initialized");
+		modulesByClass = new HashMap<String, LucModule<?>>();
+		Map<String, LucModule<?>> modulesByKey = new HashMap<String, LucModule<?>>();
+		
+		List<LucModule<?>> modules = new ArrayList<LucModule<?>>();
+		//TRANSLATION
+		modules.addAll(TrnUtil.getLuceneModules());
+		//HELP
+		modules.addAll(HelpUtil.getLuceneModules());
+		//ORGANIZATION not used yet.
+		//modules.add(new LucOrganisationModule());
+
+		//Add all to map.
+		for (LucModule<?> lucModule : modules) {
+			String moduleKey = getModuleKey(lucModule);
+			LucModule<?> oldModule = modulesByKey.get(moduleKey);
+			if (oldModule!=null) throw new RuntimeException("Duplicate module key: "+moduleKey);
+			modulesByClass.put(moduleKey, lucModule);
+		}
 	}
 	
 	private static Collection<LucModule<?>> getAllKnownModules(){
 		return modulesByClass.values();
-	}
-
-	/**
-	 * Checks all known modules for duplicate names and suffixes.
-	 */
-	private static void checkAllModulesNames(){
-		Map<String, LucModule<?>> nameMap = new HashMap<String, LucModule<?>>();
-		Map<String, LucModule<?>> suffixMap = new HashMap<String, LucModule<?>>();
-		boolean problemFound=false;
-		Collection<LucModule<?>> modules = getAllKnownModules();
-		for (LucModule<?> module : modules) {
-			LucModule<?> otherModule = null;
-			
-			otherModule = nameMap.get(module.getName());
-			if (otherModule == null){
-				nameMap.put(module.getName(), module);
-			}else{
-				logger.error("Two modules have same name: "+module.getName());
-				problemFound = true;
-				break;
-			}
-			
-			otherModule = null;
-			otherModule = suffixMap.get(module.getDirSuffix());
-			if(otherModule == null){
-				suffixMap.put(module.getDirSuffix(), module);
-			}else{
-				logger.error("Modules with names "+module.getName()+" and "+ otherModule.getName()+" have same suffix: "+module.getDirSuffix());
-				problemFound = true;
-				break;
-			}
-		}
-		if (problemFound){
-			//TODO do some action! for example throw init error to stop deploy process.
-		}
 	}
 
 	/**
@@ -171,7 +169,7 @@ public class LuceneWorker {
 		String dir = getModuleDirPath(module, context);
 		boolean exists = IndexReader.indexExists(dir);
 		if(!exists){
-			logger.info(module.getName()+": Index directory missing. Need rebuild.");
+			logInfo(module,"Index directory missing. Need rebuild.");
 		}
 		return exists;
 	}
@@ -183,17 +181,22 @@ public class LuceneWorker {
 	 * @return
 	 */
 	private static String getModuleDirPath(LucModule<?> module, ServletContext context){
-		return context.getRealPath("/") + LUCENE_BASE_DIR + "/" + module.getDirSuffix();
+		String dir = context.getRealPath("/") + LUCENE_BASE_DIR + "/" + module.getName();
+		String subDir = module.getSuffix();
+		if (subDir !=null && !subDir.trim().equalsIgnoreCase("")){
+			dir += "/"+subDir;
+		}
+		return dir;
 	}
 	
 	/**
-	 * Creates path to stamp file of the module.
+	 * Returns path to stamp file of the module.
 	 * @param module
 	 * @param context
 	 * @return path to stamp file of the module.
 	 */
-	private static String getModuleStampPath(LucModule<?> module, ServletContext context){
-		return context.getRealPath("/") + LUCENE_BASE_DIR + "/" + module.getDirSuffix() + LUCENE_STAMP_EXT;
+	private static String getStampFilePath(LucModule<?> module, ServletContext context){
+		return context.getRealPath("/") + LUCENE_BASE_DIR + "/" + getModuleNameAndSuffix(module) + LUCENE_STAMP_EXT;
 	}
 	
 	/**
@@ -209,7 +212,7 @@ public class LuceneWorker {
 	private static boolean stampIsOk(LucModule<?> module, ServletContext context){
 		
 		boolean stampOK=true;
-		String stampFileName = getModuleStampPath(module, context);
+		String stampFileName = getStampFilePath(module, context);
 		long serialVersionUIDfromModule = module.getSerialVersionUID();
 
 		try {
@@ -218,10 +221,10 @@ public class LuceneWorker {
 			
 			if (!stampFile.exists()){
 				stampOK = false;
-				logger.warn(module.getName() + ": stamp file not found: need rebuild.");
+				logWarn(module,"Stamp file not found: need rebuild.");
 			}else if (!stampFile.canRead()){
 				stampOK = false;
-				logger.warn(module.getName() + ": stamp file is not readable: need rebuild.");
+				logWarn(module,"Stamp file is not readable: need rebuild.");
 				//at least lets try to delete and create file again cos it may be stupid file permissions.
 				//but usually we should not see this message in logs. 
 			}else{
@@ -234,15 +237,15 @@ public class LuceneWorker {
 				//Now compare serial version UIDs from module and file.	
 				if (serialVersionUIDfromModule != serialVersionUIDfromStamp){
 					stampOK = false;
-					logger.warn(module.getName() + ": Algorithm serial ID mismatch : need rebuild.");
+					logWarn(module,"Algorithm serial ID mismatch : need rebuild.");
 				}else{
 					//if code and file serial version UIDs are ok, then:
 					try {
 						//load stamp value from db and compare with value from file.
-						AmpLuceneIndexStamp stamp = LuceneUtil.getIdxStamp(module.getDirSuffix());
+						AmpLuceneIndexStamp stamp = LuceneUtil.getIdxStamp(getModuleNameAndSuffix(module));
 						if (stamp ==null || stamp.getStamp().longValue() != dbIdFromStamp){
 							stampOK = false;
-							logger.warn(module.getName() + ": DB timestamp mismatch: need rebuild.");
+							logWarn(module,"DB timestamp mismatch: need rebuild.");
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -253,7 +256,7 @@ public class LuceneWorker {
 			
 		} catch (IOException e) {
 			stampOK = false;
-			logger.warn(module.getName()+": cannot read from file. Need rebuild. Message: "+e.getMessage());
+			logWarn(module,"Cannot read from file. Need rebuild. Message: "+e.getMessage());
 		}
 		return stampOK;
 	}
@@ -269,26 +272,26 @@ public class LuceneWorker {
 		try {
 			String dir = getModuleDirPath(module, context);
 			LuceneUtil.deleteDirectory(dir);
-			logger.info(module.getName()+": Index directory deleted.");
+			logInfo(module,"Index directory deleted.");
 			Analyzer analyzer = module.getAnalyzer();
-			logger.info(module.getName()+": loading items to index...");
+			logInfo(module,"Loading items to index...");
 			List<E> items = module.getItemsToIndex();
 			long startTime = System.currentTimeMillis();
 			IndexWriter writer = new IndexWriter(dir, analyzer, true);
 			if (items!=null && items.size()>0){
-				logger.info(module.getName()+": creating index for "+items.size()+" items. This may take some time...");
+				logInfo(module,"Creating index for "+items.size()+" items. This may take some time...");
 				for (E item : items) {
 					Document doc = module.convertToDocument(item);
 					writer.addDocument(doc);
 				}
 			}else{
-				logger.info(module.getName()+": creating empty index.");
+				logInfo(module,"Creating empty index.");
 			}
 			writer.optimize();
 			writer.close();
 			long stopTime = System.currentTimeMillis();
 			long seconds = (stopTime - startTime)/1000;
-			logger.info(module.getName()+": index rebuild finished in "+seconds+" seconds.");
+			logInfo(module,"Index rebuild finished in "+seconds+" seconds.");
 			//recreate file and db stamps.
 			recreateFileStamp(module, context, module.getSerialVersionUID(), stopTime);
 			rectreateDbStamp(module, stopTime);
@@ -306,16 +309,16 @@ public class LuceneWorker {
 	 * @throws IOException 
 	 */
 	private static void recreateFileStamp(LucModule<?> module, ServletContext context, long serialVersionUID, long stopTimestamp) throws IOException{
-			String stampFilePath = getModuleStampPath(module, context);
+			String stampFilePath = getStampFilePath(module, context);
 			File stampFile = new File(stampFilePath);
 			if (stampFile.exists() && stampFile.delete()){
-				logger.info(module.getName()+": stamp file deleted.");
+				logInfo(module,"Stamp file deleted.");
 			}
 			DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(stampFile));
 			outputStream.writeLong(serialVersionUID);
 			outputStream.writeLong(stopTimestamp);
 			outputStream.close();
-			logger.info(module.getName()+": stamp file created.");
+			logInfo(module,"Stamp file created.");
 	}
 
 	/**
@@ -325,27 +328,92 @@ public class LuceneWorker {
 	 * @throws DgException 
 	 */
 	private static void rectreateDbStamp(LucModule<?> module, long stopTimestamp) throws DgException {
-		if (LuceneUtil.deleteIdxStamps(module.getDirSuffix())){
-			logger.info(module.getName()+": DB stamp deleted.");
+		String moduleFullName = getModuleNameAndSuffix(module);
+		if (LuceneUtil.deleteIdxStamps(moduleFullName)){
+			logInfo(module,"DB stamp deleted.");
 		}
-		LuceneUtil.createStamp(module.getDirSuffix(), stopTimestamp);
-		logger.info(module.getName()+": DB stamp created.");
+		LuceneUtil.createStamp(moduleFullName, stopTimestamp);
+		logInfo(module,"DB stamp created.");
 	}
 	
 	private static boolean needToRebuilAllIndexes(){
 		//TODO do some check like modules do.
 		return false;
 	}
+
+	/**
+	 * Forms module name including separator and suffix.
+	 * If suffix is null than only module name is retrned.
+	 * @param module
+	 * @return
+	 */
+	private static String getModuleNameAndSuffix(LucModule<?> module){
+		String name = module.getName();
+		String suffix = module.getSuffix();
+		if (suffix !=null && !suffix.trim().equalsIgnoreCase("")){
+			name += SUFFIX_SEPARATOR + suffix;
+		}
+		return name;
+	}
 	
 	/**
-	 * Returns module for class name.
+	 * Constructs module key from module.
+	 * Retrieves class and suffix from module.
 	 * @param <E>
-	 * @param className
+	 * @param module
+	 * @return
+	 */
+	private static <E> String getModuleKey(LucModule<E> module){
+		String className = module.getItemClass().getName();
+		String suffix = module.getSuffix();
+		if (suffix!=null){
+			className += SUFFIX_SEPARATOR + suffix;
+		}
+		return className;
+	}
+
+	/**
+	 * Constructs key for module from class name and suffix.
+	 * If suffix is null then only class name is used.
+	 * Used when we want to find module from some item written in index.
+	 * @param <E>
+	 * @param clazz
+	 * @param suffix
+	 * @return
+	 */
+	private static <E> String getModuleKey(Class<E> clazz, String suffix){
+		String className = clazz.getName();
+		if (suffix!=null){
+			className += SUFFIX_SEPARATOR + suffix;
+		}
+		return className;
+	}
+
+	/**
+	 * Retrieves module for clazz and suffix.
+	 * @param <E>
+	 * @param clazz
+	 * @param suffix
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private static <E> LucModule<E> getModuleFor(String className){
-		return (LucModule<E>)modulesByClass.get(className);
+	private static <E> LucModule<E> getModule(Class<E> clazz, String suffix){
+		LucModule<E> module = (LucModule<E>) modulesByClass.get(getModuleKey(clazz, suffix)); 
+		return module;
+	}
+	
+	/**
+	 * Retrieves module for item and suffix.
+	 * Used when we want to find module of one particular item by its class.
+	 * @param <E>
+	 * @param item
+	 * @param suffix
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private static <E> LucModule<E> getModule(E item, String suffix){
+		String key = getModuleKey(item.getClass(), suffix);
+		return (LucModule<E>) modulesByClass.get(key);
 	}
 	
 	/**
@@ -356,8 +424,21 @@ public class LuceneWorker {
 	 * @param context
 	 */
 	public static <E> void addItemToIndex(E item, ServletContext context) throws DgException{
+		addItemToIndex(item, context,null);
+	}
+
+	/**
+	 * Adds item to index.
+	 * Module to work with is determined from E class and suffix.
+	 * @param <E>
+	 * @param item
+	 * @param context
+	 * @param suffix
+	 * @throws DgException
+	 */
+	public static <E> void addItemToIndex(E item, ServletContext context, String suffix) throws DgException{
 		
-		LucModule<E> module = getModuleFor(item.getClass().getName());
+		LucModule<E> module = getModule(item, suffix);
 		
 		if (module!=null){
 			try {
@@ -373,7 +454,7 @@ public class LuceneWorker {
 			//TODO do something if we do not have indexes of
 		}
 	}
-	
+
 	/**
 	 * Deletes item from index.
 	 * Call this when removing entity from db which is also in index.
@@ -383,7 +464,20 @@ public class LuceneWorker {
 	 * @throws DgException
 	 */
 	public static <E> void deleteItemFromIndex(E item, ServletContext context) throws DgException{
-		LucModule<E> module = getModuleFor(item.getClass().getName());
+		deleteItemFromIndex(item, context, null);
+	}
+	
+	/**
+	 * Deletes item from index.
+	 * Item class and suffix value are used to determine index to work with.
+	 * @param <E>
+	 * @param item
+	 * @param context
+	 * @param suffix
+	 * @throws DgException
+	 */
+	public static <E> void deleteItemFromIndex(E item, ServletContext context, String suffix) throws DgException{
+		LucModule<E> module = getModule(item, suffix);
 		try {
 			if (module!=null){
 				String dir = getModuleDirPath(module, context);
@@ -399,25 +493,41 @@ public class LuceneWorker {
 	
 	/**
 	 * Search items in index.
-	 * Module is determined from class
+	 * Module (index to be searched) is determined from clazz parameter.
+	 * @param <E> 
+	 * @param clazz
+	 * @param textToSearch search term.
+	 * @param context
+	 * @return hits in index sorted by relevance
+	 * @throws DgException
+	 */
+	public static <E> Hits search(Class<E> clazz, String textToSearch, ServletContext context) throws DgException{
+		return search(clazz, textToSearch, context, null);
+	}
+
+	/**
+	 * Search items in index.
+	 * Module (index to be searched) is determined from clazz parameter and classNameSuffix.
+	 * Use classNameSuffix if you have separate indexes for same class.
 	 * @param <E>
 	 * @param clazz
 	 * @param textToSearch
 	 * @param context
+	 * @param classNameSuffix suffix for classes to separate them by some feature in different indexes. 
 	 * @return
 	 * @throws DgException
 	 */
-	public static <E> Hits search(Class<E> clazz, String textToSearch, ServletContext context) throws DgException{
+	public static <E> Hits search(Class<E> clazz, String textToSearch, ServletContext context, String suffix) throws DgException{
 		Hits hits = null;
 		try {
-			LucModule<E> module = getModuleFor(clazz.getName());
+			LucModule<E> module = getModule(clazz, suffix);
 			String dir = getModuleDirPath(module, context);
-			String searchFieldName = module.getSearchFieldName();
+			String[] searchFieldNames = module.getSearchFieldNames();
 			String searchText = textToSearch;
 			Analyzer analyzer = module.getAnalyzer();
 			IndexSearcher searcher = new IndexSearcher(dir);
-			QueryParser parser = new QueryParser(searchFieldName, analyzer);
-			Query query = parser.parse(searchText);
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(searchFieldNames, analyzer);
+			Query query = queryParser.parse(searchText);
 			hits = searcher.search(query);
 		} catch (IOException e1) {
 			throw new DgException("Cannot search index",e1);
@@ -426,10 +536,31 @@ public class LuceneWorker {
 		}
 		return hits;
 	}
-	
-	@SuppressWarnings("unchecked")
+
+	/**
+	 * Converts hits to list of beans of specified type.
+	 * @param <E> type of beans in result list. Also used to determine module.
+	 * @param hits
+	 * @param clazz
+	 * @return
+	 * @throws IOException
+	 */
 	public static <E> List<E> hitsToSortedList(Hits hits, Class<E> clazz) throws IOException{
-		LucModule<E> module = getModuleFor(clazz.getName());
+		return hitsToSortedList(hits, clazz, null);
+	}
+
+	/**
+	 * Converts hits to list of beans of specified type.
+	 * @param <E>
+	 * @param hits
+	 * @param clazz
+	 * @param suffix
+	 * @return
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E> List<E> hitsToSortedList(Hits hits, Class<E> clazz, String suffix) throws IOException{
+		LucModule<E> module = getModule(clazz,suffix);
 		List<E> items = null;
 		if (hits!=null && hits.length()>0){
 			items = new ArrayList<E>(hits.length());
@@ -442,5 +573,30 @@ public class LuceneWorker {
 		}
 		return items;
 	}
+	
+	private static void logWarn(LucModule<?> module, String message){
+		log(module,message, true);
+	}
+	
+	private static void logInfo(LucModule<?> module, String message){
+		log(module,message, false);
+	}
+	
+	private static void log(LucModule<?> module, String message, boolean warn){
+		String msg = "";
+		if (module!=null){
+			msg+= module.getName();
+			if (module.getSuffix()!=null){
+				msg += SUFFIX_SEPARATOR + module.getSuffix();
+			}
+		}
+		msg += ": " + message;
+		if (warn){
+			logger.info(msg);
+		}else {
+			logger.warn(msg);
+		}
+	}
+	
 	
 }

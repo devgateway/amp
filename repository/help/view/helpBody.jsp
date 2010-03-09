@@ -8,17 +8,18 @@
 
 <style type="text/css">
 
-.highlight {background-color:silver; }
+	.highlight {background-color:silver; }
 
+	.bodyFull { display : none; }
+	.bodyShort { display : block; }
 
 </style>
 
 <script type="text/javascript">
 
-function showBody(){
-$("#bodyShort").hide();
-$("#bodyFull").show();
-
+function showBody(title){
+	$(title).find("div.bodyShort").hide();
+	$(title).find("div.bodyFull").show();
 }
 </script>
 

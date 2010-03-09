@@ -259,12 +259,18 @@ public class MEIndicatorsUtil
             //create each type of value and assign to connection
 
             AmpIndicatorValue indValTarget = null;
+            AmpCategoryValue risk=null;
+            if(actInd.getRisk()!=0){
+                  risk=CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
+             }
             if (actInd.getTargetVal() != null) {
                 indValTarget = new AmpIndicatorValue();
                 indValTarget.setValueType(AmpIndicatorValue.TARGET);
                 indValTarget.setValue(new Double(actInd.getTargetVal()));
                 indValTarget.setComment(actInd.getTargetValComments());
-                indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+                indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate())); 
+                indValTarget.setRiskValue(risk);
+                indValTarget.setLogFrame(actInd.getIndicatorsCategory());
                 indValTarget.setIndicatorConnection(indConn);
                 indConn.getValues().add(indValTarget);
             }
@@ -275,6 +281,8 @@ public class MEIndicatorsUtil
                 indValBase.setValue(new Double(actInd.getBaseVal()));
                 indValBase.setComment(actInd.getBaseValComments());
                 indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+                indValBase.setRiskValue( risk);
+                indValBase.setLogFrame(actInd.getIndicatorsCategory());
                 indValBase.setIndicatorConnection(indConn);
                 indConn.getValues().add(indValBase);
             }
@@ -285,8 +293,22 @@ public class MEIndicatorsUtil
                 indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
                 indValRevised.setComment(actInd.getRevisedTargetValComments());
                 indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+                indValRevised.setRiskValue(risk);
+                indValRevised.setLogFrame(actInd.getIndicatorsCategory());
                 indValRevised.setIndicatorConnection(indConn);
                 indConn.getValues().add(indValRevised);
+            }
+
+            if (actInd.getCurrentVal() != null) {
+               AmpIndicatorValue indValCur = new AmpIndicatorValue();
+                indValCur.setValueType(AmpIndicatorValue.ACTUAL);
+                indValCur.setValue(new Double(actInd.getCurrentVal()));
+                indValCur.setComment(actInd.getCurrentValComments());
+                indValCur.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
+                indValCur.setRiskValue( risk);
+                indValCur.setLogFrame(actInd.getIndicatorsCategory());
+                indValCur.setIndicatorConnection(indConn);
+                indConn.getValues().add(indValCur);
             }
             // save connection with its new values.
             if (newIndicator) {

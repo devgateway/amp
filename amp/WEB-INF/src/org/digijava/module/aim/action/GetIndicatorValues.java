@@ -27,7 +27,7 @@ public class GetIndicatorValues extends Action {
 		UpdateIndicatorValuesForm uIndValForm = (UpdateIndicatorValuesForm) form;
 		Long indValId = new Long(-1);
 		String temp = request.getParameter("indValId");
-		if (temp != null) {
+		if (temp != null&&!temp.trim().equals("")) {
 			try {
 				indValId = new Long(Long.parseLong(temp));
 				if (uIndValForm.getIndicators() != null) {
@@ -44,6 +44,14 @@ public class GetIndicatorValues extends Action {
 							uIndValForm.setExpIndicatorId(actInd.getIndicatorId());
 							uIndValForm.setRevisedTargetVal(actInd.getRevisedTargetVal());
 							uIndValForm.setRevisedTargetValDate(actInd.getRevisedTargetValDate());
+                            uIndValForm.setRiskId(actInd.getRisk());
+                            if(actInd.getIndicatorsCategory()!=null){
+                                     uIndValForm.setLogFrameId(actInd.getIndicatorsCategory().getId());
+                            }
+                            uIndValForm.setCurrentVal(actInd.getCurrentVal());
+                            uIndValForm.setCurrValDate(actInd.getCurrentValDate());
+                            uIndValForm.setCurrValComments(actInd.getCurrentValComments());
+
 							//uIndValForm.setActivityId(actInd.getActivityId());
 							break;
 						}
@@ -54,7 +62,8 @@ public class GetIndicatorValues extends Action {
 				logger.error(nfe.getMessage());
 			}
 		} else {
-			uIndValForm.setExpIndicatorId(new Long(-1));
+			uIndValForm.setRiskId(0l);
+            uIndValForm.setLogFrameId(0l);
 		}
 		
 		return mapping.findForward("forward");

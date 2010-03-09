@@ -170,7 +170,7 @@ public class AMPStartupListener extends HttpServlet implements
 
 			// Lucene indexation
 			LuceneUtil.checkIndex(sce.getServletContext());
-			LuceneUtil.createHelp(sce.getServletContext());
+			//LuceneUtil.createHelp(sce.getServletContext());
 			//ampContext.setAttribute(Constants.LUCENE_INDEX, idx); //deprecated
 			LuceneWorker.init(sce.getServletContext());
 

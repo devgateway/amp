@@ -43,6 +43,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LucModule;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -52,6 +53,8 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.entity.PatcherMessageGroup;
+import org.digijava.module.translation.lucene.LangSupport;
+import org.digijava.module.translation.lucene.TrnLuceneModule;
 import org.digijava.module.translation.util.ListChangesBuffer;
 import org.digijava.module.translation.util.ListChangesBuffer.OperationFixer;
 import org.hibernate.HibernateException;
@@ -519,6 +522,20 @@ public class TrnUtil {
         return retVal;
     }
 
+    /**
+     * Returns modules for all supported languages including English.
+     * @see LangSupport
+     * @return
+     */
+    public static List<LucModule<?>> getLuceneModules(){
+    	List<LucModule<?>> modules = new ArrayList<LucModule<?>>();
+    	LangSupport[] langs = LangSupport.values();
+    	for (LangSupport lang : langs) {
+			modules.add(new TrnLuceneModule(lang));
+		}
+    	return modules;
+    }
+    
     /**
      * Returns messages for specified set of keys.
      * This is used when we need to load translations only by keys not looking at site_id and language.

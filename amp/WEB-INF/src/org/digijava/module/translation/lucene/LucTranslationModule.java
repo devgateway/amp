@@ -26,17 +26,18 @@ public class LucTranslationModule implements LucModule<Message> {
 	/**
 	 * PLEASE INCREMENT THIS VALUE EACH TIME CLASS IS CHANGED.
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID 		= 2L;
 //	public static final String ID_FIELD = "key";
-	public static final String FIELD_KEY = "trnKey";
-	public static final String FIELD_LANG = "trnLang";
-	public static final String FIELD_MESSAGE = "trnMessage";
+	public static final String MODULE_NAME 			= "translations";
+	public static final String FIELD_KEY 			= "trnKey";
+	public static final String FIELD_LANG 			= "trnLang";
+	public static final String FIELD_MESSAGE 		= "trnMessage";
 	
 	private boolean needIndexRebuild = false;
 
 	@Override
-	public String getDirSuffix() {
-		return "translation";
+	public String getSuffix() {
+		return null;
 	}
 
 	@Override
@@ -97,8 +98,9 @@ public class LucTranslationModule implements LucModule<Message> {
 	}
 
 	@Override
-	public String getSearchFieldName() {
-		return FIELD_MESSAGE;
+	public String[] getSearchFieldNames() {
+		String[] fieldNames = {FIELD_MESSAGE}; 
+		return fieldNames;
 	}
 
 	@Override
@@ -109,6 +111,11 @@ public class LucTranslationModule implements LucModule<Message> {
 		msg.setLocale(doc.get(FIELD_LANG));
 		msg.setMessage(doc.get(FIELD_MESSAGE));
 		return msg;
+	}
+
+	@Override
+	public Class<Message> getItemClass() {
+		return Message.class;
 	}
 
 	

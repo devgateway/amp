@@ -13,6 +13,10 @@
 
 <script language="JavaScript">
 
+<digi:context name="helpActionUrl" property="context/module/moduleinstance/helpActions.do" />
+
+
+
 function showHint(str,event){
 	
 if(event.keyCode != 13){
@@ -136,8 +140,9 @@ function search(){
 			"ý","%fd",
 			"þ","%fe",
 			"ÿ","%ff");
- 	
-	var urls="/help/helpActions.do?actionType=searchHelpTopic";
+
+ 	var actionUrl = '<%=helpActionUrl%>';
+	var urls = actionUrl + '?actionType=searchHelpTopicNew';
 	url=urls+"&key="+key;
 	
 	for( i=0; i<baseChars.length; i+=2){
@@ -173,14 +178,19 @@ function stChang(){
  {
 	
     document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.replace(/�/g,"&#233;");
-	document.getElementById("bodyhelp").style.border="1px solid #white";
+	//document.getElementById("bodyhelp").style.border="1px solid #white";
+	$('.resultTitle').click(function(){
+		showBody(this);
+	});
+	
   } 
 }
+
 function enter(event) {
 	if(event.keyCode == 13){
 		search();	
-		}
-	  }
+	}
+}
 
 </script>
 <style type="text/css">
@@ -189,7 +199,6 @@ function enter(event) {
 .whiteThing { background-color: #FFF;}
 
 </style>
-
 	<div id="content" class="yui-skin-sam" style="width: 100%;">
 	<div id="demo" class="yui-navset"
 		style="font-family: Arial, Helvetica, sans-serif;">

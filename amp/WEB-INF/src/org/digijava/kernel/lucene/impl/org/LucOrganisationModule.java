@@ -26,9 +26,9 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 	/**
 	 * PLEASE INCREMENT VALUE ECH TIME CLASS IS CHANGED. 
 	 */
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 4L;
 	
-	private static final String DIR_NAME = "organisation";
+	private static final String NAME = "Organisations";
 	private static final String FIELD_ID = "orgId";
 	private static final String FIELD_NAME = "orgName";
 
@@ -38,13 +38,13 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 	}
 
 	@Override
-	public String getDirSuffix() {
-		return DIR_NAME;
+	public String getSuffix() {
+		return null;
 	}
 
 	@Override
 	public String getName() {
-		return "Organiations";
+		return NAME;
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 	}
 
 	@Override
-	public String getSearchFieldName() {
+	public String[] getSearchFieldNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -97,6 +97,11 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 	public AmpOrganisation hitToItem(Hit hit) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Class<AmpOrganisation> getItemClass() {
+		return AmpOrganisation.class;
 	}
 
 }

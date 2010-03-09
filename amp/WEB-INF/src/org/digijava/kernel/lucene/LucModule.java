@@ -9,13 +9,27 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Hit;
+import org.digijava.kernel.lucene.impl.org.LucOrganisationModule;
+import org.digijava.module.help.lucene.LucHelpModule;
 
 /**
  * Lucene Module interface.
- * this was named module to make easy understand that 
- * each module in AMP (e.g. Help, translations) 
- * should have one implementations of this interface.
- * Otherwise it represents one separate Index in lucene.
+ * Each time we want to index something we have to implement this interface
+ * and register implementation with LuceneWorker. 
+ * Each implementation represents one separate Index in lucene.
+ * they should be stored in separate folders. Because of this each module returns
+ * its own name which is used as folder names.
+ * There are two types of beans that can be indexed:
+ * First type is simple one, only one index for them is required and all beans are stored there.
+ * Such module implementations may return null as suffix.
+ * Examples of such modules could be Organizations - {@link LucOrganisationModule}, Indicators and others. 
+ * When searching such indexes suffix parameters can be null or methods without this parameters can be used. 
+ * Second type of indexes require same types of beans be split in different indexes by some feature.
+ * For example translations should be split in separate indexes by language code.
+ * Help module {@link LucHelpModule} requires language code + module instance because there are two types of
+ * help content, one for user and other for admin and user should not be able to search admin help.
+ * For this reason modules of second type should return suffix values other then null to let LuceneWorker distinguish them.
+ * For example translatioins return language codes, like en, fr, sp so folders will look like translation_fr.
  * @author Irakli Kobiashvili
  *
  */
@@ -29,7 +43,7 @@ public interface LucModule<E> extends Serializable {
 	long getSerialVersionUID();
 	
 	/**
-	 * Returns unique name of the module.
+	 * Returns name of the module.
 	 * e.g. Translation, Help, Activity
 	 * @return name of the module.
 	 */
@@ -41,7 +55,9 @@ public interface LucModule<E> extends Serializable {
 	 * have problems with different FS.
 	 * @return name of the sub-folder for indexes.
 	 */
-	String getDirSuffix();
+	String getSuffix();
+	
+	Class<E> getItemClass();
 	
 	/**
 	 * Each module should return its own type of analyzer object.
@@ -86,7 +102,20 @@ public interface LucModule<E> extends Serializable {
 	 * this field should be created in {@link #convertToDocument(Object)} method and added to doc method produces.
 	 * @return search field name.
 	 */
-	String getSearchFieldName();
+//	String getSearchFieldName();
 	
+	/**
+	 * Module provide array of field names to be searched for.
+	 * @return
+	 */
+	String[] getSearchFieldNames();
+	
+	/**
+	 * Converts one hit object to one bean of type E.
+	 * This method knows how to read field values from hit and build from it object of E class.
+	 * @param hit lucene search result - one hit.
+	 * @return bean of E
+	 * @throws IOException
+	 */
 	E hitToItem(Hit hit) throws IOException;
 }

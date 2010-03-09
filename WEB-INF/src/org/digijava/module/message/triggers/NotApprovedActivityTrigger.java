@@ -27,8 +27,8 @@ public class NotApprovedActivityTrigger extends Trigger {
         Event e=new Event(NotApprovedActivityTrigger.class);
         AmpActivity act=(AmpActivity) source;
         e.getParameters().put(PARAM_NAME,act.getName());
-        if(act.getUpdatedBy()!=null){
-            e.getParameters().put(PARAM_SAVED_BY,act.getUpdatedBy());
+        if(act.getModifiedBy()!=null){
+            e.getParameters().put(PARAM_SAVED_BY,act.getModifiedBy());
         }else{
             e.getParameters().put(PARAM_SAVED_BY,act.getActivityCreator());
         }

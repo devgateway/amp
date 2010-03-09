@@ -513,7 +513,7 @@ function fnChk(frmContrl, f){
   </digi:trn>
   </c:set>
   
-  if (isNaN(frmContrl.value)) {
+  if (isNaN(frmContrl.value) || frmContrl.value<0 ) {
     alert("${errMsgAddSectorNumericValue}");
     frmContrl.value = "";
     //frmContrl.focus();

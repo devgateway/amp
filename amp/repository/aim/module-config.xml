@@ -150,6 +150,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpChapter</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpImputation</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRecipient</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpActivityAccess</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

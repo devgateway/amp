@@ -16,11 +16,10 @@
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td class="separator1" title="<digi:trn key="aim:AgencyImplementing">The organisation that directly implements the activity</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td><field:display name="Implementing Agency" feature="Implementing Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">

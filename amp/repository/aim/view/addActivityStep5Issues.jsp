@@ -76,14 +76,13 @@
 					<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 						<feature:display name="Issues" module="Issues">
 							<field:display name="Issues" feature="Issues">
-								<table width="95%" bgcolor="#f4f4f2">
+								<table width="100%" bgcolor="#f4f4f2">
 
 									<tr><td class="separator1" title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:issues">Issues</digi:trn>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="issues.issues">

@@ -18,11 +18,10 @@
 
 									
 									<tr><td class="separator1" title="<digi:trn key="aim:AgencyExecuting">The organization that receives the funds from the funding country/agency, and coordinates the project</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:executingAgency">Executing Agency</digi:trn>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td><field:display name="Executing Agency" feature="Executing Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">

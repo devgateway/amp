@@ -13,11 +13,10 @@
 
 				<digi:instance property="aimEditActivityForm" />
 									<tr><td class="separator1" title="<digi:trn key="aim:WebSource">Web links related to the project</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 									  	<digi:trn key="aim:webResource">Web resources</digi:trn>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										&nbsp;
+									<tr><td bgColor=#f4f4f2>&nbsp;
+										
 									</td></tr>									
 									<tr><td>
 										<field:display name="Add Web Resource Button" feature="Web Resources">

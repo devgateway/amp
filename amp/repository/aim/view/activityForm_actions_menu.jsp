@@ -18,33 +18,26 @@
 <c:set var="closeTitle">
 	<digi:trn>This button will take you back to My Desktop and will alert you if the changes to an activity have not been saved</digi:trn>
 </c:set>
-
-<table width="100%">
-	<tr>	
-		<td height="35" vAlign=center class="separator2">
-			<feature:display name="Logframe" module="Previews">
-				<field:display name="Logframe Preview Button" feature="Logframe" >
-					<a id="linkEditActivityMenu" onclick="previewLogFrameClicked()" title="${previewLogframeTitle}">
-						<digi:trn>Preview Logframe</digi:trn>&nbsp;|&nbsp;
-					</a>
-				</field:display>
-			</feature:display>
-			<feature:display name="Logframe" module="Previews">
-				<field:display name="Logframe Preview Button" feature="Logframe" >			
-					<a id="linkEditActivityMenu" onclick="previewClicked()">
-						<digi:trn>Preview</digi:trn>&nbsp;|&nbsp;
-					</a>
-				</field:display>
-			</feature:display>
-			<a id="linkEditActivityMenu" onclick="saveClicked()" title="${saveAndSubmitTitle}">
-				<digi:trn>Save and Submit</digi:trn>&nbsp;|&nbsp;
-			</a>
-			<field:display name="Draft" feature="Identification">
-				<a id="linkEditActivityMenu" onclick="saveAsDraftClicked()" title="${saveAsDraftTitle}">
-					<digi:trn>Save as Draft</digi:trn>&nbsp;|&nbsp;
-				</a>
-			</field:display>
-			<a id="linkEditActivityMenu" onclick="closeClicked()" title="${closeTitle}"><digi:trn>Close</digi:trn></a>
-		</td>
-	</tr>
-</table>
+<div style="width:100%;text-align:center;">
+    <feature:display name="Logframe" module="Previews">
+        <field:display name="Logframe Preview Button" feature="Logframe" >
+            <a onclick="previewLogFrameClicked()" title="${previewLogframeTitle}" style="cursor:pointer;">
+                <img src="/TEMPLATE/ampTemplate/imagesSource/common/preview_logframe.png" alt="<digi:trn>Preview Logframe</digi:trn>">
+            </a>
+        </field:display>
+    </feature:display>
+    <a onclick="previewClicked()" title="${previewTitle}" style="cursor:pointer;">
+        <img src="/TEMPLATE/ampTemplate/imagesSource/common/preview.png" alt="<digi:trn>Preview</digi:trn>">
+    </a>
+    <a onclick="saveClicked()" title="${saveAndSubmitTitle}" style="cursor:pointer;">
+        <img src="/TEMPLATE/ampTemplate/imagesSource/common/save_22.png" alt="<digi:trn>Save and Submit</digi:trn>">
+    </a>
+    <field:display name="Draft" feature="Identification">
+        <a onclick="saveAsDraftClicked()" title="${saveAsDraftTitle}" style="cursor:pointer;">
+            <img src="/TEMPLATE/ampTemplate/imagesSource/common/savedraft_22.png" alt="<digi:trn>Save as Draft</digi:trn>">
+        </a>
+    </field:display>
+    <a onclick="closeClicked()" title="${closeTitle}" style="cursor:pointer;">
+        <img src="/TEMPLATE/ampTemplate/imagesSource/common/close.gif" alt="<digi:trn>Close</digi:trn>">
+    </a>
+</div>

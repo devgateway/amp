@@ -16,11 +16,10 @@
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td class="separator1" title="<digi:trn key="aim:ContractingAgency">The third party outside of the implementing agency</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn>
 									</td></tr>
-									<tr><td >
-										&nbsp;
+									<tr><td >&nbsp;
+										
 									</td></tr>
 									<tr><td><field:display name="Contracting Agency" feature="Contracting Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">

@@ -21,8 +21,8 @@
 											<digi:trn key="aim:customfields:step_name:${stepNumber}"><c:out value="${step.name}"/></digi:trn>
 										</b>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>

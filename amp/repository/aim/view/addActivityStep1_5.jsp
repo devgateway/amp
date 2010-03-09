@@ -180,10 +180,7 @@ ${fn:replace(message,quote,escapedQuote)}
 					</table>
 				</td></tr>
 				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
+					<table width="100%" cellSpacing="1" cellPadding="4" vAlign="top">
 						<tr>
 							<td height="16" vAlign="center" width="100%"><span class="subtitle-blue">
 								<c:if test="${aimEditActivityForm.editAct == false}">
@@ -208,13 +205,12 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
 
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="100%" bgcolor="#f4f4f2" border=0>
 									<feature:display name="Identification" module="Project ID and Planning">
 									&nbsp;
 									</feature:display>
 									<tr>
 										<td class="separator1">
-											<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 											<digi:trn key="aim:editActivity:references">References</digi:trn>
 										</td>
 									</tr>
@@ -262,11 +258,11 @@ ${fn:replace(message,quote,escapedQuote)}
 										</td>
 									</tr>
 
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 

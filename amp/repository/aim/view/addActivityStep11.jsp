@@ -229,10 +229,7 @@ ${fn:replace(message,quote,escapedQuote)}
 								</table>
 							</td></tr>
 							<tr><td>
-								<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-							</td></tr>
-							<tr><td>
-								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
+								<table width="100%" cellSpacing="1" cellPadding="4" vAlign="top">
 									<tr>
 										<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
 											<c:if test="${aimEditActivityForm.editAct == false}">
@@ -263,11 +260,9 @@ ${fn:replace(message,quote,escapedQuote)}
 													bgcolor="#006699">
 													<tr>
 															<td bgColor=#f4f4f2 align="center" vAlign="top">
-																<table width="95%">
+																<table width="100%">
 																	<tr>
 																		<td class="separator1" title="<digi:trn key="aim:costing">Costing</digi:trn>">
-																			<IMG alt=Link height=10
-																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																			<digi:trn key="aim:costing">Costing</digi:trn>
 																		</td>
 																	</tr>
@@ -286,8 +281,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</td></tr>
 
 
-																	<tr><td>
-																	&nbsp;
+																	<tr><td>&nbsp;
+																	
 																	</td></tr>
 																	<tr><td>
 																	
@@ -346,8 +341,8 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 								</table>
 							</td></tr>
-							<tr><td>
-								&nbsp;
+							<tr><td>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>

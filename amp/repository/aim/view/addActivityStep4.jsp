@@ -269,9 +269,6 @@ ${fn:replace(message,quote,escapedQuote)}
 								</table>
 							</td></tr>
 							<tr><td>
-								<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-							</td></tr>
-							<tr><td>
 								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 									<tr>
 										<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -304,7 +301,6 @@ ${fn:replace(message,quote,escapedQuote)}
 																<table width="95%" bgcolor="#f4f4f2">
 																	<tr>
 																		<td class="separator1" title="<digi:trn key="aim:regionalFunding">Regional funding</digi:trn>">
-																			<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 																			<digi:trn key="aim:regionalFunding">Regional funding</digi:trn>
 																		</td>
 																	</tr>
@@ -628,8 +624,8 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 								</table>
 							</td></tr>
-							<tr><td>
-								&nbsp;
+							<tr><td>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>

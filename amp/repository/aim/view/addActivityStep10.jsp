@@ -363,10 +363,7 @@ ${fn:replace(message,quote,escapedQuote)}
 					</table>
 				</td></tr>
 				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
+					<table width="100%" cellSpacing="1" cellPadding="4" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
@@ -389,9 +386,8 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="100%" bgcolor="#f4f4f2" border=0>
 									<tr><td class="separator1" title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn>
 									</td></tr>
 									<tr><td>
@@ -718,8 +714,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											</logic:iterate>
 											</logic:notEmpty>
 											<tr>
-												<td width="32%" align="center" colspan="6">
-													&nbsp;
+												<td width="32%" align="center" colspan="6">&nbsp;
+													
 												</td>
 											</tr>
 											<field:display name="Add Indicator Button" feature="Activity">
@@ -730,14 +726,14 @@ ${fn:replace(message,quote,escapedQuote)}
 											</tr>
 											</field:display>
 											<tr>
-												<td width="32%" align="center" colspan="6">
-													&nbsp;
+												<td width="32%" align="center" colspan="6">&nbsp;
+													
 												</td>
 											</tr>
 										</table>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										&nbsp;
+									<tr><td bgColor=#f4f4f2>&nbsp;
+										
 									</td></tr>
 <%--
 									<tr><td bgColor=#f4f4f2 align="center">
@@ -772,8 +768,8 @@ ${fn:replace(message,quote,escapedQuote)}
 						</td></tr>
 					</table>
 				</td></tr>
-				<tr><td>
-					&nbsp;
+				<tr><td>&nbsp;
+					
 				</td></tr>
 			</table>
 		</td>

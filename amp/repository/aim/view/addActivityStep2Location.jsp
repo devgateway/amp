@@ -35,10 +35,9 @@
 	<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#f4f4f2">
         <tr>
             <td bgColor=#f4f4f2 align="center" vAlign="top"><!-- contents -->
-                <table width="95%" bgcolor="#f4f4f2">
+                <table width="100%" bgcolor="#f4f4f2">
                     <tr>
                         <td class="separator1">
-                        	<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15 />
                            	<digi:trn key="aim:location">
                            	Location
                            	</digi:trn>

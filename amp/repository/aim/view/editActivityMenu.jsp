@@ -238,15 +238,15 @@ var draftStatus=document.getElementById("draftFlag");
 <!-- To avoid step numbering bug in the future please change getSteps() method
 of ActivityUtil class also when change step visibility module/feature name -->
 <div id="scrollingDiv" style="top: 193px;">
-<table width="300" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=1 bordercolor="D2E1FF">
+<table width="200" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f2f2f2" style="border:1px solid gray;text-transform:capitalize">
 	<tr>
-		<td align="center" class="editActivityMenuTitle">
+		<td align="center" class="editActivityMenuTitle" height="20">
 			<digi:trn>Activity Sections</digi:trn>
 		</td>
 	</tr>
 	<tr>
 		<td>			
-			<table border=0 width="300" cellSpacing=4 cellPadding=2 vAlign="top" align="left">				
+			<table border=0 width="100%" cellSpacing=0 cellPadding=4 vAlign="top" align="left">				
 				<feature:display name="Identification" module="Project ID and Planning">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 1}">
@@ -261,7 +261,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 1}">
-					<td bgcolor="#0202F0" nowrap="nowrap">
+					<td bgcolor="#376091" nowrap="nowrap">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
 								<td height="19">
@@ -290,10 +290,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 1}">
-					<td nowrap="nowrap">
+					<td bgcolor="#376091" nowrap="nowrap">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19" nowrap="nowrap">
+								<td height="19" nowrap="nowrap">
 									<span class="textalb">
 										<digi:trn key="aim:planning">
 										Planning</digi:trn>
@@ -318,10 +318,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == '1_5'}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
 							<tr>
-								<td bgcolor="#0202F0" height="19" nowrap="nowrap">
+								<td height="19" nowrap="nowrap">
 									<span class="textalb">
 										<digi:trn key="aim:editMenu:References">References</digi:trn>
 									</span>
@@ -346,10 +346,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 2}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td height="19">
 									<span class="textalb">
 										<digi:trn key="aim:location">
 											Location</digi:trn>
@@ -375,10 +375,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 2}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:sectors">
 							Sectors</digi:trn>
@@ -404,10 +404,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 2}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19" nowrap="nowrap">
+								<td bgcolor="#376091" height="19" nowrap="nowrap">
 						<span class="textalb">
 							<digi:trn key="aim:program">
 							Program</digi:trn>
@@ -434,10 +434,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 3}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:funding">
 							Funding</digi:trn>
@@ -463,10 +463,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 5}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:components">
 							Components</digi:trn>
@@ -492,10 +492,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 5}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 									<span class="textalb">
 										<digi:trn key="aim:issues">
 										Issues</digi:trn>
@@ -521,10 +521,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 6}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:relatedDocuments">
 							Related Documents</digi:trn>
@@ -550,10 +550,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 7}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:relatedOrgs">
 							Related Organizations</digi:trn>
@@ -579,10 +579,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 8}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:contactInformation">
 							Contact Information</digi:trn>
@@ -608,10 +608,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 			        </c:if>
 			        
 			        <c:if test="${aimEditActivityForm.step == 17}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 										<span class="textalb">
 											<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
 										</span>
@@ -638,10 +638,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 			
 					<c:if test="${aimEditActivityForm.step == 10}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 										<span class="textalb">
 											<digi:trn key="aim:MandE">
 												M & E
@@ -669,11 +669,11 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 11}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
 
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:costing">Costing</digi:trn>
 						</span>
@@ -700,10 +700,10 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 13}">
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" bgcolor="#376091">
 						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 							<tr>
-								<td bgcolor="#0202F0" height="19">
+								<td bgcolor="#376091" height="19">
 						<span class="textalb">
 							<digi:trn key="aim:ipacontracting">IPA Contracting</digi:trn>
 						</span>
@@ -718,6 +718,9 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					<td align="center">
 					</td>
 				</tr>
+				<tr><td>
+					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
+				</td></tr>
 <!--				<feature:display name="Logframe" module="Previews">-->
 <!--					<field:display name="Logframe Preview Button" feature="Logframe" >-->
 <!--						<tr>-->

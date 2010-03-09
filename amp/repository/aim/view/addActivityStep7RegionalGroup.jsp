@@ -14,11 +14,10 @@
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td class="separator1" title="<digi:trn key="aim:RegionalGroupTitle">The Regional Group</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:RegionalGroup">Regional Group</digi:trn>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td><field:display name="Regional Group" feature="Regional Group">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">

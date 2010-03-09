@@ -13,11 +13,10 @@
 
 <digi:instance property="aimEditActivityForm" />
 								<tr><td class="separator1" title="<digi:trn key="aim:OrganisationResponsible">The responsible Organization</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>	
 																
 									<field:display name="Responsible Organization" feature="Responsible Organization">

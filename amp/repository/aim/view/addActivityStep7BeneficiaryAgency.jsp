@@ -14,11 +14,10 @@
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td class="separator1" title="<digi:trn key="aim:BeneficiaryAgency">The organisation that benefits from the activity</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn>
 									</td></tr>
-									<tr><td >
-										&nbsp;
+									<tr><td >&nbsp;
+										
 									</td></tr>
 									<tr><td>
 								<field:display name="Beneficiary Agency" feature="Beneficiary Agency">

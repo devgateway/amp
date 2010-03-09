@@ -704,9 +704,6 @@
 					</table>
 				</td></tr>
 				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
-				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -1139,8 +1136,8 @@
 	                               </logic:notEmpty>
 								  <!-- end contents -->
 								</td></tr>
-                                <tr><td>
-                                    &nbsp;
+                                <tr><td>&nbsp;
+                                    
                                 </td></tr>
 						</table>
 						</td>

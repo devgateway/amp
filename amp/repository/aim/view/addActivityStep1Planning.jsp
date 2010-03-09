@@ -21,11 +21,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td class="separator1">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:planning">Planning</digi:trn>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>

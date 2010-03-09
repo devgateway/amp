@@ -461,9 +461,6 @@ ${fn:replace(message,quote,escapedQuote)}
 
 				</td></tr>
 				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
-				<tr><td>
 
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 
@@ -518,26 +515,26 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 							</feature:display>
 
-									<tr><td>
+									<tr><td>&nbsp;
 
-										&nbsp;
+										
 
 									</td></tr>
 							<feature:display name="Web Resources" module="Document">
 
 							<jsp:include page="addActivityStep6WebResources.jsp"/>
 							</feature:display>
-									<tr><td bgColor=#f4f4f2>
+									<tr><td bgColor=#f4f4f2>&nbsp;
 
-										&nbsp;
+										
 
 									</td></tr>
 
 									<!-- Managed Documents -->
 										<jsp:include page="addActivityStep6ManagedDocuments.jsp"/>
-									<tr><td>
+									<tr><td>&nbsp;
 
-										&nbsp;
+										
 
 									</td></tr>
 									<module:display name="Document" parentModule="PROJECT MANAGEMENT">
@@ -643,9 +640,9 @@ ${fn:replace(message,quote,escapedQuote)}
 
 				</td></tr>
 
-				<tr><td>
+				<tr><td>&nbsp;
 
-					&nbsp;
+					
 
 				</td></tr>
 

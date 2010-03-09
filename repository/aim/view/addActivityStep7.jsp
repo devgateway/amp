@@ -223,9 +223,6 @@ function isOrganisationSelectedForDeletion(val) {
 					</table>
 				</td></tr>
 				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
-				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -251,26 +248,26 @@ function isOrganisationSelectedForDeletion(val) {
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left">
 							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<table width="95%" bgcolor="#f4f4f2">
+								<table width="100%" bgcolor="#f4f4f2">
 									<feature:display name="Responsible Organization" module="Organizations">
 										<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
 									</feature:display>
 		
-											<tr><td>
-												&nbsp;
+											<tr><td>&nbsp;
+												
 											</td></tr>
 									<feature:display name="Executing Agency" module="Organizations">
 									<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
 									</feature:display>
 	
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<feature:display name="Implementing Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ImplementingAgency.jsp"/>
 									</feature:display>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 
 
@@ -318,8 +315,8 @@ function isOrganisationSelectedForDeletion(val) {
 						</td></tr>
 					</table>
 				</td></tr>
-				<tr><td>
-					&nbsp;
+				<tr><td>&nbsp;
+					
 				</td></tr>
 			</table>
 		</td>

@@ -6,7 +6,7 @@ a
 
 a:link 
 {
-	color: #0000FF;
+	color: #27415F;
 	font-weight: bold
 }
 
@@ -19,8 +19,9 @@ a:link
 {
 	color: #FFFFFF;
 	font-weight: bold;
-	background-color: #000279;
-	font-size: 14px
+	background-color: #27415F;
+	font-size: 14px;
+	padding-left:8px;
 }
 
 .separator2
@@ -37,13 +38,13 @@ a:link
 }
 
 .editActivityMenuTitle {
-	background-color: #BCD4F6;
+	background-color: #dbe5f1;
 	font-size: 14px;
 	color:#000000;
-	font-weight: bold
+	font-weight: bold;
 }
 
 #menuElement {
 	text-decoration: none;
-	font-size: 12px
+	font-size: 8pt;
 }

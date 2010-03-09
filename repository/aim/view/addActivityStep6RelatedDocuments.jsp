@@ -12,13 +12,12 @@
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <digi:instance property="aimEditActivityForm" />
-								<table width="95%" bgcolor="#f4f4f2">
+								<table width="100%" bgcolor="#f4f4f2">
 									<tr><td class="separator1" title="<digi:trn key="aim:DocumentsRelated">Document related to the project</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:relatedDocuments">Related Documents</digi:trn>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										&nbsp;
+									<tr><td bgColor=#f4f4f2>&nbsp;
+										
 									</td></tr>
 									
 									<feature:display name="Related Documents" module="Document"></feature:display>

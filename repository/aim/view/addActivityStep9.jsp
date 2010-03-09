@@ -248,9 +248,6 @@ ${fn:replace(message,quote,escapedQuote)}
 					</table>
 				</td></tr>
 				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
-				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -649,8 +646,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											</logic:notEmpty>
 										</table>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										&nbsp;
+									<tr><td bgColor=#f4f4f2>&nbsp;
+										
 									</td></tr>
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
@@ -692,8 +689,8 @@ ${fn:replace(message,quote,escapedQuote)}
 						</td></tr>
 					</table>
 				</td></tr>
-				<tr><td>
-					&nbsp;
+				<tr><td>&nbsp;
+					
 				</td></tr>
 			</table>
 		</td>

@@ -41,7 +41,6 @@ function edit(key,fieldName) {
                                     
                                       <tr>
                                         <td>
-                                          <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15 />
                                           <a title="<digi:trn key="aim:crossCuttingIssuesTitle">Cross Cutting Issues</digi:trn>">
                                           <b>
                                             <digi:trn>Cross Cutting Issues</digi:trn>

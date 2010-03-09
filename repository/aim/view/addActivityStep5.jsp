@@ -660,9 +660,6 @@ function removeSelComponents() {
                     </table>
                   </td>
                 </tr>
-				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
                 <tr>
                   <td>
                     <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -722,7 +719,7 @@ function removeSelComponents() {
 								</td></tr>
 									
 									<tr>
-										<td bgColor=#f4f4f2> &nbsp;</td>
+										<td bgColor=#f4f4f2>&nbsp; </td>
 									</tr>
 <!--
 

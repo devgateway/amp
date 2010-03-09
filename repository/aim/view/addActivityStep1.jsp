@@ -494,18 +494,17 @@ ${fn:replace(message,quote,escapedQuote)}
 					</table>
 				</td></tr>
 				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
+					<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top">
 						<tr>
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+							<td height=16 vAlign=center width="100%">
+                            <span class="subtitle-blue">
 								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
+                            </span>
 							</td>
 						</tr>
 					</table>
@@ -524,17 +523,15 @@ ${fn:replace(message,quote,escapedQuote)}
 						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
 							<tr><td bgcolor="#f4f4f2" width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+							<tr><td bgColor="#ffffff" align="center" vAlign="top">
 								<!-- contents -->
 
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="100%" border=0>
 									<feature:display name="Identification" module="Project ID and Planning">
 									&nbsp;
 									</feature:display>
 									<tr><td class="separator1">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:identification">Identification</digi:trn>
-
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									

@@ -18,9 +18,8 @@
 <%@page import="org.digijava.module.aim.form.ActivityForm"%><digi:instance property="aimEditActivityForm"/>
 
 
-								<table width="95%" bgcolor="#f4f4f2">
+								<table width="100%" bgcolor="#f4f4f2">
 									<tr><td class="separator1" title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
 										<digi:trn key="aim:components">Components</digi:trn>
 									</td></tr>
 									<tr><td>&nbsp;

@@ -402,9 +402,6 @@ ${fn:replace(message,quote,escapedQuote)}
 						</tr>
 					</table>
 				</td></tr>
-				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
                 <tr>
                   <td>
                     <table width="100%" cellSpacing="1" cellPadding="1" valign="top">
@@ -445,7 +442,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	                             	  	<feature:display name="Funding Overview" module="Funding">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0">
                                           <tr>
-                                            <td class="separator1" title="<digi:trn>Funding Overview (To Date)</digi:trn>">&nbsp;
+                                            <td class="separator1" title="<digi:trn>Funding Overview (To Date)</digi:trn>">
                                               <digi:trn>Funding Overview (To Date)</digi:trn>
                                             </td>
                                           </tr>
@@ -508,7 +505,7 @@ ${fn:replace(message,quote,escapedQuote)}
                              	  	<feature:display name="Proposed Project Cost" module="Funding">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0">
                                           <tr>
-                                            <td class="separator1">&nbsp;
+                                            <td class="separator1">
                                               <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
 											  <img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" hspace="5" title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>"/>
                                             </td>
@@ -604,7 +601,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                         <table width="100%" bgcolor="#f4f4f2">
                                             <tr>
                                                 <td class="separator1" title="<digi:trn key="aim:regionalFunding">Regional funding</digi:trn>">
-                                                    &nbsp;&nbsp;<digi:trn key="aim:regionalFunding">Regional funding</digi:trn>
+                                                    <digi:trn key="aim:regionalFunding">Regional funding</digi:trn>
                                                 </td>
                                             </tr>
                                             <tr><td>
@@ -804,7 +801,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                       
                                       <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0" >
                                         <tr>
-                                          <td class="separator1">&nbsp;
+                                          <td class="separator1">
 											<digi:trn>Organization Funding</digi:trn>
 										    <img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" hspace="5" title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>"/>
                                           </td>

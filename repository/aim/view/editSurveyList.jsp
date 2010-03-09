@@ -150,18 +150,20 @@
 						</tr>
 					</table>
 				</td></tr>
-				<tr><td colspan="2">
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height="16" vAlign="center" width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
-									<digi:trn>Add New Activity</digi:trn>
+									<digi:trn key="aim:addNewActivity">
+										Add New Activity
+									</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn>Edit Activity</digi:trn>
+									<digi:trn key="aim:editActivity">
+										Edit Activity
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>

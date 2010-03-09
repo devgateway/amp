@@ -34,7 +34,6 @@
         <table width="100%" bgcolor="#f4f4f2">
             <tr>
                 <td class="separator1">
-                    <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15 />
 					<digi:trn key="aim:sector">Sector</digi:trn>
                     <a href="javascript:popupwin()">
                         <img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
@@ -47,8 +46,8 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    &nbsp;
+                <td>&nbsp;
+                    
                 </td>
             </tr>
             <tr>

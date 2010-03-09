@@ -589,7 +589,7 @@ function remProgram(programType) {
 			}
 		}		
 }
--->
+'--> 
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -658,8 +658,8 @@ function remProgram(programType) {
       <td width="100%" vAlign="top" align="left" class=r-dotted-lg>
         <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
           <tr>
-            <td class=r-dotted-lg width="10">
-            &nbsp;
+            <td class=r-dotted-lg width="10">&nbsp;
+            
             </td>
             <td align=left vAlign=top>
               <table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
@@ -785,12 +785,9 @@ function remProgram(programType) {
                     </table>
                   </td>
                 </tr>
-				<tr><td>
-					<jsp:include page="/repository/aim/view/activityForm_actions_menu.jsp" />
-				</td></tr>
                 <tr>
                   <td>
-                    <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
+                    <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top">
                       <tr>
                         <td height=16 vAlign=center width="100%">
                           <span class=subtitle-blue>
@@ -836,7 +833,7 @@ function remProgram(programType) {
                   <td>
                     <table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
                       <tr>
-                        <td width="75%" vAlign="top">
+                        <td width="100%" vAlign="top">
                           <table cellPadding=0 cellSpacing=0 width="100%">
                           	<tr>
                           		<td>
@@ -850,29 +847,29 @@ function remProgram(programType) {
 			                              </tr>
 			                            </feature:display>
 			                            <tr>
-			                              <td>
-			                              &nbsp;
+			                              <td>&nbsp;
+			                              
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Sectors" module="Project ID and Planning">
 			                            	<jsp:include page="addActivityStep2Sector.jsp"/>
 										</feature:display>
 			                            <tr>
-			                              <td>
-			                              &nbsp;
+			                              <td>&nbsp;
+			                              
 			                              </td>
 			                            </tr>                            
 			                            <tr>
-			                              <td>
-			                              &nbsp;
+			                              <td>&nbsp;
+			                              
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Program" module="Program">
 			                              <jsp:include page="addActivityStep2Program.jsp"/>
 			                            </feature:display>
 			                            <tr>
-			                              <td>
-			                              &nbsp;
+			                              <td>&nbsp;
+			                              
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues">
@@ -885,8 +882,8 @@ function remProgram(programType) {
 
 										<feature:display name="Step2" module="Custom Fields">
 				                            <tr>
-				                              <td>
-				                              &nbsp;
+				                              <td>&nbsp;
+				                              
 				                              </td>
 				                            </tr>			                            
 			                            	<tr>
@@ -952,8 +949,8 @@ function remProgram(programType) {
       </td>
     </tr>
     <tr>
-      <td>
-      &nbsp;
+      <td>&nbsp;
+      
       </td>
     </tr>
   </table>

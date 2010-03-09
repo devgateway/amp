@@ -2511,8 +2511,7 @@ function collapseAll() {
                                                                                             <td>&nbsp;
                                                                                             </td>
                                                                                             <td>
-                                                                                            
-                                                                                             <logic:notEmpty name="funding" property="fundingDetails">
+                                                                                            <logic:notEmpty name="aimEditActivityForm" property="funding.fundingDetails">
 										                                                           <table width="100%">
 																								    <tr>
 																										<td><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></td>
@@ -2548,7 +2547,6 @@ function collapseAll() {
 											                                                           </c:forEach>
 										                                                           </table>
 										                                                       </logic:notEmpty>
-                                                                                            
                                                                                             </td>		
                                                                                         </tr>
                                                                                     </table>

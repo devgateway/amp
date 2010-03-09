@@ -37,8 +37,12 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -970,6 +974,445 @@ public class ExportActivityToPDF extends Action {
 			 * Costing
 			 */
 			buildCostingPart(request, actId, mainLayout);
+			/**
+			 * Build IPA contracting
+			 */
+			PdfPCell ipaContract1=new PdfPCell();
+			ipaContract1.setBorder(0);
+			ipaContract1.setBackgroundColor(new Color(244,244,242));
+			Paragraph ipaContractP=new Paragraph(TranslatorWorker.translateText("IPA Contracting", locale, siteId),titleFont);
+			ipaContractP.setAlignment(Element.ALIGN_RIGHT);
+			ipaContract1.addElement(ipaContractP);
+			mainLayout.addCell(ipaContract1);
+			
+			PdfPCell ipaContracting2=new PdfPCell();
+			ipaContracting2.setBorder(1);
+			//inner table with two cells 
+			PdfPTable ipaInnerTable=new PdfPTable(2);			
+			if(myForm.getContracts().getContracts()!=null){
+				for (IPAContract contract : (List<IPAContract>)myForm.getContracts().getContracts()) {
+					//name
+					PdfPCell contractName1=new PdfPCell();
+					contractName1.setBorder(1);
+					Paragraph contractNameP=new Paragraph(TranslatorWorker.translateText("Contract Name", locale, siteId)+":",titleFont);
+					contractName1.addElement(contractNameP);
+					ipaInnerTable.addCell(contractName1);
+					
+					PdfPCell contractName2=new PdfPCell();
+					contractName2.setBorder(1);
+					Paragraph createdBy2P=new Paragraph(contract.getContractName(),plainFont);
+					contractName2.addElement(createdBy2P);
+					ipaInnerTable.addCell(contractName2);
+					
+					//description
+					PdfPCell description1=new PdfPCell();
+					description1.setBorder(0);
+					Paragraph descriptionP=new Paragraph(TranslatorWorker.translateText("Description", locale, siteId)+":",titleFont);
+					description1.addElement(descriptionP);
+					ipaInnerTable.addCell(description1);
+					
+					PdfPCell description2=new PdfPCell();
+					description2.setBorder(0);
+					description2.addElement(new Paragraph(contract.getDescription(),plainFont));
+					ipaInnerTable.addCell(description2);
+					
+					//activity category
+					PdfPCell actCategory1=new PdfPCell();
+					actCategory1.setBorder(0);
+					Paragraph actCatP=new Paragraph(TranslatorWorker.translateText("Activity Category", locale, siteId)+":",titleFont);
+					actCategory1.addElement(actCatP);
+					ipaInnerTable.addCell(actCategory1);
+					
+					PdfPCell actCategory2=new PdfPCell();
+					actCategory2.setBorder(0);
+					actCategory2.addElement(new Paragraph(contract.getActivityCategory()!=null?contract.getActivityCategory().getValue():"",plainFont));
+					ipaInnerTable.addCell(actCategory2);
+					
+					//type
+					PdfPCell type1=new PdfPCell();
+					type1.setBorder(0);
+					Paragraph typeP=new Paragraph(TranslatorWorker.translateText("Type", locale, siteId)+":",titleFont);
+					type1.addElement(typeP);
+					ipaInnerTable.addCell(type1);
+					
+					PdfPCell type2=new PdfPCell();
+					type2.setBorder(0);
+					type2.addElement(new Paragraph(contract.getType()!=null?contract.getType().getValue():"",plainFont));
+					ipaInnerTable.addCell(type2);
+					
+					//start of tendering
+					PdfPCell startOfTendering1=new PdfPCell();
+					startOfTendering1.setBorder(0);
+					Paragraph startOfTendP=new Paragraph(TranslatorWorker.translateText("Start Of Tendering", locale, siteId)+":",titleFont);
+					startOfTendering1.addElement(startOfTendP);
+					ipaInnerTable.addCell(startOfTendering1);
+					
+					PdfPCell startOfTendering2=new PdfPCell();
+					startOfTendering2.setBorder(0);
+					startOfTendering2.addElement(new Paragraph(contract.getFormattedStartOfTendering(),plainFont));
+					ipaInnerTable.addCell(startOfTendering2);
+					
+					//Signature of Contract
+					PdfPCell contractSignature1=new PdfPCell();
+					contractSignature1.setBorder(0);
+					Paragraph contractSingatureP=new Paragraph(TranslatorWorker.translateText("Signature of Contract", locale, siteId)+":",titleFont);
+					contractSignature1.addElement(contractSingatureP);
+					ipaInnerTable.addCell(contractSignature1);
+					
+					PdfPCell contractSignature2=new PdfPCell();
+					contractSignature2.setBorder(0);
+					contractSignature2.addElement(new Paragraph(contract.getFormattedSignatureOfContract(),plainFont));
+					ipaInnerTable.addCell(contractSignature2);
+					
+					// Contract Organization
+					PdfPCell contractOrg1=new PdfPCell();
+					contractOrg1.setBorder(0);
+					Paragraph contractOrgP=new Paragraph(TranslatorWorker.translateText("Contract Organization", locale, siteId)+":",titleFont);
+					contractOrg1.addElement(contractOrgP);
+					ipaInnerTable.addCell(contractOrg1);
+					
+					PdfPCell contractOrg2=new PdfPCell();
+					contractOrg2.setBorder(0);
+					contractOrg2.addElement(new Paragraph(contract.getOrganization()!=null?contract.getOrganization().getName():"",plainFont));
+					ipaInnerTable.addCell(contractOrg2);
+					
+					// Contract Organization
+					PdfPCell contractOrganization1=new PdfPCell();
+					contractOrganization1.setBorder(0);
+					contractOrganization1.addElement(contractOrgP);
+					ipaInnerTable.addCell(contractOrganization1);
+					
+					PdfPCell contractOrganization2=new PdfPCell();
+					contractOrganization2.setBorder(0);
+					contractOrganization2.addElement(new Paragraph(contract.getContractingOrganizationText(),plainFont));
+					ipaInnerTable.addCell(contractOrganization2);
+					
+					//Contract Completion
+					PdfPCell contractCompletion1=new PdfPCell();
+					contractCompletion1.setBorder(0);
+					Paragraph contractCompletionP=new Paragraph(TranslatorWorker.translateText("Contract Completion", locale, siteId)+":",titleFont);
+					contractCompletion1.addElement(contractCompletionP);
+					ipaInnerTable.addCell(contractCompletion1);
+					
+					PdfPCell contractCompletion2=new PdfPCell();
+					contractCompletion2.setBorder(0);
+					contractCompletion2.addElement(new Paragraph(contract.getFormattedContractCompletion(),plainFont));
+					ipaInnerTable.addCell(contractCompletion2);
+					
+					//Status
+					PdfPCell status1=new PdfPCell();
+					status1.setBorder(0);
+					Paragraph statusP=new Paragraph(TranslatorWorker.translateText("Status", locale, siteId)+":",titleFont);
+					status1.addElement(statusP);
+					ipaInnerTable.addCell(status1);
+					
+					PdfPCell status2=new PdfPCell();
+					status2.setBorder(0);
+					status2.addElement(new Paragraph(contract.getStatus()!=null?contract.getStatus().getValue():"",plainFont));
+					ipaInnerTable.addCell(status2);
+					
+					//Total Amount
+					PdfPCell totalAmount1=new PdfPCell();
+					totalAmount1.setBorder(0);
+					Paragraph totalAmpuntP=new Paragraph(TranslatorWorker.translateText("Total Amount", locale, siteId)+":",titleFont);
+					totalAmount1.addElement(totalAmpuntP);
+					ipaInnerTable.addCell(totalAmount1);
+					
+					PdfPCell totalAmount2=new PdfPCell();
+					totalAmount2.setBorder(0);
+					output=contract.getTotalAmount()!=null? contract.getTotalAmount().floatValue()+" "+contract.getTotalAmountCurrency().getCurrencyCode()  : " ";
+					totalAmount2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(totalAmount2);
+					
+					//Total EC Contribution
+					PdfPCell totalECCont=new PdfPCell();
+					totalECCont.setBorder(0);
+					totalECCont.setColspan(2);
+					Paragraph totalECContP=new Paragraph(TranslatorWorker.translateText("Total EC Contribution", locale, siteId)+":",titleFont);
+					totalECCont.addElement(totalECContP);
+					ipaInnerTable.addCell(totalECCont);
+					
+					//IB
+					PdfPCell ib1=new PdfPCell();
+					ib1.setBorder(0);
+					Paragraph ibP=new Paragraph(TranslatorWorker.translateText("IB", locale, siteId)+":",titleFont);
+					ib1.addElement(ibP);
+					ipaInnerTable.addCell(ib1);
+					
+					PdfPCell ib2=new PdfPCell();
+					ib2.setBorder(0);					
+					if(contract.getTotalECContribIBAmount()!=null){
+						output=contract.getTotalECContribIBAmount().floatValue()+" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else if(contract.getTotalAmountCurrency()!=null){
+						output=" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else{
+						output="";
+					}					
+					ib2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(ib2);
+					
+					//INV
+					PdfPCell inv1=new PdfPCell();
+					inv1.setBorder(0);
+					Paragraph invP=new Paragraph(TranslatorWorker.translateText("INV", locale, siteId)+":",titleFont);
+					inv1.addElement(invP);
+					ipaInnerTable.addCell(inv1);
+					
+					PdfPCell inv2=new PdfPCell();
+					inv2.setBorder(0);
+					if(contract.getTotalECContribINVAmount()!=null){
+						output=contract.getTotalECContribINVAmount().floatValue()+" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else if(contract.getTotalAmountCurrency()!=null){
+						output=" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else{
+						output="";
+					}
+					inv2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(inv2);
+					
+					//Total National Contribution
+					PdfPCell totalNationalCont=new PdfPCell();
+					totalNationalCont.setBorder(0);
+					totalNationalCont.setColspan(2);
+					Paragraph totalNationalContP=new Paragraph(TranslatorWorker.translateText("Total National Contribution", locale, siteId)+":",titleFont);
+					totalNationalCont.addElement(totalNationalContP);
+					ipaInnerTable.addCell(totalNationalCont);
+					
+					//Central
+					PdfPCell central1=new PdfPCell();
+					central1.setBorder(0);
+					Paragraph centralP=new Paragraph(TranslatorWorker.translateText("Central", locale, siteId)+":",titleFont);
+					central1.addElement(centralP);
+					ipaInnerTable.addCell(central1);
+					
+					PdfPCell central2=new PdfPCell();
+					central2.setBorder(0);
+					if(contract.getTotalNationalContribCentralAmount()!=null){
+						output=contract.getTotalNationalContribCentralAmount().floatValue()+" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else if(contract.getTotalAmountCurrency()!=null){
+						output=" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else{
+						output="";
+					}
+					central2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(central2);
+					
+					//Regional
+					PdfPCell regional1=new PdfPCell();
+					regional1.setBorder(0);
+					Paragraph regionalP=new Paragraph(TranslatorWorker.translateText("Regional", locale, siteId)+":",titleFont);
+					regional1.addElement(regionalP);
+					ipaInnerTable.addCell(regional1);
+					
+					PdfPCell regional2=new PdfPCell();
+					regional2.setBorder(0);
+					if(contract.getTotalNationalContribRegionalAmount()!=null){
+						output=contract.getTotalNationalContribRegionalAmount().floatValue()+" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else if(contract.getTotalAmountCurrency()!=null){
+						output=" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else{
+						output="";
+					}
+					regional2.addElement((new Paragraph(output,plainFont)));
+					ipaInnerTable.addCell(regional2);
+					
+					//IFIs
+					PdfPCell ifi1=new PdfPCell();
+					ifi1.setBorder(0);
+					Paragraph ifiP=new Paragraph(TranslatorWorker.translateText("IFIs", locale, siteId)+":",titleFont);
+					ifi1.addElement(ifiP);
+					ipaInnerTable.addCell(ifi1);
+					
+					PdfPCell ifi2=new PdfPCell();
+					ifi2.setBorder(0);
+					if(contract.getTotalNationalContribIFIAmount()!=null){
+						output=contract.getTotalNationalContribIFIAmount().floatValue()+" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else if(contract.getTotalAmountCurrency()!=null){
+						output=" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else{
+						output="";
+					}
+					ifi2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(ifi2);
+					
+					//Total Private Contribution
+					PdfPCell totalPrivateCont=new PdfPCell();
+					totalPrivateCont.setBorder(0);
+					totalPrivateCont.setColspan(2);
+					Paragraph totalPrivateContP=new Paragraph(TranslatorWorker.translateText("Total Private Contribution", locale, siteId)+":",titleFont);
+					totalPrivateCont.addElement(totalPrivateContP);
+					ipaInnerTable.addCell(totalPrivateCont);
+					
+					//IB
+					PdfPCell privateIb1=new PdfPCell();
+					privateIb1.setBorder(0);
+					privateIb1.addElement(ibP);
+					ipaInnerTable.addCell(privateIb1);
+					
+					PdfPCell privateIb2=new PdfPCell();
+					privateIb2.setBorder(0);
+					if(contract.getTotalPrivateContribAmount()!=null){
+						output=contract.getTotalPrivateContribAmount().floatValue()+" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else if(contract.getTotalAmountCurrency()!=null){
+						output=" "+contract.getTotalAmountCurrency().getCurrencyCode();
+					}else{
+						output="";
+					}
+					privateIb2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(privateIb2);
+					
+					//Total disbursements
+					PdfPCell totalDisb1=new PdfPCell();
+					totalDisb1.setBorder(0);
+					Paragraph totalDisbP=new Paragraph(TranslatorWorker.translateText("Total disbursements", locale, siteId)+":",titleFont);
+					totalDisb1.addElement(totalDisbP);
+					ipaInnerTable.addCell(totalDisb1);
+					
+					PdfPCell totalDisb2=new PdfPCell();
+					totalDisb2.setBorder(0);
+					output=(contract.getTotalDisbursements()!=null ? contract.getTotalDisbursements().floatValue() : " ")+" ";
+					output+=contract.getDibusrsementsGlobalCurrency()!=null?contract.getDibusrsementsGlobalCurrency().getCurrencyCode():myForm.getCurrCode();
+					totalDisb2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(totalDisb2);
+					
+					//Total Funding Disbursements
+					PdfPCell totalFundDisb1=new PdfPCell();
+					totalFundDisb1.setBorder(0);
+					Paragraph totalFundDisbP=new Paragraph(TranslatorWorker.translateText("Total Funding Disbursements", locale, siteId)+":",titleFont);
+					totalFundDisb1.addElement(totalFundDisbP);
+					ipaInnerTable.addCell(totalFundDisb1);
+					
+					PdfPCell totalFundDisb2=new PdfPCell();
+					totalFundDisb2.setBorder(0);
+					output=(contract.getFundingTotalDisbursements()!=null? contract.getFundingTotalDisbursements().floatValue() : " ")+" ";
+					output+=contract.getDibusrsementsGlobalCurrency()!=null?contract.getDibusrsementsGlobalCurrency().getCurrencyCode():myForm.getCurrCode();
+					totalFundDisb2.addElement(new Paragraph(output,plainFont));
+					ipaInnerTable.addCell(totalFundDisb2);
+					
+					//Contract Execution Rate
+					PdfPCell execRate1=new PdfPCell();
+					execRate1.setBorder(0);
+					Paragraph execRateP=new Paragraph(TranslatorWorker.translateText("Contract Execution Rate", locale, siteId)+":",titleFont);
+					execRate1.addElement(execRateP);
+					ipaInnerTable.addCell(execRate1);
+					
+					PdfPCell execRate2=new PdfPCell();
+					execRate2.setBorder(0);
+					execRate2.addElement(new Paragraph((contract.getExecutionRate()!=null ? contract.getExecutionRate().floatValue() : " ")+"",plainFont));
+					ipaInnerTable.addCell(execRate2);
+					
+					//Contract Execution Rate
+					PdfPCell executionRate1=new PdfPCell();
+					executionRate1.setBorder(0);
+					executionRate1.addElement(execRateP);
+					ipaInnerTable.addCell(executionRate1);
+					
+					PdfPCell executionRate2=new PdfPCell();
+					executionRate2.setBorder(0);
+					executionRate2.addElement(new Paragraph((contract.getFundingExecutionRate()!=null ? contract.getFundingExecutionRate().floatValue() : " ")+"",plainFont));
+					ipaInnerTable.addCell(executionRate2);
+					
+					//Disbursements
+					PdfPCell disbs1=new PdfPCell();
+					disbs1.setBorder(0);
+					Paragraph disbsP=new Paragraph(TranslatorWorker.translateText("Disbursements", locale, siteId)+":",titleFont);
+					disbs1.addElement(disbsP);
+					ipaInnerTable.addCell(disbs1);
+					
+					PdfPCell disbs2=new PdfPCell();
+					disbs2.setBorder(0);
+					PdfPTable disbursmentsInnerTable= new PdfPTable(3);
+					if(contract.getDisbursements()!=null){
+						for (IPAContractDisbursement ipaDisb : (Set<IPAContractDisbursement>)contract.getDisbursements()) {
+							PdfPCell adjType=new PdfPCell();
+							adjType.setBorder(0);
+							adjType.addElement(new Paragraph(ipaDisb.getAdjustmentType().intValue()==1?"Planned":"Actual",plainFont));
+							disbursmentsInnerTable.addCell(adjType);
+							
+							PdfPCell amount=new PdfPCell();
+							amount.setBorder(0);
+							amount.addElement(new Paragraph(ipaDisb.getAmount().floatValue() + " "+ ipaDisb.getCurrency().getCurrencyName(),plainFont));
+							disbursmentsInnerTable.addCell(amount);
+							
+							PdfPCell disbDate=new PdfPCell();
+							disbDate.setBorder(0);
+							disbDate.addElement(new Paragraph(ipaDisb.getDisbDate(),plainFont));
+							disbursmentsInnerTable.addCell(disbDate);
+						}
+					}
+					
+					disbs2.addElement(disbursmentsInnerTable);
+					ipaInnerTable.addCell(disbs2);	
+					
+					//Funding Disbursements
+					PdfPCell fundingDisbs1=new PdfPCell();
+					fundingDisbs1.setBorder(0);
+					Paragraph fundDisbsP=new Paragraph(TranslatorWorker.translateText("Funding Disbursements", locale, siteId)+":",titleFont);
+					fundingDisbs1.addElement(fundDisbsP);
+					ipaInnerTable.addCell(fundingDisbs1);
+					
+					PdfPCell fundingDisbs2=new PdfPCell();
+					fundingDisbs2.setBorder(0);
+					PdfPTable fundDisbursmentsInnerTable= new PdfPTable(4);
+					
+					if(myForm.getFunding()!=null){
+						PdfPCell adjType=new PdfPCell();
+						adjType.setBorder(0);
+						adjType.addElement(new Paragraph(TranslatorWorker.translateText("Adj. Type Disb.", locale, siteId),plainFont));
+						fundDisbursmentsInnerTable.addCell(adjType);
+						
+						PdfPCell ampuntDisb=new PdfPCell();
+						ampuntDisb.setBorder(0);
+						ampuntDisb.addElement(new Paragraph(TranslatorWorker.translateText("Amount Disb.", locale, siteId),plainFont));
+						fundDisbursmentsInnerTable.addCell(ampuntDisb);
+						
+						PdfPCell currencyDisb=new PdfPCell();
+						currencyDisb.setBorder(0);
+						currencyDisb.addElement(new Paragraph(TranslatorWorker.translateText("Currency Disb.", locale, siteId),plainFont));
+						fundDisbursmentsInnerTable.addCell(currencyDisb);
+						
+						PdfPCell dateDisb=new PdfPCell();
+						dateDisb.setBorder(0);
+						dateDisb.addElement(new Paragraph(TranslatorWorker.translateText("Date Disb.", locale, siteId),plainFont));
+						fundDisbursmentsInnerTable.addCell(dateDisb);
+						
+						for (FundingDetail fundingDetail : myForm.getFunding().getFundingDetails()) {
+							if(fundingDetail.getContract()!=null && contract.getContractName().equals(fundingDetail.getContract().getContractName()) && fundingDetail.getTransactionType()==1){
+								adjType=new PdfPCell();
+								adjType.setBorder(0);
+								adjType.addElement(new Paragraph(fundingDetail.getAdjustmentType()==1?"Planned":"Actual",plainFont));
+								fundDisbursmentsInnerTable.addCell(adjType);
+								
+								PdfPCell amount=new PdfPCell();
+								amount.setBorder(0);
+								amount.addElement(new Paragraph(fundingDetail.getTransactionAmount(),plainFont));
+								fundDisbursmentsInnerTable.addCell(amount);
+								
+								PdfPCell currency=new PdfPCell();
+								currency.setBorder(0);
+								currency.addElement(new Paragraph(fundingDetail.getCurrencyName(),plainFont));
+								fundDisbursmentsInnerTable.addCell(currency);
+								
+								PdfPCell disbDate=new PdfPCell();
+								disbDate.setBorder(0);
+								disbDate.addElement(new Paragraph(fundingDetail.getTransactionDate(),plainFont));
+								fundDisbursmentsInnerTable.addCell(disbDate);
+							}
+							
+						}
+					}
+					fundingDisbs2.addElement(fundDisbursmentsInnerTable);
+					ipaInnerTable.addCell(fundingDisbs2);
+				}			
+				
+				
+			}
+			
+			ipaContracting2.addElement(ipaInnerTable);
+			mainLayout.addCell(ipaContracting2);
+			
+			
+			
 			/**
 			 * Activity created by
 			 */

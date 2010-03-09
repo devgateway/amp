@@ -110,6 +110,39 @@ function downloadFile(placeholder) {
 	}
 }
 
+var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+function initFileUploads() {
+	if (!W3CDOM) return;
+	var fakeFileUpload = document.createElement('div');
+	fakeFileUpload.className = 'fakefile';
+	fakeFileUpload.appendChild(document.createElement('input'));
+
+	var fakeFileUpload2 = document.createElement('div');
+	fakeFileUpload2.className = 'fakefile2';
+
+
+	var button = document.createElement('input');
+	button.type = 'button';
+
+	button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
+	fakeFileUpload2.appendChild(button);
+
+	fakeFileUpload.appendChild(fakeFileUpload2);
+	var x = document.getElementsByTagName('input');
+	for (var i=0;i<x.length;i++) {
+		if (x[i].type != 'file') continue;
+		if (x[i].parentNode.className != 'fileinputs') continue;
+		x[i].className = 'file hidden';
+		var clone = fakeFileUpload.cloneNode(true);
+		x[i].parentNode.appendChild(clone);
+		x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+			x[i].onchange = x[i].onmouseout = function () {
+			this.relatedElement.value = this.value;
+		}
+	}
+}
 </script>
 
 
@@ -157,27 +190,16 @@ function downloadFile(placeholder) {
 						<td><strong><digi:trn key="selectThumbnail">Select Thumbnail to upload:</digi:trn><font color="red">*</font></strong></td>
 						<td>
 							<div class="fileinputs"> 
-								<input id="thumbnail" name="thumbnail" type="file" class="file hidden">
-								<div class="fakefile">
-									<input>
-									<div class="fakefile2">
-									<input type="button" class="buton" value="Browse...">
-									</div>
-								</div>
+								<input id="thumbnail" name="thumbnail" type="file" class="file">
 							</div>
 						</td>
 						</tr>
 						<tr id="tr_path_optional">
 						<td><strong><digi:trn key="selectOptionalFile">Select Optional File to upload:</digi:trn><font color="red"></font></strong></td>
 						<td>
-							<div class="fileinputs"> 
-								<input id="optionalFile" name="optionalFile" type="file" class="file hidden">
-								<div class="fakefile">
-									<input>
-									<div class="fakefile2">
-									<input type="button" class="buton" value="Browse...">
-									</div>
-								</div>
+						<div class="fileinputs"> 
+								<input id="optionalFile" name="optionalFile" type="file" class="file">
+								
 							</div>
 						</td>
 						</tr>
@@ -212,3 +234,6 @@ function downloadFile(placeholder) {
 		</td>
 	<tr>
 <table>
+<script type="text/javascript">
+initFileUploads();
+</script>

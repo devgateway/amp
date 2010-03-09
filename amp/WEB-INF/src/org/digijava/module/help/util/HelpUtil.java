@@ -1237,13 +1237,13 @@ System.out.println("lang:"+lang);
 		text = text.replaceAll(stripComments, " ");
 		
 		String stripClosedBadTags = "<(\\s+)?(link|br|hr|input|script|style|link|head|meta)(.|[\\n\\r])+?\\2(\\s+)?>";
-		text = text.replaceAll(stripClosedBadTags, " ");
+//		text = text.replaceAll(stripClosedBadTags, " ");
 
 		String stripOpenedBadTags = "<(\\\\s+)?(link|br|hr|input|script|style|link|head|meta|img|!)(.|[\\\\n\\\\r])+?>";
-		text = text.replaceAll(stripOpenedBadTags, "");
+//		text = text.replaceAll(stripOpenedBadTags, "");
 
 		String stripTagBegginings = "<(\\s+)?[a-z]+(:[a-z]+)?(.|[\\n\\r])+?>";
-		text = text.replaceAll(stripTagBegginings, " ");
+//		text = text.replaceAll(stripTagBegginings, " ");
 
 		String stripTagEndings = "</[a-z]+([0-9]+)?(:[a-z]+)?>";
 		text = text.replaceAll(stripTagEndings, " ");

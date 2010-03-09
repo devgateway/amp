@@ -27,7 +27,7 @@
 		//}else{
 		//	winH=window.innerHeight;
 		//}		
-		var reporTable=new scrollableTable("reportsTable",450);
+		var reporTable=new scrollableTable("reportsTable",255);
 		reporTable.debug=false;
 		reporTable.maxRowDepth=1;
 		reporTable.scroll();
@@ -66,7 +66,7 @@
 		</c:set>
 	</c:if>
 
-	<table align="center" cellPadding="0" cellSpacing="0" width="100%">
+	<table align="center" cellPadding="0" cellSpacing="0" width="100%" >
 		<tr>
 			<td style="text-align: center; padding: 5px;" nowrap="nowrap">
 				<span style="vertical-align: middle; font-weight: bold"><digi:trn>Teams</digi:trn>:</span>
@@ -124,9 +124,9 @@
                      <logic:iterate name="aimImpExpForm"  property="reportsList" id="report" indexId="idx" type="org.digijava.module.aim.dbentity.AmpReports">
                      	<tbody>
                               <tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
-                              onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >
-                              	<td>
-                              		<html:multibox name="aimImpExpForm" property="selectedReportIds" value="${report.ampReportId}" styleClass="selReportsIds"/>
+                              onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="height: 50px" >
+                              	<td>                              		  
+                              		<html:multibox name="aimImpExpForm" property="selectedReportIds" value="${report.ampReportId}" styleClass="selReportsIds" />
                               	</td>                           
                               	<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
                               		<c:if test="${!aimImpExpForm.showTabs}">
@@ -292,7 +292,7 @@
           </td>
         </tr>     
         <tr>
-        	<td>
+        	<td align="right">
         		<br>
         		<button style="vertical-align: middle;" type="button" class="buton" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_EXPORT %>')">
 						<digi:trn>Export</digi:trn> 

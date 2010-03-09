@@ -28,7 +28,7 @@
 		//}else{
 		//	winH=window.innerHeight;
 		//}
-		var reporTable=new scrollableTable("reportsTable", 450);
+		var reporTable=new scrollableTable("reportsTable", 250);
 		reporTable.debug=false;
 		reporTable.maxRowDepth=1;
 		reporTable.scroll();
@@ -92,10 +92,103 @@
 	function enableButton( btnId ) {
 		var buttonEl	= document.getElementById( btnId );
 		buttonEl.disabled	= false;
+		buttonEl.style.backgroundColor= "#ECF3FD";
 		buttonEl.style.color= 'black';
+		//buttonEl.style.font= '11 px';
 	}
 	
   </script>
+  <!-- translateable browse button -->
+  
+  <style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+input.file {
+	width: 300px;
+	margin: 0;
+}
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+  
+<script langauage="JavaScript">
+	
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+
+
+		var button = document.createElement('input');
+		button.type = 'button';
+
+		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}	
+	}
+
+</script>
 
 <digi:form action="/reportsImport.do" method="post"  enctype="multipart/form-data" >
 	<html:hidden name="aimImpExpForm" property="showTabs"/>
@@ -120,13 +213,35 @@
 
 	<table align="center" cellPadding="0" cellSpacing="0" width="100%">
 		<tr>
-			<td style="text-align: center; padding: 5px;" nowrap="nowrap">
-				<digi:trn>Import Tabs/Reports</digi:trn>:
-				<html:file property="formFileReportsOrTabs" />
-				&nbsp;
+			<td style="text-align: center; padding: 5px;" nowrap="nowrap" align="center">
+				<table>
+					<tr>
+						<td width="20%">&nbsp;</td>
+						<td align="center" style="text-align: center;"><digi:trn>Import Tabs/Reports</digi:trn>:</td>
+						<td>
+							<div class="fileinputs">
+								<input id="fileUploaded" name="formFileReportsOrTabs" type="file" class="file">
+							</div>
+							<button style="vertical-align: middle;background-color: #ECF3FD;text-decoration: none;font: 11px" type="button" onclick="changePageFromImport('<%=ReportsImpExpConstants.ACTION_IMPORT_FILE %>')">
+								<digi:trn>Import</digi:trn> 
+							</button>
+						</td>
+					</tr>
+				</table>
+				<%--
+					<div class="fileinputs">
+					<input id="fileUploaded" name="formFileReportsOrTabs" type="file" class="file">
+					&nbsp;
 				<button style="vertical-align: middle;" type="button" onclick="changePageFromImport('<%=ReportsImpExpConstants.ACTION_IMPORT_FILE %>')">
 					<digi:trn>Import</digi:trn> 
 				</button>
+				</div>	
+				
+				<html:button style="dr-menu" property="" onclick="changePageFromImport('<%=ReportsImpExpConstants.ACTION_IMPORT_FILE %>')">
+								<digi:trn>Import</digi:trn> 
+							</html:button>		
+				 --%>
+							
 			</td>
 		</tr>
 				<logic:notEmpty name="aimImpExpForm" property="reportsList">
@@ -160,7 +275,7 @@
                           		<logic:iterate name="aimImpExpForm"  property="reportsList" id="report" indexId="idx" type="org.digijava.module.aim.dbentity.AmpReports">
                             		<tbody>
                               			<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
-                              			onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >
+                              			onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="height: 50px" >
                               				<td>
                               					<html:multibox name="aimImpExpForm" property="importReportIndexes" value="${idx}"/>
                               				</td>                           
@@ -334,3 +449,7 @@
 				</logic:notEmpty>
 			</table>
  </digi:form>
+
+<script type="text/javascript">
+	initFileUploads();
+</script>

@@ -388,18 +388,18 @@ function setHoveredTable(tableId, hasHeaders) {
                                                     </logic:iterate>
                                                     <c:choose>
                                                         <c:when test="${currPage<lastPage}">
-                                                            <a class="yui-pg-first"  href="javascript:page(${currPage+1})">
+                                                            <a class="yui-pg-next"  href="javascript:page(${currPage+1})">
                                                                 <digi:trn>Next</digi:trn> &gt;
                                                             </a>
-                                                            <a class="yui-pg-previous" href="javascript:page(${lastPage})">
+                                                            <a class="yui-pg-last" href="javascript:page(${lastPage})">
                                                                 <digi:trn key="aim:previous">Last</digi:trn>&gt;&gt;
                                                             </a>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="yui-pg-first">
+                                                            <span class="yui-pg-next">
                                                                 <digi:trn>Next</digi:trn> &gt;
                                                             </span>
-                                                            <span class="yui-pg-previous ">
+                                                            <span class="yui-pg-last">
                                                                 <digi:trn>Last</digi:trn> &gt;&gt;
                                                             </span>
                                                         </c:otherwise>

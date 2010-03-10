@@ -589,7 +589,7 @@ function remProgram(programType) {
 			}
 		}		
 }
-'--> 
+--> 
 </script>
 
 <digi:instance property="aimEditActivityForm" />

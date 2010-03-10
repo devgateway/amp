@@ -9,6 +9,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Hit;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.impl.org.LucOrganisationModule;
 import org.digijava.module.help.lucene.LucHelpModule;
 
@@ -72,7 +73,7 @@ public interface LucModule<E> extends Serializable {
 	 * Examples can be all organizations, or all contacts.
 	 * @return list of items of type E
 	 */
-	List<E> getItemsToIndex();
+	List<E> getItemsToIndex() throws DgException;
 	
 	/**
 	 * If for some reason module needs to rebuild indexes then this method will return true. 

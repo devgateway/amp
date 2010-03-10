@@ -138,12 +138,13 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	}
 
 	@Override
-	public List<HelpTopicHelper> getItemsToIndex() {
+	public List<HelpTopicHelper> getItemsToIndex() throws DgException {
 		String siteId = "amp"; //null;
 		List<HelpTopicHelper> topicHelpers = null;
 		EnumSet<LangSupport> langs = null;
 		boolean exclude = false;
 		
+		//prepare params
 		if (this.lang.equals(LangSupport.ENGLISH)){
 			//all except supported languages: English + all unsupported will go as English. 
 			langs = EnumSet.copyOf(LangSupport.supported());
@@ -153,11 +154,9 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 			langs = EnumSet.of(this.lang);
 		}
 		
-		try {
-			topicHelpers = HelpUtil.getHelpItems(siteId, this.moduleInstance, langs, exclude);
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
+		//do search
+		topicHelpers = HelpUtil.getHelpItems(siteId, this.moduleInstance, langs, exclude);
+
 		return topicHelpers;
 	}
 
@@ -165,11 +164,6 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	public String getName() {
 		return MODULE_NAME;
 	}
-
-//	@Override
-//	public String getSearchFieldName() {
-//		return null;
-//	}
 
 	@Override
 	public String[] getSearchFieldNames() {

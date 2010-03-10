@@ -1072,7 +1072,7 @@ public class LuceneUtil implements Serializable {
     	return createDir;
     }
 
-
+    
     /**
      * Creates lucene help
      * directory if it doesn't exist.

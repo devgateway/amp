@@ -51,8 +51,7 @@ public class LucTranslationModule implements LucModule<Message> {
 	}
 
 	@Override
-	public List<Message> getItemsToIndex() {
-		// TODO Auto-generated method stub
+	public List<Message> getItemsToIndex() throws DgException {
 		Collection<Message> messages = null;
 		List<Message> messageList = null;
 		try {

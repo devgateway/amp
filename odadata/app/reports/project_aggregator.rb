@@ -43,6 +43,10 @@ class Reports::ProjectAggregator < Ruport::Aggregator
     p.donor_agency.andand.name
   end
   
+  provides :government_counterpart do |p|
+    p.government_counterpart.andand.name
+  end
+
   provides :sector_relevances do |p|
     p.sector_relevances.ordered_by_relevance
   end

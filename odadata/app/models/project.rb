@@ -33,6 +33,7 @@ class Project < ActiveRecord::Base
   # Relations
   belongs_to              :donor
   belongs_to              :donor_agency
+  belongs_to              :government_counterpart
   
   belongs_to              :country_strategy
     

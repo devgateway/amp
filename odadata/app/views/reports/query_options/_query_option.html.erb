@@ -14,6 +14,11 @@
 </li>
 
 <li>
+	<%= check_box_tag "report[fields][]", "government_counterpart" %>
+	<%= Project.human_attribute_name('government_counterpart') %>
+</li>
+
+<li>
 	<%= check_box_tag "report[fields][]", "oecd_number" %>
 	<%= Project.human_attribute_name('oecd_number') %>
 </li>

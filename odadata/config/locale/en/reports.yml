@@ -17,6 +17,7 @@ en:
     toi: Type of Implementation
     status: Project Status
     donor_agency: Donor Agency
+    government_counterpart: Donor Agency
     project_number: Project Number
     oecd_id: OECD ID
     budget_number: Recipient Country Budget Number

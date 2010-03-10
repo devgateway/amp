@@ -6,7 +6,7 @@ global: &global
   encoding: utf8
 
 development:
-  database: odanic_development
+  database: odadata_mozambique
   <<: *global
 
 test: &TEST

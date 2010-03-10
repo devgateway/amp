@@ -1,0 +1,27 @@
+<h2><%= header lc(:title) %></h2>
+<table>
+  <% if @government_counterparts.blank? %>
+    <tr><td class="empty"><%= lc(:empty) %></td></tr>
+  <% else %>
+    <tr>
+      <th><%= GovernmentCounterpart.human_attribute_name('code') %></th>
+      <th><%= GovernmentCounterpart.human_attribute_name('name') %></th>
+      <th> </th>
+      <th> </th>
+    </tr>
+    <% for government_counterpart in @government_counterparts %>
+      <tr>
+        <td><%= government_counterpart.code %></td>
+        <td><%= government_counterpart.name %></td>
+        <td><%= link_to ll(:actions, :edit), edit_government_counterpart_path(government_counterpart) %></td>
+        <td><%= link_to ll(:actions, :delete), government_counterpart_path(government_counterpart), :method => 'delete', :confirm => "Are you sure?" %>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
+<p><b><%= link_to lc(:new), new_government_counterpart_path %></b></p>
+
+<br />
+<%= will_paginate @government_counterparts,
+	:previous_label => t('pagination.previous_page'), :next_label => t('pagination.next_page') %>

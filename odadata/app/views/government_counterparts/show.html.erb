@@ -1,0 +1,12 @@
+<div class="project_factsheet">
+	<dl class="main_details">
+		<dt class="first"><%= GovernmentCounterpart.human_attribute_name('name') %></dt>
+		<dd class="first"><%=h @government_counterpart.code %></dd>
+
+                <dt><%= GovernmentCounterpart.human_attribute_name('code') %></dt>
+		<dd> <%=h @government_counterpart.name %></dd>
+	</dl>
+</div>
+
+<%= link_to 'Edit', edit_government_counterpart_path(@government_counterpart) %> |
+<%= link_to 'Back', government_counterparts_path %>

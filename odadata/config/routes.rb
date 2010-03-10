@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :government_counterparts
+
   # Static
   map.with_options :controller => "static" do |static|
     static.root                           :action => "home"
@@ -6,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
     static.downloads  "/downloads",       :action => "downloads"
   end
   
-  map.resources :agencies                                                       
+  map.resources :agencies
   map.resources :exchange_rates          
   map.resources :projects,                :member => { :update_status => :get, :map => :get }
                                           

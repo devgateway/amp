@@ -1,0 +1,20 @@
+<h1>Editing government_counterpart</h1>
+
+<% form_for(@government_counterpart) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :code %><br />
+    <%= f.text_field :code %>
+  </p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @government_counterpart %> |
+<%= link_to 'Back', government_counterparts_path %>

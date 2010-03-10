@@ -175,4 +175,12 @@ en:
   consistencies:
     show:
       title: Financial Consistency Details
-      
+
+  government_counterparts:
+    index:
+      title: List of Government Counterparts
+      empty: No government counterparts found
+      new: New government counterpart
+    new:
+      title: New Government Counterpart
+      submit: Add New Government Counterpart

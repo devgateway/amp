@@ -17,6 +17,8 @@ en:
           label: Donor Agency
         donor_project_number: 
           label: Donor Project Number
+        government_counterpart:
+          label: Government Counterpart
         oecd_number: 
           label: OECD Number
         recipient_country_budget_nr: 
@@ -195,6 +197,12 @@ en:
         name: 
           label: Agency Name
         
+      government_counterpart:
+        code:
+          label: Code
+        name:
+          label: Name
+
       donor_agency:
         name: 
           label: Agency Name

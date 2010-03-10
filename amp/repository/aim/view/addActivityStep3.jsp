@@ -19,6 +19,7 @@
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
 <jsp:include page="addActivityStep3Popin.jsp" flush="true" />
 <jsp:include page="addActivityStep3PopinImport.jsp" flush="true" />
 <jsp:include page="addOrganizationPopin.jsp" flush="true" />
@@ -38,7 +39,23 @@
 <script language="JavaScript">
 
 	<!--
-
+	var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+	function validateProposed(value) {
+	    if(value==""){
+	        <c:set var="message">
+	        <digi:trn key="aim:enterAmount">Please enter amount</digi:trn>
+	        </c:set>
+	        alert("${message}");
+	        return false;
+	      }else if(!checkAmountUsingSymbols(value,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>")){
+	        <c:set var="message">
+	        <digi:trn key="aim:invalidAmountValue">Invalid amount value</digi:trn>
+	        </c:set>
+	        alert("${message}");
+	        return false;
+	      }
+	    }
+	
 	function validateFunding() {
 	
 		if (document.getElementsByName('funding.selFundingOrgs').length == 1) { // only one org. added
@@ -535,7 +552,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                 <logic:notEmpty name="aimEditActivityForm" property="funding.proProjCost">
                                                                 <field:display name="Proposed Project Amount" feature="Proposed Project Cost">
                                                                 <td bgcolor="#FFFFFF" align="left" width="25%">
-                                                                  <html:text name="aimEditActivityForm" property="funding.proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
+                                                                  <html:text name="aimEditActivityForm" property="funding.proProjCost.funAmount" onkeyup="validateProposed(this.value)" styleId="funAmount" style="width:100px;"/>
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Currency" feature="Proposed Project Cost">

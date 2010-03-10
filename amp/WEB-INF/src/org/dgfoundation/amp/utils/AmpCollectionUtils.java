@@ -2,6 +2,7 @@ package org.dgfoundation.amp.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -235,4 +236,19 @@ public class AmpCollectionUtils {
 		return deleted;
 	}
 	
+	/**
+	 * Convert EnumSet to list.
+	 * @param <T> class of set and list elements
+	 * @param langs EnumSet of
+	 * @return null if empty set of null is passed, otherwise list that contains same elements.
+	 */
+	public static <T> List<T> enumSetToList(EnumSet<? extends T> langs){
+		if (langs==null || langs.size()==0) return null;
+		List<T> result = new ArrayList<T>(langs.size());
+		for (T lang : langs) {
+			result.add(lang);
+		}
+		return result;
+	}
+
 }

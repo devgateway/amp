@@ -1,6 +1,7 @@
 package org.digijava.module.translation.lucene;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -37,7 +38,7 @@ public enum LangSupport {
 	
 	/**
 	 * Returns analyzer for language
-	 * @return Analayzer instance
+	 * @return Analyzer instance
 	 * @see Analyzer
 	 */
 	public Analyzer getAnalyzer(){
@@ -52,16 +53,27 @@ public enum LangSupport {
 	
 	/**
 	 * Returns all supported languages except default English
-	 * @return list of supported languages except english
+	 * @return set of supported languages except English
 	 */
-	public static List<LangSupport> supported(){
-		List<LangSupport> result = new ArrayList<LangSupport>(2);
-		result.add(LangSupport.FRENCH);
-		result.add(LangSupport.SPANISH);
-		//ADD new languages here too whne new analyzer is added. 
+	public static EnumSet<LangSupport> supported(){
+		//ADD new languages here too when new analyzer is added. 
 		//P.S. please do not think this is stupid implementation and I missed ENGLISH.
 		//We do not need ENGLISH because all unsupported languages go 
 		//together with ENGLISH which is kind of default language. 
+		return EnumSet.of(LangSupport.FRENCH, LangSupport.SPANISH);
+	}
+
+	/**
+	 * Converts EnumSet of LangSupport enumerations to list of language code strings 
+	 * @param langs
+	 * @return
+	 */
+	public static List<String> toCodeList(EnumSet<LangSupport> langs) {
+		if (langs==null || langs.size()==0) return null;
+		List<String> result = new ArrayList<String>(langs.size());
+		for (LangSupport lang : langs) {
+			result.add(lang.getLangCode());
+		}
 		return result;
 	}
 

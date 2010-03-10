@@ -87,6 +87,8 @@ public class ShowNewAdvancedTranslations extends Action{
 		
 		if (trnForm.getSearchTerm()!=null && !trnForm.getSearchTerm().trim().equals("")){
 
+			String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+			
 			//Search by key which is generated from input text. this will show exact match only.
 			String searchKey = TranslatorWorker.generateTrnKey(trnForm.getSearchTerm());
 			logger.debug("Searching for "+trnForm.getSearchTerm()+", key generated is "+searchKey+"...");
@@ -100,7 +102,7 @@ public class ShowNewAdvancedTranslations extends Action{
 			ServletContext context = request.getSession().getServletContext();
 			
 			//get results from Lucene
-			Hits hits = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context);
+			Hits hits = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context, langCode);
 			logger.debug("Lucen found "+hits.length()+" records");
 			if (hits !=null && hits.length()>0){
 				int currentPage = (trnForm.getPageNumber()==null || trnForm.getPageNumber().intValue()==0) ? 0 : trnForm.getPageNumber().intValue()-1;

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.dbentity.Country;
@@ -560,10 +562,35 @@ public class TrnUtil {
 		return messages;
     }
     
+    /**
+     * Returns all messages of specified locale code.
+     * @param locales set of locale codes like en, fr, es
+     * @return list of Message beans - translations.
+     * @throws DgException
+     */
+    @SuppressWarnings("unchecked")
+	public static List<Message> getMessagesForLocales(EnumSet<LangSupport> locales, boolean exclude) throws DgException{
+    	List<Message> messages = null;
+		if (locales!=null && locales.size()>0){
+			StringBuffer buff = new StringBuffer("from ");
+			buff.append(Message.class.getName());
+			if (exclude){
+				buff.append(" as m where m.locale not in ( :langs )");
+			}else{
+				buff.append(" as m where m.locale in ( :langs )");
+			}
+			String oql = buff.toString();
+			Session session = PersistenceManager.getRequestDBSession();
+			Query query = session.createQuery(oql);
+			query.setParameterList("langs", LangSupport.toCodeList(locales));
+			messages = query.list();
+		}
+		return messages;
+    }
 
     /**
      * Returns list of query results sorted according translated sitenames.
-     * If there is no appropreate resource for one of the sitenames, sorting will
+     * If there is no appropriate resource for one of the sitenames, sorting will
      * process according default sitename.
      * @param source Collection of query results
      * @param locale Selected locale for translation

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +17,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.bouncycastle.ocsp.Req;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -344,7 +344,7 @@ public class HelpUtil {
 			msg = "Existing help topic updated in lucene index";
 		}
 		LuceneWorker.addItemToIndex(item, context, suffix);
-		logger.info(msg);//TODO change to logger.debug()
+		logger.debug(msg);
 	}
 	
 	public static void removeFromLucene(HelpTopic topic, HttpServletRequest request) throws DgException{
@@ -354,7 +354,7 @@ public class HelpUtil {
 		HelpTopicHelper item = new HelpTopicHelper(topic);
 		String suffix = moduleInstanceName + "_" + locale;
 		LuceneWorker.deleteItemFromIndex(item, context, suffix);
-		logger.info("Help topic removed from lucene index");//TODO convert to logger.debug()
+		logger.debug("Help topic removed from lucene index");
 	}
 	
 	public static List<HelpTopic> getFirstLevelTopics(String siteId,String moduleInstance,String key)throws AimException{
@@ -477,7 +477,6 @@ public class HelpUtil {
 
     public static List<Editor> getAllHelpKey(String lang) throws
     EditorException {
-System.out.println("lang:"+lang);
     	
 	Session session = null;
 	List<Editor> helpTopics = new ArrayList<Editor>();
@@ -502,7 +501,6 @@ System.out.println("lang:"+lang);
 	
 	Session session = null;
 	Query query = null;
-	  System.out.println("GetAllHelpData");
 	Collection helpTopics = new ArrayList();
 	HelpSearchData helpsearch;
 	
@@ -518,8 +516,6 @@ System.out.println("lang:"+lang);
 		while (itr.hasNext()) {
 			helpsearch = new HelpSearchData();
 			  Editor edt = (Editor) itr.next();
-			
-			   //System.out.println("body:"+edt.getBody());
 			
 				helpsearch.setBody(edt.getBody());
 				helpsearch.setLastModDate(edt.getLastModDate());
@@ -643,7 +639,6 @@ System.out.println("lang:"+lang);
 					xml+= "<item text=\""+newCode+"\" id=\""+ topic.getHelpTopicId()+"\"/>";
 				}else{
 					xml+= "<item  text=\""+newCode+"\" id=\"" +topic.getHelpTopicId()+"\">";
-                        System.out.println("name:"+newCode+" Topic_PRNT:"+topic.getHelpTopicId());
                      if (!item.getChildren().isEmpty() || item.getChildren().size() > 0) {
 						 xml += renderTopicTree(item.getChildren(),request,true);
 					 }
@@ -735,7 +730,6 @@ System.out.println("lang:"+lang);
             m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId);
             //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
 		} catch (WorkerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		 if (m == null)
@@ -761,7 +755,6 @@ System.out.println("lang:"+lang);
             m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId);
             //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
 		} catch (WorkerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		 if (m == null)
@@ -1149,7 +1142,7 @@ System.out.println("lang:"+lang);
     	//prepare results
     	List<LucModule<?>> results = new ArrayList<LucModule<?>>();
     	//get supported languages
-    	List<LangSupport> languages = LangSupport.supported();
+    	EnumSet<LangSupport> languages = LangSupport.supported();
     	//for all module instances
     	for (String moduleInstance : rows) {
     		for (LangSupport lang : languages) {
@@ -1174,15 +1167,7 @@ System.out.println("lang:"+lang);
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-	public static List<HelpTopicHelper> getHelpItems(String siteId,String moduleInstance, Set<LangSupport> langs, Boolean exclude) throws DgException{
-    	
-    	List<String> langISOs = null;
-    	if (langs!=null && langs.size() > 0){
-    		langISOs = new ArrayList<String>(langs.size());
-    		for (LangSupport lang : langs) {
-				langISOs.add(lang.getLangCode());
-			}
-    	}
+	public static List<HelpTopicHelper> getHelpItems(String siteId,String moduleInstance, EnumSet<LangSupport> langs, boolean exclude) throws DgException{
     	
     	String oql = "select new org.digijava.module.help.helper.HelpTopicHelper(h.helpTopicId, h.topicKey, e.body, h.siteId, h.moduleInstance, e.language, h.titleTrnKey, h.bodyEditKey) "; 
     	oql += " from "+HelpTopic.class.getName()+" as h, "+Editor.class.getName()+" as e where ";
@@ -1193,7 +1178,7 @@ System.out.println("lang:"+lang);
     	if (moduleInstance != null){
     		oql += " and (h.moduleInstance like :modInst) ";
     	}
-    	if (langISOs != null){
+    	if (langs != null){
     		if (exclude){
         		oql += " and (e.language not in (:langISOs)) ";
     		}else{
@@ -1201,8 +1186,6 @@ System.out.println("lang:"+lang);
     		}
     	}
     	
-    	System.out.println(oql);//TODO remove
-    	System.out.println("siteId="+siteId+", module Instance="+moduleInstance+", langs="+langISOs.get(0));
     	Session session = PersistenceManager.getRequestDBSession();
     	Query query = session.createQuery(oql);
     	
@@ -1212,13 +1195,12 @@ System.out.println("lang:"+lang);
     	if (moduleInstance != null){
     		query.setString("modInst", moduleInstance);
     	}
-    	if (langISOs != null){
-        	query.setParameterList("langISOs", langISOs);
+    	if (langs != null){
+        	query.setParameterList("langISOs", LangSupport.toCodeList(langs));
     	}
     	
     	List<HelpTopicHelper> result = (List<HelpTopicHelper>) query.list();
 
-    	System.out.println("HelpItems count="+result.size());//TODO remove
     	return result;
     }
     
@@ -1234,7 +1216,7 @@ System.out.println("lang:"+lang);
 		if (text == null) return null;
 		
 		String stripComments ="<!--(.|[\\n\\r])+?-->";
-		text = text.replaceAll(stripComments, " ");
+//		text = text.replaceAll(stripComments, " ");
 		
 		String stripClosedBadTags = "<(\\s+)?(link|br|hr|input|script|style|link|head|meta)(.|[\\n\\r])+?\\2(\\s+)?>";
 //		text = text.replaceAll(stripClosedBadTags, " ");
@@ -1246,10 +1228,10 @@ System.out.println("lang:"+lang);
 //		text = text.replaceAll(stripTagBegginings, " ");
 
 		String stripTagEndings = "</[a-z]+([0-9]+)?(:[a-z]+)?>";
-		text = text.replaceAll(stripTagEndings, " ");
+//		text = text.replaceAll(stripTagEndings, " ");
 		
 		String multiSpaceChars = "\\s{2,}";
-		text = text.replaceAll(multiSpaceChars, " ");
+//		text = text.replaceAll(multiSpaceChars, " ");
 		
 		return text;
 	}

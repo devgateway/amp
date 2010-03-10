@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/datasource-min.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/autocomplete-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>

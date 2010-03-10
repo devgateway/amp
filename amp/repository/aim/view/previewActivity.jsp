@@ -2283,7 +2283,7 @@ function collapseAll() {
                                                                                                 	<b><digi:trn key="aim:IPA:popup:totalAmount">Total Amount</digi:trn>:</b>
                                                                                             	</td>
                                                                                             	<td>
-                                                                                                	 ${contract.totalAmount}
+                                                                                                	  <aim:formatNumber value="${contract.totalAmount}" />
                                                                                	                 ${contract.totalAmountCurrency} 
                                                                                 	            </td>
                                                                                         	</tr>
@@ -2303,7 +2303,7 @@ function collapseAll() {
                                                                                                 <b><digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
-                                                                                                 ${contract.totalECContribIBAmount}
+                                                                                                 <aim:formatNumber value="${contract.totalECContribIBAmount}" />
                                                                                                 ${contract.totalAmountCurrency} 
                                                                                             </td>
                                                                                         </tr>
@@ -2315,7 +2315,7 @@ function collapseAll() {
                                                                                                 <b><digi:trn key="aim:IPA:popup:INV">INV:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
-                                                                                                ${contract.totalECContribINVAmount}
+                                                                                                <aim:formatNumber value="${contract.totalECContribINVAmount}" />
                                                                                                ${contract.totalAmountCurrency}
                                                                                             </td>
                                                                                         </tr>
@@ -2338,7 +2338,7 @@ function collapseAll() {
                                                                                                 <b><digi:trn key="aim:IPA:popup:Central">Central</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
-                                                                                                ${contract.totalNationalContribCentralAmount}
+                                                                                                <aim:formatNumber value="${contract.totalNationalContribCentralAmount}" />
                                                                                                 ${contract.totalAmountCurrency} 
                                                                                             </td>
                                                                                         </tr>
@@ -2350,9 +2350,8 @@ function collapseAll() {
                                                                                                 <b><digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
-                                                                                                ${contract.totalNationalContribRegionalAmount} 
+                                                                                                <aim:formatNumber value="${contract.totalNationalContribRegionalAmount}" /> 
                                                                                               ${contract.totalAmountCurrency}
-                                                                                   
                                                                                             </td>
                                                                                         </tr>
                                                                                         </field:display>
@@ -2363,7 +2362,7 @@ function collapseAll() {
                                                                                                 <b><digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
-                                                                                                ${contract.totalNationalContribIFIAmount}
+                                                                                                <aim:formatNumber value="${contract.totalNationalContribIFIAmount}" />
                                                                                                ${contract.totalAmountCurrency}
                                                                                             </td>
                                                                                         </tr>
@@ -2384,7 +2383,7 @@ function collapseAll() {
                                                                                                 <b><digi:trn key="aim:IPA:popup:IB">IB:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
-                                                                                                ${contract.totalPrivateContribAmount}
+                                                                                                <aim:formatNumber value="${contract.totalPrivateContribAmount}" />
                                                                                                 ${contract.totalAmountCurrency}
                                                                                             </td>
                                                                                         </tr>
@@ -2397,7 +2396,7 @@ function collapseAll() {
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
-                                                            									${contract.totalDisbursements} &nbsp; 
+                                                            									<aim:formatNumber value="${contract.totalDisbursements}" /> &nbsp; 
                                                             									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
                                                             										&nbsp; ${aimEditActivityForm.currCode}
                                                             									</logic:empty>
@@ -2413,7 +2412,7 @@ function collapseAll() {
 											                                                  <b><digi:trn key="aim:IPA:popup:totalFundingDisbursements">Total Funding Disbursements</digi:trn>:</b>
 											                                              </td>
 											                                              <td>
-											              									${contract.fundingTotalDisbursements} &nbsp;
+											              									<aim:formatNumber value="${contract.fundingTotalDisbursements}" /> &nbsp;
 											              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
 											              										&nbsp; ${contract.totalAmountCurrency}
 											              									</logic:empty>
@@ -2478,7 +2477,7 @@ function collapseAll() {
                                                                                                     
                                                                                                                 </td>
                                                                                                                 <td align="left" valign="top">
-                                                                                                                    ${disbursement.amount}
+                                                                                                                    <aim:formatNumber value="${disbursement.amount}" />
                                                                                                                 </td>
                                                                                                                 <td align="left" valign="top">
                                                                                                                    ${disbursement.currency.currencyName} 
@@ -2533,7 +2532,7 @@ function collapseAll() {
 											                                                                       </c:if>
 											                                                                   </td>
 											                                                                   <td align="center" valign="top">
-											                                                                       ${fundingDetail.transactionAmount}
+											                                                                        <aim:formatNumber value="${fundingDetail.transactionAmount}" />
 											                                                                   </td>
 											                                                                   <td align="center" valign="top">
 											                                                                      ${fundingDetail.currencyCode} 

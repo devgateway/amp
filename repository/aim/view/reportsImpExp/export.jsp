@@ -13,7 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@page import="org.digijava.module.aim.util.reportsimpexp.ReportsImpExpConstants"%>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <!-- this is for the nice tooltip widgets -->
@@ -26,8 +26,20 @@
 		//	winH = document.body.offsetHeight;
 		//}else{
 		//	winH=window.innerHeight;
-		//}		
-		var reporTable=new scrollableTable("reportsTable",255);
+		//}
+		
+		var trs=$("tr.myClass");
+		var tableHeight=0;
+		if(trs!=null && trs.length>5){
+			for(var i=0;i<5;i++){
+				tableHeight+=trs[i].clientHeight;
+			}
+		}
+		if(tableHeight==0){
+			tableHeight=250;
+		}
+
+		var reporTable=new scrollableTable("reportsTable",tableHeight);
 		reporTable.debug=false;
 		reporTable.maxRowDepth=1;
 		reporTable.scroll();
@@ -124,7 +136,7 @@
                      <logic:iterate name="aimImpExpForm"  property="reportsList" id="report" indexId="idx" type="org.digijava.module.aim.dbentity.AmpReports">
                      	<tbody>
                               <tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
-                              onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="height: 50px" >
+                              onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" id="repTr_${idx}" class="myClass" style="">
                               	<td>                              		  
                               		<html:multibox name="aimImpExpForm" property="selectedReportIds" value="${report.ampReportId}" styleClass="selReportsIds" />
                               	</td>                           

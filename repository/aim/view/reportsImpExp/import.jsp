@@ -28,7 +28,18 @@
 		//}else{
 		//	winH=window.innerHeight;
 		//}
-		var reporTable=new scrollableTable("reportsTable", 250);
+	  	var trs=$("tr.myClass");
+		var tableHeight=0;
+		if(trs!=null && trs.length>5){
+			for(var i=0;i<5;i++){
+				tableHeight+=trs[i].clientHeight;
+			}
+		}
+		if(tableHeight==0){
+			tableHeight=250;
+		}
+
+		var reporTable=new scrollableTable("reportsTable",tableHeight);
 		reporTable.debug=false;
 		reporTable.maxRowDepth=1;
 		reporTable.scroll();
@@ -140,7 +151,7 @@ div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
-	width: 300px;
+	width: 85px;
 	padding: 0;
 	margin: 0;
 	z-index: 1;
@@ -224,7 +235,7 @@ div.fakefile2 input{
 							</div>
 							<button style="vertical-align: middle;background-color: #ECF3FD;text-decoration: none;font: 11px" type="button" onclick="changePageFromImport('<%=ReportsImpExpConstants.ACTION_IMPORT_FILE %>')">
 								<digi:trn>Import</digi:trn> 
-							</button>
+							</button>							
 						</td>
 					</tr>
 				</table>
@@ -275,7 +286,7 @@ div.fakefile2 input{
                           		<logic:iterate name="aimImpExpForm"  property="reportsList" id="report" indexId="idx" type="org.digijava.module.aim.dbentity.AmpReports">
                             		<tbody>
                               			<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
-                              			onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="height: 50px" >
+                              			onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" class="myClass">
                               				<td>
                               					<html:multibox name="aimImpExpForm" property="importReportIndexes" value="${idx}"/>
                               				</td>                           

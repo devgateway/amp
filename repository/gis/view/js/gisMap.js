@@ -408,6 +408,11 @@
 		
 		$("#testMap").getImageMap();
 		$("#testMap").chekIndicatorValues();
+		$("#testMap").bind("load", function(){
+			actionImgLoading = false;
+			$("#testMap").getImageMap();
+			$("#testMap").chekIndicatorValues();
+		});
 		$("input[name='mapLevelRadio']").click(function(){
 			var mapLevel = $("input[name='mapLevelRadio']:checked").val();
 			jQuery.fn.mapLevelChange(mapLevel);

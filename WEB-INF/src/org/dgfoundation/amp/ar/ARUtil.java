@@ -65,24 +65,44 @@ public final class ARUtil {
 	/**
 	 * 
 	 * @param getTabs if null gets both reports and tabs, on true only tabs, on false only reports
+	 * @param filterForName - reports name filter
 	 * @return list of public reports
 	 */
-	public static ArrayList getAllPublicReports(Boolean getTabs) {
+	public static ArrayList getAllPublicReports(Boolean getTabs,String filterForName) {
 		Session session = null;
 		ArrayList col = new ArrayList();
 		String tabFilter	= "";
+		String nameFilter ="";
 
 		if ( getTabs!=null ) {
 			tabFilter	= "r.drilldownTab=:getTabs AND";
 		}
+		if(filterForName!=null){
+			if(filterForName.equals("0-9%")) {
+				nameFilter+="( ";
+				for (int i=0;i<=9;i++){
+					nameFilter+=" r.name like '" + i + "%'";
+					if(i<9){
+						nameFilter+=" or ";
+					}
+				}
+				nameFilter+=" ) and ";
+ 		   }else if (!filterForName.equals("")) { //any letter
+ 			   nameFilter = " lower(r.name) like lower(:nameFilter) and";
+ 		   }		   
+		}
+		
 		try {
 
 			session = PersistenceManager.getSession();
-			String queryString = "select r from " + AmpReports.class.getName()
-					+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
+			String queryString = "select r from " + AmpReports.class.getName()+ " r " + "where ( " + tabFilter + nameFilter + " r.publicReport=true)";
 			Query qry = session.createQuery(queryString);
-			if ( getTabs!=null )
+			if ( getTabs!=null ){
 				qry.setBoolean("getTabs", getTabs);
+			}
+			if(filterForName!=null && !filterForName.equals("0-9%")){
+				qry.setParameter("nameFilter", filterForName);
+			}
 
 			Iterator itrTemp = qry.list().iterator();
 			AmpReports ar = null;

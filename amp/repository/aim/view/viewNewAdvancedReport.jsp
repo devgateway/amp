@@ -520,7 +520,6 @@ session.setAttribute("progressValue", counter);
 <c:set var="tabsPerPage">
 	<%=(Integer)request.getAttribute("viewablePages")%>
 </c:set>
-
 <c:if test="${recordsPerPage ne max_value}">
             <logic:notEqual name="viewFormat" value="print">
                 <logic:equal name="viewFormat" value="foldable">
@@ -665,11 +664,13 @@ session.setAttribute("progressValue", counter);
             	<%
                 	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
                 %>
-				<c:set var="accessTypeLocal"><%=arf.getAccessType().toString() %></c:set>
-				<c:if test="${accessTypeLocal == 'Management'}">
-                <digi:trn key="aim:noNewActivitiesManagement">Number of activities that do not show up in the list (these include draft and new activities that are pending approvals)</digi:trn>:
-                &nbsp;<%= arf.getActivitiesRejectedByFilter().toString() %>
-                </c:if>&nbsp;
+                <%if (arf.getAccessType()!= null){ %>
+					<c:set var="accessTypeLocal"><%=arf.getAccessType().toString() %></c:set>
+					<c:if test="${accessTypeLocal == 'Management'}">
+                		<digi:trn key="aim:noNewActivitiesManagement">Number of activities that do not show up in the list (these include draft and new activities that are pending approvals)</digi:trn>:
+                		&nbsp;<%= arf.getActivitiesRejectedByFilter().toString() %>
+                	</c:if>&nbsp;
+                <%} %>
 			</td>
             </tr>
             </table>

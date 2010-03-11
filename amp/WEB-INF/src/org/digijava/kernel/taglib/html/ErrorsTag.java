@@ -37,6 +37,7 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -182,22 +183,25 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
             newErrors = new ActionErrors();
             while (iter.hasNext()) {
                 ActionError item = (ActionError)iter.next();
-
-                newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + item.getKey();
+                try {
+                String message=bundleApplication.getString(item.getKey()).trim();
+                String key=TranslatorWorker.generateTrnKey(message);
+                newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + key;
                 logger.debug("New key for error is " + newKey);
                 newErrors.add(property, new ActionError(newKey, item.getValues()));
-                
+               
                 //Add the new string id if needed.
-                try {
+                
 	                Message msg = new Message();
-	                msg.setKey(item.getKey().trim().toLowerCase());
-	                msg.setMessage(bundleApplication.getString(item.getKey()));
+	                msg.setKey(key);
+	                msg.setMessage(message);
 	                msg.setSiteId(site.getId());
 	                msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
-	                if (TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId()) == null) {
-		                if (item.getKey() != null)  {                   
+	                if (TranslatorWorker.getInstance(msg.getKey()).getByKey(key, msg.getLocale(), site.getId()) == null) {
+		                if (item.getKey() != null)  {
 	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
+                            LuceneWorker.addItemToIndex(msg,  pageContext.getServletContext(),currentLocale.getCode());
 		                }
 	                }
                 }catch(Exception e){
@@ -205,7 +209,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                 }
             }
 
-            if( !newErrors.isEmpty() )
+           if( !newErrors.isEmpty() )
                 request.setAttribute(Globals.ERROR_KEY, newErrors);
         }
     }

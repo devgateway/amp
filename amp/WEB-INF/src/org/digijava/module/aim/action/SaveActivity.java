@@ -2619,7 +2619,7 @@ public class SaveActivity extends Action {
 		}
 
 		//If we're adding an activity, create system/admin message
-		if(activity.getDraft()!=null && !activity.getDraft()) {
+		if(activity.getDraft()!=null && !activity.getDraft() && eaForm.getActivityId()==null) {
 			ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 		}
 
@@ -2645,8 +2645,6 @@ public class SaveActivity extends Action {
 				}
 			}
 		}
-	
-	
 		
 		
 		if(DocumentUtil.isDMEnabled()) {

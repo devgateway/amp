@@ -328,8 +328,10 @@ function toggleSettings(){
 </logic:present>
 </ul>
 </td>
-<td width="60" align="right" class="yui-nav" valign="bottom"> 
+<td width="60" align="right" class="yui-nav" valign="bottom">
+<logic:notEmpty name="myTabs" scope="session"> 
 <a style="background-color:#FFFFFF" href="javascript:fontResize('less')">-A</a>&nbsp; <a style="background-color:#FFFFFF" href="javascript:fontResize('reset')">A</a>&nbsp;<a style="background-color:#FFFFFF" href="javascript:fontResize('add')">+A</a>&nbsp;&nbsp;
+</logic:notEmpty>
 </td>
 </tr>
 </table>

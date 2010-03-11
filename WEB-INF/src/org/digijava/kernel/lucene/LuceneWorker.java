@@ -447,6 +447,7 @@ public class LuceneWorker {
 				Analyzer analyzer = module.getAnalyzer();
 				IndexWriter writer = new IndexWriter(dir, analyzer, false);
 				writer.addDocument(doc);
+                writer.close();
 			} catch (IOException e) {
 				throw new DgException("Cannot add item to index.",e);
 			}

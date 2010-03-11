@@ -124,6 +124,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}else{
 			request.setAttribute("recordsPerPage", new Integer(25));
+			request.setAttribute("viewablePages", Constants.VIEWABLE_PAGES);
 		}
 		
 		

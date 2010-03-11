@@ -42,9 +42,9 @@ function eventType(){
 		var Yearly = document.getElementById("Yearly").checked;
 
 		var recStartTime = document.getElementById("selectedEndHour").value;
-		var recEndTime = document.getElementById("selectedStartHour").value;
+		var recEndTime = document.getElementById("recSelectedEndHour").value;
 		var recStartMinute = document.getElementById("selectedStartMinute").value;
-		var recEndMinute = document.getElementById("selectedEndMinute").value;
+		var recEndMinute = document.getElementById("recSelectedEndMinute").value;
 		
 		//document.getElementById("recurrSelectedStartTime").value = recStartTime+":"+recStartMinute;
 		document.getElementById("recurrSelectedEndTime").value = recEndTime+":"+recEndMinute;
@@ -427,7 +427,7 @@ function disableInputs(){
 				 	 		-->
 				 	 		<td><digi:trn>End Time</digi:trn></td>
 				 	 		<td>
-				 	 			<select id="selectedEndHour">
+				 	 			<select id="recSelectedEndHour">
                                                     <c:forEach var="hour" begin="0" end="23">
 	                                                      <c:if test="${hour < 10}">
 	                                                      	<c:set var="hour" value="0${hour}"/>
@@ -435,7 +435,7 @@ function disableInputs(){
 	                                                      	<option value="${hour}">${hour}</option>
                                                     </c:forEach>
                                 </select>:
-                                <select id="selectedEndMinute">
+                                <select id="recSelectedEndMinute">
                                       <c:forEach var="minute" begin="0" end="59">
                                         <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
                                         <option value="${minute}" >${minute}</option>

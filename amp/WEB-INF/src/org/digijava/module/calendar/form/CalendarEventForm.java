@@ -410,10 +410,8 @@ public class CalendarEventForm
         selectedEndTime="00:00";
         endDate=null;
         endDateBreakDown=null;
-        Calendar recEndDate = Calendar.getInstance();
-        recEndDate.add(Calendar.DATE,1);
-        recurrEndDate=sdf.format(recEndDate.getTime());
-        recurrSelectedEndTime="00:00";
+        recurrEndDate=null;
+        recurrSelectedEndTime=null;
         
 //        eventOrganisations=null;
 //        selectedEventOrganisations=null;

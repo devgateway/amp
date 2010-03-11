@@ -49,11 +49,28 @@
 		YAHOO.amptab.init();
 		var element = document.getElementById("myEvent");
 		element.style.display = "inline";
-		
-		myPanel1.setBody(element);
+        var recSelEndDate=document.getElementById("recurrSelectedEndDate");
+        var recSelEndTime=document.getElementById("recurrSelectedEndTime");
+
+        if(recSelEndDate.value==''){
+            var endDate=document.getElementById("selectedEndDate");
+            recSelEndDate.value=endDate.value;
+        }
+        if(recSelEndTime.value==''){
+            var endDateTime=document.getElementById("selectedEndTime");
+            recSelEndTime.value=endDateTime.value;
+
+            var recEndTimeHour = document.getElementById("recSelectedEndHour");
+            recEndTimeHour.selectedIndex=parseInt(endDateTime.value.substring(0,2));
+
+            var recStartMinute = document.getElementById("recSelectedEndMinute");
+            recStartMinute.selectedIndex=parseInt(endDateTime.value.substring(3,5));
+        }
+
+        myPanel1.setBody(element);
 		myPanel1.center();
 		myPanel1.show();
-
+       
 		initCalendar();
 	}
 	

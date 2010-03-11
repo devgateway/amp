@@ -135,9 +135,16 @@ public class ShowTeamReports extends Action {
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}
-
-		if (tm == null) {
-			Collection reports = ARUtil.getAllPublicReports(false);
+		
+		String filterText = "";
+		if (rf.getFilter() != null && !rf.getFilter().equals("")){
+			filterText = rf.getFilter() + "%";
+		}else{
+			filterText = null;
+		}
+		
+		if (tm == null) {			
+			Collection reports = ARUtil.getAllPublicReports(false,filterText);
 			rf.setReports(reports);
 			rf.setTotalPages(FIRST_PAGE);
 		} else {
@@ -162,18 +169,10 @@ public class ShowTeamReports extends Action {
 				rf.setTotalPages(totalPages.intValue());
 				rf.setTempNumResults(appSettings.getDefReportsPerPage());
 				//rf.setTempNumResults(100);
-			}else{
-				String filterText = "";
-				if (rf.getFilter() != null && !rf.getFilter().equals(""))
-				{
-					filterText = rf.getFilter() + "%";
-				}
-				else
-				{
-					filterText = null;
-				}
+			}else{				
 				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(), filterText ); //The filter is set to search for the first letter
-				}
+			}
+			
 			boolean found = false;
 			if (defaultTeamReport != null){
 				Iterator iter = teamResults.iterator();

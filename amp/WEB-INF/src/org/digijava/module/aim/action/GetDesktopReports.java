@@ -147,7 +147,7 @@ public class GetDesktopReports extends TilesAction {
 				if(tm.getTeamHead()) session.setAttribute(Constants.TEAM_Head,"yes");
 					else session.setAttribute(Constants.TEAM_Head,"no");
 		} else {
-			Collection reports=ARUtil.getAllPublicReports(null);
+			Collection reports=ARUtil.getAllPublicReports(null,null);
 			session.setAttribute(Constants.MY_REPORTS,reports);
 		}
 		return null;

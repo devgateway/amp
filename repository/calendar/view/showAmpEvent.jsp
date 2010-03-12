@@ -10,8 +10,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <!-- Dependencies -->        
 <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>        
 <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
@@ -1098,9 +1096,9 @@ addLoadEvent(delBody);
 		<jsp:include page="/calendar/recurringEvent.do" />
 	</div>
 </digi:form>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <script type="text/javascript">
-	//attach character counters
+	//attach character counters 
 	$("#eventTitle").charCounter(50,{
 									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 									pulse: false});

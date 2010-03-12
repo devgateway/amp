@@ -36,10 +36,7 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/ar/report_html2_view.css" type="text/css" rel="stylesheet" />
         <digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
-
-
-
-
+		<LINK rel=stylesheet type=text/css href="/repository/aim/view/css/css_dhtmlsuite/calendar.css" media=screen>
 <style>
 .link{
 	text-decoration: none;

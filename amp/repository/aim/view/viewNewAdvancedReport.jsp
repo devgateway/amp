@@ -383,6 +383,7 @@ session.setAttribute("progressValue", counter);
         			<digi:instance property="aimReportsFilterPickerForm" />
              		<html:select styleClass="inp-text" name="aimReportsFilterPickerForm" property="text" onchange="document.getElementsByName('aimReportsFilterPickerForm')[0].text.value=this.value,submitFilters()">
            			<html:option value="">All</html:option>
+           			<html:option value="0-9">0-9</html:option>
            			<html:option value="A">A</html:option>
            			<html:option value="B">B</html:option>
            			<html:option value="C">C</html:option>

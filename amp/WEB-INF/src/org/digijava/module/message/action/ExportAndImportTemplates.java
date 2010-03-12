@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,10 +26,10 @@ import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.jaxb.AlertTemplateType;
-import org.digijava.module.message.jaxb.Messaging;
-import org.digijava.module.message.jaxb.TemplatesList;
 import org.digijava.module.message.jaxb.JobClassList;
 import org.digijava.module.message.jaxb.JobClassType;
+import org.digijava.module.message.jaxb.Messaging;
+import org.digijava.module.message.jaxb.TemplatesList;
 import org.digijava.module.message.util.AmpMessageUtil;
 
 

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +55,10 @@ import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.util.DbUtil;
 
+/**
+ * Different actions on Message
+ * @author Dare
+ */
 public class AmpMessageActions extends DispatchAction {
 
 	public static final String ROOT_TAG = "Messaging";
@@ -652,7 +657,7 @@ public class AmpMessageActions extends DispatchAction {
 
 
     /**
-     * loads List of Receivers according to the receiverType(all,Users,Team,TM)
+     * loads List of Possible Receivers
      * @author Dare Roinishvili
     */
     public ActionForward loadReceiversList(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -683,6 +688,9 @@ public class AmpMessageActions extends DispatchAction {
 
     public ActionForward attachFilesToMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AmpMessageForm messageForm=(AmpMessageForm)form;
+    	//receivers shouldn't be lost
+    	fillMessageFormReceivers(messageForm);    	
+    	
     	
     	int currentAttachmentSize=messageForm.getFileUploaded().getFileData().length;
     	int attachedFilesSize=messageForm.getAttachmentsSize();
@@ -735,8 +743,13 @@ public class AmpMessageActions extends DispatchAction {
     	return mapping.findForward("addOrEditAmpMessage");
     }
     
+    
+    
     public ActionForward removeAttachment(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AmpMessageForm messageForm=(AmpMessageForm)form;
+    	//receivers shouldn't be lost
+    	fillMessageFormReceivers(messageForm);
+    	
     	Sdm attachmentsHolder=messageForm.getSdmDocument(); //this won't be null, because if we are removing any attachment, this automatically means that we have Sdm
     	Long attachmentOrder=null; //order number or sdmItem in Sdm
     	if(request.getParameter("attachmentOrder")!=null){
@@ -765,7 +778,58 @@ public class AmpMessageActions extends DispatchAction {
     }
     
     /**
-     * add Message
+     * Fills form receivers field with submitted values from messageForm.getReceiversIds().
+     * used not to loose selected receivers when form is submitted to attach/remove attachment from the message
+     * @param messageForm
+     */
+
+	private void fillMessageFormReceivers(AmpMessageForm messageForm) {
+		String[] messageReceivers=messageForm.getReceiversIds();
+    	List<LabelValueBean> allReceivers=null;
+    	if(messageReceivers!=null && messageReceivers.length>0){
+    		allReceivers=new ArrayList<LabelValueBean>();
+    		
+    		Set<AmpTeam> selectedTeams=new HashSet<AmpTeam>();
+    		//this map will hold teamId as key and all the selected members for given team as value
+    		Map<Long,Set<AmpTeamMember>> membersForTheTeam=new HashMap<Long, Set<AmpTeamMember>>();
+    		Long id=null;
+    		for(int i=0;i<messageReceivers.length;i++){
+    			if(messageReceivers[i].startsWith("t:")){//team
+    				id=new Long(messageReceivers[i].substring(messageReceivers[i].indexOf("t:")+2));
+    				AmpTeam team=TeamUtil.getAmpTeam(id);
+    				selectedTeams.add(team);
+    			}else if(messageReceivers[i].startsWith("m:")){//member
+    				id=new Long(messageReceivers[i].substring(messageReceivers[i].indexOf("m:")+2));
+    				AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(id);
+    				Set<AmpTeamMember> members=membersForTheTeam.get(teamMember.getAmpTeam().getAmpTeamId());
+    				if(members==null){
+    					members=new HashSet<AmpTeamMember>();    					
+    				}
+    				members.add(teamMember);
+    				membersForTheTeam.put(teamMember.getAmpTeam().getAmpTeamId(), members);
+    				    				
+    			}else if(messageReceivers[i].startsWith("c:")){//contacts
+    				LabelValueBean contact=new LabelValueBean(messageReceivers[i].substring(messageReceivers[i].indexOf("c:")+2),messageReceivers[i]);
+    				allReceivers.add(contact);
+    			}
+    		}
+    		
+    		for (AmpTeam team : selectedTeams) {
+    			LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());
+    			allReceivers.add(teamLabel);
+    			Set<AmpTeamMember> membersOfThisTeam=membersForTheTeam.get(team.getAmpTeamId());
+    			for (AmpTeamMember member : membersOfThisTeam) {
+    				LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());
+    				allReceivers.add(tm);
+				}
+			}
+    		
+    		messageForm.setReceivers(allReceivers);
+    	}
+	}
+    
+    /**
+     * used to create new message
      */
     public ActionForward addMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,	HttpServletResponse response) throws Exception {
 

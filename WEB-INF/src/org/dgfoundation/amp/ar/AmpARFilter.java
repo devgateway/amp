@@ -980,8 +980,18 @@ public class AmpARFilter extends PropertyListable {
 		 */
 		if (text != null) {
 			if ("".equals(text.trim()) == false) {
-				String TEXT_FILTER = "SELECT a.amp_activity_id from amp_activity a WHERE `name` like '"
-						+text+"%'";
+				String TEXT_FILTER="SELECT a.amp_activity_id from amp_activity a WHERE ";
+				if(text.equals("0-9")){
+					for (int i=0;i<=9;i++){
+						TEXT_FILTER+= " `name` like '"	+i+"%'"; 
+						if(i<9){
+							TEXT_FILTER+=" or ";
+						}
+					}
+				}else{
+					TEXT_FILTER += " `name` like '"	+text+"%'";
+				}
+				
 				queryAppend(TEXT_FILTER);
 			}
 		}

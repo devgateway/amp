@@ -763,12 +763,21 @@ function fontResize(param){
 	
 }
 function fontResizeFromCookies(){
-	normalStyleOrgValue=readCookie("normalStyleOrgValue")
-	headerStyleOrgValue=readCookie("headerStyleOrgValue")
-	aHrefStyleOrgValue=readCookie("aHrefStyleOrgValue")
-	$('td.reportsBorderTD').css('font-size',readCookie("normalStyleNextVal")+'px');
-	$('td.clsTableTitleCol>a').css('font-size',readCookie("headerStyleNextVal")+'px');
-	$("td.reportsBorderTD>a").css('font-size',readCookie("aHrefStyleNextVal")+'px');
+	normalStyleOrgValue=readCookie("normalStyleOrgValue");
+	headerStyleOrgValue=readCookie("headerStyleOrgValue");
+	aHrefStyleOrgValue=readCookie("aHrefStyleOrgValue");
+    var normalStlNextVal=readCookie("normalStyleNextVal");
+    var headerStlNextVal=readCookie("headerStyleNextVal");
+    var aHrefStlNextVal=readCookie("aHrefStyleNextVal");
+    if(normalStlNextVal!=null){
+      $('td.reportsBorderTD').css('font-size',normalStlNextVal+'px');
+    }
+     if(headerStlNextVal!=null){
+      $('td.clsTableTitleCol>a').css('font-size',headerStlNextVal+'px');
+    }
+     if(aHrefStlNextVal!=null){
+     	$("td.reportsBorderTD>a").css('font-size',aHrefStlNextVal+'px');
+    }
 }
 
 

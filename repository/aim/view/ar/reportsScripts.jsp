@@ -50,6 +50,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" >.</script>
 
 <script type="text/javascript">
+
+    var  moreSettingsPanel = null;
+    
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
 messageObj.setWaitMessage('Loading message - please wait....');
 messageObj.setShadowOffset(5);	// Large shadow
@@ -815,6 +818,55 @@ function reportOptions(element,id){
 	//}
 }
 
+
+function showDiv(){
+    if(moreSettingsPanel!=null){
+        moreSettingsPanel.destroy();
+    }
+    /* 
+     * some messages need long time to load, 
+     * that is why we create blank panel here, so user will see blank panel
+     * before function call is completed
+     */
+    
+    //create div to hold selected message
+    var div=document.createElement('DIV');
+    div.id="moreSettingsPanel";
+    
+    document.body.appendChild(div);
+    
+    var divHead=document.createElement('DIV');
+    divHead.className="hd";
+    divHead.innerHTML="Detailed List";
+    div.appendChild(divHead);
+
+   
+    // create body div to hold selected message
+    var divBody=document.createElement('DIV');
+    divBody.style.padding="5";
+    divBody.className="bd";
+	divBody.overflow="auto",
+    
+    divBody.id="msg_bd";
+    divBody.className='scrollable'
+    var moreDiv = document.getElementById('morePropId');
+    divBody.innerHTML=moreDiv.innerHTML;
+    div.appendChild(divBody);
+    
+    moreSettingsPanel = new YAHOO.widget.Panel("moreSettingsPanel",{
+        width: 600,
+        constraintoviewport: true,
+        fixedcenter: true,
+        Underlay:"shadow",
+        modal: true,
+        close:true, 
+        visible:true, 
+        draggable:true} );
+    moreSettingsPanel.render();
+
+    
+}
+
 </script>
 <style type="text/css">
 .mask {
@@ -832,6 +884,10 @@ function reportOptions(element,id){
 	text-transform:uppercase;
 	text-decoration:none
 }
+
+ .scrollable {
+            height: 400px; overflow: auto;
+ }	
 </style>
 
 

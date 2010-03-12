@@ -117,13 +117,13 @@
             alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
             return false;
         }
-	var hiddenField=document.getElementById('myHidden');
-	var relActName=document.getElementById('myInput');
-	if(relActName.value!=null && relActName.value!='' && (hiddenField.value==null || hiddenField.value=='')){
-		alert('Related activity with given name not exists');		
-		return false;
-	}	
-	return true;
+		var hiddenField=document.getElementById('myHidden');
+		var relActName=document.getElementById('myInput');
+		if(relActName.value!=null && relActName.value!='' && (hiddenField.value==null || hiddenField.value=='')){
+			alert('Related activity with given name not exists');		
+			return false;
+		}	
+		return true;
   }
 
 	function save (event){
@@ -145,6 +145,13 @@
 	}
 
 	function removeAttachment(attachmentOrder){
+		//check submit selected receivers
+		var list = document.getElementById('selreceivers');
+		if(list!=null){
+    		for(var i = 0; i < list.length; i++) {
+        		list.options[i].selected = true;
+    		}
+    	}
 		messageForm.action="${contextPath}/message/messageActions.do?actionType=removeAttachment&attachmentOrder="+attachmentOrder;
   		messageForm.target = "_self";
   		messageForm.submit();
@@ -157,6 +164,13 @@
 			alert(msg);
 			return false;
 		}
+		//check submit selected receivers
+		var list = document.getElementById('selreceivers');
+		if(list!=null){
+    		for(var i = 0; i < list.length; i++) {
+        		list.options[i].selected = true;
+    		}
+    	}
 		return true;
 	}
 	

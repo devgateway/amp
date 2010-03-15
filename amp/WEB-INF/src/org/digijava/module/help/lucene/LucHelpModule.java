@@ -3,6 +3,7 @@ package org.digijava.module.help.lucene;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -11,6 +12,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Hit;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LucModule;
+import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.module.help.helper.HelpTopicHelper;
 import org.digijava.module.help.util.HelpUtil;
 import org.digijava.module.translation.lucene.LangSupport;
@@ -26,11 +28,13 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	/**
 	 * PLEASE INCREMENT VALUE ECH TIME CLASS IS CHANGED. 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	private final LangSupport lang;
-	private final String moduleInstance;
+	private final LangSupport LANG;
+	private final String MODULE_INSTANCE;
+	private final RegexBatch HTML_STRIPPER;
 	
+	//fields
 	private static final String MODULE_NAME 		= "help";
 	private static final String ID_FIELD_TERM 		= "helpTopicId";
 	private static final String FIELD_TITLE_KEY 	= "helpTitleKey";
@@ -41,6 +45,28 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	private static final String FIELD_INSTANCE_NAME = "helpModuleInstance";
 	private static final String FIELD_INDEXED_TEXT	= "helpIndxedText";
 
+	/**
+	 * Flags used for regex matching to strip out all unneeded html.
+	 * Can combine multiple patterns like this = Pattern.DOTALL | Pattern.MULTILINE; 
+	 */
+	private static final int REGEX_FLAGS = Pattern.DOTALL;
+	/**
+	 * Regexes split and ordered so that it will leave only 
+	 * text required for Lucene indexing.  
+	 */
+	private static final String[] HTML_STRIP_REGEXES = 
+	{
+			"<!--.*?-->"						//commented texts
+			, "<!DOCTYPE.*?>"					//doc type tags
+			, "<head.*?>.*?</head>"				//head tag with content
+			, "<script.*?>.*?</script>"			//script tag with content
+			, "<style.*?>.*?</style>"			//style tag with content
+			, "<(link|input|a|br|hr|meta).*?>"	//some tags
+			, "<\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Beginnings of tags 
+			, "</\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Endings of tags
+			, "&[a-z]*?;"						//&nbsp; and things like that
+			,"\\s{2,}"							//multiple spaces
+	};
 	
 	/**
 	 * Creates lucene module for help of English and all unsupported languages.
@@ -48,8 +74,9 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	 * @see LangSupport
 	 */
 	public LucHelpModule(){
-		this.lang = LangSupport.ENGLISH;
-		this.moduleInstance = null;
+		this.LANG = LangSupport.ENGLISH;
+		this.MODULE_INSTANCE = null;
+		this.HTML_STRIPPER = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
 	}
 
 	/**
@@ -58,8 +85,9 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	 * @param moduleInstance
 	 */
 	public LucHelpModule(String moduleInstance){
-		this.lang = LangSupport.ENGLISH;
-		this.moduleInstance = moduleInstance;
+		this.LANG = LangSupport.ENGLISH;
+		this.MODULE_INSTANCE = moduleInstance;
+		this.HTML_STRIPPER = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
 	}
 	
 	/**
@@ -68,14 +96,15 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	 * @param lang
 	 */
 	public LucHelpModule(String moduleInstance, LangSupport lang){
-		this.lang = lang;
-		this.moduleInstance = moduleInstance;
+		this.LANG = lang;
+		this.MODULE_INSTANCE = moduleInstance;
+		this.HTML_STRIPPER = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
 	}
 	
 	@Override
 	public Document convertToDocument(HelpTopicHelper item) {
 		
-		//Filter title and body from HTML tags.
+		//join title and body to index together
 		String bodyText = item.getBody();
 		String titleText = item.getTitle();
 		String textToIndex = "";
@@ -85,7 +114,8 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 		if (bodyText!=null){
 			textToIndex += ". " + bodyText; 
 		}
-		textToIndex = HelpUtil.stripOutHTML(textToIndex);
+		//Filter title and body from HTML tags.
+		textToIndex = HTML_STRIPPER.replaceAll(textToIndex, " "); // this will slow down greatly, but..
 		
 		//create lucene fields
 		Field id		= new Field(ID_FIELD_TERM, item.getId().toString(), Field.Store.YES, Field.Index.UN_TOKENIZED);
@@ -112,16 +142,16 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 
 	@Override
 	public Analyzer getAnalyzer() {
-		return lang.getAnalyzer();
+		return LANG.getAnalyzer();
 	}
 
 	@Override
 	public String getSuffix() {
 		String suffix = ""; 
-		if (moduleInstance!=null && !moduleInstance.trim().equals("")){
-			suffix += moduleInstance.trim()+"_";
+		if (MODULE_INSTANCE!=null && !MODULE_INSTANCE.trim().equals("")){
+			suffix += MODULE_INSTANCE.trim()+"_";
 		}
-		suffix += lang.getLangCode();
+		suffix += LANG.getLangCode();
 		return suffix;
 	}
 
@@ -145,17 +175,17 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 		boolean exclude = false;
 		
 		//prepare params
-		if (this.lang.equals(LangSupport.ENGLISH)){
+		if (this.LANG.equals(LangSupport.ENGLISH)){
 			//all except supported languages: English + all unsupported will go as English. 
 			langs = EnumSet.copyOf(LangSupport.supported());
 			exclude = true;
 		}else{
 			//only that one supported language.
-			langs = EnumSet.of(this.lang);
+			langs = EnumSet.of(this.LANG);
 		}
 		
 		//do search
-		topicHelpers = HelpUtil.getHelpItems(siteId, this.moduleInstance, langs, exclude);
+		topicHelpers = HelpUtil.getHelpItems(siteId, this.MODULE_INSTANCE, langs, exclude);
 
 		return topicHelpers;
 	}

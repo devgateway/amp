@@ -9,7 +9,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -50,7 +49,7 @@ import org.hibernate.Transaction;
 
 public class HelpUtil {
 	private static Logger logger = Logger.getLogger(HelpUtil.class);
-
+	
 	/**
 	 * Retrieves all help topics
 	 * 
@@ -1204,37 +1203,6 @@ public class HelpUtil {
     	return result;
     }
     
-    /**
-     * Removes all HTML tags leaving only text usable for Lucene.
-     * Any content inside HTML comment, head, script, style and other specific tags will be removed completely.
-     * For other tags only tag portions will be removed.
-     * Also multiple white spaces will be replaced with one space character.
-     * @param text text that contains HTML tags. can be null.
-     * @return text without tags, or null if parameter is null.
-     */
-	public static String stripOutHTML(String text) {
-		if (text == null) return null;
-		
-		String stripComments ="<!--(.|[\\n\\r])+?-->";
-//		text = text.replaceAll(stripComments, " ");
-		
-		String stripClosedBadTags = "<(\\s+)?(link|br|hr|input|script|style|link|head|meta)(.|[\\n\\r])+?\\2(\\s+)?>";
-//		text = text.replaceAll(stripClosedBadTags, " ");
-
-		String stripOpenedBadTags = "<(\\\\s+)?(link|br|hr|input|script|style|link|head|meta|img|!)(.|[\\\\n\\\\r])+?>";
-//		text = text.replaceAll(stripOpenedBadTags, "");
-
-		String stripTagBegginings = "<(\\s+)?[a-z]+(:[a-z]+)?(.|[\\n\\r])+?>";
-//		text = text.replaceAll(stripTagBegginings, " ");
-
-		String stripTagEndings = "</[a-z]+([0-9]+)?(:[a-z]+)?>";
-//		text = text.replaceAll(stripTagEndings, " ");
-		
-		String multiSpaceChars = "\\s{2,}";
-//		text = text.replaceAll(multiSpaceChars, " ");
-		
-		return text;
-	}
 
 	/**
 	 * Compares two {@link HelpTopicHelper} by its sort index field.

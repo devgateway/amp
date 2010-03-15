@@ -1880,7 +1880,7 @@ public class SaveActivity extends Action {
 	
 	private void processPostStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm){
 		
-		if (eaForm.isEditAct() || eaForm.getActivityId()!=0 && eaForm.getActivityId()!=0) {
+		if (eaForm.isEditAct() || eaForm.getActivityId()!=null && eaForm.getActivityId()!=0) {
 		
 			//AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
 			// Setting approval status of activity

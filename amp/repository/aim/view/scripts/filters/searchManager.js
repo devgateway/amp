@@ -77,7 +77,15 @@ SearchManager.prototype.findNext	= function() {
 					spans[i].style.fontWeight	= "bold";
 					if ( this.position == numFound ) {
 						spans[i].style.color	= "red";
-						spans[i].parentNode.getElementsByTagName("input")[0].focus();
+						var parentNode			= spans[i].parentNode;
+						for (var ii=0; ii<5; ii++) {
+							if ( parentNode.nodeName.toLowerCase() == "li" ) {
+								break;
+							}
+							parentNode			= parentNode.parentNode;
+						}
+						if ( parentNode.nodeName.toLowerCase() == "li" )
+							parentNode.getElementsByTagName("input")[0].focus();
 					}
 					numFound++;
 				}
@@ -106,7 +114,15 @@ SearchManager.prototype.findPrev	= function() {
 				spans[i].style.fontWeight	= "bold";
 				if ( this.position-2 == numFound ) {
 					spans[i].style.color	= "red";
-					spans[i].parentNode.getElementsByTagName("input")[0].focus();
+					var parentNode			= spans[i].parentNode;
+					for (var i=0; i<5; i++) {
+						if ( parentNode.nodeName.toLowerCase() == "li" ) {
+							break;
+						}
+						parentNode			= parentNode.parentNode;
+					}
+					if ( parentNode.nodeName.toLowerCase() == "li" )
+						parentNode.getElementsByTagName("input")[0].focus();
 				}
 				numFound++;
 			}

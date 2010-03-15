@@ -59,6 +59,9 @@
 			fixedTrim = fixedTrim.substring(0, fixedTrim.length - 1); }
 		return fixedTrim
 	}
+    function resetRadioButtons(){
+        $("input:radio").attr("checked", false);
+    }
 
 </script>
 
@@ -163,14 +166,18 @@
 																           <html:text property="orgTypeCode" size="15" />
 																		</td>
 																	</tr>
+                                                                    <tr/>
 																	<tr>
-																		<td colspan="2" align="center">
-                                                                            <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio>
-                                                                            <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio>
-                                                                            <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio>
-																		</td>
-																		
+                                                                        <td colspan="2" align="center">
+                                                                            <fieldset style="width: 40%;border-color: #000000; text-align: left;border-style:dotted">
+                                                                            <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
+                                                                            <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
+                                                                            <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
+                                                                            <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="dr-menu"/>
+                                                                            </fieldset>
+                                                                        </td>
 																	</tr>
+                                                                    <tr/>                                                                    
 																	<tr>
 																		<td colspan="2" width="60%"  align="center">
 																			<table width="100%" cellspacing="5">

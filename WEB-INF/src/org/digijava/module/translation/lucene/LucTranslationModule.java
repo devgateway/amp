@@ -26,7 +26,7 @@ public class LucTranslationModule implements LucModule<Message> {
 	/**
 	 * PLEASE INCREMENT THIS VALUE EACH TIME CLASS IS CHANGED.
 	 */
-	private static final long serialVersionUID 		= 2L;
+	private static final long serialVersionUID 		= 3L;
 //	public static final String ID_FIELD = "key";
 	public static final String MODULE_NAME 			= "translations";
 	public static final String FIELD_KEY 			= "trnKey";

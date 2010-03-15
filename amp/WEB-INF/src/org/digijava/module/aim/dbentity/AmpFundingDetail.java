@@ -46,7 +46,7 @@ public class AmpFundingDetail implements Serializable {
 	public AmpFundingDetail(Integer transactionType, Integer adjustmentType, BigDecimal transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Float percent, Double fixedExchangeRate) {
 		this(transactionType, adjustmentType, transactionDate, ampCurrencyId, fixedExchangeRate);
 		if (percent == null || percent == 0) {
-			this.transactionAmount = transactionAmount;
+			this.transactionAmount =BigDecimal.ZERO;
 		} else {
 			this.transactionAmount = transactionAmount.multiply(new BigDecimal(percent)).divide(new BigDecimal(100));
 		}

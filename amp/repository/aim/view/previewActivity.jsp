@@ -302,7 +302,7 @@ function collapseAll() {
 								</table>
 								</c:if>
 							</td>
-							<logic:present name="currentMember" scope="session">
+							
 							<td width="50%" align="right">
 								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border=0>
 								
@@ -325,7 +325,7 @@ function collapseAll() {
 									</tr>
 								</table>
 							</td>
-							</logic:present>
+							
 						</tr>
 					</table>
 				</td></tr>

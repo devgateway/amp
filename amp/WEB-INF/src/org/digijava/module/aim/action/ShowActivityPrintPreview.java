@@ -118,6 +118,9 @@ public class ShowActivityPrintPreview
         if(actId != null) {
             HttpSession session = request.getSession();
             TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+            if (tm==null){
+            	tm = new TeamMember();
+            }
             AmpActivity activity = null;
 			try {
 				activity = ActivityUtil.loadActivity(actId);
@@ -559,9 +562,11 @@ public class ShowActivityPrintPreview
                 
                 FundingCalculationsHelper calculations=new FundingCalculationsHelper();  
                 String toCurrCode=null;
-                if (tm != null)
+                if (tm.getAppSettings() != null){
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-
+                }else {
+                	toCurrCode = Constants.DEFAULT_CURRENCY;
+                }
           
                 ArrayList fundingOrgs = new ArrayList();
                 Iterator fundItr=null;
@@ -800,15 +805,15 @@ public class ShowActivityPrintPreview
                 	getComponents(comp, activity.getAmpActivityId(), eaForm);
                 }
                 
+                if (tm.getMemberId()!=null){
+                	Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
+                	Collection actDocs = DocumentUtil.getDocumentsForActivity(RequestUtils.getSite(request), activity);
+                	if(actDocs != null && actDocs.size() > 0) {
+                		Collection docsList = new ArrayList();
+                		Collection linksList = new ArrayList();
 
-                Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
-                Collection actDocs = DocumentUtil.getDocumentsForActivity(RequestUtils.getSite(request), activity);
-                if(actDocs != null && actDocs.size() > 0) {
-                    Collection docsList = new ArrayList();
-                    Collection linksList = new ArrayList();
-
-                    Iterator docItr = actDocs.iterator();
-                    while(docItr.hasNext()) {
+                		Iterator docItr = actDocs.iterator();
+                		while(docItr.hasNext()) {
                         RelatedLinks rl = new RelatedLinks();
 
                         CMSContentItem cmsItem = (CMSContentItem) docItr
@@ -831,11 +836,12 @@ public class ShowActivityPrintPreview
                         } else {
                             linksList.add(rl);
                         }
-                    }
-                    eaForm.getDocuments().setDocumentList(docsList);
-                    eaForm.getDocuments().setLinksList(linksList);
-                }                
-                eaForm.getDocuments().setManagedDocumentList(actDocs);
+                		}
+                		eaForm.getDocuments().setDocumentList(docsList);
+                    	eaForm.getDocuments().setLinksList(linksList);
+                	}                
+                	eaForm.getDocuments().setManagedDocumentList(actDocs);
+                }
                 // loading the related organizations
                 List executingAgencies = new ArrayList();
                 List impAgencies = new ArrayList();

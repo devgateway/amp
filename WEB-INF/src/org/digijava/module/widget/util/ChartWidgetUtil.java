@@ -633,7 +633,7 @@ public class ChartWidgetUtil {
                 // the sectors which percent is less then 5% should be group in "Other"
                 AmpSector sector = funding.getSector();
 
-                if (percent > 0.05) {
+                if (percent >= 0.05) {
                     SectorHelper secHelper=new SectorHelper();
                     secHelper.setName(sector.getName());
                     secHelper.setIds(sector.getAmpSectorId().toString());
@@ -1075,14 +1075,14 @@ public class ChartWidgetUtil {
                     DonorSectorFundingHelper sectorFunding = secFundColIter.next();
                     Double percent = sectorFunding.getFounding().divide(totAllSectors,3,RoundingMode.HALF_UP).doubleValue();
                     // if percent is less than 5, group in "others"
-                    if (percent>0.05) {
+                    if (percent>=0.05) {
                         ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding());
                     } else {
                         others=others.add(sectorFunding.getFounding());
 
                     }
+                    }
                 }
-            }
             if (others.doubleValue()>0) {
                 ds.setValue("Others", others);
             }

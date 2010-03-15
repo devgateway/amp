@@ -610,56 +610,58 @@ public class SaveActivity extends Action {
 			//Do the checks here
 			if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 				if(isSectorEnabled()){
-					if (eaForm.getSectors().getActivitySectors() == null || eaForm.getSectors().getActivitySectors().size() < 1) {
-						errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
-					}
-					else{
-						float primaryPrc=0, secondaryPrc=0;
-						boolean hasPrimarySectorsAdded=false, hasSecondarySectorsAdded=false;
-						
-						Iterator<ActivitySector> secPerItr = eaForm.getSectors().getActivitySectors().iterator();
-						while (secPerItr.hasNext()) {
-							ActivitySector actSect = (ActivitySector) secPerItr.next();
-							AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(actSect.getConfigId());
-							if("Primary".equals(config.getName())) 
-								hasPrimarySectorsAdded=true;
-							if("Secondary".equals(config.getName())) 
-								hasSecondarySectorsAdded=true;
+					if (isPrimarySectorEnabled() || isSecondarySectorEnabled()){
+						if (eaForm.getSectors().getActivitySectors() == null || eaForm.getSectors().getActivitySectors().size() < 1) {
+							errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
+						}
+						else{
+							float primaryPrc=0, secondaryPrc=0;
+							boolean hasPrimarySectorsAdded=false, hasSecondarySectorsAdded=false;
 							
-							if (null == actSect.getSectorPercentage() || "".equals(actSect.getSectorPercentage())) {
-								errors.add("sectorPercentageEmpty", new ActionError("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage",locale,siteId)));
-							}
-							// sector percentage is not a number
-							else {
-								try {
-									if("Primary".equals(config.getName())) primaryPrc+=actSect.getSectorPercentage().floatValue();
-									if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().floatValue();
-								} catch (NumberFormatException nex) {
-									errors.add("sectorPercentageNonNumeric",
-											new ActionError("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));
+							Iterator<ActivitySector> secPerItr = eaForm.getSectors().getActivitySectors().iterator();
+							while (secPerItr.hasNext()) {
+								ActivitySector actSect = (ActivitySector) secPerItr.next();
+								AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(actSect.getConfigId());
+								if("Primary".equals(config.getName())) 
+									hasPrimarySectorsAdded=true;
+								if("Secondary".equals(config.getName())) 
+									hasSecondarySectorsAdded=true;
+								
+								if (null == actSect.getSectorPercentage() || "".equals(actSect.getSectorPercentage())) {
+									errors.add("sectorPercentageEmpty", new ActionError("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage",locale,siteId)));
+								}
+								// sector percentage is not a number
+								else {
+									try {
+										if("Primary".equals(config.getName())) primaryPrc+=actSect.getSectorPercentage().floatValue();
+										if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().floatValue();
+									} catch (NumberFormatException nex) {
+										errors.add("sectorPercentageNonNumeric",
+												new ActionError("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));
+									}
 								}
 							}
-						}
-						
-						if (isPrimarySectorEnabled() && isInConfig(eaForm,"Primary")){
-							if(!hasPrimarySectorsAdded){
-								errors.add("noPrimarySectorsAdded",
-										new ActionError("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
+							
+							if (isPrimarySectorEnabled() && isInConfig(eaForm,"Primary")){
+								if(!hasPrimarySectorsAdded){
+									errors.add("noPrimarySectorsAdded",
+											new ActionError("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
+								}
+								if(primaryPrc!=100)
+									errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
 							}
-							if(primaryPrc!=100)
-								errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
-						}
-
-						
-						if (isSecondarySectorEnabled() && isInConfig(eaForm, "Secondary")){
-							if(!hasSecondarySectorsAdded){
-								errors.add("noSecondarySectorsAdded",
-										new ActionError("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
+	
+							
+							if (isSecondarySectorEnabled() && isInConfig(eaForm, "Secondary")){
+								if(!hasSecondarySectorsAdded){
+									errors.add("noSecondarySectorsAdded",
+											new ActionError("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
+								}
+								if(hasSecondarySectorsAdded && secondaryPrc!=100)
+									errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
 							}
-							if(hasSecondarySectorsAdded && secondaryPrc!=100)
-								errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
+	
 						}
-
 					}
 				}
 				

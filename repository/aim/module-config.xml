@@ -29,6 +29,10 @@
 		<action login-required="false" pattern="/confirmRegisteration" />
         <action login-required="true" pattern="/exportAdminTable" />
         <action login-required="false" pattern="/reportWizard" />
+        <action login-required="false" pattern="/showPrinterFriendlyPage" />
+        <action login-required="false" pattern="/exportActToPDF" />
+        
+        
 	</security>
 
 	<!-- AIM classes Begin-->

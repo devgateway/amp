@@ -41,13 +41,14 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.helper.Project;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -515,7 +516,11 @@ public class OrgProfileUtil {
         Date startDate = null;
         if (fiscalCalendarId != null && fiscalCalendarId != -1) {
             AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
-            startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
+            if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
+                startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
+            } else {
+                startDate = getEthiopianDate(calendar, year,true);
+            }
         } else {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.MONTH, Calendar.JANUARY);
@@ -530,19 +535,23 @@ public class OrgProfileUtil {
         Date endDate = null;
         if (fiscalCalendarId != null && fiscalCalendarId != -1) {
             AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
-            //we need data including the last day of toYear,this is till the first day of toYear+1
-            int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
-            endDate = new Date(getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
+            if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
+                //we need data including the last day of toYear,this is till the first day of toYear+1
+                int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+                endDate = new Date(getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
+            } else {
+                endDate = getEthiopianDate(calendar, year,false);
+            }
 
         } else {
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.MONTH, Calendar.DECEMBER);
-            cal.set(Calendar.DAY_OF_MONTH, 31);
-            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, Calendar.JANUARY);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.YEAR, year + 1);
             endDate = cal.getTime();
         }
         return endDate;
-        }
+    }
 
     public static Date getStartOfYear(int year, int month, int day) {
         GregorianCalendar cal = new GregorianCalendar();
@@ -842,5 +851,23 @@ public class OrgProfileUtil {
         }
         return footerText;
     }
+ 
+    
+    public static Date getEthiopianDate(AmpFiscalCalendar calendar, int year, boolean startDate) {
+        Date date;
+        EthiopianCalendar ethCal = new EthiopianCalendar();
+        GregorianCalendar[] dates = null;
+        if (calendar.getIsFiscal()) {
+            dates = ethCal.getGregorianDatesForEthFiscalYr(year);
+        } else {
+            dates = ethCal.getGregorianDatesForEthYr(year);
+        }
+        if (startDate) {
+            date = dates[0].getTime();
+        } else {
+            date = dates[1].getTime();
+        }
 
+        return date;
+    }
 }

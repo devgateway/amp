@@ -115,7 +115,7 @@ SearchManager.prototype.findPrev	= function() {
 				if ( this.position-2 == numFound ) {
 					spans[i].style.color	= "red";
 					var parentNode			= spans[i].parentNode;
-					for (var i=0; i<5; i++) {
+					for (var ii=0; ii<5; ii++) {
 						if ( parentNode.nodeName.toLowerCase() == "li" ) {
 							break;
 						}

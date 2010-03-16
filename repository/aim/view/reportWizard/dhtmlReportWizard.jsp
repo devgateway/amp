@@ -37,6 +37,10 @@
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2.css'/>">
+	<!--[if IE]>
+		<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2_IE_.css'/>">
+	<![endif]-->
 
 	<br>
 	<br>

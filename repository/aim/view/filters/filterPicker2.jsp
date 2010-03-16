@@ -33,8 +33,8 @@
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
-<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 88%;">
-	<ul class="yui-nav" style="height: 10%">
+<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 88%; padding-bottom: 0px;">
+	<ul class="yui-nav">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a> </li>
 		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a> </li>
 		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a> </li>
@@ -42,7 +42,7 @@
 		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a> </li>
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a> </li>
 	</ul>
-	<div class="yui-content" style="background-color: #f6faff; height: 88%;">
+	<div class="yui-content" style="background-color: #f6faff; height: 92%;">
 		<div id="donorsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />

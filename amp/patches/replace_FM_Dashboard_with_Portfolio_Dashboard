@@ -1,0 +1,1 @@
+update amp_features_visibility set name="Portfolio Dashboard" where name="Dashboard";

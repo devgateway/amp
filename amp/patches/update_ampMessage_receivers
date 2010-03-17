@@ -1,0 +1,1 @@
+ALTER TABLE amp_message MODIFY receivers TEXT  NULL;

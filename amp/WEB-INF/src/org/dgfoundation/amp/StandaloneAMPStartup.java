@@ -4,6 +4,8 @@
 package org.dgfoundation.amp;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
@@ -27,6 +29,8 @@ import org.digijava.module.aim.action.EditActivity;
 import org.digijava.module.aim.action.SaveActivity;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -34,8 +38,10 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.HibernateException;
@@ -107,7 +113,7 @@ public class StandaloneAMPStartup {
 */				
 	}
 	
-	private static void replicateActivity(Long ampActivityId,Session session) throws Exception {
+	private static void replicateActivity(Long ampActivityId,String newName, Session session) throws Exception {
 		//mock http servlet request
 		MockHttpServletRequest request=new MockHttpServletRequest();
 		MockActionMapping mam=new MockActionMapping();
@@ -116,6 +122,7 @@ public class StandaloneAMPStartup {
 		HttpSession httpsess = request.getSession();
 		EditActivityForm eaf=new EditActivityForm();
 		eaf.setActivityId(ampActivityId);
+
 		EditActivity eas=new EditActivity();
 		MockActionServlet servlet = new MockActionServlet();
 		servlet.setServletContext(new MockServletContext());
@@ -173,6 +180,7 @@ public class StandaloneAMPStartup {
 		
 		tm.setTeamName(team.getName());
 		tm.setTeamId(team.getAmpTeamId());
+		tm.setWrite(true);
 		httpsess.setAttribute(Constants.CURRENT_MEMBER, tm);
 
 		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
@@ -198,6 +206,22 @@ public class StandaloneAMPStartup {
 		eas.execute(mam, eaf, request, msrep);
 		
 		eaf.getIdentification().setDraft(new Boolean(false));
+		eaf.getIdentification().setTitle(newName);
+		
+		AmpClassificationConfiguration auxClassification = new AmpClassificationConfiguration();
+		int i=0;
+		auxClassification.setClassification((AmpSectorScheme) ((List) SectorUtil.getAllSectorSchemes()).get(i));
+		auxClassification.setId(new Long(i));
+		auxClassification.setName(i == 0 ? "Primary" : "Secondary");
+		auxClassification.setPrimary(i == 0 ? true : false);
+		eaf.getSectors().setClassificationConfigs(new ArrayList<AmpClassificationConfiguration>());
+		eaf.getSectors().getClassificationConfigs().add(auxClassification);
+		
+		eaf.setActivityId(null);
+		List steps = ActivityUtil.getSteps();
+		eaf.setSteps(steps);
+		eaf.setEditAct(false);
+	
 		
 		SaveActivity saveAct=new SaveActivity();
 		saveAct.setServlet(servlet);
@@ -211,6 +235,8 @@ public class StandaloneAMPStartup {
 		ResourceStreamHandlerFactory.installIfNeeded();
 		try {
 			
+			
+			
 			StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
 			
 			DigiConfigManager.initialize("repository");
@@ -222,12 +248,15 @@ public class StandaloneAMPStartup {
 			
 			try {
 				//EXAMPLE OF A WORKING HIBERNATE SESSION OBJECT:
-				Session session = PersistenceManager.getSession();
+
 				
-				replicateActivity(61L,session);
+				for (int i=0; i<1000;i++) {
+					Session session = PersistenceManager.getSession();
+					logger.info("Creating activity replica "+i);
+					replicateActivity(32L,"Monrovia Water Treatment "+i, session);
+					PersistenceManager.releaseSession(session);
+				}
 				
-				
-				PersistenceManager.releaseSession(session);
 				
 				
 			} catch (HibernateException e) {

@@ -287,6 +287,7 @@ public class ContactInfoUtil {
 	}
 	
 	public static List<AmpActivityContact> getActivityContacts(Long activityId) throws Exception{
+		if (activityId==null) return null;
 		Session session=null;
 		String queryString =null;
 		Query query=null;

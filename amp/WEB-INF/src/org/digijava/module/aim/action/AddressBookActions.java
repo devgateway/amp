@@ -1,13 +1,18 @@
 package org.digijava.module.aim.action;
 
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -18,21 +23,27 @@ import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.AddressBookForm;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AddressBookActions extends DispatchAction {
+	
+	private Long siteId;
+	private String locale;
 	
 	public ActionForward viewAddressBook (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AddressBookForm myForm=(AddressBookForm)form;
@@ -47,32 +58,32 @@ public class AddressBookActions extends DispatchAction {
     	if(myForm.getCurrentAlpha()!=null && ! myForm.getCurrentAlpha().equals("viewAll")){
     		alpha=myForm.getCurrentAlpha();
     	}    	
-    	
-    	int contactsAmount=ContactInfoUtil.getContactsSize(myForm.getKeyword(),alpha);
-    	//how many pages
-    	Collection pages = null;
-    	int pagesNum=0;
-    	if(contactsAmount % myForm.getResultsPerPage()==0){
-    		pagesNum=contactsAmount/myForm.getResultsPerPage();
-    	}else{
-    		pagesNum=contactsAmount/myForm.getResultsPerPage() +1;
-    	}
-    	if (pagesNum >= 1) {
-	          pages = new ArrayList();
-	          for (int i = 0; i < pagesNum; i++) {
-	            Integer pageNum = new Integer(i + 1);
-	            pages.add(pageNum);
-	          }
-	    }
-    	
-    	if(myForm.getResultsPerPage()==null){
-    		myForm.setResultsPerPage(Constants.CONTACTS_PER_PAGE);
-    	}
-    	
-    	List<AmpContact> pagedContacts=null;
-    	pagedContacts=ContactInfoUtil.getPagedContacts(0, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);
-    	
-    	//alpha pages
+//    	
+//    	int contactsAmount=ContactInfoUtil.getContactsSize(myForm.getKeyword(),alpha);
+//    	//how many pages
+//    	Collection pages = null;
+//    	int pagesNum=0;
+//    	if(contactsAmount % myForm.getResultsPerPage()==0){
+//    		pagesNum=contactsAmount/myForm.getResultsPerPage();
+//    	}else{
+//    		pagesNum=contactsAmount/myForm.getResultsPerPage() +1;
+//    	}
+//    	if (pagesNum >= 1) {
+//	          pages = new ArrayList();
+//	          for (int i = 0; i < pagesNum; i++) {
+//	            Integer pageNum = new Integer(i + 1);
+//	            pages.add(pageNum);
+//	          }
+//	    }
+//    	
+//    	if(myForm.getResultsPerPage()==null){
+//    		myForm.setResultsPerPage(Constants.CONTACTS_PER_PAGE);
+//    	}
+//    	
+//    	List<AmpContact> pagedContacts=null;
+//    	pagedContacts=ContactInfoUtil.getPagedContacts(0, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);
+//    	
+//    	//alpha pages
     	if(alpha==null){
     		String[] contactNames=ContactInfoUtil.getContactNames();
     		String[] alphaArray = new String[26];
@@ -89,12 +100,124 @@ public class AddressBookActions extends DispatchAction {
     	}else{
     		myForm.setAlphaPages(null);
     	}
-    	
-    	myForm.setContactsForPage(pagedContacts);
+//    	
+//    	myForm.setContactsForPage(pagedContacts);
     	myForm.setCurrentPage(new Integer(1));
-    	myForm.setPages(pages);
+    	//myForm.setPages(pages);
     	myForm.setContactNames(ContactInfoUtil.getContactNames());
 		return mapping.findForward("showAllContacts");
+	}
+	
+	public ActionForward getContactsJSON (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		AddressBookForm myForm=(AddressBookForm)form;
+		//local and siteId
+		Site site = RequestUtils.getSite(request);
+		Long siteId=site.getId();
+		
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		String locale=navigationLanguage.getCode();
+		
+		//total amount of contacts
+		String alpha=null;
+    	if(myForm.getCurrentAlpha()!=null && ! myForm.getCurrentAlpha().equals("viewAll")){
+    		alpha=myForm.getCurrentAlpha();
+    	}
+    	int contactsAmount=ContactInfoUtil.getContactsSize(myForm.getKeyword(),alpha); //need this to draw correct amount of pages
+    	//sorting options
+		String sortBy = request.getParameter("sort");
+		String sortDir = request.getParameter("dir");
+		//pagination options
+		String startIndex = request.getParameter("startIndex");
+		String results = request.getParameter("results");
+		//get contacts
+		List<AmpContact> pagedContacts=ContactInfoUtil.getPagedContacts(new Integer(startIndex).intValue(), new Integer(results).intValue(), sortBy,sortDir,myForm.getKeyword(),alpha);
+		
+		
+		JSONObject json = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		//fill array
+		if(pagedContacts!=null && pagedContacts.size() > 0){
+			for (Iterator<AmpContact> it = pagedContacts.iterator(); it.hasNext();) {
+				AmpContact contact = (AmpContact) it.next();
+				JSONObject jcontact = new JSONObject();
+				jcontact.put("ID", contact.getId());
+				jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
+				jcontact.put("name", contact.getName()+" "+contact.getLastname());
+				String emails="";
+				String orgs="";
+				String phones="";
+				String faxes="";
+				if(contact.getProperties()!=null){
+					for (AmpContactProperty property : contact.getProperties()) {
+						if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+							if(emails.length()==0){
+								emails+="<ul>";
+							}
+							emails+="<li>"+property.getValue() +" </li>";
+						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValue().length()>0){
+							if(phones.length()==0){
+								phones+="<ul>";
+							}
+							phones+="<li>"+property.getValue() +" </li>";
+						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+							if(faxes.length()==0){
+								faxes+="<ul>";
+							}
+							faxes+="<li>"+property.getValue() +" </li>";
+						}
+					}
+					if(emails.length()>0){
+						emails+="</ul>";
+					}
+					if(phones.length()>0){
+						phones+="</ul>";
+					}
+					if(faxes.length()>0){
+						faxes+="</ul>";
+					}
+				}
+				jcontact.put("email", emails);
+				
+				if(contact.getOrganizationContacts()!=null || contact.getOrganisationName()!=null){
+					orgs+="<ul>";
+					if(contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0){
+						orgs+="<li>"+contact.getOrganisationName()+"</li>";
+					}
+					for (AmpOrganisationContact contOrg : contact.getOrganizationContacts()) {
+						orgs+="<li>"+contOrg.getOrganisation().getName()+"</li>";
+					}
+					orgs+="</ul>";
+				}
+				jcontact.put("organizations", orgs);
+				jcontact.put("function", contact.getFunction());
+				jcontact.put("phones", phones);
+				jcontact.put("faxes", faxes);
+				jsonArray.add(jcontact);
+			}			
+		}
+    	
+		json.put("recordsReturned", pagedContacts.size());
+		json.put("totalRecords", contactsAmount);
+		json.put("startIndex", startIndex);
+		json.put("sort", null);
+		json.put("dir", "asc");
+		json.put("pageSize", 10);
+		json.put("rowsPerPage", 10);
+
+		json.put("contacts", jsonArray);
+
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(json.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+		return null;
 	}
 	
 	public ActionForward searchContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -120,7 +243,7 @@ public class AddressBookActions extends DispatchAction {
 	    	}
 	    	
 			List<AmpContact> pagedContacts=null;
-	    	pagedContacts=ContactInfoUtil.getPagedContacts(stIndex, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);
+	    	pagedContacts=ContactInfoUtil.getPagedContacts(stIndex, myForm.getResultsPerPage(), myForm.getSortBy(),"asc",myForm.getKeyword(),alpha);
 	    	
 	    	myForm.setContactsForPage(pagedContacts);
 			myForm.setCurrentPage(new Integer(page));

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -163,14 +164,23 @@ public class ContactInfoUtil {
 		return retValue;
 	}
 	
-	public static List<AmpContact> getPagedContacts(int fromRecord,int resultsNum,String sortBy,String keyword,String alpha) throws Exception{
+	/**
+	 * @param fromRecord from which record should be loaded contacts
+	 * @param resultsNum how many contacts should be loaded
+	 * @param sortBy - with which column should records be sorted
+	 * @param sortDir - sorting direction is ascending or descending
+	 * @param keyword - records, whose name or name+lastname contain keyword text
+	 * @param alpha -records , whose name start with alpha
+	 * @return contacts
+	 * @throws Exception
+	 */
+	public static List<AmpContact> getPagedContacts(int fromRecord,int resultsNum,String sortBy,String sortDir,String keyword,String alpha) throws Exception{		
 		List<AmpContact> contacts=null;
 		Session session=null;
 		String queryString =null;
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			session.clear();
 			queryString="select cont from " + AmpContact.class.getName() +" cont ";
 			//filter
 			if(keyword!=null && alpha!=null){
@@ -181,25 +191,21 @@ public class ContactInfoUtil {
 				queryString+=" where cont.name like '"+alpha+"%'";
 			}
 			//sort
-			if(sortBy==null || sortBy.equals("nameAscending")){
-				queryString += " order by cont.name" ;
-			}else if(sortBy.equals("nameDescending")){
-				queryString += " order by cont.name desc" ;
+			if(sortBy!=null && sortDir!=null){
+				if (sortBy.equals("name") && sortDir.equals("asc")) {
+					queryString += " order by cont.name " ;
+				} else if (sortBy.equals("name") && sortDir.equals("desc")) {
+					queryString += " order by cont.name desc " ;
+				}else if(sortBy.equals("title") && sortDir.equals("asc")){
+					queryString += " order by cont.title ";
+				}else if(sortBy.equals("title") && sortDir.equals("desc")){
+					queryString += " order by cont.title desc ";
+				}else if(sortBy.equals("function") && sortDir.equals("asc")){
+					queryString += " order by cont.function ";
+				}else if(sortBy.equals("function") && sortDir.equals("desc")){
+					queryString += " order by cont.function desc ";
+				}
 			}
-			else if(sortBy.equals("orgNameAscending")){
-				queryString += " order by cont.organisationName";
-			}else if(sortBy.equals("orgNameDescending")){
-				queryString += " order by cont.organisationName desc";
-			}else if(sortBy.equals("titleAscending")){
-				queryString += " order by cont.title";
-			}else if(sortBy.equals("titleDescending")){
-				queryString += " order by cont.title desc";
-			}else if(sortBy.equals("functionAscending")){
-				queryString += " order by cont.function";
-			}else if(sortBy.equals("functionDescending")){
-				queryString += " order by cont.function desc";
-			}
-
 			query=session.createQuery(queryString);
 			query.setFirstResult(fromRecord);
 			if(resultsNum!=-1){
@@ -207,7 +213,7 @@ public class ContactInfoUtil {
 			}			
 			contacts=query.list();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return contacts;
 	}

@@ -195,92 +195,147 @@
 	color: #333;
 }
 
-
-#subtabs ul {
-	display: inline;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
-#subtabs li {
-	float: left;
-	padding: 0px 4px 0px 4px;
-}
-
-#subtabs a, #subtabs span { 
-	font-size: 8pt; 
-}
-
-#subtabs a {
-}
-
-#subtabs ul li span {
-	text-decoration: none;
-}
-
-#subtabs ul li div span {
-	text-decoration: none;
-}
-
-#subtabs {
-	text-align: center;
-	font-family:Arial,Helvetica,sans-serif;
-	font-size: 8pt;
-	padding: 2px 4px 2px 4px;
-	background-color:#CCDBFF;
-}
-
 #main {
 	clear:both;
 	text-align: left;
 	border-top: 2px solid #222E5D;
-	border-left: 1px solid #666;
-	border-right: 1px solid #666;
+	border-left: 1px solid #222E5D;
+	border-right: 1px solid #222E5D;
 	padding: 2px 4px 2px 4px;
 }
 html>body #main {
-	width:969px;
-}
-
-#mainEmpty {
-	border-top: 2px solid #222E5D;
-	width: 750px;
-	clear:both;
-}
-html>body #mainEmpty {
-	clear:both;
-	width:752px;
-}
-.clsTableTitleCol {
-	-x-system-font:none;
-	background-color:#B8B8B0;
-	color:#000000;
-	cursor:default;
-	font-family:"Verdana";
-	font-size:7.5pt;
-	font-size-adjust:none;
-	font-stretch:normal;
-	font-style:normal;
-	font-variant:normal;
-	font-weight:bold;
-	line-height:normal;
-	text-align:center;
-	height: 30px;
-}		
-.reportsBorderTable {
-	border-collapse:collapse;
-}
-.reportsBorderTD {
-	cellpadding: 0px;
-	cellspacing: 0px;
-	padding: 0px;
-	margin: 0px;
-	font-family:Arial,Helvetica,sans-serif;
-	height: 30px;
-	Fixed-width: 100px;
+	width:970px;
+	border: 2px solid #222E5D;
 }
 </style>
+
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/datatable.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/paginator.css" />
+
+<!-- Individual YUI JS files --> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/element-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datasource-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/datatable-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script> 
+	<style>
+		.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
+		color:#000000;
+		font-weight:bold;
+		font-size: 11px;
+		text-decoration:none;
+		vertical-align:bottom;
+		}
+		.yui-skin-sam th.yui-dt-asc, .yui-skin-sam th.yui-dt-desc {
+		background:#B8B8B0;
+		}
+		.yui-skin-sam .yui-dt th {
+		background:#B8B8B0;
+		}
+		.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
+		background:transparent url(/repository/aim/images/up.gif) no-repeat scroll right center;
+		}
+		.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
+		background:transparent url(/repository/aim/images/down.gif) no-repeat scroll right center;
+		}
+
+	</style>
+	
+<script language="JavaScript">
+
+	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
+		function initDynamicTable1() {
+		    YAHOO.example.XHR_JSON = new function() {
+
+		    	this.formatActions = function(elCell, oRecord, oColumn, sData) {
+		        	elCell.innerHTML =
+		        		"<a href=/aim/addressBook.do?actionType=editContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 			        	
+			        	
+		        };
+		 
+		        this.myDataSource = new YAHOO.util.DataSource("/aim/addressBook.do?actionType=getContactsJSON&");
+		        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+		        //this.myDataSource.connXhrMode = "queueRequests";
+		        this.myDataSource.responseSchema = {
+		            resultsList: "contacts",
+		            fields: ["ID","title","name","email","organizations","function","phones","faxes"],
+		            metaFields: {
+		            	totalRecords: "totalRecords" // Access to value in the server response
+		        	}    
+		        };        
+		        
+		        var myColumnDefs = [
+		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true, width: 50},
+		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 150},
+		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false, width: 150},
+		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false, width: 100},
+		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true, width: 100},
+		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false, width: 100},
+		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false, width: 100},
+		            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 50, formatter:this.formatActions,className:"ignore"}
+		        ];
+		  
+		        var div = document.getElementById('errors');
+		
+		        var handleSuccess = function(o){
+		        	if(o.responseText != undefined){
+		        		o.argument.oArgs.liner_element.innerHTML=o.responseText;
+		        	}
+		        }
+		
+		        var handleFailure = function(o){
+		        	if(o.responseText !== undefined){
+		        		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
+		        		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
+		        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
+		        	}
+		        }
+		        // Create the Paginator 
+		        var myPaginator = new YAHOO.widget.Paginator({ 
+		        	rowsPerPage:10,
+		        	containers : ["dt-pag-nav"], 
+		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
+		        	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
+		        	rowsPerPageOptions : [10,25,50,100]
+		        });   
+		        var myConfigs = {
+		            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
+		            dynamicData: true, // Enables dynamic server-driven data
+		            sortedBy : {key:"name", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
+		            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
+		            paginator:myPaginator
+		        };
+		    	 
+		        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
+		        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
+		        this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
+		        this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
+		 		this.myDataTable.subscribe("rowClickEvent", function (ev) {
+						var target = YAHOO.util.Event.getTarget(ev);
+						var record = this.getRecord(target);
+					});
+		        
+		        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+		        // Programmatically bring focus to the instance so arrow selection works immediately 
+		        this.myDataTable.focus(); 
+		
+		        // Update totalRecords on the fly with value from server
+		        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+		           oPayload.totalRecords = oResponse.meta.totalRecords;
+		           return oPayload;
+		       }
+		       
+		    };
+	    
+		}
+		
+</script>
 
 <script type="text/javascript">
 	function createContact(){
@@ -335,6 +390,8 @@ html>body #mainEmpty {
 			rows = null;
 		}
 	}
+
+	
 
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
@@ -449,243 +506,13 @@ html>body #mainEmpty {
 														<tr><td>&nbsp;</td></tr>
 														<tr>
 															<td>
-<!--																<div style="border:1px solid #999999;width: 865px" >-->
-																		<div class="reportHead" style="width: 965px; height: 30px; max-height: 30px; ">
-																			<table width="100%" class="reportsBorderTable">																				
-																				<thead class="fixedHeader">											                            	
-												                            	<tr height="100%">
-																					<td width="100" class="clsTableTitleCol">
-																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='titleAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=titleAscending&reset=false">
-																								<b><digi:trn>Title</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=titleDescending&reset=false">
-																								<b><digi:trn>Title</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
-																					</td>
-																					<td width="152" class="clsTableTitleCol">
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy!='nameAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=nameAscending&reset=false">
-																								<b><digi:trn>Name</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy=='nameAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=nameDescending&reset=false">
-																								<b><digi:trn>Name</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy=='nameAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='nameDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
-																					</td>
-																					<td width="130" class="clsTableTitleCol">
-																						<b><digi:trn>Email</digi:trn></b>
-																					</td>
-																					<td width="120" class="clsTableTitleCol">
-																						<b><digi:trn>Organizations</digi:trn></b>																																			
-																					</td>
-												                            		<td width="100" class="clsTableTitleCol">
-																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='functionAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=functionAscending&reset=false">
-																								<b><digi:trn>Function</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='functionAscending'}">
-																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=functionDescending&reset=false">
-																								<b><digi:trn>Function</digi:trn></b>
-																							</digi:link>																					
-																						</c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='functionAscending'}"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/></c:if>
-																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='functionDescending'}"><img src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/></c:if>
-																					</td>
-																					<td height="30" width="100" class="clsTableTitleCol">
-																						<b><digi:trn>Phone</digi:trn></b>													
-																					</td>
-																					<td height="30" width="100" class="clsTableTitleCol">
-																						<b><digi:trn>Fax</digi:trn></b>															
-																					</td>
-																					<td height="30" colspan="2" width="100" class="ignore clsTableTitleCol"><b>
-																						<digi:trn>Actions</digi:trn></b>
-																					</td>
-																				</tr>
-																				</thead>
-																		
-																		</table>
-																	</div>
-																	<div class="report" style="overflow:auto;width:965px;height:250px;max-height:220px; " >																		
-																		<table width="100%" id="dataTable" cellspacing="0" cellpadding="1" align="left">
-																			<c:if test="${empty addressbookForm.contactsForPage}">
-													                        	<tr>
-																					<td colspan="5">
-									                                                	<b><digi:trn>No Contacts present</digi:trn></b>
-																					</td>
-																				</tr>
-												                            </c:if>
-												                            <tbody>
-												                            <c:if test="${not empty addressbookForm.contactsForPage}">
-												                            	<c:forEach var="cont" items="${addressbookForm.contactsForPage}" varStatus="stat">
-					                                                           		<c:set var="background">
-																						<c:if test="${stat.index%2==0}">#dbe5f1</c:if>
-																						<c:if test="${stat.index%2==1}">#ffffff</c:if>
-																					</c:set>
-																					
-																					<tr bgcolor="${background}">
-																						<td class="reportsBorderTD" width="100" align="center">
-																							${cont.title}
-																						</td>
-						                                                           		<td width="152" class="reportsBorderTD">
-																						  ${cont.name}&nbsp;${cont.lastname}
-																						</td>
-																						<td width="100" class="reportsBorderTD">
-																							<c:forEach var="email" items="${cont.properties}">
-																								<c:if test="${email.name=='contact email'}">
-																									<div>${email.value}</div>
-																								</c:if>
-																							</c:forEach>
-																						</td>
-																						<td class="reportsBorderTD" width="100" align="left">
-                                                                                            <ul>
-                                                                                                <c:if test="${not empty cont.organisationName}">
-                                                                                                    <li>${cont.organisationName}</li>
-                                                                                                   </c:if>
-																									<c:forEach var="orgCont" items="${cont.organizationContacts}">
-																										<li>${orgCont.organisation.name}</li>                                                                                                
-																									</c:forEach>
-                                                                                            </ul>
-																						</td>
-																						<td class="reportsBorderTD" width="100" align="center">
-																							${cont.function}
-																						</td>																						
-																						<td class="reportsBorderTD" width="100">
-																							<c:forEach var="phone" items="${cont.properties}">
-																								<c:if test="${phone.name=='contact phone'}">
-																									<div>${phone.value}</div>
-																								</c:if>
-																							</c:forEach>																							
-																						</td>
-																						<td class="reportsBorderTD" width="100">
-																							<c:forEach var="fax" items="${cont.properties}">
-																								<c:if test="${fax.name=='contact fax'}">
-																									<div>${fax.value}</div>
-																								</c:if>
-																							</c:forEach>
-																						</td>
-																						<td class="ignore reportsBorderTD" width="100" align="center">
-																							<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																							<c:set target="${urlParams}" property="contactId">
-																								<bean:write name="cont" property="id"/>
-																							</c:set>
-																							<digi:link href="/addressBook.do?actionType=editContact" name="urlParams"><img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" /></digi:link>
-																							<digi:link href="/addressBook.do?actionType=deleteContact" name="urlParams" onclick="return confirmDelete()"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
-																						</td>																			
-					                                                            	</tr>					                                                            	
-																				</c:forEach>																				
-												                            </c:if>
-												                            </tbody>
-																			<!-- end page logic -->
-																		</table>
-																	</div>
-<!--																</div>-->
+																<div class='yui-skin-sam'>
+									                            	<div id="dynamicdata" class="report"></div>                            	
+																	<div id="dt-pag-nav"></div>
+																	<div id="errors"></div>
+																</div>
 															</td>
-														</tr>
-														<tr>
-															<td>	
-																<div style= " float:left; width:865px;" >
-																		<!-- page logic for pagination -->
-																		<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
-                                                            			<c:set target="${urlParams3}" property="page">1</c:set>
-                                                            			<c:set target="${urlParams3}" property="numPerPage">${addressbookForm.resultsPerPage}</c:set>
-                                                             			<c:set var="translation">
-                                                                			<digi:trn>First Page</digi:trn>
-                                                            			</c:set>
-																		&nbsp;                                                            			
-                                                                		<c:if test="${addressbookForm.pagesSize>0}">                                                                    		
-		                                                                	<c:if test="${addressbookForm.currentPage != 1}">
-		                                                                		<c:set target="${urlParams3}" property="page">1</c:set>
-		                                                                       	<div class="pagination">
-		                                                                           <digi:link href="/addressBook.do?actionType=searchContacts" name="urlParams3" title="${translation}" >
-		                                                                                &lt;&lt;
-		                                                                            </digi:link>
-		                                                                        </div>
-		                                                                    </c:if>
-                                                                   	 		<div style="float:left;">&nbsp;</div>
-                                                                		</c:if>
-                                                                		<c:if test="${addressbookForm.currentPage>10}">
-                                                                			<div class="pagination">
-                                                                				<c:set target="${urlParams3}" property="page">${addressbookForm.currentPage - 10}</c:set>
-	                                                                			<c:set var="translation">
-							                                                    	<digi:trn>previous 10 pages</digi:trn>
-							                                                    </c:set>
-							                                                    <digi:link href="/addressBook.do?actionType=searchContacts" name="urlParams3"title="${translation}" >  &lt;Previous 10</digi:link>
-                                                                			</div>                                                                			
-                                                                		</c:if>
-																		<logic:notEmpty name="addressbookForm" property="pages">
-																			<c:set var="start" value="${addressbookForm.offset}"/>
-																			<logic:iterate name="addressbookForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="10">
-																				<div style="float:left; width:10px;  padding:3px;border:1px solid #999999; ">
-																					<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
-																					<c:set var="translation">
-																						<digi:trn>Click here to view All pages</digi:trn>
-																					</c:set>
-						                                                            <c:if test="${addressbookForm.currentPage == pages}">
-						                                                                <font color="#FF0000"><%=pages%></font>
-						                                                            </c:if>
-						                                                            <c:if test="${addressbookForm.currentPage != pages}">
-						                                                                <c:set var="translation">
-						                                                                    <digi:trn>Click here to go to Next Page</digi:trn>
-						                                                                </c:set>
-						                                                                	<digi:link href="/addressBook.do?actionType=searchContacts" name="urlParams3"title="${translation}" ><%=pages%></digi:link>
-						                                                            </c:if>
-																				</div>
-																				<div style="float:left;">&nbsp;</div>
-																			</logic:iterate>
-																		</logic:notEmpty>
-																		<c:if test="${addressbookForm.currentPage+10 <= addressbookForm.pagesSize}">
-																			<div class="pagination">
-																				<c:set target="${urlParams3}" property="page">${addressbookForm.currentPage + 10}</c:set>
-	                                                                			<c:set var="translation">
-							                                                    	<digi:trn>next 10 pages</digi:trn>
-							                                                    </c:set>
-							                                                    <digi:link href="/addressBook.do?actionType=searchContacts" name="urlParams3"title="${translation}" >Next 10</digi:link>
-																			</div>                                                                			
-                                                                		</c:if>
-		                                                                <c:set var="translation">
-		                                                                    <digi:trn>Last Page</digi:trn>
-		                                                                </c:set>
-		                                                                <c:if test="${pages>0}">
-		                                                                	<c:set target="${urlParams3}" property="page">${addressbookForm.pagesSize}</c:set>
-		                                                                    <div class="pagination">
-		                                                                        <c:if test="${addressbookForm.currentPage != pages}">
-		                                                                            <digi:link href="/addressBook.do?actionType=searchContacts" name="urlParams3" title="${translation}" >
-		                                                                                &gt;&gt;
-		                                                                            </digi:link>
-		                                                                        </c:if>
-		                                                                        <c:if test="${addressbookForm.currentPage == pages}">
-		                                                                            &gt;&gt;
-		                                                                        </c:if>
-		                                                                    </div>
-		                                                                    <div style="float:left;">&nbsp;</div>
-		                                                                    <div class="pagination">
-		                                                                        <c:out value="${addressbookForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${addressbookForm.pagesSize}"></c:out>
-		                                                                    </div>
-		                                                                </c:if>
-                                                                		<!-- end page logic for pagination -->
-		                                                                <div style= " float:right;" >
-		                                                                    <digi:trn key="aim:results">Results</digi:trn>:&nbsp;
-		                                                                    <html:select property="resultsPerPage" styleClass="inp-text" onchange="submit()" >
-		                                                                        <html:option value="10">10</html:option>
-		                                                                        <html:option value="20">20</html:option>
-		                                                                        <html:option value="50">50</html:option>
-		                                                                        <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-		                                                                    </html:select>
-		                                                                </div>
-                                                        			</div>
-															</td>
-														</tr>
+														</tr>														
 													</table>
 												</td>
 											</tr>

@@ -799,9 +799,12 @@ public class SaveActivity extends Action {
 
 				while(itr.hasNext()){
 					AmpActivityProgram program = (AmpActivityProgram) itr.next();
-					program.setAmpActivityProgramId(null);
-                    program.setActivity(activity);
-                    programs.add(program);
+					AmpActivityProgram newProgram=new AmpActivityProgram();
+					newProgram.setActivity(activity);
+					newProgram.setProgram(program.getProgram());
+					newProgram.setProgramPercentage(program.getProgramPercentage());
+					newProgram.setProgramSetting(program.getProgramSetting());
+                    programs.add(newProgram);
 				}
 			}
 		}
@@ -811,9 +814,12 @@ public class SaveActivity extends Action {
 
 				while(itr.hasNext()){
 					AmpActivityProgram program = (AmpActivityProgram) itr.next();
-					program.setAmpActivityProgramId(null);
-                    program.setActivity(activity);
-                    programs.add(program);
+					AmpActivityProgram newProgram=new AmpActivityProgram();
+					newProgram.setActivity(activity);
+					newProgram.setProgram(program.getProgram());
+					newProgram.setProgramPercentage(program.getProgramPercentage());
+					newProgram.setProgramSetting(program.getProgramSetting());
+                    programs.add(newProgram);
 				}
 			}
 		}
@@ -823,9 +829,12 @@ public class SaveActivity extends Action {
 
 				while(itr.hasNext()){
 					AmpActivityProgram program = (AmpActivityProgram) itr.next();
-					program.setAmpActivityProgramId(null);
-                    program.setActivity(activity);
-                    programs.add(program);
+					AmpActivityProgram newProgram=new AmpActivityProgram();
+					newProgram.setActivity(activity);
+					newProgram.setProgram(program.getProgram());
+					newProgram.setProgramPercentage(program.getProgramPercentage());
+					newProgram.setProgramSetting(program.getProgramSetting());
+                    programs.add(newProgram);
 				}
 			}
 		}

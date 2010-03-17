@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledges" table="amp_funding_pledges">
+		<id name="Id" column="id" type="java.lang.Long"
+			unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">amp_funding_pledges_seq</param>
+			</generator>
+		</id>
+
+		<property name="title" column="title" type="java.lang.String" />
+		<property name="Name" column="Name" type="java.lang.String"/>
+		<property name="Address" column="Address" type="java.lang.String"/>
+		<property name="Email" column="Email" type="java.lang.String"/>
+		<property name="Title" column="Title" type="java.lang.String"/>
+		<property name="Ministry" column="Ministry" type="java.lang.String"/>
+		<property name="Telephone" column="Telephone" type="java.lang.String"/>
+		<property name="Fax" column="Fax" type="java.lang.String"/>
+		<property name="Name_1" column="Name_1" type="java.lang.String"/>
+		<property name="Address_1" column="Address_1" type="java.lang.String"/>
+		<property name="Email_1" column="Email_1" type="java.lang.String"/>
+		<property name="Title_1" column="Title_1" type="java.lang.String"/>
+		<property name="Ministry_1" column="Ministry_1" type="java.lang.String"/>
+		<property name="Telephone_1" column="Telephone_1" type="java.lang.String"/>
+		<property name="Fax_1" column="Fax_1" type="java.lang.String"/>
+		
+		
+		<many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
+		<many-to-one name="contactorganization" column="contactorganization" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
+		<many-to-one name="contactorganization_1" column="contactorganization_1" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
+		
+		<set name="locationlist" table="amp_funding_pledges_location" lazy="true" cascade="all">
+			<cache usage="read-write"/>
+			<key column="amp_location_id"/>
+			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation" />
+		</set>
+		
+		<set name="sectorlist" table="amp_funding_pledges_sectors" lazy="true" cascade="all">
+			<cache usage="read-write"/>
+			<key column="amp_sector_id"/>
+			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesSector" />
+		</set>
+	</class>
+</hibernate-mapping>

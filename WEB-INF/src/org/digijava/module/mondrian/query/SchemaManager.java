@@ -98,14 +98,6 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#All Sub-Sectors#", TranslatorWorker.translateText(MoConstants.ALL_SUB_SECTORS, locale, siteId));
 			shema = shema.replaceAll("#All Currencies#", TranslatorWorker.translateText(MoConstants.ALL_CURRENCIES, locale, siteId));
 			
-			/*
-			shema = shema.replaceAll("#Raw_Actual_Commitments#", TranslatorWorker.translateText(MoConstants.RAW_ACTUAL_COMMITMENTS, locale, siteId));
-			shema = shema.replaceAll("#Raw_Actual_Disbursements#", TranslatorWorker.translateText(MoConstants.RAW_ACTUAL_DISBURSEMENTS, locale, siteId));
-			shema = shema.replaceAll("#Raw_Actual_Expenditures#", TranslatorWorker.translateText(MoConstants.RAW_ACTUAL_EXPENDITURES, locale, siteId));
-			shema = shema.replaceAll("#Raw_Planned_Commitments#", TranslatorWorker.translateText(MoConstants.RAW_PLANNED_COMMITMENTS, locale, siteId));
-			shema = shema.replaceAll("#Raw_Planned_Disbursements#", TranslatorWorker.translateText(MoConstants.RAW_PLANNED_DISBURSEMENTS, locale, siteId));
-			shema = shema.replaceAll("#Raw_Planned_Expenditures#", TranslatorWorker.translateText(MoConstants.RAW_PLANNED_EXPENDITURES, locale, siteId));
-			*/
 			shema = shema.replaceAll("#Activity_Count#", TranslatorWorker.translateText(MoConstants.ACTIVITY_COUNT, locale, siteId));
 			shema = shema.replaceAll("#Actual_Commitments#", TranslatorWorker.translateText(MoConstants.ACTUAL_COMMITMENTS, locale, siteId));
 			shema = shema.replaceAll("#Actual_Disbursements#", TranslatorWorker.translateText(MoConstants.ACTUAL_DISBURSEMENTS, locale, siteId));
@@ -115,6 +107,16 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Planned_Expenditures#", TranslatorWorker.translateText(MoConstants.PLANNED_EXPENDITURES, locale, siteId));
 			
 			shema = shema.replaceAll("#No_Data#", TranslatorWorker.translateText(ArConstants.UNALLOCATED, locale, siteId));
+			
+			shema = shema.replaceAll("#Pledges#", TranslatorWorker.translateText(MoConstants.PLEDGES_MEASURE, locale, siteId));
+			shema = shema.replaceAll("#Tilte#", TranslatorWorker.translateText(MoConstants.PLEDGE_TITTLE, locale, siteId));
+			shema = shema.replaceAll("#All_Titles#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_TITTLE, locale, siteId));
+			shema = shema.replaceAll("#Type_of_Assistance#", TranslatorWorker.translateText(MoConstants.PLEDGE_TYPE_OF_ASSINETANCE, locale, siteId));
+			shema = shema.replaceAll("#All_Type_of_Assistance#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_TYPE_OF_ASSINETANCE, locale, siteId));
+			shema = shema.replaceAll("#Aid_Modality#", TranslatorWorker.translateText(MoConstants.PLEDGE_AID_MODALITY, locale, siteId));
+			shema = shema.replaceAll("#All_Aid_Modality#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_AID_MODALITY, locale, siteId));
+			shema = shema.replaceAll("#Pledges_Dates#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_DATES, locale, siteId));
+			shema = shema.replaceAll("#All_Pledges_Dates#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_PLEDGES_DATES, locale, siteId));
 			
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block

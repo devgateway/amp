@@ -8,6 +8,18 @@
 			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true" />
 		</Hierarchy>
 	</Dimension>
+	<Dimension name="Pledges Dates" type="TimeDimension">
+		  <Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Pledges_Dates#" primaryKey="amp_fund_detail_id" caption="#Pledges_Dates#">
+			   <View alias="v_pledges_date_hierarchy">
+          <SQL dialect="mysql">
+            <![CDATA[select * from v_pledges_date_hierarchy]]>
+          </SQL>
+        </View>
+			 <Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
+			 <Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
+			 <Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric"/>
+		</Hierarchy>
+	</Dimension>
 	<Dimension name="Donor Dates" type="TimeDimension">
 		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="amp_fund_detail_id" caption="#Donor_Dates#">
 			<Table name="cached_v_donor_date_hierarchy" />
@@ -100,19 +112,6 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
-		<!-- 
-		<Dimension name="Secondary Sector" foreignKey="amp_activity_id">
-			<Hierarchy hasAll="true" allMemberCaption="#All_Secondary_Sectors#" allMemberName="All Secondary Sectors" primaryKey="amp_activity_id">
-				<Level name="Secondary Sector" column="secondary_sector_name">
-					<NameExpression>
-						<SQL dialect="mysql">
-							IFNULL(secondary_sector_name,'#No_Data#')
-						</SQL>
-					</NameExpression>
-				</Level>
-			</Hierarchy>
-		</Dimension>
-		 -->
 		<Dimension name="Regions">
 		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="amp_activity_id" caption="#Regions#">
 			<Level name="Region" column="region">
@@ -247,4 +246,100 @@
 			</MeasureExpression>
 		</Measure>
 	</Cube>
+	<Cube name="Pledges Funding">
+		<View alias="v_pledges_funding">
+      <SQL dialect="mysql">
+        <![CDATA[select * from v_pledges_funding]]>
+      </SQL>
+    </View>
+	<Dimension name="Title">
+		<Hierarchy hasAll="true" allLevelName="All Titles" caption="#Tilte#" allMemberCaption="#All_Titles#">
+			<Level name="Title" column="title">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(title,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Donor">
+		<Hierarchy hasAll="true" allLevelName="All Donor" caption="#Donor#" allMemberCaption="#All_Donor#">
+			<Level name="DonorName" column="org_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(org_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Type of Assistance" caption="#Type_of_Assistance#">
+		<Hierarchy hasAll="true" allLevelName="All Type of Assistance#" allMemberCaption="#All_Type_of_Assistance#" caption="#Type_of_Assistance#">
+	  	<Level name="Type of Assistance" column="type_of_assistance_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(type_of_assistance_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Aid Modality" caption="#Aid_Modality#">
+		<Hierarchy hasAll="true" allLevelName="All Aid Modality" allMemberCaption="#All_Aid_Modality#" caption="#Aid_Modality#">
+	  	<Level name="Aid Modality" column="aid_modality_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(aid_modality_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Primary Sector" foreignKey="amp_activity_id">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Primary_Sectors#" allMemberName="All Primary Sectors"  caption="#Primary_Sector#">
+			<Level name="Primary Sector" column="p_sectorname">
+			<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(p_sectorname,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Regions">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" caption="#Regions#">
+			<Level name="Region" column="region">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(region,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<DimensionUsage name="Pledges Dates" source="Pledges Dates" foreignKey="amp_fund_detail_id" />
+	
+	<Measure name="Pledges" column="amount" aggregator="sum" caption="#Pledges#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter"></Measure>
+	</Cube>
+	
+  <VirtualCube  name="Donor and Pledges">
+	 <CubeUsages>
+     <CubeUsage cubeName="Pledges Funding"/>
+      <CubeUsage cubeName="Donor Funding"/>
+    </CubeUsages>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Donor"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Aid Modality"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Type of Assistance"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Title"/>
+    <VirtualCubeDimension  cubeName="Donor Funding" name="Donor"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Donor"/>
+    
+    <VirtualCubeMeasure  cubeName="Pledges Funding" name="[Measures].[Pledges]"/>
+    <VirtualCubeMeasure  cubeName="Donor Funding" name="[Measures].[Actual Commitments]"/>
+    <VirtualCubeMeasure  cubeName="Donor Funding" name="[Measures].[Actual Disbursements]"/>
+    <CalculatedMember  name="Commitment Gap" dimension="Measures">
+        <Formula>[Measures].[Pledges] - [Measures].[Actual Commitments]</Formula>
+    </CalculatedMember>
+	</VirtualCube>
 </Schema>

@@ -41,15 +41,21 @@ public class SaveHtml extends Action {
 			String currentmdx = null;
 			String measures = "";
 			String dimensions = "";
-			
+			Integer donorcube = 2;
 			 OlapModelProxy omp = (OlapModelProxy) session.getAttribute("query01");
 			if (omp != null) {
 				MondrianModel mm  = (MondrianModel) omp.getDelegate().getRootModel();
 				MondrianMdxQuery mdxQueryExt = (MondrianMdxQuery) omp.getExtension("mdxQuery");
 				currentmdx = mdxQueryExt.getMdxQuery();
 				
-				String result = currentmdx;
 				
+				String result = currentmdx;
+				Pattern pcube = Pattern.compile("\\[Donor Funding]");
+				Matcher mcube = pcube.matcher(result);
+				
+				if (mcube.find()){
+						donorcube = 1;
+					}
 				for (int i = 0; i < mm.getDimensions().length; i++) {
 					Pattern p = Pattern.compile("\\["+mm.getDimensions()[i].getLabel()+"\\]");
 					Matcher m = p.matcher(result);
@@ -85,6 +91,7 @@ public class SaveHtml extends Action {
 				newreport.setColumns(dimensions);
 				newreport.setCreationdate(new Timestamp(new java.util.Date().getTime()));
 				newreport.setOwnerId(TeamUtil.getAmpTeamMember(tm.getMemberId()));
+				newreport.setType(donorcube);
 				EntityHelper.SaveReport(newreport);
 			}else{
 				session.setAttribute("DuplicateName", true);

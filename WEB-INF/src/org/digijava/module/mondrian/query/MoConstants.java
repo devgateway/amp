@@ -54,4 +54,17 @@ public final class MoConstants {
 	public static String PLANNED_DISBURSEMENTS = "Planned Disbursements";
 	public static String PLANNED_EXPENDITURES = "Planned Expenditures";
 	public static String ACTIVITY_COUNT = "Activity Count";
+	
+	
+	//Pledges Constant
+	public static String PLEDGES_MEASURE = "pledge";
+	public static String PLEDGE_TITTLE = "Tilte";
+	public static String PLEDGE_ALL_TITTLE = "All Titles";
+	public static String PLEDGE_TYPE_OF_ASSINETANCE = "Type of Assistance";
+	public static String PLEDGE_ALL_TYPE_OF_ASSINETANCE = "All Type of Assistance";
+	public static String PLEDGE_AID_MODALITY = "Aid Modality";
+	public static String PLEDGE_ALL_AID_MODALITY = "All Aid Modality";
+	public static String PLEDGE_PLEDGES_DATES = "Pledges Dates";
+	public static String PLEDGE_ALL_PLEDGES_DATES = "All Pledges Dates";
+	
 }

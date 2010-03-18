@@ -154,6 +154,7 @@
     <form-bean name="quartzJobManagerForm" type="org.digijava.module.aim.form.QuartzJobManagerForm" />
     <form-bean name="quartzJobClassManagerForm" type="org.digijava.module.aim.form.QuartzJobClassManagerForm" />
     <form-bean name="invalidDataList" type="org.digijava.module.aim.form.InvalidDataListsForm"/>
+    <form-bean name="pledgeForm" type="org.digijava.module.fundingpledges.form.PledgeForm"/>
     
 </form-beans>
 
@@ -162,6 +163,9 @@
     <forward name="index" path="/aim/index.do" />
   </global-forwards>
   <action-mappings>    
+    <action name="pledgeForm" path="/aim/addPledge" scope="session" type="org.digijava.module.fundingpledges.action.AddPledge" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+    </action>
     <action name="aimViewAhSurveisForm" path="/aim/viewAhSurveis" scope="session" type="org.digijava.module.aim.action.ViewAhSurveis" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveis" />
     </action>

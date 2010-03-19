@@ -13,7 +13,7 @@ public class FundingPledgesDetails {
 		this.pledgeid = pledgeid;
 	}
 	private java.sql.Time funding_date;
-	private Integer pledgetype;
+	private AmpCategoryValue pledgetype;
 	private AmpCategoryValue typeOfAssistance;
 	private AmpCategoryValue aidmodality;	
 	private Double amount;
@@ -31,10 +31,11 @@ public class FundingPledgesDetails {
 	public void setFunding_date(java.sql.Time fundingDate) {
 		funding_date = fundingDate;
 	}
-	public Integer getPledgetype() {
+	
+	public AmpCategoryValue getPledgetype() {
 		return pledgetype;
 	}
-	public void setPledgetype(Integer pledgetype) {
+	public void setPledgetype(AmpCategoryValue pledgetype) {
 		this.pledgetype = pledgetype;
 	}
 	public AmpCategoryValue getTypeOfAssistance() {

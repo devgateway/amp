@@ -53,6 +53,8 @@
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display> 
+<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports"></feature:display>
+<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 

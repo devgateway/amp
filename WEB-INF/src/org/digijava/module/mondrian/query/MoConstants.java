@@ -57,7 +57,7 @@ public final class MoConstants {
 	
 	
 	//Pledges Constant
-	public static String PLEDGES_MEASURE = "pledge";
+	public static String PLEDGES_MEASURE = "Pledges Total";
 	public static String PLEDGE_TITTLE = "Tilte";
 	public static String PLEDGE_ALL_TITTLE = "All Titles";
 	public static String PLEDGE_TYPE_OF_ASSINETANCE = "Type of Assistance";
@@ -66,5 +66,10 @@ public final class MoConstants {
 	public static String PLEDGE_ALL_AID_MODALITY = "All Aid Modality";
 	public static String PLEDGE_PLEDGES_DATES = "Pledges Dates";
 	public static String PLEDGE_ALL_PLEDGES_DATES = "All Pledges Dates";
+	public static String PLEDGE_ALL_PLEDGES_TYPES = "All Pledges Types";
+	public static String PLEDGE_PLEDGES_TYPES = "Pledges Types";
+	public static String PLEDGE_PLEDGES_CONTACT_NAME = "Contact Name";
+	public static String PLEDGE_PLEDGES_CONTACT_EMAIL = "Contact Email";
+	
 	
 }

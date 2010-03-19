@@ -108,7 +108,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			
 			shema = shema.replaceAll("#No_Data#", TranslatorWorker.translateText(ArConstants.UNALLOCATED, locale, siteId));
 			
-			shema = shema.replaceAll("#Pledges#", TranslatorWorker.translateText(MoConstants.PLEDGES_MEASURE, locale, siteId));
+			shema = shema.replaceAll("#Total Pledges#", TranslatorWorker.translateText(MoConstants.PLEDGES_MEASURE, locale, siteId));
 			shema = shema.replaceAll("#Tilte#", TranslatorWorker.translateText(MoConstants.PLEDGE_TITTLE, locale, siteId));
 			shema = shema.replaceAll("#All_Titles#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_TITTLE, locale, siteId));
 			shema = shema.replaceAll("#Type_of_Assistance#", TranslatorWorker.translateText(MoConstants.PLEDGE_TYPE_OF_ASSINETANCE, locale, siteId));
@@ -117,6 +117,10 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#All_Aid_Modality#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_AID_MODALITY, locale, siteId));
 			shema = shema.replaceAll("#Pledges_Dates#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_DATES, locale, siteId));
 			shema = shema.replaceAll("#All_Pledges_Dates#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_PLEDGES_DATES, locale, siteId));
+			shema = shema.replaceAll("#All_Pledges_Types#", TranslatorWorker.translateText(MoConstants.PLEDGE_ALL_PLEDGES_TYPES, locale, siteId));
+			shema = shema.replaceAll("#Pledge_Type#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_TYPES, locale, siteId));
+			shema = shema.replaceAll("#contact_name#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_CONTACT_NAME, locale, siteId));
+			shema = shema.replaceAll("#contact_email#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_CONTACT_EMAIL, locale, siteId));
 			
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block

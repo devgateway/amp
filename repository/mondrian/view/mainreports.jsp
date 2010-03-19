@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <head>
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
 </head>
@@ -52,6 +53,7 @@
           				</digi:link> &gt; ${pageTitle}
           			</td>
           		</tr>
+        <feature:display name="Default Reports" module="Multi-dimensional Reports">
         <tr>
         	<td height=16 align="left" vAlign=center>
           		<digi:errors/>
@@ -275,9 +277,9 @@
  				</c:if>
  				<br>
  				<br>
- 				<br>
- 				
-				<tr>
+ 				<tr>
+ 				</feature:display>
+ 				<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
 					<td height=30 align="left" vAlign=center>
 							<span class=subtitle-blue>
             					<digi:trn>Pre-loaded Pledges Reports</digi:trn>
@@ -327,7 +329,7 @@
 					<c:if test="${empty report.ownerId && report.type==2 }">
 						<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
 							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >                           
-                    		<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
+                    		<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD" height="20">
                     			<p style="max-width: 300px;white-space: normal" title="${report.name}">
 									<a href="/mondrian/showreport.do?id=${report.id}&pagename=query" title="${report.name}">
 									<digi:trn key="${report.name}">
@@ -342,9 +344,7 @@
                                   	<digi:trn>Pledge</digi:trn>
 	                        	  </li>
 	                        </td>
-	                        <td width="100" align="center" title="${report.creationdate}">
-                            	<bean:write name="report" property="creationdate" format="dd/MM/yyyy"/>
-	                        </td>
+	                        
 	                         <td width="150">  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
 	                                  <li>
@@ -505,9 +505,11 @@
 					</logic:iterate>
  				</table>
  				</c:if>
+ 				</feature:display>
 			</td>
 		</tr>      
  	</table>
+ 	
 </td>
 </tr>
  </table>

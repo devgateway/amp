@@ -318,9 +318,50 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
+	<Dimension name="Pledge Type">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Pledges_Types#" allMemberName="All Regions" caption="#Pledge_Type#">
+			<Level name="Pledge Type" column="pledge_type">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(pledge_type,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Contact Name">
+		<Hierarchy hasAll="false" allMemberName="Contact Name" caption="#contact_name#">
+			<Level name="Contact Name" column="contact_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(contact_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Contact Email">
+		<Hierarchy hasAll="false" allMemberName="Contact Email" caption="#contact_email#">
+			<Level name="Contact Name" column="contact_email">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(contact_email,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	
 	<DimensionUsage name="Pledges Dates" source="Pledges Dates" foreignKey="amp_fund_detail_id" />
 	
-	<Measure name="Pledges" column="amount" aggregator="sum" caption="#Pledges#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter"></Measure>
+	<Measure name="Pledges" aggregator="sum" caption="#Total Pledges#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<MeasureExpression>
+			<SQL dialect="mysql">
+				amount/getExchange(currency_code,transaction_date)
+			</SQL>
+		</MeasureExpression>
+	</Measure>
+	
 	</Cube>
 	
   <VirtualCube  name="Donor and Pledges">
@@ -332,8 +373,14 @@
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Aid Modality"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Type of Assistance"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Title"/>
-    <VirtualCubeDimension  cubeName="Donor Funding" name="Donor"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Pledge Type"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Primary Sector"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Regions"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Donor"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Pledges Dates"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Contact Name"/>
+    <VirtualCubeDimension  cubeName="Pledges Funding" name="Contact Email"/>
+    <VirtualCubeDimension  cubeName="Donor Funding" name="Donor"/>
     
     <VirtualCubeMeasure  cubeName="Pledges Funding" name="[Measures].[Pledges]"/>
     <VirtualCubeMeasure  cubeName="Donor Funding" name="[Measures].[Actual Commitments]"/>

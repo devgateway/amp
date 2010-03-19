@@ -31,6 +31,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
+import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -82,6 +83,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -4549,4 +4551,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}	
 		
 	}
+    
+    /**
+    * resolves key from EUActivity
+    * @author dare
+    *
+    */
+    public static class EUActivityKeyResolver implements KeyResolver<Long, EUActivity>{
+	    @Override
+	    public Long resolveKey(EUActivity element) {
+	    	return element.getId();
+	    }
+    }
 } // End

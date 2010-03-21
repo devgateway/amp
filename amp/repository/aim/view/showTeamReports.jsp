@@ -774,6 +774,19 @@ function confirmFunc() {
                        <br />
                </TD>
                </TR>
+               <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Filtered Report&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+                <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Not filtered Report&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+               
 </c:if>
 <c:if test="${aimTeamReportsForm.showTabs}">
                <TR>
@@ -788,6 +801,19 @@ function confirmFunc() {
                        <br />
                </TD>
                </TR>
+               <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Filtered tab&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+                <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Not filtered tab&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+
 </c:if>
            </TABLE>
 

@@ -12,30 +12,157 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<jsp:include page="addSectors.jsp" flush="true" />
 
-<script language="JavaScript" type="text/javascript">
+<script language="JavaScript" type="text/javascript"><!--
+function fnChk(frmContrl, f){
+	  <c:set var="errMsgAddSectorNumericValue">
+	  <digi:trn key="aim:addSecorNumericValueErrorMessage">
+	  Please enter numeric value only
+	  </digi:trn>
+	  </c:set>
+	  
+	  if (isNaN(frmContrl.value)) {
+	    alert("${errMsgAddSectorNumericValue}");
+	    frmContrl.value = "";
+	    //frmContrl.focus();
+	    return false;
+	  }  
+	  if (frmContrl.value > 100) {    
+	      if (f == "sector") {
+		     <c:set var="errMsgAddSumExceed">
+			  <digi:trn key="aim:addSecorSumExceedErrorMessage">
+			  Sector percentage can not exceed 100
+			  </digi:trn>
+			  </c:set>
+			  alert("${errMsgAddSumExceed}");
+		  } else if (f == "program") {
+		     <c:set var="errMsgAddSumExceed">
+			  <digi:trn key="aim:addProgramSumExceedErrorMessage">
+			  Program percentage can not exceed 100
+			  </digi:trn>
+			  </c:set>  
+			  alert("${errMsgAddSumExceed}");
+		  } else if (f == "region") {
+		      <c:set var="errMsgAddSumExceed">
+			  <digi:trn key="aim:addRegionSumExceedErrorMessage">
+			  Region percentage can not exceed 100
+			  </digi:trn>
+			  </c:set> 
+			  alert("${errMsgAddSumExceed}");
+		  }
+	    frmContrl.value = "";
+	    return false;
+	  }
+	  return true;
+	}
+
+function addLocation() {
+	  openNewWindow(600, 500);
+	  <digi:context name="selectLoc" property="context/module/moduleinstance/selectPledgeLocation.do?edit=false" />
+	  document.pledgeForm.action = "<%= selectLoc %>";
+	  document.pledgeForm.target = popupPointer.name;
+	  document.pledgeForm.submit();
+	}
+
+function removeLocation() {
+	//document.getElementsByName("fundingEvent")[0].value = "delFunding";
+	var i = 1
+	var delStr = "deleteLocs="
+	while (document.getElementById("checkLoc"+i)!=null){
+		if(document.getElementById("checkLoc"+i).checked==true){
+			delStr = delStr + "_" + i;
+		}
+		i++;
+	}
+	if (delStr.length < 13){
+		alert ("Please, select a location first.");
+	} else {
+		document.pledgeForm.target = "_self";
+		document.pledgeForm.action="/removePledgeLocation.do?"+delStr;
+		document.pledgeForm.submit();
+	}		
+}
+
 function addSectors(editAct,configId) {
 /*  openNewWindow(600, 450);
   document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
   document.aimEditActivityForm.target = popupPointer.name;
   document.aimEditActivityForm.submit();
 */ 	
-	return
-     alert("mi add sectors");
-	 myAddSectors("edit=true&configId="+configId);	  
+	initSectorScript();
+	 myAddSectors("edit=true&configId=1");	  
 }
 
 function addSector(param)
 {
     
     <digi:context name="addSec" property="context/addPledge.do?addSector=true&edit=param" />
-    document.aimEditActivityForm.action = "<%= addSec %>";
-    document.aimEditActivityForm.target = "_self";
-    document.aimEditActivityForm.submit();
+    document.pledgeForm.action = "<%= addSec %>";
+    document.pledgeForm.target = "_self";
+    document.pledgeForm.submit();
 }
 
-</script>
+function removeSector() {
+	//document.getElementsByName("fundingEvent")[0].value = "delFunding";
+	var i = 1
+	var delStr = "deleteSect="
+	while (document.getElementById("checkSect"+i)!=null){
+		if(document.getElementById("checkSect"+i).checked==true){
+			delStr = delStr + "_" + i;
+		}
+		i++;
+	}
+	if (delStr.length < 13){
+		alert ("Please, select a sector first.");
+	} else {
+		document.pledgeForm.target = "_self";
+		document.pledgeForm.action="/removePledgeSector.do?"+delStr;
+		document.pledgeForm.submit();
+	}		
+}
+
+function addFunding() {
+	document.getElementsByName("fundingEvent")[0].value = "addFunding";
+	
+	document.pledgeForm.target = "_self";
+	document.pledgeForm.action="/addFundingPledgeDetail.do";
+	document.pledgeForm.submit();
+	
+}
+
+
+function removeFunding() {
+	document.getElementsByName("fundingEvent")[0].value = "delFunding";
+	var i = 1
+	var delStr = "deleteFunds="
+	while (document.getElementById("checkFund"+i)!=null){
+		if(document.getElementById("checkFund"+i).checked==true){
+			delStr = delStr + "_" + i;
+		}
+		i++;
+	}
+	if (delStr.length < 13){
+		alert ("Please, select a funding first.");
+	} else {
+		document.pledgeForm.target = "_self";
+		document.pledgeForm.action="/addFundingPledgeDetail.do?"+delStr;
+		document.pledgeForm.submit();
+	}		
+}
+
+function savePledge() {
+
+	<digi:context name="save" property="/savePledge.do" />
+    document.pledgeForm.action = "<%= save %>?edit=true";
+    document.pledgeForm.target = "_self";
+
+    document.pledgeForm.submit();
+}
+ 
+--></script>
 
 <digi:instance property="pledgeForm" />
 
@@ -43,7 +170,7 @@ function addSector(param)
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <body>
-<jsp:include page="addSectors.jsp" flush="true" />
+<html:hidden name="pledgeForm" styleId="event" property="fundingEvent"/>
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="1024" vAlign="top" align="center" border=0>
 	
@@ -154,8 +281,8 @@ function addSector(param)
 <!--														<aim:addOrganizationButton refreshParentDocument="true"  form="${pledgeForm}" htmlvalueHolder="selectedOrgId" htmlNameHolder="selectedOrgName" useClient="true" styleClass="dr-menu">...</aim:addOrganizationButton>-->
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
-							                              <input   name='contrDonorId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
-							                              <input name="contrDonorName" type='text' id="${nameId}" style="text-align:right" value='${pledgeForm.selectedOrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
+							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
+							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:right" value='${pledgeForm.selectedOrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
                             						</a>
 													
@@ -512,18 +639,50 @@ function addSector(param)
 									<tr>
 										<td>
 									       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-                                             	<tr><td>&nbsp;</td></tr>
+                                             	<tr><td>
+													<c:forEach var="pledgeSectors" items="${pledgeForm.pledgeSectors}" varStatus="index">
+                                                            <tr> 
+                                                                   <c:set var="indexSect" value="${indexSect+1}"/>
+										                            <td align="center" width="3%">
+																		<input type="checkbox" id="checkSect${indexSect}"  >
+																	</td>
+                                                                    <td  width="77%" valign="middle" align="left">
+                                                                        
+                                                                        [${pledgeSectors.sectorScheme}]
+                                                                        <c:if test="${!empty pledgeSectors.sectorName}">
+                                                                            [${pledgeSectors.sectorName}]
+                                                                        </c:if>
+									                               		<c:if test="${!empty pledgeSectors.subsectorLevel1Name}">
+                                                                            [${pledgeSectors.subsectorLevel1Name}]
+                                                                        </c:if>
+																		<c:if test="${!empty pledgeSectors.subsectorLevel2Name}">
+                                                                            [${pledgeSectors.subsectorLevel2Name}]
+                                                                        </c:if>
+																		
+                                                                    </td>
+                                                                    <td width="10%" valign="middle" align="right">
+                                                                       
+                                                                    <FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
+                                                                    <td width="10%" valign="middle" align="left">
+                                                                        <html:text name="pledgeSectors" indexed="true" property="sectorPercentage"size="2" onkeyup="fnChk(this, 'sector')" />
+                                                                    </td>
+                                                                </tr>
+                                                                <c:set var="sectorAdded" value="true"/>
+                                                           </c:forEach>
+												</td></tr>
 												<tr>
-													<td> &nbsp;
+													<td colspan="2"> &nbsp;
                                                     
                                                            <html:button styleClass="dr-menu"  
                                                                          property="submitButton" onclick="addSectors();" >
                                                                 <digi:trn key="btn:addSectors">Add Sectors</digi:trn>
                                                             </html:button>
 															 &nbsp;
-	                                                 		<html:button styleClass="dr-menu" property="submitButton" onclick="return removeSectors()">
-	                                                            <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
-	                                                        </html:button>
+	                                                 		<logic:notEmpty name="pledgeForm" property="pledgeSectors">
+																<html:button styleClass="dr-menu" property="submitButton" onclick="return removeSector()">
+	                                                          	  <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
+	                                                        	</html:button>
+															</logic:notEmpty>
 	                                                </td>
 	                                            </tr>
 	                                        </table>
@@ -549,17 +708,39 @@ function addSector(param)
 									<tr>
 										<td>
 									       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-                                             	<tr><td>&nbsp;</td></tr>
+                                             	<tr><td>
+												<c:forEach var="selectedLocs" items="${pledgeForm.selectedLocs}" varStatus="index">
+                                                  <tr>
+                                                      <c:set var="indexLoc" value="${indexLoc+1}"/>
+								                            <td align="center" width="3%">
+																<input type="checkbox" id="checkLoc${indexLoc}"  >
+															</td>
+                                                            <td align="left" width="77%">
+	                                                            [${selectedLocs.location.name}] 
+                                                            </td>
+                                                            <td align="right" width="10%" nowrap="nowrap">
+                                                            <FONT color="red">*</FONT>
+                                                            		<digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;
+															</td>
+															<td align="left" width="10%" nowrap="nowrap">
+                                                            		<html:text name="selectedLocs" indexed="true" property="locationpercentage" size="2"  maxlength="3" onkeyup="fnChk(this, 'region')"/>
+                                                            </td>
+                                                          
+                                                    </tr>
+                                                  </c:forEach>
+												</td></tr>
 												<tr>
-													<td> &nbsp;
+													<td colspan="2"> &nbsp;
                                                            <html:button styleClass="dr-menu"  
                                                                          property="submitButton" onclick="addLocation();">
                                                                 <digi:trn key="btn:addLocation">Add Location</digi:trn>
                                                             </html:button>
 															 &nbsp;
-	                                                 		<html:button styleClass="dr-menu" property="submitButton" onclick="return removeLocation()">
+	                                                 		<logic:notEmpty name="pledgeForm" property="selectedLocs">
+																<html:button styleClass="dr-menu" property="submitButton" onclick="return removeLocation()">
 	                                                            <digi:trn key="btn:removeLocation">Remove Location</digi:trn>
-	                                                        </html:button>
+	                                                        	</html:button>
+															</logic:notEmpty>
 	                                                </td>
 	                                            </tr>
 	                                        </table>
@@ -579,6 +760,7 @@ function addSector(param)
 									    </td>
 							        </tr>
 						            <tr><td>&nbsp;</td></tr>
+									<logic:notEmpty name="pledgeForm" property="fundingPledgesDetails">
 									<tr>
 						                <td>
 						                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
@@ -605,32 +787,33 @@ function addSector(param)
 											</table>
 										</td>
 									</tr>
+									</logic:notEmpty>
 									<tr>
 										<td>
-									       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-                                             	<tr>
+											<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+                                             	<c:forEach var="fundingDetail" items="${pledgeForm.fundingPledgesDetails}" varStatus="status">
+									       		<tr>
+													<c:set var="indexFund" value="${indexFund+1}"/>
 						                            <c:set var="translation">
 														<digi:trn key="aim:selectFromBelow">Please select from below</digi:trn>
 													</c:set>	
-													<% int tempIndex = 0; %>
-													<% String tempIndexStr = ""; %>
 													<td align="center" valign="bottom" >
-														<input type="checkbox" id="" >
+														<input type="checkbox" id="checkFund${indexFund}"  >
 													</td>
 													<td align="center" valign="bottom" width="20%">
-							                            <html:select name="pledgeForm" property="pledgeType" styleClass="inp-text">
-															<html:option value="1"><digi:trn key="aim:reprogrammedFunds">Reprogrammed Funds</digi:trn></html:option>
-															<html:option value="0"><digi:trn key="aim:newFunds">New Funds</digi:trn></html:option>
+							                            <html:select name="fundingDetail" indexed="true" property="pledgetype" styleClass="inp-text">
+															<html:option value="2"><digi:trn key="aim:reprogrammedFunds">Reprogrammed Funds</digi:trn></html:option>
+															<html:option value="1"><digi:trn key="aim:newFunds">New Funds</digi:trn></html:option>
 														</html:select>
 						                            </td>
 													<td align="center" valign="bottom" width="20%">
-						                                <category:showoptions firstLine="${translation}" name="pledgeForm" property="assistanceType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text"/>
+						                                <category:showoptions firstLine="${translation}" name="fundingDetail" property="typeOfAssistance"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text"/>
 						                            </td>
 													<td align="center" valign="bottom" width="15%">
-						                                <html:text name="pledgeForm" property="transactionAmount" onchange="addForValidation(this)" onclick="checkCurrency(this.name);" size="17" styleClass="amt"/>
+						                                <html:text name="fundingDetail" indexed="true" property="amount" onchange="addForValidation(this)" onclick="checkCurrency(this.name);" size="17" styleClass="inp-text"/>
 						                            </td>
 													<td align="center" valign="bottom" width="10%">
-						                                <html:select name="pledgeForm" property="currencyCode" styleClass="inp-text" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
+						                                <html:select name="fundingDetail" indexed="true" property="currency" styleClass="inp-text" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
 															<html:optionsCollection name="pledgeForm" property="validcurrencies" value="currencyCode"
 															label="currencyName"/>
 														</html:select>
@@ -639,12 +822,11 @@ function addSector(param)
 						                                <table cellPadding="0" cellSpacing="0">
 															<tr>
 																<td align="left" vAlign="bottom">
-																	<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-																	<html:text name="pledgeForm" property="transactionDate" styleClass="inp-text"
-																	styleId="<%=tempIndexStr%>" readonly="true" size="10" onchange="addForValidation(this)"/>
+																	<html:text name="fundingDetail" property="funding_date" styleClass="inp-text"
+																	styleId="${indexFund}" readonly="true" size="10" onchange="addForValidation(this)"/>
 																</td>
 																<td align="left" vAlign="bottom">&nbsp;
-																	<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																	<a id="transDate${indexFund}" href='javascript:pickDateById("transDate${indexFund}",${indexFund})'>
 																			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0" align="top">
 																		</a>
 																</td>														
@@ -652,24 +834,26 @@ function addSector(param)
 														</table>
 						                            </td>
 													<td align="center" valign="bottom" width="20%">
-						                                <category:showoptions firstLine="${translation}" name="pledgeForm" property="aidModality" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
+						                                <category:showoptions firstLine="${translation}" name="fundingDetail" property="aidmodality" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 						                            </td>
 						                        </tr>
-												<tr>
+												</c:forEach>
+									    		<tr>
 													<td colspan="4"> &nbsp;
                                                            <html:button styleClass="dr-menu"  
                                                                          property="submitButton" onclick="addFunding();">
                                                                 <digi:trn key="btn:addFunding">Add Funding</digi:trn>
                                                             </html:button>
 															 &nbsp;
-	                                                 		<html:button styleClass="dr-menu" property="submitButton" onclick="return removeFunding()">
+	                                                 		<logic:notEmpty name="pledgeForm" property="fundingPledgesDetails">
+																<html:button styleClass="dr-menu" property="submitButton" onclick="return removeFunding()">
 	                                                            <digi:trn key="btn:removeFunding">Remove Funding</digi:trn>
-	                                                        </html:button>
+	                                                        	</html:button>
+															</logic:notEmpty>
 	                                                </td>
 	                                            </tr>
 	                                        </table>
-									     
-									    </td>
+									     </td>
 									</tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>

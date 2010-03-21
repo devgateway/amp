@@ -166,6 +166,27 @@
     <action name="pledgeForm" path="/aim/addPledge" scope="session" type="org.digijava.module.fundingpledges.action.AddPledge" validate="false">
       <forward name="forward" path="/showLayout.do?layout=addPledge" />
     </action>
+    <action name="pledgeForm" path="/aim/addFundingPledgeDetail" scope="session" type="org.digijava.module.fundingpledges.action.AddFundingPledgeDetail">
+      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+    </action>
+    <action name="pledgeForm" path="/aim/removePledgeLocation" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeLocation">
+      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+    </action>
+     <action name="pledgeForm" path="/aim/pledgeLocationSelected" scope="session" type="org.digijava.module.fundingpledges.action.PledgeLocationSelected">
+      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="pledgeForm" path="/aim/selectPledgeLocation" scope="session" type="org.digijava.module.fundingpledges.action.SelectPledgeLocation">
+      <forward name="forward" path="/showLayout.do?layout=pledgeLocPopupLayout" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="pledgeForm" path="/aim/removePledgeSector" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeSector">
+      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+    </action>
+     <action name="pledgeForm" path="/aim/savePledge" scope="session" type="org.digijava.module.fundingpledges.action.SavePledge">
+      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+    </action>
+    
     <action name="aimViewAhSurveisForm" path="/aim/viewAhSurveis" scope="session" type="org.digijava.module.aim.action.ViewAhSurveis" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveis" />
     </action>

@@ -1,5 +1,7 @@
 package org.digijava.module.fundingpledges.dbentity;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -16,120 +18,135 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class FundingPledges {
 	private long id;
 	private String title;
+	private String additionalInformation;
 	private AmpOrganisation organization;
-	private Set<AmpSector> sectorlist;
-	private Set<AmpLocation> locationlist;
+	private Set<FundingPledgesSector> sectorlist;
+	private Set<FundingPledgesLocation> locationlist;
+	private Set<FundingPledgesDetails> fundingPledgesDetails;
 	
 	// "Point of Contact at Donors Conference on March 31st"
-	private String Name; 
-	private String Address; 
-	private String Email; 
-	private String Title; 
-	private String Ministry; 
-	private String Telephone; 
-	private String Fax;
-	private AmpOrganisation contactorganization;
+	private String contactName; 
+	private String contactAddress; 
+	private String contactEmail; 
+	private String contactTitle; 
+	private String contactMinistry; 
+	private String contactTelephone; 
+	private String contactFax;
+	private AmpOrganisation contactOrganization;
+	private String contactAlternativeName; 
+	private String contactAlternativeTelephone; 
+	private String contactAlternativeEmail; 
 	
 	//"is Point of Contact for Follow Up"
 	 
-	private String Name_1; 
-	private String Address_1; 
-	private String Email_1; 
-	private String Title_1; 
-	private String Ministry_1; 
-	private String Telephone_1; 
-	private String Fax_1;
- 	private AmpOrganisation contactorganization_1;
+	private String contactName_1; 
+	private String contactAddress_1; 
+	private String contactEmail_1; 
+	private String contactTitle_1; 
+	private String contactMinistry_1; 
+	private String contactTelephone_1; 
+	private String contactFax_1;
+ 	private AmpOrganisation contactOrganization_1;
+ 	private String contactAlternativeName_1; 
+	private String contactAlternativeTelephone_1; 
+	private String contactAlternativeEmail_1; 
 	
-	public String getName() {
-		return Name;
+	public String getContactName() {
+		return contactName;
 	}
-	public void setName(String name) {
-		Name = name;
+	public void setContactName(String name) {
+		contactName = name;
 	}
-	public String getAddress() {
-		return Address;
+	public String getContactAddress() {
+		return contactAddress;
 	}
-	public void setAddress(String address) {
-		Address = address;
+	public void setContactAddress(String address) {
+		contactAddress = address;
 	}
-	public String getEmail() {
-		return Email;
+	public String getContactEmail() {
+		return contactEmail;
 	}
-	public void setEmail(String email) {
-		Email = email;
+	public void setContactEmail(String email) {
+		contactEmail = email;
 	}
-	public String getMinistry() {
-		return Ministry;
+	public String getContactMinistry() {
+		return contactMinistry;
 	}
-	public void setMinistry(String ministry) {
-		Ministry = ministry;
+	public void setContactMinistry(String ministry) {
+		contactMinistry = ministry;
 	}
-	public String getTelephone() {
-		return Telephone;
+	public String getContactTelephone() {
+		return contactTelephone;
 	}
-	public void setTelephone(String telephone) {
-		Telephone = telephone;
+	public void setContactTelephone(String telephone) {
+		contactTelephone = telephone;
 	}
-	public String getFax() {
-		return Fax;
+	public String getContactFax() {
+		return contactFax;
 	}
-	public void setFax(String fax) {
-		Fax = fax;
+	public void setContactFax(String fax) {
+		contactFax = fax;
 	}
-	public String getName_1() {
-		return Name_1;
+	
+	public String getContactName_1() {
+		return contactName_1;
 	}
-	public void setName_1(String name_1) {
-		Name_1 = name_1;
+	public void setContactName_1(String name_1) {
+		contactName_1 = name_1;
 	}
-	public String getAddress_1() {
-		return Address_1;
+	public String getContactAddress_1() {
+		return contactAddress_1;
 	}
-	public void setAddress_1(String address_1) {
-		Address_1 = address_1;
+	public void setContactAddress_1(String address_1) {
+		contactAddress_1 = address_1;
 	}
-	public String getEmail_1() {
-		return Email_1;
+	public String getContactEmail_1() {
+		return contactEmail_1;
 	}
-	public void setEmail_1(String email_1) {
-		Email_1 = email_1;
+	public void setContactEmail_1(String email_1) {
+		contactEmail_1 = email_1;
 	}
-	public String getTitle_1() {
-		return Title_1;
+	public String getContactTitle_1() {
+		return contactTitle_1;
 	}
-	public void setTitle_1(String title_1) {
-		Title_1 = title_1;
+	public void setContactTitle_1(String title_1) {
+		contactTitle_1 = title_1;
 	}
-	public String getMinistry_1() {
-		return Ministry_1;
+	public String getContactTitle() {
+		return contactTitle;
 	}
-	public void setMinistry_1(String ministry_1) {
-		Ministry_1 = ministry_1;
+	public void setContactTitle(String title) {
+		contactTitle = title;
 	}
-	public String getTelephone_1() {
-		return Telephone_1;
+	public String getContactMinistry_1() {
+		return contactMinistry_1;
 	}
-	public void setTelephone_1(String telephone_1) {
-		Telephone_1 = telephone_1;
+	public void setContactMinistry_1(String ministry_1) {
+		contactMinistry_1 = ministry_1;
 	}
-	public String getFax_1() {
-		return Fax_1;
+	public String getContactTelephone_1() {
+		return contactTelephone_1;
 	}
-	public void setFax_1(String fax_1) {
-		Fax_1 = fax_1;
+	public void setContactTelephone_1(String telephone_1) {
+		contactTelephone_1 = telephone_1;
 	}
-	public AmpOrganisation getContactorganization() {
-		return contactorganization;
+	public String getContactFax_1() {
+		return contactFax_1;
 	}
-	public void setContactorganization(AmpOrganisation contactorganization) {
-		this.contactorganization = contactorganization;
+	public void setContactFax_1(String fax_1) {
+		contactFax_1 = fax_1;
 	}
-	public AmpOrganisation getContactorganization_1() {
-		return contactorganization_1;
+	public AmpOrganisation getContactOrganization() {
+		return contactOrganization;
 	}
-	public void setContactorganization_1(AmpOrganisation contactorganization_1) {
-		this.contactorganization_1 = contactorganization_1;
+	public void setContactOrganization(AmpOrganisation contactOrganization) {
+		this.contactOrganization = contactOrganization;
+	}
+	public AmpOrganisation getContactOrganization_1() {
+		return contactOrganization_1;
+	}
+	public void setContactOrganization_1(AmpOrganisation contactOrganization_1) {
+		this.contactOrganization_1 = contactOrganization_1;
 	}
 	
 	public long getId() {
@@ -150,17 +167,114 @@ public class FundingPledges {
 	public void setOrganization(AmpOrganisation organization) {
 		this.organization = organization;
 	}
-	public Set<AmpSector> getSectorlist() {
+	public Set<FundingPledgesSector> getSectorlist() {
 		return sectorlist;
 	}
-	public void setSectorlist(Set<AmpSector> sectorlist) {
+	public void setSectorlist(Set<FundingPledgesSector> sectorlist) {
 		this.sectorlist = sectorlist;
 	}
-	public Set<AmpLocation> getLocationlist() {
+	public Set<FundingPledgesLocation> getLocationlist() {
 		return locationlist;
 	}
-	public void setLocationlist(Set<AmpLocation> locationlist) {
+	public void setLocationlist(Set<FundingPledgesLocation> locationlist) {
 		this.locationlist = locationlist;
+	}
+	/**
+	 * @return the contactAlternativeName
+	 */
+	public String getContactAlternativeName() {
+		return contactAlternativeName;
+	}
+	/**
+	 * @param contactAlternativeName the contactAlternativeName to set
+	 */
+	public void setContactAlternativeName(String contactAlternativeName) {
+		this.contactAlternativeName = contactAlternativeName;
+	}
+	/**
+	 * @return the contactAlternativeTelephone
+	 */
+	public String getContactAlternativeTelephone() {
+		return contactAlternativeTelephone;
+	}
+	/**
+	 * @param contactAlternativeTelephone the contactAlternativeTelephone to set
+	 */
+	public void setContactAlternativeTelephone(String contactAlternativeTelephone) {
+		this.contactAlternativeTelephone = contactAlternativeTelephone;
+	}
+	/**
+	 * @return the contactAlternativeEmail
+	 */
+	public String getContactAlternativeEmail() {
+		return contactAlternativeEmail;
+	}
+	/**
+	 * @param contactAlternativeEmail the contactAlternativeEmail to set
+	 */
+	public void setContactAlternativeEmail(String contactAlternativeEmail) {
+		this.contactAlternativeEmail = contactAlternativeEmail;
+	}
+	/**
+	 * @return the contactAlternativeName_1
+	 */
+	public String getContactAlternativeName_1() {
+		return contactAlternativeName_1;
+	}
+	/**
+	 * @param contactAlternativeName_1 the contactAlternativeName_1 to set
+	 */
+	public void setContactAlternativeName_1(String contactAlternativeName_1) {
+		this.contactAlternativeName_1 = contactAlternativeName_1;
+	}
+	/**
+	 * @return the contactAlternativeTelephone_1
+	 */
+	public String getContactAlternativeTelephone_1() {
+		return contactAlternativeTelephone_1;
+	}
+	/**
+	 * @param contactAlternativeTelephone_1 the contactAlternativeTelephone_1 to set
+	 */
+	public void setContactAlternativeTelephone_1(
+			String contactAlternativeTelephone_1) {
+		this.contactAlternativeTelephone_1 = contactAlternativeTelephone_1;
+	}
+	/**
+	 * @return the contactAlternativeEmail_1
+	 */
+	public String getContactAlternativeEmail_1() {
+		return contactAlternativeEmail_1;
+	}
+	/**
+	 * @param contactAlternativeEmail_1 the contactAlternativeEmail_1 to set
+	 */
+	public void setContactAlternativeEmail_1(String contactAlternativeEmail_1) {
+		this.contactAlternativeEmail_1 = contactAlternativeEmail_1;
+	}
+	/**
+	 * @return the additionalInformation
+	 */
+	public String getAdditionalInformation() {
+		return additionalInformation;
+	}
+	/**
+	 * @param additionalInformation the additionalInformation to set
+	 */
+	public void setAdditionalInformation(String additionalInformation) {
+		this.additionalInformation = additionalInformation;
+	}
+	/**
+	 * @return the fundingPledgesDetails
+	 */
+	public Set<FundingPledgesDetails> getFundingPledgesDetails() {
+		return fundingPledgesDetails;
+	}
+	/**
+	 * @param fundingPledgesDetails the fundingPledgesDetails to set
+	 */
+	public void setFundingPledgesDetails(Set<FundingPledgesDetails> fundingPledgesDetails) {
+		this.fundingPledgesDetails = fundingPledgesDetails;
 	}
 	
 }

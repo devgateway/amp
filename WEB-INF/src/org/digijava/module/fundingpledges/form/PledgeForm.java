@@ -1,10 +1,20 @@
 package org.digijava.module.fundingpledges.form;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 
 public class PledgeForm extends ActionForm implements Serializable{
 
@@ -12,14 +22,9 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int selectedOrgId;
+	private String selectedOrgId;
 	private String selectedOrgName;
 	private String pledgeTitle;
-	private String assistanceType;
-	private String transactionDate;
-	private String aidModality;
-	private String pledgeType;
-	private String transactionAmount;
 	private Collection<AmpCurrency> validcurrencies;
 	private String currencyCode;
 	
@@ -45,68 +50,6 @@ public class PledgeForm extends ActionForm implements Serializable{
 		this.validcurrencies = validcurrencies;
 	}
 
-	/**
-	 * @return the transactionAmount
-	 */
-	public String getTransactionAmount() {
-		return transactionAmount;
-	}
-	/**
-	 * @param transactionAmount the transactionAmount to set
-	 */
-	public void setTransactionAmount(String transactionAmount) {
-		this.transactionAmount = transactionAmount;
-	}
-	/**
-	 * @return the assistanceType
-	 */
-	public String getAssistanceType() {
-		return assistanceType;
-	}
-	/**
-	 * @param assistanceType the assistanceType to set
-	 */
-	public void setAssistanceType(String assistanceType) {
-		this.assistanceType = assistanceType;
-	}
-	/**
-	 * @return the transactionDate
-	 */
-	public String getTransactionDate() {
-		return transactionDate;
-	}
-	/**
-	 * @param transactionDate the transactionDate to set
-	 */
-	public void setTransactionDate(String transactionDate) {
-		this.transactionDate = transactionDate;
-	}
-	/**
-	 * @return the aidModality
-	 */
-	public String getAidModality() {
-		return aidModality;
-	}
-	/**
-	 * @param aidModality the aidModality to set
-	 */
-	public void setAidModality(String aidModality) {
-		this.aidModality = aidModality;
-	}
-	/**
-	 * @return the pledgeType
-	 */
-	public String getPledgeType() {
-		return pledgeType;
-	}
-	/**
-	 * @param pledgeType the pledgeType to set
-	 */
-	public void setPledgeType(String pledgeType) {
-		this.pledgeType = pledgeType;
-	}
-	
-	
 	private String contact1Name;
 	private String contact1Title;
 	private String contact1OrgName;
@@ -134,17 +77,36 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String contactAlternate2Telephone;
 	
 	private String additionalInformation;
+	private Collection<ActivitySector> pledgeSectors;
+	private Collection<FundingPledgesDetails> fundingPledgesDetails;
+	private String fundingEvent;
+	private Long selectedFunding[] = null;
 	
+	
+	/**
+	 * @return the selectedFunding
+	 */
+	public Long[] getSelectedFunding() {
+		return selectedFunding;
+	}
+
+	/**
+	 * @param selectedFunding the selectedFunding to set
+	 */
+	public void setSelectedFunding(Long[] selectedFunding) {
+		this.selectedFunding = selectedFunding;
+	}
+
 	/**
 	 * @return the selectedOrgId
 	 */
-	public int getSelectedOrgId() {
+	public String getSelectedOrgId() {
 		return selectedOrgId;
 	}
 	/**
 	 * @param selectedOrgId the selectedOrgId to set
 	 */
-	public void setSelectedOrgId(int selectedOrgId) {
+	public void setSelectedOrgId(String selectedOrgId) {
 		this.selectedOrgId = selectedOrgId;
 	}
 	/**
@@ -472,6 +434,188 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 */
 	public void setAdditionalInformation(String additionalInformation) {
 		this.additionalInformation = additionalInformation;
+	}
+
+	public ActivitySector getPledgeSectors(int index) {
+		return (ActivitySector) (this.pledgeSectors.toArray()[index]);
+	}
+	
+	/**
+	 * @return the activitySectors
+	 */
+	public Collection<ActivitySector> getPledgeSectors() {
+		return pledgeSectors;
+	}
+
+	/**
+	 * @param activitySectors the activitySectors to set
+	 */
+	public void setPledgeSectors(Collection<ActivitySector> selectedSectors) {
+		this.pledgeSectors = selectedSectors;
+	}
+
+	public FundingPledgesLocation getFundingPledgesDetails(int index) {
+		return (FundingPledgesLocation) (this.fundingPledgesDetails.toArray()[index]);
+	}
+	
+	/**
+	 * @return the fundingPledgesDetails
+	 */
+	public Collection<FundingPledgesDetails> getFundingPledgesDetails() {
+		return fundingPledgesDetails;
+	}
+
+	/**
+	 * @param fundingDetails the fundingPledgesDetails to set
+	 */
+	public void setFundingPledgesDetails(Collection<FundingPledgesDetails> fundingDetails) {
+		this.fundingPledgesDetails = fundingDetails;
+	}
+
+	/**
+	 * @return the fundingEvent
+	 */
+	public String getFundingEvent() {
+		return fundingEvent;
+	}
+
+	/**
+	 * @param fundingEvent the fundingEvent to set
+	 */
+	public void setFundingEvent(String fundingEvent) {
+		this.fundingEvent = fundingEvent;
+	}
+	
+	//Location
+	private boolean noMoreRecords=false;
+	private Long implemLocationLevel = null;
+	private Integer impLevelValue; // Implementation Level value
+	private Long parentLocId;
+	private boolean defaultCountryIsSet;
+	private Collection<FundingPledgesLocation> selectedLocs = null;
+	private Long [] userSelectedLocs;
+	private TreeMap<Integer, Collection<KeyValue>> locationByLayers;
+	private TreeMap<Integer, Long> selectedLayers ;
+	
+	public TreeMap<Integer, Long> getSelectedLayers() {
+		if (selectedLayers == null)
+			selectedLayers		= new TreeMap<Integer, Long>();
+		return selectedLayers;
+	}
+	
+	public void setSelectedLayer(String key, Object value) {
+		selectedLayers.put(Integer.parseInt(key), (Long)value);
+	}
+	public Long getSelectedLayer(String key) {
+		return selectedLayers.get( Integer.parseInt(key) );
+	}
+	
+	public TreeMap<Integer, Collection<KeyValue>> getLocationByLayers() {
+		if ( locationByLayers == null )
+			locationByLayers	= new TreeMap<Integer, Collection<KeyValue>>();
+		return locationByLayers;
+	}
+
+	/**
+	 * @return the noMoreRecords
+	 */
+	public boolean isNoMoreRecords() {
+		return noMoreRecords;
+	}
+
+	/**
+	 * @param noMoreRecords the noMoreRecords to set
+	 */
+	public void setNoMoreRecords(boolean noMoreRecords) {
+		this.noMoreRecords = noMoreRecords;
+	}
+
+	/**
+	 * @return the implemLocationLevel
+	 */
+	public Long getImplemLocationLevel() {
+		return implemLocationLevel;
+	}
+
+	/**
+	 * @param implemLocationLevel the implemLocationLevel to set
+	 */
+	public void setImplemLocationLevel(Long implemLocationLevel) {
+		this.implemLocationLevel = implemLocationLevel;
+	}
+
+	/**
+	 * @return the impLevelValue
+	 */
+	public Integer getImpLevelValue() {
+		return impLevelValue;
+	}
+
+	/**
+	 * @param impLevelValue the impLevelValue to set
+	 */
+	public void setImpLevelValue(Integer impLevelValue) {
+		this.impLevelValue = impLevelValue;
+	}
+
+	/**
+	 * @return the parentLocId
+	 */
+	public Long getParentLocId() {
+		return parentLocId;
+	}
+
+	/**
+	 * @param parentLocId the parentLocId to set
+	 */
+	public void setParentLocId(Long parentLocId) {
+		this.parentLocId = parentLocId;
+	}
+
+	/**
+	 * @return the defaultCountryIsSet
+	 */
+	public boolean isDefaultCountryIsSet() {
+		return defaultCountryIsSet;
+	}
+
+	/**
+	 * @param defaultCountryIsSet the defaultCountryIsSet to set
+	 */
+	public void setDefaultCountryIsSet(boolean defaultCountryIsSet) {
+		this.defaultCountryIsSet = defaultCountryIsSet;
+	}
+
+	/**
+	 * @return the selectedLocs
+	 */
+	public Collection<FundingPledgesLocation> getSelectedLocs() {
+		return selectedLocs;
+	}
+	
+	public FundingPledgesLocation getSelectedLocs(int index) {
+		return (FundingPledgesLocation) (this.selectedLocs.toArray()[index]);
+	}
+	
+	/**
+	 * @param selectedLocs2 the selectedLocs to set
+	 */
+	public void setSelectedLocs(Collection<FundingPledgesLocation> selectedLocs2) {
+		this.selectedLocs = selectedLocs2;
+	}
+
+	/**
+	 * @return the userSelectedLocs
+	 */
+	public Long[] getUserSelectedLocs() {
+		return userSelectedLocs;
+	}
+
+	/**
+	 * @param userSelectedLocs the userSelectedLocs to set
+	 */
+	public void setUserSelectedLocs(Long[] userSelectedLocs) {
+		this.userSelectedLocs = userSelectedLocs;
 	}
 	
 }

@@ -120,8 +120,7 @@ function addNewIndicator(){
 }
 
 function addSectors() {
-
- 		openNewWindow(600, 450);
+		openNewWindow(600, 450);
 		<digi:context name="addSector" property="context/module/moduleinstance/selectSectorForind.do?edit=true" />
 	  	document.aimNewIndicatorForm.action = "<%= addSector %>";
 		document.aimNewIndicatorForm.target = popupPointer.name;

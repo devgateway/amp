@@ -10,25 +10,32 @@
 		</id>
 
 		<property name="title" column="title" type="java.lang.String" />
-		<property name="Name" column="Name" type="java.lang.String"/>
-		<property name="Address" column="Address" type="java.lang.String"/>
-		<property name="Email" column="Email" type="java.lang.String"/>
-		<property name="Title" column="Title" type="java.lang.String"/>
-		<property name="Ministry" column="Ministry" type="java.lang.String"/>
-		<property name="Telephone" column="Telephone" type="java.lang.String"/>
-		<property name="Fax" column="Fax" type="java.lang.String"/>
-		<property name="Name_1" column="Name_1" type="java.lang.String"/>
-		<property name="Address_1" column="Address_1" type="java.lang.String"/>
-		<property name="Email_1" column="Email_1" type="java.lang.String"/>
-		<property name="Title_1" column="Title_1" type="java.lang.String"/>
-		<property name="Ministry_1" column="Ministry_1" type="java.lang.String"/>
-		<property name="Telephone_1" column="Telephone_1" type="java.lang.String"/>
-		<property name="Fax_1" column="Fax_1" type="java.lang.String"/>
+		<property name="additionalInformation" column="additionalInformation" type="java.lang.String" />
+		<property name="contactName" column="contactName" type="java.lang.String"/>
+		<property name="contactAddress" column="contactAddress" type="java.lang.String"/>
+		<property name="contactEmail" column="contactEmail" type="java.lang.String"/>
+		<property name="contactTitle" column="contactTitle" type="java.lang.String"/>
+		<property name="contactMinistry" column="contactMinistry" type="java.lang.String"/>
+		<property name="contactTelephone" column="contactTelephone" type="java.lang.String"/>
+		<property name="contactFax" column="contactFax" type="java.lang.String"/>
+		<property name="contactAlternativeName" column="contactAlternativeName" type="java.lang.String"/>
+		<property name="contactAlternativeTelephone" column="contactAlternativeTelephone" type="java.lang.String"/>
+		<property name="contactAlternativeEmail" column="contactAlternativeEmail" type="java.lang.String"/>
 		
+		<property name="contactName_1" column="contactName_1" type="java.lang.String"/>
+		<property name="contactAddress_1" column="contactAddress_1" type="java.lang.String"/>
+		<property name="contactEmail_1" column="contactEmail_1" type="java.lang.String"/>
+		<property name="contactTitle_1" column="contactTitle_1" type="java.lang.String"/>
+		<property name="contactMinistry_1" column="contactMinistry_1" type="java.lang.String"/>
+		<property name="contactTelephone_1" column="contactTelephone_1" type="java.lang.String"/>
+		<property name="contactFax_1" column="contactFax_1" type="java.lang.String"/>
+		<property name="contactAlternativeName_1" column="contactAlternativeName_1" type="java.lang.String"/>
+		<property name="contactAlternativeTelephone_1" column="contactAlternativeTelephone_1" type="java.lang.String"/>
+		<property name="contactAlternativeEmail_1" column="contactAlternativeEmail_1" type="java.lang.String"/>
 		
 		<many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
-		<many-to-one name="contactorganization" column="contactorganization" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
-		<many-to-one name="contactorganization_1" column="contactorganization_1" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
+		<many-to-one name="contactOrganization" column="contactOrganization" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
+		<many-to-one name="contactOrganization_1" column="contactOrganization_1" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
 		
 		<set name="locationlist" table="amp_funding_pledges_location" lazy="true" cascade="all">
 			<cache usage="read-write"/>
@@ -40,6 +47,11 @@
 			<cache usage="read-write"/>
 			<key column="amp_sector_id"/>
 			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesSector" />
+		</set>
+		<set name="fundingPledgesDetails" table="amp_funding_pledges_sectors" lazy="true" cascade="all">
+			<cache usage="read-write"/>
+			<key column="amp_funding_pledges_details_id"/>
+			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails" />
 		</set>
 	</class>
 </hibernate-mapping>

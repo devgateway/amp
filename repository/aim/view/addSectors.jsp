@@ -105,6 +105,7 @@
 	    //content.style.visibility = "visible";
 		
 		showContent();
+		
 	}
  
 	var responseFailure = function(o){ 
@@ -385,7 +386,7 @@
 
 	function myAddSectors(params) {
 		//alert(params);
-	  
+	 
 	  <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
 
 	  var url = "<%=commentUrl %>";

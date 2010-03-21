@@ -421,8 +421,9 @@
     <page name="editQuartzJobClass" title="Edit Job Class" />
     <page name="quartzJobClassManager" title="Job Class Manager" />
 
-	<page name="addPledge" page="addPledge" title ="- Add Pledge " />
-
+	<page name="addPledge" page="addPledge" title ="AMP - Add Pledge " />
+	<page page="selectPledgeLocation" name="pledgeLocPopupLayout" title="AMP - Select Location" />
+	
 </secondary-pages>
 <module>
 

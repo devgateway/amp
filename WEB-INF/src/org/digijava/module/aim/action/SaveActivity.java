@@ -119,6 +119,8 @@ import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
@@ -1048,6 +1050,12 @@ public class SaveActivity extends Action {
 								ampFundDet.setDisbOrderId(fundDet.getDisbOrderId());
 								ampFundDet.setContract(fundDet.getContract());
 								ampFundDet.setDisbursementOrderRejected(fundDet.getDisbursementOrderRejected());
+								if (fundDet.getPledge()!=0 && fundDet.getPledge()!=null) {
+									FundingPledges selectedpledge = PledgesEntityHelper.getPledgesById(fundDet.getPledge());
+									ampFundDet.setPledgeid(selectedpledge);
+								}else{
+									ampFundDet.setPledgeid(null);
+								}
 								fundDeatils.add(ampFundDet);
 							}
 						}

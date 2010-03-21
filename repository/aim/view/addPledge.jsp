@@ -155,7 +155,7 @@ function removeFunding() {
 
 function savePledge() {
 
-	<digi:context name="save" property="/savePledge.do" />
+	<digi:context name="save" property="context/module/moduleinstance/savePledge.do" />
     document.pledgeForm.action = "<%= save %>?edit=true";
     document.pledgeForm.target = "_self";
 
@@ -281,7 +281,7 @@ function savePledge() {
 <!--														<aim:addOrganizationButton refreshParentDocument="true"  form="${pledgeForm}" htmlvalueHolder="selectedOrgId" htmlNameHolder="selectedOrgName" useClient="true" styleClass="dr-menu">...</aim:addOrganizationButton>-->
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
-							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
+							                              <input  name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
 							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:right" value='${pledgeForm.selectedOrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
                             						</a>
@@ -791,7 +791,7 @@ function savePledge() {
 									<tr>
 										<td>
 											<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-                                             	<c:forEach var="fundingDetail" items="${pledgeForm.fundingPledgesDetails}" varStatus="status">
+                                             	<c:forEach var="fundingPledgesDetails" items="${pledgeForm.fundingPledgesDetails}" varStatus="status">
 									       		<tr>
 													<c:set var="indexFund" value="${indexFund+1}"/>
 						                            <c:set var="translation">
@@ -801,19 +801,16 @@ function savePledge() {
 														<input type="checkbox" id="checkFund${indexFund}"  >
 													</td>
 													<td align="center" valign="bottom" width="20%">
-							                            <html:select name="fundingDetail" indexed="true" property="pledgetype" styleClass="inp-text">
-															<html:option value="2"><digi:trn key="aim:reprogrammedFunds">Reprogrammed Funds</digi:trn></html:option>
-															<html:option value="1"><digi:trn key="aim:newFunds">New Funds</digi:trn></html:option>
-														</html:select>
-						                            </td>
+														 <category:showoptions firstLine="${translation}" name="fundingPledgesDetails" property="pledgetypeid"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PLEDGES_TYPES_KEY%>" styleClass="inp-text"/>
+							                        </td>
 													<td align="center" valign="bottom" width="20%">
-						                                <category:showoptions firstLine="${translation}" name="fundingDetail" property="typeOfAssistance"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text"/>
+						                                <category:showoptions firstLine="${translation}" name="fundingPledgesDetails" property="typeOfAssistanceid"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text"/>
 						                            </td>
 													<td align="center" valign="bottom" width="15%">
-						                                <html:text name="fundingDetail" indexed="true" property="amount" onchange="addForValidation(this)" onclick="checkCurrency(this.name);" size="17" styleClass="inp-text"/>
+						                                <html:text name="fundingPledgesDetails" indexed="true" property="amount" size="17" styleClass="inp-text"/>
 						                            </td>
 													<td align="center" valign="bottom" width="10%">
-						                                <html:select name="fundingDetail" indexed="true" property="currency" styleClass="inp-text" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
+						                                <html:select name="fundingPledgesDetails" indexed="true" property="currencycode" styleClass="inp-text">
 															<html:optionsCollection name="pledgeForm" property="validcurrencies" value="currencyCode"
 															label="currencyName"/>
 														</html:select>
@@ -822,7 +819,7 @@ function savePledge() {
 						                                <table cellPadding="0" cellSpacing="0">
 															<tr>
 																<td align="left" vAlign="bottom">
-																	<html:text name="fundingDetail" property="funding_date" styleClass="inp-text"
+																	<html:text name="fundingPledgesDetails" property="funding_date" styleClass="inp-text"
 																	styleId="${indexFund}" readonly="true" size="10" onchange="addForValidation(this)"/>
 																</td>
 																<td align="left" vAlign="bottom">&nbsp;
@@ -834,7 +831,7 @@ function savePledge() {
 														</table>
 						                            </td>
 													<td align="center" valign="bottom" width="20%">
-						                                <category:showoptions firstLine="${translation}" name="fundingDetail" property="aidmodality" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
+						                                <category:showoptions firstLine="${translation}" name="fundingPledgesDetails" property="aidmodalityid" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 						                            </td>
 						                        </tr>
 												</c:forEach>

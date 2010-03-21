@@ -13,13 +13,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.fundingpledges.dbentity.EntityHelper;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -95,8 +91,8 @@ public class AddFundingPledgeDetail extends Action {
 	private FundingPledgesDetails getFundingDetail(AmpCurrency currency) {
 		FundingPledgesDetails fundingDetail = new FundingPledgesDetails();
 
-		fundingDetail.setCurrency(currency);
-		fundingDetail.setPledgetype(EntityHelper.PLEDGE_TYPE_NEW_FOUNDS);
+		fundingDetail.setCurrencycode(currency.getCurrencyCode());
+		//fundingDetail.setPledgetype();
         return fundingDetail;
 	}
 }

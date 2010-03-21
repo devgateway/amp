@@ -18,6 +18,9 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 
 public class AddPledge extends Action {
@@ -37,6 +40,9 @@ public class AddPledge extends Action {
     			//return removeSector(mapping, request, session, plForm);
     	    }
     	    //
+    		
+    		Collection<AmpCategoryValue> pledgestypes = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY);
+    		plForm.setPledgestypes(pledgestypes);
     		
     		Collection currencies = CurrencyUtil.getAmpCurrency();
     		ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();

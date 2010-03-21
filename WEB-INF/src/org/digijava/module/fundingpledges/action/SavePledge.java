@@ -69,18 +69,15 @@ public class SavePledge extends Action {
 				fps.setSector(sector);
 				fps.setSectorpercentage(actSector.getSectorPercentage());
 				fpsl.add(fps);
-				//pledge.getSectorlist().add(fps);
 			}
     		pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
-    		
-    		Set<FundingPledgesLocation> fpll = new HashSet<FundingPledgesLocation>();
-    		Collection<FundingPledgesLocation> fplc = plForm.getSelectedLocs();
-    		Iterator<FundingPledgesLocation> itl = fplc.iterator();
-    		while (itl.hasNext()) {
-    			FundingPledgesLocation fpl = (FundingPledgesLocation) itl.next();
-    			fpll.add(fpl);
+    		//Locations
+    	
+    		pledge.setLocationlist(new HashSet<FundingPledgesLocation>());
+    		for (Iterator iterator = plForm.getSelectedLocs().iterator(); iterator.hasNext();) {
+				FundingPledgesLocation pledgeslocations = (FundingPledgesLocation) iterator.next();
+				pledge.getLocationlist().add(pledgeslocations);
 			}
-    		pledge.setLocationlist((Set<FundingPledgesLocation>) fpll);
     		
     		Set<FundingPledgesDetails> fpdl = new HashSet<FundingPledgesDetails>();
     		Collection<FundingPledgesDetails> fpdc = plForm.getFundingPledgesDetails();
@@ -88,6 +85,7 @@ public class SavePledge extends Action {
     		while (itf.hasNext()) {
     			FundingPledgesDetails fpd = (FundingPledgesDetails) itf.next();
     			fpdl.add(fpd);
+    			fpd.setPledgeid(pledge);
 			}
     		pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
     		

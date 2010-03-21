@@ -35,6 +35,8 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
 public class FundingAdded extends Action {
 
@@ -175,7 +177,7 @@ public class FundingAdded extends Action {
 						fundDet.setAdjustmentTypeName("Planned");
 					else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 						fundDet.setAdjustmentTypeName("Actual");
-					}				
+					}
 					//
 					fundDetails.add(fundDet);
 				}

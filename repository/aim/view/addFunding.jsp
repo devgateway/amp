@@ -619,10 +619,15 @@ var isAlreadySubmitted = false;
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
+								</field:display>
+								<field:display name="Related Pledge" feature="Commitments">
+									<td align="center" valign="middle" width="170">
+										<b><font color="white"><digi:trn>Pledges</digi:trn></font></b>
+									</td>
+								</field:display>
 								<td align="center" valign="middle" width="*">&nbsp;
 									
 								</td>
-								</field:display>
 							</tr>
 
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
@@ -666,28 +671,38 @@ var isAlreadySubmitted = false;
 													label="currencyName"/>
 												</html:select>		
 											</td>
-											<c:set var="contentDisabled"><field:display name="Date Commitment" feature="Commitments">false</field:display></c:set>
-											<c:if test="${contentDisabled==''}">
-												<c:set var="contentDisabled">true</c:set>
-											</c:if>
-											<td align="left" vAlign="bottom">
-												<table cellPadding="0" cellSpacing="0">
-													<tr>
-														<td>
-															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate"
-															styleId="<%=tempIndexStr%>" readonly="true" size="10" onchange="addForValidation(this)"/>
-														</td>
-														<td align="left" vAlign="center">&nbsp;
-															<c:if test="${contentDisabled=='false'}">
-																<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-																</a>
-															</c:if>
-														</td>														
-													</tr>
-												</table>												
-											</td>
+											<c:set var="contentDisabled">
+											<field:display name="Date Commitment" feature="Commitments">false</field:display></c:set>
+												<c:if test="${contentDisabled==''}">
+													<c:set var="contentDisabled">true</c:set>
+												</c:if>
+												<td align="left" vAlign="bottom">
+													<table cellPadding="0" cellSpacing="0">
+														<tr>
+															<td>
+																<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+																<html:text name="fundingDetail" indexed="true" property="transactionDate"
+																styleId="<%=tempIndexStr%>" readonly="true" size="10" onchange="addForValidation(this)"/>
+															</td>
+															<td align="left" vAlign="center">&nbsp;
+																<c:if test="${contentDisabled=='false'}">
+																	<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+																	</a>
+																</c:if>
+															</td>														
+														</tr>
+													</table>												
+												</td>
+											<field:display name="Related Pledge" feature="Commitments">
+												<td valign="bottom">
+													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
+														<html:option value="0"></html:option>
+														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
+												</html:select>		
+												</td> 
+											</field:display>
+											
 											<field:display name="Remove Commitment Link" feature="Commitments">
 												<td align="right">
 														<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
@@ -1053,6 +1068,13 @@ var isAlreadySubmitted = false;
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 									</field:display>
 								</td>
+								
+								<td align="center" valign="middle" colspan="2">&nbsp;
+									<field:display name="Related Pledge" feature="Disbursement">
+										<b><font color="white"><digi:trn>Pledges</digi:trn></font></b>
+									</field:display>
+								</td>
+								 
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
@@ -1171,7 +1193,15 @@ var isAlreadySubmitted = false;
 												
 											</td>
 											</field:display>
-
+											<field:display name="Related Pledge" feature="Disbursement">
+											<td valign="bottom">
+													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
+														<html:option value="0"></html:option>
+														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
+												</html:select>		
+												</td> 
+											</field:display>
+											
 											<field:display name="Remove Disbursement Link" feature="Disbursement">
 												<td align="right">
 													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">

@@ -1,7 +1,9 @@
 package org.digijava.module.fundingpledges.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class FundingPledgesDetails {
 	private long id;
@@ -18,7 +20,39 @@ public class FundingPledgesDetails {
 	private AmpCategoryValue aidmodality;	
 	private Double amount;
 	private AmpCurrency currency;
+	private String currencycode;
+	private Long pledgetypeid;
+	private Long typeOfAssistanceid;
+	private Long aidmodalityid;
 	
+	public Long getTypeOfAssistanceid() {
+		return typeOfAssistanceid;
+	}
+	public void setTypeOfAssistanceid(Long typeOfAssistanceid) {
+		this.typeOfAssistanceid = typeOfAssistanceid;
+		this.typeOfAssistance = CategoryManagerUtil.getAmpCategoryValueFromDb(this.typeOfAssistanceid);
+	}
+	public Long getAidmodalityid() {
+		return aidmodalityid;
+	}
+	public void setAidmodalityid(Long aidmodalityid) {
+		this.aidmodalityid = aidmodalityid;
+		this.aidmodality = CategoryManagerUtil.getAmpCategoryValueFromDb(this.aidmodalityid);
+	}
+	public Long getPledgetypeid() {
+		return pledgetypeid;
+	}
+	public void setPledgetypeid(Long pledgetypeid) {
+		this.pledgetypeid = pledgetypeid;
+		this.pledgetype = CategoryManagerUtil.getAmpCategoryValueFromDb(this.pledgetypeid);
+	}
+	public String getCurrencycode() {
+		return currencycode;
+	}
+	public void setCurrencycode(String currencycode) {
+		this.currencycode = currencycode;
+		this.setCurrency(CurrencyUtil.getAmpcurrency(currencycode));
+	}
 	public long getId() {
 		return id;
 	}
@@ -62,5 +96,4 @@ public class FundingPledgesDetails {
 	public void setCurrency(AmpCurrency currency) {
 		this.currency = currency;
 	}
-	
 }

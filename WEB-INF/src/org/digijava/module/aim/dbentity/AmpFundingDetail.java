@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
 public class AmpFundingDetail implements Serializable
@@ -37,6 +38,17 @@ public class AmpFundingDetail implements Serializable
 	private Double fixedExchangeRate;
 	private AmpCurrency fixedRateBaseCurrency;
 	private Boolean disbursementOrderRejected;
+	private FundingPledges pledgeid;
+	
+	public FundingPledges getPledgeid() {
+		return pledgeid;
+	}
+
+
+	public void setPledgeid(FundingPledges pledgeid) {
+		this.pledgeid = pledgeid;
+	}
+
 
 	private String expCategory;
         private String disbOrderId;

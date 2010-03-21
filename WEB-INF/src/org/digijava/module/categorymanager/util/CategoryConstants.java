@@ -54,6 +54,8 @@ public class CategoryConstants {
 	
 	public static final String DATA_EXCHANGE_NAME		= "Data Echange Category";
 	public static final String DATA_EXCHANGE_KEY		= "data_exchange";
+	public static final String PLEDGES_TYPES= "Pledges Types";
+	public static final String PLEDGES_TYPES_KEY= "pledges_types";
 	
 	//--- IPA Contracting Step 13
 	

@@ -1,20 +1,16 @@
 package org.digijava.module.fundingpledges.form;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 
 public class PledgeForm extends ActionForm implements Serializable{
 
@@ -27,29 +23,6 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String pledgeTitle;
 	private Collection<AmpCurrency> validcurrencies;
 	private String currencyCode;
-	
-	/**
-	 * @return the currencyCode
-	 */
-	public String getCurrencyCode() {
-		return currencyCode;
-	}
-
-	/**
-	 * @param currencyCode the currencyCode to set
-	 */
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
-	}
-
-	public Collection<AmpCurrency> getValidcurrencies() {
-		return validcurrencies;
-	}
-
-	public void setValidcurrencies(Collection<AmpCurrency> validcurrencies) {
-		this.validcurrencies = validcurrencies;
-	}
-
 	private String contact1Name;
 	private String contact1Title;
 	private String contact1OrgName;
@@ -72,6 +45,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String contact2Telephone;
 	private String contact2Email;
 	private String contact2Fax;
+	
 	private String contactAlternate2Name;
 	private String contactAlternate2Email;
 	private String contactAlternate2Telephone;
@@ -81,7 +55,38 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<FundingPledgesDetails> fundingPledgesDetails;
 	private String fundingEvent;
 	private Long selectedFunding[] = null;
+	private Collection<AmpCategoryValue> pledgestypes;
 	
+	public Collection<AmpCategoryValue> getPledgestypes() {
+		return pledgestypes;
+	}
+
+	public void setPledgestypes(Collection<AmpCategoryValue> pledgestypes) {
+		this.pledgestypes = pledgestypes;
+	}
+
+
+	/**
+	 * @return the currencyCode
+	 */
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	/**
+	 * @param currencyCode the currencyCode to set
+	 */
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
+
+	public Collection<AmpCurrency> getValidcurrencies() {
+		return validcurrencies;
+	}
+
+	public void setValidcurrencies(Collection<AmpCurrency> validcurrencies) {
+		this.validcurrencies = validcurrencies;
+	}
 	
 	/**
 	 * @return the selectedFunding

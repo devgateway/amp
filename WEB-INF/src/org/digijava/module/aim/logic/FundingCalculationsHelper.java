@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.ObjectUtils.Null;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -124,7 +125,10 @@ public class FundingCalculationsHelper {
 
 			fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
-
+			if (fundDet.getPledgeid()!= null){
+				fundingDetail.setPledge(fundDet.getPledgeid().getId());
+			}
+			
 			// TOTALS
 			if (adjType == Constants.PLANNED) {
 				fundingDetail.setAdjustmentTypeName("Planned");

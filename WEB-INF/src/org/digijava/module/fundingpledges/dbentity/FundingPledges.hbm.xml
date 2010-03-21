@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledges" table="amp_funding_pledges">
+	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledges" table="AMP_FUNDING_PLEDGES">
 		<id name="Id" column="id" type="java.lang.Long"
 			unsaved-value="null">
 			<generator class="native">
@@ -37,20 +37,20 @@
 		<many-to-one name="contactOrganization" column="contactOrganization" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
 		<many-to-one name="contactOrganization_1" column="contactOrganization_1" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
 		
-		<set name="locationlist" table="amp_funding_pledges_location" lazy="true" cascade="all">
+		<set name="locationlist" lazy="true" cascade="all" inverse="true">
 			<cache usage="read-write"/>
-			<key column="amp_location_id"/>
+			<key column="pledge_id"/>
 			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation" />
 		</set>
 		
-		<set name="sectorlist" table="amp_funding_pledges_sectors" lazy="true" cascade="all">
+		<set name="sectorlist" lazy="true" cascade="all" inverse="true">
 			<cache usage="read-write"/>
-			<key column="amp_sector_id"/>
+			<key column="pledge_id"/>
 			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesSector" />
 		</set>
-		<set name="fundingPledgesDetails" table="amp_funding_pledges_sectors" lazy="true" cascade="all">
+		<set name="fundingPledgesDetails" lazy="true" cascade="all" inverse="true">
 			<cache usage="read-write"/>
-			<key column="amp_funding_pledges_details_id"/>
+			<key column="pledge_id"/>
 			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails" />
 		</set>
 	</class>

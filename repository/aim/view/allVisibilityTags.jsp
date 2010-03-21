@@ -453,9 +453,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Base Value" feature="Activity"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display> 
+<field:display name="Related Pledge" feature="Commitments"></field:display>
 <field:display name="Date Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Date Current Value" feature="Activity"></field:display> 
-<field:display name="Date Disbursement" feature="Disbursement"></field:display> 
+<field:display name="Date Disbursement" feature="Disbursement"></field:display>
+<field:display name="Related Pledge" feature="Disbursement"></field:display> 
 <field:display name="Date Disbursement" feature="Funding Information"></field:display> 
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Date Expenditure" feature="Expenditures"></field:display> 

@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class EditActivityForm extends ActionForm implements Serializable {
 
@@ -1891,6 +1892,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private Collection organizations;
 		private Collection<AmpCurrency> validcurrencies;
+		private Collection<FundingPledges> pledgeslist;
 		private boolean dupFunding;
 		private String orgName;
 		
@@ -1934,7 +1936,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private long transIndexId;
         private String fundingCurrCode;
         private int selectedMTEFProjectionYear;
+        
+        public Collection<FundingPledges> getPledgeslist() {
+			return pledgeslist;
+		}
 
+		public void setPledgeslist(Collection<FundingPledges> pledgeslist) {
+			this.pledgeslist = pledgeslist;
+		}
+        
         public String getFundingCurrCode() {
             return fundingCurrCode;
         }

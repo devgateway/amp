@@ -507,10 +507,10 @@ function confirmFunc() {
                               </td>
                               <td align="center">
 	                              <logic:notEmpty name="report" property="filterDataSet">
-	                                  <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green.gif" vspace="2" border="0" align="absmiddle" />
+	                                  <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green_sq.gif" vspace="2" border="0" align="absmiddle" />
 	                              </logic:notEmpty>
 	                              <logic:empty name="report" property="filterDataSet">
-	                                   <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey.gif" vspace="2" border="0" align="absmiddle" />
+	                                   <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" vspace="2" border="0" align="absmiddle" />
 	                              </logic:empty>
                               </td>
                               <td>

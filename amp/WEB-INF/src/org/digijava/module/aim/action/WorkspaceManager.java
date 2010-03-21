@@ -106,8 +106,10 @@ public class WorkspaceManager extends Action {
 			}
 		}
 		//pages
-		int numPages = workspaces.size() / NUM_RECORDS;
+		int numPages = 0;
+		if (NUM_RECORDS!=0) {numPages=workspaces.size() / NUM_RECORDS;
 		numPages += (workspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
+		}
 		//workspaces for current page
 		if(edIndex>workspaces.size()){
 			edIndex=workspaces.size();

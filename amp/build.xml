@@ -383,7 +383,7 @@
 		<echo message="Exporting stored functions from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
 			<classpath refid="compile.classpath"/>
-			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,') RETURNS ',returns,' ',body, ';;') FROM proc WHERE db='${clean.source}'</transaction>
+			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,')',if(returns!='',' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}';</transaction>
 		</sql>
 		<echo message="Exporting views from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">

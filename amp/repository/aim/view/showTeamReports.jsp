@@ -341,6 +341,13 @@ function confirmFunc() {
                             
                             <td bgColor=#999999 align="center" height="20">
                               <b>
+                              <digi:trn>
+                              Filtered
+                              </digi:trn>
+                              </b>
+                            </td>
+                            <td bgColor=#999999 align="center" height="20">
+                              <b>
                               <digi:trn key="aim:hierarchies">
                               Hierarchies
                               </digi:trn>
@@ -497,6 +504,14 @@ function confirmFunc() {
                                     </li>
                                   </logic:equal>
                                 </p>
+                              </td>
+                              <td align="center">
+	                              <logic:notEmpty name="report" property="filterDataSet">
+	                                  <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_green.gif" vspace="2" border="0" align="absmiddle" />
+	                              </logic:notEmpty>
+	                              <logic:empty name="report" property="filterDataSet">
+	                                   <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey.gif" vspace="2" border="0" align="absmiddle" />
+	                              </logic:empty>
                               </td>
                               <td>
                                 <logic:iterate name="report" property="hierarchies" id="hierarchy" >

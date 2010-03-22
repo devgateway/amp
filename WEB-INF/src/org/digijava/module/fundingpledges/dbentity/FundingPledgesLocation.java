@@ -1,12 +1,12 @@
 package org.digijava.module.fundingpledges.dbentity;
 
-import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 public class FundingPledgesLocation {
 
 	private Long id;
 	private FundingPledges pledgeid;
-	private AmpLocation location;
+	private AmpCategoryValueLocations location;
 	private Float locationpercentage;
 	
 	public Long getId() {
@@ -21,14 +21,15 @@ public class FundingPledgesLocation {
 	public void setPledgeid(FundingPledges pledgeid) {
 		this.pledgeid = pledgeid;
 	}
-	public AmpLocation getLocation() {
-		return location;
-	}
-	public void setLocation(AmpLocation location) {
-		this.location = location;
-	}
+	
 	public Float getLocationpercentage() {
 		return locationpercentage;
+	}
+	public AmpCategoryValueLocations getLocation() {
+		return location;
+	}
+	public void setLocation(AmpCategoryValueLocations location) {
+		this.location = location;
 	}
 	public void setLocationpercentage(Float locationpercentage) {
 		this.locationpercentage = locationpercentage;

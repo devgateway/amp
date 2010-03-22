@@ -108,7 +108,7 @@ public class SelectPledgeLocation extends Action {
 	        			 */
 	        			if ( currentLayer == implLocValue.getIndex() && plForm.getSelectedLocs() != null ) {
 	        				for ( FundingPledgesLocation l: plForm.getSelectedLocs() ) {
-	        					if ( child.equals(l.getLocation().getLocation()) ) {
+	        					if ( child.equals(l.getLocation()) ) {
 	        						addLocationAllowed	= false;
 	        						break;
 	        					}

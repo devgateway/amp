@@ -35,26 +35,12 @@ public class PledgeLocationSelected extends Action {
 		if ( userSelectedLocs != null ) {
 			for (int i=0; i<userSelectedLocs.length; i++) {
 				AmpCategoryValueLocations ampCVLocation		= DynLocationManagerUtil.getLocation( userSelectedLocs[i], false);
-				AmpLocation location							= new AmpLocation();
-				location.setLocation(ampCVLocation);
-				//location.setAncestorLocationNames( DynLocationManagerUtil.getParents(ampCVLocation) );
-				location.setName(ampCVLocation.getName());
-				//location.setId( ampCVLocation.getId() );
-				//location.setPercent("");
 				FundingPledgesLocation fpl = new FundingPledgesLocation();
-				fpl.setLocation(location);
+				fpl.setLocation(ampCVLocation);
 				if ( plForm.getSelectedLocs() == null )
 					plForm.setSelectedLocs( new ArrayList<FundingPledgesLocation>() );
 				if ( !plForm.getSelectedLocs().contains(fpl) )
 					plForm.getSelectedLocs().add(fpl);
-				
-				/*AmpCategoryValueLocations ampRegion			= DynLocationManagerUtil.getAncestorByLayer(ampCVLocation, 
-																CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-				if ( ampRegion != null ){
-					if ( eaForm.getFunding().getFundingRegions() == null )
-						eaForm.getFunding().setFundingRegions( new ArrayList<AmpCategoryValueLocations>() );
-					eaForm.getFunding().getFundingRegions().add(ampRegion);
-				}*/
 			}
 		}
 		

@@ -1,6 +1,5 @@
 package org.digijava.module.fundingpledges.dbentity;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,7 +11,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class FundingPledgesDetails {
-	private long detailid;
+	private long id;
 	private FundingPledges pledgeid;
 	public FundingPledges getPledgeid() {
 		return pledgeid;
@@ -33,14 +32,12 @@ public class FundingPledgesDetails {
 	private Long typeOfAssistanceid;
 	private Long aidmodalityid;
 	
-	public long getDetailid() {
-		return detailid;
+	public long getId() {
+		return id;
 	}
-	public void setDetailid(long detailid) {
-		this.detailid = detailid;
+	public void setId(long id) {
+		this.id = id;
 	}
-	
-	
 	public Long getTypeOfAssistanceid() {
 		return typeOfAssistanceid;
 	}
@@ -119,9 +116,9 @@ public class FundingPledgesDetails {
 		this.fundingDate = fundingDate;
 		try {
 			DateFormat formatter ;
-			Date date ;
-			formatter = new SimpleDateFormat("dd-MM-yyyy");
-			date = (Date)formatter.parse(fundingDate);
+			java.util.Date date ;
+			formatter = new SimpleDateFormat("dd/MM/yyyy");
+			date = formatter.parse(fundingDate);
 			this.funding_date = new Timestamp(date.getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();

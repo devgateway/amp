@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<!DOCTYPE Schema PUBLIC "//UNKNOWN/" "mondrian.dtd">
+<!DOCTYPE AMP [
+<!ENTITY mondriandtd SYSTEM "mondrian.dtd">]>
 <Schema name="AMP">
-	<Dimension name="Activity">
+<Dimension name="Activity">
 		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberCaption="#All_Activities#" allMemberName="All Activities" caption="#Activity#">
 			<Table name="cached_amp_activity" />
 			<Level name="Activity Title" column="name" table="cached_amp_activity" uniqueMembers="true" />
@@ -64,7 +65,7 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
-		<Dimension name="Donor Types">
+		<Dimension name="Donor Types" >
 			<Hierarchy hasAll="true" allLevelName="All Donors types" caption="#Donors_types#" allMemberCaption="#All_Donors_types#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorType" column="donor_type_name">
@@ -246,7 +247,8 @@
 			</MeasureExpression>
 		</Measure>
 	</Cube>
-	<Cube name="Pledges Funding">
+	
+  <Cube name="Pledges Funding">
 		<View alias="v_pledges_funding">
       <SQL dialect="mysql">
         <![CDATA[select * from v_pledges_funding]]>
@@ -357,17 +359,43 @@
 	<Measure name="Pledges" aggregator="sum" caption="#Total Pledges#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 		<MeasureExpression>
 			<SQL dialect="mysql">
-				amount/getExchange(currency_code,transaction_date)
+				v_pledges_funding.amount/getExchange(v_pledges_funding.currency_code,v_pledges_funding.transaction_date)
 			</SQL>
 		</MeasureExpression>
 	</Measure>
-	
 	</Cube>
-	
-  <VirtualCube  name="Donor and Pledges">
+  
+  <Cube name="Pledges Commitmens">
+		<View alias="v_donor_funding">
+      <SQL dialect="mysql">
+        <![CDATA[select * from v_donor_funding WHERE NOT ISNULL(pledge_id)]]>
+      </SQL>
+    </View>
+
+    <Measure name="Pledges Actual Commitments" aggregator="sum" caption="Pledges Actual Commitments" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+				  case when transaction_type = 0 and adjustment_type =1  then
+          transaction_amount / getExchangeWithFixed(currency_code, transaction_date,fixed_exchange_rate) 
+          else 0  end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+    <Measure name="Pledges Actual Disbursements" aggregator="sum" caption="Pledges Actual Disbursements" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+				  case when transaction_type = 1 and adjustment_type =1 then
+          transaction_amount / getExchangeWithFixed(currency_code, transaction_date,fixed_exchange_rate) 
+          else 0  end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+  </Cube>
+	<VirtualCube  name="Donor and Pledges">
 	 <CubeUsages>
      <CubeUsage cubeName="Pledges Funding"/>
       <CubeUsage cubeName="Donor Funding"/>
+      <CubeUsage cubeName="Pledges Commitmens"/>
     </CubeUsages>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Donor"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Aid Modality"/>
@@ -380,13 +408,18 @@
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Pledges Dates"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Contact Name"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Contact Email"/>
+    
+    
     <VirtualCubeDimension  cubeName="Donor Funding" name="Donor"/>
     
     <VirtualCubeMeasure  cubeName="Pledges Funding" name="[Measures].[Pledges]"/>
     <VirtualCubeMeasure  cubeName="Donor Funding" name="[Measures].[Actual Commitments]"/>
     <VirtualCubeMeasure  cubeName="Donor Funding" name="[Measures].[Actual Disbursements]"/>
+    <VirtualCubeMeasure  cubeName="Pledges Commitmens" name="[Measures].[Pledges Actual Commitments]"/>
+    <VirtualCubeMeasure  cubeName="Pledges Commitmens" name="[Measures].[Pledges Actual Disbursements]"/>
+    
     <CalculatedMember  name="Commitment Gap" dimension="Measures">
-        <Formula>[Measures].[Pledges] - [Measures].[Actual Commitments]</Formula>
+        <Formula>[Measures].[Pledges] - [Measures].[Pledges Actual Commitments]</Formula>
     </CalculatedMember>
 	</VirtualCube>
 </Schema>

@@ -1,5 +1,11 @@
 package org.digijava.module.fundingpledges.dbentity;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -14,7 +20,9 @@ public class FundingPledgesDetails {
 	public void setPledgeid(FundingPledges pledgeid) {
 		this.pledgeid = pledgeid;
 	}
-	private java.sql.Time funding_date;
+	private java.sql.Timestamp funding_date;
+	private String fundingDate;
+	
 	private AmpCategoryValue pledgetype;
 	private AmpCategoryValue typeOfAssistance;
 	private AmpCategoryValue aidmodality;	
@@ -59,10 +67,10 @@ public class FundingPledgesDetails {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public java.sql.Time getFunding_date() {
+	public java.sql.Timestamp getFunding_date() {
 		return funding_date;
 	}
-	public void setFunding_date(java.sql.Time fundingDate) {
+	public void setFunding_date(java.sql.Timestamp fundingDate) {
 		funding_date = fundingDate;
 	}
 	
@@ -95,5 +103,27 @@ public class FundingPledgesDetails {
 	}
 	public void setCurrency(AmpCurrency currency) {
 		this.currency = currency;
+	}
+	/**
+	 * @return the fundingDate
+	 */
+	public String getFundingDate() {
+		return fundingDate;
+	}
+	/**
+	 * @param fundingDate the fundingDate to set
+	 */
+	public void setFundingDate(String fundingDate) {
+		this.fundingDate = fundingDate;
+		try {
+			DateFormat formatter ;
+			Date date ;
+			formatter = new SimpleDateFormat("dd-MM-yyyy");
+			date = (Date)formatter.parse(fundingDate);
+			this.funding_date = new Timestamp(date.getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

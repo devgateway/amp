@@ -420,9 +420,9 @@ function adminHelp(){
 	                                              </div>
 	                                        </li>
                                         </feature:display>
- 											<li class="yuiampmenuitem" title='<digi:trn key="aim:clickToAddPledge">Click here to add pledge</digi:trn>'>
-		                                       <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/addPledge.do">
-		                                           <digi:trn key="aim:AddPledge">Add Pledge</digi:trn>
+ 											<li class="yuiampmenuitem" title='<digi:trn key="aim:clickToManagePledges">Click here to manage pledges</digi:trn>'>
+		                                       <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewPledgesList.do">
+		                                           <digi:trn key="aim:Pledges">Pledges</digi:trn>
 		                                        </a>
 											</li>
                                       </ul>

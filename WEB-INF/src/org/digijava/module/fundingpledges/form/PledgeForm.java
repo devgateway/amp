@@ -2,6 +2,7 @@ package org.digijava.module.fundingpledges.form;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 import org.apache.struts.action.ActionForm;
@@ -14,9 +15,6 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 
 public class PledgeForm extends ActionForm implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String selectedOrgId;
 	private String selectedOrgName;
@@ -53,6 +51,53 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String additionalInformation;
 	private Collection<ActivitySector> pledgeSectors;
 	private Collection<FundingPledgesDetails> fundingPledgesDetails;
+	private Collection<AmpCategoryValue> pledgeTypeCategory = null;
+	private Collection<AmpCategoryValue> assistanceTypeCategory = null;
+	private Collection<AmpCategoryValue> aidModalityCategory = null;
+
+	/**
+	 * @return the pledgeTypeCategory
+	 */
+	public Collection<AmpCategoryValue> getPledgeTypeCategory() {
+		return pledgeTypeCategory;
+	}
+
+	/**
+	 * @param pledgeTypeCategory the pledgeTypeCategory to set
+	 */
+	public void setPledgeTypeCategory(Collection<AmpCategoryValue> pledgeTypeCategory) {
+		this.pledgeTypeCategory = pledgeTypeCategory;
+	}
+
+	/**
+	 * @return the assistanceTypeCategory
+	 */
+	public Collection<AmpCategoryValue> getAssistanceTypeCategory() {
+		return assistanceTypeCategory;
+	}
+
+	/**
+	 * @param assistanceTypeCategory the assistanceTypeCategory to set
+	 */
+	public void setAssistanceTypeCategory(
+			Collection<AmpCategoryValue> assistanceTypeCategory) {
+		this.assistanceTypeCategory = assistanceTypeCategory;
+	}
+
+	/**
+	 * @return the aidModalityCategory
+	 */
+	public Collection<AmpCategoryValue> getAidModalityCategory() {
+		return aidModalityCategory;
+	}
+
+	/**
+	 * @param aidModalityCategory the aidModalityCategory to set
+	 */
+	public void setAidModalityCategory(Collection<AmpCategoryValue> aidModalityCategory) {
+		this.aidModalityCategory = aidModalityCategory;
+	}
+
 	private String fundingEvent;
 	private Long selectedFunding[] = null;
 	private Collection<AmpCategoryValue> pledgestypes;
@@ -148,7 +193,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * @param contact1Name the contact1Name to set
 	 */
 	public void setContact1Name(String contact1Name) {
-		contact1Name = contact1Name;
+		this.contact1Name = contact1Name;
 	}
 	/**
 	 * @return the contact1Title
@@ -160,7 +205,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * @param contact1Title the contact1Title to set
 	 */
 	public void setContact1Title(String contact1Title) {
-		contact1Title = contact1Title;
+		this.contact1Title = contact1Title;
 	}
 	/**
 	 * @return the contact1OrgName
@@ -196,7 +241,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * @param contact1Ministry the contact1Ministry to set
 	 */
 	public void setContact1Ministry(String contact1Ministry) {
-		contact1Ministry = contact1Ministry;
+		this.contact1Ministry = contact1Ministry;
 	}
 	/**
 	 * @return the contact1Address
@@ -208,7 +253,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * @param contact1Address the contact1Address to set
 	 */
 	public void setContact1Address(String contact1Address) {
-		contact1Address = contact1Address;
+		this.contact1Address = contact1Address;
 	}
 	/**
 	 * @return the contact1Telephone
@@ -220,7 +265,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * @param contact1Telephone the contact1Telephone to set
 	 */
 	public void setContact1Telephone(String contact1Telephone) {
-		contact1Telephone = contact1Telephone;
+		this.contact1Telephone = contact1Telephone;
 	}
 	/**
 	 * @return the contact1Email
@@ -232,7 +277,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * @param contact1Email the contact1Email to set
 	 */
 	public void setContact1Email(String contact1Email) {
-		contact1Email = contact1Email;
+		this.contact1Email = contact1Email;
 	}
 	/**
 	 * @return the contact1Fax
@@ -244,7 +289,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 * @param contact1Fax the contact1Fax to set
 	 */
 	public void setContact1Fax(String contact1Fax) {
-		contact1Fax = contact1Fax;
+		this.contact1Fax = contact1Fax;
 	}
 	/**
 	 * @return the contactAlternate1Name
@@ -458,11 +503,11 @@ public class PledgeForm extends ActionForm implements Serializable{
 	public void setPledgeSectors(Collection<ActivitySector> selectedSectors) {
 		this.pledgeSectors = selectedSectors;
 	}
-
+	/*
 	public FundingPledgesLocation getFundingPledgesDetails(int index) {
 		return (FundingPledgesLocation) (this.fundingPledgesDetails.toArray()[index]);
 	}
-	
+	*/
 	/**
 	 * @return the fundingPledgesDetails
 	 */

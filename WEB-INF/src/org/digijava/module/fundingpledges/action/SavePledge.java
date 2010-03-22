@@ -19,8 +19,8 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
-import org.digijava.module.fundingpledges.util.PledgeUtil;
 
 public class SavePledge extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -29,13 +29,13 @@ public class SavePledge extends Action {
     		
     		FundingPledges pledge = new FundingPledges();
     		pledge.setTitle(plForm.getPledgeTitle());
-    		pledge.setOrganization(PledgeUtil.getOrganizationById(Long.parseLong(plForm.getSelectedOrgId())));
+    		pledge.setOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getSelectedOrgId())));
     		pledge.setAdditionalInformation(plForm.getAdditionalInformation());
     		
     		pledge.setContactName(plForm.getContact1Name());
     		pledge.setContactTitle(plForm.getContact1Title());
     		if (plForm.getContact1OrgId()!=null && plForm.getContact1OrgId().length()!=0) {
-    			pledge.setContactOrganization(PledgeUtil.getOrganizationById(Long.parseLong(plForm.getContact1OrgId())));
+    			pledge.setContactOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getContact1OrgId())));
 			}
     		pledge.setContactMinistry(plForm.getContact1Ministry());
     		pledge.setContactAddress(plForm.getContact1Address());
@@ -49,7 +49,7 @@ public class SavePledge extends Action {
     		pledge.setContactName_1(plForm.getContact2Name());
     		pledge.setContactTitle_1(plForm.getContact2Title());
     		if (plForm.getContact2OrgId()!=null && plForm.getContact2OrgId().length()!=0) {
-    			pledge.setContactOrganization_1(PledgeUtil.getOrganizationById(Long.parseLong(plForm.getContact2OrgId())));
+    			pledge.setContactOrganization_1(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getContact2OrgId())));
     		}
     		pledge.setContactMinistry_1(plForm.getContact2Ministry());
     		pledge.setContactAddress_1(plForm.getContact2Address());
@@ -60,36 +60,43 @@ public class SavePledge extends Action {
     		pledge.setContactAlternativeEmail_1(plForm.getContactAlternate2Email());
     		pledge.setContactAlternativeTelephone_1(plForm.getContactAlternate2Telephone());
     		
-    		Set<FundingPledgesSector> fpsl = new HashSet<FundingPledgesSector>();
-    		for (Iterator sectorIt = plForm.getPledgeSectors().iterator(); sectorIt.hasNext();) {
-       		 	ActivitySector actSector = (ActivitySector) sectorIt.next();
-				AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
-				sector.setAmpSectorId(actSector.getSectorId());
-				FundingPledgesSector fps = new FundingPledgesSector();
-				fps.setSector(sector);
-				fps.setSectorpercentage(actSector.getSectorPercentage());
-				fpsl.add(fps);
-			}
-    		pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
-    		//Locations
-    	
-    		pledge.setLocationlist(new HashSet<FundingPledgesLocation>());
-    		for (Iterator iterator = plForm.getSelectedLocs().iterator(); iterator.hasNext();) {
-				FundingPledgesLocation pledgeslocations = (FundingPledgesLocation) iterator.next();
-				pledge.getLocationlist().add(pledgeslocations);
-			}
+    		if(plForm.getPledgeSectors()!=null && plForm.getPledgeSectors().size()>0){
+	    		Set<FundingPledgesSector> fpsl = new HashSet<FundingPledgesSector>();
+	    		for (Iterator sectorIt = plForm.getPledgeSectors().iterator(); sectorIt.hasNext();) {
+	       		 	ActivitySector actSector = (ActivitySector) sectorIt.next();
+					AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
+					sector.setAmpSectorId(actSector.getSectorId());
+					FundingPledgesSector fps = new FundingPledgesSector();
+					fps.setSector(sector);
+					fps.setSectorpercentage(actSector.getSectorPercentage());
+					fpsl.add(fps);
+					//pledge.getSectorlist().add(fps);
+				}
+	    		pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
+    		}
     		
-    		Set<FundingPledgesDetails> fpdl = new HashSet<FundingPledgesDetails>();
-    		Collection<FundingPledgesDetails> fpdc = plForm.getFundingPledgesDetails();
-    		Iterator<FundingPledgesDetails> itf = fpdc.iterator();
-    		while (itf.hasNext()) {
-    			FundingPledgesDetails fpd = (FundingPledgesDetails) itf.next();
-    			fpdl.add(fpd);
-    			fpd.setPledgeid(pledge);
-			}
-    		pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
+    		if(plForm.getSelectedLocs()!=null && plForm.getSelectedLocs().size()>0){
+	    		Set<FundingPledgesLocation> fpll = new HashSet<FundingPledgesLocation>();
+	    		Collection<FundingPledgesLocation> fplc = plForm.getSelectedLocs();
+	    		Iterator<FundingPledgesLocation> itl = fplc.iterator();
+	    		while (itl.hasNext()) {
+	    			FundingPledgesLocation fpl = (FundingPledgesLocation) itl.next();
+	    			fpll.add(fpl);
+				}
+	    		pledge.setLocationlist((Set<FundingPledgesLocation>) fpll);
+    		}
     		
-    		PledgeUtil.savePledge(pledge);
+    		if(plForm.getFundingPledgesDetails()!=null && plForm.getFundingPledgesDetails().size()>0){
+	    		Set<FundingPledgesDetails> fpdl = new HashSet<FundingPledgesDetails>();
+	    		Collection<FundingPledgesDetails> fpdc = plForm.getFundingPledgesDetails();
+	    		Iterator<FundingPledgesDetails> itf = fpdc.iterator();
+	    		while (itf.hasNext()) {
+	    			FundingPledgesDetails fpd = (FundingPledgesDetails) itf.next();
+	    			fpdl.add(fpd);
+				}
+	    		pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
+    		}
+    		PledgesEntityHelper.savePledge(pledge);
     		
     		return mapping.findForward("forward");
 		}

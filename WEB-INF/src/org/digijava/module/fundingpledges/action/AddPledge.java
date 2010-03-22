@@ -2,6 +2,7 @@ package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -41,8 +42,11 @@ public class AddPledge extends Action {
     	    }
     	    //
     		
-    		Collection<AmpCategoryValue> pledgestypes = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY);
-    		plForm.setPledgestypes(pledgestypes);
+    		plForm.setPledgeTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY));
+    		
+    		plForm.setAssistanceTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY));
+
+    		plForm.setAidModalityCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY));
     		
     		Collection currencies = CurrencyUtil.getAmpCurrency();
     		ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
@@ -56,6 +60,40 @@ public class AddPledge extends Action {
 	      					}
 	      			}
 	        }
+	        if (request.getParameter("reset") != null && request.getParameter("reset").equalsIgnoreCase("true")) {
+	        	plForm.setPledgeTitle(null);
+	        	plForm.setSelectedOrgId(null);
+	        	plForm.setSelectedOrgName(null);
+	        	plForm.setAdditionalInformation(null);
+	        	plForm.setContact1Address(null);
+	        	plForm.setContact1Email(null);
+	        	plForm.setContact1Fax(null);
+	        	plForm.setContact1Ministry(null);
+	        	plForm.setContact1Name(null);
+	        	plForm.setContact1OrgId(null);
+	        	plForm.setContact1OrgName(null);
+	        	plForm.setContact1Telephone(null);
+	        	plForm.setContact1Title(null);
+	        	plForm.setContactAlternate1Email(null);
+	        	plForm.setContactAlternate1Name(null);
+	        	plForm.setContactAlternate1Telephone(null);
+	        	plForm.setContact2Address(null);
+	        	plForm.setContact2Email(null);
+	        	plForm.setContact2Fax(null);
+	        	plForm.setContact2Ministry(null);
+	        	plForm.setContact2Name(null);
+	        	plForm.setContact2OrgId(null);
+	        	plForm.setContact2OrgName(null);
+	        	plForm.setContact2Telephone(null);
+	        	plForm.setContact2Title(null);
+	        	plForm.setContactAlternate2Email(null);
+	        	plForm.setContactAlternate2Name(null);
+	        	plForm.setContactAlternate2Telephone(null);
+	        	plForm.setFundingPledgesDetails(null);
+	        	plForm.setPledgeSectors(null);
+	        	plForm.setSelectedLocs(null);
+	        	request.getSession().removeAttribute("reset");
+			}
             return mapping.findForward("forward");
             
     }

@@ -15,6 +15,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="addSectors.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript"><!--
 function fnChk(frmContrl, f){
@@ -68,22 +69,28 @@ function addLocation() {
 	}
 
 function removeLocation() {
-	//document.getElementsByName("fundingEvent")[0].value = "delFunding";
-	var i = 1
-	var delStr = "deleteLocs="
-	while (document.getElementById("checkLoc"+i)!=null){
-		if(document.getElementById("checkLoc"+i).checked==true){
-			delStr = delStr + "_" + i;
+	<c:set var="confirmDelete">
+	  <digi:trn key="aim:removeSelectedLocationsMessage">
+	 	 Remove selected locations?
+	  </digi:trn>
+	</c:set>
+	if (confirm("${confirmDelete}")){
+		var i = 1
+		var delStr = "deleteLocs="
+		while (document.getElementById("checkLoc"+i)!=null){
+			if(document.getElementById("checkLoc"+i).checked==true){
+				delStr = delStr + "_" + i;
+			}
+			i++;
 		}
-		i++;
-	}
-	if (delStr.length < 13){
-		alert ("Please, select a location first.");
-	} else {
-		document.pledgeForm.target = "_self";
-		document.pledgeForm.action="/removePledgeLocation.do?"+delStr;
-		document.pledgeForm.submit();
-	}		
+		if (delStr.length < 13){
+			alert ("Please, select a location first.");
+		} else {
+			document.pledgeForm.target = "_self";
+			document.pledgeForm.action="/removePledgeLocation.do?"+delStr;
+			document.pledgeForm.submit();
+		}
+	}			
 }
 
 function addSectors(editAct,configId) {
@@ -106,22 +113,28 @@ function addSector(param)
 }
 
 function removeSector() {
-	//document.getElementsByName("fundingEvent")[0].value = "delFunding";
-	var i = 1
-	var delStr = "deleteSect="
-	while (document.getElementById("checkSect"+i)!=null){
-		if(document.getElementById("checkSect"+i).checked==true){
-			delStr = delStr + "_" + i;
+	<c:set var="confirmDelete">
+	  <digi:trn key="aim:removeSelectedSectorsMessage">
+	 	 Remove selected sectors?
+	  </digi:trn>
+	</c:set>
+	if (confirm("${confirmDelete}")){
+		var i = 1
+		var delStr = "deleteSect="
+		while (document.getElementById("checkSect"+i)!=null){
+			if(document.getElementById("checkSect"+i).checked==true){
+				delStr = delStr + "_" + i;
+			}
+			i++;
 		}
-		i++;
-	}
-	if (delStr.length < 13){
-		alert ("Please, select a sector first.");
-	} else {
-		document.pledgeForm.target = "_self";
-		document.pledgeForm.action="/removePledgeSector.do?"+delStr;
-		document.pledgeForm.submit();
-	}		
+		if (delStr.length < 13){
+			alert ("Please, select a sector first.");
+		} else {
+			document.pledgeForm.target = "_self";
+			document.pledgeForm.action="/removePledgeSector.do?"+delStr;
+			document.pledgeForm.submit();
+		}	
+	}	
 }
 
 function addFunding() {
@@ -135,39 +148,135 @@ function addFunding() {
 
 
 function removeFunding() {
-	document.getElementsByName("fundingEvent")[0].value = "delFunding";
-	var i = 1
-	var delStr = "deleteFunds="
-	while (document.getElementById("checkFund"+i)!=null){
-		if(document.getElementById("checkFund"+i).checked==true){
-			delStr = delStr + "_" + i;
+	<c:set var="confirmDelete">
+	  <digi:trn key="aim:removeSelectedFundingMessage">
+	 	 Remove selected fundings?
+	  </digi:trn>
+	</c:set>
+	if (confirm("${confirmDelete}")){
+		document.getElementsByName("fundingEvent")[0].value = "delFunding";
+		var i = 1
+		var delStr = "deleteFunds="
+		while (document.getElementById("checkFund"+i)!=null){
+			if(document.getElementById("checkFund"+i).checked==true){
+				delStr = delStr + "_" + i;
+			}
+			i++;
 		}
-		i++;
-	}
-	if (delStr.length < 13){
-		alert ("Please, select a funding first.");
-	} else {
-		document.pledgeForm.target = "_self";
-		document.pledgeForm.action="/addFundingPledgeDetail.do?"+delStr;
-		document.pledgeForm.submit();
-	}		
+		if (delStr.length < 13){
+			alert ("Please, select a funding first.");
+		} else {
+			document.pledgeForm.target = "_self";
+			document.pledgeForm.action="/addFundingPledgeDetail.do?"+delStr;
+			document.pledgeForm.submit();
+		}	
+	}	
 }
 
 function savePledge() {
 
-	<digi:context name="save" property="context/module/moduleinstance/savePledge.do" />
-    document.pledgeForm.action = "<%= save %>?edit=true";
-    document.pledgeForm.target = "_self";
+	if (validateData()){
+		<digi:context name="save" property="/savePledge.do" />
+  	 	document.pledgeForm.action = "<%= save %>?edit=true";
+  	  	document.pledgeForm.target = "_self";
 
-    document.pledgeForm.submit();
+    	document.pledgeForm.submit();
+	}
 }
- 
+
+function validateData(){
+	<c:set var="pleaseInsertTitle">
+	  <digi:trn key="aim:pleaseInsertTitle">
+	 	 Please, insert a pledge title.
+	  </digi:trn>
+	</c:set>
+	if (document.getElementsByName("pledgeTitle")[0]==null || document.getElementsByName("pledgeTitle")[0].value.length==0){
+		alert ("${pleaseInsertTitle}")
+		return false;
+	}
+	<c:set var="pleaseSelectOrg">
+	  <digi:trn key="aim:pleaseSelectOrg">
+	 	 Please, select organisation using organisation selector.
+	  </digi:trn>
+	</c:set>
+	if (document.getElementById("contrDonorId")==null || document.getElementById("contrDonorId").value.length==0){
+		alert ("${pleaseSelectOrg}")
+		return false;
+	}
+	<c:set var="insertPercentage">
+	  <digi:trn key="aim:insertPercentage">
+	 	 Percentages can not be empty or 0.
+	  </digi:trn>
+	</c:set>
+	var i = 0;
+	while (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0]!=null){
+		var temp = 0;
+		temp = temp + document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0].value;
+		if (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0].value.length==0 || temp==0){
+			alert ("${insertPercentage}")
+			return false;
+		}
+		i++;
+	}
+	i=0;
+	while (document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0]!=null){
+		var temp = 0;
+		temp = temp + document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0].value;
+		if (document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0].value.length==0 || temp==0){
+			alert ("${insertPercentage}")
+			return false;
+		}
+		i++;
+	}
+	
+	<c:set var="addFunding">
+	  <digi:trn key="aim:addFunding">
+	 	 Pledges should have at least one funding.
+	  </digi:trn>
+	</c:set>
+	i = 0;
+	if (document.getElementsByName("fundingPledgesDetails[0].pledgetypeid")[0] == null){
+		alert ("${addFunding}")
+		return false;
+	}
+	
+	<c:set var="insertAmount">
+	  <digi:trn key="aim:insertAmount">
+	  	Please, insert amount greater than 0 for each funding.
+	  </digi:trn>
+	</c:set>
+	i = 0;
+	while (document.getElementsByName("fundingPledgesDetails["+i+"].amount")[0]!=null){
+		var temp = 0;
+		temp = temp + document.getElementsByName("fundingPledgesDetails["+i+"].amount")[0].value;
+		if (document.getElementsByName("fundingPledgesDetails["+i+"].amount")[0].value.length==0 || temp==0){
+			alert ("${insertAmount}")
+			return false;
+		}
+		i++;
+	}
+	
+	<c:set var="selectFunding_date">
+	  <digi:trn key="aim:selectFunding_date">
+	 	 Please, select a date for each funding.
+	  </digi:trn>
+	</c:set>
+	i = 0;
+	while (document.getElementsByName("fundingPledgesDetails["+i+"].fundingDate")[0]!=null){
+		if (document.getElementsByName("fundingPledgesDetails["+i+"].fundingDate")[0].value.length ==0){
+			alert ("${selectFunding_date}")
+			return false;
+		}
+		i++;
+	}
+	return true;
+}
+
 --></script>
 
 <digi:instance property="pledgeForm" />
 
 <digi:form action="/addPledge.do" method="post">
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <body>
 <html:hidden name="pledgeForm" styleId="event" property="fundingEvent"/>
@@ -247,7 +356,7 @@ function savePledge() {
 												</td>
 												<td valign="middle" align="left" width="70%">
 													<a>
-														<html:text property="pledgeTitle" size="30"/>
+														<html:text property="pledgeTitle" size="30" />
                             						</a>
 												</td>											
 											</tr>
@@ -281,7 +390,7 @@ function savePledge() {
 <!--														<aim:addOrganizationButton refreshParentDocument="true"  form="${pledgeForm}" htmlvalueHolder="selectedOrgId" htmlNameHolder="selectedOrgName" useClient="true" styleClass="dr-menu">...</aim:addOrganizationButton>-->
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
-							                              <input  name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
+							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
 							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:right" value='${pledgeForm.selectedOrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
                             						</a>
@@ -792,7 +901,7 @@ function savePledge() {
 										<td>
 											<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
                                              	<c:forEach var="fundingPledgesDetails" items="${pledgeForm.fundingPledgesDetails}" varStatus="status">
-									       		<tr>
+												<tr>
 													<c:set var="indexFund" value="${indexFund+1}"/>
 						                            <c:set var="translation">
 														<digi:trn key="aim:selectFromBelow">Please select from below</digi:trn>
@@ -801,13 +910,19 @@ function savePledge() {
 														<input type="checkbox" id="checkFund${indexFund}"  >
 													</td>
 													<td align="center" valign="bottom" width="20%">
-														 <category:showoptions firstLine="${translation}" name="fundingPledgesDetails" property="pledgetypeid"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PLEDGES_TYPES_KEY%>" styleClass="inp-text"/>
-							                        </td>
+														<html:select name="fundingPledgesDetails" indexed="true" property="pledgetypeid" styleClass="inp-text">
+															<html:optionsCollection name="pledgeForm" property="pledgeTypeCategory" value="id"
+															label="value"/>
+														</html:select>
+						                            </td>
 													<td align="center" valign="bottom" width="20%">
-						                                <category:showoptions firstLine="${translation}" name="fundingPledgesDetails" property="typeOfAssistanceid"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text"/>
+						                                <html:select name="fundingPledgesDetails" indexed="true" property="typeOfAssistanceid" styleClass="inp-text">
+															<html:optionsCollection name="pledgeForm" property="assistanceTypeCategory" value="id"
+															label="value"/>
+														</html:select>
 						                            </td>
 													<td align="center" valign="bottom" width="15%">
-						                                <html:text name="fundingPledgesDetails" indexed="true" property="amount" size="17" styleClass="inp-text"/>
+						                                <html:text name="fundingPledgesDetails" indexed="true" property="amount" size="17" styleClass="inp-text" />
 						                            </td>
 													<td align="center" valign="bottom" width="10%">
 						                                <html:select name="fundingPledgesDetails" indexed="true" property="currencycode" styleClass="inp-text">
@@ -819,8 +934,8 @@ function savePledge() {
 						                                <table cellPadding="0" cellSpacing="0">
 															<tr>
 																<td align="left" vAlign="bottom">
-																	<html:text name="fundingPledgesDetails" property="funding_date" styleClass="inp-text"
-																	styleId="${indexFund}" readonly="true" size="10" onchange="addForValidation(this)"/>
+																	<html:text name="fundingPledgesDetails" indexed="true" property="fundingDate" styleClass="inp-text"
+																	styleId="${indexFund}" readonly="true" size="10"/>
 																</td>
 																<td align="left" vAlign="bottom">&nbsp;
 																	<a id="transDate${indexFund}" href='javascript:pickDateById("transDate${indexFund}",${indexFund})'>
@@ -831,7 +946,10 @@ function savePledge() {
 														</table>
 						                            </td>
 													<td align="center" valign="bottom" width="20%">
-						                                <category:showoptions firstLine="${translation}" name="fundingPledgesDetails" property="aidmodalityid" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
+						                               <html:select name="fundingPledgesDetails" indexed="true" property="aidmodalityid" styleClass="inp-text">
+															<html:optionsCollection name="pledgeForm" property="aidModalityCategory" value="id"
+															label="value"/>
+														</html:select>
 						                            </td>
 						                        </tr>
 												</c:forEach>
@@ -877,7 +995,7 @@ function savePledge() {
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td align="center">
 										<html:button styleClass="dr-menu" property="submitButton" onclick="return savePledge()">
 	                                         <digi:trn key="btn:savePlegde">Save Pledge</digi:trn>

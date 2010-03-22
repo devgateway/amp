@@ -3,6 +3,7 @@ package org.digijava.module.fundingpledges.dbentity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.print.DocFlavor.STRING;
 
@@ -14,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Pledge;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -88,12 +90,29 @@ public class PledgesEntityHelper {
 		return pledge;
 	}
 	
-	public static void savePledge(FundingPledges pledge) throws DgException {
+	public static void savePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors,PledgeForm plf) throws DgException {
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
 			tx=session.beginTransaction();
-			session.saveOrUpdate(pledge);
+			session.save(pledge);
+			for (Iterator iterator = sectors.iterator(); iterator.hasNext();) {
+				FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator
+						.next();
+				fundingPledgesSector.setPledgeid(pledge);
+				session.save(fundingPledgesSector);
+			}
+			for (Iterator iterator = plf.getFundingPledgesDetails().iterator(); iterator.hasNext();) {
+				FundingPledgesDetails FundingPledgesDetails = (FundingPledgesDetails) iterator.next();
+				FundingPledgesDetails.setPledgeid(pledge);
+				session.save(FundingPledgesDetails);
+			}
+			/*
+			for (Iterator iterator = plf.getSelectedLocs().iterator(); iterator.hasNext();) {
+				FundingPledgesLocation FundingPledgesloc = (FundingPledgesLocation) iterator.next();
+				FundingPledgesloc.setPledgeid(pledge);
+				session.save(FundingPledgesloc);
+			}*/
 			tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error saving pledge",e);

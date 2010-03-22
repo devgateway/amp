@@ -60,8 +60,8 @@ public class SavePledge extends Action {
     		pledge.setContactAlternativeEmail_1(plForm.getContactAlternate2Email());
     		pledge.setContactAlternativeTelephone_1(plForm.getContactAlternate2Telephone());
     		
+    		Set<FundingPledgesSector> pledgessector = new HashSet<FundingPledgesSector>();
     		if(plForm.getPledgeSectors()!=null && plForm.getPledgeSectors().size()>0){
-	    		Set<FundingPledgesSector> fpsl = new HashSet<FundingPledgesSector>();
 	    		for (Iterator sectorIt = plForm.getPledgeSectors().iterator(); sectorIt.hasNext();) {
 	       		 	ActivitySector actSector = (ActivitySector) sectorIt.next();
 					AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
@@ -69,34 +69,34 @@ public class SavePledge extends Action {
 					FundingPledgesSector fps = new FundingPledgesSector();
 					fps.setSector(sector);
 					fps.setSectorpercentage(actSector.getSectorPercentage());
-					fpsl.add(fps);
-					//pledge.getSectorlist().add(fps);
+					pledgessector.add(fps);
 				}
-	    		pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
+	    		//pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
     		}
-    		
+    		/*
     		if(plForm.getSelectedLocs()!=null && plForm.getSelectedLocs().size()>0){
-	    		Set<FundingPledgesLocation> fpll = new HashSet<FundingPledgesLocation>();
+	    		Set<FundingPledgesLocation> pledgesloc = new HashSet<FundingPledgesLocation>();
 	    		Collection<FundingPledgesLocation> fplc = plForm.getSelectedLocs();
 	    		Iterator<FundingPledgesLocation> itl = fplc.iterator();
 	    		while (itl.hasNext()) {
 	    			FundingPledgesLocation fpl = (FundingPledgesLocation) itl.next();
-	    			fpll.add(fpl);
+	    			pledgesloc.add(fpl);
 				}
-	    		pledge.setLocationlist((Set<FundingPledgesLocation>) fpll);
-    		}
-    		
+	    		//pledge.setLocationlist((Set<FundingPledgesLocation>) pledgesloc);
+    		}*/
+    		/*
     		if(plForm.getFundingPledgesDetails()!=null && plForm.getFundingPledgesDetails().size()>0){
-	    		Set<FundingPledgesDetails> fpdl = new HashSet<FundingPledgesDetails>();
+	    		Set<FundingPledgesDetails> fundingdetails = new HashSet<FundingPledgesDetails>();
 	    		Collection<FundingPledgesDetails> fpdc = plForm.getFundingPledgesDetails();
 	    		Iterator<FundingPledgesDetails> itf = fpdc.iterator();
 	    		while (itf.hasNext()) {
 	    			FundingPledgesDetails fpd = (FundingPledgesDetails) itf.next();
-	    			fpdl.add(fpd);
-				}
-	    		pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
-    		}
-    		PledgesEntityHelper.savePledge(pledge);
+	    			fpd.setPledgeid(pledge);
+	    			fundingdetails.add(fpd);
+	    		}
+	    		//pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
+    		}*/
+    		PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
     		
     		return mapping.findForward("forward");
 		}

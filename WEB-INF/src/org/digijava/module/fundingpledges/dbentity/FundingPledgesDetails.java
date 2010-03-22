@@ -12,7 +12,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class FundingPledgesDetails {
-	private long id;
+	private long detailid;
 	private FundingPledges pledgeid;
 	public FundingPledges getPledgeid() {
 		return pledgeid;
@@ -32,6 +32,14 @@ public class FundingPledgesDetails {
 	private Long pledgetypeid;
 	private Long typeOfAssistanceid;
 	private Long aidmodalityid;
+	
+	public long getDetailid() {
+		return detailid;
+	}
+	public void setDetailid(long detailid) {
+		this.detailid = detailid;
+	}
+	
 	
 	public Long getTypeOfAssistanceid() {
 		return typeOfAssistanceid;
@@ -60,12 +68,6 @@ public class FundingPledgesDetails {
 	public void setCurrencycode(String currencycode) {
 		this.currencycode = currencycode;
 		this.setCurrency(CurrencyUtil.getAmpcurrency(currencycode));
-	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
 	}
 	public java.sql.Timestamp getFunding_date() {
 		return funding_date;

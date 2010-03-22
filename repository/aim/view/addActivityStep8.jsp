@@ -99,7 +99,7 @@
     function mapCallBack(status, statusText, responseText, responseXML){
        window.location.reload();
     }
-
+<%-- dublicate functions in contactScripts.jsp
       var responseSuccess1 = function(o){
         /* Please see the Success Case section for more
          * details on the response object's properties.
@@ -123,11 +123,13 @@
     var responseFailure1 = function(o){
         alert("Connection Failure!");
     }
+    
     var callback1 =
         {
         success:responseSuccess1,
         failure:responseFailure1
     };
+--%>
 
     function refreshPage(){
         document.aimEditActivityForm.submit();

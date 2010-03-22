@@ -175,6 +175,9 @@ public class AddContactComponent extends DispatchAction{
             List<AmpContact> foundContacts = ContactInfoUtil.searchContacts(keyword);
             createForm.setContacts(foundContacts);
         }
+        
+        fillContactProperties(createForm);
+        
         return mapping.findForward("forward");
 
     }

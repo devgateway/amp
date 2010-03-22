@@ -340,7 +340,8 @@ YAHOO.namespace("YAHOO.amp");
                 var keyword=document.getElementById('keyword').value;
     			<digi:context name="searchCont" property="context/addAmpContactInfo.do?action=search" />
                 var url = "${searchCont}&keyword="+keyword;
-                YAHOO.util.Connect.asyncRequest("POST", url, callback1);
+             	var parameters = getContactParams();                
+                YAHOO.util.Connect.asyncRequest("POST", url, callback1, parameters);
                 return true;
             }
             return false;

@@ -8,7 +8,12 @@
 	<description>Fill amp_ahsurvey_question table.</description>
 
 	<trigger type="all">
-		<condition type="appliedPatch">fillAmpAhSurveyQuestionTypeTable.xml</condition>
+		<condition type="custom">
+			<script returnVar="y">
+				<lang type="hql">select count(*) from org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType</lang>
+			</script>
+			<test>y != 0</test>
+		</condition>
 		<condition type="custom">
 			<script returnVar="x">
 				<lang type="hql">select count(*) from org.digijava.module.aim.dbentity.AmpAhsurveyQuestion</lang>

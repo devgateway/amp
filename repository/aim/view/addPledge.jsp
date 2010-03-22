@@ -12,12 +12,15 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<!--<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="addSectors.jsp" flush="true" />
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript"><!--
+
+var quitRnot1 = 0;
+
 function fnChk(frmContrl, f){
 	  <c:set var="errMsgAddSectorNumericValue">
 	  <digi:trn key="aim:addSecorNumericValueErrorMessage">
@@ -208,7 +211,13 @@ function validateData(){
 	 	 Percentages can not be empty or 0.
 	  </digi:trn>
 	</c:set>
+	<c:set var="percentageSectorTotal">
+	  <digi:trn key="aim:sumOfSectorPercentagesMustBe100">
+	 	 Sum of sector percentages must be 100.
+	  </digi:trn>
+	</c:set>
 	var i = 0;
+	var percent = 100;
 	while (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0]!=null){
 		var temp = 0;
 		temp = temp + document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0].value;
@@ -217,8 +226,20 @@ function validateData(){
 			return false;
 		}
 		i++;
+		percent = percent - temp;
 	}
+	if(percent!=0 && percent!=100){
+		alert ("${percentageSectorTotal}")
+		return false;
+	}	
+
+	<c:set var="percentageLocationTotal">
+	  <digi:trn key="aim:sumOfLocationPercentagesMustBe100">
+	 	 Sum of location percentages must be 100.
+	  </digi:trn>
+	</c:set>
 	i=0;
+	percent = 100;
 	while (document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0]!=null){
 		var temp = 0;
 		temp = temp + document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0].value;
@@ -227,7 +248,13 @@ function validateData(){
 			return false;
 		}
 		i++;
+		percent = percent - temp;
 	}
+	if(percent!=0 && percent!=100){
+		alert ("${percentageLocationTotal}")
+		return false;
+	}	
+
 	
 	<c:set var="addFunding">
 	  <digi:trn key="aim:addFunding">
@@ -293,8 +320,10 @@ function validateData(){
 							<td>
 								<span class=crumb>
 									<digi:link href="/viewMyDesktop.do" styleClass="comment" >
-
 										<digi:trn key="aim:desktop">Desktop</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/viewPledgesList.do" styleClass="comment" >
+										<digi:trn key="aim:pledges">Pledges</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 									<digi:trn key="aim:addPledge">Add Pledge</digi:trn>
 								
@@ -306,7 +335,7 @@ function validateData(){
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+							<td height="50" vAlign="middle" width="100%"><span class=subtitle-blue>
 								<digi:trn key="aim:addNewPledge">Add New Pledge</digi:trn>
 								
 							</td>

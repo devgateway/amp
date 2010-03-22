@@ -20,12 +20,72 @@ function addPledge() {
 	document.viewPledgesForm.submit();
 }
 
+function editPledge(id){
+	document.viewPledgesForm.action="/addPledge.do?pledgeId="+id;
+	document.viewPledgesForm.submit();
+}
+
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    	var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+}
+
+
+function setHoveredRow(rowId) {
+
+	var rowElement = document.getElementById(rowId);
+	if(rowElement){
+    	var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        cells      = rowElement.getElementsByTagName('td');
+
+		for(var i = 0, n = cells.length; i < n; ++i) {
+			cells[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			cells[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		cells = null;
+	}
+}
+
+
 </script>
 
 <digi:instance property="viewPledgesForm" />
 
 <digi:form action="/viewPledgesList.do" method="post">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="1024" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="800" vAlign="top" align="center" border=0>
 	
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
@@ -50,7 +110,7 @@ function addPledge() {
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+							<td height=50 vAlign="middle" width="100%"><span class=subtitle-blue>
 								<digi:trn key="aim:pledgesList">Pledges List</digi:trn>
 								
 							</td>
@@ -60,7 +120,7 @@ function addPledge() {
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr>
-							<td width="75%" vAlign="top">
+							<td width="75%" vAlign="middle" height="40">
 								<table cellPadding=0 cellSpacing=0 width="100%" border=0>
 									<html:button styleClass="dr-menu" property="submitButton" onclick="return addPledge()">
 	                                       <digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
@@ -71,11 +131,79 @@ function addPledge() {
 					</table>
 					</td>
 				</tr>
+				<logic:notEmpty name="viewPledgesForm" property="allFundingPledges">
+				<tr>
+                   	<td class="report">
+					<table width="100%" height="20" cellpadding="0" cellspacing="0" >
+                      <thead>
+						<tr style="background-color: #999999; color: #000000;" align="center">
+							<td width="45%" align="center">
+								<b> 
+									<digi:trn>Pledge Name</digi:trn>
+								</b>
+							</td>
+							<td width="45%" align="center">
+								<b> 
+									<digi:trn>Organization</digi:trn>
+								</b>
+							</td>
+							<td width="10%" align="center">
+								<b> 
+									<digi:trn>Action</digi:trn>
+								</b>
+							</td>
+						</tr>
+						</thead>
+					</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<div style="overflow: auto; width: 800; height: 200px; max-height: 220px;" class="report">
+					<table width="800" cellspacing="0" cellpadding="0" id="dataTable" >
+                       <tbody class="yui-dt-data">
+						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
+							<td width="45%" align="center">
+								<bean:write name="allFundingPledges" property="title" />
+							</td>
+							<td width="45%" align="center">
+								<bean:write name="allFundingPledges" property="organization.name" />
+							</td>
+							<td width="10%" align="center">
+								<c:set var="pledgeId">
+									<bean:write name="allFundingPledges" property="id" />
+								</c:set>
+								<a class="itr" href="javascript:editPledge('${pledgeId}');">
+                                   	<img src= "../ampTemplate/images/application_edit.png" border=0>
+								</a>
+							</td>
+						
+						</c:forEach>
+                        </tbody>
+					</table>
+                    </div>
+					</td>
+				</tr>
+				</logic:notEmpty>
+				<logic:empty name="viewPledgesForm" property="allFundingPledges">
+					<tr style="background-color: #999999; color: #000000;" align="center">
+						<td width="100%" align="center" height="20" >
+							<b> 
+								<digi:trn>No pledges found.</digi:trn>
+							</b>
+						</td>
+					</tr>
+				</logic:empty>
 			</table>
 		</td>
 	</tr>
 </table>
 
 	
+<script language="javascript">
+	setStripsTable("dataTable", "tableEven", "tableOdd");
+	setHoveredTable("dataTable", false);
+	setHoveredRow("rowHighlight");
+</script> 
 
 </digi:form>

@@ -16,6 +16,21 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 public class PledgeForm extends ActionForm implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	private Long pledgeId;
+	/**
+	 * @return the pledgeId
+	 */
+	public Long getPledgeId() {
+		return pledgeId;
+	}
+
+	/**
+	 * @param pledgeId the pledgeId to set
+	 */
+	public void setPledgeId(Long pledgeId) {
+		this.pledgeId = pledgeId;
+	}
+
 	private String selectedOrgId;
 	private String selectedOrgName;
 	private String pledgeTitle;

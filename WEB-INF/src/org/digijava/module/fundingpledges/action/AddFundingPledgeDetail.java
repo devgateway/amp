@@ -84,7 +84,7 @@ public class AddFundingPledgeDetail extends Action {
 		}
         }
 		plForm.setFundingEvent(null);
-		request.removeAttribute("deleteFunds");
+		request.getSession().removeAttribute("deleteFunds");
 		return mapping.findForward("forward");
 	}
 

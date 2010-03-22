@@ -48,7 +48,7 @@ public class RemovePledgeSector extends Action {
 			plForm.setPledgeSectors(selectedSectors);
 		}
 		
-		request.removeAttribute("deleteSect");
+		request.getSession().removeAttribute("deleteSect");
 		return mapping.findForward("forward");
 	}
 }

@@ -48,7 +48,7 @@ public class RemovePledgeLocation extends Action {
 			plForm.setSelectedLocs(selectedLocs);
 		}
 		
-		request.removeAttribute("deleteLocs");
+		request.getSession().removeAttribute("deleteLocs");
 		return mapping.findForward("forward");
 	}
 }

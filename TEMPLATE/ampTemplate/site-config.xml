@@ -664,6 +664,7 @@
 				<page>aim_showSelectedFilters</page>
 				<page>tabManagerData</page>
 				<page>aim_filterPicker</page>
+				<page>selectPledgeLocation</page>
 			</module>
             <module name="orgProfile">
 				<page>largestProjects</page>
@@ -672,6 +673,7 @@
 			<module name="mondrian">
 				<page>savehtml</page>
             </module>
+            
 		</page-group>
 	</site-layout>
 </site-config>

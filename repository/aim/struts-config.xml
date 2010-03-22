@@ -178,7 +178,7 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="pledgeForm" path="/aim/selectPledgeLocation" scope="session" type="org.digijava.module.fundingpledges.action.SelectPledgeLocation">
-      <forward name="forward" path="/showLayout.do?layout=pledgeLocPopupLayout" />
+      <forward name="forward" path="/showLayout.do?layout=selectPledgeLocation" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="pledgeForm" path="/aim/removePledgeSector" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeSector">

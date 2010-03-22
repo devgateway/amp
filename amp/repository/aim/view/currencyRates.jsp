@@ -9,6 +9,8 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.util.CurrencyUtil"%>
+
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -283,6 +285,7 @@ function fnSubmit() {
 	}
 </script>
 <c:set var="baseCurrencyGS" value="<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY) %>" scope="request" />
+<c:set var="baseCurrencyGSDesc" value="<%= CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY)).getCurrencyName() %>" scope="request" />
 <digi:errors/>
 <digi:instance property="aimCurrencyRateForm" />
 
@@ -321,9 +324,10 @@ function fnSubmit() {
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:exchangeRatesfor1USDollars">
-							Exchange Rates for 1 US Dollars(USD)
+						<digi:trn>
+							Exchange Rates for 1&nbsp;
 						</digi:trn>
+						<digi:trn>${baseCurrencyGS}&nbsp</digi:trn>(<digi:trn>${baseCurrencyGSDesc}</digi:trn>)
 						</span>
 					</td>
 				</tr>
@@ -353,7 +357,7 @@ function fnSubmit() {
 											<digi:trn>Base Code</digi:trn>
 										</td>
 										<td  vAlign="center">
-											<html:select property="filterByBaseCode" styleClass="inp-text">
+											<html:select property="filterByBaseCode" styleClass="inp-text" value="${baseCurrencyGS}">
 <!--												<html:option value=""><digi:trn>${baseCurrencyGS}</digi:trn></html:option>-->
 												<logic:iterate id="codebase" name="aimCurrencyRateForm" property="currencyCodes">																																															
 													<html:option value="${codebase.currencyCode}"><digi:trn>${codebase.currencyCode}</digi:trn></html:option>	

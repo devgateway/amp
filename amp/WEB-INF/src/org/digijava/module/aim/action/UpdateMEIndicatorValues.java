@@ -6,14 +6,17 @@ package org.digijava.module.aim.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.UpdateIndicatorValuesForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -26,6 +29,8 @@ public class UpdateMEIndicatorValues extends Action {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 		UpdateIndicatorValuesForm uivForm = (UpdateIndicatorValuesForm) form;
+        HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		String event = request.getParameter("event");
 		if (event != null && event.equalsIgnoreCase("save")) {
 			ActivityIndicator actInd = new ActivityIndicator();
@@ -56,10 +61,15 @@ public class UpdateMEIndicatorValues extends Action {
 			actInd.setCurrentValComments(uivForm.getCurrValComments());
 
 			actInd.setActivityId(uivForm.getActivityId());
-			MEIndicatorsUtil.saveMEIndicatorValues(actInd);
+            AmpActivityVersion updatedAct=IndicatorUtil.saveMEIndicatorValues(actInd,request);
+			uivForm.setActivityId(updatedAct.getAmpActivityId());
 		} else if (event != null && event.equalsIgnoreCase("delete")) {
-			IndicatorUtil.removeConnection(IndicatorUtil.getConnectionToActivity(uivForm.getIndicatorConId()));
+			uivForm.setActivityId(IndicatorUtil.removeActivityIndCon(uivForm.getIndicatorConId(),request));
 		}
+        uivForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(uivForm.getActivityId()));
+        uivForm.setIndicatorId(null);
+        uivForm.setIndicatorValId(null);
+        uivForm.setExpIndicatorId(new Long(-1));
 		return mapping.findForward("forward");
 	}
 }

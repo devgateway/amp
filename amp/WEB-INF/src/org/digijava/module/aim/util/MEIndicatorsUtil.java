@@ -1,12 +1,12 @@
 package org.digijava.module.aim.util;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -17,7 +17,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.Constants;
@@ -30,7 +29,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 @Deprecated
 public class MEIndicatorsUtil
@@ -228,112 +226,7 @@ public class MEIndicatorsUtil
         }
         return col;
     }
-    // TODO refactor this method...
-    public static void saveMEIndicatorValues(ActivityIndicator actInd) {
-        Session session = null;
-        Transaction tx = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
-            AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, actInd.getIndicatorId());
-            AmpActivity activity = (AmpActivity) session.get(AmpActivity.class, actInd.getActivityId());
-            //try to find connection of current activity with current indicator
-            IndicatorActivity indConn = IndicatorUtil.findActivityIndicatorConnection(activity, ind, session);
-            //if no connection found then create new one. Else clear old values for the connection.
-            boolean newIndicator = false;
-            if (indConn == null) {
-                indConn = new IndicatorActivity();
-                indConn.setActivity(activity);
-                indConn.setIndicator(ind);
-                indConn.setValues(new HashSet<AmpIndicatorValue>());
-                newIndicator = true;
-            } else {
-                if ((indConn.getValues() != null) && (indConn.getValues().size() > 0)) {
-                    for (AmpIndicatorValue value : indConn.getValues()) {
-                        session.delete(value);
-                    }
-                    indConn.getValues().clear();
-                }
-            }
-
-            //create each type of value and assign to connection
-
-            AmpIndicatorValue indValTarget = null;
-            AmpCategoryValue risk=null;
-            if(actInd.getRisk()!=0){
-                  risk=CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
-             }
-            if (actInd.getTargetVal() != null) {
-                indValTarget = new AmpIndicatorValue();
-                indValTarget.setValueType(AmpIndicatorValue.TARGET);
-                indValTarget.setValue(new Double(actInd.getTargetVal()));
-                indValTarget.setComment(actInd.getTargetValComments());
-                indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate())); 
-                indValTarget.setRiskValue(risk);
-                indValTarget.setLogFrame(actInd.getIndicatorsCategory());
-                indValTarget.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValTarget);
-            }
-            AmpIndicatorValue indValBase = null;
-            if (actInd.getBaseVal() != null) {
-                indValBase = new AmpIndicatorValue();
-                indValBase.setValueType(AmpIndicatorValue.BASE);
-                indValBase.setValue(new Double(actInd.getBaseVal()));
-                indValBase.setComment(actInd.getBaseValComments());
-                indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
-                indValBase.setRiskValue( risk);
-                indValBase.setLogFrame(actInd.getIndicatorsCategory());
-                indValBase.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValBase);
-            }
-            AmpIndicatorValue indValRevised = null;
-            if (actInd.getRevisedTargetVal() != null) {
-                indValRevised = new AmpIndicatorValue();
-                indValRevised.setValueType(AmpIndicatorValue.REVISED);
-                indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
-                indValRevised.setComment(actInd.getRevisedTargetValComments());
-                indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
-                indValRevised.setRiskValue(risk);
-                indValRevised.setLogFrame(actInd.getIndicatorsCategory());
-                indValRevised.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValRevised);
-            }
-
-            if (actInd.getCurrentVal() != null) {
-               AmpIndicatorValue indValCur = new AmpIndicatorValue();
-                indValCur.setValueType(AmpIndicatorValue.ACTUAL);
-                indValCur.setValue(new Double(actInd.getCurrentVal()));
-                indValCur.setComment(actInd.getCurrentValComments());
-                indValCur.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
-                indValCur.setRiskValue( risk);
-                indValCur.setLogFrame(actInd.getIndicatorsCategory());
-                indValCur.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValCur);
-            }
-            // save connection with its new values.
-            if (newIndicator) {
-                // Save the new indicator that is NOT present in the indicators collection from the Activity.
-                //IndicatorUtil.saveConnectionToActivity(indConn, session);
-                session.saveOrUpdate(indConn);
-            } else {
-                //They are loaded by different sessions!
-                for (AmpIndicatorValue value : indConn.getValues()) {
-                    session.save(value);
-                }
-                session.saveOrUpdate(activity);
-            }
-            tx.commit();
-        } catch (Exception e) {
-            logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception trbf) {
-                    logger.error("Transaction roll back failed " + trbf.getMessage());
-                }
-            }
-        }
-    }
+   
     /* TODO this method is written for old indicator structure,
      * should be rewritten when dashboard will be rewritten...
      */

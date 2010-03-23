@@ -2,6 +2,7 @@ package org.digijava.module.aim.util;
 		
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -10,18 +11,28 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
@@ -29,13 +40,21 @@ import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.helper.ActivityDocumentsConstants;
+import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -53,8 +72,8 @@ import org.hibernate.Transaction;
 public class IndicatorUtil {
 
 	private static Logger logger = Logger.getLogger(IndicatorUtil.class);
-	
-	
+
+
 	/**
 	 * Loads Indicator from db.
 	 * NULL if nothing found with specified ID.
@@ -1558,6 +1577,204 @@ public class IndicatorUtil {
 
         }
         return id;
+    }
+    public static Long removeActivityIndCon(Long conId, HttpServletRequest request) throws Exception {
+        Session session = null;
+        Transaction tx = null;
+        Long activityId = null;
+        IndicatorActivity indAct = IndicatorUtil.getConnectionToActivity(conId);
+        AmpActivity oldActivity = indAct.getActivity();
+        if (ActivityVersionUtil.numberOfVersions() > 0) {
+            try {
+                session = PersistenceManager.getRequestDBSession();
+                tx = session.beginTransaction();
+                AmpActivityVersion oldVersion = (AmpActivityVersion) session.load(AmpActivityVersion.class, oldActivity.getAmpActivityId());
+                AmpActivityVersion activity = ActivityUtil.cloneActivity(oldVersion, session,request);
+                session.save(activity);
+                ActivityUtil.cloneIndicatorActivity(oldVersion, indAct.getIndicator().getIndicatorId(), activity, session);
+                HttpSession httpSession = request.getSession();
+                TeamMember tm = (TeamMember) httpSession.getAttribute("currentMember");
+                AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
+                Long newActivityId = activity.getAmpActivityId();
+                String ampId = ActivityUtil.generateAmpId(member.getUser(), newActivityId, session);
+                activity.setAmpId(ampId);
+                session.update(activity);
+                editVersionGroup(oldActivity, session, activity, member);
+                tx.commit();
+                activityId=activity.getAmpActivityId();
+            } catch (Exception e) {
+                logger.error("Unable to save new Version :" + e.getMessage());
+
+            }
+        } else {
+
+            activityId = oldActivity.getAmpActivityId();
+            IndicatorUtil.removeConnection(indAct);
+        }
+        return activityId;
+    }
+        /**
+         * Moved from MEIndicatorsUtil...
+         * TODO refactor this method..
+         * @param actInd
+         * @param memberId
+         * @return
+         */
+         // .
+    public static AmpActivityVersion saveMEIndicatorValues(ActivityIndicator actInd, HttpServletRequest request) {
+        Session session = null;
+        Transaction tx = null;
+        AmpActivityVersion activity = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            HttpSession httpSession = request.getSession();
+            TeamMember tm = (TeamMember) httpSession.getAttribute("currentMember");
+            AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, actInd.getIndicatorId());
+            AmpActivityVersion oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, actInd.getActivityId());
+            AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
+            boolean isVersioningOn = false;
+            if (ActivityVersionUtil.numberOfVersions() > 0) {
+                activity = ActivityUtil.cloneActivity(oldActivity, session,request);
+                session.save(activity);
+                Long activityId = activity.getAmpActivityId();
+                String ampId = ActivityUtil.generateAmpId(member.getUser(), activityId, session);
+                activity.setAmpId(ampId);
+                session.update(activity);
+                ActivityUtil.cloneIndicatorActivity(oldActivity, ind.getIndicatorId(), activity, session);
+                isVersioningOn = true;
+            } else {
+                activity = oldActivity;
+            }
+            //try to find connection of current activity with current indicator
+            IndicatorActivity indConn = findActivityIndicatorConnection(oldActivity, ind, session);
+
+            //if no connection found then create new one. Else clear old values for the connection.
+            boolean newIndicator = false;
+            if (indConn == null || isVersioningOn) {
+                indConn = new IndicatorActivity();
+                indConn.setActivity(activity);
+                indConn.setIndicator(ind);
+                indConn.setValues(new HashSet<AmpIndicatorValue>());
+                newIndicator = true;
+            } else {
+                if ((indConn.getValues() != null) && (indConn.getValues().size() > 0)) {
+                    for (AmpIndicatorValue value : indConn.getValues()) {
+                        session.delete(value);
+                    }
+                    indConn.getValues().clear();
+                }
+            }
+
+            //create each type of value and assign to connection
+
+            AmpIndicatorValue indValTarget = null;
+            AmpCategoryValue risk = null;
+            if (actInd.getRisk() != 0) {
+                risk = CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
+            }
+            if (actInd.getTargetVal() != null) {
+                indValTarget = new AmpIndicatorValue();
+                indValTarget.setValueType(AmpIndicatorValue.TARGET);
+                indValTarget.setValue(new Double(actInd.getTargetVal()));
+                indValTarget.setComment(actInd.getTargetValComments());
+                indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+                indValTarget.setRiskValue(risk);
+                indValTarget.setLogFrame(actInd.getIndicatorsCategory());
+                indValTarget.setIndicatorConnection(indConn);
+                indConn.getValues().add(indValTarget);
+            }
+            AmpIndicatorValue indValBase = null;
+            if (actInd.getBaseVal() != null) {
+                indValBase = new AmpIndicatorValue();
+                indValBase.setValueType(AmpIndicatorValue.BASE);
+                indValBase.setValue(new Double(actInd.getBaseVal()));
+                indValBase.setComment(actInd.getBaseValComments());
+                indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+                indValBase.setRiskValue(risk);
+                indValBase.setLogFrame(actInd.getIndicatorsCategory());
+                indValBase.setIndicatorConnection(indConn);
+                indConn.getValues().add(indValBase);
+            }
+            AmpIndicatorValue indValRevised = null;
+            if (actInd.getRevisedTargetVal() != null) {
+                indValRevised = new AmpIndicatorValue();
+                indValRevised.setValueType(AmpIndicatorValue.REVISED);
+                indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
+                indValRevised.setComment(actInd.getRevisedTargetValComments());
+                indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+                indValRevised.setRiskValue(risk);
+                indValRevised.setLogFrame(actInd.getIndicatorsCategory());
+                indValRevised.setIndicatorConnection(indConn);
+                indConn.getValues().add(indValRevised);
+            }
+
+            if (actInd.getCurrentVal() != null) {
+                AmpIndicatorValue indValCur = new AmpIndicatorValue();
+                indValCur.setValueType(AmpIndicatorValue.ACTUAL);
+                indValCur.setValue(new Double(actInd.getCurrentVal()));
+                indValCur.setComment(actInd.getCurrentValComments());
+                indValCur.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
+                indValCur.setRiskValue(risk);
+                indValCur.setLogFrame(actInd.getIndicatorsCategory());
+                indValCur.setIndicatorConnection(indConn);
+                indConn.getValues().add(indValCur);
+            }
+            // save connection with its new values.
+            if (newIndicator) {
+                // Save the new indicator that is NOT present in the indicators collection from the Activity.
+                //IndicatorUtil.saveConnectionToActivity(indConn, session);
+                session.saveOrUpdate(indConn);
+            } else {
+                //They are loaded by different sessions!
+                for (AmpIndicatorValue value : indConn.getValues()) {
+                    session.save(value);
+                }
+                session.saveOrUpdate(activity);
+            }
+            if (isVersioningOn) {
+              editVersionGroup(oldActivity, session, activity, member);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception trbf) {
+                    logger.error("Transaction roll back failed " + trbf.getMessage());
+                }
+            }
+        }
+        return activity;
+    }
+
+     public static void editVersionGroup(AmpActivity oldActivity, Session session, AmpActivityVersion activity, AmpTeamMember member) throws HibernateException {
+        if (oldActivity.getAmpActivityGroup() != null) {
+            // Edited activity with version group.
+            AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class,
+                            oldActivity.getAmpActivityGroup().getAmpActivityGroupId());
+            auxActivityGroup.setAmpActivityLastVersion(activity);
+            session.save(auxActivityGroup);
+            activity.setAmpActivityGroup(auxActivityGroup);
+            activity.setModifiedDate(Calendar.getInstance().getTime());
+            activity.setModifiedBy(member);
+            activity.setAmpActivityPreviousVersion(oldActivity);
+            session.update(activity);
+        } else {
+            // Edited activity with no version group info (activity created BEFORE the versioning system).
+            AmpActivityGroup newActivityGroup = new AmpActivityGroup();
+            newActivityGroup.setAmpActivityLastVersion(activity);
+            session.save(newActivityGroup);
+            activity.setAmpActivityGroup(newActivityGroup);
+            activity.setModifiedDate(Calendar.getInstance().getTime());
+            activity.setModifiedBy(member);
+            activity.setAmpActivityPreviousVersion(oldActivity);
+            session.update(activity);
+            // Add version info to old un-versioned activity.
+            oldActivity.setAmpActivityGroup(newActivityGroup);
+            session.update(oldActivity);
+        }
     }
 
 

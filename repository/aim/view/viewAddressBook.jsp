@@ -258,8 +258,9 @@ html>body #main {
 		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 			        	
 			        	
 		        };
-		 
-		        this.myDataSource = new YAHOO.util.DataSource("/aim/addressBook.do?actionType=getContactsJSON&");
+		        
+		        var lastTimeStamp = new Date().getTime();
+		        this.myDataSource = new YAHOO.util.DataSource("/aim/addressBook.do?actionType=getContactsJSON&lastTimeStamp"+lastTimeStamp+"&");
 		        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 		        //this.myDataSource.connXhrMode = "queueRequests";
 		        this.myDataSource.responseSchema = {

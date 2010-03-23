@@ -37,9 +37,6 @@
 	} 
 	else if("Off Budget".equals(onOff)) {
 	%>
-	<digi:trn key="amp:showOffBudget">
-	Showing all Off Budget activities...
-	</digi:trn>
 	<% 
 	} else { 
 	%>	

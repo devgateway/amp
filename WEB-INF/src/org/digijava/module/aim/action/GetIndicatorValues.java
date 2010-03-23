@@ -34,7 +34,7 @@ public class GetIndicatorValues extends Action {
 					Iterator itr = uIndValForm.getIndicators().iterator();
 					while (itr.hasNext()) {
 						ActivityIndicator actInd = (ActivityIndicator) itr.next();
-						if (actInd.getIndicatorValId().equals(indValId)) {
+						if (actInd.getIndicatorValId()!=null&&actInd.getIndicatorValId().equals(indValId)) {
 							uIndValForm.setBaseVal(actInd.getBaseVal());
 							uIndValForm.setBaseValDate(actInd.getBaseValDate());
 							uIndValForm.setTargetVal(actInd.getTargetVal());

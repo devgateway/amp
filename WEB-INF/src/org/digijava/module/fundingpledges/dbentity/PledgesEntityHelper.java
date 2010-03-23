@@ -78,10 +78,10 @@ public class PledgesEntityHelper {
 		return pledge;
 	}
 	
-	public static Collection<FundingPledgesDetails> getPledgesDetails(Long pledgeid){
+	public static ArrayList<FundingPledgesDetails> getPledgesDetails(Long pledgeid){
 		Session session = null;
 		Query qry = null;
-		Collection<FundingPledgesDetails> fundingpledgesdetails = null;
+		ArrayList<FundingPledgesDetails> fundingpledgesdetails =  new ArrayList<FundingPledgesDetails>();
 		FundingPledgesDetails fd = null;
 
 		try {
@@ -91,29 +91,21 @@ public class PledgesEntityHelper {
 			qry = session.createQuery(queryString);
 			qry.setParameter("id", pledgeid, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
+			while (itr.hasNext()) {
 				fd = (FundingPledgesDetails) itr.next();
 				fundingpledgesdetails.add(fd);
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get pledge");
-			logger.debug("Exceptiion " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
+			logger.error("Unable to get pledge details");
+			logger.debug("Exception " + e);
 		}
 		return fundingpledgesdetails;
 	}
 	
-	public static Collection<FundingPledgesLocation> getPledgesLocations(Long pledgeid){
+	public static ArrayList<FundingPledgesLocation> getPledgesLocations(Long pledgeid){
 		Session session = null;
 		Query qry = null;
-		Collection<FundingPledgesLocation> fundingpledgeloc = null;
+		ArrayList<FundingPledgesLocation> fundingpledgeloc = new ArrayList<FundingPledgesLocation>();
 		FundingPledgesLocation pl = null;
 
 		try {
@@ -123,28 +115,20 @@ public class PledgesEntityHelper {
 			qry = session.createQuery(queryString);
 			qry.setParameter("id", pledgeid, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
+			while (itr.hasNext()) {
 				pl = (FundingPledgesLocation) itr.next();
 				fundingpledgeloc.add(pl);
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get pledge");
-			logger.debug("Exceptiion " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+			logger.error("Unable to get pledge locations");
+			logger.debug("Exception " + e);
+		} 
 		return fundingpledgeloc;
 	}
-	public static Collection<FundingPledgesSector> getPledgesSectors(Long pledgeid){
+	public static ArrayList<FundingPledgesSector> getPledgesSectors(Long pledgeid){
 		Session session = null;
 		Query qry = null;
-		Collection<FundingPledgesSector> FundingPledgesSector = null;
+		ArrayList<FundingPledgesSector> fundingPledgesSector = new ArrayList<FundingPledgesSector>();
 		FundingPledgesSector fs = null;
 
 		try {
@@ -154,23 +138,15 @@ public class PledgesEntityHelper {
 			qry = session.createQuery(queryString);
 			qry.setParameter("id", pledgeid, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
+			while (itr.hasNext()) {
 				fs = (FundingPledgesSector) itr.next();
-				FundingPledgesSector.add(fs);
+				fundingPledgesSector.add(fs);
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get pledge");
-			logger.debug("Exceptiion " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return FundingPledgesSector;
+			logger.error("Unable to get pledge sectors");
+			logger.debug("Exception " + e);
+		} 
+		return fundingPledgesSector;
 	}
 	public static void savePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors,PledgeForm plf) throws DgException {
 		Session session = PersistenceManager.getRequestDBSession();
@@ -178,22 +154,133 @@ public class PledgesEntityHelper {
 		try {
 			tx=session.beginTransaction();
 			session.save(pledge);
+			
 			for (Iterator iterator = sectors.iterator(); iterator.hasNext();) {
 				FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator
 						.next();
 				fundingPledgesSector.setPledgeid(pledge);
 				session.save(fundingPledgesSector);
 			}
-			for (Iterator iterator = plf.getFundingPledgesDetails().iterator(); iterator.hasNext();) {
-				FundingPledgesDetails FundingPledgesDetails = (FundingPledgesDetails) iterator.next();
-				FundingPledgesDetails.setPledgeid(pledge);
-				session.save(FundingPledgesDetails);
+			if(plf.getFundingPledgesDetails()!=null && plf.getFundingPledgesDetails().size()>0){
+				for (Iterator iterator = plf.getFundingPledgesDetails().iterator(); iterator.hasNext();) {
+					FundingPledgesDetails FundingPledgesDetails = (FundingPledgesDetails) iterator.next();
+					FundingPledgesDetails.setPledgeid(pledge);
+					session.save(FundingPledgesDetails);
+				}
 			}
-			for (Iterator iterator = plf.getSelectedLocs().iterator(); iterator.hasNext();) {
-				FundingPledgesLocation FundingPledgesloc = (FundingPledgesLocation) iterator.next();
-				FundingPledgesloc.setPledgeid(pledge);
-				session.save(FundingPledgesloc);
+			
+			if(plf.getSelectedLocs()!=null && plf.getSelectedLocs().size()>0){
+				for (Iterator iterator = plf.getSelectedLocs().iterator(); iterator.hasNext();) {
+					FundingPledgesLocation FundingPledgesloc = (FundingPledgesLocation) iterator.next();
+					FundingPledgesloc.setPledgeid(pledge);
+					session.save(FundingPledgesloc);
+				}
 			}
+			tx.commit();
+		} catch (HibernateException e) {
+			logger.error("Error saving pledge",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					throw new DgException("Cannot rallback save pledge action",ex);
+				}
+				throw new DgException("Cannot save Pledge!",e);
+			}
+		}
+	}
+	
+	public static void updatePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors,PledgeForm plf) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			session.update(pledge);
+			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
+			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
+			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
+			
+			if(sectors!=null && sectors.size()>0){
+				for (Iterator iterator = sectors.iterator(); iterator.hasNext();) {
+					FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator.next();
+					if (fpsl.contains(fundingPledgesSector)) {
+						fundingPledgesSector.setPledgeid(pledge);
+						session.update(fundingPledgesSector);
+					} else {
+						fundingPledgesSector.setPledgeid(pledge);
+						session.save(fundingPledgesSector);
+					}
+				}
+			} else {
+				for (Iterator iterator = fpsl.iterator(); iterator.hasNext();) {
+					FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator.next();
+					session.delete(fundingPledgesSector);
+				}
+			}
+			fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
+			if(fpsl!=null && fpsl.size()>0){
+				for (Iterator iterator = fpsl.iterator(); iterator.hasNext();) {
+					FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator.next();
+					if (!sectors.contains(fundingPledgesSector)) {
+						session.delete(fundingPledgesSector);
+					}
+				}
+			}
+			
+			if(plf.getFundingPledgesDetails()!=null && plf.getFundingPledgesDetails().size()>0){
+				for (Iterator iterator = plf.getFundingPledgesDetails().iterator(); iterator.hasNext();) {
+					FundingPledgesDetails fundingPledgesDetails = (FundingPledgesDetails) iterator.next();
+					if (fpdl.contains(fundingPledgesDetails)) {
+						fundingPledgesDetails.setPledgeid(pledge);
+						session.update(fundingPledgesDetails);
+					} else {
+						fundingPledgesDetails.setPledgeid(pledge);
+						session.save(fundingPledgesDetails);
+					}
+				}
+			} else {
+				for (Iterator iterator = fpdl.iterator(); iterator.hasNext();) {
+					FundingPledgesDetails fundingPledgesDetails = (FundingPledgesDetails) iterator.next();
+					session.delete(fundingPledgesDetails);
+				}
+			}
+			fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
+			if(fpdl!=null && fpdl.size()>0){
+				for (Iterator iterator = fpdl.iterator(); iterator.hasNext();) {
+					FundingPledgesDetails fundingPledgesDetails = (FundingPledgesDetails) iterator.next();
+					if (!plf.getFundingPledgesDetails().contains(fundingPledgesDetails)) {
+						session.delete(fundingPledgesDetails);
+					}
+				}
+			}
+			if(plf.getSelectedLocs()!=null && plf.getSelectedLocs().size()>0){
+				for (Iterator iterator = plf.getSelectedLocs().iterator(); iterator.hasNext();) {
+					FundingPledgesLocation fundingPledgesloc = (FundingPledgesLocation) iterator.next();
+					if (fpll.contains(fundingPledgesloc)) {
+						fundingPledgesloc.setPledgeid(pledge);
+						session.update(fundingPledgesloc);
+					} else {
+						fundingPledgesloc.setPledgeid(pledge);
+						session.save(fundingPledgesloc);
+					}
+					
+				}
+			} else {
+				for (Iterator iterator = fpll.iterator(); iterator.hasNext();) {
+					FundingPledgesLocation fundingPledgesloc = (FundingPledgesLocation) iterator.next();
+					session.delete(fundingPledgesloc);
+				}
+			}
+			fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
+			if(fpll!=null && fpll.size()>0){
+				for (Iterator iterator = fpll.iterator(); iterator.hasNext();) {
+					FundingPledgesLocation fundingPledgesloc = (FundingPledgesLocation) iterator.next();
+					if (!plf.getSelectedLocs().contains(fundingPledgesloc)) {
+						session.delete(fundingPledgesloc);
+					}
+				}
+			}
+			
 			tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error saving pledge",e);

@@ -16,7 +16,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * 
  */
 public class FundingPledges {
-	private long id;
+	private Long id;
 	private String title;
 	private String additionalInformation;
 	private AmpOrganisation organization;
@@ -149,10 +149,10 @@ public class FundingPledges {
 		this.contactOrganization_1 = contactOrganization_1;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getTitle() {

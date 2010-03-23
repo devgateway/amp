@@ -2,9 +2,7 @@ package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,13 +13,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -66,53 +61,30 @@ public class AddPledge extends Action {
 	      			}
 	        }
 	        if (request.getParameter("reset") != null && request.getParameter("reset").equalsIgnoreCase("true")) {
-	        	plForm.setPledgeId(null);
-				plForm.setPledgeTitle(null);
-	        	plForm.setSelectedOrgId(null);
-	        	plForm.setSelectedOrgName(null);
-	        	plForm.setAdditionalInformation(null);
-	        	plForm.setContact1Address(null);
-	        	plForm.setContact1Email(null);
-	        	plForm.setContact1Fax(null);
-	        	plForm.setContact1Ministry(null);
-	        	plForm.setContact1Name(null);
-	        	plForm.setContact1OrgId(null);
-	        	plForm.setContact1OrgName(null);
-	        	plForm.setContact1Telephone(null);
-	        	plForm.setContact1Title(null);
-	        	plForm.setContactAlternate1Email(null);
-	        	plForm.setContactAlternate1Name(null);
-	        	plForm.setContactAlternate1Telephone(null);
-	        	plForm.setContact2Address(null);
-	        	plForm.setContact2Email(null);
-	        	plForm.setContact2Fax(null);
-	        	plForm.setContact2Ministry(null);
-	        	plForm.setContact2Name(null);
-	        	plForm.setContact2OrgId(null);
-	        	plForm.setContact2OrgName(null);
-	        	plForm.setContact2Telephone(null);
-	        	plForm.setContact2Title(null);
-	        	plForm.setContactAlternate2Email(null);
-	        	plForm.setContactAlternate2Name(null);
-	        	plForm.setContactAlternate2Telephone(null);
-	        	plForm.setFundingPledgesDetails(null);
-	        	plForm.setPledgeSectors(null);
-	        	plForm.setSelectedLocs(null);
+	        	resetForm(plForm);
 	        	request.getSession().removeAttribute("reset");
-			} else if (request.getParameter("pledgeId") != null){
+			} else if (request.getParameter("pledgeId") != null && Long.valueOf(request.getParameter("pledgeId")) > 0){
 				FundingPledges fp = PledgesEntityHelper.getPledgesById(Long.valueOf(request.getParameter("pledgeId")));
+				resetForm(plForm);
+	        	plForm.setFundingPledges(fp);
 				plForm.setPledgeId(fp.getId());
 				plForm.setPledgeTitle(fp.getTitle());
-	        	plForm.setSelectedOrgId(String.valueOf(fp.getOrganization().getAmpOrgId()));
-	        	plForm.setSelectedOrgName(fp.getOrganization().getName());
+				AmpOrganisation pledgeOrg =	PledgesEntityHelper.getOrganizationById(fp.getOrganization().getAmpOrgId());
+				plForm.setSelectedOrgId(pledgeOrg.getAmpOrgId().toString());
+	        	plForm.setSelectedOrgName(pledgeOrg.getAcronym());
 	        	plForm.setAdditionalInformation(fp.getAdditionalInformation());
 	        	plForm.setContact1Address(fp.getContactAddress());
 	        	plForm.setContact1Email(fp.getContactEmail());
 	        	plForm.setContact1Fax(fp.getContactFax());
 	        	plForm.setContact1Ministry(fp.getContactMinistry());
 	        	plForm.setContact1Name(fp.getContactName());
-	        	plForm.setContact1OrgId(String.valueOf(fp.getContactOrganization().getAmpOrgId()));
-	        	plForm.setContact1OrgName(fp.getContactOrganization().getName());
+	        	//plForm.setContact1OrgId(String.valueOf(fp.getContactOrganization().getAmpOrgId()));
+	        	//plForm.setContact1OrgName(fp.getContactOrganization().getName());
+	        	if (fp.getContactOrganization()!=null){
+		        	AmpOrganisation cont1Org =	PledgesEntityHelper.getOrganizationById(fp.getContactOrganization().getAmpOrgId());
+					plForm.setContact1OrgId(cont1Org.getAmpOrgId().toString());
+		        	plForm.setContact1OrgName(cont1Org.getAcronym());
+	        	}
 	        	plForm.setContact1Telephone(fp.getContactTelephone());
 	        	plForm.setContact1Title(fp.getContactTitle());
 	        	plForm.setContactAlternate1Email(fp.getContactAlternativeEmail());
@@ -123,24 +95,32 @@ public class AddPledge extends Action {
 	        	plForm.setContact2Fax(fp.getContactFax_1());
 	        	plForm.setContact2Ministry(fp.getContactMinistry_1());
 	        	plForm.setContact2Name(fp.getContactName_1());
-	        	plForm.setContact2OrgId(String.valueOf(fp.getContactOrganization_1().getAmpOrgId()));
-	        	plForm.setContact2OrgName(fp.getContactOrganization_1().getName());
+	        	//plForm.setContact2OrgId(String.valueOf(fp.getContactOrganization_1().getAmpOrgId()));
+	        	//plForm.setContact2OrgName(fp.getContactOrganization_1().getName());
+	        	if (fp.getContactOrganization_1()!=null){
+		        	AmpOrganisation cont2Org =	PledgesEntityHelper.getOrganizationById(fp.getContactOrganization_1().getAmpOrgId());
+		        	plForm.setContact2OrgId(cont2Org.getAmpOrgId().toString());
+		        	plForm.setContact2OrgName(cont2Org.getAcronym());
+	        	}
 	        	plForm.setContact2Telephone(fp.getContactTelephone_1());
 	        	plForm.setContact2Title(fp.getContactTitle_1());
 	        	plForm.setContactAlternate2Email(fp.getContactAlternativeEmail_1());
 	        	plForm.setContactAlternate2Name(fp.getContactAlternativeName_1());
 	        	plForm.setContactAlternate2Telephone(fp.getContactAlternativeTelephone_1());
 	        	plForm.setFundingPledgesDetails(fp.getFundingPledgesDetails());
-	        	Collection<FundingPledgesSector> fpsl = fp.getSectorlist();
+	        	Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(fp.getId());
+	        	//Collection<FundingPledgesSector> fpsl = fp.getSectorlist();
 	        	Collection<ActivitySector> asl = new ArrayList<ActivitySector>();
 	        	Iterator it = fpsl.iterator();
 	        	while (it.hasNext()) {
 					FundingPledgesSector fps = (FundingPledgesSector) it.next();
 					AmpSector ampSec = fps.getSector();
 					ActivitySector actSec = new ActivitySector();
-					actSec.setId(ampSec.getAmpSectorId());
+					actSec.setId(fps.getId());
 					actSec.setSectorId(ampSec.getAmpSectorId());
 					actSec.setSectorPercentage(fps.getSectorpercentage());
+					actSec.setSectorScheme(ampSec.getAmpSecSchemeId().getSecSchemeName());
+					actSec.setConfigId(ampSec.getAmpSecSchemeId().getAmpSecSchemeId());
 					if (ampSec.getParentSectorId()==null) {
 						actSec.setSectorName(ampSec.getName());
 					} else if (ampSec.getParentSectorId().getParentSectorId()==null){
@@ -155,10 +135,48 @@ public class AddPledge extends Action {
 				}
 	        	
 	        	plForm.setPledgeSectors(asl);
-	        	plForm.setSelectedLocs(fp.getLocationlist());
+	        	plForm.setSelectedLocs(PledgesEntityHelper.getPledgesLocations(fp.getId()));
+	        	plForm.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
+	        	request.getSession().removeAttribute("pledgeId");
 			}
             return mapping.findForward("forward");
             
+    }
+    
+    private void resetForm(PledgeForm plForm){
+    	plForm.setPledgeId(null);
+		plForm.setPledgeTitle(null);
+    	plForm.setFundingPledges(null);
+		plForm.setSelectedOrgId(null);
+    	plForm.setSelectedOrgName(null);
+    	plForm.setAdditionalInformation(null);
+    	plForm.setContact1Address(null);
+    	plForm.setContact1Email(null);
+    	plForm.setContact1Fax(null);
+    	plForm.setContact1Ministry(null);
+    	plForm.setContact1Name(null);
+    	plForm.setContact1OrgId(null);
+    	plForm.setContact1OrgName(null);
+    	plForm.setContact1Telephone(null);
+    	plForm.setContact1Title(null);
+    	plForm.setContactAlternate1Email(null);
+    	plForm.setContactAlternate1Name(null);
+    	plForm.setContactAlternate1Telephone(null);
+    	plForm.setContact2Address(null);
+    	plForm.setContact2Email(null);
+    	plForm.setContact2Fax(null);
+    	plForm.setContact2Ministry(null);
+    	plForm.setContact2Name(null);
+    	plForm.setContact2OrgId(null);
+    	plForm.setContact2OrgName(null);
+    	plForm.setContact2Telephone(null);
+    	plForm.setContact2Title(null);
+    	plForm.setContactAlternate2Email(null);
+    	plForm.setContactAlternate2Name(null);
+    	plForm.setContactAlternate2Telephone(null);
+    	plForm.setFundingPledgesDetails(null);
+    	plForm.setPledgeSectors(null);
+    	plForm.setSelectedLocs(null);
     }
     
     private ActionForward addSector(ActionMapping mapping, HttpSession session,
@@ -248,7 +266,8 @@ public class AddPledge extends Action {
     		}
     		session.removeAttribute("sectorSelected");
     		session.removeAttribute("add");
-    		return mapping.findForward("forward");
+    		session.removeAttribute("addSector");
+    	    return mapping.findForward("forward");
 
     	} else {
     		ActivitySector selectedSector = (ActivitySector) session
@@ -331,6 +350,7 @@ public class AddPledge extends Action {
     	    }
     		plForm.setPledgeSectors(prevSelSectors);
     		session.removeAttribute("sectorSelected");
+    		session.removeAttribute("addSector");
     	    return mapping.findForward("forward");
     	}
     }

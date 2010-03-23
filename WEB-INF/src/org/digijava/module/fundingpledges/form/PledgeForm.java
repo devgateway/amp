@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 
@@ -31,6 +32,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 		this.pledgeId = pledgeId;
 	}
 
+	private FundingPledges fundingPledges;
 	private String selectedOrgId;
 	private String selectedOrgName;
 	private String pledgeTitle;
@@ -69,6 +71,20 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<AmpCategoryValue> pledgeTypeCategory = null;
 	private Collection<AmpCategoryValue> assistanceTypeCategory = null;
 	private Collection<AmpCategoryValue> aidModalityCategory = null;
+
+	/**
+	 * @return the fundingPledges
+	 */
+	public FundingPledges getFundingPledges() {
+		return fundingPledges;
+	}
+
+	/**
+	 * @param fundingPledges the fundingPledges to set
+	 */
+	public void setFundingPledges(FundingPledges fundingPledges) {
+		this.fundingPledges = fundingPledges;
+	}
 
 	/**
 	 * @return the pledgeTypeCategory

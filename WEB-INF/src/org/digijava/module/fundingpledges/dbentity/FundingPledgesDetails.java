@@ -70,7 +70,11 @@ public class FundingPledgesDetails {
 		return funding_date;
 	}
 	public void setFunding_date(java.sql.Timestamp fundingDate) {
-		funding_date = fundingDate;
+		this.funding_date = fundingDate;
+		java.util.Date date1 = new java.util.Date(fundingDate.getTime());
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String fundingDateStr = formatter.format(date1);
+        this.fundingDate = fundingDateStr;
 	}
 	
 	public AmpCategoryValue getPledgetype() {
@@ -78,18 +82,21 @@ public class FundingPledgesDetails {
 	}
 	public void setPledgetype(AmpCategoryValue pledgetype) {
 		this.pledgetype = pledgetype;
+		this.pledgetypeid = pledgetype.getId();
 	}
 	public AmpCategoryValue getTypeOfAssistance() {
 		return typeOfAssistance;
 	}
 	public void setTypeOfAssistance(AmpCategoryValue typeOfAssistance) {
 		this.typeOfAssistance = typeOfAssistance;
+		this.typeOfAssistanceid = typeOfAssistance.getId();
 	}
 	public AmpCategoryValue getAidmodality() {
 		return aidmodality;
 	}
 	public void setAidmodality(AmpCategoryValue aidmodality) {
 		this.aidmodality = aidmodality;
+		this.aidmodalityid = aidmodality.getId();
 	}
 	public Double getAmount() {
 		return amount;
@@ -102,6 +109,7 @@ public class FundingPledgesDetails {
 	}
 	public void setCurrency(AmpCurrency currency) {
 		this.currency = currency;
+		this.currencycode = currency.getCurrencyCode();
 	}
 	/**
 	 * @return the fundingDate

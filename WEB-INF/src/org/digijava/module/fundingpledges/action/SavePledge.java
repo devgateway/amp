@@ -1,6 +1,5 @@
 package org.digijava.module.fundingpledges.action;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -16,8 +15,6 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
@@ -27,7 +24,14 @@ public class SavePledge extends Action {
 			
     		PledgeForm plForm = (PledgeForm) form;
     		
-    		FundingPledges pledge = new FundingPledges();
+    		FundingPledges pledge = null;
+    		if (plForm.getFundingPledges()==null) {
+    			pledge = new FundingPledges();
+			} else {
+				pledge = plForm.getFundingPledges();
+			}
+    		
+    		pledge.setId(plForm.getPledgeId());
     		pledge.setTitle(plForm.getPledgeTitle());
     		pledge.setOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getSelectedOrgId())));
     		pledge.setAdditionalInformation(plForm.getAdditionalInformation());
@@ -69,6 +73,7 @@ public class SavePledge extends Action {
 					FundingPledgesSector fps = new FundingPledgesSector();
 					fps.setSector(sector);
 					fps.setSectorpercentage(actSector.getSectorPercentage());
+					fps.setId(actSector.getId());
 					pledgessector.add(fps);
 				}
 	    		//pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
@@ -96,7 +101,12 @@ public class SavePledge extends Action {
 	    		}
 	    		//pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
     		}*/
-    		PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
+    		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
+    			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
+			} else {
+				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
+			}
+    		
     		
     		return mapping.findForward("forward");
 		}

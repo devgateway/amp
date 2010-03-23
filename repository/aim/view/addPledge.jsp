@@ -64,7 +64,7 @@ function fnChk(frmContrl, f){
 	}
 
 function addLocation() {
-	  openNewWindow(600, 500);
+	  openNewWindow(600, 300);
 	  <digi:context name="selectLoc" property="context/module/moduleinstance/selectPledgeLocation.do?edit=false" />
 	  document.pledgeForm.action = "<%= selectLoc %>";
 	  document.pledgeForm.target = popupPointer.name;
@@ -255,7 +255,6 @@ function validateData(){
 		return false;
 	}	
 
-	
 	<c:set var="addFunding">
 	  <digi:trn key="aim:addFunding">
 	 	 Pledges should have at least one funding.
@@ -296,9 +295,88 @@ function validateData(){
 		}
 		i++;
 	}
+
+	<c:set var="insertValidEmail">
+	  <digi:trn key="aim:insertValidEmail">
+	 	 Please, insert a valid Email.
+	  </digi:trn>
+	</c:set>
+	if (document.getElementsByName("contact1Email")[0].value.length>0 && document.getElementsByName("contact1Email")[0].value.indexOf("@") == -1){
+		alert ("${insertValidEmail}")
+		return false;
+	}
+	if (document.getElementsByName("contactAlternate1Email")[0].value.length>0 && document.getElementsByName("contactAlternate1Email")[0].value.indexOf("@") == -1){
+		alert ("${insertValidEmail}")
+		return false;
+	}
+	if (document.getElementsByName("contact2Email")[0].value.length>0 && document.getElementsByName("contact2Email")[0].value.indexOf("@") == -1){
+		alert ("${insertValidEmail}")
+		return false;
+	}
+	if (document.getElementsByName("contactAlternate2Email")[0].value.length>0 && document.getElementsByName("contactAlternate2Email")[0].value.indexOf("@") == -1){
+		alert ("${insertValidEmail}")
+		return false;
+	}
+	
 	return true;
 }
 
+function setSameContact(){
+	if(document.getElementById("sameContact").checked==true){
+		document.getElementsByName("contact2Name")[0].value = document.getElementsByName("contact1Name")[0].value;
+		//document.getElementsByName("contact2Name")[0].disabled = true;
+		document.getElementsByName("contact2Title")[0].value = document.getElementsByName("contact1Title")[0].value;
+		//document.getElementsByName("contact2Title")[0].disabled = true;
+		document.getElementsByName("contact2OrgName")[0].value = document.getElementsByName("contact1OrgName")[0].value;
+		//document.getElementsByName("contact2OrgName")[0].disabled = true;
+		document.getElementsByName("contact2OrgId")[0].value = document.getElementsByName("contact1OrgId")[0].value;
+		//document.getElementsByName("contact2OrgId")[0].disabled = true;
+		document.getElementsByName("contact2Ministry")[0].value = document.getElementsByName("contact1Ministry")[0].value;
+		//document.getElementsByName("contact2Ministry")[0].disabled = true;
+		document.getElementsByName("contact2Address")[0].value = document.getElementsByName("contact1Address")[0].value;
+		//document.getElementsByName("contact2Address")[0].disabled = true;
+		document.getElementsByName("contact2Telephone")[0].value = document.getElementsByName("contact1Telephone")[0].value;
+		//document.getElementsByName("contact2Telephone")[0].disabled = true;
+		document.getElementsByName("contact2Email")[0].value = document.getElementsByName("contact1Email")[0].value;
+		//document.getElementsByName("contact2Email")[0].disabled = true;
+		document.getElementsByName("contactAlternate2Email")[0].value = document.getElementsByName("contactAlternate1Email")[0].value;
+		//document.getElementsByName("contactAlternate2Email")[0].disabled = true;
+		document.getElementsByName("contact2Fax")[0].value = document.getElementsByName("contact1Fax")[0].value;
+		//document.getElementsByName("contact2Fax")[0].disabled = true;
+		document.getElementsByName("contactAlternate2Name")[0].value = document.getElementsByName("contactAlternate1Name")[0].value;
+		//document.getElementsByName("contactAlternate2Name")[0].disabled = true;
+		document.getElementsByName("contactAlternate2Telephone")[0].value = document.getElementsByName("contactAlternate1Telephone")[0].value;
+		//document.getElementsByName("contactAlternate2Telephone")[0].disabled = true;
+		
+	} else {
+		document.getElementsByName("contact2Name")[0].value = "";
+		document.getElementsByName("contact2Name")[0].disabled = false;
+		document.getElementsByName("contact2Title")[0].value = "";
+		document.getElementsByName("contact2Title")[0].disabled = false;
+		document.getElementsByName("contact2OrgName")[0].value = "";
+		document.getElementsByName("contact2OrgName")[0].disabled = false;
+		document.getElementsByName("contact2OrgId")[0].value = "";
+		document.getElementsByName("contact2OrgId")[0].disabled = false;
+		document.getElementsByName("contact2Ministry")[0].value = "";
+		document.getElementsByName("contact2Ministry")[0].disabled = false;
+		document.getElementsByName("contact2Address")[0].value = "";
+		document.getElementsByName("contact2Address")[0].disabled = false;
+		document.getElementsByName("contact2Telephone")[0].value = "";
+		document.getElementsByName("contact2Telephone")[0].disabled = false;
+		document.getElementsByName("contact2Email")[0].value = "";
+		document.getElementsByName("contact2Email")[0].disabled = false;
+		document.getElementsByName("contactAlternate2Email")[0].value = "";
+		document.getElementsByName("contactAlternate2Email")[0].disabled = false;
+		document.getElementsByName("contact2Fax")[0].value = "";
+		document.getElementsByName("contact2Fax")[0].disabled = false;
+		document.getElementsByName("contactAlternate2Name")[0].value = "";
+		document.getElementsByName("contactAlternate2Name")[0].disabled = false;
+		document.getElementsByName("contactAlternate2Telephone")[0].value = "";
+		document.getElementsByName("contactAlternate2Telephone")[0].disabled = false;
+		
+	}
+		
+}
 --></script>
 
 <digi:instance property="pledgeForm" />
@@ -385,7 +463,7 @@ function validateData(){
 												</td>
 												<td valign="middle" align="left" width="70%">
 													<a>
-														<html:text property="pledgeTitle" size="30" />
+														<html:text property="pledgeTitle" size="60" />
                             						</a>
 												</td>											
 											</tr>
@@ -473,8 +551,8 @@ function validateData(){
 													<a>
 														<c:set var="valueId1"> contact1OrgId </c:set>
 							                              <c:set var="nameId1"> contact1OrgName </c:set>
-							                              <input name='contact1OrgId' type="hidden" id="${valueId1}" style="text-align:right" value='${pledgeForm.contact1OrgId}' size="4"/>
-							                              <input name="contrDonorName" type='text' id="${nameId1}" style="text-align:right" value='${pledgeForm.contact1OrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
+							                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:right" value='${pledgeForm.contact1OrgId}' size="4"/>
+							                              <input name="contact1OrgName" type='text' id="${nameId1}" style="text-align:right" value='${pledgeForm.contact1OrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
                             						
                             						</a>
@@ -601,7 +679,7 @@ function validateData(){
 													<a>
 														<digi:trn key="sameAsOriginalPointOfContact">Same As Original Point Of Contact</digi:trn>
 													</a>
-													<input type="checkbox" id="sameContact" >
+													<input type="checkbox" id="sameContact" onclick="setSameContact()">
 												</td>
 											</tr>
 											<tr bgcolor="#ffffff">											
@@ -634,11 +712,11 @@ function validateData(){
 												</td>
 												<td valign="middle" align="left" width="30%">
 													<a>
-														<c:set var="valueId1"> contact2OrgId </c:set>
-							                              <c:set var="nameId1"> contact2OrgName </c:set>
-							                              <input name='contact2OrgId' type="hidden" id="${valueId1}" style="text-align:right" value='${pledgeForm.contact1OrgId}' size="4"/>
-							                              <input name="contrDonorName" type='text' id="${nameId1}" style="text-align:right" value='${pledgeForm.contact1OrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
-							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
+														<c:set var="valueId2"> contact2OrgId </c:set>
+							                              <c:set var="nameId2"> contact2OrgName </c:set>
+							                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:right" value='${pledgeForm.contact2OrgId}' size="4"/>
+							                              <input name="contact2OrgName" type='text' id="${nameId2}" style="text-align:right" value='${pledgeForm.contact2OrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
+							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton>
                             						
                             						</a>
 												</td>	
@@ -732,7 +810,7 @@ function validateData(){
 												</td>
 												<td valign="middle" align="left" width="30%">
 													<a>
-														<html:text property="contactAlternate2Email" size="20"/>
+														<html:text property="contactAlternate2Email" size="20" />
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="20%">

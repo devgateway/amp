@@ -14,6 +14,36 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
+<style type="text/css">
+.jcol {
+	padding-left: 10px;
+}
+
+.jlien {
+	text-decoration: none;
+}
+
+.tableEven {
+	background-color: #dbe5f1;
+	font-size: 8pt;
+	padding: 2px;
+}
+
+.tableOdd {
+	background-color: #FFFFFF;
+	font-size: 8pt;
+	padding: 2px;
+}
+
+.Hovered {
+	background-color: #a5bcf2;
+}
+
+.notHovered {
+	background-color: #FFFFFF;
+}
+</style>
+
 <script language="JavaScript" type="text/javascript">
 function addPledge() {
 	document.viewPledgesForm.action="/addPledge.do?reset=true";
@@ -85,7 +115,7 @@ function setHoveredRow(rowId) {
 <digi:instance property="viewPledgesForm" />
 
 <digi:form action="/viewPledgesList.do" method="post">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="800" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="960" vAlign="top" align="center" border=0>
 	
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
@@ -137,17 +167,27 @@ function setHoveredRow(rowId) {
 					<table width="100%" height="20" cellpadding="0" cellspacing="0" >
                       <thead>
 						<tr style="background-color: #999999; color: #000000;" align="center">
-							<td width="45%" align="center">
+							<td width="25%" align="center">
 								<b> 
 									<digi:trn>Pledge Name</digi:trn>
 								</b>
 							</td>
-							<td width="45%" align="center">
+							<td width="25%" align="center">
 								<b> 
 									<digi:trn>Organization</digi:trn>
 								</b>
 							</td>
-							<td width="10%" align="center">
+							<td width="25%" align="center">
+								<b> 
+									<digi:trn>Contact Name</digi:trn>
+								</b>
+							</td>
+							<td width="20%" align="center">
+								<b> 
+									<digi:trn>Contact Email</digi:trn>
+								</b>
+							</td>
+							<td width="5%" align="center">
 								<b> 
 									<digi:trn>Action</digi:trn>
 								</b>
@@ -159,25 +199,32 @@ function setHoveredRow(rowId) {
 				</tr>
 				<tr>
 					<td>
-					<div style="overflow: auto; width: 800; height: 200px; max-height: 220px;" class="report">
-					<table width="800" cellspacing="0" cellpadding="0" id="dataTable" >
+					<div style="overflow: auto; width: 100%; height: 200px; max-height: 220px;" class="report">
+					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" >
                        <tbody class="yui-dt-data">
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
-							<td width="45%" align="center">
-								<bean:write name="allFundingPledges" property="title" />
-							</td>
-							<td width="45%" align="center">
-								<bean:write name="allFundingPledges" property="organization.name" />
-							</td>
-							<td width="10%" align="center">
-								<c:set var="pledgeId">
-									<bean:write name="allFundingPledges" property="id" />
-								</c:set>
-								<a class="itr" href="javascript:editPledge('${pledgeId}');">
-                                   	<img src= "../ampTemplate/images/application_edit.png" border=0>
-								</a>
-							</td>
-						
+							<tr>
+								<td width="25%" align="center">
+									<bean:write name="allFundingPledges" property="title" />
+								</td>
+								<td width="25%" align="center">
+									<bean:write name="allFundingPledges" property="organization.name" />
+								</td>
+								<td width="25%" align="center">
+									<bean:write name="allFundingPledges" property="contactName" />
+								</td>
+								<td width="20%" align="center">
+									<bean:write name="allFundingPledges" property="contactEmail" />
+								</td>
+								<td width="5%" align="center">
+									<c:set var="pledgeId">
+										<bean:write name="allFundingPledges" property="id" />
+									</c:set>
+									<a class="itr" href="javascript:editPledge('${pledgeId}');">
+	                                   	<img src= "../ampTemplate/images/application_edit.png" border=0>
+									</a>
+								</td>
+							</tr>
 						</c:forEach>
                         </tbody>
 					</table>
@@ -201,6 +248,7 @@ function setHoveredRow(rowId) {
 
 	
 <script language="javascript">
+
 	setStripsTable("dataTable", "tableEven", "tableOdd");
 	setHoveredTable("dataTable", false);
 	setHoveredRow("rowHighlight");

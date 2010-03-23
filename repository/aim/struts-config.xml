@@ -168,13 +168,13 @@
       <forward name="forward" path="/showLayout.do?layout=addPledge" />
     </action>
     <action name="pledgeForm" path="/aim/addFundingPledgeDetail" scope="session" type="org.digijava.module.fundingpledges.action.AddFundingPledgeDetail">
-      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
     </action>
     <action name="pledgeForm" path="/aim/removePledgeLocation" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeLocation">
-      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
     </action>
      <action name="pledgeForm" path="/aim/pledgeLocationSelected" scope="session" type="org.digijava.module.fundingpledges.action.PledgeLocationSelected">
-      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="pledgeForm" path="/aim/selectPledgeLocation" scope="session" type="org.digijava.module.fundingpledges.action.SelectPledgeLocation">
@@ -182,10 +182,10 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="pledgeForm" path="/aim/removePledgeSector" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeSector">
-      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
     </action>
      <action name="pledgeForm" path="/aim/savePledge" scope="session" type="org.digijava.module.fundingpledges.action.SavePledge">
-      <forward name="forward" path="/showLayout.do?layout=addPledge" />
+      <forward name="forward" path="/aim/viewPledgesList.do" redirect="true"/>
     </action>
     <action name="viewPledgesForm" path="/aim/viewPledgesList" scope="session" type="org.digijava.module.fundingpledges.action.ShowPledgesList">
       <forward name="forward" path="/showLayout.do?layout=viewPledgesList"/>

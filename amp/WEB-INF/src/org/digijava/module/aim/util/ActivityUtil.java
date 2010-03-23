@@ -18,9 +18,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
@@ -759,10 +761,81 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					session.update(oldActivity);
 				}        
      
+      
+	
+     /*if(activity.getComponents()!=null) {
+    	  Collection<AmpComponent> components= activity.getComponents();
+	      for (AmpComponent ampComponent : components) {
+	    	  ampComponent.setActivity(activity);
+	    	  session.save(ampComponent);
+	      	}
+	      }*/
+     
+	      
+      if (activity.getClosingDates() != null) {
+    	  Collection<AmpActivityClosingDates> newClosingDates = activity.getClosingDates();
+    	  // activity.getClosingDates().clear();
+    	  Iterator<AmpActivityClosingDates> iter = newClosingDates.iterator();
+    	  while (iter.hasNext()) {
+    		  AmpActivityClosingDates auxClosingDate = iter.next();
+    		  if (auxClosingDate.getClosingDate() != null) {
+    			  auxClosingDate.setAmpActivityId(activity);
+    			  session.save(auxClosingDate);
+    		  }
+    	  }
+      }
+      
+      }
+
+      // Components section.
+      Map<Long,AmpComponent> componentsMap=new HashMap<Long,AmpComponent>();
+      if(rsp.getEaForm().getComponents().getCompotosave()!=null) {
+    	  Collection<AmpComponent> components = rsp.getEaForm().getComponents().getCompotosave();
+    	  Iterator<AmpComponent> iComponents = components.iterator();
+    	  while(iComponents.hasNext()){
+    		  AmpComponent auxComponent = iComponents.next();
+    		  AmpComponent newComponent = new AmpComponent();
+    		  newComponent.setActivity(activity);
+    		  newComponent.setCode(auxComponent.getCode());
+    		  newComponent.setCreationdate(auxComponent.getCreationdate());
+    		  newComponent.setDescription(auxComponent.getDescription());
+    		  newComponent.setFunding(new HashSet<AmpComponentFunding>());
+    		  newComponent.setTitle(auxComponent.getTitle());
+    		  newComponent.setType(auxComponent.getType());
+    		  newComponent.setUrl(auxComponent.getUrl());
+    		  activity.getComponents().add(newComponent);
+
+    		  session.save(newComponent);
+    		  componentsMap.put(auxComponent.getAmpComponentId(), newComponent);
+    		  Iterator<AmpComponentFunding> iFundings = auxComponent.getFunding().iterator();
+    		  while(iFundings.hasNext()) {
+    			  AmpComponentFunding auxFunding = iFundings.next();
+    			  AmpComponentFunding newFunding = new AmpComponentFunding();
+    			  newFunding.setActivity(activity);
+    			  newFunding.setAdjustmentType(auxFunding.getAdjustmentType());
+    			  //newFunding.setAmpComponentFundingId(auxFunding.getAmpComponentFundingId());
+    			  newFunding.setComponent(newComponent);
+    			  newFunding.setCurrency(auxFunding.getCurrency());
+    			  newFunding.setExchangeRate(auxFunding.getExchangeRate());
+    			  newFunding.setExpenditureCategory(auxFunding.getExpenditureCategory());
+    			  newFunding.setReportingDate(auxFunding.getReportingDate());
+    			  newFunding.setReportingOrganization(auxFunding.getReportingOrganization());
+    			  newFunding.setTransactionAmount(auxFunding.getTransactionAmount());
+    			  newFunding.setTransactionDate(auxFunding.getTransactionDate());
+    			  newFunding.setTransactionType(auxFunding.getTransactionType());
+    			  activity.getComponentFundings().add(newFunding);
+
+    			  session.save(newFunding);
+    		  }    		  
+    	  }    	  
+      }
+      
       if(activity.getComponentProgress()!=null) {
     	  Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
 	      for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
 	    	  ampPhysicalPerformance.setAmpActivityId(activity);
+	    	  AmpComponent dbComp=componentsMap.get(ampPhysicalPerformance.getComponent().getAmpComponentId());
+	    	  ampPhysicalPerformance.setComponent(dbComp);
 	      	  session.save(ampPhysicalPerformance);
 	  	  }
       } else {
@@ -802,70 +875,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	    	  session.save(auxPP);
     	  	  }
           }
-      }
-     /*if(activity.getComponents()!=null) {
-    	  Collection<AmpComponent> components= activity.getComponents();
-	      for (AmpComponent ampComponent : components) {
-	    	  ampComponent.setActivity(activity);
-	    	  session.save(ampComponent);
-	      	}
-	      }*/
-     
-	      
-      if (activity.getClosingDates() != null) {
-    	  Collection<AmpActivityClosingDates> newClosingDates = activity.getClosingDates();
-    	  // activity.getClosingDates().clear();
-    	  Iterator<AmpActivityClosingDates> iter = newClosingDates.iterator();
-    	  while (iter.hasNext()) {
-    		  AmpActivityClosingDates auxClosingDate = iter.next();
-    		  if (auxClosingDate.getClosingDate() != null) {
-    			  auxClosingDate.setAmpActivityId(activity);
-    			  session.save(auxClosingDate);
-    		  }
-    	  }
-      }
-      
-      }
-
-      // Components section.
-      if(rsp.getEaForm().getComponents().getCompotosave()!=null) {
-    	  Collection<AmpComponent> components = rsp.getEaForm().getComponents().getCompotosave();
-    	  Iterator<AmpComponent> iComponents = components.iterator();
-    	  while(iComponents.hasNext()){
-    		  AmpComponent auxComponent = iComponents.next();
-    		  AmpComponent newComponent = new AmpComponent();
-    		  newComponent.setActivity(activity);
-    		  newComponent.setCode(auxComponent.getCode());
-    		  newComponent.setCreationdate(auxComponent.getCreationdate());
-    		  newComponent.setDescription(auxComponent.getDescription());
-    		  newComponent.setFunding(new HashSet<AmpComponentFunding>());
-    		  newComponent.setTitle(auxComponent.getTitle());
-    		  newComponent.setType(auxComponent.getType());
-    		  newComponent.setUrl(auxComponent.getUrl());
-    		  activity.getComponents().add(newComponent);
-
-    		  session.save(newComponent);
-    		  Iterator<AmpComponentFunding> iFundings = auxComponent.getFunding().iterator();
-    		  while(iFundings.hasNext()) {
-    			  AmpComponentFunding auxFunding = iFundings.next();
-    			  AmpComponentFunding newFunding = new AmpComponentFunding();
-    			  newFunding.setActivity(activity);
-    			  newFunding.setAdjustmentType(auxFunding.getAdjustmentType());
-    			  //newFunding.setAmpComponentFundingId(auxFunding.getAmpComponentFundingId());
-    			  newFunding.setComponent(newComponent);
-    			  newFunding.setCurrency(auxFunding.getCurrency());
-    			  newFunding.setExchangeRate(auxFunding.getExchangeRate());
-    			  newFunding.setExpenditureCategory(auxFunding.getExpenditureCategory());
-    			  newFunding.setReportingDate(auxFunding.getReportingDate());
-    			  newFunding.setReportingOrganization(auxFunding.getReportingOrganization());
-    			  newFunding.setTransactionAmount(auxFunding.getTransactionAmount());
-    			  newFunding.setTransactionDate(auxFunding.getTransactionDate());
-    			  newFunding.setTransactionType(auxFunding.getTransactionType());
-    			  activity.getComponentFundings().add(newFunding);
-
-    			  session.save(newFunding);
-    		  }    		  
-    	  }    	  
       }
       
       /*Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId, session);

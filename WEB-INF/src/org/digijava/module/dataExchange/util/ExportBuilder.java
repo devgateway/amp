@@ -502,7 +502,7 @@ public class ExportBuilder {
 			for (AmpFundingMTEFProjection ampProj : ampfunding.getMtefProjections()) {
 				FundingType.Projections proj = objectFactory.createFundingTypeProjections();
 				proj.setType(ampProj.getProjected().getValue());
-				proj.setAmount(ampProj.getAmount());
+				proj.setAmount(new BigDecimal(ampProj.getAmount().toBigInteger()));//ampProj.getAmount());
 				proj.setCurrency(ampProj.getAmpCurrency().getCurrencyCode());
 
 				Calendar cal = Calendar.getInstance();
@@ -755,7 +755,7 @@ public class ExportBuilder {
 			amount = amount.multiply(new BigDecimal(1000)) ;
 		}
 
-		retValue.setAmount(amount);
+		retValue.setAmount(new BigDecimal(amount.toBigInteger()));
 		retValue.setCurrency(currency);
 		
 		return retValue;

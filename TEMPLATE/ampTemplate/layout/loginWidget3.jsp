@@ -182,8 +182,15 @@
         		<c:set var="trn3">
 					<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
 				</c:set>
-				  <digi:link href="/showRegisterUser.do" module="aim" style="color:white; margin-top: 3px;">
+				  <digi:link href="/showRegisterUser.do" module="aim" title="${trn3}" style="color:white; margin-top: 3px;">
 				    <digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
+				  </digi:link>	
+                 &nbsp;&nbsp;<span style="color: white;">|</span>&nbsp;&nbsp;
+        		<c:set var="title">
+					<digi:trn>Click here to change your password</digi:trn>
+				</c:set>
+				  <digi:link href="/showChangePassword.do" title="${title}" module="aim" style="color:white; margin-top: 3px;">
+				    <digi:trn> Change Password</digi:trn>
 				  </digi:link>	
                  &nbsp;&nbsp;<span style="color: white;">|</span>&nbsp;&nbsp;
                  <c:set var="trn1">

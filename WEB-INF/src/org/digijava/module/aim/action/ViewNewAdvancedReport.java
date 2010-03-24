@@ -41,6 +41,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -103,11 +104,14 @@ public class ViewNewAdvancedReport extends Action {
 		
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");				
 		AmpApplicationSettings ampAppSettings = null;				
-		if(tm!=null)				
-		ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-		if(ampAppSettings==null)
-			if(tm!=null)
-			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+		if(tm!=null) {				
+			ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+		}
+		if(ampAppSettings==null) {
+			if(tm!=null) {
+				ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+			}
+		}
 		
 		if (ampAppSettings != null){
 
@@ -263,6 +267,15 @@ public class ViewNewAdvancedReport extends Action {
 					request.getSession().setAttribute("publicgeneratedreports",pgenerated);
 				}				
 				
+			}
+			
+			// Check if the user is logged in.
+			User currentUser = RequestUtils.getUser(request);
+			if(currentUser == null) {
+				// If is not a public report.
+				if(ar == null || !ar.getPublicReport()) {
+					return mapping.findForward("index");
+				}
 			}
 			
 			//This is for public views to avoid nullPointerException due to there is no logged user.

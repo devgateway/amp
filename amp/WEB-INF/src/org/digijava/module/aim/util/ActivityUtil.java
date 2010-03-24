@@ -2820,8 +2820,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     AmpActivity activity = null;
     Session session = null;
     try {
-      session = PersistenceManager.getSession();
-      String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
+      session = PersistenceManager.getRequestDBSession();
+      String qryStr = "select a from " + AmpActivityGroup.class.getName() + " gr inner join gr.ampActivityLastVersion a " +
           "where lower(a.name) = :lowerName";
       Query qry = session.createQuery(qryStr);
       qry.setString("lowerName", name.toLowerCase());
@@ -2832,17 +2832,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     catch (Exception e) {
       logger.debug("Exception in isActivityExisting() " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex) {
-          logger.debug("Exception while releasing session " + ex.getMessage());
-        }
-      }
     }
     return activity;
   }

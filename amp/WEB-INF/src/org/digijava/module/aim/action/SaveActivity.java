@@ -1940,7 +1940,15 @@ public class SaveActivity extends Action {
 					else activity.setApprovalStatus(aAct.getApprovalStatus());
 				}
 			}
-			activity.setActivityCreator(eaForm.getIdentification().getCreatedBy());
+            if (eaForm.getIdentification().getCreatedBy() != null) {
+                activity.setActivityCreator(eaForm.getIdentification().getCreatedBy());
+            } else {
+                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+                activity.setActivityCreator(teamMember);
+                Calendar cal = Calendar.getInstance();
+                activity.setCreatedDate(cal.getTime());
+
+            }
 		}
 		else{
 			AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
@@ -2381,18 +2389,16 @@ public class SaveActivity extends Action {
 
 		String toDelete = request.getParameter("delete");
 		if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
-			if (eaForm.isEditAct() == false) {
-				/*AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
-				if (act != null) {
-					request.setAttribute("existingActivity", act);
-					eaForm.setActivityId(act.getAmpActivityId());
-					logger.debug("Activity with the name "
-							+ eaForm.getIdentification().getTitle() + " already exist.");
-					return mapping.findForward("activityExist");
-				}*/
-				}
-		} else if (toDelete.trim().equals("true")) {
-			eaForm.setEditAct(true);
+            if (eaForm.getActivityId() == null || eaForm.getActivityId() == 0) {
+                AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
+                if (act != null) {
+                    request.setAttribute("existingActivity", act);
+                    eaForm.setActivityId(act.getAmpActivityId());
+                    logger.debug("Activity with the name "
+                            + eaForm.getIdentification().getTitle() + " already exist.");
+                    return mapping.findForward("activityExist");
+                }
+            }
 		} else {
 			logger.debug("No duplicate found");
 		}

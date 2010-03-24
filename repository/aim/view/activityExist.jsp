@@ -22,6 +22,7 @@ function overwrite() {
 function cancel() {
 	//document.aimEditActivityForm.step.value = "9";
 	<digi:context name="action" property="context/module/moduleinstance/addActivity.do?edit=true&step=1" />
+    document.aimEditActivityForm.activityId.value=0;
 	document.aimEditActivityForm.action = "<%= action %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -32,7 +33,7 @@ function cancel() {
 
 <digi:form action="/saveActivity.do" method="post">
 <html:hidden property="step" />
-<!-- <html:hidden property="activityId" />-->
+<html:hidden property="activityId" />
 <input type="hidden" name="delete" value="true">
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">

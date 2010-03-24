@@ -450,6 +450,14 @@
 												<td>&nbsp;</td>
 												<td>&nbsp;</td>
 												<td class=f-names>
+													<html:checkbox property="pledger" styleClass="inp-text">
+														<digi:trn key="um:pledgesUser">Pledges User</digi:trn>
+													</html:checkbox></td>
+											</tr>
+											<tr>
+												<td>&nbsp;</td>
+												<td>&nbsp;</td>
+												<td class=f-names>
 													<html:checkbox property="sendEmail"	styleClass="inp-text">
 														<digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn>
 													</html:checkbox></td>

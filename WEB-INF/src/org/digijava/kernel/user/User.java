@@ -55,6 +55,7 @@ public class User
     private String url;
     private boolean active;
     private boolean banned;
+    private Boolean pledger;
     private Site registeredThrough;
     private Set interests;
     private java.sql.Clob bio;
@@ -406,5 +407,19 @@ public class User
     public void setContacts(Set contacts) {
         this.contacts = contacts;
     }
+
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
+	}
+
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
+	}
 
 }

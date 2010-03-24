@@ -160,6 +160,7 @@ public class Login extends Action {
 						TeamMember tm = new TeamMember();
 						tm.setMemberName(usr.getName());
 						tm.setMemberId(usr.getId());
+						tm.setPledger(usr.getPledger());
 						tm.setTeamName(TranslatorWorker.translateText("AMP Administrator", locale, siteId));
 						session.setAttribute(Constants.CURRENT_MEMBER, tm);
 						// show the index page with the admin toolbar at the bottom

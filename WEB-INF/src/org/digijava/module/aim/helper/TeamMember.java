@@ -28,6 +28,8 @@ public class TeamMember {
 	
 	private boolean teamHead;
 
+	private Boolean pledger;
+
 	private boolean read; /* read permission */
 
 	private boolean write; /* write permission */
@@ -260,5 +262,19 @@ public class TeamMember {
 
 	public void setAddActivity(Boolean addActivity) {
 		this.addActivity = addActivity;
+	}
+
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
+	}
+
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
 	}
 }

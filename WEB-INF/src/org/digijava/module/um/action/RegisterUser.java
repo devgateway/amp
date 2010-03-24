@@ -83,6 +83,8 @@ public class RegisterUser extends Action {
 			// set organization name
 			user.setOrganizationName(userRegisterForm.getOrganizationName());
 
+			user.setPledger(userRegisterForm.getPledger());
+			
 			user.setOrganizationTypeOther(new String(" "));
 			
 

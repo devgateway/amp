@@ -328,6 +328,14 @@ function isInvalid(field){
 																		</td>
 																	</tr>
 																	<tr>
+																		<td width="169" align="right" height="30">
+                                                                     		 <digi:trn key="um:pledgesUser">Pledges User</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+          																	<html:checkbox property="pledger" styleClass="inp-text"/>
+																		</td>
+																	</tr>
+																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>
 																	<tr>

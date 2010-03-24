@@ -136,6 +136,7 @@ public class SelectTeam extends Action {
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());
             tm.setComputation(member.getAmpTeam().getComputation());
             tm.setAddActivity(member.getAmpTeam().getAddActivity());
+            tm.setPledger(member.getUser().getPledger());
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
             } else {

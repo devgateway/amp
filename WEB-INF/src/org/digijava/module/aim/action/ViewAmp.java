@@ -300,6 +300,7 @@ public class ViewAmp
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());
+            tm.setPledger(member.getUser().getPledger());
             tm.setRoleId(member.getAmpMemberRole()
                     .getAmpTeamMemRoleId());
             tm.setRoleName(member.getAmpMemberRole().getRole());

@@ -981,7 +981,8 @@ function setSameContact(){
 						                <td>
 						                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
 						                    	<tr>
-						                            <td align="center" width="20%">
+													<td align="center" valign="bottom" width="3%" />
+						                            <td align="center" width="17%">
 						                                <b><digi:trn key="aim:typeOfPledge">Type Of Pledge</digi:trn></b>
 						                            </td>
 													<td align="center" width="20%">
@@ -1013,10 +1014,10 @@ function setSameContact(){
 						                            <c:set var="translation">
 														<digi:trn key="aim:selectFromBelow">Please select from below</digi:trn>
 													</c:set>	
-													<td align="center" valign="bottom" >
+													<td align="center" valign="bottom" width="3%" >
 														<input type="checkbox" id="checkFund${indexFund}"  >
 													</td>
-													<td align="center" valign="bottom" width="20%">
+													<td align="center" valign="bottom" width="17%">
 														<html:select name="fundingPledgesDetails" indexed="true" property="pledgetypeid" styleClass="inp-text">
 															<html:optionsCollection name="pledgeForm" property="pledgeTypeCategory" value="id"
 															label="value"/>

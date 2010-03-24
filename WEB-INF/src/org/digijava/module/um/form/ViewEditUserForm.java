@@ -2,7 +2,10 @@ package org.digijava.module.um.form;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -10,6 +13,11 @@ import org.digijava.module.aim.helper.CountryBean;
 
 public class ViewEditUserForm extends ActionForm {
 
+	
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+	    this.pledger=false;
+	    }
+	
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String email;
@@ -41,6 +49,7 @@ public class ViewEditUserForm extends ActionForm {
 
 	private String event;
 	private Boolean ban;
+	private Boolean pledger;
 	private String confirmNewPassword;
 	private String newPassword;
 	private Boolean displaySuccessMessage;
@@ -249,6 +258,20 @@ public class ViewEditUserForm extends ActionForm {
 
 	public void setSelectedOrgId(Long selectedOrgId) {
 		this.selectedOrgId = selectedOrgId;
+	}
+
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
+	}
+
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
 	}
 
 }

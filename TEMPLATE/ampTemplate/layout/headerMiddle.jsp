@@ -420,11 +420,17 @@ function adminHelp(){
 	                                              </div>
 	                                        </li>
                                         </feature:display>
- 											<li class="yuiampmenuitem" title='<digi:trn key="aim:clickToManagePledges">Click here to manage pledges</digi:trn>'>
-		                                       <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewPledgesList.do">
-		                                           <digi:trn key="aim:Pledges">Pledges</digi:trn>
-		                                        </a>
-											</li>
+										<c:if test="${not empty sessionScope.currentMember}">
+											<c:if test="${sessionScope.currentMember.pledger == 'true'}">
+		 										<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
+			                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToManagePledges">Click here to manage pledges</digi:trn>'>
+				                                       <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewPledgesList.do">
+				                                           <digi:trn key="aim:Pledges">Pledges</digi:trn>
+				                                        </a>
+													</li>
+												</module:display>
+											</c:if>
+										</c:if>
                                       </ul>
                                   </div>
                               </div>                    

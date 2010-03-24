@@ -151,11 +151,13 @@ function setHoveredRow(rowId) {
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr>
 							<td width="75%" vAlign="middle" height="40">
+								<feature:display name="Add Pledge Button" module="Pledges">
 								<table cellPadding=0 cellSpacing=0 width="100%" border=0>
 									<html:button styleClass="dr-menu" property="submitButton" onclick="return addPledge()">
 	                                       <digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
 									</html:button>
 								</table>
+								</feature:display>
 							</td>
 						</tr>
 					</table>

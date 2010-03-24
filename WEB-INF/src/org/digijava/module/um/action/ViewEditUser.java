@@ -167,7 +167,7 @@ public class ViewEditUser extends Action {
             uForm.setSelectedOrgTypeId(null);
             uForm.setSelectedCountryIso(null);
             uForm.setAssignedOrgId(null);
-
+            uForm.setPledger(false);
             uForm.setId(null);
             uForm.setEmail(null);
             uForm.setConfirmNewPassword(null);
@@ -190,6 +190,7 @@ public class ViewEditUser extends Action {
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
                 uForm.setAssignedOrgId(user.getAssignedOrgId());
+                uForm.setPledger(user.getPledger());
                 if(user.getAssignedOrgId()!=null) {
                     uForm.setOrgs(new ArrayList<AmpOrganisation>());
                     AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
@@ -303,7 +304,7 @@ public class ViewEditUser extends Action {
                     userLangPreferences.setNavigationLanguage(RequestUtils.getNavigationLanguage(request));
 
                     user.setUserLangPreferences(userLangPreferences);
-
+                    user.setPledger(uForm.getPledger());
                     DbUtil.updateUser(user);
 
                     resetViewEditUserForm(uForm);

@@ -83,7 +83,7 @@ public class GetAvailableUsersForWorkspaceJSON extends Action {
 
 		Collection<User> tempCol = new ArrayList<User>();
 
-		for (int i = stIndex; i < edIndex; i++) {
+		for (int i = stIndex; i <= edIndex; i++) {
 			tempCol.add(vect.get(i));
 		}
 		for (Iterator<User> it = tempCol.iterator(); it.hasNext();) {

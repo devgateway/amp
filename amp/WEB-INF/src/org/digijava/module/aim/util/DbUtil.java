@@ -3385,13 +3385,14 @@ public class DbUtil {
             while (iter.hasNext()) {
                 AmpFundingDetail ampFundingDetail = (AmpFundingDetail) iter.next();
                 Double fixedRateToUSD = ampFundingDetail.getFixedExchangeRate();
-                if (fixedRateToUSD!=null && fixedRateToUSD.doubleValue()!=1){
+                if (fixedRateToUSD!=null && fixedRateToUSD.doubleValue()!=1 && 
+                		!ampFundingDetail.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(ampCurrencyCode)){
                 	 fromCurrency=fixedRateToUSD.doubleValue();
 
                 	 toCurrency = Util.getExchange(ampCurrencyCode,
  							new java.sql.Date(ampFundingDetail
  									.getTransactionDate().getTime()));
-
+                	
                 	 DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
 							.getTransactionAmount().doubleValue(),
 							fromCurrency, toCurrency, new java.sql.Date(
@@ -3406,7 +3407,7 @@ public class DbUtil {
                 		amount.setCalculations(tmpamount.getCalculations());
                 	}
                 }else{
-                    toCurrency = Util.getExchange(ampCurrencyCode,
+                	toCurrency = Util.getExchange(ampCurrencyCode,
 							new java.sql.Date(ampFundingDetail
 									.getTransactionDate().getTime()));
 
@@ -3415,6 +3416,9 @@ public class DbUtil {
 							new java.sql.Date(ampFundingDetail
 									.getTransactionDate().getTime()));
 
+					if (ampFundingDetail.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(ampCurrencyCode)){
+						toCurrency = fromCurrency;
+					}
 					logger.debug("to Currency: " + toCurrency);
 					logger.debug("From Currency: " + fromCurrency);
 

@@ -239,22 +239,26 @@ public class QuarterlyInfoWorker {
 			Object[] row = (Object[]) iter1.next();
 			Double transactionAmount = (Double) row[0];
 			Date transactionDate = (Date) row[1];
-			// modified by priyajith
-			AmpCurrency curr = (AmpCurrency) row[2];
-			Double fixedRate=(Double) row[3];
-			fromCurrency = Util.getExchange(curr.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
-			double targetCurrency = Util.getExchange(selCurrency,new java.sql.Date(transactionDate.getTime()));	
-			//end			
-			double tmpAmt = 0.0;
-			if (transactionAmount != null)
-				tmpAmt = transactionAmount.doubleValue();
 			
-			if (fixedRate!=null && fixedRate.doubleValue()!=1
-					&& selCurrency !=null 
-					){
-				fromCurrency=fixedRate.doubleValue();
+			AmpCurrency curr = (AmpCurrency) row[2];
+			double targetCurrency;
+			Double fixedRate=(Double) row[3];
+			double tmpAmt = 0.0;
+			//If the selected currency is the same than the funding currency not currency conversion is needed
+			if (selCurrency.equalsIgnoreCase(curr.getCurrencyCode())){
+				fromCurrency = Util.getExchange(curr.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
+				targetCurrency = fromCurrency;
+			}else{
+				fromCurrency = Util.getExchange(curr.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
+				targetCurrency = Util.getExchange(selCurrency,new java.sql.Date(transactionDate.getTime()));
+				if (fixedRate!=null && fixedRate.doubleValue()!=1 && selCurrency !=null){
+					fromCurrency=fixedRate.doubleValue();
+				}
 			}
 			
+			if (transactionAmount != null){
+				tmpAmt = transactionAmount.doubleValue();
+			}
 			//String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,targetCurrency);
 			DecimalWraper amountConverted = CurrencyWorker.convertWrapper(tmpAmt, fromCurrency, targetCurrency,new java.sql.Date(transactionDate.getTime()));			
 			

@@ -284,6 +284,7 @@
 
         }
         function fnChk(frmContrl,exceedhundred){
+            //alert(frmContrl.value);
     <c:set var="errMsgAddSectorNumericValue">
         <digi:trn>Please enter numeric value only</digi:trn>
     </c:set>
@@ -302,6 +303,11 @@
     </c:set>
                 alert("${errMsgAddSumExceed}");
                 frmContrl.value = "";
+                return false;
+            }
+            if(frmContrl.value < 0) {
+            	alert("${errMsgAddSectorNumericValue}");
+            	frmContrl.value = "";
                 return false;
             }
             return true;

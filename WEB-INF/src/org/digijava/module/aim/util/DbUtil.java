@@ -3263,6 +3263,7 @@ public class DbUtil {
 		Connection con;
 		try {
 			con = PersistenceManager.getSession().connection();
+			con.setAutoCommit(false);
 			con.createStatement().execute("DELETE FROM amp_lucene_index WHERE idxName like '" + idxName + "'");
 			con.commit();
 		} catch (Exception e) {

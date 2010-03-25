@@ -636,6 +636,7 @@ document.addComponentsPopup=function()
 
 document.validate=function()
 {
+	
   var msgEnterAmount="<digi:trn key="aim:selectComponent:errmsg:enterAmount">Amount not entered.</digi:trn>";
   var msgInvalidAmount="<digi:trn key="aim:selectComponent:errmsg:invalidAmount">Invalid amount entered.</digi:trn>";
   var msgEnterDate="<digi:trn key="aim:selectComponent:errmsg:enterDate">Date not entered.</digi:trn>";
@@ -669,6 +670,8 @@ document.validate=function()
 	}
 
 	for (index = 0;index < x.elements.length;index++) {
+		var decimalSymbol="<%=FormatHelper.getDecimalSymbol()%>";
+		var groupSymbol="<%=FormatHelper.getGroupSymbol()%>";
 		var str = x.elements[index].name;
 		if (str.match("comm_[0-9]*_2")) {
 			// validate amount
@@ -677,7 +680,7 @@ document.validate=function()
 				x.elements[index].focus();
 				return false;
 			}
-			if (checkAmount(x.elements[index].value) == false) {
+			if (checkAmountUsingSymbols(x.elements[index].value,groupSymbol,decimalSymbol) == false) {
 				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
@@ -697,7 +700,7 @@ document.validate=function()
 				x.elements[index].focus();
 				return false;
 			}
-			if (checkAmount(x.elements[index].value) == false) {
+			if (checkAmountUsingSymbols(x.elements[index].value,groupSymbol,decimalSymbol) == false) {
 				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
@@ -715,7 +718,7 @@ document.validate=function()
 				x.elements[index].focus();
 				return false;
 			}
-			if (checkAmount(x.elements[index].value) == false) {
+			if (checkAmountUsingSymbols(x.elements[index].value,groupSymbol,decimalSymbol) == false) {
 				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;

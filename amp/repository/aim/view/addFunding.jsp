@@ -34,12 +34,12 @@
 	//this map will store only the funding items that got changed - they require re-validation
 	var forValidation = {};
 
-	var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
-	var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
-	var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
+	var errmsg1="<digi:trn>Type Of Assistance not selected</digi:trn>";
+	var errmsg2="\n<digi:trn>Funding Id not entered</digi:trn>";
+	var errmsg3="\n<digi:trn>Financing Instrument not selected</digi:trn>";
 	var errmsg4="\n<digi:trn>Funding status not selected</digi:trn>";
-    var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
-	var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+    var msgEnterAmount="\n<digi:trn>Please enter the amount for the transaction</digi:trn>";
+	var msgInvalidAmount="\n<digi:trn>Invalid amount entered for the transaction</digi:trn>";
 	var msgInvalidAmountProj="\n<digi:trn>Invalid amount entered for projection</digi:trn>";
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 //	var msgConfirmFunding="<digi:trn jsFriendly="true" key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
@@ -49,8 +49,8 @@
 </gs:test>
 	var msgConfirmFunding="";
 	//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-	var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-	var msgEnterRate="\n<digi:trn key="aim:addFunding:errmsg:invalidRate">Please enter a valid exchange rate, the decimal symbol is:</digi:trn>";
+	var msgEnterDate="\n<digi:trn>Please enter the transaction date for the transaction</digi:trn>";
+	var msgEnterRate="\n<digi:trn>Please enter a valid exchange rate, the decimal symbol is:</digi:trn>";
 	//var msgEnterDate="qsfgqsg";
 
 
@@ -402,6 +402,7 @@ DIV.red_notice
 									<a title="<digi:trn key="aim:FinanceInstrument">Method by which aid is delivered to an activity</digi:trn>" class="required_field">
 									<digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn>
 									</a>
+									</td>
 								<td>
 								<c:set var="contentDisabled"><field:display name="Financing Instrument" feature="Funding Information">false</field:display></c:set>
 								<c:if test="${contentDisabled==''}">

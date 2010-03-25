@@ -73,7 +73,14 @@
 		setHoveredRow("rowHighlight");
 		monitorCheckbox();
 	}	 
+	function setVersion(activityId)
+	{
+		document.getElementById("action").value = "setVersion";
+		document.getElementById("activityCurrentVersion").value = activityId;
+		document.aimCompareActivityVersionsForm.submit();
+	}
 	function submitCompare() {
+		document.getElementById("action").value = "compare";
 		var checkboxes = document.getElementsByName("compareCheckboxes");
 		var selectedVersions = [];
 		for(var i = 0; i < checkboxes.length; i++) {

@@ -121,6 +121,9 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Pledge_Type#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_TYPES, locale, siteId));
 			shema = shema.replaceAll("#contact_name#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_CONTACT_NAME, locale, siteId));
 			shema = shema.replaceAll("#contact_email#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_CONTACT_EMAIL, locale, siteId));
+			shema = shema.replaceAll("#Pledges Actual Commitments#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_COMMITMENTS, locale, siteId));
+			shema = shema.replaceAll("#Pledges Actual Disbursements#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_DISBURSEMENTS, locale, siteId));
+			shema = shema.replaceAll("#Commitment Gap#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_COMMITMENTS_GAP, locale, siteId));
 			
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block

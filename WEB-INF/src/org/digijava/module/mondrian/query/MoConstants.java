@@ -70,6 +70,12 @@ public final class MoConstants {
 	public static String PLEDGE_PLEDGES_TYPES = "Pledges Types";
 	public static String PLEDGE_PLEDGES_CONTACT_NAME = "Contact Name";
 	public static String PLEDGE_PLEDGES_CONTACT_EMAIL = "Contact Email";
+	public static String PLEDGE_PLEDGES_COMMITMENTS = "Pledges Actual Commitments";
+	public static String PLEDGE_PLEDGES_DISBURSEMENTS = "Pledges Actual Disbursements";
+	public static String PLEDGE_PLEDGES_COMMITMENTS_GAP = "Commitment Gap";
+	
+	
+	
 	
 	
 }

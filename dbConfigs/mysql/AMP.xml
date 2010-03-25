@@ -331,29 +331,7 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
-	<Dimension name="Contact Name">
-		<Hierarchy hasAll="false" allMemberName="Contact Name" caption="#contact_name#">
-			<Level name="Contact Name" column="contact_name">
-				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(contact_name,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
-	<Dimension name="Contact Email">
-		<Hierarchy hasAll="false" allMemberName="Contact Email" caption="#contact_email#">
-			<Level name="Contact Name" column="contact_email">
-				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(contact_email,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
-	
+
 	<DimensionUsage name="Pledges Dates" source="Pledges Dates" foreignKey="amp_fund_detail_id" />
 	
 	<Measure name="Pledges" aggregator="sum" caption="#Total Pledges#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
@@ -363,6 +341,7 @@
 			</SQL>
 		</MeasureExpression>
 	</Measure>
+	
 	</Cube>
   
   <Cube name="Pledges Commitmens">
@@ -371,8 +350,8 @@
         <![CDATA[select * from v_donor_funding WHERE NOT ISNULL(pledge_id)]]>
       </SQL>
     </View>
-
-    <Measure name="Pledges Actual Commitments" aggregator="sum" caption="Pledges Actual Commitments" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+    
+    <Measure name="Pledges Actual Commitments" aggregator="sum" caption="#Pledges Actual Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 				  case when transaction_type = 0 and adjustment_type =1  then
@@ -381,7 +360,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-    <Measure name="Pledges Actual Disbursements" aggregator="sum" caption="Pledges Actual Disbursements" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+    <Measure name="Pledges Actual Disbursements" aggregator="sum" caption="#Pledges Actual Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 				  case when transaction_type = 1 and adjustment_type =1 then
@@ -406,10 +385,6 @@
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Regions"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Donor"/>
     <VirtualCubeDimension  cubeName="Pledges Funding" name="Pledges Dates"/>
-    <VirtualCubeDimension  cubeName="Pledges Funding" name="Contact Name"/>
-    <VirtualCubeDimension  cubeName="Pledges Funding" name="Contact Email"/>
-    
-    
     <VirtualCubeDimension  cubeName="Donor Funding" name="Donor"/>
     
     <VirtualCubeMeasure  cubeName="Pledges Funding" name="[Measures].[Pledges]"/>
@@ -418,8 +393,8 @@
     <VirtualCubeMeasure  cubeName="Pledges Commitmens" name="[Measures].[Pledges Actual Commitments]"/>
     <VirtualCubeMeasure  cubeName="Pledges Commitmens" name="[Measures].[Pledges Actual Disbursements]"/>
     
-    <CalculatedMember  name="Commitment Gap" dimension="Measures">
+    <CalculatedMember  name="Commitment Gap" dimension="Measures" caption="#Commitment Gap#">
         <Formula>[Measures].[Pledges] - [Measures].[Pledges Actual Commitments]</Formula>
     </CalculatedMember>
-	</VirtualCube>
+    </VirtualCube>
 </Schema>

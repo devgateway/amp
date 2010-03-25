@@ -169,47 +169,38 @@ function validateFunding() {
 
 
 
-function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate, decimalSymbol,groupSymbol,msgConfirmFunding) {
-	
+function validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, decimalSymbol,groupSymbol,msgConfirmFunding) {	
 	this.decimalSymbol=decimalSymbol;
 	
 	this.groupSymbol=groupSymbol;
 
 	
 	var fundId = trim(document.getElementById("orgFundingId").value);
-
 	var assistType = trim(document.getElementsByName("funding.assistanceType")[0].value);
-
-	var mod=trim(document.getElementsByName("funding.modality")[0].value);
-
+	var mod=trim(document.getElementsByName("funding.modality")[0].value);	
+	var fundStatus=trim(document.getElementsByName("funding.fundingStatus")[0].value);
 	var errmsg='';
 
 	if (assistType == 0) {
-
 		errmsg+=errmsg1;
-
 	}
 
 	if (fundId.length == 0) {
-
 		//errmsg+=errmsg2;//tanzania
-
 	}
 
 	if (mod == 0) {
-
 		errmsg+=errmsg3;
-
+	}
+	
+	if(fundStatus==0){
+		errmsg+=errmsg4;
 	}
 
 	if (errmsg!=''){
-
 		alert (errmsg);
-
 		document.getElementById("orgFundingId").focus();
-
 		return false;
-
 	}
 
 	/*
@@ -235,20 +226,15 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 
 	if (numComm == 0) {
-
 		//alert ("Please enter a commitment");
-		if(!confirm("No commitments entered. Do you wish to proceed?"))
-		{	
+		if(!confirm("No commitments entered. Do you wish to proceed?")){	
 			return false;
 		}
 	}
 
 	if (numExp > 0 && numDisb == 0) {
-
 		alert ("Expenditure entered without entering Disbursement");
-
 		return false;
-
 	}
 
 	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding);
@@ -258,32 +244,14 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 
 function validateFundingExchangeRate() {
-
 	var fundId = trim(document.getElementById("orgFundingId").value);
-
-
-
 	var numComm = document.getElementById("numComm").value;
-
 	var numDisb = document.getElementById("numDisb").value;
-
 	var numExp = document.getElementById("numExp").value;
-
-
-
-
 
 	return validateFundingDetailsExchangeRate(numComm,numDisb,numExp);
 
 }
-
-
-
-
-
-
-
-
 
 	function chkNumeric(objName,comma,period,hyphen)
 
@@ -298,81 +266,40 @@ function validateFundingExchangeRate() {
 // just hard code it here and take out the passed parameterscheckNumeric
 
 		var checkOK = "0123456789" + comma + period + hyphen;
-
 		var checkStr = objName;
-
 		var allValid = true;
-
 		var decPoints = 0;
-
 		//var contor;
 
 		var allNum = "";
-
 		var j 		= 0;
-
 		var i		= 0;
 
-
-
 		contor=0;
-
-		for (i = 0;  i < checkStr.value.length;  i++)
-
-		{
-
+		for (i = 0;  i < checkStr.value.length;  i++) {
 			ch = checkStr.value.charAt(i);
-
-			if (ch==".")
-
-			{
-
+			if (ch==".") {
 				if (i==0) {allValid=false; break;}
-
 				contor++;
-
 				if (contor>1) {allValid=false; break;}
-
-
-
 			}
-
-
-
-			for (j = 0;  j < checkOK.length;  j++)
-
-			 {
-
+			for (j = 0;  j < checkOK.length;  j++) {
 			 	if (ch == checkOK.charAt(j)) break;
-
 			 }
 
-			if (j == checkOK.length)
-
-			{
-
+			if (j == checkOK.length) {
 				allValid = false;
-
 				break;
-
 			}
 
 			if (ch != ",") allNum += ch;
-
 		}
 
-		if (!allValid)
-
-		{
-
+		if (!allValid)	{
 			alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
-
 			alert(alertsay);
-
 			return false;
-
 		}
-
 		return true;
 
 	}
@@ -381,71 +308,36 @@ function validateFundingExchangeRate() {
 
 
 
-function validateFundingDetailsExchangeRate(comm,disb,exp)
-
-{
+function validateFundingDetailsExchangeRate(comm,disb,exp) {
 
 	var itr = comm + disb + exp;
-
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
-
 	var disbIndex = -1, expIndex = -1;
-
 	for (var j = 0;j < itr;j ++) {
 
 		var amtField = "fundingDetail[" + j + "].transactionAmount";
-
 		var dateField = "fundingDetail[" + j + "].transactionDate";
-
 		var transType = "fundingDetail[" + j + "].transactionType";
-
 		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";
 
 		var temp = new Array();
-
 		temp = document.aimEditActivityFormPopin.elements;
 
-
-
 		for (var i = 0;i < temp.length;i ++) {
-
-
-
-			if(temp[i].name != null && temp[i].name == fixedExchangeRate)
-
-			{
+			if(temp[i].name != null && temp[i].name == fixedExchangeRate) {
 				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
 
 			}
-
-
-
-
-
 		}
-
 	}
-
 	return true;
-
-
-
 }
-
-
-
-
 
 function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding) {
 
 	var itr = comm + disb + exp;
-
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
-
 	var disbIndex = -1, expIndex = -1;
-	
-	
-
 	//var numProj = document.getElementById("numProjections").value;
 	var numProj = (document.getElementById("MTEFTable").getElementsByTagName('tr').length - 1 ) / 2;
 	//alert(numProj);
@@ -488,71 +380,34 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 
 
 		for (var i = 0;i < temp.length;i ++) {
-
-
-
-			if(temp[i].name != null && temp[i].name == fixedExchangeRate)
-
-			{
-
+			if(temp[i].name != null && temp[i].name == fixedExchangeRate){
 				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
-
 			}
-
-
-
 			if (temp[i].name != null && temp[i].name == amtField) {
-
 				if (trim(temp[i].value) == "") {
-
-
-
 					alert(msgEnterAmount);
-
 					temp[i].focus();
-
 					return false;
-
 				}
 
-
-
 				if (checkAmountUsingSymbol(temp[i].value) == false) {
-
-
-
 					alert(msgInvalidAmount);
-
 					temp[i].focus();
-
 					return false;
-
 				}
 				
 				if (msgConfirmFunding != "" && checkAmountLen(temp[i].value,msgConfirmFunding) == false) {
-
 					temp[i].focus();
-
 					return false;
-
 				}
 
 				var type = document.getElementsByName(transType);
-
 				value = parseFloat(temp[i].value);
-
 				if (isNaN(value)) {
-
 					alert(msgInvalidAmount);
-
 					temp[i].focus();
-
 					return false;
-
-				}
-
-				else {
-
+				}else {
 					if (type.item(0).value == 0)
 
 						commAmt = commAmt + value;

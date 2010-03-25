@@ -96,6 +96,14 @@ public class GisUtil {
                                fill, showGrid);
 
     }
+    
+    public void getNoDataImage(Graphics2D g2d, String s) {
+		g2d.setBackground(new Color(255, 255, 255, 255));
+		java.awt.Font f = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 24);
+		g2d.setColor(Color.black);
+		g2d.setFont(f);
+		g2d.drawString(s, 70, 250);   	
+    }
 
     public void addCaptionsToImage(Graphics2D g2d, List mapData,
                                    int canvasWidth, int canvasHeight,

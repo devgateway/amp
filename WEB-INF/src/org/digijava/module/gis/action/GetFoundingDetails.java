@@ -127,8 +127,28 @@ public class GetFoundingDetails extends Action {
             }
 
             CoordinateRect rect = gisUtil.getMapRect(map);
+            if (rect == null) {
+            	
+            	 response.setContentType("image/png");
+            	 BufferedImage graph = new BufferedImage(canvasWidth,
+                         canvasHeight,
+                         BufferedImage.TYPE_INT_ARGB);
+            	String  s = "No map data in the database";
+            	Graphics2D g2d = graph.createGraphics();
+            	Color c  = new Color(211,211,211);
+                g2d.setBackground(c);
 
-            if (rect != null) {
+                g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+                gisUtil.getNoDataImage(g2d, s);
+                g2d.dispose();
+
+                RenderedImage ri = graph;
+
+                ImageIO.write(ri, "png", sos);
+
+                graph.flush();               
+            }
+            else {
                 if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
                     response.setContentType("image/png");
 

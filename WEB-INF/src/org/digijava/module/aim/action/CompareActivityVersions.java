@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -25,12 +26,14 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableCollect
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.editor.util.DbUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class CompareActivityVersions extends Action {
 
@@ -42,9 +45,27 @@ public class CompareActivityVersions extends Action {
 			HttpServletResponse response) throws Exception {
 
 		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+		Session session = PersistenceManager.getRequestDBSession();
+		Transaction tx = session.beginTransaction();
+
+		if (request.getParameter("action").equals("setVersion") && request.getParameter("activityCurrentVersion") != null)
+		{
+			Long activityId = Long.parseLong(request.getParameter("activityCurrentVersion"));
+			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
+			AmpActivityGroup group = activity.getAmpActivityGroup();
+			tx.begin();
+			
+			//Update the modified date of the selected activity to send it last to the list
+			activity.setModifiedDate(Calendar.getInstance().getTime());
+			group.setAmpActivityLastVersion(activity);
+			session.save(group);
+			tx.commit();
+			
+			return new ActionForward(mapping.findForward("reload").getPath() + "&ampActivityId=" + activityId);
+		}
+		
 		vForm.setOutputCollection(new ArrayList<CompareOutput>());
 		// Load the activities.
-		Session session = PersistenceManager.getRequestDBSession();
 		vForm.setActivityOne((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId()));
 		vForm.setActivityTwo((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityTwoId()));
 

@@ -54,23 +54,22 @@ public class FormatHelper {
 	}                      
     
         
-        public static BigDecimal parseBigDecimal(String number) {                                                                              
-            
-            if(number==null) return null;
-            if("".equalsIgnoreCase(number)){
-         	   return new BigDecimal(0);
-            }
-                                                                             
-            BigDecimal result;                                                                                                                               
-            DecimalFormat formater = getDecimalFormat();                                                                              
-            try {    
-         	   result = new BigDecimal(formater.parse(number).toString());                                                                                       
-         	 } catch (ParseException e) {                                                                                                                 
-                    logger.error("Error parsing String to double", e);     
-                    return null;
-            }                                                                                                                                            
-            return result;                                                                                                                               
-    }                                                                                                                                                    
+        public static BigDecimal parseBigDecimal(String number) {
+        	BigDecimal result = null;
+        	if(number!=null){
+        		if("".equalsIgnoreCase(number)){
+        			result = new BigDecimal(0);
+                 }else{
+                	 DecimalFormat formater = getDecimalFormat();
+                     try {    
+                  	   result = new BigDecimal(formater.parse(number).toString());                                                                                       
+                  	 } catch (ParseException e) {                                                                                                                 
+                        logger.error("Error parsing String to double", e);
+                     }
+                 }
+        	}
+            return result;
+        }                                                                                                                                                    
                                 
      
         

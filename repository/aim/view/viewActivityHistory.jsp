@@ -45,11 +45,11 @@
 				<td>
 					<c:if test="${aimViewActivityHistoryForm.activityId ne item.ampActivityId}">
 						<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
-						Make this the current version
+						<digi:trn>Make this the current version</digi:trn>
 						</div>
 					</c:if>
 					<c:if test="${aimViewActivityHistoryForm.activityId eq item.ampActivityId}">
-						<strong>Current Version</strong>
+						<strong><digi:trn>Current Version</digi:trn></strong>
 					</c:if>
 				</td>
 			</c:if>
@@ -73,11 +73,11 @@
 				<td>
 					<c:if test="${aimViewActivityHistoryForm.activityId ne item.ampActivityId}">
 						<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
-						Make this the current version
+						<digi:trn>Make this the current version</digi:trn>
 						</div>
 					</c:if>
 					<c:if test="${aimViewActivityHistoryForm.activityId eq item.ampActivityId}">
-						<strong>Current Version</strong>
+						<strong><digi:trn>Current Version</digi:trn></strong>
 					</c:if>
 				</td>
 			</c:if>

@@ -66,6 +66,8 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String contactAlternate2Telephone;
 	
 	private String additionalInformation;
+	private String whoAuthorizedPledge;
+	private String furtherApprovalNedded;
 	private Collection<ActivitySector> pledgeSectors;
 	private Collection<FundingPledgesDetails> fundingPledgesDetails;
 	private Collection<AmpCategoryValue> pledgeTypeCategory = null;
@@ -698,5 +700,28 @@ public class PledgeForm extends ActionForm implements Serializable{
 	public void setUserSelectedLocs(Long[] userSelectedLocs) {
 		this.userSelectedLocs = userSelectedLocs;
 	}
-	
+	/**
+	 * @return the whoAuthorizedPledge
+	 */
+	public String getWhoAuthorizedPledge() {
+		return whoAuthorizedPledge;
+	}
+	/**
+	 * @param whoAuthorizedPledge the whoAuthorizedPledge to set
+	 */
+	public void setWhoAuthorizedPledge(String whoAuthorizedPledge) {
+		this.whoAuthorizedPledge = whoAuthorizedPledge;
+	}
+	/**
+	 * @return the furtherApprovalNedded
+	 */
+	public String getFurtherApprovalNedded() {
+		return furtherApprovalNedded;
+	}
+	/**
+	 * @param furtherApprovalNedded the furtherApprovalNedded to set
+	 */
+	public void setFurtherApprovalNedded(String furtherApprovalNedded) {
+		this.furtherApprovalNedded = furtherApprovalNedded;
+	}
 }

@@ -11,6 +11,8 @@
 
 		<property name="title" column="title" type="java.lang.String" />
 		<property name="additionalInformation" column="additionalInformation" type="java.lang.String" />
+		<property name="whoAuthorizedPledge" column="whoAuthorizedPledge" type="java.lang.String" />
+		<property name="furtherApprovalNedded" column="furtherApprovalNedded" type="java.lang.String" />
 		<property name="contactName" column="contactName" type="java.lang.String"/>
 		<property name="contactAddress" column="contactAddress" type="java.lang.String"/>
 		<property name="contactEmail" column="contactEmail" type="java.lang.String"/>

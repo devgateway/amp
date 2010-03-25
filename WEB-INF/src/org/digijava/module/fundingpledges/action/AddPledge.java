@@ -73,6 +73,8 @@ public class AddPledge extends Action {
 				plForm.setSelectedOrgId(pledgeOrg.getAmpOrgId().toString());
 	        	plForm.setSelectedOrgName(pledgeOrg.getAcronym());
 	        	plForm.setAdditionalInformation(fp.getAdditionalInformation());
+	        	plForm.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
+	        	plForm.setFurtherApprovalNedded(fp.getFurtherApprovalNedded());
 	        	plForm.setContact1Address(fp.getContactAddress());
 	        	plForm.setContact1Email(fp.getContactEmail());
 	        	plForm.setContact1Fax(fp.getContactFax());
@@ -150,6 +152,8 @@ public class AddPledge extends Action {
 		plForm.setSelectedOrgId(null);
     	plForm.setSelectedOrgName(null);
     	plForm.setAdditionalInformation(null);
+    	plForm.setWhoAuthorizedPledge(null);
+    	plForm.setFurtherApprovalNedded(null);
     	plForm.setContact1Address(null);
     	plForm.setContact1Email(null);
     	plForm.setContact1Fax(null);

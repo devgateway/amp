@@ -463,7 +463,7 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="70%">
 													<a>
-														<html:text property="pledgeTitle" size="60" />
+														<html:text property="pledgeTitle" size="60" styleClass="inp-text"/>
                             						</a>
 												</td>											
 											</tr>
@@ -498,10 +498,36 @@ function setSameContact(){
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
 							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
-							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:right" value='${pledgeForm.selectedOrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
+							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:right" value='${pledgeForm.selectedOrgName}' size="53" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
                             						</a>
 													
+												</td>											
+											</tr>
+											<tr bgcolor="#ffffff">											
+												<td valign="middle" align="left" width="30%">
+													<a>
+													<digi:trn key="whoHasAuthorizedPledge">Who Has Authorized Pledge?</digi:trn>
+													</a>
+												
+												</td>
+												<td valign="middle" align="left" width="70%">
+													<a>
+														<html:text property="whoAuthorizedPledge" size="60" styleClass="inp-text"/>
+                            						</a>
+												</td>											
+											</tr>
+											<tr bgcolor="#ffffff">											
+												<td valign="middle" align="left" width="30%">
+													<a>
+													<digi:trn key="pleaseIndicateFurtherApprovalNeeded">Please Indicate any Further Approval Needed</digi:trn> 
+													</a>
+												
+												</td>
+												<td valign="middle" align="left" width="70%">
+													<a>
+														<html:text property="furtherApprovalNedded" size="60" styleClass="inp-text"/>
+                            						</a>
 												</td>											
 											</tr>
 										</table>
@@ -520,95 +546,101 @@ function setSameContact(){
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactName">Name</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Name" size="20"/>
+														<html:text property="contact1Name" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTitle">Title</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Title" size="20"/>
+														<html:text property="contact1Title" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactOrganization">Organization</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
 														<c:set var="valueId1"> contact1OrgId </c:set>
 							                              <c:set var="nameId1"> contact1OrgName </c:set>
 							                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:right" value='${pledgeForm.contact1OrgId}' size="4"/>
-							                              <input name="contact1OrgName" type='text' id="${nameId1}" style="text-align:right" value='${pledgeForm.contact1OrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
+							                              <input name="contact1OrgName" type="text" id="${nameId1}" style="text-align:right" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
                             						
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactMinistry">Ministry</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Ministry" size="20"/>
+														<html:text property="contact1Ministry" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactAddress">Address</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Address" size="20"/>
+														<html:text property="contact1Address" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTelephone">Telephone</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Telephone" size="20"/>
+														<html:text property="contact1Telephone" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactEmail">Email</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Email" size="20"/>
+														<html:text property="contact1Email" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactFax">Fax</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Fax" size="20"/>
+														<html:text property="contact1Fax" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
@@ -618,43 +650,43 @@ function setSameContact(){
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactName">Name</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate1Name" size="20"/>
+														<html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactTelephone">Telephone</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate1Telephone" size="20"/>
+														<html:text property="contactAlternate1Telephone" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactEmail">Email</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate1Email" size="20"/>
+														<html:text property="contactAlternate1Email" size="40" styleClass="inp-text" onchange="setSameContact()"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
 													</a>
 												</td>										
@@ -675,7 +707,7 @@ function setSameContact(){
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 											<tr>
-												<td valign="middle" align="left" width="20%" colspan="2">
+												<td valign="middle" align="left" width="15%" colspan="2">
 													<a>
 														<digi:trn key="sameAsOriginalPointOfContact">Same As Original Point Of Contact</digi:trn>
 													</a>
@@ -683,95 +715,101 @@ function setSameContact(){
 												</td>
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactName">Name</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact2Name" size="20"/>
+														<html:text property="contact2Name" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTitle">Title</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact2Title" size="20"/>
+														<html:text property="contact2Title" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactOrganization">Organization</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
 														<c:set var="valueId2"> contact2OrgId </c:set>
 							                              <c:set var="nameId2"> contact2OrgName </c:set>
 							                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:right" value='${pledgeForm.contact2OrgId}' size="4"/>
-							                              <input name="contact2OrgName" type='text' id="${nameId2}" style="text-align:right" value='${pledgeForm.contact2OrgName}' size="20" style="background-color:#CCCCCC" onKeyDown="return false" />
+							                              <input name="contact2OrgName" type='text' id="${nameId2}" style="text-align:right" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton>
                             						
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactMinistry">Ministry</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact2Ministry" size="20"/>
+														<html:text property="contact2Ministry" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactAddress">Address</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact2Address" size="20"/>
+														<html:text property="contact2Address" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTelephone">Telephone</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact2Telephone" size="20"/>
+														<html:text property="contact2Telephone" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
+													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactEmail">Email</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact2Email" size="20"/>
+														<html:text property="contact2Email" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactFax">Fax</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact2Fax" size="20"/>
+														<html:text property="contact2Fax" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>										
 											</tr>
@@ -781,43 +819,43 @@ function setSameContact(){
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactName">Name</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate2Name" size="20"/>
+														<html:text property="contactAlternate2Name" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactTelephone">Telephone</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate2Telephone" size="20"/>
+														<html:text property="contactAlternate2Telephone" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 														<digi:trn key="pointContactEmail">Email</digi:trn>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate2Email" size="20" />
+														<html:text property="contactAlternate2Email" size="40" styleClass="inp-text"/>
                             						</a>
 												</td>	
-												<td valign="middle" align="left" width="20%">
+												<td valign="middle" align="left" width="15%">
 													<a>
 													</a>
 												</td>
-												<td valign="middle" align="left" width="30%">
+												<td valign="middle" align="left" width="35%">
 													<a>
 													</a>
 												</td>										
@@ -862,7 +900,7 @@ function setSameContact(){
 										                            <td align="center" width="3%">
 																		<input type="checkbox" id="checkSect${indexSect}"  >
 																	</td>
-                                                                    <td  width="77%" valign="middle" align="left">
+                                                                    <td  width="67%" valign="middle" align="left">
                                                                         
                                                                         [${pledgeSectors.sectorScheme}]
                                                                         <c:if test="${!empty pledgeSectors.sectorName}">
@@ -876,11 +914,11 @@ function setSameContact(){
                                                                         </c:if>
 																		
                                                                     </td>
-                                                                    <td width="10%" valign="middle" align="right">
+                                                                    <td width="15%" valign="middle" align="right">
                                                                        
                                                                     <FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
-                                                                    <td width="10%" valign="middle" align="left">
-                                                                        <html:text name="pledgeSectors" indexed="true" property="sectorPercentage"size="2" onkeyup="fnChk(this, 'sector')" />
+                                                                    <td width="15%" valign="middle" align="left">
+                                                                        <html:text name="pledgeSectors" indexed="true" property="sectorPercentage"size="5" onkeyup="fnChk(this, 'sector')" styleClass="inp-text"/>
                                                                     </td>
                                                                 </tr>
                                                                 <c:set var="sectorAdded" value="true"/>
@@ -931,15 +969,15 @@ function setSameContact(){
 								                            <td align="center" width="3%">
 																<input type="checkbox" id="checkLoc${indexLoc}"  >
 															</td>
-                                                            <td align="left" width="77%">
+                                                            <td align="left" width="67%">
 	                                                            [${selectedLocs.location.name}] 
                                                             </td>
-                                                            <td align="right" width="10%" nowrap="nowrap">
+                                                            <td align="right" width="15%" nowrap="nowrap">
                                                             <FONT color="red">*</FONT>
                                                             		<digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;
 															</td>
-															<td align="left" width="10%" nowrap="nowrap">
-                                                            		<html:text name="selectedLocs" indexed="true" property="locationpercentage" size="2"  maxlength="3" onkeyup="fnChk(this, 'region')"/>
+															<td align="left" width="15%" nowrap="nowrap">
+                                                            		<html:text name="selectedLocs" indexed="true" property="locationpercentage" size="5"  onkeyup="fnChk(this, 'region')" styleClass="inp-text"/>
                                                             </td>
                                                           
                                                     </tr>
@@ -1030,7 +1068,7 @@ function setSameContact(){
 														</html:select>
 						                            </td>
 													<td align="center" valign="bottom" width="15%">
-						                                <html:text name="fundingPledgesDetails" indexed="true" property="amount" size="17" styleClass="inp-text" />
+						                                <html:text name="fundingPledgesDetails" indexed="true" property="amount" size="17" styleClass="inp-text"/>
 						                            </td>
 													<td align="center" valign="bottom" width="10%">
 						                                <html:select name="fundingPledgesDetails" indexed="true" property="currencycode" styleClass="inp-text">
@@ -1043,7 +1081,7 @@ function setSameContact(){
 															<tr>
 																<td align="left" vAlign="bottom">
 																	<html:text name="fundingPledgesDetails" indexed="true" property="fundingDate" styleClass="inp-text"
-																	styleId="${indexFund}" readonly="true" size="10"/>
+																	styleId="${indexFund}" readonly="true" size="10" />
 																</td>
 																<td align="left" vAlign="bottom">&nbsp;
 																	<a id="transDate${indexFund}" href='javascript:pickDateById("transDate${indexFund}",${indexFund})'>
@@ -1094,7 +1132,7 @@ function setSameContact(){
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="90%">
 													<a>
-														<html:textarea property="additionalInformation" rows="6" cols="80"/>
+														<html:textarea property="additionalInformation" rows="6" cols="80" styleClass="inp-text"/>
                             						</a>
 												</td>											
 											</tr>

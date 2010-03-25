@@ -35,6 +35,8 @@ public class SavePledge extends Action {
     		pledge.setTitle(plForm.getPledgeTitle());
     		pledge.setOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getSelectedOrgId())));
     		pledge.setAdditionalInformation(plForm.getAdditionalInformation());
+    		pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
+    		pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
     		
     		pledge.setContactName(plForm.getContact1Name());
     		pledge.setContactTitle(plForm.getContact1Title());

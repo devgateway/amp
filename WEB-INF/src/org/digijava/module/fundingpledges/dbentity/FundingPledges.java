@@ -19,6 +19,9 @@ public class FundingPledges {
 	private Long id;
 	private String title;
 	private String additionalInformation;
+	private String whoAuthorizedPledge;
+	private String furtherApprovalNedded;
+	
 	private AmpOrganisation organization;
 	private Set<FundingPledgesSector> sectorlist;
 	private Set<FundingPledgesLocation> locationlist;
@@ -276,5 +279,28 @@ public class FundingPledges {
 	public void setFundingPledgesDetails(Set<FundingPledgesDetails> fundingPledgesDetails) {
 		this.fundingPledgesDetails = fundingPledgesDetails;
 	}
-	
+	/**
+	 * @return the whoAuthorizedPledge
+	 */
+	public String getWhoAuthorizedPledge() {
+		return whoAuthorizedPledge;
+	}
+	/**
+	 * @param whoAuthorizedPledge the whoAuthorizedPledge to set
+	 */
+	public void setWhoAuthorizedPledge(String whoAuthorizedPledge) {
+		this.whoAuthorizedPledge = whoAuthorizedPledge;
+	}
+	/**
+	 * @return the furtherApprovalNedded
+	 */
+	public String getFurtherApprovalNedded() {
+		return furtherApprovalNedded;
+	}
+	/**
+	 * @param furtherApprovalNedded the furtherApprovalNedded to set
+	 */
+	public void setFurtherApprovalNedded(String furtherApprovalNedded) {
+		this.furtherApprovalNedded = furtherApprovalNedded;
+	}
 }

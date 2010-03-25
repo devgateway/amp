@@ -2,6 +2,7 @@ package org.digijava.module.gis.action;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
@@ -1724,11 +1725,13 @@ private int matchesId(Long ptableId) {
 		BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = graph.createGraphics();
-
+		if (map == null) {
+			g2d.setBackground(new Color(211, 211, 211));
+		} else {
 		g2d.setBackground(new Color(0, 0, 100, 255));
-
+		}
 		g2d.clearRect(0, 0, canvasWidth, canvasHeight);
-
+		
 
                 if (map != null) {
                     gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth,
@@ -1740,6 +1743,10 @@ private int matchesId(Long ptableId) {
                                                canvasHeight, rect.getLeft(), rect.getRight(),
                                                rect.getTop(),
                                                rect.getBottom());
+                }  else {
+                	String s = new String("No map data in the database");
+                	
+                	gisUtil.getNoDataImage(g2d, s);
                 }
 		g2d.dispose();
 

@@ -99,11 +99,16 @@ public class OrgProfileFilterAction extends Action {
         if (calendars != null) {
             orgForm.setFiscalCalendars(new ArrayList(calendars));
         }
-        if(orgForm.getFiscalCalendarId()==null){
-				String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-				if (value != null) {
-					orgForm.setFiscalCalendarId(Long.parseLong(value));
-				}
+        if (orgForm.getFiscalCalendarId() == null) {
+            Long fisCalId = tm.getAppSettings().getFisCalId();
+            if (fisCalId == null) {
+                String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+                if (value != null) {
+                    fisCalId = Long.parseLong(value);
+                }
+
+            }
+            orgForm.setFiscalCalendarId(fisCalId);
         }
         FilterHelper filter=null;
         if(orgForm.getWorkspaceOnly()!=null&&orgForm.getWorkspaceOnly()){

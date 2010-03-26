@@ -44,7 +44,7 @@ public class PrimaryContactCheckTest extends BasicActionTestCaseAdapter{
 	
 	public void testCheckUniqueMail() throws Exception{
 		logger.info("getting contact");
-		List<AmpContact> contacts=ContactInfoUtil.getPagedContacts(1, 1, null, null, null);
+		List<AmpContact> contacts=ContactInfoUtil.getPagedContacts(1, 1, null,null, null, null);
 		if(contacts!=null){
 			for (AmpContact ampContact : contacts) {
 				Set<AmpContactProperty> properties=ampContact.getProperties();

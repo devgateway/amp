@@ -134,7 +134,7 @@ public class XLSExportAction extends Action {
 				int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
 				String urlPrefix = request.getRequestURL().substring(0, end);
 				//								
-				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/imagesSource/common/AMPLogo.png").openStream();
+				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
 			    byte[] bytes = IOUtils.toByteArray(is);
 			    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
 			    is.close();

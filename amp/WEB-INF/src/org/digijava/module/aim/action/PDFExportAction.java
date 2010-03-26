@@ -227,7 +227,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 					int end = this.request.getRequestURL().length() - "/aim/pdfExport.do".length();
 					String urlPrefix = this.request.getRequestURL().substring(0, end); 
 					try {
-						logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/imagesSource/common/AMPLogo.png");
+						logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
 					} catch (BadElementException e) {
 						e.printStackTrace();
 					} catch (MalformedURLException e) {

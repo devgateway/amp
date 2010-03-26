@@ -2250,7 +2250,8 @@ public class ExportActivityToPDF extends Action {
 		PdfPTable fundingTable=new PdfPTable(3);
 		fundingTable.setWidths(new float[]{2f,2f,1f});
 		boolean drawTotals=false; //draw total planned commitment,total actual commitments e.t.c.
-		if(myForm.getFunding().getFundingOrganizations()!=null){				
+		if(myForm.getFunding().getFundingOrganizations()!=null){	
+			String currencyCode=myForm.getCurrCode()!=null?myForm.getCurrCode():"";
 			for (FundingOrganization fundingOrganisation : myForm.getFunding().getFundingOrganizations()) {
 				if(fundingOrganisation.getFundings()!=null){
 					drawTotals=true;
@@ -2355,7 +2356,7 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							PdfPCell subTotalPlComm=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED COMMITMENTS:",locale,siteId)+" \t\t         "+funding.getSubtotalPlannedCommitments()+myForm.getCurrCode(),plainFont));
+							PdfPCell subTotalPlComm=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED COMMITMENTS:",locale,siteId)+" \t\t         "+funding.getSubtotalPlannedCommitments()+currencyCode,plainFont));
 							subTotalPlComm.setBackgroundColor(new Color(221,221,221));
 							subTotalPlComm.setColspan(3);
 							fundingTable.addCell(subTotalPlComm);
@@ -2386,7 +2387,7 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							PdfPCell subTotalActComm=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL COMMITMENTS:",locale,siteId)+" \t\t          "+funding.getSubtotalActualCommitments()+myForm.getCurrCode(),plainFont));
+							PdfPCell subTotalActComm=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL COMMITMENTS:",locale,siteId)+" \t\t          "+funding.getSubtotalActualCommitments()+currencyCode,plainFont));
 							subTotalActComm.setBackgroundColor(new Color(221,221,221));
 							subTotalActComm.setColspan(3);
 							fundingTable.addCell(subTotalActComm);
@@ -2417,7 +2418,7 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							PdfPCell subTotalPlDisb=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED DISBURSEMENT:",locale,siteId)+" \t\t         "+funding.getSubtotalPlannedDisbursements()+myForm.getCurrCode(), plainFont));
+							PdfPCell subTotalPlDisb=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED DISBURSEMENT:",locale,siteId)+" \t\t         "+funding.getSubtotalPlannedDisbursements()+currencyCode, plainFont));
 							subTotalPlDisb.setBackgroundColor(new Color(221,221,221));
 							subTotalPlDisb.setColspan(3);
 							subTotalPlDisb.setBorder(0);
@@ -2448,7 +2449,7 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							PdfPCell subTotalActDisb=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL DISBURSEMENT:",locale,siteId)+" \t\t         "+funding.getSubtotalDisbursements()+myForm.getCurrCode(), plainFont));
+							PdfPCell subTotalActDisb=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL DISBURSEMENT:",locale,siteId)+" \t\t         "+funding.getSubtotalDisbursements()+currencyCode, plainFont));
 							subTotalActDisb.setBackgroundColor(new Color(221,221,221));
 							subTotalActDisb.setColspan(3);
 							fundingTable.addCell(subTotalActDisb);
@@ -2479,7 +2480,7 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							PdfPCell subTotalPlExp=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED EXPENDITURES:",locale,siteId)+" \t\t         "+funding.getSubtotalPlannedExpenditures()+myForm.getCurrCode(), plainFont));
+							PdfPCell subTotalPlExp=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED EXPENDITURES:",locale,siteId)+" \t\t         "+funding.getSubtotalPlannedExpenditures()+currencyCode, plainFont));
 							subTotalPlExp.setBackgroundColor(new Color(221,221,221));
 							subTotalPlExp.setColspan(3);
 							fundingTable.addCell(subTotalPlExp);
@@ -2510,7 +2511,7 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							PdfPCell subTotalActExp=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL EXPENDITURES:",locale,siteId)+" \t\t         "+funding.getSubtotalExpenditures()+myForm.getCurrCode(),plainFont));
+							PdfPCell subTotalActExp=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL EXPENDITURES:",locale,siteId)+" \t\t         "+funding.getSubtotalExpenditures()+currencyCode,plainFont));
 							subTotalActExp.setBackgroundColor(new Color(221,221,221));
 							subTotalActExp.setColspan(3);
 							fundingTable.addCell(subTotalActExp);
@@ -2541,13 +2542,13 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							PdfPCell subTotalDisbOrd=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL DISBURSMENT ORDERS:",locale,siteId)+" \t\t          "+funding.getSubtotalActualDisbursementsOrders()+myForm.getCurrCode(),plainFont));
+							PdfPCell subTotalDisbOrd=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL DISBURSMENT ORDERS:",locale,siteId)+" \t\t          "+funding.getSubtotalActualDisbursementsOrders()+currencyCode,plainFont));
 							subTotalDisbOrd.setBackgroundColor(new Color(221,221,221));
 							subTotalDisbOrd.setColspan(3);
 							fundingTable.addCell(subTotalDisbOrd);
 							
 							//UNDISBURSED BALANCE
-							PdfPCell undisbursedBalanceCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("UNDISBURSED BALANCE:",locale,siteId)+" \t\t         "+ funding.getUnDisbursementBalance()+myForm.getCurrCode()+"\n\n",plainFont));
+							PdfPCell undisbursedBalanceCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("UNDISBURSED BALANCE:",locale,siteId)+" \t\t         "+ funding.getUnDisbursementBalance()+currencyCode+"\n\n",plainFont));
 							undisbursedBalanceCell1.setBorder(0);
 							undisbursedBalanceCell1.setBackgroundColor(new Color(255,255,204));
 							undisbursedBalanceCell1.setColspan(3);
@@ -2587,7 +2588,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell totalPCAmount=new PdfPCell();
 				totalPCAmount.setBorder(0);
 				totalPCAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getTotalPlannedCommitments()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getTotalPlannedCommitments()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				totalPCAmount.addElement(p1);
 				fundingTable.addCell(totalPCAmount);
@@ -2603,7 +2604,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell totalACAmount=new PdfPCell();
 				totalACAmount.setBorder(0);
 				totalACAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getTotalCommitments()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getTotalCommitments()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				totalACAmount.addElement(p1);
 				fundingTable.addCell(totalACAmount);
@@ -2619,7 +2620,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell totalPDAmount=new PdfPCell();
 				totalPDAmount.setBorder(0);
 				totalPDAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getTotalPlannedDisbursements()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getTotalPlannedDisbursements()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				totalPDAmount.addElement(p1);
 				fundingTable.addCell(totalPDAmount);
@@ -2634,7 +2635,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell totalADAmount=new PdfPCell();
 				totalADAmount.setBorder(0);
 				totalADAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getTotalDisbursements()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getTotalDisbursements()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				totalADAmount.addElement(p1);
 				fundingTable.addCell(totalADAmount);
@@ -2649,7 +2650,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell totalPEAmount=new PdfPCell();
 				totalPEAmount.setBorder(0);
 				totalPEAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getTotalPlannedExpenditures()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getTotalPlannedExpenditures()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				totalPEAmount.addElement(p1);
 				fundingTable.addCell(totalPEAmount);
@@ -2664,7 +2665,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell totalAEAmount=new PdfPCell();
 				totalAEAmount.setBorder(0);
 				totalAEAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getTotalExpenditures()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getTotalExpenditures()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				totalAEAmount.addElement(p1);
 				fundingTable.addCell(totalAEAmount);
@@ -2679,7 +2680,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell totalADOAmount=new PdfPCell();
 				totalADOAmount.setBorder(0);
 				totalADOAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getTotalActualDisbursementsOrders()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getTotalActualDisbursementsOrders()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				totalADOAmount.addElement(p1);
 				fundingTable.addCell(totalADOAmount);
@@ -2694,7 +2695,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell undBalAmount=new PdfPCell();
 				undBalAmount.setBorder(0);
 				undBalAmount.setBackgroundColor(new Color(221,221,221));
-				p1=new Paragraph(myForm.getFunding().getUnDisbursementsBalance()+myForm.getCurrCode(),plainFont);
+				p1=new Paragraph(myForm.getFunding().getUnDisbursementsBalance()+currencyCode,plainFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				undBalAmount.addElement(p1);
 				fundingTable.addCell(undBalAmount);
@@ -2726,8 +2727,12 @@ public class ExportActivityToPDF extends Action {
 		infoTable.addCell(innerCell);
 		innerCell=new PdfPCell(new Paragraph(fd.getTransactionAmount()+fd.getCurrencyCode(),plainFont));
 		innerCell.setBorder(0);
-		infoTable.addCell(innerCell);											
-		innerCell=new PdfPCell(new Paragraph(fd.getFormattedRate(),plainFont));
+		infoTable.addCell(innerCell);
+		String formattedRate="";
+		if(fd.getFormattedRate()!=null){
+			formattedRate=fd.getFormattedRate();
+		}
+		innerCell=new PdfPCell(new Paragraph(formattedRate,plainFont));
 		innerCell.setBorder(0);
 		infoTable.addCell(innerCell);
 	}

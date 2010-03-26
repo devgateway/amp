@@ -38,7 +38,7 @@ public class AmpFundingDetail implements Serializable {
 	private String expCategory;
 	private String disbOrderId;
 	private IPAContract contract;
-	private BigDecimal transactionAmountInBaseCurrency;
+	private BigDecimal transactionAmountInUSD;
 
 	public AmpFundingDetail() {
 	}
@@ -75,21 +75,17 @@ public class AmpFundingDetail implements Serializable {
 
 	}
 
-       /**
-		 * @return the transactionAmountInBaseCurrency
-		 */
-		public BigDecimal getTransactionAmountInBaseCurrency() {
-			return transactionAmountInBaseCurrency;
-		}
+    /**
+     * Used on Gis page, returns amount in USD and not in base currency.
+     * @return transactionAmountInUSD
+     */
+    public BigDecimal getTransactionAmountInUSD() {
+        return transactionAmountInUSD;
+    }
 
-
-		/**
-		 * @param transactionAmountInBaseCurrency the transactionAmountInBaseCurrency to set
-		 */
-		public void setTransactionAmountInBaseCurrency(
-				BigDecimal transactionAmountInBaseCurrency) {
-			this.transactionAmountInBaseCurrency = transactionAmountInBaseCurrency;
-		}
+    public void setTransactionAmountInUSD(BigDecimal transactionAmountInUSD) {
+        this.transactionAmountInUSD = transactionAmountInUSD;
+    }
 
 	public IPAContract getContract() {
 		return contract;

@@ -27,6 +27,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -240,11 +241,11 @@ public class ChartWidgetUtil {
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
-            result.addValue(fundingPledge.doubleValue(), pledgesTranslatedTitle, new Long(i));
+            result.addValue(fundingPledge, pledgesTranslatedTitle, new Long(i));
             DecimalWraper fundingComm = getFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode, true, filter.getTeamMember());
-            result.addValue(fundingComm.doubleValue(), actComTranslatedTitle, new Long(i));
+            result.addValue(fundingComm.getValue(), actComTranslatedTitle, new Long(i));
             DecimalWraper fundingDisb = getFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode, false, filter.getTeamMember());
-            result.addValue(fundingDisb.doubleValue(), actDisbTranslatedTitle, new Long(i));
+            result.addValue(fundingDisb.getValue(), actDisbTranslatedTitle, new Long(i));
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
                 nodata = false;
             }
@@ -626,10 +627,10 @@ public class ChartWidgetUtil {
         BigDecimal[] allFundingWrapper={BigDecimal.ZERO};// to hold whole funding value
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
-            double otherFunfing=0;
+            BigDecimal otherFunding=BigDecimal.ZERO;
             String otherIds="";
 			for (DonorSectorFundingHelper funding : fundings) {
-				Double percent = (funding.getFounding().divide(allFundingWrapper[0],RoundingMode.HALF_UP)).doubleValue();
+				Double percent = (funding.getFounding().divide(allFundingWrapper[0],3,RoundingMode.HALF_UP)).doubleValue();
                 // the sectors which percent is less then 5% should be group in "Other"
                 AmpSector sector = funding.getSector();
 
@@ -637,13 +638,13 @@ public class ChartWidgetUtil {
                     SectorHelper secHelper=new SectorHelper();
                     secHelper.setName(sector.getName());
                     secHelper.setIds(sector.getAmpSectorId().toString());
-                    ds.setValue(secHelper, Math.round(funding.getFounding().doubleValue()));
+                    ds.setValue(secHelper, funding.getFounding().setScale(10, RoundingMode.HALF_UP));
                 } else {
-                	otherFunfing += funding.getFounding().doubleValue();
-                        otherIds+=sector.getAmpSectorId()+",";
+                    otherFunding = otherFunding.add(funding.getFounding());
+                    otherIds += sector.getAmpSectorId() + ",";
                 }
 			}
-                    if (otherFunfing != 0) {
+                    if (!otherFunding.equals(BigDecimal.ZERO)) {
                         String otherSectors = "Other Sectors";
                         try {
                             otherSectors = TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
@@ -653,7 +654,7 @@ public class ChartWidgetUtil {
                         SectorHelper secHelper = new SectorHelper();
                         secHelper.setName(otherSectors);
                         secHelper.setIds(otherIds.substring(0,otherIds.length()-1));
-                        ds.setValue(secHelper, Math.round(otherFunfing));
+                        ds.setValue(secHelper, otherFunding.setScale(10, RoundingMode.HALF_UP));
                     }
 		}
 		return ds;
@@ -677,7 +678,7 @@ public class ChartWidgetUtil {
 	 */
 	 public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,BigDecimal[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;
-		String oql ="select actSec.sectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
+		String oql ="select actSec.sectorId, sum(fd.transactionAmountInUSD*actSec.sectorPercentage*0.01)";
 		oql += " from ";
 		oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
@@ -772,7 +773,7 @@ public class ChartWidgetUtil {
     }
 
        public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
-        String oql = "select   sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
+        String oql = "select   sum(fd.transactionAmountInUSD*actSec.sectorPercentage*0.01)";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec " + " inner join actSec.sectorId sec " + " inner join actSec.activityId act " + " inner join actSec.classificationConfig config ";
@@ -819,7 +820,7 @@ public class ChartWidgetUtil {
     public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
         Long year = filter.getYear();
         Long orgGroupId = filter.getOrgGroupId();
-        double regionalTotal = 0;
+        BigDecimal regionalTotal = BigDecimal.ZERO;
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -932,22 +933,23 @@ public class ChartWidgetUtil {
                 } else {
                     total = cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.doubleValue());
-                regionalTotal += total.doubleValue();
+                ds.setValue(region.getName(), total.getValue().setScale(10, RoundingMode.HALF_UP));
+                regionalTotal =regionalTotal.add(total.getValue());
             }
             List<String> keys = ds.getKeys();
             Iterator<String> keysIter = keys.iterator();
-            double othersValue = 0;
+            BigDecimal othersValue = BigDecimal.ZERO;
             while (keysIter.hasNext()) {
                 String key = keysIter.next();
-                Double value = (Double) ds.getValue(key);
-                if (value / regionalTotal <= 0.05) {
-                    othersValue += value;
+                BigDecimal value = (BigDecimal) ds.getValue(key);
+                Double percent = (value.divide(regionalTotal,3,RoundingMode.HALF_UP)).doubleValue();
+                if (percent <= 0.05) {
+                    othersValue=othersValue .add(value);
                     ds.remove(key);
                 }
             }
-            if (othersValue > 0) {
-                ds.setValue("Others", othersValue);
+            if (!othersValue.equals(BigDecimal.ZERO)) {
+                ds.setValue("Others", othersValue.setScale(10, RoundingMode.HALF_UP));
             }
         } catch (Exception e) {
             logger.error(e);
@@ -1076,9 +1078,9 @@ public class ChartWidgetUtil {
                     Double percent = sectorFunding.getFounding().divide(totAllSectors,3,RoundingMode.HALF_UP).doubleValue();
                     // if percent is less than 5, group in "others"
                     if (percent>=0.05) {
-                        ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding());
+                        ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding().setScale(10, RoundingMode.HALF_UP));
                     } else {
-                        others=others.add(sectorFunding.getFounding());
+                        others=others.add(sectorFunding.getFounding().setScale(10, RoundingMode.HALF_UP));
 
                     }
                     }

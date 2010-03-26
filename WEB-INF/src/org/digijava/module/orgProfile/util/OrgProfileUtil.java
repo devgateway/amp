@@ -7,6 +7,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.table.RtfCell;
 import java.awt.Color;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -436,7 +437,7 @@ public class OrgProfileUtil {
             }
             queryString += " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate  ";
             queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
-            queryString +=" group by act order by sum(fd.transactionAmountInBaseCurrency) desc ";
+            queryString +=" group by act order by sum(fd.transactionAmountInUSD) desc ";
 
             Query query = session.createQuery(queryString);
             query.setDate("startDate", startDate);
@@ -489,7 +490,7 @@ public class OrgProfileUtil {
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
 
-                Double amount = cal.getTotActualComm().doubleValue();
+                BigDecimal amount = cal.getTotActualComm().getValue();
 
                 project.setAmount(FormatHelper.formatNumber(amount));
                 String title = activity.getName();
@@ -716,7 +717,8 @@ public class OrgProfileUtil {
     }
     public static List<NameValueYearHelper> getData(FilterHelper filter,int type) throws DgException {
         List<NameValueYearHelper> result = new ArrayList<NameValueYearHelper>();
-        TreeMap<Long,String> totalValues=new TreeMap<Long,String>();
+        TreeMap<Long,BigDecimal> totalValues=new TreeMap<Long,BigDecimal>();
+        TreeMap<Long,String> totalValuesFormated=new TreeMap<Long,String>();
         Long year = filter.getYear();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
@@ -755,24 +757,28 @@ public class OrgProfileUtil {
                     nameValueYearHelper.setYearValues(new TreeMap<Long,String>());
                 }
                 if(totalValues.containsKey(i)){
-                    String value=(String)totalValues.get(i);
-                    Double newValue=funding.doubleValue()+FormatHelper.parseDouble(value);
+                    BigDecimal value=totalValues.get(i);
+                    BigDecimal newValue=funding.getValue().add(value);
                     totalValues.remove(i);
-                    totalValues.put(i, FormatHelper.formatNumber(newValue));
+                    totalValues.put(i,newValue);
+
                 }
                 else{
-                    totalValues.put(i, FormatHelper.formatNumber(funding.doubleValue()));
+                    totalValues.put(i, funding.getValue());
                 }
-                nameValueYearHelper.getYearValues().put(i, FormatHelper.formatNumber(funding.doubleValue()));
+                nameValueYearHelper.getYearValues().put(i, FormatHelper.formatNumber(funding.getValue()));
 
             }
             result.add(nameValueYearHelper);
 
         }
-
         NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
         nameValueYearHelper.setName("TOTAL");
-        nameValueYearHelper.setYearValues(totalValues);
+         for (Long i = year - 4; i <= year; i++) {
+             totalValuesFormated.put(i,FormatHelper.formatNumber(totalValues.get(i)));
+         }
+
+        nameValueYearHelper.setYearValues(totalValuesFormated);
         result.add(nameValueYearHelper);
         return result;
     }

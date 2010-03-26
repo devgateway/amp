@@ -137,9 +137,20 @@
                 document.aimAddOrgForm.selectedStaffId.value=staffId;
             }
             else{
-                document.aimAddOrgForm.selectedStaffId.value=null;
+                var elems = document.getElementsByName("selectedStaff");
+                var selected = false;
+                for (var i=0; i<elems.length; i++){
+					if (elems[i].checked == true)
+						selected = true;
+                }
+                if (!selected){
+					alert ("Please, select one option first.");
+					return false;
+                } else {
+                	document.aimAddOrgForm.selectedStaffId.value=null;
+                }
             }
-    <digi:context name="deleteStaff" property="context/module/moduleinstance/editOrganisation.do" />
+    		<digi:context name="deleteStaff" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="deleteStaffInfo";
             document.aimAddOrgForm.action = "${deleteStaff}";
             document.aimAddOrgForm.target = "_self";
@@ -188,7 +199,18 @@
                 document.aimAddOrgForm.selectedOrgInfoId.value=orginfoId;
             }
             else{
-                document.aimAddOrgForm.selectedOrgInfoId.value=null;
+            	 var elems = document.getElementsByName("selectedOrgInfoIds");
+                 var selected = false;
+                 for (var i=0; i<elems.length; i++){
+ 					if (elems[i].checked == true)
+ 						selected = true;
+                 }
+                 if (!selected){
+ 					alert ("Please, select one option first.");
+ 					return false;
+                 } else {
+                	 document.aimAddOrgForm.selectedOrgInfoId.value=null;
+                 }
             }
     <digi:context name="deleteOrgInfo" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="deleteOrgInfo";

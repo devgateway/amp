@@ -67,8 +67,7 @@
 																<c:out value="${customField.labelTrue}"/>
 															</c:when>
 															<c:otherwise>
-																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value" size="40"
-																styleId="originalAppDate" styleClass="inp-text" />																														
+																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value" size="40" styleId="originalAppDate" styleClass="inp-text" maxlength="250"/>																														
 															</c:otherwise>
 														</c:choose>
 														</a>

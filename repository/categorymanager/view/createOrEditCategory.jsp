@@ -255,6 +255,15 @@
 											</td>
 										</tr>
 										<tr>
+											<td></td>
+											<td>
+												<html:checkbox property="isMultiselect" />
+												<digi:trn key="aim:categoryManagerAllowMultiselect">
+													Should <strong>multiselect</strong> be allowed for this category
+												</digi:trn>
+											</td>
+										</tr>
+										<tr>
 											<td >
 											</td>
 											<td >

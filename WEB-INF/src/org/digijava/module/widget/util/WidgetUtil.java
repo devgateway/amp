@@ -613,7 +613,7 @@ public class WidgetUtil {
 			toDate =new Date(ChartWidgetUtil.getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
 		}		
         Session session = PersistenceManager.getRequestDBSession();
-        String queryString = " select new   org.digijava.module.widget.helper.TopDonorGroupHelper(orgGrp.orgGrpName, sum(fd.transactionAmountInBaseCurrency)) ";
+        String queryString = " select new   org.digijava.module.widget.helper.TopDonorGroupHelper(orgGrp.orgGrpName, sum(fd.transactionAmountInUSD)) ";
         queryString += " from ";
         queryString += AmpFundingDetail.class.getName() +
                 " as fd  inner join fd.ampFundingId f ";

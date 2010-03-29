@@ -153,7 +153,6 @@ public class UpdateTeamActivities extends Action {
 					if (selActivities[i] != null) {
 						Long actId = selActivities[i];
 						AmpActivity activity = ActivityUtil.getProjectChannelOverview(actId);
-						
 						AmpTeam ampTeam = TeamUtil.getAmpTeam(taForm.getTeamId());
 						activity.setTeam(ampTeam);
 						AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(memberId);
@@ -195,8 +194,39 @@ public class UpdateTeamActivities extends Action {
 			if (session.getAttribute("teamActivityList") != null) {
 				session.removeAttribute("teamActivityList");
 			}
+			List<AmpActivity> unassignedActivityList = new ArrayList<AmpActivity>();
+            Collection<AmpActivity> colUnassigned = TeamUtil.getAllUnassignedActivities();
+            if (colUnassigned != null) {
+                unassignedActivityList.addAll(colUnassigned);
+                Collections.sort(unassignedActivityList);
+            }
+            int currPage=taForm.getCurrentPage();
+            int fromIndex = (currPage-1) * numRecords;
+            if (unassignedActivityList.size() <= fromIndex) {
+                currPage-=1;
+                taForm.setCurrentPage(currPage);
+                fromIndex = (currPage - 1) * numRecords;
+            }
+            int toIndex = fromIndex + numRecords;
+            if (unassignedActivityList.size() > toIndex) {
+                taForm.setActivities(unassignedActivityList.subList(fromIndex, toIndex));
+            } else {
+                taForm.setActivities(unassignedActivityList.subList(fromIndex, unassignedActivityList.size()));
+               
+            }
+            
+            int numPages = unassignedActivityList.size() / numRecords;
+			numPages += (unassignedActivityList.size() % numRecords != 0) ? 1 : 0;
+			if (numPages > 1) {
+			Collection<Integer> pages = new ArrayList<Integer>();
+				for (int i = 0; i < numPages; i++) {
+					pages.add(i+1);
+				}
+                taForm.setPages(pages);
+			}
 			taForm.setAssignActivity(null);
-			return mapping.findForward("forward");
+            taForm.setRemoveActivity(null);
+			return mapping.findForward("showAddActivity");
 		} else if (taForm.getUuid() != null && taForm.getRemoveDocument().equals("assign")) {
 			/* add the selected activities to the team list */
 			logger.info("in assign document to activity");

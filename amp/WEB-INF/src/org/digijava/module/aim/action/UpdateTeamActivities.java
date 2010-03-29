@@ -269,7 +269,7 @@ public class UpdateTeamActivities extends Action {
 						while (i.hasNext()) {
 							data = (DocumentData) i.next();
 							if (data.getUuid().equals(aad.getUuid())) {
-								c.remove(data);
+								i.remove();
 							}
 						}
 					}

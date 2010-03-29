@@ -6,14 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<input type="hidden" id="refreshed" value="no">
-<script type="text/javascript">
-    onload=function(){
-        var refreshed=document.getElementById("refreshed");
-        if(refreshed.value=="no")refreshed.value="yes";
-        else{refreshed.value="no";location.reload();}
-    }
-</script>
+
+
 <digi:instance  property="calendarViewForm"/>
 <c:if test="${!calendarViewForm.print}">			
 <table border="0"  width="100%" height="100%">

@@ -71,7 +71,7 @@
     <action name="calendarEventForm" parameter="method" path="/calendar/showCalendarEvent" scope="session" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
       <forward name="success" path="/showLayout.do?layout=showAmpEvent" />
       <forward name="preview" path="/showLayout.do?layout=previewAmpEvent" />
-      <forward name="forward" path="/calendar/showCalendarView.do" />
+      <forward name="forward" path="/calendar/showCalendarView.do" redirect="true"/>
       <forward name="print" path="/showLayout.do?layout=printPreviewPopupLayout" />
     </action>
 	

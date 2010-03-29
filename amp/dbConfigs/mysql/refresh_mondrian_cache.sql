@@ -1,3 +1,5 @@
+START TRANSACTION;
+
 DROP TABLE IF EXISTS cached_v_status;
 CREATE TABLE cached_v_status AS SELECT * FROM v_status;
 DROP TABLE IF EXISTS cached_v_donors;
@@ -326,21 +328,17 @@ ADD INDEX idx_spl8_activity (amp_activity_id),ADD INDEX idx_spl8_name (name);
 DROP TABLE IF EXISTS cached_v_m_donor_funding;
 CREATE TABLE cached_v_m_donor_funding AS SELECT * FROM `v_donor_funding_cached`;
 
-ALTER TABLE v_donor_funding_cached ADD INDEX idx_amp_activity (amp_activity_id),
-ADD INDEX idx_donor_name (donor_name),
-ADD INDEX idx_curr_code (currency_code),
+ALTER TABLE cached_v_m_donor_funding ADD INDEX idx_amp_activity (amp_activity_id),
+ADD INDEX idx_donor_name (donor_name),ADD INDEX idx_curr_code (currency_code),
 ADD INDEX idx_financ_intrum (financing_instrument_name),
 ADD INDEX idx_donor_type (donor_type_name),
-ADD INDEX idx_donor_name (donor_name),
-ADD INDEX idx_curr_code (currency_code)
-ADD INDEX idx_donor_name (donor_name),
-ADD INDEX idx_donor_group (org_grp_name)
+ADD INDEX idx_donor_group (org_grp_name),
 ADD INDEX idx_region_name (Region),
 ADD INDEX idx_pri_prog_name (primary_program_name),
 ADD INDEX idx_sec_prog_name (secondary_program_name),
 ADD INDEX idx_pri_sector_name (p_sectorname),
 ADD INDEX idx_nac_prog_name (national_program_name);
-
+COMMIT;
 
 
 

@@ -238,132 +238,110 @@ insert into cached_v_donor_date_hierarchy SELECT * FROM v_donor_date_hierarchy;
 DROP TABLE IF EXISTS `cached_v_m_regions`;
 CREATE TABLE cached_v_m_regions AS SELECT * FROM `v_regions_cached`;
 
-CREATE INDEX idx_amp_activity ON `cached_v_m_regions`(amp_activity_id);
-CREATE INDEX idx_region_id ON `cached_v_m_regions`(region_id);
-
-CREATE INDEX idx_amp_activity ON `cached_v_status`(amp_activity_id);
-CREATE INDEX idx_st_name ON `cached_v_status`(name);
-CREATE INDEX idx_st_id ON `cached_v_status`(amp_status_id);
-
-CREATE INDEX idx_psec_activity ON `cached_v_sectors` (amp_activity_id);
-CREATE INDEX idx_psec_name ON `cached_v_sectors` (sectorname);
-CREATE INDEX idx_pesc_id ON `cached_v_sectors`(amp_sector_id);
-CREATE INDEX idx_pesc_per ON `cached_v_sectors`(sector_percentage);
-
-CREATE INDEX idx_ssec_activity ON `cached_v_secondary_sectors` (amp_activity_id);
-CREATE INDEX idx_ssec_name ON `cached_v_secondary_sectors` (sectorname);
-CREATE INDEX idx_sesc_id ON `cached_v_secondary_sectors`(amp_sector_id);
-CREATE INDEX idx_sesc_per ON `cached_v_secondary_sectors`(sector_percentage);
-
-CREATE INDEX idx_psub_activity ON `cached_v_sub_sectors` (amp_activity_id);
-CREATE INDEX idx_psub_name ON `cached_v_sub_sectors` (sectorname);
-CREATE INDEX idx_psub_id ON `cached_v_sub_sectors`(amp_sector_id);
-CREATE INDEX idx_psub_per ON `cached_v_sub_sectors`(sector_percentage);
-
-CREATE INDEX idx_npl0_activity ON `cached_v_nationalobjectives_level_0` (amp_activity_id);
-CREATE INDEX idx_npl1_activity ON `cached_v_nationalobjectives_level_1` (amp_activity_id);
-CREATE INDEX idx_npl2_activity ON `cached_v_nationalobjectives_level_2` (amp_activity_id);
-CREATE INDEX idx_npl3_activity ON `cached_v_nationalobjectives_level_3` (amp_activity_id);
-CREATE INDEX idx_npl4_activity ON `cached_v_nationalobjectives_level_4` (amp_activity_id);
-CREATE INDEX idx_npl5_activity ON `cached_v_nationalobjectives_level_5` (amp_activity_id);
-CREATE INDEX idx_npl6_activity ON `cached_v_nationalobjectives_level_6` (amp_activity_id);
-CREATE INDEX idx_npl7_activity ON `cached_v_nationalobjectives_level_7` (amp_activity_id);
-CREATE INDEX idx_npl8_activity ON `cached_v_nationalobjectives_level_8` (amp_activity_id);
-
-CREATE INDEX idx_ppl0_activity ON `cached_v_primaryprogram_level_0` (amp_activity_id);
-CREATE INDEX idx_ppl1_activity ON `cached_v_primaryprogram_level_1` (amp_activity_id);
-CREATE INDEX idx_ppl2_activity ON `cached_v_primaryprogram_level_2` (amp_activity_id);
-CREATE INDEX idx_ppl3_activity ON `cached_v_primaryprogram_level_3` (amp_activity_id);
-CREATE INDEX idx_ppl4_activity ON `cached_v_primaryprogram_level_4` (amp_activity_id);
-CREATE INDEX idx_ppl5_activity ON `cached_v_primaryprogram_level_5` (amp_activity_id);
-CREATE INDEX idx_ppl6_activity ON `cached_v_primaryprogram_level_6` (amp_activity_id);
-CREATE INDEX idx_ppl7_activity ON `cached_v_primaryprogram_level_7` (amp_activity_id);
-CREATE INDEX idx_ppl8_activity ON `cached_v_primaryprogram_level_8` (amp_activity_id);
-
-CREATE INDEX idx_spl0_activity ON `cached_v_secondaryprogram_level_0` (amp_activity_id);
-CREATE INDEX idx_spl1_activity ON `cached_v_secondaryprogram_level_1` (amp_activity_id);
-CREATE INDEX idx_spl2_activity ON `cached_v_secondaryprogram_level_2` (amp_activity_id);
-CREATE INDEX idx_spl3_activity ON `cached_v_secondaryprogram_level_3` (amp_activity_id);
-CREATE INDEX idx_spl4_activity ON `cached_v_secondaryprogram_level_4` (amp_activity_id);
-CREATE INDEX idx_spl5_activity ON `cached_v_secondaryprogram_level_5` (amp_activity_id);
-CREATE INDEX idx_spl6_activity ON `cached_v_secondaryprogram_level_6` (amp_activity_id);
-CREATE INDEX idx_spl7_activity ON `cached_v_secondaryprogram_level_7` (amp_activity_id);
-CREATE INDEX idx_spl8_activity ON `cached_v_secondaryprogram_level_8` (amp_activity_id);
+ALTER TABLE `cached_v_m_regions` ADD INDEX idx_amp_activity (amp_activity_id),
+ADD INDEX idx_region_id (region_id);
 
 
-CREATE INDEX idx_npidl0_pidid ON `cached_v_nationalobjectives_level_0` (amp_program_id);
-CREATE INDEX idx_npidl1_pid ON `cached_v_nationalobjectives_level_1` (amp_program_id);
-CREATE INDEX idx_npidl2_pid ON `cached_v_nationalobjectives_level_2` (amp_program_id);
-CREATE INDEX idx_npidl3_pid ON `cached_v_nationalobjectives_level_3` (amp_program_id);
-CREATE INDEX idx_npidl4_pid ON `cached_v_nationalobjectives_level_4` (amp_program_id);
-CREATE INDEX idx_npidl5_pid ON `cached_v_nationalobjectives_level_5` (amp_program_id);
-CREATE INDEX idx_npidl6_pid ON `cached_v_nationalobjectives_level_6` (amp_program_id);
-CREATE INDEX idx_npidl7_pid ON `cached_v_nationalobjectives_level_7` (amp_program_id);
-CREATE INDEX idx_npidl8_pid ON `cached_v_nationalobjectives_level_8` (amp_program_id);
+ALTER TABLE `cached_v_status` ADD INDEX idx_amp_activity (amp_activity_id),
+ADD INDEX idx_st_name (name),ADD INDEX idx_st_id (amp_status_id);
 
-CREATE INDEX idx_pidpidl0_pid ON `cached_v_primaryprogram_level_0` (amp_program_id);
-CREATE INDEX idx_pidpidl1_pid ON `cached_v_primaryprogram_level_1` (amp_program_id);
-CREATE INDEX idx_pidpidl2_pid ON `cached_v_primaryprogram_level_2` (amp_program_id);
-CREATE INDEX idx_pidpidl3_pid ON `cached_v_primaryprogram_level_3` (amp_program_id);
-CREATE INDEX idx_pidpidl4_pid ON `cached_v_primaryprogram_level_4` (amp_program_id);
-CREATE INDEX idx_pidpidl5_pid ON `cached_v_primaryprogram_level_5` (amp_program_id);
-CREATE INDEX idx_pidpidl6_pid ON `cached_v_primaryprogram_level_6` (amp_program_id);
-CREATE INDEX idx_pidpidl7_pid ON `cached_v_primaryprogram_level_7` (amp_program_id);
-CREATE INDEX idx_pidpidl8_pid ON `cached_v_primaryprogram_level_8` (amp_program_id);
+ALTER TABLE `cached_v_sectors` ADD INDEX idx_psec_activity (amp_activity_id),
+ADD INDEX idx_psec_name (sectorname),ADD INDEX idx_pesc_id (amp_sector_id),
+ADD INDEX idx_pesc_per (sector_percentage);
 
-CREATE INDEX idx_spidl0_pid ON `cached_v_secondaryprogram_level_0` (amp_program_id);
-CREATE INDEX idx_spidl1_pid ON `cached_v_secondaryprogram_level_1` (amp_program_id);
-CREATE INDEX idx_spidl2_pid ON `cached_v_secondaryprogram_level_2` (amp_program_id);
-CREATE INDEX idx_spidl3_pid ON `cached_v_secondaryprogram_level_3` (amp_program_id);
-CREATE INDEX idx_spidl4_pid ON `cached_v_secondaryprogram_level_4` (amp_program_id);
-CREATE INDEX idx_spidl5_pid ON `cached_v_secondaryprogram_level_5` (amp_program_id);
-CREATE INDEX idx_spidl6_pid ON `cached_v_secondaryprogram_level_6` (amp_program_id);
-CREATE INDEX idx_spidl7_pid ON `cached_v_secondaryprogram_level_7` (amp_program_id);
-CREATE INDEX idx_spidl8_pid ON `cached_v_secondaryprogram_level_8` (amp_program_id);
+ALTER TABLE cached_v_secondary_sectors ADD INDEX idx_ssec_activity (amp_activity_id),
+ADD INDEX idx_ssec_name (sectorname),ADD INDEX idx_sesc_id (amp_sector_id),
+ADD INDEX idx_sesc_per (sector_percentage);
 
-CREATE INDEX idx_npl0_p ON `cached_v_nationalobjectives_level_0` (program_percentage);
-CREATE INDEX idx_npl1_p ON `cached_v_nationalobjectives_level_1` (program_percentage);
-CREATE INDEX idx_npl2_p ON `cached_v_nationalobjectives_level_2` (program_percentage);
-CREATE INDEX idx_npl3_p ON `cached_v_nationalobjectives_level_3` (program_percentage);
-CREATE INDEX idx_npl4_p ON `cached_v_nationalobjectives_level_4` (program_percentage);
-CREATE INDEX idx_npl5_p ON `cached_v_nationalobjectives_level_5` (program_percentage);
-CREATE INDEX idx_npl6_p ON `cached_v_nationalobjectives_level_6` (program_percentage);
-CREATE INDEX idx_npl7_p ON `cached_v_nationalobjectives_level_7` (program_percentage);
-CREATE INDEX idx_npl8_p ON `cached_v_nationalobjectives_level_8` (program_percentage);
+ALTER TABLE cached_v_sub_sectors ADD INDEX idx_psub_activity (amp_activity_id),
+ADD INDEX idx_psub_name (sectorname),ADD INDEX idx_psub_id (amp_sector_id),
+ADD INDEX idx_psub_per (sector_percentage);
 
-CREATE INDEX idx_ppl0_p ON `cached_v_primaryprogram_level_0` (program_percentage);
-CREATE INDEX idx_ppl1_p ON `cached_v_primaryprogram_level_1` (program_percentage);
-CREATE INDEX idx_ppl2_p ON `cached_v_primaryprogram_level_2` (program_percentage);
-CREATE INDEX idx_ppl3_p ON `cached_v_primaryprogram_level_3` (program_percentage);
-CREATE INDEX idx_ppl4_p ON `cached_v_primaryprogram_level_4` (program_percentage);
-CREATE INDEX idx_ppl5_p ON `cached_v_primaryprogram_level_5` (program_percentage);
-CREATE INDEX idx_ppl6_p ON `cached_v_primaryprogram_level_6` (program_percentage);
-CREATE INDEX idx_ppl7_p ON `cached_v_primaryprogram_level_7` (program_percentage);
-CREATE INDEX idx_ppl8_p ON `cached_v_primaryprogram_level_8` (program_percentage);
+ALTER TABLE `cached_v_secondary_sub_sectors` ADD INDEX idx_ssub_activity (amp_activity_id),
+ADD INDEX idx_ssub_name (sectorname),ADD INDEX idx_ssub_id (amp_sector_id),
+ADD INDEX idx_ssub_per (sector_percentage);
 
-CREATE INDEX idx_spl0_p ON `cached_v_secondaryprogram_level_0` (program_percentage);
-CREATE INDEX idx_spl1_p ON `cached_v_secondaryprogram_level_1` (program_percentage);
-CREATE INDEX idx_spl2_p ON `cached_v_secondaryprogram_level_2` (program_percentage);
-CREATE INDEX idx_spl3_p ON `cached_v_secondaryprogram_level_3` (program_percentage);
-CREATE INDEX idx_spl4_p ON `cached_v_secondaryprogram_level_4` (program_percentage);
-CREATE INDEX idx_spl5_p ON `cached_v_secondaryprogram_level_5` (program_percentage);
-CREATE INDEX idx_spl6_p ON `cached_v_secondaryprogram_level_6` (program_percentage);
-CREATE INDEX idx_spl7_p ON `cached_v_secondaryprogram_level_7` (program_percentage);
-CREATE INDEX idx_spl8_p ON `cached_v_secondaryprogram_level_8` (program_percentage);
 
+ALTER TABLE cached_v_nationalobjectives_level_0 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_1 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_2 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_3 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_4 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_5 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_6 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_7 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+ALTER TABLE cached_v_nationalobjectives_level_8 ADD INDEX idx_npidl0_pidid (amp_program_id),
+ADD INDEX idx_npl0_activity (amp_activity_id),ADD INDEX idx_npl0_name (name);
+
+
+ALTER TABLE cached_v_primaryprogram_level_0 ADD INDEX idx_ppidl0_pidid (amp_program_id),
+ADD INDEX idx_ppl0_activity (amp_activity_id),ADD INDEX idx_ppl0_name (name);
+ALTER TABLE cached_v_primaryprogram_level_1 ADD INDEX idx_ppidl1_pidid (amp_program_id),
+ADD INDEX idx_ppl1_activity (amp_activity_id),ADD INDEX idx_ppl1_name (name);
+ALTER TABLE cached_v_primaryprogram_level_2 ADD INDEX idx_ppidl2_pidid (amp_program_id),
+ADD INDEX idx_ppl2_activity (amp_activity_id),ADD INDEX idx_ppl2_name (name);
+ALTER TABLE cached_v_primaryprogram_level_3 ADD INDEX idx_ppidl3_pidid (amp_program_id),
+ADD INDEX idx_ppl3_activity (amp_activity_id),ADD INDEX idx_ppl3_name (name);
+ALTER TABLE cached_v_primaryprogram_level_4 ADD INDEX idx_ppidl4_pidid (amp_program_id),
+ADD INDEX idx_npl4_activity (amp_activity_id),ADD INDEX idx_npl4_name (name);
+ALTER TABLE cached_v_primaryprogram_level_5 ADD INDEX idx_ppidl5_pidid (amp_program_id),
+ADD INDEX idx_ppl5_activity (amp_activity_id),ADD INDEX idx_ppl5_name (name);
+ALTER TABLE cached_v_primaryprogram_level_6 ADD INDEX idx_ppidl6_pidid (amp_program_id),
+ADD INDEX idx_ppl6_activity (amp_activity_id),ADD INDEX idx_ppl6_name (name);
+ALTER TABLE cached_v_primaryprogram_level_7 ADD INDEX idx_ppidl7_pidid (amp_program_id),
+ADD INDEX idx_ppl7_activity (amp_activity_id),ADD INDEX idx_ppl7_name (name);
+ALTER TABLE cached_v_primaryprogram_level_8 ADD INDEX idx_ppidl8_pidid (amp_program_id),
+ADD INDEX idx_ppl8_activity (amp_activity_id),ADD INDEX idx_ppl8_name (name);
+
+
+
+ALTER TABLE cached_v_secondaryprogram_level_0 ADD INDEX idx_spidl0_pidid (amp_program_id),
+ADD INDEX idx_spl0_activity (amp_activity_id),ADD INDEX idx_spl0_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_1 ADD INDEX idx_spidl1_pidid (amp_program_id),
+ADD INDEX idx_spl1_activity (amp_activity_id),ADD INDEX idx_spl1_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_2 ADD INDEX idx_spidl2_pidid (amp_program_id),
+ADD INDEX idx_spl2_activity (amp_activity_id),ADD INDEX idx_spl2_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_3 ADD INDEX idx_spidl3_pidid (amp_program_id),
+ADD INDEX idx_spl3_activity (amp_activity_id),ADD INDEX idx_spl3_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_4 ADD INDEX idx_spidl4_pidid (amp_program_id),
+ADD INDEX idx_spl4_activity (amp_activity_id),ADD INDEX idx_spl4_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_5 ADD INDEX idx_spidl5_pidid (amp_program_id),
+ADD INDEX idx_spl5_activity (amp_activity_id),ADD INDEX idx_spl5_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_6 ADD INDEX idx_spidl6_pidid (amp_program_id),
+ADD INDEX idx_spl6_activity (amp_activity_id),ADD INDEX idx_spl6_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_7 ADD INDEX idx_spidl7_pidid (amp_program_id),
+ADD INDEX idx_spl7_activity (amp_activity_id),ADD INDEX idx_spl7_name (name);
+ALTER TABLE cached_v_secondaryprogram_level_8 ADD INDEX idx_spidl8_pidid (amp_program_id),
+ADD INDEX idx_spl8_activity (amp_activity_id),ADD INDEX idx_spl8_name (name);
 
 
 DROP TABLE IF EXISTS cached_v_m_donor_funding;
 CREATE TABLE cached_v_m_donor_funding AS SELECT * FROM `v_donor_funding_cached`;
 
-CREATE INDEX idx_amp_activity ON `cached_v_m_donor_funding`(amp_activity_id);
-CREATE INDEX idx_donor_name ON `cached_v_m_donor_funding`(donor_name);
-CREATE INDEX idx_curr_code ON `cached_v_m_donor_funding`(currency_code);
-CREATE INDEX idx_financ_intrum ON `cached_v_m_donor_funding`(financing_instrument_name);
-CREATE INDEX idx_donor_type ON `cached_v_m_donor_funding`(donor_type_name);
-CREATE INDEX idx_donor_group ON `cached_v_m_donor_funding`(org_grp_name);
-CREATE INDEX idx_region_name ON `cached_v_m_donor_funding`(Region);
-CREATE INDEX idx_pri_prog_name ON `cached_v_m_donor_funding`(primary_program_name);
-CREATE INDEX idx_sec_prog_name ON `cached_v_m_donor_funding`(secondary_program_name);
-CREATE INDEX idx_nac_prog_name ON `cached_v_m_donor_funding`(national_program_name);
-CREATE INDEX idx_pri_sector_name ON `cached_v_m_donor_funding`(p_sectorname);
+ALTER TABLE v_donor_funding_cached ADD INDEX idx_amp_activity (amp_activity_id),
+ADD INDEX idx_donor_name (donor_name),
+ADD INDEX idx_curr_code (currency_code),
+ADD INDEX idx_financ_intrum (financing_instrument_name),
+ADD INDEX idx_donor_type (donor_type_name),
+ADD INDEX idx_donor_name (donor_name),
+ADD INDEX idx_curr_code (currency_code)
+ADD INDEX idx_donor_name (donor_name),
+ADD INDEX idx_donor_group (org_grp_name)
+ADD INDEX idx_region_name (Region),
+ADD INDEX idx_pri_prog_name (primary_program_name),
+ADD INDEX idx_sec_prog_name (secondary_program_name),
+ADD INDEX idx_pri_sector_name (p_sectorname),
+ADD INDEX idx_nac_prog_name (national_program_name);
+
+
+
+
+

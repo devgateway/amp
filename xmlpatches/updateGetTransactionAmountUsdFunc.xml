@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="true" retryOnFail="false" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-    <jira>AMP-7526</jira>
+    <jira>AMP-8212</jira>
     <keyword>Gis</keyword>
     <keyword>PieChart</keyword>
     <author>Medea Gugushvili</author>

@@ -111,6 +111,7 @@ function checkSelActivities() {
 			return false;					  
 		}
 	}
+    document.aimTeamActivitiesForm.removeActivity.value="assign" ;
 	return true;
 }	
 
@@ -149,7 +150,7 @@ function checkSelActivities() {
 <digi:form action="/updateTeamActivity.do" method="post">
 
 <html:hidden property="teamId" />
-<html:hidden property="removeActivity" value="assign" />
+<html:hidden property="removeActivity"/>
 <html:hidden property="sort" />
 <html:hidden property="sortOrder" />
 <html:hidden property="page" />

@@ -57,15 +57,13 @@ public class ShowEvents extends Action {
 		    out.close();
 		    //clear session
 		    ses.removeAttribute("filter");
-	        ses.removeAttribute("donor");
 	        ses.removeAttribute("year");
 	        ses.removeAttribute("month");
 	        ses.removeAttribute("day");
 	        ses.removeAttribute("mode");
 	        ses.removeAttribute("type");
 	        ses.removeAttribute("print");
-	        ses.removeAttribute("eventTypes");
-		        
+	            
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -197,7 +197,7 @@ public class ShowCalendarEvent extends Action {
         } else if (ceform.getMethod().equalsIgnoreCase("save")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
-        	ActionErrors errors=validateDate(stDate,endDate);
+        	ActionErrors errors=validateDate(stDate,endDate,ceform);
         	errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
@@ -248,7 +248,7 @@ public class ShowCalendarEvent extends Action {
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
         	ActionErrors errors=new ActionErrors();
         	if(ceform.getAmpCalendarId()==null || !ceform.isResetForm()){
-        		errors=validateDate(stDate,endDate);
+        		errors=validateDate(stDate,endDate,ceform);
         		errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	}        	
         	if(!errors.isEmpty()){
@@ -644,7 +644,7 @@ public class ShowCalendarEvent extends Action {
         return teamMap;
     }
     
-    private ActionErrors validateDate(String eventStartDate,String eventEndDate) throws Exception{   
+    private ActionErrors validateDate(String eventStartDate,String eventEndDate, CalendarEventForm form) throws Exception{   
     	ActionErrors errors=new ActionErrors();
         String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);            
         if (dtformat == null) {
@@ -655,6 +655,7 @@ public class ShowCalendarEvent extends Action {
         SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
         Date stDate = null;
         Date endDate=null;
+        Date endRecurrDate=null;
         
         try {
         	stDate=sdf.parse(eventStartDate);
@@ -664,14 +665,47 @@ public class ShowCalendarEvent extends Action {
 		
         try {
         	endDate=sdf.parse(eventEndDate);
-		
         } catch (Exception e) {
 			errors.add("incorrectDate", new ActionError("error.calendar.emptyEventEndDate"));
+		}
+        
+        try {
+        	endRecurrDate=sdf.parse(form.getRecurrEndDate() + " " + form.getRecurrSelectedEndTime());
+        } catch (Exception e) {
+			//errors.add("incorrectDate", new ActionError("error.calendar.emptyEventEndDate"));
 		}
         
         if(stDate !=null && !stDate.equals(endDate) && !stDate.before(endDate)){
         	errors.add("incorrectDate", new ActionError("error.calendar.endDateLessThanStartDate"));
         }
+        
+        if(endRecurrDate !=null && endRecurrDate.before(endDate)){
+        	errors.add("incorrectDate", new ActionError("error.calendar.endRecurrDateLessThanEndDate"));
+        }
+        
+        
+        Long diffDate = endDate.getTime() - stDate.getTime();
+        Long diffDays = (diffDate / (24 * 60 * 60 * 1000));
+        Long recurrDays = 0L;
+        
+        if (form.getTypeofOccurrence()!=null && form.getTypeofOccurrence()!="" && form.getRecurrPeriod()!=null && form.getRecurrPeriod()>0){
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("day")) {
+        		recurrDays = form.getRecurrPeriod();
+			}
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("week")) {
+        		recurrDays = form.getRecurrPeriod() * 7;
+			}
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("month")) {
+        		recurrDays = form.getRecurrPeriod() * 30;
+			}
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("year")) {
+        		recurrDays = form.getRecurrPeriod() * 365;
+			}
+        }
+        if ((recurrDays > 0) && (diffDays >= recurrDays)) {
+        	errors.add("incorrectDate", new ActionError("error.calendar.recurrPeriodLessThanEventDuration"));
+		}
+        
     	return errors;
     }
     

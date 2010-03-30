@@ -30,7 +30,7 @@
 <digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript">
-
+	
 	//this map will store only the funding items that got changed - they require re-validation
 	var forValidation = {};
 
@@ -269,7 +269,6 @@ var isAlreadySubmitted = false;
 	function closeWindow() {
 		window.close();
 	}
-
 
 	-->
 </script>
@@ -542,7 +541,7 @@ DIV.red_notice
 							<c:set var="contentDisabled">true</c:set>
 						</c:if>
 						<td valign="bottom" align="center">
-							<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" onchange="this.value=trim(this.value)" styleClass="amt" disabled="${contentDisabled}"/>
+							<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17"  onchange="this.value=trim(this.value)" styleClass="amt" disabled="${contentDisabled}"/>
 						</td>
 							
 				 		<c:set var="contentDisabled"><field:display name="Projection Currency Code" feature="MTEF Projections">false</field:display></c:set>

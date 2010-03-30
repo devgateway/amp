@@ -50,7 +50,7 @@
 <module:display name="PARIS INDICATORS"></module:display> 
 <module:display name="PI Reports" parentModule="REPORTING"></module:display> 
 <module:display name="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Paris Indicators Project Management" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -175,7 +175,7 @@
 <feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display> 
 <feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display> 
 <feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 
-<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
+<feature:display name="Paris Indicators" module="Paris Indicators Project Management"></feature:display>
 <feature:display name="Physical Progress" module="Components"></feature:display> 
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
 <feature:display name="Planned Disbursements" module="Measures"></feature:display> 
@@ -621,7 +621,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 
 <field:display name="Overall Cost" feature="Planning"></field:display> 
-<field:display name="Paris Survey" feature="Paris Indicators"></field:display> 
+<field:display name="Paris Survey" feature="Paris Indicators"></field:display>
 <field:display name="Percentage" feature="Sectors"></field:display> 
 <field:display name="Physical Progress Tab" feature="Physical Progress"></field:display> 
 <field:display name="Physical Progress" feature="Physical Progress"></field:display> 

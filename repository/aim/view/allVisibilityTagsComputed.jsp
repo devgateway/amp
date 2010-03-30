@@ -43,7 +43,7 @@
 <module:display name="PARIS INDICATORS"></module:display> 
 <module:display name="PI Reports" parentModule="REPORTING"></module:display> 
 <module:display name="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Paris Indicators Project Management" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -152,7 +152,7 @@
 <feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display> 
 <feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display> 
 <feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 
-<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
+<feature:display name="Paris Indicators" module="Paris Indicators Project Management"></feature:display>
 <feature:display name="Physical Progress" module="Components"></feature:display> 
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
 <feature:display name="Planned Disbursements" module="Measures"></feature:display> 

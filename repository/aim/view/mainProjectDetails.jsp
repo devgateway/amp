@@ -547,7 +547,8 @@ html>body #mainEmpty {
 									</LI>
 								</logic:notEqual>
 							 </field:display>
-						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
+                                <module:display name="Paris Indicators Project Management" parentModule="PROJECT MANAGEMENT"></module:display>
+                                <feature:display name="Paris Indicators" module="Paris Indicators Project Management"></feature:display>
 						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 								   <LI>						

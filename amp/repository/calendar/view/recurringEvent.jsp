@@ -35,7 +35,6 @@ function validateDuration(rec,duration){
 }
 
 function eventType(){
-	
         var Daily = document.getElementById("Daily").checked;
 		var Weekly = document.getElementById("Weekly").checked;
 		var Monthly = document.getElementById("Monthly").checked;
@@ -73,64 +72,60 @@ function eventType(){
         var year_occurance_duration = endYear - startYear;
 
 
-    if(!Daily && !Weekly && !Monthly && !Yearly){
-   		alert("please choose type of recurring event");
-		return false;
-	}
+	    if(!Daily && !Weekly && !Monthly && !Yearly){
+	   		alert("please choose type of recurring event");
+			return false;
+		}
 
-	var periodValid = true;
+		var periodValid = true;
     
-    if(Yearly){
+	    if(Yearly){
         
     	//var yearlyMonth = document.getElementById("selectedStartYearlyMonth").value;
         
-    	if(document.getElementById("recurrYearly").value=='' || document.getElementById("recurrYearly").value=='0'){
-            alert ("Recurring period should be higher than 0");
-            periodValid = false;
-   		}else{
-   	    var rec = document.getElementById("recurrYearly").value;
-        document.getElementById("type").value = 'year';
-        //document.getElementById("hiddenYearMonth").value = yearlyMonth;
-        document.getElementById("hiddenMonth").value = '';
-        document.getElementById("weekDays").value = '';
-		document.getElementById("hidden").value = rec;
-	 }
-   }
-
+    		if(document.getElementById("recurrYearly").value=='' || document.getElementById("recurrYearly").value=='0'){
+            	alert ("Recurring period should be higher than 0");
+            	periodValid = false;
+   			}else{
+   	    		var rec = document.getElementById("recurrYearly").value;
+        		document.getElementById("type").value = 'year';
+        		//document.getElementById("hiddenYearMonth").value = yearlyMonth;
+        		document.getElementById("hiddenMonth").value = '';
+        		document.getElementById("weekDays").value = '';
+				document.getElementById("hidden").value = rec;
+	 		}
+   		}
 	
-	
-	if(Monthly){
-		 var month = document.getElementById("selectedStartMonth").value;
-		 if(document.getElementById("selectedStartMonth").value=='' || document.getElementById("selectedStartMonth").value=='0'){
-	            alert ("Recurring period should be higher than 0");
+		if(Monthly){
+			var month = document.getElementById("selectedStartMonth").value;
+		 	if(document.getElementById("selectedStartMonth").value=='' || document.getElementById("selectedStartMonth").value=='0'){
+	        	alert ("Recurring period should be higher than 0");
 	            periodValid = false;
-	   	}else{
-	   	    document.getElementById("hidden").value = month;
-	        document.getElementById("type").value = 'month';
-	        document.getElementById("hiddenMonth").value = month;
-	        document.getElementById("weekDays").value = '';
-	       
+	   		}else{
+		   	    document.getElementById("hidden").value = month;
+	        	document.getElementById("type").value = 'month';
+	        	document.getElementById("hiddenMonth").value = month;
+	        	document.getElementById("weekDays").value = '';
+			}
 		}
-	}
 
-	if(Daily){
-        var rec = document.getElementById("recurrDaily").value; 
-        if(document.getElementById("recurrDaily").value=='' || document.getElementById("recurrDaily").value=='0'){
-            alert ("Recurring period should be higher than 0");
-            periodValid = false;
-   		}else{
-   	    document.getElementById("hidden").value = rec;
-        document.getElementById("type").value = 'day';
-        document.getElementById("hiddenMonth").value = '';
-        document.getElementById("weekDays").value = '';
-        }
-    }
+		if(Daily){
+	        var rec = document.getElementById("recurrDaily").value; 
+        	if(document.getElementById("recurrDaily").value=='' || document.getElementById("recurrDaily").value=='0'){
+            	alert ("Recurring period should be higher than 0");
+            	periodValid = false;
+   			}else{
+   	    		document.getElementById("hidden").value = rec;
+        		document.getElementById("type").value = 'day';
+        		document.getElementById("hiddenMonth").value = '';
+        		document.getElementById("weekDays").value = '';
+        	}
+    	}
 
-	if(Weekly){
+		if(Weekly){
+			var rec = document.getElementById("recurrWeekly").value;
 
-		 var rec = document.getElementById("recurrWeekly").value;
-
-		 if(document.getElementById("recurrWeekly").value=='' || document.getElementById("recurrWeekly").value=='0'){
+			if(document.getElementById("recurrWeekly").value=='' || document.getElementById("recurrWeekly").value=='0'){
 	            alert ("Recurring period should be higher than 0");
 	            periodValid = false;
 	   		}else{
@@ -148,10 +143,10 @@ function eventType(){
 				}
 				document.getElementById("weekDays").value = result;
 	    	}
-	}
-	if (periodValid){
-		submit();
-	}
+		}
+		if (periodValid){
+			submit();
+		}
 }
 
 
@@ -210,7 +205,6 @@ function disableInputs(){
 }
 </script>
 
-<digi:form action="/showCalendarEvent.do">
 <table border="0" cellPadding=2 cellSpacing=0 width="100%" >
 
 
@@ -513,4 +507,3 @@ function disableInputs(){
 		</td>
 	</tr>
 </table>
-</digi:form>

@@ -52,11 +52,11 @@
         var recSelEndDate=document.getElementById("recurrSelectedEndDate");
         var recSelEndTime=document.getElementById("recurrSelectedEndTime");
 
-        if(recSelEndDate.value==''){
+        if(recSelEndDate != null && recSelEndDate.value==''){
             var endDate=document.getElementById("selectedEndDate");
             recSelEndDate.value=endDate.value;
         }
-        if(recSelEndTime.value==''){
+        if(recSelEndTime != null && recSelEndTime.value==''){
             var endDateTime=document.getElementById("selectedEndTime");
             recSelEndTime.value=endDateTime.value;
 
@@ -70,7 +70,6 @@
         myPanel1.setBody(element);
 		myPanel1.center();
 		myPanel1.show();
-       
 		initCalendar();
 	}
 	
@@ -88,18 +87,18 @@
 	addLoadEvent(initScripts);
 	
 function submit() {
-	
+
 	 var list = document.getElementById('selreceivers');  
 	 if(list!=null){
 	  	for(var i = 0; i < list.length; i++) {
 	  		list.options[i].selected = true;
 	  	}
 	}
-		var eventForm = document.getElementsByName("calendarEventForm")[0];
+		var eventForm = document.getElementById("showAmpEventFormID");
 		eventForm.action = "/calendar/showCalendarEvent.do?method=recurr"; 
 		eventForm.target = "_self";
 		eventForm.submit();
-	}
+}
 </script>
 
 

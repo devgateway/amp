@@ -216,12 +216,18 @@
 function removeSelOrgs() {
 	setMethod("removeOrg");
 	selectAtts();
-	document.calendarEventForm.submit();
+	var eventForm = document.getElementById("showAmpEventFormID");
+	eventForm.target = "_self";
+	eventForm.submit();	
+//	document.calendarEventForm.submit();
 }
 function submitForm() {
 	setMethod("");
 	selectAtts();
-	document.calendarEventForm.submit();
+	var eventForm = document.getElementById("showAmpEventFormID");
+	eventForm.target = "_self";
+	eventForm.submit();	
+//	document.calendarEventForm.submit();
 }
 
 
@@ -539,9 +545,15 @@ function addOrganisation(orgId, orgName){
 			  
 		document.getElementById('hdnMethod').value = 'save';
 		<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
-		document.calendarEventForm.action = "<%=sendEvent %>";
-		document.calendarEventForm.target = "_self";
-		document.calendarEventForm.submit();
+//		document.calendarEventForm.action = "<%=sendEvent %>";
+//		document.calendarEventForm.target = "_self";
+//		document.calendarEventForm.submit();
+		
+		var eventForm = document.getElementById("showAmpEventFormID");
+		eventForm.action = "<%=sendEvent %>"; 
+		eventForm.target = "_self";
+		eventForm.submit();	
+		
   }	  
 	
   function setMethod(mth){
@@ -567,14 +579,18 @@ function submitForm(thisform){
 	document.getElementById('CalendatTypeid').value = typeid;
 	setMethod("");
 	selectAtts();
-	document.calendarEventForm.submit();
+	
+	var eventForm = document.getElementById("showAmpEventFormID");
+	eventForm.target = "_self";
+	eventForm.submit();	
+//	document.calendarEventForm.submit();
 }
 
 addLoadEvent(delBody);
 </script>
 
 
-<digi:form action="/showCalendarEvent.do">
+<digi:form action="/showCalendarEvent.do" styleId="showAmpEventFormID">
     <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
     <html:hidden name="calendarEventForm" property="selectedStartMonth" styleId="hiddenMonth"/>
     <html:hidden name="calendarEventForm" property="selectedStartYear" styleId="hiddenYearMonth"/>

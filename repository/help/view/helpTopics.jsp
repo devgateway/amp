@@ -181,9 +181,10 @@ if (typeof DOMParser == "undefined") {
 	 		return
 	 	}
 	 	$("#bodyhelp").show();
+        var lastTimeStamp = new Date().getTime();
 
 	 	var urlact="/help/helpActions.do?actionType=getbody"
-		urlact=urlact+"&body="+str
+		urlact=urlact+"&body="+str+"&lastTimeStamp="+lastTimeStamp;
 		xmlHttp.open("GET",urlact,true)
 		xmlHttp.onreadystatechange=stateChange
 		xmlHttp.send(null)

@@ -24,7 +24,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
+
 <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>" ></script>
@@ -99,6 +99,9 @@
 	  	color:black;
 	  	font-size:10px;
 	}
+    .yui-panel .hd {
+        white-space:normal;
+    }
 		
 </style>
 

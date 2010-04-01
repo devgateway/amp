@@ -12,6 +12,7 @@ public class AmpGlobalSettings implements Serializable {
 	private String globalSettingsPossibleValues; //the name of the database table/view containing the values
 	private String globalSettingsDescription; //a description that will appear on mouseover
 	private String section;
+	private transient String[] listOfValues;
 	
 	/**
 	 * @return Returns the globalSettingsName.
@@ -70,6 +71,12 @@ public class AmpGlobalSettings implements Serializable {
 	@Override
 	public String toString () {
 		return this.globalSettingsName;
+	}
+	public String[] getListOfValues() {
+		return listOfValues;
+	}
+	public void setListOfValues(String[] listOfValues) {
+		this.listOfValues = listOfValues;
 	}
 	
 	

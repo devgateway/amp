@@ -54,4 +54,6 @@ public class GlobalSettingsConstants {
     public static final String BASE_CURRENCY= "Base Currency";
 
     public static final String SECURE_SERVER= "Secure Server";
+    
+    public static final String BUDGET_SUPPORT_FOR_PI9 = "Budget Support for PI 9";
 }

@@ -122,6 +122,11 @@ public class GlobalSettings extends Action {
 		while (itr.hasNext())
 		{
 			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr.next();
+			
+			//TODO: Add a new field to identify fields that need multiselect activated.
+			if(ampGS.getGlobalSettingsValue().indexOf(";") != -1) {
+				ampGS.setListOfValues(ampGS.getGlobalSettingsValue().split(";"));
+			}
 			gsForm.setGlobalSettingType(ampGS.getGlobalSettingsName(), ampGS.getGlobalSettingsPossibleValues());
 			
 			/**

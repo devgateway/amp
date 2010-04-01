@@ -85,7 +85,11 @@ function select(title){
 function search(){
  
 	var key = document.getElementById("selected").value;
-	
+    if( key.replace(/^\s+|\s+$/g,"").length==0){
+        var msg="<digi:trn>Please provide search criteria</digi:trn>";
+        alert(msg);
+        return;
+    }
 	xmlHttp=GetXmlHttpObject()
 	if (xmlHttp==null){
  			alert ("Browser does not support HTTP Request")

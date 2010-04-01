@@ -207,7 +207,7 @@ public class HelpActions extends DispatchAction {
 			String currentLang = RequestUtils.getNavigationLanguage(request).getCode();
 			for (HelpTopicHelper topic : topics) {
 				if (onlyCurrentLang && !currentLang.equals(topic.getLangIso())) continue;
-//				buf.append("<div id=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\" onclick=\"showBody()\"><b>");
+                buf.append("<div class=\"searchResult\">  \n");
 				buf.append("<div class=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link resultTitle\"><b>");
 				buf.append(topic.getTitle());
 				buf.append("</b></a></div> \n");
@@ -225,6 +225,7 @@ public class HelpActions extends DispatchAction {
 				buf.append("  <div class=\"bodyFull\" >");
 				buf.append(topic.getBody());
 				buf.append("  </div> \n");
+                buf.append("  </div> \n");
 				//delimiter
 				buf.append("<hr/> \n\n");
 			}

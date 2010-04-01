@@ -15,6 +15,13 @@
         <script language="JavaScript" type="text/javascript">
 	       <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
         </script>
+        <style type="text/css">
+       .link{
+       cursor:pointer;
+       font-size:10px;
+       text-decoration: underline;
+       }
+        </style>
         
 	</HEAD>
 	

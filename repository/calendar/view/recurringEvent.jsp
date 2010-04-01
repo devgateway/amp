@@ -9,13 +9,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:instance property="calendarEventForm"/>
-<jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
 
-<link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 <script type="text/javascript">
 
@@ -204,6 +198,7 @@ function disableInputs(){
 	
 }
 </script>
+
 
 <table border="0" cellPadding=2 cellSpacing=0 width="100%" >
 

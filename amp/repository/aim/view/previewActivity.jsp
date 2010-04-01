@@ -987,92 +987,90 @@ function collapseAll() {
 												 -->
 												</table>
 											</c:if>
-											</div>										</td>
+											</div>
+										</td>
 									</tr>
 									</field:display>
                                     
                                     <field:display name="Implementation Level" feature="Location">	  
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:level">Level</digi:trn>										</td>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn>Level</digi:trn>
+										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.location.levelId>0}" >
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/>
-											</c:if>										</td>
+											</c:if>
+										</td>
 									</tr>
 									</field:display>
                             </feature:display>   
                             <!--19-->
-                            <feature:display name="Sectors" module="Project ID and Planning">
-                                            
-                                            <tr>
-                                                <td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="sector_plus"  onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
-                                                    <img id="sector_minus" onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"style="display : none"/>
-                                              <digi:trn key="aim:sector">	Sector</digi:trn>										</td>
-                                      <td bgcolor="#ffffff">
-                                                    <div id="sector_dots">...</div>
-                                                    <div id="act_sector" style="display: none;">
-							                            <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
-							                               <bean:define id="emptySector" value="Sector"></bean:define>
-															<field:display name="${config.name} Sector" feature="Sectors">															
-																				
-															<c:set var="hasSectors">
-																false
-															</c:set>
-															<c:forEach var="actSect" items="${aimEditActivityForm.sectors.activitySectors}">
-																<c:if test="${actSect.configId==config.id}">
-																	<c:set var="hasSectors">
-																		true
-																	</c:set>
-																</c:if>
-															</c:forEach>
-															<c:if test="${hasSectors}">
-							                                <strong>
-								                               	<digi:trn key="aim:addactivitysectors:${config.name} Sector">
-								                                <c:out value="${config.name} Sector"/>
-								                                </digi:trn>
-								                                </strong><br/>
-							                                </c:if>
-					                                        <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
-																	<c:forEach var="sectors" items="${aimEditActivityForm.sectors.activitySectors}">
-	                                                            		<c:if test="${sectors.configId==config.id}">
-                                                            			<field:display name="Sector Scheme Name" feature="Sectors">
-                                                                     		<c:out value="${sectors.sectorScheme}" />      
-                                                                     	</field:display>                                                    
-                                                            			<c:if test="${!empty sectors.sectorName}">
-                                                            				<field:display name="Sector Scheme Name" feature="Sectors">
-                                                            			    	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
-                                                            			    </field:display> 
-                                                                            <c:out value="${sectors.sectorName}" />
-                                                              			</c:if> 
-                                                              			<c:if test="${!empty sectors.subsectorLevel1Name}">
-                                                              				<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">																										
-	                                                              				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
-	                                                                			<c:out value="${sectors.subsectorLevel1Name}"/>
-                                                                			</field:display>
-                                                            			</c:if>
-                                                            			<c:if test="${!empty sectors.subsectorLevel2Name}">
-                                                            				<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
-	                                                            				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
-	                                                                			<c:out value="${sectors.subsectorLevel2Name}"/>
-	                                                                		</field:display>
-                                                                		</c:if>
-                                                                		&nbsp;&nbsp;
-                                                                		<field:display name="Percentage" feature="Sectors">
-	                                                                		<c:if test="${sector.sectorPercentage!=''}">                                                                                        
-	                                                                            <c:if test="${sector.sectorPercentage!='0'}">
-	                                                                                    (<c:out value="${sectors.sectorPercentage}" />)%
-	                                                                            </c:if>
-	                                                                        </c:if><br/>
-	                                                                    </field:display>
-
-																		</c:if>
-																	</c:forEach>
-				                                        </c:if>
-					                                    </field:display>
+                            <feature:display name="Sectors" module="Project ID and Planning">                                            
+                            	<tr>
+                                	<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="sector_plus"  onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
+                                    	<img id="sector_minus" onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"style="display : none"/>
+                                        <digi:trn key="aim:sector">	Sector</digi:trn>
+                                    </td>
+                                    <td bgcolor="#ffffff">
+                                    	<div id="sector_dots">...</div>
+                                        <div id="act_sector" style="display: none;">
+							            <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
+							            	<bean:define id="emptySector" value="Sector"></bean:define>
+											<field:display name="${config.name} Sector" feature="Sectors">
+												<c:set var="hasSectors">false</c:set>
+												<c:forEach var="actSect" items="${aimEditActivityForm.sectors.activitySectors}">
+													<c:if test="${actSect.configId==config.id}">
+														<c:set var="hasSectors">true</c:set>
+													</c:if>
+												</c:forEach>
+												<c:if test="${hasSectors}">
+							                    	<strong>
+								                    	<digi:trn key="aim:addactivitysectors:${config.name} Sector">
+								                        	<c:out value="${config.name} Sector"/>
+								                        </digi:trn>
+								                    </strong><br/>
+							                    </c:if>
+					                            <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
+													<c:forEach var="sectors" items="${aimEditActivityForm.sectors.activitySectors}">
+	                                                	<c:if test="${sectors.configId==config.id}">
+                                                        	<field:display name="Sector Scheme Name" feature="Sectors">
+                                                            	<c:out value="${sectors.sectorScheme}" />      
+                                                            </field:display>                                                    
+                                                            <c:if test="${!empty sectors.sectorName}">
+                                                            	<field:display name="Sector Scheme Name" feature="Sectors">
+                                                            		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
+                                                            	</field:display> 
+                                                             	<c:out value="${sectors.sectorName}" />
+                                                             </c:if> 
+                                                             <c:if test="${!empty sectors.subsectorLevel1Name}">
+                                                             	<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">																										
+	                                                            	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
+	                                                                <c:out value="${sectors.subsectorLevel1Name}"/>
+                                                                </field:display>
+                                                            </c:if>
+                                                            <c:if test="${!empty sectors.subsectorLevel2Name}">
+                                                            	<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
+	                                                            	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width="16"/>
+	                                                                <c:out value="${sectors.subsectorLevel2Name}"/>
+	                                                            </field:display>
+                                                            </c:if>
+                                                            &nbsp;&nbsp;
+                                                            <field:display name="Percentage" feature="Sectors">
+	                                                        	<c:if test="${sector.sectorPercentage!=''}">                                                                                        
+	                                                            	<c:if test="${sector.sectorPercentage!='0'}">
+	                                                                	(<c:out value="${sectors.sectorPercentage}" />)%
+	                                                                </c:if>
+	                                                            </c:if><br/>
+	                                                        </field:display>
+														</c:if>
 													</c:forEach>
-                                                    </div>
-												</td>
-                                            </tr>
+				                                 </c:if>
+					                        	</field:display>
+													</c:forEach>
+                                            	</div>
+											</td>
+                                    	</tr>
                                     </feature:display>
                                     
                                     <c:if test="${not empty aimEditActivityForm.components.activityComponentes}">
@@ -1430,32 +1428,30 @@ function collapseAll() {
 																</td></tr>
 															</c:if>
 															<tr><td bgcolor="#ffffff">
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-																<FONT color="blue">*
-																	<digi:trn key="aim:theAmountEnteredAreInThousands">
-																		The amount entered are in thousands (000)		  															</digi:trn>
-																</FONT>
-</gs:test>
+																<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+																	<FONT color="blue">*
+																		<digi:trn>The amount entered are in thousands (000)</digi:trn>
+																	</FONT>
+																</gs:test>
 															</td></tr>
 															<field:display name="Components Physical Progress" feature="Activity - Component Step">
-															<tr><td bgcolor="#f4f4f2">
-																<b><digi:trn key="aim:physicalProgressOfTheComponent">
-																Physical progress of the component</digi:trn></b>
-															</td></tr>
-															<c:if test="${!empty comp.phyProgress}">
-																<c:forEach var="phyProg" items="${comp.phyProgress}">
-																	<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																		<b>
-																			<c:out value="${phyProg.title}"/></b> -
-																			<c:out value="${phyProg.reportingDate}"/>
-																	</td></tr>
-																	<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																		<i>
-																		<digi:trn key="aim:description">Description</digi:trn> :</i>
-																		<c:out value="${phyProg.description}"/>
-																	</td></tr>
-																</c:forEach>
-															</c:if>
+																<tr><td bgcolor="#f4f4f2">
+																	<b><digi:trn>Physical progress of the component</digi:trn></b>
+																</td></tr>
+																<c:if test="${!empty comp.phyProgress}">
+																	<c:forEach var="phyProg" items="${comp.phyProgress}">
+																		<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																			<b>
+																				<c:out value="${phyProg.title}"/></b> -
+																				<c:out value="${phyProg.reportingDate}"/>
+																		</td></tr>
+																		<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																			<i>
+																			<digi:trn key="aim:description">Description</digi:trn> :</i>
+																			<c:out value="${phyProg.description}"/>
+																		</td></tr>
+																	</c:forEach>
+																</c:if>
 															</field:display>
 														</table>
 													</td></tr>
@@ -1583,7 +1579,10 @@ function collapseAll() {
 												<c:forEach var="issue" items="${aimEditActivityForm.issues.issues}">
 													<tr><td valign="top">
 														<li class="level1"><b>
-														<digi:trn key="aim:issuename:${issue.id}"> <c:out value="${issue.name}"/> </digi:trn> <field:display feature="Issues" name="Issue Date"><c:out value="${issue.issueDate}"/> </field:display>
+															<digi:trn> <c:out value="${issue.name}"/> </digi:trn> 
+															<field:display feature="Issues" name="Issue Date">
+																<c:out value="${issue.issueDate}"/>
+															</field:display>
 														</b></li>
 													</td></tr>
 													<field:display name="Measures Taken" feature="Issues">
@@ -1591,9 +1590,7 @@ function collapseAll() {
 															<c:forEach var="measure" items="${issue.measures}">
 																<tr><td>
 																	<li class="level2"><i>
-																	<digi:trn key="aim:${measure.nameTrimmed}">
-																	<c:out value="${measure.name}"/>
-																	</digi:trn>
+																	<digi:trn><c:out value="${measure.name}"/></digi:trn>
 																	</i></li>
 																</td></tr>
 																<field:display name="Actors" feature="Issues">
@@ -1625,16 +1622,14 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="related_documents_plus"  onclick="toggleGroup('related_documents')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
 											<img id="related_documents_minus" onclick="toggleGroup('related_documents')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"style="display : none"/>
-											<digi:trn key="aim:relatedDocuments">
-											Related Documents</digi:trn>
+											<digi:trn>Related Documents</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
 											<div id="related_documents_dots">...</div>
 											<div id="act_related_documents" style="display: none;">
 											<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"
-													id="docs" type="org.digijava.module.aim.helper.Documents">
+												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"id="docs" type="org.digijava.module.aim.helper.Documents">
 													<c:if test="${docs.isFile == true}">
 													<tr><td>
 													 <table width="100%" class="box-border-nopadding">
@@ -1732,34 +1727,33 @@ function collapseAll() {
 											<digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-										<feature:display module="Organizations" name="Responsible Organization"></feature:display>
-
-										<feature:display module="Organizations" name="Responsible Organization">
-											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
-												<img id="implementing_agency_plus"  onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
-                                            	<img id="implementing_agency_minus" onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
-											<b><digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
-												<div id="responsible_organisation_dots">...</div>
-												<div id="act_responsible_organisation" style="display: none;">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
-													id="respOrganisations" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="respOrganisations" property="name" />
-																<c:set var="tempOrgId" scope="page">${respOrganisations.ampOrgId}</c:set>
-																<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization">
-																	<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
-																	(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> ) 
-																	</logic:notEmpty>
-																</field:display>
-															</li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-												</div>
-											</logic:notEmpty>
-                                            </feature:display>
+											<feature:display module="Organizations" name="Responsible Organization"></feature:display>
+											<feature:display module="Organizations" name="Responsible Organization">
+												<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
+													<img id="implementing_agency_plus"  onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
+	                                            	<img id="implementing_agency_minus" onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
+												<b><digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn></b><br/>
+												<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
+													<div id="responsible_organisation_dots">...</div>
+													<div id="act_responsible_organisation" style="display: none;">
+													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+														<tr><td>
+														<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
+														id="respOrganisations" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																<ul><li> <bean:write name="respOrganisations" property="name" />
+																	<c:set var="tempOrgId" scope="page">${respOrganisations.ampOrgId}</c:set>
+																	<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> ) 
+																		</logic:notEmpty>
+																	</field:display>
+																</li></ul>
+														</logic:iterate>
+														</td></tr>
+													</table>
+													</div>
+												</logic:notEmpty>
+	                                         </feature:display>
 											<div id="orgz_dots">...</div>
 											<div id="act_orgz" style="display: none;">
 											   <feature:display name="Executing Agency" module="Organizations">
@@ -2092,23 +2086,27 @@ function collapseAll() {
                                     <feature:display name="Proposed Project Cost" module="Funding">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<digi:trn key="aim:proposedPrjectCost"> Proposed Project Cost</digi:trn>										</td>
+											<digi:trn> Proposed Project Cost</digi:trn>
+										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
-															<td><digi:trn key="aim:cost">Cost</digi:trn></td>
+															<td><digi:trn>Cost</digi:trn></td>
                                                         <td bgcolor="#FFFFFF" align="left" >
-                                                          <c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
-																 	<!--<FONT color=blue>*</FONT>-->
-																 	 ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          </c:if>&nbsp;
-																<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        </td>
-												    </tr>
-																		  <tr bgcolor="#ffffff">
-															<td><digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn></td>
-                                                        <td bgcolor="#FFFFFF" align="left" width="150">
-                                                          <c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
-                                                             ${aimEditActivityForm.funding.proProjCost.funDate}                                                          </c:if>                                                        </td>
+	                                                        <c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
+															 	 ${aimEditActivityForm.funding.proProjCost.funAmount}
+															</c:if>&nbsp;
+															<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>
+														</td>
+												   	  </tr>
+													  <tr bgcolor="#ffffff">
+															<td><digi:trn>Proposed Completion Date</digi:trn></td>
+                                                        	<td bgcolor="#FFFFFF" align="left" width="150">
+	                                                        	<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
+	                                                            	${aimEditActivityForm.funding.proProjCost.funDate}
+	                                                          	</c:if>
+	                                                        </td>
                                                       </tr>
                                                 </table>
                                              </c:if>										</td>
@@ -2134,8 +2132,7 @@ function collapseAll() {
 									</feature:display>
 									<!-- End Costing -->
                                                                          
-                                                                         	<!-- IPA Contracting -->
-                                                                                
+                                   <!-- IPA Contracting -->                                                                                
 									<feature:display name="Contracting" module="Contracting">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
@@ -2168,7 +2165,7 @@ function collapseAll() {
                                                                                 <field:display name="Contract Description" feature="Contracting">
                                                                                  <tr>
                                                                                     <td align="left">
-                                                                                       <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
+                                                                                       <b><digi:trn>Description:</digi:trn></b>
                                                                                     </td>
                                                                                     <td>
                                                                                        ${contract.description}
@@ -2179,7 +2176,7 @@ function collapseAll() {
                                                                                   <field:display name="Contracting Activity Category" feature="Contracting">
                                                                                    <tr>
                                                                                      <td align="left">
-                                                                                  	     <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
+                                                                                  	     <b><digi:trn>Activity Category:</digi:trn></b>
                                                                                       </td>
                                                                                        <td>
                                                                                           <c:if test ="${not empty contract.activityCategory}">${contract.activityCategory.value}</c:if>
@@ -2201,7 +2198,7 @@ function collapseAll() {
                                                                                     <field:display name="Contracting Start of Tendering" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
+                                                                                                <b><digi:trn>Start of Tendering:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.formattedStartOfTendering}
@@ -2224,7 +2221,7 @@ function collapseAll() {
                                                                                         <field:display name="Contract Organization" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
+                                                                                                <b><digi:trn>Contract Organization:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 <c:if test="${not empty contract.organization}">
@@ -2239,11 +2236,10 @@ function collapseAll() {
                                                                                         <field:display name="Contracting Contractor Name" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
+                                                                                                <b><digi:trn>Contract Organization</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
-                                                                                                     ${contract.contractingOrganizationText}
-                                                                                                
+                                                                                                ${contract.contractingOrganizationText}                                                                                                
                                                                                             </td>
                                                                                             
                                                                                         </tr>	
@@ -2252,7 +2248,7 @@ function collapseAll() {
                                                                                         <field:display name="Contract Completion" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
+                                                                                                <b><digi:trn>Contract Completion:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
                                                                                                  ${contract.formattedContractCompletion}

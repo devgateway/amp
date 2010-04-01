@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -23,7 +24,9 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -162,19 +165,21 @@ public class PIReport9 extends PIAbstractReport {
 
 								// Setup row.
 								if (showColumn[0]
-										&& (CategoryManagerUtil.equalsCategoryValue(
-												auxFunding.getFinancingInstrument(),
-												CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) || auxFunding
-												.getFinancingInstrument().getId().equals(new Long(84)))) {
+										&& ArrayUtils
+												.contains(
+														FeaturesUtil
+																.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
+														auxFunding.getFinancingInstrument().getId().toString())) {
 									auxRow.setColumn1(amount);
 								} else {
 									auxRow.setColumn1(new BigDecimal(0));
 								}
 								if (showColumn[1]
-										&& !CategoryManagerUtil.equalsCategoryValue(
-												auxFunding.getFinancingInstrument(),
-												CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)
-										&& !auxFunding.getFinancingInstrument().getId().equals(new Long(84))) {
+										&& !ArrayUtils
+												.contains(
+														FeaturesUtil
+																.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
+														auxFunding.getFinancingInstrument().getId().toString())) {
 									auxRow.setColumn2(amount);
 								} else {
 									auxRow.setColumn2(new BigDecimal(0));

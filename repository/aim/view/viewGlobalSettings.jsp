@@ -74,9 +74,16 @@ function saveClicked() {
 
 }
 function validateCustomFields(form){
-	if (form.gsfValue.value==''){
-		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)	
-		return false;
+	if (typeof form.gsfValue != "undefined") {
+		if (form.gsfValue.value==''){
+			alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)	
+			return false;
+		}
+	} else {
+		if (form.listOfValues.value==''){
+			alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)	
+			return false;
+		}
 	}
 	return true;
 }
@@ -169,20 +176,41 @@ function createDateString(monthId, dayId) {
 
 function saveAllSettings(){
 	var allvalues='';
-	for (i=0;i < document.aimGlobalSettingsForm.length -1;i++){
-	  if (document.aimGlobalSettingsForm[i].globalId){
-			if (!validateCustomFields(document.aimGlobalSettingsForm[i])){
-			return false;
+	for (i=0;i < document.aimGlobalSettingsForm.length -1;i++) {
+		if (document.aimGlobalSettingsForm[i].globalId) {
+			if (!validateCustomFields(document.aimGlobalSettingsForm[i])) {
+				return false;
+			}
+			var id=document.aimGlobalSettingsForm[i].globalId.value;
+			if (typeof document.aimGlobalSettingsForm[i].gsfValue != "undefined") {
+				var opt = document.aimGlobalSettingsForm[i].gsfValue;
+				var val=document.aimGlobalSettingsForm[i].gsfValue.value;
+				allvalues=allvalues+id+"="+val+"&";
+			} else {
+				// Code for multiselect.
+				var opt = document.aimGlobalSettingsForm[i].listOfValues;
+				var selected = new Array();
+				var index = 0;
+				var val = id + '=';
+				for (var intLoop=0; intLoop < opt.length; intLoop++) {
+					if (opt[intLoop].selected) {
+						index = selected.length;
+						selected[index] = new Object;
+						selected[index].value = opt[intLoop].value;
+						selected[index].index = intLoop;
+						val = val + selected[index].value + ';';
+					}
+				}
+				val = val + "&";
+				allvalues = allvalues + val;
+			}
 		}
-		    var id=document.aimGlobalSettingsForm[i].globalId.value;
-	    	var val=document.aimGlobalSettingsForm[i].gsfValue.value;
-		    allvalues=allvalues+id+"="+val+"&";
-		}
-	  
 	}
+	//alert(allvalues);
 	document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].allValues.value=allvalues;
 	return true;
 }
+
 function setIndex(index){
 		document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].indexTab.value=index;
 	}
@@ -347,8 +375,14 @@ function startClock(){
 			                                    
 			                                    <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text> 
 			                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn> 	
+												
+												<%}else if(globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Budget Support for PI 9".trim())) {%>
+													<html:select property="listOfValues" styleClass="inp-text;width:100%" multiple="true" name="globalSett">
+				                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
+				                                        <html:option value="${global.key}">${global.value}</html:option>
+				                                      </logic:iterate>
+				                                    </html:select>
 			                                    <%}else { %>
-			                                    	
 			                                    
 			                                    <html:select   property="gsfValue" alt="prueba"  style="width:100%"  styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">

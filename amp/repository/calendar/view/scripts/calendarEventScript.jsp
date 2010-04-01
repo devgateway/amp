@@ -22,6 +22,7 @@
 			
 		};
 	
+		var myPanel1Init = false;
 		var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"700px",
 		    fixedcenter: true,
@@ -67,7 +68,10 @@
             recStartMinute.selectedIndex=parseInt(endDateTime.value.substring(3,5));
         }
 
-        myPanel1.setBody(element);
+		if (!myPanel1Init){
+	        myPanel1.setBody(element);
+	        myPanel1Init = true;
+		}
 		myPanel1.center();
 		myPanel1.show();
 		initCalendar();

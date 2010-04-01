@@ -5,22 +5,15 @@
  */
 package org.dgfoundation.amp.visibility;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.util.FeaturesUtil;
-
-import bsh.util.Util;
 
 /**
  * @author dan

@@ -162,9 +162,8 @@ function openEUActivityDetails(euActivityId) {
 	</tr>
 	<field:display name="Costing Contribution Gap" feature="Costing">
 		<tr bgcolor="#FFFFFF">
-			<td align="right"><b><digi:trn key="aim:viewcostssummary:contributionGap">Contribution Gap:</digi:trn></b></td>
-			<td align="right"><b> 
-			
+			<td align="right"><b><digi:trn>Contribution Gap:</digi:trn></b></td>
+			<td align="right"><b>			
 				<aim:formatNumber value="<%=(grandCost.subtract(grandContribution))%>"/></b></td>
 			<td align="right">&nbsp;</td>
 		</tr>

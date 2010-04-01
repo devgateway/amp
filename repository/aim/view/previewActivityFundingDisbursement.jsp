@@ -35,14 +35,13 @@
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
 						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Disbursement"
-								feature="Funding Information">
-								<digi:trn
-									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
-								</digi:trn>
-							</field:display></td>
+							<td align="right" bgcolor="#FFFFFF">
+								<field:display	name="Adjustment Type Disbursement"	feature="Funding Information">
+									<digi:trn>
+										<bean:write name="fundingDetail" property="adjustmentTypeName" />
+									</digi:trn>
+								</field:display>
+							</td>
 
 							<td align="right"><field:display name="Date Disbursement"
 								feature="Funding Information">
@@ -67,27 +66,23 @@
 	<!-- End Planned Disbursements -->
 	
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key='aim:subtotalplanneddisbursement'>
-                                                                                		    SUBTOTAL PLANNED DISBURSEMENT:	                                                                                	</digi:trn>
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<digi:trn>SUBTOTAL PLANNED DISBURSEMENT:</digi:trn>
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalPlannedDisbursements}">
           		  ${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}
             </c:if>&nbsp;
-			</td>
+		</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
-	</tr>
-	
+	</tr>	
 	</field:display>
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC"
-			style="text-transform: uppercase; text-transform: uppercase"><digi:trn
-			key="aim:actualisbursements">ACTUAL DISBURSEMENT</digi:trn></td>
+		<td colspan="4" bgcolor="#FFFFCC"style="text-transform: uppercase; text-transform: uppercase">
+			<digi:trn>ACTUAL DISBURSEMENT</digi:trn>
+		</td>
 	</tr>
 
 	<!-- Start Actual Disbursements -->
@@ -96,14 +91,13 @@
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Disbursement"
-								feature="Funding Information">
-								<digi:trn
-									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
-								</digi:trn>
-							</field:display></td>
+							<td align="right" bgcolor="#FFFFFF">
+								<field:display	name="Adjustment Type Disbursement"	feature="Funding Information">
+									<digi:trn>
+										<bean:write name="fundingDetail" property="adjustmentTypeName" />
+									</digi:trn>
+								</field:display>
+							</td>
 
 							<td align="right" align="right"><field:display name="Date Disbursement"
 								feature="Funding Information">
@@ -128,15 +122,12 @@
 	<!-- End Actual Disbursements -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><digi:trn
-			key='aim:subtotalActualdisbursement'>
-                                                                                    SUBTOTAL ACTUAL DISBURSEMENT </digi:trn>
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+			<digi:trn>SUBTOTAL ACTUAL DISBURSEMENT </digi:trn>
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
-                                  ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}
+             	${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}
              </c:if>&nbsp;
         </td>
                    

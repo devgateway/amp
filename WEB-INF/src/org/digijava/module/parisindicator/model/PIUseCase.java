@@ -260,8 +260,11 @@ public class PIUseCase {
 			session = PersistenceManager.getRequestDBSession();
 			// Set the query to return AmpAhSurvey objects.
 			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
-			criteria.createAlias("pointOfDeliveryDonor", "podd1");
 			
+			// Link to amp_activity view to use only the last version of an activity.
+			criteria.createAlias("ampActivityId", "activityTable");	
+			
+			criteria.createAlias("pointOfDeliveryDonor", "podd1");
 			// Explanation: Hibernate will automatically detect prior alias 'podd1' to amp_organisation 
 			// and use it to link with amp_org_group to create alias 'podd2', then using the same logic
 			// will link 'podd2' to create 'podd3', and thats the alias I can use to access amp_org_type.

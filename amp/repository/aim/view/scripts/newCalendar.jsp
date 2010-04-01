@@ -205,8 +205,8 @@
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		var myX = div.offsetWidth / 2;
 		var myY = intY +(div.offsetHeight / 2);
-		if (browser!="Microsoft Internet Explorer" || document.getElementById('popinContent').scrollTop < myY){
-			myY -= document.getElementById('popinContent').scrollTop;
+		if (browser!="Microsoft Internet Explorer" || document.getElementById('popin').scrollTop < myY){
+			myY -= document.getElementById('popin').scrollTop;
 		}
 		calendarObjForForm.setCalendarPositionByHTMLElement(div, myX, myY );	// Position the calendar right below the form input
 		calendarObjForForm.setInitialDateFromInput(inputObject,format);	// Specify that the calendar should set it's initial date from the value of the input field.

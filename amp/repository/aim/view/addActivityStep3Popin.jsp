@@ -189,10 +189,10 @@
 		}
 		else if (element.style.display == "none"){
 			element.style.display = "inline";
+			element.style.width="100%"
+			element.style.height="100%";
+			element.style.overflow="auto";		
 		}
-		element.style.width="100%"
-		element.style.height="100%";
-		element.style.overflow="scroll";		
 		
 		if (panelStart < 1){
 			myPanel.setBody(element);

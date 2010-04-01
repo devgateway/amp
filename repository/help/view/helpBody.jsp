@@ -18,8 +18,9 @@
 <script type="text/javascript">
 
 function showBody(title){
-	$(title).find("div.bodyShort").hide();
-	$(title).find("div.bodyFull").show();
+    var topic=$(title).parents("div:eq(1)");
+	$(topic).find("div.bodyShort").toggle();
+	$(topic).find("div.bodyFull").toggle();
 }
 </script>
 

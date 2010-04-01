@@ -149,15 +149,7 @@ function GetXmlHttpObj()	{
 </script>
 
 
-<style type="text/css">
 
-  .link{
-      cursor:pointer;
-      font-size:10px;
-   }
-
-
-</style>
 
 <div id="content"  class="yui-skin-sam" style="width:100%;">
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">

@@ -29,12 +29,12 @@
             {:prompt => I18n.t('options.prompt') }, :class => "large" %></li>
 	
 	<li><%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name", 
-				{ :required => true, :prompt => I18n.t('options.prompt') }, :class => "large" %></li>
+				{ :required => true, :prompt => t('.prompt') }, :class => "large" %></li>
 	
 	<li><%= f.collection_select :country_strategy_id, @project.donor.country_strategies, "id", "strategy_number",
-	 		{ :prompt => I18n.t('options.country_strategy_unavailable') }, :class => "large" %></li>
+	 		{ :prompt => t('.country_strategy_unavailable') }, :class => "large" %></li>
 	<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
-			:include_blank => I18n.t('options.prompt'), :translate => true %></li>
+			:include_blank => t('.prompt'), :translate => true %></li>
 
     
 	<li class="fifty">

@@ -1,11 +1,11 @@
-<h2><%= header lc(:title) %></h2>
+<h2><%= header t('.title') %></h2>
 
 <table>
 	<tr>
-		<th><%= ll(:terms, :sector) %></th>
-		<th><%= ll(:reports, :no_projects) %></th>
-		<th><%= ll(:reports, :list) %></th>
-<!--		<th><%= ll(:terms, :map) %></th>-->
+		<th><%= t('.sector') %></th>
+		<th><%= t('.no_projects') %></th>
+		<th><%= t('.list') %></th>
+<!--		<th><%= t('.map') %></th>-->
 	</tr>
 	
 	<% @sectors.each do |sector| %>

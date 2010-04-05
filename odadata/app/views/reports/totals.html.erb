@@ -14,7 +14,7 @@
 				<%= hidden_field_tag option[0], option[1] %>
 			<% end %>
 		<% end %>
-        <%= lc(:commitments_payments_selection) %>:
+        <%= t('.commitments_payments_selection') %>:
 		<select name="type" onchange="$(this).parent().submit()">
 			<% %w(commitments payments).each do |cp| %>
 				<option value="<%= cp -%>" <%= "selected='selected'" if  cp == @type%> ><%= cp.titleize -%></option>
@@ -35,7 +35,7 @@
 				<th><%= year %></th>
 			<% end %>
 			<% if year >= Time.now.year %>
-				<th><%= year %> <%= ll(:terms, :forecast) %></th>
+				<th><%= year %> <%= t('.forecast') %></th>
 			<% end %>
 		<% end %>
 	</tr>

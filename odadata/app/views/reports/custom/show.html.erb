@@ -8,6 +8,6 @@
 	);
 </script>
 
-<h2><%= header lc(:title) %></h2>
+<h2><%= header t('.title') %></h2>
 
 <%= Reports::ProjectReport.render_html(:data => @data) %>

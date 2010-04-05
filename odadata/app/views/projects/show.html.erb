@@ -1,7 +1,7 @@
 <% stylesheet 'factsheets' %>
 
 <div class="factsheet">
-	 <a class="prt" href="#" onclick="window.close();"><%= ll(:actions, :close_window) %></a><a class="prt" href="#" onclick="window.print();"><%= ll(:actions, :print) %></a>
+	 <a class="prt" href="#" onclick="window.close();"><%= t('.close_window') %></a><a class="prt" href="#" onclick="window.print();"><%= t('.print') %></a>
 	<h3><%= header lc(:title, :project => @project.donor_project_number) %></h3>
 		
 	<dl class="main_details">
@@ -21,7 +21,7 @@
 		<dd><%=@project.government_counterpart.andand.code %> <%= @project.government_counterpart.andand.name %></dd>
 		
 		<dt><%= Project.human_attribute_name('country_strategy') %></dt>
-		<dd><%= @project.country_strategy.andand.strategy_number || t('options.country_strategy_unavailable') %></dd>
+		<dd><%= @project.country_strategy.andand.strategy_number || t('.country_strategy_unavailable') %></dd>
 	</dl>
 	
 	<div class="map_image">
@@ -29,7 +29,7 @@
 		  	:popup => ['', 'height=700,width=915,scrollbars=yes,resizable=yes'], :class => 'map' %>
 	</div>
 	
-	<h3><%= lc(:project_information) %></h3>
+	<h3><%= t('.project_information') %></h3>
 	<dl>
 	    <dt class="first"><%= Project.human_attribute_name('prj_status') %></dt>
 	    <dd class="first"><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
@@ -58,7 +58,7 @@
 		<dd><%= @project.comments %>&nbsp;</dd>
 	</dl>
 
-	<h3><%= lc(:funding_information) %></h3>
+	<h3><%= t('.funding_information') %></h3>
 	<dl>
 	    <dt class="first"><%= Project.human_attribute_name('aid_modality') %></dt>
 	    <dd class="first"><%= @project.aid_modality.name %></dd>
@@ -73,7 +73,7 @@
 	</dl>
 	
 	<dl>
-		<dt><%= lc(:totals) %></dt>
+		<dt><%= t('.totals') %></dt>
 		<dd>
 			<dl>
 				<dt class="first"><%= Funding.human_attribute_name('payments') %></dt>
@@ -85,7 +85,7 @@
 		</dd>
 		
 		<% if @project.historic_funding %>
-	    	<dt><%= lc(:historic) %></dt>
+	    	<dt><%= t('.historic') %></dt>
 	    	<dd>
 				<dl>
 	            	<dt class="first"><%= HistoricFunding.human_attribute_name('payments') %></dt>
@@ -98,7 +98,7 @@
 		<% end %>
 		    
 	    <% @project.fundings.ordered.select(&:has_data?).each do |f| %>
-	    	<dt><%= lc(:funding, :year => f.year) %></dt>
+	    	<dt><%= t('.funding', :year => f.year) %></dt>
 	        <dd>
 				<dl>
 	            	<dt class="first"><%= Funding.human_attribute_name('commitments') %></dt>
@@ -129,7 +129,7 @@
 	    <% end %>
 	
 		<% @project.funding_forecasts.ordered.select(&:has_data?).each do |f| %>
-	    	<dt><%= lc(:funding_forecast, :year => f.year) %></dt>
+	    	<dt><%= t('.funding_forecast', :year => f.year) %></dt>
 	        <dd>
 				<dl>
 					<dt class="first"><%= FundingForecast.human_attribute_name('payments') %></dt>
@@ -148,7 +148,7 @@
 	    <% end %>
 	</dl>
 		
-	<h3><%= lc(:classification) %></h3>
+	<h3><%= t('.classification') %></h3>
 		<dl>		
 			<dt class="first"><%= Project.human_attribute_name('implementing_agencies') %></dt>
 			<dd class="first">
@@ -183,7 +183,7 @@
 				</dl>
 			</dd>
 	
-			<dt><%= lc(:mdgs) %></dt>
+			<dt><%= t('.mdgs') %></dt>
 			<dd>
 				<ul>
 					<% @project.mdgs.each do |mdg| %>
@@ -192,7 +192,7 @@
 				</ul>
 			</dd>
 			
-			<dt><%= lc(:markers) %></dt>
+			<dt><%= t('.markers') %></dt>
 			<dd>
 				<dl>
 					<dt class="first"><%= Project.human_attribute_name('gender_policy_marker') %></dt>
@@ -209,10 +209,10 @@
 				</dl>
 			</dd>
 					
-			<dt><%= lc(:focal_regions) %></dt>
+			<dt><%= t('.focal_regions') %></dt>
 			<dd>
 				<% if @project.geo_relevances.blank? %>
-					<%= ll(:options, :national) %>
+					<%= t('.national') %>
 				<% else %>
 					<dl>
 
@@ -228,7 +228,7 @@
 									<% relevances.sort_by { |a| a.district.name }.each do |r| %>
 										<%# this is lame hack II, but it works :( (All Municipalities code is 100*n) %>
                                     	<% if r.district.code.to_i%100 == 0 %>
-                                    		<li><%= lc(:all_district) %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
+                                    		<li><%= t('.all_district') %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
                                     	<% else %>
 											<li><%= r.district.name %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
 										<% end %>

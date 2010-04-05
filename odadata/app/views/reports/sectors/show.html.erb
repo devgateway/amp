@@ -1,4 +1,4 @@
-<h2><%= header lc(:title, :sector => @sector.name_with_code) %></h2>
+<h2><%= header t('.title', :sector => @sector.name_with_code) %></h2>
 
 <%= Reports::ProjectReport.render_html(
 		:projects => @projects, 

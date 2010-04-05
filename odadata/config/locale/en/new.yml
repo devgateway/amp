@@ -94,7 +94,7 @@ en:
       title: Add New Exchange Rate
       back: Back
   
-  layout:
+  layouts:
     currency_reports_window:
       no_results_message: Your search has returned no results. Please try expanding the query.
       print: Print
@@ -107,7 +107,7 @@ en:
     report_show:
       close_window: Close Window
     header:
-      _admin:
+      admin:
         gen_conf: General Configuration
         op_cl_data_input: Op./Cl. Data Input
         glossary: Glossary
@@ -118,14 +118,15 @@ en:
         gov_counterpart: Government Counterpart
         scrollbars: News Tickers
         logout: Log out
-      _default:
+      default:
         short_title: Official Development Assistance <br/>to Nicaragua Database
         design_own: Design own report
         links: Links
         downloads: Downloads
         exchange_rates: Exchange Rates
         resources: Resources
-      _focal_point:
+      focal_point:
+        design_own: Design own report
         bluebook: EU Blue Book
         projects: Projects
         new_project: Add New
@@ -147,7 +148,7 @@ en:
         country_manual: ODAnic Manual
         contact: Contact
         logout: Log out
-        
+  
   odamap:
     _query_options:
       next_step: next step
@@ -160,9 +161,178 @@ en:
       toa: Aid Modality
       status: Project Status
   
-  porjects:
-    _contracted_agency:
+  projects:
+    form:
+      stages:
+        profile_information: Profile Information
+        sector_agencies: Sector / Agencies
+        goals: MDGs
+        location_funding: Location / Funding
+        funding_forecast: Funding Forecasts
+    contracted_agency:
       prompt: Please select
-
-        
+    geo_relevance:
+      prompt: Please select
+      delete: Delete
+    location_funding_form:
+      cofunding_title: Co-Funding Donors and Amounts
+      funding_title: Finances {{year}}
+      historic_funding: Historic Funding (up to the end of {{year}})
+      add_cofunding_donor: Add another Donor
+      geo_usage: |
+         Please select the focal regions of this project.<br />
+         If you do not select any, it will be considered a national project.
+         add_location: Add another Location
+    implementing_agency:
+      prompt: Please select
+      delete_associated: Delete
+    profile_information_form:
+      prompt: Please select
+      country_strategy_unavailable: Not linked to any strategy
+    project:
+      edit: Edit
+      delete: Delete
+      choose_action: 'Choose:'
+      publish: Publish
+      draft: Draft
+    sector_agencies_form:
+      prompt: Please select
+      not_avail: Not available
+    sector_relevance:
+      no_subsector: No Sub-Sector
+      prompt: Please select
+      delete: Delete
+    edit:
+      title: Edit Project "{{project}}"
+    index:
+      donor: Donor
+      project_no: Project No.
+      project_title: Project Title
+      total_commitments: Total Committed
+      disbursed: Disbursed {{year}}
+      disbursement_forecast: Disbursement Forecast {{year}}
+      title: List <i>{{status}}</i> Projects
+      empty: Please add your projects.
+    new:
+      title: Add New Project
+    show:
+      print: Print
+      close_window: Close Window
+      title: Project Fact Sheet for <i>{{project}}</i>
+      project_information: Project Information
+      funding_information: Funding Information
+      totals: Funding Totals
+      historic: Historic Funding
+      funding: Funding {{year}}
+      funding_forecast: Funding Forecast {{year}}
+      classification: Classification
+      markers: Markers
+      mdgs: MDGs
+      focal_regions: Focal Regions
+      all_district: All municipalities
+      country_strategy_unavailable: Not linked to any strategy
+      national: National
+    show_map:
+      region: Region
+      project: Project
+      municipalities: Municipalities
+      map_legend: "Yellow highlighted areas are the project's focal regions/municipalities"
   
+  reports:
+    custom:
+      new:
+        donor: Donor
+        region: Region
+        markers: Rio &amp; Policy Markers
+        mdg: MDG
+        dac_sector: DAC Sector
+        all: all
+        grant_loan: Grant / Loan
+        of_budget: On/Off Budget
+        of_treasury: On/Off Treasury
+        toa: Aid Modality
+        cod: ODA Breakdown
+        status: Project Status
+        disaggregation:
+          title: Disaggregation
+          by_sector: Disaggregate Fundings by DAC-CRS Sector
+          by_location: Disaggregate Fundings by Location
+        title: Custom Report
+        output: Output
+        output_format: Output Format
+        web: Web Document
+        excel: Excel Download
+        map: Show Map
+        fields: Display Fields
+        main_filter: Main Filter Criteria
+        markers_annotation: '* Significant &amp; Principal Projects only'
+        other: Other Criteria
+        action: Action
+        query_database: Query Database
+        totals: Annual Totals
+        output_in: Output in
+        select_all: Select All
+      show:
+        title: Custom Report
+    districts:
+      index:
+        title: "Projects of <i>{{province}}</i> by Municipality"
+        no_projects: Number of Projects
+        list: List
+        municipality: Municipality
+      show:
+        title: Projects of {{district}}
+    donors:
+      index:
+        title: Projects by Donor
+        no_projects: Number of Projects
+        list: List
+        donor: Donor
+        map: Map
+      show:
+        title: Projects of {{donor}}
+    mdgs:
+      index:
+        title: Projects by MDG
+        no_projects: Number of Projects
+        list: List
+        map: Map
+      show:
+        title: Projects of {{mdg}}
+    provinces:
+      index:
+        no_projects: Number of Projects
+        list: List
+        region: Region
+        details: Details
+        title: Projects by Department
+      show:
+        title: Projects in {{province}}
+    sectors:
+      index:
+        no_projects: Number of Projects
+        list: List
+        map: Map
+        title: Projects by Sector
+        sector: Sector
+      show:
+        title: Projects of {{sector}}
+    totals:
+      forecast: Forecast
+      commitments_payments_selection: Select Commitments/Disbursements
+  
+  settings:
+    data_input_status:
+      open: Data Input is currently open
+      closed: Data Input is currently closed
+      do_close: Close Data Input
+      do_open: Open Data Input
+    scrollbars:
+      title: Update Newstickers
+      submit: Save tickers
+      successful: Successfully updated news tickers!
+    
+        
+        
+        
+        

@@ -42,15 +42,15 @@
 	
 	
 	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
-				:include_blank => ll(:options, :prompt), :translate => true %></li>
+				:include_blank => t('.prompt'), :translate => true %></li>
 				
 	<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
-				:include_blank => ll(:options, :prompt), :translate => true %></li>
+				:include_blank => t('.prompt'), :translate => true %></li>
 	
 	<li class="thirty"><%= aid_modality_select(f) %></li>
 	
 	<li class="thirty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
-				 :include_blank => ll(:options, :prompt), :translate => true %></li>
+				 :include_blank => t('.prompt'), :translate => true %></li>
 	
 	
 	<script type="text/javascript" charset="utf-8">
@@ -79,11 +79,11 @@
 	<li id="delegated_cooperation">
 		<% f.fields_for :delegated_cooperation, @project.delegated_cooperation || DelegatedCooperation.new do |dc| %>			
 			<%= dc.collection_select :delegating_donor_id, Donor.ordered, :id, :name, 
-				{ :prompt => t('options.prompt') }, :class => 'dynamic_select parent large' %>
+				{ :prompt => t('.prompt') }, :class => 'dynamic_select parent large' %>
     
 			<%= dc.related_collection_select :delegating_agency_id, :donor_id, 
 				Donor.ordered, :'agencies.ordered', :name, :id, :name, 
-				{ :prompt => t('options.not_avail') }, :class => 'dynamic_select child large' %>
+				{ :prompt => t('.not_avail') }, :class => 'dynamic_select child large' %>
 		<% end %>
 	</li>	
 		

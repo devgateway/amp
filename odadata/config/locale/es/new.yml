@@ -25,9 +25,9 @@ es:
       toa_payments: "{{type}} Desembolsos"
   
   country_strategies:
-    _focal_province:
+    focal_province:
       delete: Delete
-    _focal_sectors:
+    focal_sectors:
       amount: Amount
       national_sector: Sector is national
       focal_regions: Focal Regions
@@ -105,12 +105,12 @@ es:
     graph_window:
       print: Imprimir
       close_window: Cerrar ventana
-    _currency_selector:
+    currency_selector:
       currency_selection: Seleccione la moneda
     report_show:
       close_window: Cerrar ventana  
     header:
-       _admin:
+       admin:
          logout: Salir
          gen_conf: Configuración General
          op_cl_data_input: Abrir/Cerrar Ingreso de Datos
@@ -121,13 +121,14 @@ es:
          agencies: Agencias
          gov_counterpart: Homólogo Gubermental
          scrollbars: Señales de Pantalla  
-       _default:
+       default:
          exchange_rates: Tasas de Cambio
          design_own: 'Diseña Reporte' 
          links: Enlaces
          downloads: Descargas
          resources: Recursos 
-       _focal_points:
+         short_title: Sistema de la asistencia oficial <br/>de desarrollo a Nicaragua
+       focal_points:
          bluebook: Blue Book UE
          projects: Proyectos
          new_project: Añadir Nuevo
@@ -148,7 +149,7 @@ es:
          contact: Contacto
   
   odamap:
-    _query_options:
+    query_options:
       donor: Donante
       dac_sector: Sectores CAD
       location: Localidades
@@ -160,5 +161,164 @@ es:
       status: Estado del proyecto
   
   projects:
-    _contracted_agency:
+    form:
+      stages:
+        profile_information: Información de Perfil
+        sector_agencies: Sectores / Agencias
+        goals: ODM
+        location_funding: Ubicación / Financiamiento
+        funding_forecast: Proyección de Financiamiento
+    contracted_agency:
       prompt: Por favor seleccione
+      delete: Borrar
+    geo_relevance:
+      prompt: Por favor seleccione
+      delete: Borrar
+    implementing_agency:
+      prompt: Por favor seleccione
+      delete_associated: Borrar
+    location_funding_form:
+      cofunding_title: Donantes co-financiadores y montos
+      historic_funding: Historic Funding (up to the end of {{year}})
+      funding_title: Finances {{year}}
+      add_cofunding_donor: Add another Donor
+      geo_usage: |
+        Please select the focal regions of this project.<br />
+        If you do not select any, it will be considered a national project.
+    profile_information_form:
+      country_strategy_unavailable: No vinculado a una estrategia
+      prompt: Por favor seleccione
+    project:
+      edit: Editar
+      delete: Borrar
+      choose_action: 'Escoge:'
+      publish: Publica
+      draft: Borrador
+    sector_agencies_form:
+      prompt: Por favor seleccione 
+      not_avail: No disponible
+    sector_relevance:
+      prompt: Por favor seleccione
+      no_subsector: Sin Sub-Sector
+      delete: Borrar
+    edit:
+      title: Editar Proyecto "{{project}}"
+    index:
+      title: Listar Proyectos que son <i>{{status}}</i>
+      empty: Por favor agrega sus proyectos.
+      donor: Donante
+      project_no: No. de Proyecto
+      project_title: Título de Proyecto
+      total_commitments: Monto Comprometido
+      disbursed: Desembolsado {{year}}
+      disbursement_forecast: Proyección de desembolsos {{year}}
+    new:
+      title: Añadir Nuevo Proyecto
+    show:
+      title: Ficha Descriptiva para <i>{{project}}</i>
+      project_information: Información de Proyecto
+      funding_information: Información de Financiamiento
+      classification: Clasificación
+      markers: Marcas
+      mdgs: ODM
+      focal_regions: Departamentos Focales
+      historic: Financiamiento Histórico
+      totals: Total de Financiamiento
+      funding: Financiamiento {{year}}
+      funding_forecast: Proyección de Financiamiento {{year}}
+      all_district: Todos los municipios
+      national: Nacional
+      country_strategy_unavailable: No vinculado a una estrategia
+    show_map:
+      project: Proyecto
+      regions: Departamentos
+      municipalities: Municipalidades
+      map_legend: Las áreas sobresaltadas en amarillo son las regiones focales del proyecto
+  
+  reports:
+    custom:
+      new:
+        all: todos
+        donor: Donante
+        mdg: ODM
+        region: 'Departamento'
+        markers: Indicadores
+        dac_sector: Sectores CAD
+        grant_loan: 'Donación / Préstamo'
+        of_budget: Incluido en el Presupuesto
+        of_treasury: Incluido en Tesorería
+        toa: Modalidad de Ayuda
+        cod: Distribución de AOD
+        status: Estado del proyecto
+        disaggregation:
+          title: Disaggregation
+          by_sector: Disaggregate Fundings by DAC-CRS Sector
+          by_location: Disaggregate Fundings by Location
+        title: Reporte Personalizado
+        output: Salida
+        output_format: Formato de Salida
+        web: Documento Web 
+        excel: Descargar Excel
+        map: Mostrar Mapa
+        fields: Mostrar Campos
+        main_filter: Filtro Principal del Criterio
+        markers_annotation: '* Importante &amp; Solamente Proyectos Principales'
+        other: Otros Criterios
+        action: Acción
+        query_database: Consultar
+        totals: Total Anual
+        output_in: Salida en 
+        select_all: Seleccionar Todos
+        deselect_all: Deseleccionar Todos
+      show:
+        title: Reporte Personalizado
+    districts:
+      index:
+        title: Reporte Personalizado
+        no_projects: Número de Proyectos 
+        list: Listar
+        municipality: Municipalidad
+      show:
+        title: Proyectos de {{district}}
+    donor:
+      index:
+        no_projects: Número de Proyectos 
+        list: Listar
+        title: Proyectos por Donantes
+        donor: Donor
+        map: Mapa
+      show:
+        title: Proyectos de {{donor}}
+    mgds:
+      index:
+        no_projects: Número de Proyectos 
+        list: Listar
+        map: Mapa
+        title: Proyectos por ODM
+        mdg: MDG
+      show:
+        title: Proyectos de {{mdg}}
+    provinces:
+      index:
+        title: Proyectos por Departamento
+        no_projects: Número de Proyectos 
+        list: Listar
+        region: 'Departamento'
+        details: Detalles
+      show:
+        title: Proyectos de {{province}}
+    sectors:
+      index:
+        no_projects: Número de Proyectos 
+        list: Listar
+        map: Mapa
+        title: Proyectos por Sector
+        sector: Sectores
+      show:
+        title: Proyectos de {{sector}}
+    totals:
+       commitments_payments_selection: Seleccione Compromisos/Desembolsos
+       forecast: 'Proyección'
+       
+        
+        

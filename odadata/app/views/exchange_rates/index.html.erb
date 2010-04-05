@@ -1,8 +1,8 @@
-<h2><%= header lc(:title) %></h2>
+<h2><%= header t('.title') %></h2>
 
 <table>
 	<% if @exchange_rates.blank? %>
-		<tr><td class="empty"><%= lc(:empty) %></td></tr>
+		<tr><td class="empty"><%= t('.empty') %></td></tr>
 	<% else %>
 		<% @exchange_rates.each do |year, rates| %> 
 			<tr>
@@ -21,7 +21,7 @@
 					<td><%= rate.currency %></td>
 					<td><%= rate.euro_rate %></td>
 					<% restrict_to 'admin' do %>
-						<td><%= link_to ll(:actions, :edit), edit_exchange_rate_path(rate) %></td>
+						<td><%= link_to t('.edit'), edit_exchange_rate_path(rate) %></td>
 					<% end %>
 				</tr>
 			<% end %>
@@ -30,5 +30,5 @@
 </table>
 	
 <% restrict_to 'admin' do %>
-	<p><b><%= link_to lc(:new), new_exchange_rate_path %></b></p>
+	<p><b><%= link_to t('.new'), new_exchange_rate_path %></b></p>
 <% end %>

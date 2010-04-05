@@ -1,0 +1,164 @@
+es:
+  
+  agencies:
+    index:
+      title: Lista de Agencias
+      empty: No hay agencias en el base de datos. Por favor crea una nueva agencia.
+      new: Añadir Agencia
+      edit: Editar
+    new:
+      title: Añadir Nueva Agencia
+      submit: Crear Agencia
+      back: Regresar
+    edit:
+      title: Editar Agencia
+      submit: Actualizar Agencia
+      back: Regresar
+  
+  consistencies:
+    show:
+      title: Detalles de Regularidad de Financiamiento
+      year: Año
+      total_commitments: Monto Comprometido
+      total_payments: Monto Pagado
+      donor: Donante
+      toa_payments: "{{type}} Desembolsos"
+  
+  country_strategies:
+    _focal_province:
+      delete: Delete
+    _focal_sectors:
+      amount: Amount
+      national_sector: Sector is national
+      focal_regions: Focal Regions
+    edit:
+      title: Editar Estrategia de País
+      back: Regresar
+    index:
+      title: Estrategias de País y Detalles de Programación
+      empty: No hay estrategias de país.
+      edit: Editar
+      show: Mostrar
+      new: Añadir nueva Estrategia de País
+    new:
+      title: Añadir nueva Estrategia de País
+    show:
+      details: Estrategia del País y Detalles de la Programación 
+      general: Información General
+      total_oda_commitments: Compromisos Totales de AOD
+      total_oda_disbursements: Desembolsos Totales de AOD
+  donor_agencies:
+    edit:
+      titel: Editar Estrategia de País
+      back: Editar
+    index:
+      title: Agencies for {{donor}}
+      new: Añadir nueva Estrategia de País
+      edit: Editar
+      delete: Borrar
+      confirm_delte: '¿Está seguro que quiere borrar "{{agency}}"?'
+      empty: No hay agencias por este donante. Por favor crea una agencia nueva.
+    new:
+      title: Añadir Nueva Agencia por Donante {{donor}}
+      back: Regresar
+    
+  donor_details:
+    edit:
+       title: Editar donante
+  
+  donor:
+    edit:
+       title: Editar donante
+    index:
+       title: Donante / Lista de donantes co-financiadores
+       empty: No hay donantes en el base de datos. Por favor crea un donante nuevo.
+       edit: Editar
+       delete: Borrar
+       agencies: Agencias donantes ({{total}})
+       logins: Cuenta de ingreso
+       new: Añadir donante nuevo
+    new:
+      title: Añadir donante nuevo
+    show:
+      title: Ficha Descriptiva para <i>{{donor}}</i>
+  
+  exchange_rates:
+    edit:
+      title: Editar Agencia
+    index:
+      edit: Editar
+      title: Lista de Agencias
+      empty: No hay agencias en el base de datos. Por favor crea una nueva agencia.
+      new: Añadir Agencia
+    new:
+      back: Regresar
+      title: Añadir nueva tasa de cambio
+  
+  
+
+  
+  layouts: 
+    currency_report_window:
+      no_results_message: Su búsqueda no ha encontrado resultados. Por favor, intente buscar de nuevo con diferente criterio.
+      print: Imprimir
+      close_window: Cerrar ventana
+    graph_window:
+      print: Imprimir
+      close_window: Cerrar ventana
+    _currency_selector:
+      currency_selection: Seleccione la moneda
+    report_show:
+      close_window: Cerrar ventana  
+    header:
+       _admin:
+         logout: Salir
+         gen_conf: Configuración General
+         op_cl_data_input: Abrir/Cerrar Ingreso de Datos
+         glossary: Glosario
+         donor_admin: Administración de Donantes
+         exchange_rates: Tasas de cambio
+         agencies_top: Agencias / Contrapartes
+         agencies: Agencias
+         gov_counterpart: Homólogo Gubermental
+         scrollbars: Señales de Pantalla  
+       _default:
+         exchange_rates: Tasas de Cambio
+         design_own: 'Diseña Reporte' 
+         links: Enlaces
+         downloads: Descargas
+         resources: Recursos 
+       _focal_points:
+         bluebook: Blue Book UE
+         projects: Proyectos
+         new_project: Añadir Nuevo
+         draft_projects: Borrador
+         published_projects: Publicado
+         deleted_projects: Papelera de Reciclaje
+         donor_info: Info Donante
+         donor_details: Detalles de Donante
+         accounts: Cuentas de Ingreso
+         financial_consistency: Regularidad de Financiamiento
+         exchange_rates: Tasas de Cambio
+         strategy: Estrategia del País
+         manuals: Manuales
+         data_input_manual: Manual de Ingreso de Datos
+         data_input_glossary: Glosario de Ingreso de Datos
+         dac_crs_manual: DAC-CRS Manual
+         country_manual: ODAnic Manual
+         contact: Contacto
+  
+  odamap:
+    _query_options:
+      donor: Donante
+      dac_sector: Sectores CAD
+      location: Localidades
+      next_step: Próximo Paso
+      add_remove: De click en el mapa para agregar una o más localizaciones. Para eliminarlo de click otra vez.
+      query_database: Consultar
+      all: todos
+      toa: Modalidad de Ayuda
+      status: Estado del proyecto
+  
+  projects:
+    _contracted_agency:
+      prompt: Por favor seleccione

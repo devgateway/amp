@@ -4,5 +4,5 @@
 		<%= options_from_collection_for_select(Province.all, :id, :name, focal_province.id) %>
 	</select>
 
-	<%= link_to_function ll(:actions, :delete), "$(this).parents('.focal_province').remove();" %>
+	<%= link_to_function t('.delte'), "$(this).parents('.focal_province').remove();" %>
 </div>

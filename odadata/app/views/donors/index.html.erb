@@ -1,8 +1,8 @@
-<h2><%= header lc(:title) %></h2>
+<h2><%= header t('.title') %></h2>
 
 <table>
 	<% if @donors.blank? %>
-		<tr><td class="empty"><%= lc(:empty) %></td></tr>
+		<tr><td class="empty"><%= t('.empty') %></td></tr>
 	<% else %>
 		<tr>
 			<th><!-- Flags --></th>
@@ -20,14 +20,14 @@
 				<td><%= donor.name %></td>
 				<td><%= donor.cofunding_only ? "yes" : "no" %></td>
 				<td><%= null_to_na(donor.currency) %></td>
-				<td><%= link_to ll(:actions, :edit), edit_donor_path(donor) %></td>
-				<td><%= link_to ll(:actions, :delete), donor_path(donor), :method => 'delete', :confirm => "This donor has #{donor.projects.size} projects assigned, those will be kept in the database but unaccessible for the public if you delete it now. Are you sure?" %>
-				<td><%= link_to lc(:agencies, :total => donor.agencies.size), 
+				<td><%= link_to t('.edit'), edit_donor_path(donor) %></td>
+				<td><%= link_to t('.delete'), donor_path(donor), :method => 'delete', :confirm => "This donor has #{donor.projects.size} projects assigned, those will be kept in the database but unaccessible for the public if you delete it now. Are you sure?" %>
+				<td><%= link_to t('.agencies', :total => donor.agencies.size), 
 						donor_donor_agencies_path(donor) unless donor.cofunding_only? %></td>
-				<td><%= link_to lc(:logins), donor_users_path(donor) unless donor.cofunding_only? %></td>
+				<td><%= link_to t('.login'), donor_users_path(donor) unless donor.cofunding_only? %></td>
 			</tr>
 		<% end %>
 	<% end %>
 </table>
 
-<p><b><%= link_to lc(:new), new_donor_path %></b></p>
+<p><b><%= link_to t('.new'), new_donor_path %></b></p>

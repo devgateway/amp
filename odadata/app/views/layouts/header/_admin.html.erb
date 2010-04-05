@@ -5,7 +5,7 @@
 		<a href="/">
 		<img src="/images/ODAdataLogo_<%=Prefs.country_code%>.gif" alt="ODAdata" width="236" height="80" border="0" style="float:left" />
 		</a>
-        <p style="color:#fff;font-weight:bold;"><%= ll(:navigation, :admin, :gen_conf) %></p>
+        <p style="color:#fff;font-weight:bold;"><%= t('.gen_conf') %></p>
 	</div>
     
 	<!-- START User Info Bar -->
@@ -23,35 +23,35 @@
 <!-- START Navigation-->
 	<ul id="mainMenu">
 		<li>
-			<a href="#" class="no_cursor"><%= ll(:navigation, :admin, :gen_conf) %></a>
+			<a href="#" class="no_cursor"><%= t('.gen_conf') %></a>
 	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
-				<li><%= link_to ll(:navigation, :admin, :op_cl_data_input), :controller => 'settings', :action => 'data_input_status' %></li>
-				<li><%= link_to ll(:navigation, :admin, :scrollbars), :controller => 'settings', :action => 'scrollbars' %></li>
+				<li><%= link_to t('.op_cl_data_input'), :controller => 'settings', :action => 'data_input_status' %></li>
+				<li><%= link_to t('.scrollbars'), :controller => 'settings', :action => 'scrollbars' %></li>
 			</ul>
 		</li>
 
 		<li>
-			<div><a href="<%= donors_path %>"><%= ll(:navigation, :admin, :donor_admin) %></a></div>
+			<div><a href="<%= donors_path %>"><%= t('.donor_admin') %></a></div>
 		</li>
 
 		<li>
-			<div><a href="<%= exchange_rates_path %>"><%= ll(:navigation, :admin, :exchange_rates) %></a></div>
+			<div><a href="<%= exchange_rates_path %>"><%= t('.exchange_rates') %></a></div>
 		</li>
 
 		<li>
-			<a href="#" class="no_cursor"><%= ll(:navigation, :admin, :agencies_top) %></a>
+			<a href="#" class="no_cursor"><%= t('.agencies_top') %></a>
 	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
-				<li><a href="<%= agencies_path %>"><%= ll(:navigation, :admin, :agencies) %></a></li>
-<!--				<li><a href="#"><%= ll(:navigation, :admin, :gov_counterpart) %></a></li>-->
+				<li><a href="<%= agencies_path %>"><%= t('.agencies') %></a></li>
+<!--				<li><a href="#"><%= t('.gov_counterpart') %></a></li>-->
 			</ul>
 		</li>
 
 		<%= render :partial => "layouts/header/language_select" %>
 
 		<li>
-			<a href="<%= logout_path %>"><%= ll(:navigation, :logout) %></a>
+			<a href="<%= logout_path %>"><%= t('.logout') %></a>
 		</li>
 	</ul>
 <!-- END Navigation -->

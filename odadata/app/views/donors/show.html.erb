@@ -1,5 +1,5 @@
 <div class="project_factsheet">
-	<h3><%= header lc(:title, :donor => @donor.name) %></h3>
+	<h3><%= header t('.title', :donor => @donor.name) %></h3>
 		
 	<dl class="main_details">
 		<dt class="first"><%= Donor.human_attribute_name('name') %></dt>

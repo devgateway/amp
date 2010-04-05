@@ -1,0 +1,168 @@
+en:
+  
+  agencies:
+    index:
+      title: List of Agencies
+      empty: No agencies exist in the database. Please add your agencies.
+      new: Add Agency
+      edit: Edit
+    new:
+      title: Add New Agency
+      submit: Create Agency
+      back: Back
+    edit:
+      title: Edit Agency
+      submit: Update Agency
+      back: Back
+  
+  consistencies:
+    show:
+      title: Financial Consistency Details
+      year: Year
+      total_commitments: Total Commitments
+      total_payments: Total Disbursements
+      donor: Donor
+      toa_payments: "{{type}} Disbursements"
+  
+  country_strategies:
+    _focal_province:
+      delete: Delete
+    _focal_sectors:
+      amount: Amount
+      national_sector: Sector is national
+      focal_regions: Focal Regions
+    edit:
+      title: Edit Country Strategy
+      back: Back
+    index:
+      title: Country Strategies and Programming Details
+      empty: You do not have any Country Strategies
+      edit: Edit
+      show: Show
+      new: Add new Country Strategy
+    new:
+      title: Add New Country Strategy
+    show:
+      details: Country Strategy and Programming Details
+      general: General Information
+      total_oda_commitments: Total ODA Commitments
+      total_oda_disbursements: Total ODA Disbursements
+  
+  donor_agencies:
+    edit:
+      title: Edit Agency
+      back: Back
+    index:
+      new: Add Agency
+      edit: Edit
+      delete: Delete
+      confirm_delte: Are you sure you want to delete "{{agency}}"?
+      empty: No Agencies Exist for this Donor. Please create a New Agency.
+      new:
+        title: Add New Agency for Donor {{donor}}
+        back: Back
+  
+  donor_details:
+    edit: 
+      title: Edit Donor Contact Details
+  
+  donor:
+    edit:
+      title: Edit Donor
+    index:
+      title: Donor / Co-funding Donor List
+      empty: No donors exist in the Database. Please create a new donor.
+      edit: Edit
+      delete: Delete
+      agencies: Donor Agencies ({{total}})
+      logins: Login Accounts
+      new: Add new donor
+    new:
+      title: Add New Donor
+    show:
+      title: Donor Fact Sheet for <i>{{donor}}</i>
+  
+  exchange_rates:
+    edit:
+      title: Edit Exchange Rate
+    index:
+      title: Exchange Rates
+      empty: No Exchange Rates Exist in the Database. Please create a New Exchange Rate.
+      new: New Exchange Rate
+      edit: Edit
+    new:
+      title: Add New Exchange Rate
+      back: Back
+  
+  layout:
+    currency_reports_window:
+      no_results_message: Your search has returned no results. Please try expanding the query.
+      print: Print
+      close_window: Close Window
+    graph_window:
+      print: Print
+      close_window: Close Window
+    _currency_selector:
+      currency_selection: Select Currency
+    report_show:
+      close_window: Close Window
+    header:
+      _admin:
+        gen_conf: General Configuration
+        op_cl_data_input: Op./Cl. Data Input
+        glossary: Glossary
+        donor_admin: Donor Administration
+        exchange_rates: Exchange Rates
+        agencies_top: Agencies / Counterparts
+        agencies: Agencies
+        gov_counterpart: Government Counterpart
+        scrollbars: News Tickers
+        logout: Log out
+      _default:
+        short_title: Official Development Assistance <br/>to Nicaragua Database
+        design_own: Design own report
+        links: Links
+        downloads: Downloads
+        exchange_rates: Exchange Rates
+        resources: Resources
+      _focal_point:
+        bluebook: EU Blue Book
+        projects: Projects
+        new_project: Add New
+        draft_projects: Draft
+        published_projects: Published
+        deleted_projects: Recycle Bin
+        projects: Projects
+        reports_on: Reports on
+        donor_info: Donor Info
+        donor_details: Donor Details
+        accounts: Login Accounts    
+        strategy: Country Strategy
+        exchange_rates: Exchange Rates
+        financial_consistency: Financial Consistency
+        manuals: Manuals
+        data_input_manual: Data Input Manual
+        data_input_glossary: Data Input Glossary
+        dac_crs_manual: DAC-CRS Manual
+        country_manual: ODAnic Manual
+        contact: Contact
+        logout: Log out
+        
+  odamap:
+    _query_options:
+      next_step: next step
+      add_remove: Click map to add one or more locations. Click again to remove.
+      locations: Locations
+      donor: Donor
+      dac_sector: DAC Sector
+      all: all
+      query_database: Query Database
+      toa: Aid Modality
+      status: Project Status
+  
+  porjects:
+    _contracted_agency:
+      prompt: Please select
+
+        
+  

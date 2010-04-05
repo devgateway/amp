@@ -1,9 +1,9 @@
-<h2><%= header lc(:title) %></h2>
+<h2><%= header t('.title') %></h2>
 
 <table>
 	<tr>
-		<th><%= lc(:name) %></th>
-		<th><%= lc(:role) %></th>
+		<th><%= t('.name') %></th>
+		<th><%= t('.role') %></th>
 		<th> </th>
 		<th> </th>			
 	</tr>
@@ -12,11 +12,11 @@
 	<tr>
 		<td><%= user.name %></td>
 		<td><%= user.role.description %></td>
-		<td><%= link_to lc(:edit), edit_user_path(user) %></td>
-		<td><%= link_to lc(:delete), user_path(user), :method => 'delete' %></td>
+		<td><%= link_to t('.edit'), edit_user_path(user) %></td>
+		<td><%= link_to t('.delete'), user_path(user), :method => 'delete' %></td>
 	</tr>
 	<% end %>
 	
 </table>
 
-<p><b><%= link_to lc(:new), @donor.nil? ? new_user_path : new_donor_user_path(@donor) %></b></p>
+<p><b><%= link_to t('.new'), @donor.nil? ? new_user_path : new_donor_user_path(@donor) %></b></p>

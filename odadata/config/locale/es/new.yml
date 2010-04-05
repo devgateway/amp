@@ -47,6 +47,7 @@ es:
       general: Información General
       total_oda_commitments: Compromisos Totales de AOD
       total_oda_disbursements: Desembolsos Totales de AOD
+  
   donor_agencies:
     edit:
       titel: Editar Estrategia de País
@@ -61,7 +62,7 @@ es:
     new:
       title: Añadir Nueva Agencia por Donante {{donor}}
       back: Regresar
-    
+  
   donor_details:
     edit:
        title: Editar donante
@@ -94,9 +95,6 @@ es:
       back: Regresar
       title: Añadir nueva tasa de cambio
   
-  
-
-  
   layouts: 
     currency_report_window:
       no_results_message: Su búsqueda no ha encontrado resultados. Por favor, intente buscar de nuevo con diferente criterio.
@@ -128,7 +126,7 @@ es:
          downloads: Descargas
          resources: Recursos 
          short_title: Sistema de la asistencia oficial <br/>de desarrollo a Nicaragua
-       focal_points:
+       focal_point:
          bluebook: Blue Book UE
          projects: Proyectos
          new_project: Añadir Nuevo
@@ -147,6 +145,9 @@ es:
          dac_crs_manual: DAC-CRS Manual
          country_manual: ODAnic Manual
          contact: Contacto
+         design_own: 'Diseña Reporte'
+         reports_on: Reportes sobre
+         logout: Salir
   
   odamap:
     query_options:
@@ -319,6 +320,47 @@ es:
     totals:
        commitments_payments_selection: Seleccione Compromisos/Desembolsos
        forecast: 'Proyección'
-       
-        
-        
+  
+  settings:
+    data_input_status:
+      open: El ingreso de datos es actualmente abierto
+      closed: El ingreso de datos es actualmente cerrado
+      do_close: Cerrar el ingreso de datos
+      do_open: Abrir el ingreso de datos
+    scrollbars:
+      title: Actualizar Señales de Pantalla
+      submit: Guardar Señales de Pantalla
+      successful: Se ha actualizado los señales de pantalla
+  
+  shared:
+    currency_selector:
+      currency_selection: Seleccione la moneda
+  
+  static:
+    data_input_closed:
+      title: "¡La entrada de datos está actualmente cerrada!"
+      please_wait: "¡Por favor espere hasta el próximo ciclo o ponerse en contaco con el Punto Focal Maestro!"
+      redirect: Usted va a ser redirigido en pocos segundos.
+    downsloads:
+      title: Descargas
+      available_shortly: Descargas del primer reporte ODAnic 2007 en Excel será cargado en breve
+    home:
+      bluebook_image_link: Haga Click sobre la imagen para EU Blue Book 2007
+  user_sessions:
+    new:
+      title: "¡Por favor ingrese al sistema!"
+  users:
+    edit:
+      title: Editar Cuenta de Ingreso
+      back: Regresar
+    index:
+      title: Cuentas de Ingreso
+      name: Nombre
+      role: Rol de Usuario
+      edit: Editar cuenta
+      delete: Borrar cuenta
+      new: Crear nuevo usuario
+    new:
+      title: Añadir Nueva Cuenta de Ingreso
+      back: Regresar
+  

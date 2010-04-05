@@ -15,7 +15,7 @@
 		<% end %>
 	<% end %>
 	<select name="currency" onchange="$(this).parent().submit()">
-		<option selected="selected"><%= ll(:reports, :currency_selection) %>:</option>
+		<option selected="selected"><%= t('.currency_selection') %>:</option>
 		<% ExchangeRate.available_currencies.each do |currency| %>
 			<option value="<%= currency -%>"><%= currency -%></option>
 		<% end %>

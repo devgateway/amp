@@ -1,6 +1,6 @@
-<h2><%= header lc(:title) %></h2>
+<h2><%= header t('.title') %></h2>
 
 <%= error_messages_for :user %>
 <%= render :partial => 'form' %>
 
-<p><b><%= link_to ll(:actions, :back), list_path %></b>&nbsp;</p>
+<p><b><%= link_to t('.back'), list_path %></b>&nbsp;</p>

@@ -331,8 +331,38 @@ en:
       title: Update Newstickers
       submit: Save tickers
       successful: Successfully updated news tickers!
-    
-        
-        
-        
-        
+  
+  shared:
+    currency_selektor:
+      currency_selection: Select Currency
+  
+  static:
+    data_input_closed:
+      title: The data input is currently closed!
+      please_wait: Please wait for the next update cycle or contact the Master Focal Point!
+      redirect: You will be redirected back in a few seconds.
+    downloads:
+      title: Downloads
+      available_shortly: Downloads of the first ODAnic report 2007 in Excel will be uploaded shortly
+    home:
+      bluebook_image_link: Click on Image for EU Blue Book 2007
+  
+  user_sessions:
+    new:
+      title: Please log in!
+  
+  users:
+    edit:
+      back: Back
+      title: Edit Login Account
+    index:
+      title: Login Accounts
+      name: Name
+      role: User Role
+      edit: Edit account
+      delete: Delete account
+      new: Create new user
+    new:
+      title: Add New Login Account
+      back: Back
+  

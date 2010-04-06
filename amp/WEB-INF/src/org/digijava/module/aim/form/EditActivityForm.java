@@ -1677,6 +1677,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long actorId;
 		
 		private String issueDate;
+		private String issuesExpanded;
+		private String measuresExpanded;
 		
 
 		public String getActor() {
@@ -1742,6 +1744,34 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setMeasureId(Long measureId) {
 			this.measureId = measureId;
+		}
+
+		/**
+		 * @return the issuesExpanded
+		 */
+		public String getIssuesExpanded() {
+			return issuesExpanded;
+		}
+
+		/**
+		 * @param issuesExpanded the issuesExpanded to set
+		 */
+		public void setIssuesExpanded(String issuesExpanded) {
+			this.issuesExpanded = issuesExpanded;
+		}
+
+		/**
+		 * @return the measuresExpanded
+		 */
+		public String getMeasuresExpanded() {
+			return measuresExpanded;
+		}
+
+		/**
+		 * @param measuresExpanded the measuresExpanded to set
+		 */
+		public void setMeasuresExpanded(String measuresExpanded) {
+			this.measuresExpanded = measuresExpanded;
 		}
 
 	}

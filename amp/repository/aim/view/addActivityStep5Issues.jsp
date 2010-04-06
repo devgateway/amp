@@ -33,6 +33,7 @@
 <script language="JavaScript">
 <!--
 	function expandIssue(issueId){
+		addExpandedIssue(issueId);
 		var imgId='#img_expI_'+issueId;
 		var imghId='#img_colI_'+issueId;
 		var divId='#div_issue_'+issueId;
@@ -42,6 +43,7 @@
 	}       
 	
 	function collapseIssue(issueId){
+		removeExpandedIssue(issueId);
 		var imgId='#img_expI_'+issueId;
 		var imghId='#img_colI_'+issueId;
 		var divId='#div_issue_'+issueId;
@@ -51,6 +53,7 @@
 	}
      
 	function expandMeasure(measId){
+		addExpandedMeasure(measId);
 		var imgId='#img_expM_'+measId;
 		var imghId='#img_colM_'+measId;
 		var divId='#div_measure_'+measId;
@@ -60,6 +63,7 @@
 	}       
 	
 	function collapseMeasure(measId){
+		removeExpandedMeasure(measId);
 		var imgId='#img_expM_'+measId;
 		var imghId='#img_colM_'+measId;
 		var divId='#div_measure_'+measId;
@@ -67,13 +71,102 @@
 		$(imgId).show();
 		$(divId).hide('fast');
 	}
+
+	function expandIssuesExpanded(){
+		var tmp = document.getElementById("issuesExpanded").value;
+		//alert(tmp);
+		var spl = tmp.split("_");
+		for ( var i = 0; i < spl.length; i++) {
+			if (!isNaN(spl[i]))
+				expandIssue(spl[i]);
+		}
+	}
+
+	function expandMeasuresExpanded(){
+		var tmp = document.getElementById("measuresExpanded").value;
+		//alert(tmp);
+		var spl = tmp.split("_");
+		for ( var i = 0; i < spl.length; i++) {
+			if (!isNaN(spl[i]))
+				expandMeasure(spl[i]);
+		}
+	}
+	
+	function addExpandedIssue(issueId){
+		if (!isNaN(issueId)) {
+			var tmp = document.getElementById("issuesExpanded").value;
+			if (tmp.indexOf(issueId)==-1) {
+				document.getElementById("issuesExpanded").value = tmp + "_" + issueId;
+			}
+		}
+		
+	}
+
+	function removeExpandedIssue(issueId){
+		var tmp = document.getElementById("issuesExpanded").value;
+		var spl = tmp.split("_");
+		var ret = "";
+		for ( var int = 0; int < spl.length; int++) {
+			if (spl[i] != issueId){
+				ret = ret + "_" + spl[i];
+			}
+		}
+		document.getElementById("issuesExpanded").value = ret;
+	}
+
+	function addExpandedMeasure(measId){
+		if (!isNaN(measId)) {
+			var tmp = document.getElementById("measuresExpanded").value;
+			if (tmp.indexOf(measId)==-1) {
+				document.getElementById("measuresExpanded").value = tmp + "_" + measId;
+			}
+		}
+	}
+
+	function removeExpandedMeasure(measId){
+		var tmp = document.getElementById("measuresExpanded").value;
+		var spl = tmp.split("_");
+		var ret = "";
+		for ( var int = 0; int < spl.length; int++) {
+			if (spl[i] != measId){
+				ret = ret + "_" + spl[i];
+			}
+		}
+		document.getElementById("measuresExpanded").value = ret;
+	}
+
+	function myAddIssues(){
+		addIssues(document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
+	}
+
+	function myUpdateIssues(id){
+		updateIssues(id,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
+	}
+
+	function myAddMeasures(issueId){
+		addMeasures(issueId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
+	}
+
+	function myUpdateMeasures(issueId,measureId){
+		updateMeasures(issueId,measureId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
+	}
+	
+	function myAddActors(issueId,measureId){
+		addActors(issueId,measureId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
+	}
+
+	function myUpdateActor(issueId,measureId,actorId){
+		updateActor(issueId,measureId,actorId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
+	}
 -->
 </script>
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <digi:instance property="aimEditActivityForm" />
 
-					<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
+					<html:hidden property="issues.issuesExpanded" styleId="issuesExpanded"/>
+  					<html:hidden property="issues.measuresExpanded" styleId="measuresExpanded"/>
+  					<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 						<feature:display name="Issues" module="Issues">
 							<field:display name="Issues" feature="Issues">
 								<table width="100%" bgcolor="#f4f4f2">
@@ -98,12 +191,12 @@
 															<td vAlign="center" align="left">
 															<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
 																<tr class="rowIssue" >
-																	<td width="20%" align="left">
+																	<td  align="left">
 <!--																	    <IMG src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"/>-->
 																			<img id="img_expI_<c:out value="${issues.id}"/>" onclick="expandIssue(<c:out value="${issues.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif"/>
 																			<img id="img_colI_<c:out value="${issues.id}"/>" onclick="collapseIssue(<c:out value="${issues.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif"  style="display : none;"/>
 
-																		<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
+																		<a href="javascript:myUpdateIssues('<c:out value="${issues.id}"/>')">
 																		<c:out value="${issues.name}"/></a>
 																		 &nbsp;
 																		<field:display feature="Issues" name="Issue Date">
@@ -113,10 +206,10 @@
 																			<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" />
 																		</a> 
 																	</td>
-																	<td align="left">
+																	<td align="right">
 																		<field:display feature="Issues" name="Measures Taken">
 																			<field:display name="Add Measures Link" feature="Issues">
-																				<a href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
+																				<a href="javascript:myAddMeasures('<c:out value="${issues.id}"/>')">
 																					<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
 																				</a>
 																			</field:display>													
@@ -138,18 +231,18 @@
 																		<td vAlign="center" align="left" width="3">
 																			<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
 																		</td>
-																		<td vAlign="center" align="left" width="20%" >
+																		<td vAlign="center" align="left" >
 																		    <img id="img_expM_<c:out value="${measure.id}"/>" onclick="expandMeasure(<c:out value="${measure.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif"/>
 																			<img id="img_colM_<c:out value="${measure.id}"/>" onclick="collapseMeasure(<c:out value="${measure.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif"  style="display : none;"/>
-																			<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
+																			<a href="javascript:myUpdateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
 																			<c:out value="${measure.name}"/> </a>
 																			<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
 																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
 																			</a>
 																		</td>
-																		<td>
+																		<td align="right">
 																			<field:display name="Add Actors Link" feature="Issues">
-																				<a href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></a>
+																				<a href="javascript:myAddActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></a>
 																			</field:display>																		
 																		</td>
 																	</tr>
@@ -169,7 +262,7 @@
 																					</td>
 																					<td vAlign="center" align="left">
 																					    <IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
-																						<a href="javascript:updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
+																						<a href="javascript:myUpdateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
 																							<c:out value="${actor.name}"/>
 																						</a>
 																					</td>
@@ -201,7 +294,7 @@
 															
 															<field:display name="Add Issues Button" feature="Issues">
 
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="myAddIssues()">
 																		<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 																</html:button>
 
@@ -215,7 +308,7 @@
 											<field:display name="Add Issues Button" feature="Issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="myAddIssues()">
 															<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 													</html:button>
 
@@ -228,3 +321,7 @@
 								</field:display>
 							</feature:display>
 						</module:display>
+				<script language="JavaScript">
+					expandIssuesExpanded();
+					expandMeasuresExpanded();
+				</script>

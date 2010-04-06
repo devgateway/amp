@@ -75,7 +75,7 @@ public class GetAvailableUsersForWorkspaceJSON extends Action {
 		
 		Collection<User> availableUsers = (Collection<User>) tmForm.getallUser();
 		int stIndex = startIndexInt;
-		int edIndex = (startIndexInt + resultsInt)>availableUsers.size()?availableUsers.size()-1:(startIndexInt + resultsInt);
+		int edIndex = (startIndexInt + resultsInt)>=availableUsers.size()?availableUsers.size()-1:(startIndexInt + resultsInt);
 
 		Vector<User> vect = new Vector<User>();
 

@@ -117,47 +117,47 @@ function checkallIssues() {
 	        	} 
         }
 	    
-	  function addIssues(){
+	  function addIssues(issuesExpanded,measuresExpanded){
 	 			 myPanel1.setHeader('<digi:trn key="aim:addIssue">Add Issue</digi:trn>');
 	  			 <digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
- 				var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issueId=-1",callback);
+ 				var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId=-1",callback);
         }
        
        
        
-       function updateIssues(id) {
+       function updateIssues(id,issuesExpanded,measuresExpanded) {
      		   myPanel1.setHeader('<digi:trn key="aim:updateIssue">Update Issue</digi:trn>');
 			<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
-			var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issueId="+id,callback);
+			var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+id,callback);
 		}
         
         
-	function addMeasures(issueId) {
+	function addMeasures(issueId,issuesExpanded,measuresExpanded) {
 	 	  myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 		 <digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		 var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId=-1",callback);
+		 var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+issueId+"&issues.measureId=-1",callback);
 	}
 
 
-	function updateMeasures(issueId,measureId) {
+	function updateMeasures(issueId,measureId,issuesExpanded,measuresExpanded) {
 		myPanel1.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
 		<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
+		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
 	}
 	
 	
-	function addActors(issueId,measureId) {
+	function addActors(issueId,measureId,issuesExpanded,measuresExpanded) {
 		myPanel1.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId=-1",callback);
+		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.actorId=-1",callback);
 	}
 
 
 
-	function updateActor(issueId,measureId,actorId) {
+	function updateActor(issueId,measureId,actorId,issuesExpanded,measuresExpanded) {
 		myPanel1.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
+		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
 	}
 
 //END POPIN
@@ -475,6 +475,8 @@ function removeSelComponents() {
   <html:hidden property="reset" />
   <html:hidden property="location.country" />
   <html:hidden property="editAct" />
+	<html:hidden property="issues.issuesExpanded"/>
+	<html:hidden property="issues.measuresExpanded"/>
 
   <input type="hidden" name="edit" value="true">
   <c:set var="stepNm">

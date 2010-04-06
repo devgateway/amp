@@ -1,0 +1,1 @@
+INSERT INTO `amp_widget`(widget_type,widget_name) values ('topTenDonors','Top Ten Donors');

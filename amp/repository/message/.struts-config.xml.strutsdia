@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="StrutsProcess">
+ <PROCESS-ITEM ID="#message#messageActions" NAME="action0"
+  PATH="/message/messageActions" SHAPE="32,17,0,0" TITLE="messageForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="addOrEditAmpMessage" NAME="forward0"
+   PATH="/showLayout.do?layout=ampMessageLayout" TARGET="action5"
+   TITLE="addOrEditAmpMessage" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="viewMessage" NAME="forward1"
+   PATH="/showLayout.do?layout=viewSelectedMessage" TARGET="action5"
+   TITLE="viewMessage" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="viewMyDesktop" NAME="forward3"
+   PATH="/aim/viewMyDesktop.do" TARGET="action9" TITLE="viewMyDesktop"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="forwardMsgPage" NAME="forward2"
+   PATH="/showLayout.do?layout=forwardMessagesLayout" TARGET="action5"
+   TITLE="forwardMsgPage" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="showAllMessages" NAME="forward4"
+   PATH="/showLayout.do?layout=allMessagesLayout" TARGET="action5"
+   TITLE="showAllMessages" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#message#getMessages" NAME="action1"
+  PATH="/message/getMessages" SHAPE="32,561,0,0" TITLE="messageForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#aim#viewMyDesktop" NAME="action9"
+  PATH="/aim/viewMyDesktop" SHAPE="288,465,0,0" SUBTYPE="unknown"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#showLayout" NAME="action5" PATH="/showLayout"
+  SHAPE="240,241,0,0" SUBTYPE="unknown" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#message#msgSettings" NAME="action2"
+  PATH="/message/msgSettings" SHAPE="32,369,0,0" TITLE="messageForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="index" NAME="forward0" PATH="/aim/index.do"
+   TARGET="action6" TITLE="index" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="settingsPage" NAME="forward1"
+   PATH="/showLayout.do?layout=messageSettings" TARGET="action5"
+   TITLE="settingsPage" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#message#templatesManager" NAME="action3"
+  PATH="/message/templatesManager" SHAPE="32,513,0,0"
+  TITLE="messageForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="templatesManager" NAME="forward0"
+   PATH="/showLayout.do?layout=templateAlertsManager" TARGET="action5"
+   TITLE="templatesManager" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="addOrEditPage" NAME="forward1"
+   PATH="/showLayout.do?layout=addOrEditTemplate" TARGET="action5"
+   TITLE="addOrEditPage" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#aim#index" NAME="action6" PATH="/aim/index"
+  SHAPE="304,529,0,0" SUBTYPE="unknown" TYPE="action" model-entity="StrutsProcessItem"/>
+</PROCESS>

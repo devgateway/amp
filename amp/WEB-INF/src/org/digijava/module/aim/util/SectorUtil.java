@@ -125,16 +125,14 @@ public class SectorUtil {
 
 		try {
 
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			int tempIncr = 0;
 				logger.info("searching SECTORS...............");
 				String qryStr = "select sector from " + AmpSector.class.getName()
-					+ " sector , "
-					+ AmpSectorScheme.class.getName()
-					+ " sscheme"
+					+ " sector inner join  sector.ampSecSchemeId sscheme"
 					+ " where lower(sector.name) like '%"
 					+ keyword.toLowerCase()
-					+ "%' and " + "sector.ampSecSchemeId = " + secSchemeId;
+					+ "%' and " + "sscheme = " + secSchemeId;
 
 				Query qry = session.createQuery(qryStr);
 				//qry.setParameter("orgType", orgType, Hibernate.LONG) ;
@@ -177,13 +175,7 @@ public class SectorUtil {
 
 		} catch (Exception ex) {
 			logger.debug("Unable to search sectors" + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.debug("releaseSession() failed", ex2);
-			}
-		}
+		} 
 		return col;
 	}
 

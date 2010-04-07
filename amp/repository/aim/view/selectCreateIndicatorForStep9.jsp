@@ -46,13 +46,14 @@
                             {
                                 var valid = validateForm();
                                 if (valid == true) {
-                        <digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
+                        			<digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
                                     document.aimIndicatorForm.action = "<%=addNewInd%>";
                                     document.aimIndicatorForm.target = "_self";
                                     document.aimIndicatorForm.submit();				  
                                 }
                                 return valid;
                             }
+
                             function unload(){}
 
                             function validateForm() {
@@ -69,6 +70,7 @@
                                 }
                                 return true;
                             }
+                            
                             function isSearchKeyGiven()
                             {
                                 if(trim(document.aimIndicatorForm.searchkey.value).length == 0)

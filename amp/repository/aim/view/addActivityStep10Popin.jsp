@@ -308,6 +308,7 @@
         	"&addswitch="+document.getElementsByName('addswitch')[0].value+
             "&searchkey="+document.getElementsByName('searchkey')[0].value+
         	"&sectorId="+document.getElementsByName('sectorId')[0].value;
+
     	if(document.getElementsByName('selectedIndicators')[0]!=null){
 	    	var indicators = document.getElementsByName('selectedIndicators')[0].options.length;
 	    	for(var i=0; i<indicators; i++ ){
@@ -318,9 +319,9 @@
     	}
     	if(document.getElementsByName('indicatorName')[0]!=null){
         	ret += "&indicatorName="+document.getElementsByName('indicatorName')[0].value+
-        	"&indicatorDesc="+document.getElementsByName('indicatorDesc')[0].value+
-        	"&indicatorName="+document.getElementsByName('indicatorName')[0].value+
-        	"&ascendingInd="+document.getElementsByName('ascendingInd')[0].value;
+        	"&indicatorDesc="+document.getElementsByName('indicatorDesc')[0].value+        	
+        	"&ascendingInd="+document.getElementsByName('ascendingInd')[0].value+
+        	"&indicatorCode="+document.getElementsByName('indicatorCode')[0].value;
         }
 
     	return ret;
@@ -328,8 +329,9 @@
     function searchIndicators(){	
        <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?showAddIndPage=false" />
 		var url = "<%=searchInd %>";
-		url += getParams();
-		YAHOO.util.Connect.asyncRequest("POST", url, callback);
+		var params=getParams();
+		//url += getParams();
+		YAHOO.util.Connect.asyncRequest("POST", url,callback , params);
        
     }
     function addIndicatorTL(addbutton){
@@ -354,12 +356,7 @@
         var valid = validateSectorForm(selectedSectsSize);
         if (valid == true) {
             <digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do?"/>
-            var url = "<%=addNewInd%>";
-            url+= "&indicatorName="+document.getElementsByName('indicatorName')[0].value+
-  	              "&indicatorDesc="+document.getElementsByName('indicatorDesc')[0].value+
-	              "&indicatorName="+document.getElementsByName('indicatorName')[0].value+
-                  "&ascendingInd="+document.getElementsByName('ascendingInd')[0].value+
-                  "&creationDate="+document.getElementsByName('creationDate')[0].value;
+            var url = "<%=addNewInd%>";           
             
         	if(document.getElementsByName('selActivitySector')!=null){
     	    	var indicators = document.getElementsByName('selActivitySector').length;
@@ -367,8 +364,9 @@
    	        		url+="&selActivitySector="+document.getElementsByName('selActivitySector')[i].value;
     	        }
         	}
-       
-            YAHOO.util.Connect.asyncRequest("POST", url, callback);
+
+        	var params=getParams();
+            YAHOO.util.Connect.asyncRequest("POST", url, callback ,params);
         }
         return valid;
     }
@@ -438,11 +436,7 @@
         if (validateSector()) {
             <digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
             var url = "<%= remSec%>";
-            url+= "&indicatorName="+document.getElementsByName('indicatorName')[0].value+
-  	              "&indicatorDesc="+document.getElementsByName('indicatorDesc')[0].value+
-	              "&indicatorName="+document.getElementsByName('indicatorName')[0].value+
-                  "&ascendingInd="+document.getElementsByName('ascendingInd')[0].value+
-                  "&creationDate="+document.getElementsByName('creationDate')[0].value;
+            
             if(document.getElementsByName('selActivitySector')!=null){
             	var sec = document.getElementsByName('selActivitySector').length
             	for(var i=0;i<sec;i++){
@@ -451,7 +445,8 @@
                 	}
             	}
             }
-            YAHOO.util.Connect.asyncRequest("POST", url, callback);
+            var params=getParams();
+            YAHOO.util.Connect.asyncRequest("POST", url, callback ,params);
             return true;			
         }
         else {

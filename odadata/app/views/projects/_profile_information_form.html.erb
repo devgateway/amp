@@ -1,19 +1,18 @@
 <script language="javascript">
 	// TODO: Create datepicker css class and move this into application.js
-  $(document).ready(
-  	function(){
-
+  $(document).ready(function(){
 		$.datepicker.setDefaults({
-            showOn: "button", 
-            buttonImage: "/images/datepicker.png", 
-            buttonImageOnly: true,
-            dateFormat: 'yy-mm-dd'
-        });
+      showOn: "button", 
+      buttonImage: "/images/datepicker.png", 
+      buttonImageOnly: true,
+      dateFormat: 'yy-mm-dd'
+    });
 
-        $('#project_end').datepicker();
-        $('#project_start').datepicker();
-	}
-  );
+    $('#project_planned_end').datepicker();
+    $('#project_planned_start').datepicker();
+    $('#project_actual_end').datepicker();
+    $('#project_actual_start').datepicker();
+	});
 </script>
 
 
@@ -35,16 +34,24 @@
 	 		{ :prompt => t('.country_strategy_unavailable') }, :class => "large" %></li>
 	<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
 			:include_blank => t('.prompt'), :translate => true %></li>
-
     
-	<li class="fifty">
-    	<%= f.text_field :start, :readonly =>true %>
-    	<%= error_message_on(:project, :start, "","", "error_message" ) %>
-    </li>
+  <li class="fifty">
+  	<%= f.text_field :planned_start, :readonly =>true %>
+  	<%= error_message_on(:project, :planned_start, "","", "error_message" ) %>
+  </li>
 
-	<li class="fifty">
-    	<%= f.text_field :end, :readonly =>true  %>
-    	<%= error_message_on(:project, :end, "","", "error_message" ) %>
-    </li>
+  <li class="fifty">
+    <%= f.text_field :planned_end, :readonly =>true  %>
+    <%= error_message_on(:project, :planned_end, "","", "error_message" ) %>
+  </li>
+  
+  <li class="fifty">
+  	<%= f.text_field :actual_start, :readonly =>true %>
+  	<%= error_message_on(:project, :actual_start, "","", "error_message" ) %>
+  </li>
 
+  <li class="fifty">
+    <%= f.text_field :actual_end, :readonly =>true  %>
+    <%= error_message_on(:project, :actual_end, "","", "error_message" ) %>
+  </li>
 <% end %>

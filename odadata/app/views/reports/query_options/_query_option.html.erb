@@ -49,13 +49,23 @@
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "start", true %>
-	<%= Project.human_attribute_name('start') %>
+	<%= check_box_tag "report[fields][]", "actual_start", true %>
+	<%= Project.human_attribute_name('actual_start') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "end", true %>
-	<%= Project.human_attribute_name('end') %>
+	<%= check_box_tag "report[fields][]", "actual_end", true %>
+	<%= Project.human_attribute_name('actual_end') %>
+</li>
+
+<li>
+	<%= check_box_tag "report[fields][]", "planned_start", false %>
+	<%= Project.human_attribute_name('planned_start') %>
+</li>
+
+<li>
+	<%= check_box_tag "report[fields][]", "planned_end", false %>
+	<%= Project.human_attribute_name('planned_end') %>
 </li>
 
 <li>

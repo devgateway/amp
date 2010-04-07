@@ -35,10 +35,14 @@ en:
           label: Related Country Strategy
         prj_status: 
           label: Project Status
-        start: 
-          label: Start Date
-        end: 
-          label: End Date
+        planned_start: 
+          label: Planned Start Date
+        planned_end: 
+          label: Planned End Date
+        actual_start:
+          label: Actual Start Date
+        actual_end:
+          label: Actual End Date
         implementing_agencies: 
           label: Channel of Delivery
         contracted_agencies: 

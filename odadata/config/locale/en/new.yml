@@ -179,10 +179,12 @@ en:
       funding_title: Finances {{year}}
       historic_funding: Historic Funding (up to the end of {{year}})
       add_cofunding_donor: Add another Donor
+      add_cofunding_agency: Add another Agency
+      geo_relevances_title: Focal Regions
       geo_usage: |
          Please select the focal regions of this project.<br />
          If you do not select any, it will be considered a national project.
-         add_location: Add another Location
+      add_location: Add another Location
     implementing_agency:
       prompt: Please select
       delete_associated: Delete

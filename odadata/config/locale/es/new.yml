@@ -180,12 +180,15 @@ es:
       delete_associated: Borrar
     location_funding_form:
       cofunding_title: Donantes co-financiadores y montos
-      historic_funding: Historic Funding (up to the end of {{year}})
-      funding_title: Finances {{year}}
-      add_cofunding_donor: Add another Donor
+      historic_funding: Financiamiento Histórico (hasta el final de {{year}})
+      funding_title: Finanzas {{year}}
+      add_cofunding_donor: Añadir otro Donante
+      add_cofunding_agency: Añadir otro Agencia
+      geo_relevances_title: Focal Regions # TODO
       geo_usage: |
-        Please select the focal regions of this project.<br />
-        If you do not select any, it will be considered a national project.
+        Por favor seleccione las regiones focales de este proyecto..<br />
+        Si no seleccione por lo menos uno, el proyecto se considera un proyecto nacional.
+      add_location: Añadir otra provincia
     profile_information_form:
       country_strategy_unavailable: No vinculado a una estrategia
       prompt: Por favor seleccione

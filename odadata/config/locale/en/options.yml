@@ -26,6 +26,8 @@ en:
     regional_with_nicaraguan_component_available: Regional with Nicaraguan Component Available
     
     # Project Status
+    planned: Planned but not yet signed
+    signed: Signed but not yet disbursed
     ongoing: Ongoing
     pipeline: Pipeline
     completed: Completed

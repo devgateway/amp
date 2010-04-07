@@ -26,6 +26,8 @@ es:
     regional_with_nicaraguan_component_available: Regional con Componente Nicaragüense disponible
     
     # Project Status
+    planned: Planned but not yet signed # TODO
+    signed: Signed but not yet disbursed # TODO
     ongoing: En ejecución 
     pipeline: En planificación 
     completed: Completado

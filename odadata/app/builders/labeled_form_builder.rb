@@ -132,7 +132,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     function    << "$(this).parent('#{css_selector}').hide(); $(this).prev('input').val('1')"
     
     out = ''
-    out << hidden_field(:_delete)
+    out << hidden_field(:_destroy)
     out << @template.link_to_function(name, function, *args.push(options))
     out 
   end

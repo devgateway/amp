@@ -25,9 +25,7 @@ import org.digijava.module.aim.util.SectorUtil;
 public class AddNewIndicatorTL extends Action {
 	private static Logger logger = Logger.getLogger(AddNewIndicatorTL.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		IndicatorForm indForm = (IndicatorForm) form;
 		AmpIndicator indicator = new AmpIndicator();
         indicator.setName(indForm.getIndicatorName());

@@ -195,10 +195,16 @@ protected
   end
   
   def dates_consistency
-    unless self.start <= self.end
+    unless self.planned_start <= self.planned_end
       # FIXME: Translation missing & errors.add_to_base should be used here after views are fixed
-       errors.add('start', 'Start date is previous to End Date')
-       errors.add('end', '<br>') #added to avoid breaking the design of fieldset while showing the error
-    end if self.start && self.end
+       errors.add('planned_start', 'Start date is previous to End Date')
+       errors.add('planned_end', '<br>') #added to avoid breaking the design of fieldset while showing the error
+    end if self.planned_start && self.planned_end
+    
+    unless self.actual_start <= self.actual_end
+      # FIXME: Translation missing & errors.add_to_base should be used here after views are fixed
+       errors.add('actual_start', 'Start date is previous to End Date')
+       errors.add('actual_end', '<br>') #added to avoid breaking the design of fieldset while showing the error
+    end if self.actual_start && self.actual_end
   end
 end

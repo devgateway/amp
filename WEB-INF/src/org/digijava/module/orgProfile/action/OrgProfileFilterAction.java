@@ -74,7 +74,7 @@ public class OrgProfileFilterAction extends Action {
         if(orgForm.getOrgGroupId()==null||orgForm.getOrgGroupId()==-1){
             // all groups
             orgForm.setOrgGroupId(-1l);
-            orgs=new ArrayList(DbUtil.getAll(AmpOrganisation.class));
+            orgs=new ArrayList<AmpOrganisation>(DbUtil.getAllOrganisation());
         }
         else{
              orgs = DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());

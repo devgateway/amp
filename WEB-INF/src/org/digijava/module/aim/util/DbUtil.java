@@ -1510,22 +1510,22 @@ public class DbUtil {
      * @author Priyajith C
      */
     // Retreives all organisation;
-    public static Collection getAllOrganisation() {
+    public static Collection<AmpOrganisation> getAllOrganisation() {
         Session session = null;
         Query qry = null;
-        Collection organisation = new ArrayList();
+        Collection<AmpOrganisation> organisations = new ArrayList<AmpOrganisation>();
 
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select o from "
                 + AmpOrganisation.class.getName() + " o order by name asc";
             qry = session.createQuery(queryString);
-            organisation = qry.list();
+            organisations = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get all organisations");
             logger.debug("Exceptiion " + e);
         }
-        return organisation;
+        return organisations;
     }
 
     public static Collection<AmpFiscalCalendar> getAllFisCalenders() {
@@ -2758,7 +2758,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = " select org from " + AmpOrganisation.class.getName() + " org where org.orgGrpId=:orgGroupId";
+            queryString = " select org from " + AmpOrganisation.class.getName() + " org where org.orgGrpId=:orgGroupId order by org.name";
             q = session.createQuery(queryString);
             q.setLong("orgGroupId", orgGroupId);
             organizations = q.list();

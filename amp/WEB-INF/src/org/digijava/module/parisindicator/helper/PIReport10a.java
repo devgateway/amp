@@ -263,13 +263,27 @@ public class PIReport10a extends PIAbstractReport {
 					if (PIConstants.MISSION.equalsIgnoreCase(eventTypeName)) {
 						Calendar cal = (Calendar) auxCalendar.getCalendarPK().getCalendar();
 						int year = new Integer(yearFormat.format(cal.getStartDate())).intValue();
-						// checking if the Mission is 'joint'
-						if (null != auxCalendar.getOrganisations() && auxCalendar.getOrganisations().size() > 1) {
-							auxRow.setYear(year);
-							auxRow.setColumn1(auxRow.getColumn1() + 1);
-							list.add(auxRow);
+
+						// Checking if the Mission is 'JOINT' with other MUL/BIL
+						// donor, which can be accomplished checking against
+						// commonData.
+						int count = 0;
+						Iterator<AmpOrganisation> iterOrganisationsFromCalendar = auxCalendar.getOrganisations()
+								.iterator();
+						while (iterOrganisationsFromCalendar.hasNext()) {
+							AmpOrganisation auxOrgFromEvent = iterOrganisationsFromCalendar.next();
+							if (PIUtils.containOrganisations(commonData, auxOrgFromEvent)) {
+								count++;
+							}
 						}
-						auxRow.setColumn2(auxRow.getColumn2() + 1);
+						if (count > 1) {
+							auxRow.setColumn1(1);
+						}
+						auxRow.setYear(year);
+						auxRow.setDonorGroupName(auxOrganisation.getOrgGrpId().getOrgGrpName());
+						auxRow.setDonorGroup(auxOrganisation.getOrgGrpId());
+						auxRow.setColumn2(1);
+						list.add(auxRow);
 					}
 				}
 			}

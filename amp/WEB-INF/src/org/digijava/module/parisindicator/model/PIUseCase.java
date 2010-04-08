@@ -3,6 +3,7 @@ package org.digijava.module.parisindicator.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -293,7 +294,7 @@ public class PIUseCase {
 	public Collection<AmpOrganisation> getCommonSurveyDataForPI10a(Collection<AmpOrganisation> filterDonors,
 			Collection<AmpOrgGroup> filterDonorGroups) {
 
-		Collection<AmpOrganisation> commonData = new ArrayList<AmpOrganisation>();
+		Collection<AmpOrganisation> commonData = new HashSet<AmpOrganisation>();
 		Session session = null;
 		try {
 			// TODO: change this code to use restrictions like the
@@ -310,8 +311,8 @@ public class PIUseCase {
 						AmpOrganisation auxOrganisation = iterOrganisations.next();
 						AmpOrgGroup auxOrgGrp = auxOrganisation.getOrgGrpId();
 						// Filter for Multilateral and Bilateral PoDDs.
-						if (auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_BILATERAL)
-								|| auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
+						if (auxOrgGrp.getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_BILATERAL)
+								|| auxOrgGrp.getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
 							boolean add = true;
 							// If needed, filter for organizations.
 							if (filterDonors != null) {

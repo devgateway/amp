@@ -335,7 +335,13 @@ public class HelpUtil {
 		String moduleInstanceName = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		ServletContext context = request.getSession().getServletContext();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		HelpTopicHelper item = new HelpTopicHelper(topic);
+		String title = null;
+		try {
+			title = TranslatorWorker.translateText(topic.getTopicKey(), request);
+		} catch (WorkerException ex) {
+			logger.error(ex);
+		}
+		HelpTopicHelper item = new HelpTopicHelper(topic, title, locale);
 		String suffix = moduleInstanceName + "_" + locale;
 		String msg = "New help topic added to lucene index";
 		if (update){

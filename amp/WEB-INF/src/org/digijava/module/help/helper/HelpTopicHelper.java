@@ -2,6 +2,8 @@ package org.digijava.module.help.helper;
 
 import java.util.List;
 
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.util.HelpUtil;
 
@@ -45,6 +47,22 @@ public class HelpTopicHelper {
 		this.siteId = topic.getSiteId();
 	}
 	
+	public HelpTopicHelper(HelpTopic topic, String title){
+		this(topic);
+		this.title = title;
+	}
+
+	public HelpTopicHelper(HelpTopic topic, String title, String lang){
+		this(topic, title);
+		
+		List<Editor> editorList = HelpUtil.getEditor(topic.getBodyEditKey(), lang);
+		if (editorList != null && !editorList.isEmpty()){
+			this.body = editorList.get(0).getBody();
+		}
+		this.langIso = lang;
+		
+	}
+	
 	public HelpTopicHelper(
 			Long topicId,
 			String title, 
@@ -54,8 +72,7 @@ public class HelpTopicHelper {
 			String lang, 
 			String titleTrnKey, 
 			String bodyEditorKey
-			)
-	{
+			){
 		this.id = topicId;
 		this.title = title;
 		this.body = body;

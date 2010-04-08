@@ -73,6 +73,9 @@ public class SelectLocation extends SelectorAction{
 						eaForm.getLocation().setSelectedLocs(new ArrayList<Location>());
 					}
 					if (!eaForm.getLocation().getSelectedLocs().contains(location)) {
+						if (eaForm.getLocation().getSelectedLocs().size()==0) {
+							location.setPercent(100);
+						}
 						eaForm.getLocation().getSelectedLocs().add(location);
 					}
 					AmpCategoryValueLocations ampRegion			= DynLocationManagerUtil.getAncestorByLayer(ampCVLocation,

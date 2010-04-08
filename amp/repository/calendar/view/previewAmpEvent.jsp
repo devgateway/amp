@@ -29,6 +29,8 @@ function deleteEvent(){
 	{
 		document.getElementById('hdnMethod').value = "delete";
 		return true;
+	} else {
+		document.getElementById('hdnMethod').value = "preview";
 	}
 	return false;
 }

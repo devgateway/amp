@@ -192,11 +192,11 @@ en:
       prompt: Please select
       country_strategy_unavailable: Not linked to any strategy
     project:
-      edit: Edit
-      delete: Delete
-      choose_action: 'Choose:'
-      publish: Publish
-      draft: Draft
+      edit: Edit project
+      delete: Delete project
+      publish: Publish project
+      edit_and_draft: Edit project (moves it to drafts)
+      clone: Clone & Edit
     sector_agencies_form:
       prompt: Please select
       not_avail: Not available

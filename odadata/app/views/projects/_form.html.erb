@@ -11,6 +11,9 @@
 		
 	</ul>
 	
+	<%# Ensure that newly created and updated projects will always go to the drafts folder %>
+	<%= form.hidden_field :data_status, :value => Project::DRAFT %>
+	
 	<div id="profile_information" class="stage">
 		<%# error_messages_for :project, 
 				:attributes => [:donor_project_number, :title, :description, :prj_status, :start, :end] %>

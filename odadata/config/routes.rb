@@ -10,7 +10,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :agencies
   map.resources :exchange_rates          
-  map.resources :projects,                :member => { :update_status => :get, :map => :get }
+  map.resources :projects,                :member => { :update_status => :get, :map => :get, :clone => :get }
                                           
   map.resources :users                   
   map.resources :donor_agencies                

@@ -7,14 +7,13 @@
 		<tr><td class="empty"><%= t('.empty') %></td></tr>
 	<% else %>
 		<tr>
-			<th><!-- Factsheet link --></th>
 			<th><%= t('.donor') %></th>
 			<th><%= t('.project_no') %></th>
 			<th><%= t('.project_title') %></th>
 			<th><%= t('.total_commitments') %></th>
 			<th><%= t('.disbursed', :year => Time.now.year-1) %></th>
 			<th><%= t('.disbursement_forecast', :year => Time.now.year) %></th>
-			<th> </th>
+			<th></th>
     	</tr>			
 	
 		<%= render :partial => @projects %>

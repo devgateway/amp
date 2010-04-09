@@ -1,7 +1,9 @@
 <tr>
-	<td><%= factsheet_link(project) %></td>
 	<td><%= project.donor.name %></td>
-	<td><%= project.donor_project_number %></td>
+	<td>
+	  <%= icon_link_to 'page_white', project_path(project), t('.factsheet') %>
+	  <%= project.donor_project_number %>
+	</td>
 	<td><%= short_expander_tag(project.title) %></td>
 	<td class="currency" style="text-align: right">
 		<%= project.total_commitments %>
@@ -13,18 +15,18 @@
 		<%= project.funding_forecasts.find_by_year(Time.now.year).payments rescue 'n/a' %>
 	</td>
 	<td>
-		<select onChange="location=this.value">
-			<option selected><%= t('.choose_action') %></option>
-			<option value="<%= edit_project_path(project) -%>"><%= t('.edit') %></option>
-			<% if project.data_status == Project::DRAFT %>
-				<option value="<%= update_status_project_path(project, :status => Project::PUBLISHED) -%>"><%= t('.publish') %></option>
-			<% else %>
-				<option value="<%= update_status_project_path(project, :status => Project::DRAFT) -%>"><%= t('.draft') %></option>
-			<% end %>
-			
-			<% if project.data_status != Project::DELETED %>
-				<option value="<%= update_status_project_path(project, :status => Project::DELETED) -%>"><%= t('.delete') %></option>
-			<% end %>
-		</select>
+	  <%= icon_link_to 'page_white_copy', clone_project_path(project), t('.clone') %>
+		
+		<% if project.data_status == Project::DRAFT %>
+		  <%= icon_link_to 'page_white_edit', edit_project_path(project), t('.edit') %>
+		  <%= icon_link_to 'accept', update_status_project_path(project, :status => Project::PUBLISHED), t('.publish') %>
+		<% elsif project.data_status == Project::PUBLISHED %>
+		  <%= icon_link_to 'page_white_edit', edit_project_path(project), t('.edit_and_draft') %>
+		  <%= icon_link_to 'accept', update_status_project_path(project, :status => Project::DRAFT), t('.draft') %>
+		<% end %>
+		
+		<% if project.data_status != Project::DELETED %>
+		  <%= icon_link_to 'page_white_delete', update_status_project_path(project, :status => Project::DELETED), t('.delete') %>
+		<% end %>
 	</td>
 </tr>

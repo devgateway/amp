@@ -64,6 +64,7 @@ class ProjectsController < ApplicationController
   
   def clone
     @project = current_donor.projects.find(params[:id]).clone
+    @project.donor_project_number += " (copy)"
     render :action => 'new'
   end
 

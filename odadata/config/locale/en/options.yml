@@ -77,3 +77,15 @@ en:
     # Delegated Cooperation:
     del_yes: "Yes"
     del_no: "No"
+
+    # Government Code Project
+    on_cut: "On"
+    off_cut: "Off"
+
+    in_kind_cash: "In kind convertible to cash"
+    in_kind_non_cash: "In kind not convertible to cash"
+    in_cash_under_donor: "In cash under donor management"
+    in_cash_under_beneficiary: "In cash under beneficiary/government management"
+
+    yes: "Yes"
+    no: "No"

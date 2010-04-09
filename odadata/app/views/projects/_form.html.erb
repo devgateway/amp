@@ -50,6 +50,8 @@
 	<%= form.submit(lc("submit"), :onclick =>"checkOnUnload = null;") %>
 </div>
 <script language="javascript" >
+
+
 $("#previous_button").click(function () { 
     var $tabs = $('ul#tabs');
     var selected = $tabs.data('selected.tabs');
@@ -70,6 +72,8 @@ $("#next_button").click(function () {
     return false;
     });
 
+    var $tabs = $('ul#tabs');
+    $tabs.tabs('select', 1);
     
 </script>
 <% end %>

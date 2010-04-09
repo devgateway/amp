@@ -24,6 +24,16 @@ class Project < ActiveRecord::Base
   GRANT_LOAN_OPTIONS        = [['grant', 1], ['loan', 2]]
   ON_OFF_BUDGET_OPTIONS     = [['on_budget', true], ['off_budget', false]]
   ON_OFF_TREASURY_OPTIONS   = [['on_treasury', true], ['off_treasury', false]]
+
+
+  ON_OFF_CUT                = [['on_cut', true], ['off_cut', false]]
+
+
+
+
+  ENTRY_TYPES               = [['in_kind_cash', 1], ['in_kind_non_cash', 2], ['in_cash_under_donor', 3], ['in_cash_under_beneficiary', 4]]
+  LOAN_TO_PUBLIC_ENTERPRISES = [['yes', true], ['no', false]]
+
   
   FIRST_YEAR_OF_RELEVANCE   = 2007
   FORECAST_RANGE            = 3
@@ -112,13 +122,14 @@ class Project < ActiveRecord::Base
                             :message => "has invalid code: {{value}}"
   
   # STATE: general
-  validates_presence_of     :donor_project_number, :title, :description, :prj_status
+  validates_presence_of     :donor_project_number, :title, :description, :donor_agency_id, :prj_status
   validates_uniqueness_of   :donor_project_number, :scope => :donor_id
   
   # STATE: categorization
   validates_presence_of     :national_regional, :type_of_implementation, :aid_modality_id, :grant_loan, 
                             :officer_responsible_name
-                            
+
+  validates_presence_of     :government_counterpart, :government_project_code, :single_treasury_account, :if => :on_budget_validation?
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances
   validates_associated      :fundings, :funding_forecasts, :historic_funding
   
@@ -206,5 +217,9 @@ protected
        errors.add('actual_start', 'Start date is previous to End Date')
        errors.add('actual_end', '<br>') #added to avoid breaking the design of fieldset while showing the error
     end if self.actual_start && self.actual_end
+  end
+
+  def on_budget_validation?
+   !(fundings.detect {|funding| funding.on_budget == true }).blank?
   end
 end

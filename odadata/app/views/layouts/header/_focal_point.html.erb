@@ -5,7 +5,7 @@
 		<a href="/">
 		<img src="/images/ODAdataLogo_<%=Prefs.country_code%>.gif" alt="ODAdata" width="236" height="80" border="0" style="float:left" />
 		</a>
-        <p style="color:#fff;font-weight:bold;">Official Development Assistance <br/> to Nicaragua Database</p>
+        <p style="color:#fff;font-weight:bold;"><%=  t('.short_title') %></p>
 	</div>
     
 	<!-- START User Info Bar -->
@@ -34,7 +34,7 @@
 			<ul>
 				<!-- 15/01/09 - ODA-86: Changed "Time.now.year - 1" to show just year 2007 until we have some data for 2008 -->
 				<% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year - 2) do |year| %>
-					<li><%= link_to year, bluebook_root_path(:year => year), 
+					<li><%= link_to year, donor_atlas_root_path(:year => year),
 								:popup => ['Contents', 'height=600,width=920,scrollbars=yes'] %>
 					</li>
 				<% end %>

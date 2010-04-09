@@ -48,17 +48,17 @@ ActionController::Routing::Routes.draw do |map|
   
   ##
   # EU Blue Book routes
-  map.namespace :bluebook do |bluebook|
-    bluebook.with_options :path_prefix => '/bluebook/:year', :year => /\d{4}/ do |bb|
-      bb.root :controller => 'pages', :action => 'contents'
-      bb.pages '/pages/:page_name', :controller => 'pages'
+  map.namespace :donor_atlas do |donor_atlas|
+    donor_atlas.with_options :path_prefix => '/donor_atlas/:year', :year => /\d{4}/ do |da|
+      da.root :controller => 'pages', :action => 'contents'
+      da.pages '/pages/:page_name', :controller => 'pages'
   
-      bb.resources :donor_profiles, :only => [:show], :formatted => :none
+      da.resources :donor_profiles, :only => [:show], :formatted => :none
   
       # Chart routes
-      bb.connect 'charts/:action/:id.:format', :controller => 'charts'
-      bb.connect 'charts/:action.:format', :controller => 'charts'
-      bb.connect 'charts/:action/:id', :controller => 'charts'
+      da.connect 'charts/:action/:id.:format', :controller => 'charts'
+      da.connect 'charts/:action.:format', :controller => 'charts'
+      da.connect 'charts/:action/:id', :controller => 'charts'
     end
   end
   

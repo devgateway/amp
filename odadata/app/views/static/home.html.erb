@@ -15,10 +15,14 @@
 		float: left;
 		text-align: center;
 	}
+
+	#leftColumn A:hover, #rightColumn A:hover {
+          background-color:#ffffff;
+	}
 </style>
 
 <div id="leftColumn">
-	<a href="/odamap" target="_blank"><IMG SRC="/images/Nicaragua.jpg" width="150" height="100" border="1" alt="ODAmap" /></a>
+	<a href="/odamap" target="_blank" ><IMG SRC="/images/Mozambique.gif" border="1" alt="ODAmap" /></a>
 	<%=t 'map_image_link' %> 
 </div>
 
@@ -45,6 +49,13 @@
 </div>
 
 <div id="rightColumn">
-	<a href="/resources/nicaragua_bluebook_2007_<%= I18n.locale %>.pdf"><IMG SRC="/images/EUBluebookCoverNicaragua.jpg" width="150" height="100" border="1" alt="EU BlueBook Cover"></a>
-	<%=t '.bluebook_image_link' %>
+      <a target="_blank" title="Search Projects via ODAmap" href="/resources/Mozambique%20Donor%20Atlas%202008.pdf">
+        <img alt="ODAmoz Mozambique Donor Atlas 2008" longdesc="ODAmoz Mozambique Donor Atlas 2008" src="/images/Mozambique_DA.jpg" width="145" height="109">
+      </a><br>
+      Click on Cover Page to Download Donor Atlas<br>
+      <br>
+      <a target="_blank" href="/resources/ODAmoz_Official_Launch.WMV">
+        <img alt="Video of the News item on The Official Launching of ODAmoz 24.05.07 " longdesc="Video of the News item on The Official Launching of ODAmoz 24.05.07 " src="/images/Mozambique_news.gif" width="132" height="100">
+      </a><br>
+      The Official Launching of ODAmoz 24.05.07
 </div>

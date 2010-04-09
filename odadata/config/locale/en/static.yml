@@ -2,44 +2,104 @@ en:
   static:
     home:
       introduction_short: |
-        <p>ODAnic is the online database of Official Development Assistance (ODA) from development partners to Nicaragua. It was created in response to the Paris Declaration on Aid Effectiveness, which advocates stronger coordination of donor activities and better alignment of aid with the poverty reduction strategy of the Government of Nicaragua. Originally a tool for EU donors, in the spirit of increasing aid harmonization, ODAnic now contains information on assistance from the entire donor community in Nicaragua.</p>
-        <p>ODAnic is user-friendly, free of charge, and available to all. Users can search for projects by donor, sector, and other criteria, and create custom reports using the "Design Your Own Report" function. ODAnic also contains donor profiles with each EU Member State's strategy for assistance to Nicaragua.</p>
-        <p>With ODAmap, users can locate projects by geographic location. The EU Blue Book is an interactive, online resource with graphs and other tools to help users understand and analyze the data.</p><br />
-        <p>Welcome to ODAnic!</p>
+        <p>ODAmoz is a new EC funded electronic tool that provides information on Official Development Assistance (ODA) to Mozambique. It was created in response to the Paris Declaration advocating for strengthened coordination and harmonization among Donors and alignment with the Government of Mozambique. </p>
+        <p>ODAmoz enables to track Donors&#39; and United Nations Agencies&#39; projects and programmes in the country: where they are operating, who finances them, and which organization implements them. </p>
+        <p>It is a user-friendly database, accessible to all through the internet. Its &quot;Design your own report&quot; function makes it easy to search for specific information through a set of predefined criteria (donor, sector, location, project status, funding type and MDGs) and offers tables and geographic maps (ODAmap) for analysis. </p>
+        <p>Welcome to ODAmoz!</p>
           
       introduction_long: |
-        <p><strong>About ODAnic</strong></p>
-        <p>In 2007, the UK’s Department for International Development (DFID) initiated and supported the establishment of ODAnic, an online interactive tool to centralize, coordinate and harmonize information on the activities of the European Commission and all EU Member States operating in Nicaragua.  Through ODAnic, EU donors launched the first ever electronic EU Blue Book for Nicaragua.  Both products were based on good practices in Mozambique (ODAmoz) and the EU Blue Book in Vietnam. </p>
-        <p>In 2008, in a further step towards greater harmonisation, ODAnic was opened up to all donors operating in Nicaragua.  Today, a total of 21 donors have pledged to provide information to ODAnic.  Exploration is underway to link ODAnic to the Government of Nicaragua’s own aid information management system known as SysODA.</p>
-        <p>The 2008 EU Blue Book is scheduled for release in April 2009.</p>
-        <p>This new and improved version of ODAnic is a product of the Development Gateway, an international nonprofit organization with a mission to create and implement Web-based tools to make aid and development efforts more effective.  OECD, UNDP and the World Bank comprise the Development Gateway’s Aid Effectiveness Steering Committee and play a key role in guiding the direction of the aid effectiveness program. </p>
-        <p><strong>Objective</strong></p>
-        <p>The main purpose of ODAnic is to provide donors in Nicaragua with the tools and training to fulfill their reporting obligations under the Paris Declaration and Accra Agenda for Action, following international standards and in the spirit of transparency and accountability.  At the same time, ODAnic also provides the Government, donors, civil society and the public a snapshot of donors’ strategies, projects and financial commitments.</p>
-        <p>Since the Rome Declaration on Aid Effectiveness in 2003, Aid Information Management Systems have been widely recognized as essential tools for improving government and donor accountability, streamlining aid management practices, advancing donor coordination and ensuring more effective alignment of donor activities with country strategies.</p>
-        <p><strong>Key Benefits</strong></p>
-        <p>This approach to system implementations recognizes that technology solutions alone are not sufficient to bring about lasting change.  They should be adopted as part of a larger effort that brings partners together, puts sustainable management processes in place, and ensures long-term technical maintenance. </p>
-        <p>Through the ODAnic tool itself, users can:<br />
-        <ul>
-        <li>
-        View pre-defined reports by donor, sector, and more<br />
-        </li>
-        <li>
-          Create custom reports and filter activities by key characteristics<br />
-        </li>
-        <li>
-          Locate activities geographically via an interactive map of the country<br />
-        </li>
-        <li>
-          View key details for a specific project<br />
-        </li>
-        <li>
-          Learn more about donor financing to the country through outputs such as the EU Blue Book, which includes graphs and donor profiles
-          </li>
-        </ul>
-          </p>
-        <p><strong>Responsibility</strong></p>
-        <p>Donors are responsible for maintaining and validating the information in ODAnic.  Each donor agency in a country selects a focal point to adhere to locally agreed guidelines and timelines for updates, while following international data classifications developed by the OECD Development Assistance Committee.  This information is then freely available to all.<br />
+        <p align="justify">
+        <b>History</b><br>
+        In 2005, the EC Delegation in Mozambique hired a consultant in the context of
+        the EU Pilot Initiative on Coordination &amp; Harmonization in order to establish
+        among other a common EU Project Database DbIS. This database was established,
+        centralizing and making available the information on activities of all EU Member
+        States operating in Mozambique.
         </p>
+        <p>In a further step of overall Donor harmonization in Mozambique in the light
+        of the Paris Declaration, it was agreed to open up the EU DbIS to <strong>ALL</strong>
+        Donors present in Mozambique and merge with the UN Project Database to a new
+        common Donor database called ODAmoz.</p>
+        <p>This initiative was fully endorsed by the Development Partners Group in
+        charge of the simplification and harmonization of development cooperation in the
+        country. </p>
+        <p>In light of the need to guarantee Government of Mozambique ownership and to
+        ensure a proper administrative set up of the project, management of ODAmoz was
+        handed over to the designated directorate in the Ministry of Planning and
+        Development (MPD): the Direcao Nacional de Investimento e Cooperacao (DIC) in
+        September 2006 and a <strong>ODAmoz Management Committee</strong> installed in
+        late 2006, composed of Donor and GoM representatives.</p>
+        <p align="justify">
+        <b>Objective</b><br>
+        The main objective and focus of ODAmoz is to provide donors with a tool, based
+        on international standards (e.g. OECD/DAC sector codification), to fulfil their
+        obligations towards the Government of Mozambique of reporting and planning on
+        quarterly disbursements (see downloads). <br>
+        It also gives the GOM, donors and the public in general a snapshot of donors and
+        UN agencies projects and financial commitments.
+        </p>
+        <p><strong>Update timeline</strong><br>
+        As mentioned above, ODAmoz focuses on reports on quarterly disbursement data and
+        forecasts for the current year and annual values for further <strong>3 years
+        according to Medium Term Expenditure Forecast (MTEF) procedure</strong><br>
+        &nbsp;<br>
+        The ODAmoz Management Committee agreed to link the update procedure to the
+        Official Budget Cycle of GoM. In general the <strong>update deadlines</strong>
+        will be followed according to below mentioned dates:<br>
+        &nbsp;<br>
+        1st Quarter:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        1st of April - 15th of May<br>
+        2nd Quarter:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        1st of July - 15th of August<br>
+        3rd Quarter:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        1st of October - 15th of November<br>
+        4th Quarter / Yearly report:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        15th of January - 15th of February<br>
+        &nbsp;<br>
+        The reports will be downloaded shortly afterwards and sent to the ODAmoz
+        Community in EXCEL format for the quarterly reports and as EXCEL and .pdf
+        documents for the yearly reports. All reports will be available aggregated and
+        disaggregated per Donor/UN Agency in the download section.</p>
+        <p align="justify">
+        <b>UN Reporting Specificity</b><br>
+        Due to UN&#39;s specific and heterogenic funding arrangements (working with both
+        core and donor funds) and the difficulty in separating them, <strong>it has now
+        been agreed that UN agencies can fully report on their overall funding (core +
+        donor) even if possibly already reported by a Donor in ODAmoz</strong>. The
+        respective Donor implementing a project via an UN Agency will need to explicitly
+        state this in the concerned Project Nr e.g.: An EC Project Nr: 9ACPMOZ011,
+        implemented via UNDP should be inserted in <strong>ODAmoz</strong> as
+        9ACPMOZ011/UNDP.<br>
+        &nbsp;<br>
+        Donor Totals and UN Agency totals therefore should not be added up in order to
+        avoid double counting. In the Search by Donor Report, Donors and UN Agencies
+        already have been separated. It is planned to enable this for each query
+        possibility. <br>
+        Please note that this therefore does not always enable us to have a clear
+        picture of the full combined Donor and UN ODA to Mozambique.
+        </p>
+        <p align="justify">
+        <b>Responsibility</b><br>
+        Each Donor and UN agency has selected a focal point that is responsible for
+        collecting, entering and updating the data online on a quarterly basis. Accuracy
+        and completeness of the data can only be guaranteed up to the last quarterly
+        disbursement; forecasts are based on estimates.
+        </p>
+        <p>The Ministry of Planning and Development (MPD) and its Directorate for
+        Investment and Cooperation (DIC) is gradually taking up responsibility for the
+        general overview of the database and production of the quarterly reports on
+        Donor disbursements. </p>
+        <p align="justify">
+        <b>ODAmoz&#39; Vision</b><br>
+        ODAmoz is becoming more and more Donor inclusive, and is seen as a very useful
+        tool, e.g. in the On/Off-Budget discussions with the Government of Mozambique
+        and in providing a common source of information for many of the Donors involved
+        that are revising their country strategies.
+        </p>
+        <p>The intention is therefore, among other, to train focal points in each sector
+        line ministry at central and provincial level as users in order for the
+        Government of Mozambique to fully exploit ODAmoz&#39;s potential.</p>
+
       map_image_link: Click on Map for ODAmap
       bluebook_image_link: Click on Image for EU Blue Book 2007
       read_more: Read more...

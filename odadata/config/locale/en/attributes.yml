@@ -53,6 +53,14 @@ en:
           label: Type of Implementation
         aid_modality: 
           label: Aid Modality
+        single_treasury_account:
+          label: Single Treasury Account
+        government_project_code:
+          label: Government Project Code
+        enters_in:
+          label: Enters in
+        loan_to_public_enterprises:
+          label: Loan to public enterprises
         grant_loan: 
           label: Type of Funding
         delegated_cooperation: 

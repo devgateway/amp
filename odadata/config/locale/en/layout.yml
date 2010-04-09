@@ -1,8 +1,8 @@
 en:
   layout:
-    standard_title: ODAnic - Official Development Assistance to Nicaragua Database
+    standard_title: ODAnic - Official Development Assistance to Mozambique Database
     custom_title: ODAnic - {{page_title}}
-    short_title: Official Development Assistance <br/>to Nicaragua Database
+    short_title: Official Development Assistance <br/>to Mozambique Database
       
   actions:
       print: Print

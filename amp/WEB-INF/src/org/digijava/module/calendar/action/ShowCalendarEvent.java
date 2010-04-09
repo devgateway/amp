@@ -201,7 +201,8 @@ public class ShowCalendarEvent extends Action {
         	errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
-        		return mapping.findForward("success");        		
+        		ceform.setEventTypesList(CategoryManagerUtil.getAmpEventColors());
+                return mapping.findForward("success");        		
         	}else{
         		saveAmpCalendar(ceform, request);
                 ceform.setMethod("");

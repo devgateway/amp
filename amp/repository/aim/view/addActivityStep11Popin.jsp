@@ -210,15 +210,19 @@
 		showContent();
 	}
 	function addEUActivity() {
-		var msg='\n<digi:trn key="aim:addEditActivity">Add/Edit Activity</digi:trn>';
-		showPanelLoading(msg);		
+		<c:set var="translation">
+			<digi:trn key="aim:addEditActivity">Add/Edit Activity</digi:trn>
+		</c:set>
+		showPanelLoading("${translation}");		
 		<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do?new" />
 		var url = "<%=addEUActivity %>";//?comment=" + "ccd" + "&edit=" + "true";
 		YAHOO.util.Connect.asyncRequest("POST", url, callback);
 	}
 	function editEUActivity(indexId) {
-		var msg='\n<digi:trn key="aim:addEditActivity">Add/Edit Activity</digi:trn>';
-		showPanelLoading(msg);		
+		<c:set var="translation">
+			<digi:trn key="aim:addEditActivity">Add/Edit Activity</digi:trn>
+		</c:set>
+		showPanelLoading("${translation}");		
 		<digi:context name="editEUActivity" property="context/module/moduleinstance/editEUActivity.do?editEU&indexId=" />
 		var url = "<%=editEUActivity%>";
 		url+=indexId;

@@ -148,11 +148,13 @@ class Project < ActiveRecord::Base
     
     associations.each do |assoc_name|
       objects = self.send(assoc_name)
+      # to-many association
       if objects.is_a?(Array)
         objects.each do |obj|
           attributes = obj.clone.attributes.except(:project_id)
           cloned_instance.send(assoc_name).send(:build, attributes)
         end
+      # to-one association
       elsif !objects.nil? # ensure the association is set-up 
         cloned_instance.send("build_#{assoc_name}", objects.clone.attributes.except(:project_id))
       end

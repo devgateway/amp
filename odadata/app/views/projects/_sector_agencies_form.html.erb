@@ -92,9 +92,9 @@
 		</select>
 	</li>
 
-        <script type="text/javascript" charset="utf-8">
+  <script type="text/javascript" charset="utf-8">
 		$(function() {
-                        $("#project_donor_agency_id").bind("change", recalculate_government_code);
+      $("#project_donor_agency_id").bind("change", recalculate_government_code);
 			dropdown_single_treasury_account = $('#project_single_treasury_account');
 			enter_in_label = $('#enters_in');
 
@@ -126,79 +126,77 @@
 		});
 
 
-                function recalculate_government_code()
-                {
-                  var number1 = "-";
-                  var number2 = "-";
-                  var number3 = "-";
-                  on_off_cut = $("#project_single_treasury_account");
-                  type_of_funding = $("#project_grant_loan");
-                  aid_modality = $("#project_aid_modality_id");
-
-                  switch(on_off_cut.val()){
-                          case "true":
-                                  number1 = 1
-                                  number3 = 4
-                                  break;
-                          case "false":
-                                  number1 = 2
-                                  var project_enters_in = $("#project_enters_in");
-                                  switch(project_enters_in.val()){
-                                          case "1":
-                                                  number3 = 2;
-                                          break;
-                                          case "2":
-                                                  number3 = 8;
-                                          break;
-                                          case "3":
-                                                  number3 = 7;
-                                          break;
-                                          case "4":
-                                                  number3 = 5;
-                                          break;
-                                  }
-                                  break;
-                  }
-                  switch(type_of_funding.val()) {
-                          case "1":
-                                  number2 = 3;
-                          break;
-                          case "2":
-                                  number2 = 5;
-                                  project_loan_to_public_enterprises = $("#project_loan_to_public_enterprises");
-                                  switch(project_loan_to_public_enterprises.val()){
-                                          case "true":
-                                                  number3 = 6;
-                                          break;
-                                          case "false":
-                                          break;
-                                  }
-                          break;
-                  }
-
-                  if(aid_modality.val() == 1){
-                    number3 = 1;
-                  }
-                  else if(aid_modality.val() > 1 && aid_modality.val() < 15)  { //Common Funds
-                    number3 = 3;
-                  }
-                  else if (aid_modality.val() == 1){
-
-                  }
-                  
-                  government_project_code = $("#project_government_project_code");
-                  //Extract the Agency Code
-
-                  donor_agency_code = ($("#project_donor_agency_id option:selected").val() == "") ? "" : $("#project_donor_agency_id option:selected").text().split(" - ")[0];
-                  
-                  government_project_code.val(number1 + "" + number2 + "" + number3 + "" + donor_agency_code);
-                }
+    function recalculate_government_code()
+    {
+      var number1 = "-";
+      var number2 = "-";
+      var number3 = "-";
+      on_off_cut = $("#project_single_treasury_account");
+      type_of_funding = $("#project_grant_loan");
+      aid_modality = $("#project_aid_modality_id");
+    
+      switch(on_off_cut.val()){
+              case "true":
+                      number1 = 1
+                      number3 = 4
+                      break;
+              case "false":
+                      number1 = 2
+                      var project_enters_in = $("#project_enters_in");
+                      switch(project_enters_in.val()){
+                              case "1":
+                                      number3 = 2;
+                              break;
+                              case "2":
+                                      number3 = 8;
+                              break;
+                              case "3":
+                                      number3 = 7;
+                              break;
+                              case "4":
+                                      number3 = 5;
+                              break;
+                      }
+                      break;
+      }
+      switch(type_of_funding.val()) {
+              case "1":
+                      number2 = 3;
+              break;
+              case "2":
+                      number2 = 5;
+                      project_loan_to_public_enterprises = $("#project_loan_to_public_enterprises");
+                      switch(project_loan_to_public_enterprises.val()){
+                              case "true":
+                                      number3 = 6;
+                              break;
+                              case "false":
+                              break;
+                      }
+              break;
+      }
+    
+      if(aid_modality.val() == 1){
+        number3 = 1;
+      }
+      else if(aid_modality.val() > 1 && aid_modality.val() < 15)  { //Common Funds
+        number3 = 3;
+      }
+      else if (aid_modality.val() == 1){
+    
+      }
+      
+      government_project_code = $("#project_government_project_code");
+      //Extract the Agency Code
+    
+      donor_agency_code = ($("#project_donor_agency_id option:selected").val() == "") ? "" : $("#project_donor_agency_id option:selected").text().split(" - ")[0];
+      
+      government_project_code.val(number1 + "" + number2 + "" + number3 + "" + donor_agency_code);
+    }
 	</script>
 
-
-
-        <li id="delegated_cooperation">
-		<% f.fields_for :delegated_cooperation, @project.delegated_cooperation || DelegatedCooperation.new do |dc| %>			
+	<li id="delegated_cooperation">
+		<% f.fields_for :delegated_cooperation, @project.delegated_cooperation || @project.build_delegated_cooperation do |dc| %>			
 			<%= dc.collection_select :delegating_donor_id, Donor.ordered, :id, :name, 
 				{ :prompt => t('.prompt') }, :class => 'dynamic_select parent large' %>
     

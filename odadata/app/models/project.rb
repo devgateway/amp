@@ -142,6 +142,26 @@ class Project < ActiveRecord::Base
     "#{id}-#{donor_project_number.strip.downcase.gsub(/[^[:alnum:]]/,'-')}".gsub(/-{2,}/,'-')
   end
   
+  def clone_with_associations
+    associations = self.nested_attributes_options.keys
+    cloned_instance = self.clone_without_associations
+    
+    associations.each do |assoc_name|
+      objects = self.send(assoc_name)
+      if objects.is_a?(Array)
+        objects.each do |obj|
+          attributes = obj.clone.attributes.except(:project_id)
+          cloned_instance.send(assoc_name).send(:build, attributes)
+        end
+      elsif !objects.nil? # ensure the association is set-up 
+        cloned_instance.send("build_#{assoc_name}", objects.clone.attributes.except(:project_id))
+      end
+    end
+    
+    cloned_instance
+  end
+  alias_method_chain :clone, :associations
+  
   ##
   # This returns a list of Provinces and Districts in the following format:
   # {"Province 1" => ["Dist 1.1", "Dist 1.2"], "Province 2" => ["Dist 2.1"] ...}
@@ -216,7 +236,7 @@ protected
       # FIXME: Translation missing & errors.add_to_base should be used here after views are fixed
        errors.add('actual_start', 'Start date is previous to End Date')
        errors.add('actual_end', '<br>') #added to avoid breaking the design of fieldset while showing the error
-    end if self.actual_start && self.actual_end
+    end if self.actual_start && self.actual_end#
   end
 
   def on_budget_validation?

@@ -61,6 +61,11 @@ class ProjectsController < ApplicationController
     
     redirect_to projects_path
   end
+  
+  def clone
+    @project = current_donor.projects.find(params[:id]).clone
+    render :action => 'new'
+  end
 
    def show_map
      @project = Project.find(params[:id])

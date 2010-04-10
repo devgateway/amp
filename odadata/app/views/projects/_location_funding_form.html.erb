@@ -18,6 +18,40 @@
 			$(this).nextAll('select.donors').show();
 		}
 	});
+	
+	var cloneFinancesRow = function() {
+	  var blueprint = $('div#finances fieldset:last');
+	  var next = blueprint.clone();
+	  var time = new Date().getTime();
+	  
+	  // Replace the id and name attributes.
+    next.find(':text, :checkbox, input[type=hidden], select').each(function() {
+      $(this).attr('id', $(this).attr('id').replace(/\_\d+\_/, '_' + time + '_'));
+      $(this).attr('name', $(this).attr('name').replace(/\]\[\d+\]\[/, '][' + time + ']['));
+    });
+    
+    // Replate the for attributes.
+    next.find('label').each(function() {
+      $(this).attr('for', $(this).attr('for').replace(/\_\d+\_/, '_' + time + '_'));
+    });
+    
+    // Remove the record id
+    next.find('#project_fundings_attributes_' + time + '_id').remove();
+    
+    // Save year and reset fields 
+    // (not select fields because for on/off budget it makes more sense to assume the previous year's value)
+    var year_field = '#project_fundings_attributes_' + time + '_year';
+    var year = +next.find(year_field).val();
+    next.find(':text, :checkbox').val(null);
+    next.find(year_field).val(year + 1);
+	  next.find('legend').text(next.find('legend').text().replace(year, year + 1));
+	  
+	  blueprint.after(next);
+	};
+	
+  $(function() {
+    $('#add_new_finances').click(cloneFinancesRow);
+  });
 </script>
 
 <% f.field_set t('.geo_relevances_title') do %>
@@ -64,21 +98,25 @@
 	<% end %>
 <% end %>
 
-<% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year) do |y| %>
-	<% f.field_set t('.funding_title', :year => y) do %>
-		<% f.fields_for :fundings, (f.object.fundings.detect { |fun| fun.year == y } || f.object.fundings.build(:year => y)) do |fa| -%>
-			<%= fa.hidden_field :year, :value => y %>
-			<%= fa.hidden_field :currency, :value => @project.donor.currency %>
-			
-			<li><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
-			
-			<li class="fifty"><%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %></li>
-			<li class="fifty"><%= fa.text_field :payments_q2, :value => fa.object.payments_q2 %></li>
-			<li class="fifty"><%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %></li>
-			<li class="fifty"><%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %></li>
-			
-			<li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
-			<li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
-		<% end %>
-	<% end %>
-<% end %>
+<div id="finances">
+  <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year) do |y| %>
+  	<% f.field_set t('.funding_title', :year => y) do %>
+  		<% f.fields_for :fundings, (f.object.fundings.detect { |fun| fun.year == y } || f.object.fundings.build(:year => y)) do |fa| -%>
+  			<%= fa.hidden_field :year, :value => y %>
+  			<%= fa.hidden_field :currency, :value => @project.donor.currency %>
+  			
+  			<li><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
+  			
+  			<li class="fifty"><%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %></li>
+  			<li class="fifty"><%= fa.text_field :payments_q2, :value => fa.object.payments_q2 %></li>
+  			<li class="fifty"><%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %></li>
+  			<li class="fifty"><%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %></li>
+  			
+  			<li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
+  			<li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
+  		<% end %>
+  	<% end %>
+  <% end %>
+  
+  <input type="button" id="add_new_finances">Add new</input>
+</div>

@@ -24,6 +24,9 @@ class ProjectsController < ApplicationController
    
   def new
     @project = current_donor.projects.build
+    
+    setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
+    setup_record_range(@project.funding_forecasts, Time.now.year, Time.now.year+Project::FORECAST_RANGE)
   end
 
   def create    
@@ -125,5 +128,15 @@ class ProjectsController < ApplicationController
     projects.each { |p| p.destroy } 
      
     redirect_to :action => 'list_recycle_bin'
+  end
+  
+private
+  # Initializes a number of e.g. funding records with a year attribute
+  # for a specific range
+  def setup_record_range(association, from, to)
+    years = (from..to).to_a - association.all.map(&:year)
+    years.each { |year| association.build(:year => year ) }
+    
+    association
   end
 end

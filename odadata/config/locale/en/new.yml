@@ -273,7 +273,7 @@ en:
         query_database: Query Database
         totals: Annual Totals
         output_in: Output in
-        select_all: Select All
+        check_uncheck_all: Check / Uncheck all
       show:
         title: Custom Report
     districts:

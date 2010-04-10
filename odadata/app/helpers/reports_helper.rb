@@ -127,7 +127,7 @@ module ReportsHelper
   # Adds the select / deselect all functionality for the reports builder
   def select_deselect_link(item)
     content_tag(:span, :class => "link", :onclick => "toggleAll('#{item}')", :id => "#{item}_toggle") do
-      image_tag("icons/checklist_checked.png", :size => "16x16")
+      image_tag("icons/checklist_checked.png", :size => "16x16", :title => t('.check_uncheck_all'))
     end
   end
 end

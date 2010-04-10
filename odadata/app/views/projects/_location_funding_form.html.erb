@@ -20,7 +20,7 @@
 	});
 	
 	var cloneFinancesRow = function() {
-	  var blueprint = $(this).parent('div').find('fieldset:last');
+	  var blueprint = $(this).parent('div').parent('div').find('fieldset:last');
 	  var next = blueprint.clone();
 	  var time = new Date().getTime();
 	  
@@ -118,6 +118,4 @@
   	  <li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
   	<% end %>
   <% end %>
-  
-  <input type="button" class="add_new_finances" value="Add information for another year" />
 </div>

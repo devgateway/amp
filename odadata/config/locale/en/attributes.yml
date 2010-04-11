@@ -56,7 +56,7 @@ en:
         single_treasury_account:
           label: Single Treasury Account
         government_project_code:
-          label: Government Project Code
+          label: Government Budget Code
         enters_in:
           label: Enters in
         loan_to_public_enterprises:

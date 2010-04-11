@@ -120,6 +120,8 @@ en:
           label: Co-Funding
         mdgs: 
           label: MDGs
+        project_currency:
+          label: Currency
         
       sector_relevance:
         dac_sector: 

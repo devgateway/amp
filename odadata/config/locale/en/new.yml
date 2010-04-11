@@ -181,6 +181,8 @@ en:
       add_cofunding_donor: Add another Donor
       add_cofunding_agency: Add another Agency
       geo_relevances_title: Focal Regions
+      project_currency: Input currency
+      change_currency_confirmation: This will clear all amounts. Are you sure?
       geo_usage: |
          Please select the focal regions of this project.<br />
          If you do not select any, it will be considered a national project.

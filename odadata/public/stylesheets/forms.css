@@ -119,4 +119,14 @@ form fieldset h3 {
   font-weight: bold; 
 }       
 
+/* Input currency */
+input.monetary {
+  width: 130px;
+  padding-right: 40px;
+}
+span.currency {
+  margin-left: -30px;
+  color: #AAA;
+  font-size: 1.1em;
+}
 /* End DATA INPUT FORM STYLES */

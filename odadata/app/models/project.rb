@@ -113,6 +113,7 @@ class Project < ActiveRecord::Base
       
   ##
   # Callbacks
+  before_validation :set_funding_currency 
   #before_save :reset_delegated_cooperation
   
   ##
@@ -136,6 +137,12 @@ class Project < ActiveRecord::Base
   validate                  :total_sector_amount_is_100
   validate                  :total_location_amount_is_100
   validate                  :dates_consistency
+  
+  attr_accessor :project_currency
+  
+  def project_currency
+    @project_currency || self.historic_funding.try(:currency) || self.donor.currency 
+  end
   
   # This gives us nicer URLs with the project number in it instead of just the id
   def to_param
@@ -207,6 +214,12 @@ protected
   # Callback methods
   def reset_delegated_cooperation
     delegating_agency_id = nil unless delegated_cooperation
+  end
+  
+  def set_funding_currency
+    historic_funding.currency = project_currency
+    fundings.each { |f| f.currency = project_currency }
+    funding_forecasts.each { |f| f.currency = project_currency }
   end
   
   ##

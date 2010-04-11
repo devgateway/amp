@@ -112,8 +112,15 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
   
-  def currency_select(options = {}, html_options = {})
-    select(:currency, ExchangeRate.available_currencies.map { |c| [c, c] }, options, html_options)
+  def currency_select(method, options = {}, html_options = {})
+    select(method, ExchangeRate.available_currencies.map { |c| [c, c] }, options, html_options)
+  end
+  
+  def monetary_field(method)
+    value = object.send(method)
+    
+    text_field(method, :value => value.to_s(false), :class => "monetary") +
+      @template.content_tag(:span, value.currency, :class => "currency")
   end
   
   # Creates a link for removing an associated element from the form, by removing its containing element from the DOM.

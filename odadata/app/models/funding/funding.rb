@@ -6,7 +6,7 @@ class Funding < ActiveRecord::Base
   validates_presence_of :currency, :year
       
   named_scope :ordered, :order => "project_id ASC, year ASC" 
-    
+  
   # Returns total payments for a requested year
   # For the current year it sums up only the payments of
   # quarters that have passed already!

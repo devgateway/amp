@@ -168,7 +168,7 @@ class Project < ActiveRecord::Base
   # This returns a list of Provinces and Districts in the following format:
   # {"Province 1" => ["Dist 1.1", "Dist 1.2"], "Province 2" => ["Dist 2.1"] ...}
   def geo_list
-    ActiveSupport::Deprecation.warn("Ugly method! Will be removed ASAP! Don't use  it anymore")
+    ActiveSupport::Deprecation.warn("Ugly method! Will be removed ASAP! Don't use it anymore")
     provinces.inject({}) do |list, province|
       list[province.name] = districts.find_all_by_province_id(province.id).map(&:name)
       

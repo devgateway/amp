@@ -112,6 +112,10 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
   
+  def currency_select(options = {}, html_options = {})
+    select(:currency, ExchangeRate.available_currencies.map { |c| [c, c] }, options, html_options)
+  end
+  
   # Creates a link for removing an associated element from the form, by removing its containing element from the DOM.
   #
   # Must be called from within an associated form.

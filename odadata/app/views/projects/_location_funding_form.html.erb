@@ -96,8 +96,11 @@
 	<% f.fields_for :historic_funding, (f.object.historic_funding || f.object.build_historic_funding) do |fh| %>
 		<%= fh.hidden_field :currency, :value => @project.donor.currency -%>
 	
-		<li class="fifty"><%= fh.text_field :commitments, :value => fh.object.commitments %></li>
-		<li class="fifty"><%= fh.text_field :payments, :value => fh.object.payments %></li>
+		<li class="fifty">
+		  <%= fh.text_field :commitments, :value => fh.object.commitments.to_s(false) %>
+		  <span class="currency">EUR</span>
+		</li>
+		<li class="fifty"><%= fh.text_field :payments, :value => fh.object.payments.to_s(false) %></li>
 	<% end %>
 <% end %>
 
@@ -107,12 +110,12 @@
   	  <%= fa.hidden_field :year %>
   	  <%= fa.hidden_field :currency, :value => @project.donor.currency %>
   	  
-  	  <li><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
+  	  <li><%= fa.text_field :commitments, :value => fa.object.commitments.to_s(false) %><span class="currency">EUR</span></li>
   	  
-  	  <li class="fifty"><%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %></li>
-  	  <li class="fifty"><%= fa.text_field :payments_q2, :value => fa.object.payments_q2 %></li>
-  	  <li class="fifty"><%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %></li>
-  	  <li class="fifty"><%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %></li>
+  	  <li class="fifty"><%= fa.text_field :payments_q1, :value => fa.object.payments_q1.to_s(false) %><span class="currency">EUR</span></li>
+  	  <li class="fifty"><%= fa.text_field :payments_q2, :value => fa.object.payments_q2.to_s(false) %></li>
+  	  <li class="fifty"><%= fa.text_field :payments_q3, :value => fa.object.payments_q3.to_s(false) %></li>
+  	  <li class="fifty"><%= fa.text_field :payments_q4, :value => fa.object.payments_q4.to_s(false) %></li>
   	  
   	  <li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
   	  <li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>

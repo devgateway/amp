@@ -1,19 +1,16 @@
 package org.digijava.module.aim.helper;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.text.DecimalFormat;
-
-import mondrian.rolap.BitKey.Big;
-import mondrian.util.Bug;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
-
-import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIDeclaration;
 
 public class CurrencyWorker {
 	private static Logger logger = Logger.getLogger(CurrencyWorker.class);
@@ -65,7 +62,7 @@ public class CurrencyWorker {
 
 	public static BigDecimal convertToUSD(BigDecimal amnt,String fromCurrencyCode)  throws AimException{
 		exchangeRate = CurrencyUtil.getLatestExchangeRate(fromCurrencyCode);
-		return amnt.multiply(new BigDecimal(exchangeRate)) ;
+		return amnt.multiply(new BigDecimal(exchangeRate),new MathContext(Constants.MATH_CONTEXT_PRECISION ,RoundingMode.HALF_UP)) ;
 	}
         public static double convertToDefaultCurr(double amnt,String fromCurrencyCode) throws AimException {
           double amount=0;
@@ -83,7 +80,7 @@ public class CurrencyWorker {
 
 	public static BigDecimal convertFromUSD(BigDecimal amnt, String toCurrencyCode) throws AimException{
 		exchangeRate = CurrencyUtil.getLatestExchangeRate(toCurrencyCode);
-		return amnt.divide(new BigDecimal(exchangeRate));
+		return amnt.divide(new BigDecimal(exchangeRate),new MathContext(Constants.MATH_CONTEXT_PRECISION ,RoundingMode.HALF_UP));
 	}
 
 	public static BigDecimal convertFromUSD(BigDecimal amnt, Long toCurrencyId) throws AimException{

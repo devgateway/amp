@@ -368,4 +368,6 @@ public class Constants {
     public static final int NUM_OF_CHARS_IMPUTATION = 22;
     
     public static final int NUM_OF_CHARS_CODE_CHAPITRE = 11;
+    
+    public static final int MATH_CONTEXT_PRECISION = 10;  
 }

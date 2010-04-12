@@ -16,12 +16,6 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-<script language="JavaScript">
-	function load() {
-		window.print();
-	}
-	function unload() {}
-</script>
 
 <%
 	Long actId = (Long)request.getAttribute("actId");
@@ -74,6 +68,14 @@
 								</field:display>
 						</table>							
                         </td>
+                      </tr>
+                      <tr>
+                          <td noWrap align="right" valign="middle"><digi:link
+                                  styleId="printWin" href="#" onclick="window.print(); return false;">
+                                  <digi:img width="17" height="20" hspace="2" vspace="2"
+                                            src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"
+                                            border="0" alt="Printer Friendly" />
+                              </digi:link></td>
                       </tr>
                       <tr>
                         <td width="100%">

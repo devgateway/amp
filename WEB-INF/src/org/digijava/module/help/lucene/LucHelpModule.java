@@ -114,6 +114,9 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 		if (bodyText!=null){
 			textToIndex += ". " + bodyText; 
 		}
+        else{
+            bodyText="";
+        }
 		//Filter title and body from HTML tags.
 		textToIndex = HTML_STRIPPER.replaceAll(textToIndex, " "); // this will slow down greatly, but..
 		
@@ -122,7 +125,7 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 		Field title_key	= new Field(FIELD_TITLE_KEY, item.getTitleKey(), Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field title		= new Field(FIELD_TITLE, item.getTitle(), Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field body_key	= new Field(FIELD_BODY_KEY, item.getBodyKey(), Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field body		= new Field(FIELD_BODY, item.getBody(), Field.Store.YES, Field.Index.UN_TOKENIZED);
+		Field body		= new Field(FIELD_BODY, bodyText, Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field lang_iso	= new Field(FIELD_LANG_ISO, item.getLangIso(), Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field instance	= new Field(FIELD_INSTANCE_NAME, item.getModuleInstance(), Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field indexed	= new Field(FIELD_INDEXED_TEXT, textToIndex, Field.Store.NO, Field.Index.TOKENIZED);

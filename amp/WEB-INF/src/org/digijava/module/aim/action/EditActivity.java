@@ -582,10 +582,14 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         String action = request.getParameter("action");
         if (action != null && action.trim().length() != 0) {
           if ("edit".equals(action)) {
-        	if (eaForm.getComments().getCommentsCol() != null)
-        			eaForm.getComments().getCommentsCol().clear();
-        	else
-        		eaForm.getComments().setCommentsCol(new ArrayList<AmpComments>());
+        	  //clear messages
+        	  eaForm.getMessages().clear();
+        	  
+        	  if (eaForm.getComments().getCommentsCol() != null) {
+        		  eaForm.getComments().getCommentsCol().clear();
+        	  }	else{
+        		  eaForm.getComments().setCommentsCol(new ArrayList<AmpComments>());
+        	  }
             eaForm.getComments().setCommentFlag(false);
             /**
              * The commentColInSession session attribute is a map of lists.

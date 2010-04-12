@@ -98,25 +98,25 @@
 																					<c:forEach var="error" items="${helpForm.helpErrors}">
 																						<tr>
 																							<td>
-																								<font color="red">${error}</font>
+																								<font color="red"><li>${error}</li> </font>
 																							</td>
 																						</tr>
 																					</c:forEach>
 																				</c:if>
 																				<tr>
-																					<td align="right"><digi:trn key="help:topic:key">Help Topic key</digi:trn></td>
+																					<td align="right"><digi:trn>Help Topic key</digi:trn></td>
 																					<td align="left"><html:text property="topicKey" /></td>
 																				</tr>
 																				
 																				<c:if test="${not empty helpForm.topicTree}">
 																				 
 																				<tr>
-																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
+																					<td align="right"><digi:trn>Select group</digi:trn></td>
 																					<td align="left">
 
 																						<bean:define id="firstLevel" name="helpForm" property="topicTree" type="java.util.Collection"/>
 																						<html:select property="parentId" name="helpForm" styleClass="inp-text">
-																						<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
+																						<html:option value=""><digi:trn>No group</digi:trn></html:option>
 																						<%= HelpUtil.renderLevelGroup(firstLevel) %>
 																						</html:select>
 																					</td>
@@ -130,13 +130,13 @@
 																							<tr>
 																								<td align="right">
 																									<c:set var="trnNextBtn">
-																										<digi:trn key="help:btn:next">next</digi:trn>
+																										<digi:trn>next</digi:trn>
 																									</c:set>
 																									<input type="button" value="${trnNextBtn }" onclick="next();" />
 																								</td>
 																								<td align="left">
 																									<c:set var="trnCancelBtn">
-																										<digi:trn key="help:btn:cancel">Cancel</digi:trn>
+																										<digi:trn>Cancel</digi:trn>
 																									</c:set>
 																									<input type="button" value="${trnCancelBtn}" onclick="cancel();" />
 																								</td>
@@ -227,19 +227,19 @@
 																							<tr>
 																								<td align="right">
 																									<c:set var="trnSaveBtn">
-																										<digi:trn key="help:btn:save">Finish</digi:trn>
+																										<digi:trn>Finish</digi:trn>
 																									</c:set>
 																									<input type="button" value="${trnSaveBtn }" onclick="finish('${helpForm.edit}');" />
 																								</td>
 																								<td align="center" width="6%">
 																									<c:set var="trnBacklBtn">
-																										<digi:trn key="help:btn:back">Back</digi:trn>
+																										<digi:trn>Back</digi:trn>
 																									</c:set>
 																									<input type="button" value="${trnBacklBtn}" onclick="back();" />
 																								</td>
 																								<td align="left">
 																									<c:set var="trnCancelBtn">
-																										<digi:trn key="help:btn:cancel">Cancel</digi:trn>
+																										<digi:trn>Cancel</digi:trn>
 																									</c:set>
 																									<input type="button" value="${trnCancelBtn}" onclick="cancel();" />
 																								</td>

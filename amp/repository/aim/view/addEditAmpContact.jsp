@@ -37,7 +37,7 @@
     var panelStart=0;
     var checkAndClose=false;
     function initOrganizationScript() {
-        var msg='\n<digi:trn key="aim:addSector">Add Organizations</digi:trn>';
+        var msg='\n<digi:trn>Add Organizations</digi:trn>';
         myPanel.setHeader(msg);
         myPanel.setBody("");
         myPanel.beforeHideEvent.subscribe(function() {
@@ -296,6 +296,15 @@ html>body #mainEmpty {
 	 return true;
 	}
 
+	function checkPhoneNumberType(type){
+	 	var regex='^[a-zA-Z]*$';
+	  	if (!type.match(regex)){
+	  		alert('only letters are allowed for phone type');	   			
+	   		return false;
+	  	}	 		 
+	 	return true;
+	}
+
 	function saveContact(){
 		if(validateInfo()){
 		    <digi:context name="addCont" property="context/addressBook.do?actionType=saveContact"/>
@@ -351,23 +360,31 @@ html>body #mainEmpty {
     	
     	if(phoneNumbers!=null){
         	for(var i=0;i < phoneNumbers.length; i++){
-            	if(checkNumber(phoneNumbers[i].value)==false){            		
+            	if(checkNumber(phoneNumbers[i].value)==false || checkPhoneNumberType(phoneTypes[i].value)==false){            		
             		return false;
             	}
         	}
     	}
     	//check fax
-    	var faxes=$("input[id^='faxes_']");
+    	var faxes=$("input[id^='fax_']");
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
-            	if(checkNumber(faxes[i].value)==false){
+        		if(faxes[i].value==''){
+        			alert('Please enter fax');
+        			return false;
+        		}else if(checkNumber(faxes[i].value)==false){
             		return false;
             	}
         	}
     	}
 		return true;
 	}
-        function removeOrgs(){
+
+	function closeWindow() { //this function closes organizations popin
+		myPanel.hide();
+	}
+	
+    function removeOrgs(){
             <digi:context name="addCont" property="context/addressBook.do?actionType=removeOrganization"/>
 		    document.addressbookForm.action = "<%= addCont %>";
 		    document.addressbookForm.target = "_self";
@@ -412,7 +429,7 @@ html>body #mainEmpty {
             	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
                 alert(msg);
             	return false;
-            }else if(dataName=='fax' && $("input[id^='faxes_']").length==3){
+            }else if(dataName=='fax' && $("input[id^='fax_']").length==3){
             	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
                 alert(msg);
             	return false;

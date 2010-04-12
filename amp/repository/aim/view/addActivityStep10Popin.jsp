@@ -492,7 +492,7 @@
 
 	<!--
 
-	function selectSector() {		
+	function selectSector() {
 		<digi:context name="selSector" property="context/module/moduleinstance/sectorActions.do?actionType=addsectorToindicator"/>
 	    var url = "<%= selSector %>";
 	    url += "&sectorReset="+document.getElementsByName('sectorReset')[0].value+

@@ -194,6 +194,7 @@
 	}
 
 	function closeWindow() {
+		alert('close-shi var !');
 		window.close();
 	}
 

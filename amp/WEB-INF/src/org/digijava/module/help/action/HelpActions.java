@@ -33,6 +33,8 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -569,10 +571,11 @@ public class HelpActions extends DispatchAction {
 	 * @return errors
 	 * @throws Exception
 	 */
-	private List<String> validate(HelpForm form, String siteId,String moduleInstance) throws AimException {
-		List<String> helpErrors = new ArrayList<String>();
+	private List<String> validate(HelpForm form, String siteId,String moduleInstance,HttpServletRequest request) throws AimException,WorkerException {
+		List<String> helpErrors = new ArrayList<String>();		
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		if (!HelpUtil.cheackEditKey(form.getTopicKey(), siteId, moduleInstance)) {
-			helpErrors.add("errors.help.createTopic.keyIsUsed");
+			helpErrors.add(TranslatorWorker.translateText("key is used", locale, RequestUtils.getSite(request).getId()));
 		}
 		return helpErrors;
 	}
@@ -610,12 +613,12 @@ public class HelpActions extends DispatchAction {
 	 * @param request
 	 * @throws AimException
 	 */
-	private void createTopicStep1(HelpForm form, HttpServletRequest request) throws AimException {
+	private void createTopicStep1(HelpForm form, HttpServletRequest request) throws AimException,WorkerException {
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		form.setHelpErrors(null);
-		if (!validate(form, siteId, moduleInstance).isEmpty()) {
-			form.setHelpErrors(validate(form, siteId, moduleInstance));
+		if (!validate(form, siteId, moduleInstance,request).isEmpty()) {
+			form.setHelpErrors(validate(form, siteId, moduleInstance,request));
 		} else {
 			form.setWizardStep(2);
 			form.setBodyEditKey("help:topic:body:" + form.getTopicKey());

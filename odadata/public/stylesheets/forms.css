@@ -126,7 +126,7 @@ input.monetary {
 }
 span.currency {
   margin-left: -30px;
-  color: #AAA;
+  color: #999;
   font-size: 1.1em;
 }
 /* End DATA INPUT FORM STYLES */

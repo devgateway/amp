@@ -642,7 +642,7 @@ function commentWin(val) {
 																					<field:display name="Implementation Level"
 																						feature="Location">
 																						<TR>
-																							<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
+																							<TD width="100%" colspan="5" align="left" bgcolor="#ffffff">
 																								<i><digi:trn key="aim:impLevel">Implementation Level</digi:trn></i>
 																								 :
                                                                                                  [<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.implemLocationLevel}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>"  />]
@@ -651,7 +651,7 @@ function commentWin(val) {
 																						</TR>
 																					</field:display>
 																					<field:display name="Implementation Location" feature="Location">
-																					<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
+																					<TD width="100%" colspan="5" align="left" bgcolor="#ffffff">
 																						<i>
 																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
 																							:&nbsp;

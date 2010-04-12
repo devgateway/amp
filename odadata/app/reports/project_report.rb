@@ -157,7 +157,7 @@ module Reports
       
       build :table_structure do 
         @workbook = Spreadsheet::Workbook.new
-        @worksheet = @workbook.add_worksheet(Spreadsheet::Worksheet.new(:name => "ODAnic Custom Report"))
+        @worksheet = @workbook.add_worksheet(Spreadsheet::Worksheet.new(:name => "ODAdata Custom Report"))
       end
       
       build :table_header do   

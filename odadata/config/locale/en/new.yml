@@ -145,7 +145,7 @@ en:
         data_input_manual: Data Input Manual
         data_input_glossary: Data Input Glossary
         dac_crs_manual: DAC-CRS Manual
-        country_manual: ODAnic Manual
+        country_manual: ODAdata Manual
         contact: Contact
         logout: Log out
   
@@ -347,7 +347,7 @@ en:
       redirect: You will be redirected back in a few seconds.
     downloads:
       title: Downloads
-      available_shortly: Downloads of the first ODAnic report 2007 in Excel will be uploaded shortly
+      available_shortly: None
     home:
       bluebook_image_link: Click on Image for EU Blue Book 2007
   

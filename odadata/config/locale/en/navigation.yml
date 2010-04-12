@@ -17,13 +17,13 @@ en:
       links: Links
       downloads: Downloads
       resources: Resources
-      odadata_manual: ODAnic Manual
-      glossary: ODAnic Glossary
+      odadata_manual: ODAdata Manual
+      glossary: ODAdata Glossary
       dac_manual: DAC-CRS Manual
       exchange_rates: Exchange Rates
       design_own: Design own report
       help: Help
-      feedback: Feedback on ODAnic
+      feedback: Feedback on ODAdata
       support: Technical Support
       
     focal_point:
@@ -46,7 +46,7 @@ en:
       data_input_manual: Data Input Manual
       data_input_glossary: Data Input Glossary
       dac_crs_manual: DAC-CRS Manual
-      country_manual: ODAnic Manual
+      country_manual: ODAdata Manual
       contact: Contact
       
     admin:

@@ -7,7 +7,7 @@ ENV['RAILS_ENV'] = ARGV.first || ENV['RAILS_ENV'] || 'development'
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 
 @workbook = Spreadsheet::Excel.new(File.join(RAILS_ROOT, 'public', 'sectors_list.xls'))
-@worksheet = @workbook.add_worksheet("ODAnic OECD DAC Sectors")
+@worksheet = @workbook.add_worksheet("ODAdata OECD DAC Sectors")
 
 @formats = {
   :heading => @workbook.add_format(:color => "blue", :bold => 1),

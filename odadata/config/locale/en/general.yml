@@ -77,7 +77,7 @@ en:
     no_exchange_rates: No Exchange Rates Exist in the Database. Please create a New Exchange Rates
           
   exchange_rates: 
-      title: Exchange Rates used by ODAnic
+      title: Exchange Rates used by ODAdata
       euro_rate: Euro Exchange Rate
            
   country_strategy:

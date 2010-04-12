@@ -240,7 +240,7 @@ YAHOO.namespace("YAHOO.amp");
     	
     	if(phoneNumbers!=null){
         	for(var i=0;i < phoneNumbers.length; i++){
-            	if(checkNumber(phoneNumbers[i].value)==false){            		
+            	if(checkNumber(phoneNumbers[i].value)==false || checkPhoneNumberType(phoneTypes[i].value)==false){            		
             		return false;
             	}
         	}
@@ -249,7 +249,9 @@ YAHOO.namespace("YAHOO.amp");
     	var faxes=$("input[id^='faxes_']");
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
-            	if(checkNumber(faxes[i].value)==false){
+    			if(faxes[i].value==''){
+        			alert('Please enter fax');
+        		}else if(checkNumber(faxes[i].value)==false){
             		return false;
             	}
         	}
@@ -257,6 +259,15 @@ YAHOO.namespace("YAHOO.amp");
 		return true;
 	}
 
+    function checkPhoneNumberType(type){
+	 	var regex='^[a-zA-Z]*$';
+	  	if (!type.match(regex)){
+	  		alert('only letters are allowed for phone type');	   			
+	   		return false;
+	  	}	 		 
+	 	return true;
+	}
+	
 	function checkNumber(number){
 	 	var validChars= "0123456789()+ ";
 	 	for (var i = 0;  i < number.length;  i++) {

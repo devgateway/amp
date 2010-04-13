@@ -26,6 +26,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
@@ -6132,17 +6133,16 @@ public class DbUtil {
                                                 		continue;
                                                 	}
                                                 }
-                                                //TODO: get rid of hardcoded values and check for the french string "Support Budg�taire Direct".
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) 
-                                                    			& !fund.getFinancingInstrument().getId().equals(new Long(84))) {
+                                                    	if ( !ArrayUtils.contains(FeaturesUtil.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
+                                                    			fund.getFinancingInstrument().getId().toString())) {
                                                             logger.warn(fund.getFinancingInstrument().getValue());
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)
-                                                        		|| fund.getFinancingInstrument().getId().equals(new Long(84))) {
+                                                        if (ArrayUtils.contains(FeaturesUtil.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
+                                                    			fund.getFinancingInstrument().getId().toString())) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }

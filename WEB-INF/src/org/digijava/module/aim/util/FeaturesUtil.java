@@ -855,6 +855,12 @@ public class FeaturesUtil {
 		return new Long( -1);
 	}
 
+	public static String[] getGlobalSettingsStringArray(String key) {
+		String[] ret = null;
+ 	 	ret = getGlobalSettingValue(key).split(";");
+ 	 	return ret;
+	}
+	
 	/*
 	 * edited by Govind G Dalwani
 	 */

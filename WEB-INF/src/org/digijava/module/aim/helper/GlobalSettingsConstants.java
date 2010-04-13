@@ -56,5 +56,6 @@ public class GlobalSettingsConstants {
     public static final String NEW_FIELDS_VISIBILITY= "New fields Visibility";    
     
     public static final String BASE_CURRENCY= "Base Currency";
-
+    
+    public static final String BUDGET_SUPPORT_FOR_PI9 = "Budget Support for PI 9";
 }

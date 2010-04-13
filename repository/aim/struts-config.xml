@@ -955,6 +955,7 @@
     </action>
     <action name="aimTeamMemberForm" path="/aim/showAddTeamMemberJSON" scope="session" type="org.digijava.module.aim.action.ShowAddTeamMember">
       <forward name="showAddFromAdmin" path="/showLayout.do?layout=aim_teamMembersAddFromAdminJSON" />
+      <forward name="showAddFromTeam" path="/showLayout.do?layout=teamMembersAdd" />
     </action>
     <action input="/showLayout.do?layout=getEmail" name="aimUserEmailForm" path="/aim/resetUserPassword" scope="request" type="org.digijava.module.um.action.UserEmail" validate="true">
       <forward name="success" path="/showLayout.do?layout=resetEmailSuccess" />
@@ -1840,8 +1841,8 @@
     
     <action name="aimTeamMemberForm" path="/aim/assignUsersToWorkspace" scope="session" type="org.digijava.module.aim.action.AssignUsersToWorkspace">
     	 <forward name="error" path="/aim/showAddTeamMemberJSON.do?fromPage=1" />
-    	  <forward name="addedFromAdmin" path="/aim/workspaceManager.do" />
-    	  <forward name="addedFromUser" path="/aim/teamMemberList.do" />
+    	  <forward name="showAddFromAdmin" path="/aim/workspaceManager.do" />
+    	  <forward name="showAddFromTeam" path="/aim/teamMemberList.do" />
     </action>
     
   </action-mappings>

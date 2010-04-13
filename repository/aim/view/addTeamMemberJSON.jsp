@@ -130,7 +130,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		if(validate()==true){
 			//submit form
 			<digi:context name="commentUrl" property="context/module/moduleinstance/assignUsersToWorkspace.do"/>;
-			document.aimTeamMemberForm.action="${commentUrl}?fromPage=1&addedFrom=addedFromAdmin";
+			document.aimTeamMemberForm.action="${commentUrl}?fromPage=1&addedFrom=showAddFromAdmin";
 		    document.aimTeamMemberForm.target="_self";
 		    document.aimTeamMemberForm.submit();
 		}

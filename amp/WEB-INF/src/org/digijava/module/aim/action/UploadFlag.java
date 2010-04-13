@@ -10,6 +10,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.form.FlagUploaderForm;
 import org.digijava.module.aim.util.DbUtil;
@@ -22,42 +26,50 @@ public class UploadFlag extends Action {
 		
 		FlagUploaderForm fuForm = (FlagUploaderForm) form;
 		
-		String errorMsg = null;
+		ActionError errorMsg = null;
 		FormFile flagFile = fuForm.getFlagFile();
+
+				
+		Long siteId = RequestUtils.getSite(request).getId();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();	
 		
 		try {
 			if (flagFile != null && flagFile.getFileSize() > 0) {
-				if (fuForm.getCountryId().longValue() > 0) {
+				byte[] image = flagFile.getFileData();
+				int newfilelength=image.length;
+				if(newfilelength>65000){
+					 errorMsg = new ActionError("error.aim.uploadFlag.wrongSize", TranslatorWorker.translateText("The file's size should be lesser than 63k", locale, siteId));
+				}
+				else if (fuForm.getCountryId().longValue() > 0) {
 					AmpSiteFlag siteFlag = null;
 					siteFlag = FeaturesUtil.getAmpSiteFlag(fuForm.getCountryId());
 					if (siteFlag == null) {
 						siteFlag = new AmpSiteFlag();
-						byte[] image = flagFile.getFileData();
 						siteFlag.setFlag(image);
 						siteFlag.setContentType(flagFile.getContentType());
 						siteFlag.setCountryId(fuForm.getCountryId());
 						siteFlag.setDefaultFlag(false);
 						DbUtil.add(siteFlag);						
 					} else {
-						byte[] image = flagFile.getFileData();
 						siteFlag.setFlag(image);
 						siteFlag.setContentType(flagFile.getContentType());
 						DbUtil.update(siteFlag);												
 					}
 				} else {
-					errorMsg = "error.aim.uploadFlag.noCountrySelected";	
+					 errorMsg = new ActionError("error.aim.uploadFlag.noCountrySelected", TranslatorWorker.translateText("No country selected", locale, siteId));
 				}
 			} else {
-				errorMsg = "error.aim.uploadFlag.noFlagSelected";				
+				 errorMsg = new ActionError("error.aim.uploadFlag.noFlagSelected", TranslatorWorker.translateText("No flag selected to upload", locale, siteId));
 			}
 		} catch (Exception e) {
-			errorMsg = "error.aim.serverError";
+		    errorMsg = new ActionError("error.aim.serverError", TranslatorWorker.translateText("Server have encountered an error", locale, siteId));
 			e.printStackTrace(System.out);				
 		} finally {
 			if (errorMsg != null) {
 				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorMsg));
-				saveErrors(request, errors);						
+				errors.add(ActionErrors.GLOBAL_ERROR, errorMsg);
+				//set the errors in session due to it is going to be redirected to GetAllFlags.java
+				request.getSession().setAttribute("uploadFlagErrors", errors);
 			}				
 		}		
 		

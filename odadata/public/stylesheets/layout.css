@@ -406,3 +406,17 @@ div.info {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
 }
+
+/** columns **/
+.columns {
+  margin: 0 -5px;
+  overflow: hidden;
+}
+
+.columns > div {
+  float: left;
+}
+
+.columns > div > div {
+  padding: 0 5px;
+}

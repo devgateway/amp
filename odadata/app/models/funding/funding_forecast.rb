@@ -40,6 +40,6 @@ class FundingForecast < ActiveRecord::Base
   
   # Formatted output for all currency fields
   currency_columns :payments, :commitments,
-    :currency => lambda { |f| f.currency }, 
-    :year => lambda { |f| f.year }, :validations => false
+    :currency => lambda { |f| f.currency }, :year => lambda { |f| f.year },
+    :nature => 'forecasts', :validations => false
 end

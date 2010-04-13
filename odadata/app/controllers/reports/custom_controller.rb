@@ -42,12 +42,25 @@ class Reports::CustomController < ReportsController
       :projects => projects, 
       :middleware => disaggregators_from_params).data
       
-    report = ComplexReport.create!(:data => data)
-    redirect_to reports_custom_path(report, :format => params[:format], :currency => "EUR")
+    report = ComplexReport.create!({
+      :data => data,
+      :currency => params[:currency],
+      :historic_rates_source => params[:report][:exchange_rates][:historic],
+      :current_rates_source => params[:report][:exchange_rates][:current],
+      :forecasts_rates_source => params[:report][:exchange_rates][:forecasts]
+    })
+    
+    redirect_to reports_custom_path(report, :format => params[:format])
   end
   
   def show
-    @data = ComplexReport.find(params[:id]).data
+    @report = ComplexReport.find(params[:id])
+    @data = @report.data
+    # Set exchange rate sources for currency conversion
+    MultiCurrency.historic_rates_source = @report.historic_rates_source
+    MultiCurrency.current_rates_source = @report.current_rates_source
+    MultiCurrency.forecasts_rates_source = @report.forecasts_rates_source
+    MultiCurrency.output_currency = @report.currency
     
     respond_to do |wants|
       wants.html { render :layout => 'report_window' }

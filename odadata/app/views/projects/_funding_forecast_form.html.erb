@@ -1,5 +1,5 @@
 <div>
-  <% f.fields_for :funding_forecasts do |fa| -%>
+  <% f.fields_for :funding_forecasts, f.object.funding_forecasts.sort_by(&:year) do |fa| -%>
   	<% f.field_set t('projects.forecasts_title', :year => fa.object.year) do %>
   		<%= fa.hidden_field :year %>
   			

@@ -16,8 +16,9 @@ module MultiCurrency
           define_method(col) do
             currency = options[:currency].respond_to?(:call) ? options[:currency].call(self) : options[:currency]
             year = options[:year].respond_to?(:call) ? options[:year].call(self) : options[:year]
+            nature = options[:nature].respond_to?(:call) ? options[:nature].call(self) : options[:nature]
             
-            ConvertibleCurrency.new(read_attribute(col), (currency || DEFAULT_CURRENCY), year)
+            ConvertibleCurrency.new(read_attribute(col), (currency || DEFAULT_CURRENCY), year, nature)
           end
           
           # Attribute setter with currency parsing

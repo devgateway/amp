@@ -82,6 +82,30 @@ module ApplicationHelper
     link_to icon_tag, link_options, :class => "icon", :title => alt_text
   end
   
+  ##
+  # Column helper
+  # This splits an array across several column and yields 
+  ##
+  
+  def data_in_columns(count, array_to_split, &block)
+    record_groups = array_to_split.in_groups(count)
+    columns = returning(columns = []) do |cols|
+      record_groups.each_with_index do |records, idx| 
+        cols << capture(records.compact, idx + 1, &block)
+      end
+    end
+        
+    output = content_tag(:div, :class => "columns") do 
+      columns.map do |content|
+        content_tag(:div, :style => "width: #{(100- count) / count}%") do
+          content_tag(:div, content)
+        end
+      end.join
+    end
+    
+    concat(output)
+  end
+
 private
   def strip_html_tags(string)
     string.gsub(/\<\/?.*?\>/, '')

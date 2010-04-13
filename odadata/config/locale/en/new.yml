@@ -86,12 +86,12 @@ en:
     edit:
       title: Edit Exchange Rate
     index:
-      title: Exchange Rates
+      title: "{{source}} Exchange Rates"
       empty: No Exchange Rates Exist in the Database. Please create a New Exchange Rate.
       new: New Exchange Rate
       edit: Edit
     new:
-      title: Add New Exchange Rate
+      title: New {{source}} Exchange Rate
       back: Back
   
   layouts:

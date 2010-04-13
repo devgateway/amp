@@ -206,6 +206,11 @@ en:
           label: Euro Exchange Rate
         year: 
           label: Year
+        source:
+          label: Data source
+          options:
+            partners: Partners
+            sistafe: e-SISTAFE
         
       agency:
         name: 

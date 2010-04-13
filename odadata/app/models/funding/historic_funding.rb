@@ -10,5 +10,5 @@ class HistoricFunding < ActiveRecord::Base
   # Formatted output for all currency fields
   currency_columns :payments, :commitments,
     :currency => lambda { |f| f.currency }, :year => Project::FIRST_YEAR_OF_RELEVANCE-1, 
-    :validations => false
+    :nature => 'historic', :validations => false
 end

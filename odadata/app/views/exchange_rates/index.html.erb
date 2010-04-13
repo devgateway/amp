@@ -1,4 +1,4 @@
-<h2><%= header t('.title') %></h2>
+<h2><%= header t('.title', :source => ExchangeRate.human_option_name(:source, @source)) %></h2>
 
 <table>
 	<% if @exchange_rates.blank? %>
@@ -30,5 +30,5 @@
 </table>
 	
 <% restrict_to 'admin' do %>
-	<p><b><%= link_to t('.new'), new_exchange_rate_path %></b></p>
+	<p><b><%= link_to t('.new'), new_exchange_rate_path(:source => @source) %></b></p>
 <% end %>

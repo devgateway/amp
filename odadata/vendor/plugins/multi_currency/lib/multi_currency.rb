@@ -1,3 +1,5 @@
+require 'thread_local_accessor'
+
 module MultiCurrency
   # Raised when conversion from one currency to another fails
   class ConversionError < StandardError
@@ -17,12 +19,10 @@ module MultiCurrency
 
   class << self
     # This can be used to set a default output currency for the ConvertibleCurrency#to_s method
-    def output_currency=(currency)
-      Thread.current['mc_output_currency'] = currency
-    end
-    
-    def output_currency
-      Thread.current['mc_output_currency']
-    end
+    thread_local_accessor :output_currency
+    # Options to use different exchange rate sources for data of different natures
+    thread_local_accessor :historic_rates_source
+    thread_local_accessor :current_rates_source
+    thread_local_accessor :forecasts_rates_source
   end
 end

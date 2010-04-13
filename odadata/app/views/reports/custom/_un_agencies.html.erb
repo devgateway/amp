@@ -1,0 +1,9 @@
+<h3>UN Agencies <%= select_deselect_link('un_agencies') %></h3>
+
+<ul class="checkbox_container">
+  <li class="all"><%= check_box_tag "un_agencies[]", "all", true %>all</a>
+    
+  <% for un_agency in Donor.main.ordered.all(:limit => 22, :offset => 22) %>
+    <li><%= check_box_tag "un_agencies[]", un_agency.id %><%= un_agency.name %></li>
+  <% end %>
+</ul>

@@ -133,7 +133,7 @@
 <% end %>
 
 <div>
-  <% f.fields_for :fundings do |fa| -%>
+  <% f.fields_for :fundings, f.object.fundings.sort_by(&:year) do |fa| -%>
     <% f.field_set t('.funding_title', :year => fa.object.year) do %>
   	  <%= fa.hidden_field :year %>
   	  

@@ -1,6 +1,16 @@
+<% stylesheet 'start/jquery-ui-1.8.custom' %>
 <% js_behavior 'checkboxes' %>
 <% stylesheet 'custom_report' %>
 
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    $('.accordion').accordion({
+      autoHeight: false
+    });
+  });
+</script>
+
+<div class="container">
 <% form_tag(
 	{ :action => 'create', :method => :put, },
 	:id => 'custom_report_conditions', 
@@ -8,123 +18,395 @@
 	:onsubmit => "window.open('',this.target,'resizable=1,scrollbars=1,height=600,width=800');return true;") do 
 %>
 
-    <div class="horizontalBox">
-	    <div>
-            <span id="project_count"></span>
-            <INPUT id="submit_button" type="submit" name="query_button" value="<%=t '.query_database' %>" class="bt" style="margin: 5px; width: 100px">
-            <!-- <INPUT type="submit" name="totals_button" value="<%=t '.totals' %>" class="bt" style="margin: 5px; width: 100px"> -->
-	    </div>
-	    <div>
-        	<p style="padding-top:6px;">
-            <%=t '.action' %>
-            </p>
-	    </div>
-    </div>
-	<div id="output_options" class="container">
-		<h2><%=t '.output' %></h2>
-		
-		<ul class="checkbox_container">
-			<h3><span style="float:left"><%=t '.fields' %></span></h3>
-			<input type="hidden" value="factsheet_link" name="report[fields][]" />
+<h2>Fields to display</h2>
+<table class="checkbox_container">
+  <tr>
+    <td style="border-right: 1px solid #777; width: 33%">
+      <ul>
+        <li>
+        	<%= check_box_tag "report[fields][]", "donor", true %>
+        	<%= Project.human_attribute_name('donor') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "donor_agency", true %>
+        	<%= Project.human_attribute_name('donor_agency') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "donor_project_number", true %>
+        	<%= Project.human_attribute_name('donor_project_number') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "oecd_number" %>
+        	<%= Project.human_attribute_name('oecd_number') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "officer_responsible_name" %>
+        	<%= Project.human_attribute_name('officer_responsible_name') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "website" %>
+        	<%= Project.human_attribute_name('website') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "title" %>
+        	<%= Project.human_attribute_name('title') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "description" %>
+        	<%= Project.human_attribute_name('description') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "comments" %>
+        	<%= Project.human_attribute_name('comments') %>
+        </li>
+        
+        <li>
+          <%= check_box_tag "report[fields][]", "planned_start", false %>
+          <%= Project.human_attribute_name('planned_start') %>
+        </li>
+
+        <li>
+          <%= check_box_tag "report[fields][]", "planned_end", false %>
+          <%= Project.human_attribute_name('planned_end') %>
+        </li>
+        
+        <li>
+          <%= check_box_tag "report[fields][]", "actual_start", true %>
+          <%= Project.human_attribute_name('actual_start') %>
+        </li>
+
+        <li>
+          <%= check_box_tag "report[fields][]", "actual_end", true %>
+          <%= Project.human_attribute_name('actual_end') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "updated_at" %>
+        	<%= Project.human_attribute_name('updated_at') %>
+        </li>
+      </ul>
+    </td>
+  
+    <td style="border-right: 1px solid #777; width: 33%">
+      <ul>
+        <li>
+        	<%= check_box_tag "report[fields][]", "country_strategy" %>
+        	<%= Project.human_attribute_name('country_strategy') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "government_counterpart" %>
+        	<%= Project.human_attribute_name('government_counterpart') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "recipient_country_budget_nr" %>
+        	<%= Project.human_attribute_name('recipient_country_budget_nr') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "sector_relevances" %>
+        	<%= Project.human_attribute_name('sector_relevances') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "national_regional" %>
+        	<%= Project.human_attribute_name('national_regional') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "geo_relevances" %>
+        	<%= Project.human_attribute_name('geo_relevances') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "mdgs" %>
+        	<%= Project.human_attribute_name('mdgs') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "prj_status" %>
+        	<%= Project.human_attribute_name('prj_status') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "grant_loan" %>
+        	<%= Project.human_attribute_name('grant_loan') %>
+        </li>
+        
+<!--        <li>
+        	<%= check_box_tag "report[fields][]", "on_off_budget" %>
+        	<%= Project.human_attribute_name('on_off_budget') %>
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "on_off_treasury" %>
+        	<%= Project.human_attribute_name('of_off_treasury') %>
+        </li>-->
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "type_of_implementation" %>
+        	<%= Project.human_attribute_name('type_of_implementation') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "aid_modality" %>
+        	<%= Project.human_attribute_name('aid_modality') %>
+        </li>
+        
+        
+
+        
+        
+        
+          
+           
             
-			<%= render :partial => "reports/query_options/query_option" %>
-		</ul>
-	</div>
-	
-	<div id="filter_criteria" class="container">
-		<h2><%=t '.main_filter' %></h2>
-		
-		<div id="donor_province" class="container">
-			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= t('.donor') %></span>
-				  <%= select_deselect_link('donors') %></h3>
-				<li class="all"><%= check_box_tag "donors[]", "all", true %><%= t('.all') %></a>
-			  <%= render :partial => "reports/query_options/donor", :collection => Donor.main.ordered.all %>
-			</ul>
-			
-			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= t('.region') %></span>
-				  <%= select_deselect_link('provinces') %></h3>
-				<li class="all"><%= check_box_tag "provinces[]", "all", true %><%= t('.all') %></a>
-			  <%= render :partial => "reports/query_options/province", :collection => Province.ordered.all %>
-			</ul>		
-			
-			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= t('.markers') %></span>
-				  <%= select_deselect_link('markers') %></h3>
-				<li class="all"><%= check_box_tag "markers[]", "all", true %><%= t('.all') %></a>
-				<%= render :partial => "reports/query_options/marker", :collection => translate_options(Project::AVAILABLE_MARKERS) %>
-				<li class="annotation"><%=t '.markers_annotation' %></li>
-			</ul>	
-		</div>
-	
-		<div id="mdg_sector" class="container">
-			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= t('.mdg') %></span>
-				  <%= select_deselect_link('targets') %></h3>
-				<li class="all"><%= check_box_tag "targets[]", "all", true %><%= t('.all') %></a>
-			  <%= render :partial => "reports/query_options/mdg", :collection => Mdg.ordered.all %>
-			</ul>
-			
-			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= t('.dac_sector') %></span>
-				  <%= select_deselect_link('sectors') %></h3>
-				<li class="all"><%= check_box_tag "sectors[]", "all", true %><%= t('.all') %></a>
-			  <%= render :partial => "reports/query_options/sector", :collection => DacSector.ordered.all, :locals => { :shorten_to => 40 } %>
-			</ul>
-		</div>
-	</div>
-	
-	<div id="other_criteria" class="container">
-		<h2><%=t '.other' %></h2>
-		
-		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= t('.grant_loan') %></span>
-			  <%= select_deselect_link('grant_loan') %></h3>
-			<li class="all"><%= check_box_tag "grant_loan[]", "all", true %><%= t('.all') %></a>	
-			<%= render :partial => "reports/query_options/grant_loan", :collection => translate_options(Project::GRANT_LOAN_OPTIONS) %>
-		</ul>
-		
-		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= t('.of_budget') %></span>
-			  <%= select_deselect_link('on_off_budget') %></h3>
-			<li class="all"><%= check_box_tag "on_off_budget[]", "all", true %><%= t('.all') %></a>	
-			<%= render :partial => "reports/query_options/on_off_budget", :collection => translate_options(Project::ON_OFF_BUDGET_OPTIONS) %>
-		</ul>
-		
-		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= t('.of_treasury') %></span>
-			  <%= select_deselect_link('on_off_treasury') %></h3>
-			<li class="all"><%= check_box_tag "on_off_treasury[]", "all", true %><%= t('.all') %></a>	
-			<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
-		</ul>
-		
-		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= t('.toa') %></span>
-			<%= select_deselect_link('aid_modality_id') %></h3>
-			<li class="all"><%= check_box_tag "aid_modality_ids[]", "all", true %><%= t('.all') %></a>
-      		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
-		</ul>
-		
-		<ul class="checkbox_container">
-			<h3 style="height:30px"><span style="float:left"><%= t('.cod') %></span>
-			  <%= select_deselect_link('type_of_implementation') %></h3>
-			<li class="all"><%= check_box_tag "type_of_implementation[]", "all", true %><%= t('.all') %></a>
-			<%= render :partial => "reports/query_options/type_of_implementation", :collection => translate_options(Project::IMPLEMENTATION_TYPES) %>
-		</ul>
-		
-		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= t('.status') %></span>
-			  <%= select_deselect_link('prj_status') %></h3>
-			<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
-		</ul>
-		
-		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= t('.title') %></span>
-			  <%= select_deselect_link('disaggregators') %></h3>
-			<li><%= check_box_tag "disaggregators[]", "sector" %><%= I18n.t('reports.disaggregation.by_sector') %></li>
-			<li><%= check_box_tag "disaggregators[]", "location" %><%= I18n.t('reports.disaggregation.by_location') %></li>
-		</ul>
-		
-	</div>	
+            
+
+            
+      </ul>
+    </td>
+    
+    <td>
+       <ul>
+         <li>
+         	<%= check_box_tag "report[fields][]", "total_commitments", true %>
+         	<%= Project.human_attribute_name('total_commitments') %>
+         </li>
+
+         <li>
+         	<%= check_box_tag "report[fields][]", "total_disbursements", true %>
+         	<%= Project.human_attribute_name('total_disbursements') %>
+         </li>
+
+         <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year+2) do |year| %>
+         	<li>
+         		<%= check_box_tag "report[fields][]", "funding_details[#{year}]" %>
+         		<%= I18n.t('reports.funds_for', :year => year) %>
+         	</li>
+         <% end %>
+       </ul>
+     </td>
+    </tr>
+</table>
+
+<h2>Filter criteria</h2>
+<div class="columns" style="margin-bottom: 40px">
+  
+  <div style="width: 70%;">
+    <div class="accordion">
+      <h4><a href="#">Donors &amp; UN Agencies</a></h4>
+      <div>
+        <div class="columns">
+        
+          <div style="width: 49%">
+            <div>
+              <%= render :partial => "donors" %>
+            </div>
+          </div>
+           
+          <div style="width: 49%">
+            <div>
+              <%= render :partial => "un_agencies" %>
+            </div>
+          </div>
+             
+        </div>
+      </div>
+      
+      <h4><a href="#">DAC Sectors</a></h4>
+      <div>
+        <% data_in_columns(2, DacSector.ordered.all) do |sectors, column| %>
+          <ul class="checkbox_container">
+            <% if column == 1 %>
+              <li class="all"><%= check_box_tag "sectors[]", "all", true %>all</a>
+            <% end %>
+
+            <% for sector in sectors %>
+              <li class="tooltip" title="<%= sector.name %>">
+              	<%= check_box_tag "sectors[]", sector.id %><%= sector.name_with_code(defined?(shorten_to) ? shorten_to : nil) -%>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+      
+      <h4><a href="#">Location</a></h4>
+      <div>
+        <% data_in_columns(3, Province.ordered.all) do |provinces, column| %>
+          <ul class="checkbox_container">
+            <% if column == 1 %>
+              <li class="all"><%= check_box_tag "provinces[]", "all", true %>all</a>
+            <% end %>
+
+            <% for province in provinces %>
+              <li class="tooltip" title="<%= province.name %>">
+              	<%= check_box_tag "provinces[]", province.id %><%= province.name -%>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+       
+       <h4><a href="#">MDGs</a></h4>
+        <div>
+           <% data_in_columns(2, Mdg.ordered.all) do |mdgs, column| %>
+             <ul class="checkbox_container">
+               <% if column == 1 %>
+                 <li class="all"><%= check_box_tag "mdgs[]", "all", true %>all</a>
+               <% else %>
+                  <li></li>
+                <% end %>
+
+               <% for mdg in mdgs %>
+                 <li class="tooltip" title="<%= mdg.name %>">
+                 	<%= check_box_tag "mdgs[]", mdg.id %><%= mdg.name -%>
+                 </li>
+               <% end %>
+             </ul>
+           <% end %>
+        </div>
+    </div>
+  </div>
+  
+  <div style="width: 27%; margin-left: 3%">
+    <div class="accordion">
+      
+      <h4><a href="#">On/Off Budget</a></h4>
+       <div>
+          <ul class="checkbox_container">
+          	<li class="all"><%= check_box_tag "on_off_budget[]", "all", true %><%= ll(:options, :all) %></a>	
+          	<%= render :partial => "reports/query_options/on_off_budget", :collection => translate_options(Project::ON_OFF_BUDGET_OPTIONS) %>
+          </ul>
+       </div>
+       
+       <h4><a href="#">On/Off Treasury</a></h4>
+       <div>
+         <ul class="checkbox_container">
+         	<li class="all"><%= check_box_tag "on_off_treasury[]", "all", true %><%= ll(:options, :all) %></a>	
+         	<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
+         </ul>
+       </div>
+       
+       <h4><a href="#">Aid Modality</a></h4>
+       <div>
+          <ul class="checkbox_container">
+          	<li class="all"><%= check_box_tag "aid_modality_ids[]", "all", true %><%= ll(:options, :all) %></a>
+            		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
+          </ul>
+       </div>
+        
+        <h4><a href="#">Channel of Delivery</a></h4>
+        <div>
+          <ul class="checkbox_container">
+          	<li class="all"><%= check_box_tag "type_of_implementation[]", "all", true %><%= ll(:options, :all) %></a>
+          	<%= render :partial => "reports/query_options/type_of_implementation", :collection => translate_options(Project::IMPLEMENTATION_TYPES) %>
+          </ul>
+        </div>
+           
+        
+        <h4><a href="#">Project Status</a></h4>
+         <div>
+            <ul class="checkbox_container">
+            	<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
+            </ul>
+         </div>
+    </div>
+  </div>
+  
+</div>
+
+<h2>Output options</h2>
+<table class="checkbox_container">
+  <tr>
+    <td style="border-right: 1px solid #777; width: 33%">
+      <h3>Disaggregation</h3>
+      <ul>
+        <li><%= check_box_tag "disaggregators[]", "sector" %><%= I18n.t('reports.disaggregation.by_sector') %></li>
+      	<li><%= check_box_tag "disaggregators[]", "location" %><%= I18n.t('reports.disaggregation.by_location') %></li>
+      </ul>
+    </td>
+    
+    <td style="border-right: 1px solid #777; width: 33%">
+      <h3>Exchange Rates</h3>
+      <ul>
+        <li>
+          <%= label_tag "report[exchange_rates][historic]", "Historic:", :style => "width: 60px; display: block; float: left" %>
+          <%= select_tag "report[exchange_rates][historic]", options_for_select(ExchangeRate::SOURCES.map { |s| [ExchangeRate.human_option_name(:source, s), s] }) %>
+        </li>
+
+        <li>
+          <%= label_tag "report[exchange_rates][current]", "Current:", :style => "width: 60px; display: block; float: left" %>
+          <%= select_tag "report[exchange_rates][current]", options_for_select(ExchangeRate::SOURCES.map { |s| [ExchangeRate.human_option_name(:source, s), s] }) %>
+        </li>
+
+        <li>
+          <%= label_tag "report[exchange_rates][forecasts]", "Forecasts:", :style => "width: 60px; display: block; float: left" %>
+          <%= select_tag "report[exchange_rates][forecasts]", options_for_select(ExchangeRate::SOURCES.map { |s| [ExchangeRate.human_option_name(:source, s), s] }) %>
+        </li>
+      </ul>
+    </td>
+    
+    <td>
+      <h3>Output Format</h3>
+      <ul>
+        <li>Currency: <%= select_tag "currency", options_for_select(ExchangeRate.available_currencies_for_select) %></li>           
+        <%= submit_tag "reports[format][xls]", :value => t('.query_database'), :class => "bt", :style => "margin: 5px; width: 100px" %>
+        <%= submit_tag "reports[format][web]", :value => t('.query_database'), :class => "bt", :style => "margin: 5px; width: 100px" %>
+      </ul>
+    </td>
+  </tr>
+</table>
 <% end %>
+</div>
+
+
+
+
+
+<!--
+<ul class="checkbox_container">
+	<h3><span style="float:left"><%= I18n.t('reports.disaggregation.title') %></span><span class="link" onclick="toggleAll('disaggregation', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="disaggregation_toggle" selected="false"><%=t '.select_all' %></span></h3>
+	<li><%= check_box_tag "disaggregators[]", "sector" %><%= I18n.t('reports.disaggregation.by_sector') %></li>
+	<li><%= check_box_tag "disaggregators[]", "location" %><%= I18n.t('reports.disaggregation.by_location') %></li>
+</ul>
+
+
+<div>
+  <div>
+    <ul>
+      
+
+
+
+      
+      
+      <li>
+      	<%= check_box_tag "report[fields][]", "implementing_agencies" %>
+      	<%= Project.human_attribute_name('implementing_agencies') %>
+      </li>
+
+      <li>
+      	<%= check_box_tag "report[fields][]", "contracted_agencies" %>
+      	<%= Project.human_attribute_name('contracted_agencies') %>
+      </li>
+      
+      <li>
+      	<%= check_box_tag "report[fields][]", "markers" %>
+      	<%= Project.human_attribute_name('markers') %>
+      </li>
+
+      
+    </ul>
+  </div>
+</div>
+-->

@@ -1,43 +1,25 @@
 /* Start Design Own Report */
-.container {
-	float: left;
-}
-div#output_options {
-	width: 170px;
-	margin-right: 15px;
-}
-div#filter_criteria {
-	width: 518px;
-	margin-right: 15px;
-}
-div#other_criteria {
-	width: 170px;
-}
-div#donor_province {
-	width: 200px;
-	margin-right: 5px;
-}
-div#mdg_sector {
-	width: 313px;
+div.container {
+  padding: 0 20px;
 }
 
-.container h2 {
+h2 {
 	margin: 0;
 	display:block;
 	border-bottom:1px solid black;
-	margin-bottom:10px;
+	margin: 10px 0;
 }
 
-.checkbox_container h3 {
+h3 {
 	margin: 0;
 	padding: 2px;
 	font-size: 8pt;
 	display: block;
 	border-bottom: 1px solid #777;
-	background-color: #687EAB;
 	color: #000;
 	height:20px;
 }
+
 .checkbox_container .link {
 	float:right;
 	font-size:9px;
@@ -45,19 +27,23 @@ div#mdg_sector {
 }
 
 
-ul.checkbox_container {
+div.checkbox_container {
 	margin-top: 10px;
 	font-size:8pt;
-	list-style-image:none;
-	list-style-position:outside;
-	list-style-type:none;
 	margin:0;
 	padding:0;
 	border: 1px solid #777;
 	background-color: #DBE2F1;
 }
 
-ul.checkbox_container li {
+div.checkbox_container ul {
+  list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	padding: 0;
+}
+
+div.checkbox_container ul li {
 	display: block;
 	clear: both;
 	vertical-align: baseline;
@@ -68,6 +54,7 @@ ul.checkbox_container li {
 
 ul.checkbox_container li.all {
 	font-weight: bold;
+	margin-top: -16px;
 }
 
 ul.checkbox_container li div {
@@ -80,5 +67,42 @@ ul.checkbox_container li input {
 	float: left;
 	margin-right: 5px;
 	margin-left: 0;
+}
+
+ul.checkbox_container {
+	margin-top: 10px;
+	font-size:8pt;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin: 0;
+	padding: 20px 0 0 0;
+}
+
+ul.checkbox_container li {
+	display: block;
+	clear: both;
+	vertical-align: baseline;
+	margin-top: 2px;
+	margin-bottom: 4px;
+	padding-left: 5px;
+}
+
+table.checkbox_container {
+  border: 1px solid #777 !important;
+  border-spacing: 0 !important;
+  margin-bottom: 20px;
+}
+
+table.checkbox_container ul {
+  padding-left: 10% !important;
+}
+
+table.checkbox_container h3 {
+  margin-bottom: 1.5em;
+}
+
+span.select_all {
+  float: right;
 }
 /* End Design Own Report */

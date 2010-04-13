@@ -8,10 +8,11 @@ module Ruport
           self.column_formatters = {}
           
           build :format_columns do
-            columns_to_format = data.column_names.reject { |c| self.column_formatters[c.to_sym].nil? }
-            columns_to_format.each do |column|
-              formatter = self.column_formatters[column.to_sym]
-              data.replace_column(column) { |r| formatter.call(r[column]) }
+            self.column_formatters.each do |expr, formatter|
+              expr = expr.to_s if expr.is_a?(Symbol)
+              data.column_names.select { |c| expr === c }.each do |column|
+                data.replace_column(column) { |r| formatter.call(r[column]) }
+              end
             end
           end
         end

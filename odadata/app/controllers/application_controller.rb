@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   
   helper :all
   before_filter :set_output_currency
+  after_filter :reset_exchange_rate_sources
   before_filter :set_locale
   layout :set_layout
   
@@ -36,6 +37,12 @@ protected
     
   def set_output_currency
     MultiCurrency.output_currency = params[:currency] || "EUR"
+  end
+  
+  def reset_exchange_rate_sources
+    MultiCurrency.historic_rates_source = nil
+    MultiCurrency.current_rates_source = nil
+    MultiCurrency.forecasts_rates_source = nil
   end
   
   def ensure_open_data_input

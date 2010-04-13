@@ -3,12 +3,14 @@ module MultiCurrency
     include Comparable
     include ActionView::Helpers::NumberHelper
   
-    attr_reader :base_value, :currency
+    attr_reader :base_value, :currency, :nature
   
-    def initialize(value, currency = nil, base_year = Time.now.year)
+    # The nature attribute can be one of "historic, current and forecasts" and is required to allow the use of
+    # different exchange rate tables
+    def initialize(value, currency = nil, base_year = Time.now.year, nature = 'current')
       @currency = currency
       @year = base_year || Time.now.year
-      @@rates_cache = {}
+      @nature = nature || 'current'
   
       case value
       when String
@@ -99,10 +101,11 @@ module MultiCurrency
   
       # Find exchange rate for old currency -> new currency
       begin
-        rate = ExchangeRate.find_rate(@currency, currency, @year) 
+        rates_source = MultiCurrency.send("#{@nature}_rates_source") || ExchangeRate::SOURCES.first
+        rate = ExchangeRate.find_rate(@currency, currency, @year, rates_source) 
       rescue ActiveRecord::RecordNotFound, NoMethodError
         raise ExchangeRateUnavailable, 
-          "Can't find exchange rate for conversion from #{@currency} into #{currency} for year #{@year}"
+          "Can't find exchange rate for conversion from #{@currency} into #{currency} for year #{@year} at source #{rates_source}"
       end
   
       ConvertibleCurrency.new(@base_value * rate, currency, @year)

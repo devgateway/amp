@@ -63,8 +63,14 @@ public class ShowAddTeamMember extends Action {
 					}
 				}
 				
-				if (frmPage == 1) {					
-					return mapping.findForward("showAddFromAdmin");	
+				if (frmPage == 1) {	
+					String redirectWhere=(String)request.getSession().getAttribute("redirectTo");
+					if(redirectWhere!=null){
+						request.getSession().removeAttribute(redirectWhere);
+						return mapping.findForward(redirectWhere);
+					}else{
+						return mapping.findForward("showAddFromAdmin");
+					}	
 				} else {
 					return mapping.findForward("showAddFromTeam");
 				}

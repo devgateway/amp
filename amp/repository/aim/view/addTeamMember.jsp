@@ -130,7 +130,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		if(validate()==true){
 			//submit form
 			<digi:context name="commentUrl" property="context/module/moduleinstance/assignUsersToWorkspace.do"/>;
-			document.aimTeamMemberForm.action="${commentUrl}?fromPage=1&addedFrom=addedFromUser";
+			document.aimTeamMemberForm.action="${commentUrl}?fromPage=1&addedFrom=showAddFromTeam";
 		    document.aimTeamMemberForm.target="_self";
 		    document.aimTeamMemberForm.submit();
 		}
@@ -185,6 +185,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 <html:hidden name="aimTeamMemberForm" property="teamLeaderExists" styleId="wrkspcManager"/>
 <html:hidden name="aimTeamMemberForm" property="workspaceManagerRoleId" styleId="wrkspcManRoleId"/>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
+<digi:errors/>
 <body>
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="450">
 	<tr></tr>

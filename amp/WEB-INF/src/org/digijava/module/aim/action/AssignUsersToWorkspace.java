@@ -53,6 +53,7 @@ public class AssignUsersToWorkspace extends Action {
 	        	saveErrors(request, errors);
 	        	tmForm.setSomeError(true);
 				logger.debug("Member is Admin");
+				request.getSession().setAttribute("redirectTo", redirectWhere);
 				return mapping.findForward("error");
 	        }
 	        

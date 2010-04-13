@@ -10,10 +10,11 @@ class ExchangeRate < ActiveRecord::Base
   class << self
     def find_rate(from, to, year = Time.now.year, source = SOURCES.first)
       find(:first,
-        :select => 'target.euro_rate / source.euro_rate AS rate',
+        :select => "target.euro_rate / source.euro_rate AS rate, ABS(#{year} - source.year) AS diff",
         :from => 'exchange_rates source, exchange_rates target',
-        :conditions => { 'source.currency' => from, 'target.currency' => to, 'target.year' => year, 'source.year' => year,
-          'source.source' => source, 'target.source' => source }
+        :conditions => ['source.currency = ? AND target.currency = ? AND target.year = source.year AND source.source = ? AND target.source = ?',
+          to, from, source, source],
+        :order => 'diff ASC'
       ).try(:rate).try(:to_f) || raise(ActiveRecord::RecordNotFound)
     end
     

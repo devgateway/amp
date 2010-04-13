@@ -43,6 +43,9 @@ class ProjectsController < ApplicationController
 
   def edit
     @project = current_donor.projects.find(params[:id])
+    
+    setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
+    setup_record_range(@project.funding_forecasts, Time.now.year, Time.now.year+Project::FORECAST_RANGE)
   end
   
   def update  

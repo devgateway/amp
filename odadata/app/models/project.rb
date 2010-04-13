@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
   ##
   # Constants
   NATIONAL_REGIONAL_OPTIONS = [['national', 1], ['regional', 2], ['regional_with_nicaraguan_component_available', 3]]
-  STATUS_OPTIONS            = [['planned', 4, true], ['signed', 5, true], ['pipeline', 2, true], ['ongoing', 1, true], ['completed', 3]]
+  STATUS_OPTIONS            = [['planned', 2, true], ['signed', 4, true], ['ongoing', 1, true], ['completed', 3]]
   
   MARKER_OPTIONS            = [['not_relevant', 0], ['significant', 1], ['principal_objective', 2]]
   AVAILABLE_MARKERS         = [['gender_policy', 'gender_policy'], ['environment_policy', 'environment_policy'], 

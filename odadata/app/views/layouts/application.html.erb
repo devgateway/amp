@@ -11,7 +11,8 @@
 		<%= stylesheet_link_tag(
 				'layout', 'forms', 'ui.datepicker', 
 				"layouts/#{current_user.andand.layout || 'public'}",
-				:media => :all, :cache => 'styles') %>
+				:media => :all, :cache => false) %>
+		<%# TODO: Set cache back to styles upon production deployment!!! %>
 		<%= stylesheet_link_tag('print', :media => :print, :cache => false) %>
 		
 		<%= javascript_include_tag('jquery-1.4.2.min', 'jquery-ui-1.8.custom.min', 'behavior/menu', "ui.datepicker-#{I18n.locale}") %>

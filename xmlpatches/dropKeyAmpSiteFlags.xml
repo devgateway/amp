@@ -10,7 +10,6 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="mysql">
-			TRUNCATE TABLE  `amp_site_flags`;
 			ALTER TABLE  `amp_site_flags` CHANGE  `COUNTRY_ID`  `COUNTRY_ID` BIGINT( 20 ) NOT NULL;
 			</lang>
 		</script>

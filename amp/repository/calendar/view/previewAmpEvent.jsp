@@ -226,7 +226,7 @@ function getWeekdays(){
 				                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
 				              </td>
 				            </tr>
-				            <c:if test="${calendarEventForm.typeofOccurrence != null}">
+				            <c:if test="${not empty calendarEventForm.typeofOccurrence}">
 					            <tr height="5px"><td colspan="2"></td></tr>
 					            <tr>
 					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">

@@ -245,36 +245,37 @@ en:
   reports:
     custom:
       new:
-        donor: Donor
-        region: Region
-        markers: Rio &amp; Policy Markers
-        mdg: MDG
-        dac_sector: DAC Sector
-        all: all
-        grant_loan: Grant / Loan
-        of_budget: On/Off Budget
-        of_treasury: On/Off Treasury
-        toa: Aid Modality
-        cod: ODA Breakdown
-        status: Project Status
+        output_fields:
+          heading: Fields to display
+          
+        criteria:
+          donors_and_un_agencies: Donors & UN Agencies
+          sectors: DAC Sectors
+          location: Location
+          mdg: Millenium Development Goals
+          on_off_budget: On/Off Budget
+          on_off_treasury: On/Off Treasury
+          aid_modality: Aid Modality
+          channel_of_delivery: Channel of Delivery
+          prj_status: Project Status
+          
+        output_options:
+          heading: Output options
+          format: Output Format
+          rates: Exchange Rates
+          disaggregation: Disaggregation
+          
         disaggregation:
-          title: Disaggregation
           by_sector: Disaggregate Fundings by DAC-CRS Sector
           by_location: Disaggregate Fundings by Location
-        title: Custom Report
-        output: Output
-        output_format: Output Format
-        web: Web Document
-        excel: Excel Download
-        map: Show Map
-        fields: Display Fields
-        main_filter: Main Filter Criteria
-        markers_annotation: '* Significant &amp; Principal Projects only'
-        other: Other Criteria
-        action: Action
-        query_database: Query Database
-        totals: Annual Totals
-        output_in: Output in
+          
+        rates:
+          historic: Historic
+          current: Current
+          forecasts: Forecasts
+          
+        currency: Currency
+        all: all
         check_uncheck_all: Check / Uncheck all
       show:
         title: Custom Report

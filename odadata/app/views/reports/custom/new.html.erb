@@ -5,7 +5,9 @@
 <script type="text/javascript" charset="utf-8">
   $(function() {
     $('.accordion').accordion({
-      autoHeight: false
+      autoHeight: false,
+      collapsible: true,
+      active: false
     });
   });
 </script>
@@ -18,7 +20,7 @@
 	:onsubmit => "window.open('',this.target,'resizable=1,scrollbars=1,height=600,width=800');return true;") do 
 %>
 
-<h2>Fields to display</h2>
+<h2><%= t('.output_fields.heading') %></h2>
 <table class="checkbox_container">
   <tr>
     <td style="border-right: 1px solid #777; width: 33%">
@@ -160,19 +162,7 @@
         <li>
         	<%= check_box_tag "report[fields][]", "aid_modality" %>
         	<%= Project.human_attribute_name('aid_modality') %>
-        </li>
-        
-        
-
-        
-        
-        
-          
-           
-            
-            
-
-            
+        </li>            
       </ul>
     </td>
     
@@ -204,7 +194,7 @@
   
   <div style="width: 70%;">
     <div class="accordion">
-      <h4><a href="#">Donors &amp; UN Agencies</a></h4>
+      <h4><a href="#"><%= t('.criteria.donors_and_un_agencies') %></a></h4>
       <div>
         <div class="columns">
         
@@ -223,7 +213,7 @@
         </div>
       </div>
       
-      <h4><a href="#">DAC Sectors</a></h4>
+      <h4><a href="#"><%= t('.criteria.sectors')%></a></h4>
       <div>
         <% data_in_columns(2, DacSector.ordered.all) do |sectors, column| %>
           <ul class="checkbox_container">
@@ -240,7 +230,7 @@
         <% end %>
       </div>
       
-      <h4><a href="#">Location</a></h4>
+      <h4><a href="#"><%= t('.criteria.location') %></a></h4>
       <div>
         <% data_in_columns(3, Province.ordered.all) do |provinces, column| %>
           <ul class="checkbox_container">
@@ -257,7 +247,7 @@
         <% end %>
       </div>
        
-       <h4><a href="#">MDGs</a></h4>
+       <h4><a href="#"><%= t('.criteria.mdg') %></a></h4>
         <div>
            <% data_in_columns(2, Mdg.ordered.all) do |mdgs, column| %>
              <ul class="checkbox_container">
@@ -281,42 +271,43 @@
   <div style="width: 27%; margin-left: 3%">
     <div class="accordion">
       
-      <h4><a href="#">On/Off Budget</a></h4>
+      <h4><a href="#"><%= t('.criteria.on_off_budget') %></a></h4>
        <div>
           <ul class="checkbox_container">
-          	<li class="all"><%= check_box_tag "on_off_budget[]", "all", true %><%= ll(:options, :all) %></a>	
+          	<li class="all"><%= check_box_tag "on_off_budget[]", "all", true %><%= t('.all') %></a>	
           	<%= render :partial => "reports/query_options/on_off_budget", :collection => translate_options(Project::ON_OFF_BUDGET_OPTIONS) %>
           </ul>
        </div>
        
-       <h4><a href="#">On/Off Treasury</a></h4>
+       <h4><a href="#"><%= t('.criteria.on_off_treasury') %></a></h4>
        <div>
          <ul class="checkbox_container">
-         	<li class="all"><%= check_box_tag "on_off_treasury[]", "all", true %><%= ll(:options, :all) %></a>	
+         	<li class="all"><%= check_box_tag "on_off_treasury[]", "all", true %><%= t('.all') %></a>	
          	<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
          </ul>
        </div>
        
-       <h4><a href="#">Aid Modality</a></h4>
+       <h4><a href="#"><%= t('.criteria.aid_modality') %></a></h4>
        <div>
           <ul class="checkbox_container">
-          	<li class="all"><%= check_box_tag "aid_modality_ids[]", "all", true %><%= ll(:options, :all) %></a>
+          	<li class="all"><%= check_box_tag "aid_modality_ids[]", "all", true %><%= t('.all') %></a>
             		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
           </ul>
        </div>
         
-        <h4><a href="#">Channel of Delivery</a></h4>
+        <h4><a href="#"><%= t('.criteria.channel_of_delivery') %></a></h4>
         <div>
           <ul class="checkbox_container">
-          	<li class="all"><%= check_box_tag "type_of_implementation[]", "all", true %><%= ll(:options, :all) %></a>
+          	<li class="all"><%= check_box_tag "type_of_implementation[]", "all", true %><%= t('.all') %></a>
           	<%= render :partial => "reports/query_options/type_of_implementation", :collection => translate_options(Project::IMPLEMENTATION_TYPES) %>
           </ul>
         </div>
            
         
-        <h4><a href="#">Project Status</a></h4>
+        <h4><a href="#"><%= t('.criteria.prj_status') %></a></h4>
          <div>
             <ul class="checkbox_container">
+              <li class="all"><%= check_box_tag "prj_status[]", "all", true %><%= t('.all') %></a>
             	<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
             </ul>
          </div>
@@ -325,11 +316,11 @@
   
 </div>
 
-<h2>Output options</h2>
+<h2><%= t('.output_options.heading') %></h2>
 <table class="checkbox_container">
   <tr>
     <td style="border-right: 1px solid #777; width: 33%">
-      <h3>Disaggregation</h3>
+      <h3><%= t('.output_options.disaggregation') %></h3>
       <ul>
         <li><%= check_box_tag "disaggregators[]", "sector" %><%= I18n.t('reports.disaggregation.by_sector') %></li>
       	<li><%= check_box_tag "disaggregators[]", "location" %><%= I18n.t('reports.disaggregation.by_location') %></li>
@@ -337,29 +328,29 @@
     </td>
     
     <td style="border-right: 1px solid #777; width: 33%">
-      <h3>Exchange Rates</h3>
+      <h3><%= t('.output_options.rates') %></h3>
       <ul>
         <li>
-          <%= label_tag "report[exchange_rates][historic]", "Historic:", :style => "width: 60px; display: block; float: left" %>
+          <%= label_tag "report[exchange_rates][historic]", t('.rates.historic'), :style => "width: 60px; display: block; float: left" %>
           <%= select_tag "report[exchange_rates][historic]", options_for_select(ExchangeRate::SOURCES.map { |s| [ExchangeRate.human_option_name(:source, s), s] }) %>
         </li>
 
         <li>
-          <%= label_tag "report[exchange_rates][current]", "Current:", :style => "width: 60px; display: block; float: left" %>
+          <%= label_tag "report[exchange_rates][current]", t('.rates.current'), :style => "width: 60px; display: block; float: left" %>
           <%= select_tag "report[exchange_rates][current]", options_for_select(ExchangeRate::SOURCES.map { |s| [ExchangeRate.human_option_name(:source, s), s] }) %>
         </li>
 
         <li>
-          <%= label_tag "report[exchange_rates][forecasts]", "Forecasts:", :style => "width: 60px; display: block; float: left" %>
+          <%= label_tag "report[exchange_rates][forecasts]", t('.rates.forecasts'), :style => "width: 60px; display: block; float: left" %>
           <%= select_tag "report[exchange_rates][forecasts]", options_for_select(ExchangeRate::SOURCES.map { |s| [ExchangeRate.human_option_name(:source, s), s] }) %>
         </li>
       </ul>
     </td>
     
     <td>
-      <h3>Output Format</h3>
+      <h3><%= t('.output_options.format') %></h3>
       <ul>
-        <li>Currency: <%= select_tag "currency", options_for_select(ExchangeRate.available_currencies_for_select) %></li>           
+        <li><%= t('.currency') %>: <%= select_tag "currency", options_for_select(ExchangeRate.available_currencies_for_select) %></li>           
         <%= submit_tag "reports[format][xls]", :value => t('.query_database'), :class => "bt", :style => "margin: 5px; width: 100px" %>
         <%= submit_tag "reports[format][web]", :value => t('.query_database'), :class => "bt", :style => "margin: 5px; width: 100px" %>
       </ul>

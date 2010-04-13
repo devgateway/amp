@@ -81,27 +81,22 @@ function validate() {
 
   if (document.aimFlagUploaderForm.countryId.value == "-1") {
 
-    alert("Please select a country");
+    alert("<digi:trn>Please select a country</digi:trn>");
 
     document.aimFlagUploaderForm.countryId.focus();
 
     return false;
 
   }
-
-
-
-  /*
-
   if (trim(document.aimFlagUploaderForm.flagFile.value).length == 0) {
 
-    alert("Please select a flag");
+    alert("<digi:trn>Please select a flag</digi:trn>");
 
     document.aimFlagUploaderForm.flagFile.focus();
 
     return false;
 
-  }*/
+  }
 
 }
 

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -26,6 +27,13 @@ public class GetAllFlags extends Action {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 		HttpSession session = request.getSession();
+		
+		//uploadFlagErrors has been added to session in UploadFlag before redirect.
+		ActionErrors errors = (ActionErrors)request.getSession().getAttribute("uploadFlagErrors");
+		if(errors!=null){
+			saveErrors(request, errors);
+			request.getSession().removeAttribute("uploadFlagErrors");
+		}
 		if (!RequestUtils.isAdmin(response, session, request)) {
 			return null;
 		}

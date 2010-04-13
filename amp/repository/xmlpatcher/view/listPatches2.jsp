@@ -61,6 +61,10 @@
     color: #D6D6D6
 }
 
+.yui-skin-sam .yui-dt tr.yui-dt-selected td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.yui-dt-selected td.yui-dt-desc{
+    background-color:#426FD9;
+}
 
 
 </style>

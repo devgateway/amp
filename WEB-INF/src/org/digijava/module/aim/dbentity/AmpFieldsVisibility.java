@@ -68,6 +68,10 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 	public Class getPermissibleCategory() {
 	    return AmpFieldsVisibility.class;
 	}
+	@Override
+	public Object getIdentifier(){
+		return this.id;
+	}
 	
 	public String getClusterIdentifier() {
 		return name;

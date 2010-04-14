@@ -39,10 +39,11 @@ import org.digijava.module.editor.dbentity.Editor;
  * @author not attributable
  * @version 1.0
  */
-public class EditorForm
-    extends ActionForm {
+public class EditorForm extends ActionForm {
 
-    public static class TextInfo {
+	private static final long serialVersionUID = 1L;
+
+	public static class TextInfo {
 
         private String content;
         private String langName;
@@ -98,7 +99,6 @@ public class EditorForm
         public String getUrl() {
             return url;
         }
-
     }
 
     private List editorList;
@@ -124,6 +124,8 @@ public class EditorForm
     private String activityFieldName;
     
     private String newId;
+
+    private Boolean noPageHeader;
     
     public String getActivityName() {
         return activityName;
@@ -270,5 +272,13 @@ public class EditorForm
 
 	public void setNewId(String newId) {
 		this.newId = newId;
+	}
+
+	public void setNoPageHeader(Boolean noPageHeader) {
+		this.noPageHeader = noPageHeader;
+	}
+
+	public Boolean getNoPageHeader() {
+		return noPageHeader;
 	}
 }

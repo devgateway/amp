@@ -2,6 +2,7 @@
 <config>
 <secondary-pages>
 	<page page="edit" name="editor_editText" title="Edit Data" />
+	<page page="edit" name="editorNoHeader_editText" title="Edit Data" />
 	<page page="admin/adminPage" name="editor_adminPage" title="Editor admin" />	
 	<page page="showPage" name="editor_showPage" title="Editor show page" />	
 	<page page="showNavigation" name="editor_showNavigation" title="Editor show page" />	

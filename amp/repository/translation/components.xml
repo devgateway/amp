@@ -7,6 +7,7 @@
     <page page="adminPerms" name="translationPermLayout" title="Permission Administration" />
     <page page="adminUser" name="translationUserLayout" title="User Administration" />
     <page page="translator" name="translatorLayout" title="Translator Interface" />
+    <page page="translator" name="translatorNoheaderLayout" title="Translate text" />
 </secondary-pages>
 <module>
 	<teaser-file>dropdownLangSwitch.jsp</teaser-file>

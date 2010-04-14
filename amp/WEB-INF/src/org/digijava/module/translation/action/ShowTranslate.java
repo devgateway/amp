@@ -105,6 +105,9 @@ public class ShowTranslate
                 formBean.setTranslation(key);
             }
         }
+        if (formBean.getPgHeader()!=null && !formBean.getPgHeader().booleanValue()){
+        	return mapping.findForward("noHeader");
+        }
         return mapping.findForward("forward");
     }
 }

@@ -8,6 +8,7 @@
   <action-mappings>
     <action name="editorForm" type="org.digijava.module.editor.action.ShowEditText" scope="session" path="/editor/showEditText">
       <forward name="forward" path="/showLayout.do?layout=editor_editText" />
+      <forward name="hideHeader" path="/showLayout.do?layout=editorNoHeader_editText" />
     </action>
     <action name="editorForm" type="org.digijava.module.editor.action.SaveText" scope="session" path="/editor/saveText" />
     <action name="editorForm" type="org.digijava.module.editor.action.ShowInEnglish" scope="session" path="/editor/showInEnglish">

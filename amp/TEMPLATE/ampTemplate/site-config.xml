@@ -545,6 +545,12 @@
 				<page>amp_viewNPDoptions</page>
 				<page>amp_viewNPDgrid</page>
 			</module>
+			<module name="translation">
+				<page>translatorNoheaderLayout</page>
+			</module>
+			<module name="editor">
+				<page>editorNoHeader_editText</page>
+			</module>
             <module name="widget">
             	<page>popup_addWidgetColumn</page>
             	<page>preview_tableWidget</page>

@@ -347,13 +347,16 @@
 			alert('${translation}');
 			return false;
 		}
-		if(document.getElementsByName("totalCost")[0].value<=0){
-			<c:set var="translation">
+        var regEx=/^[0-9]+\.?[0-9]*$/;
+        var totalCost=document.getElementsByName("totalCost")[0];
+        if(!totalCost.value.match(regEx)){
+            <c:set var="translation">
 				<digi:trn>Enter a valid Total Cost</digi:trn>
 			</c:set>
-			alert('${translation}');
-			return false;
-		}
+			alert('${translation}')
+            totalCost.focus();
+            return false;
+        }
 		if(document.getElementsByName("totalCostCurrencyId")[0].value==-1){
 			<c:set var="translation">
 				<digi:trn>Enter a valid Currency for Total Cost</digi:trn>
@@ -362,15 +365,18 @@
 			return false;
 		}
 		if(document.getElementsByName("deleteContrib")!=null){
-			var items = document.getElementsByName("deleteContrib").length;
-			for(var i=0; i< items; i++){
-				if(document.getElementsByName("contrAmount")[i].value<=0){
-					<c:set var="translation">
-						<digi:trn>Enter a valid Amount</digi:trn>
-					</c:set>
-					alert('${translation}');
-					return false;
-				}
+        var items = document.getElementsByName("deleteContrib").length;
+        for(var i=0; i< items; i++){
+        var contrAmount=document.getElementsByName("contrAmount")[i];
+        if(!contrAmount.value.match(regEx)){
+            <c:set var="translation">
+                <digi:trn>Enter a valid Amount</digi:trn>
+            </c:set>
+                        alert('${translation}');
+                        contrAmount.focus();
+                        return false;
+              }
+				
 				if(document.getElementsByName("contrCurrId")[i].value==-1){
 					<c:set var="translation">
 						<digi:trn>Select a Currency</digi:trn>

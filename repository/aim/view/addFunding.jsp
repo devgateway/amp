@@ -136,7 +136,7 @@
 		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
 		if (new Boolean(value)){%>
 		if (totalDisbs > totalComms) {
-			var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you wish to proceed?</digi:trn>";
+			var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you want to save the funding ?</digi:trn>";
 			if(confirm(Warn)) {	
 					return true;
 				} else {

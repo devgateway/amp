@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	
+	<jira>AMP-8283</jira>
+	<author>Irakli</author>
+	<description>
+		after fixing issue need to fore index folder rebuild to ensure its good.
+	</description>	
+	
+	
+	<apply>		
+		<script>
+			<lang type="sql" delimiter=";">
+				DELETE FROM amp_lucene_index WHERE idxName LIKE 'help_%';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

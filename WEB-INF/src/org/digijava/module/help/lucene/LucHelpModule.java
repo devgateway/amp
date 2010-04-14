@@ -107,23 +107,26 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 		//join title and body to index together
 		String bodyText = item.getBody();
 		String titleText = item.getTitle();
-		String textToIndex = "";
+		String textToIndex = null;
+		//build text to index
 		if (titleText != null){
-			textToIndex += titleText;
+			textToIndex = titleText;
 		}
-		if (bodyText!=null){
-			textToIndex += ". " + bodyText; 
+		if (bodyText !=null){
+			//"title. body" or only "body"
+			textToIndex = (textToIndex!=null)?textToIndex+". "+bodyText:bodyText;
 		}
-        else{
-            bodyText="";
-        }
+		if (textToIndex == null) textToIndex = ""; //NULL not allowed for these values.
+		if (bodyText == null) bodyText = "";
+		if (titleText == null) titleText = "";
+
 		//Filter title and body from HTML tags.
-		textToIndex = HTML_STRIPPER.replaceAll(textToIndex, " "); // this will slow down greatly, but..
+		textToIndex = HTML_STRIPPER.replaceAll(textToIndex, " "); // this will slow down, but wee need to strip out many things..
 		
 		//create lucene fields
 		Field id		= new Field(ID_FIELD_TERM, item.getId().toString(), Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field title_key	= new Field(FIELD_TITLE_KEY, item.getTitleKey(), Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field title		= new Field(FIELD_TITLE, item.getTitle(), Field.Store.YES, Field.Index.UN_TOKENIZED);
+		Field title		= new Field(FIELD_TITLE, titleText, Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field body_key	= new Field(FIELD_BODY_KEY, item.getBodyKey(), Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field body		= new Field(FIELD_BODY, bodyText, Field.Store.YES, Field.Index.UN_TOKENIZED);
 		Field lang_iso	= new Field(FIELD_LANG_ISO, item.getLangIso(), Field.Store.YES, Field.Index.UN_TOKENIZED);

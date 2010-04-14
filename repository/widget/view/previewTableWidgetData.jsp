@@ -113,7 +113,7 @@
 	
 		function requestTable_${dform.widgetId}(columnId,itemId){
 			<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />
-			var url = '${tableRendererUrl}~tableId=${dform.widgetId}~preview=true';
+			var url = '${tableRendererUrl}~tableId=${dform.widgetId}~preview=true'+'~timestamp=' +new Date().getTime();
 			if (columnId!=null && itemId!=null){
 				url+='~columnId='+columnId+'~itemId='+itemId;
 			}

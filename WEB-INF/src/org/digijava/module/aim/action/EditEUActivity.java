@@ -4,6 +4,7 @@
 package org.digijava.module.aim.action;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -151,7 +152,7 @@ public class EditEUActivity extends MultiAction {
 				euaf.setName(element.getName());
 				euaf.setProgress(element.getProgress());
 				euaf.setTextId(element.getTextId());
-				euaf.setTotalCost(element.getTotalCost().toString());
+				euaf.setTotalCost(element.getTotalCost().setScale(2, RoundingMode.HALF_UP).toString());
 				euaf.setTotalCostCurrencyId(element.getTotalCostCurrency().getAmpCurrencyId());
 				euaf.setDueDate(DateTimeUtil.parseDateForPicker2(element.getDueDate()));
 
@@ -166,11 +167,11 @@ public class EditEUActivity extends MultiAction {
 				Iterator ii=element.getContributions().iterator();
 				while (ii.hasNext()) {
 					EUActivityContribution element2 = (EUActivityContribution) ii.next();
-					euaf.getContrAmountList().add(element2.getAmount().toString());
+					euaf.getContrAmountList().add(element2.getAmount().setScale(2, RoundingMode.HALF_UP).toString());
 					euaf.getContrCurrIdList().add(element2.getAmountCurrency().getAmpCurrencyId().toString());
 					AmpOrganisation o =  DbUtil.getOrganisation( element2.getDonor().getAmpOrgId());
 					euaf.getContrDonorIdList().add(o.getAmpOrgId().toString());
-					euaf.getContrDonorNameList().add(o.getName());
+					euaf.getContrDonorNameList().add(o.getAcronym());
 					euaf.getContrFinInstrIdList().add(element2.getFinancingInstr().getId());
 					euaf.getContrFinTypeIdList().add(element2.getFinancingTypeCategVal().getId());
 				}

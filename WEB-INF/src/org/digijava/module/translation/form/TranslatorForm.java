@@ -27,16 +27,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-public class TranslatorForm
-    extends ActionForm {
+public class TranslatorForm extends ActionForm {
 
-    private String key;
+	private static final long serialVersionUID = 1L;
+
+	private String key;
     private String message;
     private String translation;
     private String groupTranslation;
     private String globalTranslation;
     private String deleteTranslation;
     private String siteId;
+    private Boolean pgHeader;
 
     private String type;
 
@@ -160,4 +162,12 @@ public class TranslatorForm
     public void setSiteId(String siteId) {
         this.siteId = siteId;
     }
+
+	public void setPgHeader(Boolean pgHeader) {
+		this.pgHeader = pgHeader;
+	}
+
+	public Boolean getPgHeader() {
+		return pgHeader;
+	}
 }

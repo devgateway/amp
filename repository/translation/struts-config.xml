@@ -106,6 +106,7 @@
     <!--translator interface-->
     <action name="translatorForm" type="org.digijava.module.translation.action.ShowTranslate" scope="request" path="/translation/showTranslate">
       <forward name="forward" path="/showLayout.do?layout=translatorLayout" />
+      <forward name="noHeader" path="/showLayout.do?layout=translatorNoheaderLayout" />
     </action>
     <action name="translatorForm" type="org.digijava.module.translation.action.SaveTranslation" scope="request" input="/showLayout.do?layout=translatorLayout" path="/translation/saveTranslation">
       <forward name="forward" path="/translation/showTranslate" />

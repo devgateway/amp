@@ -208,7 +208,7 @@
 																			<table width="100%" cellspacing="1" cellpadding="5" bgcolor="#ffffff">
 																				<tr>
 																					<td align="right"><STRONG><digi:trn>Title</digi:trn></STRONG></td>
-																					<td align="left"><digi:trn linkAlwaysVisible="true">${helpForm.topicKey}</digi:trn></td>
+																					<td align="left"><digi:trn linkAlwaysVisible="true" editorPageHeader="false">${helpForm.topicKey}</digi:trn></td>
 																				</tr>
 																			<!--
                                                                                 <tr>
@@ -219,7 +219,7 @@
                                                                                 
                                                                                 <tr>
 																					<td align="right"><STRONG><digi:trn>body</digi:trn></STRONG></td>
-																					<td align="left"><digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit></td>
+																					<td align="left"><digi:edit key="${helpForm.bodyEditKey}" noPageHeader="true">no text preview</digi:edit></td>
 																				</tr>
 																				<tr>
 																					<td colspan="2">
@@ -333,7 +333,7 @@
 																				-->
 																				<tr>
 																					<td align="right"><STRONG><digi:trn>Title</digi:trn></STRONG></td>
-																					<td align="left"><digi:trn linkAlwaysVisible="true">${helpForm.topicKey}</digi:trn></td>
+																					<td align="left"><digi:trn linkAlwaysVisible="true" editorPageHeader="false">${helpForm.topicKey}</digi:trn></td>
 																				</tr>
 																			<!--	
                                                                                 <tr>
@@ -343,7 +343,7 @@
 																			-->
                                                                                <tr>
 																					<td align="right"><STRONG><digi:trn>body</digi:trn></STRONG></td>
-																					<td align="left"><digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit></td>
+																					<td align="left"><digi:edit key="${helpForm.bodyEditKey}" noPageHeader="true">no text preview</digi:edit></td>
 																				</tr>
 																				<tr>
 																					<td colspan="2">

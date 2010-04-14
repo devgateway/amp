@@ -186,6 +186,9 @@ public class ShowEditText
             formBean.setContent("default");
         }
 
+        if (formBean.getNoPageHeader()!=null && formBean.getNoPageHeader().booleanValue()){
+        	return mapping.findForward("hideHeader");
+        }
         return mapping.findForward("forward");
     }
 }

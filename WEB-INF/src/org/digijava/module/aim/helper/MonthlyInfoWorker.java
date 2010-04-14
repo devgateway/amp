@@ -1,6 +1,8 @@
 package org.digijava.module.aim.helper;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -152,8 +154,8 @@ public class MonthlyInfoWorker {
                     rate = new BigDecimal(det.getFixedExchangeRate());
                 }
 
-
-                sum = sum.add(det.getTransactionAmount().divide(rate).multiply(defCurrRate));
+                MathContext mc = new MathContext(Constants.MATH_CONTEXT_PRECISION ,RoundingMode.HALF_UP);
+                sum = sum.add(det.getTransactionAmount().divide(rate,mc).multiply(defCurrRate,mc));
 
             }
 

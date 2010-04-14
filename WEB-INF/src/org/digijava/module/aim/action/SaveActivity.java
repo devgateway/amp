@@ -1050,7 +1050,7 @@ public class SaveActivity extends Action {
 								ampFundDet.setDisbOrderId(fundDet.getDisbOrderId());
 								ampFundDet.setContract(fundDet.getContract());
 								ampFundDet.setDisbursementOrderRejected(fundDet.getDisbursementOrderRejected());
-								if (fundDet.getPledge()!=0 && fundDet.getPledge()!=null) {
+								if ( fundDet.getPledge()!=null && fundDet.getPledge()!=0 ) {
 									FundingPledges selectedpledge = PledgesEntityHelper.getPledgesById(fundDet.getPledge());
 									ampFundDet.setPledgeid(selectedpledge);
 								}else{

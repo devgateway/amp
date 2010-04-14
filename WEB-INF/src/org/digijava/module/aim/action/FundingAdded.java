@@ -74,7 +74,7 @@ public class FundingAdded extends Action {
 		double totalComms	= 0;
 		double totalDisbs	= 0;
 		double totalExps	= 0;
-		boolean isBigger = false;		
+		//boolean isBigger = false;		
 		//
 		if (eaForm.getFunding().getFundingDetails() != null) {
 			Iterator itr = eaForm.getFunding().getFundingDetails().iterator();
@@ -91,19 +91,19 @@ public class FundingAdded extends Action {
 						if (( fundDet.getTransactionType() == Constants.EXPENDITURE )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
 							totalExps	+= amount;
 			}
-			String alert = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
+//			String alert = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
 			//
-			if (Boolean.parseBoolean(alert)) {
-				if (totalDisbs > totalComms) {
-					eaForm.setTotDisbIsBiggerThanTotCom(true);
-					isBigger = true;
-				} else {
-					eaForm.setTotDisbIsBiggerThanTotCom(false);
-				}
-			}
+//			if (Boolean.parseBoolean(alert)) {
+//				if (totalDisbs > totalComms) {
+//					eaForm.setTotDisbIsBiggerThanTotCom(true);
+//					isBigger = true;
+//				} else {
+//					eaForm.setTotDisbIsBiggerThanTotCom(false);
+//				}
+//			}
 		}
 		EditActivityForm.Funding currentFunding = null;
-		if (!isBigger) {
+		//if (!isBigger) {
 			currentFunding = eaForm.getFunding();
 			//
 			Funding newFund = new Funding();
@@ -239,7 +239,7 @@ public class FundingAdded extends Action {
 			}
 			//
 			this.updateTotals(eaForm, tm);
-		}	
+		//}	
 		//
 		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
 		eaForm.setCurrCode( currCode );

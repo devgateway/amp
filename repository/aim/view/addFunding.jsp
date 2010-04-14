@@ -96,7 +96,63 @@
 			}
 		}
 
-var isAlreadySubmitted = false;
+	function getCommitmentRows(){
+		var j=0;
+		var adjLabel="fundingDetail["+j+"].adjustmentType";
+		while(document.getElementsByName(adjLabel)[0]!=null){
+			j++;
+			adjLabel="fundingDetail["+j+"].adjustmentType"
+		}
+		return j;
+	}
+	
+	function validateAmounts(){
+    	var totalComms	= 0;
+    	var totalDisbs	= 0;
+    	var rows = getCommitmentRows();
+    	for(i=0; rows!=0 && i<rows; i++){
+    		var adjLabel="fundingDetail["+i+"].adjustmentType";
+			var transAmountLabel="fundingDetail["+i+"].transactionAmount";
+			var transTypeLabel="fundingDetail["+i+"].transactionType";
+			var amount = 0;
+
+			var strAmount=document.getElementsByName(transAmountLabel)[0].value;
+			var decimalSeparator="<%=FormatHelper.getDecimalSymbol()%>";
+			var groupSeparator="<%=FormatHelper.getGroupSymbol()%>";
+			strAmount=strAmount.replace(groupSeparator,"");
+			strAmount=strAmount.replace(decimalSeparator,".");
+			amount=parseFloat(strAmount);
+			if ((document.getElementsByName(transTypeLabel)[0].value == 0) && (document.getElementsByName(adjLabel)[0].value == 1)) {
+				totalComms	+= amount;
+			} else {
+				if ((document.getElementsByName(transTypeLabel)[0].value == 1) && (document.getElementsByName(adjLabel)[0].value == 1)) {
+					totalDisbs	+= amount;
+				}
+			}
+		}
+
+    	
+	<%
+		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
+		if (new Boolean(value)){%>
+		if (totalDisbs > totalComms) {
+			var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you wish to proceed?</digi:trn>";
+			if(confirm(Warn)) {	
+					return true;
+				} else {
+					return false;	
+				}
+		}
+	<%}%>
+		
+		
+
+
+		return true;
+		
+   	}
+
+	var isAlreadySubmitted = false;
 
 	function addFunding() {
 		if(!isAlreadySubmitted)
@@ -111,8 +167,12 @@ var isAlreadySubmitted = false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
-	
-			isAlreadySubmitted = true;
+
+		if ( !validateAmounts() ) {
+			return false;
+		}
+		
+		isAlreadySubmitted = true;
 	  	document.aimEditActivityForm.submit();
 			//validateFormatUsingSymbos();
 		}

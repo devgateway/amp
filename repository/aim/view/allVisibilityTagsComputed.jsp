@@ -162,6 +162,11 @@
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
+<feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
+<feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
+<feature:display name="Pledge Location" module="Pledges"></feature:display> 
+<feature:display name="Pledge Sector" module="Pledges"></feature:display> 
+<feature:display name="Pledge Additional Information" module="Pledges"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
 <feature:display name="Program" module="Program"></feature:display> 
 <feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 

@@ -535,6 +535,7 @@ function setSameContact(){
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
+								<feature:display name="Pledge Contact 1" module="Pledges">
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
 										<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
@@ -696,6 +697,8 @@ function setSameContact(){
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
+								</feature:display>
+								<feature:display name="Pledge Contact 2" module="Pledges">
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
 										<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
@@ -865,6 +868,7 @@ function setSameContact(){
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
+								</feature:display>
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr>
 									    <td>
@@ -874,7 +878,8 @@ function setSameContact(){
 									         
 									    </td>
 							        </tr>
-						            <tr><td>&nbsp;</td></tr>
+						            <feature:display name="Pledge Sector" module="Pledges">
+									<tr><td>&nbsp;</td></tr>
 									<tr>
 						                <td>
 						                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
@@ -943,6 +948,8 @@ function setSameContact(){
 									     
 									    </td>
 									</tr>
+									</feature:display>
+									<feature:display name="Pledge Location" module="Pledges">
 									<tr><td>&nbsp;</td></tr>
 									<tr>
 						                <td>
@@ -1001,6 +1008,7 @@ function setSameContact(){
 									     
 									    </td>
 									</tr>
+									</feature:display>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
@@ -1099,7 +1107,9 @@ function setSameContact(){
 						                            </td>
 						                        </tr>
 												</c:forEach>
-									    		<tr>
+
+									    		</div>
+												<tr>
 													<td colspan="4"> &nbsp;
                                                            <html:button styleClass="dr-menu"  
                                                                          property="submitButton" onclick="addFunding();">
@@ -1119,6 +1129,7 @@ function setSameContact(){
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
+								<feature:display name="Pledge Additional Information" module="Pledges">
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
 										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -1141,6 +1152,7 @@ function setSameContact(){
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
+								</feature:display>
 								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td align="center">
 										<html:button styleClass="dr-menu" property="submitButton" onclick="return savePledge()">

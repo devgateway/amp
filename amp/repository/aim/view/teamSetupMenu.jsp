@@ -431,7 +431,7 @@ function putLoading(){
 						<c:if test="${selectedSubTab  == '0'}">
 						   	<LI>
                                 <span>
-                                <digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>								
+                                <digi:trn>Assigned Activities</digi:trn>								
                                 </span>
 							</LI>
 						</c:if>
@@ -441,7 +441,7 @@ function putLoading(){
 								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesMember">Click here to view member activities</digi:trn>'>
 									<span>
 									<digi:link href="/teamActivityList.do" name="urlParams">
-										<digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>
+										<digi:trn>Assigned Activities</digi:trn>
 									</digi:link>							
 									</span>
 								</div>	

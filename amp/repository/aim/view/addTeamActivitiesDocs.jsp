@@ -183,29 +183,23 @@ function validate() {
     <c:set var="message2">
     <digi:trn>Please choose an activity</digi:trn>
     </c:set>
-    if (document.aimTeamActivitiesForm.selectedAct.value == "") {
+    
+    if ( document.getElementById('myInput').value == "") {
     	alert("${message2}");
-    	document.aimTeamActivitiesForm.selectedAct.focus();
+    	document.getElementById('myInput').focus();
 		return false;
     }
-	if (document.aimTeamActivitiesForm.selActDocuments.checked != null) {
-		if (document.aimTeamActivitiesForm.selActDocuments.checked == false) {
-			alert("${message}");
-			return false;
+	var length = document.getElementsByName('uuid').length;
+	var flag = 0;
+	for (i = 0; i < length; i++) {
+		if (document.getElementsByName('uuid')[i].checked == true) {
+			flag = 1;
+			break;
 		}
-	} else {
-		var length = document.aimTeamActivitiesForm.selActDocuments.length;
-		var flag = 0;
-		for (i = 0; i < length; i++) {
-			if (document.aimTeamActivitiesForm.selActDocuments[i].checked == true) {
-				flag = 1;
-				break;
-			}
-		}
-		if (flag == 0) {
-			alert("${message}");
-			return false;
-		}
+	}
+	if (flag == 0) {
+		alert("${message}");
+		return false;
 	}
 	return true;
 }

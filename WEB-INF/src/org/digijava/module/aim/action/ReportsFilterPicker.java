@@ -950,7 +950,14 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setComputedYear(curYear);
 		}
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
-		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getCurrency());
+		
+		Long cur = filterForm.getCurrency();
+		if (cur == null) {
+			cur = filterForm.getDefaultCurrency();
+		}
+		
+		
+		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, cur);
 		arf.setCurrency(currency);
 		String name = "- " + currency.getCurrencyName();
 		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);

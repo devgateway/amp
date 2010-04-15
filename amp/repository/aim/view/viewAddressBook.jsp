@@ -222,7 +222,8 @@ html>body #main {
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script> 
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script> 
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/container-min.js"></script>
 	<style>
 		.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
 		color:#000000;
@@ -249,15 +250,16 @@ html>body #main {
 <script language="JavaScript">
 
 	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
-		function initDynamicTable1() {
+		function initDynamicTable1() {			
+	
 		    YAHOO.example.XHR_JSON = new function() {
 
 		    	this.formatActions = function(elCell, oRecord, oColumn, sData) {
 		        	elCell.innerHTML =
 		        		"<a href=/aim/addressBook.do?actionType=editContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 			        	
+		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 		        	
 			        	
-		        };
+		        };		        
 		        
 		        var lastTimeStamp = new Date().getTime();
 		        this.myDataSource = new YAHOO.util.DataSource("/aim/addressBook.do?actionType=getContactsJSON&lastTimeStamp"+lastTimeStamp+"&");
@@ -331,6 +333,47 @@ html>body #main {
 		           oPayload.totalRecords = oResponse.meta.totalRecords;
 		           return oPayload;
 		       }
+
+				//further lines are for generating tooltips
+		        var showTimer,hideTimer;				
+		        var tt = new YAHOO.widget.Tooltip("myTooltip");
+				
+		        this.myDataTable.on('cellMouseoverEvent', function (oArgs) {
+					if (showTimer) {
+						window.clearTimeout(showTimer);
+						showTimer = 0;
+					}
+
+					var target = oArgs.target;
+					var column = this.getColumn(target);
+					if (column.key == 'name' || column.key == 'email' || column.key == 'organizations' || column.key == 'phones' || column.key == 'faxes') {
+						var record = this.getRecord(target);
+						var tooltipText = record.getData(column.key);
+						var xy = [parseInt(oArgs.event.clientX,10) + 10 ,parseInt(oArgs.event.clientY,10) + 10 ];
+
+						showTimer = window.setTimeout(function() {
+							tt.setBody(tooltipText);
+							tt.cfg.setProperty('xy',xy);
+							tt.show();
+							hideTimer = window.setTimeout(function() {
+								tt.hide();
+							},5000);
+						},500);
+					}
+				});
+				
+		        this.myDataTable.on('cellMouseoutEvent', function (oArgs) {
+					if (showTimer) {
+						window.clearTimeout(showTimer);
+						showTimer = 0;
+					}
+					if (hideTimer) {
+						window.clearTimeout(hideTimer);
+						hideTimer = 0;
+					}
+					tt.hide();
+				});
+				       
 		       
 		    };
 	    
@@ -398,8 +441,6 @@ html>body #main {
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 </script>
 
-
-
 	<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
 		<tr>
 			<td width="14">&nbsp;</td>
@@ -421,7 +462,7 @@ html>body #main {
 						<!-- End navigation -->
 					</tr>
 					<tr><td align="left">
-                    	<jsp:include page="/repository/aim/view/exportTableHeadFixed.jsp" />
+                    	<jsp:include page="/repository/aim/view/exportTable.jsp" />
                 	</td></tr>					
 					<tr>
 						<td height="16" vAlign="center" width="867" colspan="7">

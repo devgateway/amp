@@ -570,7 +570,6 @@ function sortHierarchy( columnName, prevOrder ) {
 		descending			= 0;
 	var subForm				= document.forms["aimAdvancedReportForm"];
 	for ( var i=0; i<subForm.levelPicked.options.length; i++ ) {
-		alert(subForm.levelPicked.options[i].text + "QQ");
 		if (subForm.levelPicked.options[i].text == columnName) { 
 			subForm.levelPicked.selectedIndex	= i;
 			break;

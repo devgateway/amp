@@ -1,6 +1,6 @@
-FONTSET "fontset"
-
 MAP
+  FONTSET "fontset"
+  
   NAME "Project Info"
   # Map image size
   SIZE 600 600
@@ -66,8 +66,11 @@ MAP
 	LAYER
 	    NAME 'NIC2'
 	    TYPE POLYGON
-	    DATA 'NIC2.shp'
-		TEMPLATE '/blubb'
+	    
+	    CONNECTIONTYPE postgis
+      CONNECTION "user=odadata dbname=odadata_mozambique host=localhost port=5432"
+      DATA "the_geom from districts_with_geom"
+      
 	    METADATA
 	      'wms_title' 'NIC2'
 		  'wfs_title' 'NIC2'
@@ -85,20 +88,20 @@ MAP
 	    END
 	    DUMP TRUE
 	
-		LABELITEM 'NAME_2'
+		LABELITEM 'name'
 		
-		CLASS
-	       NAME 'LAKE'
-			
-		   EXPRESSION ('[HASC_2]' eq 'lake')
-	       STYLE
-	         SYMBOL 0
-	         SIZE 10
-	         OUTLINECOLOR 0 0 0
-	         COLOR 255 255 255
-			 ANTIALIAS true
-	       END
-	    END
+		# CLASS
+		#          NAME 'LAKE'
+		#       
+		#        EXPRESSION ('[HASC_2]' eq 'lake')
+		#          STYLE
+		#            SYMBOL 0
+		#            SIZE 10
+		#            OUTLINECOLOR 0 0 0
+		#            COLOR 255 255 255
+		#        ANTIALIAS true
+		#          END
+		#       END
 	
 		CLASS
 	       NAME 'NIC2_labels'
@@ -139,79 +142,79 @@ MAP
 		
 	 END
 	
-  LAYER
-    NAME 'NIC1'
-    TYPE POLYGON
-    DATA 'NIC1.shp'
-	TEMPLATE '/blubb'
-    METADATA
-      'wms_title' 'NIC1'
-    END
-    STATUS DEFAULT
-    TRANSPARENCY 100
-    PROJECTION
-    'proj=longlat'
-    'ellps=WGS84'
-    'datum=WGS84'
-    'no_defs'
-    END
-    LABELITEM 'NAME_1'
-		
-    CLASS
-       NAME 'LAKE'
-		
-	   EXPRESSION ('[HASC_1]' eq 'lake')
-       STYLE
-         SYMBOL 0
-         SIZE 10
-         OUTLINECOLOR 0 0 0
-         COLOR 255 255 255
-		 ANTIALIAS true
-       END
-    END
-
-	CLASS
-       NAME 'NIC1_high_scale' 
-
-		MINSCALE 1500000
-       STYLE
-         SYMBOL 0
-         SIZE 0
-         OUTLINECOLOR 0 0 0
-		COLOR 104 126 171
-		WIDTH 2
-       END
-     LABEL 
-      	TYPE truetype
-	  	COLOR 0 0 0
-	  	OUTLINECOLOR 255 255 255
-	  	SIZE 10
-	  	FONT arialbd
-	  	MINDISTANCE 100
-	  	PARTIALS FALSE
-     END 
-    END
-
-
-	CLASS
-       NAME 'NIC1' 
-       STYLE
-         SYMBOL 0
-         SIZE 0
-         OUTLINECOLOR 0 0 0
-		WIDTH 2
-       END
-     LABEL 
-      	TYPE truetype
-	  	COLOR 0 0 0
-	  	OUTLINECOLOR 255 255 255
-	  	SIZE 11
-	  	FONT arialbd
-	  	MINDISTANCE 100
-	  	PARTIALS FALSE
-     END 
-    END
-  END
+  # LAYER
+  #     NAME 'NIC1'
+  #     TYPE POLYGON
+  #     DATA 'NIC1.shp'
+  #   TEMPLATE '/blubb'
+  #     METADATA
+  #       'wms_title' 'NIC1'
+  #     END
+  #     STATUS DEFAULT
+  #     TRANSPARENCY 100
+  #     PROJECTION
+  #     'proj=longlat'
+  #     'ellps=WGS84'
+  #     'datum=WGS84'
+  #     'no_defs'
+  #     END
+  #     LABELITEM 'NAME_1'
+  #     
+  #     CLASS
+  #        NAME 'LAKE'
+  #     
+  #      EXPRESSION ('[HASC_1]' eq 'lake')
+  #        STYLE
+  #          SYMBOL 0
+  #          SIZE 10
+  #          OUTLINECOLOR 0 0 0
+  #          COLOR 255 255 255
+  #      ANTIALIAS true
+  #        END
+  #     END
+  # 
+  #   CLASS
+  #        NAME 'NIC1_high_scale' 
+  # 
+  #     MINSCALE 1500000
+  #        STYLE
+  #          SYMBOL 0
+  #          SIZE 0
+  #          OUTLINECOLOR 0 0 0
+  #     COLOR 104 126 171
+  #     WIDTH 2
+  #        END
+  #      LABEL 
+  #         TYPE truetype
+  #       COLOR 0 0 0
+  #       OUTLINECOLOR 255 255 255
+  #       SIZE 10
+  #       FONT arialbd
+  #       MINDISTANCE 100
+  #       PARTIALS FALSE
+  #      END 
+  #     END
+  # 
+  # 
+  #   CLASS
+  #        NAME 'NIC1' 
+  #        STYLE
+  #          SYMBOL 0
+  #          SIZE 0
+  #          OUTLINECOLOR 0 0 0
+  #     WIDTH 2
+  #        END
+  #      LABEL 
+  #         TYPE truetype
+  #       COLOR 0 0 0
+  #       OUTLINECOLOR 255 255 255
+  #       SIZE 11
+  #       FONT arialbd
+  #       MINDISTANCE 100
+  #       PARTIALS FALSE
+  #      END 
+  #     END
+  #   END
 
 	LAYER
 	    NAME 'NIC2_Lakes'

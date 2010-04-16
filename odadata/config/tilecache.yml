@@ -6,7 +6,7 @@ layers:
   basic:
     type: MapServer
     mapfile: app/map/nic.map
-    layers: NIC2,NIC1
+    layers: NIC2
     maxresolution: 0.01991484375
     levels: 5
     extension: jpeg

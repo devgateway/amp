@@ -51,7 +51,7 @@ var cloneFinancesRow = function() {
   blueprint.after(next);
 };
 
-var currencySelector = function(expr) {
+var currencySelector = function(expr, confirmation) {
   var input = $(expr);
   
   var storeOldValue = function() {
@@ -63,7 +63,7 @@ var currencySelector = function(expr) {
   }
   
   var adjustCurrencyLabels = function() {
-	  if (confirm('<%= t(".change_currency_confirmation") %>')) {
+	  if (confirm(confirmation)) {
 	    $('span.currency').text($(this).val());
 	    $('input.monetary').val(null);
 	    storeOldValue();

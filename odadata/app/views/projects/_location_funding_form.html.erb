@@ -1,7 +1,7 @@
 <script type="text/javascript" charset="utf-8">
   $(function() {
     $('.add_new_finances').click(cloneFinancesRow);
-    currencySelector('#project_project_currency');
+    currencySelector('#project_project_currency', '<%= t(".change_currency_confirmation") %>');
   });
 </script>
 

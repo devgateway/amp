@@ -43,6 +43,10 @@ en:
           label: Actual Start Date
         actual_end:
           label: Actual End Date
+        actual_start_end:
+          label: Actual Start - End
+        planned_start_end:
+          label: Planned Start - End
         implementing_agencies: 
           label: Channel of Delivery
         contracted_agencies: 

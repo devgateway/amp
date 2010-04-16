@@ -34,11 +34,11 @@
 	    <dt class="first"><%= Project.human_attribute_name('prj_status') %></dt>
 	    <dd class="first"><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
 	    
-	    <dt><%= Project.human_attribute_name('start') %></dt>
-	    <dd><%= @project.start %></dd>
+	    <dt><%= Project.human_attribute_name('actual_start_end') %></dt>
+	    <dd><%= @project.actual_start || 'n/a' %> / <%= @project.actual_end || 'n/a' %></dd>
 	    
-	    <dt><%= Project.human_attribute_name('end') %></dt>
-	    <dd><%= @project.end %></dd>
+	    <dt><%= Project.human_attribute_name('planned_start_end') %></dt>
+	    <dd><%= @project.planned_start || 'n/a' %> / <%= @project.planned_end || 'n/a' %></dd>
 	    
 	    <%# recipient/region/income code here?! %>
 	    

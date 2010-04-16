@@ -3,11 +3,12 @@
 
 <% labeled_form_for @project do |form| %>
 <div id="tab_container" style="float:left;width:750px;">
-	<ul id="tabs" class="ui-tabs-nav">			<li class="ui-tabs-nav-li"><a href="#profile_information"><span><%= t('.stages.profile_information') %></span></a></li>
+	<ul id="tabs" class="ui-tabs-nav">
+	    <li class="ui-tabs-nav-li"><a href="#profile_information"><span><%= t('.stages.profile_information') %></span></a></li>
 			<li class="ui-tabs-nav-li"><a href="#sector_agencies"><span><%= t('.stages.sector_agencies') %></span></a></li>
 			<li class="ui-tabs-nav-li"><a href="#goals"><span><%= t('.stages.goals') %></span></a></li>
 			<li class="ui-tabs-nav-li"><a href="#location_funding"><span><%= t('.stages.location_funding') %></span></a></li>
-			<li class="ui-tabs-nav-li"><a href="#funding_forecast"><span><%= t('.stages.funding_forecast') %></span></a></li>
+			<li class="ui-tabs-nav-li"><a href="#historic_funding"><span><%= t('.stages.historic_funding') %></span></a></li>
 		
 	</ul>
 	
@@ -39,9 +40,9 @@
 		<%= render :partial => "location_funding_form", :locals => { :f => form } %>
 	</div>
 	
-	<div id="funding_forecast" class="stage">
+	<div id="historic_funding" class="stage">
 		<%# error_messages_for :project, :attributes => [] %>
-		<%= render :partial => "funding_forecast_form", :locals => { :f => form } %>
+		<%= render :partial => "historic_funding_form", :locals => { :f => form } %>
 	</div>
     
 </div>

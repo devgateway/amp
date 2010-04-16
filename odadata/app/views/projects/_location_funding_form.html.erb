@@ -44,30 +44,26 @@
   <li><%= f.currency_select :project_currency %></li>
 <% end %>
 
-
-<% f.field_set t('.historic_funding', :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>
-	<% f.fields_for :historic_funding, (f.object.historic_funding || f.object.build_historic_funding) do |fh| %>	
-		<li class="fifty">
-		  <%= fh.monetary_field :commitments %>
-		</li>
-		<li class="fifty"><%= fh.monetary_field :payments %></li>
-	<% end %>
-<% end %>
+<div>
+  <% f.fields_for :fundings, f.object.fundings.sort_by(&:year).select { |r| r.year == Time.now.year } do |fa| -%>
+    <%= render :partial => "regular_funding", :locals => { :f => fa } %>
+  <% end %>
+</div>
 
 <div>
-  <% f.fields_for :fundings, f.object.fundings.sort_by(&:year) do |fa| -%>
-    <% f.field_set t('.funding_title', :year => fa.object.year) do %>
-  	  <%= fa.hidden_field :year %>
-  	  
-  	  <li><%= fa.monetary_field :commitments %></li>
-  	  
-  	  <li class="fifty"><%= fa.monetary_field :payments_q1 %></li>
-  	  <li class="fifty"><%= fa.monetary_field :payments_q2 %></li>
-  	  <li class="fifty"><%= fa.monetary_field :payments_q3 %></li>
-  	  <li class="fifty"><%= fa.monetary_field :payments_q4 %></li>
-  	  
-  	  <li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
-  	  <li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
+  <% f.fields_for :funding_forecasts, f.object.funding_forecasts.sort_by(&:year) do |fa| -%>
+  	<% f.field_set t('projects.forecasts_title', :year => fa.object.year) do %>
+  		<%= fa.hidden_field :year %>
+  			
+  	  <li class="fifty"><%= fa.monetary_field :commitments %></li>
+  		<li class="fifty"><%= fa.monetary_field :payments %></li>
+  		
+  		<li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
+  		<li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
   	<% end %>
   <% end %>
+  
+  <div style="overflow: hidden">
+    <input type="button" class="add_new_finances" value="Add information for another year" style="display: block; float: right; width: 200px; border: 1px solid #AAAAAA; padding: 2px; color: #777" />
+  </div>
 </div>

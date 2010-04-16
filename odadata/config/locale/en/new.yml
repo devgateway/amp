@@ -168,7 +168,7 @@ en:
         sector_agencies: Sector / Agencies
         goals: MDGs
         location_funding: Location / Funding
-        funding_forecast: Funding Forecasts
+        historic_funding: Historic Funding
     contracted_agency:
       prompt: Please select
     geo_relevance:
@@ -176,8 +176,6 @@ en:
       delete: Delete
     location_funding_form:
       cofunding_title: Co-Funding Donors and Amounts
-      funding_title: Finances {{year}}
-      historic_funding: Historic Funding (up to the end of {{year}})
       add_cofunding_donor: Add another Donor
       add_cofunding_agency: Add another Agency
       geo_relevances_title: Focal Regions
@@ -187,6 +185,10 @@ en:
          Please select the focal regions of this project.<br />
          If you do not select any, it will be considered a national project.
       add_location: Add another Location
+    historic_funding_form:
+      historic_funding: Historic Funding (up to the end of {{year}})
+    regular_funding:
+      title: Finances {{year}}
     implementing_agency:
       prompt: Please select
       delete_associated: Delete

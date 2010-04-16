@@ -1,0 +1,14 @@
+<% f.field_set t('.historic_funding', :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>
+	<% f.fields_for :historic_funding, (f.object.historic_funding || f.object.build_historic_funding) do |fh| %>	
+		<li class="fifty">
+		  <%= fh.monetary_field :commitments %>
+		</li>
+		<li class="fifty"><%= fh.monetary_field :payments %></li>
+	<% end %>
+<% end %>
+
+<div>
+  <% f.fields_for :fundings, f.object.fundings.sort_by(&:year).select { |r| r.year < Time.now.year } do |fa| -%>
+    <%= render :partial => 'regular_funding', :locals => { :f => fa } %>
+  <% end %>
+</div>

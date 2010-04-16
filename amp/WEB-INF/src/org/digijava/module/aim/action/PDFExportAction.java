@@ -306,7 +306,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			pdfc.setPaddingBottom(10);
 			pdfc.setPaddingTop(10);
 			pdfc.setColspan(rd.getTotalDepth());
-			table.addCell(pdfc);		
+			table.addCell(pdfc);
 						
 			
 			if(!"".equalsIgnoreCase(r.getReportDescription())){
@@ -392,7 +392,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				} else if (this.request.getAttribute("logoPositionOptions").equals("1")) {//footer
 					Image logo = null;
 					byte[] b = new byte[900];
-					this.session.getServletContext().getResourceAsStream("/TEMPLATE/ampTemplate/imagesSource/common/AMPLogo.png").read(b);
+					this.session.getServletContext().getResourceAsStream("/TEMPLATE/ampTemplate/images/AMPLogo.png").read(b);
 					try {
 						logo = Image.getInstance(b);
 						logo.setAbsolutePosition(10, 20);

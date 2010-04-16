@@ -303,17 +303,17 @@
 								</tr>
 
 								<tr>
-									<td align="center" colspan=2><html:button
-										styleClass="dr-menu" property="submitButton"
-										onclick="return searchOrganization()">
-										<digi:trn key="btn:search">Search</digi:trn>
-									</html:button> &nbsp; <html:button styleClass="dr-menu"
-										property="resetButton" onclick="resetForm()">
-										<digi:trn key="btn:clear">Clear</digi:trn>
-									</html:button> &nbsp; <html:button styleClass="dr-menu"
-										property="submitButton" onclick="closeWindow()">
-										<digi:trn key="btn:close">Close</digi:trn>
-									</html:button></td>
+									<td align="center" colspan=2>
+										<html:button styleClass="dr-menu" property="submitButton" onclick="return searchOrganization()">
+											<digi:trn>Search</digi:trn>
+										</html:button> &nbsp; 
+										<html:button styleClass="dr-menu" property="resetButton" onclick="resetForm()">
+											<digi:trn>Clear</digi:trn>
+										</html:button> &nbsp; 
+										<html:button styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+											<digi:trn>Close</digi:trn>
+										</html:button>
+									</td>
 								</tr>
 							</table>
 							</td>

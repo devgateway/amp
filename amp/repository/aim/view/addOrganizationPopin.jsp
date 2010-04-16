@@ -118,7 +118,6 @@
 		var flag = validate();
 		if (flag == false)
 			return false;
-
 		
 		<digi:context name="selOrg" property="/aim/selectOrganizationComponent.do"/>
 	    //document.aimSelectOrganizationForm.action = "<%= selOrg %>";
@@ -140,9 +139,6 @@
 	
 	}
 
-
-
-
 	function selectOrganizationPages(page) {
 	   <digi:context name="searchOrg" property="/aim/selectOrganizationComponent.do" />
 	   //var val = "<%=searchOrg%>";
@@ -152,7 +148,15 @@
 	   document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=page;
 	   var urlParams="<%=searchOrg%>";
 	   var params="edit=true&orgSelReset=false&subAction=selectPage&page="+page;
-	   YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback);
+	   if(document.getElementsByName("selOrganisations")!=null){
+			var sectors = document.getElementsByName("selOrganisations").length;
+			for(var i=0; i< sectors; i++){
+				if(document.getElementsByName("selOrganisations")[i].checked){
+					params+="&"+document.getElementsByName("selOrganisations")[i].name+"="+document.getElementsByName("selOrganisations")[i].value;
+				}
+			}
+		}
+	   YAHOO.util.Connect.asyncRequest("POST", urlParams, callback,params);
 	   //document.aimSelectOrganizationForm.submit();
 	   //return true;
 	}	
@@ -207,9 +211,17 @@
 			 //url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";
 		     //document.aimSelectOrganizationForm.action = url;
 		     //document.aimSelectOrganizationForm.submit();
-		     var url = "<%=searchOrg %>"
-			 var params = "?alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";    
-			 YAHOO.util.Connect.asyncRequest("POST", url+params, callback);
+		     var urlParams = "<%=searchOrg %>"
+			 var params = "alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";
+		     if(document.getElementsByName("selOrganisations")!=null){
+					var sectors = document.getElementsByName("selOrganisations").length;
+					for(var i=0; i< sectors; i++){
+						if(document.getElementsByName("selOrganisations")[i].checked){
+							params+="&"+document.getElementsByName("selOrganisations")[i].name+"="+document.getElementsByName("selOrganisations")[i].value;
+						}
+					}
+				}
+			 YAHOO.util.Connect.asyncRequest("POST",urlParams,callback,params);
 		     
 			 //return true;
 		}
@@ -228,9 +240,18 @@
 		     //document.aimSelectOrganizationForm.submit();
 
 			   var urlParams="<%=searchOrg%>";
-			   var params="?edit=true&subAction=search&tempNumResults=1000000";
-			   YAHOO.util.Connect.asyncRequest("POST", urlParams+params, callback);
-			      document.aimSelectOrganizationForm.tempNumResults.value=aux;		      
+			   var params="?edit=true&subAction=search&tempNumResults=1000000&viewAll=viewAll";
+			   if(document.getElementsByName("selOrganisations")!=null){
+					var sectors = document.getElementsByName("selOrganisations").length;
+					for(var i=0; i< sectors; i++){
+						if(document.getElementsByName("selOrganisations")[i].checked){
+							params+="&"+document.getElementsByName("selOrganisations")[i].name+"="+document.getElementsByName("selOrganisations")[i].value;
+						}
+					}
+				}
+
+			   YAHOO.util.Connect.asyncRequest("POST", urlParams, callback,params);
+			   document.aimSelectOrganizationForm.tempNumResults.value=aux;		      
 			  //return true;
 		}
 	}

@@ -61,7 +61,7 @@
 
 	function validate() {
 		<c:set var="translation">
-			<digi:trn key="aim:chooseOrganizationToAdd">Please choose an organization to add</digi:trn>
+			<digi:trn>Please choose an organization to add</digi:trn>
 		</c:set>
 		if(document.aimSelectOrganizationForm.selectedOrganisationFromPages.value != "-1") return true;
 
@@ -107,7 +107,6 @@
 		var flag = validate();
 		if (flag == false)
 			return false;
-
 		
 		<digi:context name="selOrg" property="context/module/moduleinstance/selectOrganizationComponent.do"/>
 	    //document.aimSelectOrganizationForm.action = "<%= selOrg %>";
@@ -128,8 +127,6 @@
 		document.aimSelectOrganizationForm.tempNumResults.value=10;
 	
 	}
-
-
 
 
 	function selectOrganizationPages(page) {
@@ -181,9 +178,6 @@
 		}
 		else return false;
 	}
-
-
-
 
 	function searchAlpha(val) {
 		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {

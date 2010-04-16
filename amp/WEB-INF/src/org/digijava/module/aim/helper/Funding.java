@@ -46,6 +46,8 @@ public class Funding implements Serializable
 	private String subtotalExpenditures;
 	private String subtotalActualDisbursementsOrders;
 	private String undisbursementbalance;
+	
+	private Long groupVersionedFunding;
    		
 	public AmpCategoryValue getTypeOfAssistance() {
 		return typeOfAssistance;
@@ -327,6 +329,14 @@ public class Funding implements Serializable
 			return expenditures;
 		}
 		return fundingDetails;
+	}
+
+	public Long getGroupVersionedFunding() {
+		return groupVersionedFunding;
+	}
+
+	public void setGroupVersionedFunding(Long groupVersionedFunding) {
+		this.groupVersionedFunding = groupVersionedFunding;
 	}
 	
 }

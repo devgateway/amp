@@ -1272,7 +1272,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				}
 			}
 
-        
+       // Group different versions of the same funding.
+       Iterator<AmpFunding> iterFunding = activity.getFunding().iterator();
+       while(iterFunding.hasNext()) {
+    	   AmpFunding auxFunding = iterFunding.next();
+    	   if(auxFunding.getGroupVersionedFunding() == null) {
+    		   auxFunding.setGroupVersionedFunding(auxFunding.getAmpFundingId());
+    	   }
+       }
+        	
        session.flush();
        if (alwaysRollback == false)
     	  tx.commit(); // commit the transcation

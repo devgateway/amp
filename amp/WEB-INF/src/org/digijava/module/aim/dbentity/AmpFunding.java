@@ -54,6 +54,8 @@ public class AmpFunding implements Serializable, Versionable
 	private AmpCategoryValue financingInstrument;
 	private AmpCategoryValue fundingStatus;
 	
+	private Long groupVersionedFunding;
+	
 	//private Set survey;
 	
 		/**
@@ -427,7 +429,8 @@ public class AmpFunding implements Serializable, Versionable
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		AmpFunding auxFunding = (AmpFunding) obj;
-		if (this.ampDonorOrgId.equals(auxFunding.getAmpDonorOrgId())) {
+		if (this.groupVersionedFunding != null
+				&& this.groupVersionedFunding.equals(auxFunding.getGroupVersionedFunding())) {
 			return true;
 		}
 		return false;
@@ -571,8 +574,12 @@ public class AmpFunding implements Serializable, Versionable
 		}
 		return out;
 	}
+
+	public Long getGroupVersionedFunding() {
+		return groupVersionedFunding;
+	}
+
+	public void setGroupVersionedFunding(Long previousVersionedFunding) {
+		this.groupVersionedFunding = previousVersionedFunding;
+	}
 }
-	
-	
-	
-	

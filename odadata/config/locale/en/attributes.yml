@@ -369,11 +369,3 @@ en:
       mdg:
         verbose_caption: 
           label: "Goal {{number}}: {{name}}"
-        
-      prefs:
-        scroll_bar_public: 
-          label: Public Ticker (Reports & Bluebook, no login required)
-        scroll_bar_admin: 
-          label: Data Input Ticker (visible for logged-in donors only)
-        scroll_bar_mfp: 
-          label: Master Focal Point Ticker (shown here, in the admin area)

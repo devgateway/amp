@@ -74,8 +74,8 @@ A IMG { border: 0; }
 .flash {
 	height: 25px;
 	text-align: center;
-	margin: -22px 0px 10px 0px;
-	padding-top: 2px;
+	margin: -10px 0 10px 0;
+	padding-top: 3px;
 	vertical-align: bottom;
 	width: 100%;
 	z-index: 100; /* we overlay the scrollbar */
@@ -253,8 +253,7 @@ A IMG { border: 0; }
 	height: 22px;
 	position: relative;
 	padding:0;
-	margin:0;
-	float:left;
+	margin: 0 0 10px 0;
 	width:900px;
 	border-top:1px solid white;
 }

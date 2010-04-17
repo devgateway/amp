@@ -8,6 +8,8 @@ class Reports::DistrictsController < ReportsController
   def show
     @district = District.find(params[:id])
     @projects = @district.projects.published.ordered.all
+    
+    @currency_selector = true
     render :layout => 'report_window'
   end
 end

@@ -6,6 +6,8 @@ class Reports::SectorsController < ReportsController
   def show
     @sector = DacSector.find(params[:id])
     @projects = @sector.projects.published.ordered.all
+    
+    @currency_selector = true
     render :layout => 'report_window'
   end
 end

@@ -6,6 +6,8 @@ class Reports::ProvincesController < ReportsController
   def show
     @province = Province.find(params[:id])
     @projects = @province.projects.published.all
+    
+    @currency_selector = true
     render :layout => 'report_window'
   end
 end

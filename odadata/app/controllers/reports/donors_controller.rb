@@ -7,6 +7,8 @@ module Reports
     def show
       @donor = Donor.find(params[:id])
       @projects = @donor.projects.published.ordered.all
+      
+      @currency_selector = true
       render :layout => 'report_window'
     end
   end

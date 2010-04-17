@@ -6,6 +6,8 @@ class Reports::MdgsController < ReportsController
   def show
     @mdg = Mdg.find(params[:id])
     @projects = @mdg.projects.published.ordered.all
+    
+    @currency_selector = true
     render :layout => 'report_window'
   end
 end

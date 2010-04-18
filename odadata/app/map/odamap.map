@@ -59,7 +59,7 @@ MAP
     
     CONNECTIONTYPE postgis
     CONNECTION "dbname='odadata_mozambique' host=localhost port=5432 user='odadata' password='123456' sslmode=disable"
-    DATA 'the_geom FROM "provinces_with_geom" USING UNIQUE id USING srid=-1'
+    DATA 'the_geom FROM "provinces" USING UNIQUE id USING srid=-1'
     PROCESSING "CLOSE_CONNECTION=DEFER"
     
     METADATA
@@ -110,7 +110,7 @@ MAP
     
     CONNECTIONTYPE postgis
     CONNECTION "dbname='odadata_mozambique' host=localhost port=5432 user='odadata' password='123456' sslmode=disable"
-    DATA 'the_geom FROM "districts_with_geom" USING UNIQUE id USING srid=-1'
+    DATA 'the_geom FROM "districts" USING UNIQUE id USING srid=-1'
     PROCESSING "CLOSE_CONNECTION=DEFER"
     
     METADATA

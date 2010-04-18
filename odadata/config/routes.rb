@@ -37,11 +37,11 @@ ActionController::Routing::Routes.draw do |map|
   ##
   # Reports
   map.namespace :reports do |reports|
-    reports.resources :donors
-    reports.resources :sectors
-    reports.resources :mdgs
-    reports.resources :provinces do |p|
-      p.resources :districts, :shallow => true
+    reports.resources :donors, :member => { :map => :get }
+    reports.resources :sectors, :member => { :map => :get }
+    reports.resources :mdgs, :member => { :map => :get }
+    reports.resources :provinces, :member => { :map => :get } do |p|
+      p.resources :districts, :shallow => true, :member => { :map => :get }
     end
     reports.resources :custom
   end

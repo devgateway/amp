@@ -1,15 +1,26 @@
 cache:
   type: DiskCache
   root: 'tmp/mapcache'
+  debug: false # this can disable caching
 
 layers:    
   basic:
     type: MapServer
-    mapfile: app/map/nic.map
-    layers: NIC2
+    mapfile: app/map/odamap.map
+    layers: NIC2,NIC1
     maxresolution: 0.01991484375
     levels: 5
-    extension: jpeg
+    extension: png
     metatile: true
     metabuffer: 0, 0
-    bbox: -87.6903, 10.7075, -82.5921, 15.0259
+    bbox: 21, -27, 49, -10
+  report:
+    type: MapServer
+    mapfile: app/map/reports.map
+    layers: NIC1,NIC2,highlights
+    maxresolution: 0.01991484375
+    levels: 1
+    extension: png
+    metatile: true
+    metabuffer: 0, 0
+    bbox: 21, -27, 49, -10

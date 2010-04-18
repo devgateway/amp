@@ -1,0 +1,212 @@
+MAP
+  FONTSET "fontset"
+  SYMBOLSET "symbols"
+  
+  CONFIG "MS_ERRORFILE" "/tmp/ms_error.txt"
+  
+  NAME "Project Info"
+  # Map image size
+  SIZE 600 600
+  UNITS kilometers
+
+  EXTENT 21.990147 -27.278631 49.066542 -10.061314
+  PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+  END
+
+  # Background color for the map canvas -- change as desired
+  IMAGECOLOR 255 255 255
+  IMAGEQUALITY 95
+  IMAGETYPE png
+  OUTPUTFORMAT
+    NAME png
+    DRIVER 'GD/PNG'
+    MIMETYPE 'image/png'
+    IMAGEMODE PC256
+    EXTENSION 'png'
+  END
+
+  # Web interface definition. Only the template parameter
+  # is required to display a map. See MapServer documentation
+  WEB
+    # Set IMAGEPATH to the path where MapServer should
+    # write its output.
+    IMAGEPATH '/tmp/'
+
+    # Set IMAGEURL to the url that points to IMAGEPATH
+    # as defined in your web server configuration
+    IMAGEURL '/tmp/'
+
+    # WMS server settings
+    METADATA
+      'wms_title'           'ODAmap Nicaragua'
+      'wms_onlineresource'  'http://nic.odadata.eu/odamap/wxs?'
+      'wms_srs'             'EPSG:4326'
+    END
+
+    # Scale range at which web interface will operate
+    # Template and header/footer settings
+    # Only the template parameter is required to display a map. See MapServer documentation
+  END
+	
+  LAYER
+    NAME 'NIC1'
+    TYPE POLYGON
+    DUMP true
+    EXTENT 21.990147 -27.278631 49.066542 -10.061314
+    
+    CONNECTIONTYPE postgis
+    CONNECTION "dbname='odadata_mozambique' host=localhost port=5432 user='odadata' password='123456' sslmode=disable"
+    DATA 'the_geom FROM "provinces_with_geom" USING UNIQUE id USING srid=-1'
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+    
+    METADATA
+      'ows_title' 'NIC1'
+    END
+    STATUS OFF
+    TRANSPARENCY 100
+    PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    END
+    
+    LABELITEM 'name'
+  
+  
+    CLASS
+       NAME 'provinces' 
+       
+       STYLE
+          SYMBOL 0 
+          WIDTH 1.5 
+          OUTLINECOLOR 0 0 0
+       END
+       
+      LABEL 
+        FONT arial
+        TYPE truetype
+        SIZE 10
+        COLOR 0 0 0
+        OUTLINECOLOR 255 255 255
+        OUTLINEWIDTH 3
+        ANGLE 0
+        BUFFER 10
+        POSITION cc
+        FORCE true
+        ANTIALIAS true
+        PARTIALS false
+      END 
+    END
+  END
+  
+  LAYER
+    NAME 'NIC2'
+    TYPE POLYGON
+    DUMP true
+    EXTENT 21.990147 -27.278631 49.066542 -10.061314
+    
+    CONNECTIONTYPE postgis
+    CONNECTION "dbname='odadata_mozambique' host=localhost port=5432 user='odadata' password='123456' sslmode=disable"
+    DATA 'the_geom FROM "districts_with_geom" USING UNIQUE id USING srid=-1'
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+    
+    METADATA
+      'ows_title' 'NIC2'
+    END
+    STATUS OFF
+    TRANSPARENCY 100
+    PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    END
+    
+    LABELITEM 'name'
+    LABELMAXSCALEDENOM 3000000
+    LABELMINSCALEDENOM 0
+    
+    CLASS
+       NAME 'districts' 
+       STYLE
+         SYMBOL 0 
+         OUTLINECOLOR 0 0 0
+         COLOR 255 255 255
+       END
+       
+       LABEL 
+         FONT arial
+         TYPE truetype
+         SIZE 8
+         COLOR 0 0 0
+         OUTLINECOLOR 255 255 255
+         OUTLINEWIDTH 3
+         ANGLE 0
+         BUFFER 10
+         POSITION cc
+         FORCE true
+         ANTIALIAS true
+         PARTIALS false
+       END
+    END
+  END
+  
+  LAYER
+    NAME 'highlights'
+    TYPE POLYGON
+    DUMP true
+    EXTENT 21.990147 -27.278631 49.066542 -10.061314
+    
+    CONNECTIONTYPE postgis
+    CONNECTION "dbname='odadata_mozambique' host=localhost port=5432 user='odadata' password='123456' sslmode=disable"
+    DATA 'the_geom FROM "districts_with_geom" USING UNIQUE id USING srid=-1'
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+    
+    METADATA
+      'ows_title' 'NIC2'
+    END
+    STATUS OFF
+    TRANSPARENCY 100
+    PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    END
+    
+    LABELITEM 'name'
+    LABELMAXSCALEDENOM 3000000
+    LABELMINSCALEDENOM 0
+    
+    CLASS
+       NAME 'highlights' 
+        STYLE
+          SYMBOL 'hatch'
+          COLOR 255 0 0
+          ANGLE 135
+          SIZE 10
+          WIDTH 1
+        END
+       
+       LABEL 
+         FONT arial
+         TYPE truetype
+         SIZE 8
+         COLOR 0 0 0
+         OUTLINECOLOR 255 255 255
+         OUTLINEWIDTH 3
+         ANGLE 0
+         BUFFER 10
+         POSITION cc
+         FORCE true
+         ANTIALIAS true
+         PARTIALS false
+       END
+    END
+  END
+END

@@ -34,7 +34,7 @@
 			function init_map() {
 				var options = {
 					controls: [new OpenLayers.Control.MouseDefaults()],
-					maxExtent: new OpenLayers.Bounds(-87.6903, 10.7075, -82.5921, 15.0259),
+					maxExtent: new OpenLayers.Bounds(21, -27, 49, -10),
 					maxResolution: 0.01991484375,
 					numZoomLevels: 5
 				}
@@ -42,7 +42,7 @@
 						
 				map = new OpenLayers.Map( 'map', options );
 				layer = new OpenLayers.Layer.WMS( "Nicaragua",
-				        "/odamap/wxs", {layers: 'basic'},
+				        "/odamap/wxs", {layers: 'basic', format: 'png'},
 						{singleTile: false, transitionEffect: 'resize'});		
             	
 				//map.addControl( new OpenLayers.Control.LayerSwitcher() );

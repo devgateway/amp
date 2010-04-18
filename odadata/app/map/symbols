@@ -1,0 +1,6 @@
+SYMBOLSET
+  SYMBOL
+    NAME 'hatch'
+    TYPE HATCH
+  END
+END

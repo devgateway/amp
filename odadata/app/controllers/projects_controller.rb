@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
     @project = current_donor.projects.build
     
     setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
-    setup_record_range(@project.funding_forecasts, Time.now.year-1, (Time.now.year-1)+Project::FORECAST_RANGE)
+    setup_record_range(@project.funding_forecasts, Time.now.year+1, (Time.now.year+1)+Project::FORECAST_RANGE)
   end
 
   def create    
@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
     @project = current_donor.projects.find(params[:id])
     
     setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
-    setup_record_range(@project.funding_forecasts, Time.now.year-1, (Time.now.year-1)+Project::FORECAST_RANGE)
+    setup_record_range(@project.funding_forecasts, Time.now.year+1, (Time.now.year+1)+Project::FORECAST_RANGE)
   end
   
   def update  

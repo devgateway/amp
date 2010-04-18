@@ -50,16 +50,16 @@ module OdaMap
       municipalities_layer = @map.getLayerByName("NIC2")
       municipalities_layer.labelitem = nil
       municipalities_layer.getClass(0).getStyle(0).color = ColorObj.new(255, 255, 255)
-      
+            
       @projects.each_with_index do |prj, idx|
         new_layer = municipalities_layer.clone
         cls = ClassObj.new()
               
         cls.insertStyle(STYLES[idx])
-        cls.setExpression(build_expression(prj))
+        new_layer.setFilter(build_expression(prj))
         
         new_layer.insertClass(cls, 0)
-        @map.insertLayer(new_layer, -idx+1)
+        @map.insertLayer(new_layer)
       end
     end
     
@@ -76,13 +76,14 @@ private
       # This highlights all regions for national projects
       return nil if prj.districts.empty?
       
-      criteria = returning([]) do |crit|
-        prj.districts.each do |dist|
-          crit << "([id] == #{dist.id})"
-        end
-      end
-      
-      "(" + criteria.join(" OR ") + ")"         
+      #criteria = returning([]) do |crit|
+      #  prj.districts.each do |dist|
+      #    crit << "([id] == #{dist.id})"
+      #  end
+      #end
+      #
+      #"(" + criteria.join(" OR ") + ")"     
+      "id IN (#{prj.districts.map(&:id).join(', ')})"    
     end
   end
 end

@@ -5,7 +5,7 @@
 		<th><%= t('.mdg') %></th>
 		<th><%= t('.no_projects') %></th>
 		<th><%= t('.list') %></th>
-<!--		<th><%= t('.map') %></th>-->
+    <th><%= t('.map') %></th>
 	</tr>
 	
 	<% @mdgs.each do |mdg| %>
@@ -17,6 +17,7 @@
 				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0), 
 					reports_mdg_path(mdg) %>
 			</td>
+			<td><%= icon_link_to('moz_map', map_reports_mdg_path(mdg)) %></td>
 		</tr>
 	<% end %>
 </table>

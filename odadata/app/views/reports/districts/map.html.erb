@@ -1,0 +1,35 @@
+<% stylesheet 'pagination' %>
+
+<h1>Projects at <%= @district.name %></h1>
+
+<div class="columns" style="width: 1050px">
+  <div style="width: 450px">
+    <div>
+      <%= image_tag(map_reports_district_path(@district, :page => params[:page], :format => 'png')) %>
+    </div>
+  </div>
+  
+  <div style="width: 600px">
+    <div>
+      <table>
+        <tr>
+          <th>Pattern</th>
+          <th>Project</th>
+          <th>Fact Sheet</th>
+        </tr>
+        
+        <% @projects.each_with_index do |prj, idx| %>
+          <tr>
+            <td><%= image_tag "patterns/#{idx+1}.gif" %></td>
+            <td><%= prj.title %></td>
+            <td><%= icon_link_to "page_white_text", project_path(prj) %>
+          </tr>
+        <% end %>
+      </table>
+          
+      <%= will_paginate @projects,
+            :previous_label => t('pagination.previous_page'), :next_label => t('pagination.next_page'),
+            :inner_window => 2, :outer_window => 0 %>
+    </div>
+  </div>
+</div>

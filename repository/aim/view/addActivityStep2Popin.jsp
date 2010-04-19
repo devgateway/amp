@@ -508,6 +508,8 @@
                }
             }
             if(!flag){
+              var msg="<digi:trn jsFriendly="true">Please, select program!</digi:trn>";
+              alert(msg);
               return false;
             }
           }else{

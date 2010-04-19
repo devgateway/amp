@@ -315,6 +315,7 @@ function collapseAll() {
 										<c:set var="tran"><digi:trn key="aim:previe:collapseAll">Collapse all</digi:trn> </c:set>
 										<input type="button" class="dr-menu" onclick="javascript:collapseAll()" value="${tran}"/>
 										</td>
+                                        <c:if test="${aimEditActivityForm.pageId !=1}">
 										<td height=16 vAlign=bottom align="right">
 												<input type="button" class="dr-menu" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
 										</td>
@@ -322,6 +323,7 @@ function collapseAll() {
 											<c:set var="trn"><digi:trn>Export To PDF</digi:trn> </c:set>
 											<input type="button" class="dr-menu" onclick="javascript:exportToPdf(${actId})" value="${trn}"/>
 										</td>
+                                        </c:if>
 									</tr>
 								</table>
 							</td>

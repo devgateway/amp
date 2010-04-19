@@ -532,13 +532,21 @@ div.scrollable {
 
 			if(angle!=''){
 		  		if(parseInt(angle)==(angle-0)) {
-		 		if(parseInt(angle)<0 || parseInt(angle)>90){
-			 	errmsg+='\n<digi:trn>Angle of inclination must be in range from 0 to 90</digi:trn>';
+		 			if(parseInt(angle)<0 || parseInt(angle)>90){
+			 			errmsg+='\n<digi:trn>Angle of inclination must be in range from 0 to 90</digi:trn>';
+					}
+		 		}else{
+		 			errmsg+='\n<digi:trn>Please enter correct angle</digi:trn>';
+		 		}
 			}
-		 }else{
-		 	errmsg+='\n<digi:trn>Please enter correct angle</digi:trn>';
-		 }
-				} 
+
+		//***validate activities per page
+		if(pageSize!=''){
+			var validChars='^[0-9]*$';
+			if(!pageSize.match(validChars)){
+				errmsg+='\n<digi:trn>Please enter correct number of pages</digi:trn>';
+			}
+		}
 		 
 		 //***Validate error messages
 		 if (errmsg==''){

@@ -1285,7 +1285,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        if (alwaysRollback == false)
     	  tx.commit(); // commit the transcation
 
-       logger.debug("Activity saved");    
+       logger.debug("Activity saved");
        
        //Save surveys for new activities.
        //TODO: Check if this code can be removed, apparently the survey and their responses
@@ -1566,7 +1566,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
 
-      if (pageStart!=null && rowCount!=null){
+      if (pageStart!=null && rowCount!=null && rowCount.intValue()>=0){
           query.setFirstResult(pageStart);
           query.setMaxResults(rowCount);
       }

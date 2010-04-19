@@ -114,7 +114,7 @@ class Project < ActiveRecord::Base
   ##
   # Callbacks
   before_validation :set_funding_currency 
-  #before_save :reset_delegated_cooperation
+  before_save :set_equal_location_shares
   
   ##
   # Validation
@@ -149,6 +149,7 @@ class Project < ActiveRecord::Base
     "#{id}-#{donor_project_number.strip.downcase.gsub(/[^[:alnum:]]/,'-')}".gsub(/-{2,}/,'-')
   end
   
+  # Method to clone a model with all it's associations
   def clone_with_associations
     associations = self.nested_attributes_options.keys
     cloned_instance = self.clone_without_associations
@@ -222,21 +223,33 @@ protected
     funding_forecasts.each { |f| f.currency = project_currency }
   end
   
+  def set_equal_location_shares
+    alive = self.geo_relevances.reject(&:marked_for_destruction?)
+    total = alive.size
+    return unless alive.all? { |g| g.amount.blank? }
+    
+    alive.each { |a| a.amount =  100 / total }
+  end
+  
   ##
   # Validation methods
   # Validate that the total sector amount per project is 100%
   def total_sector_amount_is_100
-    if self.sector_relevances.any? && self.sector_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum != 100
+    return true unless self.geo_relevances.any?
+    
+    if (total = self.sector_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum) < 95
       # FIXME: Translation missing
-      errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
+      errors.add('sector_relevances', "The sum of the sector percentages should be 100%, but is #{total}%")
     end
   end  
   
-  # Validate that the total location amount per project is 100%
+  # Validate that the total location amount per project is nearly 100%
   def total_location_amount_is_100
-    if self.geo_relevances.any? && self.geo_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum != 100
+    return true unless self.geo_relevances.any?
+    
+    if (total = self.geo_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum) < 95
       # FIXME: Translation missing
-      errors.add('geo_relevances', 'The sum of the location percentages should be 100%')
+      errors.add('geo_relevances', "The sum of the location percentages should be 100%, but is #{total}")
     end
   end
   

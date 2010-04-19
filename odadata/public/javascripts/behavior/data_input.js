@@ -23,7 +23,7 @@ var cloneFinancesRow = function() {
   var next = blueprint.clone();
   var time = new Date().getTime();
   
-  // Get the prefix to differentiate between fundings and forecasts
+  // Get the prefix
   var prefix = next.find(':text').attr('id').match(/^(.*)\_\d+\_.*$/)[1] + '_';
   
   // Replace the id and name attributes.

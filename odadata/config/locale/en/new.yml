@@ -171,6 +171,7 @@ en:
       prompt: Please select
     geo_relevance:
       prompt: Please select
+      all_districts: All districts
       delete: Delete
     location_funding_form:
       cofunding_title: Co-Funding Donors and Amounts

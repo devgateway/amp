@@ -4,7 +4,7 @@
 		
 		<%= f.related_collection_select :district_id, :province_id, 
 				Province.ordered, :'districts.ordered', :name, :id, :name, 
-				{ :label => false }, :class => 'dynamic_select child large' %>
+				{ :label => false, :prompt => t('.all_districts') }, :class => 'dynamic_select child large' %>
 				
 		<%= f.text_field :amount %>
 

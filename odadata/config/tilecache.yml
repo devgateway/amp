@@ -1,7 +1,6 @@
 cache:
   type: DiskCache
   root: 'tmp/mapcache'
-  debug: false # this can disable caching
 
 layers:    
   basic:

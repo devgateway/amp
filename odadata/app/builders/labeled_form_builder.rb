@@ -177,7 +177,15 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     
     @template.link_to_function(name, opts) do |page|
       tmpl = form_builder.render_associated_form(object, :partial => partial)        
-      page << %{$('#{container}').append("#{escape_javascript(tmpl)}".replace(/new_\\d+/g, "new_" + (new Date().getTime())))}
+      page << %{
+        var time = new Date().getTime();
+        var template = $('#{escape_javascript(tmpl)}');
+        $(template).find(':text, :checkbox, input[type=hidden], select').each(function() {
+          $(this).attr('id', $(this).attr('id').replace(/\\_\\d+\\_/, '_' + time + '_'));
+          $(this).attr('name', $(this).attr('name').replace(/\\]\\[\\d+\\]\\[/, '][' + time + ']['));
+        });
+        
+        $('#{container}').append(template);}
     end
   end
   
@@ -192,8 +200,16 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     form_builder     = self # because the value of self changes in the block
     
     @template.button_to_function(name, opts) do |page|
-      tmpl = form_builder.render_associated_form(object, :partial => partial)        
-      page << %{$('#{container}').append("#{escape_javascript(tmpl)}".replace(/new_\\d+/g, "new_" + (new Date().getTime())))}
+      tmpl = form_builder.render_associated_form(object, :partial => partial)
+      page << %{
+        var time = new Date().getTime();
+        var template = $('#{escape_javascript(tmpl)}');
+        $(template).find(':text, :checkbox, input[type=hidden], select').each(function() {
+          $(this).attr('id', $(this).attr('id').replace(/\\_\\d+\\_/, '_' + time + '_'));
+          $(this).attr('name', $(this).attr('name').replace(/\\]\\[\\d+\\]\\[/, '][' + time + ']['));
+        });
+        
+        $('#{container}').append(template);}
     end
   end
   
@@ -224,14 +240,10 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
       name              = extract_option_or_class_name(opts, :name, associated.first)
       partial           = opts[:partial] || name
       local_assign_name = partial.split('/').last.split('.').first
-    
-      output = associated.map do |element|
-        fields_for(association_name(name), element, (opts[:fields_for] || {}).merge(:name => name)) do |f|
-          @template.render({:partial => "#{partial}", :locals => {local_assign_name.to_sym => f.object, :f => f}.merge(opts[:locals] || {})}.merge(opts[:render] || {}))
-        end
-      end
       
-      output.join
+      fields_for(association_name(name), associated, (opts[:fields_for] || {}).merge(:name => name)) do |f|
+        @template.concat(@template.render({:partial => "#{partial}", :locals => {local_assign_name.to_sym => f.object, :f => f}.merge(opts[:locals] || {})}.merge(opts[:render] || {})))
+      end
     end
   end
   

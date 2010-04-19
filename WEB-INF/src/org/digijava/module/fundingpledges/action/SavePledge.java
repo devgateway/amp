@@ -1,5 +1,7 @@
 package org.digijava.module.fundingpledges.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -14,7 +16,10 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
@@ -80,6 +85,25 @@ public class SavePledge extends Action {
 				}
 	    		//pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
     		}
+    		String fundings = request.getParameter("fundings");
+    		String funds[] = fundings.split("-");
+    		plForm.setFundingPledgesDetails(new ArrayList<FundingPledgesDetails>());
+
+    		for (int i = 0; i < funds.length; i++) {
+    			String token[] = funds[i].split("_");
+     			FundingPledgesDetails fpd = new FundingPledgesDetails();
+     			if (token[0].length()>0){
+     				fpd.setId(Long.parseLong(token[0]));
+     			}
+    			fpd.setPledgetypeid(Long.parseLong(token[1]));
+    			fpd.setTypeOfAssistanceid(Long.parseLong(token[2]));
+    			fpd.setAmount(Double.parseDouble(token[3]));
+    			fpd.setCurrencycode(token[4]);
+    			fpd.setFundingDate(token[5]);
+    			fpd.setAidmodalityid(Long.parseLong(token[6]));
+    			plForm.getFundingPledgesDetails().add(fpd);
+			}
+    		
     		/*
     		if(plForm.getSelectedLocs()!=null && plForm.getSelectedLocs().size()>0){
 	    		Set<FundingPledgesLocation> pledgesloc = new HashSet<FundingPledgesLocation>();

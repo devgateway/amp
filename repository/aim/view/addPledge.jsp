@@ -11,12 +11,15 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm, org.digijava.module.categorymanager.dbentity.AmpCategoryValue, java.util.*, org.digijava.module.aim.dbentity.*" %>
 
 <!--<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="addSectors.jsp" flush="true" />
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
+<% int indexFund = 0; 
+PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
+%>
 <script language="JavaScript" type="text/javascript"><!--
 
 var quitRnot1 = 0;
@@ -140,47 +143,27 @@ function removeSector() {
 	}	
 }
 
-function addFunding() {
-	document.getElementsByName("fundingEvent")[0].value = "addFunding";
-	
-	document.pledgeForm.target = "_self";
-	document.pledgeForm.action="/addFundingPledgeDetail.do";
-	document.pledgeForm.submit();
-	
-}
-
-
-function removeFunding() {
-	<c:set var="confirmDelete">
-	  <digi:trn key="aim:removeSelectedFundingMessage">
-	 	 Remove selected fundings?
-	  </digi:trn>
-	</c:set>
-	if (confirm("${confirmDelete}")){
-		document.getElementsByName("fundingEvent")[0].value = "delFunding";
-		var i = 1
-		var delStr = "deleteFunds="
-		while (document.getElementById("checkFund"+i)!=null){
-			if(document.getElementById("checkFund"+i).checked==true){
-				delStr = delStr + "_" + i;
-			}
-			i++;
-		}
-		if (delStr.length < 13){
-			alert ("Please, select a funding first.");
-		} else {
-			document.pledgeForm.target = "_self";
-			document.pledgeForm.action="/addFundingPledgeDetail.do?"+delStr;
-			document.pledgeForm.submit();
-		}	
-	}	
-}
-
 function savePledge() {
 
 	if (validateData()){
+		var i = 0;
+		var param = "";
+		while (i<=numFund){
+			if(document.getElementById('fund_'+i)!=null){
+				param += document.getElementsByName('fund_'+i+"_0")[0].value + "_";
+				param += document.getElementsByName('fund_'+i+"_2")[0].value + "_";
+				param += document.getElementsByName('fund_'+i+"_3")[0].value + "_";
+				param += document.getElementsByName('fund_'+i+"_4")[0].value + "_";
+				param += document.getElementsByName('fund_'+i+"_5")[0].value + "_";
+				param += document.getElementsByName('fund_'+i+"_6")[0].value + "_";
+				param += document.getElementsByName('fund_'+i+"_7")[0].value + "_";
+				param += "-";
+			}
+			i++;
+		}
+		
 		<digi:context name="save" property="/savePledge.do" />
-  	 	document.pledgeForm.action = "<%= save %>?edit=true";
+  	 	document.pledgeForm.action = "<%=save%>?fundings="+param;
   	  	document.pledgeForm.target = "_self";
 
     	document.pledgeForm.submit();
@@ -261,7 +244,8 @@ function validateData(){
 	  </digi:trn>
 	</c:set>
 	i = 0;
-	if (document.getElementsByName("fundingPledgesDetails[0].pledgetypeid")[0] == null){
+
+	if (tempFund==0){
 		alert ("${addFunding}")
 		return false;
 	}
@@ -272,12 +256,14 @@ function validateData(){
 	  </digi:trn>
 	</c:set>
 	i = 0;
-	while (document.getElementsByName("fundingPledgesDetails["+i+"].amount")[0]!=null){
-		var temp = 0;
-		temp = temp + document.getElementsByName("fundingPledgesDetails["+i+"].amount")[0].value;
-		if (document.getElementsByName("fundingPledgesDetails["+i+"].amount")[0].value.length==0 || temp==0){
-			alert ("${insertAmount}")
-			return false;
+	while (i<=numFund){
+		if (document.getElementsByName("fund_"+i+"_4")[0]!=null){
+			var temp = 0;
+			temp = temp + document.getElementsByName("fund_"+i+"_4")[0].value;
+			if (document.getElementsByName("fund_"+i+"_4")[0].value.length==0 || temp==0){
+				alert ("${insertAmount}")
+				return false;
+			}
 		}
 		i++;
 	}
@@ -288,8 +274,8 @@ function validateData(){
 	  </digi:trn>
 	</c:set>
 	i = 0;
-	while (document.getElementsByName("fundingPledgesDetails["+i+"].fundingDate")[0]!=null){
-		if (document.getElementsByName("fundingPledgesDetails["+i+"].fundingDate")[0].value.length ==0){
+	while (i<=numFund){
+		if (document.getElementsByName("fund_"+i+"_6")[0]!=null && document.getElementsByName("fund_"+i+"_6")[0].value.length ==0){
 			alert ("${selectFunding_date}")
 			return false;
 		}
@@ -301,19 +287,23 @@ function validateData(){
 	 	 Please, insert a valid Email.
 	  </digi:trn>
 	</c:set>
-	if (document.getElementsByName("contact1Email")[0].value.length>0 && document.getElementsByName("contact1Email")[0].value.indexOf("@") == -1){
+	
+	if (document.getElementsByName("contact1Email")[0]!=null && document.getElementsByName("contact1Email")[0].value.length>0 && document.getElementsByName("contact1Email")[0].value.indexOf("@") == -1){
 		alert ("${insertValidEmail}")
 		return false;
 	}
-	if (document.getElementsByName("contactAlternate1Email")[0].value.length>0 && document.getElementsByName("contactAlternate1Email")[0].value.indexOf("@") == -1){
+	
+	if (document.getElementsByName("contactAlternate1Email")[0]!=null && document.getElementsByName("contactAlternate1Email")[0].value.length>0 && document.getElementsByName("contactAlternate1Email")[0].value.indexOf("@") == -1){
 		alert ("${insertValidEmail}")
 		return false;
 	}
-	if (document.getElementsByName("contact2Email")[0].value.length>0 && document.getElementsByName("contact2Email")[0].value.indexOf("@") == -1){
+
+	if (document.getElementsByName("contact2Email")[0]!=null && document.getElementsByName("contact2Email")[0].value.length>0 && document.getElementsByName("contact2Email")[0].value.indexOf("@") == -1){
 		alert ("${insertValidEmail}")
 		return false;
 	}
-	if (document.getElementsByName("contactAlternate2Email")[0].value.length>0 && document.getElementsByName("contactAlternate2Email")[0].value.indexOf("@") == -1){
+	
+	if (document.getElementsByName("contactAlternate2Email")[0]!=null && document.getElementsByName("contactAlternate2Email")[0].value.length>0 && document.getElementsByName("contactAlternate2Email")[0].value.indexOf("@") == -1){
 		alert ("${insertValidEmail}")
 		return false;
 	}
@@ -1022,10 +1012,10 @@ function setSameContact(){
 									    </td>
 							        </tr>
 						            <tr><td>&nbsp;</td></tr>
-									<logic:notEmpty name="pledgeForm" property="fundingPledgesDetails">
 									<tr>
 						                <td>
-						                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+						                    <div id="fundTitle" style="display:block;">
+											<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
 						                    	<tr>
 													<td align="center" valign="bottom" width="3%" />
 						                            <td align="center" width="17%">
@@ -1048,79 +1038,136 @@ function setSameContact(){
 						                            </td>
 						                        </tr>
 											</table>
+											</div>
 										</td>
 									</tr>
-									</logic:notEmpty>
 									<tr>
 										<td>
 											<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-                                             	<c:forEach var="fundingPledgesDetails" items="${pledgeForm.fundingPledgesDetails}" varStatus="status">
 												<tr>
-													<c:set var="indexFund" value="${indexFund+1}"/>
-						                            <c:set var="translation">
-														<digi:trn key="aim:selectFromBelow">Please select from below</digi:trn>
-													</c:set>	
-													<td align="center" valign="bottom" width="3%" >
-														<input type="checkbox" id="checkFund${indexFund}"  >
-													</td>
-													<td align="center" valign="bottom" width="17%">
-														<html:select name="fundingPledgesDetails" indexed="true" property="pledgetypeid" styleClass="inp-text">
-															<html:optionsCollection name="pledgeForm" property="pledgeTypeCategory" value="id"
-															label="value"/>
-														</html:select>
-						                            </td>
-													<td align="center" valign="bottom" width="20%">
-						                                <html:select name="fundingPledgesDetails" indexed="true" property="typeOfAssistanceid" styleClass="inp-text">
-															<html:optionsCollection name="pledgeForm" property="assistanceTypeCategory" value="id"
-															label="value"/>
-														</html:select>
-						                            </td>
-													<td align="center" valign="bottom" width="15%">
-						                                <html:text name="fundingPledgesDetails" indexed="true" property="amount" size="17" styleClass="inp-text"/>
-						                            </td>
-													<td align="center" valign="bottom" width="10%">
-						                                <html:select name="fundingPledgesDetails" indexed="true" property="currencycode" styleClass="inp-text">
-															<html:optionsCollection name="pledgeForm" property="validcurrencies" value="currencyCode"
-															label="currencyName"/>
-														</html:select>
-						                            </td>
-													<td align="center" valign="bottom" width="15%">
-						                                <table cellPadding="0" cellSpacing="0">
+													<td>
+		                                             	<div id="fundingDiv">
+		                                             	<c:forEach var="fundingPledgesDetails" items="${pledgeForm.fundingPledgesDetails}" varStatus="status">
+														
+														<% String tNameBase = "fund_" + indexFund + "_"; 
+														String divName = "fund_" + indexFund;
+														indexFund++;
+														String field0 = tNameBase + "0"; 
+														 String field1 = tNameBase + "1"; 
+														 String field2 = tNameBase + "2"; 
+														 String field3 = tNameBase + "3"; 
+														 String field4 = tNameBase + "4";
+														 String field5 = tNameBase + "5";
+														 String field6 = tNameBase + "6";
+														 String field7 = tNameBase + "7"; %>
+														 <div id="<%=divName%>" >
+															<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellSpacing=1>
 															<tr>
-																<td align="left" vAlign="bottom">
-																	<html:text name="fundingPledgesDetails" indexed="true" property="fundingDate" styleClass="inp-text"
-																	styleId="${indexFund}" readonly="true" size="10" />
+									                            <td align="center" valign="bottom" width="3%" >
+																	<input name="<%=field0%>" type="hidden" id="<%=field0%>" value='${fundingPledgesDetails.id}'/>
+										                        	<input type="checkbox" name="<%=field1%>" id="<%=field1%>" >
 																</td>
-																<td align="left" vAlign="bottom">&nbsp;
-																	<a id="transDate${indexFund}" href='javascript:pickDateById("transDate${indexFund}",${indexFund})'>
-																			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0" align="top">
-																		</a>
-																</td>														
-															</tr>
+																<td align="center" valign="bottom" width="17%">
+																	<select name="<%=field2%>" class="inp-text">
+																		<c:forEach var="type" items="${pledgeForm.pledgeTypeCategory}">
+																			<c:if test="${fundingPledgesDetails.pledgetypeid == type.id}">
+																				<option selected="true" value="<c:out value="${type.id}"/>">	
+																			</c:if>
+																			<c:if test="${fundingPledgesDetails.pledgetypeid != type.id}">
+																				<option value="<c:out value="${type.id}"/>">
+																			</c:if>
+																			<c:out value="${type.value}" />
+																			</option>
+																		</c:forEach>
+																	</select>
+									                            </td>
+																<td align="center" valign="bottom" width="20%">
+									                                <select name="<%=field3%>" class="inp-text">
+																		<c:forEach var="type" items="${pledgeForm.assistanceTypeCategory}">
+																			<c:if test="${fundingPledgesDetails.typeOfAssistanceid == type.id}">
+																				<option selected="true" value="<c:out value="${type.id}"/>">	
+																			</c:if>
+																			<c:if test="${fundingPledgesDetails.typeOfAssistanceid != type.id}">
+																				<option value="<c:out value="${type.id}"/>">
+																			</c:if>
+																			<c:out value="${type.value}" />
+																			</option>
+																		</c:forEach>
+																	</select>
+									                            </td>
+																<td align="center" valign="bottom" width="15%">
+																	<input type="text" name="<%=field4%>" value="<c:out value="${fundingPledgesDetails.amount}"/>" size="17" class="inp-text"/>
+									                            </td>
+																<td align="center" valign="bottom" width="10%">
+									                                <select name="<%=field5%>" class="inp-text">
+																		<c:forEach var="currency" items="${pledgeForm.validcurrencies}">
+																			<c:if test="${fundingPledgesDetails.currencycode == currency.currencyCode}">
+																				<option selected="true" value="<c:out value="${currency.currencyCode}"/>">	
+																			</c:if>
+																			<c:if test="${fundingPledgesDetails.currencycode != currency.currencyCode}">
+																				<option value="<c:out value="${currency.currencyCode}"/>">
+																			</c:if>
+																			<c:out value="${currency.currencyName}" />
+																			</option>
+																		</c:forEach>
+																	</select>
+									                            </td>
+																<td align="center" valign="bottom" width="15%">
+									                                <table cellPadding="0" cellSpacing="0">
+																		<tr>
+																			
+																			<td align="left" vAlign="bottom">
+																				<input type="text" name="<%=field6%>" id="<%=field6%>" readonly="true" value="<c:out value="${fundingPledgesDetails.fundingDate}"/>" size="10"  class="inp-text" />
+																			</td>
+																			<td align="left" vAlign="bottom">&nbsp;
+																				<a id="date1<%=field6%>" href='javascript:pickDateById("date1<%=field6%>","<%=field6%>")'>
+																					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																				</a>
+																			</td>														
+																		</tr>
+																	</table>
+									                            </td>
+																<td align="center" valign="bottom" width="20%">
+									                               <select name="<%=field7%>" class="inp-text">
+																		<c:forEach var="type" items="${pledgeForm.aidModalityCategory}">
+																			<c:if test="${fundingPledgesDetails.aidmodalityid == type.id}">
+																				<option selected="true" value="<c:out value="${type.id}"/>">	
+																			</c:if>
+																			<c:if test="${fundingPledgesDetails.aidmodalityid != type.id}">
+																				<option value="<c:out value="${type.id}"/>">
+																			</c:if>
+																			<c:out value="${type.value}" />
+																			</option>
+																		</c:forEach>
+																	</select>
+									                            </td>
+									                        </tr>
 														</table>
-						                            </td>
-													<td align="center" valign="bottom" width="20%">
-						                               <html:select name="fundingPledgesDetails" indexed="true" property="aidmodalityid" styleClass="inp-text">
-															<html:optionsCollection name="pledgeForm" property="aidModalityCategory" value="id"
-															label="value"/>
-														</html:select>
-						                            </td>
-						                        </tr>
-												</c:forEach>
-
-									    		</div>
+													</div>
+													</c:forEach>
+													</div>
+													</td>
+												</tr>
 												<tr>
 													<td colspan="4"> &nbsp;
-                                                           <html:button styleClass="dr-menu"  
-                                                                         property="submitButton" onclick="addFunding();">
-                                                                <digi:trn key="btn:addFunding">Add Funding</digi:trn>
-                                                            </html:button>
-															 &nbsp;
-	                                                 		<logic:notEmpty name="pledgeForm" property="fundingPledgesDetails">
-																<html:button styleClass="dr-menu" property="submitButton" onclick="return removeFunding()">
-	                                                            <digi:trn key="btn:removeFunding">Remove Funding</digi:trn>
-	                                                        	</html:button>
-															</logic:notEmpty>
+														<table>
+															<tr>
+																<td>
+		                                                           <html:button styleClass="dr-menu"  
+		                                                                         property="submitButton" onclick="addFunding();">
+		                                                                <digi:trn key="btn:addFunding">Add Funding</digi:trn>
+		                                                            </html:button>
+																	&nbsp;
+																</td>
+																<td>
+																	<div id="remBut" style="display:block;">
+																		<html:button styleClass="dr-menu" property="submitButton" onclick="return removeFunding()">
+			                                                            <digi:trn key="btn:removeFunding">Remove Funding</digi:trn>
+			                                                        	</html:button>
+																	</div>
+																</td>
+															</tr>
+														</table>
 	                                                </td>
 	                                            </tr>
 	                                        </table>
@@ -1175,6 +1222,128 @@ function setSameContact(){
 		</td>
 	</tr>
 </table>
+<script type="text/javascript">
+
+initFund();
+var numFund = <%=indexFund%>;
+var tempFund = numFund;
+
+function initFund(){
+	numFund = <%=indexFund%>;
+	tempFund = <%=indexFund%>;
+	if (tempFund==0){
+		var titles = document.getElementById('fundTitle');
+		titles.style.display="none";
+		var remBut = document.getElementById('remBut');
+		remBut.style.display="none";
+	}
+}
+
+function addFunding() {
+	var ni = document.getElementById('fundingDiv');
+	var divname = "fund_" + numFund;
+	var newdiv = document.createElement('div');
+	newdiv.setAttribute("id",divname);
+	var s = "<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellSpacing=1> <tr> <td align='center' valign='bottom' width='3%' >";
+	s += "<input name='fund_"+ numFund +"_0' type='hidden' id='fund_"+ numFund +"_0' value=''/> <input type='checkbox' id='fund_"+ numFund +"_1'/></td>";
+	s += "<td align='center' valign='bottom' width='17%'> <select name='fund_"+ numFund +"_2' class='inp-text'>";
+	<% Collection col = pledgeForm.getPledgeTypeCategory();
+	Iterator itr = col.iterator();
+	while (itr.hasNext()) {
+		AmpCategoryValue type = (AmpCategoryValue) itr.next();	
+		if (type != null){ %>
+				s += "<option value='<%=type.getId()%>'><%=type.getValue()%></option>";				  			
+		<% }
+	 }%>
+	 s += "</select> </td>";
+
+	s += "<td align='center' valign='bottom' width='20%'> <select name='fund_"+ numFund +"_3' class='inp-text'>";
+	<% Collection col2 = pledgeForm.getAssistanceTypeCategory();
+	Iterator itr2 = col2.iterator();
+	while (itr2.hasNext()) {
+		AmpCategoryValue type = (AmpCategoryValue) itr2.next();	
+		if (type != null){ %>
+				s += "<option value='<%=type.getId()%>'><%=type.getValue()%></option>";				  			
+		<% }
+	 }%>
+	 s += "</select> </td>";
+
+	s += "<td align='center' valign='bottom' width='15%'> <input type='text' name='fund_"+ numFund +"_4' size='17' class='inp-text'/> </td>";
+
+	s += "<td align='center' valign='bottom' width='10%'> <select name='fund_"+ numFund +"_5' class='inp-text'>";
+	<% Collection col3 = pledgeForm.getValidcurrencies();
+	Iterator itr3 = col3.iterator();
+	while (itr3.hasNext()) {
+		AmpCurrency currency = (AmpCurrency) itr3.next();	
+		if (currency != null){
+			if (currency.getCurrencyCode().equals(pledgeForm.getDefaultCurrency())) {%>
+				s += "<option selected='true' value='<%=currency.getCurrencyCode()%>'><%=currency.getCurrencyName()%></option>";				  			
+		<% } else { %>
+				s += "<option value='<%=currency.getCurrencyCode()%>'><%=currency.getCurrencyName()%></option>";
+		<%}
+		}
+	 }%>
+	 s += "</select> </td>";
+
+	s += "<td align='center' valign='bottom' width='15%'> <table cellPadding='0' cellSpacing='0'>";
+		s += "<tr> <td align='left' vAlign='bottom'> <input type='text' name='fund_"+ numFund +"_6' id='fund_"+ numFund +"_6' readonly='true' size='10' class='inp-text' />	</td>";
+		s += "<td align='left' vAlign='bottom'>&nbsp; <a id='date1fund_"+ numFund +"_6' href='javascript:pickDateById(\"date1fund_"+ numFund +"_6\",\"fund_"+ numFund +"_6\")'>";
+		s += "<img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0> </a> </td> </tr> </table> </td>";
+
+	s += "<td align='center' valign='bottom' width='20%'> <select name='fund_"+ numFund +"_7' class='inp-text'>";
+	<% Collection col4 = pledgeForm.getAidModalityCategory();
+	Iterator itr4 = col4.iterator();
+	while (itr4.hasNext()) {
+		AmpCategoryValue type = (AmpCategoryValue) itr4.next();	
+		if (type != null){ %>
+				s += "<option value='<%=type.getId()%>'><%=type.getValue()%></option>";				  			
+		<% }
+	 }%>
+	 s += "</select> </td> </tr> </table>";
+	
+	newdiv.innerHTML = s;
+	ni.appendChild(newdiv);
+	numFund++;
+	tempFund++;
+	var titles = document.getElementById('fundTitle');
+	titles.style.display="block";
+	var remBut = document.getElementById('remBut');
+	remBut.style.display="block";
+}
+
+function removeFunding()
+{
+	<c:set var="confirmDelete">
+	  <digi:trn key="aim:removeSelectedFundingMessage">
+	 	 Remove selected fundings?
+	  </digi:trn>
+	</c:set>
+	if (confirm("${confirmDelete}")){
+		var d = document.getElementById('fundingDiv');
+		var i = 0;
+		var flag = false;
+		while (i<=numFund){
+			if(document.getElementById("fund_"+i+"_1")!=null && document.getElementById("fund_"+i+"_1").checked==true){
+				var olddiv = document.getElementById("fund_"+i);
+				d.removeChild(olddiv);
+				tempFund--;
+				flag = true;
+			}
+			i++;
+		}
+		if (!flag){
+			alert ("Please, select a funding first.");
+		}
+	}
+	if (tempFund==0){
+		var titles = document.getElementById('fundTitle');
+		titles.style.display="none";
+		var remBut = document.getElementById('remBut');
+		remBut.style.display="none";
+	}
+}
+
+</script>
 
 </body>
 </digi:form>

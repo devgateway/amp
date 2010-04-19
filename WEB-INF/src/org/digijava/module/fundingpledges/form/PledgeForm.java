@@ -73,6 +73,22 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<AmpCategoryValue> pledgeTypeCategory = null;
 	private Collection<AmpCategoryValue> assistanceTypeCategory = null;
 	private Collection<AmpCategoryValue> aidModalityCategory = null;
+	private String defaultCurrency;
+	
+	
+	/**
+	 * @return the defaultCurrency
+	 */
+	public String getDefaultCurrency() {
+		return defaultCurrency;
+	}
+
+	/**
+	 * @param defaultCurrency the defaultCurrency to set
+	 */
+	public void setDefaultCurrency(String defaultCurrency) {
+		this.defaultCurrency = defaultCurrency;
+	}
 
 	/**
 	 * @return the fundingPledges

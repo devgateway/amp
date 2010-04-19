@@ -16,6 +16,8 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -23,6 +25,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class AddPledge extends Action {
 
@@ -141,6 +144,14 @@ public class AddPledge extends Action {
 	        	plForm.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
 	        	request.getSession().removeAttribute("pledgeId");
 			}
+	        TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+			if (teamMember.getAppSettings() != null) {
+				ApplicationSettings appSettings = teamMember.getAppSettings();
+				if (appSettings.getCurrencyId() != null) {
+					plForm.setDefaultCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()).getCurrencyCode());
+				}
+			}
+	        request.getSession().setAttribute("pledgeForm", plForm);
             return mapping.findForward("forward");
             
     }

@@ -57,8 +57,8 @@
 
 
 $("#previous_button").click(function () { 
-    var $tabs = $('ul#tabs');
-    var selected = $tabs.data('selected.tabs');
+    var $tabs = $('div#tab_container');
+    var selected = $tabs.tabs('option', 'selected');
     previousTab = selected-1;
     if(previousTab < 0) previousTab = 4;
 	$tabs.tabs('select', previousTab);
@@ -67,8 +67,8 @@ $("#previous_button").click(function () {
     });
 
 $("#next_button").click(function () { 
-    var $tabs = $('ul#tabs');
-    var selected = $tabs.data('selected.tabs');
+    var $tabs = $('div#tab_container');
+    var selected = $tabs.tabs('option', 'selected');
     nextTab = selected+1;
     if(nextTab > 4) nextTab = 0;
 	$tabs.tabs('select', nextTab); 
@@ -76,8 +76,8 @@ $("#next_button").click(function () {
     return false;
     });
 
-    var $tabs = $('ul#tabs');
-    $tabs.tabs('select', 1);
+//    var $tabs = $('ul#tabs');
+//    $tabs.tabs('select', 1);
     
 </script>
 <% end %>

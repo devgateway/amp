@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
   
   ##
   # Constants
-  NATIONAL_REGIONAL_OPTIONS = [['national', 1], ['regional', 2], ['regional_with_nicaraguan_component_available', 3]]
+  NATIONAL_REGIONAL_OPTIONS = [['national', 1], ['regional', 2]]
   STATUS_OPTIONS            = [['planned', 2, true], ['signed', 4, true], ['ongoing', 1, true], ['completed', 3]]
   
   MARKER_OPTIONS            = [['not_relevant', 0], ['significant', 1], ['principal_objective', 2]]
@@ -38,6 +38,7 @@ class Project < ActiveRecord::Base
   FIRST_YEAR_OF_RELEVANCE   = 2007
   FORECAST_RANGE            = 3
   
+  FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT   = 2005
     
   ##
   # Relations

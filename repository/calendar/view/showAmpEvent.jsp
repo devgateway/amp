@@ -377,28 +377,28 @@ function addOrganisation(orgId, orgName){
     return false;
   }
 
-  function addGuest(guest) {
-	if (is_mail(guest.value)) {
+    function addGuest(guest) {
 	    var list = document.getElementById('selreceivers');
 	    if (list == null || guest == null || guest.value == null || guest.value == "") {
-	      return;
+            return;
 	    }
 
-	var guestVal=guest.value;
+        var guestVal=guest.value;
 		
-	while(guestVal.indexOf(";")!=-1){		
-		var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
-		if (!checkEmail(optionValue)){
-			alert(validEmailmsg+' '+optionValue);
-			return false;
-	      }
-		if (isGuestAllreadyAdded(optionValue)){
-			alert(alreadyAdded+' '+optionValue);
-			return false;
+        while(guestVal.indexOf(";")!=-1){
+
+            var optionValue=guestVal.substring(0,guestVal.indexOf(";"));
+            if (!checkEmail(optionValue)){
+                alert(validEmailmsg+' '+optionValue);
+                return false;
+            }
+            if (isGuestAllreadyAdded(optionValue)){
+                alert(alreadyAdded+' '+optionValue);
+                return false;
+            }
+            guestVal=guestVal.substring(guestVal.indexOf(";")+1);
 	    }
-		 guestVal=guestVal.substring(guestVal.indexOf(";")+1);
-	    }
-	
+
 		var guestVal=guest.value;
 		while(guestVal.indexOf(";")!=-1){		
 			var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
@@ -406,23 +406,19 @@ function addOrganisation(orgId, orgName){
 		    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
 		}
 		if(guestVal.length>0){
-		if (!checkEmail(guestVal)){
-			alert(validEmailmsg+' '+guestVal);
-			return false;
-		}
+            if (!checkEmail(guestVal)){
+                alert(validEmailmsg+' '+guestVal);
+                return false;
+            }
 
-		if (isGuestAllreadyAdded(guestVal)){
-			alert(alreadyAdded+' '+guestVal);
-			return false;
-		}
+            if (isGuestAllreadyAdded(guestVal)){
+                alert(alreadyAdded+' '+guestVal);
+                return false;
+            }
 			addOption(list,guestVal,'g:'+guestVal);
 		}	
 	    guest.value = "";
-	} else {
-		alert("Please enter a valid email address !");
-		guest.focus();
-	}
-  }
+	} 
 
     function isGuestAllreadyAdded(guest){
 	  var selreceivers=document.getElementById('selreceivers');

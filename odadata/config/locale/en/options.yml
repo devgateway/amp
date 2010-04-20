@@ -23,7 +23,6 @@ en:
     # National/Regional
     national: National
     regional: Regional
-    regional_with_nicaraguan_component_available: Regional with Nicaraguan Component Available
     
     # Project Status
     planned: Planned but not yet signed
@@ -89,3 +88,7 @@ en:
 
     yes: "Yes"
     no: "No"
+
+    state: State
+    local_governments: Local Governments
+    public_enterprises: Public Enterprises

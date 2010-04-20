@@ -32,7 +32,7 @@ class Project < ActiveRecord::Base
 
 
   ENTRY_TYPES               = [['in_kind_cash', 1], ['in_kind_non_cash', 2], ['in_cash_under_donor', 3], ['in_cash_under_beneficiary', 4]]
-  LOAN_TO_PUBLIC_ENTERPRISES = [['yes', true], ['no', false]]
+  LOAN_TO_PUBLIC_ENTERPRISES = [['state', 1], ['local_governments', 2], ['public_enterprises', 2]]
 
   
   FIRST_YEAR_OF_RELEVANCE   = 2007

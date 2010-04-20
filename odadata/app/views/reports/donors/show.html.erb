@@ -2,4 +2,4 @@
 
 <%= Reports::ProjectReport.render_html(
 		:projects => @projects, 
-		:fields => %w(factsheet_link donor donor_project_number title total_commitments total_disbursements commitments_forecast disbursements_forecast start_date end_date)) %>
+		:fields => %w(factsheet_link donor donor_project_number title total_commitments total_disbursements commitments_forecast disbursements_forecast actual_start actual_end)) %>

@@ -529,7 +529,7 @@
 		showPanelLoading2(msg);
 		YAHOO.util.Connect.asyncRequest("POST", params1, callback2);
 	}
-
+	
 	function checkNumeric(objName,comma,period,hyphen)
 	{
 		var numberfield = objName;

@@ -332,13 +332,13 @@
 							<logic:notEmpty name="aimSelectOrganizationForm" property="organizations">
 								<tr>
 									<td align="left" vAlign="top">
-										<table width="100%" cellPadding="3">
+										<table width="100%" cellPadding="3" id="searchResults">
 											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">		
 												<tr>
 													<td bgcolor=#ECF3FD width="1%">&nbsp;</td>		
 													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">		
 														<td bgcolor="#ECF3FD" width="10%">
-															<html:multibox	property="selOrganisations">
+															<html:multibox	property="selOrganisations" styleClass="orgsMultibox">
 																<bean:write name="organisations" property="ampOrgId" />
 															</html:multibox>&nbsp;
 														</td>

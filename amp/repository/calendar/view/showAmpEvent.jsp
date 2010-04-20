@@ -183,12 +183,6 @@
 		showContent();
 	}
 
-	function selectOrg(params1, params2, params3, params4) {
-		var msg='\n<digi:trn>Select Organization</digi:trn>';
-		showPanelLoading(msg);
-		YAHOO.util.Connect.asyncRequest("POST", params1, callback);
-	}
-
 	-->
 
 </script>

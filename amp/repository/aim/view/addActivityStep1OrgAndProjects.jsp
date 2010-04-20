@@ -85,7 +85,7 @@
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();" styleClass="dr-menu"> <digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();" styleClass="dr-menu"> <digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
 																</td>
 																<td>
 																	<input type="button" value="<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>" class="dr-menu"

@@ -37,19 +37,18 @@
 </script>
 
 <script language="JavaScript">
-
-	<!--
-	var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+<!--	
+	var msgInvalidAmount="\n<digi:trn>Invalid amount entered for the transaction</digi:trn>";
 	function validateProposed(value) {
 	    if(value==""){
 	        <c:set var="message">
-	        <digi:trn key="aim:enterAmount">Please enter amount</digi:trn>
+	        <digi:trn>Please enter amount</digi:trn>
 	        </c:set>
 	        alert("${message}");
 	        return false;
 	      }else if(!checkAmountUsingSymbols(value,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>")){
 	        <c:set var="message">
-	        <digi:trn key="aim:invalidAmountValue">Invalid amount value</digi:trn>
+	        <digi:trn>Invalid amount value</digi:trn>
 	        </c:set>
 	        alert("${message}");
 	        return false;

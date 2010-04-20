@@ -49,6 +49,7 @@
 	}
 	//this is called from editActivityMenu.jsp
 	//window.onload=initSectorScript();
+	
 -->	
 </script>
 <style type="text/css">
@@ -167,16 +168,7 @@
 		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent();
 	}
-
-	function selectOrg(params1, params2, params3, params4) {
-		//alert(params);
-		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
-		showPanelLoading(msg);
-		//<digi:context name="commentUrl" property="/contentrepository/addTemporaryDocument.do" />
-	//	var url = "<%=commentUrl %>";
-		YAHOO.util.Connect.asyncRequest("POST", params1, callback);
-	}
-
+	
 	-->
 
 </script>

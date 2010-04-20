@@ -11,13 +11,55 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript">
-	function selectOrg(params1, params2, params3, params4) {
-		myPanel.cfg.setProperty("width","600px");
-		myPanel.cfg.setProperty("height","500px");
-		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
-		showPanelLoading(msg);
-		YAHOO.util.Connect.asyncRequest("POST", params1, callback);
-	}
+	
+function selectOrg(params1, params2, params3, params4) {
+	myPanel.cfg.setProperty("width","600px");
+	myPanel.cfg.setProperty("height","500px");
+	var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+	showPanelLoading(msg);
+	YAHOO.util.Connect.asyncRequest("POST", params1, callback);
+}
+
+var responseSuccessValidation = function(o){
+	/* Please see the Success Case section for more
+	 * details on the response object's properties.
+	 * o.tId
+	 * o.status
+	 * o.statusText
+	 * o.getResponseHeader[ ]
+	 * o.getAllResponseHeaders
+	 * o.responseText
+	 * o.responseXML
+	 * o.argument
+	 */		
+	var root=o.responseXML.getElementsByTagName('ORGANIZATIONS')[0].childNodes[0];
+    var selOrgs=root.getAttribute('amount');
+    if(selOrgs=='0'){
+    	<c:set var="translation">
+    		<digi:trn>Please choose an organization to add</digi:trn>
+    	</c:set>
+    	alert("${translation}");
+        checkAndClose=false;
+        return false;
+    }else{
+    	processAddOrganizations();
+    }		
+}	
+
+var responseFailureValidation = function(o){ 
+// Access the response object's properties in the 
+// same manner as listed in responseSuccess( ). 
+// Please see the Failure Case section and 
+// Communication Error sub-section for more details on the 
+// response object's properties.
+	alert("Connection Failure!"); 
+}  
+
+var validationCallback = 
+{ 
+	success:responseSuccessValidation, 
+	failure:responseFailureValidation 
+};
 
 	function checkNumeric(objName,comma,period,hyphen)
 	{
@@ -71,33 +113,12 @@
 
 
 	function validate() {
-		<c:set var="translation">
-			<digi:trn key="aim:chooseOrganizationToAdd">Please choose an organization to add</digi:trn>
-		</c:set>
-		if(document.aimSelectOrganizationForm.selectedOrganisationFromPages.value != "-1") return true;
-
-		if (document.aimSelectOrganizationForm.selOrganisations.checked != null) { // only one
-			if (document.aimSelectOrganizationForm.selOrganisations.checked == false) {
-				alert("${translation}");
-				return false;
-			}
+		var checkboxes=$("#searchResults").find("input.orgsMultibox:checked");
+		if(checkboxes!=null && checkboxes.length>0){
+			return true;
 		}
-		else { // many
-			var length = document.aimSelectOrganizationForm.selOrganisations.length;
-			var flag = 0;
-			for (i = 0;i < length;i ++) {
-				if (document.aimSelectOrganizationForm.selOrganisations[i].checked == true) {
-					flag = 1;
-					break;
-				}
-			}
-
-			if (flag == 0) {
-				alert("${translation}");
-				return false;
-			}
-		}
-		return true;
+		return false;
+		
 	}
 	
 	
@@ -115,21 +136,26 @@
 	}
 	
 	function selectOrganization() {
-		var flag = validate();
-		if (flag == false)
-			return false;
-		
-		<digi:context name="selOrg" property="/aim/selectOrganizationComponent.do"/>
-	    //document.aimSelectOrganizationForm.action = "<%= selOrg %>";
-		//document.aimSelectOrganizationForm.target = window.opener.name;
-		document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
-	    //document.aimSelectOrganizationForm.submit();
-	    checkAndClose=true;
-		var url = "<%=selOrg %>"
-		var params = "?edit=true&orgSelReset=false&subAction=organizationSelected"+getParams();    
-		YAHOO.util.Connect.asyncRequest("POST", url+params, callback);
 
-		return true;
+		var flag = validate();
+		if (flag == true){
+			processAddOrganizations();
+		}else{
+			<digi:context name="selOrg" property="/aim/selectOrganizationComponent.do?subAction=validate"/>
+			document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
+		    checkAndClose=true;
+			var urlParams="<%=selOrg%>";		
+			YAHOO.util.Connect.asyncRequest("POST", urlParams, validationCallback);	
+		}
+	}
+
+	function processAddOrganizations(){ //dare
+		<digi:context name="selOrg" property="/aim/selectOrganizationComponent.do"/>;
+		document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
+		checkAndClose=true;
+		var url = "<%=selOrg %>";
+		var params = "?edit=true&orgSelReset=false&subAction=organizationSelected"+getParams(); 
+		YAHOO.util.Connect.asyncRequest("POST", url+params, callback);
 	}
 
 	function resetForm() {
@@ -197,8 +223,6 @@
 		}
 		else return false;
 	}
-
-
 
 
 	function searchAlpha(val) {

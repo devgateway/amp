@@ -30,7 +30,7 @@
 	<li><%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name_with_code",
 				{ :required => true, :prompt => t('.prompt') }, :class => "large" %></li>
 	
-	<li><%= f.collection_select :country_strategy_id, @project.donor.country_strategies, "id", "strategy_number",
+	<li><%#= f.collection_select :country_strategy_id, @project.donor.country_strategies, "id", "strategy_number",
 	 		{ :prompt => t('.country_strategy_unavailable') }, :class => "large" %></li>
 	<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
 			:include_blank => t('.prompt'), :translate => true %></li>

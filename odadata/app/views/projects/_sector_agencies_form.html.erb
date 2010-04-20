@@ -47,7 +47,46 @@
 	<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
 				:include_blank => t('.prompt'), :translate => true %></li>
 	
-	<li class="fifty"><%= aid_modality_select(f) %></li>
+	<li>
+          <%= aid_modality_select(f) %>
+
+          <script>
+            // Selector behavior for aid_modality
+              $("#project_dummy_aid_modality_id").bind("change", function(e){
+                if ($("#project_dummy_aid_modality_id option:selected").attr("group") == "true")
+                {
+                  $("#" + $("#project_dummy_aid_modality_id option:selected").val()).attr("style", "display:block;")
+                }
+                else
+                {
+                  $("#project_dummy_aid_modality_id option").each(function(ev)
+                  {
+                    if($(this).attr("group") == "true")
+                      $("#" + $(this).val()).attr("style", "display:none");
+                  });
+                }
+              });
+
+              $("#project_dummy_aid_modality_id").change(function(ev){
+               if ($("#project_dummy_aid_modality_id option:selected").attr("group") != "true")
+                    $("#project_aid_modality_id").val($(this).val());
+                  else
+                    $("#project_aid_modality_id").val("");
+              });
+
+              $("#project_dummy_aid_modality_id option").each(function(ev)
+              {
+                if($(this).attr("group") == "true") {
+                  $("#" + $(this).val()).change(function(ev){
+                    $("#project_aid_modality_id").val($(this).val());
+                  });
+                }
+              });
+
+            $("#project_dummy_aid_modality_id").change()
+
+          </script>
+        </li>
 	
 	<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
 				 :include_blank => t('.prompt'), :translate => true %></li>
@@ -92,6 +131,41 @@
 		</select>
 	</li>
 
+	<li id="delegated_cooperation">
+		<% f.fields_for :delegated_cooperation, @project.delegated_cooperation || @project.build_delegated_cooperation do |dc| %>			
+			<%= dc.collection_select :delegating_donor_id, Donor.ordered, :id, :name, 
+				{ :prompt => t('.prompt') }, :class => 'dynamic_select parent large' %>
+    
+			<%= dc.related_collection_select :delegating_agency_id, :donor_id, 
+				Donor.ordered, :'agencies.ordered', :name, :id, :name, 
+				{ :prompt => t('.not_avail') }, :class => 'dynamic_select child large' %>
+		<% end %>
+	</li>	
+	<li><%= f.text_field :website, :class => "large" %></li>
+	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>
+
+	
+<% end %>
+
+<!--
+<%# f.field_set Project.human_attribute_name('markers') do %>
+	<li class="thirty"><%= f.select :biodiversity_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty"><%= f.select :climate_change_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty"><%= f.select :desertification_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	
+	<li class="thirty"><%= f.select :gender_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty"><%= f.select :environment_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty" style="height: 45px"></li>
+<%# end %>
+-->
+<% f.field_set Project.human_attribute_name('officer_responsible') do %>
+	<li class="thirty"><%= f.text_field :officer_responsible_name %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_phone %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_email %></li>
+<% end %>
+
+
+
   <script type="text/javascript" charset="utf-8">
 		$(function() {
       $("#project_donor_agency_id").bind("change", recalculate_government_code);
@@ -134,7 +208,7 @@
       on_off_cut = $("#project_single_treasury_account");
       type_of_funding = $("#project_grant_loan");
       aid_modality = $("#project_aid_modality_id");
-    
+
       switch(on_off_cut.val()){
               case "true":
                       number1 = 1
@@ -175,7 +249,7 @@
                       }
               break;
       }
-    
+
       if(aid_modality.val() == 1){
         number3 = 1;
       }
@@ -183,49 +257,17 @@
         number3 = 3;
       }
       else if (aid_modality.val() == 1){
-    
+
       }
-      
+
       government_project_code = $("#project_government_project_code");
       //Extract the Agency Code
-    
+
       donor_agency_code = ($("#project_donor_agency_id option:selected").val() == "") ? "" : $("#project_donor_agency_id option:selected").text().split(" - ")[0];
 
       government_counterpart_code = ($("#project_government_counterpart_id option:selected").val() == "") ? "" : $("#project_government_counterpart_id option:selected").text().split(" - ")[0];
-      
+
       government_project_code.val(number1 + "" + number2 + "" + number3 + "" + donor_agency_code + "" + government_counterpart_code);
 
     }
 	</script>
-
-	<li id="delegated_cooperation">
-		<% f.fields_for :delegated_cooperation, @project.delegated_cooperation || @project.build_delegated_cooperation do |dc| %>			
-			<%= dc.collection_select :delegating_donor_id, Donor.ordered, :id, :name, 
-				{ :prompt => t('.prompt') }, :class => 'dynamic_select parent large' %>
-    
-			<%= dc.related_collection_select :delegating_agency_id, :donor_id, 
-				Donor.ordered, :'agencies.ordered', :name, :id, :name, 
-				{ :prompt => t('.not_avail') }, :class => 'dynamic_select child large' %>
-		<% end %>
-	</li>	
-	<li><%= f.text_field :website, :class => "large" %></li>
-	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>
-
-	
-<% end %>
-
-<% f.field_set Project.human_attribute_name('markers') do %>	
-	<li class="thirty"><%= f.select :biodiversity_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-	<li class="thirty"><%= f.select :climate_change_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-	<li class="thirty"><%= f.select :desertification_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-	
-	<li class="thirty"><%= f.select :gender_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-	<li class="thirty"><%= f.select :environment_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-	<li class="thirty" style="height: 45px"></li>
-<% end %>
-
-<% f.field_set Project.human_attribute_name('officer_responsible') do %>
-	<li class="thirty"><%= f.text_field :officer_responsible_name %></li>
-	<li class="thirty"><%= f.text_field :officer_responsible_phone %></li>
-	<li class="thirty"><%= f.text_field :officer_responsible_email %></li>
-<% end %>

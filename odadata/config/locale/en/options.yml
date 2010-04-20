@@ -89,6 +89,7 @@ en:
     yes: "Yes"
     no: "No"
 
+    not_apply: "No"
     state: State
     local_governments: Local Governments
     public_enterprises: Public Enterprises

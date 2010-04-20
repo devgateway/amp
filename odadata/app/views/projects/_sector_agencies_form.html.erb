@@ -69,8 +69,10 @@
               });
 
               $("#dummy_aid_modality_id").change(function(ev){
-               if ($("#dummy_aid_modality_id option:selected").attr("group") != "true")
+               if ($("#dummy_aid_modality_id option:selected").attr("group") != "true"){
                     $("#project_aid_modality_id").val($(this).val());
+                    $("#project_aid_modality_id").change();
+               }
               });
 
 
@@ -91,13 +93,12 @@
                 if($(this).attr("group") == "true") {
                   $("#" + $(this).val()).change(function(ev){
                     $("#project_aid_modality_id").val($(this).val());
+                    $("#project_aid_modality_id").change();
                   });
                 }
               });
               $("#dummy_aid_modality_id").change()
             });
-
-
           </script>
         </li>
 	
@@ -181,18 +182,32 @@
 
   <script type="text/javascript" charset="utf-8">
           $(function() {
+            var foodAidId = 23; //Awful hard coding of special case
+            $("#project_aid_modality_id").bind("change", function(){
+              recalculate_government_code();
+              if ($("#project_aid_modality_id").val() != foodAidId && $("#project_single_treasury_account").val() == "true" )
+                $('#enters_in').hide();
+              else
+                $('#enters_in').show();
+            });
 
-            $("#project_aid_modality_id").bind("change", recalculate_government_code);
             $("#project_donor_agency_id").bind("change", recalculate_government_code);
             $("#project_government_counterpart_id").bind("change", recalculate_government_code);
+            $("#project_loan_to_public_enterprises").bind("change", recalculate_government_code);
+            $("#project_enters_in").bind("change", recalculate_government_code);
+
             dropdown_single_treasury_account = $('#project_single_treasury_account');
             enter_in_label = $('#enters_in');
 
             dropdown_single_treasury_account.bind("change", function(e) {
               if(this.value == "false") {
+                //Added exception for Food Aid, Id = 23
                 enter_in_label.show();
               } else {
-                enter_in_label.hide();
+                if ($("#project_aid_modality_id").val() == foodAidId )
+                  enter_in_label.show();
+                else
+                  enter_in_label.hide();
               }
               recalculate_government_code();
             });
@@ -215,9 +230,9 @@
 
           });
 
-
           function recalculate_government_code()
           {
+
             var number1 = "-";
             var number2 = "-";
             var number3 = "-";
@@ -232,23 +247,26 @@
                 break;
               case "false":
                 number1 = 2
-                var project_enters_in = $("#project_enters_in");
-                switch(project_enters_in.val()){
-                  case "1":
-                    number3 = 2;
-                    break;
-                  case "2":
-                    number3 = 8;
-                    break;
-                  case "3":
-                    number3 = 7;
-                    break;
-                  case "4":
-                    number3 = 5;
-                    break;
-                }
                 break;
             }
+            if(on_off_cut.val() == "false" || aid_modality.val() == 23) {
+              var project_enters_in = $("#project_enters_in");
+              switch(project_enters_in.val()){
+                case "1": //In Kind Convertible In Cash
+                  number3 = 2;
+                  break;
+                case "2": //In Kind Not Convertible In Cash
+                  number3 = 8;
+                  break;
+                case "3": //In Cash under Donor Management
+                  number3 = 7;
+                  break;
+                case "4": //In Cash under Beneficiary/Government Management
+                  number3 = 5;
+                  break;
+              }
+            }
+
             switch(type_of_funding.val()) {
               case "1":
                 number2 = 3;
@@ -256,33 +274,33 @@
               case "2":
                 number2 = 5;
                 project_loan_to_public_enterprises = $("#project_loan_to_public_enterprises");
-                switch(project_loan_to_public_enterprises.val()){
-                  case "true":
+                if(project_loan_to_public_enterprises.val() != "0")
                     number3 = 6;
-                    break;
-                  case "false":
-                    break;
-                }
                 break;
             }
 
-            if(aid_modality.val() == 1){
+            commonFunds = [2,3,4,5,6,7,8,9,10,11,12,13,14,22];
+            projects = 15;
+            if(aid_modality.val() == 1) //General Budget Support
+            {
               number3 = 1;
             }
-            else if(aid_modality.val() > 1 && aid_modality.val() < 15)  { //Common Funds
-              number3 = 3;
+            else if(projects ==  aid_modality.val()){
+//              number3 = 3;
             }
-            else if (aid_modality.val() == 1){
-
+            else
+            {
+              $.each(commonFunds, function(index, value) {
+                if(value ==  aid_modality.val()){
+                  number3 = 3;
+                }
+              });
             }
 
             government_project_code = $("#project_government_project_code");
             //Extract the Agency Code
-
             donor_agency_code = ($("#project_donor_agency_id option:selected").val() == "") ? "" : $("#project_donor_agency_id option:selected").text().split(" - ")[0];
-
             government_counterpart_code = ($("#project_government_counterpart_id option:selected").val() == "") ? "" : $("#project_government_counterpart_id option:selected").text().split(" - ")[0];
-
             government_project_code.val(number1 + "" + number2 + "" + number3 + "" + donor_agency_code + "" + government_counterpart_code);
 
           }

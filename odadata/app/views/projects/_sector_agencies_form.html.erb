@@ -52,29 +52,41 @@
 
           <script>
             // Selector behavior for aid_modality
-              $("#project_dummy_aid_modality_id").bind("change", function(e){
-                if ($("#project_dummy_aid_modality_id option:selected").attr("group") == "true")
+              $("#dummy_aid_modality_id").bind("change", function(e){
+                if ($("#dummy_aid_modality_id option:selected").attr("group") == "true")
                 {
-                  $("#" + $("#project_dummy_aid_modality_id option:selected").val()).attr("style", "display:block;")
+                  $("#" + $("#dummy_aid_modality_id option:selected").val()).attr("style", "display:block;");
                 }
                 else
                 {
-                  $("#project_dummy_aid_modality_id option").each(function(ev)
+                  $("#dummy_aid_modality_id option").each(function(ev)
                   {
-                    if($(this).attr("group") == "true")
+                    if($(this).attr("group") == "true"){
                       $("#" + $(this).val()).attr("style", "display:none");
+                    }
                   });
                 }
               });
 
-              $("#project_dummy_aid_modality_id").change(function(ev){
-               if ($("#project_dummy_aid_modality_id option:selected").attr("group") != "true")
+              $("#dummy_aid_modality_id").change(function(ev){
+               if ($("#dummy_aid_modality_id option:selected").attr("group") != "true")
                     $("#project_aid_modality_id").val($(this).val());
-                  else
-                    $("#project_aid_modality_id").val("");
               });
 
-              $("#project_dummy_aid_modality_id option").each(function(ev)
+
+            $(document).ready(function(){
+              if ($("#project_aid_modality_id").val() != "") {
+                $("#dummy_aid_modality_id option").each(function(){
+                  if($(this).attr("group") == "true") {
+                    $("#" + $(this).val() + " option").each(function(){
+                      if($(this).val() == $("#project_aid_modality_id").val()){
+                        $("#dummy_aid_modality_id").val($(this).parent().attr("id"));
+                      }
+                    });
+                  }
+                });
+              }
+              $("#dummy_aid_modality_id option").each(function(ev)
               {
                 if($(this).attr("group") == "true") {
                   $("#" + $(this).val()).change(function(ev){
@@ -82,8 +94,9 @@
                   });
                 }
               });
+              $("#dummy_aid_modality_id").change()
+            });
 
-            $("#project_dummy_aid_modality_id").change()
 
           </script>
         </li>
@@ -169,6 +182,7 @@
   <script type="text/javascript" charset="utf-8">
           $(function() {
 
+            $("#project_aid_modality_id").bind("change", recalculate_government_code);
             $("#project_donor_agency_id").bind("change", recalculate_government_code);
             $("#project_government_counterpart_id").bind("change", recalculate_government_code);
             dropdown_single_treasury_account = $('#project_single_treasury_account');

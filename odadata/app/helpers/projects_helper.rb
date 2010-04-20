@@ -17,6 +17,6 @@ module ProjectsHelper
       s << select_tag(k, blank_option + options_from_collection_for_select(values, :id, :name, form.object.aid_modality_id), :style => "display:none;")
     end
 
-    form.label(:aid_modality_id) + hidden_field_tag("#{form.object_name}[aid_modality_id]", form.object.aid_modality_id) + select_tag("#{form.object_name}[dummy_aid_modality_id]", blank_option + ungrouped + groups) + grouped
+    form.label(:aid_modality_id) + hidden_field_tag("#{form.object_name}[aid_modality_id]", form.object.aid_modality_id) + select_tag("dummy_aid_modality_id", blank_option + ungrouped + groups) + grouped
   end
 end

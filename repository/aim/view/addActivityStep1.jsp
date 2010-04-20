@@ -273,10 +273,10 @@
 </script>
 <script language="JavaScript">
 <!--
-	
+	 
 function checkSelOrgs() {
 	<c:set var="translation">
-		<digi:trn key="aim:chooseOrganizationToRemove">Please choose an organization to remove</digi:trn>
+		<digi:trn>Please choose an organization to remove</digi:trn>
 	</c:set>
 	
 	if (document.getElementsByName('identification.selOrgs').checked != null) { // only one org. added

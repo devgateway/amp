@@ -66,29 +66,29 @@ public class AddFundingDetail extends Action {
 		event = formBean.getFunding().getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
-
-		if (event.equals("importFundingDetail") && formBean.getFileImport() != null) //If this is an import, means we have to look for the file and parse it
-		{
-			String error = importFunding(formBean, teamMember);
-			if (error != null && !error.equals("")){
-				try {
-					ActionErrors errors = new ActionErrors();
-					errors.add("title", new ActionError(
-								"error.aim.addActivity.importFunding.error", TranslatorWorker.translateText("Error in the structure/data of the file. Please review.", locale, siteId)));
-					saveErrors(request, errors);								
-				} catch (WorkerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		if (event!=null) {
+			if (event.equals("importFundingDetail") && formBean.getFileImport() != null) //If this is an import, means we have to look for the file and parse it
+			{
+				String error = importFunding(formBean, teamMember);
+				if (error != null && !error.equals("")){
+					try {
+						ActionErrors errors = new ActionErrors();
+						errors.add("title", new ActionError(
+									"error.aim.addActivity.importFunding.error", TranslatorWorker.translateText("Error in the structure/data of the file. Please review.", locale, siteId)));
+						saveErrors(request, errors);								
+					} catch (WorkerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+	
+	
+				return mapping.findForward("forward");
 			}
-
-
-			return mapping.findForward("forward");
+			else if(event.equals("importFundingDetailDone")){
+				return mapping.findForward("confirmed");
+			}
 		}
-		else if(event.equals("importFundingDetailDone")){
-			return mapping.findForward("confirmed");
-		}
-
 		
 		
 		String currCode = Constants.DEFAULT_CURRENCY;
@@ -100,64 +100,64 @@ public class AddFundingDetail extends Action {
 		}
 
 		long index = formBean.getFunding().getTransIndexId();
-                if(event!=null){
-		String subEvent = event.substring(0,3);
-		FundingDetail fd = null;
-		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
-			if (formBean.getFunding().getFundingDetails() == null) {
-				fundingDetails = new ArrayList<FundingDetail>();
-				fd = getFundingDetail(currCode);
-				fundingDetails.add(fd);
-			} else {
-				fundingDetails = new ArrayList<FundingDetail>(formBean.getFunding().getFundingDetails());
-				if (subEvent.equals("del")) {
-					FundingDetail temp = new FundingDetail();
-					temp.setIndexId(index);
-                                        temp=(FundingDetail)fundingDetails.get(fundingDetails.indexOf(temp));
-                                        Iterator <FundingDetail> iter=fundingDetails.iterator();
-                                        while(iter.hasNext()){
-                                              FundingDetail det=iter.next();
-                                              if (det.getTransactionType()==Constants.DISBURSEMENT&&
-                                                  det.getDisbOrderId() != null &&
-                                                  det.getDisbOrderId().equals(temp.getDisbOrderId())) {
-                                                      det.setDisbOrderId(null);
-                                              }
-                                        }
-					fundingDetails.remove(temp);
-				} else {
+        if(event!=null && event.length()>3){
+			String subEvent = event.substring(0,3);
+			FundingDetail fd = null;
+			if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
+				if (formBean.getFunding().getFundingDetails() == null) {
+					fundingDetails = new ArrayList<FundingDetail>();
 					fd = getFundingDetail(currCode);
 					fundingDetails.add(fd);
+				} else {
+					fundingDetails = new ArrayList<FundingDetail>(formBean.getFunding().getFundingDetails());
+					if (subEvent.equals("del")) {
+						FundingDetail temp = new FundingDetail();
+						temp.setIndexId(index);
+	                                        temp=(FundingDetail)fundingDetails.get(fundingDetails.indexOf(temp));
+	                                        Iterator <FundingDetail> iter=fundingDetails.iterator();
+	                                        while(iter.hasNext()){
+	                                              FundingDetail det=iter.next();
+	                                              if (det.getTransactionType()==Constants.DISBURSEMENT&&
+	                                                  det.getDisbOrderId() != null &&
+	                                                  det.getDisbOrderId().equals(temp.getDisbOrderId())) {
+	                                                      det.setDisbOrderId(null);
+	                                              }
+	                                        }
+						fundingDetails.remove(temp);
+					} else {
+						fd = getFundingDetail(currCode);
+						fundingDetails.add(fd);
+					}
 				}
+				if (fd != null && fd.getTransactionType() == 0) {
+					formBean.getFunding().setNumComm(formBean.getFunding().getNumComm() + 1);
+				} else if (fd != null && fd.getTransactionType() == 1) {
+					formBean.getFunding().setNumDisb(formBean.getFunding().getNumDisb() + 1);
+				} else if (fd != null && fd.getTransactionType() == 2) {
+					formBean.getFunding().setNumExp(formBean.getFunding().getNumExp() + 1);
+				}
+	                        else if (fd != null && fd.getTransactionType() == 4) {
+	                                int numDisbOrder=formBean.getFunding().getNumDisbOrder() + 1;
+	                                formBean.getFunding().setNumDisbOrder(numDisbOrder);
+	                                Iterator<FundingDetail> iter=fundingDetails.iterator();
+	                                long max=100;
+	                                while(iter.hasNext()){
+	                                       FundingDetail det=iter.next();
+	                                       if(det.getDisbOrderId()!=null&&!det.getDisbOrderId().equals("")){
+	                                                 int id = Integer.parseInt(det.getDisbOrderId());
+	                                                 if (max < id) {
+	                                                   max = id;
+	                                                 }
+	
+	                                       }
+	
+	
+	                                }
+	                                fd.setDisbOrderId(""+(++max));
+	                        }
+				formBean.getFunding().setFundingDetails(fundingDetails);
 			}
-			if (fd != null && fd.getTransactionType() == 0) {
-				formBean.getFunding().setNumComm(formBean.getFunding().getNumComm() + 1);
-			} else if (fd != null && fd.getTransactionType() == 1) {
-				formBean.getFunding().setNumDisb(formBean.getFunding().getNumDisb() + 1);
-			} else if (fd != null && fd.getTransactionType() == 2) {
-				formBean.getFunding().setNumExp(formBean.getFunding().getNumExp() + 1);
-			}
-                        else if (fd != null && fd.getTransactionType() == 4) {
-                                int numDisbOrder=formBean.getFunding().getNumDisbOrder() + 1;
-                                formBean.getFunding().setNumDisbOrder(numDisbOrder);
-                                Iterator<FundingDetail> iter=fundingDetails.iterator();
-                                long max=100;
-                                while(iter.hasNext()){
-                                       FundingDetail det=iter.next();
-                                       if(det.getDisbOrderId()!=null&&!det.getDisbOrderId().equals("")){
-                                                 int id = Integer.parseInt(det.getDisbOrderId());
-                                                 if (max < id) {
-                                                   max = id;
-                                                 }
-
-                                       }
-
-
-                                }
-                                fd.setDisbOrderId(""+(++max));
-                        }
-			formBean.getFunding().setFundingDetails(fundingDetails);
-		}
-                }
+        }
 		formBean.getFunding().setEvent(null);
 		formBean.getFunding().setDupFunding(true);
 		formBean.getFunding().setFirstSubmit(false);

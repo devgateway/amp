@@ -241,8 +241,10 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
       partial           = opts[:partial] || name
       local_assign_name = partial.split('/').last.split('.').first
       
-      fields_for(association_name(name), associated, (opts[:fields_for] || {}).merge(:name => name)) do |f|
-        @template.concat(@template.render({:partial => "#{partial}", :locals => {local_assign_name.to_sym => f.object, :f => f}.merge(opts[:locals] || {})}.merge(opts[:render] || {})))
+      returning("") do |output|
+        fields_for(association_name(name), associated, (opts[:fields_for] || {}).merge(:name => name)) do |f|
+          output << @template.render({:partial => "#{partial}", :locals => {local_assign_name.to_sym => f.object, :f => f}.merge(opts[:locals] || {})}.merge(opts[:render] || {}))
+        end
       end
     end
   end

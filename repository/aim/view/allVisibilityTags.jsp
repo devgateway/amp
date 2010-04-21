@@ -670,7 +670,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Proposed Project Planned" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Purpose" feature="Identification"></field:display> 
-<field:display name="Recievers" feature="Create Message Form"></field:display> 
+<field:display name="Recievers" feature="Create Message Form"></field:display>
+<field:display name="Country" feature="Location"></field:display> 
 <field:display name="Region" feature="Location"></field:display>
 <field:display name="Zone" feature="Location"></field:display>
 <field:display name="District" feature="Location"></field:display> 

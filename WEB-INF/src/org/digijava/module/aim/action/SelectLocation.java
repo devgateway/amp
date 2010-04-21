@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.SelectLocationForm;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -32,6 +33,16 @@ public class SelectLocation extends SelectorAction{
         AmpCategoryValue implLevel		= CategoryManagerUtil.getAmpCategoryValueFromDb( selectTestForm.getImplemLevel() );
         String cIso						= FeaturesUtil.getDefaultCountryIso();
         AmpCategoryValueLocations defCountry		= DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        
+        boolean setFullPercForDefaultCountry	= false;
+        if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) && 
+        		implLevel!=null && implLocValue!=null &&
+				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) && 
+				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) 
+				) {
+        	setFullPercForDefaultCountry 		= true;
+        	eaForm.getLocation().setAllowDividePercentageButton(false);
+        }
 
 		Long [] userSelectedLocs		= selectTestForm.getUserSelectedLocs();
 		boolean defCountryInSelection	= false;
@@ -43,9 +54,7 @@ public class SelectLocation extends SelectorAction{
 				if ( ampCVLocation.getId().longValue()==defCountry.getId().longValue() ) 
 					defCountryInSelection	= true;
 			}
-			if ( !defCountryInSelection && implLevel!=null && implLocValue!=null &&
-					CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) && 
-					CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {
+			if ( !defCountryInSelection && setFullPercForDefaultCountry ) {
 				userSelectedLocsColl.add(defCountry);
 			}
 			for (AmpCategoryValueLocations ampCVLocation: userSelectedLocsColl ) {
@@ -56,14 +65,14 @@ public class SelectLocation extends SelectorAction{
 				location.setLocId( ampCVLocation.getId() );
 				location.setPercent(0);
 				
-				if ( implLevel!=null && implLocValue!=null &&
-						CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) && 
-						CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {
+				if ( setFullPercForDefaultCountry ) {
 					if ( CategoryManagerUtil.equalsCategoryValue(ampCVLocation.getParentCategoryValue(), 
 							CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {
-						location.setPercentageBlocked(true);
-						if ( ampCVLocation.getId().longValue() == defCountry.getId().longValue() )
+						if ( ampCVLocation.getId().longValue() == defCountry.getId().longValue() ) {
 							location.setPercent(100);
+						}
+						else
+							location.setPercentageBlocked(true);
 					}
 				}
 				
@@ -73,7 +82,7 @@ public class SelectLocation extends SelectorAction{
 						eaForm.getLocation().setSelectedLocs(new ArrayList<Location>());
 					}
 					if (!eaForm.getLocation().getSelectedLocs().contains(location)) {
-						if (eaForm.getLocation().getSelectedLocs().size()==0) {
+						if (eaForm.getLocation().getSelectedLocs().size()==0 && !setFullPercForDefaultCountry ) {
 							location.setPercent(100);
 						}
 						eaForm.getLocation().getSelectedLocs().add(location);

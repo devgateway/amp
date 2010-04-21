@@ -301,10 +301,11 @@ public class ProjectFicheExport extends Action {
 				nationalTotal = nationalCentral.add(nationalRegional).add(nationalIFIs);
 				
 				totalCost = euTotal.add(nationalTotal).add(privateTotal);
-				
-				euPercent = euTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
-				nationalPercent = nationalTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
-				privatePercent = privateTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
+				if (!totalCost.equals(BigDecimal.ZERO)) {
+                    euPercent = euTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
+                    nationalPercent = nationalTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
+                    privatePercent = privateTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
+                }
 			}
 			
 			public void add(TableHelper x){

@@ -59,6 +59,8 @@ en:
           label: Aid Modality
         single_treasury_account:
           label: Single Treasury Account
+        on_budget:
+          label: On Budget
         government_project_code:
           label: Government Budget Code
         enters_in:
@@ -202,6 +204,22 @@ en:
           label: Country Flag or Organisation Logo
         profile_picture: 
           label: Representative Picture of Donor Country (for EU Blue Book)
+        oda_on_budget_1:
+          label: used national budget execution procedures
+        oda_on_budget_1_currency:
+          label: "Currency"
+        oda_on_budget_2:
+          label: used national financial reporting procedures
+        oda_on_budget_2_currency:
+          label: "Currency"
+        oda_on_budget_3:
+          label: used national auditing procedures
+        oda_on_budget_3_currency:
+          label: "Currency"
+        oda_on_budget_4:
+          label: used national procurement systems in calendar
+        oda_on_budget_4_currency:
+          label: "Currency"
         
       exchange_rate:
         currency: 

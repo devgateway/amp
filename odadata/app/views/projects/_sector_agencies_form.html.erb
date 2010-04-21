@@ -102,7 +102,7 @@
           </script>
         </li>
 	
-	<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
+	<li><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
 				 :include_blank => t('.prompt'), :translate => true %></li>
 	
 
@@ -122,15 +122,21 @@
 			dropdown.trigger('change');
 		});
 	</script>
-
         <li>
+          <%= f.select :on_budget, Project::ON_OFF_BUDGET,
+				:include_blank => ll(:options, :prompt), :translate => true %>
+        </li>
+
+        <li id="single_treasury_account">
           <%= f.select :single_treasury_account, Project::ON_OFF_CUT,
 				:include_blank => ll(:options, :prompt), :translate => true %>
         </li>
+
         <li id="enters_in">
           <%= f.select :enters_in, Project::ENTRY_TYPES,
 				:include_blank => ll(:options, :prompt), :translate => true %>
         </li>
+
         <li id="loan_to_public_enterprises">
           <%= f.select :loan_to_public_enterprises, Project::LOAN_TO_PUBLIC_ENTERPRISES,
 				:include_blank => ll(:options, :prompt), :translate => true %>
@@ -187,8 +193,10 @@
               recalculate_government_code();
               if ($("#project_aid_modality_id").val() != foodAidId && $("#project_single_treasury_account").val() == "true" )
                 $('#enters_in').hide();
-              else
+              else{
                 $('#enters_in').show();
+                $('#single_treasury_account').show();
+              }
             });
 
             $("#project_donor_agency_id").bind("change", recalculate_government_code);
@@ -196,9 +204,22 @@
             $("#project_loan_to_public_enterprises").bind("change", recalculate_government_code);
             $("#project_enters_in").bind("change", recalculate_government_code);
 
+            dropdown_on_off_budget = $('#project_on_budget');
+            single_treasury_account_label = $('#single_treasury_account');
+
+            dropdown_on_off_budget.bind("change", function(e) {
+              if(this.value == "false" || this.value == "") {
+                single_treasury_account_label.hide();
+              }
+              else
+              {
+                single_treasury_account_label.show();
+              }
+            });
+            dropdown_on_off_budget.trigger('change');
+
             dropdown_single_treasury_account = $('#project_single_treasury_account');
             enter_in_label = $('#enters_in');
-
             dropdown_single_treasury_account.bind("change", function(e) {
               if(this.value == "false") {
                 //Added exception for Food Aid, Id = 23

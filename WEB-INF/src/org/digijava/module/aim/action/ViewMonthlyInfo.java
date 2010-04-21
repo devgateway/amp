@@ -152,7 +152,7 @@ public class ViewMonthlyInfo extends TilesAction {
                             MonthlyInfo info = (MonthlyInfo) iterInfo.next();
 
                             totalActual = totalActual.add(info.getActualAmount());
-                            totalPlanned = totalActual.add(info.getPlannedAmount());
+                            totalPlanned = totalPlanned.add(info.getPlannedAmount());
                     }
                         monthlyForm.setTotalActual(totalActual);
                         monthlyForm.setTotalPlanned(totalPlanned);

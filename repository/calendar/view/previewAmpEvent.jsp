@@ -28,11 +28,12 @@ function deleteEvent(){
 	if(confirm(err))
 	{
 		document.getElementById('hdnMethod').value = "delete";
+		document.calendarEventForm.submit();
 		return true;
 	} else {
-		document.getElementById('hdnMethod').value = "preview";
+		return false;
 	}
-	return false;
+	
 }
 
 
@@ -272,7 +273,7 @@ function getWeekdays(){
 				                	&nbsp;
 				                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
 				                	&nbsp;
-				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
+				                	<input type="button" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
 				                </c:if>
 				                <c:if test="${calendarEventForm.actionButtonsVisible==false}">
 				                	&nbsp;

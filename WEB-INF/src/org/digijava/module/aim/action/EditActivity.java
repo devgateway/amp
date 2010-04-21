@@ -1829,11 +1829,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 		if (componentes != null && componentes.size() > 0) {
 			Collection activitySectors = new ArrayList();
-			Iterator<AmpActivityComponente> sectItr = componentes.iterator();
-			while (sectItr.hasNext()) {
-				AmpActivityComponente ampActSect =  sectItr.next();
-				if (ampActSect != null) {
-					AmpSector sec = ampActSect.getSector();
+			Iterator<AmpActivityComponente> compItr = componentes.iterator();
+			while (compItr.hasNext()) {
+				AmpActivityComponente ampActComponente =  compItr.next();
+				if (ampActComponente != null) {
+					AmpSector sec = ampActComponente.getSector();
 					if (sec != null) {
 						AmpSector parent = null;
 						AmpSector subsectorLevel1 = null;
@@ -1850,30 +1850,30 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 						} else {
 							parent = sec;
 						}
-						ActivitySector actCompo = new ActivitySector();
+						ActivitySector actSector = new ActivitySector();
 						if (parent != null) {
-							actCompo.setId(parent.getAmpSectorId());
+							actSector.setId(parent.getAmpSectorId());
 							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
 							if (view != null)
 								if (view.equalsIgnoreCase("On")) {
-									actCompo.setCount(1);
+									actSector.setCount(1);
 								} else {
-									actCompo.setCount(2);
+									actSector.setCount(2);
 								}
 
-							actCompo.setSectorId(parent.getAmpSectorId());
-							actCompo.setSectorName(parent.getName());
+							actSector.setSectorId(parent.getAmpSectorId());
+							actSector.setSectorName(parent.getName());
 							if (subsectorLevel1 != null) {
-								actCompo.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
-								actCompo.setSubsectorLevel1Name(subsectorLevel1.getName());
+								actSector.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
+								actSector.setSubsectorLevel1Name(subsectorLevel1.getName());
 								if (subsectorLevel2 != null) {
-									actCompo.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
-									actCompo.setSubsectorLevel2Name(subsectorLevel2.getName());
+									actSector.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
+									actSector.setSubsectorLevel2Name(subsectorLevel2.getName());
 								}
 							}
-							actCompo.setSectorPercentage(ampActSect.getPercentage().floatValue());
+							actSector.setSectorPercentage(ampActComponente.getPercentage().floatValue());
 						}
-						activitySectors.add(actCompo);
+						activitySectors.add(actSector);
 					}
 				}
 			}

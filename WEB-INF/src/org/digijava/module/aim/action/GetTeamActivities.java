@@ -38,11 +38,9 @@ public class GetTeamActivities
     public static final String ARCHIVE_COMMAND		= "archive";
     public static final String UNARCHIVE_COMMAND	= "unarchive";
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
         TeamActivitiesForm taForm = (TeamActivitiesForm) form;
-
         Long id = null;
 
         try {
@@ -231,8 +229,7 @@ public class GetTeamActivities
         return null;
     }
     
-    private static void decideArchiveMode(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) {
+    private static void decideArchiveMode(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) {
     	
     	TeamActivitiesForm tForm	= (TeamActivitiesForm) form;
     	String showArchived			= request.getParameter("showArchivedActivities");

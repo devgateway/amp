@@ -113,7 +113,6 @@
 		document.aimTeamActivitiesForm.removeActivity.value = archive;
 		document.aimTeamActivitiesForm.submit();
 	}
-
 -->
 
 </script>
@@ -316,7 +315,7 @@ function setHoveredTable(tableId, hasHeaders) {
 														</td>
 													</tr>
 													<tr>
-														<td align="center" colspan=2>
+														<td align="center" colspan="2">
 															<table cellspacing="5" width="100%">
 																<tr>
 																	<td align="center">
@@ -325,13 +324,15 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                     	<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
                                                                     	<c:choose>
 	                                                                    	<c:when test="${selectedSubTab==unarchivedTab}">
-																				<html:submit onclick="submitArchiveCmd('<%=GetTeamActivities.ARCHIVE_COMMAND%>')" styleClass="dr-menu" property="submitButton">
+	                                                                    		<c:set var="archiveActs"><%=GetTeamActivities.ARCHIVE_COMMAND %></c:set>
+	                                                                    		<html:submit onclick="submitArchiveCmd('${archiveActs}')" styleClass="dr-menu" property="submitButton">
 																					<digi:trn>Archive Activities</digi:trn>
-																				</html:submit>
+																				</html:submit>																				
 																			</c:when>
 																			<c:when test="${selectedSubTab==archivedTab}">
-																				<html:submit onclick="submitArchiveCmd('<%=GetTeamActivities.UNARCHIVE_COMMAND%>')" styleClass="dr-menu" property="submitButton">
-																					<digi:trn> Unarchive Activities</digi:trn>
+																				<c:set var="unArchiveActs"><%=GetTeamActivities.UNARCHIVE_COMMAND %></c:set>
+																				<html:submit onclick="submitArchiveCmd('${unArchiveActs}')" styleClass="dr-menu" property="submitButton">
+																					<digi:trn>Unarchive Activities</digi:trn>
 																				</html:submit>
 																			</c:when>
 																			<c:otherwise>

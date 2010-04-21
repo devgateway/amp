@@ -568,7 +568,7 @@ public class ProjectFicheExport extends Action {
 		
 		
 		
-		Collection indicatorsMe=IndicatorUtil.getActivityIndicators(act.getAmpActivityId());
+		Collection indicatorsMe=IndicatorUtil.getActivityIndicatorHelperBeans(act.getAmpActivityId());
 
 		
 		//fische objectives:
@@ -863,14 +863,19 @@ public class ProjectFicheExport extends Action {
 		tbl.addCell(c);
 
 		c=new Cell("");
-		Iterator i=indicatorsMe.iterator();
-		while (i.hasNext()) {
-			ActivityIndicator element = (ActivityIndicator) i.next();
-			if(element.getIndicatorsCategory()==null || element.getIndicatorsCategory().getValue()==null ||
-					CategoryManagerUtil.equalsCategoryValue(element.getIndicatorsCategory(), hcValue) )
-						continue;
-			c.addElement(new Paragraph(element.getIndicatorName()));
-		}
+        Iterator i=null;
+        if (indicatorsMe != null) {
+            i = indicatorsMe.iterator();
+            while (i.hasNext()) {
+                ActivityIndicator element = (ActivityIndicator) i.next();
+                if (element.getIndicatorsCategory() == null || element.getIndicatorsCategory().getValue() == null
+                        || CategoryManagerUtil.equalsCategoryValue(element.getIndicatorsCategory(), hcValue)) {
+                    continue;
+                }
+                c.addElement(new Paragraph(element.getIndicatorName()));
+            }
+
+        }
 		tbl.addCell(c);
 		
 	

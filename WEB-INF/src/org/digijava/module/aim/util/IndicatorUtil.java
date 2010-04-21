@@ -820,19 +820,17 @@ public class IndicatorUtil {
 	public static Set<AmpIndicator> getActivityIndicators(Long activityId) throws DgException{
 		Set<AmpIndicator> result=null;
 		Session sesison=PersistenceManager.getRequestDBSession();
-		String oql="select indi from "+AmpIndicator.class.getName()+" indi ";
-		oql+="where indi.valuesActivity.activity.ampActivityId =:actId ";
+		String oql="select indi from "+AmpIndicator.class.getName()
+                +" indi inner join indi.valuesActivity valAct inner join valAct.activity act";
+		oql+=" where act.ampActivityId =:actId ";
 		oql+="order by indi.name";
 		try {
 			Query query=sesison.createQuery(oql);
 			query.setLong("actId", activityId);
 			List resultList=query.list();
-			if (result!=null && result.size()>0){
+			if (resultList!=null && resultList.size()>0){
 				result=new HashSet<AmpIndicator>();
-				for (Iterator iterator = resultList.iterator(); iterator.hasNext();) {
-					AmpIndicator indicator = (AmpIndicator) iterator.next();
-					result.add(indicator);
-				}
+				result.addAll(resultList);
 			}
 		} catch (HibernateException e) {
 			throw new DgException("Cannot load indicators for Activity with id "+activityId,e);

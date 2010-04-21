@@ -21,18 +21,6 @@ function fnEditProject(id)
    document.location.href="<%=addUrl%>?pageId=1&action=edit&step=13&surveyFlag=true&activityId=" + id;
 }
 
-function preview(id)
-{
-	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
-   document.location.href = "<%=addUrl%>~pageId=2~activityId=" + id;
-}
-
-function projectFiche(id)
-{
-	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
-	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
-}
-
 </script>
 
 

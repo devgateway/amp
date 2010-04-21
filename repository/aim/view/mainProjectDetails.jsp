@@ -78,9 +78,9 @@ function fnShowHistory(id) {
 function preview(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
-   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
-	document.aimChannelOverviewForm.target = "_self";
-   document.aimChannelOverviewForm.submit();
+   document.aimMainProjectDetailsForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
+	document.aimMainProjectDetailsForm.target = "_self";
+   document.aimMainProjectDetailsForm.submit();
 }
 </script>
 

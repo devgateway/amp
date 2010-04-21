@@ -25,8 +25,9 @@ class Reports::CustomController < ReportsController
     
   end
   
-  def create
+  def create    
     fields = params[:report][:fields]
+    format = params[:report][:format].keys.first
     funding_details = extract_detail_years_and_add_placeholder!(fields)
     disaggregators = disaggregators_from_params
     
@@ -50,7 +51,7 @@ class Reports::CustomController < ReportsController
       :forecasts_rates_source => params[:report][:exchange_rates][:forecasts]
     })
     
-    redirect_to reports_custom_path(report, :format => params[:format])
+    redirect_to reports_custom_path(report, :format => format)
   end
   
   def show

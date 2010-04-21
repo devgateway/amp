@@ -350,9 +350,11 @@
     <td>
       <h3><%= t('.output_options.format') %></h3>
       <ul>
-        <li><%= t('.currency') %>: <%= select_tag "currency", options_for_select(ExchangeRate.available_currencies_for_select) %></li>           
-        <%= submit_tag "reports[format][xls]", :value => t('.query_database'), :class => "bt", :style => "margin: 5px; width: 100px" %>
-        <%= submit_tag "reports[format][web]", :value => t('.query_database'), :class => "bt", :style => "margin: 5px; width: 100px" %>
+        <li><%= t('.currency') %>: <%= select_tag "currency", options_for_select(ExchangeRate.available_currencies_for_select, DEFAULT_CURRENCY) %></li>           
+        <input type="submit" name="report[format][xls]" value="<%= t('.xls_output') %>" 
+          class="bt" style="margin: 5px; width: 100px" />
+        <input type="submit" name="report[format][html]" value="<%= t('.web_output') %>" 
+          class="bt" style="margin: 5px; width: 100px" />
       </ul>
     </td>
   </tr>
@@ -365,22 +367,6 @@
 
 
 <!--
-<ul class="checkbox_container">
-	<h3><span style="float:left"><%= I18n.t('reports.disaggregation.title') %></span><span class="link" onclick="toggleAll('disaggregation', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="disaggregation_toggle" selected="false"><%=t '.select_all' %></span></h3>
-	<li><%= check_box_tag "disaggregators[]", "sector" %><%= I18n.t('reports.disaggregation.by_sector') %></li>
-	<li><%= check_box_tag "disaggregators[]", "location" %><%= I18n.t('reports.disaggregation.by_location') %></li>
-</ul>
-
-
-<div>
-  <div>
-    <ul>
-      
-
-
-
-      
-      
       <li>
       	<%= check_box_tag "report[fields][]", "implementing_agencies" %>
       	<%= Project.human_attribute_name('implementing_agencies') %>
@@ -395,9 +381,4 @@
       	<%= check_box_tag "report[fields][]", "markers" %>
       	<%= Project.human_attribute_name('markers') %>
       </li>
-
-      
-    </ul>
-  </div>
-</div>
 -->

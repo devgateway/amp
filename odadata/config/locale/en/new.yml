@@ -280,6 +280,9 @@ en:
         currency: Currency
         all: all
         check_uncheck_all: Check / Uncheck all
+        
+        xls_output: Excel Sheet
+        web_output: Query Database
       show:
         title: Custom Report
     districts:

@@ -225,14 +225,14 @@
 							</dt>
 							<dd<%= ' class="first"' if first %>>
 								<ul>
-									<% relevances.sort_by { |a| a.district.name }.each do |r| %>
-										<%# this is lame hack II, but it works :( (All Municipalities code is 100*n) %>
-                                    	<% if r.district.code.to_i%100 == 0 %>
-                                    		<li><%= t('.all_district') %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
-                                    	<% else %>
-											<li><%= r.district.name %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
-										<% end %>
-									<% end %>
+								  <% if relevances.any? { |r| !r.district_id.blank? } %>
+								    <% relevances.sort_by { |a| a.district.name }.each do |r| %>
+  									  <li><%= r.district.name %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
+  									<% end %>
+								  <% else %>
+								    <li><%= t('.all_district') %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
+								  <% end %>
+									
 								</ul>
 							</dd>
 							<% first = false %>

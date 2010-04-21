@@ -78,6 +78,13 @@ function setHoveredTable(tableId, hasHeaders) {
 
 
 }
+function preview(id)
+{
+    <digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+document.aimMonthlyInfoForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
+document.aimMonthlyInfoForm.target = "_self";
+document.aimMonthlyInfoForm.submit();
+}
 </script>
 
 <digi:errors/>

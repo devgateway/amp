@@ -194,6 +194,8 @@ en:
     profile_information_form:
       prompt: Please select
       country_strategy_unavailable: Not linked to any strategy
+    goals_form:
+      mdg_caption: "Goal {{number}}: {{name}}"
     project:
       edit: Edit project
       delete: Delete project

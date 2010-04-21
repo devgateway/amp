@@ -80,9 +80,12 @@ public class UpdateTeamActivities extends Action {
 		String archiveCmd	= taForm.getRemoveActivity();
 		if ( archiveCmd != null ) {
 			ArrayList<Long> selectedActivities	= new ArrayList<Long>();
-			if ( taForm.getSelActivities() != null ) 
-				for (int i=0; i<taForm.getSelActivities().length; i++) 
+			if ( taForm.getSelActivities() != null ) {
+				for (int i=0; i<taForm.getSelActivities().length; i++){
 					selectedActivities.add(taForm.getSelActivities()[i]);
+				}
+			}				 
+					
 			if ( GetTeamActivities.ARCHIVE_COMMAND.equals(archiveCmd) ) {
 				ActivityUtil.changeActivityArchiveStatus(selectedActivities, true);
 				request.setAttribute(GetTeamActivities.ARCHIVED_PARAMETER, GetTeamActivities.UNARCHIVED_SUB_TAB);

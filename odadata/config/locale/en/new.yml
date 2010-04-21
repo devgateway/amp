@@ -240,9 +240,9 @@ en:
       country_strategy_unavailable: Not linked to any strategy
       national: National
     show_map:
-      region: Region
       project: Project
-      municipalities: Municipalities
+      geo_list: Provinces & Districts
+      national: National Project
       map_legend: "Yellow highlighted areas are the project's focal regions/municipalities"
   
   reports:

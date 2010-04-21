@@ -4,6 +4,7 @@ class GeoRelevance < ActiveRecord::Base
   belongs_to :district
   
   before_validation :update_province_id_for_district
+  before_validation :clear_district_id
   
   validate :district_matches_parent
   # TODO: Proper error message
@@ -17,6 +18,11 @@ private
     unless self.district.blank?
       self.province_id = self.district.province_id
     end
+  end
+  
+  # Sets the district id to NULL instead of 0
+  def clear_district_id
+    self.district = nil if self.district.blank?
   end
   
   def district_matches_parent

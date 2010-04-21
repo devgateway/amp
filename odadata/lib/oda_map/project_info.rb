@@ -5,7 +5,7 @@ module OdaMap
       @project = project
       
       municipalities_layer = @map.getLayerByName("NIC2")
-      
+      municipalities_layer.labelitem = nil
       
       cls = ClassObj.new()
       style = StyleObj.new()
@@ -16,7 +16,7 @@ module OdaMap
       style.outlinecolor = outlinecolor
       
       cls.insertStyle(style)
-      cls.setExpression(build_expression)
+      cls.setExpression(build_expression(@project))
       
       municipalities_layer.insertClass(cls, 0)
     end
@@ -30,23 +30,17 @@ module OdaMap
     end
     
 private
-    def build_expression
+    def build_expression(prj)
       # This highlights all regions for national projects
-      return nil if @project.geo_list.blank?
+      return nil if prj.districts.empty?
       
-      criteria = []
-      @project.geo_list.each do |l1, l2s|
-        # TODO: We probably shouldn't check for the exact string here
-        if l2s.include?("All Municipalities")
-          criteria << "('[NAME_1]' eq '#{l1}' AND '[HASC_2]' ne 'lake')"
-        else
-          l2s.each do |l2|
-            criteria << "('[NAME_1]' eq '#{l1}' AND '[NAME_2]' eq '#{l2}')"
-          end
-        end
+      district_ids = prj.district_ids
+      
+      if (provinces = prj.provinces_with_total_coverage).any?
+        district_ids << provinces.map(&:district_ids)
       end
       
-      "(" + criteria.join(" OR ") + ")"         
+      %{( [id] IN "#{district_ids.join(', ')}" )}
     end
   end
 end

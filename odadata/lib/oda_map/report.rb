@@ -76,14 +76,13 @@ private
       # This highlights all regions for national projects
       return nil if prj.districts.empty?
       
-      #criteria = returning([]) do |crit|
-      #  prj.districts.each do |dist|
-      #    crit << "([id] == #{dist.id})"
-      #  end
-      #end
-      #
-      #"(" + criteria.join(" OR ") + ")"     
-      "id IN (#{prj.districts.map(&:id).join(', ')})"    
+      district_ids = prj.district_ids
+      
+      if (provinces = prj.provinces_with_total_coverage).any?
+        district_ids << provinces.map(&:district_ids)
+      end
+      
+      %{( [id] IN "#{district_ids.join(', ')}" )}    
     end
   end
 end

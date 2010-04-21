@@ -62,6 +62,8 @@ class Project < ActiveRecord::Base
   # Geographic relevance
   has_many                :geo_relevances, :dependent => :delete_all
   has_many                :provinces, :through => :geo_relevances, :uniq => true
+  has_many                :provinces_with_total_coverage, :through => :geo_relevances, :uniq => true,
+                          :source => :province, :conditions => ["geo_relevances.district_id IS NULL"]
   has_many                :districts, :through => :geo_relevances
   
   # Sector relevance
@@ -174,6 +176,9 @@ class Project < ActiveRecord::Base
     cloned_instance
   end
   alias_method_chain :clone, :associations
+  
+  # Is this a national project?
+  def national?; geo_relevances.empty?; end
   
   ##
   # This returns a list of Provinces and Districts in the following format:

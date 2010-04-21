@@ -173,12 +173,20 @@
 									                                                    </field:display>
 									                                                        
 									                                                    <td align="right" nowrap="nowrap">
+									                                                    	<c:set var="percentageDisplay" value="block" />
+									                                                    	<c:if test="${selectedLocs.percentageBlocked}">
+									                                                    		<c:set var="percentageDisplay" value="none"/>
+									                                                    	</c:if>
 									                                                        <field:display name="Regional Percentage" feature="Location">
-									                                                        	<field:display name="Validate Mandatory Regional Percentage" feature="Location">
-									                                                        		<FONT color="red">*</FONT>
-									                                                        	</field:display>
-									                                                        	<digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
-									                                                        	<html:text name="selectedLocs" indexed="true" property="percent" size="4"  maxlength="5" onkeyup="fnChk(this, 'region')" style="background-color: white;"/>
+									                                                        	<div style="display: ${percentageDisplay}">
+										                                                        	<field:display name="Validate Mandatory Regional Percentage" feature="Location">
+										                                                        		<FONT color="red">*</FONT>
+										                                                        	</field:display>
+										                                                        	
+										                                                        	<digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
+										                                                        	<html:text name="selectedLocs" indexed="true" property="percent" size="4"  maxlength="5" disabled="" 
+										                                                        	onkeyup="fnChk(this, 'region')" style="background-color: white;"/>
+									                                                        	</div>
 									                                                        </field:display>
 									                                                    </td>
 									                                                </tr>
@@ -209,7 +217,12 @@
 		                                                     		 			</td>
 	                                                     					</field:display>
 																			<td> &nbsp;
-																				<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('location');">
+																				<c:set var="dividePercentageButtonStyle">color:lightgray</c:set>
+																				<c:if test="${aimEditActivityForm.location.allowDividePercentageButton}">
+																					<c:set var="dividePercentageButtonStyle">color:black</c:set>
+																				</c:if>
+																				<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('location');" style="${dividePercentageButtonStyle}" 
+																						disabled="${!aimEditActivityForm.location.allowDividePercentageButton}">
 																					<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																				</html:button>                                                            
                                         									</td>	

@@ -91,6 +91,7 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
@@ -908,6 +909,24 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
             Iterator locIter = ampLocs.iterator();
             boolean maxLevel = false;
+            
+            
+            String cIso								= FeaturesUtil.getDefaultCountryIso();
+        	AmpCategoryValueLocations defCountry	= DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        	AmpCategoryValue implLevel				= CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                    CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
+        	AmpCategoryValue implLocValue			= CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                    CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
+        	boolean setFullPercForDefaultCountry	= false;
+            if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) && 
+            		implLevel!=null && implLocValue!=null &&
+    				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) && 
+    				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) 
+    				) {
+            	setFullPercForDefaultCountry 		= true;
+            	eaForm.getLocation().setAllowDividePercentageButton(false);
+            }
+            
             while (locIter.hasNext()) {
             	AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();	//AMP-2250
             	if (actLoc == null)
@@ -927,20 +946,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 //                  impLevel = 1;
 //                }
 //              }
-
+            	
               if (loc != null) {
                 Location location = new Location();
                 location.setLocId(loc.getAmpLocationId());
-                Collection col1 = FeaturesUtil.getDefaultCountryISO();
-                String ISO = null;
-                Iterator itr1 = col1.iterator();
-                while (itr1.hasNext()) {
-                  AmpGlobalSettings ampG = (AmpGlobalSettings) itr1.next();
-                  ISO = ampG.getGlobalSettingsValue();
-                }
-                logger.info(" this is the settings Value" + ISO);
-                //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
-                Country cntry = DbUtil.getDgCountry(ISO);
+                
+                logger.info(" this is the settings Value" + cIso);
+                Country cntry = DbUtil.getDgCountry(cIso);
                 location.setCountryId(cntry.getCountryId());
                 location.setCountry(cntry.getCountryName());
                 location.setNewCountryId(cntry.getIso());
@@ -983,6 +995,14 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
                 if(actLoc.getLocationPercentage()!=null)
                 location.setPercent( actLoc.getLocationPercentage().floatValue());
+                
+                if ( setFullPercForDefaultCountry && location.getPercent() == 0.0 && 
+                		CategoryManagerUtil.equalsCategoryValue(loc.getLocation().getParentCategoryValue(), 
+                				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) && 
+                		loc.getLocation().getId() != defCountry.getId() ) 
+                {
+                	location.setPercentageBlocked(true);
+                }
 
                 locs.add(location);
               }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-8333</jira>
+  <keyword>global settings</keyword>
+  <keyword>percentages</keyword>
+  <keyword>country</keyword>
+  <author>agartner</author>
+  <description>This is the Global Setting that enables/disables percentages in activities for other countries (beside the default country)</description>
+  <trigger type="all">
+		<condition type="entryInTableExists" tablename="amp_global_settings" columnname="settingsName" columnvalue="Allow percentages for all countries">amp_generic</condition>
+	</trigger>
+  <apply>	
+    <script>
+    <lang delimiter=";" type="mysql">
+		INSERT INTO amp_global_settings (settingsName, settingsValue, possibleValues, description, section )
+			VALUES ("Allow percentages for all countries", "false", "t_Boolean", 
+			"This is the Global Setting that enables/disables percentages in activities for other countries (beside the default country)", 
+			"funding");
+	</lang>
+    </script>
+  </apply>
+
+</tns:patch>

@@ -56,4 +56,6 @@ public class GlobalSettingsConstants {
     public static final String SECURE_SERVER= "Secure Server";
     
     public static final String BUDGET_SUPPORT_FOR_PI9 = "Budget Support for PI 9";
+    
+    public static final String ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES = "Allow percentages for all countries";
 }

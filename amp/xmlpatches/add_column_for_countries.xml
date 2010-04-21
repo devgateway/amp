@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-8333</jira>
+  <keyword>column</keyword>
+  <keyword>country</keyword>
+  <keyword>view</keyword>
+  <author>agartner</author>
+  <description>This adds country as a possible column in reports</description>
+  <trigger type="all">
+		<condition inverted="true" type="tableOrViewExists">v_countries</condition>
+	</trigger>
+  <apply>	
+    <script>
+    <lang delimiter=";" type="mysql">
+		CREATE OR REPLACE VIEW `v_countries` AS 
+		SELECT `ra`.`amp_activity_id` AS `amp_activity_id`, 
+			getLocationName(getLocationIdByImplLoc(l.location_id, "Country")) as location_name, 
+			getLocationIdByImplLoc(l.location_id, "Country") AS location_id,
+			sum(ra.location_percentage) as location_percentage 
+		FROM amp_activity_location ra, amp_location l  
+		WHERE ra.amp_location_id=l.amp_location_id AND getLocationIdByImplLoc(l.location_id, "Country") is not null 
+		GROUP BY ra.amp_activity_id,getLocationIdByImplLoc(l.location_id, "Country") ;
+		
+		INSERT INTO amp_columns(columnName, aliasName, cellType, extractorView, relatedContentPersisterClass) 
+			VALUES ("Country", "countryCol", "org.dgfoundation.amp.ar.cell.MetaTextCell", 
+				"v_countries", "org.digijava.module.aim.dbentity.AmpCategoryValueLocations");
+	</lang>
+    </script>
+  </apply>
+
+</tns:patch>

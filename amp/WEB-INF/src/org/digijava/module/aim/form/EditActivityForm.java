@@ -971,6 +971,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		
 		private boolean noMoreRecords=false;
 		
+		private boolean allowDividePercentageButton	= true;
+		
 		
 		public boolean isNoMoreRecords() {
 			return noMoreRecords;
@@ -1246,6 +1248,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setParentLocId(Long parentLocId) {
 			this.parentLocId = parentLocId;
+		}
+		/**
+		 * @return the allowDividePercentageButton
+		 */
+		public boolean getAllowDividePercentageButton() {
+			return allowDividePercentageButton;
+		}
+
+		/**
+		 * @param allowDividePercentageButton the allowDividePercentageButton to set
+		 */
+		public void setAllowDividePercentageButton(boolean allowDividePercentageButton) {
+			this.allowDividePercentageButton = allowDividePercentageButton;
 		}
 
 		public void reset(ActionMapping mapping, HttpServletRequest request) {

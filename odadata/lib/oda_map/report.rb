@@ -82,7 +82,7 @@ private
         district_ids << provinces.map(&:district_ids)
       end
       
-      %{( [id] IN "#{district_ids.join(', ')}" )}    
+      "id IN (#{district_ids.join(', ')})"    
     end
   end
 end

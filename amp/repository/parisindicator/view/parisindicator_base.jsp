@@ -56,7 +56,7 @@
     
 	<table border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 		<tr>
-			<td width="1000" align="left" valign="top" border="1" style="padding-left: 5px;">
+			<td width="980px" align="left" valign="top" border="1" style="padding-left: 5px;">
 				<table width="100%" border="0" cellpadding="5" cellspacing="0">
 					<tr>
 						<td>&nbsp;</td>
@@ -177,7 +177,7 @@
 					<tr>
                         <td>
                             <logic:notEmpty name="parisIndicatorForm" property="availablePIReports">
-                                <div id="content" class="yui-skin-sam" style="padding-left:10px;width:98%;width:1000px;">
+                                <div id="content" class="yui-skin-sam" style="padding-left:10px;width:98%;width:980px;">
                                     <div id="demo" class="yui-navset">
                                         <ul id="MyTabs" class="yui-nav"">
                                             <logic:iterate id="element" name="parisIndicatorForm" property="availablePIReports" indexId="index">
@@ -188,7 +188,7 @@
                                                 <LI class="<%=selected%>">
                                                     <span>
                                                         <digi:link href="/parisindicator.do?reportId=${element.indicatorCode}&reset=true&header=true" target="_self">
-                                                            <div style="max-width: 90px">
+                                                            <div style="max-width: 80px">
                                                                 <digi:trn key="Paris Indicator">Paris Indicator</digi:trn>&nbsp;<bean:write name="element" property="indicatorCode"/>
                                                             </div>
                                                         </digi:link>

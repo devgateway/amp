@@ -65,7 +65,7 @@ en:
   donor_details:
     edit: 
       title: Edit Donor Contact Details
-  
+
   donor:
     edit:
       title: Edit Donor
@@ -299,6 +299,8 @@ en:
         no_projects: Number of Projects
         list: List
         donor: Donor
+        donors: Donors
+        un_agencies: UN Agencies
         map: Map
       show:
         title: Projects of {{donor}}

@@ -170,7 +170,7 @@ public class ImportAction extends MultiAction {
         		session.setAttribute("DEimportErrors", errors);
         	}
         	
-        	//return mapping.findForward("forwardError");
+        	return mapping.findForward("forwardError");
         }
         
         //importBuilder.splitInChunks(inputStream1);

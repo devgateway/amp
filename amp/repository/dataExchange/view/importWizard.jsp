@@ -131,6 +131,11 @@ div.fakefile2 input{
 	  }
 
        function importActivities(){
+           var file=document.getElementById('uploadedFile').value;
+           if(file==''){
+               alert("<digi:trn jsFriendly="true">Please choose the file you want to import</digi:trn>");
+               return false;
+           }
             var form = document.getElementById('form');
             form.action = "/dataExchange/import.do~loadFile=true";
             form.target="_self"

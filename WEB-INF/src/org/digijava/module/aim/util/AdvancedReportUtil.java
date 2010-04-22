@@ -309,7 +309,52 @@ public final class AdvancedReportUtil {
 		}
 		return coll;
 	}
-
+	
+	
+	public static Collection getMeasureListbyType(String type)
+	{
+		Session session = null;
+		String sqlQuery = "";
+		boolean flag =false;
+		Iterator iter = null;
+		Collection coll = new ArrayList();
+		Query query = null;
+		AmpMeasures ampMeasures = new AmpMeasures();
+		try
+		{
+			session = PersistenceManager.getSession();
+			sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c where c.type=:type";
+			query = session.createQuery(sqlQuery);
+			query.setString("type", type);
+			if (query != null) 
+			{
+				iter = query.list().iterator();
+				while (iter.hasNext()) 
+				{
+					ampMeasures = (AmpMeasures) iter.next();
+					coll.add(ampMeasures);
+				}
+				flag = true;
+			}
+			return coll;
+		}
+		catch(Exception e)
+		{
+			logger.error(e);
+			////System.out.println(" Error in getMeasureList()  :  " + e);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coll;
+	}
 	@Deprecated
 	public static AmpTeamMember checkDuplicateReportName(String reportTitle){
 		AmpTeamMember teamMember=null;

@@ -14,7 +14,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 /**

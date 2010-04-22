@@ -45,7 +45,6 @@ public final class ArConstants {
 	public final static String QUARTER="Quarter";
 	public final static String MONTH="Month";
 	public final static String PROPOSED_COST="Proposed Cost";
-	
 	public final static String SOURCE_FUNDING="Source Funding";
 	
 	public final static String PERSPECTIVE="Perspective";
@@ -65,11 +64,16 @@ public final class ArConstants {
 	public final static int COMPONENT_TYPE=2;
 	public final static int REGIONAL_TYPE=3;
 	public final static int CONTRIBUTION_TYPE=4;
+	public final static int PLEDGES_TYPE=5;
 	
 	//metainfo values:
 	public final static String COMMITMENT="Commitments";
 	public final static String DISBURSEMENT="Disbursements";
 	public final static String EXPENDITURE="Expenditures";
+	public final static String PLEDGES_COMMITMENT="Pledges Commitments";
+	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
+	public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
+	
     
 	//Computed Field Constants
     //
@@ -112,6 +116,9 @@ public final class ArConstants {
     
     public final static String PLANNED_COMMITMENT_COUNT="PLANNED_COMMITMENT_COUNT";
     public final static String PLANNED_DISBURSEMENT_COUNT="PLANNED_DISBURSEMENT_COUNT";
+    
+    public final static String PLEDGED_TOTAL="PLEDGE_TOTAL";
+    public final static String ACTUAL_PLEDGE_COMMITMENT = "ACTUAL_PLEDGE_COMMITMENT";
     
     //dates variable names
     public final static String ACTIVITY_CLOSE_DATE_VALUE = "ACTIVITY_CLOSE_DATE_VALUE";
@@ -182,6 +189,11 @@ public final class ArConstants {
 	public static final String VIEW_COMPONENT_FUNDING="v_component_funding";
 	public static final String VIEW_REGIONAL_FUNDING="v_regional_funding";
 	public static final String VIEW_CONTRIBUTION_FUNDING="v_contribution_funding";
+	public static final String VIEW_PLEDGES_FUNDING="v_pledges_funding_st";
+	
+	
+	//Columns order names
+	public static final String PLEDGES_COLUMNS="Pledges Columns";
 	
 	//reportsFilter
 	

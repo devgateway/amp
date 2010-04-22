@@ -12,7 +12,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-    <script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
+    
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%><script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
@@ -129,6 +130,9 @@
 		</c:set>
 		<c:set var="summary">
 			<digi:trn key="aim:summaryReport">Summary Report</digi:trn>
+		</c:set>
+		<c:set var="PledgesFunding">
+			<digi:trn key="aim:pledgesfunding">Pledges Report</digi:trn>
 		</c:set>
 	</c:if>
 
@@ -289,7 +293,8 @@
 								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; height: 140px;
 											position: relative;">
 								<table style="top: 17%; left: 1%; position: absolute;">
-								<feature:display name="Donor Report" module="Report Types">
+									<%if (request.getParameter("type")== null){%>
+									<feature:display name="Donor Report" module="Report Types">
                                              <tr>
                                                <td>
                                                  <html:radio property="reportType" disabled="${disableFundingType}" value="donor"  onclick="repManager.checkSteps()">
@@ -325,7 +330,17 @@
                                                    </td>
                                                  </tr>
                                                </feature:display>
-                                     </table>
+                                              <%}else{%>
+                                              <c:set var="disablePledgeType">true</c:set>
+                                              	<tr>
+                                              		<td>
+                                                		<html:radio property="reportType" disabled="${disablePledgeType}" value="pledge" onclick="repManager.checkSteps()">
+                                                   			${PledgesFunding}
+                                                     	</html:radio>
+                                                   </td>
+                                                </tr>
+                                              <%}%>
+                                     	</table>
 									<br />
 								</div>
 

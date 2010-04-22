@@ -178,7 +178,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		String donorGroupName=null;
 		String donorTypeName=null;
 		Double fixedExchangeRate = null;;
-		
+		Double pledgetotal = null;;
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
 
@@ -201,6 +201,10 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		if (columnsMetaData.contains("org_grp_name")) {
 			donorGroupName	= rs.getString("org_grp_name");
+		}
+		
+		if (columnsMetaData.contains("total_pledged")) {
+			pledgetotal	= rs.getDouble("total_pledged");
 		}
 		
 		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
@@ -283,7 +287,12 @@ public class CategAmountColWorker extends ColumnWorker {
 		case 4:
 			trStr = ArConstants.DISBURSEMENT_ORDERS;
 			break;
-			
+		case 5:
+			trStr = ArConstants.PLEDGES_COMMITMENT;
+			break;
+		case 6:
+			trStr = ArConstants.PLEDGES_DISBURSEMENT;
+			break;
 		}
 
 		if(trStr!=null) {
@@ -359,6 +368,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(donorTypeName!=null) {
 			MetaInfo donorTypeMs = this.getCachedMetaInfo(ArConstants.DONOR_TYPE_COL, donorTypeName);
 			acc.getMetaData().add(donorTypeMs);
+		}
+		
+		if(pledgetotal!=null) {
+			MetaInfo pledgedtotalname = this.getCachedMetaInfo(ArConstants.PLEDGED_TOTAL, null);
+			acc.getMetaData().add(pledgedtotalname);
 		}
 		
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT

@@ -106,7 +106,8 @@ public class Values extends HashMap<String, BigDecimal> {
 
 		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluateOriginalvalue(cell));
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluateOriginalvalue(cell));
-
+		//this.addValue(ArConstants.ACTUAL_PLEDGE_COMMITMENT, TokenRepository.buildPledgesCommitmentsLogicalToken().evaluateOriginalvalue(cell));
+		
 		// no filtered, affected by %
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildSelectedYearPlannedDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildCumulatedDisursementsLogicalToken().evaluate(cell));
@@ -119,7 +120,11 @@ public class Values extends HashMap<String, BigDecimal> {
 			this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(cell));
 			this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(cell));
 		}
-
+		/*
+		if (cell.existsMetaString(ArConstants.PLEDGED_TOTAL)){
+			this.addValue(ArConstants.PLEDGED_TOTAL, TokenRepository.buildTotalPledgedLogicalToken().evaluateOriginalvalue(cell));
+		}
+		*/
 		if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) != null) {
 			if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
 				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {

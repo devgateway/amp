@@ -246,7 +246,7 @@ public class AmpARFilter extends PropertyListable {
 
 	private String text;
 	private String indexText;
-
+	private static final String initialPledgeFilterQuery = "SELECT distinct(id) FROM amp_funding_pledges WHERE 1=1 ";
 	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
@@ -254,10 +254,8 @@ public class AmpARFilter extends PropertyListable {
 	private String sortBy;
 	private Boolean sortByAsc						= true;
 	private Collection<String> hierarchySorters		= new ArrayList<String>();
+	
 	private void queryAppend(String filter) {
-		// generatedFilterQuery+=
-		// (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + "
-		// amp_activity_id IN ("+filter+")";
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
 
@@ -271,6 +269,10 @@ public class AmpARFilter extends PropertyListable {
 		//Check if the reportid is not nut for public mondrian reports
 		if (request.getParameter("ampReportId")!=null){
 			ampReportId = request.getParameter("ampReportId");
+			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
+					this.generatedFilterQuery = initialPledgeFilterQuery;
+			}
 		}
 		if (ampReportId == null) {
 			AmpReports ar = (AmpReports) request.getSession().getAttribute(
@@ -437,6 +439,11 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void generateFilterQuery(HttpServletRequest request) {
+		if (request.getSession().getAttribute("pledgereport") != null && request.getSession().getAttribute("pledgereport").toString().equalsIgnoreCase("true")){
+			indexedParams=new ArrayList<FilterParam>();
+			return;
+		}
+		
 		indexedParams=new ArrayList<FilterParam>();
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="

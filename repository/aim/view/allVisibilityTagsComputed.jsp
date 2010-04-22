@@ -28,7 +28,8 @@
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
 <module:display name="GIS DASHBOARD"></module:display> 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -45,7 +46,6 @@
 <module:display name="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
-<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -206,8 +206,8 @@
 <field:display feature="Identification" name="Objective Verification"></field:display> 
 <field:display feature="Identification" name="Objective"></field:display> 
 <field:display feature="Identification" name="Organizations and Project ID"></field:display> 
-<field:display feature="Identification" name="Project Title"></field:display> 
-<field:display feature="Identification" name="Purpose"></field:display> 
+<field:display feature="Identification" name="Project Title"></field:display>
+ <field:display feature="Identification" name="Purpose"></field:display> 
 <field:display feature="Identification" name="Results"></field:display> 
 <field:display feature="Issues" name="Issue Date"></field:display> 
 <field:display feature="Issues" name="Measures Taken"></field:display> 
@@ -715,3 +715,10 @@
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>
 <feature:display name="Other Resources" module="Resources"></feature:display>
+
+<feature:display name="Pledges Columns" module="Pledges"></feature:display>
+<field:display feature="Pledges Columns" name="Pledges Titles"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>

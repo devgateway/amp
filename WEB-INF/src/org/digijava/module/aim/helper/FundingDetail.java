@@ -37,8 +37,12 @@ public class FundingDetail implements Serializable, Comparable
     private Long pledge;
     
        
-		public Long getPledge() {
-		return pledge;
+	public Long getPledge() {
+		if (pledge!=null){
+			return pledge;
+		}else{
+			return 0L;
+		}
 	}
 
 	public void setPledge(Long pledge) {

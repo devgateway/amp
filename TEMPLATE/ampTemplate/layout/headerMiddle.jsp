@@ -454,7 +454,7 @@ function adminHelp(){
 	                                            </a>
 	                                        </li>
 	                                    </module:display>
-										<module:display name="Multi-dimensional Reports" parentModule="REPORTING">
+	                                    <module:display name="Multi-dimensional Reports" parentModule="REPORTING">
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()">
                                             	<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
@@ -468,7 +468,13 @@ function adminHelp(){
                                                     </a>
                                                 </li>
                                         </feature:display>
-                                      </ul>
+                                        
+                                        	<li class="yuiampmenuitem" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
+                                            	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true&type=5"  onclick="return canExit()">
+                                                	<b><digi:trn key="aim:parisIndicator">Pledges Reports</digi:trn></b>
+												</a>
+                                           </li>
+                                    </ul>
                                   </div>
                               </div>                    
                           </li>

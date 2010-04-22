@@ -34,6 +34,7 @@
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
 <module:display name="GIS DASHBOARD"></module:display> 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -51,7 +52,6 @@
 <module:display name="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
-<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -817,3 +817,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Average Disbursement Rate" feature="Computed Fields"></field:display>
 <field:display name="Project Age Ratio" feature="Computed Fields"></field:display>
 <field:display name="Activity Count" feature="Computed Fields"></field:display>
+
+<feature:display name="Pledges Columns" module="Pledges"></feature:display>
+<field:display feature="Pledges Columns" name="Pledges Titles"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>

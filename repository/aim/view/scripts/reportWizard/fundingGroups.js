@@ -71,6 +71,9 @@ YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By'
 			);
 
+YAHOO.amp.reportwizard.fundingGroups["pledge"]	= 	new Array(
+		'Pledges Donor','Pledges Types','Pledges Regions','Pledges Aid Modality','Pledges Type Of Assistance'
+	);
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }

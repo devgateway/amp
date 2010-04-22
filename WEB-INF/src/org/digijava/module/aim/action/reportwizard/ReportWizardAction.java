@@ -155,9 +155,28 @@ public class ReportWizardAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
+
+		//Add pledges reports support, the goals is to remove all not pledges columns
+		Integer typereport=0;
 		
-		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList()) );
-		myForm.setAmpMeasures( AdvancedReportUtil.getMeasureList() );
+		if (request.getParameter("type")!=null){
+			typereport = new Integer(request.getParameter("type"));
+			if (typereport==ArConstants.PLEDGES_TYPE){
+				myForm.setReportType("pledge");
+				myForm.setHideActivities(true);
+			}
+		}
+		if (myForm.getReportType().equalsIgnoreCase("pledge") && typereport != ArConstants.PLEDGES_TYPE){
+			typereport = ArConstants.PLEDGES_TYPE;
+			request.getParameterMap().put("type", "5");
+		}
+		
+		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport) );
+		if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
+			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("P"));
+		}else{
+			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
+		}
 		
 		if ( request.getParameter("desktopTab")!=null && "true".equals(request.getParameter("desktopTab")) ) {
 			myForm.setDesktopTab( true );
@@ -199,6 +218,9 @@ public class ReportWizardAction extends MultiAction {
 			myForm.setReportType("component");
 		if ( new Long(ArConstants.CONTRIBUTION_TYPE).equals(ampReport.getType()) )
 			myForm.setReportType("contribution");
+		if ( new Long(ArConstants.PLEDGES_TYPE).equals(ampReport.getType()) )
+			myForm.setReportType("pledge");
+		
 		
 		TreeSet<AmpReportColumn> cols		= new TreeSet<AmpReportColumn> ( new FieldsComparator() );
 		TreeSet<AmpReportHierarchy> hiers	= new TreeSet<AmpReportHierarchy> ( new FieldsComparator() );
@@ -255,6 +277,8 @@ public class ReportWizardAction extends MultiAction {
 				ampReport.setType( new Long(ArConstants.COMPONENT_TYPE) );
 		if ( "contribution".equals(myForm.getReportType()) ) 
 				ampReport.setType( new Long(ArConstants.CONTRIBUTION_TYPE) );
+		if ( "pledge".equals(myForm.getReportType()) ) 
+			ampReport.setType( new Long(ArConstants.PLEDGES_TYPE) );
 		
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
 		ampReport.setHideActivities( myForm.getHideActivities() );
@@ -442,7 +466,7 @@ public class ReportWizardAction extends MultiAction {
 			}
 	}
 	
-	private HashMap buildAmpTreeColumnSimple(Collection formColumns)
+	private HashMap buildAmpTreeColumnSimple(Collection formColumns, Integer type)
 	{
 			
 			ArrayList ampColumnsVisibles=new ArrayList();
@@ -484,13 +508,18 @@ public class ReportWizardAction extends MultiAction {
 							for(Iterator kt=ampColumnsOrder.iterator();kt.hasNext();)
 							{
 								AmpColumnsOrder aco=(AmpColumnsOrder) kt.next();
-								////System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
-								if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0)
-									{
+								//System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
+								if (type == ArConstants.PLEDGES_TYPE){
+									if (aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS)){
 										ampThemesOrdered.add(aco);
-										////System.out.println("	----------------ADDED!");
 									}
-								
+								}else{
+									if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0 &&
+											!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS)){
+										ampThemesOrdered.add(aco);
+										//System.out.println("	----------------ADDED!");
+									}
+								}
 							}
 						}
 					}

@@ -21,9 +21,10 @@ public class TokenRepository {
 
 		public static final String PLANED_DISBURSEMENT = "plannedDisbusementLogicalToken";
 		public static final String ACTUAL_DISBURSEMENT = "actualCommitmentsLogicalToken";
-
-		
-		
+		/*
+		public static final String PLEDGES_COMMITMENTS = "pledgeCommitmentsLogicalToken";
+		public static final String PLEDGES_TOTAL = "pledgeTotalLogicalToken";
+		*/
 	};
 
 	// internally thread safe repository for tokens:
@@ -63,7 +64,57 @@ public class TokenRepository {
 		tokens.put(TokenNames.TOTAL_COMMITMENTS, te);
 		return te;
 	}
+	
+	// Pledge Total Commitment 
+	/*
+	public static TokenExpression buildPledgesCommitmentsLogicalToken() {
+		// Injected funding
+		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
+		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
+		PresentLogicalToken pledgetotal = new PresentLogicalToken(ArConstants.PLEDGED_TOTAL, false);
+		// Filter no Commitments funding
+		EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
+		EqualsLogicalToken NotDisbursementTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT, ArConstants.TRANSACTION_TYPE, true);
+		EqualsLogicalToken NotExpenditureTrType = new EqualsLogicalToken(ArConstants.EXPENDITURE, ArConstants.TRANSACTION_TYPE, true);
+		EqualsLogicalToken NotDisbursedOrderTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT_ORDERS, ArConstants.TRANSACTION_TYPE, true);
 
+		// Only Actual
+		EqualsLogicalToken NotPlannedAdjType = new EqualsLogicalToken(ArConstants.PLANNED, ArConstants.ADJUSTMENT_TYPE, true);
+		EqualsLogicalToken actualAdjType = new EqualsLogicalToken(ArConstants.ACTUAL, ArConstants.ADJUSTMENT_TYPE, false);
+
+		ANDBinaryLogicalToken and0 = new ANDBinaryLogicalToken(NotDisbursementTrType, NotExpenditureTrType, false);
+		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(and0, NotDisbursedOrderTrType, false);
+		ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(and1, NotCommitments, false);
+		
+		ORBinaryLogicalToken or1 = new ORBinaryLogicalToken(actualAdjType, NotPlannedAdjType, false);
+		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(or1, and2, false);
+		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, proposedCost, false);
+		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, grandTotaldCost, false);
+		ANDBinaryLogicalToken and6 = new ANDBinaryLogicalToken(and5, pledgetotal, false);
+		TokenExpression te = new TokenExpression(new LogicalToken[] { and6 });
+
+		if (tokens == null)
+			tokens = new Hashtable<String, TokenExpression>();
+		tokens.put(TokenNames.PLEDGES_COMMITMENTS, te);
+		return te;
+	}
+	*/
+	// Pledged Total
+	/*
+	public static TokenExpression buildTotalPledgedLogicalToken() {
+		PresentLogicalToken totalpledged = new PresentLogicalToken(ArConstants.PLEDGED_TOTAL, false);
+
+		EqualsLogicalToken commitmentTrType = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, false);
+		EqualsLogicalToken actualAdjType = new EqualsLogicalToken(ArConstants.ACTUAL, ArConstants.ADJUSTMENT_TYPE, false);
+
+		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(commitmentTrType, actualAdjType, false);
+		TokenExpression te = new TokenExpression(new LogicalToken[] { totalpledged, and1 });
+		if (tokens == null)
+			tokens = new Hashtable<String, TokenExpression>();
+		tokens.put(TokenNames.PLEDGES_TOTAL, te);
+		return te;
+	}
+	*/
 	// PLANNED
 	public static TokenExpression buildPLannedCommitmentsLogicalToken() {
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);

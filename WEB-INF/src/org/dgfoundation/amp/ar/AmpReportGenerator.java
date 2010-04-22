@@ -51,6 +51,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected int extractableCount;
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode=false;
+	private boolean pledgereport=false;
 	
 
 	/**
@@ -237,6 +238,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				
 				
 				ce.setDebugMode(debugMode);
+				ce.setPledge(pledgereport);
 				
 				Column column = ce.populateCellColumn();
 
@@ -355,6 +357,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			ac.setExtractorView(ArConstants.VIEW_REGIONAL_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.CONTRIBUTION_TYPE)
 			ac.setExtractorView(ArConstants.VIEW_CONTRIBUTION_FUNDING);
+		if (reportMetadata.getType().intValue() == ArConstants.PLEDGES_TYPE)
+			ac.setExtractorView(ArConstants.VIEW_PLEDGES_FUNDING);
 
 		ColumnFilterGenerator.attachHardcodedFilters(ac);
 
@@ -403,7 +407,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				
 				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
 						element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
-						element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) || element.getExpression()!=null
+						element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) ||
+						element.getExpression()!=null
 						)
 					continue;
 
@@ -466,7 +471,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 			newcol.getItems().add(tac);
 		}
-
+		
 		newcol.setName(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL: ArConstants.COLUMN_TOTAL);
 
 		// make order to measurements
@@ -713,8 +718,14 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns = new GroupColumn(ArConstants.COLUMN_RAW_DATA);
 		this.filter = filter;
 		extractableCount = 0;
-
-		filter.generateFilterQuery(request);
+		
+		if (!(reportMetadata.getType()==ArConstants.PLEDGES_TYPE)){
+			filter.generateFilterQuery(request);
+		}else {
+			pledgereport = true;
+			request.getSession().setAttribute("pledgereport", "true");
+			filter.generateFilterQuery(request);
+		}
 		
 		debugMode=(request.getParameter("debugMode")!=null);
 

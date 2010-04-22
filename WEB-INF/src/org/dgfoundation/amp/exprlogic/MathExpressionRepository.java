@@ -76,6 +76,10 @@ public class MathExpressionRepository {
 	public static final String CONSUMPTION_RATE = "consumptionRate";
 
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENT = "selectedYearPlannedDisbursement";
+	
+	//public static final String PLEDGES_COMMITMENT_GAP = "commitmentgap";
+	
+	//public static final String PLEDGES_TOTAL = "totalpledge";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -120,6 +124,8 @@ public class MathExpressionRepository {
 		buildCumulatedDisbursements();
 		buildConsumptionRate();
 		buildSelectdYearOfPlannedDisbursements();
+//		buildPledgesGap();
+//		buildTotalPledged();
 	}
 
 	/**
@@ -531,7 +537,26 @@ public class MathExpressionRepository {
 			logger.error(e);
 		}
 	}
+	
+	/*
+	private static void buildPledgesGap() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLEDGED_TOTAL, ArConstants.ACTUAL_PLEDGE_COMMITMENT);
+			expresions.put(PLEDGES_COMMITMENT_GAP, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
 
+	private static void buildTotalPledged() {
+		try {
+			MathExpression pledgedtotal = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.PLEDGES_TOTAL_PLEDGED, new BigDecimal(1));
+			expresions.put(PLEDGES_TOTAL, pledgedtotal);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}*/
+	
 	/**
 	 * Get The expression by Key
 	 * 

@@ -1776,7 +1776,7 @@ public class TeamUtil {
 			String queryString = "";
 			Query qry = null;
 			//queryString = "select act.ampActivityId, act.name, act.ampId from "+ AmpActivity.class.getName()	+ " act  ";
-			queryString ="select grp.ampActivityLastVersion.ampActivityId, grp.ampActivityLastVersion.name, grp.ampActivityLastVersion.ampId from "
+			queryString ="select grp.ampActivityLastVersion.ampActivityId, grp.ampActivityLastVersion.name, grp.ampActivityLastVersion.ampId,grp.ampActivityLastVersion.archived from "
 				 + AmpActivityGroup.class.getName()+" grp ";
 			if(teamId!=null){
 				//queryString+="where act.team="+teamId;
@@ -1797,6 +1797,7 @@ public class TeamUtil {
 				Object[] act = (Object[]) itr.next();
 				//AmpActivity act = (AmpActivity) itr.next();
 				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (String) act[2] );
+				activity.setArchived((Boolean)act[3]);
 				//AmpActivity activity = (AmpActivity)itr.next();
 				AmpActivity tmp = holder.get(activity.getAmpActivityId());
 				if (tmp==null){

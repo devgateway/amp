@@ -7,19 +7,20 @@ class Reports::CustomController < ReportsController
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 
     },
-    [:prj_status, :grant_loan, :aid_modality_ids, :type_of_implementation] => 
-      lambda { |m, v| ["#{m} IN (?)", v] },
+    [:prj_status, :grant_loan, :aid_modality_ids, :type_of_implementation, :on_off_budget, :on_off_treasury] =>
+      lambda { |m, v| ["#{m} IN (?)", v] }}
       
     # FIXME: This makes no sense for a filter, waiting for Vanessas response to ODANIC-82
-    :on_off_budget => lambda { |m, v|
+    # Commented out features to allow project level On Budget and Single Treasury Account (this replaces On/Off treasury) ODAMOZ-66
+#    :on_off_budget => lambda { |m, v|
        # both on and off are selected if length is 2
-       ["fundings.on_budget = ?", v] unless v.length == 2
-    },
-    :on_off_treasury => lambda { |m, v|
-       # both on and off are selected if length is 2
-       ["fundings.on_treasury = ?", v] unless v.length == 2
-    }
-  }
+#       ["fundings.on_budget = ?", v] unless v.length == 2
+#    },
+#    :on_off_treasury => lambda { |m, v|
+#       # both on and off are selected if length is 2
+#       ["fundings.on_treasury = ?", v] unless v.length == 2
+#    }
+#  }
   
   def new
     

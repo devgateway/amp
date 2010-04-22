@@ -57,10 +57,10 @@ en:
           label: Type of Implementation
         aid_modality: 
           label: Aid Modality
-        single_treasury_account:
-          label: Single Treasury Account
-        on_budget:
-          label: On Budget
+        on_off_treasury:
+          label: On/Off Treasury
+        on_off_budget:
+          label: On/Off Budget
         government_project_code:
           label: Government Budget Code
         enters_in:

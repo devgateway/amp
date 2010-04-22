@@ -22,13 +22,14 @@ class Project < ActiveRecord::Base
   IMPLEMENTATION_TYPES      = [['bilateral', 1], ['multilateral', 2], ['ngo_implementation', 3]]
 
   GRANT_LOAN_OPTIONS        = [['grant', 1], ['loan', 2]]
+
   #TODO: Delethign this, replaced by ON_OFF_BUDGET
-  ON_OFF_BUDGET_OPTIONS     = [['on_budget', true], ['off_budget', false]]
+#  ON_OFF_BUDGET_OPTIONS     = [['on_budget', true], ['off_budget', false]]
+
+
+#  ON_OFF_CUT                = [['on_cut', true], ['off_cut', false]]
   ON_OFF_TREASURY_OPTIONS   = [['on_treasury', true], ['off_treasury', false]]
-
-
-  ON_OFF_CUT                = [['on_cut', true], ['off_cut', false]]
-  ON_OFF_BUDGET             = [['on_budget', true], ['off_budget', false]]
+  ON_OFF_BUDGET_OPTIONS     = [['on_budget', true], ['off_budget', false]]
 
 
 
@@ -135,7 +136,7 @@ class Project < ActiveRecord::Base
   validates_presence_of     :national_regional, :type_of_implementation, :aid_modality_id, :grant_loan, 
                             :officer_responsible_name
 
-  validates_presence_of     :government_counterpart_id, :government_project_code, :single_treasury_account, :on_budget, :if => :on_budget_validation?
+  validates_presence_of     :government_counterpart_id, :government_project_code, :on_off_budget, :if => :on_budget_validation?
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances
   validates_associated      :fundings, :funding_forecasts, :historic_funding
   
@@ -276,7 +277,7 @@ protected
   end
 
   def on_budget_validation?
-    self.on_budget
+    self.on_off_budget
 #   !(fundings.detect {|funding| funding.on_budget == true }).blank?
   end
 end

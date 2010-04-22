@@ -2,7 +2,7 @@
 <ul class="checkbox_container">
   <li class="all"><%= check_box_tag "donors[]", "all", true %>all</a>
     
-  <% for donor in Donor.main.ordered.all(:limit => 22) %>
+  <% for donor in Donor.countries.ordered.all %>
     <li><%= check_box_tag "donors[]", donor.id %><%= donor.name %></li>
   <% end %>
 </ul>

@@ -1,6 +1,6 @@
 class Donor < ActiveRecord::Base
   acts_as_reportable
-  
+
   translates :name
   
   has_many :users
@@ -30,12 +30,19 @@ class Donor < ActiveRecord::Base
   
   # List of main donors (not cofunding only!)
   named_scope :main, :conditions => "cofunding_only IS DISTINCT FROM true"
-  named_scope :bluebook, :conditions => "cofunding_only IS DISTINCT FROM true AND bluebook_donor IS DISTINCT FROM false "
-  
+
+  # List of Donors (Non-UN)
+  named_scope :countries, :conditions => "cofunding_only IS DISTINCT FROM true AND donor_type = 'country' "
+
+  # List of UN Agencies 
+  named_scope :un_agencies, :conditions => "cofunding_only IS DISTINCT FROM true AND donor_type = 'un_agency'  "
+
+
   # TODO: This is a hack to order by the translated donor name
   # This should better be done in the globalization plugin directly but joining in the translation
   named_scope :ordered, :order => "name ASC"
   FIRST_YEAR_OF_RELEVANCE   = 2007
+  DONOR_TYPES = %w(country un_agency)
   
   # Mark projects of destroyed donors as deleted instead of removing them from the db immediately
   before_destroy { |d| d.projects.update_all(:data_status => Project::DELETED) }
@@ -111,6 +118,17 @@ class Donor < ActiveRecord::Base
       :conditions => ['projects.donor_id = ? AND projects.data_status = ?', self.id, Project::PUBLISHED],
       :group => 'funding_forecasts.year'
     ).inject({}) {|totals, rec| totals[rec.year] = rec.forecast.to_currency(currency, rec.year); totals} 
+  end
+
+  def commitments_by_aid_modality(year = Time.now.year)
+    # FIXME: This is a very ugly solution to the problem and should be replaced asap.
+    # Use lazy loading to minimize database queries
+    @annual_payments_by_toa ||= Funding.find(:all,
+      :select=>'fundings.commitments AS commitments, fundings.year as year, projects.aid_modality_id AS aid_modality',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND fundings.year = ?', self.id, Project::PUBLISHED, year],
+      :group => 'aid_modality, year'
+    ).inject([]) {|totals, rec| totals[rec.aid_modality.to_i] = rec.pay.to_currency(currency, rec.year); totals}
   end
   
   def payments_by_aid_modality(year = Time.now.year)

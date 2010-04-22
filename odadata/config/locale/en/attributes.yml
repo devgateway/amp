@@ -202,6 +202,8 @@ en:
           label: Total Local Staff
         flag: 
           label: Country Flag or Organisation Logo
+        donor_type:
+          label: Donor Type
         profile_picture: 
           label: Representative Picture of Donor Country (for EU Blue Book)
         oda_on_budget_1:

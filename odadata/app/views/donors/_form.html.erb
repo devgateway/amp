@@ -1,12 +1,9 @@
 <% labeled_form_for @donor, :html => { :multipart => true } do |f| %>
 	<% f.field_set do %>
-		<li><%= f.check_box :cofunding_only %></li>
-		<li><%= f.check_box :bluebook_donor %></li>
-		
 		<li><%= f.text_field :code %></li>
 		<li class="fifty"><%= f.text_field :name %></li>
 		<li class="fifty"><%= f.text_field :name_es %></li>
-		
+                <li><%= f.select :donor_type, Donor::DONOR_TYPES.map { |s| [s.humanize, s]} %></li>
 		<li>
             <%= f.file_field :flag %>
 			<% if @donor.flag.url(:regular).include?('missing.png') %>
@@ -24,6 +21,8 @@
 		
 		<li><%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %></li>
 	<% end %>
+		<li><%= f.check_box :cofunding_only %></li>
+		<li><%= f.check_box :bluebook_donor %></li>
 	
 	<div class="buttonHolder"><%= f.submit %></div>
 <% end %>

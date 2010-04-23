@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript">
     <jsp:include page="scripts/calendar.js.jsp" flush="true" />
@@ -242,14 +243,21 @@
             }
         }
         function removeSectors() {
-    <digi:context name="removeSectors" property="context/module/moduleinstance/editOrganisation.do" />
-            document.aimAddOrgForm.actionFlag.value="removeSector";
-            document.aimAddOrgForm.action = "${removeSectors}";
-            document.aimAddOrgForm.target = "_self";
-            document.aimAddOrgForm.submit();
+        	var sectorsToBeRemoved=$("#selectedSectors").find("input.sectorsMultibox:checked");
+        	if(sectorsToBeRemoved==null || sectorsToBeRemoved.length == 0){
+            	alert('Please choose at least one sector to remove');
+            	return false;
+        	}else{
+        		<digi:context name="removeSectors" property="context/module/moduleinstance/editOrganisation.do" />
+                document.aimAddOrgForm.actionFlag.value="removeSector";
+                document.aimAddOrgForm.action = "${removeSectors}";
+                document.aimAddOrgForm.target = "_self";
+                document.aimAddOrgForm.submit();
+        	}
         }
+        
         function addSector() {
-    <digi:context name="addSectors" property="context/module/moduleinstance/editOrganisation.do" />
+    		<digi:context name="addSectors" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addSector";
             document.aimAddOrgForm.action = "${addSectors}";
             document.aimAddOrgForm.target = "_self";
@@ -301,10 +309,9 @@
             }
             catch(err){
                 return false;
-
             }
-
         }
+        
         function fnChk(frmContrl,exceedhundred){
             //alert(frmContrl.value);
     <c:set var="errMsgAddSectorNumericValue">
@@ -949,12 +956,12 @@ function resetPrimary(contList){
                                                                 <tr>
                                                                     <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sector Preferences</digi:trn><font color="red">*</font></td>
                                                                     <td>
-                                                                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+                                                                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedSectors">
                                                                             <c:if test="${aimAddOrgForm.sectors != null}">
                                                                                 <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
                                                                                     <tr>
                                                                                         <td width="5px" align="right">
-                                                                                            <html:multibox property="selSectors" >
+                                                                                            <html:multibox property="selSectors" styleClass="sectorsMultibox">
                                                                                                 <c:if test="${sector.subsectorLevel1Id == -1}">
                                                                                                     ${sector.sectorId}
                                                                                                 </c:if>
@@ -1463,11 +1470,11 @@ function resetPrimary(contList){
                 <tr>
                     <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sector Preferences</digi:trn></td>
                     <td>
-                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedSectors">
                             <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
                                 <tr>
                                     <td width="5px" align="right">
-                                        <html:multibox property="selSectors" >
+                                        <html:multibox property="selSectors" styleClass="sectorsMultibox">
                                             <c:if test="${sector.subsectorLevel1Id == -1}">
                                                 ${sector.sectorId}
                                             </c:if>

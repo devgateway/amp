@@ -413,9 +413,9 @@ function commentWin(val) {
 																						</tr>
 																						<tr>																						
 																						<logic:iterate name="activity" property="chapter.imputations" id="imp">
-																						<td>
+																						<tr><td>
 																						${activity.chapter.year} - ${imp.code} - ${imp.description} 
-																						</td>
+																						</td></tr>
 																						</logic:iterate>
 																						</tr>
 																								<tr>

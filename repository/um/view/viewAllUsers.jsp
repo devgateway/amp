@@ -332,7 +332,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 					document.umAddUserForm.target = "_self";
 					//document.umAddUserForm.submit();
 					var url = "<%=selectType %>";
-					YAHOO.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+                    var postString= getParams()
+                    YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 				}
 				return false;
 			}
@@ -352,7 +353,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
 					document.umAddUserForm.target = "_self";
 					//document.umAddUserForm.submit();
 					var url = "<%=selectGrp %>";
-					YAHOO.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+                    var postString= getParams()
+                    YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 					
 				}
 				return false;
@@ -502,8 +504,9 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
       if(validate()){
         userRegistered = true;
 		<digi:context name="addNewUser" property="context/module/moduleinstance/registerUser.do" />
-		var url = "<%=addNewUser %>";
-		YAHOO.util.Connect.asyncRequest("POST",url +"?"+ getParams(), callback, '');
+        var url = "<%=addNewUser %>";
+        var postString= getParams()
+        YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
          
       }
     }

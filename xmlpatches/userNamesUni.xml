@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-8346</jira>
+    <keyword>users</keyword>
+    <keyword>unicode</keyword>
+    <author>Medea Gugushvili</author>
+    <description>In the some databases dg_user table doesn't have Unicode type for FIRST_NAMES and LAST_NAME columns</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="mysql">
+                ALTER TABLE dg_user MODIFY FIRST_NAMES varchar(255) CHARACTER SET utf8;
+                ALTER TABLE dg_user MODIFY LAST_NAME varchar(255) CHARACTER SET utf8;
+            </lang>
+        </script>
+    </apply>
+
+</tns:patch>

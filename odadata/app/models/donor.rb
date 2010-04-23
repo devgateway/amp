@@ -43,6 +43,7 @@ class Donor < ActiveRecord::Base
   named_scope :ordered, :order => "name ASC"
   FIRST_YEAR_OF_RELEVANCE   = 2007
   DONOR_TYPES = %w(country un_agency)
+  YES_NO_OPTIONS = [["donor_yes", true], ["donor_no", false]]
   
   # Mark projects of destroyed donors as deleted instead of removing them from the db immediately
   before_destroy { |d| d.projects.update_all(:data_status => Project::DELETED) }

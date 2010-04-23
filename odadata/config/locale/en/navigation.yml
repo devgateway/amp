@@ -7,7 +7,10 @@ en:
     
     default:
       home: Home
-      donor_atlas: Donor Atlas
+      donor_profiles:
+        head: Donor Profiles
+        donor: Donors
+        un_agencies: UN Agencies
       search_by: 
         head: Search projects by
         donor: Donor
@@ -37,7 +40,7 @@ en:
       published_projects: Published
       deleted_projects: Recycle Bin
       bluebook: EU Blue Book
-      donor_atlas: Donor Atlas
+      donor_atlas: Donor Info
       design_own: Design own report
       strategy: Country Strategy
       financial_consistency: Financial Consistency

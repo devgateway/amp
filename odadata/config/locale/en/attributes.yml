@@ -222,6 +222,28 @@ en:
           label: used national procurement systems in calendar
         oda_on_budget_4_currency:
           label: "Currency"
+        parallel_piu:
+          label: Number of parallel project implementation units (PIU) used in this calendar year?
+        yearly_missions:
+          label: "Number of missions:"
+        yearly_coordinated_missions:
+          label: "Co-ordinated missions:"
+        yearly_analytic_works:
+          label: "Number of works:"
+        yearly_coordinated_analytic_works:
+          label: "Co-ordinated works:"
+        gbs_multiyear_agreement:
+          label: Multi year agreement
+        gbs_multiyear_agreement_years:
+          label: "Amount of years:"
+        gbs_question_1:
+          label: Were your financial commitments for GBS in year n made within 4 weeks after the JR in year n-1?
+        gbs_question_2:
+          label: Have your organization disbursed all the committed funds in this year as scheduled?
+        gbs_question_3:
+          label: Have your organization disbursed all the committed funds according to the quarterly disbursement schedule agreed?
+        gbs_question_4:
+          label: Is it possible to identify specific categories of items NOT recorded in the State Budget that should have been recorded?<br> Please, indicate the items.
         
       exchange_rate:
         currency: 

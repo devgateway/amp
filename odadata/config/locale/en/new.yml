@@ -63,9 +63,16 @@ en:
         back: Back
   
   donor_details:
+    general_info: General Information
+    donor_profile: Donor Profile
     edit: 
       title: Edit Donor Contact Details
-
+      saved: Donor details saved sucessfully
+    form:
+      total_oda_classification_title: "Total amount of ODA to GoM (ON Budget) that"
+      yearly_missions_head: Donor missions to the field undertaken in this calendar year
+      yearly_analytic_works_head: Country analytic works in this calendar year
+      gbs_head: General Budget Support
   donor:
     edit:
       title: Edit Donor
@@ -81,7 +88,7 @@ en:
       title: Add New Donor
     show:
       title: Donor Fact Sheet for <i>{{donor}}</i>
-  
+
   exchange_rates:
     edit:
       title: Edit Exchange Rate
@@ -125,6 +132,7 @@ en:
         exchange_rates: Exchange Rates
         resources: Resources
       focal_point:
+        short_title: Official Development Assistance <br/>to Mozambique Database
         design_own: Design own report
         bluebook: EU Blue Book
         projects: Projects
@@ -374,4 +382,60 @@ en:
     new:
       title: Add New Login Account
       back: Back
-  
+
+  donor_profiles:
+      title: Donors
+      un_agencies: UN Agencies
+      head: Donor Profiles
+      donor: Donor
+      donor_report: Donor Report
+      institutional_framework:
+        head: Institutional Framework
+        institutions_responsible_for_oda: Management System for ODA
+        total_staff_in_country: Total Staff in Country
+        total_expatriate_staff: Total Expatriate Staff
+        total_local_staff: Total Local Staff
+      contact:
+        head: Contact Information
+        address: Address
+        phone: Phone
+        email: Email
+        website: Website
+      aid_at_a_glance:
+        head: Aid at a glance
+        grant_total_oda: Grant ODA / Total ODA
+        loan_total_oda: Loan ODA / Total ODA
+      oda_breakdown:
+        head: ODA Breakdown
+        multilateral_total_oda: Multilateral ODA / Total ODA
+        bilateral_total_oda: Bilateral ODA / Total ODA
+        support_ngos_total: Support to NGOs / Total ODA
+        top_regions: Top 3 Regions
+        only_national: Only national activities.
+      donor_details:
+        oda_on_budget_head: "Total amount of ODA to GoM (ON Budget) that:"
+        oda_on_budget_1: used national budget execution procedures
+        oda_on_budget_2: used national financial reporting procedures
+        oda_on_budget_3: used national auditing procedures
+        oda_on_budget_4: used national procurement systems in calendar
+        parallel_piu: Number of parallel project implementation units (PIU) used in this calendar year?
+        yearly_missions_head: Donor missions to the field undertaken in this calendar year
+        yearly_missions: "Number of missions:"
+        yearly_coordinated_missions: "Co-ordinated missions:"
+        yearly_analytic_works_head: Country analytic works in this calendar year
+        yearly_analytic_works: "Number of works:"
+        yearly_coordinated_analytic_works: "Co-ordinated works:"
+        gbs_head: General Budget Support
+        gbs_multiyear_agreement: Multi year agreement
+        gbs_multiyear_agreement_years: "Amount of years:"
+        gbs_question_1: Were your financial commitments for GBS in year n made within 4 weeks after the JR in year n-1?
+        gbs_question_2: Have your organization disbursed all the committed funds in this year as scheduled?
+        gbs_question_3: Have your organization disbursed all the committed funds according to the quarterly disbursement schedule agreed?
+        gbs_question_4: Is it possible to identify specific categories of items NOT recorded in the State Budget that should have been recorded?<br> Please, indicate the items.
+      disbursements:
+        head: Disbursements
+        in_millions: in Millions
+        grant: Grant
+        loan: Loan
+        total: Total
+        forecast: Forecasts

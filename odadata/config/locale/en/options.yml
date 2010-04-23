@@ -86,8 +86,8 @@ en:
     in_cash_under_donor: "In cash under donor management"
     in_cash_under_beneficiary: "In cash under beneficiary/government management"
 
-    yes: "Yes"
-    no: "No"
+    donor_yes: "Yes"
+    donor_no: "No"
 
     not_apply: "No"
     state: State

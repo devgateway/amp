@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :projects,                :member => { :update_status => :get, :map => :get, :clone => :get }
                                           
   map.resources :users                   
-  map.resources :donor_agencies                
+  map.resources :donor_agencies
   map.resources :country_strategies,      :collection => { :add_sector => :get }
   
   map.resources :donors do |d|
@@ -48,17 +48,21 @@ ActionController::Routing::Routes.draw do |map|
   
   ##
   # EU Blue Book routes
-  map.namespace :donor_atlas do |donor_atlas|
-    donor_atlas.with_options :path_prefix => '/donor_atlas/:year', :year => /\d{4}/ do |da|
-      da.root :controller => 'pages', :action => 'contents'
-      da.pages '/pages/:page_name', :controller => 'pages'
-  
-      da.resources :donor_profiles, :only => [:show], :formatted => :none
+  map.namespace :donor_info do |donor_info|
+    donor_info.with_options :path_prefix => '/donor_info/:year', :year => /\d{4}/ do |bb|
+      bb.root :controller => 'pages', :action => 'contents'
+      bb.pages '/pages/:page_name', :controller => 'pages'
   
       # Chart routes
-      da.connect 'charts/:action/:id.:format', :controller => 'charts'
-      da.connect 'charts/:action.:format', :controller => 'charts'
-      da.connect 'charts/:action/:id', :controller => 'charts'
+      bb.connect 'charts/:action/:id.:format', :controller => 'charts'
+      bb.connect 'charts/:action.:format', :controller => 'charts'
+      bb.connect 'charts/:action/:id', :controller => 'charts'
+    end
+    donor_info.with_options :path_prefix => '/donor_info' do |bb|
+      bb.root :controller => 'pages', :action => 'contents'
+      bb.pages '/pages/:page_name', :controller => 'pages'
+      bb.resources :donor_profiles, :only => [:show], :formatted => :none
+      bb.connect 'donor_report/:action/:id.:format', :controller => 'donor_report'
     end
   end
   

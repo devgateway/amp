@@ -26,6 +26,8 @@ Rails::Initializer.run do |config|
   config.gem "spreadsheet"
   config.gem "tilecache",                 :lib => 'tile_cache',         :version => '>=0.0.4'
   config.gem "jrails",                    :version => '>=0.6.0'
+  config.gem "GeoRuby",                   :lib => false
+  config.gem "spatial_adapter"
   # Gems from GitHub
   config.gem 'mislav-will_paginate',      :lib => 'will_paginate',      :source => 'http://gems.github.com'
   config.gem 'rubyist-aasm',              :lib => 'aasm',               :source => 'http://gems.github.com'

@@ -269,8 +269,7 @@ function deleteFlag(id) {
                             <div class="pseudoInput">
                               <input type="text" id="pseudotext"  READONLY/>
                               <input type="button" id="pseudobutton" value="<digi:trn key="aim:browseFile">Browse...</digi:trn>" style="width:75px; height:20px;font-size:10px;"/>
-                              <html:file name="aimFlagUploaderForm" property="flagFile" styleId="flagUploader" styleClass="hide" onmousedown="buttonClicked('depressed');" onmouseup="buttonClicked('normal');" onmouseout="buttonClicked('phased');"  />
-
+                              <html:file name="aimFlagUploaderForm" property="flagFile" styleId="flagUploader" styleClass="hide" onmousedown="buttonClicked('depressed');" onmouseup="buttonClicked('normal');" onmouseout="buttonClicked('phased');" />                              
 
                             </div>
                           </div>
@@ -279,7 +278,7 @@ function deleteFlag(id) {
 
 
 
-                      </tr>
+                      </tr>                      
 
                       <tr>
 
@@ -319,7 +318,6 @@ function deleteFlag(id) {
                         </td>
 
                       </tr>
-
                     </table>
 
             </td>

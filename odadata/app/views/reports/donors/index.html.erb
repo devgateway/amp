@@ -9,7 +9,7 @@
 		<th><%= t('.list') %></th>
                 <th><%= t('.map') %></th>
 	</tr>
-	<% Donor.countries.each do |donor| %>
+	<% Donor.countries.ordered.each do |donor| %>
 		<% projects = donor.projects.published %>
 		<tr>
 			<td><%= donor.name %></td>
@@ -31,7 +31,7 @@
 		<th><%= t('.list') %></th>
                 <th><%= t('.map') %></th>
   </tr>
-        <% Donor.un_agencies.each do |donor| %>
+        <% Donor.un_agencies.ordered.each do |donor| %>
 		<% projects = donor.projects.published %>
 		<tr>
 			<td><%= donor.name %></td>

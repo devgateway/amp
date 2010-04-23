@@ -125,7 +125,7 @@
 					%>
 					--%>
 					
-						<digi:errors/>
+
 						<c:if test="${param['loginError'] != null}">
 						  <bean:message key="errors.header" />
 						  <bean:message key="errors.prefix" />

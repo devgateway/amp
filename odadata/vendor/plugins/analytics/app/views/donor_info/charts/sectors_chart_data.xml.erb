@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pie>
+	<% @sector_payments.each_with_index do |p, idx| %>
+		<slice title="<%= p.dac_sector.name_with_code %>" color="<%= Settings::COLOR_SCHEME[idx] %>"><%= p.payments.to_i %></slice>
+	<% end %>
+</pie>

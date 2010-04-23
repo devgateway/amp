@@ -1,0 +1,7 @@
+<% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+    <%= y %>
+    <%= @gbs_commitment[y] %><br>
+<% end %>
+
+
+

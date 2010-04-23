@@ -1,0 +1,321 @@
+<table class="bluebook">
+<% I18n.with_options :scope => [:donor_profiles] do |nav| %>
+	<tr>
+		<td width=20% valign=top>
+			<% unless @donor.profile_picture.url(:regular).include?('missing.png') %>
+				<%= image_tag @donor.profile_picture.url(:regular) %>
+			<% end%>
+
+			<br><br><br>
+			<center>
+			<% if @donor.flag.url(:regular).include?('missing.png') %>
+				<img src="/flags/missing/regular/missing.png" alt="missing.png" width="80" height="54" border="1"/>
+			<% else %>
+				<%= image_tag @donor.flag.url(:regular) %>
+			<% end%><br><br>
+			<font size="3"><b><%= @donor.name %></b></font>
+
+                        <br>
+                        <%= link_to nav.t("donor_report"), :controller => 'donor_report', :action => 'show', :id => @donor %>
+			</center>
+		</td>
+		<td width=40% valign=top>
+			<strong><%=  nav.t("institutional_framework.head") %></strong></br>
+			<table width="100%">
+				<tr>
+					<td><%= nav.t("institutional_framework.institutions_responsible_for_oda") %></td>
+					<td><%= @donor.institutions_responsible_for_oda %></td>
+				</tr>
+				<tr>
+					<td><%= nav.t("institutional_framework.total_staff_in_country") %></td>
+					<td><%= @donor.donor_details.find_by_year(year).total_staff_in_country %></td>
+				</tr>
+				<tr>
+					<td><%= nav.t("institutional_framework.total_expatriate_staff") %></td>
+					<td><%= @donor.donor_details.find_by_year(year).total_expatriate_staff %></td>
+				</tr>
+				<tr>
+					<td><%= nav.t("institutional_framework.total_local_staff") %></td>
+					<td><%= @donor.donor_details.find_by_year(year).total_local_staff %></td>
+				</tr>
+				<tr>
+					<td colspan=2>
+                                          <strong><%= nav.t('contact.head') %></strong><br>
+                                          <strong><%= nav.t("contact.address") %>:</strong><%= @donor.field_office_address %><br>
+                                          <strong><%= nav.t("contact.phone") %>: </strong><%= @donor.field_office_phone %><br>
+                                          <strong><%= nav.t("contact.email") %>: </strong><%= auto_link(@donor.field_office_email) %><br>
+                                          <strong><%= nav.t("contact.website") %>: </strong><%= auto_link(@donor.field_office_website) %><br>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width=40% valign=top>
+			<strong><%= nav.t("aid_at_a_glance.head") %></strong>
+			<table>
+				<tr>
+					<td><%= nav.t("aid_at_a_glance.grant_total_oda") %></td>
+					<td><%= @disbursement_grants.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= nav.t("aid_at_a_glance.loan_total_oda") %></td>
+					<td><%= @disbursement_loans.round %> %</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td width=100% valign=top colspan="2" align="right">
+			<br />
+			<strong><%= nav.t("oda_breakdown.head") %></strong>
+			<table>
+				<tr>
+					<td><%= nav.t("oda_breakdown.multilateral_total_oda") %></td>
+					<td><%= @disbursement_multilaterals.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= nav.t("oda_breakdown.bilateral_total_oda") %></td>
+					<td><%= @disbursement_bilaterals.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= nav.t("oda_breakdown.support_ngos_total") %></td>
+					<td><%= @disbursement_ngos.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= nav.t("oda_breakdown.top_regions") %></td>
+					<td>
+						<% if @top_three.blank? %>
+							<i><%= nav.t("oda_breakdown.only_national") %></i>
+						<% else %>
+							<%= format_as_html_list(@top_three.map { |data| "-&nbsp;#{data.province.name}" }) %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+                </td>
+                <td>
+			<table style="float:right;">
+				<tr>
+                                  <td>
+                                    <div style="width: 100%; text-align: left; padding-top: 4px"><%= render :partial => '/layouts/currency_selector' %></div>
+                                  </td>
+                                </tr>
+				<tr>
+					<td><b><%= nav.t("disbursements.head") %> (<%= "#{MultiCurrency.output_currency}" %>, <%= nav.t("disbursements.in_millions") %> )</b>
+						<table>
+							<tr>
+								<td class="title">
+                                </td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td class="title"><%=y%></td>
+  <%
+  end
+  %>
+								<td class="title"><%=year+1%> * </td>
+							</tr>
+							<tr>
+								<td class="sub_title"><%= nav.t("disbursements.grant") %></td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td><%= in_millions(@total_payments_grants[y]) %></td>
+  <%
+  end
+  %>
+								<td><%= in_millions(@total_forecasts_grants) %></td>
+							</tr>
+							<tr>
+								<td class="sub_title"><%= nav.t("disbursements.loan") %></td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td><%= in_millions(@total_payments_loans[y])  %></td>
+  <%
+  end
+  %>
+								<td><%= in_millions(@total_forecasts_loans)  %></td>
+							</tr>
+                            <tr>
+								<td class="sub_title"><%= nav.t("disbursements.total") %></td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td><%= in_millions(@total_payments_grants[y] + @total_payments_loans[y]) %></td>
+  <%
+  end
+  %>
+								<td><%= in_millions(@total_forecasts_grants + @total_forecasts_loans) %></td>
+							</tr>
+						</table>
+						*&nbsp;<%= nav.t("disbursements.forecast") %>
+					</td>
+				</tr>
+                        </table>
+		</td>
+	</tr>
+	<tr>
+          <td colspan="3">
+            <table border="0" width="100%">
+              <tr>
+                <td colspan="3">
+                  <strong><%= nav.t("donor_details.oda_on_budget_head") %></strong> <br>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.oda_on_budget_1") %>
+                </td>
+                <td>
+                  <%=@donor.oda_on_budget_1%>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.oda_on_budget_2") %>
+                </td>
+                <td>
+                  <%=@donor.oda_on_budget_2%>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.oda_on_budget_3") %>
+                </td>
+                <td>
+                  <%=@donor.oda_on_budget_3%>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.oda_on_budget_4") %>
+                </td>
+                <td>
+                  <%=@donor.oda_on_budget_4%>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <strong><%= nav.t("donor_details.parallel_piu") %></strong> <br>
+                </td>
+                <td>
+                  <%=@donor.parallel_piu%>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <strong><%= nav.t("donor_details.yearly_missions_head") %></strong> <br>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.yearly_missions") %>
+                </td>
+                <td>
+                  <%=@donor.yearly_missions%>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.yearly_coordinated_missions") %>
+                </td>
+                <td>
+                  <%=@donor.yearly_coordinated_missions%>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <strong><%= nav.t("donor_details.yearly_analytic_works_head") %></strong> <br>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.yearly_analytic_works") %>
+                </td>
+                <td>
+                  <%=@donor.yearly_analytic_works%>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.yearly_coordinated_analytic_works") %>
+                </td>
+                <td>
+                  <%= @donor.yearly_coordinated_analytic_works%>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <strong><%= nav.t("donor_details.gbs_head") %></strong> <br>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.gbs_multiyear_agreement") %>
+                </td>
+                <td>
+                  <%=option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_multiyear_agreement)%>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.gbs_multiyear_agreement_years") %>
+                </td>
+                <td>
+                  <%=@donor.gbs_multiyear_agreement_years%>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.gbs_question_1") %>
+                </td>
+                <td>
+                  <%= option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_question_1) %>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.gbs_question_2") %>
+                </td>
+                <td>
+                  <%= option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_question_2) %>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.gbs_question_3") %>
+                </td>
+                <td>
+                  <%= option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_question_3) %>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                  <%= nav.t("donor_details.gbs_question_4") %>
+                </td>
+                <td>
+                  <%=@donor.gbs_question_4%>
+                </td>
+              </tr>
+            </table>
+        </td>
+	</tr>	
+<% 
+end 
+%>
+</table>
+

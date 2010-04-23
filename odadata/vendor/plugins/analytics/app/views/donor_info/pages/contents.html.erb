@@ -1,0 +1,30 @@
+<table class="bluebook">
+<%
+if params[:un] == "yes"
+%>
+	<tr>
+		<td class="head"><%=t("donor_profiles.un_agencies")%></td>
+	</tr>
+	<% Donor.un_agencies.ordered.each do |d| %>
+		<tr>
+			<td><%= link_to(d.name.titleize, donor_info_donor_profile_path(d.id)) %></a></td>
+		</tr>
+	<% end %>
+<%
+else
+%>
+	<tr>
+		<td class="head"><%=t("donor_profiles.title")%></td>
+	</tr>
+	<% Donor.countries.ordered.each do |d| %>
+		<tr>
+			<td><%= link_to(d.name.titleize, donor_info_donor_profile_path(d.id)) %></a></td>
+		</tr>
+	<% end %>
+<%
+end
+%>
+        <tr>
+                <td>All Aggregated Donor Report</td>
+        </tr>
+</table>

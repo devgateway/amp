@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chart>
+        <series>
+                <% x=-1 %>
+                <% @aid_payments.each_key do |aid_modality| %>
+                        <value xid="<%= x+=1.to_i %>"><%= aid_modality %></value>
+                <% end %>
+
+        </series>
+        <graphs>
+       
+                <graph gid="1">
+                        <% x=-1 %>
+                        <% @aid_commitments.each_value do |commitments| %>
+                                <value xid="<%= x+=1.to_i %>" color="#0000FF"><%= (commitments.to_f/1000000).round(2) %></value>
+                        <% end %>
+                </graph>
+               
+                <graph gid="2">
+                        <% x=-1 %>
+                        <% @aid_payments.each_value do |payments| %>
+                                <value xid="<%= x+=1.to_i %>" color="00FFFF"><%= (payments.to_f/1000000).round(2) %></value>
+                        <% end %>
+                </graph>
+       
+        </graphs>
+
+</chart>

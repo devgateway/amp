@@ -88,9 +88,15 @@ public class ExportBuilder {
 
 	public ActivityType getActivityType(AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		ActivityType retValue = objectFactory.createActivityType();
+		if (ampActivity.getAmpId() == null){
+			String msg = "AmpID is empty";
+			this.addToLog(ampActivity, msg);
+			throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+		}
 		retValue.setDbKey(ampActivity.getAmpId());
 		retValue.setDate(ExportHelper.getGregorianCalendar(ampActivity.getCreatedDate()));
-		
+
+
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
 			if (elem.canExport()){
 				buildActivityType(retValue, elem);

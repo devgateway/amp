@@ -50,7 +50,9 @@
 			</div>
 				</td>
 	</logic:present>
-	
+	<logic:notPresent name="currentMemeber" scope="session">
+		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center"">&nbsp;</td>
+	</logic:notPresent>
 	<c:if test="${addFakeColumn}">
 			<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
 		</c:if>
@@ -78,6 +80,9 @@
 		</td>
 		
 	</logic:present>
+	<logic:notPresent name="currentMemeber" scope="session">
+		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center">&nbsp;</td>
+	</logic:notPresent>
 		<c:if test="${addFakeColumn}">
 				<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
 		</c:if>

@@ -4,6 +4,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -66,6 +67,7 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ChapterUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -88,6 +90,7 @@ import org.digijava.module.editor.util.Constants;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.HibernateException;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
@@ -358,6 +361,17 @@ public class AddAmpActivity extends Action {
         teamLeadFlag = teamMember.getTeamHead();
         workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
       }
+      
+      if(eaForm.getIdentification().getChapterCode()!=null)
+			try {
+				eaForm.getIdentification().setChapterForPreview(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
 
       if (teamLeadFlag && workingTeamFlag)
         eaForm.setWorkingTeamLeadFlag("yes");
@@ -868,7 +882,16 @@ private ActionForward showStep9(ActionMapping mapping,
 	              eaForm.getIdentification().setActAthLastName(usr.getLastName());
 	              eaForm.getIdentification().setActAthEmail(usr.getEmail());
 	              eaForm.getIdentification().setActAthAgencySource(usr.getOrganizationName());
-	
+	              if(eaForm.getIdentification().getChapterCode()!=null)
+					try {
+						eaForm.getIdentification().setChapterForPreview(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
+					} catch (HibernateException e) {
+						logger.error(e);
+						e.printStackTrace();
+					} catch (SQLException e) {
+						logger.error(e);
+						e.printStackTrace();
+					}
 	            }
 	          }
 	
@@ -1324,6 +1347,12 @@ private ActionForward showStep1(ActionMapping mapping,
 	eaForm.getContracts().setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContracts().getContractDetails(), request));
 	eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 
+	//chapter
+    eaForm.getIdentification().setChapterYears(Util.createBeanWrapperItemsCollection(ChapterUtil.getDistinctChapterYearList()));
+    if(eaForm.getIdentification().getChapterYear()!=null) 
+    	eaForm.getIdentification().setChapterCodes(Util.createBeanWrapperItemsCollection(ChapterUtil.getChapterListForYear(eaForm.getIdentification().getChapterYear())));
+    
+	
 	if (eaForm.getIdentification().getResults() == null ||
 	    eaForm.getIdentification().getResults().trim().length() == 0) {
 	  eaForm.getIdentification().setResults("aim-results-" + teamMember.getMemberId() + "-" +

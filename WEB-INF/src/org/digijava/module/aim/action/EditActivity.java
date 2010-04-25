@@ -95,6 +95,7 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ChapterUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -666,7 +667,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  eaForm.getIdentification().setBudgetCodeProjectID(activity.getBudgetCodeProjectID().trim());
           
           eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
-
           /*
            * Tanzania adds
            */
@@ -721,7 +721,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  eaForm.getIdentification().setLessonsLearned(activity.getLessonsLearned().trim());
           
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
-
+      	
+      	if(activity.getChapter()!=null) {
+      		eaForm.getIdentification().setChapterCode(activity.getChapter().getCode());
+      		eaForm.getIdentification().setChapterYear(activity.getChapter().getYear());
+      	}
         
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 

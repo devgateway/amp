@@ -99,6 +99,7 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.ChapterUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -255,6 +256,8 @@ public class SaveActivity extends Action {
 			activity.setProjectImpact(eaForm.getIdentification().getProjectImpact());
 		}
 
+		activity.setChapter(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
+		
 		if (eaForm.getIdentification().getActivitySummary() == null
 				|| eaForm.getIdentification().getActivitySummary().trim().length() == 0) {
 			activity.setActivitySummary(new String(" "));
@@ -322,8 +325,6 @@ public class SaveActivity extends Action {
 		} else {
 			activity.setStatusReason(eaForm.getPlanning().getStatusReason().trim());
 		}
-
-		
 		
 		if (eaForm.getContracts().getContractDetails() == null
 				|| eaForm.getContracts().getContractDetails().trim().length() == 0) {

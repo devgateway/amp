@@ -678,8 +678,12 @@ function collapseAll() {
 
 								<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
+									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="budget_plus"  onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
+											<img id="budget_minus" onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"style="display : none"/>
+										<digi:trn key="aim:actBudget">Budget</digi:trn></td>
 										<td bgcolor="#ffffff">
+										<div id="budget_dots">...</div>
+										<div id="act_budget" style="display: none;">
 										<field:display name="On/Off Budget" feature="Budget">	
 
 										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="true">
@@ -690,6 +694,19 @@ function collapseAll() {
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget										</digi:trn>
 										</logic:equal>
+										
+										<p/>
+										<digi:trn>Code Chapitre</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code"/> - 
+										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/>
+										<p/>
+										<digi:trn>Imputations</digi:trn>:
+										<logic:iterate id="imputation" name="aimEditActivityForm" property="identification.chapterForPreview.imputations">
+										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> -
+										<bean:write name="imputation" property="code"/> -
+										<bean:write name="imputation" property="description"/>
+										<br/>
+										</logic:iterate>
 										
 										<%--
 										<logic:equal name="aimEditActivityForm" property="budget" value="false">
@@ -703,6 +720,7 @@ function collapseAll() {
 										</logic:equal>
 										--%>										
 										</field:display>
+										</div>
 										</td>
 									</tr>
 									</feature:display>

@@ -28,6 +28,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String projectManagement;
 	private String contractDetails;
 	
+	private AmpChapter chapter;
+	
 	
     private Boolean budget;
     private String govAgreementNumber;
@@ -1539,6 +1541,20 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setSecMiCntOrganization(String secMiCntOrganization) {
 		this.secMiCntOrganization = secMiCntOrganization;
+	}
+
+	/**
+	 * @return the chapter
+	 */
+	public AmpChapter getChapter() {
+		return chapter;
+	}
+
+	/**
+	 * @param chapter the chapter to set
+	 */
+	public void setChapter(AmpChapter chapter) {
+		this.chapter = chapter;
 	}
 
 	public String getSecMiCntPhoneNumber() {

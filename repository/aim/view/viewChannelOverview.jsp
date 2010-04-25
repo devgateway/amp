@@ -400,6 +400,30 @@ function commentWin(val) {
 																								Activity is On Budget
 																							</digi:trn></td>
 																						</tr>
+
+																						<logic:present name="activity" property="chapter">
+																						<tr>
+																							<td>&nbsp;</td>
+																						</tr>
+																						<tr>
+																							<td><digi:trn>Code Chapitre</digi:trn>: ${activity.chapter.code} - ${activity.chapter.description}</td>
+																						</tr>
+																						<tr>
+																							<td><digi:trn>Imputations</digi:trn>:</td>
+																						</tr>
+																						<tr>																						
+																						<td>
+																						<logic:iterate name="activity" property="chapter.imputations" id="imp">
+																						${activity.chapter.year} - ${imp.code} - ${imp.description}
+																						<br/> 
+																						</logic:iterate>
+																						</td>
+																						</tr>
+																								<tr>
+																							<td>&nbsp;</td>
+																						</tr>
+																						</logic:present>
+																						
 																						<field:display name="FY" feature="Budget">
 																							<tr>
 																								<td><digi:trn key="aim:actFY">

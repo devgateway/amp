@@ -76,7 +76,9 @@ public class ViewAhSurveyFormulas extends Action {
             selFormula.setTargetValue(svform.getTargetValue());
             selFormula.setEnabled(svform.isFormulaEnabled());
 
-            setSurvyByColumnIndex(calcFormulas, selFormula);
+            //setSurvyByColumnIndex(calcFormulas, selFormula);
+            calcFormulas.clear();
+            calcFormulas.add(selFormula);
 
             sv.setCalcFormulas(calcFormulas);
             DbUtil.updateIndicator(sv);
@@ -111,12 +113,12 @@ public class ViewAhSurveyFormulas extends Action {
 		return surveyIndicators;
 	}
 
-    private void setSurvyByColumnIndex(Set set, AmpAhsurveyIndicatorCalcFormula survey) {
+    /*private void setSurvyByColumnIndex(Set set, AmpAhsurveyIndicatorCalcFormula survey) {
         if (set != null && !set.isEmpty()) {
             set.clear();
             set.add(survey);
         }
-    }
+    }*/
 
     private AmpAhsurveyIndicatorCalcFormula getSurvyByColumnIndex(Set set) {
         AmpAhsurveyIndicatorCalcFormula retSurvey = null;

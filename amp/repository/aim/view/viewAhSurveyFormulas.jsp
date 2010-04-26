@@ -232,7 +232,7 @@ function changeFormula(el, ampIndicatorId, enabled, baseLineValue, targetValue, 
                             <c:forEach var="report" items="${aimViewAhSurveyFormulasForm.surveis}">
                               <c:if test="${report.indicatorCode != '4' && report.indicatorCode != '5aii' && report.indicatorCode != '5bii' && report.indicatorCode != '9'&& report.indicatorCode != '10a' && report.indicatorCode != '10b'&&report.indicatorCode != '8'}">
                                  <c:forEach var="prop" items="${report.calcFormulas}" varStatus="rowCounter">
-									<tr id="${report.ampIndicatorId}" onClick='changeFormula(this, "${report.ampIndicatorId}","${prop.enabled}","${prop.baseLineValue}","${prop.targetValue}","${prop.constantName}","${prop.calcFormula}");'>
+									<tr id="${report.ampIndicatorId}" onClick='changeFormula(this, "${report.ampIndicatorId}",${prop.enabled},"${prop.baseLineValue}","${prop.targetValue}","${prop.constantName}","${prop.calcFormula}");'>
 									<td>
 	                                    <IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-gr.gif" width=10 />
 	                                    <strong>[${report.indicatorCode}]</strong>

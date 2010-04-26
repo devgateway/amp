@@ -41,7 +41,12 @@
         	<%= check_box_tag "report[fields][]", "donor_project_number", true %>
         	<%= Project.human_attribute_name('donor_project_number') %>
         </li>
-
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "government_project_code" %>
+        	<%= Project.human_attribute_name('government_project_code') %>
+        </li>
+        
         <li>
         	<%= check_box_tag "report[fields][]", "oecd_number" %>
         	<%= Project.human_attribute_name('oecd_number') %>

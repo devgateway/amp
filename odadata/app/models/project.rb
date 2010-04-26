@@ -212,6 +212,10 @@ class Project < ActiveRecord::Base
         fundings.total_payments
     end
   end
+  
+  def undisbursed
+    total_commitments - total_payments
+  end
 
   # Sum up total Co-Funding for this project and return in project donor's currency
   def total_cofunding

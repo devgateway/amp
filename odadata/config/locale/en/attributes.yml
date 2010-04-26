@@ -156,6 +156,9 @@ en:
           label: Total Commitments
         total_disbursements: 
           label: Total Disbursements
+        undisbursed:
+          label: Undisbursed Funds
+          report_heading: Undisbursed
         total_commitments_in:
           label: Total Commitments {{year}}
         total_disbursements_in:

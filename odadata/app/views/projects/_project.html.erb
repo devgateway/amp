@@ -9,12 +9,19 @@
 		<%= project.total_commitments %>
 	</td>
 	<td class="currency" style="text-align: right">
-		<%= project.fundings.find_by_year(Time.now.year - 1).payments rescue 'n/a' %>
+		<%= project.total_payments %>
 	</td>
 	<td class="currency" style="text-align: right">
-		<%= project.funding_forecasts.find_by_year(Time.now.year).payments rescue 'n/a' %>
+		<%= project.undisbursed %>
 	</td>
 	<td>
+		<%= project.actual_start %>
+	</td>
+	<td>
+		<%= project.actual_end %>
+	</td>
+	
+	<td style="white-space: nowrap">
 	  <%= icon_link_to 'page_white_copy', clone_project_path(project), t('.clone') %>
 		
 		<% if project.data_status == Project::DRAFT %>

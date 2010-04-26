@@ -1,6 +1,6 @@
 module OptionsHelper
-  def option_text_by_id(options_array, id)
-    translate_options(options_array).rassoc(id).first rescue "n/a"
+  def option_text_by_id(klass, method, options_array, id)
+    klass.send(:human_option_name, method, (options_array.rassoc(id).first))
   end
   
   # Use to savely get a value from a model.

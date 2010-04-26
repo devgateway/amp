@@ -1,18 +1,20 @@
 <% stylesheet 'pagination' %>
 
-<h2><%= header t('.title', :status => option_text_by_id(Project::DATA_STATUS_OPTIONS, @status)) %></h2>
+<h2><%= header t('.title', :status => option_text_by_id(Project, :data_status, Project::DATA_STATUS_OPTIONS, @status)) %></h2>
 
 <table>
 	<% if @projects.blank? then %>
 		<tr><td class="empty"><%= t('.empty') %></td></tr>
 	<% else %>
 		<tr>
-			<th><%= t('.donor') %></th>
-			<th><%= t('.project_no') %></th>
-			<th><%= t('.project_title') %></th>
-			<th><%= t('.total_commitments') %></th>
-			<th><%= t('.disbursed', :year => Time.now.year-1) %></th>
-			<th><%= t('.disbursement_forecast', :year => Time.now.year) %></th>
+			<th><%= Project.human_attribute_name('donor') %></th>
+			<th><%= Project.human_attribute_name('donor_project_number') %></th>
+			<th><%= Project.human_attribute_name('project_title') %></th>
+			<th><%= Project.human_attribute_name('total_commitments') %></th>
+			<th><%= Project.human_attribute_name('total_disbursements') %></th>
+			<th><%= Project.human_attribute_name('undisbursed') %></th>
+			<th><%= Project.human_attribute_name('actual_start') %></th>
+			<th><%= Project.human_attribute_name('actual_end') %></th>
 			<th></th>
     	</tr>			
 	

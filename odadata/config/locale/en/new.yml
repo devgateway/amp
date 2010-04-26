@@ -105,6 +105,8 @@ en:
     application:
       custom_title: ODAmoz - {{page_title}}
       standard_title: ODAmoz - Official Development Assistance to Mozambique Database
+    odamap: 
+      title: ODAmap - Official Development Assistance to Mozambique Database
     currency_reports_window:
       no_results_message: Your search has returned no results. Please try expanding the query.
       print: Print
@@ -160,7 +162,7 @@ en:
         short_title: Official Development Assistance <br/>to Mozambique Database
   
   odamap:
-    _query_options:
+    index:
       next_step: next step
       add_remove: Click map to add one or more locations. Click again to remove.
       locations: Locations

@@ -308,7 +308,7 @@
          <div>
             <ul class="checkbox_container">
               <li class="all"><%= check_box_tag "prj_status[]", "all", true %><%= t('.all') %></a>
-            	<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
+            	<%= render :partial => "reports/query_options/status", :collection => Project::STATUS_OPTIONS %>
             </ul>
          </div>
     </div>

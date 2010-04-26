@@ -1,1 +1,1 @@
-<li><%= check_box_tag "prj_status[]", status[1], !!status[2] %><%= status[0] %></li>
+<li><%= check_box_tag "prj_status[]", status[1], !!status[2] %><%= Project.human_option_name(:prj_status, status[0]) %></li>

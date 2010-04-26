@@ -11,9 +11,7 @@ class ActiveRecord::Base
       options[:count] ||= 1
       I18n.translate(defaults.shift, options.merge(:default => defaults, :scope => [:activerecord, :attributes]))
     end
-  end
-  
-  class << self
+
     # This is used to retrieve human option names which are stored alongside attribute
     # names in the according translation file now.
     def human_option_name(attribute_name, option_name, options = {})

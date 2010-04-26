@@ -170,3 +170,66 @@ function update_locations(loc) {
 		$("#locations").append(region.dom_element);
 	});		
 }
+
+var initAttributeSliders = function() {
+	$('div#criteria> div:not(.default)').hide(); 
+	$('div#criteria> h3').click(function() {			
+    	$(this).next('div:not(:visible)').slideToggle('fast')
+    	.siblings('div:visible').slideUp('fast');
+		$('h3.selected').removeClass('selected');
+		$(this).addClass('selected');
+  	}).hover(
+		function () {
+			$(this).addClass('hover');
+		}, 
+		function () {
+	  		$(this).removeClass('hover');
+		}
+   );
+};
+			
+var initMap = function() {
+	var options = {
+		controls: [new OpenLayers.Control.MouseDefaults()],
+		maxExtent: new OpenLayers.Bounds(21, -27, 49, -10),
+		maxResolution: 0.01991484375,
+		numZoomLevels: 5
+	}
+	
+			
+	map = new OpenLayers.Map( 'map', options );
+	layer = new OpenLayers.Layer.WMS( "Nicaragua",
+	        "/odamap/wxs", {layers: 'basic', format: 'png'},
+			{singleTile: false, transitionEffect: 'resize'});		
+      	
+	//map.addControl( new OpenLayers.Control.LayerSwitcher() );
+	map.addControl(new OpenLayers.Control.PanZoomBar());
+	//vectors = new OpenLayers.Layer.Vector("Selected Features");
+	//map.addLayers([layer, vectors]);
+	map.addLayer(layer);
+					
+	// Add locations to list
+	map.events.register('click', map, function (e) {
+		var coord = new OpenLayers.Pixel(e.xy.x, e.xy.y);
+		var lonlat = map.getLonLatFromPixel(coord);
+		
+		$.ajax({
+		  async: false,
+			cache: false,
+			data: { lon: lonlat.lon, lat: lonlat.lat },
+			dataType: "json",
+			url: "/odamap/query",
+			beforeSend: function(XMLHttpRequest) {
+			  show_loading_indicator();
+			},
+			success: function(data, textStatus) {
+				update_locations(data);
+			},
+			complete: function(XMLHttpRequest, textStatus) {
+				hide_loading_indicator();
+			}
+		});
+	});
+		
+	map.zoomToMaxExtent();
+};

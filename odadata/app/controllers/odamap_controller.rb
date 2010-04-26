@@ -3,7 +3,6 @@ require 'tile_cache'
 class OdamapController < ApplicationController
   
   def index
-    render :layout => "odamap"
   end
   
   # Proxy for WxS requests

@@ -25,6 +25,8 @@
   <tr>
     <td style="border-right: 1px solid #777; width: 33%">
       <ul>
+        <%= hidden_field_tag "report[fields][]", "factsheet_link" %>
+        
         <li>
         	<%= check_box_tag "report[fields][]", "donor", true %>
         	<%= Project.human_attribute_name('donor') %>
@@ -162,7 +164,17 @@
         <li>
         	<%= check_box_tag "report[fields][]", "aid_modality" %>
         	<%= Project.human_attribute_name('aid_modality') %>
-        </li>            
+        </li>
+        
+        <li>
+        	<%= check_box_tag "report[fields][]", "implementing_agencies" %>
+        	<%= Project.human_attribute_name('implementing_agencies') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "contracted_agencies" %>
+        	<%= Project.human_attribute_name('contracted_agencies') %>
+        </li>     
       </ul>
     </td>
     
@@ -366,17 +378,7 @@
 
 
 
-<!--
-      <li>
-      	<%= check_box_tag "report[fields][]", "implementing_agencies" %>
-      	<%= Project.human_attribute_name('implementing_agencies') %>
-      </li>
-
-      <li>
-      	<%= check_box_tag "report[fields][]", "contracted_agencies" %>
-      	<%= Project.human_attribute_name('contracted_agencies') %>
-      </li>
-      
+<!--      
       <li>
       	<%= check_box_tag "report[fields][]", "markers" %>
       	<%= Project.human_attribute_name('markers') %>

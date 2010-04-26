@@ -104,6 +104,9 @@ en:
     application:
       custom_title: ODAmoz - {{page_title}}
       standard_title: ODAmoz - Official Development Assistance to Mozambique Database
+    report_window:
+      custom_title: ODAmoz Report - {{page_title}}
+      standard_title: ODAmoz - Official Development Assistance to Mozambique Database
     odamap: 
       title: ODAmap - Official Development Assistance to Mozambique Database
     currency_reports_window:
@@ -224,9 +227,9 @@ en:
       del_no: 'No'
       del_yes: 'Yes'
       geo_usage: |
-         Please select the focal regions of this project.<br />
+         Please select the locations of this project.<br />
          If you do not select any, it will be considered a national project.
-      geo_relevances_title: Focal Regions
+      geo_relevances_title: Project's Locations
       add_location: Add another Location
       sector_relevances: Project's Focal Sectors
     cofunding_agency:

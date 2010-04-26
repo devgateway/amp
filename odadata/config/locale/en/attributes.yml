@@ -22,12 +22,12 @@ en:
         oecd_number: 
           label: OECD Number
         recipient_country_budget_nr: 
-          label: Recipient Country Budget Number
+          label: Mozambican Project Number
         title: 
-          label: Title
+          label: Project / Programme Title
           description: Single-line glossary entry
         description: 
-          label: Description
+          label: Brief Project Description
           description: |+
             This is an example multi-line
             glossary entry.
@@ -100,11 +100,11 @@ en:
         delegated_by: 
           label: Delegated by
         website: 
-          label: Website
+          label: Project Internet Link
         comments: 
           label: Comments
         officer_responsible: 
-          label: Officer Responsible
+          label: Project Contact Person
         officer_responsible_name: 
           label: Name
         officer_responsible_phone: 

@@ -66,7 +66,7 @@ public class SearchIndicators extends Action {
 		
 		
 		if((indForm.getSearchkey()!=null && indForm.getSearchkey().trim().length() > 0) || 
-			(indForm.getSectorId()!=null  && !indForm.getSectorId().equals(1l))){
+			(indForm.getSectorId()!=null  && !indForm.getSectorId().equals(-1l))){
 			searchInd = IndicatorUtil.searchIndicators(indForm.getSearchkey(),indForm.getSectorId());
 		}else {
 			searchInd = IndicatorUtil.getAmpIndicator();

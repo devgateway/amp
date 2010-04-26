@@ -349,6 +349,7 @@ public class IndicatorForm extends ActionForm implements Serializable
 	 */
 	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
 		defaultFlag = false;
+        selectedIndicators=null;
 	}
 
 	public Collection<AmpSector> getAllSectors() {

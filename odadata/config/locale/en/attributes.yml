@@ -59,14 +59,28 @@ en:
           label: Extending Agencies
         national_regional: 
           label: National / Regional
+          options:
+            national: National
+            regional: Regional
+            regional_with_nicaraguan_component_available: Regional with Nicaraguan Component Available
         type_of_implementation: 
           label: Type of Implementation
+          options:
+            bilateral: Bilateral
+            multilateral: Multilateral
+            ngo_implementation: NGO Implementation
         aid_modality: 
           label: Aid Modality
         on_off_treasury:
           label: On/Off Treasury
+          options:
+            on_treasury: On Treasury
+            off_treasury: Off Treasury
         on_off_budget:
           label: On/Off Budget
+          options:
+            on_budget: On Budget
+            off_budget: Off Budget
         government_project_code:
           label: Government Budget Code
         enters_in:
@@ -75,8 +89,14 @@ en:
           label: Loan to public enterprises
         grant_loan: 
           label: Type of Funding
+          options:
+            grant: Grant
+            loan: Loan
         delegated_cooperation: 
           label: Delegated Cooperation
+          options:
+            "yes": "Yes"
+            "no": "No"
         delegated_by: 
           label: Delegated by
         website: 
@@ -95,14 +115,34 @@ en:
           label: Markers
         biodiversity_marker: 
           label: Biodiversity
+          options:
+            not_relevant: Not Relevant
+            significant: Significant
+            principal_objective: Principal Objective
         climate_change_marker: 
           label: Climate Change
+          options:
+            not_relevant: Not Relevant
+            significant: Significant
+            principal_objective: Principal Objective
         desertification_marker: 
           label: Desertification
+          options:
+            not_relevant: Not Relevant
+            significant: Significant
+            principal_objective: Principal Objective
         gender_policy_marker: 
           label: Gender Policy
+          options:
+            not_relevant: Not Relevant
+            significant: Significant
+            principal_objective: Principal Objective
         environment_policy_marker: 
           label: Environment Policy
+          options:
+            not_relevant: Not Relevant
+            significant: Significant
+            principal_objective: Principal Objective
         sector_relevances: 
           label: Project's Focal Sectors
         geo_relevances: 
@@ -134,6 +174,13 @@ en:
           label: MDGs
         project_currency:
           label: Currency
+        data_status:
+          label: Data Status
+          options:
+            draft: Draft
+            published: Published
+            deleted: Deleted
+            completed: Completed
         
       sector_relevance:
         dac_sector: 

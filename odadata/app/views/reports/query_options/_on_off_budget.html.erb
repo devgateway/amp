@@ -1,1 +1,1 @@
-<li><%= check_box_tag "on_off_budget[]", on_off_budget[1] %><%= on_off_budget[0] %></li>
+<li><%= check_box_tag "on_off_budget[]", on_off_budget[1] %><%= Project.human_option_name(:on_off_budget, on_off_budget[0]) %></li>

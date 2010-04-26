@@ -229,6 +229,14 @@ en:
       geo_relevances_title: Focal Regions
       add_location: Add another Location
       sector_relevances: Project's Focal Sectors
+    cofunding_agency:
+      label: Co-Funding Agency / NGO
+      prompt: Please select
+      delete: Delete this agency
+    cofunding_donor:
+      label: Co-Funding Donor
+      prompt: Please select
+      delete: Delete this donor
     delete_associated: Delete
      
     sector_relevance:

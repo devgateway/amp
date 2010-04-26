@@ -275,7 +275,7 @@
        <div>
           <ul class="checkbox_container">
           	<li class="all"><%= check_box_tag "on_off_budget[]", "all", true %><%= t('.all') %></a>	
-          	<%= render :partial => "reports/query_options/on_off_budget", :collection => translate_options(Project::ON_OFF_BUDGET_OPTIONS) %>
+          	<%= render :partial => "reports/query_options/on_off_budget", :collection => Project::ON_OFF_BUDGET_OPTIONS %>
           </ul>
        </div>
        
@@ -283,7 +283,7 @@
        <div>
          <ul class="checkbox_container">
          	<li class="all"><%= check_box_tag "on_off_treasury[]", "all", true %><%= t('.all') %></a>	
-         	<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
+         	<%= render :partial => "reports/query_options/on_off_treasury", :collection => Project::ON_OFF_TREASURY_OPTIONS %>
          </ul>
        </div>
        
@@ -299,7 +299,7 @@
         <div>
           <ul class="checkbox_container">
           	<li class="all"><%= check_box_tag "type_of_implementation[]", "all", true %><%= t('.all') %></a>
-          	<%= render :partial => "reports/query_options/type_of_implementation", :collection => translate_options(Project::IMPLEMENTATION_TYPES) %>
+          	<%= render :partial => "reports/query_options/type_of_implementation", :collection => Project::IMPLEMENTATION_TYPES %>
           </ul>
         </div>
            

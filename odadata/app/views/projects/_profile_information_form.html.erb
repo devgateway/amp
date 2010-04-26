@@ -31,6 +31,7 @@
 	<li><%#= f.collection_select :country_strategy_id, @project.donor.country_strategies, "id", "strategy_number",
 	 		{ :prompt => t('.country_strategy_unavailable') }, :class => "large" %></li>
 -->
+
 	<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
 			:include_blank => t('.prompt'), :translate => true %></li>
     

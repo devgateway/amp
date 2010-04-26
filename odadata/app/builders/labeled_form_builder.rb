@@ -38,7 +38,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     label_opts = extract_label_options!(options)
     
     strip_options_for_select!(choices)
-    choices = translate_options(choices) if options.delete(:translate)
+    choices = translate_options(@object, method, choices) if options.delete(:translate)
     
     wrap_in_label_row(method, 
       @template.select(@object_name, method, choices, objectify_options(options), html_options), 

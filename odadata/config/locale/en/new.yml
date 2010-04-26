@@ -72,6 +72,7 @@ en:
       yearly_missions_head: Donor missions to the field undertaken in this calendar year
       yearly_analytic_works_head: Country analytic works in this calendar year
       gbs_head: General Budget Support
+      details_title: Staff Information
   donor:
     edit:
       title: Edit Donor

@@ -55,17 +55,17 @@
                   <%=  t('.gbs_head')%>:
                 </li>
                 <li class="fifty" style="height:100px;">
-		  <%= f.select :gbs_multiyear_agreement, translate_options(Donor::YES_NO_OPTIONS) %>
+		  <%= f.select :gbs_multiyear_agreement, Donor::YES_NO_OPTIONS, :translate => true %>
 		  <%= f.text_field :gbs_multiyear_agreement_years, :size => 5 %>
                 </li>
                 <li>
-		  <%= f.select :gbs_question_1, translate_options(Donor::YES_NO_OPTIONS)  %>
+		  <%= f.select :gbs_question_1, Donor::YES_NO_OPTIONS, :translate => true  %>
                 </li>
                 <li>
-		  <%= f.select :gbs_question_2, translate_options(Donor::YES_NO_OPTIONS)  %>
+		  <%= f.select :gbs_question_2, Donor::YES_NO_OPTIONS, :translate => true  %>
                 </li>
                 <li>
-		  <%= f.select :gbs_question_3, translate_options(Donor::YES_NO_OPTIONS)  %>
+		  <%= f.select :gbs_question_3, Donor::YES_NO_OPTIONS, :translate => true %>
                 </li>
                 <li>
 		  <%= f.text_area :gbs_question_4 %>
@@ -75,7 +75,7 @@
   <% end %>
 
     <% Time.now.year.upto(Time.now.year) do |y| %>
-      <% f.field_set t('donor_details.details_title', :year => y) do %>
+      <% f.field_set t('.details_title', :year => y) do %>
           <% f.fields_for :donor_details, @donor.donor_details.find_or_initialize_by_year(y) do |fa| -%>
             <%= fa.hidden_field :year, :value => y %>
             <li class="thirty"><%= fa.text_field :total_staff_in_country, :value => fa.object.andand.total_staff_in_country  %></li>

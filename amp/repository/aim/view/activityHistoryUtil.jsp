@@ -14,6 +14,7 @@
 		
     var myPanelHistory = new YAHOO.widget.Panel("newmyHistory", {
 		width:"800px",
+        height:"600px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",
@@ -36,10 +37,9 @@
 	function showHistory() {
 		var content = document.getElementById("myHistoryContent");
 		var element6 = document.getElementById("myHistory"); 
-		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
-		//if (panelFirstShow == 1){ 
-			element6.style.display = "inline";
-			myPanelHistory.setBody(element6);
+		content.innerHTML = '<p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>'+loading+'</b></font></p>';
+		//if (panelFirstShow == 1){
+			myPanelHistory.setBody(element6.innerHTML);
 			panelFirstShow = 0;
 		//}
 		document.getElementById("myHistoryContent").scrollTop=0;

@@ -1,5 +1,5 @@
 class District < ActiveRecord::Base
-  CAPTION = "Municipality"
+  CAPTION = "District"
   
   belongs_to  :province  
   has_many    :geo_relevances, :dependent => :delete_all

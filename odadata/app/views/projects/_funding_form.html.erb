@@ -1,0 +1,58 @@
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    $('.add_new_finances').click(cloneFinancesRow);
+    currencySelector('#project_project_currency', '<%= t(".change_currency_confirmation") %>');
+  });
+</script>
+
+
+
+<% f.field_set t('.cofunding_title') do %>
+	<li>
+		<%= f.add_associated_button(t('.add_cofunding_donor'), @project.cofundings.new, :style => "display: block; float: right; margin-top: -5px; width: 170px", :partial => "cofunding_donor") %>
+		<%= f.add_associated_button(t('.add_cofunding_agency'), @project.cofundings.new, :style => "display: block; float: right; margin-top: -5px; width: 170px", :partial => "cofunding_agency") %>
+		
+   	<%= error_message_on(:project, :cofundings, "","", "error_message" ) %>
+
+		<div id="cofundings">
+			<% @project.cofundings.each do |cofunding| %>
+				<% f.fields_for :cofundings, cofunding do |cf| %>
+					<% if cofunding.donor_type == "Donor" %>
+						<%= render :partial => "cofunding_donor", :locals => { :f => cf } %>
+					<% elsif cofunding.donor_type == "Agency" %>
+						<%= render :partial => "cofunding_agency", :locals => { :f => cf } %>
+					<% end %>
+				<% end %>
+			<% end %>
+		</div>
+	</li>
+<% end %>
+	
+<% f.field_set t('.project_currency') do %>
+  <li><%= f.currency_select :project_currency %></li>
+<% end %>
+
+<div>
+  <% f.fields_for :fundings, f.object.fundings.sort_by(&:year).select { |r| r.year == Time.now.year } do |fa| -%>
+    <%= render :partial => "regular_funding", :locals => { :f => fa } %>
+  <% end %>
+</div>
+
+<div>
+  <% f.fields_for :funding_forecasts, f.object.funding_forecasts.sort_by(&:year) do |fa| -%>
+  	<% f.field_set t('.forecasts_title', :year => fa.object.year) do %>
+  		<%= fa.hidden_field :year %>
+  			
+  	  <li class="fifty"><%= fa.monetary_field :commitments %></li>
+  		<li class="fifty"><%= fa.monetary_field :payments %></li>
+<!--
+  		<li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
+  		<li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
+-->
+  	<% end %>
+  <% end %>
+  
+  <div style="overflow: hidden">
+    <input type="button" class="add_new_finances" value="Add information for another year" style="display: block; float: right; width: 200px; border: 1px solid #AAAAAA; padding: 2px; color: #777" />
+  </div>
+</div>

@@ -8,6 +8,21 @@
   		</div>
 	</li>
 <% end %>
+
+<% f.field_set t('.geo_relevances_title') do %>
+	<p><%=t '.geo_usage' %></p>
+
+	<li>
+		<%= f.add_associated_button(t('.add_location'), @project.geo_relevances.build, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
+		
+		<%= error_message_on(:project, :geo_relevances, "","", "error_message" ) %>
+		<div id="geo_relevances">
+			<%= f.render_associated_form @project.geo_relevances, :new => 1 %>
+  		</div>
+	</li>
+	
+<% end %>
+
 <% f.field_set do %>	
 	<li>
 		<%= f.label :implementing_agencies %>
@@ -39,8 +54,9 @@
 			<% end %>
 		</div>
 	</li>
-	
-	
+<% end %>
+
+<% f.field_set do%>	
 	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
 				:include_blank => t('.prompt'), :translate => true %></li>
 				
@@ -182,19 +198,7 @@
 <%# end %>
 -->
 
-<% f.field_set t('.geo_relevances_title') do %>
-	<p><%=t '.geo_usage' %></p>
-
-	<li>
-		<%= f.add_associated_button(t('.add_location'), @project.geo_relevances.build, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
-		
-		<%= error_message_on(:project, :geo_relevances, "","", "error_message" ) %>
-		<div id="geo_relevances">
-			<%= f.render_associated_form @project.geo_relevances, :new => 1 %>
-  		</div>
-	</li>
-	
-<% end %>
+<
 
 
   <script type="text/javascript" charset="utf-8">

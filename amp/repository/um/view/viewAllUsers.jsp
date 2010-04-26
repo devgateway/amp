@@ -20,7 +20,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/paginator-min.js"></script> 
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/container-min.js"></script>
 
 <style>
 .yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
@@ -120,6 +121,46 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable);
            oPayload.totalRecords = oResponse.meta.totalRecords;
            return oPayload;
        }
+
+     //further lines are for generating tooltips
+       var showTimer,hideTimer;				
+       var tt = new YAHOO.widget.Tooltip("myTooltip");
+		
+       this.myDataTable.on('cellMouseoverEvent', function (oArgs) {
+			if (showTimer) {
+				window.clearTimeout(showTimer);
+				showTimer = 0;
+			}
+
+			var target = oArgs.target;
+			var column = this.getColumn(target);
+			if (column.key == 'email') {
+				var record = this.getRecord(target);
+				var tooltipText = record.getData(column.key);
+				var xy = [parseInt(oArgs.event.clientX,10) + 10 ,parseInt(oArgs.event.clientY,10) + 10 ];
+
+				showTimer = window.setTimeout(function() {
+					tt.setBody(tooltipText);
+					tt.cfg.setProperty('xy',xy);
+					tt.show();
+					hideTimer = window.setTimeout(function() {
+						tt.hide();
+					},5000);
+				},500);
+			}
+		});
+		
+       this.myDataTable.on('cellMouseoutEvent', function (oArgs) {
+			if (showTimer) {
+				window.clearTimeout(showTimer);
+				showTimer = 0;
+			}
+			if (hideTimer) {
+				window.clearTimeout(hideTimer);
+				hideTimer = 0;
+			}
+			tt.hide();
+		});
        
     };
     

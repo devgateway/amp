@@ -74,7 +74,7 @@ public class AddPledge extends Action {
 				plForm.setPledgeTitle(fp.getTitle());
 				AmpOrganisation pledgeOrg =	PledgesEntityHelper.getOrganizationById(fp.getOrganization().getAmpOrgId());
 				plForm.setSelectedOrgId(pledgeOrg.getAmpOrgId().toString());
-	        	plForm.setSelectedOrgName(pledgeOrg.getAcronym());
+	        	plForm.setSelectedOrgName(pledgeOrg.getName());
 	        	plForm.setAdditionalInformation(fp.getAdditionalInformation());
 	        	plForm.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
 	        	plForm.setFurtherApprovalNedded(fp.getFurtherApprovalNedded());

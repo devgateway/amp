@@ -99,6 +99,12 @@ public class selectOrganizationComponent extends Action {
 			oForm.setUseClient(false);
 		}
 
+		if ("true".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_USE_ACRONYM))) {
+			oForm.setUseAcronym(true);
+		} else {
+			oForm.setUseAcronym(false);
+		}
+		
 		if (!"".equalsIgnoreCase(collection) && collection != null) {
 			oForm.setMultiSelect(true);
 		} else {

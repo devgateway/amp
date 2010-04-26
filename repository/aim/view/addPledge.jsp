@@ -453,7 +453,7 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="70%">
 													<a>
-														<html:text property="pledgeTitle" size="60" styleClass="inp-text"/>
+														<html:text property="pledgeTitle" size="90" styleClass="inp-text"/>
                             						</a>
 												</td>											
 											</tr>
@@ -487,8 +487,8 @@ function setSameContact(){
 <!--														<aim:addOrganizationButton refreshParentDocument="true"  form="${pledgeForm}" htmlvalueHolder="selectedOrgId" htmlNameHolder="selectedOrgName" useClient="true" styleClass="dr-menu">...</aim:addOrganizationButton>-->
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
-							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:right" value='${pledgeForm.selectedOrgId}' size="4"/>
-							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:right" value='${pledgeForm.selectedOrgName}' size="53" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
+							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:left" value='${pledgeForm.selectedOrgId}' size="4"/>
+							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:left" value='${pledgeForm.selectedOrgName}' size="83" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
                             						</a>
 													
@@ -503,7 +503,7 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="70%">
 													<a>
-														<html:text property="whoAuthorizedPledge" size="60" styleClass="inp-text"/>
+														<html:text property="whoAuthorizedPledge" size="90" styleClass="inp-text"/>
                             						</a>
 												</td>											
 											</tr>
@@ -516,7 +516,7 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="70%">
 													<a>
-														<html:text property="furtherApprovalNedded" size="60" styleClass="inp-text"/>
+														<html:text property="furtherApprovalNedded" size="90" styleClass="inp-text"/>
                             						</a>
 												</td>											
 											</tr>
@@ -538,31 +538,28 @@ function setSameContact(){
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactName">Name</digi:trn>
 													</a>
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Name" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contact1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTitle">Title</digi:trn>
 													</a>
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Title" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contact1Title" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactOrganization">Organization</digi:trn>
 													</a>
@@ -571,21 +568,20 @@ function setSameContact(){
 													<a>
 														<c:set var="valueId1"> contact1OrgId </c:set>
 							                              <c:set var="nameId1"> contact1OrgName </c:set>
-							                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:right" value='${pledgeForm.contact1OrgId}' size="4"/>
-							                              <input name="contact1OrgName" type="text" id="${nameId1}" style="text-align:right" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
-							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
+							                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:left" value='${pledgeForm.contact1OrgId}' size="4"/>
+							                              <input name="contact1OrgName" type="text" id="${nameId1}" style="text-align:left" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
+							                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
                             						
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactMinistry">Ministry</digi:trn>
 													</a>
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Ministry" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contact1Ministry" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
@@ -597,31 +593,29 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Address" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contact1Address" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTelephone">Telephone</digi:trn>
 													</a>
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Telephone" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contact1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactEmail">Email</digi:trn>
 													</a>
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Email" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contact1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
@@ -631,12 +625,13 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contact1Fax" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contact1Fax" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
 										</table>
 										<tr><td>&nbsp;</td></tr>
+									<field:display name="Alternate Contact 1" feature="Pledge Contact 1">
 									<tr><td><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b></td></tr>
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
@@ -648,7 +643,7 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
@@ -658,7 +653,7 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate1Telephone" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contactAlternate1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>										
 											</tr>
@@ -670,7 +665,7 @@ function setSameContact(){
 												</td>
 												<td valign="middle" align="left" width="35%">
 													<a>
-														<html:text property="contactAlternate1Email" size="40" styleClass="inp-text" onchange="setSameContact()"/>
+														<html:text property="contactAlternate1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
@@ -686,6 +681,7 @@ function setSameContact(){
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
+									</field:display>
 								</table>
 								</feature:display>
 								<feature:display name="Pledge Contact 2" module="Pledges">
@@ -709,7 +705,6 @@ function setSameContact(){
 											</tr>
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactName">Name</digi:trn>
 													</a>
@@ -720,7 +715,6 @@ function setSameContact(){
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTitle">Title</digi:trn>
 													</a>
@@ -733,7 +727,6 @@ function setSameContact(){
 											</tr>
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactOrganization">Organization</digi:trn>
 													</a>
@@ -742,14 +735,13 @@ function setSameContact(){
 													<a>
 														<c:set var="valueId2"> contact2OrgId </c:set>
 							                              <c:set var="nameId2"> contact2OrgName </c:set>
-							                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:right" value='${pledgeForm.contact2OrgId}' size="4"/>
-							                              <input name="contact2OrgName" type='text' id="${nameId2}" style="text-align:right" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
-							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton>
+							                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:left" value='${pledgeForm.contact2OrgId}' size="4"/>
+							                              <input name="contact2OrgName" type='text' id="${nameId2}" style="text-align:left" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
+							                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton>
                             						
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactMinistry">Ministry</digi:trn>
 													</a>
@@ -772,7 +764,6 @@ function setSameContact(){
                             						</a>
 												</td>	
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactTelephone">Telephone</digi:trn>
 													</a>
@@ -785,7 +776,6 @@ function setSameContact(){
 											</tr>
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="15%">
-													<FONT color=red>*</FONT>
 													<a>
 														<digi:trn key="pointContactEmail">Email</digi:trn>
 													</a>
@@ -808,6 +798,7 @@ function setSameContact(){
 											</tr>
 										</table>
 										<tr><td>&nbsp;</td></tr>
+									<field:display name="Alternate Contact 2" feature="Pledge Contact 2">
 									<tr><td><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b></td></tr>
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
@@ -857,6 +848,7 @@ function setSameContact(){
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
+									</field:display>
 								</table>
 								</feature:display>
 								<table width="95%" bgcolor="#f4f4f2" border=0>
@@ -921,17 +913,20 @@ function setSameContact(){
 												</td></tr>
 												<tr>
 													<td colspan="2"> &nbsp;
-                                                    
+                                                    	<field:display name="Add Pledge Sector Button" feature="Pledge Sector">
                                                            <html:button styleClass="dr-menu"  
                                                                          property="submitButton" onclick="addSectors();" >
                                                                 <digi:trn key="btn:addSectors">Add Sectors</digi:trn>
                                                             </html:button>
+														</field:display>
+														<field:display name="Remove Pledge Sector Button" feature="Pledge Sector">
 															 &nbsp;
 	                                                 		<logic:notEmpty name="pledgeForm" property="pledgeSectors">
 																<html:button styleClass="dr-menu" property="submitButton" onclick="return removeSector()">
 	                                                          	  <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
 	                                                        	</html:button>
 															</logic:notEmpty>
+														</field:display>
 	                                                </td>
 	                                            </tr>
 	                                        </table>
@@ -982,16 +977,20 @@ function setSameContact(){
 												</td></tr>
 												<tr>
 													<td colspan="2"> &nbsp;
+														<field:display name="Add Pledge Location Button" feature="Pledge Location">
                                                            <html:button styleClass="dr-menu"  
                                                                          property="submitButton" onclick="addLocation();">
                                                                 <digi:trn key="btn:addLocation">Add Location</digi:trn>
                                                             </html:button>
+														</field:display>
+														<field:display name="Remove Pledge Location Button" feature="Pledge Location">
 															 &nbsp;
 	                                                 		<logic:notEmpty name="pledgeForm" property="selectedLocs">
 																<html:button styleClass="dr-menu" property="submitButton" onclick="return removeLocation()">
 	                                                            <digi:trn key="btn:removeLocation">Remove Location</digi:trn>
 	                                                        	</html:button>
 															</logic:notEmpty>
+														</field:display>
 	                                                </td>
 	                                            </tr>
 	                                        </table>
@@ -1008,7 +1007,7 @@ function setSameContact(){
 									        <!-- contents -->
 									        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
 									        <b><digi:trn key="aim:pledgeInformation">Pledge Information</digi:trn></b>
-									         
+									        <FONT color="red">*</FONT>
 									    </td>
 							        </tr>
 						            <tr><td>&nbsp;</td></tr>
@@ -1153,18 +1152,22 @@ function setSameContact(){
 														<table>
 															<tr>
 																<td>
-		                                                           <html:button styleClass="dr-menu"  
-		                                                                         property="submitButton" onclick="addFunding();">
-		                                                                <digi:trn key="btn:addFunding">Add Funding</digi:trn>
-		                                                            </html:button>
-																	&nbsp;
+																	<field:display name="Add Pledge Funding Button" feature="Pledge Funding">
+			                                                           <html:button styleClass="dr-menu"  
+			                                                                         property="submitButton" onclick="addFunding();">
+			                                                                <digi:trn key="btn:addFunding">Add Funding</digi:trn>
+			                                                            </html:button>
+																		&nbsp;
+																	</field:display>
 																</td>
 																<td>
+																	<field:display name="Remove Pledge Funding Button" feature="Pledge Funding">
 																	<div id="remBut" style="display:block;">
 																		<html:button styleClass="dr-menu" property="submitButton" onclick="return removeFunding()">
 			                                                            <digi:trn key="btn:removeFunding">Remove Funding</digi:trn>
 			                                                        	</html:button>
 																	</div>
+																	</field:display>
 																</td>
 															</tr>
 														</table>

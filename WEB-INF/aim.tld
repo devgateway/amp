@@ -118,6 +118,14 @@
 		</attribute>
 
 		<attribute>
+			<name>useAcronym</name>
+			<required>false</required>
+			<description>
+				if true  the org acronym will be set to htmlNameHolder
+			</description>
+		</attribute>
+
+		<attribute>
 			<name>htmlvalueHolder</name>
 			<rtexprvalue>true</rtexprvalue>
 			<description></description>

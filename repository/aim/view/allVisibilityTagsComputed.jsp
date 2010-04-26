@@ -166,6 +166,7 @@
 <feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
 <feature:display name="Pledge Location" module="Pledges"></feature:display> 
 <feature:display name="Pledge Sector" module="Pledges"></feature:display> 
+<feature:display name="Pledge Funding" module="Pledges"></feature:display> 
 <feature:display name="Pledge Additional Information" module="Pledges"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
 <feature:display name="Program" module="Program"></feature:display> 
@@ -722,3 +723,11 @@
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
+<field:display name="Add Pledge Location Button" feature="Pledge Location"></field:display>
+<field:display name="Remove Pledge Location Button" feature="Pledge Location"></field:display>
+<field:display name="Add Pledge Sector Button" feature="Pledge Sector"></field:display>
+<field:display name="Remove Pledge Sector Button" feature="Pledge Sector"></field:display>
+<field:display name="Add Pledge Funding Button" feature="Pledge Funding"></field:display>
+<field:display name="Remove Pledge Funding Button" feature="Pledge Funding"></field:display>
+<field:display name="Alternate Contact 1" feature="Pledge Contact 1"></field:display>
+<field:display name="Alternate Contact 2" feature="Pledge Contact 2"></field:display>

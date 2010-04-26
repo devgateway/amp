@@ -20,7 +20,8 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String refreshParentDocument = "";
 	private String aditionalRequestParameters = "";
 	private String styleClass=""; //class name
-
+	private String useAcronym = "false";
+	
 	public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
 	public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
 	public static final String PARAM_PROPERY_NAME = "PARAM_PROPERY_NAME";
@@ -33,7 +34,8 @@ public class AddOrganizationButton extends BodyTagSupport {
 	public static final String PARAM_NAME_DELEGATE_CLASS = "PARAM_NAME_DELEGATE_CLASS";
 	public static final String ADITIONAL_REQUEST_PARAMS = "ADITIONAL_REQUEST_PARAMS";
 	public static final String STYLE_CLASS_NAME = "class"; //buttons standard class property
-
+	public static final String PARAM_USE_ACRONYM = "PARAM_USE_ACRONYM";
+	
 	public int doStartTag() throws JspException {
 		try {
 			// add current form to session under a common param name
@@ -83,6 +85,12 @@ public class AddOrganizationButton extends BodyTagSupport {
 			}
 			if ("true".equalsIgnoreCase(useClient)) {
 				html.append(PARAM_USE_CLIENT);
+				html.append("=");
+				html.append("true");
+				html.append("~");
+			}
+			if ("true".equalsIgnoreCase(useAcronym)) {
+				html.append(PARAM_USE_ACRONYM);
 				html.append("=");
 				html.append("true");
 				html.append("~");
@@ -236,6 +244,20 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 	public void setStyleClass(String styleClass) {
 		this.styleClass = styleClass;
+	}
+
+	/**
+	 * @return the useAcronym
+	 */
+	public String getUseAcronym() {
+		return useAcronym;
+	}
+
+	/**
+	 * @param useAcronym the useAcronym to set
+	 */
+	public void setUseAcronym(String useAcronym) {
+		this.useAcronym = useAcronym;
 	}
 
 	

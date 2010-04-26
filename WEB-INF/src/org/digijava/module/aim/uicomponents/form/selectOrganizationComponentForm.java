@@ -58,6 +58,15 @@ public class selectOrganizationComponentForm extends ActionForm {
 	boolean useClient;
 	private String valueHoder="";
 	private String nameHolder="";
+	boolean useAcronym;
+	
+	public boolean isUseAcronym() {
+		return useAcronym;
+	}
+
+	public void setUseAcronym(boolean useAcronym) {
+		this.useAcronym = useAcronym;
+	}
 
 	public boolean isUseClient() {
 		return useClient;

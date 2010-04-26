@@ -60,7 +60,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   end
   
   def submit(value = nil, options = {})
-    value ||= @template.lc(:submit)
+    value ||= @template.t(:submit)
     super(value, options)
   end
   

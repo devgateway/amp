@@ -26,9 +26,9 @@ module ApplicationHelper
   
   def render_page_title
     if @_page_title
-      t('layout.custom_title', :page_title => strip_html_tags(@_page_title))
+      t('.custom_title', :page_title => strip_html_tags(@_page_title))
     else
-      t('layout.standard_title')
+      t('.standard_title')
     end
   end
   

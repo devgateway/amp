@@ -181,7 +181,7 @@
          <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year+2) do |year| %>
          	<li>
          		<%= check_box_tag "report[fields][]", "funding_details[#{year}]" %>
-         		<%= I18n.t('reports.funds_for', :year => year) %>
+         		<%= t('.funds_for', :year => year) %>
          	</li>
          <% end %>
        </ul>
@@ -322,8 +322,8 @@
     <td style="border-right: 1px solid #777; width: 33%">
       <h3><%= t('.output_options.disaggregation') %></h3>
       <ul>
-        <li><%= check_box_tag "disaggregators[]", "sector" %><%= I18n.t('reports.disaggregation.by_sector') %></li>
-      	<li><%= check_box_tag "disaggregators[]", "location" %><%= I18n.t('reports.disaggregation.by_location') %></li>
+        <li><%= check_box_tag "disaggregators[]", "sector" %><%= t('.disaggregation.by_sector') %></li>
+      	<li><%= check_box_tag "disaggregators[]", "location" %><%= t('.disaggregation.by_location') %></li>
       </ul>
     </td>
     

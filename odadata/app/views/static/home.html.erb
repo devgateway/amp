@@ -30,7 +30,7 @@
 	<div id="shortIntro">
 		<%=t 'introduction_short' %>
 		<p align="right">
-			<%= link_to_function t('read_more'), nil do |page| 
+			<%= link_to_function t ('.read_more') , nil do |page| 
 				page[:shortIntro].hide
 				page[:longIntro].show 
 			end %>
@@ -40,7 +40,7 @@
 	<div id="longIntro" style="display: none">
 		<%=t 'introduction_long' %>
 		<p align="right">
-			<%= link_to_function t('back'), nil do |page| 
+			<%= link_to_function t ('.back'), nil do |page| 
 				page[:longIntro].hide
 				page[:shortIntro].show 
 			end %>

@@ -102,6 +102,9 @@ en:
       back: Back
   
   layouts:
+    application:
+      custom_title: ODAmoz - {{page_title}}
+      standard_title: ODAmoz - Official Development Assistance to Mozambique Database
     currency_reports_window:
       no_results_message: Your search has returned no results. Please try expanding the query.
       print: Print
@@ -154,6 +157,7 @@ en:
         country_manual: ODAdata Manual
         contact: Contact
         logout: Log out
+        short_title: Official Development Assistance <br/>to Mozambique Database
   
   odamap:
     _query_options:
@@ -169,6 +173,9 @@ en:
   
   projects:
     form:
+      previous_step: Previous
+      next_step: Next
+      submit: Save project
       stages:
         profile_information: Profile Information
         sector_agencies: Sector / Agencies
@@ -192,6 +199,7 @@ en:
          Please select the focal regions of this project.<br />
          If you do not select any, it will be considered a national project.
       add_location: Add another Location
+      forecasts_title: Forecasts {{year}}
     historic_funding_form:
       historic_funding: Historic Funding (up to the end of {{year}})
     regular_funding:
@@ -210,9 +218,17 @@ en:
       publish: Publish project
       edit_and_draft: Edit project (moves it to drafts)
       clone: Clone & Edit
+      factsheet: Factsheet
     sector_agencies_form:
       prompt: Please select
       not_avail: Not available
+      add_sector: Add another Sector
+      add_implementing_agency: Add Channel of Delivery
+      add_contracted_agency: Add Extending Agencies
+      del_no: 'No'
+      del_yes: 'Yes'
+    delete_associated: Delete
+     
     sector_relevance:
       no_subsector: No Sub-Sector
       prompt: Please select
@@ -256,6 +272,7 @@ en:
   reports:
     custom:
       new:
+        funds_for: Funding information {{year}}
         output_fields:
           heading: Fields to display
           
@@ -327,6 +344,7 @@ en:
         region: Region
         details: Details
         title: Projects by Department
+        show_municipalities: Show Municipalities
       show:
         title: Projects in {{province}}
     sectors:
@@ -363,10 +381,21 @@ en:
       available_shortly: None
     home:
       bluebook_image_link: Click on Image for EU Blue Book 2007
+      back: Back
+      read_more: Read more
+      introduction_short: |
+          <p>ODAmoz is a new EC funded electronic tool that provides information on Official Development Assistance (ODA) to Mozambique. It was created in response to the Paris Declaration advocating for strengthened coordination and harmonization among Donors and alignment with the Government of Mozambique. </p>
+          <p>ODAmoz enables to track Donors&#39; and United Nations Agencies&#39; projects and programmes in the country: where they are operating, who finances them, and which organization implements them. </p>
+          <p>It is a user-friendly database, accessible to all through the internet. Its &quot;Design your own report&quot; function makes it easy to search for specific information through a set of predefined criteria (donor, sector, location, project status, funding type and MDGs) and offers tables and geographic maps (ODAmap) for analysis. </p>
+          <p>Welcome to ODAmoz!</p>
+      map_image_link: Click on map for ODAmap
+    links:
+      title: Línks 
   
   user_sessions:
     new:
       title: Please log in!
+      submit: Submit
   
   users:
     edit:

@@ -12,7 +12,7 @@ module ProjectsHelper
     groups = choices.inject("") do |s, (k, values)|
       s << content_tag(:option, k, :value => k.gsub(/ +/,'_'), :group => "true")
     end
-    blank_option = content_tag(:option,  ll(:options, :prompt))
+    blank_option = content_tag(:option,  t('.prompt'))
     grouped = choices.inject("") do |s, (k, values)|
       s << select_tag(k, blank_option + options_from_collection_for_select(values, :id, :name, form.object.aid_modality_id), :style => "display:none;")
     end

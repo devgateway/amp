@@ -28,7 +28,7 @@
 				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15"), reports_province_path(province) %>
 			</td>
 			<td><%= icon_link_to('moz_map', map_reports_province_path(province)) %></td>
-			<td><%= reports_link_to lc(:show_municipalities), reports_province_districts_path(province) %>
+			<td><%= reports_link_to t ('.show_municipalities'), reports_province_districts_path(province) %>
 		</tr>
 	<% end %>
 	

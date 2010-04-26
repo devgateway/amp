@@ -1,7 +1,7 @@
 <% f.field_set do %>
 	<li>
 		<%= f.label :sector_relevances %>
-		<%= f.add_associated_button(t('projects.add_sector'), @project.sector_relevances.new, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
+		<%= f.add_associated_button(t('.add_sector'), @project.sector_relevances.new, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
 		
         <%= error_message_on(:project, :sector_relevances, "","", "error_message" ) %>
 		<div id="sector_relevances">
@@ -11,7 +11,7 @@
 	
 	<li>
 		<%= f.label :implementing_agencies %>
-		<%= button_to_function t('projects.add_implementing_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page|  
+		<%= button_to_function t('.add_implementing_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page|  
 				page.insert_html :bottom, :implementing_agencies, 
 					:partial => 'implementing_agency', :object => Agency.new
 			end %>
@@ -27,7 +27,7 @@
 	
 	<li>
 		<%= f.label :contracted_agencies %>
-		<%= button_to_function t('projects.add_contracted_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page| 
+		<%= button_to_function t('.add_contracted_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page| 
 			page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => Agency.new
 		end %>
 		
@@ -124,22 +124,22 @@
 	</script>
         <li>
           <%= f.select :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS,
-				:include_blank => ll(:options, :prompt), :translate => true %>
+				:include_blank => t('.prompt'), :translate => true %>
         </li>
 
         <li id="on_off_treasury">
           <%= f.select :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS,
-				:include_blank => ll(:options, :prompt), :translate => true %>
+				:include_blank => t('.prompt'), :translate => true %>
         </li>
 
         <li id="enters_in">
           <%= f.select :enters_in, Project::ENTRY_TYPES,
-				:include_blank => ll(:options, :prompt), :translate => true %>
+				:include_blank => t('.prompt'), :translate => true %>
         </li>
 
         <li id="loan_to_public_enterprises">
           <%= f.select :loan_to_public_enterprises, Project::LOAN_TO_PUBLIC_ENTERPRISES,
-				:include_blank => ll(:options, :prompt), :translate => true %>
+				:include_blank => t('.prompt'), :translate => true %>
         </li>
 
         <li id="government_counterpart">
@@ -151,7 +151,7 @@
         <li>
 		<%= f.label :delegated_cooperation %>
 		<select name="project[delegated_cooperation_attributes][_delete]" id="delegated_coorp_on_off">
-			<%= options_for_select({ t('options.del_no') => 1, t('options.del_yes') => 0}, (@project.delegated_cooperation ? 0 : 1)) %>
+			<%= options_for_select({ t('.del_no') => 1, t('.del_yes') => 0}, (@project.delegated_cooperation ? 0 : 1)) %>
 		</select>
 	</li>
 

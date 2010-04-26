@@ -1,7 +1,0 @@
-en:   
-  user_sessions:
-    login_success: Welcome {{name}}! You are now logged in!
-    logout_success: Logged out successfully! Good bye.
-    new:
-      title: Please log in!
-      submit: Login

@@ -197,7 +197,7 @@ en:
         province: 
           label: Region
         district: 
-          label: Municipalities
+          label: Districts
         amount: 
           label: Amount in %
         

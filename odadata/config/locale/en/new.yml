@@ -274,14 +274,14 @@ en:
       markers: Markers
       mdgs: MDGs
       focal_regions: Focal Regions
-      all_district: All municipalities
+      all_district: All districts
       country_strategy_unavailable: Not linked to any strategy
       national: National
     show_map:
       project: Project
       geo_list: Provinces & Districts
       national: National Project
-      map_legend: "Yellow highlighted areas are the project's focal regions/municipalities"
+      map_legend: "Yellow highlighted areas are the project's focal regions/districts"
   
   reports:
     custom:
@@ -358,7 +358,7 @@ en:
         region: Region
         details: Details
         title: Projects by Department
-        show_municipalities: Show Municipalities
+        show_municipalities: Show Districts
       show:
         title: Projects in {{province}}
     sectors:

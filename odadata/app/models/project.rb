@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
   FIRST_YEAR_OF_RELEVANCE   = 2007
   FORECAST_RANGE            = 3
   
-  FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT   = 2005
+  FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT   = 2007
     
   ##
   # Relations

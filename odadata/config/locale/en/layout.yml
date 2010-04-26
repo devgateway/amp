@@ -1,7 +1,7 @@
 en:
   layout:
-    standard_title: ODAdata- Official Development Assistance to Mozambique Database
-    custom_title: ODAdata - {{page_title}}
+    standard_title: ODAMoz - Official Development Assistance to Mozambique Database
+    custom_title: ODAMoz - {{page_title}}
     short_title: Official Development Assistance <br/>to Mozambique Database
       
   actions:

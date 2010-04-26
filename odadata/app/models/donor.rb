@@ -124,8 +124,8 @@ class Donor < ActiveRecord::Base
   def commitments_by_aid_modality(year = Time.now.year)
     # FIXME: This is a very ugly solution to the problem and should be replaced asap.
     # Use lazy loading to minimize database queries
-    @annual_payments_by_toa ||= Funding.find(:all,
-      :select=>'fundings.commitments AS commitments, fundings.year as year, projects.aid_modality_id AS aid_modality',
+    @annual_payments_by_toa = Funding.find(:all,
+      :select=>'SUM(fundings.commitments) AS pay, fundings.year as year, projects.aid_modality_id AS aid_modality',
       :joins => 'JOIN projects ON fundings.project_id = projects.id',
       :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND fundings.year = ?', self.id, Project::PUBLISHED, year],
       :group => 'aid_modality, year'
@@ -133,9 +133,10 @@ class Donor < ActiveRecord::Base
   end
   
   def payments_by_aid_modality(year = Time.now.year)
+    puts year
     # FIXME: This is a very ugly solution to the problem and should be replaced asap.
     # Use lazy loading to minimize database queries
-    @annual_payments_by_toa ||= Funding.find(:all, 
+    @annual_payments_by_toa = Funding.find(:all, 
       :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year, projects.aid_modality_id AS aid_modality',
       :joins => 'JOIN projects ON fundings.project_id = projects.id',
       :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND fundings.year = ?', self.id, Project::PUBLISHED, year],

@@ -53,4 +53,12 @@
     <%= f.text_field :actual_end, :readonly =>true  %>
     <%= error_message_on(:project, :actual_end, "","", "error_message" ) %>
   </li>
+	<li><%= f.text_field :website, :class => "large" %></li>
+	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>
+<% end %>
+
+<% f.field_set Project.human_attribute_name('officer_responsible') do %>
+	<li class="thirty"><%= f.text_field :officer_responsible_name %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_phone %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_email %></li>
 <% end %>

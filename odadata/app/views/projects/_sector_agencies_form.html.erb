@@ -1,14 +1,14 @@
-<% f.field_set do %>
+<% f.field_set t('.sector_relevances') do %>
 	<li>
-		<%= f.label :sector_relevances %>
-		<%= f.add_associated_button(t('.add_sector'), @project.sector_relevances.new, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
+		<%= f.add_associated_button(t('.add_sector'), @project.sector_relevances.new, :style => "display: block; float: right; width: 170") %>
 		
         <%= error_message_on(:project, :sector_relevances, "","", "error_message" ) %>
 		<div id="sector_relevances">
 			<%= f.render_associated_form @project.sector_relevances, :new => 1 %>
   		</div>
 	</li>
-	
+<% end %>
+<% f.field_set do %>	
 	<li>
 		<%= f.label :implementing_agencies %>
 		<%= button_to_function t('.add_implementing_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page|  
@@ -165,8 +165,7 @@
 				{ :prompt => t('.not_avail') }, :class => 'dynamic_select child large' %>
 		<% end %>
 	</li>	
-	<li><%= f.text_field :website, :class => "large" %></li>
-	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>
+	
 
 	
 <% end %>
@@ -182,12 +181,20 @@
 	<li class="thirty" style="height: 45px"></li>
 <%# end %>
 -->
-<% f.field_set Project.human_attribute_name('officer_responsible') do %>
-	<li class="thirty"><%= f.text_field :officer_responsible_name %></li>
-	<li class="thirty"><%= f.text_field :officer_responsible_phone %></li>
-	<li class="thirty"><%= f.text_field :officer_responsible_email %></li>
-<% end %>
 
+<% f.field_set t('.geo_relevances_title') do %>
+	<p><%=t '.geo_usage' %></p>
+
+	<li>
+		<%= f.add_associated_button(t('.add_location'), @project.geo_relevances.build, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
+		
+		<%= error_message_on(:project, :geo_relevances, "","", "error_message" ) %>
+		<div id="geo_relevances">
+			<%= f.render_associated_form @project.geo_relevances, :new => 1 %>
+  		</div>
+	</li>
+	
+<% end %>
 
 
   <script type="text/javascript" charset="utf-8">

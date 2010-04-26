@@ -35,6 +35,12 @@ en:
           label: Related Country Strategy
         prj_status: 
           label: Project Status
+          options:
+            planned: Planned but not yet signed
+            signed: Signed but not yet disbursed
+            ongoing: Ongoing
+            pipeline: Pipeline
+            completed: Completed
         planned_start: 
           label: Planned Start Date
         planned_end: 

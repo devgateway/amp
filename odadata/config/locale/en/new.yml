@@ -193,13 +193,8 @@ en:
       cofunding_title: Co-Funding Donors and Amounts
       add_cofunding_donor: Add another Donor
       add_cofunding_agency: Add another Agency
-      geo_relevances_title: Focal Regions
       project_currency: Input currency
       change_currency_confirmation: This will clear all amounts. Are you sure?
-      geo_usage: |
-         Please select the focal regions of this project.<br />
-         If you do not select any, it will be considered a national project.
-      add_location: Add another Location
       forecasts_title: Forecasts {{year}}
     historic_funding_form:
       historic_funding: Historic Funding (up to the end of {{year}})
@@ -228,6 +223,12 @@ en:
       add_contracted_agency: Add Extending Agencies
       del_no: 'No'
       del_yes: 'Yes'
+      geo_usage: |
+         Please select the focal regions of this project.<br />
+         If you do not select any, it will be considered a national project.
+      geo_relevances_title: Focal Regions
+      add_location: Add another Location
+      sector_relevances: Project's Focal Sectors
     delete_associated: Delete
      
     sector_relevance:
@@ -285,7 +286,7 @@ en:
           on_off_budget: On/Off Budget
           on_off_treasury: On/Off Treasury
           aid_modality: Aid Modality
-          channel_of_delivery: Channel of Delivery
+          type_of_implementation: Type of Implementation
           prj_status: Project Status
           
         output_options:

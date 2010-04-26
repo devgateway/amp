@@ -1,10 +1,17 @@
 <div class="right">
 		<div id="query">
-		  <% form_tag({:action => 'report'}, 
+		  <% form_tag({ :controller => 'reports/custom', :action => 'create', :method => 'put' },
       	:id => 'custom_report_conditions', 
       	:target => "Results", 
       	:onsubmit => "window.open('',this.target,'resizable=1,scrollbars=1,height=600,width=800');return true;") do 
       %>
+      
+        <% %w(factsheet_link donor donor_project_number title total_commitments total_disbursements commitments_forecast disbursements_forecast actual_start actual_end).each do |f| %>
+          <%= hidden_field_tag("report[fields][]", f) %>
+        <% end %>
+        
+        <%= hidden_field_tag("report[format][html]", true) %>
+      
       	<div id="criteria">
       		<h3 class="selected" id="location_trigger"><%= t('.locations') %></h3>
       		<div class="default" id="location_container">
@@ -17,7 +24,7 @@
       		<h3><%= t('.donor') %></h3>
       		<div>
       			<ul class="checkbox_container">
-      				<li class="all"><%= check_box "donors", "all", :checked => 'checked' %><%= t('.all') %></a>
+      				<li class="all"><%= check_box_tag "donors[]", "all", true %><%= t('.all') %></a>
       				<%= render :partial => "reports/query_options/donor", :collection => Donor.main.ordered.all %>
       			</ul>
       			<span class="next"><a onclick="$(this).parent().parent().next('h3').click(); return false;" href="#"><%= t('.next_step') %>...</a></span>
@@ -27,7 +34,7 @@
       		<h3><%= t('.dac_sector') %></h3>
       		<div>
       			<ul class="checkbox_container">
-      				<li class="all"><%= check_box "crs_sectors", "all", :checked => 'checked' %><%= t('.all') %></a>
+      				<li class="all"><%= check_box_tag "sectors[]", "all", true %><%= t('.all') %></a>
       			  	<%= render :partial => "reports/query_options/sector", :collection => DacSector.find(:all, :order => "code ASC"), :locals => { :shorten_to => 35 } %>
       			</ul>
       			<span class="next"><a onclick="$(this).parent().parent().next('h3').click(); return false;" href="#"><%= t('.next_step') %>...</a></span>
@@ -37,7 +44,7 @@
       		<h3><%= t('.toa') %></h3>
       		<div>
       			<ul class="checkbox_container">
-      				<li class="all"><%= check_box "aid_modality", "all", :checked => 'checked' %><%= t('.all') %></a>
+      				<li class="all"><%= check_box_tag "aid_modality[]", "all", true %><%= t('.all') %></a>
       		  		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
       			</ul>
       			<span class="next"><a onclick="$(this).parent().parent().next('h3').click(); return false;" href="#"><%= t('.next_step') %>...</a></span>

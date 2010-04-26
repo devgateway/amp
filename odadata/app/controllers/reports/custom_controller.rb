@@ -4,6 +4,7 @@ class Reports::CustomController < ReportsController
     :targets => lambda { |m, v| ["mdg_relevances.mdg_id IN (?)", v] },
     :sectors => lambda { |m, v| ["sector_relevances.dac_sector_id IN (?)", v] },
     :provinces => lambda { |m, v| ["geo_relevances.province_id IN (?)", v] },
+    :districts => lambda { |m, v| ["geo_relevances.district_id IN (?)", v] },
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 
     },
@@ -47,9 +48,9 @@ class Reports::CustomController < ReportsController
     report = ComplexReport.create!({
       :data => data,
       :currency => params[:currency],
-      :historic_rates_source => params[:report][:exchange_rates][:historic],
-      :current_rates_source => params[:report][:exchange_rates][:current],
-      :forecasts_rates_source => params[:report][:exchange_rates][:forecasts]
+      :historic_rates_source => (params[:report][:exchange_rates][:historic] rescue nil),
+      :current_rates_source => (params[:report][:exchange_rates][:current] rescue nil),
+      :forecasts_rates_source => (params[:report][:exchange_rates][:forecasts] rescue nil)
     })
     
     redirect_to reports_custom_path(report, :format => format)

@@ -39,8 +39,9 @@ function Region(loc_obj, loc_geom) {
 	this.dom_id = "region_" + this.id;
   
 	// Generate HTML elements
-	var inputname = "geo_level1s[" + this.id + "]";
-	var input = $('<input type="hidden" value="1" />').attr("name", inputname);
+	var input = $('<input type="hidden" />')
+	  .attr("name", "provinces[]")
+	  .attr("value", this.id);
 	var muc_list_item = $('<li class="all">All Municipalities</li>').append(input);
 
 	this.muc_list = $('<ul></ul>').append(muc_list_item);
@@ -84,10 +85,11 @@ function Municipality(loc_obj, loc_geom) {
     this.name = loc_obj.name;
 
     // Generate HTML element
-    var inputname = "geo_level2s[" + this.id + "]";
-	  var input = $('<input type="hidden" value="1" />').attr("name", inputname);
+    var input = $('<input type="hidden" />')
+  	  .attr("name", "districts[]")
+  	  .attr("value", this.id);
 
-    this.dom_id = "municipality_" + this.id;
+    this.dom_id = "district_" + this.id;
     this.dom_element = $("<li></li>").text(this.name).append(input);
 
     // Generate vector overlay

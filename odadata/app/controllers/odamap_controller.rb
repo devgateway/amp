@@ -24,12 +24,4 @@ class OdamapController < ApplicationController
       #:level2_geom => res_l2.toWKT
     }
   end
-  
-  def report
-    fields = [:factsheet_link, :donor, :donor_project_number, :title, :total_commitments, :total_payments, "total_commitments_#{Time.now.year-1}", "total_payments_#{Time.now.year-1}", "commitments_forecast_#{Time.now.year}", "payments_forecast_#{Time.now.year}", :start, :end]
-    
-    report = Report::Html.new_from_params(params, fields)
-    
-    render :inline => report.output, :layout => "currency_report_window"
-  end
 end

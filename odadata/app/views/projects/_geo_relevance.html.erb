@@ -6,8 +6,8 @@
 				Province.ordered, :'districts.ordered', :name, :id, :name, 
 				{ :label => false, :prompt => t('.all_districts') }, :class => 'dynamic_select child large' %>
 				
-		<%= f.text_field :amount %>
-
+		<%= f.text_field :amount, :class => "amount" %>
+    
 		<br/>
 		
 		<%= f.remove_link t('.delete') %>

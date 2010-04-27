@@ -120,7 +120,8 @@ class Project < ActiveRecord::Base
   ##
   # Callbacks
   before_validation :set_funding_currency 
-  before_save :set_equal_location_shares
+  before_validation :set_equal_location_shares
+  before_validation :set_equal_sector_shares
   
   ##
   # Validation
@@ -238,6 +239,14 @@ protected
   
   def set_equal_location_shares
     alive = self.geo_relevances.reject(&:marked_for_destruction?)
+    total = alive.size
+    return unless alive.all? { |g| g.amount.blank? }
+    
+    alive.each { |a| a.amount =  100 / total }
+  end
+  
+  def set_equal_sector_shares
+    alive = self.sector_relevances.reject(&:marked_for_destruction?)
     total = alive.size
     return unless alive.all? { |g| g.amount.blank? }
     

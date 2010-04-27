@@ -1330,6 +1330,10 @@ function showFilter(){
             selActYearFrom = from.value;
             var to= document.getElementsByName('yearTo')[0];
             selActYearTo = to.value;
+            if( selActYearFrom>selActYearTo&&selActYearTo!=-1){
+                alert('<digi:trn jsFriendly="true">Start year must be greater than end year</digi:trn>');
+                return false;
+            }
             for (var i=0; i<stat.length; i++) {
                        if(stat.options[i].selected ){
                            if(stat.options[i].value=='0'){

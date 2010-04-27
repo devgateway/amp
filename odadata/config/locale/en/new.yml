@@ -117,7 +117,7 @@ en:
     graph_window:
       print: Print
       close_window: Close Window
-    _currency_selector:
+    currency_selector:
       currency_selection: Select Currency
     report_show:
       close_window: Close Window

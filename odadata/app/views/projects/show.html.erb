@@ -192,22 +192,6 @@
 				</ul>
 			</dd>
 			
-			<dt><%= t('.markers') %></dt>
-			<dd>
-				<dl>
-					<dt class="first"><%= Project.human_attribute_name('gender_policy_marker') %></dt>
-					<dd class="first"><%= option_text_by_id(Project, :gender_policy_marker, Project::MARKER_OPTIONS, @project.gender_policy_marker) %></dd>
-	
-					<dt><%= Project.human_attribute_name('environment_policy_marker') %></dt>
-					<dd><%= option_text_by_id(Project, :environment_policy_marker, Project::MARKER_OPTIONS, @project.environment_policy_marker) %></dd>
-	
-					<dt><%= Project.human_attribute_name('biodiversity_marker') %></dt>
-					<dd><%= option_text_by_id(Project, :biodiversity_marker, Project::MARKER_OPTIONS, @project.biodiversity_marker) %></dd>
-	
-					<dt><%= Project.human_attribute_name('climate_change_marker') %></dt>
-					<dd><%= option_text_by_id(Project, :climate_change_marker, Project::MARKER_OPTIONS, @project.climate_change_marker) %></dd>
-				</dl>
-			</dd>
 					
 			<dt><%= t('.focal_regions') %></dt>
 			<dd>

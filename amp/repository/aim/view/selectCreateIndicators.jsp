@@ -131,7 +131,7 @@
                                                 <tr>
                                                     <td bgcolor="#ECF3FD" align="center" colspan="2" >
                                                         <html:button  styleClass="dr-menu" property=""  onclick="gotoCreateIndPage()">
-                                                            <digi:trn key="btn:crtInd">Add new Indicator</digi:trn> 
+                                                            <digi:trn>Add new Indicator</digi:trn> 
                                                         </html:button>
                                                     </td>
                                                 </tr>									
@@ -141,36 +141,36 @@
                                                     <td align="center" bgcolor="#ECF3FD">
                                                         <table cellSpacing=2 cellPadding=2>
                                                             <tr>
-                                                                <td><digi:trn key="aim:indicatorName">Indicator Name</digi:trn><font color="red">*</font></td>
+                                                                <td><digi:trn>Indicator Name</digi:trn><font color="red">*</font></td>
                                                                 <td>
                                                                     <html:text property="indicatorName" size="20" styleClass="inp-text" maxlength="50"/>	
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><digi:trn key="aim:description">Description</digi:trn></td>
+                                                                <td><digi:trn>Description</digi:trn></td>
                                                                 <td>
                                                                     <html:textarea property="indicatorDesc" cols="35" rows="2" styleClass="inp-text"/>&nbsp;&nbsp;	
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <digi:trn key="aim:indicatorCode">Indicator Code</digi:trn>
+                                                                    <digi:trn>Indicator Code</digi:trn><font color="red">*</font>
                                                                 </td>
                                                                 <td>
                                                                     <html:text property="indicatorCode" size="20" styleClass="inp-text"/>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><digi:trn key="aim:indicatorType">Indicator Type</digi:trn></td>
+                                                                <td><digi:trn>Indicator Type</digi:trn></td>
                                                                 <td>
                                                                     <html:select property="ascendingInd" styleClass="inp-text">
-                                                                        <html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
-                                                                        <html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>
+                                                                        <html:option value="A"><digi:trn>ascending</digi:trn></html:option>
+                                                                        <html:option value="D"><digi:trn>descending</digi:trn></html:option>
                                                                     </html:select>
                                                                 </td>
                                                             </tr>	
                                                             <tr>
-                                                                <td><digi:trn key="aim:indicatorSector">Sectors</digi:trn><font color="red">*</font></td>
+                                                                <td><digi:trn>Sectors</digi:trn><font color="red">*</font></td>
                                                                 <td>	<!-- sectors start -->
                                                                     <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
                                                                         <tr>
@@ -228,11 +228,11 @@
                                                                                                                 <tr>
                                                                                                                     <logic:notEmpty name="MS" scope="application">
                                                                                                                         <td>
-                                                                                                                            <input type="button" value="<digi:trn key="btn:addSectors">Add Sectors</digi:trn>" class="dr-menu"  onclick="addSectors();">
+                                                                                                                            <input type="button" value="<digi:trn>Add Sectors</digi:trn>" class="dr-menu"  onclick="addSectors();">
                                                                                                                         </td>
                                                                                                                     </logic:notEmpty>
                                                                                                                     <td >
-                                                                                                                        <input type="button" class="dr-menu" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+                                                                                                                        <input type="button" class="dr-menu" onclick="return removeSelSectors()" value='<digi:trn>Remove Sector</digi:trn>' />
                                                                                                                     </td>
                                                                                                                 </tr>
                                                                                                             </table>
@@ -251,7 +251,7 @@
                                                             </tr>	
                                                             <tr>
                                                                 <td>
-                                                                    <digi:trn key="aim:creationdate">Creation date:</digi:trn>
+                                                                    <digi:trn>Creation date:</digi:trn>
                                                                 </td>
                                                                 <td>
                                                                     <html:text property="creationDate" disabled="true" styleId="txtCreationDate" style="font-family:verdana;font-size:11px;width:80px;"/>
@@ -260,14 +260,14 @@
                                                             <tr>
                                                                 <td align="center" colspan=2>&nbsp;														
                                                                     <html:button  styleClass="dr-menu" property="addnewIndicator"  onclick="addNewIndicatorTL(${selectedSectsSize})">
-                                                                        <digi:trn key="btn:add">Add</digi:trn> 
+                                                                        <digi:trn>Add</digi:trn> 
                                                                     </html:button>
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                     </td>
                                                 </tr>
-                                            </c:if>								
+                                            </c:if>
                                         </table>
                                     </td>
                                 </tr>

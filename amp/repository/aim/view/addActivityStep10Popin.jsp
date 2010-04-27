@@ -381,6 +381,12 @@
             return false;
         }
 
+        if (document.aimIndicatorFormIndicator.indicatorCode.value.length == 0) {
+            alert("Please enter indicator code");
+            document.aimIndicatorFormIndicator.indicatorCode.focus();
+            return false;
+        }
+
         if(selectedSectsSize!=1) {
             alert("Please add Sectors");
             return false;

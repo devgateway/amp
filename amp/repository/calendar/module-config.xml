@@ -17,6 +17,7 @@
 		
 		<action pattern="/translateSpecial">WRITE,TRANSLATE</action>
         <action login-required="true" pattern="/showCalendarEvent" />
+        <action login-required="true" pattern="/showCalendarView" />
         <action login-required="true" pattern="/previewCalendarEvent" />
         <action login-required="true" pattern="/previewCalendarEventDone" />
 	</security>

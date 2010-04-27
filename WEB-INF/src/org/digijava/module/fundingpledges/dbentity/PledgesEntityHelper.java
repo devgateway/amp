@@ -17,14 +17,19 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-
 /**
  * 
  * @author Diego Dimunzio
  * 
  */
+
+
+/**
+ * 
+ */
 public class PledgesEntityHelper {
 	private static Logger logger = Logger.getLogger(PledgesEntityHelper.class);
+	
 	public static ArrayList<FundingPledges> getPledges(){
 		 Session session = null;
 	        Query q = null;
@@ -48,6 +53,30 @@ public class PledgesEntityHelper {
 	        return AllPledges;
 	}
 	
+	public static ArrayList<FundingPledges> getPledgesByDonor(Long donorid){
+		 Session session = null;
+	        Query q = null;
+	        FundingPledges pledge = new FundingPledges();
+	        ArrayList<FundingPledges> Pledges = new ArrayList<FundingPledges>();
+	        List list = null;
+	        try {
+	            session = PersistenceManager.getRequestDBSession();
+	            String queryString = new String();
+	            queryString = "select p from " + FundingPledges.class.getName()
+				+ " p where (p.organization=:id)";
+	            q = session.createQuery(queryString);
+	            q.setParameter("id", donorid,Hibernate.LONG);
+	            Iterator iter = q.list().iterator();
+	            while (iter.hasNext()) {
+	            	pledge = (FundingPledges) iter.next();
+	            	Pledges.add(pledge);
+	            }
+
+	        } catch (Exception ex) {
+	        	logger.debug("Projects : Unable to get Pledges names from database" + ex.getMessage());
+	        }
+	        return Pledges;
+	}
 	public static FundingPledges getPledgesById(Long id){
 		Session session = null;
 		Query qry = null;

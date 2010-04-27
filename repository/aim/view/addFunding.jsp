@@ -757,7 +757,7 @@
 											<field:display name="Related Pledge" feature="Commitments">
 												<td valign="bottom">
 													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
-														<html:option value="0"></html:option>
+														<html:option value="0"><digi:trn>Select Pledge</digi:trn> </html:option>
 														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
 												</html:select>		
 												</td> 
@@ -1256,7 +1256,7 @@
 											<field:display name="Related Pledge" feature="Disbursement">
 											<td valign="bottom">
 													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
-														<html:option value="0"></html:option>
+														<html:option value="0"><digi:trn>Select Pledge</digi:trn> </html:option>
 														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
 												</html:select>		
 												</td> 

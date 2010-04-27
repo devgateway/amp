@@ -30,6 +30,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 public class AddFunding extends Action {
@@ -134,6 +135,9 @@ public class AddFunding extends Action {
 		formBean.getFunding().setDupFunding(true);
 		formBean.getFunding().setFirstSubmit(false);
 		formBean.setTotDisbIsBiggerThanTotCom(false);
+		 // load donor related pledges
+		formBean.getFunding().setPledgeslist(PledgesEntityHelper.getPledgesByDonor(orgId));
+		
 		return mapping.findForward("forward");
 	}
 	public static String getFYDate(Integer numOfAddedYears, Integer year) {

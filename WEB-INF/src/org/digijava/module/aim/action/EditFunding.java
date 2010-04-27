@@ -18,10 +18,13 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.MTEFProjection;
+import org.digijava.module.aim.helper.Pledge;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 public class EditFunding extends Action {
@@ -146,6 +149,7 @@ public class EditFunding extends Action {
 				}
 			}
 		}
+		
 		//
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		//
@@ -169,6 +173,10 @@ public class EditFunding extends Action {
 		formBean.getOldFunding().setDupFunding(true);
 		formBean.getOldFunding().setFirstSubmit(false);
 		//
+		
+	     // load donor related pledges
+		formBean.getFunding().setPledgeslist(PledgesEntityHelper.getPledgesByDonor(orgId));
+		
 		return mapping.findForward("forward");
 	}
 }

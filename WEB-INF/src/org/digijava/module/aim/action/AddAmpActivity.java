@@ -87,6 +87,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -210,7 +211,8 @@ public class AddAmpActivity extends Action {
      }
 
      // load all pledges
-      eaForm.getFunding().setPledgeslist(PledgesEntityHelper.getPledges());
+     ArrayList<FundingPledges> pledges = new ArrayList<FundingPledges>();
+     eaForm.getFunding().setPledgeslist(pledges);
       
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());

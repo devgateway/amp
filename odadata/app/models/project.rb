@@ -19,7 +19,7 @@ class Project < ActiveRecord::Base
   DELETED                   = 2
   DATA_STATUS_OPTIONS       = [['draft', DRAFT], ['published', PUBLISHED], ['deleted', DELETED]]
   
-  IMPLEMENTATION_TYPES      = [['bilateral', 1], ['multilateral', 2], ['ngo_implementation', 3]]
+  IMPLEMENTATION_TYPES      = [['not available', 0], ['bilateral', 1], ['multilateral', 2], ['ngo_implementation', 3]]
 
   GRANT_LOAN_OPTIONS        = [['grant', 1], ['loan', 2]]
 

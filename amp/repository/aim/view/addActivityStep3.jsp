@@ -652,140 +652,137 @@ ${fn:replace(message,quote,escapedQuote)}
                                                         </c:choose>
 														<table border="0" width="100%">
                                                         <tr><td bgcolor="${row_color_region}">
-                                                            <img id="regional_funding_${regionalFunding.regionId}_plus"
-                                                                onclick="toggleGroup('regional_funding_${regionalFunding.regionId}')"
-                                                                src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" /> <img
-                                                                id="regional_funding_${regionalFunding.regionId}_minus" onclick="toggleGroup('regional_funding_${regionalFunding.regionId}')"
-                                                                src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"
-                                                                style="display: none" />
+                                                            <img id="regional_funding_${regionalFunding.regionId}_plus" onclick="toggleGroup('regional_funding_${regionalFunding.regionId}')"
+                                                                src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" /> 
+                                                            <img id="regional_funding_${regionalFunding.regionId}_minus" onclick="toggleGroup('regional_funding_${regionalFunding.regionId}')"
+                                                                src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" style="display: none" />
                                                             <!-- Region name -->
                                                             <bean:write name="regionalFunding" property="regionName"/>
                                                             &nbsp;
                                                             <field:display name="Edit Funding Link" feature="Regional Funding">
-                                                            <a class="action_item" href="javascript:editFunding('<bean:write name="regionalFunding" property="regionId"/>')"><digi:trn key="aim:editThisFunding">Edit</digi:trn></a>
+                                                            	<a class="action_item" href="javascript:editFunding('<bean:write name="regionalFunding" property="regionId"/>')"><digi:trn key="aim:editThisFunding">Edit</digi:trn></a>
                                                             </field:display>
                                                             <field:display name="Remove Fundings" feature="Regional Funding">
-                                                            <a class="action_item" href="javascript:removeRegFundings('<bean:write name="regionalFunding" property="regionId"/>')"><digi:trn>Delete</digi:trn></a>
+                                                            	<a class="action_item" href="javascript:removeRegFundings('<bean:write name="regionalFunding" property="regionId"/>')"><digi:trn>Delete</digi:trn></a>
                                                             </field:display>
                                                         </td></tr>
                                                         <tr><td>
                                                             <!-- Regional funding details -->
                                                             <div id="regional_funding_${regionalFunding.regionId}_dots" style="display: block"></div>
-                                                            <div id="act_regional_funding_${regionalFunding.regionId}"
-                                                                style="display: ''; position: relative; left: 10px;">
-                                                            <table width="98%" cellSpacing=1 cellPadding=3 border=0
-                                                            bgcolor="#d7eafd">
-                                                            <logic:notEmpty name="regionalFunding" property="commitments">
-                                                                <tr bgcolor="#ffffff">
-                                                                <td height="3"> </td></tr>
-                                                                <tr bgcolor="#bfd2df">
-                                                                <td><strong>Commitments</strong>
-                                                                </td></tr>
-                                                                <tr><td bgcolor=#ffffff>
-                                                                    <table width="100%" cellSpacing=1 cellPadding=3 border=0>
-                                                                        <tr bgcolor="#999999" style="color:black">
-                                                                            <field:display name="Actual/Planned Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Total Amount Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:totalAmount">Total Amount</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Currency Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:currency">Currency</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Date Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:date">Date</digi:trn></strong></td></field:display>
-                                                                        </tr>
-                                                                        <logic:iterate name="regionalFunding"
-                                                                        property="commitments" id="commitment"
-                                                                        type="org.digijava.module.aim.helper.FundingDetail" indexId="counterRows">
-                                                                        <!-- L2 START-->
-                                                                        <c:choose>
-                                                                            <c:when test="${counterRows%2 == 0}"><c:set var="row_color">#ffffff</c:set></c:when>
-                                                                            <c:otherwise><c:set var="row_color">#dbe5f1</c:set></c:otherwise>
-                                                                        </c:choose>
-                                                                        <tr bgcolor="${row_color}">
-                                                                            <field:display name="Actual/Planned Commitments" feature="Regional Funding">
-                                                                                <td align="center"><digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td>
-                                                                            </field:display>
-                                                                            <field:display name="Total Amount Commitments" feature="Regional Funding"><td align="center">
-                                                                            <FONT color=blue>*</FONT>
-                                                                            <c:out value="${commitment.transactionAmount}"/></td></field:display>
-                                                                            <field:display name="Currency Commitments" feature="Regional Funding"><td align="center"><c:out value="${commitment.currencyCode}"/></td></field:display>
-                                                                            <field:display name="Date Commitments" feature="Regional Funding"><td align="center"><c:out value="${commitment.transactionDate}"/></td></field:display>																									
-                                                                        </tr>
-                                                                        </logic:iterate>	<!-- L2 END-->
-                                                                    </table>
-                                                                </td></tr>
-                                                            </logic:notEmpty>
-                                                            <logic:notEmpty name="regionalFunding" property="disbursements">
-                                                                <tr bgcolor="#ffffff">
-                                                                <td height="3"> </td></tr>
-                                                                <tr bgcolor="#bfd2df">
-                                                                <td><strong>Disbursements</strong>
-                                                                </td></tr>
-                                                                <tr><td bgcolor=#ffffff>
-                                                                    <table width="100%" cellSpacing=1 cellPadding=3 border=0
-                                                                    bgcolor="#eeeeee">
-                                                                        <tr bgcolor="#999999" style="color:black">
-                                                                            <field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Total Amount Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:totalAmount">Total Amount</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Currency Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:currency">Currency</digi:trn></td></strong></field:display>
-                                                                            <field:display name="Date Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:date">Date</digi:trn></strong></td></field:display>																									
-                                                                        </tr>
-                                                                        <logic:iterate name="regionalFunding"
-                                                                        property="disbursements" id="disbursement"
-                                                                        type="org.digijava.module.aim.helper.FundingDetail" indexId="counterRows">
-                                                                        <!-- L3 START-->
-                                                                        <c:choose>
-                                                                            <c:when test="${counterRows%2 == 0}"><c:set var="row_color">#ffffff</c:set></c:when>
-                                                                            <c:otherwise><c:set var="row_color">#dbe5f1</c:set></c:otherwise>
-                                                                        </c:choose>
-                                                                        <tr bgcolor="${row_color}">
-                                                                            <field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td align="center"><digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
-                                                                            </td></field:display>
-                                                                            <field:display name="Total Amount Disbursements" feature="Regional Funding"><td align="center">
-                                                                            <FONT color=blue>*</FONT>
-                                                                            <c:out value="${disbursement.transactionAmount}"/>
-                                                                            </td></field:display>
-                                                                            <field:display name="Currency Disbursements" feature="Regional Funding"><td align="center"><c:out value="${disbursement.currencyCode}"/></td></field:display>
-                                                                            <field:display name="Date Disbursements" feature="Regional Funding"><td align="center"><c:out value="${disbursement.transactionDate}"/></td></field:display>																									
-                                                                        </tr>
-                                                                        </logic:iterate>	<!-- L3 END-->
-                                                                    </table>
-                                                                </td></tr>
-                                                            </logic:notEmpty>
-                                                            <logic:notEmpty name="regionalFunding" property="expenditures">
-																<tr bgcolor="#ffffff">
-                                                                <td height="3"> </td></tr>
-                                                                <tr bgcolor="#bfd2df">
-                                                                <td ><strong>Expenditures</strong>
-                                                                </td></tr>
-                                                                <tr><td bgcolor=#ffffff>
-                                                                    <table width="100%" cellSpacing=1 cellPadding=3 border=0
-                                                                    bgcolor="#eeeeee">
-                                                                        <tr bgcolor="#999999" style="color:black">
-                                                                            <field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Total Amount Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:totalAmount">Total Amount</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Currency Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:currency">Currency</digi:trn></strong></td></field:display>
-                                                                            <field:display name="Date Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:date">Date</digi:trn></strong></td></field:display>																									
-                                                                        </tr>
-                                                                        <logic:iterate name="regionalFunding"
-                                                                        property="expenditures" id="expenditure"
-                                                                        type="org.digijava.module.aim.helper.FundingDetail" indexId="counterRows">
-                                                                        <!-- L4 START-->
-                                                                        <c:choose>
-                                                                            <c:when test="${counterRows%2 == 0}"><c:set var="row_color">#ffffff</c:set></c:when>
-                                                                            <c:otherwise><c:set var="row_color">#dbe5f1</c:set></c:otherwise>
-                                                                        </c:choose>
-                                                                        <tr bgcolor="${row_color}">
-                                                                            <field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td align="center"><digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
-                                                                            </td></field:display>
-                                                                            <field:display name="Total Amount Expenditures" feature="Regional Funding"><td align="center">
-                                                                            <FONT color=blue>*</FONT>
-                                                                            <c:out value="${expenditure.transactionAmount}"/>
-                                                                            </td></field:display>
-                                                                            <field:display name="Currency Expenditures" feature="Regional Funding"><td align="center"><c:out value="${expenditure.currencyCode}"/></td></field:display>
-                                                                            <field:display name="Date Expenditures" feature="Regional Funding"><td align="center"><c:out value="${expenditure.transactionDate}"/></td></field:display>																									
-                                                                        </tr>
-                                                                        </logic:iterate>	<!-- L4 END-->
-                                                                    </table>
-                                                                </td></tr>
-                                                            </logic:notEmpty>
-                                                            </table>
+                                                            <div id="act_regional_funding_${regionalFunding.regionId}" style="display: ''; position: relative; left: 10px;">
+	                                                            <table width="98%" cellSpacing="1" cellPadding="3" border="0" bgcolor="#d7eafd">
+		                                                            <logic:notEmpty name="regionalFunding" property="commitments">
+		                                                                <tr bgcolor="#ffffff">
+		                                                                	<td height="3"> </td>
+		                                                                </tr>
+		                                                                <tr bgcolor="#bfd2df">
+		                                                                	<td><strong>Commitments</strong></td>
+		                                                                </tr>
+		                                                                <tr><td bgcolor=#ffffff>
+		                                                                    <table width="100%" cellSpacing=1 cellPadding=3 border=0>
+		                                                                        <tr bgcolor="#999999" style="color:black">
+		                                                                            <field:display name="Actual/Planned Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Total Amount Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:totalAmount">Total Amount</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Currency Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:currency">Currency</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Date Commitments" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:date">Date</digi:trn></strong></td></field:display>
+		                                                                        </tr>
+		                                                                        <logic:iterate name="regionalFunding"
+		                                                                        property="commitments" id="commitment"
+		                                                                        type="org.digijava.module.aim.helper.FundingDetail" indexId="counterRows">
+		                                                                        <!-- L2 START-->
+		                                                                        <c:choose>
+		                                                                            <c:when test="${counterRows%2 == 0}"><c:set var="row_color">#ffffff</c:set></c:when>
+		                                                                            <c:otherwise><c:set var="row_color">#dbe5f1</c:set></c:otherwise>
+		                                                                        </c:choose>
+		                                                                        <tr bgcolor="${row_color}">
+		                                                                            <field:display name="Actual/Planned Commitments" feature="Regional Funding">
+		                                                                                <td align="center"><digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td>
+		                                                                            </field:display>
+		                                                                            <field:display name="Total Amount Commitments" feature="Regional Funding"><td align="center">
+		                                                                            <FONT color=blue>*</FONT>
+		                                                                            <c:out value="${commitment.transactionAmount}"/></td></field:display>
+		                                                                            <field:display name="Currency Commitments" feature="Regional Funding"><td align="center"><c:out value="${commitment.currencyCode}"/></td></field:display>
+		                                                                            <field:display name="Date Commitments" feature="Regional Funding"><td align="center"><c:out value="${commitment.transactionDate}"/></td></field:display>																									
+		                                                                        </tr>
+		                                                                        </logic:iterate>	<!-- L2 END-->
+		                                                                    </table>
+		                                                                </td></tr>
+		                                                            </logic:notEmpty>
+		                                                            <logic:notEmpty name="regionalFunding" property="disbursements">
+		                                                                <tr bgcolor="#ffffff">
+		                                                                <td height="3"> </td></tr>
+		                                                                <tr bgcolor="#bfd2df">
+		                                                                <td><strong>Disbursements</strong>
+		                                                                </td></tr>
+		                                                                <tr><td bgcolor=#ffffff>
+		                                                                    <table width="100%" cellSpacing=1 cellPadding=3 border=0
+		                                                                    bgcolor="#eeeeee">
+		                                                                        <tr bgcolor="#999999" style="color:black">
+		                                                                            <field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Total Amount Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:totalAmount">Total Amount</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Currency Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:currency">Currency</digi:trn></td></strong></field:display>
+		                                                                            <field:display name="Date Disbursements" feature="Regional Funding"><td align="center"><strong><digi:trn key="aim:date">Date</digi:trn></strong></td></field:display>																									
+		                                                                        </tr>
+		                                                                        <logic:iterate name="regionalFunding"
+		                                                                        property="disbursements" id="disbursement"
+		                                                                        type="org.digijava.module.aim.helper.FundingDetail" indexId="counterRows">
+		                                                                        <!-- L3 START-->
+		                                                                        <c:choose>
+		                                                                            <c:when test="${counterRows%2 == 0}"><c:set var="row_color">#ffffff</c:set></c:when>
+		                                                                            <c:otherwise><c:set var="row_color">#dbe5f1</c:set></c:otherwise>
+		                                                                        </c:choose>
+		                                                                        <tr bgcolor="${row_color}">
+		                                                                            <field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td align="center"><digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
+		                                                                            </td></field:display>
+		                                                                            <field:display name="Total Amount Disbursements" feature="Regional Funding"><td align="center">
+		                                                                            <FONT color=blue>*</FONT>
+		                                                                            <c:out value="${disbursement.transactionAmount}"/>
+		                                                                            </td></field:display>
+		                                                                            <field:display name="Currency Disbursements" feature="Regional Funding"><td align="center"><c:out value="${disbursement.currencyCode}"/></td></field:display>
+		                                                                            <field:display name="Date Disbursements" feature="Regional Funding"><td align="center"><c:out value="${disbursement.transactionDate}"/></td></field:display>																									
+		                                                                        </tr>
+		                                                                        </logic:iterate>	<!-- L3 END-->
+		                                                                    </table>
+		                                                                </td></tr>
+		                                                            </logic:notEmpty>
+		                                                            <logic:notEmpty name="regionalFunding" property="expenditures">
+																		<tr bgcolor="#ffffff">
+		                                                                <td height="3"> </td></tr>
+		                                                                <tr bgcolor="#bfd2df">
+		                                                                <td ><strong>Expenditures</strong>
+		                                                                </td></tr>
+		                                                                <tr><td bgcolor=#ffffff>
+		                                                                    <table width="100%" cellSpacing=1 cellPadding=3 border=0
+		                                                                    bgcolor="#eeeeee">
+		                                                                        <tr bgcolor="#999999" style="color:black">
+		                                                                            <field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn>Actual/Planned</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Total Amount Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn>Total Amount</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Currency Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn>Currency</digi:trn></strong></td></field:display>
+		                                                                            <field:display name="Date Expenditures" feature="Regional Funding"><td align="center"><strong><digi:trn>Date</digi:trn></strong></td></field:display>																									
+		                                                                        </tr>
+		                                                                        <logic:iterate name="regionalFunding"
+		                                                                        property="expenditures" id="expenditure"
+		                                                                        type="org.digijava.module.aim.helper.FundingDetail" indexId="counterRows">
+		                                                                        <!-- L4 START-->
+		                                                                        <c:choose>
+		                                                                            <c:when test="${counterRows%2 == 0}"><c:set var="row_color">#ffffff</c:set></c:when>
+		                                                                            <c:otherwise><c:set var="row_color">#dbe5f1</c:set></c:otherwise>
+		                                                                        </c:choose>
+		                                                                        <tr bgcolor="${row_color}">
+		                                                                            <field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td align="center"><digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
+		                                                                            </td></field:display>
+		                                                                            <field:display name="Total Amount Expenditures" feature="Regional Funding"><td align="center">
+		                                                                            <FONT color=blue>*</FONT>
+		                                                                            <c:out value="${expenditure.transactionAmount}"/>
+		                                                                            </td></field:display>
+		                                                                            <field:display name="Currency Expenditures" feature="Regional Funding"><td align="center"><c:out value="${expenditure.currencyCode}"/></td></field:display>
+		                                                                            <field:display name="Date Expenditures" feature="Regional Funding"><td align="center"><c:out value="${expenditure.transactionDate}"/></td></field:display>																									
+		                                                                        </tr>
+		                                                                        </logic:iterate>	<!-- L4 END-->
+		                                                                    </table>
+		                                                                </td></tr>
+		                                                            </logic:notEmpty>
+	                                                            </table>
                                                             </div>
                                                         </td></tr>
 														</table>

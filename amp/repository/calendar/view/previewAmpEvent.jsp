@@ -94,7 +94,7 @@ function getWeekdays(){
 	</tr>
 	<tr>				
         <td align="center" nowrap="nowrap" valign="top">
-        	<table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
+        	<table class="contentbox_border" width="100%" cellpadding="1" cellspacing="1">
                 <tr>
                 	<td align="center" style="padding: 0px 3px 0px 3px;">
                 		<table width="100%">
@@ -122,7 +122,7 @@ function getWeekdays(){
 				          <table>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:evntTitle">Event title</digi:trn>
+				                <digi:trn key="calendar:evntTitle">Event title</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
@@ -132,7 +132,7 @@ function getWeekdays(){
 				           <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:Description">Description</digi:trn>
+				                <digi:trn key="calendar:Description">Description</digi:trn>:
 				              </td>
 				              <td>
 				              	<html:textarea name="calendarEventForm" property="description" style="width: 220px;" readonly="true"/>                
@@ -141,7 +141,7 @@ function getWeekdays(){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-				                <digi:trn key="calendar:cType">Calendar type</digi:trn>
+				                <digi:trn key="calendar:cType">Calendar type</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
@@ -160,7 +160,7 @@ function getWeekdays(){
 				            <feature:display name="Event Type" module="Calendar">
 				            	<tr>
 					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-					                <digi:trn key="calendar:eventsType">Event type</digi:trn>
+					                <digi:trn key="calendar:eventsType">Event type</digi:trn>:
 					              </td>
 					              <td style="font-family: Tahoma;font-size: 12px;">
 					                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
@@ -172,7 +172,7 @@ function getWeekdays(){
 				            <feature:display name="Donors" module="Calendar">
 				            	<tr>
 					              <td style="text-align: right;font-family: Tahoma;font-size: 12px; font-weight:bold;"nowrap="nowrap">
-					                <digi:trn key="cal:organizations">Organizations</digi:trn>
+					                <digi:trn key="cal:organizations">Organizations</digi:trn>:
 					              </td>
 					              <td>
 					                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
@@ -184,7 +184,7 @@ function getWeekdays(){
 				            </feature:display>			            
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-				                <digi:trn key="calendar:StDate">Start date</digi:trn>
+				                <digi:trn key="calendar:StDate">Start date</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="selectedStartDate" value="${calendarEventForm.selectedStartDate}"/>
@@ -195,7 +195,7 @@ function getWeekdays(){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-				                <digi:trn key="calendar:EndDate">End Date</digi:trn>
+				                <digi:trn key="calendar:EndDate">End Date</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="selectedEndDate" value="${calendarEventForm.selectedEndDate}"/>
@@ -206,7 +206,7 @@ function getWeekdays(){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:Attendee">Attendee</digi:trn>
+				                <digi:trn key="calendar:Attendee">Attendee</digi:trn>:
 				              </td>
 				              <td>
 				                <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 70px;">
@@ -219,7 +219,7 @@ function getWeekdays(){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
+				                <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
@@ -228,7 +228,7 @@ function getWeekdays(){
 				              </td>
 				            </tr>
 				            <c:if test="${not empty calendarEventForm.typeofOccurrence}">
-					            <tr height="5px"><td colspan="2"></td></tr>
+					            <tr height="3px"><td colspan="2"></td></tr>
 					            <tr>
 					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 					                <digi:trn>Recurring Event</digi:trn>:
@@ -253,6 +253,7 @@ function getWeekdays(){
 					                  
 					              --></td>
 					            </tr>
+								<tr height="3px"><td colspan="2"></td></tr>
 					            <tr>
 					            <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 					                <digi:trn>Recurring Event End Date</digi:trn>:
@@ -265,25 +266,38 @@ function getWeekdays(){
 					            </tr>
 				            </c:if>
 				            <tr height="5px"><td colspan="2">&nbsp;</td></tr>
-				            <tr>
-				              <td>
-				              </td>
-				              <td>
-				                <c:if test="${calendarEventForm.actionButtonsVisible!=false}">
-				                	<input type="submit" style="width: 100px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
-				                	&nbsp;
-				                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
-				                	&nbsp;
-				                	<input type="button" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
-				                </c:if>
-				                <c:if test="${calendarEventForm.actionButtonsVisible==false}">
-				                	&nbsp;
-				                	<input type="submit" style="width: 100px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
-				                	&nbsp;
-				                </c:if>
-				               <input type="button" value="<digi:trn>Print</digi:trn>" onclick="openPrinter();" />
-				              </td>
-				            </tr>
+				            <c:if test="${calendarEventForm.actionButtonsVisible!=false}">
+								<tr>
+					              	<td>
+					              	</td>
+					              	<td>
+					                	<input type="submit" style="width: 110px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
+					                	&nbsp;
+					                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+									</td>
+								</tr>
+								<tr height="3px"><td colspan="2"></td></tr>
+								<tr>
+					              	<td>
+					              	</td>
+									<td>
+					                	<input type="button" value="<digi:trn>Delete</digi:trn>" style="width: 110px;" onclick="deleteEvent();" />
+										&nbsp;
+										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
+									</td>
+								</tr>
+				            </c:if>
+				           	<c:if test="${calendarEventForm.actionButtonsVisible==false}">
+				                <tr>
+					              	<td>
+					              	</td>
+					              	<td>
+				                		<input type="submit" style="width: 110px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
+				                		&nbsp;
+										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
+									</td>
+								</tr>
+				            </c:if>
 				          </table>
 				        </div>
 				      </td>

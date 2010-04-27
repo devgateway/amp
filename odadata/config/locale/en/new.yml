@@ -330,6 +330,7 @@ en:
         no_projects: Number of Projects
         list: List
         municipality: District
+        map: ODAmap
       show:
         title: Projects of {{district}}
     donors:
@@ -340,7 +341,7 @@ en:
         donor: Donor
         donors: Donors
         un_agencies: UN Agencies
-        map: Map
+        map: ODAmap
       show:
         title: Projects of {{donor}}
     mdgs:
@@ -348,7 +349,7 @@ en:
         title: Projects by MDG
         no_projects: Number of Projects
         list: List
-        map: Map
+        map: ODAmap
       show:
         title: Projects of {{mdg}}
     provinces:
@@ -359,6 +360,7 @@ en:
         details: Details
         title: Projects by Department
         show_municipalities: Show Districts
+        map: ODAmap
       show:
         title: Projects in {{province}}
     sectors:

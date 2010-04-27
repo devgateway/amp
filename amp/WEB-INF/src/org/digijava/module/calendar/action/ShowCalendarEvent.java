@@ -588,6 +588,7 @@ public class ShowCalendarEvent extends Action {
                 			endRecurrDate.setTime(rec.getRecurrEndDate());
                 			endRecurrDateBreakDown = new DateBreakDown(endRecurrDate, ceform.getSelectedCalendarTypeId().intValue(),request);
                 			ceform.setRecurrEndDate(endRecurrDateBreakDown.formatDateString());
+                			ceform.setRecurrSelectedEndTime(endRecurrDateBreakDown.formatTimeString());
                 		}
                 		ceform.setRecurrPeriod(rec.getRecurrPeriod());
                 		ceform.setTypeofOccurrence(rec.getTypeofOccurrence());

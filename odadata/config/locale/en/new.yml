@@ -339,8 +339,6 @@ en:
         no_projects: Number of Projects
         list: List
         donor: Donor
-        donors: Donors
-        un_agencies: UN Agencies
         map: ODAmap
       show:
         title: Projects of {{donor}}

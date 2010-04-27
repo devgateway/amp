@@ -30,12 +30,15 @@ class Donor < ActiveRecord::Base
   
   # List of main donors (not cofunding only!)
   named_scope :main, :conditions => "cofunding_only IS DISTINCT FROM true"
-
+  
+  # Filter donors by type
+  named_scope :of_type, lambda { |t| { :conditions => ["donor_type = ?", t] } }
+  
   # List of Donors (Non-UN)
-  named_scope :countries, :conditions => "cofunding_only IS DISTINCT FROM true AND donor_type = 'country' "
+  named_scope :countries, :conditions => "cofunding_only IS DISTINCT FROM true AND donor_type = 'country'"
 
   # List of UN Agencies 
-  named_scope :un_agencies, :conditions => "cofunding_only IS DISTINCT FROM true AND donor_type = 'un_agency'  "
+  named_scope :un_agencies, :conditions => "cofunding_only IS DISTINCT FROM true AND donor_type = 'un_agency'"
 
 
   # TODO: This is a hack to order by the translated donor name

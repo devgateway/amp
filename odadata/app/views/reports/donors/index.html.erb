@@ -1,47 +1,24 @@
-<%# TODO: Add total projects number to reports again %>
 <h2><%= header t('.title') %></h2>
 
-<h3><%= t('.donors')%></h3>
-<table>	
-	<tr>
-		<th><%= t('.donor') %></th>
-		<th><%= t('.no_projects') %></th>
-		<th><%= t('.list') %></th>
-                <th><%= t('.map') %></th>
-	</tr>
-	<% Donor.countries.ordered.each do |donor| %>
-		<% projects = donor.projects.published %>
-		<tr>
-			<td><%= donor.name %></td>
-			<td><%= projects.size %></td>
-			<td>
-				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0), 
-					reports_donor_path(donor) %>
-			</td>
-			<td><%= icon_link_to('moz_map', map_reports_donor_path(donor)) %></td>
-		</tr>
-	<% end %>
-</table>
-
-<h3><%= t('.un_agencies')%></h3>
-<table>
-  <tr>
-		<th><%= t('.donor') %></th>
-		<th><%= t('.no_projects') %></th>
-		<th><%= t('.list') %></th>
-                <th><%= t('.map') %></th>
-  </tr>
-        <% Donor.un_agencies.ordered.each do |donor| %>
-		<% projects = donor.projects.published %>
-		<tr>
-			<td><%= donor.name %></td>
-			<td><%= projects.size %></td>
-			<td>
-				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0),
-					reports_donor_path(donor) %>
-			</td>
-			<td><%= icon_link_to('moz_map', map_reports_donor_path(donor)) %></td>
-		</tr>
-	<% end %>
-
-</table>
+<% Donor::DONOR_TYPES.each do |type| %>
+  <h3><%= Donor.human_option_name(:donor_type, type) %></h3>
+  <table>	
+  	<tr>
+  		<th><%= t('.donor') %></th>
+  		<th><%= t('.no_projects') %></th>
+  		<th><%= t('.list') %></th>
+  		<th><%= t('.map') %></th>
+  	</tr>
+  	<% Donor.main.of_type(type).ordered.each do |donor| %>
+  		<tr>
+  			<td><%= donor.name %></td>
+  			<td><%= donor.projects.published.size %></td>
+  			<td>
+  				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+  					reports_donor_path(donor) %>
+  			</td>
+  			<td><%= icon_link_to('moz_map', map_reports_donor_path(donor)) %></td>
+  		</tr>
+  	<% end %>
+  </table>
+<% end %>

@@ -212,6 +212,11 @@ en:
           label: Confirm Password
         
       donor:
+        donor_type:
+          label: Donor Type
+          options:
+            un_agency: UN Agencies
+            country: Donors
         name: 
           label: English Name
         name_es: 
@@ -258,8 +263,6 @@ en:
           label: Total Local Staff
         flag: 
           label: Country Flag or Organisation Logo
-        donor_type:
-          label: Donor Type
         profile_picture: 
           label: Representative Picture of Donor Country (for EU Blue Book)
         oda_on_budget_1:

@@ -59,6 +59,7 @@
 						</c:if>
 					
 						<c:if test="${aimNPDForm.mode != 1}">
+                            <tr>
 							<td align="left">
 								<table class="otherLinks">
 									<tr>
@@ -79,6 +80,7 @@
 									</tr>
 								</table>								
 							</td>
+                            </tr>
 						</c:if>
 					</td>
 				</tr>

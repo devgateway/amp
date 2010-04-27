@@ -45,6 +45,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -232,8 +234,15 @@ public class AmpARFilter extends PropertyListable {
 
 	private Set regions = null;
 	private Set risks = null;
-	private Set donorTypes = null;
-	private Set donorGroups = null;
+	
+	@PropertyListableIgnore
+	private Set<AmpOrgType> donorTypes = null;
+	private Set<AmpOrgType> selectedDonorTypes = null;
+	
+	@PropertyListableIgnore
+	private Set<AmpOrgGroup> donorGroups = null;
+	private Set<AmpOrgGroup> selectedDonorGroups = null;
+	
 	private Set responsibleorg = null;
 	private Set executingAgency;
 	private Set implementingAgency;
@@ -1566,22 +1575,56 @@ public class AmpARFilter extends PropertyListable {
 		this.draft = draft;
 	}
 
-	@ProperyDescription(description = "Donor Types: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
-	public Set getDonorTypes() {
+	@PropertyListableIgnore
+	public Set<AmpOrgType> getDonorTypes() {
 		return donorTypes;
 	}
 
-	public void setDonorTypes(Set donorTypes) {
+	public void setDonorTypes(Set<AmpOrgType> donorTypes) {
 		this.donorTypes = donorTypes;
 	}
+	
+	
 
-	@ProperyDescription(description = "Donors Group: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
-	public Set getDonorGroups() {
+	/**
+	 * @return the selectedDonorTypes
+	 */
+	@ProperyDescription(description = "Donor Types: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
+	public Set<AmpOrgType> getSelectedDonorTypes() {
+		return selectedDonorTypes;
+	}
+
+	/**
+	 * @param selectedDonorTypes the selectedDonorTypes to set
+	 */
+	public void setSelectedDonorTypes(Set<AmpOrgType> selectedDonorTypes) {
+		this.selectedDonorTypes = selectedDonorTypes;
+	}
+
+	@PropertyListableIgnore
+	public Set<AmpOrgGroup> getDonorGroups() {
 		return donorGroups;
 	}
 
-	public void setDonorGroups(Set donorGroups) {
+	public void setDonorGroups(Set<AmpOrgGroup> donorGroups) {
 		this.donorGroups = donorGroups;
+	}
+	
+	
+
+	/**
+	 * @return the selectedDonorGroups
+	 */
+	@ProperyDescription(description = "Donors Group: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
+	public Set<AmpOrgGroup> getSelectedDonorGroups() {
+		return selectedDonorGroups;
+	}
+
+	/**
+	 * @param selectedDonorGroups the selectedDonorGroups to set
+	 */
+	public void setSelectedDonorGroups(Set<AmpOrgGroup> selectedDonorGroups) {
+		this.selectedDonorGroups = selectedDonorGroups;
 	}
 
 	@ProperyDescription(description = "Beneficiary Agencies: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)

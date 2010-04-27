@@ -1080,27 +1080,36 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setJointCriteria(filterForm.getJointCriteria());
 
 		if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
-			arf.setDonorTypes(new HashSet());
+			arf.setDonorTypes( new HashSet<AmpOrgType>() );
+			arf.setSelectedDonorTypes( new HashSet<AmpOrgType>() );
 			for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {
 				Long id = Long.parseLong("" + filterForm.getSelectedDonorTypes()[i]);
 				AmpOrgType type = DbUtil.getAmpOrgType(id);
-				if (type != null)
+				if (type != null) {
 					arf.getDonorTypes().add(type);
+					arf.getSelectedDonorTypes().add(type);
+				}
 			}
-		} else
+		} else{
 			arf.setDonorTypes(null);
+			arf.setSelectedDonorTypes(null);
+		}
 
 		if (filterForm.getSelectedDonorGroups() != null && filterForm.getSelectedDonorGroups().length > 0) {
-			arf.setDonorGroups(new HashSet());
+			arf.setDonorGroups(new HashSet<AmpOrgGroup>());
+			arf.setSelectedDonorGroups(new HashSet<AmpOrgGroup>() );
 			for (int i = 0; i < filterForm.getSelectedDonorGroups().length; i++) {
 				Long id = Long.parseLong("" + filterForm.getSelectedDonorGroups()[i]);
 				AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
-				if (grp != null)
+				if (grp != null){
 					arf.getDonorGroups().add(grp);
+					arf.getSelectedDonorGroups().add(grp);
+				}
 			}
-		} else
+		} else {
 			arf.setDonorGroups(null);
-
+			arf.setSelectedDonorGroups(null);
+		}
 		if (filterForm.getSelectedBudgets() != null) {
 			int selectedValue;
 			if ( filterForm.getSelectedBudgets().length == 1 ) {
@@ -1143,11 +1152,23 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));
-		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency(), AmpOrganisation.class));
 		arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg(), AmpOrganisation.class));
 		
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
+		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency(), AmpOrganisation.class));
+		if ( arf.getDonnorgAgency() != null ) {
+			for (AmpOrganisation tempOrg: arf.getDonnorgAgency() ) {
+				if ( arf.getDonorGroups() == null )
+					arf.setDonorGroups(new HashSet<AmpOrgGroup>() );
+				if ( arf.getDonorTypes() == null )
+					arf.setDonorTypes( new HashSet<AmpOrgType>() );
+				
+				arf.getDonorGroups().add( tempOrg.getOrgGrpId() );
+				arf.getDonorTypes().add( tempOrg.getOrgGrpId().getOrgType() );
+			}
+		}
+		
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
 		
 		if ( filterForm.getSelectedArchivedStatus() == null || filterForm.getSelectedArchivedStatus().length != 1 ) {

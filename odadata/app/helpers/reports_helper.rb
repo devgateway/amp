@@ -28,7 +28,7 @@ module ReportsHelper
       column_name = "#{marker}_marker"
       content_tag("tr", 
         content_tag("td", "#{Project.human_attribute_name(column_name)}:") + 
-        content_tag("td", option_text_by_id(Project::MARKER_OPTIONS, significance)),
+        content_tag("td", option_text_by_id(Project, columns_name, Project::MARKER_OPTIONS, significance)),
         :class => "simple")
     end
     
@@ -70,7 +70,7 @@ module ReportsHelper
     end
     
     rows << content_tag("tr",
-      content_tag("td", option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, finances.on_budget), :colspan => 2), 
+      content_tag("td", option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, finances.on_budget), :colspan => 2), 
       :class => "simple")
     
     content_tag("table", rows, html_options)
@@ -88,8 +88,8 @@ module ReportsHelper
     end
     
     rows << content_tag("tr",
-      content_tag("td", (option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, finances.on_budget) rescue 'n/a')) +
-      content_tag("td", (option_text_by_id(Project::ON_OFF_TREASURY_OPTIONS, finances.on_treasury) rescue 'n/a')),
+      content_tag("td", (option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, finances.on_budget) rescue 'n/a')) +
+      content_tag("td", (option_text_by_id(Project, :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS, finances.on_treasury) rescue 'n/a')),
       :class => "simple")
     
     content_tag("table", rows, html_options)

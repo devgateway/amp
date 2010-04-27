@@ -46,19 +46,19 @@
         <%end%>
         
         <dt><%=@country_strategy.class.human_attribute_name('programming_responsibility') %></dt>
-	    <dd><%=option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.programming_responsibility)%></dd>
+	    <dd><%=option_text_by_id(CountryStrategy, :programming_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.programming_responsibility)%></dd>
 
         <dt><%=@country_strategy.class.human_attribute_name('project_appraisal_responsibility') %></dt>
-	    <dd><%=option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.project_appraisal_responsibility)%></dd>
+	    <dd><%=option_text_by_id(CountryStrategy, :project_appraisal_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.project_appraisal_responsibility)%></dd>
 
         <dt><%=@country_strategy.class.human_attribute_name('tenders_responsibility') %></dt>
-	    <dd><%=option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.tenders_responsibility)%></dd>
+	    <dd><%=option_text_by_id(CountryStrategy, :tenders_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.tenders_responsibility)%></dd>
 
         <dt><%=@country_strategy.class.human_attribute_name('commitments_and_payments_responsibility') %></dt>
-	    <dd><%=option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.commitments_and_payments_responsibility)%></dd>
+	    <dd><%=option_text_by_id(CountryStrategy, :commitments_and_payments_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.commitments_and_payments_responsibility)%></dd>
 
         <dt><%=@country_strategy.class.human_attribute_name('monitoring_and_evaluation_responsibility') %></dt>
-	    <dd><%=option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.monitoring_and_evaluation_responsibility)%></dd>
+	    <dd><%=option_text_by_id(CountryStrategy, :monitoring_and_evaluation_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.monitoring_and_evaluation_responsibility)%></dd>
 
         <dt><%=@country_strategy.class.human_attribute_name('budget_support')%></dt>
         <dd><%="#{@country_strategy.commitment_to_budget_support}%"%></dd>

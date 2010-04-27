@@ -263,7 +263,7 @@
                   <%= nav.t("donor_details.gbs_multiyear_agreement") %>
                 </td>
                 <td>
-                  <%=option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_multiyear_agreement)%>
+                  <%=option_text_by_id(Donor, :gbs_multiyear_agreement, Donor::YES_NO_OPTIONS, @donor.gbs_multiyear_agreement)%>
                 </td>
               </tr>
               <tr>
@@ -281,7 +281,7 @@
                   <%= nav.t("donor_details.gbs_question_1") %>
                 </td>
                 <td>
-                  <%= option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_question_1) %>
+                  <%= option_text_by_id(Donor, :gbs_question_1, Donor::YES_NO_OPTIONS, @donor.gbs_question_1) %>
                 </td>
               </tr>
               <tr>
@@ -290,7 +290,7 @@
                   <%= nav.t("donor_details.gbs_question_2") %>
                 </td>
                 <td>
-                  <%= option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_question_2) %>
+                  <%= option_text_by_id(Donor, :gbs_question_2, Donor::YES_NO_OPTIONS, @donor.gbs_question_2) %>
                 </td>
               </tr>
               <tr>
@@ -299,7 +299,7 @@
                   <%= nav.t("donor_details.gbs_question_3") %>
                 </td>
                 <td>
-                  <%= option_text_by_id(Donor::YES_NO_OPTIONS, @donor.gbs_question_3) %>
+                  <%= option_text_by_id(Donor, :gbs_question_3, Donor::YES_NO_OPTIONS, @donor.gbs_question_3) %>
                 </td>
               </tr>
               <tr>

@@ -20,10 +20,10 @@ module Reports
       extend ReportsHelper
       extend I18nHelper
       
-      format_column(:grant_loan) { |r| option_text_by_id(Project::GRANT_LOAN_OPTIONS, r) }
-      format_column(:prj_status) { |r| option_text_by_id(Project::STATUS_OPTIONS, r) }
-      format_column(:national_regional) { |r| option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, r) }
-      format_column(:type_of_implementation) { |r| option_text_by_id(Project::IMPLEMENTATION_TYPES, r) }
+      format_column(:grant_loan) { |r| option_text_by_id(Project, :grant_loan, Project::GRANT_LOAN_OPTIONS, r) }
+      format_column(:prj_status) { |r| option_text_by_id(Project, :prj_status, Project::STATUS_OPTIONS, r) }
+      format_column(:national_regional) { |r| option_text_by_id(Project, :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, r) }
+      format_column(:type_of_implementation) { |r| option_text_by_id(Project, :type_of_implementation, Project::IMPLEMENTATION_TYPES, r) }
       format_column(:geo_relevances) do |r| 
         if r.empty?
           I18n.t('options.national')

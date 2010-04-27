@@ -32,7 +32,7 @@
 	<h3><%= t('.project_information') %></h3>
 	<dl>
 	    <dt class="first"><%= Project.human_attribute_name('prj_status') %></dt>
-	    <dd class="first"><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
+	    <dd class="first"><%= option_text_by_id(Project, :prj_status, Project::STATUS_OPTIONS, @project.prj_status) %></dd>
 	    
 	    <dt><%= Project.human_attribute_name('actual_start_end') %></dt>
 	    <dd><%= @project.actual_start || 'n/a' %> / <%= @project.actual_end || 'n/a' %></dd>
@@ -43,10 +43,10 @@
 	    <%# recipient/region/income code here?! %>
 	    
 	    <dt><%= Project.human_attribute_name('national_regional') %></dt>
-	    <dd><%= option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
+	    <dd><%= option_text_by_id(Project, :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
 	    
 	    <dt><%= Project.human_attribute_name('type_of_implementation') %></dt>
-	    <dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
+	    <dd><%= option_text_by_id(Project, :type_of_implementation, Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
 
 		<dt><%= Project.human_attribute_name('officer_responsible') %></dt>
 		<dd><%= @project.officer_responsible %>&nbsp;</dd>
@@ -64,7 +64,7 @@
 	    <dd class="first"><%= @project.aid_modality.name %></dd>
 	    
 	    <dt><%= Project.human_attribute_name('grant_loan') %></dt>
-	    <dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
+	    <dd><%= option_text_by_id(Project, :grant_loan, Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
 		
 		<% if @project.delegated_cooperation %>
 			<dt><%= DelegatedCooperation.human_attribute_name('delegated_by') %></dt>
@@ -108,10 +108,10 @@
 					<dd><%= f.payments %></dd>
 					
 	            	<dt><%= Funding.human_attribute_name('on_budget') %></dt>
-					<dd><%= option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
+					<dd><%= option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
 					
 	            	<dt><%= Funding.human_attribute_name('on_treasury') %></dt>
-					<dd><%= option_text_by_id(Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
+					<dd><%= option_text_by_id(Project, :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
 					
 					<dt><%= Funding.human_attribute_name('payments_q1') %></dt>
 					<dd><%= f.payments_q1 %></dd>
@@ -139,10 +139,10 @@
 					<dd><%= f.commitments %></dd>
 					
 	            	<dt><%= FundingForecast.human_attribute_name('on_budget') %></dt>
-					<dd><%= option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
+					<dd><%= option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
 	
 	            	<dt><%= FundingForecast.human_attribute_name('on_treasury') %></dt>
-					<dd><%= option_text_by_id(Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
+					<dd><%= option_text_by_id(Project, :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
 	        	</dl>
 			</dd>
 	    <% end %>
@@ -196,16 +196,16 @@
 			<dd>
 				<dl>
 					<dt class="first"><%= Project.human_attribute_name('gender_policy_marker') %></dt>
-					<dd class="first"><%= option_text_by_id(Project::MARKER_OPTIONS, @project.gender_policy_marker) %></dd>
+					<dd class="first"><%= option_text_by_id(Project, :gender_policy_marker, Project::MARKER_OPTIONS, @project.gender_policy_marker) %></dd>
 	
 					<dt><%= Project.human_attribute_name('environment_policy_marker') %></dt>
-					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.environment_policy_marker) %></dd>
+					<dd><%= option_text_by_id(Project, :environment_policy_marker, Project::MARKER_OPTIONS, @project.environment_policy_marker) %></dd>
 	
 					<dt><%= Project.human_attribute_name('biodiversity_marker') %></dt>
-					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.biodiversity_marker) %></dd>
+					<dd><%= option_text_by_id(Project, :biodiversity_marker, Project::MARKER_OPTIONS, @project.biodiversity_marker) %></dd>
 	
 					<dt><%= Project.human_attribute_name('climate_change_marker') %></dt>
-					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.climate_change_marker) %></dd>
+					<dd><%= option_text_by_id(Project, :climate_change_marker, Project::MARKER_OPTIONS, @project.climate_change_marker) %></dd>
 				</dl>
 			</dd>
 					

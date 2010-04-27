@@ -832,32 +832,23 @@ public class LocationUtil {
         if ( isCountry ) {
         	AmpCategoryValueLocations tempLoc	= 
         		DynLocationManagerUtil.getLocationByIso(loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-        	if ( tempLoc != null ) 
-        		throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso", loc.getParentCategoryValue().getValue() );
+        	if (tempLoc != null && (loc.getId()==null || loc.getId().longValue()!=tempLoc.getId().longValue())){	
+       			throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso", loc.getParentCategoryValue().getValue() );
+        	}
         	tempLoc	= 
         		DynLocationManagerUtil.getLocationByIso3(loc.getIso3(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-        	if ( tempLoc != null ) 
+        	if (tempLoc != null && (loc.getId()==null || loc.getId().longValue()!=tempLoc.getId().longValue())){ 
         		throw new DuplicateLocationCodeException("There is already a country with the same iso 3!", "iso3", loc.getParentCategoryValue().getValue() );
+        	}
         	
         }
         
         AmpCategoryValueLocations tempLoc	= 
         	DynLocationManagerUtil.getLocationByName(loc.getName(), loc.getParentCategoryValue(), loc.getParentLocation() );
-        if ( tempLoc != null ) 
+        if (tempLoc != null && (loc.getId()==null || loc.getId().longValue()!=tempLoc.getId().longValue())){
         	throw new DuplicateLocationCodeException("There is already a location with the same name!", "name", loc.getParentCategoryValue().getValue() );
+        }
         
-//        if ( loc.getCode() != null && loc.getCode().length() > 0 ) {
-//		        AmpCategoryValueLocations tempLoc	= 
-//		        	DynLocationManagerUtil.getLocationByCode(loc.getCode(), loc.getParentCategoryValue());
-//		        if ( tempLoc != null ) 
-//		        	throw new DuplicateLocationCodeException("There is already a location with the same code", "code", loc.getParentCategoryValue().getValue() );
-//        }
-//        else {
-//        	if ( !isCountry ){
-//        		// For consistency reasons this should be checked through javascript on client-side
-//        		throw new DgException ("Code should not be empty for locations that are not country.");
-//        	}
-//        }
         /* END - country check for duplicate iso and iso3 codes */
         
         try {

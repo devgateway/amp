@@ -80,11 +80,6 @@ public class AddNewLocation extends Action {
                 
                 try {
                 	LocationUtil.saveLocation(location);
-                	
-                	if ( CategoryManagerUtil.equalsCategoryValue(location.getParentCategoryValue(), 
-                					CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {
-                		DynLocationManagerUtil.synchronizeCountries();
-                	}
                 }
                 catch (DuplicateLocationCodeException e) {
                 	errors.add("title" ,  

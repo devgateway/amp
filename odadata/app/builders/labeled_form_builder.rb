@@ -123,16 +123,6 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
       @template.content_tag(:span, value.currency, :class => "currency")
   end
   
-  # This is for signed project's fields that cannot be changed after 
-  # the data input has been closed.
-  def freezing_monetary_field(method)
-    if @object.project && @object.project.signature_locked?
-      monetary_field(method, :disabled => true)
-    else
-      monetary_field(method)
-    end
-  end
-  
   # Creates a link for removing an associated element from the form, by removing its containing element from the DOM.
   #
   # Must be called from within an associated form.

@@ -8,10 +8,10 @@
       dateFormat: 'yy-mm-dd'
     });
 
-    $('#project_planned_end').datepicker();
-    $('#project_planned_start').datepicker();
-    $('#project_actual_end').datepicker();
-    $('#project_actual_start').datepicker();
+    $('#project_planned_end:not(:disabled)').datepicker();
+    $('#project_planned_start:not(:disabled)').datepicker();
+    $('#project_actual_end:not(:disabled)').datepicker();
+    $('#project_actual_start:not(:disabled)').datepicker();
 	});
 </script>
 
@@ -37,24 +37,29 @@
 			:include_blank => t('.prompt'), :translate => true %></li>
     
   <li class="fifty">
-  	<%= f.text_field :planned_start, :readonly =>true %>
+  	<%= f.text_field :planned_start, :readonly =>true,
+  	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED) %>
   	<%= error_message_on(:project, :planned_start, "","", "error_message" ) %>
   </li>
 
   <li class="fifty">
-    <%= f.text_field :planned_end, :readonly =>true  %>
+    <%= f.text_field :planned_end, :readonly =>true,
+          :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED) %>
     <%= error_message_on(:project, :planned_end, "","", "error_message" ) %>
   </li>
   
   <li class="fifty">
-  	<%= f.text_field :actual_start, :readonly =>true %>
+  	<%= f.text_field :actual_start, :readonly =>true,
+  	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
   	<%= error_message_on(:project, :actual_start, "","", "error_message" ) %>
   </li>
 
   <li class="fifty">
-    <%= f.text_field :actual_end, :readonly =>true  %>
+    <%= f.text_field :actual_end, :readonly =>true,
+  	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
     <%= error_message_on(:project, :actual_end, "","", "error_message" ) %>
   </li>
+  
 	<li><%= f.text_field :website, :class => "large" %></li>
 	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>
 <% end %>

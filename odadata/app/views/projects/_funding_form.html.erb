@@ -29,7 +29,7 @@
 <% end %>
 
 <%# After some input fields have been locked, we don't want users to change the currency %>
-<% unless @project.signature_locked? %>	
+<% unless @project.publication_locked? %>	
   <% f.field_set t('.project_currency') do %>
     <li><%= f.currency_select :project_currency %></li>
   <% end %>
@@ -46,8 +46,14 @@
   	<% f.field_set t('.forecasts_title', :year => fa.object.year) do %>
   		<%= fa.hidden_field :year %>
   			
-  	  <li class="fifty"><%= fa.freezing_monetary_field :commitments %></li>
-  		<li class="fifty"><%= fa.monetary_field :payments %></li>
+  	  <li class="fifty"><%= fa.monetary_field :commitments,
+		    :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING && fa.object.year <= fa.object.project.date_of_publication.year) %>
+      </li>
+      
+  		<li class="fifty">
+  		  <%= fa.monetary_field :payments,
+  		    :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED && fa.object.year <= fa.object.project.date_of_publication.year) %>
+  		</li>
 <!--
   		<li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
   		<li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>

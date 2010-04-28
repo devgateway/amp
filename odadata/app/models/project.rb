@@ -7,7 +7,13 @@ class Project < ActiveRecord::Base
   ##
   # Constants
   NATIONAL_REGIONAL_OPTIONS = [['national', 1], ['regional', 2]]
-  STATUS_OPTIONS            = [['planned', 1, true], ['signed', 2, true], ['ongoing', 3, true], ['completed', 4]]
+  
+  STATUS_PLANNED            = 1
+  STATUS_SIGNED             = 2
+  STATUS_ONGOING            = 3
+  STATUS_COMPLETED          = 4
+  STATUS_OPTIONS            = [['planned', STATUS_PLANNED, true], ['signed', STATUS_SIGNED, true], 
+                              ['ongoing', STATUS_ONGOING, true], ['completed', STATUS_COMPLETED]]
   
   MARKER_OPTIONS            = [['not_relevant', 0], ['significant', 1], ['principal_objective', 2]]
   AVAILABLE_MARKERS         = [['gender_policy', 'gender_policy'], ['environment_policy', 'environment_policy'], 
@@ -123,6 +129,7 @@ class Project < ActiveRecord::Base
   before_validation :set_equal_location_shares
   before_validation :set_equal_sector_shares
   before_save :set_date_of_signature
+  before_save :set_date_of_publication
   
   ##
   # Validation
@@ -142,9 +149,9 @@ class Project < ActiveRecord::Base
   validates_associated      :fundings, :funding_forecasts, :historic_funding
   
   # Project status dependent
-  validates_presence_of      :planned_start, :planned_end, :if => lambda { |p| p.prj_status >= 2 },
+  validates_presence_of      :planned_start, :planned_end, :if => lambda { |p| p.prj_status >= STATUS_SIGNED },
                             :message => I18n.t("projects.error.must_be_present_if_signed")
-  validates_presence_of      :actual_start, :actual_end, :if => lambda { |p| p.prj_status >= 3 },
+  validates_presence_of      :actual_start, :actual_end, :if => lambda { |p| p.prj_status >= STATUS_ONGOING },
                             :message => I18n.t("projects.error.must_be_present_if_ongoing")
   
   validate                  :total_sector_amount_is_100
@@ -239,11 +246,18 @@ class Project < ActiveRecord::Base
     date_of_signature <= latest_data_input_close.date
   end
   
+  def publication_locked?
+    return false if self.date_of_publication.blank?
+    return false unless latest_data_input_close = DataInputAction.most_recent(:conditions => { :action => 'closed' } ).first
+    
+    date_of_publication <= latest_data_input_close.date
+  end
+  
   # If a project has been signature locked (marked as signed), we don't want it to go back 
   # to planned state, so this returns the modified status options
   def status_options
-    if signature_locked?
-      STATUS_OPTIONS[1..-1]
+    if publication_locked?
+      STATUS_OPTIONS[self.prj_status-1..-1]
     else
       STATUS_OPTIONS
     end
@@ -282,10 +296,16 @@ protected
   ## If the project status is set to signed, the current date will be 
   # saved as the date of signature. This is relevant for freezing commitments
   def set_date_of_signature
-    return unless self.changed.include?('prj_status') && 
-      Project::STATUS_OPTIONS.rassoc(self.prj_status).first == "signed"
+    return unless self.changed.include?('prj_status') && self.prj_status >= STATUS_SIGNED
     
-    self.date_of_signature = Time.now
+    self.date_of_signature ||= Time.now
+  end
+  
+  # Sets date of first publication, used in the field freezing logic
+  def set_date_of_publication
+    return unless self.changed.include?('data_status') && self.data_status == PUBLISHED
+    
+    self.date_of_publication ||= Time.now
   end
   
   ##

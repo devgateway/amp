@@ -1,7 +1,9 @@
 <% f.field_set t('.title', :year => f.object.year) do %>
   <%= f.hidden_field :year %>
   
-  <li><%= f.monetary_field :commitments %></li>
+  <li><%= f.monetary_field :commitments, 
+            :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED && f.object.year <= @project.date_of_publication.year) %>
+  </li>
   
   <li class="fifty"><%= f.monetary_field :payments_q1 %></li>
   <li class="fifty"><%= f.monetary_field :payments_q2 %></li>

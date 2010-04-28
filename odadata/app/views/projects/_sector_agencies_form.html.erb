@@ -72,7 +72,6 @@
                 if ($("#dummy_aid_modality_id option:selected").attr("group") == "true")
                 {
                   $("#" + $("#dummy_aid_modality_id option:selected").val()).attr("style", "display:block;");
-                  $("#" + $("#dummy_aid_modality_id option:selected").val())[0].selectedIndex = 0;
                 }
                 else
                 {
@@ -80,6 +79,7 @@
                   {
                     if($(this).attr("group") == "true"){
                       $("#" + $(this).val()).attr("style", "display:none");
+                      $("#" + $(this).val())[0].selectedIndex = 0;
                     }
                   });
                 }

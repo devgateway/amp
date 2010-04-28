@@ -112,31 +112,7 @@ function toggleElement ( elementId, show ) {
 }
 
 function toggleBudgetFields( show ) {
-
-	toggleElement("Imputation", show);
 	toggleElement("CodeChapitre", show);
-	toggleElement("FY", show);
-	toggleElement("Vote", show);
-	toggleElement("Sub-Vote", show);
-	toggleElement("Sub-Program", show);
-	toggleElement("ProjectCode", show);
-	toggleElement("financial", show);
-
-	toggleElement("Imputation1", show);
-	toggleElement("CodeChapitre1", show);
-	toggleElement("FY1", show);
-	toggleElement("Vote1", show);
-	toggleElement("Sub-Vote1", show);
-	toggleElement("Sub-Program1", show);
-	toggleElement("ProjectCode1", show);
-
-	toggleElement("Imputation2", show);
-	toggleElement("CodeChapitre2", show);
-	toggleElement("FY2", show);
-	toggleElement("Vote2", show);
-	toggleElement("Sub-Vote2", show);
-	toggleElement("Sub-Program2", show);
-	toggleElement("ProjectCode2", show);
 }
 
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
@@ -624,7 +600,7 @@ target.style.cursor = "default"
 												</td>
 											</tr>
 												</field:display>
-											 <tr>
+											 <tr id="CodeChapitre">
 											 <td>
 											<field:display name="Code Chapitre" feature="Budget">										
 											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
@@ -652,7 +628,7 @@ target.style.cursor = "default"
 								</feature:display>
 								
 								<field:display name="Financial Instrument" feature="Budget">
-										<tr bgcolor="#ffffff" id="financial"><td valign="top" align="left" >
+										<tr bgcolor="#ffffff"><td valign="top" align="left" >
 											<a title="<digi:trn key="aim:GBS">Financial Instrument</digi:trn>">
 											<digi:trn key="aim:actGBS">
 												Financial Instrument

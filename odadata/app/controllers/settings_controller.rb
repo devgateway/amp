@@ -2,11 +2,16 @@ class SettingsController < ApplicationController
   access_rule 'admin'
   
   def data_input_status
-    @status = Prefs.data_input_open
+    @last_action = DataInputAction.most_recent.first
   end
   
   def toggle_data_input
-    Prefs.data_input_open = (params[:new_status] == "1") ? true : false
+    if params[:open]
+      DataInputAction.open!
+    elsif params[:close]
+      DataInputAction.close!
+    end
+    
     redirect_to :action => "data_input_status"
   end
 end

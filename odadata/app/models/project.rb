@@ -122,6 +122,7 @@ class Project < ActiveRecord::Base
   before_validation :set_funding_currency 
   before_validation :set_equal_location_shares
   before_validation :set_equal_sector_shares
+  before_save :set_date_of_signature
   
   ##
   # Validation
@@ -223,6 +224,26 @@ class Project < ActiveRecord::Base
     cofundings.to_a.sum(&:amount).in(donor.currency) rescue 0.to_currency(donor.currency)
   end
   
+  
+  # This is for #ODAMOZ-30, it will lock some features and freeze commitments
+  # if this project has had a state of signed when the data input was closed for the last time
+  def signature_locked?
+    return false if self.date_of_signature.blank?
+    return false unless latest_data_input_close = DataInputAction.most_recent(:conditions => { :action => 'closed' } ).first
+    
+    date_of_signature <= latest_data_input_close.date
+  end
+  
+  # If a project has been signature locked (marked as signed), we don't want it to go back 
+  # to planned state, so this returns the modified status options
+  def status_options
+    if signature_locked?
+      STATUS_OPTIONS[1..-1]
+    else
+      STATUS_OPTIONS
+    end
+  end
+  
 protected
   
   ##
@@ -251,6 +272,15 @@ protected
     return unless alive.all? { |g| g.amount.blank? }
     
     alive.each { |a| a.amount =  100 / total }
+  end
+  
+  ## If the project status is set to signed, the current date will be 
+  # saved as the date of signature. This is relevant for freezing commitments
+  def set_date_of_signature
+    return unless self.changed.include?('prj_status') && 
+      Project::STATUS_OPTIONS.rassoc(self.prj_status).first == "signed"
+    
+    self.date_of_signature = Time.now
   end
   
   ##

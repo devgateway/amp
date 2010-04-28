@@ -1,9 +1,15 @@
 <center>
-	<h2><%= @status ? t('.open') : t('.closed') %></h2>
+	<h2><%= t('.title', :status => @last_action.action, :date => @last_action.date) %></h2>
 	
-	<form action="toggle_data_input" method="post" accept-charset="utf-8">
-		<input type="hidden" name="new_status" value="<%= @status ? "0" : "1" %>" id="new_status" />
-		
-		<p><input type="submit" value="<%= @status ? t('.do_close') : t('.do_open') %>"></p>
+	<form action="toggle_data_input" method="post" accept-charset="utf-8">		
+	  <% if @last_action.action == 'opened' %>
+	    <p><%= t('.close_warning') %></p>
+	    
+    	<input type="hidden" name="close" value="1" />
+		  <p><input type="submit" value="<%= t('.do_close') %>"></p>
+		<% else %>
+		  <input type="hidden" name="open" value="1" />
+		  <p><input type="submit" value="<%= t('.do_open') %>"></p>
+		<% end %>
 	</form>
 </center>

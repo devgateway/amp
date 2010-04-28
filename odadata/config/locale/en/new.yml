@@ -92,6 +92,7 @@ en:
   exchange_rates:
     edit:
       title: Edit Exchange Rate
+      back: Back
     index:
       title: "{{source}} Exchange Rates"
       empty: No Exchange Rates Exist in the Database. Please create a New Exchange Rate.
@@ -377,14 +378,12 @@ en:
   
   settings:
     data_input_status:
-      open: Data Input is currently open
-      closed: Data Input is currently closed
+      title: Data Input has been {{status}} at {{date}}
+      close_warning: |
+        Make sure the update process has finished before closing the data input.<br />
+        This will freeze the commitments of all signed projects in the database.<br />
       do_close: Close Data Input
       do_open: Open Data Input
-  
-  shared:
-    currency_selektor:
-      currency_selection: Select Currency
   
   static:
     data_input_closed:

@@ -60,7 +60,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   end
   
   def submit(value = nil, options = {})
-    value ||= @template.t(:submit)
+    value ||= @template.t('.submit')
     super(value, options)
   end
   
@@ -116,11 +116,21 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     select(method, ExchangeRate.available_currencies.map { |c| [c, c] }, options, html_options)
   end
   
-  def monetary_field(method)
+  def monetary_field(method, options = {})
     value = object.send(method)
     
-    text_field(method, :value => value.to_s(false), :class => "monetary") +
+    text_field(method, options.merge({ :class => "monetary", :value => value.to_s(false) })) +
       @template.content_tag(:span, value.currency, :class => "currency")
+  end
+  
+  # This is for signed project's fields that cannot be changed after 
+  # the data input has been closed.
+  def freezing_monetary_field(method)
+    if @object.project && @object.project.signature_locked?
+      monetary_field(method, :disabled => true)
+    else
+      monetary_field(method)
+    end
   end
   
   # Creates a link for removing an associated element from the form, by removing its containing element from the DOM.

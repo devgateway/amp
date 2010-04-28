@@ -9,6 +9,11 @@ class FundingForecast < ActiveRecord::Base
     [:payments, :commitments].any? { |c| self.send(c).to_i > 0 }
   end
   
+  # This is the logic to freeze forecasts for signed projects after the data input is being closed
+  # For reference: #ODAMOZ-30
+  def readonly?
+    
+  end
   
   class << self
     def annual_payments

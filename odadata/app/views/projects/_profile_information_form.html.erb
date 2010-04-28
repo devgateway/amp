@@ -33,7 +33,7 @@
 	 		{ :prompt => t('.country_strategy_unavailable') }, :class => "large" %></li>
 -->
 
-	<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
+	<li><%= f.select :prj_status, @project.status_options, 
 			:include_blank => t('.prompt'), :translate => true %></li>
     
   <li class="fifty">

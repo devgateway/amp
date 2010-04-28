@@ -46,9 +46,16 @@ protected
   end
   
   def ensure_open_data_input
-    return true if Prefs.data_input_open
+    return true if DataInputAction.current_status == 'opened'
     
-    session[:redirect_url] = request.referrer
+    # Clear all previous success flashes
+    flash.now[:success] = nil
+    
+    # Log user out
+    current_user_session.destroy
+    
+    # Show error page and redirect back to the home page
+    session[:redirect_url] = root_url
     redirect_to :controller => 'static', :action => 'data_input_closed'  
   end
 end

@@ -236,10 +236,10 @@ function checkNumeric(objName,comma,period,hyphen)
 															<digi:trn key="btn:add">Add</digi:trn> 
 														</html:button>
 													</td>
-													<td>
-														<html:reset  styleClass="dr-menu" property="submitButton">
-															<digi:trn key="btn:clear">Clear</digi:trn> 
-														</html:reset>
+                                                     <td>
+														<html:button styleClass="dr-menu" property="submitButton" onclick="resetSectors()">
+															<digi:trn key="btn:clear">Clear</digi:trn>
+														</html:button>
 													</td>
 													<td>
 														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow2()">

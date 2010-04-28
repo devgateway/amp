@@ -159,7 +159,6 @@ function eventType(){
 		}
 }
 
-
 function disableInputs(){
 
 	var Daily = document.getElementById("Daily").checked;
@@ -167,16 +166,25 @@ function disableInputs(){
 	var Monthly = document.getElementById("Monthly").checked;
 	var Yearly = document.getElementById("Yearly").checked;
 
+	for(var i=1; i<8; i++){
+		var checkId = "checkDay" + i;
+		document.getElementById(checkId).disabled = "disabled";
+		//document.getElementById(checkId).checked = false;
+	}
+	document.getElementById("recurrDaily").disabled = "disabled";
+	document.getElementById("recurrWeekly").disabled = "disabled";
+	document.getElementById("recurrYearly").disabled = "disabled";
+	document.getElementById("selectedStartMonth").disabled = "disabled";
+
 	
 	if (Daily){
 		for(var i=1; i<8; i++){
 			var checkId = "checkDay" + i;
-			document.getElementById(checkId).disabled = "disabled";
+			document.getElementById(checkId).checked = false;
 		}
 		document.getElementById("recurrDaily").disabled = "";
-		document.getElementById("recurrWeekly").disabled = "disabled";
-		document.getElementById("recurrYearly").disabled = "disabled";
-		document.getElementById("selectedStartMonth").disabled = "disabled";
+		document.getElementById("recurrWeekly").value = "";
+		document.getElementById("recurrYearly").value = "";
 	}
 
 	if (Weekly){
@@ -185,31 +193,29 @@ function disableInputs(){
 			document.getElementById(checkId).disabled = "";
 		}
 		document.getElementById("recurrWeekly").disabled = "";
-		document.getElementById("recurrDaily").disabled = "disabled";
-		document.getElementById("recurrYearly").disabled = "disabled";
-		document.getElementById("selectedStartMonth").disabled = "disabled";
+		document.getElementById("recurrDaily").value = "";
+		document.getElementById("recurrYearly").value = "";
 	}
 
 	if (Monthly){
 		for(var i=1; i<8; i++){
 			var checkId = "checkDay" + i;
-			document.getElementById(checkId).disabled = "disabled";
+			document.getElementById(checkId).checked = false;
 		}
-		document.getElementById("recurrYearly").disabled = "disabled";
-		document.getElementById("recurrWeekly").disabled = "disabled";
-		document.getElementById("recurrDaily").disabled = "disabled";
 		document.getElementById("selectedStartMonth").disabled = "";
+		document.getElementById("recurrDaily").value = "";
+		document.getElementById("recurrWeekly").value = "";
+		document.getElementById("recurrYearly").value = "";
 	}
 
 	if (Yearly){
 		for(var i=1; i<8; i++){
 			var checkId = "checkDay" + i;
-			document.getElementById(checkId).disabled = "disabled";
+			document.getElementById(checkId).checked = false;
 		}
 		document.getElementById("recurrYearly").disabled = "";
-		document.getElementById("recurrWeekly").disabled = "disabled";
-		document.getElementById("recurrDaily").disabled = "disabled";
-		document.getElementById("selectedStartMonth").disabled = "disabled";
+		document.getElementById("recurrDaily").value = "";
+		document.getElementById("recurrWeekly").value = "";
 	}
 	
 }

@@ -75,6 +75,7 @@
 		myPanel1.center();
 		myPanel1.show();
 		initCalendar();
+		disableInputs();
 	}
 	
 	function addTitleSelect(selectName){

@@ -294,7 +294,8 @@ protected
   def total_sector_amount_is_100
     return true unless self.geo_relevances.any?
     
-    if (total = self.sector_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum) < 95
+    total = self.sector_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum
+    if (total < 95) || (total > 100)
       # FIXME: Translation missing
       errors.add('sector_relevances', "The sum of the sector percentages should be 100%, but is #{total}%")
     end
@@ -304,9 +305,10 @@ protected
   def total_location_amount_is_100
     return true unless self.geo_relevances.any?
     
-    if (total = self.geo_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum) < 95
+    total = self.geo_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum
+    if (total < 95) || (total > 100)
       # FIXME: Translation missing
-      errors.add('geo_relevances', "The sum of the location percentages should be 100%, but is #{total}")
+      errors.add('geo_relevances', "The sum of the location percentages should be 100%, but is #{total}%")
     end
   end
   

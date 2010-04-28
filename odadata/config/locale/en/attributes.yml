@@ -66,6 +66,7 @@ en:
         type_of_implementation: 
           label: Type of Implementation
           options:
+            not_available: Not available
             bilateral: Bilateral
             multilateral: Multilateral
             ngo_implementation: NGO Implementation
@@ -85,8 +86,18 @@ en:
           label: Government Budget Code
         enters_in:
           label: Enters in
+          options:
+              in_kind_cash: In kind convertible in cash
+              in_kind_non_cash: In kind non convertible in cash
+              in_cash_under_donor: In kind under donor management
+              in_cash_under_beneficiary: In kind under beneficiary management
         loan_to_public_enterprises:
           label: Loan to public enterprises
+          options:
+            not_apply: Not applies
+            state: State
+            local_governments: Local Governments
+            public_enterprises: Public Enterprises
         grant_loan: 
           label: Type of Funding
           options:

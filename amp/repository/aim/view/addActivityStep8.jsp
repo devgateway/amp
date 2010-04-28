@@ -535,7 +535,7 @@ function resetAll()
                                                                                         	<c:forEach var="orgCont" items="${donorContact.contact.organizationContacts}">
 	                                                                                        	<li>${orgCont.organisation.name}</li>
 	                                                                                        </c:forEach>
-                                                                                        </c:if>                                                                                        
+                                                                                        </c:if>
                                                                                      </ul>
 																				</td>
 																				<td>
@@ -616,7 +616,18 @@ function resetAll()
 																						</c:if>
 																					</c:forEach>
 																				</td>
-																				<td>${mofedContact.contact.organisationName}</td>
+																				<td>
+																					<ul>
+                                                                                        <c:if test="${not empty mofedContact.contact.organisationName}">
+                                                                                     		<li>${mofedContact.contact.organisationName}</li>
+                                                                                        </c:if>
+                                                                                        <c:if test="${not empty mofedContact.contact.organizationContacts}">
+                                                                                        	<c:forEach var="orgCont" items="${mofedContact.contact.organizationContacts}">
+	                                                                                        	<li>${orgCont.organisation.name}</li>
+	                                                                                        </c:forEach>
+                                                                                        </c:if>
+                                                                                     </ul>
+                                                                                </td>
 																				<td>
 																					<c:forEach var="phone" items="${mofedContact.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
@@ -695,7 +706,18 @@ function resetAll()
 																						</c:if>
 																					</c:forEach>
 																				</td>
-																				<td>${projCoordinator.contact.organisationName}</td>
+																				<td>
+																					<ul>
+                                                                                        <c:if test="${not empty projCoordinator.contact.organisationName}">
+                                                                                     		<li>${projCoordinator.contact.organisationName}</li>
+                                                                                        </c:if>
+                                                                                        <c:if test="${not empty projCoordinator.contact.organizationContacts}">
+                                                                                        	<c:forEach var="orgCont" items="${projCoordinator.contact.organizationContacts}">
+	                                                                                        	<li>${orgCont.organisation.name}</li>
+	                                                                                        </c:forEach>
+                                                                                        </c:if>
+                                                                                     </ul>
+																				</td>
 																				<td>
 																					<c:forEach var="phone" items="${projCoordinator.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
@@ -774,7 +796,18 @@ function resetAll()
 																						</c:if>
 																					</c:forEach>
 																				</td>
-																				<td>${sectorMinistry.contact.organisationName}</td>
+																				<td>
+																					<ul>
+                                                                                        <c:if test="${not empty sectorMinistry.contact.organisationName}">
+                                                                                     		<li>${sectorMinistry.contact.organisationName}</li>
+                                                                                        </c:if>
+                                                                                        <c:if test="${not empty sectorMinistry.contact.organizationContacts}">
+                                                                                        	<c:forEach var="orgCont" items="${sectorMinistry.contact.organizationContacts}">
+	                                                                                        	<li>${orgCont.organisation.name}</li>
+	                                                                                        </c:forEach>
+                                                                                        </c:if>
+                                                                                     </ul>
+																				</td>
 																				<td>
 																					<c:forEach var="phone" items="${sectorMinistry.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
@@ -854,7 +887,18 @@ function resetAll()
 																						</c:if>
 																					</c:forEach>
 																				</td>
-																				<td>${implExecAgency.contact.organisationName}</td>
+																				<td>
+																					<ul>
+                                                                                        <c:if test="${not empty implExecAgency.contact.organisationName}">
+                                                                                     		<li>${implExecAgency.contact.organisationName}</li>
+                                                                                        </c:if>
+                                                                                        <c:if test="${not empty implExecAgency.contact.organizationContacts}">
+                                                                                        	<c:forEach var="orgCont" items="${implExecAgency.contact.organizationContacts}">
+	                                                                                        	<li>${orgCont.organisation.name}</li>
+	                                                                                        </c:forEach>
+                                                                                        </c:if>
+                                                                                     </ul>
+																				</td>
 																				<td>
 																					<c:forEach var="phone" items="${implExecAgency.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">

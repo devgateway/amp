@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
   ##
   # Constants
   NATIONAL_REGIONAL_OPTIONS = [['national', 1], ['regional', 2]]
-  STATUS_OPTIONS            = [['planned', 2, true], ['signed', 4, true], ['ongoing', 1, true], ['completed', 3]]
+  STATUS_OPTIONS            = [['planned', 1, true], ['signed', 2, true], ['ongoing', 3, true], ['completed', 4]]
   
   MARKER_OPTIONS            = [['not_relevant', 0], ['significant', 1], ['principal_objective', 2]]
   AVAILABLE_MARKERS         = [['gender_policy', 'gender_policy'], ['environment_policy', 'environment_policy'], 
@@ -140,6 +140,12 @@ class Project < ActiveRecord::Base
   validates_presence_of     :government_counterpart_id, :government_project_code, :on_off_budget, :if => :on_budget_validation?
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances
   validates_associated      :fundings, :funding_forecasts, :historic_funding
+  
+  # Project status dependent
+  validates_presence_of      :planned_start, :planned_end, :if => lambda { |p| p.prj_status >= 2 },
+                            :message => I18n.t("projects.error.must_be_present_if_signed")
+  validates_presence_of      :actual_start, :actual_end, :if => lambda { |p| p.prj_status >= 3 },
+                            :message => I18n.t("projects.error.must_be_present_if_ongoing")
   
   validate                  :total_sector_amount_is_100
   validate                  :total_location_amount_is_100

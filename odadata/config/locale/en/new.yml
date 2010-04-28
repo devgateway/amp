@@ -1,4 +1,8 @@
 en:
+  pagination:
+    previous_page: Previous Page
+    next_page: Next Page
+    
   agencies:
     index:
       title: List of Agencies
@@ -285,6 +289,8 @@ en:
       map_legend: "Yellow highlighted areas are the project's focal regions/districts"
     error:
       donor_project_number_taken: Donor project number already exists
+      must_be_present_if_signed: "{{attribute}} must be present in signed projects"
+      must_be_present_if_ongoing: "{{attribute}} must be present in ongoing projects"
   reports:
     custom:
       new:

@@ -28,6 +28,22 @@ function validateDuration(rec,duration){
  	return true;
 }
 
+function fnChk(elem){
+	  <c:set var="errMsg">
+	  <digi:trn>
+	  Please enter numeric value only
+	  </digi:trn>
+	  </c:set>
+	  
+	  if (isNaN(elem.value) || elem.value<0 ) {
+	    alert("${errMsg}");
+	    elem.value = "";
+	    elem.focus();
+	    return false;
+	  }
+	  return true;
+}
+
 function eventType(){
         var Daily = document.getElementById("Daily").checked;
 		var Weekly = document.getElementById("Weekly").checked;
@@ -230,7 +246,7 @@ function disableInputs(){
 							 		 	<td><digi:trn>Every</digi:trn></td>
 							 	 		<td>
 											<html:hidden  property="recurrPeriod" name="calendarEventForm"  styleId="testRecPer"/>
-							 	 			<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrDaily"/>
+							 	 			<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrDaily" onkeyup="fnChk(this)"/>
 							 	 		</td>
 							 	 		<td align="left"><digi:trn>Day(s)</digi:trn></td>
 					 			 	</tr>
@@ -255,7 +271,7 @@ function disableInputs(){
 							 	 	<tr>	
 							 	 		<td ><digi:trn>Every</digi:trn></td>
 							 	 		<td>
-							 	 		<html:select property="selectedStartMonth" name="calendarEventForm" styleId="selectedStartMonth" >
+							 	 		<html:select property="selectedStartMonth" name="calendarEventForm" styleId="selectedStartMonth">
 							 	 		 			<c:forEach var="month" begin="1" end="12">
                                                 		<c:if test="${month < 10}"><c:set var="month" value="0${month}"/></c:if>
                                                          	<html:option value="${month}">${month}</html:option>
@@ -285,7 +301,7 @@ function disableInputs(){
 									 		<tr>
 									 	 		<td><digi:trn>Every</digi:trn></td>
 									 	 		<td>
-													<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrWeekly"/> 
+													<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrWeekly" onkeyup="fnChk(this)"/> 
 													<!--<input type="text"  size="7px" name="recurrPeriod" id="recurrWeekly"/>-->
 												</td>
 									 	 		<td><digi:trn>Week (s)</digi:trn></td>
@@ -326,7 +342,7 @@ function disableInputs(){
 												</html:select>
 						 	 		    	</td>
 							 	 			--><td>
-												<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrYearly"/> 
+												<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrYearly" onkeyup="fnChk(this)"/> 
 												<!--<input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/>-->
 											</td>
 							 	 			<td><digi:trn>Year(s)</digi:trn></td>

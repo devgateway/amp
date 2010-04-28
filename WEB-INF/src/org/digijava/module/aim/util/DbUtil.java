@@ -6344,9 +6344,11 @@ public class DbUtil {
 				int auxYear = startYear - 1;
 				for (int i = 0; i < startDates.length; i++) {
 					auxYear++;
-					if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
-							&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
-						ret = auxYear;
+					if(startDates[i] != null && endDates[i]!=null) {
+						if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
+								&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
+							ret = auxYear;
+						}
 					}
 				}
 			}

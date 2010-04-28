@@ -437,7 +437,6 @@ function filterSpecialCharacters(valueToFilter){
 
 }
 function resetSectors(){
-    alert("gugu")
 		document.aimNewIndicatorSectorForm.sector.value = -1
 }
 -->

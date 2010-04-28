@@ -12,10 +12,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 
-<style>
 
 <style  type="text/css">
-<!--
 
 .contentbox_border{
         border: 1px solid black;

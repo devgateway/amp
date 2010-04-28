@@ -13,6 +13,16 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<style type="text/css">
+	
+	#popin .content { 
+	    overflow:auto; 
+	    height:455px;
+	    width:580px;
+	    background-color:fff; 
+	    padding:10px; 
+	}  
+</style>
 
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">

@@ -8,7 +8,7 @@ class Reports::CustomController < ReportsController
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 
     },
-    [:prj_status, :grant_loan, :aid_modality_ids, :type_of_implementation, :on_off_budget, :on_off_treasury] =>
+    [:prj_status, :grant_loan, :aid_modality_id, :type_of_implementation, :on_off_budget, :on_off_treasury] =>
       lambda { |m, v| ["#{m} IN (?)", v] }}
       
     # FIXME: This makes no sense for a filter, waiting for Vanessas response to ODANIC-82

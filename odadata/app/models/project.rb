@@ -131,7 +131,7 @@ class Project < ActiveRecord::Base
   
   # STATE: general
   validates_presence_of     :donor_project_number, :title, :description, :donor_agency_id, :prj_status
-  validates_uniqueness_of   :donor_project_number, :scope => :donor_id
+  validates_uniqueness_of   :donor_project_number, :scope => :donor_id, :message => I18n.t("projects.error.donor_project_number_taken")
   
   # STATE: categorization
   validates_presence_of     :national_regional, :type_of_implementation, :aid_modality_id, :grant_loan, 

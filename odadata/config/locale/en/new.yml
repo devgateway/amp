@@ -282,7 +282,8 @@ en:
       geo_list: Provinces & Districts
       national: National Project
       map_legend: "Yellow highlighted areas are the project's focal regions/districts"
-  
+    error:
+      donor_project_number_taken: Donor project number already exists
   reports:
     custom:
       new:

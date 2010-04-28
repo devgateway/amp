@@ -20,7 +20,8 @@
 	<li><%= f.text_field :title, :size => 80, :class => "large" %></li>
 	<li><%= f.text_area  :description, :rows => 10, :class => "large" %></li>
 
-	<li class="fifty"><%= f.text_field :donor_project_number %></li>
+	<li class="fifty"><%= f.text_field :donor_project_number %>
+        <%= error_message_on(:project, :donor_project_number, "", "", "error_message" )%></li>
 	<li class="fifty"><%= f.text_field :oecd_number %></li>
 	<li><%= f.text_field :recipient_country_budget_nr, :class => "large" %></li>
 

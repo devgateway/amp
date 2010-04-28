@@ -135,8 +135,7 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of   :donor_project_number, :scope => :donor_id, :message => I18n.t("projects.error.donor_project_number_taken")
   
   # STATE: categorization
-  validates_presence_of     :national_regional, :type_of_implementation, :aid_modality_id, :grant_loan, 
-                            :officer_responsible_name
+  validates_presence_of     :type_of_implementation, :aid_modality_id, :grant_loan, :officer_responsible_name
 
   validates_presence_of     :government_counterpart_id, :government_project_code, :on_off_budget, :if => :on_budget_validation?
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances

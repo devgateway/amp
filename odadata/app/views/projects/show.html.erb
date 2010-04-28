@@ -42,9 +42,10 @@
 	    
 	    <%# recipient/region/income code here?! %>
 	    
-	    <dt><%= Project.human_attribute_name('national_regional') %></dt>
-	    <dd><%= option_text_by_id(Project, :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
-	    
+<!--
+	    <dt><%#= Project.human_attribute_name('national_regional') %></dt>
+	    <dd><%#= option_text_by_id(Project, :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
+-->
 	    <dt><%= Project.human_attribute_name('type_of_implementation') %></dt>
 	    <dd><%= option_text_by_id(Project, :type_of_implementation, Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
 
@@ -61,7 +62,7 @@
 	<h3><%= t('.funding_information') %></h3>
 	<dl>
 	    <dt class="first"><%= Project.human_attribute_name('aid_modality') %></dt>
-	    <dd class="first"><%= @project.aid_modality.name %></dd>
+	    <dd class="first"><%= @project.aid_modality.andand.name %></dd>
 	    
 	    <dt><%= Project.human_attribute_name('grant_loan') %></dt>
 	    <dd><%= option_text_by_id(Project, :grant_loan, Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
@@ -214,7 +215,7 @@
   									  <li><%= r.district.name %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
   									<% end %>
 								  <% else %>
-								    <li><%= t('.all_district') %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
+								    <li><%= t('.all_district') %> </li>
 								  <% end %>
 									
 								</ul>

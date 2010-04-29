@@ -6,7 +6,7 @@ function highlightTabsWithErrors(element) {
 		divId = $(this).children('a').attr('href');
 		correspondingDiv = $(divId);
 		
-		if (correspondingDiv.find('.fieldWithErrors').length > 0) {
+		if (correspondingDiv.find('.fieldWithErrors').length > 0 || correspondingDiv.find('.error_message').length) {
 			$(this).addClass('tab_with_errors');
 		}
 	});

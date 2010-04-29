@@ -1,5 +1,7 @@
 <fieldset class="mdg">
-	<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
+        <%= error_message_on(:project, :target_ids, "","", "fieldWithErrors" ) %>
+
+        <% Mdg.ordered.all(:include => :targets).each do |mdg| %>
 		<h3><%=t '.mdg_caption', :number => mdg.id, :name => mdg.name %></h3>
 		
 		<ol>

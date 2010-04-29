@@ -144,19 +144,22 @@ class Project < ActiveRecord::Base
   # STATE: categorization
   validates_presence_of     :type_of_implementation, :aid_modality_id, :grant_loan, :officer_responsible_name
 
-  validates_presence_of     :government_counterpart_id, :government_project_code, :on_off_budget, :if => :on_budget_validation?
+  validates_inclusion_of    :on_off_budget, :in => [true, false]
+  validates_presence_of     :government_counterpart_id, :government_project_code, :if => :on_budget_validation?
+
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances
   validates_associated      :fundings, :funding_forecasts, :historic_funding
   
   # Project status dependent
-  validates_presence_of      :planned_start, :planned_end, :if => lambda { |p| p.prj_status >= STATUS_SIGNED },
+  validates_presence_of      :planned_start, :planned_end, :if => lambda { |p| !p.prj_status.nil? && p.prj_status >= STATUS_SIGNED},
                             :message => I18n.t("projects.error.must_be_present_if_signed")
-  validates_presence_of      :actual_start, :actual_end, :if => lambda { |p| p.prj_status >= STATUS_ONGOING },
+  validates_presence_of      :actual_start, :actual_end, :if => lambda { |p| !p.prj_status.nil? && p.prj_status >= STATUS_ONGOING },
                             :message => I18n.t("projects.error.must_be_present_if_ongoing")
   
   validate                  :total_sector_amount_is_100
   validate                  :total_location_amount_is_100
   validate                  :dates_consistency
+  validate                  :valid_mdg_relevances
   
   attr_accessor :project_currency
   
@@ -349,5 +352,11 @@ protected
   def on_budget_validation?
     self.on_off_budget
 #   !(fundings.detect {|funding| funding.on_budget == true }).blank?
+  end
+
+  def valid_mdg_relevances
+    if self.mdg_relevances.empty?
+      errors.add('target_ids', I18n.t("projects.error.missing_mdgs"))
+    end
   end
 end

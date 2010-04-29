@@ -293,6 +293,7 @@ en:
       must_be_present_if_ongoing: "{{attribute}} must be present in ongoing projects"
       total_amount_location_invalid: "The sum of the location percentages should be 100%, but is {{total}}%"
       total_amount_sector_invalid: "The sum of the sector percentages should be 100%, but is {{total}}%"
+      missing_mdgs: "Please complete the MDG information."
   reports:
     custom:
       new:

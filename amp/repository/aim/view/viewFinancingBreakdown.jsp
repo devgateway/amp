@@ -336,7 +336,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																			<c:out value="${translation}"/>
 																		</c:if>
 																	</digi:link>
-                                                </td>															    </TD>
+                                                </TD>
 												</field:display>
 											<bean:define id="breakdown" name="breakdown" type="org.digijava.module.aim.helper.FinancingBreakdown" toScope="request" />
 

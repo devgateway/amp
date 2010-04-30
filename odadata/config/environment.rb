@@ -24,12 +24,11 @@ Rails::Initializer.run do |config|
   config.gem "ruport"  
   config.gem "acts_as_reportable",        :lib => false
   config.gem "spreadsheet"
-  config.gem "tilecache",                 :lib => 'tile_cache',         :version => '>=0.0.4'
+  config.gem "tilecache",                 :version => '>=0.0.4',        :lib => 'tile_cache'
   config.gem "jrails",                    :version => '>=0.6.0'
-  config.gem "GeoRuby",                   :lib => false
-  config.gem "spatial_adapter"
-  # Gems from GitHub
-  config.gem 'mislav-will_paginate',      :lib => 'will_paginate',      :source => 'http://gems.github.com'
+  config.gem "GeoRuby",                   :version => '>=1.3.4',        :lib => false
+  config.gem "spatial_adapter",           :version => '>=1.1.0'
+  config.gem 'will_paginate',             :version => '>=2.3.12'
   config.gem 'rubyist-aasm',              :lib => 'aasm',               :source => 'http://gems.github.com'
   config.gem 'graysky-translator',        :lib => 'translator',         :source => 'http://gems.github.com'
 

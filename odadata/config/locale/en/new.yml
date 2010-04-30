@@ -113,6 +113,9 @@ en:
     report_window:
       custom_title: ODAmoz Report - {{page_title}}
       standard_title: ODAmoz - Official Development Assistance to Mozambique Database
+    donor_info:
+      custom_title: ODAmoz Report - {{page_title}}
+      standard_title: ODAmoz - Official Development Assistance to Mozambique Database
     odamap: 
       title: ODAmap - Official Development Assistance to Mozambique Database
     currency_reports_window:

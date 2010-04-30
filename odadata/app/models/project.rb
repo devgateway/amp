@@ -16,6 +16,7 @@ class Project < ActiveRecord::Base
                               ['ongoing', STATUS_ONGOING, true], ['completed', STATUS_COMPLETED]]
   
   MARKER_OPTIONS            = [['not_relevant', 0], ['significant', 1], ['principal_objective', 2]]
+  PRIVATE_SUPPORT_OPTIONS   = [['does_not_apply', 0], ['do_not_know', 1], ['direct_support', 2], ['indirect_support_private_sector', 3], ['indirect_support_public_sector', 4]]
   AVAILABLE_MARKERS         = [['gender_policy', 'gender_policy'], ['environment_policy', 'environment_policy'], 
                               ['biodiversity', 'biodiversity'], ['climate_change', 'climate_change'], 
                               ['desertification', 'desertification']]
@@ -142,7 +143,7 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of   :donor_project_number, :scope => :donor_id, :message => I18n.t("projects.error.donor_project_number_taken")
   
   # STATE: categorization
-  validates_presence_of     :type_of_implementation, :aid_modality_id, :grant_loan, :officer_responsible_name
+  validates_presence_of     :type_of_implementation, :aid_modality_id, :grant_loan, :officer_responsible_name, :private_support
 
   validates_inclusion_of    :on_off_budget, :in => [true, false]
   validates_presence_of     :government_counterpart_id, :government_project_code, :if => :on_budget_validation?

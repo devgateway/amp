@@ -84,6 +84,14 @@ en:
             off_budget: Off Budget
         government_project_code:
           label: Government Budget Code
+        private_support:
+          label: Private Support
+          options:
+            does_not_apply: Does not apply
+            do_not_know: Do not know if applies
+            direct_support: Direct support to private sector
+            indirect_support_private_sector: Indirect support to PS by means of PS
+            indirect_support_public_sector: Indirect support to PS by means of public sector
         enters_in:
           label: Enters in
           options:

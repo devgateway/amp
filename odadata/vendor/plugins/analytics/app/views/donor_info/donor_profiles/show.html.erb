@@ -28,15 +28,15 @@
 				</tr>
 				<tr>
 					<td><%= nav.t("institutional_framework.total_staff_in_country") %></td>
-					<td><%= @donor.donor_details.find_by_year(year).total_staff_in_country %></td>
+					<td><%= @donor.donor_details.find_by_year(year).andand.total_staff_in_country %></td>
 				</tr>
 				<tr>
 					<td><%= nav.t("institutional_framework.total_expatriate_staff") %></td>
-					<td><%= @donor.donor_details.find_by_year(year).total_expatriate_staff %></td>
+					<td><%= @donor.donor_details.find_by_year(year).andand.total_expatriate_staff %></td>
 				</tr>
 				<tr>
 					<td><%= nav.t("institutional_framework.total_local_staff") %></td>
-					<td><%= @donor.donor_details.find_by_year(year).total_local_staff %></td>
+					<td><%= @donor.donor_details.find_by_year(year).andand.total_local_staff %></td>
 				</tr>
 				<tr>
 					<td colspan=2>
@@ -263,7 +263,9 @@
                   <%= nav.t("donor_details.gbs_multiyear_agreement") %>
                 </td>
                 <td>
+                  <% unless @donor.gbs_multiyear_agreement.nil? %>
                   <%=option_text_by_id(Donor, :gbs_multiyear_agreement, Donor::YES_NO_OPTIONS, @donor.gbs_multiyear_agreement)%>
+                  <% end %>
                 </td>
               </tr>
               <tr>
@@ -272,7 +274,7 @@
                   <%= nav.t("donor_details.gbs_multiyear_agreement_years") %>
                 </td>
                 <td>
-                  <%=@donor.gbs_multiyear_agreement_years%>
+                  <%=@donor.gbs_multiyear_agreement_years %>
                 </td>
               </tr>
               <tr>
@@ -281,7 +283,7 @@
                   <%= nav.t("donor_details.gbs_question_1") %>
                 </td>
                 <td>
-                  <%= option_text_by_id(Donor, :gbs_question_1, Donor::YES_NO_OPTIONS, @donor.gbs_question_1) %>
+                  <%= option_text_by_id(Donor, :gbs_question_1, Donor::YES_NO_OPTIONS, @donor.gbs_question_1) unless @donor.gbs_question_1.nil?  %>
                 </td>
               </tr>
               <tr>
@@ -290,7 +292,7 @@
                   <%= nav.t("donor_details.gbs_question_2") %>
                 </td>
                 <td>
-                  <%= option_text_by_id(Donor, :gbs_question_2, Donor::YES_NO_OPTIONS, @donor.gbs_question_2) %>
+                  <%= option_text_by_id(Donor, :gbs_question_2, Donor::YES_NO_OPTIONS, @donor.gbs_question_2) unless @donor.gbs_question_2.nil? %>
                 </td>
               </tr>
               <tr>
@@ -299,7 +301,7 @@
                   <%= nav.t("donor_details.gbs_question_3") %>
                 </td>
                 <td>
-                  <%= option_text_by_id(Donor, :gbs_question_3, Donor::YES_NO_OPTIONS, @donor.gbs_question_3) %>
+                  <%= option_text_by_id(Donor, :gbs_question_3, Donor::YES_NO_OPTIONS, @donor.gbs_question_3) unless @donor.gbs_question_3.nil? %>
                 </td>
               </tr>
               <tr>

@@ -11,6 +11,11 @@
     padding:0px 10px 0px 10px;
     
   }
+  TD
+  {
+     font-size:10px;
+  }
+
 </style>
 <div style="overflow:auto;width:880px;border:1px solid #cecece;">
 
@@ -22,6 +27,8 @@
 <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
     <th colspan="2"><%= y %></th>
 <% end %>
+    <th colspan="2">CUT</th>
+    <th colspan="2">Budget</th>
   </tr>
   <tr>
     <th style="border-top:0px;">&nbsp;</th>
@@ -29,11 +36,14 @@
     <th style="font-size:10px;">Committed</th>
     <th style="font-size:10px;">Disbursed</th>
 <% end %>
+    <th style="font-size:10px;">On</th>
+    <th style="font-size:10px;">Off</th>
+    <th style="font-size:10px;">On</th>
+    <th style="font-size:10px;">Off</th>
   </tr>
 <% AidModality.all.group_by(&:group_name).each do | toagroup |%>
   <%
   if toagroup[0].nil?
-  
     toagroup[1].each do |am|
     %>
   <tr>
@@ -41,9 +51,13 @@
       <strong><%= am.name %></strong>
     </td>
       <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
-          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= @donor.commitments_by_aid_modality(y)[am.id] %></td>
-          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= @donor.payments_by_aid_modality(y)[am.id] %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.commitments_by_aid_modality(y)[am.id] %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%=  0.to_currency(@currency) +  @donor.payments_by_aid_modality(y)[am.id] %></td>
       <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.payments_on_cut_by_aid_modality[am.id] %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency) + @donor.payments_off_cut_by_aid_modality[am.id] %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.payments_on_budget_by_aid_modality[am.id] %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency) + @donor.payments_off_budget_by_aid_modality[am.id] %></td>
     <% end %>
   </tr>
   <%
@@ -57,6 +71,10 @@
           <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"></td>
           <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"></td>
       <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
   </tr>
   <%
     toagroup[1].each do |am|
@@ -66,20 +84,116 @@
       <%= am.name %>
     </td>
       <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
-          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= @donor.commitments_by_aid_modality(y)[am.id] %></td>
-          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= @donor.payments_by_aid_modality(y)[am.id] %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.commitments_by_aid_modality(y)[am.id] %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency) + @donor.payments_by_aid_modality(y)[am.id] %></td>
       <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.payments_on_cut_by_aid_modality[am.id] %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency) + @donor.payments_off_cut_by_aid_modality[am.id] %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.payments_on_budget_by_aid_modality[am.id] %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency) + @donor.payments_off_budget_by_aid_modality[am.id] %></td>
     <% end %>
   </tr>
   <%
   end
   %>
 <% end %>
-<!--  <tr>
-    <td>All Aid Modalities</td>
-  <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
-      <td><%= y %></td>
-  <% end %>
-  </tr>-->
+  <tr>
+    <td style="background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;">
+      <strong>Total ODA to GoM</strong>
+
+    </td>
+      <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency)+ @donor.annual_commitments_on_budget[y] %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency)+ @donor.annual_payments_on_budget[y] %></td>
+      <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+  </tr>
+<!--
+  <tr>
+    <td style="padding-left:20px;background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;">
+      non- GoM ODA to NGOs
+    </td>
+      <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"></td>
+      <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+  </tr>
+<tr>
+    <td style="padding-left:20px;background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;">
+      non- GoM ODA to private sector
+    </td>
+      <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"></td>
+      <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">4&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td style="padding-left:20px;background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;">
+      non- GoM ODA to civil society
+    </td>
+      <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"></td>
+      <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">4&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="padding-left:20px;background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;">
+      non- GoM ODA to others
+    </td>
+      <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"></td>
+      <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">4&nbsp;</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">4&nbsp;</td>
+  </tr>
+-->
+<tr>
+    <td style="background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;">
+      <strong>Total Non-GoM ODA</strong>
+
+    </td>
+      <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.annual_commitments_off_budget[y] %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency) + @donor.annual_payments_off_budget[y] %></td>
+      <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+  </tr>
+  <tr>
+    <td style="background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;">
+      <strong>Total ODA to Mozambique</strong>
+
+    </td>
+      <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= 0.to_currency(@currency) + @donor.annual_commitments[y] %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= 0.to_currency(@currency) + @donor.annual_payments[y] %></td>
+      <% end %>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+  </tr>
+
 </table>
   </div>

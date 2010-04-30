@@ -61,7 +61,39 @@ class Donor < ActiveRecord::Base
   def total_commitments
     annual_commitments.values.sum
   end
+
+  # Fetches the donor's commitments per year from the database
+  # They are returned as Currency objects in the donor's currency and
+  # can be accessed as an array (e.g. Donor.annual_commitments[2007])
+  # Forecasts are *not* included!
+  def annual_commitments_off_budget
+    # Thanks to new solutions, this can be written as:
+    # accessible_fundings.in_currency("SEK").find(:all, :select => 'SUM(commitments) AS commitments, year', :group => 'year')
+    # Use lazy loading to minimize database queries
+    @annual_commitments_off_budget = Funding.find(:all,
+      :select=>'SUM(fundings.commitments) AS total_commitments, fundings.year as year',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_budget = false', self.id, Project::PUBLISHED],
+      :group => 'fundings.year'
+    ).inject({}) {|totals, rec| totals[rec.year] = rec.total_commitments.to_currency(currency, rec.year); totals}
+  end
   
+  # Fetches the donor's commitments per year from the database
+  # They are returned as Currency objects in the donor's currency and
+  # can be accessed as an array (e.g. Donor.annual_commitments[2007])
+  # Forecasts are *not* included!
+  def annual_commitments_on_budget
+    # Thanks to new solutions, this can be written as:
+    # accessible_fundings.in_currency("SEK").find(:all, :select => 'SUM(commitments) AS commitments, year', :group => 'year')
+    # Use lazy loading to minimize database queries
+    @annual_commitments_off_budget = Funding.find(:all,
+      :select=>'SUM(fundings.commitments) AS total_commitments, fundings.year as year',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_budget = true', self.id, Project::PUBLISHED],
+      :group => 'fundings.year'
+    ).inject({}) {|totals, rec| totals[rec.year] = rec.total_commitments.to_currency(currency, rec.year); totals}
+  end
+
   # Fetches the donor's commitments per year from the database
   # They are returned as Currency objects in the donor's currency and 
   # can be accessed as an array (e.g. Donor.annual_commitments[2007])
@@ -112,6 +144,34 @@ class Donor < ActiveRecord::Base
     ).inject({}) {|totals, rec| totals[rec.year] = rec.pay.to_currency(currency, rec.year); totals} 
   end
   
+  # Fetches the donor's payments per year from the database
+  # They are returned as Currency objects in the donor's currency and
+  # can be accessed as an array (e.g. Donor.annual_payments[2007])
+  # Forecasts are *not* included!
+  def annual_payments_off_budget
+    # Use lazy loading to minimize database queries
+    @annual_payments_off_budget = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_budget = false', self.id, Project::PUBLISHED],
+      :group => 'fundings.year'
+    ).inject({}) {|totals, rec| totals[rec.year] = rec.pay.to_currency(currency, rec.year); totals}
+  end
+  
+  # Fetches the donor's payments per year from the database
+  # They are returned as Currency objects in the donor's currency and
+  # can be accessed as an array (e.g. Donor.annual_payments[2007])
+  # Forecasts are *not* included!
+  def annual_payments_on_budget
+    # Use lazy loading to minimize database queries
+    @annual_payments_off_budget = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_budget = true', self.id, Project::PUBLISHED],
+      :group => 'fundings.year'
+    ).inject({}) {|totals, rec| totals[rec.year] = rec.pay.to_currency(currency, rec.year); totals}
+  end
+
   # Fetches the donor's payment forecasts per year from the database
   # They are returned as Currency objects in the donor's currency and 
   # can be accessed as an array (e.g. Donor.annual_payments_forecasts[2011])
@@ -136,7 +196,6 @@ class Donor < ActiveRecord::Base
   end
   
   def payments_by_aid_modality(year = Time.now.year)
-    puts year
     # FIXME: This is a very ugly solution to the problem and should be replaced asap.
     # Use lazy loading to minimize database queries
     @annual_payments_by_toa = Funding.find(:all, 
@@ -196,4 +255,60 @@ class Donor < ActiveRecord::Base
   
     res.pay.to_currency(self.currency)
   end
+
+  def payments_on_budget_by_aid_modality
+     @annual_payments_on_budget_by_toa = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, projects.aid_modality_id AS aid_modality, fundings.year ',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_budget = true ', self.id, Project::PUBLISHED],
+      :group => 'aid_modality, year'
+    ).inject([]) {|totals, rec| totals[rec.aid_modality.to_i] = rec.pay.to_currency(currency, rec.year); totals}
+    @annual_payments_on_budget_by_toa
+  end
+  def payments_off_budget_by_aid_modality
+     @annual_payments_on_budget_by_toa = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, projects.aid_modality_id AS aid_modality, fundings.year ',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_budget = false ', self.id, Project::PUBLISHED],
+      :group => 'aid_modality, year'
+    ).inject([]) {|totals, rec| totals[rec.aid_modality.to_i] = rec.pay.to_currency(currency, rec.year); totals}
+  end
+  def payments_on_cut_by_aid_modality
+     @annual_payments_on_budget_by_toa = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, projects.aid_modality_id AS aid_modality, fundings.year ',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_treasury = true ', self.id, Project::PUBLISHED],
+      :group => 'aid_modality, year'
+    ).inject([]) {|totals, rec| totals[rec.aid_modality.to_i] = rec.pay.to_currency(currency, rec.year); totals}
+  end
+  def payments_off_cut_by_aid_modality
+     @annual_payments_on_budget_by_toa = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, projects.aid_modality_id AS aid_modality, fundings.year ',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_treasury = false ', self.id, Project::PUBLISHED],
+      :group => 'aid_modality, year'
+    ).inject([]) {|totals, rec| totals[rec.aid_modality.to_i] = rec.pay.to_currency(currency, rec.year); totals}
+  end
+
+
+  def annual_payments_on_budget(on_budget = true)
+    # Use lazy loading to minimize database queries
+    @annual_payments = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_budget = ?', self.id, Project::PUBLISHED, on_budget],
+      :group => 'fundings.year'
+    ).inject({}) {|totals, rec| totals[rec.year] = rec.pay.to_currency(currency, rec.year); totals}
+  end
+
+  def annual_payments_on_treasury(on_treasury =true)
+    # Use lazy loading to minimize database queries
+    @annual_payments = Funding.find(:all,
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year',
+      :joins => 'JOIN projects ON fundings.project_id = projects.id',
+      :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND projects.on_off_treasury = ?', self.id, Project::PUBLISHED, on_treasury],
+      :group => 'fundings.year'
+    ).inject({}) {|totals, rec| totals[rec.year] = rec.pay.to_currency(currency, rec.year); totals}
+  end
+
 end

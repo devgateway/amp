@@ -33,9 +33,9 @@ def show
     @projects_multilaterals = @projects.select { |p| p.type_of_implementation == 2 }
                
     # Total amount of money spent on all projects by all donors in the country
-    @eu_total_payments = @donors.inject(0.to_currency(@currency)) do |total, donor|
-      total + donor.annual_payments[year]
-    end
+#    @eu_total_payments = @donors.inject(0.to_currency(@currency)) do |total, donor|
+#      total + donor.annual_payments[year]
+#    end
     
     # Total payments by grant/loan (in donor's currency)
     @total_payments_grants = Hash.new

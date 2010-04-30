@@ -23,7 +23,6 @@ public class EUActivityForm extends ActionForm implements Serializable {
 	private String inputs;
 	private String totalCost;
 	private Long totalCostCurrencyId;
-	private boolean someError;
 	
 	private Object[] contrAmount;
 	private Object[] contrCurrId;
@@ -223,13 +222,6 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		this.totalCostCurrencyId = totalCostCurrency;
 	}
 
-    public boolean isSomeError() {
-		return someError;
-	}
-
-	public void setSomeError(boolean someError) {
-		this.someError = someError;
-	}
 
 	/**
 	 * 

@@ -1,6 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -135,7 +134,7 @@ public class DesktopUtil {
 						AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, act.getCategories());
 						if (statusValue != null)
 							project.setStatusId(statusValue.getId());
-						project.setActivityRisk(IndicatorUtil.getOverallRisk(act.getAmpActivityId()));
+						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
 						project.setLineMinRank(act.getLineMinRank());
 						project.setPlanMinRank(act.getPlanMinRank());
 
@@ -178,7 +177,7 @@ public class DesktopUtil {
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
-										comm.setAmount(fd.getTransactionAmount());
+										comm.setAmount(fd.getTransactionAmount().doubleValue());
 										comm.setCurrencyCode(fd.getAmpCurrencyId().getCurrencyCode());
 										comm.setTransactionDate(fd.getTransactionDate());
 										project.getCommitmentList().add(comm);
@@ -243,7 +242,7 @@ public class DesktopUtil {
 						AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, act.getCategories());
 						if (statusValue != null)
 							project.setStatusId(statusValue.getId());
-						project.setActivityRisk(IndicatorUtil.getOverallRisk(act.getAmpActivityId()));
+						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
 
 						project.setSector(new ArrayList());
 						Set sectSect = act.getSectors();
@@ -287,7 +286,7 @@ public class DesktopUtil {
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
-										comm.setAmount(fd.getTransactionAmount());
+										comm.setAmount(fd.getTransactionAmount().doubleValue());
 										comm.setCurrencyCode(fd.getAmpCurrencyId().getCurrencyCode());
 										comm.setTransactionDate(fd.getTransactionDate());
 										project.getCommitmentList().add(comm);
@@ -416,17 +415,17 @@ public class DesktopUtil {
 		return col;
 	}
 
-	public static BigDecimal updateProjectTotals(Collection activities,String currCode) {
+	public static double updateProjectTotals(Collection activities,String currCode) {
 
 		logger.info("updateProjectTotals called with currcode =" + currCode);
 
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-		BigDecimal grandTotal = new BigDecimal(0);
+		double grandTotal = 0;
 		if (activities != null) {
 			Iterator itr = activities.iterator();
 			while (itr.hasNext()) {
 				AmpProject project = (AmpProject) itr.next();
-				BigDecimal totAmount = new BigDecimal(0);
+				double totAmount = 0;
 				if (project.getCommitmentList() != null &&
 						project.getCommitmentList().size() > 0) {
 					Iterator cItr = project.getCommitmentList().iterator();
@@ -434,11 +433,11 @@ public class DesktopUtil {
 						Commitments comm = (Commitments) cItr.next();
 						double toCurrency = Util.getExchange(currCode, new java.sql.Date( comm.getTransactionDate().getTime()));
 						double fromCurrency = Util.getExchange(comm.getCurrencyCode(),new java.sql.Date(comm.getTransactionDate().getTime()));
-						totAmount =totAmount.add( CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency));
+						totAmount += CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency);
 					}
 				}
-				grandTotal =grandTotal.add(totAmount);
-				if (totAmount.doubleValue() <= 0) {
+				grandTotal += totAmount;
+				if (totAmount <= 0) {
 					project.setTotalCommited("");
 				} else {
 					project.setTotalCommited(mf.format(totAmount));

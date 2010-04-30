@@ -10,9 +10,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<jsp:include page="addActivityStep7Popin.jsp" flush="true" />
-<jsp:include page="addOrganizationPopin.jsp" flush="true" />
-
 <digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -45,55 +42,14 @@ function resetAll()
 }
 
 function removeSelOrgs(value) {
-	if (isOrganisationSelectedForDeletion(value)) {
-		document.getElementsByName("agencies.item")[0].value = value;
-		<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
-		document.aimEditActivityForm.action = "<%= remOrgs %>";
-		document.aimEditActivityForm.target = "_self"
-		document.aimEditActivityForm.submit();
-		return true;
-	}
-	return false;
+	document.getElementsByName("agencies.item")[0].value = value;
+	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
+	document.aimEditActivityForm.action = "<%= remOrgs %>";
+	document.aimEditActivityForm.target = "_self"
+	document.aimEditActivityForm.submit();
+	return true;
 }
 
-
-function isOrganisationSelectedForDeletion(val) {
-	//alert(val);
-	var sel;
-	var selected = true;
-	var count = 0;
-	if (val == '1') {// executing agency
-		sel = document.getElementsByName("agencies.selExAgencies");		
-	} else if (val == '2') {// implementing agency
-		sel = document.getElementsByName("agencies.selImpAgencies");
-	} else if (val == '5') {// beneficiary agency
-		sel = document.getElementsByName("agencies.selBenAgencies");
-	} else if (val == '6') {// contracting agency
-		sel = document.getElementsByName("agencies.selConAgencies");
-	} else if (val == '7') {// regional group
-		sel = document.getElementsByName("agencies.selRegGroups");
-	} else if (val == '8') {//sector group
-		sel = document.getElementsByName("agencies.selSectGroups");
-	} else if (val == '9') {//responsible organisation
-		sel = document.getElementsByName("agencies.selRespOrganisations");
-	}
-	for (var i = 0; i<sel.length; i++) {
-		if (!sel[i].checked) {
-			count++;
-		}
-	}
-	//alert(sel.length);
-	//alert(count);
-	if (count == sel.length) {
-		selected = false;
-		<c:set var="errMsg">
-	   		<digi:trn>Please select an organization to remove</digi:trn>
-	    </c:set>
-	    alert("${errMsg}");
-	}
-	//alert(selected);
-	return selected;
-}
 -->
 </script>
 
@@ -139,7 +95,7 @@ function isOrganisationSelectedForDeletion(val) {
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td>
-								<span class=crumb style="visibility: hidden">
+								<span class=crumb>
 									<c:if test="${aimEditActivityForm.pageId == 0}">
 										<c:set var="translation">
 											<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
@@ -232,7 +188,10 @@ function isOrganisationSelectedForDeletion(val) {
 									</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn key="aim:editActivity">
+										Edit Activity
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -242,32 +201,50 @@ function isOrganisationSelectedForDeletion(val) {
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%">
-							
+							<tr>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn>
+													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                  <digi:trn key="aim:activity:RelatedOrganizations">
+                                                                                                         Related Organizations
+												</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left">
 							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<table width="100%" bgcolor="#f4f4f2">
+								<table width="95%" bgcolor="#f4f4f2">
 									<feature:display name="Responsible Organization" module="Organizations">
 										<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
 									</feature:display>
 		
-											<tr><td>&nbsp;
-												
+											<tr><td>
+												&nbsp;
 											</td></tr>
 									<feature:display name="Executing Agency" module="Organizations">
 									<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
 									</feature:display>
 	
-									<tr><td>&nbsp;
-										
+									<tr><td>
+										&nbsp;
 									</td></tr>
 									<feature:display name="Implementing Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ImplementingAgency.jsp"/>
 									</feature:display>
-									<tr><td>&nbsp;
-										
+									<tr><td>
+										&nbsp;
 									</td></tr>
 
 
@@ -315,8 +292,8 @@ function isOrganisationSelectedForDeletion(val) {
 						</td></tr>
 					</table>
 				</td></tr>
-				<tr><td>&nbsp;
-					
+				<tr><td>
+					&nbsp;
 				</td></tr>
 			</table>
 		</td>

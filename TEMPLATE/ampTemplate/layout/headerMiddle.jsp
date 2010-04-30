@@ -7,21 +7,20 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<div class="headerMiddle">
         <!-- Dependencies --> 
 		
 <%@page import="org.digijava.module.aim.helper.Constants"%>
 
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
         
         <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
 <!--<div id="myAboutFilterWrapper" style="display: none;" >-->
@@ -38,7 +37,7 @@
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/yui/container.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
 
         <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
@@ -97,38 +96,30 @@ cursor:pointer;
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
                 	<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                		<img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 				</module:display>
                 <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                 	<div class="bd">                    
-                    	<ul>
-                        	<module:display  name="Report Generator" parentModule="REPORTING">
-	                        	<li class="yuiampmenuitem" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-	                            	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false"  onclick="return canExit()">
-	                                	<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
-	                                </a>
-	                            </li>
-	                       </module:display>
-						   <module:display name="Multi-dimensional Reports" parentModule="REPORTING">
-                           	<li class="yuiampmenuitem">
-                           		<a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()">
-                                	<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
-                                </a>
-                          	</li>
-                         	</module:display>
-                       </ul>
-                   </div>
-                </div>              
-            </li>
-                             
+                		<ul>
+            				<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
+            					<li class="yuiampmenuitem" style="float:left;">
+                					<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
+                    					<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
+                    				</digi:link>
+                				</li>
+            				</module:display>
+            			</ul>
+            		</div>
+            	</div>
+           	</li>
            	<feature:display name="Language Option" module="Tools">
 		            <li style="float:left;">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
 		                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
 		                <div id="reports2" class="yuiampmenu">
 		                    <div class="bd">                    
@@ -171,7 +162,7 @@ border-right:1px solid white;
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
 		                <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>
 		                <div id="reports2" class="yuiampmenu">
 		                    <div class="bd">                    
@@ -220,7 +211,7 @@ function adminHelp(){
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
                               <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -255,7 +246,7 @@ function adminHelp(){
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
                               <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -274,13 +265,6 @@ function adminHelp(){
                                         </a>
                                         </li>
 										</feature:display>
-										<feature:display name="Support Documents" module="HELP">
-										<li>
-										<a class="yuiampmenuitemlabel" href="/contentrepository/documentManager.do?fwd=support">
-                                        <digi:trn key="aim:supportdocuments">Support Documents</digi:trn>
-                                        </a>
-                                        </li>
-										</feature:display> 
 										<feature:display name="Support Request Form" module="HELP">
                                         <li>	
                                         <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/login.action?code=<%=FeaturesUtil.getDefaultCountryIso()%>" target="_blank">
@@ -374,7 +358,7 @@ function adminHelp(){
                                  <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
@@ -436,6 +420,17 @@ function adminHelp(){
 	                                              </div>
 	                                        </li>
                                         </feature:display>
+										<c:if test="${not empty sessionScope.currentMember}">
+											<c:if test="${sessionScope.currentMember.pledger == 'true'}">
+		 										<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
+			                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToManagePledges">Click here to manage pledges</digi:trn>'>
+				                                       <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewPledgesList.do">
+				                                           <digi:trn key="aim:Pledges">Pledges</digi:trn>
+				                                        </a>
+													</li>
+												</module:display>
+											</c:if>
+										</c:if>
                                       </ul>
                                   </div>
                               </div>                    
@@ -447,7 +442,7 @@ function adminHelp(){
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -459,7 +454,7 @@ function adminHelp(){
 	                                            </a>
 	                                        </li>
 	                                    </module:display>
-										<module:display name="Multi-dimensional Reports" parentModule="REPORTING">
+	                                    <module:display name="Multi-dimensional Reports" parentModule="REPORTING">
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()">
                                             	<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
@@ -467,13 +462,19 @@ function adminHelp(){
                                         </li>
                                         </module:display>
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
-                                                <li class="yuiampmenuitem" title='<digi:trn >Click here to view Paris Indicator Reports</digi:trn>'>
-                                                    <a class="yuiampmenuitemlabel" href="/parisindicator/parisindicator.do~reportId=3~reset=true~header=true"  onclick="return canExit()">
+                                                <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
+                                                    <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true~print2=false~print=false"  onclick="return canExit()">
                                                         <b><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn></b>
                                                     </a>
                                                 </li>
                                         </feature:display>
-                                      </ul>
+                                        
+                                        	<li class="yuiampmenuitem" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
+                                            	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true&type=5"  onclick="return canExit()">
+                                                	<b><digi:trn key="aim:parisIndicator">Pledges Reports</digi:trn></b>
+												</a>
+                                           </li>
+                                    </ul>
                                   </div>
                               </div>                    
                           </li>
@@ -530,7 +531,7 @@ function adminHelp(){
                           	</c:if>
                           	<feature:display name="Create Event" module="Calendar">
                           		<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;"  onclick="return canExit()">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
@@ -564,14 +565,14 @@ function adminHelp(){
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
                               </span>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                                   <div class="bd">                    
                                       <ul>
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/aim/nationalPlaningDashboard.do"  onclick="return canExit()">
+                                            <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do"  onclick="return canExit()">
                                             <digi:trn key="aim:npd">NPD</digi:trn>
                                             </a>
                                         </li>
@@ -628,7 +629,7 @@ function adminHelp(){
                                  <digi:trn key="fm:messages">Messages</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -656,7 +657,7 @@ function adminHelp(){
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -668,15 +669,6 @@ function adminHelp(){
                                         </a>
                                         </li>
                                         </feature:display>
-                                        <feature:display name="My Workspaces" module="Tools">
-                                        <li>
-                                         <a class="yuiampmenuitemlabel" href="/aim/myWorkspaces.do?action=show">
-                                    
-                                        <digi:trn key="aim:workspaceinfo">My Workspaces</digi:trn>
-                                        </a>
-                                        </li>
-                                        </feature:display>
-                                        
                                         <feature:display name="Language Option" module="Tools">
 		                                        <li style="_width:300px">
 		                                        <a class="yuiampmenuitemlabel" href="#">
@@ -710,14 +702,9 @@ function adminHelp(){
                                         <digi:trn key="aim:search">Search</digi:trn>
                                         </a>
                                         </li>
-                                        <li>
-	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true">
-	                                        	<digi:trn>Address Book</digi:trn>
-	                                        </a>
-                                        </li>
                                       </ul>
                                   </div>
-                              </div>
+                              </div>                    
                           </li>
                           </module:display>
                           <module:display name="HELP">
@@ -726,7 +713,7 @@ function adminHelp(){
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -738,13 +725,6 @@ function adminHelp(){
                                         </a>
                                         </li>
 										</feature:display>
-										<feature:display name="Support Documents" module="HELP">
-										<li>
-                                        <a class="yuiampmenuitemlabel" href="/contentrepository/documentManager.do?fwd=support">
-                                        <digi:trn key="aim:supportdocuments">Support Documents</digi:trn>
-                                        </a>
-                                        </li>
-										</feature:display> 
 										<feature:display name="Support Request Form" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/" target="_blank">
@@ -783,7 +763,7 @@ function adminHelp(){
 
 var arrowClicked = false;
 //Run initialization for menu
-var oMenuBar = new YAHOO.widget.MenuBar("mainmenuHeader", { 
+var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
 constraintoviewport:false
  });
 
@@ -795,7 +775,7 @@ oMenuBar.render();
 
 oMenuBar.subscribe("show", function () {
 
-	if (YAHOO.env.ua.ie === 7 && this.parent) {
+	if (YAHOOAmp.env.ua.ie === 7 && this.parent) {
 		this.align();
 		this.align();
 	}
@@ -831,4 +811,3 @@ function onMenuItemClick(p_sType, p_aArgs, p_oValue) {
 
 
 </script>
-</div>

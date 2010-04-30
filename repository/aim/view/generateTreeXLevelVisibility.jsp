@@ -14,7 +14,7 @@
 <bean:define id="moduleAux" name="moduleAux" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="request" toScope="page"/>
 <bean:define id="moduleAux2" name="moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
                     <c:if test="${currentLevel == 1}">
-						<div id="divmodule<bean:write name="moduleAux" property="root.id"/>" class="yui-hidden">
+						<div id="divmodule<bean:write name="moduleAux" property="root.id"/>">
                     </c:if>
 	
 	                    <c:if test="${currentLevel == 1}">

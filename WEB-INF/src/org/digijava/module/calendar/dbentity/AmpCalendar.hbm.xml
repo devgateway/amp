@@ -7,6 +7,8 @@
 			<key-many-to-one column="CALENDAR_ID" name="calendar"
 				class="org.digijava.module.calendar.dbentity.Calendar" />
 		</composite-id>
+		<many-to-one column="EVENT_TYPE_ID" name="eventType"
+			class="org.digijava.module.calendar.dbentity.AmpEventType" />
 		<many-to-one column="MEMBER_ID" name="member"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 		<set name="organisations" table="AMP_CALENDAR_EVENT_ORGANISATIO" lazy="true">
@@ -19,6 +21,5 @@
 			<one-to-many class="org.digijava.module.calendar.dbentity.AmpCalendarAttendee" />
 		</set>
 		<property name="privateEvent" column="PRIVATE" type="boolean" />
-		<many-to-one name="eventsType" column="EVENTS_TYPE_ID" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 	</class>
 </hibernate-mapping>

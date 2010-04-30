@@ -10,11 +10,11 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
 <div id="myContent" style="display: none">
 	<div id="myContentContent" class="content">
@@ -25,9 +25,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOO.namespace("YAHOO.amp");
+		YAHOOAmp.namespace("YAHOOAmp.amp");
 
-		var myPanel = new YAHOO.widget.Panel("saveCustomReports", {
+		var myPanel = new YAHOOAmp.widget.Panel("saveCustomReports", {
 			width:"400px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -51,8 +51,7 @@
 		myPanel.render(document.body);
 	}
 	//this is called from editActivityMenu.jsp
-	//window.onload=initSaveScript();
-	addLoadEvent(initSaveScript);
+	window.onload=initSaveScript();
 -->	
 </script>
 <style type="text/css">
@@ -143,14 +142,13 @@
 		showPanelLoading();
 		<digi:context name="saveReport" property="context/module/moduleinstance/SaveHtml.do"/>
 		var url = "<%=saveReport%>?";
-		YAHOO.util.Connect.asyncRequest("GET", url, callback);
+		YAHOOAmp.util.Connect.asyncRequest("GET", url, callback);
 	}
 
 	function showPanelLoading(){
 		  var content = document.getElementById("myContentContent");
-			content.innerHTML = '<div style="text-align: center">' + 
-			'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-			'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+		  content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
 		  showContent();
 	}
 
@@ -175,7 +173,7 @@ function save() {
 		var postString = "";
 		<digi:context name="showreport" property="context/module/moduleinstance/SaveHtml.do" />
 		var url = "<%=showreport%>"
-		YAHOO.util.Connect.asyncRequest("GET", url, callback);
+		YAHOOAmp.util.Connect.asyncRequest("GET", url, callback);
 		myclose();
 		reload();
 	}
@@ -184,6 +182,9 @@ function save() {
 function reload() {
 	document.SaveHtmlForm.action.value="save";
 	document.SaveHtmlForm.submit();	
+}
+
+function load() {
 }
 
 function closePopup() {

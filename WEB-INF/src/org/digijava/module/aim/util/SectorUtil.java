@@ -1,13 +1,10 @@
 package org.digijava.module.aim.util;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -15,11 +12,12 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
 import org.hibernate.Hibernate;
@@ -79,28 +77,28 @@ public class SectorUtil {
 					sectr = new ActivitySector();
 			   		sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
 					if(as.getParentSectorId() != null){
-
+						
 						sectr.setSectorName(as.getParentSectorId().getName());
 						sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
 						sectr.setSubsectorLevel1Id(as.getAmpSectorId());
 						sectr.setSubsectorLevel1Name(as.getName());
-
+						
 						if(as.getParentSectorId().getParentSectorId() != null){
-
+						
 							sectr.setSectorName(as.getParentSectorId().getParentSectorId().getName());
 							sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
 							sectr.setSubsectorLevel1Id(as.getParentSectorId().getAmpSectorId());
 							sectr.setSubsectorLevel1Name(as.getParentSectorId().getName());
 							sectr.setSubsectorLevel2Id(as.getAmpSectorId());
 							sectr.setSubsectorLevel2Name(as.getName());
-
+							
 						}
 					}else{
-
+						
 						sectr.setSectorName(as.getName());
 				   		sectr.setSectorId(as.getAmpSectorId());
-
-
+						
+						
 					}
 					col.add(sectr);
 				}
@@ -116,68 +114,6 @@ public class SectorUtil {
 		}
 		return col;
 	}//End Search Sector.
-
-	public static Collection searchForSector(String keyword, Long secSchemeId) {
-		Session session = null;
-		Collection col = new ArrayList();
-
-		logger.info("INSIDE Search Sector DBUTIL..... ");
-
-		try {
-
-			session = PersistenceManager.getRequestDBSession();
-			int tempIncr = 0;
-				logger.info("searching SECTORS...............");
-				String qryStr = "select sector from " + AmpSector.class.getName()
-					+ " sector inner join  sector.ampSecSchemeId sscheme"
-					+ " where lower(sector.name) like '%"
-					+ keyword.toLowerCase()
-					+ "%' and " + "sscheme = " + secSchemeId;
-
-				Query qry = session.createQuery(qryStr);
-				//qry.setParameter("orgType", orgType, Hibernate.LONG) ;
-				//col =qry.list();
-				Iterator itr = qry.list().iterator();
-
-				ActivitySector sectr;
-				tempIncr = 0;
-
-				while (itr.hasNext()) {
-					AmpSector as=(AmpSector) itr.next();
-					sectr = new ActivitySector();
-			   		sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
-					if(as.getParentSectorId() != null){
-
-						sectr.setSectorName(as.getParentSectorId().getName());
-						sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
-						sectr.setSubsectorLevel1Id(as.getAmpSectorId());
-						sectr.setSubsectorLevel1Name(as.getName());
-
-						if(as.getParentSectorId().getParentSectorId() != null){
-
-							sectr.setSectorName(as.getParentSectorId().getParentSectorId().getName());
-							sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
-							sectr.setSubsectorLevel1Id(as.getParentSectorId().getAmpSectorId());
-							sectr.setSubsectorLevel1Name(as.getParentSectorId().getName());
-							sectr.setSubsectorLevel2Id(as.getAmpSectorId());
-							sectr.setSubsectorLevel2Name(as.getName());
-
-						}
-					}else{
-
-						sectr.setSectorName(as.getName());
-				   		sectr.setSectorId(as.getAmpSectorId());
-
-
-					}
-					col.add(sectr);
-				}
-
-		} catch (Exception ex) {
-			logger.debug("Unable to search sectors" + ex);
-		} 
-		return col;
-	}
 
 	public static List getAmpSectors(Long id) {
 		ArrayList ampSectors = new ArrayList();
@@ -254,89 +190,6 @@ public class SectorUtil {
 
 	}
 
-	/**
-	 * Gets all sectors ordered by parentId
-	 * @param secSchemeId
-	 * @return
-	 */
-	public static List<AmpSector> treeBuildGetAllSectorsFromScheme(Long secSchemeId) {
-		Session session = null;
-		List<AmpSector> col = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s " + "where amp_sec_scheme_id = " + secSchemeId + " order by parent_sector_id, amp_sector_id";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-
-		} catch (Exception e) {
-			logger.error("Cannot get parent sectors, " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		return col;
-	}
-
-	/**
-	 * Using a list of AmpSector objects as source will calculate the fields "level" and "hasChildren".
-	 * @param list
-	 * @return
-	 */
-	public static List<AmpSector> generateLevelHierarchy(List<AmpSector> list) {
-		int level;
-		Iterator<AmpSector> iter = list.iterator();
-		while (iter.hasNext()) {
-			level = 0;
-			AmpSector auxSector = iter.next();
-			if (auxSector.getParentSectorId() == null) {
-				auxSector.setLevel(++level);
-			} else {
-				level = getParent(auxSector, level);
-				auxSector.setLevel(level);
-			}
-		}
-		return list;
-	}
-
-	// This recursive method helps the generateLevelHierarchy method.
-	private static int getParent(AmpSector auxSector, int level) {
-		if (auxSector.getParentSectorId() != null) {
-			level = getParent(auxSector.getParentSectorId(), level);
-		}
-		return ++level;
-	}
-
-    // This recursive method helps the generateLevelHierarchy method.
-	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
-		if (topLevelSector.getParentSectorId() != null) {
-			topLevelSector = getTopLevelParent(topLevelSector.getParentSectorId());
-		}
-		return topLevelSector;
-	}
-
-	public static List<AmpSector> generateChildHierarchy(List<AmpSector> list) {
-		Iterator<AmpSector> iter = list.iterator();
-		while (iter.hasNext()) {
-			AmpSector auxSector = iter.next();
-			Iterator<AmpSector> iter2 = list.iterator();
-			while (iter2.hasNext()) {
-				AmpSector auxSector2 = iter2.next();
-				if (auxSector2.getParentSectorId() != null
-						&& auxSector.getAmpSectorId().equals(auxSector2.getParentSectorId().getAmpSectorId())) {
-					auxSector.setHasChildren(true);
-				}
-			}
-		}
-		return list;
-	}
-
 	public static Collection getAllSectorSchemes() {
 		Session session = null;
 		Collection col = null;
@@ -356,33 +209,6 @@ public class SectorUtil {
 					PersistenceManager.releaseSession(session);
 			} catch (Exception ex) {
 				logger.error("releaseSession() failed");
-			}
-		}
-		return col;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Collection<AmpSector> getAllParentSectorsSortedByCode(Long secSchemeId) {
-		Session session = null;
-		Collection<AmpSector> col = null;
-
-		try {
-			session = PersistenceManager.getSession();//TODO why not use thread session?
-			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
-					+ " and parent_sector_id is null " + "order by s.sectorCodeOfficial";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-
-		} catch (Exception e) {
-			logger.error("Cannot get parent sectors, " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
 			}
 		}
 		return col;
@@ -414,14 +240,14 @@ public class SectorUtil {
 		}
 		return col;
 	}
-
+	
 	public static Collection getAllParentSectors() {
 		Session session = null;
 		Collection col = null;
 
 		try {
 			session = PersistenceManager.getSession();
-
+			
 			String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.primary=true ";
 			Query qry = session.createQuery(queryString);
 			AmpClassificationConfiguration auxConfig = (AmpClassificationConfiguration) qry.uniqueResult();
@@ -444,9 +270,9 @@ public class SectorUtil {
 		}
 		return col;
 	}
-
-
-
+	
+	
+	
 	public static List<AmpSector> getAllSectorsFromScheme(Long secSchemeId) {
 		Session session = null;
 		List<AmpSector> col = null;
@@ -485,34 +311,10 @@ public class SectorUtil {
 
 		} catch (Exception e) {
 			logger.error("Cannot get sectors, " + e);
-		}
+		} 
 		return col;
 	}
-	public static Collection<AmpSector> getAllChildSectorsSortBySectorCode(Long parSecId) {
-		Session session = null;
-		Collection col = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s " + "where parent_sector_id = " + parSecId
-					+ " order by s.sectorCodeOfficial";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-
-		} catch (Exception e) {
-			logger.error("Cannot get child sectors, " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		return col;
-	}
+	
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		Session session = null;
 		Collection col = null;
@@ -682,8 +484,68 @@ public class SectorUtil {
 
 		return sec;
 	}
-	
 
+	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId){
+		
+		Session session = null;
+		Query qry = null;
+		AmpIndicatorSector indSectorId = null;
+		Iterator itr = null;
+		
+		
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpIndicatorSector.class.getName()
+			+ " s where (s.themeIndicatorId=:themeIndicatorId)";
+			
+			qry = session.createQuery(queryString);
+			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
+			itr = qry.list().iterator();
+
+			if (itr.hasNext()) {
+				indSectorId = (AmpIndicatorSector) itr.next();
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to get sector");
+			logger.debug("Exceptiion " + e);
+		}
+		
+		return indSectorId;
+	}
+	
+	public static boolean getIndIcatorSector(Long indicatorId,Long sectorId){
+		
+		Session session = null;
+		Query qry = null;
+		List <AmpIndicatorSector> indSectors = null;
+		boolean exist=false;
+		
+		
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpIndicatorSector.class.getName()
+			+ " s where (s.themeIndicatorId=:themeIndicatorId) and s.sectorId=:sectorId";
+			
+			qry = session.createQuery(queryString);
+			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
+			qry.setLong("sectorId", sectorId);
+			indSectors = qry.list();
+			if(indSectors!=null&&indSectors.size()>0){
+				exist=true;
+			}
+
+			
+		} catch (Exception e) {
+			logger.error("Unable to get sector");
+			logger.debug("Exceptiion " + e);
+		}
+		
+		return exist;
+	}
+	
 	public static AmpSector getAmpSector(Long id) {
 
 		Session session = null;
@@ -765,7 +627,7 @@ public class SectorUtil {
 	}
 
 
-	public static ArrayList<AmpSector> getAmpSectors() {
+	public static ArrayList getAmpSectors() {
 		Session session = null;
 		Query q = null;
 		AmpSector ampSector = null;
@@ -1057,19 +919,19 @@ public class SectorUtil {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @return List of sectors and sub-sectors ordered by sectors alphabetically
-	 *  and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1, b2, etc...).
-	 *  The names of the sectors are a embelished (upper case, or added some spaces)
-	 *  for better presentation.
-	 *  DO NOT save this objects back to the database  !!!!
+	 *  and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1, b2, etc...). 
+	 *  The names of the sectors are a embelished (upper case, or added some spaces) 
+	 *  for better presentation. 
+	 *  DO NOT save this objects back to the database  !!!! 
 	 */
 	public static List<AmpSector> getAmpSectorsAndSubSectors( String configurationName ) {
 		List<AmpSector> ret 	= new ArrayList<AmpSector>();
 		Long id					= null;
 		try {
-			Collection<AmpClassificationConfiguration> configs	=
+			Collection<AmpClassificationConfiguration> configs	= 
 					 SectorUtil.getAllClassificationConfigs();
 			Iterator<AmpClassificationConfiguration> confIter	= configs.iterator();
 			while ( confIter.hasNext() ) {
@@ -1086,52 +948,18 @@ public class SectorUtil {
 					AmpSector ampSector = iter.next();
 					ampSector.setName( ampSector.getName().toUpperCase() );
 					ret.add(ampSector);
-					Collection<AmpSector> dbChildReturnSet =
+					Collection<AmpSector> dbChildReturnSet = 
 							SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
 					Iterator<AmpSector> iterSub = dbChildReturnSet.iterator();
 					while (iterSub.hasNext()) {
 						AmpSector ampSubSector = (AmpSector) iterSub.next();
-						String temp = " -- " + ampSubSector.getName();
+						String temp = " -- " + ampSubSector.getName();				
 						ampSubSector.setName(temp);
 						ret.add(ampSubSector);
 					}
 				}
 			}
-
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return ret;
-	}
-	public static List<AmpSector> getAmpSectorsAndSubSectorsHierarchy( String configurationName ) {
-		List<AmpSector> ret 	= new ArrayList<AmpSector>();
-		Long id					= null;
-		try {
-			Collection<AmpClassificationConfiguration> configs	=
-					 SectorUtil.getAllClassificationConfigs();
-			Iterator<AmpClassificationConfiguration> confIter	= configs.iterator();
-			while ( confIter.hasNext() ) {
-				AmpClassificationConfiguration conf		= confIter.next();
-				if ( configurationName.equals( conf.getName() ) ) {
-					if ( conf.getClassification()!= null )
-						id	= conf.getClassification().getAmpSecSchemeId();
-				}
-			}
-			if ( id != null ) {
-				Collection<AmpSector> dbReturnSet = SectorUtil.getAllParentSectors(id);
-				Iterator<AmpSector> iter = dbReturnSet.iterator();
-				while (iter.hasNext()) {
-					AmpSector ampSector = iter.next();
-					ampSector.setName( ampSector.getName().toUpperCase() );
-					ret.add(ampSector);
-					Collection<AmpSector> dbChildReturnSet =
-							SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
-					ampSector.getChildren().addAll( dbChildReturnSet);
-				}
-			}
-
+		
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1158,44 +986,6 @@ public class SectorUtil {
 			queryString ="select pi from "+AmpSectorScheme.class.getName()+" pi ";
 			qry = session.createQuery(queryString);
 			col = qry.list();
-		}
-		catch(Exception ex)
-		{
-			logger.error("Unable to get report names  from database " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2)
-			{
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return col;
-	}
-	/*
-	 * this is to get the level one sectors from the AmpSector table sorted by officialCode
-	 */
-
-	public static Collection getSectorLevel1SortBySectorCode(Integer schemeId)
-	{
-		String queryString = null;
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-
-		try
-		{
-			session = PersistenceManager.getSession();
-			queryString ="select pi from "+AmpSector.class.getName()+" pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null order by pi.sectorCodeOfficial ";
-			qry = session.createQuery(queryString);
-			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
-			col = qry.list();
-			session.flush();
 		}
 		catch(Exception ex)
 		{
@@ -1289,11 +1079,11 @@ public class SectorUtil {
 		}
 		return col;
 	}
-
-
+        
+        
     /**
      * Returns All  Configurations of Classifications
-     *
+     * 
      * @return All Configurations
      * @throws DgException If exception occurred
      */
@@ -1319,7 +1109,7 @@ public class SectorUtil {
 
     /**
      * Returns Classification Configuration by Configuration Id
-     *
+     * 
      * @param configId Configuration Id
      * @return Classification Configuration using  Configuration Id
      * @throws DgException If exception occurred
@@ -1343,12 +1133,12 @@ public class SectorUtil {
     }
 
     /**
-     * Returns true if specified classification is selected as default classification
+     * Returns true if specified classification is selected as default classification 
      * in the configuration
      * otherwise returns false.
-     *
+     * 
      * @param classificationId  Id of classification
-     * @return true If specified classification is selected as default classification
+     * @return true If specified classification is selected as default classification 
      * in the configuration
      * @throws DgException If exception occurred
      */
@@ -1380,12 +1170,12 @@ public class SectorUtil {
     }
 
     /**
-     * adds or update classification configuration
-     *
-     *
+     * adds or update classification configuration 
+     * 
+     * 
      * @param configId  Id of configuration
      * @param configName Name of configuration
-     * @param multiSector
+     * @param multiSector  
      * @param classification Default classification
      * @throws DgException If exception occurred
      */
@@ -1427,32 +1217,7 @@ public class SectorUtil {
         }
 
     }
-
-    public static void updateClassificationConfig(AmpClassificationConfiguration config) throws DgException {
-
-        Session session = null;
-        Transaction tx = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
-            session.saveOrUpdate(config);
-            tx.commit();
-        } catch (Exception ex) {
-            logger.error("Unable to save config to database " + ex.getMessage());
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-            }
-            throw new DgException(ex);
-
-        }
-
-    }
-
-
+    
     /**
      * Loads AmpClassificationConfiguration bean which is primary.
      * Please see next method which is old version and was not touch to not damage anything.
@@ -1478,12 +1243,12 @@ public class SectorUtil {
 
         }
     }
-
+    
     /**
      * gets id of classification which is selected in primary configuration
+     * 
      *
-     *
-     * @return Id of classification
+     * @return Id of classification  
      * @throws DgException If exception occurred
      */
     public static Long getPrimaryConfigClassificationId() throws DgException {
@@ -1522,9 +1287,9 @@ public class SectorUtil {
         return id;
 
     }
-
+    
     /***
-     *
+     * 
      * @param classificationId
      */
     public static void deleteClassification (Long classificationId){
@@ -1679,15 +1444,48 @@ public class SectorUtil {
                                       }
 		}
 
+         
+                
+                public static void deleteIndSector(Long sectorid,Long indid){
+	        	
+        	    logger.info(" deleting the indsectors");
+	   			Session session = null;
+	   			Transaction tx = null;
+	   			AmpThemeIndicators ampThemeInd=null;
+        	   
+        	   try {
+        		   session = PersistenceManager.getRequestDBSession();
+        		   tx = session.beginTransaction();
+        		   ampThemeInd=(AmpThemeIndicators)session.load(AmpThemeIndicators.class,indid);
+        		   Iterator itr=ampThemeInd.getSectors().iterator();
+        		   while(itr.hasNext()){
+        			   AmpIndicatorSector ind=(AmpIndicatorSector)itr.next();
+        			   if(ind.getSectorId().getAmpSectorId().equals(sectorid)){
+        				   itr.remove();
+        				   session.delete(ind);
+        				     
+        			   }
+        		   }
+        		   session.update(ampThemeInd);
+        		   tx.commit();
+        		   session.flush();
+        		   
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				logger.error("Exception from deleteIndSectors:" + e.getMessage());
+				e.printStackTrace(System.out);
+			}
+        	   
+           }
+                
 
-
-      
     public static Set<AmpSector> getSectorDescendents( Collection<AmpSector> parentSectors ) {
     	Set<AmpSector> generatedSectors	= new HashSet<AmpSector>();
-
+    	
     	generatedSectors.addAll( parentSectors );
     	Iterator sectorIterator=parentSectors.iterator();
-
+		
 		while(sectorIterator.hasNext())
 		{//process each sector and get all its children
 			AmpSector currentSector=(AmpSector)sectorIterator.next();
@@ -1695,7 +1493,7 @@ public class SectorUtil {
 			{
 				Collection childSectors=SectorUtil.getAllChildSectors(currentSector.getAmpSectorId());
 				generatedSectors.addAll(childSectors); //add the children sectors to the filter
-
+				
 				//add the grand children
 				Iterator childSectorsIterator=childSectors.iterator();
 				while(childSectorsIterator.hasNext())
@@ -1704,35 +1502,14 @@ public class SectorUtil {
 					Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
 					generatedSectors.addAll(grandChildrenSectors);
 				}
-
+				
 			}
-
+		
 		}
-
+		
 		return generatedSectors;
     }
-
-    public static class HelperSectorNameComparator implements Comparator<AmpSector> {
-        Locale locale;
-        Collator collator;
-
-        public HelperSectorNameComparator(){
-            this.locale=new Locale("en", "EN");
-        }
-
-        public HelperSectorNameComparator(String iso) {
-            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-        }
-
-        public int compare(AmpSector o1, AmpSector o2) {
-            collator = Collator.getInstance(locale);
-            collator.setStrength(Collator.TERTIARY);
-
-            int result = collator.compare(o1.getName(), o2.getName());
-            return result;
-        }
-    }
-
+                
 	/*
 	 * this is to delete a sector
 
@@ -1783,21 +1560,4 @@ public class SectorUtil {
 			}
 		}
                 */
-//TODO replace with recursive method
-    public static List<AmpSector> getAllDescendants(Long parentId) {
-        // we have only three levels of sectors...
-        List<AmpSector> sectors = new ArrayList<AmpSector>();
-        sectors.add(getAmpSector(parentId));
-        List<AmpSector> childrenSectors = getAmpSubSectors(parentId);
-        if(childrenSectors!=null){
-            sectors.addAll(childrenSectors);
-             for (AmpSector sector : childrenSectors) {
-                List<AmpSector> grandChildren = getAmpSubSectors(sector.getAmpSectorId());
-                if( grandChildren!=null){
-                     sectors.addAll(grandChildren);
-                }
-            }
-        }
-        return sectors;
-    }
 }

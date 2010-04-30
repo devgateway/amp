@@ -21,9 +21,9 @@
 			<td width="30%" align="right" valign="top" nowrap="nowrap"
 				bgcolor="#f4f4f2" class="t-name"><img id="group_funding_plus"
 				onclick="toggleGroup('group_funding')"
-				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" /> <img
+				src="/TEMPLATE/ampTemplate/images/arrow_right.gif" /> <img
 				id="group_funding_minus" onclick="toggleGroup('group_funding')"
-				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"
+				src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
 				style="display: none" /> <digi:trn key="aim:funding">Funding</digi:trn>
 			</td>
 			<td bgcolor="#ffffff"><b>
@@ -159,7 +159,8 @@
 														type="org.digijava.module.aim.helper.Funding"></bean:define>
 													<jsp:include page="previewActivityFundingCommitments.jsp" />
 
-													<feature:display module="Funding"	name="Disbursement">
+													<feature:display module="Funding"
+														name="Disbursement">
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
 													</feature:display>
 
@@ -179,13 +180,19 @@
 												<!-- end funding detail --></td>
 												</tr>
 												<tr>
+
 													<td bgcolor="#ffffff">
-														<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-															<FONT color=blue>* <digi:trn>The amount entered are in thousands (000)</digi:trn></FONT>
-														</gs:test>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+													<FONT color=blue>* <digi:trn
+														key="aim:theAmountEnteredAreInThousands">
+																				The amount entered are in thousands (000)
+		  												</digi:trn>
+													</FONT>
+</gs:test>
 													</td>
 												</tr>
-											</table>											
+											</table>
+											
 											<br><br>
 											</td>
 										</tr>
@@ -229,29 +236,39 @@
 	                        	</c:if>&nbsp;        
 	                        </td>
                         </tr>
-                        <feature:display module="Funding" name="Disbursement">
-	                        <tr>
-	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
-	                            	<digi:trn>TOTAL PLANNED DISBURSEMENT:</digi:trn>
-	                            </td>
-	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-	                                <c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
-		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" />
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
-	                                </c:if> &nbsp;
-	                             </td>
-	                        </tr>
-	                        <tr>
-	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-	                            	<digi:trn>TOTAL ACTUAL DISBURSEMENT </digi:trn>
-	                            </td>
-	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-	                                <c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
-		                                <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" />
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
-	                                </c:if>&nbsp;
-	                             </td>
-	                        </tr>
+                        <feature:display module="Funding"
+                            name="Disbursement">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+                                key='aim:totalplanneddisbursement'>
+                                TOTAL PLANNED DISBURSEMENT:	
+                                </digi:trn>
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
+	                                <bean:write
+	                                name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> <bean:write
+	                                name="aimEditActivityForm" property="currCode" />
+                                </c:if> &nbsp;
+                             </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000"><digi:trn
+                                key='aim:totalActualdisbursement'>
+                                                                                                        TOTAL ACTUAL DISBURSEMENT </digi:trn>
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
+	                                <bean:write
+	                                name="aimEditActivityForm" property="funding.totalDisbursements" /> <bean:write
+	                                name="aimEditActivityForm" property="currCode" />
+                                </c:if>&nbsp;
+                             </td>
+                        </tr>
                         </feature:display>
                         <feature:display module="Funding" name="Expenditures">
                         <tr>

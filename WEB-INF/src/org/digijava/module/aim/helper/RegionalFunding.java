@@ -5,7 +5,6 @@
 
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -39,18 +38,18 @@ public class RegionalFunding {
 	private Collection commitments;
 	private Collection disbursements;
 	private Collection expenditures;
-	private BigDecimal totCommitments;
-	private BigDecimal totDisbursements;
-	private BigDecimal totExpenditures;
-	private BigDecimal totUnDisbursed;
-	private BigDecimal totUnExpended;
+	private double totCommitments;
+	private double totDisbursements;
+	private double totExpenditures;
+	private double totUnDisbursed;
+	private double totUnExpended;
 	
 	public RegionalFunding() {
-		totCommitments = new BigDecimal(0);
-		totDisbursements =  new BigDecimal(0);
-		totExpenditures =  new BigDecimal(0);
-		totUnDisbursed =  new BigDecimal(0);
-		totUnExpended =  new BigDecimal(0);
+		totCommitments = 0;
+		totDisbursements = 0;
+		totExpenditures = 0;
+		totUnDisbursed = 0;
+		totUnExpended = 0;
 	}
 
 	/**
@@ -138,70 +137,70 @@ public class RegionalFunding {
 	/**
 	 * @return Returns the totCommitments.
 	 */
-	public BigDecimal getTotCommitments() {
+	public double getTotCommitments() {
 		return totCommitments;
 	}
 
 	/**
 	 * @param totCommitments The totCommitments to set.
 	 */
-	public void setTotCommitments(BigDecimal totCommitments) {
+	public void setTotCommitments(double totCommitments) {
 		this.totCommitments = totCommitments;
 	}
 
 	/**
 	 * @return Returns the totDisbursements.
 	 */
-	public BigDecimal getTotDisbursements() {
+	public double getTotDisbursements() {
 		return totDisbursements;
 	}
 
 	/**
 	 * @param totDisbursements The totDisbursements to set.
 	 */
-	public void setTotDisbursements(BigDecimal totDisbursements) {
+	public void setTotDisbursements(double totDisbursements) {
 		this.totDisbursements = totDisbursements;
 	}
 
 	/**
 	 * @return Returns the totExpenditures.
 	 */
-	public BigDecimal getTotExpenditures() {
+	public double getTotExpenditures() {
 		return totExpenditures;
 	}
 
 	/**
 	 * @param totExpenditures The totExpenditures to set.
 	 */
-	public void setTotExpenditures(BigDecimal totExpenditures) {
+	public void setTotExpenditures(double totExpenditures) {
 		this.totExpenditures = totExpenditures;
 	}
 
 	/**
 	 * @return Returns the totUnDisbursed.
 	 */
-	public BigDecimal getTotUnDisbursed() {
+	public double getTotUnDisbursed() {
 		return totUnDisbursed;
 	}
 
 	/**
 	 * @param totUnDisbursed The totUnDisbursed to set.
 	 */
-	public void setTotUnDisbursed(BigDecimal totUnDisbursed) {
+	public void setTotUnDisbursed(double totUnDisbursed) {
 		this.totUnDisbursed = totUnDisbursed;
 	}
 
 	/**
 	 * @return Returns the totUnExpended.
 	 */
-	public BigDecimal getTotUnExpended() {
+	public double getTotUnExpended() {
 		return totUnExpended;
 	}
 
 	/**
 	 * @param totUnExpended The totUnExpended to set.
 	 */
-	public void setTotUnExpended(BigDecimal totUnExpended) {
+	public void setTotUnExpended(double totUnExpended) {
 		this.totUnExpended = totUnExpended;
 	}
 	

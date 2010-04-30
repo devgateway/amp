@@ -6,18 +6,11 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.form.EditActivityForm.Survey;
-import org.digijava.module.aim.util.Output;
 
-import com.rc.retroweaver.runtime.Collections;
-
-public class AmpAhsurvey implements Versionable {
+public class AmpAhsurvey {
 
 	private Long ampAHSurveyId;
 
@@ -27,7 +20,7 @@ public class AmpAhsurvey implements Versionable {
 	private AmpActivity ampActivityId;
 	private AmpOrganisation ampDonorOrgId;
     private AmpOrganisation pointOfDeliveryDonor;
-	private Set<AmpAhsurveyResponse> responses;
+	private Set responses;
 
 	/**
 	 * @return Returns the ampAHSurveyId.
@@ -44,13 +37,13 @@ public class AmpAhsurvey implements Versionable {
 	/**
 	 * @return Returns the responses.
 	 */
-	public Set<AmpAhsurveyResponse> getResponses() {
+	public Set getResponses() {
 		return responses;
 	}
 	/**
 	 * @param responses The responses to set.
 	 */
-	public void setResponses(Set<AmpAhsurveyResponse> responses) {
+	public void setResponses(Set responses) {
 		this.responses = responses;
 	}
 	/**
@@ -91,7 +84,7 @@ public class AmpAhsurvey implements Versionable {
 	public boolean equals(Object obj) {
 		if(obj instanceof AmpAhsurvey) {
 			AmpAhsurvey aux = (AmpAhsurvey) obj;
-			if (aux.getAmpAHSurveyId() != null && aux.getAmpAHSurveyId() == this.getAmpAHSurveyId()) {
+			if(aux.getAmpAHSurveyId() == this.getAmpAHSurveyId()) {
 				return true;
 			} else {
 				return false;
@@ -108,75 +101,5 @@ public class AmpAhsurvey implements Versionable {
 		} else {
 			return 0;
 		}
-	}
-	
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		AmpAhsurvey aux = (AmpAhsurvey) obj;
-		if (this.ampDonorOrgId.equals(aux.getAmpDonorOrgId())) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	@Override
-	public Object getValue() {
-
-		Comparator surveyComparator = new Comparator() {
-			public int compare(Object o1, Object o2) {
-				AmpAhsurveyResponse aux1 = (AmpAhsurveyResponse) o1;
-				AmpAhsurveyResponse aux2 = (AmpAhsurveyResponse) o2;
-				return aux1.getAmpQuestionId().getAmpQuestionId().compareTo(aux2.getAmpQuestionId().getAmpQuestionId());
-			}
-		};
-
-		String ret = "";
-		ret = this.pointOfDeliveryDonor.getAcronym();
-		List<AmpAhsurveyResponse> auxList = new ArrayList<AmpAhsurveyResponse>(this.responses);
-		Collections.sort(auxList, surveyComparator);
-		Iterator<AmpAhsurveyResponse> iter = auxList.iterator();
-		while (iter.hasNext()) {
-			AmpAhsurveyResponse auxResponse = iter.next();
-			ret = ret
-					+ ((auxResponse.getResponse() != null && !auxResponse.getResponse().equals("nil")) ? auxResponse
-							.getResponse() : "-");
-		}
-		return ret;
-	}
-	@Override
-	public Output getOutput() {
-		Comparator surveyComparator = new Comparator() {
-			public int compare(Object o1, Object o2) {
-				AmpAhsurveyResponse aux1 = (AmpAhsurveyResponse) o1;
-				AmpAhsurveyResponse aux2 = (AmpAhsurveyResponse) o2;
-				return aux1.getAmpQuestionId().getAmpQuestionId().compareTo(aux2.getAmpQuestionId().getAmpQuestionId());
-			}
-		};
-
-		Output out = new Output();
-		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(new Output(null, new String[] {"Donor: " }, new Object[] { this.ampDonorOrgId.getName() }));
-		out.getOutputs().add(
-				new Output(null, new String[] {"<br/>", "PoDD: " }, new Object[] { this.pointOfDeliveryDonor.getName() }));
-		out.getOutputs().add(
-				new Output(new ArrayList(), new String[] { "<br/>", "Questions:" }, new Object[] { "" }));
-		Output questions = out.getOutputs().get(out.getOutputs().size() - 1);
-
-		String responses = "";
-		if (this.responses != null) {
-			List<AmpAhsurveyResponse> auxList = new ArrayList<AmpAhsurveyResponse>(this.responses);
-			Collections.sort(auxList, surveyComparator);
-			Iterator<AmpAhsurveyResponse> iter = auxList.iterator();
-			while (iter.hasNext()) {
-				AmpAhsurveyResponse auxResponse = iter.next();
-				Output auxOutResp = new Output();
-				auxOutResp.setTitle(auxResponse.getOutput().getTitle());
-				auxOutResp.setValue(auxResponse.getOutput().getValue());
-				if (auxOutResp.getValue() != null) {
-					questions.getOutputs().add(auxOutResp);
-				}
-			}
-		}
-		return out;
 	}
 }

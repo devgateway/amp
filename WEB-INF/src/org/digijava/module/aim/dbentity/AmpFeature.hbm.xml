@@ -15,7 +15,6 @@
 		<property name="active" column="active" type="java.lang.Boolean" />
 
 		<set name="templates" table="amp_template_features" inverse="true">
-			<cache usage="read-write" />
 			<key column="featureId" />
 			<many-to-many column="templateId"
 				class="org.digijava.module.aim.dbentity.FeatureTemplates" />

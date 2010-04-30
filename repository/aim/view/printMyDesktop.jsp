@@ -85,10 +85,10 @@
 								<digi:trn key="aim:project">Project</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 1}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 									</c:if>
 								</c:if>
 							</TD>
@@ -99,10 +99,10 @@
 								<digi:trn key="aim:ampId">AMP ID</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 2}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 									</c:if>
 								</c:if>
 							</TD>
@@ -113,10 +113,10 @@
 								<digi:trn key="aim:donor">Donor(s)</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 3}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 									</c:if>
 								</c:if>
 							</TD>
@@ -128,10 +128,10 @@
 								<digi:trn key="aim:totalCommitments">Total Commitments</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 4}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 									</c:if>
 								</c:if>
 							</TD>

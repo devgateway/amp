@@ -24,7 +24,6 @@ public class CurrencyRateForm
   private Collection currencyRates;
   private Collection allRates;
   private String filterByCurrCode;
-  private String filterByBaseCode;
   private int numResultsPerPage;
   private String view;
   private String prevFromDate = "";
@@ -397,12 +396,5 @@ public String getLastRateUpdate() {
 
 public void setLastRateUpdate(String lastRateUpdate) {
 	this.lastRateUpdate = lastRateUpdate;
-}
-public String getFilterByBaseCode() {
-	return filterByBaseCode;
-}
-
-public void setFilterByBaseCode(String filterByBaseCode) {
-	this.filterByBaseCode = filterByBaseCode;
 }
 }

@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.jfree.chart.urls.PieURLGenerator;
 import org.jfree.data.general.PieDataset;
 
@@ -24,11 +24,11 @@ public class PieChartURLGenerator implements PieURLGenerator, Serializable {
     private String categoryParameterName = "category";
     /** trsanslation language of the Category parameter  */
     private String languageCode = "en";
-    private Long siteId = new Long(3);
+    private String siteId = "3";
     /** The pie index parameter name. */
     private String indexParameterName = "pieIndex";
 
-    public PieChartURLGenerator(String prefix, String categoryParameterName, String languageCode, Long siteId) {
+    public PieChartURLGenerator(String prefix, String categoryParameterName, String languageCode, String siteId) {
         if (prefix == null) {
             throw new IllegalArgumentException(
                     "Null 'prefix' argument.");
@@ -49,14 +49,14 @@ public class PieChartURLGenerator implements PieURLGenerator, Serializable {
         String keyEng = "";
         try {
             // get risks associated with this activity
-            Collection<AmpCategoryValue> risks = IndicatorUtil.getRisks(ampActivityId);
-            Iterator<AmpCategoryValue> riskIterator = risks.iterator();
+            Collection<AmpIndicatorRiskRatings> risks = IndicatorUtil.getRisks(ampActivityId);
+            Iterator<AmpIndicatorRiskRatings> riskIterator = risks.iterator();
             while (riskIterator.hasNext()) {
-                AmpCategoryValue risk = riskIterator.next();
-                String translatedName = TranslatorWorker.translateText(risk.getValue(), languageCode, siteId);
+                AmpIndicatorRiskRatings risk = riskIterator.next();
+                String translatedName = TranslatorWorker.translateText(risk.getRatingName(), languageCode, siteId);
                 if (translatedName.equals(key.toString())) {
                     //get risk name in English, this is how we get rid of  the accents  problem
-                    keyEng = risk.getValue();
+                    keyEng = risk.getRatingName();
                     break;
                 }
             }

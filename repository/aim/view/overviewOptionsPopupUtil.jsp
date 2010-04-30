@@ -9,12 +9,12 @@
 <script type="text/javascript">
 	var contentLocal;
 
-	YAHOO.namespace("YAHOO.amptab_2");
-	YAHOO.amptab.init = function() {
-	    		var tabView = new YAHOO.widget.TabView('tabview_container_2');
+	YAHOOAmp.namespace("YAHOOAmp.amptab_2");
+	YAHOOAmp.amptab.init = function() {
+	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container_2');
 	};
 
-	YAHOO.amptab.handleClose = function() {
+	YAHOOAmp.amptab.handleClose = function() {
 		//alert('cierro');
 		//this.reload();
 		//if(navigator.appName == 'Microsoft Internet Explorer'){
@@ -24,7 +24,7 @@
 		//document.getElementById("myPOverviewframe").removeChild(contentLocal);
 	}
 		
-    var myPanelOverviewframe = new YAHOO.widget.Panel("newmyPOverviewframe", {
+    var myPanelOverviewframe = new YAHOOAmp.widget.Panel("newmyPOverviewframe", {
 		width:"700px",
 		height:"500px",
 	    fixedcenter: true,
@@ -38,7 +38,7 @@
 	    }
 	     );
 
-    myPanelOverviewframe.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+    myPanelOverviewframe.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 	
 	function initScriptsOverviewframe() {
 		//alert('initScriptsOverviewframe');
@@ -60,7 +60,7 @@
 		//var element5 = document.getElementById("myPOverviewframe");
 		//element5.appendChild(contentLocal);
 		 
-		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>Loading...</b></font></p>';
+		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
 		//contentLocal.parentElement = element5;
 		//if (panelFirstShow == 1){ 
 			contentLocal.style.display = "inline";
@@ -129,7 +129,7 @@
         var postString		= "type="+type+"&description="+key;
         //alert(postString);
         showPOverviewframe();
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/viewProjectDetails.do", OverviewframeCallback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewProjectDetails.do", OverviewframeCallback, postString);
 	}
 
 	var currentOverviewframe = window.onload;

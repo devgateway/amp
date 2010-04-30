@@ -16,6 +16,12 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
+<script language="JavaScript">
+	function load() {
+		window.print();
+	}
+	function unload() {}
+</script>
 
 <%
 	Long actId = (Long)request.getAttribute("actId");
@@ -70,14 +76,6 @@
                         </td>
                       </tr>
                       <tr>
-                          <td noWrap align="right" valign="middle"><digi:link
-                                  styleId="printWin" href="#" onclick="window.print(); return false;">
-                                  <digi:img width="17" height="20" hspace="2" vspace="2"
-                                            src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"
-                                            border="0" alt="Printer Friendly" />
-                              </digi:link></td>
-                      </tr>
-                      <tr>
                         <td width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
@@ -123,40 +121,41 @@
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										
                                          </td>
-									</tr>    
+									</tr> 
 									   	<field:display name="Objective Comments" feature="Identification">
-										<logic:present name="currentMember" scope="session">
-										<tr>
-											<td width="27%" align="right" valign="top" nowrap="nowrap" >
-												<b><digi:trn key="aim:objectiveComments">Objective Comments</digi:trn></b>	
-											</td>
-											<td bgcolor="#ffffff">
-											 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
-											 	<logic:equal name="comments" property="key" value="Objective Assumption">
-													<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments"><b>
-														<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
-														<bean:write name="comment" property="comment"/><br/>
-	                                        		</logic:iterate>
-	                                        	</logic:equal>
-	                                        	<logic:equal name="comments" property="key" value="Objective Verification">
-													<logic:iterate name="comments" id="comment" property="value"
-														type="org.digijava.module.aim.dbentity.AmpComments"><b>
-														<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</b>
-														<bean:write name="comment" property="comment"/><br/>
-	                                        		</logic:iterate>
-	                                        	</logic:equal>
-	                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
-													<logic:iterate name="comments" id="comment" property="value"
-														type="org.digijava.module.aim.dbentity.AmpComments"><b>
-														<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:</b>
-														<bean:write name="comment" property="comment"/><br/>
-	                                        		</logic:iterate>
-	                                        	</logic:equal>
-											</logic:iterate>										
-											</td>
-										</tr>
-										</logic:present>
-									</field:display>
+											<logic:present name="currentMember" scope="session">
+											<tr>
+												<td width="27%" align="right" valign="top" nowrap="nowrap" >
+													<b><digi:trn key="aim:objectiveComments">Objective Comments</digi:trn></b>	
+												</td>
+												<td bgcolor="#ffffff">
+												 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
+												 	<logic:equal name="comments" property="key" value="Objective Assumption">
+														<logic:iterate name="comments" id="comment" property="value"
+															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
+															<bean:write name="comment" property="comment"/><br/>
+		                                        		</logic:iterate>
+		                                        	</logic:equal>
+		                                        	<logic:equal name="comments" property="key" value="Objective Verification">
+														<logic:iterate name="comments" id="comment" property="value"
+															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</b>
+															<bean:write name="comment" property="comment"/><br/>
+		                                        		</logic:iterate>
+		                                        	</logic:equal>
+		                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
+														<logic:iterate name="comments" id="comment" property="value"
+															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:</b>
+															<bean:write name="comment" property="comment"/><br/>
+		                                        		</logic:iterate>
+		                                        	</logic:equal>
+												</logic:iterate>										
+												</td>
+											</tr>
+											</logic:present>
+										</field:display>
 									</field:display>
 									 </feature:display>
                                        <feature:display name="Identification" module="Project ID and Planning">   
@@ -426,8 +425,7 @@
 																</c:if>
 															</c:forEach>
 														</table>
-													</c:if>	
-												</td>
+													</c:if>										</td>
 										  </tr>
 										</field:display>
                                         
@@ -968,20 +966,20 @@
 
                         <table cellSpacing=1 cellPadding=0 border="0" bordercolor="#FF0000" width="100%">
                         <feature:display name="Planned Commitments" module="Measures">
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
-                                key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
-                            </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
+	                        <tr>
+	                            <td bgcolor="#eeeeee"
+	                                style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
+	                                key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
+	                            </td>
+	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+	                                style="border-top: 1px solid #000000">
 	                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> <bean:write
-                                name="aimEditActivityForm" property="currCode" />
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> <bean:write
+		                                name="aimEditActivityForm" property="currCode" />
 		                             </c:if>&nbsp;
-                        </td>
-                        </tr>
+	                        </td>
+	                        </tr>
                         </feature:display>
                         <tr>
                             <td bgcolor="#eeeeee"
@@ -991,8 +989,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                  <c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalCommitments" /> <bean:write
+	                                <bean:write
+	                                name="aimEditActivityForm" property="funding.totalCommitments" /> <bean:write
 	                                name="aimEditActivityForm" property="currCode" />
 	                              </c:if>&nbsp;
 	                         </td>
@@ -1009,8 +1007,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                  <c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> <bean:write
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> <bean:write
 		                                name="aimEditActivityForm" property="currCode" />
 		                          </c:if>&nbsp;
                             </td>
@@ -1024,8 +1022,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                  <c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalDisbursements" /> <bean:write
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalDisbursements" /> <bean:write
 		                                name="aimEditActivityForm" property="currCode" />
 		                          </c:if>&nbsp;
                            </td>
@@ -1040,8 +1038,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                  <c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> <bean:write
+			                                <bean:write
+			                                name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> <bean:write
 			                                name="aimEditActivityForm" property="currCode" />
 			                      </c:if>&nbsp;
                             </td>
@@ -1054,8 +1052,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                  <c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalExpenditures" /> <bean:write
+		                                <bean:write
+		                                name="aimEditActivityForm" property="funding.totalExpenditures" /> <bean:write
 		                                name="aimEditActivityForm" property="currCode" />
 		                          </c:if>&nbsp;
 		                    </td>
@@ -1078,8 +1076,8 @@
                           <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000; text-transform: uppercase;">
                                  <c:if test="${not empty aimEditActivityForm.funding.totalActualDisbursementsOrders}">
-                                <bean:write
-                                name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />	<bean:write
+	                                <bean:write
+	                                name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />	<bean:write
 	                                name="aimEditActivityForm" property="currCode" />
 	                             </c:if>&nbsp;
 	                       </td>
@@ -1095,7 +1093,7 @@
                                 style="border-top: 1px solid #000000">
                                  <c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
 		                                <bean:write
-                                name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> <bean:write
+		                                name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> <bean:write
 		                                name="aimEditActivityForm" property="currCode" />
 		                         </c:if>&nbsp;
 		                  </td>
@@ -1580,6 +1578,7 @@
 															<td vAlign="center" align="left">
 																&nbsp;<b><c:out value="${docs.title}"/></b> -
 																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
+																
 																<logic:notEqual name="docs" property="docDescription" value=" ">
 																	<br />&nbsp;
 																	<b><digi:trn key="aim:description">Description</digi:trn>:</b>
@@ -1613,7 +1612,7 @@
 																		<c:set var="translation">
 																			<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 																		</c:set>																		
-																		<a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>" onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}"><img src="/TEMPLATE/ampTemplate/imagesSource/resources/check_out.gif" border="0"></a>									
+																		<a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>" onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}"><img src="/repository/contentrepository/view/images/check_out.gif" border="0"></a>									
 																		<logic:notEmpty name="crDoc" property="description">
 																			<br />&nbsp;
 																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;
@@ -1641,7 +1640,7 @@
 														<table width="100%" class="box-border-nopadding">
 															<tr>
 																<td width="2">
-																	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/web-page.gif"/>																</td>
+																	<digi:img src="module/aim/images/web-page.gif"/>																</td>
 																<td align="left" vAlign="center">&nbsp;
 																	<b><c:out value="${links.title}"/></b> -
 																	&nbsp;&nbsp;&nbsp;<i><a href="<c:out value="${links.url}"/>">
@@ -1662,16 +1661,20 @@
 								<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b><digi:trn>Related Organizations</digi:trn></b>
-										</td>
-										<td bgcolor="#ffffff">										
-											<feature:display name="Responsible Organization" module="Organizations">
-												<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
-												<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
-													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-														<tr><td>
-														<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
-														id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+											<b>
+											<digi:trn key="aim:relatedOrganizations">
+										    Related Organizations</digi:trn>
+									  </b>									</td>
+
+										<td bgcolor="#ffffff">
+										
+										<feature:display name="Responsible Organization" module="Organizations">
+											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
+													id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<ul><li> 
 																<bean:write name="respOrg" property="name" />
 																<c:set var="tempOrgId" scope="page">${respOrg.ampOrgId}</c:set>
@@ -1681,11 +1684,11 @@
 																	</logic:notEmpty>
 																</field:display>
 															</li></ul>
-														</logic:iterate>
-														</td></tr>
-													</table>
-												</logic:notEmpty>
-												<br/>
+													</logic:iterate>
+													</td></tr>
+												</table>
+											</logic:notEmpty>
+											<br/>
 											</feature:display>
 										
                                            <feature:display name="Executing Agency" module="Organizations">
@@ -1831,117 +1834,62 @@
 								
 									</module:display>
 									
-                                     <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
-										<feature:display name="Donor Contact Information" module="Contact Information">
-											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-													<digi:trn>Donor funding contact information</digi:trn>
-												</td>
-												<td bgcolor="#ffffff">
-													<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
-														<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
-															<div>
-																<c:out value="${donorContact.contact.name}"/>
-																<c:out value="${donorContact.contact.lastname}"/> -
-																<c:forEach var="property" items="${donorContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																		<c:out value="${property.value}"/> ;
-																	</c:if>
-																</c:forEach>			
-															</div>
-														</c:forEach>
-													</c:if>																						
-												</td>
-											</tr>
-											</feature:display>
-											<feature:display name="Government Contact Information" module="Contact Information">
-											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-													<digi:trn>MOFED contact information</digi:trn>
-												</td>
-												<td bgcolor="#ffffff">
-													<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
-														<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
-															<div>
-																<c:out value="${mofedContact.contact.name}"/>
-																<c:out value="${mofedContact.contact.lastname}"/> -
-																<c:forEach var="property" items="${mofedContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																		<c:out value="${property.value}"/> ;
-																	</c:if>
-																</c:forEach>			
-															</div>
-														</c:forEach>
-													</c:if>
-												</td>
-											</tr>
-											</feature:display>
-											<feature:display name="Project Coordinator Contact Information" module="Contact Information">
-											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-													<digi:trn>Project Coordinator Contact Information</digi:trn>
-												</td>
-												<td bgcolor="#ffffff">
-													<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-														<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-															<div>
-																<c:out value="${projCoordinatorContact.contact.name}"/>
-																<c:out value="${projCoordinatorContact.contact.lastname}"/> -
-																<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																		<c:out value="${property.value}"/> ;
-																	</c:if>
-																</c:forEach>			
-															</div>
-														</c:forEach>
-													</c:if>
-												</td>
-											</tr>
-											</feature:display>
-											<feature:display name="Sector Ministry Contact Information" module="Contact Information">
-											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-													<digi:trn>Sector Ministry Contact Information</digi:trn>
-												</td>
-												<td bgcolor="#ffffff">
-													<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-														<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-															<div>
-																<c:out value="${sectorMinistryContact.contact.name}"/>
-																<c:out value="${sectorMinistryContact.contact.lastname}"/> -
-																<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																		<c:out value="${property.value}"/>;
-																	</c:if>
-																</c:forEach>			
-															</div>
-														</c:forEach>
-													</c:if>
-												</td>
-											</tr>
-										</feature:display>
-										<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
-											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
-												</td>
-												<td bgcolor="#ffffff">
-													<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-														<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-															<div>
-																<c:out value="${implExecAgencyContact.contact.name}"/>
-																<c:out value="${implExecAgencyContact.contact.lastname}"/> -
-																<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																		<c:out value="${property.value}"/>;
-																	</c:if>
-																</c:forEach>
-															</div>
-														</c:forEach>
-													</c:if>
-												</td>
-											</tr>
-										</feature:display>
+
+									
+									 
+									
+                                    <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
+									<feature:display name="Donor Contact Information" module="Contact Information">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:donorFundingContactInformation">
+										    Donor funding contact information</digi:trn>	
+									  </b>									</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.contactInfo.dnrCntFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.dnrCntLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.dnrCntEmail}"/>										</td>
+									</tr>
+									</feature:display>
+									<feature:display name="Government Contact Information" module="Contact Information">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+										<b>	<digi:trn key="aim:mofedContactInformation">
+										    MOFED contact information</digi:trn>	
+									  </b>									</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.contactInfo.mfdCntFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.mfdCntLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.mfdCntEmail}"/>										</td>
+									</tr>
+									</feature:display>
+									<feature:display name="Project Coordinator Contact Information" module="Contact Information">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:projectCoordinator">
+										    Project Coordinator Contact Information</digi:trn>	
+									  </b>									</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.contactInfo.prjCoFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.prjCoLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.prjCoEmail}"/>										</td>
+									</tr>
+									</feature:display>
+									<feature:display name="Sector Ministry Contact Information" module="Contact Information">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:sectorMinistryCnt">
+										    Sector Ministry Contact Information</digi:trn>	
+									  </b>									</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.contactInfo.secMiCntFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.secMiCntLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.secMiCntEmail}"/>										</td>
+									</tr>
+									</feature:display>
 									</module:display>
 							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
@@ -1994,7 +1942,7 @@
 											<b>
 									  <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn></b>
 									  </td>
-										<td bgcolor="#ffffff">
+									<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
@@ -2020,8 +1968,7 @@
                                                          </td>
                                                        </tr>
                                               		</table>
-                            				</c:if>
-                            			</td>
+                            				</c:if>										</td>
 									</tr>
 								  </feature:display>
 								
@@ -2038,432 +1985,15 @@
                                               <tr>
                                                 <td>
                                                 	<bean:define id="mode" value="preview" type="java.lang.String" toScope="request" />
-                                                    <jsp:include page="viewCostsSummary.jsp" flush="" />
+                                                    <jsp:include page="viewCostsSummary.jsp" flush="" />                                              
                                                 </td>
                                               </tr>
-                                            </table>
-                                            </td>
+                                            </table> 
+                                            </td>										
                                       </tr>
 									</feature:display>
 								  </logic:present>
-									
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap">
-											<b><digi:trn>IPA Contracting</digi:trn></b>
-										</td>
-										<td bgcolor="#ffffff">
-											<logic:notEmpty name="aimEditActivityForm" property="contracts">
-                                                        	<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-                                                                 <c:forEach items="${aimEditActivityForm.contracts.contracts}" var="contract" varStatus="idx">
-                                                                       <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-                                                            	           <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
-                                                            	           		<field:display name="Contract Name" feature="Contracting">
-                                                                               <tr>
-                                                                                  <td align="left">
-                                                                                     <b><digi:trn>Contract name:</digi:trn></b>
-                                                                                   </td>
-                                                                                   <td>
-                                                                	                  ${contract.contractName}
-                                                                                   </td>
-                                                                                </tr>
-                                                                                </field:display>
-                                                                                
-                                                                                <field:display name="Contract Description" feature="Contracting">
-                                                                                 <tr>
-                                                                                    <td align="left">
-                                                                                       <b><digi:trn>Description:</digi:trn></b>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                       ${contract.description}
-                                                                                     </td>
-                                                                                  </tr> 
-                                                                                  </field:display>
-                                                                                  
-                                                                                  <field:display name="Contracting Activity Category" feature="Contracting">
-                                                                                   <tr>
-                                                                                     <td align="left">
-                                                                                  	     <b><digi:trn>Activity Category:</digi:trn></b>
-                                                                                      </td>
-                                                                                       <td>
-                                                                                          <c:if test ="${not empty contract.activityCategory}">${contract.activityCategory.value}</c:if>
-                                                                                       </td>
-                                                                                    </tr>
-                                                                                    </field:display>
-                                                                                    
-                                                                                    <field:display name="Contract type" feature="Contracting">
-                                                                                     <tr>
-                                                                                     <td align="left">
-                                                                                  	     <b><digi:trn>Type</digi:trn>:</b>
-                                                                                      </td>
-                                                                                       <td>
-                                                                                          <c:if test ="${not empty contract.type}">${contract.type.value}</c:if>
-                                                                                       </td>
-                                                                                    </tr>
-                                                                                    </field:display>
-                                                                                    
-                                                                                    <field:display name="Contracting Start of Tendering" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Start of Tendering:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${contract.formattedStartOfTendering}
-                                                                                           </td>                                                                                            
-                                                                                        </tr>
-                                                                                        </field:display>	
-                                                                                        
-                                                                                        <field:display name="Signature of Contract" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Signature of Contract:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                 ${contract.formattedSignatureOfContract}
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contract Organization" feature="Contracting">
-                                                                                         <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Contract Organization:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <c:if test="${not empty contract.organization}">
-                                                                                                     ${contract.organization.name}
-                                                                                                </c:if>
-                                                                                                
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting Contractor Name" feature="Contracting">
-                                                                                         <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Contract Organization</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                     ${contract.contractingOrganizationText}
-                                                                                                
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contract Completion" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Contract Completion:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                 ${contract.formattedContractCompletion}
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting Status" feature="Contracting">
-                                                                                         <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Status:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                
-                                                                                                <c:if test ="${not empty contract.status}">
-                                                                                 
-                                                                                                    ${contract.status.value}
-                                                                                                </c:if>
-                                                                                                
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Total Amount" feature="Contracting">
-                                                                                        	<tr>
-                                                                                            	<td align="left">
-                                                                                                	<b><digi:trn>Total Amount</digi:trn>:</b>
-                                                                                            	</td>
-                                                                                            	<td>
-                                                                                                	 <aim:formatNumber value="${contract.totalAmount}" />
-                                                                               	                 ${contract.totalAmountCurrency} 
-                                                                                	            </td>
-                                                                                        	</tr>
-                                                                                    	</field:display>
-                                                                                        
-                                                                                        <field:display name="Total EC Contribution" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left" colspan="2">
-                                                                                                <b><digi:trn>Total EC Contribution:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting IB" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>IB</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <aim:formatNumber value="${contract.totalECContribIBAmount}" />
-                                                                                                ${contract.totalAmountCurrency} 
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting INV" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>INV:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                               <aim:formatNumber value="${contract.totalECContribINVAmount}" />
-                                                                                               ${contract.totalAmountCurrency}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        
-                                                                                        
-                                                                                        
-                                                                                        <field:display name="Contracting Total National Contribution" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left" colspan="2">
-                                                                                                <b><digi:trn>Total National Contribution:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting Central Amount" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Central</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <aim:formatNumber value="${contract.totalNationalContribCentralAmount}" />
-                                                                                                ${contract.totalAmountCurrency} 
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting Regional Amount" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Regional</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <aim:formatNumber value="${contract.totalNationalContribRegionalAmount}" />  
-                                                                                              ${contract.totalAmountCurrency}
-                                                                                   
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting IFIs" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>IFIs</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <aim:formatNumber value="${contract.totalNationalContribIFIAmount}" />
-                                                                                               ${contract.totalAmountCurrency}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        
-                                                                                        <field:display name="Total Private Contribution" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left" colspan="2">
-                                                                                                <b><digi:trn>Total Private Contribution:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting IB" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>IB:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <aim:formatNumber value="${contract.totalPrivateContribAmount}" />
-                                                                                                ${contract.totalAmountCurrency}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        <field:display name="Total Disbursements of Contract" feature="Contracting">
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Total Disbursements</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                            									<aim:formatNumber value="${contract.totalDisbursements}" /> &nbsp; 
-                                                            									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-                                                            										&nbsp; ${aimEditActivityForm.currCode}
-                                                            									</logic:empty>
-                                                            									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
-                                                            										&nbsp; ${contract.dibusrsementsGlobalCurrency}
-                                                            									</logic:notEmpty>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </field:display>  
-                                                                                    <field:display name="Total Funding Disbursements of Contract" feature="Contracting">
-											                                          <tr>
-											                                              <td align="left">
-											                                                  <b><digi:trn>Total Funding Disbursements</digi:trn>:</b>
-											                                              </td>
-											                                              <td>
-											              									<aim:formatNumber value="${contract.fundingTotalDisbursements}" /> &nbsp;
-											              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-											              										&nbsp; ${contract.totalAmountCurrency}
-											              									</logic:empty>
-											              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
-											              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
-											              									</logic:notEmpty>
-											                                              </td>
-											                                          </tr>
-											                                      </field:display>  
-                                                                                    <field:display name="Contract Execution Rate" feature="Contracting">
-                                                                                
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn>Contract Execution Rate</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                            										&nbsp; ${contract.executionRate}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </field:display>
-                                                                                    
-                                                                                    <field:display name="Contract Funding Execution Rate" feature="Contracting">
-											                                          <tr>
-											                                              <td align="left">
-											                                                  <b><digi:trn>Contract Execution Rate</digi:trn>:</b>
-											                                              </td>
-											                                              <td>
-											              										&nbsp; ${contract.fundingExecutionRate}
-											                                              </td>
-											                                          </tr>
-											                                      </field:display>   
-                                                                                        
-                                                                                        <field:display name="Disbursements" feature="Contracting">
-                                                                                        <tr>
-                                                                                    
-                                                                                            <td colspan="2">
-                                                                                                <b><digi:trn>Disbursements:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td>&nbsp;
-                                                                                            </td>
-                                                                                            <td>
-                                                                                               
-                                                                                    
-                                                                                                    <logic:notEmpty name="contract" property="disbursements">
-                                                                                                         <table>
-                                                                                              
-                                                                                                        <c:forEach  items="${contract.disbursements}" var="disbursement" >
-                                                                                                            <tr>
-                                                                                          
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    <c:if test="${disbursement.adjustmentType==0}">
-                                                                                                                          <digi:trn>Actual</digi:trn>
-                                                                                                                   </c:if>
-                                                                                                                    <c:if test="${disbursement.adjustmentType==1}">
-                                                                                                                          <digi:trn>Planned</digi:trn>
-                                                                                                                   </c:if>
-                                                                                                    
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                   <aim:formatNumber value="${disbursement.amount}" />
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                   ${disbursement.currency.currencyName} 
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    ${disbursement.disbDate}
-                                                                                                                    
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        </c:forEach>
-                                                                                                        </table>
-                                                                                                        
-                                                                                                    </logic:notEmpty>						
-                                                                                                		
-                                                                                            </td>		
-                                                                                        </tr>		
-                                                                                        
-                                                                                        
-                                                                                        <field:display name="Contracting Funding Disbursements" feature="Contracting">
-                                                                                        <tr>
-                                                                                    
-                                                                                            <td colspan="2">
-                                                                                                <b><digi:trn>Funding Disbursements:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </field:display>
-                                                                                        
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td>&nbsp;
-                                                                                            </td>
-                                                                                            <td>
-                                                                                            
-                                                                                             <logic:notEmpty name="aimEditActivityForm" property="funding.fundingDetails">
-										                                                           <table width="100%">
-																								    <tr>
-																										<td><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn>Adjustment Type Disbursement</digi:trn></field:display></td>
-																										<td><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn>Amount Disbursement</digi:trn></field:display></td>
-																										<td><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn>Currency Disbursement</digi:trn></field:display></td>
-																										<td><field:display name="Date Disbursement" feature="Disbursement"><digi:trn>Date Disbursement</digi:trn></field:display></td>
-																										
-																									</tr>
-											                                                           <c:forEach  items="${aimEditActivityForm.funding.fundingDetails}" var="fundingDetail" >
-											                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
-											                                                           		<c:if test="${fundingDetail.transactionType == 1}">
-											                                                               <tr>
-											                                                                   <td align="center" valign="top">
-											                                                                       <c:if test="${fundingDetail.adjustmentType==0}">
-										                                                                             <digi:trn>Actual</digi:trn>
-											                                                                       </c:if>
-											                                                                       <c:if test="${fundingDetail.adjustmentType==1}">
-										                                                                             <digi:trn>Planned</digi:trn>
-											                                                                       </c:if>
-											                                                                   </td>
-											                                                                   <td align="center" valign="top">
-											                                                                      <aim:formatNumber value="${fundingDetail.transactionAmount}" />
-											                                                                   </td>
-											                                                                   <td align="center" valign="top">
-											                                                                      ${fundingDetail.currencyCode} 
-											                                                                   </td>
-											                                                                   <td align="center" valign="top">
-											                                                                       ${fundingDetail.transactionDate}
-											                                                                   </td>
-											                                                               </tr>
-											                                                               </c:if>
-											                                                               </logic:equal>
-											                                                           </c:forEach>
-										                                                           </table>
-										                                                       </logic:notEmpty>
-                                                                                            
-                                                                                            </td>		
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                   </td></tr>
-                                                                                  
-                                                                                </c:forEach>
-                                                                                </table>
-                                                                                
-                                                                            </logic:notEmpty>
-										</td>
-									</tr>
-								        
+									        
                            		
 													
 
@@ -2535,27 +2065,25 @@
 									</tr>
 									</logic:notEmpty>
 									</field:display>
-									<%-- 
 									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
-										<field:display name="Data Team Leader" feature="Identification">
-											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" >
-													<b>
-													<digi:trn key="aim:activityTeamLeader">
-												    Data Team Leader</digi:trn>
-													</b>
-												</td>
-		
-												<td bgcolor="#ffffff">											
-														<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
-													<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
-													<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-												</td>
-											</tr>
-										</field:display>
+									<field:display name="Data Team Leader" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+											<digi:trn key="aim:activityTeamLeader">
+										    Data Team Leader</digi:trn>
+											</b>
+										</td>
+
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>											
+										</td>
+									</tr>
+									</field:display>
 									</logic:notEmpty>
-									
-									--%>									
+
 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
 									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												
 										<tr>

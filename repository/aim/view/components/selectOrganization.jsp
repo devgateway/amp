@@ -120,7 +120,6 @@
 		document.aimSelectOrganizationForm.ampOrgTypeId.value=-1;
 		document.aimSelectOrganizationForm.keyword.value="";
 		document.aimSelectOrganizationForm.tempNumResults.value=10;
-		document.aimSelectOrganizationForm.matchEntireWord.checked=false;
 	
 	}
 
@@ -208,8 +207,6 @@
 <digi:form action="/selectOrganizationComponent.do" method="post">
 
 <html:hidden property="selectedOrganisationFromPages" />
-<html:hidden property="valueHoder" />
-<html:hidden property="nameHolder" />
 	<script language="JavaScript">
 	//if use client yes
 	
@@ -247,7 +244,6 @@
         <% } %>
     </logic:iterate>
 
-<html:hidden name="aimSelectOrganizationForm" property="callbackFunction" styleId="callbackFunction"/>
 
 
 	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -264,58 +260,55 @@
 								<digi:trn>Search Organizations</digi:trn></td>
 						</tr>
 						<tr>
-							<td align="center" bgcolor=#ECF3FD>
-							<table cellSpacing=2 cellPadding=2>
-								<tr>
-									<td><digi:trn key="aim:selectOrganizationType">
-											Select Organization type</digi:trn></td>
-									<td><c:set var="translation">
-										<digi:trn key="aim:addActivityAllOrganizationTypes">All</digi:trn>
-									</c:set> <html:select property="ampOrgTypeId" styleClass="inp-text">
-										<logic:equal value="false" name="aimSelectOrganizationForm" property="filterDonorGroups">
-											<html:option value="-1">${translation}</html:option>
-										</logic:equal>
-										<logic:notEmpty name="aimSelectOrganizationForm"
-											property="orgTypes">
-											<html:optionsCollection name="aimSelectOrganizationForm"
-												property="orgTypes" value="ampOrgTypeId" label="orgType" />
-										</logic:notEmpty>
-									</html:select></td>
-								</tr>
-								<tr>
-									<td><digi:trn key="aim:enterKeyword">
-											Enter a keyword</digi:trn></td>
-									<td><html:text property="keyword" styleClass="inp-text" />
-									</td>
-								</tr>
-								<tr>
-									<td><digi:trn key="aim:numResultsPerPage">
-											Number of results per page</digi:trn></td>
-									<td><html:text property="tempNumResults" size="2"
-										styleClass="inp-text" /></td>
-								</tr>
-
-								<tr>
-									<td><digi:trn key="aim:matchEntireWordOnly">
-											Match Entire Word Only</digi:trn></td>
-									<td><html:checkbox property="matchEntireWord" value="true"></html:checkbox>
-									</td>
-								</tr>
-
-								<tr>
-									<td align="center" colspan=2>
-										<html:button styleClass="dr-menu" property="submitButton" onclick="return searchOrganization()">
-											<digi:trn>Search</digi:trn>
-										</html:button> &nbsp; 
-										<html:button styleClass="dr-menu" property="resetButton" onclick="resetForm()">
-											<digi:trn>Clear</digi:trn>
-										</html:button> &nbsp; 
-										<html:button styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
-											<digi:trn>Close</digi:trn>
-										</html:button>
-									</td>
-								</tr>
-							</table>
+							<td align="center" bgcolor="#ECF3FD">
+								<table cellSpacing="2" cellPadding="2">
+									<tr>
+										<td>
+											<digi:trn>Select Organization type</digi:trn>
+										</td>
+										<td>
+											<c:set var="translation">
+												<digi:trn>All</digi:trn>
+											</c:set>
+											<html:select property="ampOrgTypeId" styleClass="inp-text">
+												<html:option value="-1">${translation}</html:option>
+												<logic:notEmpty name="aimSelectOrganizationForm" property="orgTypes">
+													<html:optionsCollection name="aimSelectOrganizationForm" property="orgTypes" value="ampOrgTypeId" label="orgType" />
+												</logic:notEmpty>
+											</html:select>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<digi:trn>Enter a keyword</digi:trn>
+										</td>
+										<td>
+											<html:text property="keyword" styleClass="inp-text" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<digi:trn>Number of results per page</digi:trn>
+										</td>
+										<td>
+											<html:text property="tempNumResults" size="2" styleClass="inp-text" />
+										</td>
+									</tr>
+	
+									<tr>
+										<td align="center" colspan="2">
+											<html:button styleClass="dr-menu" property="submitButton" onclick="return searchOrganization()">
+												<digi:trn>Search</digi:trn>
+											</html:button> &nbsp; 
+											<html:button styleClass="dr-menu" property="resetButton" onclick="resetForm()">
+												<digi:trn>Clear</digi:trn>
+											</html:button> &nbsp;
+											<html:button styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+												<digi:trn>Close</digi:trn>
+											</html:button>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
 					</table>
@@ -332,13 +325,13 @@
 							<logic:notEmpty name="aimSelectOrganizationForm" property="organizations">
 								<tr>
 									<td align="left" vAlign="top">
-										<table width="100%" cellPadding="3" id="searchResults">
+										<table width="100%" cellPadding="3">
 											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">		
 												<tr>
 													<td bgcolor=#ECF3FD width="1%">&nbsp;</td>		
 													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">		
 														<td bgcolor="#ECF3FD" width="10%">
-															<html:multibox	property="selOrganisations" styleClass="orgsMultibox">
+															<html:multibox	property="selOrganisations">
 																<bean:write name="organisations" property="ampOrgId" />
 															</html:multibox>&nbsp;
 														</td>
@@ -354,7 +347,12 @@
 																</html:button>
 															</logic:equal>
 															<logic:equal name="aimSelectOrganizationForm" property="useClient" value="true">
-																<input type="button" value="<digi:trn>...</digi:trn>" onclick="setValues(<bean:write name="organisations" property="ampOrgId" />,'<bean:write name="organisations" property="acronym" />')" />
+																<logic:equal name="aimSelectOrganizationForm" property="useAcronym" value="true">
+																	<input type="button" value="<digi:trn>...</digi:trn>" onclick="setValues(<bean:write name="organisations" property="ampOrgId" />,'<bean:write name="organisations" property="acronym" />')" />
+																</logic:equal>
+																<logic:equal name="aimSelectOrganizationForm" property="useAcronym" value="false">
+																	<input type="button" value="<digi:trn>...</digi:trn>" onclick="setValues(<bean:write name="organisations" property="ampOrgId" />,'<bean:write name="organisations" property="name" />')" />
+																</logic:equal>
 															</logic:equal>
 														</td>
 													</logic:equal>

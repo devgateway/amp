@@ -1,20 +1,19 @@
 package org.digijava.module.message.helper;
 
-import org.digijava.module.message.triggers.ActivitySaveTrigger;
-import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
-import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
-import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
-import org.digijava.module.message.triggers.ApprovedActivityTrigger;
-import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
-import org.digijava.module.message.triggers.CalendarEventTrigger;
-import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
-import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivityActualStartDateTrigger;
 import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger;
+import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
-import org.digijava.module.message.triggers.AlertForDonorsTrigger;
+import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
+import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
+import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
  * @author Dare Roinishvili
@@ -39,8 +38,7 @@ public class MessageConstants {
                                                                 ActivityFinalDateForDisbursementsTrigger.class,
                                                                 ActivityProposedApprovalDateTrigger.class,
                                                                 ActivityProposedCompletionDateTrigger.class,
-                                                                ActivityProposedStartDateTrigger.class,
-                                                                AlertForDonorsTrigger.class};
+                                                                ActivityProposedStartDateTrigger.class};
 
     public static final  String[] triggerName=new String[] {"Save Actvity",
                                                             "Activity Disbursement Date",
@@ -55,16 +53,13 @@ public class MessageConstants {
                                                             "Activity Final Date For Disbursements",
                                                             "Activity Proposed Approval Date",
                                                             "Activity Proposed Completion Date",
-                                                            "Activity Proposed Start Date",
-                                                            "Alert For Donors"};
+                                                            "Activity Proposed Start Date"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";
 
 	public static final String MESSAGE_TYPE_NAME= "Message Type";
 	public static final String MESSAGE_TYPE_KEY= "message_type";
-	
-	public static final int ATTACHMENTS_MAX_SIZE=10*1024*1024; //max limit is 10Mb
 
 	/**
 	 * What or who sends the message

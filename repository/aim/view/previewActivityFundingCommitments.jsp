@@ -30,17 +30,19 @@
 </feature:display>
 <c:if test="${!empty funding.fundingDetails}">
 <feature:display name="Planned Commitments" module="Measures">
-	<logic:iterate name="funding" property="fundingDetails"	id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="fundingDetails"
+		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
 						<tr bgcolor="#ffffff">
-							<td height="18" width="40%" align="right" bgcolor="#ffffff">
-								<field:display	name="Adjustment Type Commitment" feature="Commitments">
-									<digi:trn>
-										<bean:write name="fundingDetail" property="adjustmentTypeName" />
-									</digi:trn>
-								</field:display>
-							</td>
+							<td height="18" width="40%" align="right" bgcolor="#ffffff"><field:display
+								name="Adjustment Type Commitment"
+								feature="Commitments">
+								<digi:trn
+									key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+								</digi:trn>
+							</field:display></td>
 
 
 							<td height="18" align="right"><field:display
@@ -97,13 +99,15 @@
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 						<tr bgcolor="#ffffff">
-							<td width="40%" align="right"  bgcolor="#FFFFFF">
-								<field:display name="Adjustment Type Commitment" feature="Commitments">
-									<digi:trn>
-										<bean:write name="fundingDetail" property="adjustmentTypeName" />
-									</digi:trn>
-								</field:display>
-							</td>
+							<td width="40%" align="right"  bgcolor="#FFFFFF"><field:display
+								name="Adjustment Type Commitment"
+								feature="Commitments">
+								<digi:trn
+									key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+								</digi:trn>
+							</field:display></td>
+
 
 							<td height="18" align="right"><field:display name="Date Commitment"
 								feature="Commitments">

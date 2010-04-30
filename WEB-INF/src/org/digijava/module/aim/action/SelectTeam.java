@@ -31,13 +31,12 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 public class SelectTeam extends Action {
 
     private static Logger logger = Logger.getLogger(SelectTeam.class);
-    
+
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response)
             throws java.lang.Exception {
 
-    	
-    	HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         LoginForm lForm = (LoginForm) form;
         
         //This is for the auto login.
@@ -137,6 +136,7 @@ public class SelectTeam extends Action {
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());
             tm.setComputation(member.getAmpTeam().getComputation());
             tm.setAddActivity(member.getAmpTeam().getAddActivity());
+            tm.setPledger(member.getUser().getPledger());
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
             } else {
@@ -161,6 +161,4 @@ public class SelectTeam extends Action {
 
         return mapping.findForward("forward");
     }
-    
-   
 }

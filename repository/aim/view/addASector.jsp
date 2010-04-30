@@ -31,7 +31,7 @@
 			 else
 			 {
 				<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
-				document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent="+levelType+'&rootId='+<%=request.getParameter("rootId")%>;
+				document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent="+levelType;
 				document.aimAddSectorForm.target = "_self";
 				document.aimAddSectorForm.submit();
 			 }
@@ -56,8 +56,6 @@
 <html:hidden property="sectorId" />
 <html:hidden property="levelType" />
 <html:hidden property="parentId" />
-<html:hidden property="treeView" />
-<html:hidden property="rootId" />
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />

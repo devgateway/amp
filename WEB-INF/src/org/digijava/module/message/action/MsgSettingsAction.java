@@ -5,13 +5,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
@@ -25,12 +23,6 @@ import org.digijava.module.message.util.AmpMessageUtil;
 public class MsgSettingsAction extends DispatchAction {
 	
 	public ActionForward getSettings (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		HttpSession session = request.getSession();
-		
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}
-
 		AmpMessageForm msgForm=(AmpMessageForm)form;
 		msgForm=clearForm(msgForm); //clear form 
 		AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
@@ -99,26 +91,26 @@ public class MsgSettingsAction extends DispatchAction {
 			//INBOX
 			membersIds=AmpMessageUtil.getOverflowedMembersIdsForInbox(limit, clazz);
 			if(membersIds!=null && ! membersIds.isEmpty() && membersIds.size()>0){
-				for (Long id : membersIds) {					
+				for (Long id : membersIds) {
 					//update hidden messages to visible if necessary
-			 	 	AmpMessageUtil.updateHiddenInboxMsgsToVisible(clazz, id, limit);
-			 	 	//hide visible messages if necessary
-			 	 	AmpMessageUtil.updateVisibleInboxMsgsToHidden(clazz, id, limit);
+					AmpMessageUtil.updateHiddenInboxMsgsToVisible(clazz, id, limit);
+					//hide visible messages if necessary
+					AmpMessageUtil.updateVisibleInboxMsgsToHidden(clazz, id, limit);
 				}
-			}else{//<-- if storage was changed to larger number, then overflowed members may be empty.also some overflowed members may require to become not overflowed. that means hidden messages should be changed to visible
+			}else{//<-- if storage was changed to larger number, then overflowed members may be empty.also some overflowed members may require to become not overflowed. that means hidden messages should be changed to visible				
 				AmpMessageUtil.updateAllHiddenInboxMessagesToVisible(clazz);
 			}
 			
 			//only UserMessage and AmpAlert have sent/draft tabs
-			if(clazz.equals(UserMessage.class)||clazz.equals(AmpAlert.class)||clazz.equals(Approval.class)){
+			if(clazz.equals(UserMessage.class)||clazz.equals(AmpAlert.class)){
 				//SENT
 				membersIds=AmpMessageUtil.getOverflowedMembersIdsForSentOrDraft(limit, clazz, false);
 				if(membersIds!=null && membersIds.size()>0){
 					for (Long id : membersIds) {
 						//update hidden messages to visible if necessary
-				 	 	AmpMessageUtil.updateHiddenSentOrDraftMsgsToVisible(clazz, id, false, limit);
-				 	 	//hide visible messages if necessary
-				 	 	AmpMessageUtil.updateVisibleSentOrDraftMsgsToHidden(clazz, id, false, limit);
+						AmpMessageUtil.updateHiddenSentOrDraftMsgsToVisible(clazz, id, false, limit);
+						//hide visible messages if necessary
+						AmpMessageUtil.updateVisibleSentOrDraftMsgsToHidden(clazz, id, false, limit);
 					}
 				}else {
 					AmpMessageUtil.updateAllSentOrDrartHiddenMsgsToVisible(clazz, false);
@@ -128,16 +120,17 @@ public class MsgSettingsAction extends DispatchAction {
 				membersIds=AmpMessageUtil.getOverflowedMembersIdsForSentOrDraft(limit, clazz, true);
 				if(membersIds!=null && membersIds.size()>0){
 					for (Long id : membersIds) {
-						//update hidden messages to visible if necessary				 	 	
+						//update hidden messages to visible if necessary
 						AmpMessageUtil.updateHiddenSentOrDraftMsgsToVisible(clazz, id, true, limit);
-				 	 	//hide visible messages if necessary
-				 	 	AmpMessageUtil.updateVisibleSentOrDraftMsgsToHidden(clazz, id, true, limit);
+						//hide visible messages if necessary
+						AmpMessageUtil.updateVisibleSentOrDraftMsgsToHidden(clazz, id, true, limit);
+
 					}
 				}else {
 					AmpMessageUtil.updateAllSentOrDrartHiddenMsgsToVisible(clazz, true);
 				}
 			}					
-		} 
+		}		 
 	}
 	
 	private AmpMessageForm clearForm(AmpMessageForm form){
@@ -145,7 +138,6 @@ public class MsgSettingsAction extends DispatchAction {
 		form.setMsgStoragePerMsgTypeCurr(null);
 		form.setDaysForAdvanceAlertsWarningsCurr(null);		
 		form.setEmailMsgsCurrent(new Long(-1));
-		
 		form.setMsgRefreshTimeNew(null);
 		form.setMsgStoragePerMsgTypeNew(null);
 		form.setDaysForAdvanceAlertsWarningsNew(null);		

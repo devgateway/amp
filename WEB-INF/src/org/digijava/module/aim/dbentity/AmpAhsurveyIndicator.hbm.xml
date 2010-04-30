@@ -7,7 +7,7 @@
 		<cache usage="read-write" />
 		<id name="ampIndicatorId" column="amp_indicator_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_AHSURVEY_INDICATOR_seq</param>
+				<param name="sequence">AMP_INDICATOR_seq</param>
 			</generator>
 		</id>
 
@@ -17,7 +17,8 @@
 		<property name="indicatorCode" column="indicator_code" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
 
-		<set name="questions" table="AMP_AHSURVEY_QUESTION" inverse="true" cascade="none">
+		<set name="questions" table="AMP_AHSURVEY_QUESTION" inverse="true" lazy="true"
+			cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_indicator_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurveyQuestion" />

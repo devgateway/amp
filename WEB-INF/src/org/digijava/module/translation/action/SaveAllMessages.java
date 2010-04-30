@@ -69,7 +69,7 @@ public class SaveAllMessages extends Action {
 					if (msg == null) {
 						saveOrUpdate = false; //save
 						msg = new Message();
-						msg.setSiteId(formBean.getSiteId());
+						msg.setSiteId(formBean.getSiteId().toString());
 					}
 
 					msg.setKey(currentMsg.getKey());

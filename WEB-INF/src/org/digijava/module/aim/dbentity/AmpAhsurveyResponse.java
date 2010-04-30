@@ -6,9 +6,7 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import org.digijava.module.aim.util.Output;
-
-public class AmpAhsurveyResponse implements Versionable {
+public class AmpAhsurveyResponse {
 
 	private Long ampReponseId;
 	private AmpAhsurvey ampAHSurveyId;
@@ -63,31 +61,5 @@ public class AmpAhsurveyResponse implements Versionable {
 	public void setAmpAHSurveyId(AmpAhsurvey ampAHSurveyId) {
 		this.ampAHSurveyId = ampAHSurveyId;
 	}
-	
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		AmpAhsurveyResponse auxResponse = (AmpAhsurveyResponse) obj;
-		String val1 = this.response != null ? this.response : "";
-		String val2 = auxResponse.getResponse() != null ? auxResponse.getResponse() : "";
-		if (this.ampQuestionId.equals(auxResponse.getAmpQuestionId()) && val1.equals(val2)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	@Override
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public Output getOutput() {
-		Output out = new Output();
-		out.setTitle(new String[] { " Q", this.ampQuestionId.getQuestionNumber().toString(), ": " });
-		if (this.response != null && !this.response.equals("nil")) {
-			out.setValue(new Object[] { this.response });
-		}
-		return out;
-	}
+
 }

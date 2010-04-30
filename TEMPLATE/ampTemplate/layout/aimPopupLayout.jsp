@@ -9,10 +9,6 @@
 <digi:base />
 <link href="css/global.css" rel="stylesheet" type="text/css">
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript">
-  <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
-</script>
-
 
 <head>
 			<%

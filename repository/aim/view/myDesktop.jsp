@@ -352,13 +352,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 
 									</c:if>
 
@@ -380,13 +380,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 
 									</c:if>
 
@@ -408,13 +408,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 
 									</c:if>
 
@@ -438,13 +438,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 
 									</c:if>
 

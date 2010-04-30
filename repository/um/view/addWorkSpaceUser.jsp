@@ -54,6 +54,67 @@
 -->
 </style>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+
+<script language="JavaScript">
+	function deleteWS(id){
+		document.umAddUserForm.teamMemberId.value=id;
+		document.umAddUserForm.actionFlag.value = "deleteWS";
+		<digi:context name="selectType" property="context/module/moduleinstance/addWorkSpaceUser.do" />
+		document.umAddUserForm.action = "<%= selectType %>";
+		document.umAddUserForm.target = "_self";
+		document.umAddUserForm.submit();
+	}
+	function cancel()
+	{
+		document.umAddUserForm.action = "/um/addUser.do";
+		document.umAddUserForm.firstNames.value="";
+		document.umAddUserForm.lastName.value="";
+		document.umAddUserForm.email.value="";
+		document.umAddUserForm.emailConfirmation.value="";
+		document.umAddUserForm.password.value="";
+		document.umAddUserForm.passwordConfirmation.value="";
+		document.umAddUserForm.role.value="-1";
+		document.umAddUserForm.teamId.value="-1"
+		document.umAddUserForm.addWorkspace.value="false";
+		document.umAddUserForm.selectedOrgType.value="-1";
+		document.umAddUserForm.selectedOrgGroup.value="-1";
+		document.umAddUserForm.selectedOrganizationId.value="-1";
+		document.umAddUserForm.sendEmail.value="-1";
+
+		document.umAddUserForm.target = "_self";
+		document.umAddUserForm.submit();
+		return false;
+	}
+	function validate()
+	{
+		if(document.umAddUserForm.teamId.value=="-1"){
+			<c:set var="translation">
+			<digi:trn key="aim:chooseTeam">Please choose workspace</digi:trn>
+    		</c:set>
+			
+			alert("${translation}");
+			document.umAddUserForm.teamId.focus();
+			return false;
+		}	
+		if(document.umAddUserForm.role.value=="-1"){
+			<c:set var="translation">
+			<digi:trn key="aim:chooseRole">Please choose role</digi:trn>
+    		</c:set>
+			
+			alert("${translation}");
+			document.umAddUserForm.role.focus();
+			return false;
+		}	
+		return true;
+	}
+
+</script>
+
+
+
+
+
 <digi:instance property="umAddUserForm" />
 
 <digi:form action="/addWorkSpaceUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
@@ -65,10 +126,49 @@
 
 <input type="hidden" name="actionFlag" value="">
 <input type="hidden" name="teamMemberId" />
-  <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=650>
+  <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=705>
 	<tr>
-		<td align=left vAlign=top>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=752>
 			<table cellPadding=5 cellSpacing=0 width="100%">
+				<tr>
+					<!-- Start Navigation -->
+					<td height=33><span class=crumb>
+
+						<c:set var="translation">
+				            <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+				          </c:set>
+				          <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+				            <digi:trn key="aim:AmpAdminHome">
+				            Admin Home
+				            </digi:trn>
+				          </digi:link>&nbsp;&gt;&nbsp;
+				
+				          <c:set var="translation">
+				            <digi:trn key="aim:clickToViewAllUsers">Click here to goto users manager</digi:trn>
+				          </c:set>
+				          <digi:link href="/viewAllUsers.do" styleClass="comment" title="${translation}" >
+				            <digi:trn key="aim:viewAllUsers">
+				            List of users
+				            </digi:trn>
+				          </digi:link>&nbsp;&gt;&nbsp;
+
+				          <c:set var="translation">
+				            <digi:trn key="aim:clickToViewAddUser">Click here to goto add new user</digi:trn>
+				          </c:set>
+				          <digi:link href="/addUser.do" styleClass="comment" title="${translation}" >
+				            <digi:trn key="aim:addNewUser">
+				            Add new user
+				            </digi:trn>
+				          </digi:link>&nbsp;&gt;&nbsp;
+				
+				          <digi:trn key="aim:viewEditUser:AddWorkspace">
+				          Add Workspace
+				          </digi:trn>
+                      </span>
+					</td>
+					<!-- End navigation -->
+				</tr>
 			    <tr>
 			      <td colspan="2">
 			        <span class=subtitle-blue>
@@ -79,15 +179,30 @@
 			      </td>
 			    </tr>
 				<tr>
-				<td noWrap vAlign="top">
-					<table width="100%" border="0">
+				<td noWrap width=616 vAlign="top">
+					<table class="contentbox_border" width="75%" border="0" bgcolor="#f4f4f2">
+					   <tr>			
+					      <td align="center">
+						     <table width="100%">
+							    <tr>
+							       <td style="background-color: #CCDBFF;height: 18px;"/>
+							    </tr>
+							 </table>
+						  </td>
+					   </tr>
 					   <tr>
-						  <td valign="top" align="center">
+						  <td valign="top" bgcolor="#f4f4f2" align="center">
 					
+							<table border=0 cellPadding=0 cellSpacing=0 width=772>
+								<tr>
+									<td width=14>&nbsp;
+									</td>
+									<td align=left vAlign=top width=520>
+									
 										<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=center colspan="2">
+												<td align=left class=title noWrap colspan="2">
 													<digi:errors/>
 													<logic:notEmpty name="umAddUserForm" property="errors" >
 							                        <font color="red">
@@ -160,7 +275,7 @@
 													<html:option value="-1">-- <digi:trn key="um:selectWorkspace">Select a workspace</digi:trn> --</html:option>
 													<c:forEach items="${umAddUserForm.workspaces}" var="workspaces">
 														<html:option value="${workspaces.ampTeamId}">
-															<digi:trn key="${workspaces.name}"><c:out value="${workspaces.name}"/></digi:trn>
+															<c:out value="${workspaces.name}"/>
 														</html:option>
 													</c:forEach>
 													</html:select>
@@ -174,6 +289,7 @@
 												<td align="left" width="70%">
 													<html:select property="role" >
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
+													
 													<logic:iterate name="umAddUserForm" property="ampRoles" id="ampRole" type="org.digijava.module.aim.dbentity.AmpTeamMemberRoles">
 														<html:option value="${ampRole.ampTeamMemRoleId}">
 															<digi:trn key="<%=ampRole.getAmpTeamMemberKey() %>">
@@ -191,15 +307,13 @@
 							                        <c:set var="btnSubmit">
 							                              <digi:trn key="btn:submit">Submit</digi:trn>
 							                        </c:set>
-<!--													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" />-->
-													<input type="button" value="${btnSubmit}" onclick='return addWorkSpace()'/>
+													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" />
 												</td>
 												<td align="left">
 							                        <c:set var="btnDone">
 							                              <digi:trn key="btn:done">Done</digi:trn>
 							                        </c:set>
-<!--													<html:submit value="${btnDone}" styleClass="dr-menu" onclick="return cancel()"/>-->
-													<input type="button" value="${btnDone}" onclick='return cancelAddWorkSpace()'/>
+													<html:submit value="${btnDone}" styleClass="dr-menu" onclick="return cancel()"/>
 												</td>
 												
 											</tr>
@@ -210,8 +324,11 @@
 									</td>
 								</tr>
 								<tr>
+									<td width=14>&nbsp;
+									</td>
 									<td align=center vAlign=top width=520><br>
 		             					<table border=0 cellPadding=5 cellSpacing=0 width="80%">
+										<c:if test="${!empty umAddUserForm.assignedWorkspaces && umAddUserForm.assignedWorkspaces != null}">
 										<tr bgColor=#999999>
 										<td bgColor=#999999 align="center" height="20">
 										<b><digi:trn key="um:addWorkspaces:wsname">Workspace</digi:trn></b>
@@ -223,10 +340,6 @@
 										<b><digi:trn key="um:addWorkspaces:wsaction">Action</digi:trn></b>
 										</td>
 										</tr>
-										<c:if test="${empty umAddUserForm.assignedWorkspaces || umAddUserForm.assignedWorkspaces == null}">
-										<tr><td colspan="3" align="center"><digi:trn>There are not workspaces assigned for this user yet</digi:trn></td></tr>
-										</c:if>
-										<c:if test="${!empty umAddUserForm.assignedWorkspaces && umAddUserForm.assignedWorkspaces != null}">										
 		    							<logic:iterate name="umAddUserForm"  property="assignedWorkspaces" id="assignedWS" indexId="idx">
 		                              	<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
 		                              	onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >                           
@@ -237,7 +350,7 @@
 										<c:out value="${assignedWS.ampMemberRole.description}"/>
 										</td>
 										<td align="center">
-										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteUserFromWS">Click on this icon to remove user from the workspace</digi:trn>"><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0 hspace="2"/></a>
+										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteUserFromWS">Click on this icon to remove user from the workspace</digi:trn>"><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>
 										</td>
 										</tr>
 										</logic:iterate>
@@ -246,7 +359,10 @@
 									</td>
 								</tr>
 							</table>
-
+							<br /><br />
+						  </td>
+					   </tr>
+				    </table>
 	            </td>
                 </tr>
   		     </table>

@@ -41,10 +41,9 @@ public class ShowTeamReports extends Action {
 			throws java.lang.Exception {
 
 		String forwardName	= "forward";
-
+		
 		List dbReturnSet = null;
 		HttpSession session = request.getSession();
-        session.removeAttribute("publicuser");
 		String action = request.getParameter("action");
 		
 		boolean appSettingSet = false;
@@ -58,12 +57,6 @@ public class ShowTeamReports extends Action {
 			}
 			if (  "false".equals( request.getParameter("tabs") )  )
 				rf.setShowTabs(false);
-		}
-		else
-		{
-			//if tabs parameter is null, default to reports
-			rf.setShowTabs(false);
-			
 		}
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if ( tm != null )
@@ -135,16 +128,9 @@ public class ShowTeamReports extends Action {
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}
-		
-		String filterText = "";
-		if (rf.getFilter() != null && !rf.getFilter().equals("")){
-			filterText = rf.getFilter() + "%";
-		}else{
-			filterText = null;
-		}
-		
-		if (tm == null) {			
-			Collection reports = ARUtil.getAllPublicReports(false,filterText);
+
+		if (tm == null) {
+			Collection reports = ARUtil.getAllPublicReports(false);
 			rf.setReports(reports);
 			rf.setTotalPages(FIRST_PAGE);
 		} else {
@@ -164,15 +150,14 @@ public class ShowTeamReports extends Action {
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), null);
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId());
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 				rf.setTempNumResults(appSettings.getDefReportsPerPage());
 				//rf.setTempNumResults(100);
-			}else{				
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(), filterText ); //The filter is set to search for the first letter
-			}
-			
+			}else{
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId());
+				}
 			boolean found = false;
 			if (defaultTeamReport != null){
 				Iterator iter = teamResults.iterator();
@@ -193,7 +178,7 @@ public class ShowTeamReports extends Action {
 			//
 			// requirements for translation purposes of hierarchies
 			AmpReports el = null;
-			Long siteId = RequestUtils.getSite(request).getId();
+			String siteId = RequestUtils.getSite(request).getSiteId();
 			String locale = RequestUtils.getNavigationLanguage(request).getCode();
 			String text = null;
 			String translatedText = null;

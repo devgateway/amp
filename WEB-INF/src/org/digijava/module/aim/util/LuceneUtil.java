@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
@@ -19,9 +20,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -33,12 +34,10 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -49,24 +48,28 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.CellColumn;
-import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
 import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import com.lowagie.text.pdf.codec.Base64.InputStream;
 
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -86,7 +89,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 10L;
+	private static final long serialVersionUID = 7L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -96,43 +99,37 @@ public class LuceneUtil implements Serializable {
     /**
      * 
      */
-    public final static String ID_FIELD = "id";
+    public final static String idField = "id";
 
-    public final static String TITLE_FIELD = "title";
-    
     /**
-     * LUCENE INDEX PATH: use the LUCENE_BASE_DIR + new 
+     * LUCENE INDEX PATH: use the luceneBaseDir + new 
      * 					  directory for your index
      */
     
     /**
      * lucene base directory
      */
-    public final static String LUCENE_BASE_DIR = "lucene";
-    public final static String LUCENE_STAMP_EXT = ".stamp";
+    public final static String luceneBaseDir = "lucene";
+    public final static String luceneStampExt = ".stamp";
     
     /**
      * name of help index directory
      */
-    public final static String HELP_INDEX_SUFIX = "help";
-    public final static String HELP_INDEX_DIRECTORY = LUCENE_BASE_DIR +"/" + HELP_INDEX_SUFIX;
-
-    /**
-     * Translations index directory.
-     */
-    public final static String TRN_INDEX_SUFIX = "translation";
-    public final static String TRN_INDEX_DIRECTORY = LUCENE_BASE_DIR +"/" + TRN_INDEX_SUFIX;
+    public final static String helpIndexSufix = "help";
+    public final static String helpIndexDirectory = luceneBaseDir +"/" + helpIndexSufix;
     
     /**
      * name of the activity index directory
      * please don't use for other indexes
      * @author Arty
      */
-    public final static String ACTIVITY_INDEX_SUFFIX = "activity";
-    public final static String ACTVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX;
+    public final static String activityIndexSufix = "activity";
+    public final static String activityIndexDirectory = luceneBaseDir + "/" + activityIndexSufix;
 
 	private static final int CHUNK_SIZE = 10000;
+
     
+    @SuppressWarnings("unchecked")
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
 	  	String oql= "select idx from "+AmpLuceneIndexStamp.class.getName()+" idx"+
 	  	  			" where idx.idxName=:theName";
@@ -142,85 +139,10 @@ public class LuceneUtil implements Serializable {
 	  		org.hibernate.Query query=session.createQuery(oql);
 	  		query.setString("theName", name);
 	  		
-	  		return ((AmpLuceneIndexStamp)query.uniqueResult());
+	  		return ((AmpLuceneIndexStamp)query.list().get(0));
 	  	} catch (Exception e) {
 	  		throw new Exception("Cannot get index stamp for:"+name,e);
 	  	}
-    }
-    
-    /**
-     * Deletes all stamps from db with specified name.
-     * @param name
-     * @return true - at least one record has been deleted. false - nothing was deleted.
-     * @throws DgException
-     */
-	@SuppressWarnings("unchecked")
-	public static boolean deleteIdxStamps(String name) throws DgException {
-		String oql = "select idx from " + AmpLuceneIndexStamp.class.getName()
-				+ " idx" + " where idx.idxName=:theName";
-		Transaction transaction = null;
-		boolean oldRecordDeleted = false;
-		try {
-			Session session = PersistenceManager.getRequestDBSession();
-			org.hibernate.Query query = session.createQuery(oql);
-			query.setString("theName", name);
-			List<AmpLuceneIndexStamp> stamps = query.list();
-			// Delete all fund stamps for this module name.
-			if (stamps != null && stamps.size() > 0) {
-				transaction = session.beginTransaction();
-				for (AmpLuceneIndexStamp stamp : stamps) {
-					session.delete(stamp);
-				}
-				transaction.commit();
-				oldRecordDeleted = true;
-			}
-		} catch (HibernateException e) {
-			if (transaction != null) {
-				try {
-					transaction.rollback();
-				} catch (HibernateException e1) {
-					throw new DgException("Cannot rollback stamp deletion for "
-							+ name, e1);
-				}
-			}
-			throw new DgException("Cannot delete stams for " + name, e);
-		}
-		return oldRecordDeleted;
-	}
-
-	/**
-	 * Creates new stamp record.
-	 * @param name
-	 * @param timestamp
-	 * @throws DgException
-	 */
-	public static void createStamp(String name, long timestamp) throws DgException {
-		AmpLuceneIndexStamp stamp = new AmpLuceneIndexStamp();
-		stamp.setIdxName(name);
-		stamp.setStamp(timestamp);
-		Session session = PersistenceManager.getRequestDBSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.save(stamp);
-			tx.commit();
-		} catch (HibernateException e) {
-			if(tx!=null){
-				try {
-					tx.rollback();
-				} catch (HibernateException e1) {
-					logger.error(e1);
-					throw new DgException("Cannot rollback stamp creation for "+name,e1);
-				}
-			}
-			throw new DgException("Cannot create stamp for "+name, e);
-		}
-		
-	}
-	
-    static public boolean deleteDirectory(String path) {
-    	File dir = new File(path);
-    	return deleteDirectory(dir);
     }
     
     static public boolean deleteDirectory(File path) {
@@ -242,8 +164,8 @@ public class LuceneUtil implements Serializable {
     public static void checkIndex(ServletContext sc){
     	logger.info("Lucene startup!");
 
-    	File idxStamp = new File(sc.getRealPath("/") + LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX + LUCENE_STAMP_EXT);
-    	File idxDir = new File(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY);
+    	File idxStamp = new File(sc.getRealPath("/") + luceneBaseDir + "/" + activityIndexSufix + luceneStampExt);
+    	File idxDir = new File(sc.getRealPath("/") + activityIndexDirectory);
     	boolean deleteIndex = false;
     	
     	checkStamp:{
@@ -289,7 +211,7 @@ public class LuceneUtil implements Serializable {
     			//getting DB timestamp
     			long dbStamp = -1;
     			try {
-					dbStamp = getIdxStamp(ACTIVITY_INDEX_SUFFIX).getStamp();
+					dbStamp = getIdxStamp(activityIndexSufix).getStamp();
 				} catch (Exception e) {
 					logger.error(e);
 				}
@@ -352,14 +274,14 @@ public class LuceneUtil implements Serializable {
 				long stopTime = System.currentTimeMillis();
 				
 				try {
-					AmpLuceneIndexStamp currentStamp = getIdxStamp(ACTIVITY_INDEX_SUFFIX);
+					AmpLuceneIndexStamp currentStamp = getIdxStamp(activityIndexSufix);
 					if (currentStamp != null)
-						DbUtil.deleteAllStamps(ACTIVITY_INDEX_SUFFIX);
+						DbUtil.deleteAllStamps(activityIndexSufix);
 				} catch (Exception e1) {
 				}
 				
 				AmpLuceneIndexStamp stamp = new AmpLuceneIndexStamp();
-				stamp.setIdxName(ACTIVITY_INDEX_SUFFIX);
+				stamp.setIdxName(activityIndexSufix);
 				stamp.setStamp(stopTime);
 				
 				try {
@@ -407,12 +329,12 @@ public class LuceneUtil implements Serializable {
 			Session session = PersistenceManager.getSession();
 			Connection	conn	= session.connection();
 			Statement st		= conn.createStatement();
-			String qryStr		= "select max(amp_activity_id) from amp_activity";
+			String qryStr		= "select max(amp_activity_id) mid from v_titles";
 
 			ResultSet rs		= st.executeQuery(qryStr);
 			
 			rs.next();
-			ret = rs.getInt(1);
+			ret = Integer.parseInt(rs.getString("mid"));
 		}
 		catch(Exception ex){
 			logger.error("Error while getting the max activity id:", ex);
@@ -587,14 +509,14 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 		    	int currActId = rs.getInt("amp_activity_id");
 		    	x = (Items) list.get(currActId);
-	    		if (x != null && rs.getString("code")!=null){
-	    			x.componentcode.add(rs.getString("code"));
-	    		}
+		    	if (rs.getString("code")!=null){
+		    	    x.componentcode.add(rs.getString("code"));
+		    	}
 				isNext = rs.next();
 			}
 			
 			//New fields for Senegal.
-			qryStr = "select * from v_cris_number where amp_activity_id >= " + chunkStart
+			qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart
 					+ " and amp_activity_id < " + chunkEnd + " ";
 			rs = st.executeQuery(qryStr);
 			rs.last();
@@ -605,23 +527,10 @@ public class LuceneUtil implements Serializable {
 				int currActId = rs.getInt("amp_activity_id");
 				x = (Items) list.get(currActId);
 				x.CRIS = rs.getString("cris_number");
+				x.budgetNumber = rs.getString("budget_number");
 				isNext = rs.next();
 			}
-
-			qryStr = "select * from v_code_chapitre where amp_activity_id >= " + chunkStart
-					+ " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " code chapitre!");
-			isNext = rs.first();
-
-			while (isNext) {
-				int currActId = rs.getInt("amp_activity_id");
-				x = (Items) list.get(currActId);
-				x.budgetNumber = rs.getString("code");
-				isNext = rs.next();
-			}
-			
+	 	 	
 			conn.close();
 
 			logger.info("Building the index ");
@@ -669,7 +578,7 @@ public class LuceneUtil implements Serializable {
 		Document doc = new Document();
 		String all = new String("");
 		if (actId != null){
-			doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
+			doc.add(new Field(idField, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
 			//all = all.concat(" " + actId);
 		}
 		if (projectId != null){
@@ -677,9 +586,7 @@ public class LuceneUtil implements Serializable {
 			all = all.concat(" " + projectId);
 		}
 		if (title != null){
-			Field titleField = new Field(TITLE_FIELD, title, Field.Store.NO, Field.Index.TOKENIZED);
-			titleField.setBoost(30);
-			doc.add(titleField);
+			doc.add(new Field("title", title, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + title);
 		}
 		if (description != null && description.length()>0){
@@ -699,7 +606,7 @@ public class LuceneUtil implements Serializable {
 			all = all.concat(" " + results);
 		}
 		
-		
+		//
 		if (numcont != null && numcont.length()>0){
 			doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + numcont);
@@ -753,12 +660,12 @@ public class LuceneUtil implements Serializable {
 		ServletContext sc = request.getSession().getServletContext();
 		
 		if (update){
-			deleteActivity(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(id));
+			deleteActivity(sc.getRealPath("/") + activityIndexDirectory, idField, String.valueOf(id));
 		}
 		
 		IndexWriter indexWriter = null;
 		try {
-			indexWriter = new IndexWriter(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
+			indexWriter = new IndexWriter(sc.getRealPath("/") + activityIndexDirectory, LuceneUtil.analyzer, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -780,10 +687,7 @@ public class LuceneUtil implements Serializable {
 			 	   componentsCode.add(c.getCode());
 			 	}
 		 	}
-			String code=null;
-            if(act.getChapter()!=null){
-                code=act.getChapter().getCode();
-            }
+				
 			
 			doc = activity2Document(
 					String.valueOf(act.getAmpActivityId()), 
@@ -793,13 +697,13 @@ public class LuceneUtil implements Serializable {
 					Util.getEditorBody(site,act.getObjective(),navigationLanguage), 
 					Util.getEditorBody(site,act.getPurpose(),navigationLanguage), 
 					Util.getEditorBody(site,act.getResults(),navigationLanguage),
-					/*Util.getEditorBody(site,act.getContactName(),navigationLanguage)*/null,
+					Util.getEditorBody(site,act.getContactName(),navigationLanguage),
 			 	 	componentsCode,
 			 	 	act.getCrisNumber(),
-                    code
-			 	 	
+			 	 	act.getBudgetCodeProjectID()
 			);
 		} catch (EditorException e1) {
+			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		if (doc != null){
@@ -824,20 +728,7 @@ public class LuceneUtil implements Serializable {
 	 * @return a Hits object that contains the results
 	 */
 	public static Hits search(String index, String field, String searchString){
-		return search(index, new String[]{field}, searchString);
-	}
-
-	/**
-	 * Runs a search in the index and returns the results
-	 * 
-	 * @param index the index where the search will be done
-	 * @param fields the field's array where you do the search
-	 * @param searchString
-	 * 
-	 * @return a Hits object that contains the results
-	 */	
-    public static Hits search(String index, String[] fields, String searchString){
-    	MultiFieldQueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+		QueryParser parser = new QueryParser(field, analyzer);
 		Query query = null;
 		Hits hits = null;
 		
@@ -880,9 +771,9 @@ public class LuceneUtil implements Serializable {
      * @throws org.digijava.kernel.exception.DgException
      * 
      */
-    public static void createHelpAAAA(ServletContext sc) throws  DgException{
+    public static void createHelp(ServletContext sc) throws  DgException{
             
-		boolean createDir = LuceneUtil.checkHelpDir(sc);
+		boolean createDir = LuceneUtil.isDir(sc);
 	
 		if(!createDir){
 			logger.info("Building the help");
@@ -906,7 +797,6 @@ public class LuceneUtil implements Serializable {
      * @throws org.digijava.kernel.exception.DgException
      * 
      * @see org.digijava.module.help.helper.HelpSearchData
-     * @deprecated 1) bad name - if t does not add/update but recreates whole help index. 2) 
      */
     public static void addUpdatehelp(boolean update, ServletContext sc) throws DgException {
 
@@ -915,7 +805,7 @@ public class LuceneUtil implements Serializable {
     	Date date ; 
 
     	try{ 
-    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + helpIndexDirectory);
 
     		formatter  = new SimpleDateFormat();
     		String leastUpDate = formatter.format(lastLucModDay);
@@ -935,7 +825,6 @@ public class LuceneUtil implements Serializable {
     			// Converts html formatted help topics body to plain text format.
     			String newCode = article.replaceAll("\\<.*?\\>","");
 
-    			//greatest if + else-if ever!!!
     			if(update){
     					if(item.getLastModDate().after(date)){
 	    					deleteHelp("title",title, sc);
@@ -974,7 +863,7 @@ public class LuceneUtil implements Serializable {
 		Searcher indexSearcher = null;
 		try {
 			if(searchString != null){
-			indexSearcher = new IndexSearcher(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+			indexSearcher = new IndexSearcher(sc.getRealPath("/") + helpIndexDirectory);
 			searchString = searchString.trim();
 			query = parser.parse("+"+searchString+"*");
 		
@@ -1012,7 +901,7 @@ public class LuceneUtil implements Serializable {
      */
     private static Object highlight(Field field, Query query, ServletContext sc) throws IOException {
 
-    	query.rewrite(IndexReader.open(sc.getRealPath("/") + HELP_INDEX_DIRECTORY));
+    	query.rewrite(IndexReader.open(sc.getRealPath("/") + helpIndexDirectory));
     	QueryScorer scorer = new QueryScorer(query);
     	SimpleHTMLFormatter formatter =
     		new SimpleHTMLFormatter("<span class=\"highlight\">",
@@ -1030,9 +919,14 @@ public class LuceneUtil implements Serializable {
 
 
     /**
-     * @deprecated instead use {@link LuceneWorker#addItemToIndex(Object, ServletContext, String)} method
+     * Creates {@link Document} using {@link createDocument(String,String,String)}.
+     * Adds newly created document to lucene help directory
+     *  
+     * @param article body of help topic
+     * @param title title of help topic
+     * @param titTrnKey translation key used to translate title
+     * @throws java.lang.Exception
      */
-    @Deprecated
     public static void indexArticle(String article, String title,String titTrnKey, String lang,ServletContext sc)
     throws Exception {
     	Document document = LuceneUtil.createHelpDocument(article,title,titTrnKey,lang);
@@ -1067,12 +961,12 @@ public class LuceneUtil implements Serializable {
      * 
      * @return true if lucene-index directory exists otherwise false
      */
-    public static boolean checkHelpDir(ServletContext sc){
-    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+    public static boolean isDir(ServletContext sc){
+    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + helpIndexDirectory);
     	return createDir;
     }
 
-    
+
     /**
      * Creates lucene help
      * directory if it doesn't exist.
@@ -1084,7 +978,7 @@ public class LuceneUtil implements Serializable {
     public static void indexHelpDocument(Document document, ServletContext sc) throws IOException {
     	try{
 
-    		boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+    		boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + helpIndexDirectory);
 
     		if(createDir == false){
     			createDir= true;
@@ -1093,7 +987,7 @@ public class LuceneUtil implements Serializable {
     		}
 
     		StandardAnalyzer analyzer  = new StandardAnalyzer();
-    		IndexWriter writer = new IndexWriter(sc.getRealPath("/") + HELP_INDEX_DIRECTORY, analyzer, createDir);
+    		IndexWriter writer = new IndexWriter(sc.getRealPath("/") + helpIndexDirectory, analyzer, createDir);
     		writer.addDocument(document);
     		writer.optimize();
     		writer.close();
@@ -1106,37 +1000,19 @@ public class LuceneUtil implements Serializable {
      * 
      * @param field
      * @param search
-     * @deprecated instead of this {@link LuceneWorker#deleteItemFromIndex(Object, ServletContext, String)} is used
      */
-    @Deprecated
     public static void deleteHelp(String field, String search, ServletContext sc){
     	Term term = new Term(field,search);
     	Directory directory;
     	IndexReader indexReader;
 
     	try {
-    		indexReader = IndexReader.open(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+    		indexReader = IndexReader.open(sc.getRealPath("/") + helpIndexDirectory);
     		Integer deleted = indexReader.deleteDocuments(term);
     		indexReader.close();
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
     }
-
-    @SuppressWarnings("unchecked")
-	public static void addHitsToCell(CellColumn column) throws IOException{
-    	if (column != null && column.getItemsMap() != null && column.getHits() != null){
-	    	HashMap<Long,Cell> items  = column.getItemsMap();
-	    	Hits hits = column.getHits();
-	    	
-	    	for (Iterator iterator = hits.iterator(); iterator.hasNext();) {
-	    		Hit hit = (Hit) iterator.next();
-	    		Document doc = hit.getDocument();
-	    		Cell cell = items.get(new Long(doc.get("id")));
-	    		if (cell != null)
-	    			cell.setLuceneScore(new Float(hit.getScore()));
-			}
-    	}
-    }
-
+ 
 }

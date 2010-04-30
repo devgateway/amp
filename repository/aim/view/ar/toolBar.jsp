@@ -3,18 +3,15 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>	
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"> 
@@ -142,7 +139,9 @@ addLoadEvent(addpanel);
 	}
 </script>
 <style>
+<!--
 .toolbar{
+	width: 90px;
 	background: #addadd; 
 	background-color: #addadd; 
 	padding: 3px 3px 3px 3px; 
@@ -150,7 +149,6 @@ addLoadEvent(addpanel);
 	top: 10px; 
 	left: 10px;
 	bottom: 100px;		
-	width: 450px;
 }
 .toolbartable{
 	border-color: #FFFFFF;
@@ -159,10 +157,12 @@ addLoadEvent(addpanel);
 	border-right-width: 2px;"
 	border-left-width: 2px;
 	border-style: solid;
-	width: 100%;
 }
+-->
 </style>
 <% String ampReportId=request.getParameter("ampReportId");
+	if(ampReportId==null) ampReportId=(String)request.getAttribute("ampReportId");
+	 request.setAttribute("ampReportId",ampReportId);
    String viewParam="";
    if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";
    String viewParamXLS="/xlsExport.do";      
@@ -172,21 +172,17 @@ addLoadEvent(addpanel);
    String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
 %>
 <script type="text/javascript">
-	function toggleActionForm(type,reportId) {
-		var exportFormEl	= document.getElementById('exportForm');
-        exportFormEl.ampReportId.value=reportId;
+	function toggleActionForm(type) {
 		if (type == null) return false;
 		if (type == "xls") {
-			exportFormEl.action = "/aim"+"<%=viewParamXLS%>";
+			document.forms[4].action = "/aim"+"<%=viewParamXLS%>";
 		} else if (type == "pdf") {
-			exportFormEl.action = "/aim"+"<%=viewParamPDF%>";
+			document.forms[4].action = "/aim"+"<%=viewParamPDF%>";
 		}
 		showMyPanel(0, 'logoStatement');
 	}
 </script>
 <div class="toolbar" align="center">
-<module:display name="Exports" parentModule="REPORTING"></module:display>
-
 <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
 	<tr>
 		<!-- 
@@ -198,46 +194,30 @@ addLoadEvent(addpanel);
 				<digi:img src="module/aim/images/reload.gif" border="0" alt="Reload Report"/>
 			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
 		-->
-		<feature:display name="Export to PDF" module="Exports">
+
 		<td noWrap align=left valign="center">		
-			<a class="settingsLink" href="#" target="_blank" onclick="toggleActionForm('pdf','${ampReportId}'); return false;">
-				<digi:img style="vertical-align: middle;" width="17" height="20" 
-							hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
-				<digi:trn>Export to PDF</digi:trn>
-			</a>
-			
-		</td>
-		</feature:display>
-
-		<feature:display name="Export to Excel" module="Exports">
-		<td noWrap align=left valign="center">
-			<a class="settingsLink" href="#" target="_blank" onclick="toggleActionForm('xls','${ampReportId}'); return false;">
-				<digi:img style="vertical-align: middle;" width="17" height="20" 
-							hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
-				<digi:trn>Export to Excel</digi:trn>
+			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
+				<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 			</a>
 		</td>
-		</feature:display>
 
-		<feature:display name="Export to CSV" module="Exports">
 		<td noWrap align=left valign="center">
-			<digi:link styleClass="settingsLink" href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img style="vertical-align: middle;" width="17" height="20" 
-							hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/csv.gif" border="0" alt="Export to CSV" />
-				<digi:trn>Export to CSV</digi:trn>
+			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+			</a>
+		</td>
+
+		<td noWrap align=left valign="center">
+			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
-		</feature:display>
 		
-		<feature:display name="Printer Friendly" module="Exports">
 		<td noWrap align=left valign="center">
-			<digi:link styleClass="settingsLink" href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
-				<digi:img style="vertical-align: middle;" width="17" height="20" 
-						hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
-				<digi:trn>Print</digi:trn>
+			<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
 			</digi:link>
 		</td>
-		</feature:display>
 	</tr>
 </table>
 </div>
@@ -279,7 +259,7 @@ function openPrinter(){
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tr>
 			<td align="center"> 
-				<digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/dgf_logo.jpg" border="0" />						
+				<digi:img hspace="2" vspace="2" src="module/aim/images/dgf_logo.jpg" border="0" />						
 			</td>
 		</tr>
 		<tr>
@@ -301,13 +281,13 @@ function openPrinter(){
 
 <div id="logoStatement" style="display: none">
 	<div align="center">
-			<digi:form action="<%=viewParamPDF%>" method="post" styleId="exportForm">			
+			<digi:form action="<%=viewParamPDF%>" method="post">			
 				<input type="hidden" name="viewParam" value="<%=viewParam%>" />
 				<input type="hidden" name="ampReportId" value="<%=ampReportId%>" />
 				<table cellpadding="5" cellspacing="5" border="0" width="100%">
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" onclick="javascript:showMyPanel(1, 'statementPopup');" title="${displayampstatement}"  />
+							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(1, 'statementPopup');" title="${displayampstatement}"  />
 							<digi:trn key="rep:pop:StatementOptions">Statement Options</digi:trn>
 						</td>
 						<td>
@@ -319,7 +299,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:StatementPositionOptions">Statement Position Options</digi:trn>														
 						</td>
 						<td>
@@ -331,7 +311,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td>
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:DateOptions">Date Options</digi:trn>
 						</td>
 						<td>
@@ -343,7 +323,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td>
-							<digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" onclick="javascript:showMyPanel(2, 'logoPopup');" title="${displayofficialamplogo}" />
+							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(2, 'logoPopup');" title="${displayofficialamplogo}" />
 							<digi:trn key="rep:pop:LogoOptions">Logo Options</digi:trn>
 						</td>
 						<td>
@@ -355,7 +335,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:LogoPositionOptions">Logo Position Options</digi:trn>														
 						</td>
 						<td>
@@ -387,4 +367,4 @@ function openPrinter(){
 			</digi:form>
 		</div>			        
 	</div>		        
-</span>
+</div>

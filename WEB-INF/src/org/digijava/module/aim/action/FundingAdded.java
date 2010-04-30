@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,6 +35,8 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
 public class FundingAdded extends Action {
 
@@ -70,39 +71,39 @@ public class FundingAdded extends Action {
 			}
 		}
 		//		
-		BigDecimal totalComms	= new BigDecimal(0);
-		BigDecimal totalDisbs	= new BigDecimal(0);
-		BigDecimal totalExps	= new BigDecimal(0);
-		boolean isBigger = false;	
+		double totalComms	= 0;
+		double totalDisbs	= 0;
+		double totalExps	= 0;
+		//boolean isBigger = false;		
 		//
 		if (eaForm.getFunding().getFundingDetails() != null) {
 			Iterator itr = eaForm.getFunding().getFundingDetails().iterator();
 			while (itr.hasNext()) {
 				FundingDetail fundDet = (FundingDetail) itr.next();
 				//
-				BigDecimal amount = this.getAmountInDefaultCurrency(fundDet, tm.getAppSettings());					
+				double amount = this.getAmountInDefaultCurrency(fundDet, tm.getAppSettings());					
 				if (( fundDet.getTransactionType() == Constants.COMMITMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
-					totalComms=totalComms.add(amount);
+					totalComms	+= amount;
 				else 
 					if (( fundDet.getTransactionType() == Constants.DISBURSEMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
-						totalDisbs=totalDisbs.add( amount);
+							totalDisbs	+= amount;
 					else 
 						if (( fundDet.getTransactionType() == Constants.EXPENDITURE )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
-							totalExps =totalExps.add( amount);
+							totalExps	+= amount;
 			}
-			String alert = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
+//			String alert = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
 			//
-			if (Boolean.parseBoolean(alert)) {
-				if (totalDisbs.compareTo(totalComms) > 0 ) {
-					eaForm.setTotDisbIsBiggerThanTotCom(true);
-					isBigger = true;
-				} else {
-					eaForm.setTotDisbIsBiggerThanTotCom(false);
-				}
-			}
+//			if (Boolean.parseBoolean(alert)) {
+//				if (totalDisbs > totalComms) {
+//					eaForm.setTotDisbIsBiggerThanTotCom(true);
+//					isBigger = true;
+//				} else {
+//					eaForm.setTotDisbIsBiggerThanTotCom(false);
+//				}
+//			}
 		}
 		EditActivityForm.Funding currentFunding = null;
-	//	if (!isBigger) {
+		//if (!isBigger) {
 			currentFunding = eaForm.getFunding();
 			//
 			Funding newFund = new Funding();
@@ -176,7 +177,7 @@ public class FundingAdded extends Action {
 						fundDet.setAdjustmentTypeName("Planned");
 					else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 						fundDet.setAdjustmentTypeName("Actual");
-					}				
+					}
 					//
 					fundDetails.add(fundDet);
 				}
@@ -247,11 +248,10 @@ public class FundingAdded extends Action {
 		return mapping.findForward("forward");
 	}
 	
-
-	private BigDecimal[] getFundingAmounts(EditActivityForm form, TeamMember tm) {
-		BigDecimal totalComms	= new BigDecimal(0);
-		BigDecimal totalDisbs	= new BigDecimal(0);
-		BigDecimal totalExps	= new BigDecimal(0);		
+	private double[] getFundingAmounts(EditActivityForm form, TeamMember tm) {
+		double totalComms	= 0;
+		double totalDisbs	= 0;
+		double totalExps	= 0;		
 		//
 		Collection <FundingOrganization> orgs	= form.getFunding().getFundingOrganizations();
 		if ( orgs != null ) {
@@ -266,15 +266,15 @@ public class FundingAdded extends Action {
 							Iterator<FundingDetail> iterDet	= details.iterator();
 							while ( iterDet.hasNext() ) {
 								FundingDetail detail		= iterDet.next();
-								BigDecimal amount				= this.getAmountInDefaultCurrency(detail, tm.getAppSettings());					
+								double amount				= this.getAmountInDefaultCurrency(detail, tm.getAppSettings());					
 								if (( detail.getTransactionType() == Constants.COMMITMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
-											totalComms	=totalComms.add(amount) ;
+											totalComms	+= amount;
 								else 
 									if (( detail.getTransactionType() == Constants.DISBURSEMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
-											totalDisbs=totalDisbs.add( amount);
+											totalDisbs	+= amount;
 									else 
 										if (( detail.getTransactionType() == Constants.EXPENDITURE )&&(detail.getAdjustmentType()==Constants.ACTUAL))
-											totalExps=totalExps.add(amount);
+											totalExps	+= amount;
 							}
 						}
 					}
@@ -282,25 +282,25 @@ public class FundingAdded extends Action {
 				
 			}
 		}
-		BigDecimal[] amounts = {totalComms, totalDisbs, totalExps};
+		double[] amounts = {totalComms, totalDisbs, totalExps};
 		//
 		return amounts;
 	}
 	
 	private void updateTotals ( EditActivityForm form, TeamMember tm ) {
-		BigDecimal [] amounts = getFundingAmounts(form, tm);
+		double [] amounts = getFundingAmounts(form, tm);
 		//
 		form.getFunding().setTotalCommitments(FormatHelper.formatNumber(amounts[0]));
 		form.getFunding().setTotalDisbursements(FormatHelper.formatNumber(amounts[1]));
 		form.getFunding().setTotalExpenditures(FormatHelper.formatNumber(amounts[2])	);
 	}
 	
-	private BigDecimal getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {		
+	private double getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {		
 		java.sql.Date dt = new java.sql.Date(DateConversion.getDate(fundDet.getTransactionDate()).getTime());
 		double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
 		String toCurrCode = CurrencyUtil.getAmpcurrency( appSet.getCurrencyId() ).getCurrencyCode();
 		double toExRt = Util.getExchange(toCurrCode,dt);
-		BigDecimal amt = CurrencyWorker.convert1(FormatHelper.parseBigDecimal(fundDet.getTransactionAmount()),frmExRt,toExRt);
+		double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 		//
 		return amt;		
 	}

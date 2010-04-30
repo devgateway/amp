@@ -30,7 +30,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
 
@@ -47,8 +46,10 @@ public class ShowDocumentsList
 
         // get documents List from data base
         ModuleInstance moduleInstance = DgUtil.getRealModuleInstance(request);
-        String siteId = RequestUtils.getSite(request).getId().toString();
-        documentsList = DbUtil.getDocuments(siteId,moduleInstance.getInstanceName());
+
+        documentsList = DbUtil.getDocuments(moduleInstance.getSite().
+                                            getSiteId(),
+                                            moduleInstance.getInstanceName());
 
         if (documentsList != null) {
             formBean.setDocumentsList(documentsList);

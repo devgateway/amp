@@ -1,8 +1,6 @@
 package org.digijava.module.message.dbentity;
 
-import java.io.Serializable;
-
-public class AmpMessageSettings implements Serializable{
+public class AmpMessageSettings {
 	
 	private Long id;
 	private Long msgRefreshTime;

@@ -1,7 +1,6 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -22,13 +21,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.MonthlyInfoForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
-import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.MonthlyComparison;
@@ -36,7 +33,6 @@ import org.digijava.module.aim.helper.MonthlyInfo;
 import org.digijava.module.aim.helper.MonthlyInfoWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -101,35 +97,20 @@ public class ViewMonthlyInfo extends TilesAction {
             List monthlyInfos = new ArrayList();
             try {
                 if (mapping.getInput().equals("/aim/viewMonthlyComparisons")) {
-                	BigDecimal total = new BigDecimal(0);
-        			Long ampActivityId = Long.parseLong(request.getParameter("ampActivityId"));
-        			try {
-        				AmpActivity activity = ActivityUtil.loadActivity(ampActivityId);
-        				total = CurrencyWorker.convert(activity.getFunAmount(), fp.getCurrencyCode());
-        				monthlyForm.setTotalCost(total);
-        				
-        			} catch (DgException e) {
-        				logger.error("can't get the total cost",e);
-        			}
-        			
-                  BigDecimal totalActualComm = new BigDecimal(0);
-                  BigDecimal totalDisbOrders = new BigDecimal(0);
-                  BigDecimal totalPlannedDisb=new BigDecimal(0);
-                  BigDecimal totalActualDisb=new BigDecimal(0);
-                  BigDecimal totalActualExp=new BigDecimal(0);
-                  BigDecimal totalPlannedExp=new BigDecimal(0);
+                  double totalActualComm = 0, totalDisbOrders = 0,totalPlannedDisb=0,
+                          totalActualDisb=0, totalActualExp=0, totalPlannedExp=0;
                   
-                    monthlyInfos = MonthlyInfoWorker.getMonthlyComparisons(fp,total);
+                    monthlyInfos = MonthlyInfoWorker.getMonthlyComparisons(fp);
                     if(monthlyInfos!=null){
                        Iterator iterInfo = monthlyInfos.iterator();
                         while (iterInfo.hasNext()) {
                             MonthlyComparison comparison=(MonthlyComparison)iterInfo.next();
-                            totalActualComm=totalActualComm.add(comparison.getActualCommitment());
-                            totalActualDisb=totalActualComm.add(comparison.getActualDisbursement());
-                            totalActualExp=totalActualExp.add(comparison.getActualExpenditure());
-                            totalDisbOrders=totalDisbOrders.add(comparison.getDisbOrders());
-                            totalPlannedDisb=totalPlannedDisb.add(comparison.getPlannedDisbursement());
-                            totalPlannedExp=totalPlannedExp.add(comparison.getPlannedExpenditure());
+                            totalActualComm+=comparison.getActualCommitment();
+                            totalActualDisb+=comparison.getActualDisbursement();
+                            totalActualExp+=comparison.getActualExpenditure();
+                            totalDisbOrders+=comparison.getDisbOrders();
+                            totalPlannedDisb+=comparison.getPlannedDisbursement();
+                            totalPlannedExp+=comparison.getPlannedExpenditure();
                                 
                         }
                        monthlyForm.setTotalActualCommitment(totalActualComm);
@@ -138,21 +119,19 @@ public class ViewMonthlyInfo extends TilesAction {
                        monthlyForm.setTotalPlannedDisbursement(totalPlannedDisb);
                        monthlyForm.setTotalPlannedExpenditure(totalPlannedExp);
                        monthlyForm.setTotalDisbOrder(totalDisbOrders);
-                       monthlyForm.setUncommittedBalance(total.subtract(totalActualComm));
                        Collections.sort(monthlyInfos);
                     }
 
                 } else {
                     monthlyInfos = MonthlyInfoWorker.getMonthlyData(fp);
-                    BigDecimal totalActual = new BigDecimal(0); 
-                    BigDecimal totalPlanned = new BigDecimal(0);
+                    double totalActual = 0, totalPlanned = 0;
                     if (monthlyInfos != null) {
                         Iterator iterInfo = monthlyInfos.iterator();
                         while (iterInfo.hasNext()) {
                             MonthlyInfo info = (MonthlyInfo) iterInfo.next();
 
-                            totalActual = totalActual.add(info.getActualAmount());
-                            totalPlanned = totalPlanned.add(info.getPlannedAmount());
+                            totalActual += info.getActualAmount();
+                            totalPlanned += info.getPlannedAmount();
                     }
                         monthlyForm.setTotalActual(totalActual);
                         monthlyForm.setTotalPlanned(totalPlanned);

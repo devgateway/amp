@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -39,21 +39,21 @@ public class ImportChaptersAction extends Action {
 			InputStream inp = icform.getUploadedFile().getInputStream();
 			POIFSFileSystem poifs = new POIFSFileSystem(inp);
 			HSSFWorkbook wb = new HSSFWorkbook(poifs);
-			Sheet sheet = wb.getSheetAt(0);
+			HSSFSheet sheet = wb.getSheetAt(0);
 			boolean header = true;
 			int chaptersInserted = 0;
 			int chaptersUpdated = 0;
 			int imputationsInserted = 0;
 			int imputationsUpdated = 0;
 			int errorNumber = 0;
-			for (Iterator<Row> rit = sheet.rowIterator(); rit.hasNext();) {
+			for (Iterator<HSSFRow> rit = sheet.rowIterator(); rit.hasNext();) {
 				try {
-					Row row = rit.next();
+					HSSFRow HSSFRow = rit.next();
 					if (header) {
 						header = false;
 						continue;
 					}
-					String chapterCode = ChapterUtil.getNumberFromCell(row.getCell(1));
+					String chapterCode = ChapterUtil.getNumberFromCell(HSSFRow.getCell((short)1));
 					AmpChapter chapter = ChapterUtil
 							.getChapterByCode(chapterCode);
 					if (chapter == null) {
@@ -61,13 +61,13 @@ public class ImportChaptersAction extends Action {
 						chaptersInserted++;
 					} else
 						chaptersUpdated++;
-					if(row.getCell(2)!=null) chapter.setDescription(row.getCell(2).getStringCellValue()); else chapter.setDescription(null);
-					String year =  ChapterUtil.getNumberFromCell(row.getCell(0));
+					if(HSSFRow.getCell((short)2)!=null) chapter.setDescription(HSSFRow.getCell((short)2).getStringCellValue()); else chapter.setDescription(null);
+					String year =  ChapterUtil.getNumberFromCell(HSSFRow.getCell((short)0));
 					chapter.setYear(new Integer(year));
 					ChapterUtil.saveChapter(chapter);
 					logger.info("Processed chapter with code "
 							+ chapter.getCode());
-					String impCode = ChapterUtil.getNumberFromCell(row.getCell(3));
+					String impCode = ChapterUtil.getNumberFromCell(HSSFRow.getCell((short)3));
 					AmpImputation imp = ChapterUtil.getImputationByCode(impCode);
 					if (imp == null) {
 						imp = new AmpImputation(impCode);
@@ -75,7 +75,7 @@ public class ImportChaptersAction extends Action {
 					} else
 						imputationsUpdated++;
 					imp.setChapter(chapter);
-					if(row.getCell(4)!=null) imp.setDescription(row.getCell(4).getStringCellValue());else imp.setDescription(null);
+					if(HSSFRow.getCell((short)4)!=null) imp.setDescription(HSSFRow.getCell((short)4).getStringCellValue());else imp.setDescription(null);
 					ChapterUtil.saveImputation(imp);
 					logger.info("Processed imputation with code "
 							+ imp.getCode());

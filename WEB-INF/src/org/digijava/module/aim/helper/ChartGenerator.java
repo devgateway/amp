@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,17 +19,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -57,7 +54,7 @@ public class ChartGenerator {
 
 	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw,
 			int chartWidth,int chartHeight,String url, HttpServletRequest request) throws WorkerException {
-        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 		Collection activityIds = new ArrayList();
 		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
@@ -94,10 +91,31 @@ public class ChartGenerator {
 		return generateRiskChart(cp,request);
 	}
 
-	public static String getActivityRiskChartFileName(Long actId,HttpSession session,PrintWriter pw,int chartWidth,int chartHeight,String url, HttpServletRequest request) throws Exception{
-		Collection<AmpCategoryValue> risks = IndicatorUtil.getRisks(actId);
+	public static String getActivityRiskChartFileName(Long actId,
+			HttpSession session,PrintWriter pw,
+			int chartWidth,int chartHeight,String url, HttpServletRequest request) throws Exception{
 
-		/*ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
+        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
+
+		ArrayList<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
+		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+		if(valuesActivity!=null && valuesActivity.size()>0){
+			Iterator<IndicatorActivity> it=valuesActivity.iterator();
+			while(it.hasNext()){
+				 IndicatorActivity indActivity=it.next();
+				 Set<AmpIndicatorValue> values=indActivity.getValues();
+				 for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
+					 AmpIndicatorValue val=valuesIter.next();
+					 if(val.getRisk()!=null){
+						 risks.add(val.getRisk());
+						 break;//TODO INDIC because this is stupid! all values have same risk and this risk should go to connection.
+					 }
+				}
+			}
+		}
+
+		//ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
         for (Iterator<AmpIndicatorRiskRatings> riskIter = risks.iterator(); riskIter.hasNext(); ) {
         	AmpIndicatorRiskRatings item = (AmpIndicatorRiskRatings) riskIter.next();
             String value = item.getRatingName();
@@ -105,9 +123,10 @@ public class ChartGenerator {
             key = key.replaceAll(" ", "");
             String msg = TranslatorWorker.translateText(key, langCode, siteId);
             item.setTranslatedRatingName(msg);
-        }*/
+        }
 
         //Collections.sort((List)risks);
+
 
 		ChartParams cp = new ChartParams();
 		cp.setChartHeight(chartHeight);
@@ -118,31 +137,6 @@ public class ChartGenerator {
 		cp.setWriter(pw);
 		cp.setUrl(url);
 		return generateRiskChart(cp,request);
-	}
-
-    /*
-     *
-     * TODO remove this method we have same method in IndicatorUtil getRisks()...
-     */
-    @Deprecated
-	public static ArrayList<AmpCategoryValue> getActivityRisks(Long actId)	throws DgException {
-		ArrayList<AmpCategoryValue> risks=new ArrayList<AmpCategoryValue>();
-		List<IndicatorActivity> valuesActivity=IndicatorUtil.getIndicatorActivities(actId);
-		if(valuesActivity!=null && valuesActivity.size()>0){
-			Iterator<IndicatorActivity> it=valuesActivity.iterator();
-			while(it.hasNext()){
-				 IndicatorActivity indActivity=it.next();
-				 Set<AmpIndicatorValue> values=indActivity.getValues();
-				 for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
-					 AmpIndicatorValue val=valuesIter.next();
-					 if(val.getRiskValue()!=null){
-						 risks.add(val.getRiskValue());
-						 break;//TODO INDIC because this is stupid! all values have same risk and this risk should go to connection.
-					 }
-				}
-			}
-		}
-		return risks;
 	}
 
 	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
@@ -165,7 +159,7 @@ public class ChartGenerator {
 		Collection col = new ArrayList();
 		ArrayList temp = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorValues(
 				activityIds,indId,includeBaseline, request);
-        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 
 		if ((actId.longValue() > 0 && indId.longValue() <= 0) ||
@@ -200,11 +194,13 @@ public class ChartGenerator {
 		return generatePerformanceChart(cp,request);
 	}
 
-	public static String getActivityPerformanceChartFileName(Long actId,HttpSession session,PrintWriter pw,
+	public static String getActivityPerformanceChartFileName(Long actId,
+			HttpSession session,PrintWriter pw,
 			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) throws Exception{
 
-		
-		List<IndicatorActivity> values=IndicatorUtil.getIndicatorActivities(actId);;
+		AmpActivity activity=ActivityUtil.loadActivity(actId);
+		Set<IndicatorActivity> values=activity.getIndicators();
+
 
 //		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
 //			if(valuesActivity!=null && valuesActivity.size()>0){
@@ -250,45 +246,22 @@ public class ChartGenerator {
 
 	public static String generateRiskChart(ChartParams cp,HttpServletRequest request) {
 		String fileName = null;
-        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-		Collection<AmpCategoryValue> col = cp.getData();
-		try {
-			JFreeChart chart = generateRiskChart(cp,siteId,langCode);
-			if(chart!=null){
-				String url = cp.getUrl(); 
-				if (url != null && url.trim().length() > 0) {
-					((PiePlot)chart.getPlot()).setURLGenerator(new PieChartURLGenerator(url,"risk",langCode,siteId));
-				}
-				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-
-				fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),cp.getChartHeight(),info,cp.getSession());
-				ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
-
-				cp.getWriter().flush();
-			}
-		} catch (Exception e) {
-			logger.error("Exception from generateRisk() :" + e.getMessage());
-			e.printStackTrace(System.out);
-		}
-		return fileName;
-	}
-	
-	public static JFreeChart generateRiskChart(ChartParams cp,Long siteId,String langCode) {
-		JFreeChart chart =null;
-		Collection<AmpCategoryValue> col = cp.getData();
+		Collection<AmpIndicatorRiskRatings> col = cp.getData();
 		try {
 			if (col != null && col.size() > 0) {
-				Iterator<AmpCategoryValue> itr = col.iterator();
+				Iterator<AmpIndicatorRiskRatings> itr = col.iterator();
 
 				DefaultPieDataset ds = new DefaultPieDataset();
+
 				//how many risks are for each risk name
 				Map<String,Integer> riskCount=new HashMap<String, Integer> ();
 				//what is value of each risk name
 				Map<String,Integer> riskValues=new HashMap<String, Integer> ();
 
-				for (AmpCategoryValue risk : col) {
-					Integer count=riskCount.get(risk.getValue());
+				for (AmpIndicatorRiskRatings risk : col) {
+					Integer count=riskCount.get(risk.getRatingName());
 					if (count==null){
 						//this is first one o the type
 						count=new Integer(1);
@@ -296,9 +269,10 @@ public class ChartGenerator {
 						//this is not first one so increment
 						count=new Integer(count+1);
 					}
-					riskCount.put(risk.getValue(), count);
-					riskValues.put(risk.getValue(), risk.getIndex());
+					riskCount.put(risk.getRatingName(), count);
+					riskValues.put(risk.getRatingName(), risk.getRatingValue());
 				}
+
 
 				Color seriesColors[] = new Color[col.size()];
 				int index = 0;
@@ -332,41 +306,168 @@ public class ChartGenerator {
 						}
 
 						//put in datasource
+
                         String msg = TranslatorWorker.translateText(riskName, langCode, siteId);
 						ds.setValue(msg,count);
 
 					}
 				}
 
-				chart = ChartFactory.createPieChart(
+
+
+
+//				while (itr.hasNext()) {
+//					AmpIndicatorRiskRatings risk=itr.next();
+//					//MEIndicatorRisk risk = (MEIndicatorRisk) itr.next();
+//
+//					switch (risk.getRatingValue()) {
+//					case Constants.HIGHLY_SATISFACTORY:
+//						seriesColors[index++] = Constants.HIGHLY_SATISFACTORY_CLR;
+//						break;
+//					case Constants.VERY_SATISFACTORY:
+//						seriesColors[index++] = Constants.VERY_SATISFACTORY_CLR;
+//						break;
+//					case Constants.SATISFACTORY:
+//						seriesColors[index++] = Constants.SATISFACTORY_CLR;
+//						break;
+//					case Constants.UNSATISFACTORY:
+//						seriesColors[index++] = Constants.UNSATISFACTORY_CLR;
+//						break;
+//					case Constants.VERY_UNSATISFACTORY:
+//						seriesColors[index++] = Constants.VERY_UNSATISFACTORY_CLR;
+//						break;
+//					case Constants.HIGHLY_UNSATISFACTORY:
+//						seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
+//					}
+//
+//					ds.setValue("High",-1);
+//					ds.setValue("hehee",0);
+//					ds.setValue("Low",1);
+//					if (risk.getRatingValue()<0){
+//						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+//					}else{
+//						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+//					}
+//				}
+
+				JFreeChart chart = ChartFactory.createPieChart(
 						cp.getTitle(), // title
 						ds,		// dataset
 						true,	// show legend
 						false,	// show tooltips
 						false);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
-				
+
 				PiePlot plot = (PiePlot) chart.getPlot();
 				for (int i = 0;i < index;i ++) {
 					plot.setSectionPaint(i,seriesColors[i]);
 				}
-				
+
+				String url = cp.getUrl();
+				if (url != null && url.trim().length() > 0) {
+					plot.setURLGenerator(new PieChartURLGenerator(url,"risk",langCode,siteId));
+				}
+				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+
+				fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),
+						cp.getChartHeight(),info,cp.getSession());
+				ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
+
+				cp.getWriter().flush();
 			}
 		} catch (Exception e) {
 			logger.error("Exception from generateRisk() :" + e.getMessage());
 			e.printStackTrace(System.out);
 		}
-		return chart;
+		return fileName;
 	}
 
 	public static String generatePerformanceChart(ChartParams cp,HttpServletRequest request) {
-		String fileName=null;
-        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-		
-		try {			
-			JFreeChart chart = generatePerformanceChart(cp,siteId,langCode);
+
+		String fileName = null;
+		Double baseValue=null,actualValue=null,targetValue=null;
+		String baseValueType=null,targetValueType=null,actualValueType=null;
+		DefaultCategoryDataset ds = new DefaultCategoryDataset();
+		try {
+			Collection data=cp.getData();
+			for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+				IndicatorActivity connection = (IndicatorActivity) iterator.next();
+
+				Collection<AmpIndicatorValue> col = connection.getValues();
+				if (col != null && col.size() > 0) {
+					String indicatorName=connection.getIndicator().getName();
+
+					Iterator<AmpIndicatorValue> itr = col.iterator();
+					boolean revisedAlreadyParsed=false;
+					while (itr.hasNext()) {
+						AmpIndicatorValue ampIndValue = itr.next();
+						if (ampIndValue.getValueType() == AmpIndicatorValue.BASE) {
+							baseValue = ampIndValue.getValue();
+							baseValueType =  "base".toLowerCase();
+							baseValueType = baseValueType.replaceAll(" ", "");
+							String msg = TranslatorWorker.translateText(baseValueType, langCode, siteId);
+							baseValueType=msg;
+						} else if (ampIndValue.getValueType() == AmpIndicatorValue.ACTUAL) {
+							actualValue = ampIndValue.getValue();
+							actualValueType = "actual".toLowerCase();
+							actualValueType = actualValueType.replaceAll(" ", "");
+							  String msg = TranslatorWorker.translateText(actualValueType, langCode, siteId);
+							actualValueType=msg;
+						} else if (ampIndValue.getValueType() == AmpIndicatorValue.TARGET && !revisedAlreadyParsed) {
+							targetValue = ampIndValue.getValue();
+							targetValueType = "target".toLowerCase();
+							targetValueType = targetValueType.replaceAll(" ", "");
+							  String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
+							targetValueType=msg;
+
+						} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED) {
+							targetValue = ampIndValue.getValue();
+							targetValueType =  "target".toLowerCase();
+							targetValueType = targetValueType.replaceAll(" ", "");
+							 String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
+							targetValueType=msg;
+							revisedAlreadyParsed=true;//this is used to not overwrite revised with target.
+						}
+					}
+					if (baseValue<=actualValue&& actualValue<=targetValue){
+						actualValue=actualValue-baseValue;
+						targetValue=targetValue-baseValue;
+						actualValue=(100f*actualValue)/targetValue;
+						targetValue=100-actualValue;
+					} else {
+						double result = 0;
+						baseValue -= targetValue;
+			            actualValue -= targetValue;
+			            targetValue = baseValue;
+			            if (baseValue != 0 && actualValue != 0) {
+			                result = actualValue / (baseValue / 100);
+			                actualValue=100-result;
+			                targetValue=100 - actualValue;
+			            }
+						//ds.addValue(baseValue,baseValueType,indicatorName);
+					}
+					ds.addValue(actualValue,actualValueType,indicatorName);
+					ds.addValue(targetValue,targetValueType,indicatorName);
+
+				}
+			}
+
+
+			JFreeChart chart = ChartFactory.createStackedBarChart(
+					cp.getTitle(), // title
+					null,	// X-axis label
+					null,	// Y-axis label
+					ds,		// dataset
+					PlotOrientation.VERTICAL,	// Orientation
+					true,	// show legend
+					false,	// show tooltips
+					false);	// show urls
+			chart.setBackgroundPaint(Color.WHITE);
+
 			CategoryPlot plot = (CategoryPlot) chart.getPlot();
+
 			CategoryItemRenderer r1 = plot.getRenderer();   //new StackedBarRenderer();
 			//r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
 			r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
@@ -403,98 +504,13 @@ public class ChartGenerator {
 			ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
 			cp.getWriter().flush();
 
+
+
+
 		} catch (Exception e) {
 			logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
 			e.printStackTrace();
 		}
  		return fileName;
-	}
-	
-	public static JFreeChart generatePerformanceChart(ChartParams cp,Long siteId,String langCode) {
-			JFreeChart chart =null;
-			Double baseValue=null,actualValue=null,targetValue=null;
-			String baseValueType=null,targetValueType=null,actualValueType=null;
-			DefaultCategoryDataset ds = new DefaultCategoryDataset();
-			try {
-				Collection data=cp.getData();
-				for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-					IndicatorActivity connection = (IndicatorActivity) iterator.next();
-
-					Collection<AmpIndicatorValue> col = connection.getValues();
-					if (col != null && col.size() > 0) {
-						String indicatorName=connection.getIndicator().getName();
-
-						Iterator<AmpIndicatorValue> itr = col.iterator();
-						boolean revisedAlreadyParsed=false;
-						while (itr.hasNext()) {
-							AmpIndicatorValue ampIndValue = itr.next();
-							if (ampIndValue.getValueType() == AmpIndicatorValue.BASE) {
-								baseValue = ampIndValue.getValue();
-								baseValueType =  "base".toLowerCase();
-								baseValueType = baseValueType.replaceAll(" ", "");
-								String msg = TranslatorWorker.translateText(baseValueType, langCode, siteId);
-								baseValueType=msg;
-							} else if (ampIndValue.getValueType() == AmpIndicatorValue.ACTUAL) {
-								actualValue = ampIndValue.getValue();
-								actualValueType = "actual".toLowerCase();
-								actualValueType = actualValueType.replaceAll(" ", "");
-								  String msg = TranslatorWorker.translateText(actualValueType, langCode, siteId);
-								actualValueType=msg;
-							} else if (ampIndValue.getValueType() == AmpIndicatorValue.TARGET && !revisedAlreadyParsed) {
-								targetValue = ampIndValue.getValue();
-								targetValueType = "target".toLowerCase();
-								targetValueType = targetValueType.replaceAll(" ", "");
-								  String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
-								targetValueType=msg;
-
-							} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED) {
-								targetValue = ampIndValue.getValue();
-								targetValueType =  "target".toLowerCase();
-								targetValueType = targetValueType.replaceAll(" ", "");
-								 String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
-								targetValueType=msg;
-								revisedAlreadyParsed=true;//this is used to not overwrite revised with target.
-							}
-						}
-						if (baseValue<=actualValue&& actualValue<=targetValue){
-							actualValue=actualValue-baseValue;
-							targetValue=targetValue-baseValue;
-							actualValue=(100f*actualValue)/targetValue;
-							targetValue=100-actualValue;
-						} else {
-							double result = 0;
-							baseValue -= targetValue;
-				            actualValue -= targetValue;
-				            targetValue = baseValue;
-				            if (baseValue != 0 && actualValue != 0) {
-				                result = actualValue / (baseValue / 100);
-				                actualValue=100-result;
-				                targetValue=100 - actualValue;
-				            }
-							//ds.addValue(baseValue,baseValueType,indicatorName);
-						}
-						ds.addValue(actualValue,actualValueType,indicatorName);
-						ds.addValue(targetValue,targetValueType,indicatorName);
-
-					}
-				}
-
-
-				 chart = ChartFactory.createStackedBarChart(
-						cp.getTitle(), // title
-						null,	// X-axis label
-						null,	// Y-axis label
-						ds,		// dataset
-						PlotOrientation.VERTICAL,	// Orientation
-						true,	// show legend
-						false,	// show tooltips
-						false);	// show urls
-				chart.setBackgroundPaint(Color.WHITE);				
-
-			} catch (Exception e) {
-				logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
-				e.printStackTrace();
-			}
-	 		return chart;
 	}
 }

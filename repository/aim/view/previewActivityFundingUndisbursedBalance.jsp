@@ -7,19 +7,22 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
+
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
 
 <tr>
-	<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
-		<digi:trn>UNDISBURSED BALANCE</digi:trn>
-	</td>
-	<td nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
-		<c:if test="${not empty funding.unDisbursementBalance}">
-			${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}
-		</c:if> &nbsp;
-	</td>
-	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
-</tr>
+		<td colspan="2" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+			key="aim:undisbursedBalance">
+           	  UNDISBURSED BALANCE 	             </digi:trn></td>
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000">
+			<c:if test="${not empty funding.unDisbursementBalance}">
+				${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}
+			</c:if> &nbsp;
+		</td>
+		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+	</tr>

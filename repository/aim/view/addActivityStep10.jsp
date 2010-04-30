@@ -17,7 +17,7 @@
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
-<jsp:include page="addActivityStep10Popin.jsp" flush="true" />
+
 <script language="JavaScript">
 <!--
 
@@ -193,7 +193,7 @@
 			document.aimEditActivityForm.submit();
 		}
 	}
-/*
+
 	function addIndicator()
 	{
 		openNewRsWindow(800, 400);
@@ -202,7 +202,7 @@
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 	}
-*/
+
 	function deleteIndicator()
 		{
 			return confirm(deleteThisIndicator);
@@ -213,8 +213,6 @@
 </script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/saveIndicatorValues.do~edit=true" method="post">
@@ -253,7 +251,7 @@
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td>
-								<span class=crumb style="visibility: hidden">
+								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home ">
 										<digi:trn key="aim:AmpAdminHome">
@@ -363,7 +361,7 @@ ${fn:replace(message,quote,escapedQuote)}
 					</table>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="4" vAlign="top">
+					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
@@ -372,7 +370,10 @@ ${fn:replace(message,quote,escapedQuote)}
 									</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn key="aim:editActivity">
+										Edit Activity
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -382,13 +383,35 @@ ${fn:replace(message,quote,escapedQuote)}
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%">
-							
+							<tr>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn>
+													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
+                                                                                                 ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                 <digi:trn key="aim:activity:MonitoringAndEvaluation">
+                                                                                                     Monitoring and Evaluation
+                                                                                                 </digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<table width="100%" bgcolor="#f4f4f2" border=0>
-									<tr><td class="separator1" title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
-										<digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn>
+								<table width="95%" bgcolor="#f4f4f2" border=0>
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
+										<b><digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn></b>
+										</a>
 									</td></tr>
 									<tr><td>
 										<table width="100%" cellSpacing=2 cellPadding=2 vAlign=top align=left class="box-border-nopadding" border=0>
@@ -413,7 +436,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.indicator.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
-															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" border=0>
+															<img src= "../ampTemplate/images/arrow_down.gif" border=0>
 														</digi:link>
 													</c:if>
 													<c:if test="${aimEditActivityForm.indicator.expIndicatorId!=indicator.indicatorId}">
@@ -425,7 +448,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														</c:set>
 														<c:set target="${urlParams}" property="edit" value="true" />
 														<digi:link href="/detailedIndicator.do" name="urlParams">
-															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
+															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;
 													<field:display name="Indicator Name" feature="Activity">
@@ -446,7 +469,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<bean:write name="indicator" property="indicatorId" />
 													</c:set>
 													<digi:link href="/removeIndFromActivity.do" name="urlParams1">
-														<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" onclick="return deleteIndicator()"/>
+														<img src="../ampTemplate/images/trash_12.gif" border="0" onclick="return deleteIndicator()"/>
 													</digi:link>
 												</td>
 											</tr>
@@ -490,11 +513,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtBaseValDate">&nbsp;&nbsp;
 																
 																	<a id="clear1" href="javascript:clearDate(document.getElementById("txtBaseValDate"), 'clear1')">
-																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																
 																	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtBaseValDate"),"clear1")'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																
 																</td>
@@ -531,11 +554,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtTargetValDate">&nbsp;&nbsp;
 																	
 																	<a id="clear2" href="javascript:clearDate(document.getElementById('txtTargetValDate'), 'clear2')">
-																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	
 																	<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("txtTargetValDate"),"clear2")'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 															
 																</td>
@@ -590,10 +613,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtRevisedTargetValDate">&nbsp;&nbsp;
 
 																	<a id="clear3" href="javascript:clearDate(document.getElementById('txtRevisedTargetValDate'), 'clear3')">
-																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("txtRevisedTargetValDate"),"clear3")'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>
@@ -616,7 +639,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															id="priorValues" type="org.digijava.module.aim.helper.PriorCurrentValues">
 																<tr bgColor=#f4f4f2>
 																	<td align="center">
-																		<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_dark.gif" border=0>
+																		<img src= "../ampTemplate/images/arrow_dark.gif" border=0>
 																	</td>
 																	<td>
 																		<bean:write name="priorValues" property="currValue" />
@@ -662,10 +685,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtCurrValDate">&nbsp;&nbsp;
 
 																	<a id="clear4" href="javascript:clearDate(document.getElementById('txtCurrValDate'), 'clear4')">
-																	 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date4" href='javascript:pickDateWithClear("date4",document.getElementById("txtCurrValDate"),"clear4")'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>																
 															</tr>
@@ -683,15 +706,20 @@ ${fn:replace(message,quote,escapedQuote)}
 														<field:display name="Risk" feature="Activity">
 														<tr>
 															<td>&nbsp;&nbsp;&nbsp;</td>
-                                                            <td colspan="2">
-                                                                <b>
-                                                                    <digi:trn key="aim:meRisk">Risk</digi:trn>
-                                                                </b>
-                                                                <c:set var="translation">
-                                                                    <digi:trn key="aim:addActivityStatusFirstLine">Please select a risk from below</digi:trn>
-                                                                </c:set>
-                                                                <category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="indicator.indicatorRisk"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text"  />
-                                                            </td>
+															<td><b>
+															<digi:trn key="aim:meRisk">Risk</digi:trn>
+															</b></td>
+															<td>
+																<html:select property="indicator.indicatorRisk" styleClass="inp-text">
+																<option value="0"><digi:trn key="help:selectRisk">Select Risk</digi:trn></option>
+																	<logic:iterate id="currRisk" name="aimEditActivityForm" property="indicator.riskCollection">
+																		<c:set var="trn">
+																			<digi:trn key="aim:risk:${currRisk.translatedRatingName}">${currRisk.ratingName}</digi:trn>
+																		</c:set>
+																		<html:option value="${currRisk.ampIndRiskRatingsId}">${trn}</html:option>
+																	</logic:iterate>
+																</html:select>
+															</td>
 														</tr>
 														</field:display>
 														<tr><td>&nbsp;</td></tr>
@@ -714,8 +742,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											</logic:iterate>
 											</logic:notEmpty>
 											<tr>
-												<td width="32%" align="center" colspan="6">&nbsp;
-													
+												<td width="32%" align="center" colspan="6">
+													&nbsp;
 												</td>
 											</tr>
 											<field:display name="Add Indicator Button" feature="Activity">
@@ -726,14 +754,14 @@ ${fn:replace(message,quote,escapedQuote)}
 											</tr>
 											</field:display>
 											<tr>
-												<td width="32%" align="center" colspan="6">&nbsp;
-													
+												<td width="32%" align="center" colspan="6">
+													&nbsp;
 												</td>
 											</tr>
 										</table>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>&nbsp;
-										
+									<tr><td bgColor=#f4f4f2>
+										&nbsp;
 									</td></tr>
 <%--
 									<tr><td bgColor=#f4f4f2 align="center">
@@ -768,8 +796,8 @@ ${fn:replace(message,quote,escapedQuote)}
 						</td></tr>
 					</table>
 				</td></tr>
-				<tr><td>&nbsp;
-					
+				<tr><td>
+					&nbsp;
 				</td></tr>
 			</table>
 		</td>

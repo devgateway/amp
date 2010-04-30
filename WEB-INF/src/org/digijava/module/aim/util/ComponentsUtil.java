@@ -3,7 +3,6 @@ package org.digijava.module.aim.util;
 /*
  * @author Govind G Dalwani
  */
-import java.math.BigDecimal;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +16,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -26,8 +24,6 @@ import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -65,7 +61,7 @@ public class ComponentsUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select distinct co from " + AmpComponent.class.getName() + " co where co.type.id=:id";
+            queryString = "select distinct co from " + AmpComponent.class.getName() + " co where co.type.type_id=:id";
             qry = session.createQuery(queryString);
             qry.setLong("id", id);
             col = qry.list();
@@ -94,24 +90,20 @@ public class ComponentsUtil {
         return col;
     }
     
-    public static AmpCategoryValue getComponentTypeById(Long id) {
+    public static AmpComponentType getComponentTypeById(Long id) {
         Collection col = null;
         String queryString = null;
         Session session = null;
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select co from " + AmpCategoryValue.class.getName() + " co where co.id=:id";
+            queryString = "select co from " + AmpComponentType.class.getName() + " co where co.type_id=:id";
             qry = session.createQuery(queryString);
             qry.setParameter("id", id, Hibernate.LONG);
 
             col = qry.list();
             if (col.size() > 0){
-            	for (Iterator iterator = col.iterator(); iterator.hasNext();) {
-					AmpCategoryValue catclass = (AmpCategoryValue) iterator.next();
-					return catclass;
-				}
-            	
+            	return new ArrayList<AmpComponentType>(col).get(0);
             }
         } catch (Exception ex) {
             logger.error("Unable to get Component for editing from database " + ex.getMessage());
@@ -151,7 +143,7 @@ public class ComponentsUtil {
     /*
      * add a new Component
      */
-    public static void addNewComponentType(AmpCategoryValue type) throws DgException {
+    public static void addNewComponentType(AmpComponentType type) {
         DbUtil.add(type);
 
     }
@@ -218,7 +210,7 @@ public class ComponentsUtil {
     /*
 	 * add a new Component
 	 */
-    public static void addNewComponent(AmpComponent ampComp) throws DgException{
+    public static void addNewComponent(AmpComponent ampComp) {
         DbUtil.add(ampComp);
 
     }
@@ -540,7 +532,7 @@ public class ComponentsUtil {
     }
 
     public static void calculateFinanceByYearInfo(Components<FundingDetail> tempComp, Collection<AmpComponentFunding> fundingComponentActivity) {
-        SortedMap<Integer, Map<String, BigDecimal>> fbyi = new TreeMap<Integer, Map<String, BigDecimal>> ();
+        SortedMap<Integer, Map<String, Double>> fbyi = new TreeMap<Integer, Map<String, Double>> ();
         Iterator<AmpComponentFunding> fundingDetailIterator = fundingComponentActivity.iterator();
         while (fundingDetailIterator.hasNext()) {
             AmpComponentFunding fundingDetail = fundingDetailIterator.next();
@@ -548,22 +540,22 @@ public class ComponentsUtil {
             cal.setTime(fundingDetail.getTransactionDate());
             int year = cal.get(Calendar.YEAR);
             if (!fbyi.containsKey(year)) {
-                fbyi.put(year, new HashMap<String, BigDecimal> ());
+                fbyi.put(year, new HashMap<String, Double> ());
             }
-            Map<String, BigDecimal> yearInfo = fbyi.get(year);
-            BigDecimal montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : new BigDecimal(0);
-            BigDecimal montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : new BigDecimal(0);
-            BigDecimal montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : new BigDecimal(0);
-            BigDecimal exchangeRate = new BigDecimal(1);
+            Map<String, Double> yearInfo = fbyi.get(year);
+            double montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : 0;
+            double montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : 0;
+            double montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : 0;
+            double exchangeRate = 1;
             if (fundingDetail.getExchangeRate() != null && fundingDetail.getExchangeRate() != 0) {
-                exchangeRate =new BigDecimal(fundingDetail.getExchangeRate()) ;
+                exchangeRate = fundingDetail.getExchangeRate();
             }
             if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType() == 0) {
-                montoProgramado =montoProgramado.add(fundingDetail.getTransactionAmount().divide(exchangeRate))   ;
+                montoProgramado += fundingDetail.getTransactionAmount() / exchangeRate;
             } else if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType() == 1) {
-                montoReprogramado =montoReprogramado.add(fundingDetail.getTransactionAmount().divide(exchangeRate)) ;
+                montoReprogramado += fundingDetail.getTransactionAmount() / exchangeRate;
             } else if (fundingDetail.getTransactionType() == 2 && fundingDetail.getAdjustmentType() == 1) {
-                montoEjecutado =montoEjecutado.add(fundingDetail.getTransactionAmount().divide( exchangeRate)) ;
+                montoEjecutado += fundingDetail.getTransactionAmount() / exchangeRate;
             }
             yearInfo.put("MontoProgramado", montoProgramado);
             yearInfo.put("MontoReprogramado", montoReprogramado);
@@ -642,7 +634,7 @@ public class ComponentsUtil {
 			collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
             
-            int result = (o1.getType().getValue()==null || o2.getType().getValue()==null)?0:collator.compare(o1.getType().getValue(), o2.getType().getValue());
+            int result = (o1.getType().getName()==null || o2.getType().getName()==null)?0:collator.compare(o1.getType().getName(), o2.getType().getName());
             return result;
 		}
     }

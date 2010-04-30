@@ -20,7 +20,7 @@
 -->
 </script>
 
-<%-- 
+
 <table width="100%" height="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
 <form action="/j_acegi_security_check" method="post"">
@@ -64,8 +64,7 @@
 
                                                   <c:if test="${param['loginError'] == 'noTeamMember'}">
                                                      <c:set var="errorDisplayed">true</c:set>
-                                                    
-                                                     <digi:trn key="error.aim.userinvalidteammembernoworkplace">You can not login into AMP because you are not assigned to a workspace</digi:trn>
+                                                     <digi:trn key="error.aim.userinvalidteammember">The user is not allowed to login</digi:trn>
            					     				</c:if>
                                                   
                                                   <c:if test="${param['loginError'] == 'invalidUser'}">
@@ -183,4 +182,3 @@
 </table>
 </td></tr>
 </table>
- --%> 

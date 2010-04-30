@@ -5,14 +5,11 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.Output;
 
-public class AmpRegionalFunding implements Versionable {
+public class AmpRegionalFunding {
 	
 	private Long ampRegionalFundingId;
 	private AmpActivity activity;
@@ -20,7 +17,7 @@ public class AmpRegionalFunding implements Versionable {
 	private Integer adjustmentType;
 	private Date transactionDate;
 	private Date reportingDate;
-	private BigDecimal transactionAmount;
+	private Double transactionAmount;
 	private AmpOrganisation reportingOrganization;
 	private AmpCurrency currency;
 	private String expenditureCategory;
@@ -128,13 +125,13 @@ public class AmpRegionalFunding implements Versionable {
 	/**
 	 * @return Returns the transactionAmount.
 	 */
-	public BigDecimal getTransactionAmount() {
+	public Double getTransactionAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
 	}
 	/**
 	 * @param transactionAmount The transactionAmount to set.
 	 */
-	public void setTransactionAmount(BigDecimal transactionAmount) {
+	public void setTransactionAmount(Double transactionAmount) {
 		this.transactionAmount = FeaturesUtil.applyThousandsForEntry(transactionAmount);
 	}
 	/**
@@ -184,57 +181,5 @@ public class AmpRegionalFunding implements Versionable {
 			return ampRegionalFundingId.equals(regFund.getAmpRegionalFundingId());	
 		}
 		throw new ClassCastException();
-	}
-	
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		AmpRegionalFunding aux = (AmpRegionalFunding) obj;
-		String original = " " + this.regionLocation + this.currency + this.transactionType
-				+ this.transactionAmount.longValue() + this.transactionDate + this.adjustmentType;
-		String copy = " " + aux.regionLocation + aux.currency + aux.transactionType + aux.transactionAmount.longValue()
-				+ aux.transactionDate + aux.adjustmentType;
-		if (original.equals(copy)) {
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public Output getOutput() {
-		Output out = new Output();
-		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(
-				new Output(null, new String[] { "Region: " }, new Object[] { this.regionLocation.getName() }));
-		String transactionType = "";
-		switch (this.transactionType.intValue()) {
-		case 0:
-			transactionType = "Commitments: ";
-
-			break;
-		case 1:
-			transactionType = " Disbursements: ";
-			break;
-		case 2:
-			transactionType = " Expenditures: ";
-			break;
-		case 3:
-			transactionType = " Disbursement Orders: ";
-			break;
-		case 4:
-			transactionType = " MTEF Projection: ";
-			break;
-		}
-		out.getOutputs().add(new Output(null, new String[] { " Trn: " }, new Object[] { transactionType }));
-		out.getOutputs().add(
-				new Output(null, new String[] { " Value: " }, new Object[] {
-						(this.adjustmentType.intValue() == 0) ? " Planned - " : " Actual - ", this.transactionAmount,
-						" ", this.currency, " - ", this.transactionDate }));
-		return out;
-	}
-	
-	@Override
-	public Object getValue() {
-		return "" + this.transactionType + this.transactionDate + this.transactionAmount + this.reportingDate
-				+ this.currency + this.expenditureCategory + this.adjustmentType + this.reportingOrganization;
 	}
 }

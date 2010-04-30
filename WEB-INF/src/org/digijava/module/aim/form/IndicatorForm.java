@@ -51,9 +51,8 @@ public class IndicatorForm extends ActionForm implements Serializable
 	private boolean showAddInd; //show or hide add Indicator fields on add Indicator page
 	
 	private char ascendingInd;
-    private Long sectorId;
-
-
+	
+	
 	public void resetsector(){
     	this.sector = new Long(-1);    	
     	this.sectorScheme = new Long(-1);
@@ -349,7 +348,6 @@ public class IndicatorForm extends ActionForm implements Serializable
 	 */
 	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
 		defaultFlag = false;
-        selectedIndicators=null;
 	}
 
 	public Collection<AmpSector> getAllSectors() {
@@ -399,12 +397,4 @@ public class IndicatorForm extends ActionForm implements Serializable
 	public void setShowAddInd(boolean showAddInd) {
 		this.showAddInd = showAddInd;
 	}
-    public Long getSectorId() {
-        return sectorId;
-    }
-
-    public void setSectorId(Long sectorId) {
-        this.sectorId = sectorId;
-    }
-
 }

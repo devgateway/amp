@@ -8,22 +8,21 @@
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 
 <script type="text/javascript">
-		YAHOO.namespace("YAHOO.amptab");
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
 		
-		YAHOO.amptab.handleCloseAbout = function() {
+		YAHOOAmp.amptab.handleCloseAbout = function() {
 			if(navigator.appName == 'Microsoft Internet Explorer'){
 			}
 		}
 		
-		YAHOO.amptab.handleClose = function() {
+		YAHOOAmp.amptab.handleClose = function() {
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
 			filter.parent.removeChild(filter);
 			
 		};
 	
-		var myPanel1Init = false;
-		var myPanel1 = new YAHOO.widget.Panel("new", {
+		var myPanel1 = new YAHOOAmp.widget.Panel("new", {
 			width:"700px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -34,7 +33,7 @@
 		    draggable:true} );
 		    
 		
-	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 	
 		    
 	function initScripts() {
@@ -47,33 +46,14 @@
 	}
 	
 	function showRecEvent() {
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("myEvent");
 		element.style.display = "inline";
-        var recSelEndDate=document.getElementById("recurrSelectedEndDate");
-        var recSelEndTime=document.getElementById("recurrSelectedEndTime");
-
-        if(recSelEndDate != null && recSelEndDate.value==''){
-            var endDate=document.getElementById("selectedEndDate");
-            recSelEndDate.value=endDate.value;
-        }
-        if(recSelEndTime != null && recSelEndTime.value==''){
-            var endDateTime=document.getElementById("selectedEndTime");
-            recSelEndTime.value=endDateTime.value;
-
-            var recEndTimeHour = document.getElementById("recSelectedEndHour");
-            recEndTimeHour.selectedIndex=parseInt(endDateTime.value.substring(0,2));
-
-            var recStartMinute = document.getElementById("recSelectedEndMinute");
-            recStartMinute.selectedIndex=parseInt(endDateTime.value.substring(3,5));
-        }
-
-		if (!myPanel1Init){
-	        myPanel1.setBody(element);
-	        myPanel1Init = true;
-		}
+		
+		myPanel1.setBody(element);
 		myPanel1.center();
 		myPanel1.show();
+
 		initCalendar();
 	}
 	
@@ -88,21 +68,13 @@
 		}
 	}
 
-	addLoadEvent(initScripts);
+	window.onload=initScripts;
 	
 function submit() {
-
-	 var list = document.getElementById('selreceivers');  
-	 if(list!=null){
-	  	for(var i = 0; i < list.length; i++) {
-	  		list.options[i].selected = true;
-	  	}
-	}
-		var eventForm = document.getElementById("showAmpEventFormID");
-		eventForm.action = "/calendar/showCalendarEvent.do?method=recurr"; 
-		eventForm.target = "_self";
+		var eventForm = document.getElementsByName("calendarEventForm")[0];
+		eventForm.action = "/calendar/showCalendarEvent.do" 
 		eventForm.submit();
-}
+	}
 </script>
 
 

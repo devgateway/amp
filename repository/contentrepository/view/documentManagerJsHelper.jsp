@@ -42,19 +42,17 @@
 }
 </style>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='css/yui/datatable.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='css/yui/menu.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='css/paginator.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datasource-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/datatable-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/connection-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/menu-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container_core-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/paginator-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datasource-beta-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ajaxconnection/connection-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 
 
@@ -101,7 +99,7 @@
 	/* AJAX Callback object for showing versions*/
 	var callbackForVersions	= {
 		success: function (o) {
-			YAHOO.amp.panels[1].setBody( "<div class='versions_markup yui-skin-sam' align='center' id='versions_div'>" + o.responseText + "</div>");
+			YAHOO.amp.panels[1].setBody( "<div class='versions_markup' align='center' id='versions_div'>" + o.responseText + "</div>");
 			setHeightOfDiv("versions_div", 250, 250);
 			YAHOO.amp.table.enhanceVersionsMarkup();
 			YAHOO.amp.panels[1].setFooter("* ${translation_public_ver_msg}");
@@ -119,14 +117,15 @@
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
-			    {key:"v_ver_num",type:"number", label:"${headerVersion}",sortable:true},
-			    {key:"v_type",label:"${headerType}",sortable:true},
-		        {key:"v_file_name",label:"${headerFileName}",sortable:true},
-		        {key:"v_date",label:"${headerDate}",type:"date",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
-		        {key:"v_size",type:"number",label:"${headerFileSize}",sortable:true},
-		        {key:"v_notes",label:"${headerNotes}",sortable:false},
-		        {key:"v_actions",label:"${headerAction}",sortable:false}
+			    {key:"v_ver_num",type:"number", text:"${headerVersion}",sortable:true},
+			    {key:"v_type",text:"${headerType}",sortable:true},
+		        {key:"v_file_name",text:"${headerFileName}",sortable:true},
+		        {key:"v_date",text:"${headerDate}",type:"date",sortable:true},
+		        {key:"size",type:"number",text:"${headerFileSize}",sortable:true},
+		        {key:"v_notes",text:"${headerNotes}",sortable:false},
+		        {key:"v_actions",text:"${headerAction}",sortable:false}
 		    ];
+		    this.columnSetForVersions = new YAHOO.widget.ColumnSet(this.columnHeadersForVersions);
 	      var options					= {
 	                    				rowsPerPage: 7,
 	                    				pageCurrent: 1,
@@ -135,28 +134,7 @@
 	                			};
 		
 		    var versionsDiv = YAHOO.util.Dom.get("versions_div");
-
-		    var oConfigs = { 
-	                paginator:new YAHOO.widget.Paginator({ 
-	                	rowsPerPage:10,
-	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"  	
-	                }) 
-	        		}; 
-	  
-		    var tableEl						= versionsDiv.getElementsByTagName("table")[0];
-			var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
-			myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE; 
-			myDataSource.responseSchema		= {fields: [{key: "v_ver_num"},
-			                           		         {key: "v_type"},
-					                           		 {key: "v_file_name"},
-					                           		 {key: "v_date", parser: "date"},
-					                           		 {key: "v_size"},
-					                           		 {key: "v_notes"},
-					                           		{key: "v_actions"}
-				                           		     	] 
-			                           		     	};
-		    
-		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnHeadersForVersions, myDataSource, oConfigs	);
+		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnSetForVersions, null, options	);
 	};
 
 </script>
@@ -268,10 +246,6 @@
 	<digi:trn>Please wait a moment...</digi:trn>
 </c:set>
 
-<c:set var="trans_no_resources">
-	<digi:trn>No resources found here.</digi:trn>
-</c:set>
-
 
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
@@ -279,73 +253,66 @@ YAHOO.namespace("YAHOO.amp.table");
 
 /* Function for creating YAHOO datatable for all documents*/
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
-	var checkBoxToHide 	= false;
-	<c:if test="${checkBoxToHide == null || checkBoxToHide == 'true' }">
-	checkBoxToHide		= true;
-	</c:if>
+	var checkBoxToHide = document.getElementById("checkBoxToHide");
 	<%
     	String dt = request.getParameter("documentsType");		
 	%>
-	var dt = "<%= dt %>";		
-	if( checkBoxToHide ){
+	var dt = "<%= dt %>";	
+	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
 	    this.columnHeaders = [
-			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
-		    {key:"type",label:"${trans_headerType}",sortable:true},
-	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
-	        {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
-	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
-	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-	        {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
-	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
+			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
+			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+		    {key:"type",text:"${trans_headerType}",sortable:true},
+	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
+	        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
+	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
+	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
 	    ];
 	}
-	else {
+	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
 		this.columnHeaders = [
-    			{key:"select",formatter:"checkbox", label:"${trans_headerSelect}",sortable:false,width:40},
-    			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
-    		    {key:"type",label:"${trans_headerType}",sortable:true},
-    	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
-    	        {key:"date",type:"Date",label:"${trans_headerDate}",formatter:YAHOO.widget.DataTable.formatDate,sortable:true},
-    	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
-    	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-    	        {key:"description",label:"${trans_headerDescription}",sortable:false,width:100},
-    	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
+    			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
+    			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+    		    {key:"type",text:"${trans_headerType}",sortable:true},
+    	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
+    	        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+    	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
+    	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
+    	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+    	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
     	    ];
+	}else {
+	    this.columnHeaders = [
+      			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+       		    {key:"type",text:"${trans_headerType}",sortable:true},
+       	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
+        	    {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
+            	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
+	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+	    ];
 	}
-    //this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
+    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
+
     var markup	 				= YAHOO.util.Dom.get(markupName);
     //var datasource				= YAHOO.util.DataSource(markup);
-    var oConfigs = { 
-	                paginator:new YAHOO.widget.Paginator({ 
-	                	rowsPerPage:10,
-	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"
-	                }),
-	                MSG_EMPTY: "${trans_no_resources}" 
-	        		}; 
+    var options					= {
+    	    						pageCurrent:1,
+									rowsPerPage:10,
+							        pageLinksLength:2												        
+	                			  };
 
-    //alert (this.columnHeaders);	 
-    var tableEl						= markup.getElementsByTagName("table")[0];
-	var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
-	myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE; 
-	myDataSource.responseSchema		= {fields: [{key: "resource_title"},
-	                           		         {key: "type"},
-			                           		 {key: "file_name"},
-			                           		 {key: "date", parser: "date"},
-			                           		 {key: "size"},
-			                           		 {key: "cm_doc_type"},
-			                           		 {key: "description"},
-			                           		{key: "actions"}
-		                           		     	] 
-	                           		     	};
-	if (!checkBoxToHide) {
-		myDataSource.responseSchema.fields.unshift({key: "select"});
-	}
-
-	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);
+	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
-
+	
+	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
+		dataTable.showEmptyMessage();
+	}
     return dataTable;
 };
 
@@ -497,25 +464,17 @@ function WindowControllerObject(bodyContainerEl) {
 						parameters	+= "&showOnlyLinks=" + this.showOnlyLinks;
 				if ( this.showOnlyDocs ) 
 						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
-				
-				if ( obj.otherProp != null ) {
-					if ( obj.otherProp.checkBoxToHide != null)
-						parameters	+= "&checkBoxToHide=" + obj.otherProp.checkBoxToHide;
-				}
 				//alert(parameters);
-				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' /> </div>";
+				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};
 				
-	this.populateWithSelDocs	= function (documentsType, rights, otherProp) {
+	this.populateWithSelDocs	= function (documentsType, rights) {
 									var o				= new Object();
 									o.docListInSession	= documentsType;
 									if (rights != null) {
 										o.rights	= rights;
-									}
-									if ( otherProp!= null ) {
-										o.otherProp	= otherProp;
 									}
 									this.populateCallback (null, null, o);
 								}
@@ -708,7 +667,7 @@ function getSelectedDocumentsFromDatatable(datatable, vec) {
 	else
 		result	= new Array();
 	//alert (datatable);
-	var trEls	= datatable.getSelectedTrEls();
+	trEls	= datatable.getSelectedRows();
 	//alert("Rows Selected: " + trEls.length);
 	
 	var vector_length		= result.length;
@@ -735,7 +694,7 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 	var divId					= "other_markup" + num;
 	callbackForOtherDocuments	= {
 		success: function(o) {
-					containerElement.innerHTML	= "<div class='all_markup yui-skin-sam' align='center' id='"+divId+"'>" + o.responseText + "</div>";
+					containerElement.innerHTML	= "<div class='all_markup' align='center' id='"+divId+"'>" + o.responseText + "</div>";
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
 					datatable.subscribe("checkboxClickEvent", datatable.onEventSelectRow);
 					//
@@ -796,9 +755,43 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		var mItem2="${trans_teamDocuments}";
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj, id:mItem2} )   );
 	</logic:notEmpty>
-
+	/*
+		var onclickObj 	= {
+			fn					: windowController.populateWithPublicDocs,
+			scope				: windowController
+			
+		};
+		
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_publicDocuments}", {onclick: onclickObj} )   );
+	
+	var scopeObj	= {
+			mItemDoc			: null,
+			mItemLink			: null
+		};
+	var onclickObj 	= {
+			fn					: windowController.clickedShowOnlyDocs,
+			obj					: scopeObj,
+			scope				: windowController
+			
+	};
+	var showDocItem			= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyDocuments}", {onclick: onclickObj} );
+	scopeObj.mItemDoc		= showDocItem;
+	
+	var onclickObj 	= {
+			fn					: windowController.clickedShowOnlyLinks,
+			obj					: scopeObj,
+			scope				: windowController
+	};
+	var showLinkItem		= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyWebLinks}", {onclick: onclickObj});
+	scopeObj.mItemLink		= showLinkItem;
+	
+	optionsMenu.addItem( showDocItem );
+	optionsMenu.addItem( showLinkItem );
+	
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_options}", {submenu: optionsMenu})   );
+	*/
 	menu.render(containerElement);
-//	menu.show();
+	//menu.show();
 	return menu;
 
 }
@@ -865,7 +858,7 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 		myForm.docDescription.readOnly				= true;
 		myForm.docDescription.style.backgroundColor	= "#eeeeee";
 		myForm.docDescription.style.color			= "darkgray";
-		
+
 		myForm.docType.style.backgroundColor	= "#eeeeee";
 		myForm.docType.style.color			= "darkgray";
 
@@ -959,7 +952,7 @@ function validateAddDocument() {
 
 function setHeightOfDiv(divId, maxLimit, value ){
 	var obj	= document.getElementById(divId);
-	obj.style.width		= "480px";
+	obj.style.width		= "580px";
 	obj.style.overflow	= "auto";
 	if (obj.offsetHeight > maxLimit)  {
 		obj.style.height	= value;

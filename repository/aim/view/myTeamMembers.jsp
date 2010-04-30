@@ -53,7 +53,7 @@
 					<logic:iterate name="myTeamMembers" id="tm" scope="session" 
 					type="org.digijava.module.aim.helper.TeamMember"> 
 						<TR><TD title="${trnclickToViewMemberDetails}">
-							<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-gr.gif" width=10>
+							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 							<A href="javascript:showUserProfile(<c:out value="${tm.memberId}"/>)">
 								<bean:write name="tm" property="memberName" />
 							</A>

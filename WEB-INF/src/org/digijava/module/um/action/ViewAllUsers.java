@@ -9,16 +9,12 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.UserBean;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
@@ -31,11 +27,6 @@ import org.digijava.module.um.util.AmpUserUtil;
 	    public ActionForward execute(ActionMapping mapping, ActionForm form,
 	                                 HttpServletRequest request,
 	                                 HttpServletResponse response) throws Exception {
-			HttpSession session = request.getSession();
-			
-			if (!RequestUtils.isAdmin(response, session, request)) {
-				return null;
-			}
 	    	
 	    	ViewAllUsersForm vwForm = (ViewAllUsersForm) form;
 	    	
@@ -213,17 +204,13 @@ import org.digijava.module.um.util.AmpUserUtil;
 	            }
 	            String sortBy=vwForm.getSortBy();
 	            
-	           if(sortBy!=null && sortBy.equals("nameAscending")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparatorAsc());
-	           } else if(sortBy!=null && sortBy.equals("nameDescending")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparatorDesc());
-	           } else if(sortBy!=null && sortBy.equals("emailAscending")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperEmailComparatorAsc());
-	           } else if(sortBy!=null && sortBy.equals("emailDescending")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperEmailComparatorDesc());
+	           if(sortBy!=null && sortBy.equals("name")){
+	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparator());
+	           } else if(sortBy!=null && sortBy.equals("email")){
+	        	   Collections.sort(sortedUser, new DbUtil.HelperEmailComparator());
 	           }	        	   
 	           else {
-	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparatorAsc());
+	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparator());
 	           }
 	           
 	

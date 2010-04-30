@@ -12,14 +12,14 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
-
 <digi:instance property="aimEditActivityForm" />
-									<tr><td class="separator1" title="<digi:trn key="aim:ContractingAgency">The third party outside of the implementing agency</digi:trn>">
-										<digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn>
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:ContractingAgency">The third party outside of the implementing agency</digi:trn>">
+										<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b></a>
 									</td></tr>
-									<tr><td >&nbsp;
-										
+									<tr><td >
+										&nbsp;
 									</td></tr>
 									<tr><td><field:display name="Contracting Agency" feature="Contracting Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">

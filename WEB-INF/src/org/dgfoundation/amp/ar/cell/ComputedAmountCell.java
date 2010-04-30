@@ -9,7 +9,6 @@ import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.logic.Logic;
 
 public class ComputedAmountCell extends CategAmountCell {
 
@@ -26,11 +25,11 @@ public class ComputedAmountCell extends CategAmountCell {
 		return ComputedAmountColWorker.class;
 	}
 
-	public BigDecimal getAmount() {
+	public double getAmount() {
 		BigDecimal ret = new BigDecimal(0);
 		if (id != null)
-			return convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100));
-		
+			return (convert() * (getPercentage() / 100));
+
 		// get values from mergedCells
 
 		MathExpression expression = null;
@@ -38,9 +37,9 @@ public class ComputedAmountCell extends CategAmountCell {
 		if (getValues().containsKey(COMPUTED_VALUE)) {
 			BigDecimal val = getValues().get(COMPUTED_VALUE);
 			if (val != null) {
-				return val;
+				return val.doubleValue();
 			} else {
-				return new BigDecimal(0);
+				return 0d;
 			}
 
 		} else {
@@ -69,12 +68,12 @@ public class ComputedAmountCell extends CategAmountCell {
 				getValues().prepareCountValues();
 				BigDecimal result = expression.result(getValues());
 				if (result != null) {
-					return result;
+					return result.doubleValue();
 				}
 
 			}
 
-			return new BigDecimal(0);
+			return 0d;
 
 		}
 	}
@@ -154,8 +153,6 @@ public class ComputedAmountCell extends CategAmountCell {
 			while (i.hasNext()) {
 				values.collectCellVariables((CategAmountCell) i.next());
 			}
-		
-
 		}
 		
 		
@@ -167,7 +164,7 @@ public class ComputedAmountCell extends CategAmountCell {
 	}
 
 	public String toString() {
-		if ((this.getAmount().doubleValue() == 0d) && (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null)) {
+		if ((this.getAmount() == 0d) && (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null)) {
 			return "";
 		}
 

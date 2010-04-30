@@ -23,14 +23,17 @@ import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorValuesComparator;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-public class AddEditData extends Action {
+public class AddEditData
+    extends Action {
 
     private static Logger logger = Logger.getLogger(AddEditData.class);
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+
+
+
         ThemeForm themeForm = (ThemeForm) form;
 
         String parent=request.getParameter("parent");
@@ -52,9 +55,6 @@ public class AddEditData extends Action {
 					bean.setValueType(value.getValueType());
 					bean.setIndicatorValueId(value.getIndValId());
 					bean.setLocation(value.getLocation());
-                                        if(value.getIndicatorSource()!=null){
-                                            bean.setSourceId(value.getIndicatorSource().getId());
-                                        }
 					indValuesList.add(bean);
 				}
             	
@@ -73,7 +73,6 @@ public class AddEditData extends Action {
             themeForm.setCreationDate(null);
             themeForm.setValAmount(null);
             themeForm.setValueType(null);
-            themeForm.setSourceId(null);
         }
         String event = request.getParameter("event");
         String action=request.getParameter("action");
@@ -90,11 +89,9 @@ public class AddEditData extends Action {
                 AmpPrgIndicatorValue item = (AmpPrgIndicatorValue) iter.next();
                 
                 item.setCreationDate(themeForm.getCreationDate()[iter.nextIndex() - 1]);
-                item.setValAmount(themeForm.getValAmount()[iter.nextIndex() - 1].doubleValue());
+                item.setValAmount(themeForm.getValAmount()[iter.nextIndex() - 1]);
                 item.setValueType(themeForm.getValueType()[iter.nextIndex() - 1]);
-                if(themeForm.getSourceId()!=null){
-                     item.setSourceId(themeForm.getSourceId()[iter.nextIndex() - 1]);
-                }
+               
             }
         }
 
@@ -109,18 +106,27 @@ public class AddEditData extends Action {
         }else if(event!=null && event.equals("delIndValue")){
             String index=request.getParameter("index");
             if(indValues!=null){
+                AmpPrgIndicatorValue prgIndVal=indValues.get(Integer.valueOf(index).intValue()); //es value minda rom amovushalo indicators.  
                 indValues.remove(Integer.valueOf(index).intValue());
+                if(prgIndVal.getIndicatorValueId()!=null){
+                    IndicatorUtil.removeProgramIndicatorValue(new Long(prgIndVal.getIndicatorValueId()), new Long(themeForm.getParentId()));
+                    //ProgramUtil.deletePrgIndicatorValueById(new Long(themeForm.getParentId()),new Long(prgIndVal.getIndicatorValueId())); //pirvel parametrshi momdis connectiois id da meoreshi tviton romelic unda wavshalo imis
+                    
+                }
            }
             themeForm.setPrgIndValues(indValues);
         }else if(event!=null && event.equals("save")){
-//            if (themeForm.getParentId() != null) {
-//				for (Iterator indValIter = indValues.iterator(); indValIter	.hasNext();) {
-//					AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter.next();
-//					if (indVal.getIndicatorValueId() != null && (indVal.getIndicatorValueId().longValue() < 0)) {
-//						// ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
-//					}
-//				}
-//			}
+            if (themeForm.getParentId() != null) {
+				for (Iterator indValIter = indValues.iterator(); indValIter
+						.hasNext();) {
+					AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter
+							.next();
+					if (indVal.getIndicatorValueId() != null
+							&& (indVal.getIndicatorValueId().longValue() < 0)) {
+						// ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
+					}
+				}
+			}
 			// AmpThemeIndicators
 			// themeInd=ProgramUtil.getThemeIndicatorById(themeForm.getParentId());
 			// AmpIndicator indId =
@@ -141,14 +147,9 @@ public class AddEditData extends Action {
 						value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
 						value.setValueType(prgValue.getValueType());
 						value.setLocation(prgValue.getLocation());
-                        Long sourceId = prgValue.getSourceId();
-                        if(sourceId!=null&&sourceId!=0){
-                        	AmpCategoryValue source=CategoryManagerUtil.getAmpCategoryValueFromDb(sourceId);
-                            value.setIndicatorSource(source);
-                        }
 						value.setIndicatorConnection(connection);
 						connection.getValues().add(value);
-					}
+					}					
 				}
             	try{
                 	IndicatorUtil.updateThemeConnection(connection);

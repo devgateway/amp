@@ -191,66 +191,6 @@
 	}
 
 
-
-	function pickDateById_Funding(divID,objectId)
-	{
-		var	format=	dateFormat;
-		var div = document.getElementById(divID);
-		var inputObject = document.getElementById(objectId);
-
-		//alert(butt.y);
-		//alert(inputObject);
-		
-		var browser=navigator.appName;
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		var myX = div.offsetWidth / 2;
-		var myY = intY +(div.offsetHeight / 2);
-		if (browser!="Microsoft Internet Explorer" || document.getElementById('popin').scrollTop < myY){
-			myY -= document.getElementById('popin').scrollTop;
-		}
-		calendarObjForForm.setCalendarPositionByHTMLElement(div, myX, myY );	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,format);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-
-		var orgTop=document.getElementById('popinContent').scrollTop;
-		document.getElementById('popinContent').onscroll=function(){
-			calendarObjForForm.hide();
-		}
-		
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
-	
-	
-
-	function pickDateById_divContent(buttonObj,objectId)
-	{
-		var	format=	dateFormat;
-		var div = document.getElementById('divContent');
-		var butt = document.getElementById(buttonObj);
-		var inputObject = document.getElementById(objectId);
-		
-		//alert(butt.y);
-		//alert(inputObject);
-		
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(div,div.offsetWidth / 2, intY +(div.offsetHeight / 2));	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,format);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
-	
-
-
 	function pickDateById_divContent(buttonObj,objectId)
 	{
 		var	format=	dateFormat;

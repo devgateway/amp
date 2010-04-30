@@ -55,7 +55,6 @@ public class AddSector extends Action {
 		String event = request.getParameter("event");
 		String parent = request.getParameter("parent");
 		String schemeId = request.getParameter("ampSecSchemeId");
-		String rootId = request.getParameter("rootId");
 		logger.debug(request.getParameter("ampSecSchemeId"));
 		if(schemeId==null || schemeId.equals("") || schemeId.length()<=0){
 			schemeId = (String)session.getAttribute("Id");			
@@ -78,7 +77,7 @@ public class AddSector extends Action {
 			{
 				Site site = RequestUtils.getSite(request);
 				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				Long siteId = site.getId();
+				String siteId = site.getId()+"";
 				String locale = navigationLanguage.getCode();
 				if(addSectorForm.getLevelType().equals("scheme"))
 				{
@@ -95,13 +94,7 @@ public class AddSector extends Action {
 							addSectorForm.setSecSchemeCode(ampScheme.getSecSchemeCode());
 							addSectorForm.setParentId(ampScheme.getAmpSecSchemeId());
 						}
-						if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelFirstSectorAddedTree");
-						} else {
-							return mapping.findForward("levelFirstSectorAdded");
-						}
+						return mapping.findForward("levelFirstSectorAdded");
 					}
 					int sectorStatus = existSectorNameOrCode(addSectorForm.getSectorName(), addSectorForm.getSectorCodeOfficial(), SectorUtil.getSectorLevel1(new Integer((String)session.getAttribute("Id"))));
 					if(sectorStatus == 1) {
@@ -121,13 +114,7 @@ public class AddSector extends Action {
 		        		if (errors.size() > 0) 
 		        			saveErrors(request, errors);
 
-		        		if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelFirstSectorAddedTree");
-		        		} else {
-		        			return mapping.findForward("levelFirstSectorAdded");
-		        		}
+						return mapping.findForward("levelFirstSectorAdded");
 					}
 					if(sectorStatus == 2){
 						//error the sector code exists
@@ -146,13 +133,7 @@ public class AddSector extends Action {
 		        		if (errors.size() > 0) 
 		        			saveErrors(request, errors);
 		        		
-		        		if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelFirstSectorAddedTree");
-		        		} else {
-		        			return mapping.findForward("levelFirstSectorAdded");
-		        		}
+						return mapping.findForward("levelFirstSectorAdded");
 					}
 					addSectorForm.setParentId(new Long(schemeId));
 					AmpSector newSector = new AmpSector();
@@ -188,14 +169,7 @@ public class AddSector extends Action {
 					
 					logger.debug("level one sector added");
 					session.setAttribute("Id",null);
-					
-					if (addSectorForm.getTreeView() != null
-							&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-						//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-						return mapping.findForward("levelFirstSectorAddedTree");
-					} else {
-						return mapping.findForward("levelFirstSectorAdded");
-					}
+					return mapping.findForward("levelFirstSectorAdded");
 				}
 				if(addSectorForm.getLevelType().equals("sector"))
 				{
@@ -214,13 +188,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentId(ampScheme.getAmpSectorId());
 							addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
-						if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelSecondSectorAddedTree");
-						} else {
-							return mapping.findForward("levelSecondSectorAdded");
-						}
+						return mapping.findForward("levelSecondSectorAdded");
 					}
 					
 					int sectorStatus = existSectorNameOrCode(addSectorForm.getSectorName(), addSectorForm.getSectorCodeOfficial(),SectorUtil.getAllChildSectors(id));
@@ -242,13 +210,7 @@ public class AddSector extends Action {
 		        			return mapping.findForward("forwardSector");
 		        		}
 						
-		        		if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelSecondSectorAddedTree");
-		        		} else {
-		        			return mapping.findForward("levelSecondSectorAdded");
-		        		}
+						return mapping.findForward("levelSecondSectorAdded");
 					}
 					
 					if(sectorStatus == 2) {
@@ -269,13 +231,7 @@ public class AddSector extends Action {
 		        			return mapping.findForward("forwardSector");
 		        		}
 						
-		        		if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelSecondSectorAddedTree");
-		        		} else {
-		        			return mapping.findForward("levelSecondSectorAdded");
-		        		}
+						return mapping.findForward("levelSecondSectorAdded");
 					}
 					
 					addSectorForm.setParentId(new Long((String)session.getAttribute("Id")));
@@ -322,14 +278,7 @@ public class AddSector extends Action {
 					addSectorForm.setDescription(editSector.getDescription());
 					logger.debug("level 2  sector added");
 					session.setAttribute("Id",null);
-					
-					if (addSectorForm.getTreeView() != null
-							&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-						//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-						return mapping.findForward("levelSecondSectorAddedTree");
-					} else {
-						return mapping.findForward("levelSecondSectorAdded");
-					}
+					return mapping.findForward("levelSecondSectorAdded");
 				}
 				if(addSectorForm.getLevelType().equals("sector3"))
 				{
@@ -348,14 +297,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentId(ampScheme.getAmpSectorId());
 							addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
-						
-						if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelThirdSectorAddedTree");
-						} else {
-							return mapping.findForward("levelThirdSectorAdded");
-						}
+						return mapping.findForward("levelThirdSectorAdded");
 					}
 					
 					int sectorStatus = existSectorNameOrCode(addSectorForm.getSectorName(), addSectorForm.getSectorCodeOfficial(),SectorUtil.getAllChildSectors(id));
@@ -377,13 +319,7 @@ public class AddSector extends Action {
 		        			return mapping.findForward("forwardSector");
 		        		}
 						
-		        		if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelThirdSectorAddedTree");
-		        		} else {
-		        			return mapping.findForward("levelThirdSectorAdded");
-		        		}
+						return mapping.findForward("levelThirdSectorAdded");
 					}
 					
 					if(sectorStatus == 2) {
@@ -404,13 +340,7 @@ public class AddSector extends Action {
 		        			return mapping.findForward("forwardSector");
 		        		}
 						
-		        		if (addSectorForm.getTreeView() != null
-								&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-							//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-							return mapping.findForward("levelThirdSectorAddedTree");
-		        		} else {
-		        			return mapping.findForward("levelThirdSectorAdded");
-		        		}
+						return mapping.findForward("levelThirdSectorAdded");
 					}
 					
 					AmpSectorScheme user = SectorUtil.getParentSchemeId(id);
@@ -460,14 +390,7 @@ public class AddSector extends Action {
 					
 					logger.debug("level Third Sector added");
 					session.setAttribute("Id",null);
-					
-					if (addSectorForm.getTreeView() != null
-							&& addSectorForm.getTreeView().equalsIgnoreCase("true")) {
-						//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-						return mapping.findForward("levelThirdSectorAddedTree");
-	        		} else {
-	        			return mapping.findForward("levelThirdSectorAdded");
-	        		}
+					return mapping.findForward("levelThirdSectorAdded");
 				}
 			}
 		}

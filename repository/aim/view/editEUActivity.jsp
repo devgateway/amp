@@ -45,16 +45,16 @@ function selectOrganisation1() {
 
 <script type="text/javascript">
 	var myCalendarModel = new DHTMLSuite.calendarModel();
-
-	myCalendarModel.setLanguageCode('<bean:write name="lang" />');
-	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false,calendarModelReference:myCalendarModel});
-
+	
+	myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
+	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false,calendarModelReference:myCalendarModel}); 
+		
 	function getDateFromCalendar(inputArray)
 	{
 		var references = calendarObjForForm.getHtmlElementReferences(); // Get back reference to form field.
 		references.dueDate.value = inputArray.year + '-' + inputArray.month + '-' + inputArray.day;
-		calendarObjForForm.hide();
-	}
+		calendarObjForForm.hide();			
+	}	
 
 	function pickDate(buttonObj,inputObject)
 	{
@@ -66,17 +66,17 @@ function selectOrganisation1() {
 		}else{
 			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
 			calendarObjForForm.display();
-		}
+		}		
 	}
-</script>
+</script>		
 
-<body>
+<body onLoad="load()">
 <digi:instance property="aimEUActivityForm" />
 <digi:form action="/editEUActivity.do" method="post">
 
 <input type="hidden" name="edit" value="true">
 <html:hidden property="id"/>
-<html:hidden property="someError"/>
+
 <digi:errors/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
@@ -86,7 +86,7 @@ function selectOrganisation1() {
 		</td>
 	</tr>
 	<tr>
-		<td align="right"><font color="red">*</font>
+		<td align="right">
 			<font color="red">*</font>
 			<b><digi:trn key="aim:addEditActivityName">Activity name:</digi:trn></b>
 		</td>		
@@ -199,14 +199,8 @@ function selectOrganisation1() {
 						</logic:iterate>			
 		</table>
 	  <tr><td colspan="2" align="center">
-             	<c:set var="translation">
-                   	<digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn>
-                </c:set>				
-				<input type="Button" value="${translation}" class="dr-menu" onclick="addContributors();">
-             	<c:set var="translation">
-                   	<digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn>
-                </c:set>
-				<input type="Button" value="${translation}" class="dr-menu" onclick="removeContributors();">
+				<html:submit styleClass="dr-menu" property="addFields"><digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn></html:submit>&nbsp;&nbsp;
+				<html:submit styleClass="dr-menu" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>				
 		</td></tr>
 	
 	
@@ -234,33 +228,25 @@ function selectOrganisation1() {
 		<b><digi:trn key="aim:addEditActivityDueDate">Due Date:</digi:trn></b>
 		</td>
 		<td>
-			<html:text readonly="true" name="aimEUActivityForm" property="dueDate" styleClass="inp-text" styleId="dueDate"/>
-            <a id="clear1" href='javascript:clearDate(document.getElementById("dueDate"),"clear1")'>
-                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete "/>
-            </a>
-            <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("dueDate"),"clear1")'>
-                <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
-            </a>
+			<html:text readonly="true" property="dueDate" styleClass="inp-text"/>
+				<a onClick="pickDate(this,document.aimEUActivityForm.dueDate)">
+				  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+				</a>
 		</td>
 	</tr>	
 
 
 	<tr>
 		<td colspan="2" align="center">
-		<c:set var="translation">
-			<digi:trn key="aim:addEditActivitySave">Save</digi:trn>
-		</c:set>
-	
-		<input type="Button" value="${translation}" class="dr-menu" onclick="saveCosting();">
-
+		<html:submit styleClass="dr-menu" property="save">
+		 <digi:trn key="aim:addEditActivitySave">Save</digi:trn>
+		</html:submit>
 		
 		&nbsp;&nbsp;
-		<c:set var="translation">
-			<digi:trn key="aim:addEditActivitySlose">Close</digi:trn>
-		</c:set>
-	
-		<input type="Button" value="${translation}" class="dr-menu" onclick="closeCosting();">
-		
+		<html:button styleClass="dr-menu" property="cancel" onclick="window.close();">
+		<digi:trn key="aim:addEditActivitySlose">Close</digi:trn>
+
+		</html:button>
 		</td>
 		
 		

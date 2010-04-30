@@ -10,15 +10,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ViewIndicatorsForm;
@@ -31,12 +27,7 @@ public class ViewIndicators
     extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-		HttpSession session = request.getSession();
-		
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}
-		
+   
     	List<IndicatorsBean> allInds = new ArrayList<IndicatorsBean>();
     	Collection sectorsName = new ArrayList();
       

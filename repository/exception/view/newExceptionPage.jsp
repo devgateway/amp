@@ -61,7 +61,7 @@
 	
 	function addContract(){
 	    var postString = 'rand=<bean:write name="exceptionReportForm" property="rand"/>';
-		YAHOO.util.Connect.asyncRequest("POST", "/exception/getConfluenceDocs.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/exception/getConfluenceDocs.do", callback, postString);
 	}
 
 
@@ -89,13 +89,15 @@
         	<table width="85%" cellpadding="5">
         		<tr>
         			<td width="120px" valign="top" >
-        				<img alt="AMP Error Image" src="/TEMPLATE/ampTemplate/imagesSource/common/exceptionImg.jpg" />
+        				<img alt="AMP Error Image" src="../ampTemplate/images/exceptionImg.jpg" />
         			</td>
         			<td align="left" valign="middle" style="background-color: #F0F0F0">
         				<br/>
         				<span style="font-size:14px">
 				        	<b><digi:trn key="exception:newErrorText2">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience. </digi:trn></b><br/>
-
+				        	<c:if test="<%= org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_ECS).compareTo("true") == 0 %>">
+					        	<b><font color="blue"><digi:trn key="exception:errorHandled">This issue has been reported to the technical support team for resolution.</digi:trn></font></b><br/>
+				        	</c:if>
 				        	<br/>
 				        	<!-- 
 				        	<u><digi:trn key="exception:issueInformation">Issue Information</digi:trn></u><br/>
@@ -157,7 +159,7 @@
 					          </legend>
 					          <div id="docDiv" style="display: block;">
 						          <p align="center">
-						          	  <img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" alt="loading..."/>
+						          	  <img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="loading..."/>
 						          </p>
 							  </div>
 							</fieldset>

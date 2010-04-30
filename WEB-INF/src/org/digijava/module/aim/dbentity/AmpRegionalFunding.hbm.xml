@@ -6,7 +6,7 @@
 		<cache usage="read-write" />
 		<id name="ampRegionalFundingId" column="amp_regional_funding_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_REGIONAL_FUNDING_seq</param>
+				<param name="sequence">AMP_REG_FUNDING_seq</param>
 			</generator>
 		</id>
 
@@ -15,7 +15,7 @@
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
 		<property access="field" name="transactionAmount" column="transaction_amount"
-			type="java.math.BigDecimal" />
+			type="java.lang.Double" />
 		<property name="expenditureCategory" column="exp_category" type="java.lang.String" />
 
 		<many-to-one name="activity" column="activity_id"

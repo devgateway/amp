@@ -39,7 +39,7 @@ function submitForm(mode) {
 						<!-- End navigation -->
 				</tr>
 			</table>
-			<h2><digi:trn>Permissions</digi:trn></h2>
+			<h2><digi:trn key="aim:globalperms"></digi:trn></h2>
 			
 			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
 			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
@@ -74,7 +74,7 @@ function submitForm(mode) {
 						</html:select> <html:button property="saveGlobal"
 							onclick="submitForm('saveGlobal')">Assign Global</html:button> <digi:link
 							href="/managePerm.do?list" title="EDIT PERMISSIONS">
-							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" />&nbsp;Edit Permissions</digi:link></td>
+							<digi:img src="module/gateperm/images/edit.gif" border="0" />&nbsp;Edit Permissions</digi:link></td>
 					
 				</logic:notEmpty>
 				<tr>

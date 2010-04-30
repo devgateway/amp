@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -23,41 +22,41 @@ import org.apache.log4j.Logger;
  *
  * @author medea
  */
-public class GetOrganizations extends Action {
-
+public class GetOrganizations  extends Action {
     private static Logger logger = Logger.getLogger(GetOrganizations.class);
 
-    @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-        OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
-        Long orgGroupId = orgForm.getOrgGroupId();
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+
+		OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
+        Long orgGroupId=orgForm.getOrgGroupId();
         List<AmpOrganisation> orgs;
-        try {
-            if (orgGroupId != null && orgGroupId != -1) {
-                orgs = DbUtil.getOrganisationByGroupId(orgGroupId);
-            } else {
-                orgs =new ArrayList<AmpOrganisation>(DbUtil.getAllOrganisation());
-            }
-            orgForm.setOrganizations(orgs);
-            response.setContentType("text/xml");
-
-            OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
-            PrintWriter out = new PrintWriter(outputStream, true);
-            logger.debug("generating drop down...");
-            out.println(generateOrgDropDown(orgs));
-            out.close();
-            outputStream.close();
-        } catch (Exception e) {
-            // TODO handle this exception
-            logger.error("unable to load organizations", e);
+        if (orgGroupId != null && orgGroupId != -1) {
+          orgs= DbUtil.getOrganisationByGroupId(orgGroupId);
+        } else {
+            orgs=DbUtil.getBilMulOrganisations();
         }
+        orgForm.setOrganizations(orgs);
+		response.setContentType("text/xml");
+				try {
+                    OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+                    PrintWriter out = new PrintWriter(outputStream, true);
+                    logger.debug("generating drop down...");
+                    out.println(generateOrgDropDown(orgs));
+                    out.close();
+                    outputStream.close();
+				} catch (IOException e) {
+					// TODO handle this exception
+					e.printStackTrace();
+				}
 
 
-        return null;
-    }
+		return null;
+	}
 
     private static String generateOrgDropDown(List orgs) {
-        String orgSelect = "<select name=\"orgIds\" class=\"selectDropDown\" id=\"org_dropdown_id\"  multiple=\"true\" size=\"20\">";
+        String orgSelect = "<select name=\"orgId\" class=\"inp-text\" id=\"org_dropdown_id\">";
+        orgSelect += "<option value=\"-1\" selected=\"selected\"><digi:trn>All</digi:trn></option>";
         Iterator<AmpOrganisation> orgIter = orgs.iterator();
         while (orgIter.hasNext()) {
             AmpOrganisation org = orgIter.next();
@@ -67,4 +66,5 @@ public class GetOrganizations extends Action {
         return orgSelect;
 
     }
+
 }

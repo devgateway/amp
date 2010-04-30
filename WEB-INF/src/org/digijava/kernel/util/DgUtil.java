@@ -43,14 +43,12 @@ import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.jfree.util.Log;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -175,7 +173,6 @@ public class DgUtil {
                                       HttpServletResponse response) {
         logger.debug("Switching to language: " + language.getCode() + "(" +
                      language.getName() + ")");
-        
         if (SpecificUtils.isDgMarket(request)) {
             SpecificUtils.setDgMarketLangCookie(language, request, response);
         }
@@ -270,10 +267,6 @@ public class DgUtil {
 
             response.addCookie(cookie);
 
-            HttpSession session = request.getSession();
-            session.setAttribute("DIGI_LANGUAGE", language.getCode());
-
-            
         }
     }
 
@@ -338,20 +331,23 @@ public class DgUtil {
             Site rootSite = getRootSite(currentSite);
             User user = RequestUtils.getUser(request);
 
-            // Determine language from session
-            HttpSession session = request.getSession();
-            if (session != null){
-            	String languageCode = (String) session.getAttribute("DIGI_LANGUAGE");
-            	if (languageCode != null){
-            		language = getSupportedLanguage(languageCode, currentSite, isLocalTranslatorForSite(request));
-            		if (language != null) {
-                        logger.debug("Language, determined from session is: " +
-                                     language.getCode());
+            if (user != null) {
+                if (user.getUserLangPreferences() != null) {
+                    language = getSupportedLanguage(user.getUserLangPreferences().
+                        getNavigationLanguage().getCode(),
+                        currentSite,
+                        isLocalTranslatorForSite(request));
+
+                    if (language != null) {
+                        logger.debug(
+                            "Language, determined from user preferences (site#" +
+                            rootSite.getId() + ", user#" + user.getId() +
+                            ") is: " + language.getCode());
                         return language;
                     }
-            	}
+                }
+
             }
-            
             // Determine language using cookies
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
@@ -372,45 +368,12 @@ public class DgUtil {
                              language.getCode());
                 return language;
             }
-            
-            if (user != null) {
-                if (user.getUserLangPreferences() != null) {
-                    language = getSupportedLanguage(user.getUserLangPreferences().
-                        getNavigationLanguage().getCode(),
-                        currentSite,
-                        isLocalTranslatorForSite(request));
-
-                    if (language != null) {
-                        logger.debug(
-                            "Language, determined from user preferences (site#" +
-                            rootSite.getId() + ", user#" + user.getId() +
-                            ") is: " + language.getCode());
-                        return language;
-                    }
-                }
-
-            }
-
-            // Determine language from root site
-            if (rootSite.getDefaultLanguage() != null) {
-                language = getSupportedLanguage(rootSite.getDefaultLanguage().
-                                                getCode(),
-                                                currentSite,
-                                                isLocalTranslatorForSite(
-                    request));
-            }
-            if (language != null) {
-                logger.debug(
-                    "Language, determined from root site's default language is: " +
-                    language.getCode());
-                return language;
-            }
-            
             // Determine list of accepted languages from request
+
             // request.getLocales() contains at least one value: if
             // Accept-Language was not set in header, container puts server's
             // default locale there. That's why we need this check
-           if (request.getHeader("Accept-Language") != null) {
+            if (request.getHeader("Accept-Language") != null) {
                 Enumeration enumLocales = request.getLocales();
                 while (enumLocales.hasMoreElements()) {
                     java.util.Locale locale = (java.util.Locale) enumLocales.
@@ -432,7 +395,20 @@ public class DgUtil {
                 return language;
             }
 
-
+            // Determine language from root site
+            if (rootSite.getDefaultLanguage() != null) {
+                language = getSupportedLanguage(rootSite.getDefaultLanguage().
+                                                getCode(),
+                                                currentSite,
+                                                isLocalTranslatorForSite(
+                    request));
+            }
+            if (language != null) {
+                logger.debug(
+                    "Language, determined from root site's default language is: " +
+                    language.getCode());
+                return language;
+            }
             // Return english language
             language = new Locale();
             language.setCode(java.util.Locale.ENGLISH.getLanguage());

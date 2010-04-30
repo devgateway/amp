@@ -27,15 +27,13 @@ public class Location implements Serializable
 	private String zone;
 	private Long woredaId;
 	private String woreda;
-	private float percent;//AMP-2250 
+	private String percent;//AMP-2250 
 	private boolean showPercent;
 	
 	private String locationName;
 	
 	private List<String> ancestorLocationNames;
 	private AmpCategoryValueLocations ampCVLocation;
-	
-	private boolean percentageBlocked	= false;
 	
 	public Location() {
 		locId = new Long(-1);
@@ -225,17 +223,16 @@ public class Location implements Serializable
 		return ampCVLocation.equals( l.getAmpCVLocation() );
 	}
 
-	public float getPercent() {
+	public String getPercent() {
 		return percent;
 	}
 
-	public void setPercent(float percent) {
-		/*
+	public void setPercent(String percent) {
 		if(FormatHelper.parseDouble(percent) >0 )
 			this.setShowPercent(true);
 		else
 			this.setShowPercent(false);
-		*/
+
 		this.percent = percent;
 	}
 
@@ -289,18 +286,5 @@ public class Location implements Serializable
 			return null;
 	}
 
-	/**
-	 * @return the percentageBlocked
-	 */
-	public boolean getPercentageBlocked() {
-		return percentageBlocked;
-	}
-
-	/**
-	 * @param percentageBlocked the percentageBlocked to set
-	 */
-	public void setPercentageBlocked(boolean percentageBlocked) {
-		this.percentageBlocked = percentageBlocked;
-	}
 	
 }

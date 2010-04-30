@@ -57,9 +57,7 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	private Collection reports;
 
-    private int defReportsPerPage;
-
-    private int defReportViewablePages;
+        private int defReportsPerPage;
 
   public Collection getReports() {
 		return reports;
@@ -240,14 +238,6 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	public void setErrors(boolean errors) {
 		this.errors = errors;
-	}
-
-	public void setDefaultReportViewablePages(int defReportViewablePages) {
-		this.defReportViewablePages = defReportViewablePages;
-	}
-
-	public int getDefaultReportViewablePages() {
-		return defReportViewablePages;
 	}
 
 }

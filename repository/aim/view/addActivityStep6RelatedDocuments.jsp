@@ -9,15 +9,16 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <digi:instance property="aimEditActivityForm" />
-								<table width="100%" bgcolor="#f4f4f2">
-									<tr><td class="separator1" title="<digi:trn key="aim:DocumentsRelated">Document related to the project</digi:trn>">
-										<digi:trn key="aim:relatedDocuments">Related Documents</digi:trn>
+								<table width="95%" bgcolor="#f4f4f2">
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:DocumentsRelated">Document related to the project</digi:trn>">
+										<b><digi:trn key="aim:relatedDocuments">Related Documents</digi:trn></b></a>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>&nbsp;
-										
+									<tr><td bgColor=#f4f4f2>
+										&nbsp;
 									</td></tr>
 									
 									<feature:display name="Related Documents" module="Document"></feature:display>

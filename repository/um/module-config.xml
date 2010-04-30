@@ -25,8 +25,6 @@
 		<action login-required="true" pattern="/userUpdateGateway" />
 		<action login-required="true" pattern="/userUpdateMarket" />
 		<action login-required="true" pattern="/showUserRegisterSuccess" />
-		<action login-required="true" pattern="/viewAllUsers" />
-		<action login-required="true" pattern="/viewEditUser" />
 	</security>
 
 	<hibernate-classes required="false">

@@ -2,7 +2,6 @@ package org.digijava.module.search.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +10,8 @@ import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,13 +30,12 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.digijava.module.contentrepository.dbentity.*;
 
 public class SearchUtil {
 
@@ -47,17 +47,8 @@ public class SearchUtil {
 	public static final int TABS = 2;
 	public static final int RESOURCES = 3;
 
-	/**
-	 * Retrieves reports from DataBase. 
-	 * filters by several params. 
-	 * Both date parameters should be null or contain value. If null then not used for filtering.
-	 * @param tm mandatory. owner team member.
-	 * @param keyword mandatory, name and description should contain this text
-	 * @param fromDate optional, update time of report
-	 * @param toDate optional, update time fo report
-	 * @return
-	 */
-	public static Collection<LoggerIdentifiable> getReports(TeamMember tm,String keyword,  Date fromDate, Date toDate) throws DgException{
+	public static Collection<LoggerIdentifiable> getReports(TeamMember tm,
+			String string) {
 		// TODO: Unify this with getTabs()
 		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 		List<AmpReports> col = new ArrayList<AmpReports>();
@@ -74,36 +65,20 @@ public class SearchUtil {
 			String queryString = null;
 			Query qry = null;
 
-			if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-				
-				if ( fromDate==null || toDate==null ) {
+			if (team.getAccessType().equalsIgnoreCase(
+					Constants.ACCESS_TYPE_MNGMT)) {
 				queryString = "select DISTINCT r from "
 						+ AmpReports.class.getName()
 						+ " r where r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name"; 
-				} else {
-					queryString = "select DISTINCT r from "
-						+ AmpReports.class.getName()
-						+ " r where r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
-						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) and (r.updatedDate between :fromDt and :toDt) order by r.name"; 					
-					
-				}
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
 				qry.setParameter("teamid", tm.getTeamId());
-				qry.setParameter("keyword", "%" + keyword + "%");
-				if (fromDate!=null && toDate !=null) {
-					qry.setDate("fromDt", fromDate);
-					qry.setDate("toDt", toDate);
-					
-				}
+				qry.setParameter("keyword", "%" + string + "%");
 				col = qry.list();
 			} else {
-				
-				if ( fromDate==null || toDate == null ) {	
 				queryString = "select distinct r from "
 						+ AmpReports.class.getName()
 						+ "  r left join r.members m where "
@@ -112,42 +87,27 @@ public class SearchUtil {
 						+ " or r.id in (select r2.id from "
 						+ AmpTeamReports.class.getName()
 						+ " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
-				} else {
-					queryString = "select distinct r from "
-						+ AmpReports.class.getName()
-						+ "  r left join r.members m where "
-						+ " r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND "
-						+ " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId) "
-						+ " or r.id in (select r2.id from "
-						+ AmpTeamReports.class.getName()
-						+ "  tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true)) and (r.updatedDate between :fromDt and :toDt)";
-					
-				}
 				qry = session.createQuery(queryString);
 				qry.setLong("ampTeamMemId", tm.getMemberId());
 				qry.setLong("teamId", tm.getTeamId());
-				qry.setParameter("keyword", "%" + keyword + "%");
-				if (fromDate!=null && toDate !=null) {
-					qry.setDate("fromDt", fromDate);
-					qry.setDate("toDt", toDate);
-					
-				}				
+				qry.setParameter("keyword", "%" + string + "%");
 				col = qry.list();
 
 			}
 
 		} catch (Exception e) {
 			logger.error("Exception from getReports()", e);
-			throw new DgException("Cannot search for reports",e);
+			throw new RuntimeException(e);
 		}
 
 		resultList.addAll(col);
-	
+
 		return resultList;
 
 	}
 
-	public static Collection<LoggerIdentifiable> getTabs(TeamMember tm,	String string, Date fromDate, Date toDate) {
+	public static Collection<LoggerIdentifiable> getTabs(TeamMember tm,
+			String string) {
 		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 
 		List<AmpReports> col = new ArrayList<AmpReports>();
@@ -164,36 +124,20 @@ public class SearchUtil {
 			String queryString = null;
 			Query qry = null;
 
-			if (team.getAccessType().equalsIgnoreCase(	Constants.ACCESS_TYPE_MNGMT)) {
-				
-				if ( fromDate==null || toDate==null ) {
+			if (team.getAccessType().equalsIgnoreCase(
+					Constants.ACCESS_TYPE_MNGMT)) {
 				queryString = "select DISTINCT r from "
 						+ AmpReports.class.getName()
 						+ " r where r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
 						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
-				} else {
-					queryString = "select DISTINCT r from "
-						+ AmpReports.class.getName()
-						+ " r where r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
-						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) AND (r.updatedDate between :fromDt and :toDt) order by r.name";					
-					
-				}
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
 				qry.setParameter("teamid", tm.getTeamId());
 				qry.setParameter("keyword", "%" + string + "%");
-				
-				if (fromDate!=null && toDate !=null) {
-					qry.setDate("fromDt", fromDate);
-					qry.setDate("toDt", toDate);
-					
-				}				
 				col = qry.list();
 			} else {
-				if ( fromDate==null || toDate==null ) {
 				queryString = "select distinct r from "
 						+ AmpReports.class.getName()
 						+ "  r left join r.members m where "
@@ -202,27 +146,10 @@ public class SearchUtil {
 						+ " or r.id in (select r2.id from "
 						+ AmpTeamReports.class.getName()
 						+ " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
-				} else {
-					queryString = "select distinct r from "
-						+ AmpReports.class.getName()
-						+ "  r left join r.members m where "
-						+ " r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND "
-						+ " (r.updatedDate between :fromDt and :toDt) AND"
-						+ " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"
-						+ " or r.id in (select r2.id from "
-						+ AmpTeamReports.class.getName()
-						+ " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";					
-					
-				}
 				qry = session.createQuery(queryString);
 				qry.setLong("ampTeamMemId", tm.getMemberId());
 				qry.setLong("teamId", tm.getTeamId());
 				qry.setParameter("keyword", "%" + string + "%");
-				if (fromDate!=null && toDate !=null) {
-					qry.setDate("fromDt", fromDate);
-					qry.setDate("toDt", toDate);
-					
-				}
 				col = qry.list();
 
 			}
@@ -237,8 +164,8 @@ public class SearchUtil {
 
 	}
 
-	public static Collection<LoggerIdentifiable> getActivities(String keyword, int searchKey,
-			HttpServletRequest request, TeamMember tm, String byDateSql) {
+	public static Collection<LoggerIdentifiable> getActivities(String keyword,
+			HttpServletRequest request, TeamMember tm) {
 		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 
 		AmpARFilter filter = new AmpARFilter();
@@ -254,15 +181,8 @@ public class SearchUtil {
 				filter.setTeamAssignedOrgs(teamAO);
 		}
 		filter.setIndexText(keyword);
-		filter.setActivitySearchKey(searchKey);
-		if (byDateSql==null){
-			byDateSql="";
-		}
-		filter.setByDateSql(byDateSql);
+
 		filter.generateFilterQuery(request);
-		
-		
-		
 
 		String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
 				"FROM amp_activity", "FROM " + AmpActivity.class.getName());
@@ -270,10 +190,9 @@ public class SearchUtil {
 				+ AmpActivity.class.getName());
 
 		Session session = null;
-		
 		List<AmpActivity> col = new ArrayList<AmpActivity>();
 		try {
-			session = PersistenceManager.getRequestDBSession(); 
+			session = PersistenceManager.getRequestDBSession();
 			List result = session.createSQLQuery(
 					filter.getGeneratedFilterQuery()).addScalar(
 					"amp_activity_id", org.hibernate.Hibernate.LONG).list();
@@ -325,7 +244,6 @@ public class SearchUtil {
 						resource.setUuid(nw.getUuid());
 						resource.setWebLink(nw.getWebLink());
 						resultList.add(resource);
-												
 					}
 				}
 				q = qm.createQuery(

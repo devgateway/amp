@@ -14,9 +14,9 @@ function checkAmountUsingSymbol(amount){
 		var ch = amount.charAt(i);
 		if (validChars.indexOf(ch)==-1){
 			return false;
+			break
 		}
 	}
-	return true;
 }
 
 function chkNumericForProjection(objName)
@@ -123,8 +123,10 @@ function validateFunding() {
 
 
 
+	if (numComm == 0) {
 
-		var noCommitsWarn = confirm("No commitments have been added. Continue?");		
+		var noCommitsWarn = confirm("No commitments have been added. Continue?");
+		
 		if (noCommitsWarn==false) return false;
 	}
 
@@ -213,7 +215,9 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgI
 
 
 	if (numComm == 0) {
-		var noCommitsWarn = confirm("No commitments have been added. Continue?");		
+
+		var noCommitsWarn = confirm("No commitments have been added. Continue?");
+		
 		if (noCommitsWarn==false) return false;
 	}
 

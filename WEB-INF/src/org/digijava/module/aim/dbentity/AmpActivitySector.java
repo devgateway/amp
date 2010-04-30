@@ -1,10 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.ArrayList;
-
-import org.digijava.module.aim.util.Output;
-
-public class AmpActivitySector implements Versionable {
+public class AmpActivitySector {
 
 	private Long ampActivitySectorId;
 	
@@ -59,44 +55,5 @@ public class AmpActivitySector implements Versionable {
 	
 	public String toString() {
 		return sectorId!=null?sectorId.getName():"";
-	}
-
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		AmpActivitySector aux = (AmpActivitySector) obj;
-		if (this.classificationConfig.equals(aux.getClassificationConfig())
-				&& this.sectorId.getAmpSectorId().equals(aux.getSectorId().getAmpSectorId())) {
-			return true;
-		}
-		return false;
-	}
-	
-	public Object getValue() {
-		return this.sectorPercentage;
-	}
-
-	@Override
-	public Output getOutput() {
-		Output out = new Output();
-		out.setOutputs(new ArrayList<Output>());
-		String scheme = "[" + this.classificationConfig.getClassification().getSecSchemeName() + "]";
-		String name = "";
-		if (this.sectorId.getParentSectorId() != null) {
-			name = " - " + "[" + this.sectorId.getParentSectorId().toString() + "]";
-			if (this.sectorId.getParentSectorId().getParentSectorId() != null) {
-				name = " - " + "[" + this.sectorId.getParentSectorId().getParentSectorId().toString() + "]" + name;
-				if (this.sectorId.getParentSectorId().getParentSectorId().getParentSectorId() != null) {
-					name = " - " + "["
-							+ this.sectorId.getParentSectorId().getParentSectorId().getParentSectorId().toString()
-							+ "]" + name;
-				}
-			} else {
-				name += " - [" + this.sectorId.getName() + "]";
-			}
-		} else {
-			name += " - [" + this.sectorId.getName() + "]";
-		}
-		out.getOutputs().add(new Output(null, new String[] { scheme + name + " - Percentage: "}, new Object[] { this.sectorPercentage }));
-		return out;
 	}
 }

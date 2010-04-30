@@ -30,7 +30,6 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -320,7 +319,7 @@ public final class PermissionUtil {
         }
     
     
-    public static Map<String, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
+    public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
 	Session session = null;
 	try {
 	    session = PersistenceManager.getSession();
@@ -329,7 +328,7 @@ public final class PermissionUtil {
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is not null");
 	    query.setParameter("categoryName", permClass.getSimpleName());
 	    List col = query.list();
-	    Map<String, PermissionMap> ret = new HashMap<String, PermissionMap>();
+	    Map<Long, PermissionMap> ret = new HashMap<Long, PermissionMap>();
 	    Iterator i = col.iterator();
 	    while (i.hasNext()) {
 		PermissionMap element = (PermissionMap) i.next();
@@ -438,7 +437,7 @@ public final class PermissionUtil {
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier=:objectId ORDER BY p.objectIdentifier");
-	    query.setParameter("objectId", obj.getIdentifier().toString());
+	    query.setParameter("objectId", obj.getIdentifier());
 	    query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
 	    List col = query.list();
 
@@ -481,7 +480,7 @@ public final class PermissionUtil {
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectIdentifier");
-	    query.setParameter("objectId", obj.getIdentifier().toString());
+	    query.setParameter("objectId", obj.getIdentifier());
 	    query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
 	    query.setCacheable(true);
 	    List col = query.list();
@@ -514,7 +513,7 @@ public final class PermissionUtil {
 		// TODO Auto-generated catch block
 		throw new RuntimeException( "HibernateException Exception encountered", e);
 	    } catch (SQLException e) {
-	    	logger.error(e);
+		// TODO Auto-generated catch block
 		throw new RuntimeException( "SQLException Exception encountered", e);
 	    }
 	}
@@ -637,8 +636,8 @@ public final class PermissionUtil {
     }
     
     
-    public static Map<String, String> getAllPermissibleObjectLabelsForPermissibleClass(Class permClass) {
-	Map<String, String> ret = new HashMap<String, String>();
+    public static Map<Long, String> getAllPermissibleObjectLabelsForPermissibleClass(Class permClass) {
+	Map<Long, String> ret = new HashMap<Long, String>();
 	Session session = null;
 	try {
 	    session = PersistenceManager.getSession();
@@ -652,7 +651,7 @@ public final class PermissionUtil {
 	    Iterator i = list.iterator();
 	    while (i.hasNext()) {
 		Object[] element = (Object[]) i.next();
-		ret.put( element[0].toString(), (String) element[1]);
+		ret.put((Long) element[0], (String) element[1]);
 	    }
 	    return ret;
 

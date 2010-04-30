@@ -37,16 +37,7 @@ public class SelectSectorForm extends ActionForm {
 	private Collection searchedSectors = null; // list of searched Sectors.
 	private boolean someError;
 	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
-	private boolean showCodeBesideName;
-    public boolean isShowCodeBesideName() {
-		return showCodeBesideName;
-	}
-
-	public void setShowCodeBesideName(boolean showCodeBesideName) {
-		this.showCodeBesideName = showCodeBesideName;
-	}
-
-		private Long configId;
+        private Long configId;
 
         public Long getConfigId() {
             return configId;

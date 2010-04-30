@@ -19,7 +19,6 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer3D;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.Dataset;
 
 public class ChartUtil {
   private static Logger logger = Logger.getLogger(ChartUtil.class);
@@ -45,7 +44,7 @@ public class ChartUtil {
 //    return chart;
 //  }
 
-  private static JFreeChart createBarChart(CategoryDataset dataset,boolean fixedRange) {
+  private static JFreeChart createBarChart(CategoryDataset dataset) {
 
     // create the chart...
     JFreeChart chart = ChartFactory.createBarChart3D(
@@ -76,11 +75,8 @@ public class ChartUtil {
     CategoryPlot plot = chart.getCategoryPlot();
 
     // set the range axis to display integers only...
-    final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();    
-    
-    if(fixedRange){
-    	rangeAxis.setRange(0D, 1D);
-    }
+    final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+    rangeAxis.setRange(0D, 1D);
     rangeAxis.setNumberFormatOverride(new DecimalFormat("###%"));
 
     // disable bar outlines...
@@ -90,10 +86,10 @@ public class ChartUtil {
     //renderer.setItemLabelsVisible(false);
 
     // set up gradient paints for series...
-	renderer.setSeriesPaint(0,new Color(0,0,255));
+	renderer.setSeriesPaint(0,new Color(0,0,255));									
 	renderer.setSeriesPaint(1,new Color(0,204,255));
 	renderer.setSeriesPaint(2,new Color(204,255,255));
-	renderer.setItemMargin(0);
+	renderer.setItemMargin(0);	
 
 //	Color color=COLOR_BLUE_START;
 //	Calendar year = Calendar.getInstance();
@@ -230,16 +226,16 @@ public class ChartUtil {
 	  return result;
   }
   
-  public static JFreeChart createChart(CategoryDataset dataset, int chartType,boolean fixedRange) {
+  public static JFreeChart createChart(CategoryDataset dataset, int chartType) {
     switch (chartType) {
       case CHART_TYPE_BAR:
-    	  return createBarChart(dataset,fixedRange);
+    	  return createBarChart(dataset);
       case CHART_TYPE_STACKED_BARS:
     	  return createStackedBarChart(dataset);
       case CHRAT_TYPE_STACKED_BARS_PERCENTAGE:
     	  return createStackedPercentBarChart(dataset);
       default:
-    	  return createBarChart(dataset,fixedRange);
+    	  return createBarChart(dataset);
     }
 
   }

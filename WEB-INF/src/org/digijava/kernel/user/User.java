@@ -37,8 +37,6 @@ import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class User
     extends Entity {
@@ -57,6 +55,7 @@ public class User
     private String url;
     private boolean active;
     private boolean banned;
+    private Boolean pledger;
     private Site registeredThrough;
     private Set interests;
     private java.sql.Clob bio;
@@ -77,15 +76,7 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private Long assignedOrgId;
-    private Set<AmpOrganisation> assignedOrgs;
 
-	public Set<AmpOrganisation> getAssignedOrgs() {
-		return assignedOrgs;
-	}
-
-	public void setAssignedOrgs(Set<AmpOrganisation> assignedOrgs) {
-		this.assignedOrgs = assignedOrgs;
-	}
 
 	public Long getAssignedOrgId() {
 		return assignedOrgId;
@@ -417,7 +408,18 @@ public class User
         this.contacts = contacts;
     }
 
-    public boolean isBuildInAdmin(){
-    	return UserUtils.isBuildInAdmin(this.email);
-    }
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
+	}
+
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
+	}
+
 }

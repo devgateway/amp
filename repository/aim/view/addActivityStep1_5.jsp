@@ -89,16 +89,11 @@ function toggleDiv(num){
 -->
 </script>
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
-
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <digi:instance property="aimEditActivityForm" />
 
 <digi:form action="/addActivity.do" method="post">
- <c:set var="stepNm">
-  ${aimEditActivityForm.stepNumberOnPage}
- </c:set>
 
 <html:hidden property="step"/>
 <html:hidden property="editKey"/>
@@ -124,7 +119,7 @@ function toggleDiv(num){
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td><jsp:include page="t.jsp"/>
-								<span class=crumb style="visibility: hidden">
+								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
@@ -180,14 +175,16 @@ ${fn:replace(message,quote,escapedQuote)}
 					</table>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="4" vAlign="top">
+					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height="16" vAlign="center" width="100%"><span class="subtitle-blue">
 								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
+:
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -200,18 +197,37 @@ ${fn:replace(message,quote,escapedQuote)}
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+							<tr>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												             <digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                         <digi:trn key="aim:activity:References">
+                                                                                                         References
+                                                                                                         </digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 							<tr><td bgcolor="#f4f4f2" width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
 
-								<table width="100%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<feature:display name="Identification" module="Project ID and Planning">
 									&nbsp;
 									</feature:display>
 									<tr>
-										<td class="separator1">
-											<digi:trn key="aim:editActivity:references">References</digi:trn>
+										<td>
+											<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+											<b><digi:trn key="aim:editActivity:references">References</digi:trn></b>
 										</td>
 									</tr>
 									<tr><td>&nbsp;</td></tr>
@@ -258,11 +274,11 @@ ${fn:replace(message,quote,escapedQuote)}
 										</td>
 									</tr>
 
-									<tr><td>&nbsp;
-										
+									<tr><td>
+										&nbsp;
 									</td></tr>
-									<tr><td>&nbsp;
-										
+									<tr><td>
+										&nbsp;
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 

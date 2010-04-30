@@ -92,8 +92,7 @@ public class ConfigLoaderListener
     			if(c<'0' || c>'9') break;
     			bugFixingVersionString+=c;
     		}
-    	if(bugFixingVersionString.length()==0) return 0;
-    	return Integer.parseInt(bugFixingVersionString);    		
+    	return Integer.parseInt(bugFixingVersionString);
     }
    
 
@@ -223,13 +222,8 @@ public class ConfigLoaderListener
 		compat.load(new FileInputStream(compatFile));
 		
 		
-		String prefix="unknown";
-		if(metaData.getURL().indexOf("oracle")>-1) prefix="oracle";
-		if(metaData.getURL().indexOf("postgresql")>-1) prefix="postgresql";
-		if(metaData.getURL().indexOf("mysql")>-1) prefix="mysql";
-		
-		
-		
+		String prefix=(metaData.getDatabaseProductVersion().toUpperCase().indexOf(ORACLE_DB)>-1)?"oracle":"mysql";
+	
 		
 		int dbMajorVersion=Integer.parseInt((String)compat.get(prefix+".version.major"));
 		int dbMinorVersion=Integer.parseInt((String)compat.get(prefix+".version.minor"));
@@ -251,9 +245,7 @@ public class ConfigLoaderListener
 			throw new IncompatibleEnvironmentException("JDBC driver version is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
 	
 		
-		
-		logger.info("Database "+prefix+" version "+metaData.getDatabaseProductVersion()+"; JDBC driver version "+metaData.getDriverVersion());
-		logger.info("Database compatibility OK"); 
+		logger.info("Database compatibility OK.");
     }
     
 	/**

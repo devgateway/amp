@@ -12,17 +12,19 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-    <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/element-min.js'/>" >.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/animation-min.js'/>" >.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/tabview-min.js'/>" >.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/connection-min.js'/>" > .</script>
+    
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%><script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>">.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/animation-min.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
+	<%-- <script type="text/javascript" src=".<digi:file src='module/aim/scripts/logger/logger-min.js'/>">.</script> --%>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/ajaxconnection/connection-min.js'/>" > .</script>
 	
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop.js'/>" >.</script>
 	
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
@@ -30,17 +32,12 @@
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
 	
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2.css'/>">
-	<!--[if IE]>
-		<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2_IE_.css'/>">
-	<![endif]-->
 
 	<br>
 	<br>
@@ -134,6 +131,9 @@
 		<c:set var="summary">
 			<digi:trn key="aim:summaryReport">Summary Report</digi:trn>
 		</c:set>
+		<c:set var="PledgesFunding">
+			<digi:trn key="aim:pledgesfunding">Pledges Report</digi:trn>
+		</c:set>
 	</c:if>
 
 	<c:set var="disableFundingType">false</c:set>
@@ -208,16 +208,15 @@
 			}
 			tab2	= YAHOO.amp.reportwizard.tabView.getTab(2);
 			tab2.addListener("beforeActiveChange", generateHierarchies);
-
+			
+			ColumnsDragAndDropObject.selectObjsByDbId ("source_col_div", "dest_col_ul", selectedCols);
+			generateHierarchies();
+			MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
+			MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
+			
 			repFilters					= new Filters("${filterPanelName}", "${failureMessage}", "${filterProblemsMessage}", 
 												"${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}");
 			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
-			
-			ColumnsDragAndDropObject.selectObjsByDbId("source_col_div", "dest_col_ul", selectedCols);
-			generateHierarchies();
-			MyDragAndDropObject.selectObjsByDbId("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
-			MyDragAndDropObject.selectObjsByDbId("source_measures_ul", "dest_measures_ul", selectedMeas);
-			
 			
 			var dg			= document.getElementById("DHTMLSuite_treeNode1");
 			var cn			= dg.childNodes;
@@ -275,7 +274,7 @@
 		<ul class="yui-nav">
 			<li id="reportdetails_tab_label" class="selected"><a href="#type_step_div"><div>${detailsStepName}</div></a> </li>
 			<li id="columns_tab_label" class="disabled"><a href="#columns_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:columns">2. Columns</digi:trn></div></a> </li>
-			<li id="hierarchies_tab_label" class="disabled"><a href="#hierarchies_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:hierarchies">3. Hierarchies</digi:trn></div></a> </li>
+			<li id="hierachies_tab_label" class="disabled"><a href="#hierarchies_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:hierarchies">3. Hierarchies</digi:trn></div></a> </li>
 			<li id="measures_tab_label" class="disabled"><a href="#measures_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:measures">4. Measures</digi:trn></div></a> </li>
 		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
@@ -294,7 +293,8 @@
 								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; height: 140px;
 											position: relative;">
 								<table style="top: 17%; left: 1%; position: absolute;">
-								<feature:display name="Donor Report" module="Report Types">
+									<%if (request.getParameter("type")== null){%>
+									<feature:display name="Donor Report" module="Report Types">
                                              <tr>
                                                <td>
                                                  <html:radio property="reportType" disabled="${disableFundingType}" value="donor"  onclick="repManager.checkSteps()">
@@ -330,7 +330,17 @@
                                                    </td>
                                                  </tr>
                                                </feature:display>
-                                     </table>
+                                              <%}else{%>
+                                              <c:set var="disablePledgeType">true</c:set>
+                                              	<tr>
+                                              		<td>
+                                                		<html:radio property="reportType" disabled="${disablePledgeType}" value="pledge" onclick="repManager.checkSteps()">
+                                                   			${PledgesFunding}
+                                                     	</html:radio>
+                                                   </td>
+                                                </tr>
+                                              <%}%>
+                                     	</table>
 									<br />
 								</div>
 
@@ -359,17 +369,14 @@
 												Monthly Report
 											</digi:trn>
 										</html:radio>
-										
-										<html:radio property="reportPeriod" value="N">
-											<digi:trn>
-												No Grouping
-											</digi:trn>
-										</html:radio>
 										<br /><br />
 									</div>
 								</c:if>
-                            <c:set var="member" scope="request" value="${sessionScope.currentMember}"/>
-                  			<c:if test="${ (!myForm.desktopTab) || (member.teamHead==true && member.teamAccessType=='Management')}">
+								
+								<bean:define id="member" name="currentMember" scope="session" />
+                  				
+                  				
+							<c:if test="${ (!myForm.desktopTab) || (member.teamHead==true && member.teamAccessType=='Management')}">
 								<span class="list_header">
 									<digi:trn key="aim:reportBuilder:Options">Options</digi:trn>
 								</span>
@@ -434,7 +441,7 @@
 					</table>
 					</div>
 				</div>
-				<div id="columns_step_div"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
+				<div id="columns_step_div"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
 					<c:set var="stepNum" value="1"  scope="request" />
 					<jsp:include page="toolbar.jsp" />
 					<div style="height: 370px;">
@@ -450,11 +457,11 @@
 						</td>
 						<td valign="middle" align="center">
 							<button class="buton arrow" type="button" onClick="ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')">
-								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
+								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 							</button>
 							<br/> <br />
 							<button class="buton arrow" type="button" onClick="ColumnsDragAndDropObject.deselectObjs('dest_col_ul')">
-								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_left.gif"/>
+								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
 							</button>
 						</td>
 						<td width="47%" align="center">
@@ -490,7 +497,7 @@
 					</table>
 					</div>
 				</div>
-				<div id="hierarchies_step_div"  class="yui-hidden"  style="padding: 0px 0px 1px 0px; ">
+				<div id="hierarchies_step_div"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
 					<c:set var="stepNum" value="2" scope="request" />
 					<jsp:include page="toolbar.jsp" />
 					<div style="height: 370px;">
@@ -505,11 +512,11 @@
 						</td>
 						<td valign="middle" align="center">
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.selectObjs('source_hierarchies_ul', 'dest_hierarchies_ul')">
-								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
+								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 							</button>
 							<br/> <br />
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_hierarchies_ul', 'source_hierarchies_ul')">
-								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_left.gif"/>
+								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
 							</button>
 						</td>
 						<td width="47%" align="center">
@@ -534,7 +541,7 @@
 					</table>
 					</div>
 				</div>
-				<div id="measures_step_div" class="yui-hidden" style="padding: 0px 0px 1px 0px; " >
+				<div id="measures_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; display: none;" >
 					<c:set var="stepNum" value="3" scope="request" />
 					<jsp:include page="toolbar.jsp" />
 					<div style="height: 370px;">
@@ -550,11 +557,11 @@
 						</td>
 						<td valign="middle"  align="center">
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')">
-								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
+								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 							</button>
 							<br/> <br />
 							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')">
-								<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_left.gif"/>
+								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
 							</button>
 						</td>
 						<td width="47%" align="center">

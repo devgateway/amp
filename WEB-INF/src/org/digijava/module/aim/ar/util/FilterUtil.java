@@ -163,8 +163,6 @@ public class FilterUtil {
 		form.setSelectedPrimaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedPrimaryPrograms()) );
 		form.setSelectedSecondaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedSecondaryPrograms()) );
 		
-		form.setRegionSelected( FilterUtil.getObjectsIds( filter.getLocationSelected() ) );
-		
 		form.setText( filter.getText() );
 		form.setIndexString( filter.getIndexText() );
 		
@@ -174,28 +172,15 @@ public class FilterUtil {
 		form.setToMonth( filter.getToMonth() );
 		form.setFromDate( filter.getFromDate() );
 		form.setToDate( filter.getToDate() );
-		
+
 		if (filter.getCurrency() != null)
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
 		
-		if ( filter.getLineMinRank() != null && filter.getLineMinRank().size() > 0) {
-			int i = 0;
-			Object[] temp	= new Object[filter.getLineMinRank().size()];
-			for ( Integer intVal:filter.getLineMinRank() ) {
-				temp[i++]	= intVal.toString();
-			}
-			form.setLineMinRanks(temp);
-		}
-		if ( filter.getPlanMinRank() != null && filter.getPlanMinRank().size() > 0) {
-			int i = 0;
-			Object[] temp	= new Object[filter.getPlanMinRank().size()];
-			for ( Integer intVal:filter.getPlanMinRank() ) {
-				temp[i++]	= intVal.toString();
-			}
-			form.setPlanMinRanks(temp);
-		}
-		if ( filter.getLocationSelected() != null )
-			form.setRegionSelected ( FilterUtil.getObjectsIds(filter.getLocationSelected()));
+		form.setLineMinRank( filter.getLineMinRank() );
+		form.setPlanMinRank( filter.getPlanMinRank() );
+		if ( filter.getRegionSelected() != null )
+			form.setRegionSelected( filter.getRegionSelected().getId() );
+		
 		Collection<String> appStatuses		= filter.getApprovalStatusSelected();
 		if ( appStatuses!=null && appStatuses.size()>0  ) {
 			form.setApprovalStatusSelected( appStatuses.toArray() );
@@ -218,10 +203,9 @@ public class FilterUtil {
 		form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
 		form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
 
-		if (filter.getBudget() != null) {
-			form.setSelectedBudgets( new Object[1] ); 
-			form.getSelectedBudgets()[0]	= filter.getBudget()?"1":"0" ;
-		}
+		if (filter.getBudget() != null)
+			form.setSelectedBudget( filter.getBudget()?1:2 );
+		
 		form.setJustSearch( filter.isJustSearch() );
 		form.setRenderStartYear( filter.getRenderStartYear()>0 ? filter.getRenderStartYear() : -1 );
 		form.setRenderEndYear( filter.getRenderEndYear()>0 ? filter.getRenderEndYear() : -1 );
@@ -230,7 +214,7 @@ public class FilterUtil {
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
-		form.setAmountinthousands(filter.isAmountinthousand());
+		
 	}
 	
 }

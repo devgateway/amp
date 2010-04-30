@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,7 +28,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 public class AmountCell extends Cell {
 	// public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 
-	protected BigDecimal amount;
+	protected double amount;
 
 	protected double originalAmount;
 	
@@ -124,8 +123,8 @@ public class AmountCell extends Cell {
 	 */
 	public String toString() {
 		// mf.setMaximumFractionDigits(2);
-		BigDecimal am = getAmount();
-		if (am.doubleValue()==0d)
+		double am = getAmount();
+		if (am == 0)
 			return "";
 		else
 			return FormatHelper.formatNumberUsingCustomFormat(getAmount());
@@ -137,7 +136,7 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#getValue()
 	 */
 	public Object getValue() {
-		return amount;
+		return new Double(amount);
 	}
 
 	/*
@@ -146,7 +145,7 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#setValue(java.lang.Object)
 	 */
 	public void setValue(Object value) {
-		amount = (BigDecimal) value;
+		amount = ((Double) value).doubleValue();
 
 	}
 
@@ -185,21 +184,26 @@ public class AmountCell extends Cell {
 	/**
 	 * @return Returns the amount.
 	 */
-	public BigDecimal getAmount() {
-		BigDecimal ret = new BigDecimal(0);
-		if (id != null)
-			return convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100));
+	public double getAmount() {
+		double ret = 0;
+		if (id != null){
+			return  convert() * getPercentage() / 100;
+		}
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
-			ret =ret.add(element.getAmount());
+			ret += element.getAmount();
+			// logger.info("amount++"+element.getAmount());
 		}
+		// logger.info("******total amount for owner
+		// "+this.getOwnerId()+"="+ret);
 		return ret;
 	}
 
 	public String getWrappedAmount() {
 		if (id != null)
-			return FormatHelper.formatNumberUsingCustomFormat(convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100)));
+			return FormatHelper.formatNumberUsingCustomFormat(convert()
+					* getPercentage() / 100);
 		else
 			return "";
 	}
@@ -208,8 +212,10 @@ public class AmountCell extends Cell {
 	 * @param amount
 	 *            The amount to set.
 	 */
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
+		this.originalAmount=amount;
+		
 	}
 
 	public Class getWorker() {
@@ -253,18 +259,18 @@ public class AmountCell extends Cell {
 		this.fromExchangeRate = exchangeRate;
 	}
 
-	public BigDecimal convert() {
-		BigDecimal resultDbl = new BigDecimal(0.0);
+	public double convert() {
+		double resultDbl = 0.0;
 		if (fromExchangeRate != toExchangeRate) {
-			BigDecimal inter = new BigDecimal(1/fromExchangeRate);
-			inter = inter.multiply(amount);
-			resultDbl = inter.multiply(new BigDecimal(toExchangeRate));
+			double inter = 1 / fromExchangeRate;
+			inter = inter * amount;
+			resultDbl = inter * toExchangeRate;
 		} else {
 			resultDbl = amount;
 		}
 		return resultDbl;// Math.round(resultDbl);
 	}
-
+	
 	public double convert(double mnt) {
 		double resultDbl = 0.0;
 		if (fromExchangeRate != toExchangeRate) {
@@ -284,8 +290,8 @@ public class AmountCell extends Cell {
 	 * @param amount
 	 *            the amount to be added to the internal property.
 	 */
-	public void rawAdd(BigDecimal amount) {
-		this.amount=this.amount.add(amount);
+	public void rawAdd(double amount) {
+		this.amount += amount;
 	}
 
 	public Date getCurrencyDate() {
@@ -327,7 +333,7 @@ public class AmountCell extends Cell {
 	}
 
 	public Comparable comparableToken() {
-		return  getAmount();
+		return new Double(getAmount());
 	}
 
 	public double getPercentage() {
@@ -342,8 +348,8 @@ public class AmountCell extends Cell {
 	public void setPercentage(double percentage, MetaTextCell source) {
 		Column sourceCol = source.getColumn();
 		
-	 	initializePercentageMaps();
-		//logger.debug("percent "+percentage +" apply to "+this+" (hash"+this.getHashCode()+") with source "+sourceCol.getName());
+		initializePercentageMaps();
+		logger.debug("percent "+percentage +" apply to "+this+" (hash"+this.getHashCode()+") with source "+sourceCol.getName());
 		logger.debug("...column already has "+columnPercent+" for "+columnCellValue);
 		// never apply same percentage of same value again
 		if (columnPercent.containsKey(sourceCol.getName()) && columnCellValue.get(sourceCol.getName()).equals(source.getValue())) return;
@@ -379,27 +385,20 @@ public class AmountCell extends Cell {
 		/**
 		 * For hierarchies with programs
 		 */
-		this.replacePercentage(ArConstants.COLUMN_ANY_NATPROG, ArConstants.COLUMN_ANY_NATPROG, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_ANY_SECONDARYPROG, ArConstants.COLUMN_ANY_SECONDARYPROG, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_ANY_PRIMARYPROG, ArConstants.COLUMN_ANY_PRIMARYPROG, source, sourceCol, percentage);
-		
-		/**
-		 * For locations
-		 */
-		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_ANY_NATPROG, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_ANY_SECONDARYPROG, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_ANY_PRIMARYPROG, source, sourceCol, percentage);
 		
 		columnPercent.put(sourceCol.getName(), percentage);
 		columnCellValue
 				.put(sourceCol.getName(), (Comparable) source.getValue());
 	}
 	
-	private boolean replacePercentage (String srcColumnsName, String destColumnsName,  MetaTextCell source,  Column sourceCol, double percentage) {
+	private boolean replacePercentage (String relColumnsName,  MetaTextCell source,  Column sourceCol, double percentage) {
 		String percentColName	= null;
 		for (String colPercent : columnPercent.keySet()) 
-		    if(colPercent.contains(srcColumnsName)) percentColName=colPercent; 
-		if ( percentColName != null && 
-					sourceCol.getName().contains(destColumnsName) ) {
+		    if(colPercent.contains(relColumnsName)) percentColName=colPercent; 
+		if ( percentColName != null ) {
 			columnPercent.remove(percentColName);
 			columnCellValue.remove(percentColName);
 			columnPercent.put( sourceCol.getName(), percentage);

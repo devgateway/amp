@@ -17,8 +17,8 @@ import java.util.Set;
 public interface Categorizable {
 	public Set getMetaData();
 	
-	
 	public boolean hasMetaInfo(MetaInfo m);
+	
 	public boolean isShow();
 	public boolean isRenderizable();
 }

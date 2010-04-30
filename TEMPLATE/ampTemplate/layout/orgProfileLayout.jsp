@@ -7,83 +7,24 @@
 
 <HTML>
     <digi:base />
+    <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
     <digi:context name="digiContext" property="context"/>
     <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
     <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
-    
+
     <HEAD>
         <TITLE><digi:trn>Organization Profile</digi:trn></TITLE>
 
-        
-           <script type="text/javascript">
-               function exportPDF() {
-                   openURLinResizableWindow("/orgProfile/pdfExport.do", 780, 500);
-               }
-                function exportWord() {
-                   openURLinResizableWindow("/orgProfile/wordExport.do", 780, 500);
-               }
-          </script>
-        <style type="text/css">
+        <style>
             .tableHeaderCls {
                 font-size: 12px;
                 color: White;
                 background-color:
                 rgb(55, 96, 145);
-                font-family: Arial;
+                font-family: Tahoma;
                 text-align:center;
-                border-style:solid;
-                border-right:none;
-                border-bottom:none;
-                border-width:1px;
-                border-color: rgb(255, 255, 255);
             }
-
-            .tableEven {
-                background-color:#dbe5f1;
-                font-size:10px;
-                font-family: Arial;
-                padding:2px;
-            }
-            td {
-                font-size:10px;
-                font-family: Arial;
-            }
-
-            .tableOdd {
-                background-color:#FFFFFF;
-                font-family: Arial;
-                font-size:10px;!important
-                padding:2px;
-            }
-
-           .selectDropDown {
-                font-family: Arial;
-                font-size:10px;
-                width:200px;
-            }
-
-            .Hovered {
-                background-color:#a5bcf2;
-            }
-
-
-            .toolbar{
-                width: 350px;
-                background: #addadd;
-                background-color: #addadd;
-                padding: 3px 3px 3px 3px;
-                position: relative;
-                top: 10px;
-                left: 10px;
-                bottom: 100px;
-
-            }
-
         </style>
-        <script language="JavaScript" type="text/javascript">
-	      <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
-        </script>
-        
     </HEAD>
     <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
         <TABLE cellSpacing=0 cellPadding=0 width="100%"  border=0 valign="top" align="left">
@@ -120,15 +61,20 @@
                                             <digi:insert attribute="filters"/>
                                         </TD>
                                     </TR>
-                                                           
+                                    <TR>
+                                        <TD>&nbsp;</TD>
+                                    </TR>
+                                    <TR>
+                                        <TD><digi:trn>All the amounts are in </digi:trn>  ${sessionScope.orgProfileFilter.currName} </TD>
+                                    </TR>
                                      <TR>
                                         <TD>&nbsp;</TD>
                                     </TR>
                                     <TR>
                                         <TD>
-                                            <TABLE cellpadding="5" border="0" width="100%">
+                                            <TABLE cellpadding="5" border="0" width="80%">
                                                 <TR>
-                                                    <TD NOWRAP VALIGN="TOP" width="50%" align="center">
+                                                    <TD NOWRAP VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place1" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -136,7 +82,7 @@
                                                                         &nbsp;   
                                                                     </div>
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial,Helvetica, sans-serif;;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart1">
                                                                         <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
                                                                     </digi:insert>
@@ -155,7 +101,7 @@
                                                                                  
                                                                       </div>
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial,Helvetica, sans-serif;text-align:center;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart2">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
                                                                     </digi:insert>
@@ -177,7 +123,7 @@
                                                                      </div>
                                                                     
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial,Helvetica, sans-serif;text-align:center;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart3">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place3</digi:put>
                                                                     </digi:insert>
@@ -198,7 +144,7 @@
                                                                 </div>
                                                                               
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;text-align:center;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart4">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place4</digi:put>
                                                                     </digi:insert>
@@ -222,7 +168,7 @@
                                                                    </div>
                                                                           
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;text-align:center;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart5">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place5</digi:put>
                                                                     </digi:insert>
@@ -240,7 +186,7 @@
                                                                                        
                                                                   </div>
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;text-align:center;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart6">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place6</digi:put>
                                                                     </digi:insert>
@@ -252,7 +198,7 @@
                                                     </TD>
                                                 </TR>
                                                 <TR>
-                                                    <TD NOWRAP  VALIGN="TOP" colspan="2">
+                                                    <TD NOWRAP  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place7" module="Org Profile">
                                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -261,7 +207,7 @@
                                                                      </div>
                                                                              
                                                                 </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Arial, Helvetica, sans-serif;text-align:center;">
+                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart7">
                                                                         <digi:put name="widget-teaser-param">orgprof_chart_place7</digi:put>
                                                                     </digi:insert>
@@ -270,7 +216,10 @@
                                                                 </div>
                                                             </div>
                                                         </feature:display>
-                                                    </TD>             
+                                                    </TD>
+                                                    <TD NOWRAP  VALIGN="TOP">
+                                                      &nbsp;
+                                                    </TD>
                                                 </TR>
 
                                             </TABLE>
@@ -289,10 +238,6 @@
                 </TD>
             </TR>
         </TABLE>
-      <script language="javascript" type="text/javascript">
-        setStripsTable("tableEven", "tableOdd");
-        setHoveredTable();
-       </script>
     </BODY>
 </HTML>
 

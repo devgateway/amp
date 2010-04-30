@@ -5,14 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-
 
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
@@ -20,22 +17,22 @@
 
 <script language="JavaScript">
 
-    function chkNumeric(frmContrl){
-        var regEx=/^[0-9]*\.?[0-9]*$/;
-        var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
-        if(!frmContrl.value.match(regEx)){
-            alert(errorMsg);
-            frmContrl.value = "";
-            frmContrl.focus();
-            return false;
-        }
-    }
+function chkNumeric(frmContrl){
+  var regEx=/^[0-9]*\.?[0-9]*$/;
+  var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
+  if(!frmContrl.value.match(regEx)){
+      alert(errorMsg);
+      frmContrl.value = "";
+      frmContrl.focus();
+      return false;
+  }
+}
 $(document).ready(function(){
       $("#addDataBtn").click(function () {
           $(this).attr('disabled', 'disabled');
-  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
-  document.forms[0].action = "<%=addEditIndicator%>";
-  document.forms[0].submit();
+           <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
+          document.forms[0].action = "<%=addEditIndicator%>";
+          document.forms[0].submit();
       });
   });
 
@@ -60,6 +57,16 @@ function saveIndicator(id){
   window.close()
 }
 
+function selectLocation(index){
+    <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" />
+  	document.aimThemeForm.action = "<%=justSubmit%>&index="+index;
+  	document.aimThemeForm.submit();
+  <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>  
+  openURLinWindow("<%=selLoc%>&index="+index,700,500);
+
+
+
+}
 
 function validation(){
 	var values=document.getElementsByTagName("select");
@@ -98,12 +105,12 @@ function validation(){
 </script>
 
 <digi:instance property="aimThemeForm" />
-<digi:form action="/addEditData.do" method="post" type="aimThemeForm" name="aimThemeFormDataPopin">
+<digi:form action="/addEditData.do" method="post">
 <digi:context name="digiContext" property="context"/>
 <input type="hidden" name="event">
-<table  width=692 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
+<table  width=572 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
   <tr>
-    <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="9">
+    <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="7">
     <digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn>: ${aimThemeForm.indicatorName}
     </td>
   </tr>
@@ -117,11 +124,8 @@ function validation(){
     <td align="center" valign="middle" width="120">
       <b><font color="white"><digi:trn key="aim:addData:creationdate">Date</digi:trn></font></b>
     </td>
-    <td align="center" valign="middle" width="120" colspan="2">
+    <td align="center" valign="middle" width="120" colspan="3">
       <b><font color="white"><digi:trn key="aim:addeditdata:addlocation">Add Location</digi:trn></font></b>
-    </td>
-    <td align="center" valign="middle" width="120" colspan="2">
-      <b><font color="white"><digi:trn>Add Source</digi:trn></font></b>
     </td>
   </tr>
   <c:if test="${!empty aimThemeForm.prgIndValues}">
@@ -142,7 +146,7 @@ function validation(){
           <td bgColor=#d7eafd  height="10" align="center" nowrap="nowrap">
             <html:text name="ind" property="creationDate" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
 			<a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
-				<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0> 
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
 			</a> 
 
           </td>
@@ -157,21 +161,15 @@ function validation(){
           </td>
 
           <td bgColor=#d7eafd  height="10" nowrap="nowrap">
-        [<a href="javascript:selectLocation('${index.count-1}')">
-            <digi:trn key="aim:addeditdata:addlocation">Add location</digi:trn>
-            <!-- <img src="../ampTemplate/images/closed.gif" border="0" alt="Select location" /> -->
-        </a>]
-</td>
-           <td bgColor=#d7eafd nowrap="nowrap">
-      
-               <c:set var="translation">
-                   <digi:trn key="aim:addActivityStatusFirstLine">Please select source from below</digi:trn>
-               </c:set>
-             <category:showoptions  name="ind" firstLine="${translation}" property="sourceId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_SOURCE_KEY%>" styleClass="inp-text" />
+            [<a href="javascript:selectLocation('${index.count-1}')">
+            	<digi:trn key="aim:addeditdata:addlocation">Add location</digi:trn>
+              <!-- <img src="../ampTemplate/images/closed.gif" border="0" alt="Select location" /> -->
+            </a>]
           </td>
+
           <td bgColor=#d7eafd>
             <a href="javascript:deleteData('${index.count-1}')">
-              <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete indicator value" />
+              <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
             </a>
           </td>
         </tr>        
@@ -191,7 +189,7 @@ function validation(){
   <tr>
     <td height="25" align="center" colspan="6">
       <c:set var="trnadd"><digi:trn key="aim:btn:adddata">Add data</digi:trn></c:set>
-      <input id="addDataBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData()">&nbsp;&nbsp;
+      <input id="addDataBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}">&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>
@@ -202,7 +200,7 @@ function validation(){
       
       <input class="dr-menu" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
       <input class="dr-menu" type="reset" value="${trncancel}">
-      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="closeDataWindow();">
+      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="window.close();">
     </td>
   </tr>
    <tr><td width="100%" colspan="6"><br>

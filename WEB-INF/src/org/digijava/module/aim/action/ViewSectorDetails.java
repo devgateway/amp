@@ -1,12 +1,8 @@
 
 package org.digijava.module.aim.action ;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +44,7 @@ public class ViewSectorDetails extends Action {
 					 String level = request.getParameter("level");
 					 String secId = request.getParameter("ampSectorId");
 					 if(secId==null)
-						secId = (String)session.getAttribute("Id");
+						 secId = (String)session.getAttribute("Id");
 					 /*
 					 logger.info("LEVEL======================"+level);
 					 logger.info("event================"+event);
@@ -57,17 +53,8 @@ public class ViewSectorDetails extends Action {
 					 logger.debug(session.getAttribute("Id"));
 					 logger.debug(secId);
 					 */
-					 	String sortByColumn = request.getParameter("sortByColumn");
 						Long parentId = new Long(secId);
-
-						Collection<AmpSector> sectors=null;
-						if(sortByColumn==null || sortByColumn.compareTo("sectorCode")==0){
-							sectors = SectorUtil.getAllChildSectorsSortBySectorCode(parentId);
-						}
-						else if(sortByColumn!=null && sortByColumn.compareTo("sectorName")==0){
-							sectors = SectorUtil.getAllChildSectors(parentId);
-						}
-						viewSectorForm.setSubSectors(sectors);
+						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 						Collection _subSectors = viewSectorForm.getSubSectors();
 						Iterator itr = _subSectors.iterator();
 						while (itr.hasNext()) {

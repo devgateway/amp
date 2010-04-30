@@ -20,9 +20,8 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String refreshParentDocument = "";
 	private String aditionalRequestParameters = "";
 	private String styleClass=""; //class name
-	private String donorGroupTypes="";
-	private String useLink = "";
-
+	private String useAcronym = "false";
+	
 	public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
 	public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
 	public static final String PARAM_PROPERY_NAME = "PARAM_PROPERY_NAME";
@@ -35,8 +34,8 @@ public class AddOrganizationButton extends BodyTagSupport {
 	public static final String PARAM_NAME_DELEGATE_CLASS = "PARAM_NAME_DELEGATE_CLASS";
 	public static final String ADITIONAL_REQUEST_PARAMS = "ADITIONAL_REQUEST_PARAMS";
 	public static final String STYLE_CLASS_NAME = "class"; //buttons standard class property
-	public static final String PARAM_DONOR_GROUP_LIST = "PARAM_DONOR_GROUP_LIST";
-
+	public static final String PARAM_USE_ACRONYM = "PARAM_USE_ACRONYM";
+	
 	public int doStartTag() throws JspException {
 		try {
 			// add current form to session under a common param name
@@ -46,21 +45,14 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
-			if (getUseLink().equalsIgnoreCase("true")){
-				html.append("<a ");
-			}
-			else
-			{
-				html.append("<input type=\"button\" ");
-			}
+			html.append("<input type=\"button\" ");
 			if(!"".equalsIgnoreCase(styleClass)){
 				html.append(STYLE_CLASS_NAME);
 				html.append("=");
 				html.append("\""+styleClass+"\"");				
 			}
-			//html.append(" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
-			html.append(" onclick=\"javascript:selectOrg('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
-			
+			html.append(" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+
 			html.append(PARAM_RESET_FORM);
 			html.append("=true~");
 
@@ -97,6 +89,12 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append("true");
 				html.append("~");
 			}
+			if ("true".equalsIgnoreCase(useAcronym)) {
+				html.append(PARAM_USE_ACRONYM);
+				html.append("=");
+				html.append("true");
+				html.append("~");
+			}
 			if (!"".equalsIgnoreCase(htmlNameHolder)) {
 				html.append(PARAM_NAME_HOLDER);
 				html.append("=");
@@ -124,13 +122,6 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append(aditionalRequestParameters);
 				html.append("~");
 			}
-			
-			if (!"".equalsIgnoreCase(donorGroupTypes)) {
-				html.append(PARAM_DONOR_GROUP_LIST);
-				html.append("=");
-				html.append(donorGroupTypes);
-				html.append("~");
-			}
 			html.append("','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
 
 			out.write(html.toString());
@@ -151,13 +142,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	@Override
 	public int doEndTag() throws JspException {
 		try {
-			if (getUseLink().equalsIgnoreCase("true")){
-				pageContext.getOut().print("/>" + bodyContent.getString() + "</a>");
-			}
-			else
-			{
-				pageContext.getOut().print("value=\"" + bodyContent.getString() + "\"/>");
-			}
+			pageContext.getOut().print("value=\"" + bodyContent.getString() + "\"/>");
 		} catch (Exception e) {
 
 		}
@@ -261,20 +246,18 @@ public class AddOrganizationButton extends BodyTagSupport {
 		this.styleClass = styleClass;
 	}
 
-	public String getDonorGroupTypes() {
-		return donorGroupTypes;
+	/**
+	 * @return the useAcronym
+	 */
+	public String getUseAcronym() {
+		return useAcronym;
 	}
 
-	public void setDonorGroupTypes(String donorGroupTypes) {
-		this.donorGroupTypes = donorGroupTypes;
-	}
-
-	public void setUseLink(String useLink) {
-		this.useLink = useLink;
-	}
-
-	public String getUseLink() {
-		return useLink;
+	/**
+	 * @param useAcronym the useAcronym to set
+	 */
+	public void setUseAcronym(String useAcronym) {
+		this.useAcronym = useAcronym;
 	}
 
 	

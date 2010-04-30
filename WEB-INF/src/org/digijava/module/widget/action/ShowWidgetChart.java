@@ -1,7 +1,6 @@
 package org.digijava.module.widget.action;
 
 import java.awt.Font;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -60,25 +59,25 @@ public class ShowWidgetChart extends Action {
                 }
             } else {
                 ChartOption opt = createChartOptions(wForm, widget);
-                Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+                String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
                 opt.setSiteId(siteId);
                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);
                 JFreeChart chart = null;
                 ChartRenderingInfo info = new ChartRenderingInfo();
                 switch (wForm.getChartType().intValue()) {
-                   /* case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
+                    case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                         chart = ChartWidgetUtil.getTypeOfAidChart(opt, filter);
-                        break;*/
+                        break;
 
                     case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
                         chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
                  
                         break;
                         
-                 /*  case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+                   case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
                         chart = ChartWidgetUtil.getODAProfileChart(opt, filter);
-                        break;*/
+                        break;
                    case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
                         chart = ChartWidgetUtil.getSectorByDonorChart(opt, filter);
                         break;

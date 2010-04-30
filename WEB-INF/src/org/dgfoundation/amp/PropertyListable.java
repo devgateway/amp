@@ -33,7 +33,7 @@ public abstract class PropertyListable implements Cloneable {
     public @interface PropertyListableIgnore {    	
     }
     
-    
+
     
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -84,12 +84,6 @@ public abstract class PropertyListable implements Cloneable {
 	    for (int i = 0; i < propertyDescriptors.length; i++) {	
 			if(propertyDescriptors[i].getName().equals("class")) continue;
 			Method m = propertyDescriptors[i].getReadMethod();
-		
-			ProperyDescription description=null;
-			if (m.isAnnotationPresent(ProperyDescription.class)){
-				description=m.getAnnotation(ProperyDescription.class);
-			}
-			
 			//if(m.isAnnotationPresent(PropertyListableIgnore.class))continue;
 			Iterator<Class> iter	= annonations.iterator();
 			
@@ -110,17 +104,8 @@ public abstract class PropertyListable implements Cloneable {
 			if ( object instanceof Collection && ((Collection)object).size() == 0 )
 							continue;
 			//AMP-3372
-			
-			FilterProperty p=new FilterProperty();
-			p.setName(propertyDescriptors[i].getName());
-			p.setValue(object instanceof Collection ? Util.collectionAsString((Collection) object) : object);
-			if (description!=null){
-				p.setDescription(description.description());
-				p.setPosition(description.position());
-				p.setShowOnlyIfValueIsTrue(description.showOnlyIfValueIsTrue());
-				p.setHiddenValue(description.hiddenValue());	
-			}
-			ret.put(propertyDescriptors[i].getName(),p );
+			ret.put(propertyDescriptors[i].getName(), object instanceof Collection ? Util.collectionAsString(
+				(Collection) object) : object);
 	    }
 	} catch (IntrospectionException e) {
 	    logger.error(e);

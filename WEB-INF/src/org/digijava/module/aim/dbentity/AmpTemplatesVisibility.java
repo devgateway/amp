@@ -7,7 +7,6 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -81,18 +80,6 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	public Class getPermissibleCategory() {
 	    return AmpTemplatesVisibility.class;
 
-	}
-	
-	public void removeModule(AmpObjectVisibility module){
-		removeObjectFromSet(module, getItems());
-	}
-
-	public void removeFeature(AmpObjectVisibility feature){
-		removeObjectFromSet(feature, getFeatures() );
-	}
-
-	public void removeFiled(AmpObjectVisibility field){
-		removeObjectFromSet(field, getFields() );
 	}
 	
 }

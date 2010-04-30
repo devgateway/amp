@@ -55,10 +55,8 @@ function countryChanged() {
 		  document.aimThemeForm.submit();
 	}
 </script>
-
-
 <digi:instance property="aimThemeForm" />
-<digi:form action="/selectLocationForIndicatorValue.do" method="post" type="aimThemeForm" name="aimThemeFormLocPopin">
+<digi:form action="/selectLocationForIndicatorValue.do" method="post">
   <html:hidden property="action" styleId="indAction" value=""/>
   <html:hidden property="fill" />
   <table width="100%" vAlign="top" border=0>
@@ -144,13 +142,13 @@ function countryChanged() {
 									<tr>
 										<td>
 											<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
-											onclick="selectLocation2()">
+											onclick="selectLocation()">
 										</td>
 										<td>
 											<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
 										</td>
 										<td>
-											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow2()">
+											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
 										</td>
 									</tr>
 								</table>

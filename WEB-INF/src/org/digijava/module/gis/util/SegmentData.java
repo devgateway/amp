@@ -28,10 +28,6 @@ public class SegmentData {
         return segmentValue;
     }
 
-    public String getIndicatorSrcName() {
-        return indicatorSrcName;
-    }
-
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
     }
@@ -44,12 +40,7 @@ public class SegmentData {
         this.segmentValue = segmentValue;
     }
 
-    public void setIndicatorSrcName(String indicatorSrcName) {
-        this.indicatorSrcName = indicatorSrcName;
-    }
-
     String segmentCode;
     String parentCode;
     String segmentValue;
-    String indicatorSrcName;
 }

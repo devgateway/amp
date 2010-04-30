@@ -51,7 +51,7 @@ public class AddRegionalFunding extends Action {
 		
 		try {
 		EditActivityForm eaForm = (EditActivityForm) form;	
-		eaForm.setStep("3");
+		eaForm.setStep("4");
 		if (action != null && action.equalsIgnoreCase("show")) {
 			logger.debug("Forarding to forward");
 			eaForm.getFunding().setFundingRegionId(new Long(-1));

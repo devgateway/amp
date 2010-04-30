@@ -70,7 +70,7 @@ public class LocationSelected extends Action {
 					//loc.setPercent(null);
 				}					
 			}else {
-				location[0].setPercent(0);
+				location[0].setPercent("");
 			}		
 			
 		}
@@ -125,7 +125,7 @@ public class LocationSelected extends Action {
 								//loc.setPercent(null);
 							}					
 						}else {
-							location[0].setPercent(0);
+							location[0].setPercent("");
 						}		
 						if (eaForm.getFunding().getFundingRegions() == null) {
 							eaForm.getFunding().setFundingRegions(new ArrayList());
@@ -189,7 +189,7 @@ public class LocationSelected extends Action {
 								//loc.setPercent(null);
 							}					
 						}else {
-							location[0].setPercent(0);
+							location[0].setPercent("");
 						}		
 					}
 				}
@@ -240,7 +240,7 @@ public class LocationSelected extends Action {
 								//loc.setPercent(null);
 							}					
 						}else {
-							location[0].setPercent(0);
+							location[0].setPercent("");
 						}		
 					}
 				}

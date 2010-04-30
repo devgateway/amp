@@ -2,17 +2,13 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 
 
-public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable
+public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable
 {
 	private Long ampOrgGrpId;
 	private String orgGrpName;
@@ -96,32 +92,6 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	}
 	public Class getDimensionClass() {
 	    return DonorGroupDimension.class;
-	}
-    
-    /**
-     * 
-     * @return the organizations associated to the organization 
-     * group manager which are assigned to funding.
-     */
-    public Collection<AmpOrganisation> getDonorOrgs() throws DgException {
-        Collection<AmpOrganisation> donorOrgs=DbUtil.getDonorOrgsByGroupId(ampOrgGrpId);
-	    return donorOrgs;
-	}
-	@Override
-	public Collection<AmpOrgGroup> getChildren() {
-		return null;
-	}
-	@Override
-	public int getCountDescendants() {
-		return 1;
-	}
-	@Override
-	public String getLabel() {
-		return this.orgGrpName;
-	}
-	@Override
-	public String getUniqueId() {
-		return this.ampOrgGrpId+"";
 	}
 
 }

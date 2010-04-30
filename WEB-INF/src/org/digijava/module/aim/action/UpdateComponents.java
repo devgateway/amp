@@ -58,7 +58,7 @@ public class UpdateComponents extends Action {
 					updCompForm.setId(ampComp.getAmpComponentId());
 					updCompForm.setCompTitle(ampComp.getTitle());
 					updCompForm.setCompDes(ampComp.getDescription());
-					updCompForm.setCompType((ampComp.getType() != null) ? ampComp.getType().getId() : null);
+					updCompForm.setCompType((ampComp.getType() != null) ? ampComp.getType().getType_id() : null);
 					updCompForm.setCompCode(ampComp.getCode());
 				}
 				updCompForm.setCheck("false");
@@ -71,7 +71,7 @@ public class UpdateComponents extends Action {
 				ampComp.setAmpComponentId(id);
 				ampComp.setTitle(updCompForm.getCompTitle());
 				ampComp.setCode(updCompForm.getCompCode());
-				ampComp.setType(ComponentsUtil.getComponentTypeById(updCompForm.getId()));
+				ampComp.setType(ComponentsUtil.getComponentTypeById(updCompForm.getCompType()));
 				if (updCompForm.getCompDes() == null) {
 					ampComp.setDescription(" ");
 				} else {
@@ -119,7 +119,7 @@ public class UpdateComponents extends Action {
 				Long id = Long.valueOf(compId);
 				ActionErrors errors = new ActionErrors();
 				AmpComponent cm = ComponentsUtil.getComponentById(id);
-				if (cm == null || cm.getActivity() == null) {
+				if (cm == null || cm.getActivities() == null || cm.getActivities().isEmpty()) {
 					ComponentsUtil.deleteComponent(id);
 				} else {
 					errors.add("Delete", new ActionError("error.aim.componentDelete"));

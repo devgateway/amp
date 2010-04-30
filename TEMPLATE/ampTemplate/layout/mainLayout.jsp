@@ -20,12 +20,12 @@
 
     <!-- Stylesheet of AMP -->
     <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
-	
-    <script language="JavaScript" type="text/javascript">
-	  <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
-    </script>
+
+	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 	
 	<digi:context name="digiContext" property="context"/>
+
+
 
 	<HEAD>
 
@@ -123,7 +123,7 @@
 							<TD width="100%" align="left" valign="top">
 
 				   			<digi:insert attribute="body" />
-<!--  <br /><br /><br /><br /> -->
+<br /><br /><br /><br />
 							</TD>
 
 						</TR>

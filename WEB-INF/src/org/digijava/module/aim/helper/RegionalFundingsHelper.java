@@ -5,7 +5,6 @@
 
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -67,13 +66,13 @@ public class RegionalFundingsHelper {
 			Date dt = regFund.getTransactionDate();
 			double frmExRt = Util.getExchange(fd.getCurrencyCode(),new java.sql.Date(dt.getTime()));
 			double toExRt = Util.getExchange(currCode,new java.sql.Date(dt.getTime()));
-			BigDecimal amt = CurrencyWorker.convert1(regFund.getTransactionAmount(),frmExRt,toExRt);
+			double amt = CurrencyWorker.convert1(regFund.getTransactionAmount().doubleValue(),frmExRt,toExRt);
 			fd.setTransactionAmount(FormatHelper.formatNumber(amt));
 			fd.setCurrencyCode(currCode);
 			fd.setAdjustmentType(regFund.getAdjustmentType().intValue());
 			if (fd.getAdjustmentType() == Constants.PLANNED) {
 				fd.setAdjustmentTypeName("Planned");
-				amt = new BigDecimal(0);
+				amt = 0;
 			} else if (fd.getAdjustmentType() == Constants.ACTUAL) {
 				fd.setAdjustmentTypeName("Actual");
 			}
@@ -84,7 +83,7 @@ public class RegionalFundingsHelper {
 				}
 				rf.getCommitments().add(fd);
 				if (fd.getAdjustmentType() == Constants.ACTUAL) {
-					amt =amt.add( rf.getTotCommitments());
+					amt += rf.getTotCommitments();
 					rf.setTotCommitments(amt);						
 				}
 			} else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
@@ -93,7 +92,7 @@ public class RegionalFundingsHelper {
 				}
 				rf.getDisbursements().add(fd);
 				if (fd.getAdjustmentType() == Constants.ACTUAL) {
-					amt =amt.add(rf.getTotDisbursements());
+					amt += rf.getTotDisbursements();
 					rf.setTotDisbursements(amt);						
 				}					
 			} else if (fd.getTransactionType() == Constants.EXPENDITURE) {
@@ -102,7 +101,7 @@ public class RegionalFundingsHelper {
 				}
 				rf.getExpenditures().add(fd);
 				if (fd.getAdjustmentType() == Constants.ACTUAL) {
-					amt =amt.add(rf.getTotExpenditures());
+					amt += rf.getTotExpenditures();
 					rf.setTotExpenditures(amt);						
 				}					
 			}

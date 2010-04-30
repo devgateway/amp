@@ -7,14 +7,10 @@
 package org.digijava.module.aim.action;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
@@ -31,30 +27,20 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
 
@@ -76,11 +62,10 @@ public class ViewNewAdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 			{
-
 		AdvancedReportForm arf=(AdvancedReportForm) form;
 		HttpSession httpSession = request.getSession();
 
-
+		
 		String loadStatus=request.getParameter("loadstatus");
 		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;
 		if(progressValue == null)
@@ -104,42 +89,25 @@ public class ViewNewAdvancedReport extends Action {
 		
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");				
 		AmpApplicationSettings ampAppSettings = null;				
-		if(tm!=null) {				
-			ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-		}
-		if(ampAppSettings==null) {
-			if(tm!=null) {
-				ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
-			}
-		}
+		if(tm!=null)				
+		ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+		if(ampAppSettings==null)
+			if(tm!=null)
+			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 		
 		if (ampAppSettings != null){
-
 			if( ampAppSettings.getDefaultRecordsPerPage().intValue() != 0){
 				request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
 			}else{
 				request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
 			}
-
-			if( ampAppSettings.getDefaultViewablePages() != null && ampAppSettings.getDefaultViewablePages().intValue() != 0){
-				request.setAttribute("viewablePages", ampAppSettings.getDefaultViewablePages());
-			}else{
-				request.setAttribute("viewablePages", Constants.VIEWABLE_PAGES);
-			}
 		}else{
 			request.setAttribute("recordsPerPage", new Integer(25));
-			request.setAttribute("viewablePages", Constants.VIEWABLE_PAGES);
 		}
 		
 		
 		//check currency code:
-		if(httpSession.getAttribute("reportCurrencyCode")==null){
-			String currCode		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ) ;
-			if ( currCode == null ) {
-				currCode = Constants.DEFAULT_CURRENCY;
-			}	
-			httpSession.setAttribute("reportCurrencyCode",currCode);
-		}
+		if(httpSession.getAttribute("reportCurrencyCode")==null) httpSession.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
 		
 		if(httpSession.getAttribute("reportSorters")==null) httpSession.setAttribute("reportSorters",new HashMap());
 		Map sorters=(Map) httpSession.getAttribute("reportSorters");
@@ -151,20 +119,10 @@ public class ViewNewAdvancedReport extends Action {
 		String sortBy=request.getParameter("sortBy");
 		String sortByAsc=request.getParameter("sortByAsc");
 		String applySorter = request.getParameter("applySorter");
-		Boolean ispublicuser = (Boolean) httpSession.getAttribute("publicuser");
-		if (ispublicuser == null ) {
-			ispublicuser = false;
-		} 
-		
-		Long reportId = null;
-		
-		if(!ispublicuser) {
-			if(ampReportId==null) {
-				ampReportId=ar.getAmpReportId().toString();
-			}
-			reportId=new Long(ampReportId);
-			request.setAttribute("ampReportId",ampReportId);
-		}
+		if(ampReportId==null) 
+			ampReportId=ar.getAmpReportId().toString();
+		Long reportId=new Long(ampReportId);
+		request.setAttribute("ampReportId",ampReportId);
 		
 		String startRow=request.getParameter("startRow");
 		String endRow=request.getParameter("endRow");
@@ -175,7 +133,7 @@ public class ViewNewAdvancedReport extends Action {
 		if(cachedStr!=null) cached=Boolean.parseBoolean(cachedStr);
 		
 		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		if(!ispublicuser && (filter==null || !reportId.equals(filter.getAmpReportId()))) {
+		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
 			if(filter != null && filter.isPublicView())
 			{
 				//This is to avoid resetting the publicView status to allow the right redirection on Public Views
@@ -192,8 +150,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
 		}
-		filter.setLucene(null);
-		
+
 		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType()))){
 			filter.setApproved(true);
@@ -210,6 +167,7 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("progressValue", ++progressValue); 
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		
+		
 		if( (!cached && (applySorter == null && sortBy == null || ar==null)) || 
 			(ampReportId != null && ar != null && !ampReportId.equals(ar.getAmpReportId().toString()) )) 
 		{
@@ -220,64 +178,8 @@ public class ViewNewAdvancedReport extends Action {
 			rd=ARUtil.generateReport(mapping,form,request,response);
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 			httpSession.setAttribute("progressValue", progressValue); 
-			
-			Site site = RequestUtils.getSite(request);
-			Locale locale = RequestUtils.getNavigationLanguage(request);
-			
-			ispublicuser = (Boolean) httpSession.getAttribute("publicuser");
-			if (ispublicuser == null ) {
-				ispublicuser = false;
-			} 
-			
-
-			if (!ispublicuser){
-				ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
-			}else {
-				if (httpSession.getAttribute("newpublicreport")!=null){
-					ar = (AmpReports) httpSession.getAttribute("newpublicreport");
-				}else{
-					ar=(AmpReports) httpSession.getAttribute("reportMeta");
-				}
-				if (ar.getId() == null){
-					Random r = new Random(); 
-					ar.setAmpReportId(r.nextLong());
-					ar.setName(ar.getId().toString());
-					request.getSession().setAttribute("ampReportId",ar.getId().toString());
-				}
-				
-				if (request.getSession().getAttribute("publicgeneratedreports")!=null){
-					Collection<AmpReports> pgenerated =  (Collection<AmpReports>) request.getSession().getAttribute("publicgeneratedreports");
-					if (!pgenerated.contains(ar)){
-						 pgenerated.add(ar);
-						 request.getSession().setAttribute("publicgeneratedreports",pgenerated);
-						 if (ampReportId!=null){
-							 for (Iterator iterator = pgenerated.iterator(); iterator.hasNext();) {
-								 AmpReports storedreport = (AmpReports) iterator.next();
-								 if (ampReportId.equalsIgnoreCase(storedreport.getId().toString())){
-									 request.getSession().setAttribute("ampReportId",ar.getId().toString());
-									 ar = storedreport;
-								 break;
-								}
-							 }
-						}
-					}
-				}else{
-					Collection<AmpReports> pgenerated = new ArrayList<AmpReports>();
-					pgenerated.add(ar);
-					request.getSession().setAttribute("publicgeneratedreports",pgenerated);
-				}				
-				
-			}
-			
-			// Check if the user is logged in.
-			User currentUser = RequestUtils.getUser(request);
-			if(currentUser == null) {
-				// If is not a public report.
-				if(ar == null || !ar.getPublicReport()) {
-					return mapping.findForward("index");
-				}
-			}
-			
+	
+			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
 			//This is for public views to avoid nullPointerException due to there is no logged user.
 			if(tm != null){
 				saveOrUpdateReportLog(tm, ar);
@@ -294,25 +196,12 @@ public class ViewNewAdvancedReport extends Action {
 				if ( filter.getSortByAsc() !=null  ){
 					sortByAsc		= filter.getSortByAsc().toString();
 				}
-			}else {
-				for (Iterator iterator = ar.getColumns().iterator(); iterator
-						.hasNext();) {
-					AmpReportColumn coumn = (AmpReportColumn) iterator.next();
-					if(coumn.getOrderId().equals(1L)){
-						sortBy = coumn.getColumn().getColumnName();
-					}
-				} 
-				
 			}
 		}
 		/* If sorting info comes in request save this info in the filter bean */
 		else{
 				filter.setSortBy(sortBy);
 				filter.setSortByAsc( Boolean.parseBoolean(sortByAsc) );
-				for (Column column : rd.getColumns()) {
-					column.setHits(null);
-				}
-				
 		}
 		
 		if ( applySorter == null && !cached) {
@@ -377,17 +266,9 @@ public class ViewNewAdvancedReport extends Action {
 		rd.setGlobalHeadingsDisplayed(new Boolean(false));
 		
 		String viewFormat=request.getParameter("viewFormat");
-		if(viewFormat==null) viewFormat=GenericViews.HTML2;
+		if(viewFormat==null) viewFormat=GenericViews.HTML;
 		request.setAttribute("viewFormat",viewFormat);
 	
-		Integer currentPage = 0;
-
-		if(request.getParameter("currentPage") != null){
-			currentPage = Integer.parseInt(request.getParameter("currentPage"));
-		}
-
-		request.setAttribute("currentPage", currentPage);
-		
 		if(startRow==null && endRow==null) {
 		    startRow="0";
 		    Integer rpp = (Integer)request.getAttribute("recordsPerPage");
@@ -414,8 +295,6 @@ public class ViewNewAdvancedReport extends Action {
 		if(endRow!=null) rd.setEndRow(Integer.parseInt(endRow));
 		rd.setCurrentRowNumber(0);
 		
-		if ( startRow!=null && endRow!=null )
-			rd.computeRowSpan(0, Integer.parseInt(startRow), Integer.parseInt(endRow) );
 	
 		request.setAttribute("extraTitle",ar.getName());
 		rd.setCurrentView(viewFormat);
@@ -435,7 +314,7 @@ public class ViewNewAdvancedReport extends Action {
 	}
 
 
-	private void saveOrUpdateReportLog(TeamMember tm, AmpReports ar) throws DgException{
+	private void saveOrUpdateReportLog(TeamMember tm, AmpReports ar) {
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 		AmpReportLog reportlog = DbUtil.getAmpReportLog(ar.getAmpReportId(), ampTeamMember.getAmpTeamMemId());
 		if(reportlog!=null){

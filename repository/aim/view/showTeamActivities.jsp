@@ -234,7 +234,7 @@
 												<c:set target="${urlParams}" property="id">
 												<bean:write name="aimTeamActivitiesForm" property="teamId" />
 												</c:set>
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToAssignActivity">
 												<digi:trn key="aim:clickToAssignActivity">Click here to Assign Activity</digi:trn>
 												</c:set>
@@ -246,7 +246,7 @@
 										</tr>
 										<tr>
 											<td>
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToViewAdmin">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

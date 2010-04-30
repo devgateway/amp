@@ -8,9 +8,8 @@
     <form-bean name="calendarAdminForm" type="org.digijava.module.calendar.form.CalendarAdminForm" />
     <form-bean name="calendarViewForm" type="org.digijava.module.calendar.form.CalendarViewForm" />
     <form-bean name="calendarEventForm" type="org.digijava.module.calendar.form.CalendarEventForm" />
+    <form-bean name="calendarEventTypeForm" type="org.digijava.module.calendar.form.EventTypeForm" />
     <form-bean name="calendarEditActivityForm" type="org.digijava.module.calendar.form.EditActivityForm" />
-    <form-bean name="calendarColorPaleteForm" type="org.digijava.module.calendar.form.ColorPaleteForm" />
-    
   </form-beans>
   <action-mappings>
     <action forward="/calendar/viewEvents.do" path="/calendar/index" />
@@ -66,13 +65,11 @@
     <action name="calendarViewForm" path="/calendar/showCalendarView" scope="session" type="org.digijava.module.calendar.action.ShowCalendarView" validate="false">
       <forward name="success" path="/showLayout.do?layout=viewEvents" />
       <forward name="forward" path="/showLayout.do?layout=noEvents" />
-       <forward name="print" path="/showLayout.do?layout=printViewPopupLayout" />
     </action>
     <action name="calendarEventForm" parameter="method" path="/calendar/showCalendarEvent" scope="session" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
       <forward name="success" path="/showLayout.do?layout=showAmpEvent" />
       <forward name="preview" path="/showLayout.do?layout=previewAmpEvent" />
-      <forward name="forward" path="/calendar/showCalendarView.do" redirect="true"/>
-      <forward name="print" path="/showLayout.do?layout=printPreviewPopupLayout" />
+      <forward name="forward" path="/calendar/showCalendarView.do" />
     </action>
 	
     <action input="/calendar/showCalendarEvent.do" name="calendarEventForm" path="/calendar/previewCalendarEvent" scope="session" type="org.digijava.module.calendar.action.PreviewCalendarEvent" validate="true">
@@ -86,7 +83,10 @@
     </action>
     <action name="calendarEventForm" path="/calendar/DeleteEvent" scope="session" type="org.digijava.module.calendar.action.DeleteEvent" validate="false">
       <forward name="success" path="/calendar/showCalendarView.do" redirect="true" />
-    </action>   
+    </action>
+    <action name="calendarEventTypeForm" parameter="method" path="/calendar/eventTypes" scope="session" type="org.digijava.module.calendar.action.EventTypeAction" validate="false">
+      <forward name="eventTypesPage" path="/showLayout.do?layout=eventTypes" />
+    </action>
     <action name="calendarEventForm" path="/calendar/selectOrganization" scope="session" type="org.digijava.module.calendar.action.SelectOrganization">
       <forward name="forward" path="/showLayout.do?layout=calendarOrgPopupLayout" />
     </action>
@@ -94,14 +94,6 @@
       <forward name="forward" path="/showLayout.do?layout=calendarOrgPopupLayout" />
     </action>
     <action name="calendarEditActivityForm" path="/calendar/organisationSelected" scope="session" type="org.digijava.module.calendar.action.OrganisationSelected" />
-    
-    <action name="calendarColorPaleteForm" path="/calendar/showColorPalete" scope="session" type="org.digijava.module.calendar.action.ShowColorPalete">
-      <forward name="forward" path="/showLayout.do?layout=colorPicker" />
-    </action>
-    
-    <action name="calendarViewForm" path="/calendar/showEvents" scope="request" type="org.digijava.module.calendar.action.ShowEvents" validate="false"/>
- 
-     
   </action-mappings>
 </struts-config>
 

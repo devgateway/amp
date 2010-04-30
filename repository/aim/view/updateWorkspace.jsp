@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
-<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+
 <html:javascript formName="aimUpdateWorkspaceForm"/>
 
 
@@ -223,28 +223,28 @@ function update(action) {
   
 function workspaceChangeType(){
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Team"){
-		$("div[id^='management_']").hide();
-		$("div[id^='team_']").show('fast');
+		$("div[@id^='management_']").hide();
+		$("div[@id^='team_']").show('fast');
 		//document.aimUpdateWorkspaceForm.addActivity.checked = true;
 		if(document.aimUpdateWorkspaceForm.computation.checked == true)
-			$("div[id^='computation_']").show('fast');
-		else $("div[id^='computation_']").hide();
+			$("div[@id^='computation_']").show('fast');
+		else $("div[@id^='computation_']").hide();
 	}
 
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
 		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
 		//document.aimUpdateWorkspaceForm.computation.checked = false;
-			$("div[id^='team_']").hide();
-			$("div[id^='management_']").show('fast');
-			$("div[id^='computation_']").hide()
+			$("div[@id^='team_']").hide();
+			$("div[@id^='management_']").show('fast');
+			$("div[@id^='computation_']").hide()
 	}
 
 }
  
 function   computationChange(){
 	if(document.aimUpdateWorkspaceForm.computation.checked == true)
-		$("div[id^='computation_']").show('fast');
-	else $("div[id^='computation_']").hide();
+		$("div[@id^='computation_']").show('fast');
+	else $("div[@id^='computation_']").hide();
 }
   
 function relTeam() { 
@@ -595,7 +595,7 @@ function cancel()
 																					<td align="right" width="10">
 																						<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																						<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																					 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
+																					 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
 																						border="0" alt="Remove this child workspace"/></a>&nbsp;
 																						</c:if>
 																					</td>
@@ -615,7 +615,7 @@ function cancel()
 															<table>
 																<tr>
 																	<td>
-                                                                        <html:checkbox property="computation"  value="true" onclick="computationChange()"><digi:trn key="chk:computation">Computation</digi:trn></html:checkbox>
+																		<html:checkbox property="computation"  value="true" onchange="computationChange()"><digi:trn key="chk:computation">Computation</digi:trn></html:checkbox>
 																	</td>
 																</tr>
 															</table>
@@ -665,7 +665,7 @@ function cancel()
 																				<td align="right" width="10">
 																					<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																					<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
-																				 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Remove this linked org"/></a>&nbsp;
+																				 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Remove this linked org"/></a>&nbsp;
 																					</c:if>
 																				</td>
 																			</tr>
@@ -760,7 +760,7 @@ function cancel()
 									<table cellPadding=5 cellSpacing=1 width="100%">
 										<tr>
 											<td>
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/workspaceManager.do">
 												<digi:trn key="aim:teams">
 												Teams
@@ -772,7 +772,7 @@ function cancel()
 										
 										<tr>
 											<td>
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/admin.do">
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home

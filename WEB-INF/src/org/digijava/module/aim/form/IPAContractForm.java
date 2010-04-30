@@ -1,6 +1,5 @@
 package org.digijava.module.aim.form;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,8 +93,8 @@ public class IPAContractForm extends ActionForm  {
 	private String totalPrivateContribAmount;
 	private String totalPrivateContribAmountDate;
 
-	private String totalDisbursements;
-    private BigDecimal executionRate;
+	private Double totalDisbursements;
+    private Double executionRate;
 	
 	private List disbursements;
     private List<AmpOrganisation> organisations;
@@ -380,19 +379,19 @@ public class IPAContractForm extends ActionForm  {
 		this.dibusrsementsGlobalCurrency = dibusrsementsGlobalCurrency;
 	}
 
-	public String getTotalDisbursements() {
+	public Double getTotalDisbursements() {
 		return totalDisbursements;
 	}
 
-	public void setTotalDisbursements(String totalDisbursements) {
+	public void setTotalDisbursements(Double totalDisbursements) {
 		this.totalDisbursements = totalDisbursements;
 	}
 
-	public BigDecimal getExecutionRate() {
+	public Double getExecutionRate() {
 		return executionRate;
 	}
 
-	public void setExecutionRate(BigDecimal executionRate) {
+	public void setExecutionRate(Double executionRate) {
 		this.executionRate = executionRate;
 	}
 

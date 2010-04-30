@@ -1,8 +1,8 @@
 package org.digijava.module.aim.util;
 		
 import java.text.Collator;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -11,50 +11,34 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
-import org.digijava.module.aim.helper.ActivityDocumentsConstants;
-import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
+import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.action.SelectDocumentDM;
-import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -72,8 +56,8 @@ import org.hibernate.Transaction;
 public class IndicatorUtil {
 
 	private static Logger logger = Logger.getLogger(IndicatorUtil.class);
-
-
+	
+	
 	/**
 	 * Loads Indicator from db.
 	 * NULL if nothing found with specified ID.
@@ -820,17 +804,19 @@ public class IndicatorUtil {
 	public static Set<AmpIndicator> getActivityIndicators(Long activityId) throws DgException{
 		Set<AmpIndicator> result=null;
 		Session sesison=PersistenceManager.getRequestDBSession();
-		String oql="select indi from "+AmpIndicator.class.getName()
-                +" indi inner join indi.valuesActivity valAct inner join valAct.activity act";
-		oql+=" where act.ampActivityId =:actId ";
+		String oql="select indi from "+AmpIndicator.class.getName()+" indi ";
+		oql+="where indi.valuesActivity.activity.ampActivityId =:actId ";
 		oql+="order by indi.name";
 		try {
 			Query query=sesison.createQuery(oql);
 			query.setLong("actId", activityId);
 			List resultList=query.list();
-			if (resultList!=null && resultList.size()>0){
+			if (result!=null && result.size()>0){
 				result=new HashSet<AmpIndicator>();
-				result.addAll(resultList);
+				for (Iterator iterator = resultList.iterator(); iterator.hasNext();) {
+					AmpIndicator indicator = (AmpIndicator) iterator.next();
+					result.add(indicator);
+				}
 			}
 		} catch (HibernateException e) {
 			throw new DgException("Cannot load indicators for Activity with id "+activityId,e);
@@ -876,57 +862,8 @@ public class IndicatorUtil {
 		
 		return result;
 	}
-     
-	   /**
-     * Returns set of indicator helper beans for activity.
-     * @param activityId
-     * @return
-     * @throws DgException
-     */
-    public static List<ActivityIndicator> getActivityIndHelperBeans(Long activityId) throws DgException {
-        List<ActivityIndicator> result = null;
-
-        List<IndicatorActivity> indicators = getIndicatorActivities(activityId);
-
-        if (indicators != null && indicators.size() > 0) {
-            result = new ArrayList<ActivityIndicator>();
-            for (IndicatorActivity connection : indicators) {
-                ActivityIndicator helper = new ActivityIndicator();
-
-                helper = createIndicatorHelperBean(connection);
-
-                result.add(helper);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Returns list of indicator activities beans for activity.
-     * @param activityId
-     * @return
-     * @throws DgException
-     */
-    public static List<IndicatorActivity> getIndicatorActivities(Long activityId) throws DgException {
-        List<IndicatorActivity> indicators = null;
-        if (activityId == null) {
-            return null;
-        }
-        Session sesison = PersistenceManager.getRequestDBSession();
-        String oql = "select con from " + IndicatorConnection.class.getName() + " con inner join con.activity act ";
-        oql += " where act.ampActivityId =:actId ";
-        try {
-            Query query = sesison.createQuery(oql);
-            query.setLong("actId", activityId);
-            indicators = query.list();
-
-        } catch (HibernateException e) {
-            throw new DgException("Cannot load indicators for Activity with id " + activityId, e);
-        }
-        return indicators;
-    }
-
-   	/**
+	
+	/**
 	 * Compares {@link AmpIndicator} objects by 'name' property
 	 * @author Irakli Kobiashvili
 	 *
@@ -967,10 +904,10 @@ public class IndicatorUtil {
 	}
 
 	//TODO INDIC this is stupid temporary solution. risk should be moved to connection but business team does not care about this and we have no time to do this changes.
-	public static AmpCategoryValue getRisk(IndicatorActivity connection){
+	public static AmpIndicatorRiskRatings getRisk(IndicatorActivity connection){
 		if (connection!=null && connection.getValues()!=null){
 			Iterator<AmpIndicatorValue> iter=connection.getValues().iterator();
-			if (iter.hasNext()) return iter.next().getRiskValue();
+			if (iter.hasNext()) return iter.next().getRisk();
 		}
 		return null;
 	}
@@ -1039,10 +976,10 @@ public class IndicatorUtil {
 		}
 		bean.setProgress(String.valueOf(progress*100+"%"));
 		
-		AmpCategoryValue riskObj=getRisk(connection);
+		AmpIndicatorRiskRatings riskObj=getRisk(connection);
 		if(riskObj!=null){
-			bean.setRisk(riskObj.getId());
-			bean.setRiskName(riskObj.getValue());
+			bean.setRisk(riskObj.getAmpIndRiskRatingsId());
+			bean.setRiskName(riskObj.getRatingName());
 		}	
 		
 		return bean;
@@ -1221,6 +1158,152 @@ public class IndicatorUtil {
 		return tempPrgInd;
 	}
 	
+	@Deprecated
+	public static Object getAmpMEIndicatorValue(Long indId, Long actId){
+		Session session = null;
+		Query q = null;
+		String queryString = null;
+		Object val=null;
+		try {
+		if(actId!=null){
+		session = PersistenceManager.getRequestDBSession();
+		queryString = " select val from "
+				+ AmpMEIndicatorValue.class.getName()
+				+ " val where val.indicator=:indId and val.activityId=:actId";
+		q = session.createQuery(queryString);
+		q.setLong("indId", indId);
+		q.setLong("actId", actId);
+		val=q.uniqueResult();
+		}
+		}
+		catch (Exception e) {
+			logger.error("Unable to get the specified Indicator");
+			logger.debug("Exception : " + e);
+		}
+		return val;
+		
+	}
+
+	@Deprecated
+	public static AllPrgIndicators getAmpIndicator(Long indId, Long actId) {
+		Session session = null;
+		AllPrgIndicators tempPrgInd = new AllPrgIndicators();
+		AmpIndicator tempInd=null;
+
+		try {
+			Object val=getAmpMEIndicatorValue(indId, actId);
+			if(val!=null){
+			AmpMEIndicatorValue value = (AmpMEIndicatorValue) val;
+			tempInd = value.getIndicator();
+			tempPrgInd.setActualVal(value.getActualVal());
+			tempPrgInd.setActualValComments(value.getActualValComments());
+			tempPrgInd.setActualValDate(value.getActualValDate());
+			tempPrgInd.setBaseVal(value.getBaseVal());
+			tempPrgInd.setBaseValComments(value.getBaseValComments());
+			tempPrgInd.setBaseValDate(value.getBaseValDate());
+			tempPrgInd.setTargetVal(value.getTargetVal());
+			tempPrgInd.setTargetValComments(value.getTargetValComments());
+			tempPrgInd.setTargetValDate(value.getTargetValDate());
+			tempPrgInd.setRevisedTargetVal(value.getRevisedTargetVal());
+			tempPrgInd.setRevisedTargetValComments(value
+					.getRevisedTargetValComments());
+			tempPrgInd.setRevisedTargetValDate(value.getRevisedTargetValDate());
+			}
+			else{
+				session = PersistenceManager.getRequestDBSession();
+				tempInd=(AmpIndicator) session.load(
+						AmpIndicator.class, indId);
+			}
+			tempPrgInd.setIndicatorId(tempInd.getIndicatorId());
+			tempPrgInd.setName(tempInd.getName());
+			tempPrgInd.setCode(tempInd.getCode());
+			tempPrgInd.setRisk(tempInd.getRisk());
+			tempPrgInd.setIndicatorsCategory(tempInd.getIndicatorsCategory());
+			
+		} catch (Exception e) {
+			logger.error("Unable to get the specified Indicator");
+			logger.debug("Exception : " + e);
+		}
+		return tempPrgInd;
+	}
+
+	@Deprecated
+	public static Collection getAllIndicators(Long ampThemeId) {
+		Session session = null;
+		AmpTheme tempAmpTheme = null;
+		Collection themeInd = new ArrayList();
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tempAmpTheme = (AmpTheme) session.load(AmpTheme.class, ampThemeId);
+			Set themeIndSet = tempAmpTheme.getIndicators();
+			Iterator itrIndSet = themeIndSet.iterator();
+			while (itrIndSet.hasNext()) {
+				AmpIndicator tempThemeInd = (AmpIndicator) itrIndSet.next();
+				AmpPrgIndicator tempPrgInd = new AmpPrgIndicator();
+				Long ampThemeIndId = tempThemeInd.getIndicatorId();
+				tempPrgInd.setIndicatorId(ampThemeIndId);
+				tempPrgInd.setName(tempThemeInd.getName());
+				tempPrgInd.setCode(tempThemeInd.getCode());
+				tempPrgInd.setCreationDate(DateConversion
+						.ConvertDateToString(tempThemeInd.getCreationDate()));
+				tempPrgInd.setPrgIndicatorValues(ProgramUtil
+						.getThemeIndicatorValues(ampThemeIndId));
+				themeInd.add(tempPrgInd);
+			}
+		} catch (Exception ex) {
+			logger.error("Exception from getThemeIndicators()  "
+					+ ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		return themeInd;
+	}
+
+	@Deprecated
+	public static void deleteIndicatorOLD(Long indId) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+			AmpIndicator tempindInd = (AmpIndicator) session.load(
+					AmpIndicator.class, indId);
+
+			Collection sect = tempindInd.getSectors();
+			if (sect != null && sect.size() > 0) {
+				Iterator<AmpSector> sectIter = sect.iterator();
+				while (sectIter.hasNext()) {
+					AmpSector sector = sectIter.next();
+					AmpSector tempAmpSector = null;
+					tempAmpSector = (AmpSector) session.load(AmpSector.class,
+							sector.getAmpSectorId());
+					Set ampThemeSet = new HashSet();
+					tempAmpSector.getIndicators().remove(tempindInd);
+					tempindInd.getSectors().remove(tempAmpSector);
+				}
+			}
+
+			//TODO INDIC
+//			Collection activity = tempindInd.getActivity();
+//			if (activity != null && activity.size() > 0) {
+//				Iterator<AmpActivity> actItre = activity.iterator();
+//				while (actItre.hasNext()) {
+//					AmpActivity activit = actItre.next();
+//					AmpActivity tempActivity = null;
+//					tempActivity = (AmpActivity) session.load(
+//							AmpActivity.class, activit.getAmpActivityId());
+//					tempActivity.getIndicators().remove(tempindInd);
+//					tempindInd.getActivity().remove(tempActivity);
+//				}
+//			}
+
+			session.delete(tempindInd);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Unable to delete the indicator");
+			logger.debug("Exception : " + e);
+		}
+	}
 
 	public static Collection getAllNonDefaultIndicators() {
 		Session session = null;
@@ -1241,7 +1324,78 @@ public class IndicatorUtil {
 		return col;
 	}
 
+	public static Collection getAllDefaultIndicators(Long ampActivityId) {
+		Session session = null;
+		Collection<ActivityIndicator> coll = new ArrayList();
+		Query qry = null;
+		AmpIndicator ampIndicator = null;
+		Iterator iter = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select nondefInd from "
+					+ AmpIndicator.class.getName()
+					+ " nondefInd where nondefInd.defaultInd = true";
+			qry = session.createQuery(queryString);
+			iter = qry.list().iterator();
 
+			while (iter.hasNext()) {
+				ampIndicator = (AmpIndicator) iter.next();
+				ActivityIndicator actInd = new ActivityIndicator();
+				actInd.setIndicatorId(ampIndicator.getIndicatorId());
+				Object val=getAmpMEIndicatorValue(ampIndicator.getIndicatorId(), ampActivityId);
+				if(val!=null){
+					AmpMEIndicatorValue value = (AmpMEIndicatorValue) val;
+					actInd.setIndicatorValId(value.getAmpMeIndValId());
+					
+					
+					//================
+					// AMP-2828 by mouhamad
+			        String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+			        dateFormat = dateFormat.replace("m", "M");
+			          
+			        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+						
+					actInd.setActualVal(value.getActualVal());
+					actInd.setActualValComments(value.getActualValComments());
+					actInd.setActualValDate(formatter.format(value.getActualValDate()));
+					
+
+					actInd.setCurrentVal(value.getActualVal());
+					actInd.setCurrentValComments(value.getActualValComments());
+					actInd.setCurrentValDate(formatter.format(value.getActualValDate()));
+					
+					actInd.setBaseVal(value.getBaseVal());
+					actInd.setBaseValComments(value.getBaseValComments());
+					actInd.setBaseValDate(formatter.format(value.getBaseValDate()));
+					actInd.setTargetVal(value.getTargetVal());
+					actInd.setTargetValComments(value.getTargetValComments());
+					actInd.setTargetValDate(formatter.format(value.getTargetValDate()));
+					actInd.setRevisedTargetVal(value.getRevisedTargetVal());
+					actInd.setRevisedTargetValComments(value
+							.getRevisedTargetValComments());
+					actInd.setRevisedTargetValDate(formatter.format(value.getRevisedTargetValDate()));
+					if(value.getRisk()!=null){
+					actInd.setRisk(value.getRisk().getAmpIndRiskRatingsId());
+					}
+					actInd.setIndicatorsCategory(value.getIndicatorsCategory());
+						
+					//	===================
+							
+					
+				}
+				actInd.setIndicatorCode(ampIndicator.getCode());
+				actInd.setIndicatorName(ampIndicator.getName());
+				//actInd.setIndicatorValId(ampIndicator.getIndicatorId() + 1);
+				coll.add(actInd);
+			}
+
+		} catch (Exception e) {
+			logger.error("Unable to get default indicators");
+			logger.debug("Exception : " + e);
+			e.printStackTrace();
+		}
+		return coll;
+	}
 	
 	public static Collection getAllDefaultIndicators()
 	{
@@ -1267,7 +1421,82 @@ public class IndicatorUtil {
 		return col;
 	}
 
+	@Deprecated
+	public static Collection getActivityIndicatorsList(Long ampActivityId) {
 
+		Session session = null;
+		Query qry = null;
+		AmpActivity tempAmpactivity = null;
+		Collection coll = new ArrayList();
+		try {
+			if(ampActivityId!=null&&ampActivityId>0){
+			session = PersistenceManager.getRequestDBSession();
+			tempAmpactivity = (AmpActivity) session.load(AmpActivity.class,
+					ampActivityId);
+			Set activityIndiSet = tempAmpactivity.getIndicators();
+			Iterator itrIndSet = activityIndiSet.iterator();
+			while (itrIndSet.hasNext()) {
+				AmpIndicator tempThemeInd = (AmpIndicator) itrIndSet.next();
+				ActivityIndicator actInd = new ActivityIndicator();
+				Long ampThemeIndId = tempThemeInd.getIndicatorId();
+				actInd.setIndicatorId(ampThemeIndId);
+				actInd.setIndicatorCode(tempThemeInd.getCode());
+				actInd.setIndicatorName(tempThemeInd.getName());
+				Object val=getAmpMEIndicatorValue(ampThemeIndId,ampActivityId);
+				if(val!=null){
+				AmpMEIndicatorValue value = (AmpMEIndicatorValue) val;
+				actInd.setIndicatorValId(value.getAmpMeIndValId());
+				
+				
+				//================
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+					
+				actInd.setActualVal(value.getActualVal());
+				actInd.setActualValComments(value.getActualValComments());
+				actInd.setActualValDate(formatter.format(value.getActualValDate()));
+				
+				actInd.setCurrentVal(value.getActualVal());
+				actInd.setCurrentValComments(value.getActualValComments());
+				actInd.setCurrentValDate(formatter.format(value.getActualValDate()));
+				
+				
+				actInd.setBaseVal(value.getBaseVal());
+				actInd.setBaseValComments(value.getBaseValComments());
+				actInd.setBaseValDate(formatter.format(value.getBaseValDate()));
+				actInd.setTargetVal(value.getTargetVal());
+				actInd.setTargetValComments(value.getTargetValComments());
+				actInd.setTargetValDate(formatter.format(value.getTargetValDate()));
+				actInd.setRevisedTargetVal(value.getRevisedTargetVal());
+				actInd.setRevisedTargetValComments(value
+						.getRevisedTargetValComments());
+				actInd.setRevisedTargetValDate(formatter.format(value.getRevisedTargetValDate()));
+				if(value.getRisk()!=null){
+				actInd.setRisk(value.getRisk().getAmpIndRiskRatingsId());
+				}
+				actInd.setIndicatorsCategory(value.getIndicatorsCategory());
+					
+				//	===================
+						
+				
+				
+				
+				
+				
+				}
+				actInd.setActivityId(ampActivityId);
+				coll.add(actInd);
+			}
+			}
+		}
+
+		catch (Exception ex) {
+			logger.error("Exception from getThemeIndicators()  "
+					+ ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		return coll;
+
+	}
 
 	@Deprecated
 	public static String getIndicatorName(Long id) {
@@ -1369,35 +1598,6 @@ public class IndicatorUtil {
 			}
 			return (ArrayList)retValue;
 		}
-
-
-	  public static List<AmpIndicator> searchIndicators(String keyWord,Long sectorId) throws DgException{
-			Session session = null;
-			Query qry = null;
-			List<AmpIndicator> indicators=new ArrayList<AmpIndicator>();
-			try{
-				session=PersistenceManager.getRequestDBSession();
-				String queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where 1=1 ";
-
-				if (keyWord!=null && keyWord.length()>0){
-                   queryString+=" and ind.name like '%" + keyWord + "%'";
-                }
-                if(sectorId!=null &&  !sectorId.equals(-1l)){
-                    queryString+=" and sec.ampSectorId=:sectorId";
-                }
-				
-				qry = session.createQuery(queryString);
-                if(sectorId!=null &&  !sectorId.equals(-1l)){
-                   qry.setLong("sectorId", sectorId);
-                }
-				indicators=qry.list();
-				
-			}catch (Exception ex) {
-				logger.debug("Unable to search " + ex);
-				throw new DgException(ex);
-			}
-			return indicators;
-		}
 	  
 	  public static void deleteIndsector(Long sectorid,Long indid){
 		
@@ -1496,12 +1696,47 @@ public class IndicatorUtil {
          return tempInd;
 		}
 	 
-	
+	 @Deprecated
+	 public static void saveEditPrgIndValues(Collection<AmpPrgIndicatorValue> prgIndValues,AmpIndicator ampInd)
+		{
+			Session session = null;
+			Transaction tx = null;
+			try
+			{
+				session = PersistenceManager.getRequestDBSession();
+				Iterator indValItr = prgIndValues.iterator();
+				while(indValItr.hasNext())
+				{
+					AmpThemeIndicatorValue ampThIndVal = null;
+					AmpPrgIndicatorValue ampPrgIndVal = (AmpPrgIndicatorValue) indValItr.next();
+					if(ampPrgIndVal.getIndicatorValueId() == null){
+						ampThIndVal = new AmpThemeIndicatorValue();
+					}else{
+												ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class,ampPrgIndVal.getIndicatorValueId());
+					}
+					ampThIndVal.setValueAmount(ampPrgIndVal.getValAmount());
+					ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
+					ampThIndVal.setValueType(ampPrgIndVal.getValueType());
+					ampThIndVal.setIndicatorId(ampInd);
+					tx = session.beginTransaction();
+					session.saveOrUpdate(ampThIndVal);
+					tx.commit();
+					}
+				}
+			
+			catch(Exception ex)
+			{
+				
+		             logger.error("Unable to get the specified Indicator");
+		             logger.debug("Exception : "+ex);
+			}
+			
+		}
 	 
-	 public static Collection<AmpCategoryValue> getRisks(Long actId) throws Exception{
-		 ArrayList<AmpCategoryValue> risks=new ArrayList<AmpCategoryValue>();
+	 public static Collection<AmpIndicatorRiskRatings> getRisks(Long actId) throws Exception{
+		 ArrayList<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
 		 try {
-			 List<IndicatorActivity> valuesActivity=IndicatorUtil.getIndicatorActivities(actId);
+			 Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
 				if(valuesActivity!=null && valuesActivity.size()>0){
 					Iterator<IndicatorActivity> it=valuesActivity.iterator();
 					while(it.hasNext()){
@@ -1509,8 +1744,8 @@ public class IndicatorUtil {
 						 Set<AmpIndicatorValue> values=indActivity.getValues();					
 						 for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
 							 AmpIndicatorValue val=valuesIter.next();
-							 if(val.getRiskValue()!=null){
-								 risks.add(val.getRiskValue());
+							 if(val.getRisk()!=null){
+								 risks.add(val.getRisk());
 								 break;//all values have same risk and this risk should go to connection.
 							 }					 					
 						}
@@ -1525,257 +1760,33 @@ public class IndicatorUtil {
 	 }
 	 
 	 
-	   public static int getOverallRisk(Long actId) {
-        Collection<AmpCategoryValue> risks = null;
-        int risk = 0;
-        try {
-            risks = getRisks(actId);
-            if (risks.size() > 0) {
-                Iterator<AmpCategoryValue> itr = risks.iterator();
-                float temp = 0;
-                while (itr.hasNext()) {
-                    AmpCategoryValue ampIndicatorRisk = itr.next();
-                    temp += ampIndicatorRisk.getIndex();
-                }
-
-                temp /=  risks.size();
-                risk = Math.round(temp);
-            }
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        return risk;
-    }
-       // moved from MEIndicatorsUtil
-        public static Long getIndicatorsForActivity(Long actId, String name) {
-        Session session = null;
-        Long id = null;
-        String qryStr = null;
-        Query qry = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            if (actId != null) {
-                qryStr = "select indAct.indicator from " +
-                        IndicatorActivity.class.getName() + " " +
-                        "indAct  where (indAct.activity=:actId) and indAct.indicator.name=:name";
-                qry = session.createQuery(qryStr);
-                qry.setLong("actId", actId);
-                qry.setString("name", name);
-                if (qry != null) {
-                    Iterator<Long> meIter = qry.list().iterator();
-                    if (meIter.hasNext()) {
-                        id = meIter.next();
-                    }
-                }
-
-            }
-        } catch (Exception e) {
-            logger.error("Exception from getActivityIndicators() :" + e.getMessage());
-
-        }
-        return id;
-    }
-    public static Long removeActivityIndCon(Long conId, HttpServletRequest request) throws Exception {
-        Session session = null;
-        Transaction tx = null;
-        Long activityId = null;
-        IndicatorActivity indAct = IndicatorUtil.getConnectionToActivity(conId);
-        AmpActivity oldActivity = indAct.getActivity();
-        if (ActivityVersionUtil.numberOfVersions() > 0) {
-            try {
-                session = PersistenceManager.getRequestDBSession();
-                tx = session.beginTransaction();
-                AmpActivityVersion oldVersion = (AmpActivityVersion) session.load(AmpActivityVersion.class, oldActivity.getAmpActivityId());
-                AmpActivityVersion activity = ActivityUtil.cloneActivity(oldVersion, session,request);
-                session.save(activity);
-                ActivityUtil.cloneIndicatorActivity(oldVersion, indAct.getIndicator().getIndicatorId(), activity, session);
-                HttpSession httpSession = request.getSession();
-                TeamMember tm = (TeamMember) httpSession.getAttribute("currentMember");
-                AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
-                Long newActivityId = activity.getAmpActivityId();
-                String ampId = ActivityUtil.generateAmpId(member.getUser(), newActivityId, session);
-                activity.setAmpId(ampId);
-                session.update(activity);
-                editVersionGroup(oldActivity, session, activity, member);
-                tx.commit();
-                activityId=activity.getAmpActivityId();
-            } catch (Exception e) {
-                logger.error("Unable to save new Version :" + e.getMessage());
-
-            }
-        } else {
-
-            activityId = oldActivity.getAmpActivityId();
-            IndicatorUtil.removeConnection(indAct);
-        }
-        return activityId;
-    }
-        /**
-         * Moved from MEIndicatorsUtil...
-         * TODO refactor this method..
-         * @param actInd
-         * @param memberId
-         * @return
-         */
-         // .
-    public static AmpActivityVersion saveMEIndicatorValues(ActivityIndicator actInd, HttpServletRequest request) {
-        Session session = null;
-        Transaction tx = null;
-        AmpActivityVersion activity = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
-            HttpSession httpSession = request.getSession();
-            TeamMember tm = (TeamMember) httpSession.getAttribute("currentMember");
-            AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, actInd.getIndicatorId());
-            AmpActivityVersion oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, actInd.getActivityId());
-            AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
-            boolean isVersioningOn = false;
-            if (ActivityVersionUtil.numberOfVersions() > 0) {
-                activity = ActivityUtil.cloneActivity(oldActivity, session,request);
-                session.save(activity);
-                Long activityId = activity.getAmpActivityId();
-                String ampId = ActivityUtil.generateAmpId(member.getUser(), activityId, session);
-                activity.setAmpId(ampId);
-                session.update(activity);
-                ActivityUtil.cloneIndicatorActivity(oldActivity, ind.getIndicatorId(), activity, session);
-                isVersioningOn = true;
-            } else {
-                activity = oldActivity;
-            }
-            //try to find connection of current activity with current indicator
-            IndicatorActivity indConn = findActivityIndicatorConnection(oldActivity, ind, session);
-
-            //if no connection found then create new one. Else clear old values for the connection.
-            boolean newIndicator = false;
-            if (indConn == null || isVersioningOn) {
-                indConn = new IndicatorActivity();
-                indConn.setActivity(activity);
-                indConn.setIndicator(ind);
-                indConn.setValues(new HashSet<AmpIndicatorValue>());
-                newIndicator = true;
-            } else {
-                if ((indConn.getValues() != null) && (indConn.getValues().size() > 0)) {
-                    for (AmpIndicatorValue value : indConn.getValues()) {
-                        session.delete(value);
-                    }
-                    indConn.getValues().clear();
-                }
-            }
-
-            //create each type of value and assign to connection
-
-            AmpIndicatorValue indValTarget = null;
-            AmpCategoryValue risk = null;
-            if (actInd.getRisk() != 0) {
-                risk = CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
-            }
-            if (actInd.getTargetVal() != null) {
-                indValTarget = new AmpIndicatorValue();
-                indValTarget.setValueType(AmpIndicatorValue.TARGET);
-                indValTarget.setValue(new Double(actInd.getTargetVal()));
-                indValTarget.setComment(actInd.getTargetValComments());
-                indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
-                indValTarget.setRiskValue(risk);
-                indValTarget.setLogFrame(actInd.getIndicatorsCategory());
-                indValTarget.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValTarget);
-            }
-            AmpIndicatorValue indValBase = null;
-            if (actInd.getBaseVal() != null) {
-                indValBase = new AmpIndicatorValue();
-                indValBase.setValueType(AmpIndicatorValue.BASE);
-                indValBase.setValue(new Double(actInd.getBaseVal()));
-                indValBase.setComment(actInd.getBaseValComments());
-                indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
-                indValBase.setRiskValue(risk);
-                indValBase.setLogFrame(actInd.getIndicatorsCategory());
-                indValBase.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValBase);
-            }
-            AmpIndicatorValue indValRevised = null;
-            if (actInd.getRevisedTargetVal() != null) {
-                indValRevised = new AmpIndicatorValue();
-                indValRevised.setValueType(AmpIndicatorValue.REVISED);
-                indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
-                indValRevised.setComment(actInd.getRevisedTargetValComments());
-                indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
-                indValRevised.setRiskValue(risk);
-                indValRevised.setLogFrame(actInd.getIndicatorsCategory());
-                indValRevised.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValRevised);
-            }
-
-            if (actInd.getCurrentVal() != null) {
-                AmpIndicatorValue indValCur = new AmpIndicatorValue();
-                indValCur.setValueType(AmpIndicatorValue.ACTUAL);
-                indValCur.setValue(new Double(actInd.getCurrentVal()));
-                indValCur.setComment(actInd.getCurrentValComments());
-                indValCur.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
-                indValCur.setRiskValue(risk);
-                indValCur.setLogFrame(actInd.getIndicatorsCategory());
-                indValCur.setIndicatorConnection(indConn);
-                indConn.getValues().add(indValCur);
-            }
-            // save connection with its new values.
-            if (newIndicator) {
-                // Save the new indicator that is NOT present in the indicators collection from the Activity.
-                //IndicatorUtil.saveConnectionToActivity(indConn, session);
-                session.saveOrUpdate(indConn);
-            } else {
-                //They are loaded by different sessions!
-                for (AmpIndicatorValue value : indConn.getValues()) {
-                    session.save(value);
-                }
-                session.saveOrUpdate(activity);
-            }
-            if (isVersioningOn) {
-              editVersionGroup(oldActivity, session, activity, member);
-            }
-            tx.commit();
-        } catch (Exception e) {
-            logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception trbf) {
-                    logger.error("Transaction roll back failed " + trbf.getMessage());
-                }
-            }
-        }
-        return activity;
-    }
-
-     public static void editVersionGroup(AmpActivity oldActivity, Session session, AmpActivityVersion activity, AmpTeamMember member) throws HibernateException {
-        if (oldActivity.getAmpActivityGroup() != null) {
-            // Edited activity with version group.
-            AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class,
-                            oldActivity.getAmpActivityGroup().getAmpActivityGroupId());
-            auxActivityGroup.setAmpActivityLastVersion(activity);
-            session.save(auxActivityGroup);
-            activity.setAmpActivityGroup(auxActivityGroup);
-            activity.setModifiedDate(Calendar.getInstance().getTime());
-            activity.setModifiedBy(member);
-            activity.setAmpActivityPreviousVersion(oldActivity);
-            session.update(activity);
-        } else {
-            // Edited activity with no version group info (activity created BEFORE the versioning system).
-            AmpActivityGroup newActivityGroup = new AmpActivityGroup();
-            newActivityGroup.setAmpActivityLastVersion(activity);
-            session.save(newActivityGroup);
-            activity.setAmpActivityGroup(newActivityGroup);
-            activity.setModifiedDate(Calendar.getInstance().getTime());
-            activity.setModifiedBy(member);
-            activity.setAmpActivityPreviousVersion(oldActivity);
-            session.update(activity);
-            // Add version info to old un-versioned activity.
-            oldActivity.setAmpActivityGroup(newActivityGroup);
-            session.update(oldActivity);
-        }
-    }
-
-
+	 public static int getOverallRisk(Long actId) {
+		 	Collection<AmpIndicatorRiskRatings> risks=null;
+			int risk = 0;
+			try {
+				risks=getRisks(actId);
+				Iterator<AmpIndicatorRiskRatings> itr = risks.iterator();
+				float temp = 0;
+				while (itr.hasNext()) {
+					AmpIndicatorRiskRatings ampIndicatorRisk = (AmpIndicatorRiskRatings) itr.next();
+					temp += ampIndicatorRisk.getRatingValue();
+				}
+				if (risks.size() > 0) {
+					temp /= (float) risks.size();
+					temp = Math.round(temp);
+					if (temp < 0)
+						risk = (int) Math.floor(temp);
+					else if(temp > 0)
+						risk = (int) Math.ceil(temp);
+					else
+						risk = -1;
+				}
+			} catch (Exception e) {
+				e.printStackTrace(System.out);
+			}
+			return risk;
+		}
+	 
 	 /**
 	     * This class is used for sorting IndicatorSector onjects by name
 	     * @author Dare Roinishvili
@@ -1800,18 +1811,5 @@ public class IndicatorUtil {
 	            int result = collator.compare(o1.getIndicator().getName().toLowerCase(),o2.getIndicator().getName().toLowerCase());
 	            return result;
 	        }
-	    }
-	    
-	    public static AmpIndicatorSubgroup getIndicatorSubGroup(Long id) throws DgException {
-		Session session = PersistenceManager.getRequestDBSession();
-		AmpIndicatorSubgroup indicator = null;
-		try {
-			indicator = (AmpIndicatorSubgroup) session.load(AmpIndicatorSubgroup.class, id);
-		} catch (ObjectNotFoundException e) {
-			logger.debug("indicator with " + id + "not found");
-		} catch (Exception e) {
-			throw new DgException("Cannot load indicator", e);
-		}
-		return indicator;
-	}
+	    } 
 }

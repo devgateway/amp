@@ -86,7 +86,7 @@ public class SaveTranslation
 
         if (permitted) {
             Message msg = TranslatorWorker.getInstance(formBean.getKey()).
-                getByKey(formBean.getKey(), langCode, siteId);
+                getByKey(formBean.getKey(), langCode, siteId.toString());
             if (msg != null) {
                 if (formBean.getDeleteTranslation() != null) {
                     TranslatorWorker.getInstance(formBean.getKey()).delete(msg);
@@ -99,7 +99,7 @@ public class SaveTranslation
             else {
                 Message newMsg = new Message();
 
-                newMsg.setSiteId(siteId);
+                newMsg.setSiteId(siteId.toString());
                 newMsg.setMessage(formBean.getTranslation());
                 newMsg.setKey(formBean.getKey());
                 newMsg.setLocale(langCode);

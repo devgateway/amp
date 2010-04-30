@@ -1,7 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
 /**
  * Project Indicator.
  * This is connection between indicator and activity. Most fields are in parent class.
@@ -23,7 +21,7 @@ public class IndicatorActivity extends IndicatorConnection{
 	 * Indicator risk.
 	 * Actually risk is in each connection of indicator and activity.
 	 */
-	private  AmpCategoryValue riskValue;
+	private AmpIndicatorRiskRatings risk;
         
 
 	public AmpActivity getActivity() {
@@ -34,12 +32,12 @@ public class IndicatorActivity extends IndicatorConnection{
 		this.activity = activity;
 	}
 
-	public  AmpCategoryValue getRiskValue() {
-		return riskValue;
+	public AmpIndicatorRiskRatings getRisk() {
+		return risk;
 	}
 
-	public void setRiskValue(AmpCategoryValue risk) {
-		this.riskValue = risk;
+	public void setRisk(AmpIndicatorRiskRatings risk) {
+		this.risk = risk;
 	}
 
 }

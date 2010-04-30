@@ -48,7 +48,7 @@ public class AddTemporaryDocument extends Action {
 		}
 		saveErrors(myRequest, errors);
 		
-		return myMapping.findForward("showDocs");
+		return myMapping.findForward("forward");
 	} 
 	
 	private ActionForward showAddForm () {

@@ -47,7 +47,7 @@
 				<tr>
 					<td nowrap="nowrap" align="right">
 						<strong>
-							<digi:trn key="gis:assignWidgetToPlace:placeName">Place Name</digi:trn>:
+							<digi:trn key="gis:assignWidgetToPlace:placeName">Place Name</digi:trn>
 						</strong>
 					</td>
 					<td>
@@ -60,10 +60,9 @@
 				<tr>
 					<td nowrap="nowrap" align="right">
 						<strong>
-							<digi:trn key="gis:assignWidgetToPlace:placeCode">Place Code</digi:trn>:
+							<digi:trn key="gis:assignWidgetToPlace:placeCode">Place Code</digi:trn>
 						</strong>
 					</td>
-					
 					<td>
 						${gisWidgetPlacesForm.place.placeCode}
 					</td>
@@ -72,7 +71,6 @@
 					</td>
 				</tr>
 				<tr>
-				<!-- 
 					<td nowrap="nowrap" align="right">
 						<strong>
 							<digi:trn key="gis:assignWidgetToPlace:lastRendered">Last Rendered on</digi:trn>
@@ -81,7 +79,6 @@
 					<td>
 						<bean:write name="gisWidgetPlacesForm" property="place.placeLastRenderTime" format="dd:MMMM:yyyy - mm:hh:ss"/>
 					</td>
-					-->
 					<td>
 						&nbsp;
 					</td>

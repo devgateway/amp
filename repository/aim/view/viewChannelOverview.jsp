@@ -264,7 +264,7 @@ function commentWin(val) {
 									align="left" bgColor=#f4f4f2>
 									<TR>
 										<TD width="100%"><IMG height=10
-											src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+											src="../ampTemplate/images/arrow-014E86.gif" width=15>
                                             <c:set var="status">
                                             	${aimChannelOverviewForm.status}
                                             </c:set>
@@ -315,7 +315,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
-																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																			<b>
 																	  		<digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 																	  	</td>
@@ -330,7 +330,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
-																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b>
 																		<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs</digi:trn></b>
 																	  </td></TR>
@@ -361,7 +361,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn key="aim:status">Status</digi:trn></b></TD>
 																		</TR>
 																		<TR>
@@ -386,7 +386,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn key="aim:actBudget">Budget</digi:trn></b>
 																			</TD>
 																		</TR>
@@ -412,11 +412,12 @@ function commentWin(val) {
 																							<td><digi:trn>Imputations</digi:trn>:</td>
 																						</tr>
 																						<tr>																						
+																						<td>
 																						<logic:iterate name="activity" property="chapter.imputations" id="imp">
-																						<tr><td>
-																						${activity.chapter.year} - ${imp.code} - ${imp.description} 
-																						</td></tr>
+																						${activity.chapter.year} - ${imp.code} - ${imp.description}
+																						<br/> 
 																						</logic:iterate>
+																						</td>
 																						</tr>
 																								<tr>
 																							<td>&nbsp;</td>
@@ -538,7 +539,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn key="aim:sector">Sector</digi:trn></b></TD>
 																		</TR>
 																		<TR>
@@ -572,7 +573,7 @@ function commentWin(val) {
 																									<field:display name="Sector Scheme Name" feature="Sectors">
 																										<c:out value="${actSect.sectorScheme}" />
 																										<br/>&nbsp;
-																										<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
+																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
 																									</field:display>
 																									<field:display name="${config.name} Sector" feature="Sectors">
 																										<c:out value="${actSect.sectorName}" />
@@ -580,13 +581,13 @@ function commentWin(val) {
 																									<c:if test="${!empty actSect.subsectorLevel1Name}">
 																										<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">
 																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																											src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
+																											src="../ampTemplate/images/link_out_bot.gif"/>
 																										<c:out value="${actSect.subsectorLevel1Name}" />
 																										
 																											<c:if test="${!empty actSect.subsectorLevel2Name}">
 																											<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
 																												 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																													src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
+																													src="../ampTemplate/images/link_out_bot.gif"/>
 																												<c:out value="${actSect.subsectorLevel2Name}" />
 																												&nbsp;
 																											</field:display>
@@ -627,7 +628,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																			height=10
-																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b><digi:trn key="aim:location">Location</digi:trn></b>
 																		</TD>
 																	</TR>
@@ -642,7 +643,7 @@ function commentWin(val) {
 																					<field:display name="Implementation Level"
 																						feature="Location">
 																						<TR>
-																							<TD width="100%" colspan="${aimChannelOverviewForm.numImplLocationLevels+1}" align="left" bgcolor="#ffffff">
+																							<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
 																								<i><digi:trn key="aim:impLevel">Implementation Level</digi:trn></i>
 																								 :
                                                                                                  [<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.implemLocationLevel}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>"  />]
@@ -651,7 +652,7 @@ function commentWin(val) {
 																						</TR>
 																					</field:display>
 																					<field:display name="Implementation Location" feature="Location">
-																					<TD width="100%" colspan="${aimChannelOverviewForm.numImplLocationLevels+1}" align="left" bgcolor="#ffffff">
+																					<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
 																						<i>
 																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
 																							:&nbsp;
@@ -664,7 +665,7 @@ function commentWin(val) {
 																					<c:if test="${!empty activity.locations}">
                                                                                        
                                                                                          <tr>
-                                                                                        	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
+                                                                                        	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
                                                                                         	 	<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
 	                                                                                        	 	<td align="center" bgcolor="#ffffff">
 	                                                                                         		<i>
@@ -748,7 +749,7 @@ function commentWin(val) {
 																							<% pageContext.setAttribute("ancestorMap", DynLocationManagerUtil.getParents(loc)); %>
 																							<tr>
 																							<bean:size id="numOfAncestors" name="ancestorMap"/>
-																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
+																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
 																								<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
 																									<td align="center" bgcolor="#ffffff">
 																									<c:choose>
@@ -807,7 +808,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
 																		</TR>
@@ -825,7 +826,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
 																		</TR>
@@ -843,7 +844,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
 																		</TR>
@@ -870,7 +871,8 @@ function commentWin(val) {
 																			</c:if>
 																			<br />
 																		</field:display>
-																		<field:display feature="Identification" name="Objective">
+																		<field:display feature="Identification" name="Objectives">
+																			<field:display feature="Identification" name="Objective">
 																			<i><b><digi:trn key="aim:programObjective">
 																				Objective
 																			</digi:trn></b></i>:
@@ -913,6 +915,8 @@ function commentWin(val) {
 																					</field:display>
 																				</c:forEach>
 																			</ul>
+																			</field:display>
+
 																		<field:display name="Lessons Learned" feature="Identification">
 																			<TR>
 																				<TD bgcolor="#ffffff">
@@ -1039,200 +1043,151 @@ function commentWin(val) {
 														</TABLE>
 														</TD>
 													</TR>
-													<module:display name="Contact Information"	parentModule="PROJECT MANAGEMENT">
-														<feature:display name="Donor Contact Information"module="Contact Information">
+
+
+
+
+													<module:display name="Contact Information"
+														parentModule="PROJECT MANAGEMENT">
+														<feature:display name="Donor Contact Information"
+															module="Contact Information">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding="3" cellSpacing="1"vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
 																	<TR>
-																		<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																			<IMG height="10"src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15"/>
-																			<b><digi:trn >Donor funding Contact Information</digi:trn></b>
-																		</TD>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																			height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn
+																			key="aim:donorFundingContactInformation">
+																				Donor funding Contact Information
+																			</digi:trn></b></TD>
 																	</TR>
-																	<field:display feature="Donor Contact Information"	name="Donor First Name">
+																	<field:display feature="Donor Contact Information"
+																		name="Donor First Name">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i>
-																			<digi:trn>Name</digi:trn></i>:
-																			<c:if test="${not empty aimChannelOverviewForm.primaryDonorContact}">
-																				<c:out value="${aimChannelOverviewForm.primaryDonorContact.contact.name}" />&nbsp; 
-																				<c:out value="${aimChannelOverviewForm.primaryDonorContact.contact.lastname}" /></TD>
-																			</c:if> 																			
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																				value="${activity.contFirstName}" />&nbsp; <c:out
+																				value="${activity.contLastName}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Donor Contact Information"	name="Donor Email">
+																	<field:display feature="Donor Contact Information"
+																		name="Donor Email">
 																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<i><digi:trn>Email</digi:trn></i>:
-																				<c:if test="${not empty aimChannelOverviewForm.primaryDonorContact}">
-																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryDonorContact.contact.properties}">
-																						<c:if test="${property.name=='contact email'}">
-																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
-																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
-																						</c:if>
-																					</c:forEach>																					
-																				</c:if>
-																			</TD>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
+																				var="mailTo" value="mailto:${activity.email}" /> <a
+																				href="mailto:${activity.email}">${activity.email}</a></TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display module="Contact Information"name="Government Contact Information">
+														<feature:display module="Contact Information"
+															name="Government Contact Information">
 															<TR>
 																<TD>
-																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
-																				<b><digi:trn>MOFED Contact Information</digi:trn></b>
-																			</TD>
-																		</TR>
-																		<field:display feature="Government Contact Information"	name="Government First Name">
-																			<TR>
-																				<TD bgcolor="#ffffff">
-																					<i><digi:trn>Name</digi:trn></i>: 
-																					<c:if test="${not empty aimChannelOverviewForm.primaryMofedContact}">
-																						<c:out value="${aimChannelOverviewForm.primaryMofedContact.contact.name}" />&nbsp; 
-																						<c:out value="${aimChannelOverviewForm.primaryMofedContact.contact.lastname}" />
-																					</c:if>
-																				</TD>
-																			</TR>
-																		</field:display>
-																		<field:display feature="Government Contact Information"	name="Government Email">
-																			<TR>
-																				<TD bgcolor="#ffffff">
-																					<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
-																					<c:if test="${not empty aimChannelOverviewForm.primaryMofedContact}">
-																						<c:forEach var="property" items="${aimChannelOverviewForm.primaryMofedContact.contact.properties}">
-																							<c:if test="${property.name=='contact email'}">
-																								<c:set	var="mailTo" value="mailto:${property.value}" /> 
-																								<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
-																							</c:if>
-																						</c:forEach>																					
-																					</c:if>
-																				</TD>
-																			</TR>
-																		</field:display>
-																	</TABLE>
-																</TD>
-															</TR>
-														</feature:display>
-														<feature:display name="Project Coordinator Contact Information"	module="Contact Information">
-															<TR>
-																<TD>
-																<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
 																	<TR>
-																		<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																			<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
-																			<b><digi:trn>Project Coordinator Contact Information</digi:trn></b>
-																		</TD>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																			height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:mofedContactInformation">
+																			MOFED Contact Information</digi:trn></b></TD>
 																	</TR>
-																	<field:display feature="Project Coordinator Contact Information" name="Project Coordinator First Name">
+																	<field:display feature="Government Contact Information"
+																		name="Government First Name">
 																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<i><digi:trn>Name</digi:trn></i>: 
-																				<c:if test="${not empty aimChannelOverviewForm.primaryprojCoordinatorContact}">
-																					<c:out value="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.name}" />&nbsp; 
-																					<c:out value="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.lastname}" />
-																				</c:if>
-																			</TD>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																				value="${activity.mofedCntFirstName}" />&nbsp; <c:out
+																				value="${activity.mofedCntLastName}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Project Coordinator Contact Information"name="Project Coordinator Email">
+																	<field:display feature="Government Contact Information"
+																		name="Government Email">
 																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
-																				<c:if test="${not empty aimChannelOverviewForm.primaryprojCoordinatorContact}">
-																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.properties}">
-																						<c:if test="${property.name=='contact email'}">
-																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
-																							<a	href="${mailTo}">${property.value}</a>;
-																						</c:if>
-																					</c:forEach>																					
-																				</c:if>
-																			</TD>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonEmail">Email</digi:trn></i>: <a
+																				href="mailto:${activity.mofedCntEmail}">${activity.mofedCntEmail}</a></TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display name="Sector Ministry Contact Information"	module="Contact Information">
+														<feature:display name="Project Coordinator Contact Information"
+															module="Contact Information">
 															<TR>
 																<TD>
-																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
-																				<b><digi:trn>Sector Ministry Contact Information</digi:trn></b>
-																			</TD>
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																			height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn
+																			key="aim:projectCoordinator">
+																				Project Coordinator Contact Information
+																			</digi:trn></b></TD>
 																	</TR>
-																	<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name">
+																	<field:display feature="Project Coordinator Contact Information"
+																		name="Project Coordinator First Name">
 																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<i><digi:trn>Name</digi:trn></i>: 
-																				<c:if test="${not empty aimChannelOverviewForm.primarySectorMinistryContact}">
-																					<c:out value="${aimChannelOverviewForm.primarySectorMinistryContact.contact.name}" />&nbsp; 
-																					<c:out value="${aimChannelOverviewForm.primarySectorMinistryContact.contact.lastname}" />
-																				</c:if>
-																			</TD>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																				value="${activity.prjCoFirstName}" />&nbsp; <c:out
+																				value="${activity.prjCoLastName}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Sector Ministry Contact Information"name="Sector Ministry Contact Email">
+																	<field:display feature="Project Coordinator Contact Information"
+																		name="Project Coordinator Email">
 																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
-																				<c:if test="${not empty aimChannelOverviewForm.primarySectorMinistryContact}">
-																					<c:forEach var="property" items="${aimChannelOverviewForm.primarySectorMinistryContact.contact.properties}">
-																						<c:if test="${property.name=='contact email'}">
-																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
-																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
-																						</c:if>
-																					</c:forEach>																					
-																				</c:if>
-																			</TD>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
+																				var="mailTo" value="mailto:${activity.prjCoEmail}" /> <a
+																				href="mailto:${activity.prjCoEmail}">${activity.prjCoEmail}</a></TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display name="Implementing/Executing Agency Contact Information"	module="Contact Information">
+														<feature:display name="Sector Ministry Contact Information"
+															module="Contact Information">
 															<TR>
 																<TD>
-																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
-																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
-																				<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
-																			</TD>
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																			height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn
+																			key="aim:sectorMinistryCnt">
+																				Sector Ministry Contact Information
+																			</digi:trn></b></TD>
 																	</TR>
-																	<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact First Name">
+																	<field:display feature="Sector Ministry Contact Information"
+																		name="Sector Ministry Contact First Name">
 																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<i><digi:trn>Name</digi:trn></i>: 
-																				<c:if test="${not empty aimChannelOverviewForm.primaryImplExecutingAgencyContact}">
-																					<c:out value="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.name}" />&nbsp; 
-																					<c:out value="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.lastname}" />
-																				</c:if>
-																			</TD>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																				value="${activity.secMiCntFirstName}" />&nbsp; <c:out
+																				value="${activity.secMiCntLastName}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Implementing/Executing Agency Contact Information"name="Implementing/Executing Agency Contact Email">
+																	<field:display feature="Sector Ministry Contact Information"
+																		name="Sector Ministry Contact Email">
 																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<i><digi:trn>Email</digi:trn></i>: 
-																				<c:if test="${not empty aimChannelOverviewForm.primaryImplExecutingAgencyContact}">
-																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.properties}">
-																						<c:if test="${property.name=='contact email'}">
-																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
-																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
-																						</c:if>
-																					</c:forEach>																					
-																				</c:if>
-																			</TD>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
+																				var="mailTo" value="mailto:${activity.secMiCntEmail}" /> <a
+																				href="mailto:${activity.secMiCntEmail}">${activity.secMiCntEmail}</a></TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
@@ -1240,7 +1195,6 @@ function commentWin(val) {
 															</TR>
 														</feature:display>
 													</module:display>
-													
 													<field:display name="Accession Instrument" feature="Identification">
                                                     <c:set var="accessionInstrument">
 														${aimChannelOverviewForm.accessionInstrument}
@@ -1252,7 +1206,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
 																		width=15> <b><digi:trn
 																		key="aim:AccessionInstrument">
 																	Accession Instrument</digi:trn></b></TD>
@@ -1277,7 +1231,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
 																		width=15> <b><digi:trn key="aim:acChapter">
                                                               A.C. Chapter</digi:trn></b></TD>
 																</TR>
@@ -1297,7 +1251,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
 																		width=15> <b>
 																		<digi:trn key="aim:crisNumber">Cris Number</digi:trn>
 																		</b></TD>
@@ -1319,7 +1273,7 @@ function commentWin(val) {
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																		height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
 																		width=15> <b><digi:trn
 																		key="aim:ProjectCategory">
 																	Project Category</digi:trn></b></TD>
@@ -1348,7 +1302,7 @@ function commentWin(val) {
 															vAlign="top" align="left" bgcolor="#aaaaaa">
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																	height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																	height=10 src="../ampTemplate/images/arrow-014E86.gif"
 																	width=15> <b><digi:trn
 																	key="aim:relatedOrganizations">Related Organizations</digi:trn></b>
 																</TD>
@@ -1644,7 +1598,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																			height=10
-																			src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b><digi:trn key="aim:keyActivityDates">Key Activity Dates</digi:trn></b>
 																		</TD>
 																	</TR>
@@ -1753,7 +1707,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:typeOfAssistance">
 																				Type Of Assistance</digi:trn></b></TD>
@@ -1786,7 +1740,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn
 																				key="aim:financingInstruments">
 																				Financing Instruments</digi:trn></b></TD>
@@ -1821,7 +1775,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10
-																				src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																				src="../ampTemplate/images/arrow-014E86.gif"
 																				width=15> <b><digi:trn>
 																				Funding Status</digi:trn></b></TD>
 																		</TR>
@@ -1849,7 +1803,7 @@ function commentWin(val) {
 															vAlign="top" align="top" bgcolor="#aaaaaa">
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																	height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																	height=10 src="../ampTemplate/images/arrow-014E86.gif"
 																	width=15> <b><digi:trn
 																	key="aim:activityCreationDetails">
 																	Activity creation details</digi:trn></b></TD>

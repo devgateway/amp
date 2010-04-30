@@ -34,13 +34,13 @@
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
 <module:display name="GIS DASHBOARD"></module:display> 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
-<module:display name="Exports" parentModule="REPORTING"></module:display> 
 <module:display name="Messages" parentModule="Messaging System"></module:display> 
 <module:display name="Messaging System"></module:display> 
 <module:display name="My Desktop" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -50,7 +50,7 @@
 <module:display name="PARIS INDICATORS"></module:display> 
 <module:display name="PI Reports" parentModule="REPORTING"></module:display> 
 <module:display name="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Paris Indicators Project Management" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -59,6 +59,8 @@
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
+<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports"></feature:display>
+<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
@@ -135,16 +137,12 @@
 <feature:display name="Step1" module="Custom Fields"></feature:display>
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
 <feature:display name="Documents Tab" module="Document"></feature:display> 
-<feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
+<feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Donor Report" module="Report Types"></feature:display> 
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
-<feature:display name="Export to PDF" module="Exports"></feature:display>
-<feature:display name="Export to Excel" module="Exports"></feature:display>
-<feature:display name="Export to CSV" module="Exports"></feature:display>
-<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
@@ -154,6 +152,7 @@
 <feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display> 
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Issues" module="Issues"></feature:display> 
+<feature:display name="Job Manager" module="ADMIN"></feature:display> 
 <feature:display name="Level Links" module="Activity Levels"></feature:display> 
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
@@ -175,14 +174,20 @@
 <feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display> 
 <feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display> 
 <feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 
-<feature:display name="Paris Indicators" module="Paris Indicators Project Management"></feature:display>
+<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
 <feature:display name="Physical Progress" module="Components"></feature:display> 
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
 <feature:display name="Planned Disbursements" module="Measures"></feature:display> 
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
+<feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
+<feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
+<feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
+<feature:display name="Pledge Location" module="Pledges"></feature:display> 
+<feature:display name="Pledge Sector" module="Pledges"></feature:display> 
+<feature:display name="Pledge Funding" module="Pledges"></feature:display> 
+<feature:display name="Pledge Additional Information" module="Pledges"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
-<feature:display name="Printer Friendly" module="Exports"></feature:display>
 <feature:display name="Program" module="Program"></feature:display> 
 <feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Project Fiche" module="Previews"></feature:display> 
@@ -202,7 +207,6 @@
 <feature:display name="Total Commitments" module="Measures"></feature:display> 
 <feature:display name="Undisbursed Balance" module="Measures"></feature:display> 
 <feature:display name="User Help" module="HELP"></feature:display> 
-<feature:display name="Support Documents" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
 <feature:display name="Public Documents" module="Document Management"></feature:display>
@@ -214,7 +218,7 @@
 <feature:display name="orgprof_chart_place6" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place7" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place8" module="Org Profile"></feature:display>
-<feature:display name="Computed Fields"  module="Report Generator"></feature:display>
+
 <feature:display name="Yearly View" module="Calendar"></feature:display>
 <feature:display name="Monthly View" module="Calendar"></feature:display>
 <feature:display name="Weekly View" module="Calendar"></feature:display>
@@ -245,7 +249,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="AMP ID"></field:display> 
 <field:display feature="Identification" name="Data Source"></field:display> 
 <field:display feature="Identification" name="Computation"></field:display>
-<field:display feature="Identification" name="Description"></field:display> 
+<field:display feature="Identification" name="Description"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
 <field:display feature="Identification" name="Project Comments"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 
@@ -265,9 +269,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Project Coordinator Contact Information" name="Project Coordinator Email"></field:display> 
 <field:display feature="Project Coordinator Contact Information" name="Project Coordinator First Name"></field:display> 
 <field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact Email"></field:display> 
-<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name"></field:display>
-<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact First Name"></field:display>
-<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact Email"></field:display>
+<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name"></field:display> 
 <field:display feature="Sectors" name="Level 1 Sectors List"></field:display> 
 <field:display name="A.C. Chapter" feature="Identification"></field:display> 
 <field:display name="AMP ID" feature="Identification"></field:display> 
@@ -384,12 +386,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Components Grand Total Expenditures" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Physical Progress" feature="Activity - Component Step"></field:display> 
 <field:display name="Conditions for Fund Release" feature="Funding Information"></field:display> 
-<field:display name="Contact Name" feature="Reports Contact Information"></field:display>
-<field:display name="Donor Contact" feature="Reports Contact Information"></field:display>
-<field:display name="Ministry Of Finance Contact" feature="Reports Contact Information"></field:display>
-<field:display name="Project Coordinator Contact" feature="Reports Contact Information"></field:display>
-<field:display name="Sector Ministry Contact" feature="Reports Contact Information"></field:display> 
-<field:display name="Implementing/Executing Agency Contact" feature="Reports Contact Information"></field:display> 
+<field:display name="Contact Name" feature="Reports Contact Information"></field:display> 
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Contract Donor Disbursements" feature="Contracting"></field:display> 
@@ -464,9 +461,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Base Value" feature="Activity"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display> 
+<field:display name="Related Pledge" feature="Commitments"></field:display>
 <field:display name="Date Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Date Current Value" feature="Activity"></field:display> 
-<field:display name="Date Disbursement" feature="Disbursement"></field:display> 
+<field:display name="Date Disbursement" feature="Disbursement"></field:display>
+<field:display name="Related Pledge" feature="Disbursement"></field:display> 
 <field:display name="Date Disbursement" feature="Funding Information"></field:display> 
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Date Expenditure" feature="Expenditures"></field:display> 
@@ -506,8 +505,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Phone Number" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Title" feature="Donor Contact Information"></field:display> 
-<field:display name="Draft Alert" feature="Alert tab"></field:display>
-<field:display name="Draft Approval" feature="Approval Tab"></field:display> 
+<field:display name="Draft Alert" feature="Alert tab"></field:display> 
 <field:display name="Draft Message" feature="Message tab"></field:display> 
 <field:display name="Draft" feature="Identification"></field:display> 
 <field:display name="Edit Components Link" feature="Activity - Component Step"></field:display> 
@@ -556,8 +554,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
 <field:display name="Implementing Agency Department/Division"  feature="Implementing Agency"></field:display> 
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
-<field:display name="Inbox Message" feature="Message tab"></field:display>
-<field:display name="Inbox Approval" feature="Approval Tab"></field:display> 
+<field:display name="Inbox Message" feature="Message tab"></field:display> 
 <field:display name="Indicator Base Value" feature="Activity"></field:display> 
 <field:display name="Indicator Current Value" feature="Activity"></field:display> 
 <field:display name="Indicator Description" feature="Activity"></field:display> 
@@ -587,6 +584,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="NPD Clasification" feature="Identification"></field:display> 
 <field:display name="NPD Program Description" feature="Program"></field:display> 
 <field:display name="Name" feature="Admin - Component Type"></field:display> 
+
+
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
@@ -596,6 +595,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="National Planning Objectives Level 6" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 7" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 8" feature="NPD Programs"></field:display> 
+
 <field:display name="Primary Program Level 1" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 2" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 3" feature="NPD Programs"></field:display> 
@@ -603,7 +603,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Primary Program Level 5" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 7" feature="NPD Programs"></field:display> 
-<field:display name="Primary Program Level 8" feature="NPD Programs"></field:display>
+<field:display name="Primary Program Level 8" feature="NPD Programs"></field:display> 
+
 <field:display name="Secondary Program Level 1" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 2" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 3" feature="NPD Programs"></field:display> 
@@ -612,6 +613,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Secondary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 7" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 8" feature="NPD Programs"></field:display> 
+
+
 <field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
@@ -621,7 +624,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 
 <field:display name="Overall Cost" feature="Planning"></field:display> 
-<field:display name="Paris Survey" feature="Paris Indicators"></field:display>
+<field:display name="Paris Survey" feature="Paris Indicators"></field:display> 
 <field:display name="Percentage" feature="Sectors"></field:display> 
 <field:display name="Physical Progress Tab" feature="Physical Progress"></field:display> 
 <field:display name="Physical Progress" feature="Physical Progress"></field:display> 
@@ -670,11 +673,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Proposed Project Planned" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Purpose" feature="Identification"></field:display> 
-<field:display name="Recievers" feature="Create Message Form"></field:display>
-<field:display name="Country" feature="Location"></field:display> 
-<field:display name="Region" feature="Location"></field:display>
-<field:display name="Zone" feature="Location"></field:display>
-<field:display name="District" feature="Location"></field:display> 
+<field:display name="Recievers" feature="Create Message Form"></field:display> 
+<field:display name="Region" feature="Location"></field:display> 
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 
 <field:display name="Regional Group Add Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group Remove Button" feature="Regional Group"></field:display> 
@@ -696,7 +696,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display> 
 <field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display> 
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
+
 <field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
+
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Remove Button" feature="Responsible Organization"></field:display> 
@@ -727,8 +729,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sector" feature="Sectors"></field:display> 
 <field:display name="Sectors" feature="Admin"></field:display> 
 <field:display name="Send button" feature="Create Message Form"></field:display> 
-<field:display name="Sent Alert" feature="Alert tab"></field:display>
-<field:display name="Sent Approval" feature="Approval Tab"></field:display>
+<field:display name="Sent Alert" feature="Alert tab"></field:display> 
 <field:display name="Sent Message" feature="Message tab"></field:display> 
 <field:display name="Set Alert Drop down" feature="Create Message Form"></field:display> 
 <field:display name="Signature of Contract" feature="Contracting"></field:display> 
@@ -805,8 +806,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Reset Filter Button" feature="Filter"></field:display>
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
+<feature:display name="Computed Fields"  module="Report Generator"></feature:display>
 <field:display name="Overage Project" feature="Computed Fields"></field:display>
-<field:display name="Age of Project (Months)" feature="Computed Fields"></field:display>
+<field:display name="Age of Project" feature="Computed Fields"></field:display>
 <field:display name="Predictability of Funding" feature="Computed Fields"></field:display>
 <field:display name="Average Size of Projects" feature="Computed Fields"></field:display>
 <field:display name="Variance Of Commitments" feature="Computed Fields"></field:display>
@@ -820,5 +822,17 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Project Age Ratio" feature="Computed Fields"></field:display>
 <field:display name="Activity Count" feature="Computed Fields"></field:display>
 
-<field:display name="Proposed Project Duration" feature="Computed Fields"></field:display>
-<field:display name="Actual Project Duration" feature="Computed Fields"></field:display>
+<feature:display name="Pledges Columns" module="Pledges"></feature:display>
+<field:display feature="Pledges Columns" name="Pledges Titles"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
+<field:display name="Add Pledge Location Button" feature="Pledge Location"></field:display>
+<field:display name="Remove Pledge Location Button" feature="Pledge Location"></field:display>
+<field:display name="Add Pledge Sector Button" feature="Pledge Sector"></field:display>
+<field:display name="Remove Pledge Sector Button" feature="Pledge Sector"></field:display>
+<field:display name="Add Pledge Funding Button" feature="Pledge Funding"></field:display>
+<field:display name="Remove Pledge Funding Button" feature="Pledge Funding"></field:display>
+<field:display name="Alternate Contact 1" feature="Pledge Contact 1"></field:display>
+<field:display name="Alternate Contact 2" feature="Pledge Contact 2"></field:display>

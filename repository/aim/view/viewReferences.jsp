@@ -82,6 +82,22 @@ function fnEditProject(id)
 
 }
 
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	var url ="<%=ficheUrl%>~ampActivityId=" + id;
+	openURLinWindow(url,650,500);
+}
+
+function preview(id)
+{
+
+  <digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+  var urlToGo = "<%=addUrl%>~pageId=2~activityId=" + id;
+    document.location.href = urlToGo;
+
+}
+
 
 function login()
 {

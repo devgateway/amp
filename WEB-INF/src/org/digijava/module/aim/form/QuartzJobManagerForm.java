@@ -19,15 +19,7 @@ public class QuartzJobManagerForm extends ActionForm {
 
 
 	private String name;
-	private String exeTime;
-
-	public String getExeTime() {
-		return exeTime;
-	}
-
-	public void setExeTime(String exeTime) {
-		this.exeTime = exeTime;
-	}
+	
 
 	private String classFullname;
 	private String startDateTime;
@@ -118,7 +110,6 @@ public class QuartzJobManagerForm extends ActionForm {
 		action = null;
 		selectedMonthDay = 1;
 		editAction = false;
-		exeTime=null;
 	}
 
 	public Collection<QuartzJobForm> getJobs() {

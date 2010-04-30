@@ -130,12 +130,6 @@ public class PersistenceManager {
 
 			sf = HibernateClassLoader.getSessionFactory();
 			cfg = HibernateClassLoader.getConfiguration();
-			
-			String release_mode=System.getProperty("hibernate.connection.release_mode");
-			if(release_mode!=null) {
-				logger.info("Applied system property hibernate.connection.release_mode="+release_mode);
-				cfg.setProperty("connection.release_mode", release_mode);
-			}
 
 			if (precache) {
 				precache();

@@ -13,7 +13,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.calendar.entity.AmpEventType;
+import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;

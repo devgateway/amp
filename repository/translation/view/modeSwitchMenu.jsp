@@ -33,7 +33,7 @@
 				</li>
             </logic:equal>
             <li>
-				<a onclick="return canExit()" href="/translation/showNewAdvancedTranslation.do">
+				<a onclick="return canExit()" href="/translation/showAdvancedTranslation.do">
 		        <digi:trn key="trn:AdvancedMode">Advanced Mode</digi:trn>
                 </a>
 			</li>         

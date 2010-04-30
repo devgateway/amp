@@ -1,19 +1,15 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable, HierarchyListable
+public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable
 {
 	private Long ampOrgId;
 	private String name ;
@@ -27,7 +23,6 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private String orgCode;
 	private String orgGroup;  // defunct
 	private AmpFiscalCalendar ampFiscalCalId;
-        @Deprecated
 	private AmpSectorScheme ampSecSchemeId;
 	
 	private String budgetOrgCode;
@@ -38,193 +33,20 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	 */
 	private String orgTypeCode; // defunct
 	
-	
+	private AmpOrgType orgTypeId;
 	private AmpOrgGroup orgGrpId;
 	private String address;
-        @Deprecated
 	private Country countryId;
+	private String contactPersonName;
+	private String contactPersonTitle;
+	private String email;
+	private String phone;
+	private String fax;
 	private String orgUrl;
 	private String acronym;
 	private AmpLevel levelId;
-	private AmpCategoryValueLocations region;
-        private AmpCategoryValue implemLocationLevel;
-        private Set<AmpOrgLocation> locations;
-        private Set<AmpOrgStaffInformation> staffInfos;
-        private AmpCategoryValueLocations country;
-    private Set<AmpOrgRecipient> recipients;
-        
-        //private Set<AmpContact> contacts;
-        private String addressAbroad;
-        private String taxNumber;
-        private String primaryPurpose;
-        private String minPlanRegNumb;
-        private String legalPersonNum;
-        private Date legalPersonRegDate;
-        private Date minPlanRegDate;
-        private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
-
-        private Set<AmpOrganisationContact> organizationContacts;
-        
-        private Set calendar;
-    	
-    	private String segmentCode;
-    	private Set sectors;
-    	
-    	private Set<AmpOrganisationDocument> documents;
-
-    	//Pledges
-    	private Set fundingDetails;
-
-        private String otherInformation;
-        private Date lineMinRegDate;
-        private Date operFuncApprDate;
-        private String receiptLegPersonalityAct;
-
-        public Date getLineMinRegDate() {
-            return lineMinRegDate;
-        }
-
-        public void setLineMinRegDate(Date lineMinRegDate) {
-            this.lineMinRegDate = lineMinRegDate;
-        }
-
-        public Date getOperFuncApprDate() {
-            return operFuncApprDate;
-        }
-
-        public void setOperFuncApprDate(Date operFuncApprDate) {
-            this.operFuncApprDate = operFuncApprDate;
-        }
-
-        public String getOtherInformation() {
-            return otherInformation;
-        }
-
-        public void setOtherInformation(String otherInformation) {
-            this.otherInformation = otherInformation;
-        }
-
-        public String getReceiptLegPersonalityAct() {
-            return receiptLegPersonalityAct;
-        }
-
-        public void setReceiptLegPersonalityAct(String receiptLegPersonalityAct) {
-            this.receiptLegPersonalityAct = receiptLegPersonalityAct;
-        }
-        
-        public Set<AmpOrganizationBudgetInformation> getOrganizationBudgetInfos() {
-            return organizationBudgetInfos;
-        }
-
-        public void setOrganizationBudgetInfos(Set<AmpOrganizationBudgetInformation> organizationBudgetInfos) {
-            this.organizationBudgetInfos = organizationBudgetInfos;
-        }
-        public AmpCategoryValue getImplemLocationLevel() {
-            return implemLocationLevel;
-        }
-
-        public void setImplemLocationLevel(AmpCategoryValue implemLocationLevel) {
-            this.implemLocationLevel = implemLocationLevel;
-        }
-
-        public String getPrimaryPurpose() {
-            return primaryPurpose;
-        }
-
-        public void setPrimaryPurpose(String primaryPurpose) {
-            this.primaryPurpose = primaryPurpose;
-        }
-
-        public String getAddressAbroad() {
-            return addressAbroad;
-        }
-
-        public void setAddressAbroad(String addressAbroad) {
-            this.addressAbroad = addressAbroad;
-        }
-
-        public AmpCategoryValueLocations getCountry() {
-            return country;
-        }
-
-        public void setCountry(AmpCategoryValueLocations country) {
-            this.country = country;
-        }
-
-        public String getLegalPersonNum() {
-            return legalPersonNum;
-        }
-
-        public void setLegalPersonNum(String legalPersonNum) {
-            this.legalPersonNum = legalPersonNum;
-        }
-
-        public Date getLegalPersonRegDate() {
-            return legalPersonRegDate;
-        }
-
-        public void setLegalPersonRegDate(Date legalPersonRegDate) {
-            this.legalPersonRegDate = legalPersonRegDate;
-        }
-
-        public Set<AmpOrgLocation> getLocations() {
-            return locations;
-        }
-
-        public void setLocations(Set<AmpOrgLocation> locations) {
-            this.locations = locations;
-        }
-
-        public Date getMinPlanRegDate() {
-            return minPlanRegDate;
-        }
-
-        public void setMinPlanRegDate(Date minPlanRegDate) {
-            this.minPlanRegDate = minPlanRegDate;
-        }
-        public Set<AmpOrgRecipient> getRecipients() {
-            return recipients;
-        }
-
-        public void setRecipients(Set<AmpOrgRecipient> recipients) {
-            this.recipients = recipients;
-        }
-
-        public String getMinPlanRegNumb() {
-            return minPlanRegNumb;
-        }
-
-        public void setMinPlanRegNumb(String regNumbMinPlan) {
-            this.minPlanRegNumb = regNumbMinPlan;
-        }
-
-        public Set<AmpOrgStaffInformation> getStaffInfos() {
-            return staffInfos;
-        }
-
-        public void setStaffInfos(Set<AmpOrgStaffInformation> staffInfos) {
-            this.staffInfos = staffInfos;
-        }
-
-        public String getTaxNumber() {
-            return taxNumber;
-        }
-
-        public void setTaxNumber(String taxNumber) {
-            this.taxNumber = taxNumber;
-        }
-       
+	private AmpRegion regionId;
 	
-	public Set<AmpOrganisationContact> getOrganizationContacts() {
-			return organizationContacts;
-		}
-
-		public void setOrganizationContacts(
-				Set<AmpOrganisationContact> organizationContacts) {
-			this.organizationContacts = organizationContacts;
-		}
-
-
 	private Set survey;	// Collection of AmpAhsurvey dbentity objects 
 	
 	private transient Set surveyByPointOfDeliveryDonor;
@@ -237,8 +59,16 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.surveyByPointOfDeliveryDonor = surveyByPointOfDeliveryDonor;
 	}
 
+	private Set calendar;
 	
+	private String segmentCode;
+	private Set sectors;
+	
+	private Set<AmpOrganisationDocument> documents;
 
+	//Pledges
+	private Set fundingDetails;
+	
 	//
 	public Set getSectors() {
 		return sectors;
@@ -462,6 +292,30 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.address = address;
 	}
 	/**
+	 * @return Returns the contactPersonName.
+	 */
+	public String getContactPersonName() {
+		return contactPersonName;
+	}
+	/**
+	 * @param contactPersonName The contactPersonName to set.
+	 */
+	public void setContactPersonName(String contactPersonName) {
+		this.contactPersonName = contactPersonName;
+	}
+	/**
+	 * @return Returns the contactPersonTitle.
+	 */
+	public String getContactPersonTitle() {
+		return contactPersonTitle;
+	}
+	/**
+	 * @param contactPersonTitle The contactPersonTitle to set.
+	 */
+	public void setContactPersonTitle(String contactPersonTitle) {
+		this.contactPersonTitle = contactPersonTitle;
+	}
+	/**
 	 * @return Returns the countryId.
 	 */
 	public Country getCountryId() {
@@ -473,7 +327,30 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setCountryId(Country countryId) {
 		this.countryId = countryId;
 	}
-	
+	/**
+	 * @return Returns the email.
+	 */
+	public String getEmail() {
+		return email;
+	}
+	/**
+	 * @param email The email to set.
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	/**
+	 * @return Returns the fax.
+	 */
+	public String getFax() {
+		return fax;
+	}
+	/**
+	 * @param fax The fax to set.
+	 */
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
 	/**
 	 * @return Returns the levelId.
 	 */
@@ -498,7 +375,18 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOrgGrpId(AmpOrgGroup orgGrpId) {
 		this.orgGrpId = orgGrpId;
 	}
-	
+	/**
+	 * @return Returns the orgTypeId.
+	 */
+	public AmpOrgType getOrgTypeId() {
+		return orgTypeId;
+	}
+	/**
+	 * @param orgTypeId The orgTypeId to set.
+	 */
+	public void setOrgTypeId(AmpOrgType orgTypeId) {
+		this.orgTypeId = orgTypeId;
+	}
 	/**
 	 * @return Returns the orgUrl.
 	 */
@@ -512,16 +400,28 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.orgUrl = orgUrl;
 	}
 	/**
+	 * @return Returns the phone.
+	 */
+	public String getPhone() {
+		return phone;
+	}
+	/**
+	 * @param phone The phone to set.
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	/**
 	 * @return Returns the regionId.
 	 */
-	public AmpCategoryValueLocations getRegion() {
-		return region;
+	public AmpRegion getRegionId() {
+		return regionId;
 	}
 	/**
 	 * @param regionId The regionId to set.
 	 */
-	public void setRegion(AmpCategoryValueLocations region) {
-		this.region = region;
+	public void setRegionId(AmpRegion regionId) {
+		this.regionId = regionId;
 	}
 	/**
 	 * @return Returns the survey.
@@ -606,26 +506,6 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	public void setBudgetOrgCode(String budgetOrgCode) {
 		this.budgetOrgCode = budgetOrgCode;
-	}
-
-	@Override
-	public Collection<AmpOrganisation> getChildren() {
-		return null;
-	}
-
-	@Override
-	public int getCountDescendants() {
-		return 1;
-	}
-
-	@Override
-	public String getLabel() {
-		return this.name;
-	}
-
-	@Override
-	public String getUniqueId() {
-		return this.ampOrgId + "";
 	}
 
 	

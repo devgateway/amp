@@ -1,16 +1,16 @@
 <script type="text/javascript">
 	var contentLocal;
 
-	YAHOO.namespace("YAHOO.amptab");
-	YAHOO.amptab.init = function() {
-	    		var tabView = new YAHOO.widget.TabView('tabview_container');
+	YAHOOAmp.namespace("YAHOOAmp.amptab");
+	YAHOOAmp.amptab.init = function() {
+	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 	};
 
-	YAHOO.amptab.handleClose = function() {
+	YAHOOAmp.amptab.handleClose = function() {
 		
 	}
 		
-    var myPanelWorkspaceframe = new YAHOO.widget.Panel("newmyPWorkspaceframe", {
+    var myPanelWorkspaceframe = new YAHOOAmp.widget.Panel("newmyPWorkspaceframe", {
 		width:"600px",
 		height:"700px",
 	    fixedcenter: true,
@@ -24,7 +24,7 @@
 	    }
 	     );
 
-    myPanelWorkspaceframe.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+    myPanelWorkspaceframe.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 	
 	function initScriptsWorkspaceframe() {
 		//alert('initScriptsWorkspaceframe');
@@ -41,10 +41,7 @@
 		contentLocal = document.createElement('div');
 		contentLocal.setAttribute('id', 'myPWorkspaceframeContent');
 		contentLocal.setAttribute('class', 'content');
-		contentLocal.innerHTML = '<div style="text-align: center">' + 
-		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
-	
+		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
             contentLocal.style.height = "700px";
             contentLocal.style.width = "594px";
             contentLocal.style.overflow="scroll";
@@ -92,13 +89,13 @@
 	function previewWorkspaceframe(action,params)
 	{
         showPWorkspaceframe();
-		YAHOO.util.Connect.asyncRequest("POST", action+params, WorkspaceframeCallback, '');
+		YAHOOAmp.util.Connect.asyncRequest("POST", action+params, WorkspaceframeCallback, '');
 	}
 
 	var currentWorkspaceframe = window.onload;
-	addLoadEvent( function() {
+	window.onload = function() {
         currentWorkspaceframe.apply(currentWorkspaceframe);
-   	});
+   	};
 	//initScriptsWorkspaceframe();
 
 </script>

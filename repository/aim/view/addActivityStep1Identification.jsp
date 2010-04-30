@@ -67,8 +67,6 @@
 -->
 </style>
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
-
 <script language="JavaScript">
 
 function OnBudgetRules ( textboxId,  messageElId, numOfCharsNeeded) {
@@ -98,7 +96,7 @@ OnBudgetRules.prototype.check		= function () {
 
 
 
-YAHOO.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
+YAHOOAmp.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
 
 
 function toggleElement ( elementId, show ) {
@@ -114,31 +112,7 @@ function toggleElement ( elementId, show ) {
 }
 
 function toggleBudgetFields( show ) {
-
-	toggleElement("Imputation", show);
 	toggleElement("CodeChapitre", show);
-	toggleElement("FY", show);
-	toggleElement("Vote", show);
-	toggleElement("Sub-Vote", show);
-	toggleElement("Sub-Program", show);
-	toggleElement("ProjectCode", show);
-	toggleElement("financial", show);
-
-	toggleElement("Imputation1", show);
-	toggleElement("CodeChapitre1", show);
-	toggleElement("FY1", show);
-	toggleElement("Vote1", show);
-	toggleElement("Sub-Vote1", show);
-	toggleElement("Sub-Program1", show);
-	toggleElement("ProjectCode1", show);
-
-	toggleElement("Imputation2", show);
-	toggleElement("CodeChapitre2", show);
-	toggleElement("FY2", show);
-	toggleElement("Vote2", show);
-	toggleElement("Sub-Vote2", show);
-	toggleElement("Sub-Program2", show);
-	toggleElement("ProjectCode2", show);
 }
 
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
@@ -234,8 +208,9 @@ target.style.cursor = "default"
 											<field:display name="Project Title" feature="Identification"></field:display>
 											<tr bgcolor="#ffffff">											
 												<td valign="top" align="left">
-													<a class="requiredField" title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
-													* <digi:trn key="aim:projectTitle">Project Title</digi:trn>
+													<FONT color=red>*</FONT>
+													<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
+													<digi:trn key="aim:projectTitle">Project Title</digi:trn>
 													</a>
 												
 												</td>
@@ -611,48 +586,49 @@ target.style.cursor = "default"
 													</a>
 												</td>
 											<td>
+											
 											<table cellpadding="7" cellspacing="5">
 
 												<field:display name="On/Off Budget" feature="Budget">	
 											 <tr>
+											 
 												<td valign="top" align="left" colspan="9">	
 													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
 													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
-												
 												</td>
 											</tr>
+												</field:display>
 											 <tr id="CodeChapitre">
 											 <td>
-											<field:display name="Code Chapitre" feature="Budget">
+											<field:display name="Code Chapitre" feature="Budget">										
 											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
 											 	<html:option value="0">Select Code Year</html:option>
 											 	<html:optionsCollection property="identification.chapterYears" value="wrappedInstance" label="wrappedInstance"/>
 											 </html:select>
-											
+											 
 											<logic:present name="aimEditActivityForm" property="identification.chapterCodes"> 
 											<html:select property="identification.chapterCode">
 											 	<html:option value="0">Select Code Chapitre</html:option>
 											 	<html:optionsCollection property="identification.chapterCodes" value="wrappedInstance" label="wrappedInstance"/>
 											 </html:select>
 											 </logic:present>
-											</field:display>
+											 </field:display>
 											</td>
-									</tr>
-									</field:display>
+											</tr>
 											</table>
 											
-												</td>
-										</tr>
+											</td>
+											</tr>
+											
 											
 									
-								
-								
+						
 								</feature:display>
 								
 								<field:display name="Financial Instrument" feature="Budget">
-										<tr bgcolor="#ffffff" id="financial"><td valign="top" align="left" >
+										<tr bgcolor="#ffffff"><td valign="top" align="left" >
 											<a title="<digi:trn key="aim:GBS">Financial Instrument</digi:trn>">
 											<digi:trn key="aim:actGBS">
 												Financial Instrument
@@ -750,3 +726,4 @@ target.style.cursor = "default"
 	}; 
 
 </script>
+									

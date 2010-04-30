@@ -36,71 +36,11 @@
 	    }
 	}
 
-function setStripsTable(tableId, classOdd, classEven) {
-		var tableElement = document.getElementById(tableId);
-		rows = tableElement.getElementsByTagName('tr');
-		for(var i = 0, n = rows.length; i < n; ++i) {
-			if(i%2 == 0)
-				rows[i].className = classEven;
-			else
-				rows[i].className = classOdd;
-		}
-		rows = null;
-	}
-
-	function setHoveredTable(tableId, hasHeaders) {
-
-		var tableElement = document.getElementById(tableId);
-		if(tableElement){
-	    	var className = 'Hovered',
-	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-	        rows      = tableElement.getElementsByTagName('tr');
-
-			for(var i = 0, n = rows.length; i < n; ++i) {
-				rows[i].onmouseover = function() {
-					this.className += ' ' + className;
-				};
-				rows[i].onmouseout = function() {
-					this.className = this.className.replace(pattern, ' ');
-
-				};
-			}
-			rows = null;
-		}
-	}
 </script>
 
-<style type="text/css">
-.jcol {
-	padding-left: 10px;
-}
-
-.jlien {
-	text-decoration: none;
-}
-
-.tableEven {
-	background-color: #dbe5f1;
-	font-size: 8pt;
-	padding: 2px;
-}
-
-.tableOdd {
-	background-color: #FFFFFF;
-	font-size: 8pt;
-	padding: 2px;
-}
-
-.Hovered {
-	background-color: #a5bcf2;
-}
-
-.notHovered {
-	background-color: #FFFFFF;
-}
-</style>
-
-
+<digi:instance property="aimAddSectorForm" />
+<digi:context name="digiContext" property="context" />
+<digi:form action="/addSector.do" method="post">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
@@ -108,7 +48,8 @@ function setStripsTable(tableId, classOdd, classEven) {
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td align=left vAlign=top width=750>
+		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td align=left class=r-dotted-lg vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
@@ -141,16 +82,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 					<td height=16 vAlign=center width=571>
 						<digi:errors />
 					</td>
-				</tr>
-                <tr><td align="left">
-                        <jsp:include page="/repository/aim/view/exportTable.jsp" />
-                    </td>
-                </tr>
-                <digi:instance property="aimAddSectorForm" />
-                <digi:context name="digiContext" property="context" />
-                <digi:form action="/addSector.do" method="post">
-                    <html:hidden property="treeView" />
-                    <html:hidden property="rootId" />
+				</tr>				
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
@@ -158,9 +90,11 @@ function setStripsTable(tableId, classOdd, classEven) {
 						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
+									
 									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+										
 										<tr>
-											<td>
+											<td>	
 												<table width="100%">
 													<tr>
 														<td>
@@ -169,7 +103,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 														</digi:trn><font color="red">*</font>:
 														</td>
 														<td>
-															<html:text  name ="aimAddSectorForm" property="sectorName" styleClass="inp-text" size="75"/> 
+															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
 														</td>
 													</tr>
 													<tr>
@@ -189,163 +123,130 @@ function setStripsTable(tableId, classOdd, classEven) {
 														</digi:trn>
 														</td>
 														<td>
-														<html:textarea name="aimAddSectorForm" cols="75" rows="3" styleClass="inp-text" property="description"/>															 
+														<html:textarea name="aimAddSectorForm" cols="60" rows="3" styleClass="inp-text" property="description"/>															 
 														</td>
 													</tr>
+
+													<%--<tr>
+														<td>
+															Scheme Code :
+														</td>
+														<td>
+															<html:text name ="aimSectorSchemeForm" property="secSchemeId" size="5"/> 
+														</td>
+													</tr>--%>
+
+													
 													<tr>
 														<td>
 															&nbsp;
 														</td>
 														<td >&nbsp;&nbsp;
-															<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
+								<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
 														<td>
 													</tr>
-												</table>
+											</table>
 											</td>
+											
 										</tr>	
 										<field:display name="Level 3 Sectors List" feature="Sectors">
-										<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap" />
 										<c:if test="${aimAddSectorForm.jspFlag == false}">
-										<tr>
-											<td>
-												<table  width="100%" height="30" cellpadding="2" cellspacing="0">
-													<tr style="color: #000000;" align="center">
-														<td width="80%" align="left">
-														<!-- Table title -->
-															<b><digi:trn key="aim:LevelThreeSectors">Level Three Sectors</digi:trn></b>
-														<!-- end table title -->										
+										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+											<!-- Table title -->
+											<digi:trn key="aim:LevelthreeSectors">
+												Level Three Sectors
+											</digi:trn>
+											<!-- end table title -->										
+										</td></tr>
+										<tr><td>
+											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+													<logic:empty name="aimAddSectorForm" property="subSectors">
+													<tr bgcolor="#ffffff">
+														<td colspan="5" align="center"><b>
+															<digi:trn key="aim:noSectorPresent">
+															No Sector present
+															</digi:trn>
+														</b></td>
+													</tr>
+													</logic:empty>
+													
+													<logic:notEmpty name="aimAddSectorForm" property="subSectors">
+													<logic:iterate name="aimAddSectorForm" property="subSectors" id="sectorLevelTwo"
+																	type="org.digijava.module.aim.dbentity.AmpSector	">
+													<tr>
+														<td bgcolor="#ffffff">
+															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlParams2}" property="ampSectorId">
+															<bean:write name="sectorLevelTwo" property="ampSectorId" />
+															</c:set>
+															<c:set target="${urlParams2}" property="event" value="enough" />
+															<c:set target="${urlParams2}" property="level" value="three" />
+															<c:set var="translation">
+																<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
+															</c:set>
+															<digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >
+															<bean:write name="sectorLevelTwo" property="name"/></digi:link>
+														</td>
+														
+														<td bgcolor="#ffffff" width="40" align="center">
+															<c:set var="translation">
+																<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
+															</c:set>
+															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >Edit </digi:link> ]
+														</td>
+														<td bgcolor="#ffffff" width="55" align="center">
+															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlParams4}" property="ampSectorId">
+																<bean:write name="sectorLevelTwo" property="ampSectorId" />
+															</c:set>
+															<c:set target="${urlParams4}" property="schemeId">
+																<bean:write name="aimAddSectorForm" property="parentSectorId" />
+															</c:set>
+															<c:set target="${urlParams4}" property="event" value="delete"/>
+															<c:set var="translation">
+																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
+															</c:set>
+															[ <digi:link href="/deleteSector.do" name="urlParams4" 
+																title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td class="report">
-												<table  width="100%" height="30" cellpadding="2" cellspacing="0">
-                                                <thead>
-													<tr style="background-color: #999999; color: #000000;" align="center">
-														<td width="10%" align="left">
-														<b> 
-															<c:set target="${urlParamsSort}" property="sortByColumn" value="sectorCode" /> 
-															<c:set target="${urlParamsSort}" property="ampSectorId">
-																<bean:write name="aimAddSectorForm" property="sectorId" />
-															</c:set>
-															<c:set target="${urlParamsSort}" property="event" value="edit" />
-															<c:set target="${urlParamsSort}" property="level" value="three" />
-															<digi:link href="/viewSectorDetails.do" name="urlParamsSort" style="color:#000000;">
-																<digi:trn key="aim:SectorCode">Code</digi:trn>
-															</digi:link> 
-														</b>
-														</td>
+													</logic:iterate>
+
+																									
 													
-													    <td width="90%" align="left">
-														<b> 
-															<c:set target="${urlParamsSort}" property="sortByColumn" value="sectorName" /> 
-															<c:set target="${urlParamsSort}" property="ampSectorId">
-																<bean:write name="aimAddSectorForm" property="sectorId" />
-															</c:set>
-															<c:set target="${urlParamsSort}" property="event" value="edit" />
-															<c:set target="${urlParamsSort}" property="level" value="three" />
-															<digi:link href="/viewSectorDetails.do" name="urlParamsSort" style="color:#000000;">
-																<digi:trn key="aim:SectorNameCol">Description</digi:trn>
-															</digi:link> 
-														</b>
-													</td>
-													
-													</tr>
-                                                    </thead>
-										</table>
-										</td>
-										</tr>
-										
-										<tr>
-											<td>
-												<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;" class="report">
-													<table width="100%" cellspacing="0" cellpadding="2" id="dataTable">
-                                                        <tbody  class="yui-dt-data">
-														<logic:empty name="aimAddSectorForm" property="subSectors">
-														<tr bgcolor="#ffffff">
-															<td colspan="5" align="center"><b>
-																<digi:trn key="aim:noSectorPresent">
-																No Sector present
-																</digi:trn>
-															</b></td>
-														</tr>
-														</logic:empty>
-														<logic:notEmpty name="aimAddSectorForm" property="subSectors">
-															<logic:iterate name="aimAddSectorForm" property="subSectors" id="sectorLevelTwo" type="org.digijava.module.aim.dbentity.AmpSector	">
-															<tr height="25">
-																<td align="left" width="10%">
-																	<bean:write name="sectorLevelTwo" property="sectorCodeOfficial"/>
-																</td>
-																<td align="left" width="70%">
-																	<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlParams2}" property="ampSectorId">
-																	<bean:write name="sectorLevelTwo" property="ampSectorId" />
-																	</c:set>
-																	<c:set target="${urlParams2}" property="event" value="enough" />
-																	<c:set target="${urlParams2}" property="level" value="three" />
-																	<c:set var="translation">
-																		<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
-																	</c:set>
-																	<digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >
-																	<bean:write name="sectorLevelTwo" property="name"/></digi:link>
-																</td>
-																<td align="center" width="10%" class="ignore">
-																	<c:set var="translation">
-																		<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
-																	</c:set>
-																	<digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}">
-																		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
-																	</digi:link>
-																</td>
-																<td align="center" width="10%" class="ignore">
-																	<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlParams4}" property="ampSectorId">
-																		<bean:write name="sectorLevelTwo" property="ampSectorId" />
-																	</c:set>
-																	<c:set target="${urlParams4}" property="schemeId">
-																		<bean:write name="aimAddSectorForm" property="parentSectorId" />
-																	</c:set>
-																	<c:set target="${urlParams4}" property="event" value="delete"/>
-																	<c:set var="translation">
-																		<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
-																	</c:set>
-																	<digi:link href="/deleteSector.do" name="urlParams4" title="${translation}" onclick="return onDelete()">
-																		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
-																	</digi:link>
-																</td>
-															</tr>
-															</logic:iterate>
-														</logic:notEmpty>
-												<!-- end page logic -->
-                                                </tbody>
-													</table>
-												</td>
-											</tr>
+													</logic:notEmpty>
+													<!-- end page logic -->													
+											</table>
+										</td></tr>
 										</c:if>
 										</field:display>
 									</table>
+									
 								</td>
 							</tr>
 						</table>
 					</td>
+					
 					<td noWrap width=100% vAlign="top">
 						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=100% height="20">
+									<table cellPadding=0 cellSpacing=0 width=100>
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
 												Other links
 												</digi:trn>
 											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>
+												&nbsp;
+											</td>
 										</tr>
 									</table>
 								</td>
 							</tr>
+							
 							<tr>
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellSpacing=1 width="100%">
@@ -359,7 +260,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 												</c:set>
 												<c:set target="${urlParams5}" property="parent" value="sector3"/>
 												<c:set target="${urlParams5}" property="level" value="three"/>
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 												</c:set>
@@ -376,7 +277,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 										<field:display name="View Schemes Link" feature="Sectors">
 										<tr>
 											<td>
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 												</c:set>
@@ -390,7 +291,7 @@ function setStripsTable(tableId, classOdd, classEven) {
 										</field:display>
 										<tr>
 											<td>
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>
@@ -407,35 +308,6 @@ function setStripsTable(tableId, classOdd, classEven) {
 							</tr>
 						</table>
 					</td></tr>
-					<tr>
-				        <td>
-							<table>
-				             	<tr>
-				                 	<td colspan="2">
-				                 		<strong><digi:trn key="aim:IconReference">Icons Reference</digi:trn></strong>
-				       				</td>
-				       			</tr>
-				     			<tr>
-				           			<td width="15" height="20" align="center">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
-									</td>
-									<td nowrap="nowrap">
-				               			<digi:trn key="aim:clickToEditSector">Click on this icon to edit Sector</digi:trn>
-				               			<br />
-				       				</td>
-				       			</tr>
-				        		<tr>
-				           			<td width="15" height="20" align="center">
-										<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
-				               		</td>
-									<td nowrap="nowrap">
-									<digi:trn key="aim:clickToDeleteSector">Click on this icon to delete Sector</digi:trn>
-				               			<br />
-				       				</td>
-				       			</tr>
-				       		</table>
-				     	</td>
-				    </tr>
 					</table>
 					</td>
 				</tr>
@@ -443,10 +315,6 @@ function setStripsTable(tableId, classOdd, classEven) {
 		</td>
 	</tr>
 </table>
-<script language="javascript">
-	setStripsTable("dataTable", "tableEven", "tableOdd");
-	setHoveredTable("dataTable", false);
-</script> 
 </digi:form>
 
 

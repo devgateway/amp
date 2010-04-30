@@ -274,13 +274,13 @@ function typeChanged(value){
                   <td width="288">
                 
                 
-                  <html:text name="quartzJobManagerForm" property="startDateTime" styleId="txtStartDateTime" style="width:100px" readonly="true" styleClass="inp-text"/>
+                  <html:text name="quartzJobManagerForm" property="startDateTime" styleId="txtStartDateTime" style="width:100px" readonly="readonly" styleClass="inp-text"/>
                	  
                   <a id="clear1" href='javascript:clearDate(document.getElementById("txtStartDateTime"), "clear1")'>
-		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 	</a>
 	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtStartDateTime"),"clear1")'>
-		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>	</a>      
+		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>	</a>      
                	 
                	                               </td>
                 </tr>
@@ -326,12 +326,12 @@ function typeChanged(value){
                   <td>
                  
      
-<html:text name="quartzJobManagerForm" property="endDateTime" styleId="txtEndDateTime" style="width:100px" readonly="true"  styleClass="inp-text"/>
+<html:text name="quartzJobManagerForm" property="endDateTime" styleId="txtEndDateTime" style="width:100px"  readonly="readonly"  styleClass="inp-text"/>
                    <a id="clear1" href='javascript:clearDate(document.getElementById("txtEndDateTime"), "clear1")'>
-		<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 	</a>
 	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtEndDateTime"),"clear1")'>
-		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>	</a>    
+		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>	</a>    
                                             </td>
                 </tr>
                 <tr>
@@ -498,7 +498,7 @@ function typeChanged(value){
   </table>
 </digi:form>
 <script type="text/javascript">
-    addLoadEvent(onLoad);
+    window.onload = onLoad;
     function onLoad(){
         
         var val=1;

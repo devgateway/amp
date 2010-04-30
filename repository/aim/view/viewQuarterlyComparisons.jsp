@@ -383,26 +383,6 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                                 <digi:trn key="aim:actualExpenditures">Actual Expenditures</digi:trn>
                   </div></td>
                 </feature:display>
-              
-              <td bgcolor="#999999"><div align="center" style="font-weight:bold;color:black;">
-
-			                  			              	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<digi:trn >Total Estimated Cost</digi:trn>
-
-													  </div>
-
-			                     		         	</td>	
-												   <td bgcolor="#999999"><div align="center" style="font-weight:bold;color:black;">
-			                  			              	<div align="center">
-
-																<FONT color="blue">*</FONT>
-																			<digi:trn>Uncommitted balance</digi:trn>
-															  </div>
-
-			                     		         	</td>
               </tr>
               <logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" >
                 <tr valign="top">
@@ -453,17 +433,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                         <aim:formatNumber value="${quarterlyComparison.actualExpenditure}" />
                       </div></td>
                     </feature:display>
-                  
-                      <td><div align="right">
-                        <aim:formatNumber value="${quarterlyComparison.totalCost}" />
-                      </div></td>
-                      <td><div align="right">
-                        <aim:formatNumber value="${quarterlyComparison.uncommittedBalance}" />
-                      </div></td>
-                    </tr>
-                
-                
-                  
+                  </tr>
                 </logic:iterate>
                 <tr valign="top">
                   <td colspan="2"><span class="note"> <font color="blue">*</font>
@@ -485,21 +455,10 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                   </span> </div></td>
                   <feature:display module="Funding" name="Expenditures">
                     <td><div align="right"> <span class="note">
-                    <aim:formatNumber value="${aimQuarterlyComparisonsForm.totalActualExpenditure}" />
-                
+                      <bean:write name="aimQuarterlyComparisonsForm" property="totalActualExpenditure" />
                     </span> </div></td>
                   </feature:display>
-                
-                  <td><div align="right"> <span class="note">
-                    <aim:formatNumber value="${aimQuarterlyComparisonsForm.totalCost}" />
-                
-                    </span> </div></td>
-                      <td><div align="right"> <span class="note">
-                    <aim:formatNumber value="${aimQuarterlyComparisonsForm.uncommittedBalance}" />
-                
-                    </span> </div></td>
                 </tr>
-                
               </logic:notEmpty>
             </table></td>
           </tr>
@@ -509,7 +468,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
           <tr>
             <td align="right"><table cellspacing="0" cellpadding="0" valign="top">
               <tr>
-                <td width="15"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+                <td width="15"><digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
                 </td>
                 <td><jsp:useBean id="urlShowQuarterly" type="java.util.Map" class="java.util.HashMap"/>
                   
@@ -529,7 +488,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                 </td>
               </tr>
               <tr>
-                <td width="15"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+                <td width="15"><digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
                 </td>
                 <td><c:set var="translation">
                   <digi:trn key="aim:clickToViewMonthlyComparisons">Click here to view Monthly Comparisons</digi:trn>

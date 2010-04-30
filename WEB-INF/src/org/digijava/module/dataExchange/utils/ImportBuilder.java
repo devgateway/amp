@@ -3,13 +3,10 @@
  */
 package org.digijava.module.dataExchange.utils;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -18,7 +15,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -33,26 +29,21 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.dgfoundation.amp.error.AMPError;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -68,11 +59,10 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -86,7 +76,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.dataExchange.Exception.AmpImportException;
 import org.digijava.module.dataExchange.action.ImportValidationEventHandler;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
@@ -109,12 +98,10 @@ import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
 import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
 import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
-import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.springframework.util.FileCopyUtils;
 import org.xml.sax.SAXException;
-
 
 /**
  * @author dan
@@ -124,26 +111,7 @@ public class ImportBuilder {
 	private AmpActivity activity = null;
 	
 	private Activities activities = null;
-	private TreeSet<String> allActivitiesFromDB = null;
 	
-	public TreeSet<String> getAllActivitiesFromDB() {
-		return allActivitiesFromDB;
-	}
-
-	public AmpColumnEntry activityStructure = null;
-
-	public AmpColumnEntry getActivityStructure() {
-		return activityStructure;
-	}
-
-	public void setActivityStructure(AmpColumnEntry activityStructure) {
-		this.activityStructure = activityStructure;
-	}
-
-	public void setAllActivitiesFromDB(TreeSet<String> allActivitiesFromDB) {
-		this.allActivitiesFromDB = allActivitiesFromDB;
-	}
-
 	private static Logger logger = Logger.getLogger(ImportBuilder.class);
 	
 	private HashMap hm = null;
@@ -152,93 +120,6 @@ public class ImportBuilder {
 	private Collection<String> activityList = null; 
 	private AmpDEImportLog root = null;
 	
-	private String insertUpdate="";
-	private ArrayList<String> primaryKeys = new ArrayList(); 
-	
-	private boolean titleKey=false;
-	private boolean projectIdKey=false;
-	private boolean budgetCodeKey = false;
-	
-	public boolean isTitleKey() {
-		return titleKey;
-	}
-
-
-
-
-
-	public void setTitleKey(boolean titleKey) {
-		this.titleKey = titleKey;
-	}
-
-
-
-
-
-	public boolean isProjectIdKey() {
-		return projectIdKey;
-	}
-
-
-
-
-
-	public void setProjectIdKey(boolean projectIdKey) {
-		this.projectIdKey = projectIdKey;
-	}
-
-
-
-
-
-	public boolean isBudgetCodeKey() {
-		return budgetCodeKey;
-	}
-
-
-
-
-
-	public void setBudgetCodeKey(boolean budgetCodeKey) {
-		this.budgetCodeKey = budgetCodeKey;
-	}
-
-
-
-
-
-	public ArrayList<String> getPrimaryKeys() {
-		return primaryKeys;
-	}
-
-
-
-
-
-	public void setPrimaryKeys(ArrayList<String> primaryKeys) {
-		this.primaryKeys = primaryKeys;
-	}
-
-
-
-
-
-	public String getInsertUpdate() {
-		return insertUpdate;
-	}
-
-
-
-
-
-	public void setInsertUpdate(String insertUpdate) {
-		this.insertUpdate = insertUpdate;
-	}
-
-
-
-
-
 	public ImportBuilder(){
 		//activity = new AmpActivity();
 		//request = null;
@@ -250,7 +131,7 @@ public class ImportBuilder {
 	
 	
 
-	private void processPreStep(AmpActivityVersion activity, TeamMember tm) throws Exception, AMPError{
+	private void processPreStep(AmpActivity activity, TeamMember tm) throws Exception, AMPError{
 		if (tm != null && tm.getTeamId()!=null && tm.getTeamId() != 0L) {
 			AmpTeam team = TeamUtil.getAmpTeam(tm.getTeamId());
 			activity.setTeam(team);
@@ -290,11 +171,13 @@ public class ImportBuilder {
 		
 	}
 	
-	private void processStep1( ActivityType actType, AmpActivityVersion activity, HttpServletRequest request, String lang, HashMap hm) throws Exception{
+	private void processStep1( ActivityType actType, AmpActivity activity, HttpServletRequest request, String lang, HashMap hm) throws Exception{
 
-		//title		
+		//title
+		
 		activity.setName("");
-		if(actType.getTitle()!=null){
+		if(actType.getTitle()!=null)
+		{
 			boolean found=false;
 			ArrayList<FreeTextType> titlesList=(ArrayList<FreeTextType>) actType.getTitle();
 			for (Iterator iterator = titlesList.iterator(); iterator.hasNext();) {
@@ -341,6 +224,7 @@ public class ImportBuilder {
 		//approval status Senegal change
 		
 		activity.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
+		
 		
 		//assigning org
 		
@@ -393,37 +277,54 @@ public class ImportBuilder {
 	  
 	  
 	  //modified closing date
-	  if(actType.getModifiedClosingDate()!=null){		  
+	  if(actType.getModifiedClosingDate()!=null){
+		  
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getModifiedClosingDate().getDate());
 		  if(date!=null)
 			  activity.setActualCompletionDate(date);
+		  
+//		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getModifiedClosingDate().getDate());
+//		  if(date!=null)
+//			  {
+//			  	if(activity.getClosingDates()==null) 
+//			  		activity.setClosingDates(new HashSet());
+//			  	activity.getClosingDates().add(date);
+//			  	
+//			  }
 	  }
 
 	  //closing date
-	  if(actType.getClosingDate()!=null){		  
+	  if(actType.getClosingDate()!=null){
+		  
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getClosingDate().getDate());
 		  if(date!=null)
 			  activity.setProposedCompletionDate(date);
 	  }
 	  
-	  //status
-	  if( actType.getStatus()!=null ){
-		AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_STATUS, Constants.CATEG_VALUE_ACTIVITY_STATUS);
-		if(acv!=null){
-			activity.getCategories().add(acv);
+	  
+		//status
+		if( actType.getStatus()!=null ){
+			AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_STATUS, Constants.CATEG_VALUE_ACTIVITY_STATUS);
+			if(acv!=null)
+				activity.getCategories().add(acv);
 		}
-	}
 	  
-	//status reason
-	if( actType.getStatusReason()!=null){
-		activity.setStatusReason(actType.getStatusReason().getValue());
-	}	  
+		//status reason
+		if( actType.getStatusReason()!=null){
+			activity.setStatusReason(actType.getStatusReason().getValue());
+		}
+
+		
+		
 	  
-	}//end of step 1
+	  
+	  
+	}//end of step 1	
 
 	
 	//sectors, programs
-	private void processStep2(ActivityType activityImported, AmpActivityVersion activity, HttpServletRequest request, String string, HashMap hm) {
+	private void processStep2(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
+
 		
 		//sectors
 		Long sectorId;
@@ -515,7 +416,7 @@ public class ImportBuilder {
 				
 				AmpActivityProgram ampActivityProgram = new AmpActivityProgram();
 				ampActivityProgram.setActivity(activity);
-				ampActivityProgram.setProgramPercentage((new Float(idmlProgram.getPercentage())));
+				ampActivityProgram.setProgramPercentage((new Float(idmlProgram.getPercentage())).longValue());
 				ampActivityProgram.setProgram(ampTheme);
 				
 				//ampActivityProgram.setProgramSetting()
@@ -562,7 +463,7 @@ public class ImportBuilder {
 	}
 
 	//funding
-	private void processStep3( ActivityType actType, AmpActivityVersion activity, HttpServletRequest request, String lang, HashMap hm) throws Exception{
+	private void processStep3( ActivityType actType, AmpActivity activity, HttpServletRequest request, String lang, HashMap hm) throws Exception{
 		
 		//fundings
 		if(actType.getFunding() != null && actType.getFunding().size() > 0){
@@ -652,8 +553,9 @@ public class ImportBuilder {
 	}//end of step 3
 	
 	
-	//related orgs, components	
-	private void processStep5(ActivityType activityImported, AmpActivityVersion activity, HttpServletRequest request, String string, HashMap hm, Collection<Components<AmpComponentFunding>> tempComps) {
+	//related orgs, components
+	
+	private void processStep5(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm, Collection<Components<AmpComponentFunding>> tempComps) {
 		// TODO Auto-generated method stub
 		
 		//related orgs
@@ -728,24 +630,20 @@ public class ImportBuilder {
 			ampComp.setTitle(component.getComponentName());
 			Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
 			
-			Collection<AmpCategoryValue> componentstype = null;
-			try {
-				componentstype = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.COMPONET_TYPE_KEY, null, request);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			//TODO: ampComponentsType -> probably soon will be moved to category manager
+			ArrayList ampCompTypes = (ArrayList) ComponentsUtil.getAmpComponentTypes();
 			boolean found=false;
-			for (Iterator ampCompTypesIt = componentstype.iterator(); ampCompTypesIt.hasNext();) {
-				AmpCategoryValue act = (AmpCategoryValue) ampCompTypesIt.next();
-				if(act.getValue() != null && "".compareTo(act.getValue().trim()) !=0 
-						&& act.getValue().compareTo(component.getComponentType().getValue())==0){
+			for (Iterator ampCompTypesIt = ampCompTypes.iterator(); ampCompTypesIt.hasNext();) {
+				AmpComponentType act = (AmpComponentType) ampCompTypesIt.next();
+				if(act.getName() != null && "".compareTo(act.getName().trim()) !=0 
+						&& act.getName().compareTo(component.getComponentType().getValue())==0){
 					found =true;
 					ampComp.setType(act);
 				}
 			}
 			if(found){
 				
-					//if(ampComp.getActivities() == null) ampComp.setActivities(new HashSet());
+					if(ampComp.getActivities() == null) ampComp.setActivities(new HashSet());
 					ampComp = (AmpComponent)DataExchangeUtils.addObjectoToAmp(ampComp);
 					
 					//ampComp.getActivities().add(activity);
@@ -857,14 +755,15 @@ public class ImportBuilder {
 		acf.setCurrency(CurrencyUtil.getCurrencyByCode(fundingDetailType.getCurrency()));
 		
 		//TODO how are the amounts? in thousands?
-		if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-			acf.setTransactionAmount(fundingDetailType.getAmount().multiply(new BigDecimal(1000)));
-		else acf.setTransactionAmount(fundingDetailType.getAmount());
+		//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
+			//acf.setTransactionAmount(new Double(fundingDetailType.getAmount()*1000));
+		//else 
+		acf.setTransactionAmount(new Double(fundingDetailType.getAmount()));
 		
 	}
 
 	//documents and links
-	private void processStep6(ActivityType activityImported, AmpActivityVersion activity, HttpServletRequest request, String string, HashMap hm) {
+	private void processStep6(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
 		// TODO Auto-generated method stub
 		
 		
@@ -932,8 +831,27 @@ public class ImportBuilder {
 		//httpSession.setAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER,teamMember);
 	}
 
-	//issues
-	private void processStep7(ActivityType activityImported, AmpActivityVersion activity, HttpServletRequest request, String string, HashMap hm) {		
+	//contact information, issues
+	private void processStep7(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
+	
+		if (activityImported.getDonorContacts() != null && activityImported.getDonorContacts().size() > 0){
+			//TODO: after refactoring the contact in AMP, save all the information
+			ContactType contacts = activityImported.getDonorContacts().iterator().next();
+			if(contacts != null){
+				activity.setContFirstName(contacts.getFirstName());
+				activity.setContLastName(contacts.getLastName());
+				activity.setEmail(contacts.getEmail());
+			}
+		}
+		
+		if(activityImported.getGovContacts() !=null  && activityImported.getGovContacts().size() > 0){
+			ContactType contacts = activityImported.getGovContacts().iterator().next();
+			if(contacts != null){
+				activity.setMofedCntFirstName(contacts.getFirstName());
+				activity.setMofedCntLastName(contacts.getLastName());
+				activity.setMofedCntEmail(contacts.getEmail());
+			}
+		}
 	
 		if(activityImported.getIssues() !=null && activityImported.getIssues().size() >0){
 			Set issueSet = new HashSet();
@@ -977,7 +895,7 @@ public class ImportBuilder {
 		
 	}
 	
-	private void processStep8(ActivityType activityImported, AmpActivityVersion activity, HttpServletRequest request, String string, HashMap hm) {
+	private void processStep8(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
 		
 		if(activityImported.getAdditional() != null && activityImported.getAdditional().size() > 0){
 			for (AdditionalFieldType aft : activityImported.getAdditional()) {
@@ -997,13 +915,19 @@ public class ImportBuilder {
 		}
 		
 	}
+	private boolean isFreeTextTypeValid(FreeTextType title) {
+		// TODO Auto-generated method stub
+		if(title != null && title.getValue()!=null) return true;
+		return false;
+	}
 
-
-	private Collection getFundingXMLtoAMP(ActivityType actType, AmpActivityVersion activity, HashMap hm) throws Exception{
+	private Collection getFundingXMLtoAMP(ActivityType actType, AmpActivity activity, HashMap hm) throws Exception{
 		ArrayList<AmpFunding> fundings= null;
 		Set orgRole = new HashSet();
 		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
 			AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
+			
+			
 			
 			FundingType funding = (FundingType) it.next();
 			CodeValueType fundingOrg=funding.getFundingOrg();
@@ -1049,7 +973,6 @@ public class ImportBuilder {
 		}
 		else activity.getOrgrole().addAll(orgRole);
 		
-
 		return fundings;
 	}
 	
@@ -1064,13 +987,14 @@ public class ImportBuilder {
 				Projections mtef=(Projections)mtefItr.next();
 
 				//senegal add
-				if(mtef.getAmount().compareTo(new BigDecimal(0)) == 0 ) continue;
+				if(mtef.getAmount() == 0 ) continue;
 
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 				
-				if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-					ampmtef.setAmount(mtef.getAmount().multiply(new BigDecimal(1000)));
-				else ampmtef.setAmount(mtef.getAmount());
+				//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
+					//ampmtef.setAmount(new Double(mtef.getAmount()*1000));
+				//else
+					ampmtef.setAmount(new Double(mtef.getAmount()));
 				
 
 				ampmtef.setAmpFunding(ampFunding);
@@ -1095,10 +1019,9 @@ public class ImportBuilder {
 		// TODO Auto-generated method stub
 		for (Iterator it = fundingsDetails.iterator(); it.hasNext();) {
 			FundingDetailType fundDet = (FundingDetailType) it.next();
-
-			//senegal
-			if(fundDet.getAmount().compareTo(new BigDecimal(0)) == 0 ) continue;
 			
+			//senegal
+			if(fundDet.getAmount()==0) continue;
 			
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
 	
@@ -1113,15 +1036,18 @@ public class ImportBuilder {
 			ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrency()));
 			
 			//TODO how are the amounts? in thousands?
-			if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-				ampFundDet.setTransactionAmount(fundDet.getAmount().multiply(new BigDecimal(1000)));
-			else ampFundDet.setTransactionAmount(fundDet.getAmount());
+			//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
+				//ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
+			//else 
+				ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()));
 			fundDetails.add(ampFundDet);
 		}
 		
 	}
 
 	private Object mapCodeValueTypeElementInAmp(String fieldType, CodeValueType element, HashMap hm) {
+		
+		
 		if(fieldType!=null && element != null && element.getValue() != null && 
 				!("".equals(fieldType.trim())) && !("".equals(element.getValue().trim())) ){
 			
@@ -1147,6 +1073,8 @@ public class ImportBuilder {
 		}
 		return null;// TODO Auto-generated method stub
 	}
+
+
 
 	private Object insertFakeFieldInAmp(String fieldType,CodeValueType element) {
 		// TODO Auto-generated method stub
@@ -1251,7 +1179,10 @@ public class ImportBuilder {
 	private List<AmpActivityProgramSettings> getAllAmpActivityProgramSettings(){
 		AmpActivityProgramSettings primConf = null;
     	List<AmpActivityProgramSettings> configs = null;
-		configs = DataExchangeUtils.getAllAmpActivityProgramSettings();
+
+			configs = DataExchangeUtils.getAllAmpActivityProgramSettings();
+		
+    	
     	return configs;
 	}
 	
@@ -1323,7 +1254,7 @@ public class ImportBuilder {
 	
 	
 	
-	private String setEditorFreeTextType(List<FreeTextType> list , AmpActivityVersion activity, HttpServletRequest request, String preKey){
+	private String setEditorFreeTextType(List<FreeTextType> list , AmpActivity activity, HttpServletRequest request, String preKey){
 		boolean found=false;
 		//ArrayList<FreeTextType> descriptionList=(ArrayList<FreeTextType>) actType.getDescription();
 		String key = preKey + System.currentTimeMillis();
@@ -1350,8 +1281,24 @@ public class ImportBuilder {
 		return null;
 	}
 	
-
+	private boolean isValidLang(String lang){
 		
+		//TODO: validate lang based on dg_locale code for languages
+		if(lang!=null && lang.length() == 2 && !"".equals(lang))
+			return true;
+		return false;
+		
+	}
+	
+	private boolean isStringValid(String lang ){
+		
+		//TODO: validate lang based on dg_locale code for languages
+		if(lang != null && !"".equals(lang.trim()))
+			return true;
+		return false;
+		
+	}
+	
 	private AmpCategoryValue addCategValueForCodeValueType(CodeValueType element, HashMap hm, String fieldType, String categoryKey ){
 		//TODO: refresh the cache!!!!
 		AmpCategoryValue acv=null;
@@ -1400,29 +1347,54 @@ public class ImportBuilder {
 		return acv;
 		}
 	
-
+//	public void builImportActivitiesToAMP() throws Exception, AMPError{
+//		if(activities !=null && activities.getActivity() !=null)
+//			for (Iterator<ActivityType> it = activities.getActivity().iterator(); it.hasNext();) {
+//				ActivityType activityImported = (ActivityType) it.next();
+//				AmpActivity activity = new AmpActivity();
+//				processPreStep(activity, tm);
+//			//if( !activityExists(activityImported) ){
+//				HashMap hm = creatingImportCacheTree();
+//				processPreStep(activity, tm);
+//				
+//				//identification, assigningOrg
+//				processStep1(activityImported, activity,request, "en",hm);
+//				
+//				//sectors, programs
+//				processStep2(activityImported, activity,request, "en",hm);
+//				
+//				//funding , regional funding
+//				processStep3(activityImported, activity,request, "en",hm);
+//				
+//				//relatedOrg, components
+//				Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
+//				processStep5(activityImported, activity,request, "en",hm, tempComps);
+//				
+//				//documents
+//				processStep6(activityImported, activity,request, "en",hm);
+//				
+//				//contact information
+//				processStep7(activityImported, activity,request, "en",hm);
+//				
+//				DataExchangeUtils.saveComponents(activity, request, tempComps);
+//				DataExchangeUtils.saveActivity(activity, request);
+//				
+//			//}
+//			//else logger.info("Activity was not imported-> pls implement the update step :)");
+//			}
+//	}
 	
 	public void saveActivities(HttpServletRequest request, TeamMember tm) {
+		// TODO Auto-generated method stub
 		if(this.getRoot()!=null && this.getRoot().getElements() != null)
 			for (Iterator it = this.getRoot().getElements().iterator(); it.hasNext();) {
 				AmpDEImportLog iLog = (AmpDEImportLog) it.next();
-				//TODO
-				if(iLog.isSelect())
-				{
+				if(iLog.isSelect()){
 					Activities activities = iLog.getActivities();
 					try {
 						//if there are no errors with that activity we can import it
-						//TODO
-						//if(!iLog.isError())
-							{
-								if("insert".equals(this.getInsertUpdate()))
-										this.insertActivities(activities, request, tm, iLog.isExistingActivity());
-								if("update".equals(this.getInsertUpdate()))
-										this.updateActivities(activities, request, tm,iLog.isExistingActivity());
-								if("insert&update".equals(this.getInsertUpdate()))
-										this.insertUpdateActivities(activities, request, tm,iLog.isExistingActivity());
-
-							}
+						if(!iLog.isError())
+							this.builImportActivitiesToAMP(activities, request, tm);
 					} catch (AMPError e) {
 						// TODO Auto-generated catch block
 						logger.info("AMP ERROR : error in saving activity:"+iLog.getObjectNameLogged()+" in AMP db");
@@ -1438,33 +1410,11 @@ public class ImportBuilder {
 			}
 	}
 	
-	private void insertUpdateActivities(Activities activities2, 	HttpServletRequest request, TeamMember tm, boolean b) throws Exception, AMPError{
-		if(!b){
-			this.builImportActivitiesToAMP(activities2, request, tm);
-		}
-		else {
-			//TODO
-			
-		}
-	}
-
-	private void updateActivities(Activities activities2, HttpServletRequest request, TeamMember tm, boolean b) throws Exception, AMPError{
-		if(b){
-			//TODO
-		}
-	}
-
-	private void insertActivities(Activities activities2, HttpServletRequest request, TeamMember tm, boolean b) throws Exception, AMPError{
-		if(!b){
-			this.builImportActivitiesToAMP(activities2, request, tm);
-		}
-	}
-
 	public void builImportActivitiesToAMP(Activities activities,HttpServletRequest request, TeamMember tm) throws Exception, AMPError{
 		if(activities !=null && activities.getActivity() !=null)
 			for (Iterator<ActivityType> it = activities.getActivity().iterator(); it.hasNext();) {
 				ActivityType activityImported = (ActivityType) it.next();
-				AmpActivityVersion activity = new AmpActivityVersion();
+				AmpActivity activity = new AmpActivity();
 				processPreStep(activity, tm);
 			//if( !activityExists(activityImported) ){
 				HashMap hm = creatingImportCacheTree();
@@ -1486,18 +1436,14 @@ public class ImportBuilder {
 				//documents
 				processStep6(activityImported, activity,request, "en",hm);
 				
-				//contact information,issues
+				//contact information
 				processStep7(activityImported, activity,request, "en",hm);
-
+				
 				//custom fields
 				processStep8(activityImported, activity,request, "en",hm);
 				
-				
 				DataExchangeUtils.saveComponents(activity, request, tempComps);
-				DataExchangeUtils.saveActivity(activity, request,tm);
-				
-				//contact information
-				processContactStep(activity,activityImported);
+				DataExchangeUtils.saveActivity(activity, request);
 				
 			//}
 			//else logger.info("Activity was not imported-> pls implement the update step :)");
@@ -1577,136 +1523,126 @@ public class ImportBuilder {
         return true;
 		
 	}
-
-	public boolean splitInChunks(OutputStream outputStream) {
-		
-		String result="";
-        result = outputStream.toString();
-        String[] s =result.split("<activity");
-        String header, footer=null;
-        header = s[0];
-        String[] forFooter = null;
-        if(s[s.length-1].contains("<spider"))
-        	{
-        		forFooter = s[s.length-1].split("<spider");
-        		footer = "<spider"+ forFooter[1];
-        	}
-        else{
-        	forFooter = s[s.length-1].split("</activities>");
-    		footer = "</activities>";
-        }
-        	
-        s[s.length-1] = forFooter[0];
-        
-        
-        if(this.getImportLogs() == null || this.getImportLogs().size() < 1) this.setImportLogs(new ArrayList<AmpDEImportLog>());
-        String newActivity = "";
-        if(s.length <2) return false;
-        for (int i = 1; i < s.length; i++) {
-			newActivity="";
-        	newActivity+=header+"<activity"+s[i]+footer;
-        	AmpDEImportLog ilog = new AmpDEImportLog();
-        	String content = s[i];
-        	String[] aux = content.split("<title");
-        	String[] aux1 ;
-        	String[] aux2 ;
-        	if(aux.length < 2){
-        		ilog.addError("JAXB Exception - XML file is damaged for this activity - NO TITLE");
-        		ilog.setObjectNameLogged("NoNameActivity");
-        		this.getActivityList().add("NoNameActivity");
-        	}
-        	else{
-        		aux1 = aux[1].split(">",2);
-        		if(aux1.length == 2)
-        			aux2 = aux1[1].split("</title>");
-        		else aux2 = aux1[0].split("</title>");
-        		ilog.setObjectNameLogged(i+". "+aux2[0]);
-        		this.getActivityList().add(aux2[0]);
-        	}
-
-        	ilog.setCounter(i);
-        	
-        	ilog.setObjectTypeLogged("IDMLActivity");
-        	OutputStream outputStream1 = new ByteArrayOutputStream();
-        	//outputStream = new ByteArrayOutputStream();
-        	try {
-				FileCopyUtils.copy(new ByteArrayInputStream(newActivity.getBytes()), outputStream1);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        	ilog.setOutputStream(outputStream1);
-        	this.getImportLogs().add(ilog);
-        	//return true;
-		}
-        return true;
-		
-	}
+//	
+//
+//	public boolean checkXMLIntegrity(String xsdPath, InputStream inputS, InputStream inputStream1) {
+//		// TODO Auto-generated method stub
+//		
+//		boolean isOk = true;
+//		this.setIsOk(true);
+//		Activities acts = null;
+//		
+//		try {
+//		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
+//        Unmarshaller m = jc.createUnmarshaller();
+//        FeaturesUtil.errorLog="";
+//        boolean xsdValidate = true;
+//        	
+//        	if(xsdValidate){
+//                // create a SchemaFactory that conforms to W3C XML Schema
+//                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//
+//                 // parse the purchase order schema
+//                 Schema schema = sf.newSchema(new File(xsdPath));
+//
+//                 m.setSchema(schema);
+//                 // set your error handler to catch errors during schema construction
+//                 // we can use custom validation event handler
+//                 m.setEventHandler(new ImportValidationEventHandler());
+//           }
+//        	acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.inputStream);
+//        } 
+//		catch (SAXException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			isOk = false;
+//			this.setIsOk(false);
+//		}
+//        catch (javax.xml.bind.JAXBException jex) {
+//        	jex.printStackTrace();
+//         
+//        	String line = null;
+//            String result="";
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            try {
+//            	   FileCopyUtils.copy(inputStream1, outputStream);
+//               } catch (IOException e) {
+//    			// TODO Auto-generated catch block
+//    			e.printStackTrace();
+//               }
+//            result = outputStream.toString();
+//            String[] s =result.split("<activity");
+//            String header, footer=null;
+//            header = s[0];
+//            String[] forFooter = s[s.length-1].split("<spider");
+//            footer = "<spider"+ forFooter[1];
+//            s[s.length-1] = forFooter[0];
+//            
+//            ArrayList<InputStream> activitiesChunks = new ArrayList<InputStream>();
+//            for (int i = 1; i < s.length; i++) {
+//				String newActivity = "";
+//				newActivity+=header+"<activity"+s[i]+footer;
+//				activitiesChunks.add(new ByteArrayInputStream(newActivity.getBytes()));
+//			}
+//            if(this.generatedActivities == null) this.generatedActivities = new ArrayList<InputStream>();
+//            this.generatedActivities = activitiesChunks;
+//            isOk = false;
+//            this.setIsOk(false);
+//            logger.error("JAXB Exception!") ;
+//        } 
+//       this.activities = acts;
+//	  return isOk;
+//	}
 
 	
-	
-	public void checkXMLIntegrityNoChunks(String xsdPath, InputStream inputS, String locale, Long siteId) throws AmpImportException{
+	public boolean checkXMLIntegrityNoChunks(String xsdPath, InputStream inputS) {
 		// TODO Auto-generated method stub
 		
 		boolean isOk = true;
+		//this.setIsOk(true);
 		Activities acts = null;
 		
 		try {
-			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
-	        Unmarshaller m = jc.createUnmarshaller();
-	        FeaturesUtil.errorLog="";
-	        	
-	         // create a SchemaFactory that conforms to W3C XML Schema
-	        SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	         // parse the purchase order schema
-	        Schema schema = sf.newSchema(new File(xsdPath));
-	
-	        m.setSchema(schema);
-	         // set your error handler to catch errors during schema construction
-	         // we can use custom validation event handler
-	        m.setEventHandler(new ImportValidationEventHandler());
-	        acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(inputS);
+		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
+        Unmarshaller m = jc.createUnmarshaller();
+        FeaturesUtil.errorLog="";
+        boolean xsdValidate = true;
+        	
+        	if(xsdValidate){
+                // create a SchemaFactory that conforms to W3C XML Schema
+                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+                 // parse the purchase order schema
+                 Schema schema = sf.newSchema(new File(xsdPath));
+
+                 m.setSchema(schema);
+                 // set your error handler to catch errors during schema construction
+                 // we can use custom validation event handler
+                 m.setEventHandler(new ImportValidationEventHandler());
+           }
+        	acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(inputS);
         } 
 		catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			isOk = false;
-            logger.error("SAX Exception!") ;
+			//this.setIsOk(false);
 		}
         catch (javax.xml.bind.JAXBException jex) {
         	jex.printStackTrace();
+        	
             logger.error("JAXB Exception!") ;
-            isOk = false;
         } 
-	  if(!isOk){
-		  
-		  String errMessage = "";
-		try {
-			 errMessage = TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again", locale, siteId);
-			} catch (WorkerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		throw new AmpImportException(errMessage, 2);
-	  }
-	  if( !"".equals(FeaturesUtil.errorLog) ) {
-		  String errMessage = "";
-			try {
-				 errMessage = TranslatorWorker.translateText("The file you have uploaded is not IDML compliant. Please verify it and try upload again", locale, siteId)+" \n "+ FeaturesUtil.errorLog ;
-				} catch (WorkerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			throw new AmpImportException(errMessage, 2);
-	  }
-	  
+        this.activities = acts;
+	  return isOk;
 	}
-	public void generateLogForActivities(String path, String locale, Long siteId) {
+
+	public void generateLogForActivities(String path) {
 		// TODO Auto-generated method stub
 		Activities acts = null;
 		for (Iterator it = this.getImportLogs().iterator(); it.hasNext();) {
 			AmpDEImportLog iLog = (AmpDEImportLog) it.next();
-			//FeaturesUtil.errorLog = "";
+			FeaturesUtil.errorLog = "";
 			boolean ok= false;
 			try {
 				JAXBContext jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
@@ -1727,9 +1663,6 @@ public class ImportBuilder {
 		                 m.setEventHandler(new ImportValidationEventHandler());
 		           }
 		        	acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(iLog.getInputStream());
-		        	
-		        	validateFields(iLog, acts, locale, siteId);
-		        	
 		        	ok = true;
 		        } 
 				catch (SAXException e) {
@@ -1749,97 +1682,7 @@ public class ImportBuilder {
 		      if(ok) iLog.setActivities(acts);
 		      
 		}
-	}
-	
-	
-	private void validateFields(AmpDEImportLog iLog, Activities acts, String locale, Long siteId) {
-		// TODO Auto-generated method stub
-		String error="";
-		//if(activities !=null && acts.getActivity() !=null)
-		if(acts.getActivity() !=null)
-			for (Iterator<ActivityType> it = acts.getActivity().iterator(); it.hasNext();) {
-				error = "";
-				ActivityType activityImported = (ActivityType) it.next();
-				String title="", ampId="", budgetCode=""; 
-				//title
-				try {
-					validate(activityImported.getTitle());
-					title=activityImported.getTitle().iterator().next().getValue();
-					ampId=activityImported.getDbKey();
-					budgetCode = ""; //TODO chapitre code or PTIP
-				} catch (AmpImportException e) {
-					try {
-						error = TranslatorWorker.translateText("Title "+e.getMessage(), locale, siteId);
-					} catch (WorkerException e1) {
-						e1.printStackTrace();
-					}
-					iLog.addError(error);
-				}
-				
-				//Status
-				try {
-					validate(activityImported.getStatus());
-				} catch (AmpImportException e) {
-					try {
-						error = TranslatorWorker.translateText("Status "+e.getMessage(), locale, siteId);
-					} catch (WorkerException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					iLog.addError(error);
-				}
-				
-				
-				activityImported.getSectors();
-				String s="";
-				//activity exists?
-				if(this.isTitleKey())
-					s+=title+"###";
-				if(this.isProjectIdKey())
-					s+=ampId+"###";
-				if(this.isBudgetCodeKey())
-					s+=budgetCode+"###";
-				if(this.getAllActivitiesFromDB().contains(s)) iLog.setExistingActivity(true);
-			}
 		
-	}
-
-	private void validate(CodeValueType cvt) throws AmpImportException {
-		// TODO Auto-generated method stub
-		if(cvt == null) throw new AmpImportException("is null", 2);
-		if( !(isStringValid(cvt.getCode()) && isStringValid(cvt.getValue())) )
-			throw new AmpImportException("is not valid", 2);
-	}
-
-	private boolean isFreeTextTypeValid(FreeTextType title) {
-		// TODO validate the language attribute!
-		if(title != null && title.getValue()!=null && !"".equals(title.getValue())) return true;
-		return false;
-	}
-	
-	private void validate(List<FreeTextType> ftt) throws AmpImportException{
-		if(ftt == null || ftt.size() < 1) throw new AmpImportException("is null", 2);
-		// TODO languages of the title
-		for (FreeTextType freeTextType : ftt) {
-			if(!isFreeTextTypeValid(freeTextType)) throw new AmpImportException("is not valid", 2);
-		}
-	}
-
-	private boolean isValidLang(String lang){
-		
-		//TODO: validate lang based on dg_locale code for languages
-		if(lang!=null && lang.length() == 2 && !"".equals(lang))
-			return true;
-		return false;
-		
-	}
-	
-	private boolean isStringValid(String lang ){
-		
-		//TODO: validate lang based on dg_locale code for languages
-		if(lang != null && !"".equals(lang.trim()))
-			return true;
-		return false;
 		
 	}
 	
@@ -1858,7 +1701,6 @@ public class ImportBuilder {
 			root.getElements().add(iLog);
 		}
 	}
-
 	
 	public String printLogs(){
 		String result = new String();
@@ -1902,46 +1744,10 @@ public class ImportBuilder {
 	}
 
 
-	private void processContactStep(AmpActivity activity,ActivityType activityImported){
-		if (activityImported.getDonorContacts() != null && activityImported.getDonorContacts().size() > 0){
-			ContactType contact = activityImported.getDonorContacts().iterator().next();
-			createActivityContactInformation(activity, contact,org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
-		}
-		if(activityImported.getGovContacts()!=null && activityImported.getGovContacts().size() > 0){
-			ContactType contact = activityImported.getGovContacts().iterator().next();
-			createActivityContactInformation(activity, contact,org.digijava.module.aim.helper.Constants.MOFED_CONTACT);
-		}
-	}
 
-	private void createActivityContactInformation(AmpActivity activity,ContactType contact,String type) {
-		if(contact!=null){
-			AmpContact ampContact=new AmpContact(contact.getFirstName(),contact.getLastName());
-			try {
-			ContactInfoUtil.saveOrUpdateContact(ampContact);
-			
-			Set<AmpContactProperty> properties=new HashSet<AmpContactProperty>();
-			ampContact.setProperties(properties);
-			String [] emails=contact.getEmail().split(";");
-			for (String email : emails) {
-				AmpContactProperty property=new AmpContactProperty();
-				property.setName(org.digijava.module.aim.helper.Constants.CONTACT_PROPERTY_NAME_EMAIL);
-				property.setValue(email);
-				property.setContact(ampContact);
-				ContactInfoUtil.saveOrUpdateContactProperty(property);
-			}			
-				
-				AmpActivityContact actCont=new AmpActivityContact();
-				actCont.setActivity(activity);
-				actCont.setContact(ampContact);
-				actCont.setContactType(type);
-				actCont.setPrimaryContact(true);
-				ContactInfoUtil.saveOrUpdateActivityContact(actCont);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-	}
+
+
+
+
 	
 }

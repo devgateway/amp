@@ -97,7 +97,7 @@
 			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 				<tr>
 					<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/print_icon.gif">
+					&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
 					<digi:link href="/htmlSectorbyProject.do" target="_blank">
 						Print
 					</digi:link>
@@ -109,7 +109,7 @@
 		<tr>	
 			<logic:greaterThan name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="3">
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>				
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -120,7 +120,7 @@
             </logic:greaterThan>    
 			<logic:lessEqual name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="3">
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>				
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -133,7 +133,7 @@
 				<tr>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
-							&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border=0>	
+							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
 								<c:set var="translation">
 									<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 								</c:set>
@@ -151,7 +151,7 @@
 			        <td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 					&nbsp;	
-					<img src="/TEMPLATE/ampTemplate/imagesSource/common/icon_csv.gif" border=0>
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>
 					</c:set>
@@ -375,7 +375,7 @@
 					Commitment / Disbursement / Actual Exp by Sector / Donor / Project
 					</digi:trn>
 					</td>
-                <td bgcolor="#FFFFFF"><img src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17"></td>
+                <td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" width="17" height="17"></td>
                   </tr>
       </table>
      

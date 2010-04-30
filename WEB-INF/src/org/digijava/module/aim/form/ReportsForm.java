@@ -2,10 +2,7 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 
 public class ReportsForm extends ActionForm {
 
@@ -22,7 +19,6 @@ public class ReportsForm extends ActionForm {
 	private String flag = null;
 	private Long selReports[] = null;
 	private String addReport = null;
-	private String filter = null;
 	private String removeReports = null;
 	private String assignReports = null;
 	private Long teamId = null;
@@ -36,10 +32,8 @@ public class ReportsForm extends ActionForm {
     private int offset;
     private boolean showReportList;
 
-    
-    
     private Boolean showTabs	= false;
-    
+
 	public int getPagesToShow() {
 		return pagesToShow;
 	}
@@ -248,17 +242,7 @@ public class ReportsForm extends ActionForm {
 	public boolean isShowReportList() {
 		return showReportList;
 	}
-
-	public void setFilter(String filter) {
-		this.filter = filter;
-	}
-
-	public String getFilter() {
-		return filter;
-	}
 	
 	
- 	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
-		filter = "";
- 	}
+
 }

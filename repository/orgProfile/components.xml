@@ -5,7 +5,6 @@
 
 		<page page="largestProjects" name="largestProjects" title="5 Largest Projects"/>
                 <page page="parisIndicators" name="parisIndicators" title="Paris Indicators"/>
-                <page page="showOrgProfileTables" name="showOrgProfileTables" title="Show Table"/>
                 
 	</secondary-pages>
 	<module>

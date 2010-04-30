@@ -13,11 +13,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.exception.reportwizard.DuplicateReportNameException;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.mondrian.dbentity.EntityHelper;
 import org.digijava.module.mondrian.dbentity.OffLineReports;
 import org.digijava.module.mondrian.form.SaveHtmlForm;
+import org.digijava.module.mondrian.form.ShowReportForm;
 import org.digijava.module.mondrian.query.MoConstants;
 import org.digijava.module.mondrian.query.QueryThread;
 
@@ -39,15 +41,21 @@ public class SaveHtml extends Action {
 			String currentmdx = null;
 			String measures = "";
 			String dimensions = "";
-			
+			Integer donorcube = 2;
 			 OlapModelProxy omp = (OlapModelProxy) session.getAttribute("query01");
 			if (omp != null) {
 				MondrianModel mm  = (MondrianModel) omp.getDelegate().getRootModel();
 				MondrianMdxQuery mdxQueryExt = (MondrianMdxQuery) omp.getExtension("mdxQuery");
 				currentmdx = mdxQueryExt.getMdxQuery();
 				
-				String result = currentmdx;
 				
+				String result = currentmdx;
+				Pattern pcube = Pattern.compile("\\[Donor Funding]");
+				Matcher mcube = pcube.matcher(result);
+				
+				if (mcube.find()){
+						donorcube = 1;
+					}
 				for (int i = 0; i < mm.getDimensions().length; i++) {
 					Pattern p = Pattern.compile("\\["+mm.getDimensions()[i].getLabel()+"\\]");
 					Matcher m = p.matcher(result);
@@ -74,16 +82,21 @@ public class SaveHtml extends Action {
 					}
 				}
 			}
-			
-			OffLineReports newreport = new OffLineReports();
-			newreport.setName(sf.getReportname());
-			newreport.setQuery(currentmdx);
-			newreport.setTeamid(tm.getTeamId());
-			newreport.setMeasures(measures);
-			newreport.setColumns(dimensions);
-			newreport.setCreationdate(new Timestamp(new java.util.Date().getTime()));
-			newreport.setOwnerId(TeamUtil.getAmpTeamMember(tm.getMemberId()));
-			EntityHelper.SaveReport(newreport);
+			if (EntityHelper.isDuplicated(sf.getReportname())){
+				OffLineReports newreport = new OffLineReports();
+				newreport.setName(sf.getReportname());
+				newreport.setQuery(currentmdx);
+				newreport.setTeamid(tm.getTeamId());
+				newreport.setMeasures(measures);
+				newreport.setColumns(dimensions);
+				newreport.setCreationdate(new Timestamp(new java.util.Date().getTime()));
+				newreport.setOwnerId(TeamUtil.getAmpTeamMember(tm.getMemberId()));
+				newreport.setType(donorcube);
+				EntityHelper.SaveReport(newreport);
+			}else{
+				session.setAttribute("DuplicateName", true);
+				return mapping.findForward("report");
+			}
 			
 			return mapping.findForward("mainreport");
 			}

@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -112,14 +111,7 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		formBean.setTotalUnExpended(overallTotalUnExpended);
 		
 		formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION,false) );
-
-		BigDecimal total = FormatHelper.parseBigDecimal(FinancingBreakdownWorker.getOverallTotal(fb, Constants.PROJECT_COST, false));
-		BigDecimal commitments = FormatHelper.parseBigDecimal(overallTotalCommitted);
-		BigDecimal totalUncommittedBalance = total.subtract(commitments);
-
-		formBean.setTotalCost(FormatHelper.formatNumber(total));
-		formBean.setTotalUncommitted(FormatHelper.formatNumber(totalUncommittedBalance));
-
+		
 		return  null;
 	}
 }	

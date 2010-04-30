@@ -7,13 +7,10 @@ package org.dgfoundation.amp.visibility;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSource;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.ClusterIdentifiable;
 import org.digijava.module.gateperm.core.Permissible;
@@ -30,8 +27,6 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL,Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID})
 	protected String name;
 	
-	protected Long currentTemplateId;
-	
 	protected Set items;
 	protected Set allItems;
 	protected String nameTrimmed;
@@ -39,15 +34,6 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	protected Boolean hasLevel;
 	protected String description;
 
-	private Set sources = null;
-	
-	@Override
-	public Object getIdentifier() {
-		if(currentTemplateId==null) throw new RuntimeException("Identifier cannot be generated. The currentTemplateId property was not set!");
-		return currentTemplateId+"-"+getId();
-	}
-
-	
 	public String getDescription() {
 		return description;
 	}
@@ -129,7 +115,10 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 		return this.name+" - id="+super.toString();
 	}
 
-	
+
+	public Object getIdentifier() {
+	    return id; 
+	}
 	
 	public TreeSet getSortedAlphaItems()
 	{
@@ -150,77 +139,6 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public String getClusterIdentifier() { 
 		return name;
 	}
-
-	public Set getSources() {
-		return sources;
-	}
-
-	public void setSources(Set sources) {
-		this.sources = sources;
-	}
 	
-	public boolean addAmpFeatureSource(AmpFeatureSource fmSource ){
-		if (fmSource ==null)
-			return false;
-		if (this.sources == null){
-			this.sources = new HashSet();
-			this.sources.add(fmSource);
-			return true;
-		}
 		
-		for (Iterator iterator = this.sources.iterator(); iterator.hasNext();) {
-			AmpFeatureSource item = (AmpFeatureSource) iterator.next();
-			if (item.getName().equalsIgnoreCase(fmSource.getName())){
-				return false;
-			}
-		}
-
-		this.sources.add(fmSource);
-		return true;
-	}
-	
-	public boolean containsSource(String sourcePath){
-		boolean retValue = false;
-		
-		if (this.sources != null && sourcePath != null){
-			for (Iterator iterator = this.sources.iterator(); iterator.hasNext();) {
-				AmpFeatureSource src = (AmpFeatureSource) iterator.next();
-				if (sourcePath.equalsIgnoreCase(src.getName())){
-					retValue = true;
-					break;
-				}
-			}
-		}
-		return retValue;
-	}
-	
-	protected void removeObjectFromSet(AmpObjectVisibility obj, Set set){
-		for (Iterator iter = set.iterator(); iter.hasNext();) {
-			AmpObjectVisibility item = (AmpObjectVisibility) iter.next();
-			if (item.getId().equals(obj.getId())){
-				iter.remove();
-				break;
-			}
-		}
-	}
-		
-	public void removeTemplate(AmpObjectVisibility template){
-		removeObjectFromSet(template, this.getTemplates());
-	}
-
-	/**
-	 * @return the currentTemplateId
-	 */
-	public Long getCurrentTemplateId() {
-		return currentTemplateId;
-	}
-
-	/**
-	 * @param currentTemplateId the currentTemplateId to set
-	 */
-	public void setCurrentTemplateId(Long currentTemplateId) {
-		this.currentTemplateId = currentTemplateId;
-	}
-
-	
 }

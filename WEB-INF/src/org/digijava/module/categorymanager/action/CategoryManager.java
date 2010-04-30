@@ -26,7 +26,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.ar.impexp.impl.ReportsExpTransformerMain;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -52,7 +51,6 @@ public class CategoryManager extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		
 		errors						= new ActionErrors();
 		CategoryManagerForm myForm	= (CategoryManagerForm) form;
 		HttpSession session 		= request.getSession();
@@ -76,7 +74,6 @@ public class CategoryManager extends Action {
 			myForm.setCategoryName(null);
 			myForm.setDescription(null);
 			myForm.setKeyName(null);
-			myForm.setUsedCategories(null);
 			myForm.setIsMultiselect(false);
 			myForm.setIsOrdered(false);
 			List<PossibleValue> possibleVals = new ArrayList();

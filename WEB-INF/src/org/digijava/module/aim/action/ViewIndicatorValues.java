@@ -12,13 +12,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.form.ViewIndicatorForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class ViewIndicatorValues extends TilesAction {
 
@@ -49,10 +51,10 @@ public class ViewIndicatorValues extends TilesAction {
 						viForm.getIndicators().add(bean);
 					}
 				}else if (risk!=null){
-					AmpCategoryValue riskValue=IndicatorUtil.getRisk(connection);
+					AmpIndicatorRiskRatings riskValue=IndicatorUtil.getRisk(connection);
 
 					if (riskValue != null) {
-                        if (riskValue.getValue().equalsIgnoreCase(risk)) {
+                        if (riskValue.getRatingName().equalsIgnoreCase(risk)) {
                             ActivityIndicator bean = IndicatorUtil.createIndicatorHelperBean(connection);
                             viForm.getIndicators().add(bean);
 

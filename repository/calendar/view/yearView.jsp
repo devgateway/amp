@@ -107,11 +107,11 @@
 											<tr>
 												<td align="center">
 													<digi:link href="/viewYearEvents.do" paramName="calendarItemForm"  paramId="navYear" paramProperty="prevYear">
-													<digi:img border="0" src="/TEMPLATE/ampTemplate/imagesSource/calendar/yarrowl.gif"/></digi:link>
+													<digi:img border="0" src="module/calendar/images/yarrowl.gif"/></digi:link>
 													<span class="bold">
 													<bean:write name="calendarItemForm" property="currentYear"/></span>
 													<digi:link href="/viewYearEvents.do" paramName="calendarItemForm" paramId="navYear" paramProperty="nextYear">
-													<digi:img border="0" src="/TEMPLATE/ampTemplate/imagesSource/calendar/yarrowr.gif"/></digi:link>
+													<digi:img border="0" src="module/calendar/images/yarrowr.gif"/></digi:link>
 												</td>
 											</tr>
 										</table>

@@ -1,11 +1,7 @@
-
 package org.digijava.module.widget.util;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Rectangle;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,8 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
@@ -27,7 +23,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -44,31 +40,29 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
-import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
-import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
-import org.digijava.module.widget.helper.DonorSectorPieChartURLGenerator;
-import org.digijava.module.widget.helper.SectorHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
@@ -80,7 +74,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -89,10 +82,16 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.VerticalAlignment;
+import org.jfree.chart.axis.NumberAxis;
+import org.digijava.module.aim.util.SectorUtil;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.ui.TextAnchor;
+
+
 
 /**
  * Chart widgets util.
@@ -100,8 +99,9 @@ import org.jfree.ui.VerticalAlignment;
  *
  */
 public class ChartWidgetUtil {
-    private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
 
+    private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
+    
 
     /**
      * Generates chart object from specified indicator and options.
@@ -121,18 +121,18 @@ public class ChartWidgetUtil {
 		chart = ChartFactory.createTimeSeriesChart(opt.getTitle(), null, null, ds, opt.isShowLegend(), tooltips, urls);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font8);
+			chart.getLegend().setItemFont(font8);		
 		}
 		RectangleInsets padding = new RectangleInsets(0,0,0,0);
 		chart.setPadding(padding);
-
+		
 		XYPlot plot =(XYPlot) chart.getPlot();
 		plot.setRangeZeroBaselineVisible(true);
 		plot.getDomainAxis().setLabelFont(font8);
 		plot.getDomainAxis().setTickLabelFont(font8);
 		plot.getRangeAxis().setLabelFont(font8);
 		plot.getRangeAxis().setTickLabelFont(font8);
-
+		
 		XYItemRenderer renderer = plot.getRenderer();
 //		renderer.setItemLabelFont(font8);
 		renderer.setItemLabelsVisible(opt.isShowLabels());
@@ -147,9 +147,9 @@ public class ChartWidgetUtil {
 			r.setBaseShapesVisible(true);
 			r.setBaseShapesFilled(true);
 		}
-
-		//This will expand ranges slightly so that points at the edge will move inside
-		//and number will not be cut by borders.
+		
+		//This will expand ranges slightly so that points at the edge will move inside 
+		//and number will not be cut by borders. 
 		Range oldRange = plot.getRangeAxis().getRange();
 		Range newRange = Range.expand(oldRange, 0.1, 0.1);
 		plot.getRangeAxis().setRange(newRange);
@@ -160,9 +160,44 @@ public class ChartWidgetUtil {
 
 		return chart;
 	}
-
-
-
+    
+      /**
+     * Generates chart object from specified filters and options.
+     * This chart then can be rendered as image or pdf or file.
+     * @param opt
+     * @param filter
+     * @return chart
+     * @throws DgException
+     */
+    public static JFreeChart getTypeOfAidChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
+		JFreeChart chart = null;
+		Font font8 = new Font(null,Font.BOLD,12);
+		CategoryDataset dataset=getTypeOfAidDataset(opt,filter);
+        String titleMsg= TranslatorWorker.translateText("Type of Aid", opt.getLangCode(), opt.getSiteId());
+        DecimalFormat format=FormatHelper.getDecimalFormat();
+        String amount="";
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            amount = "Amounts in thousands";
+        } else {
+            amount = "Amounts";
+        }
+        String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
+		chart=ChartFactory.createStackedBarChart(titleMsg,"",amountTranslatedTitle,dataset,PlotOrientation.VERTICAL, true, true,false);
+		chart.getTitle().setFont(font8);
+		if (opt.isShowLegend()){
+			chart.getLegend().setItemFont(font8);		
+		}
+        CategoryPlot plot = chart.getCategoryPlot();
+        CategoryItemRenderer renderer = plot.getRenderer();
+        NumberAxis numberAxis=(NumberAxis)plot.getRangeAxis();
+        numberAxis.setNumberFormatOverride(format);
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("",format);
+		renderer.setBaseItemLabelsVisible(true);
+        renderer.setBaseItemLabelGenerator(labelGenerator);
+        return chart;
+	}
+    
+    
      /**
      * Generates chart object from specified filters and options.
      * This chart then can be rendered as image or pdf or file.
@@ -173,8 +208,7 @@ public class ChartWidgetUtil {
      */
     public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
-        Font titleFont = new Font("Arial", Font.BOLD, 12);
-        Font plainFont = new Font("Arial", Font.PLAIN, 10);
+        Font font8 = new Font(null, Font.BOLD, 12);
         CategoryDataset dataset = getPledgesCommDisbDataset(filter,opt);
         DecimalFormat format=FormatHelper.getDecimalFormat();
         String amount="";
@@ -184,29 +218,173 @@ public class ChartWidgetUtil {
             amount = "Amounts";
         }
         String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        String titleMsg= TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId())+"("+filter.getCurrName()+")";
-        chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
-        chart.getTitle().setFont(titleFont);
-        chart.getLegend().setItemFont(plainFont);
+        String titleMsg= TranslatorWorker.translateText("Pledges/Comm/Disb", opt.getLangCode(), opt.getSiteId());
+        chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        chart.getTitle().setFont(font8);
+        if (opt.isShowLegend()) {
+            chart.getLegend().setItemFont(font8);
+        }
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
+        renderer.setItemMargin(0);
+
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
         numberAxis.setNumberFormatOverride(format);
-        numberAxis.setLabelFont(plainFont);
-        numberAxis.setTickLabelFont(plainFont);
-        CategoryAxis categoryAxis=plot.getDomainAxis();
-        categoryAxis.setTickLabelFont(plainFont);
-        renderer.setSeriesPaint(0,new Color(0,0,255));
-	renderer.setSeriesPaint(1,new Color(0,204,255));
-	renderer.setSeriesPaint(2,new Color(204,255,255));
-        renderer.setItemMargin(0);
+        //This will expand ranges slightly so that points at the edge will move inside
+        //and number will not be cut by borders.
+        Range oldRange = numberAxis.getRange();
+        Range newRange = Range.expand(oldRange, 0.1, 0.1);
+        numberAxis.setRange(newRange);
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
+        renderer.setItemLabelsVisible(true);
+        renderer.setItemLabelGenerator(labelGenerator);
+        renderer.setPositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER,Math.PI/2 ));
         return chart;
     }
+    
+    /**
+     * Generates chart object from specified filters and options.
+     * This chart then can be rendered as image or pdf or file.
+     * @param opt
+     * @param filter
+     * @return chart
+     * @throws DgException
+     */
+    public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
+		JFreeChart chart = null;
+		Font font8 = new Font(null,Font.BOLD,12);
+        DecimalFormat format=FormatHelper.getDecimalFormat();
+		CategoryDataset dataset=getODAProfileDataset(filter,opt);
+        String amount="";
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            amount = "Amounts in thousands";
+        } else {
+            amount = "Amounts";
+        }
+        String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
+        String titleMsg= TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
+		chart=ChartFactory.createStackedAreaChart(titleMsg,"",amountTranslatedTitle,dataset,PlotOrientation.VERTICAL, true, false,false);
+		chart.getTitle().setFont(font8);
+		if (opt.isShowLegend()){
+			chart.getLegend().setItemFont(font8);		
+		}
+        // get a reference to the plot for further customisation...
+        CategoryPlot plot = chart.getCategoryPlot();
+        NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
+        numberAxis.setNumberFormatOverride(format);
+
+         
+		return chart;
+	}
+      /**
+     * Generates category dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
+    
+    
+    private static CategoryDataset getTypeOfAidDataset(ChartOption opt,FilterHelper filter) throws DgException {
+        boolean nodata=true; // for displaying no data message
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+           Long fiscalCalendarId = filter.getFiscalCalendarId();
+           for (int i = year.intValue() - 4; i <= year.intValue(); i++) {
+            // apply calendar filter
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
+            Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+            for (AmpCategoryValue aid : typeOfAids) {
+                DecimalWraper funding = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, aid.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
+                try{
+                String aidName= TranslatorWorker.translateText(aid.getValue(), opt.getLangCode(), opt.getSiteId());
+                result.addValue(funding.doubleValue(),aidName , new Long(i));
+                }
+                catch(WorkerException ex){
+                    logger.error(ex);
+                    throw new DgException(ex);
+                    
+                }
+                if (funding.doubleValue() != 0) {
+                    nodata = false;
+                }
+            }
+
+        }
+         if(nodata){
+            result= new DefaultCategoryDataset();
+        }
+        
+        return result;
+    }
+      /**
+     * Generates category dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
+    
+    private static CategoryDataset getODAProfileDataset(FilterHelper filter,ChartOption opt) throws DgException {
+        boolean nodata = true; // for displaying no data message
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        for (int yearVal = year.intValue() - 4; yearVal <= year.intValue(); yearVal++) {
+            // apply calendar filter
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, yearVal);
+            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, yearVal);
+            Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+            for (AmpCategoryValue financingInstrument : financingInstruments) {
+                DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, financingInstrument.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
+                if (funding.doubleValue() != 0) {
+                    nodata = false;
+                }
+                try{
+                String value= TranslatorWorker.translateText(financingInstrument.getValue(), opt.getLangCode(), opt.getSiteId());
+                result.addValue(funding.doubleValue(), value, new Long(yearVal));
+                }
+                 catch(WorkerException ex){
+                    logger.error(ex);
+                    throw new DgException(ex);
+
+                }
+            }
+
+        }
 
 
+        if (nodata) {
+            result = new DefaultCategoryDataset();
+        }
 
+        return result;
+    }
 
      /**
      * Generates category dataset using  filters .
@@ -215,8 +393,8 @@ public class ChartWidgetUtil {
      * @return CategoryDataset
      * @throws DgException
      */
-
-
+    
+    
     private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter,ChartOption opt) throws DgException, WorkerException {
         boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
@@ -240,12 +418,12 @@ public class ChartWidgetUtil {
             // apply calendar filter
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
-            Double fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
-            result.addValue(fundingPledge, pledgesTranslatedTitle, new Long(i));
-            DecimalWraper fundingComm = getFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode, true, filter.getTeamMember());
-            result.addValue(fundingComm.getValue(), actComTranslatedTitle, new Long(i));
-            DecimalWraper fundingDisb = getFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode, false, filter.getTeamMember());
-            result.addValue(fundingDisb.getValue(), actDisbTranslatedTitle, new Long(i));
+            Double fundingPledge = getPledgesFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode);
+            result.addValue(fundingPledge.doubleValue(), pledgesTranslatedTitle, new Long(i));
+            DecimalWraper fundingComm = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, true, filter.getTeamMember());
+            result.addValue(fundingComm.doubleValue(), actComTranslatedTitle, new Long(i));
+            DecimalWraper fundingDisb = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, false, filter.getTeamMember());
+            result.addValue(fundingDisb.doubleValue(), actDisbTranslatedTitle, new Long(i));
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
                 nodata = false;
             }
@@ -258,15 +436,15 @@ public class ChartWidgetUtil {
         return result;
     }
 
-
+    
     /**
      * Generates chart dataset from AMP data.
      * This dataset is required to generate chart object.
      * Because this chart show changes of some values in time we use time series objects.
-     * It creates two lines (TimeSeries): one line is desired change of values, which connects base value to target value,
+     * It creates two lines (TimeSeries): one line is desired change of values, which connects base value to target value, 
      * and another line is actual change of indicator value, it connects all actual value points.
-     * So we go through values of the indicator and put them in the correct TimeSeries objects.
-     * Correctness of the resulting chart depends on correctness of data.
+     * So we go through values of the indicator and put them in the correct TimeSeries objects. 
+     * Correctness of the resulting chart depends on correctness of data.  
      * @param indicator
      * @return
      * @throws DgException
@@ -292,7 +470,7 @@ public class ChartWidgetUtil {
 		}
 		return ds;
 	}
-
+	
 	/**
 	 * Returns all chart widgets.
 	 * @return
@@ -324,7 +502,7 @@ public class ChartWidgetUtil {
 		if (widget==null) return null;
 		return (AmpWidgetIndicatorChart)widget;
 	}
-
+	
 	/**
 	 * Loads indicator chart widget by its ID.
 	 * @param widgetId
@@ -342,7 +520,7 @@ public class ChartWidgetUtil {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Saves or creates indicator chart widget in db.
 	 * @param widget
@@ -370,7 +548,7 @@ public class ChartWidgetUtil {
 		}
 		return widget;
 	}
-
+	
 	/**
 	 * Removes indicator chart widget from db.
 	 * @param widget
@@ -396,10 +574,10 @@ public class ChartWidgetUtil {
 			throw new DgException("Cannot delete chart widget");
 		}
 	}
-
+	
 	/**
 	 * Checks if there is an widget for specified indicator.
-	 * This helps to prevent deletion of indicator while it is assigned to widgets.
+	 * This helps to prevent deletion of indicator while it is assigned to widgets. 
 	 * @param sectorIndicator
 	 * @return true if widgets for the indicator is found in db. othervise false is returned.
 	 * @throws DgException
@@ -420,7 +598,7 @@ public class ChartWidgetUtil {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Generates chart of sector-donor funding.
 	 * @param donors ID's of donors to use in calculation
@@ -430,66 +608,40 @@ public class ChartWidgetUtil {
 	 * @throws DgException
 	 * @throws WorkerException
 	 */
-	   public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException, WorkerException {
-        JFreeChart result = null;
-        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
-        String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
-        String title = (opt.isShowTitle()) ? titleMsg : null;
-        boolean tooltips = true;
-        boolean urls = true;
-        result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
-        String donorString = "";
-        if (donors != null) {
-            donorString += "~donorId=" + getInStatment(donors);
-        }
-        String url = opt.getUrl() + "~startYear=" + fromYear + "~endYear=" + toYear + donorString;
-        PiePlot plot = (PiePlot) result.getPlot();
+	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer fromYear,Integer toYear,ChartOption opt)throws DgException,WorkerException{
+		JFreeChart result = null;
+		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear,opt);		
+		
+        String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
+		String title = (opt.isShowTitle())? titleMsg:null;
+		boolean tooltips = false;
+		boolean urls = false;
+		result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
+		PiePlot plot = (PiePlot)result.getPlot();
 
-        if (opt.isShowTitle()) {
-            Font font = new Font(null, 0, 12);
-            result.getTitle().setFont(font);
-        }
-       String pattern = "{0} {1} ({2})";
-       if (opt.getLabelPattern() != null) {
-               pattern = opt.getLabelPattern();
-        }
-
-        if (opt.isShowLabels()) {
-        PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
-        plot.setLabelGenerator(gen);
-        plot.setSimpleLabels(true);
-        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
-        plot.setLabelGap(0);
-        plot.setLabelLinkMargin(0.05);
-        plot.setLabelShadowPaint(null);
-        plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
-        } else {
-            plot.setLabelGenerator(null);
-        }
-
-           //plot.setSectionOutlinesVisible(false);
-           LegendTitle lt = result.getLegend();
-           if (lt != null) {
-               Font labelFont = new Font(null, Font.PLAIN, 9);
-               lt.setItemFont(labelFont);
-               plot.setLabelFont(labelFont);
-               lt.setPosition(RectangleEdge.RIGHT);
-               lt.setVerticalAlignment(VerticalAlignment.TOP);
-               lt.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-               plot.setLegendItemShape(new Rectangle(10, 10));
-               DecimalFormat format = FormatHelper.getDecimalFormat();
-               format.setMaximumFractionDigits(0);
-               PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
-               plot.setLegendLabelGenerator(genLegend);
-               plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
-
-           }
-        DonorSectorPieChartURLGenerator urlGen = new DonorSectorPieChartURLGenerator(url);
-        plot.setURLGenerator(urlGen);
-        plot.setIgnoreNullValues(true);
-        plot.setIgnoreZeroValues(true);
-        return result;
-    }
+		if (opt.isShowTitle()){
+			Font font = new Font(null,0,12);
+			result.getTitle().setFont(font);
+		}
+		
+		if (opt.isShowLabels()){
+			String pattern = "{0} = {1} ({2})";
+			if (opt.getLabelPattern()!=null){
+				pattern=opt.getLabelPattern();
+			}
+                        DecimalFormat format=FormatHelper.getDecimalFormat();
+                        format.setMaximumFractionDigits(0);
+			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,format,new DecimalFormat("0.0%"));
+			plot.setLabelGenerator(gen);
+		}else{
+			plot.setLabelGenerator(null);
+		}
+		
+		//plot.setSectionOutlinesVisible(false);
+		plot.setIgnoreNullValues(true);
+		plot.setIgnoreZeroValues(true);
+		return result;
+	}
 
       /**
      * Generates chart object from specified filters and options.
@@ -500,12 +652,12 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-
-
+        
+        
     public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
-        Font titleFont = new Font("Arial", Font.BOLD, 12);
-        Font plainFont = new Font("Arial", Font.PLAIN, 10);
+        Font font12 = new Font(null, Font.BOLD, 12);
+    	Font font8 = new Font(null,Font.BOLD,8);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
         String transTypeName="";
         switch(filter.getTransactionType()){
@@ -514,34 +666,25 @@ public class ChartWidgetUtil {
         }
         String transTypeNameTrn=TranslatorWorker.translateText(transTypeName,opt.getLangCode(),opt.getSiteId());
 
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+" | "+filter.getCurrName()+")", dataset, true, true, false);
-        chart.getTitle().setFont(titleFont);
-        LegendTitle legend = chart.getLegend();
-        legend.setItemFont(plainFont);
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+")", dataset, true, true, false);
+        chart.getTitle().setFont(font12);
+        if (opt.isShowLegend()) {
+            chart.getLegend().setItemFont(font12);
+        }
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setLabelFont(plainFont);
-        String pattern = "{0} {1} ({2})";
+        plot.setLabelFont(font8);
+        String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
         }
-
         DecimalFormat format = FormatHelper.getDecimalFormat();
         format.setMaximumFractionDigits(0);
-        PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
         plot.setLabelGenerator(gen);
-        plot.setSimpleLabels(true);
-        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
-        plot.setLabelGap(0);
-        plot.setLabelLinkMargin(0.05);
-        plot.setLabelShadowPaint(null);
-        plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
-        legend.setPosition(RectangleEdge.LEFT);
-        legend.setVerticalAlignment(VerticalAlignment.TOP);
-        legend.setHorizontalAlignment(HorizontalAlignment.LEFT);
-        plot.setLegendItemShape(new Rectangle(10,10));
-        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
-        plot.setLegendLabelGenerator(genLegend);
-        plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
+        plot.setLegendLabelGenerator(gen);
+
+
+
         return chart;
     }
       /**
@@ -553,13 +696,12 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-
-       public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
-     	JFreeChart chart = null;
-        Font titleFont = new Font("Arial", Font.BOLD, 12);
-        Font plainFont = new Font("Arial", Font.PLAIN, 10);
-
-        DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
+       
+       public static JFreeChart getRegionByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
+        JFreeChart chart = null;
+        Font font12 = new Font(null, Font.BOLD, 12);
+        Font font8 = new Font(null, Font.BOLD, 8);
+        DefaultPieDataset dataset = getDonorRegionalDataSet(filter);
         String transTypeName = "";
         switch (filter.getTransactionType()) {
             case org.digijava.module.aim.helper.Constants.COMMITMENT:
@@ -570,33 +712,23 @@ public class ChartWidgetUtil {
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1)  +" | "+filter.getCurrName()+")", dataset, true, true, false);
-        chart.getTitle().setFont(titleFont);
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + ")", dataset, true, true, false);
+        chart.getTitle().setFont(font12);
+        if (opt.isShowLegend()) {
+            chart.getLegend().setItemFont(font12);
+        }
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setLabelFont(titleFont);
-        String pattern = "{0} {1} ({2})";
+        plot.setLabelFont(font8);
+
+        String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
         }
         DecimalFormat format = FormatHelper.getDecimalFormat();
-        format.setMaximumFractionDigits(0);
-        PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+
+        plot.setLegendLabelGenerator(gen);
         plot.setLabelGenerator(gen);
-        plot.setSimpleLabels(true);
-        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
-        plot.setLabelGap(0);
-        plot.setLabelLinkMargin(0.05);
-        plot.setLabelShadowPaint(null);
-        plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
-        plot.setLabelFont(plainFont);
-        LegendTitle legend = chart.getLegend();
-        legend.setPosition(RectangleEdge.LEFT);
-        legend.setVerticalAlignment(VerticalAlignment.TOP);
-        legend.setItemFont(plainFont);    
-        plot.setLegendItemShape(new Rectangle(10,10));
-        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
-        plot.setLegendLabelGenerator(genLegend);
-        plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
         return chart;
     }
 
@@ -614,61 +746,51 @@ public class ChartWidgetUtil {
 		if (fromYear!=null && toYear!=null){
 			/**
 			 * we should get default calendar and from/to dates should be taken according to it.
-			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from
-			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July
+			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from 
+			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July 
 			 */
 			Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
-			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
+			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);						
 			fromDate=getStartOfYear(fromYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
 			//we need data including the last day of toYear,this is till the first day of toYear+1
 			int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 			toDate =new Date(getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
-		}
-        BigDecimal[] allFundingWrapper={BigDecimal.ZERO};// to hold whole funding value
+		}		
+        Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
-            BigDecimal otherFunding=BigDecimal.ZERO;
-            String otherIds="";
+            double otherFunfing=0;
 			for (DonorSectorFundingHelper funding : fundings) {
-				Double percent = (funding.getFounding().divide(allFundingWrapper[0],3,RoundingMode.HALF_UP)).doubleValue();
+				Double percent = funding.getFounding() / allFundingWrapper[0];
                 // the sectors which percent is less then 5% should be group in "Other"
-                AmpSector sector = funding.getSector();
-
-                if (percent >= 0.05) {
-                    SectorHelper secHelper=new SectorHelper();
-                    secHelper.setName(sector.getName());
-                    secHelper.setIds(sector.getAmpSectorId().toString());
-                    ds.setValue(secHelper, funding.getFounding().setScale(10, RoundingMode.HALF_UP));
+                if (percent > 0.05) {
+                	ds.setValue(funding.getSector().getName(), Math.round(funding.getFounding()));
                 } else {
-                    otherFunding = otherFunding.add(funding.getFounding());
-                    otherIds += sector.getAmpSectorId() + ",";
+                	otherFunfing += funding.getFounding();
                 }
 			}
-                    if (!otherFunding.equals(BigDecimal.ZERO)) {
-                        String otherSectors = "Other Sectors";
-                        try {
-                            otherSectors = TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
-                        } catch (WorkerException e) {
-                            e.printStackTrace();
-                        }
-                        SectorHelper secHelper = new SectorHelper();
-                        secHelper.setName(otherSectors);
-                        secHelper.setIds(otherIds.substring(0,otherIds.length()-1));
-                        ds.setValue(secHelper, otherFunding.setScale(10, RoundingMode.HALF_UP));
-                    }
+            if(otherFunfing!=0){
+            	String otherSectors="Other Sectors";
+            	try {
+					otherSectors=TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
+				} catch (WorkerException e) {					
+					e.printStackTrace();
+				}
+            	ds.setValue(otherSectors,Math.round(otherFunfing));
+            }		
 		}
 		return ds;
 	}
-
+        
 	public static Date getStartOfYear(int year, int month,int day){
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.set(year, month, day, 0, 0, 0);
 		return cal.getTime();
 	}
-
+	
 	/**
-	 * Returns collection of DonorSectorFundingHelper beans.
-	 * Each of them represents funding of one particular sector.
+	 * Returns collection of DonorSectorFundingHelper beans. 
+	 * Each of them represents funding of one particular sector. 
 	 * @param donorIDs
 	 * @param fromDate
 	 * @param toDate
@@ -676,9 +798,10 @@ public class ChartWidgetUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	 public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,BigDecimal[] wholeFunding) throws DgException {
-    	Collection<DonorSectorFundingHelper> fundings=null;
-		String oql ="select actSec.sectorId, sum(fd.transactionAmountInUSD*actSec.sectorPercentage*0.01)";
+	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
+    	Collection<DonorSectorFundingHelper> fundings=null;  
+		String oql ="select  actSec.ampActivitySectorId, "+
+                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInBaseCurrency)";
 		oql += " from ";
 		oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
@@ -687,6 +810,8 @@ public class ChartWidgetUtil {
                         " inner join actSec.sectorId sec "+
                         " inner join actSec.activityId act "+
                         " inner join actSec.classificationConfig config ";
+		
+		
 		oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
@@ -695,7 +820,9 @@ public class ChartWidgetUtil {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
         oql +=" and config.name='Primary' and act.team is not null ";
-		oql += " group by actSec.sectorId ";
+        //  strange oracle doesn't understand act.ampActivityId... need to investigate...
+		oql += " group by act.ampActivityId.ampActivityId, actSec.ampActivitySectorId ";
+		oql += " order by actSec.ampActivitySectorId";
 
 		Session session = PersistenceManager.getRequestDBSession();
 
@@ -714,18 +841,28 @@ public class ChartWidgetUtil {
 		} catch (Exception e) {
 			throw new DgException(
 					"Cannot load sector fundings by donors from db", e);
-		}
-
+		}	
+		
 		//Process grouped data
 		if (result != null) {
 			Map<Long, DonorSectorFundingHelper> donors = new HashMap<Long, DonorSectorFundingHelper>();
 			for (Object row : result) {
 				Object[] rowData = (Object[]) row;
 				//AmpOrganisation donor = (AmpOrganisation) rowData[0];
-				AmpSector sector =(AmpSector) rowData[0];
-				BigDecimal amt = new BigDecimal((Double)rowData[1]);
-				BigDecimal amount =FeaturesUtil.applyThousandsForVisibility(amt);
-                sector = SectorUtil.getTopLevelParent(sector);
+                Long activitySectorId=(Long) rowData[0];
+                AmpActivitySector activitySector=ActivityUtil.getAmpActivitySector(activitySectorId);
+				AmpSector sector =activitySector.getSectorId() ;
+				Float sectorPrcentage =activitySector.getSectorPercentage();    //This field is NULL sometimes !
+				//AmpActivity activity = (AmpActivity) rowData[3];
+				//AmpCurrency currency = (AmpCurrency) rowData[4];
+				Double amt = (Double) rowData[2];
+                Double amount =FeaturesUtil.applyThousandsForVisibility(amt);
+				//calculate percentage
+				Double calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
+				//convert to
+				//Double converted = convert(calculated, currency);
+				//search if we already have such sector data
+                                sector = SectorUtil.getAmpParentSector(sector.getAmpSectorId());
 				DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
 				//if not create and add to map
 				if (sectorFundngObj == null){
@@ -733,80 +870,14 @@ public class ChartWidgetUtil {
 					donors.put(sector.getAmpSectorId(), sectorFundngObj);
 				}
 				//add amount to sector
-				sectorFundngObj.addFunding(amount);
-               //calculate whole funding information
-               wholeFunding[0]=wholeFunding[0].add(amount);
+				sectorFundngObj.addFunding(calculated.doubleValue());
+                                //calculate whole funding information
+                                wholeFunding[0]+=calculated.doubleValue();
 			}
-			fundings = donors.values();
+			fundings = donors.values(); 
 		}
 		return fundings;
 	}
-
-    public static Double getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Long sectorIds[]) throws DgException {
-        Double amount = 0d;
-        Long[] sectIds = null;
-        if (sectorIds != null) {
-            for (Long sectId : sectorIds) {
-                List<Long> ids = new ArrayList<Long>();
-                ids.add(sectId);
-                List<AmpSector> sectors = SectorUtil.getAllDescendants(sectId);
-                for (AmpSector sector : sectors) {
-                    ids.add(sector.getAmpSectorId());
-                }
-                sectIds = new Long[ids.size()];
-                ids.toArray(sectIds);
-
-            }
-        }
-
-        List result = getFunding(donorIDs, fromDate, toDate, sectIds);
-        //Process grouped data
-        if (result != null) {
-            amount = ((Double) result.get(0));
-        }
-        if (amount == null) {
-            amount = 0d;
-        }
-        return amount;
-
-
-    }
-
-       public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
-        String oql = "select   sum(fd.transactionAmountInUSD*actSec.sectorPercentage*0.01)";
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec " + " inner join actSec.sectorId sec " + " inner join actSec.activityId act " + " inner join actSec.classificationConfig config ";
-        oql += " where   fd.transactionType = 0 and fd.adjustmentType = 1 ";
-        if (donorIDs != null && donorIDs.length > 0) {
-            oql += " and (fd.ampFundingId.ampDonorOrgId in (" + getInStatment(donorIDs) + ") ) ";
-        }
-        if (fromDate != null && toDate != null) {
-            oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
-        }
-        if(sectorIds!=null){
-              oql += " and actSec.sectorId in (" + getInStatment(sectorIds) + ") ";
-        }
-        oql += " and config.name='Primary' and act.team is not null ";
-        Session session = PersistenceManager.getRequestDBSession();
-        //search for grouped data
-        @SuppressWarnings(value = "unchecked")
-        List result = null;
-        try {
-            Query query = session.createQuery(oql);
-            if (fromDate != null && toDate != null) {
-                query.setDate("fDate", fromDate);
-                query.setDate("eDate", toDate);
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MMMM-dd hh:mm:ss");
-                logger.debug("Filtering from " + df.format(fromDate) + " to " + df.format(toDate));
-            }
-            result = query.list();
-        } catch (Exception e) {
-            throw new DgException("Cannot load sector fundings by donors from db", e);
-        }
-        return result;
-    }
-
 
      /**
      * Generates Pie dataset using  filters .
@@ -815,12 +886,10 @@ public class ChartWidgetUtil {
      * @return CategoryDataset
      * @throws DgException
      */
-
-    @SuppressWarnings("unchecked")
-    public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
+        
+	   public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
         Long year = filter.getYear();
         Long orgGroupId = filter.getOrgGroupId();
-        BigDecimal regionalTotal = BigDecimal.ZERO;
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -832,7 +901,7 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
-        Long[] orgIds = filter.getOrgIds();
+        Long orgID = filter.getOrgId();
         int transactionType = filter.getTransactionType();
         TeamMember teamMember = filter.getTeamMember();
         DefaultPieDataset ds = new DefaultPieDataset();
@@ -841,7 +910,7 @@ public class ChartWidgetUtil {
         // apply calendar filter
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
-        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
+        Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         /*
          * We are selecting regions which are funded
          * In selected year by the selected organization
@@ -854,23 +923,28 @@ public class ChartWidgetUtil {
 
         oql += " inner join act.locations loc inner join loc.location.regionLocation reg where " +
                 " reg is not null  and fd.transactionType =:transactionType and  fd.adjustmentType = 1";
-        if (orgIds == null) {
-            if(orgGroupId!=-1){
-                oql += getOrganizationQuery(true,orgIds);
-            }
-        } else {
-            oql += getOrganizationQuery(false,orgIds);
-        }
+           if (orgID == null || orgID == -1) {
+               if (orgGroupId != null && orgGroupId != -1) {
+                   oql += getOrganizationQuery(true);
+               }
+           } else {
+               oql += getOrganizationQuery(false);
+           }
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += getTeamQuery(teamMember);
         Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
         List<AmpCategoryValueLocations> regions = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if (orgIds == null&&orgGroupId!=-1) {
+            if (orgID != null && orgID != -1) {
+                query.setLong("orgID", orgID);
+            } else {
+                if (orgGroupId != null && orgGroupId != -1) {
                     query.setLong("orgGroupId", orgGroupId);
+                }
             }
             query.setLong("transactionType", transactionType);
             if (teamMember != null) {
@@ -895,20 +969,26 @@ public class ChartWidgetUtil {
                         " loc.location.regionLocation reg ";
 
                 oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
-                if (orgIds == null) {
-                    if(orgGroupId!=-1){
-                       oql += getOrganizationQuery(true, orgIds);
+                if (orgID == null || orgID == -1) {
+                    if (orgGroupId != null && orgGroupId != -1) {
+                        oql += getOrganizationQuery(true);
                     }
                 } else {
-                    oql += getOrganizationQuery(false, orgIds);
+
+                    oql += getOrganizationQuery(false);
                 }
+
                 oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and reg is not null and reg.id=  " + region.getId();
                 oql += getTeamQuery(teamMember);
                 query = session.createQuery(oql);
                 query.setDate("startDate", startDate);
                 query.setDate("endDate", endDate);
-                if (orgIds == null&&orgGroupId!=-1) {
-                    query.setLong("orgGroupId", orgGroupId);
+                if (orgID != null && orgID != -1) {
+                    query.setLong("orgID", orgID);
+                } else {
+                    if (orgGroupId != null && orgGroupId != -1) {
+                        query.setLong("orgGroupId", orgGroupId);
+                    }
                 }
                 query.setLong("transactionType", transactionType);
                 if (teamMember != null) {
@@ -933,23 +1013,7 @@ public class ChartWidgetUtil {
                 } else {
                     total = cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.getValue().setScale(10, RoundingMode.HALF_UP));
-                regionalTotal =regionalTotal.add(total.getValue());
-            }
-            List<String> keys = ds.getKeys();
-            Iterator<String> keysIter = keys.iterator();
-            BigDecimal othersValue = BigDecimal.ZERO;
-            while (keysIter.hasNext()) {
-                String key = keysIter.next();
-                BigDecimal value = (BigDecimal) ds.getValue(key);
-                Double percent = (value.divide(regionalTotal,3,RoundingMode.HALF_UP)).doubleValue();
-                if (percent <= 0.05) {
-                    othersValue=othersValue .add(value);
-                    ds.remove(key);
-                }
-            }
-            if (!othersValue.equals(BigDecimal.ZERO)) {
-                ds.setValue("Others", othersValue.setScale(10, RoundingMode.HALF_UP));
+                ds.setValue(region.getName(), total.doubleValue());
             }
         } catch (Exception e) {
             logger.error(e);
@@ -969,10 +1033,10 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
 
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("empty-statement")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
 
-
+     
         /* if user doesn't select year, currency we are
         taking this information from global settings value*/
 
@@ -988,7 +1052,7 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
-        Long[] orgIds = filter.getOrgIds();
+        Long orgID = filter.getOrgId();
         Long orgGroupId=filter.getOrgGroupId();
         int transactionType=filter.getTransactionType();
         TeamMember tm=filter.getTeamMember();
@@ -1015,26 +1079,33 @@ public class ChartWidgetUtil {
                 " inner join actSec.sectorId sec " +
                 " inner join actSec.activityId act " +
                 " inner join actSec.classificationConfig config ";
-
+        
         oql += "  where  " +
                 " fd.adjustmentType = 1 and fd.transactionType =:transactionType  ";
-        if (orgIds == null) {
-            if(orgGroupId!=-1){
-                oql += getOrganizationQuery(true,orgIds);
+        if (orgID == null || orgID == -1) {
+            if (orgGroupId != null && orgGroupId != -1) {
+                oql += getOrganizationQuery(true);
             }
         } else {
-            oql += getOrganizationQuery(false,orgIds);
+
+            oql += getOrganizationQuery(false);
         }
+
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.name='Primary' ";
         oql+=getTeamQuery(tm);
         Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
         List<AmpSector> sectors = null;
         try {
             Query query = session.createQuery(oql);
              query.setDate("startDate", startDate);
              query.setDate("endDate", endDate);
-            if (orgIds == null&&orgGroupId!=-1) {
-                query.setLong("orgGroupId", orgGroupId);         
+            if (orgID != null && orgID != -1) {
+                query.setLong("orgID", orgID);
+            } else {
+                 if (orgGroupId != null && orgGroupId != -1) {
+                    query.setLong("orgGroupId", orgGroupId);
+                }
             }
             query.setLong("transactionType", transactionType);
             if(tm!=null){
@@ -1042,51 +1113,25 @@ public class ChartWidgetUtil {
 
             }
             sectors = query.list();
-             // to calculate funding for all sectors
-            BigDecimal totAllSectors = BigDecimal.ZERO;
+            // calculate funding for all sectors
+            DecimalWraper totAllSeqtors= getSectorFunding(startDate,endDate,orgID,orgGroupId,transactionType,null,currCode, tm);;
             Iterator<AmpSector> sectorIter = sectors.iterator();
-            BigDecimal others = BigDecimal.ZERO;
-            Map<Long, DonorSectorFundingHelper> sectorsMap = new HashMap<Long, DonorSectorFundingHelper>();
+            double others=0;
             while (sectorIter.hasNext()) {
                 AmpSector sector = sectorIter.next();
                 // calculate funding for each sector
-                DecimalWraper amount = getSectorFunding(startDate, endDate, orgIds, orgGroupId, transactionType, sector.getAmpSectorId(), currCode, tm);
-                AmpSector topLevelSector = SectorUtil.getTopLevelParent(sector);
-                Long topSectorId = topLevelSector.getAmpSectorId();
-                // getting object from map
-                DonorSectorFundingHelper sectorFundngObj = sectorsMap.get(topSectorId);
-                //if not create and add to map
-                if (sectorFundngObj == null) {
-                    sectorFundngObj = new DonorSectorFundingHelper(topLevelSector);
-                    sectorsMap.put(topSectorId, sectorFundngObj);
+                DecimalWraper total=getSectorFunding(startDate,endDate,orgID,orgGroupId,transactionType,sector.getAmpSectorId(),currCode, tm);
+                double percent=total.doubleValue()/totAllSeqtors.doubleValue();
+                // the sectors which percent is less then 5% should be group in "Others"
+                if (percent > 0.05) {
+                    ds.setValue(sector.getName(), total.doubleValue());
+                } else {
+                    others+=total.doubleValue();
                 }
-                if(amount!=null){
-                    BigDecimal amt=new BigDecimal(amount.doubleValue());
-                    //add amount to sector
-                    sectorFundngObj.addFunding(amt);
-                     // adding to total funding amount
-                    totAllSectors=totAllSectors.add(amt);
-                }
-
-
+                
             }
-            if (!sectorsMap.isEmpty()) {
-                Collection<DonorSectorFundingHelper> secFundCol = sectorsMap.values();
-                Iterator<DonorSectorFundingHelper> secFundColIter = secFundCol.iterator();
-                while (secFundColIter.hasNext()) {
-                    DonorSectorFundingHelper sectorFunding = secFundColIter.next();
-                    Double percent = sectorFunding.getFounding().divide(totAllSectors,3,RoundingMode.HALF_UP).doubleValue();
-                    // if percent is less than 5, group in "others"
-                    if (percent>=0.05) {
-                        ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding().setScale(10, RoundingMode.HALF_UP));
-                    } else {
-                        others=others.add(sectorFunding.getFounding().setScale(10, RoundingMode.HALF_UP));
-
-                    }
-                    }
-                }
-            if (others.doubleValue()>0) {
-                ds.setValue("Others", others);
+            if(others>0){
+                  ds.setValue("Others", others);
             }
         } catch (Exception e) {
             logger.error(e);
@@ -1114,8 +1159,7 @@ public class ChartWidgetUtil {
      * @see FundingCalculationsHelper
      */
 
-    @SuppressWarnings("unchecked")
-	public static DecimalWraper getSectorFunding(Date startDate, Date endDate, Long[] orgIds, Long orgGroupId, int transactionType, Long sectorId, String currCode, TeamMember tm) throws DgException {
+    public static DecimalWraper getSectorFunding(Date startDate, Date endDate, Long orgId, Long orgGroupId, int transactionType, Long sectorId, String currCode, TeamMember tm) throws DgException {
         Session session = PersistenceManager.getRequestDBSession();
         String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
         oql += " from ";
@@ -1130,13 +1174,12 @@ public class ChartWidgetUtil {
         oql += "  where  " +
                 "   fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)    and config.name='Primary'  ";
-        if (orgIds == null) {
-            if (orgGroupId != -1) {
-                oql += getOrganizationQuery(true, orgIds);
+        if (orgId == null || orgId == -1) {
+            if (orgGroupId != null && orgGroupId != -1) {
+                oql += getOrganizationQuery(true);
             }
-
         } else {
-            oql += getOrganizationQuery(false, orgIds);
+            oql += getOrganizationQuery(false);
         }
         if (sectorId != null) {
             oql += " and  sec.ampSectorId=:sectorId  ";
@@ -1145,8 +1188,12 @@ public class ChartWidgetUtil {
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
         query.setDate("endDate", endDate);
-        if (orgIds == null&&orgGroupId!=-1) {
-            query.setLong("orgGroupId", orgGroupId);
+        if (orgId != null && orgId != -1) {
+            query.setLong("orgID", orgId);
+        } else {
+            if (orgGroupId != null && orgGroupId != -1) {
+                query.setLong("orgGroupId", orgGroupId);
+            }
         }
         query.setLong("transactionType", transactionType);
         if (sectorId != null) {
@@ -1183,11 +1230,10 @@ public class ChartWidgetUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-
-
-
-	   @SuppressWarnings("unchecked")
-	public static DecimalWraper getFundingByFinancingInstrument(Long[] orgIds, Long orgGroupId, Date startDate,Date endDate, Long financingInstrumentId, String currCode, int transactionType, TeamMember tm) throws DgException {
+        
+        
+      
+	   public static DecimalWraper getFundingByFinancingInstrument(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long financingInstrumentId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
         oql += " from ";
@@ -1197,12 +1243,12 @@ public class ChartWidgetUtil {
 
         oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1  ";
 
-        if (orgIds == null) {
-            if(orgGroupId!=-1){
-               oql += getOrganizationQuery(true,orgIds);
-            }
+        if (orgID == null || orgID == -1) {
+              if (orgGroupId != null && orgGroupId != -1) {
+            oql += getOrganizationQuery(true);
+              }
         } else {
-            oql += getOrganizationQuery(false,orgIds);
+                oql += getOrganizationQuery(false);
         }
 
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
@@ -1212,13 +1258,18 @@ public class ChartWidgetUtil {
 
 
         Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if (orgIds == null&&orgGroupId!=-1) {
-                 query.setLong("orgGroupId", orgGroupId);
+            if (orgID != null && orgID != -1) {
+                query.setLong("orgID", orgID);
+            } else {
+                if (orgGroupId != null && orgGroupId != -1) {
+                    query.setLong("orgGroupId", orgGroupId);
+                }
             }
             query.setLong("transactionType", transactionType);
             query.setLong("financingInstrumentId", financingInstrumentId);
@@ -1263,11 +1314,10 @@ public class ChartWidgetUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
+        
+       
 
-
-
-	   @SuppressWarnings("unchecked")
-	public static DecimalWraper getFunding(Long[] orgIds, Long orgGroupId, Date startDate,Date endDate, Long assistanceTypeId, String currCode, int transactionType, TeamMember tm) throws DgException {
+	   public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long assistanceTypeId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
         oql += " from ";
@@ -1276,12 +1326,12 @@ public class ChartWidgetUtil {
         oql += "   inner join f.ampActivityId act ";
 
         oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
-        if (orgIds == null ) {
-            if (orgGroupId != -1) {
-                oql += getOrganizationQuery(true,orgIds);
-            } 
+        if (orgID == null || orgID == -1) {
+            if (orgGroupId != null && orgGroupId != -1) {
+                oql += getOrganizationQuery(true);
+            }
         } else {
-                oql += getOrganizationQuery(false,orgIds);
+                oql += getOrganizationQuery(false);
         }
 
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
@@ -1291,13 +1341,18 @@ public class ChartWidgetUtil {
         oql += getTeamQuery(tm);
 
         Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if (orgIds == null&&orgGroupId!=-1) {
-                  query.setLong("orgGroupId", orgGroupId);
+            if (orgID != null && orgID != -1) {
+                query.setLong("orgID", orgID);
+            } else {
+                if (orgGroupId != null && orgGroupId != -1) {
+                    query.setLong("orgGroupId", orgGroupId);
+                }
             }
             query.setLong("assistanceTypeId", assistanceTypeId);
             query.setLong("transactionType", transactionType);
@@ -1337,33 +1392,37 @@ public class ChartWidgetUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
+        
+       
 
-
-
-    @SuppressWarnings("unchecked")
-	public static double getPledgesFunding(Long[] orgIds, Long orgGroupId,  Date startDate,Date endDate, String currCode) throws DgException {
+    public static double getPledgesFunding(Long orgID, Long orgGroupId,  Date startDate,Date endDate, String currCode) throws DgException {
         double totalPlannedPldges = 0;
         String oql = "select fd ";
         oql += " from ";
         oql += AmpOrganisation.class.getName() +
                 " org inner join org.fundingDetails fd ";
         oql += " where    fd.adjustmentType = 0 ";
-        if (orgIds == null) {
-           if(orgGroupId!=-1){
-               oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
-           }
+        if (orgID == null || orgID == -1) {
+            if (orgGroupId != null && orgGroupId != -1) {
+                oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
+            }
         } else {
-            oql += " and org.ampOrgId in ("+getInStatment(orgIds)+") ";
+            oql += " and org.ampOrgId=:orgID ";
         }
         oql += " and fd.date>=:startDate and fd.date<=:endDate ";
         Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
         List<AmpPledge> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if (orgIds == null&&orgGroupId!=-1) {
-                query.setLong("orgGroupId", orgGroupId);
+            if (orgID != null && orgID != -1) {
+                query.setLong("orgID", orgID);
+            } else {
+                if (orgGroupId != null && orgGroupId != -1) {
+                    query.setLong("orgGroupId", orgGroupId);
+                }
             }
             fundingDets = query.list();
             Iterator<AmpPledge> fundDetIter = fundingDets.iterator();
@@ -1413,7 +1472,7 @@ public class ChartWidgetUtil {
                         orgIds+=getComputationOrgsQry(childTeam);
                         teamIds+=childTeam.getAmpTeamId()+",";
                     }
-
+                       
                     if (teamIds.length() > 1) {
                         teamIds = teamIds.substring(0, teamIds.length() - 1);
                         qr += "  act.team.ampTeamId in ( " + teamIds + ")";
@@ -1423,7 +1482,7 @@ public class ChartWidgetUtil {
                         qr+=" or f.ampDonorOrgId in(" +  orgIds + ")";
                     }
 
-
+                   
                     qr += " ) and act.draft=false and act.approvalStatus in ('approved','edited') ";
                 }
 
@@ -1446,19 +1505,27 @@ public class ChartWidgetUtil {
             }
 
         }
+
+
+
         return orgIds;
+
+
     }
 
-	public static String getOrganizationQuery(boolean orgGroupView,Long[] orgIds) {
-		String qry = "";
-		if (orgGroupView) {
-			qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId=:orgGroupId ";
-		} else {
-			qry = " and f.ampDonorOrgId in ("+getInStatment(orgIds)+") ";
-		}
-		return qry;
-	}
+       public static String getOrganizationQuery(boolean orgGroupView) {
+        String qry="";
+        if(orgGroupView){
+            qry=" and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId=:orgGroupId ";
+        }
+        else{
+           qry=" and f.ampDonorOrgId=:orgID ";
+        }
+        return qry;
 
+    }
+
+        
       /**
        * Returns actual or planned amount in selected currency
        * for selected organization and year
@@ -1469,8 +1536,9 @@ public class ChartWidgetUtil {
        * @return
        * @throws org.digijava.kernel.exception.DgException
        */
-    @SuppressWarnings("unchecked")
-	public static DecimalWraper getFunding(Long[] orgIds, Long orgGroupId, Date startDate,Date endDate, String currCode, boolean isComm, TeamMember tm) throws DgException {
+       
+
+    public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, String currCode, boolean isComm, TeamMember tm) throws DgException {
         String oql = "select fd ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() +
@@ -1478,26 +1546,33 @@ public class ChartWidgetUtil {
         oql += "   inner join f.ampActivityId act ";
 
         oql += " where  fd.adjustmentType = 1 ";
-        if (orgIds == null) {
-            if(orgGroupId!=-1){
-               oql += getOrganizationQuery(true,orgIds);
+        if (orgID == null || orgID == -1) {
+            if (orgGroupId != null && orgGroupId != -1) {
+                oql += getOrganizationQuery(true);
             }
         } else {
-            oql += getOrganizationQuery(false,orgIds);
+
+            oql += getOrganizationQuery(false);
         }
+
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += getTeamQuery(tm);
 
 
         Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
+           query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-             if (orgIds == null&&orgGroupId!=-1) {
-                  query.setLong("orgGroupId", orgGroupId);
-             }
+            if (orgID != null && orgID != -1) {
+                query.setLong("orgID", orgID);
+            } else {
+                if (orgGroupId != null && orgGroupId != -1) {
+                    query.setLong("orgGroupId", orgGroupId);
+                }
+            }
             if (tm != null) {
                 query.setLong("teamId", tm.getTeamId());
 
@@ -1519,8 +1594,8 @@ public class ChartWidgetUtil {
                     "Cannot load sector fundings by donors from db", e);
         }
     }
-
-    public static BigDecimal convert(BigDecimal amount,AmpCurrency originalCurrency){
+    
+    public static Double convert(Double amount,AmpCurrency originalCurrency){
     	try {
 			CurrencyWorker.convertToUSD(amount, originalCurrency.getCurrencyCode());
 		} catch (AimException e) {
@@ -1529,12 +1604,12 @@ public class ChartWidgetUtil {
 		}
     	return amount;
     }
-
-    public static BigDecimal calculatePercentage(BigDecimal amount,Float percentage){
-    	BigDecimal result=amount.multiply(new BigDecimal(percentage)).divide(new BigDecimal(100));
-    	return result;
+    
+    public static Double calculatePercentage(Double amount,Float percentage){
+    	double result=amount.doubleValue()*percentage.floatValue()/100;
+    	return new Double(result);
     }
-
+    
     public static String getInStatment(Long ids[]){
     	String oql="";
 		for (int i = 0; i < ids.length; i++) {
@@ -1545,7 +1620,7 @@ public class ChartWidgetUtil {
 		}
     	return oql;
     }
-
+    
     /**
      * Key worker for donors
      * @author Irakli Kobiashvili
@@ -1565,7 +1640,7 @@ public class ChartWidgetUtil {
 		public Long resolveKey(AmpOrganisation element) {
 			return element.getAmpOrgId();
 		}
-
+    	
     }
     //from field indicates whether we are taking years for "From Year" dropdown
     public static List<LabelValueBean> getYears(boolean from){
@@ -1585,7 +1660,7 @@ public class ChartWidgetUtil {
 		}
     	return getYears(fromYear.intValue(),toYear.intValue(),defaultCalendar.getIsFiscal());
     }
-
+    
     public static List<LabelValueBean> getYears(int fromYear,int toYear,boolean isCalendarFiscal){
     	List<LabelValueBean> years=new ArrayList<LabelValueBean>();
     	for (int year=fromYear;year<=toYear;year++) {

@@ -11,8 +11,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/category" prefix="category" %>
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
@@ -64,7 +62,7 @@
 			return false;
 
 		}
-       
+
 		if (containsValidNumericValue(document.aimUpdateIndicatorValuesForm.targetVal) == false &&
 
 							 document.aimUpdateIndicatorValuesForm.targetVal.disabled == false) {
@@ -108,25 +106,6 @@
 				return false;
 
 			}
-
-		}
-         if (containsValidNumericValue(document.aimUpdateIndicatorValuesForm.currentVal) == false) {
-
-			alert("Invalid Current value or Current value not entered");
-
-			document.aimUpdateIndicatorValuesForm.currentVal.focus();
-
-			return false;
-
-		}
-
-		if (isEmpty(document.aimUpdateIndicatorValuesForm.currValDate.value) == true) {
-
-			alert("Current value date not entered");
-
-			document.aimUpdateIndicatorValuesForm.currValDate.focus();
-
-			return false;
 
 		}
 
@@ -235,12 +214,9 @@
 						</digi:link>
 
 						&nbsp;&gt;&nbsp;
-                        <digi:link href="/getTeamActivities.do" styleClass="comment">
-                            <digi:trn key="aim:activityList">Activity List</digi:trn>
-                        </digi:link>
-                         &nbsp;&gt;&nbsp;
-                         <digi:trn>Indicator List</digi:trn>
-						
+
+						<digi:trn key="aim:activityList">Activity List</digi:trn>
+
 					</td>
 
 				</tr>
@@ -307,11 +283,10 @@
                                                         <table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
                                                 
                                                             <tr bgcolor="#ffffff">
-                                                                <!--
                                                 
                                                                 <td width="9">
                                                 
-                                                                    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
+                                                                    <img src= "../ampTemplate/images/bullet_red.gif" border=0>
                                                 
                                                                 </td>
                                                 
@@ -320,15 +295,14 @@
                                                                     <digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
                                                 
                                                                 </td>
-                                                                -->
                                                 
                                                                 <td width="9">
                                                 
-                                                                    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" border=0>
+                                                                    <img src= "../ampTemplate/images/bullet_grey.gif" border=0>
                                                 
                                                                 </td>
                                                 
-                                                                <td colspan="3">
+                                                                <td>
                                                 
                                                                     <digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
                                                 
@@ -411,17 +385,17 @@
 
 																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 
-																	<c:if test="${aimUpdateIndicatorValuesForm.indicatorId==indicator.indicatorId}">
+																	<c:if test="${aimUpdateIndicatorValuesForm.expIndicatorId==indicator.indicatorId}">
 
 																		<digi:link href="/collapseIndicator.do">
 
-																		<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" border=0>
+																		<img src= "../ampTemplate/images/arrow_down.gif" border=0>
 
 																		</digi:link>
 
 																	</c:if>
 
-																	<c:if test="${aimUpdateIndicatorValuesForm.indicatorId!=indicator.indicatorId}">
+																	<c:if test="${aimUpdateIndicatorValuesForm.expIndicatorId!=indicator.indicatorId}">
 
 																		<c:set target="${urlParams}" property="indValId">
 
@@ -434,13 +408,10 @@
 																			<bean:write name="aimUpdateIndicatorValuesForm" property="activityId"/>
 
 																		</c:set>
-                                                                        <c:set target="${urlParams}" property="indicatorId">
-																			${indicator.indicatorId}
-																		</c:set>
-                                                                        	
+
 																		<digi:link href="/expandIndicator.do" name="urlParams">
 
-																			<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
+																			<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 
 																		</digi:link>
 
@@ -452,13 +423,13 @@
 
 																	<c:if test="${indicator.defaultInd == true}">
 
-																		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
+																		<img src= "../ampTemplate/images/bullet_red.gif" border=0>
 
 																	</c:if>
 
 																	<c:if test="${indicator.defaultInd == false}">
 
-																		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" border=0>
+																		<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
 
 																	</c:if>
 
@@ -494,9 +465,9 @@
 
 																	<c:set target="${urlParams1}" property="event" value="delete" />
 
-																	<c:set target="${urlParams1}" property="indicatorConId">
+																	<c:set target="${urlParams1}" property="indicatorValId">
 
-																		<bean:write name="indicator" property="connectionId" />
+																		<bean:write name="indicator" property="indicatorValId" />
 
 																	</c:set>
 
@@ -506,7 +477,7 @@
 
 																	onclick="return confirmDelete()">
 
-																		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
 
 																	</digi:link>
 
@@ -514,7 +485,7 @@
 
 																</td></tr>
 
-																<c:if test="${aimUpdateIndicatorValuesForm.indicatorId==indicator.indicatorId}">
+																<c:if test="${aimUpdateIndicatorValuesForm.expIndicatorId==indicator.indicatorId}">
 
 																<tr>
 
@@ -527,16 +498,6 @@
 																		<table cellspacing="0" cellpadding="3" valign="top" align="left"
 
 																		border=0>
-                                                                            <field:display name="Logframe Category" feature="Activity">
-                                                                                <tr>
-                                                                                    <td >
-                                                                                        <digi:trn key="aim:logframeCategory">Logframe Category</digi:trn>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                <category:showoptions name="aimUpdateIndicatorValuesForm" property="logFrameId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.LOGFRAME_KEY%>" styleClass="inp-text" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        </field:display>
 
 																			<tr>
 
@@ -566,7 +527,7 @@
 
 																				<td align="left" vAlign="center">
 																					<a id="date1" href='javascript:pickDate("date1",document.aimUpdateIndicatorValuesForm.baseValDate)'>
-																						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
 																				</td>
 
@@ -662,7 +623,7 @@
 
 																				<td align="left" vAlign="center">
 																					<a id="date2" href='javascript:pickDate("date2",document.aimUpdateIndicatorValuesForm.targetValDate)'>
-																						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
 																				</td>
 
@@ -714,7 +675,7 @@
 
 																				<td align="left" vAlign="center">
 																					<a id="date3" href='javascript:pickDate("date3",document.aimUpdateIndicatorValuesForm.revisedTargetValDate)'>
-																						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
 																				</td>
 
@@ -735,61 +696,6 @@
 																			</tr>
 
 																			</c:if>
-                                                                            <tr>
-
-																				<td><digi:trn>Current Value</digi:trn>
-
-																				<font color="red">*</font>
-
-																				</td>
-
-																				<td><input type="text" name="currentVal" value="${indicator.currentVal}" class="inp-text" size="10"></td>
-
-																				<td><digi:trn>Date</digi:trn>
-
-																				<font color="red">*</font></td>
-
-																				<td><input type="text" name="currValDate" value="${indicator.currentValDate}"
-
-																				class="inp-text" size="10" readonly="true"
-
-																				id="currValDate"></td>
-
-																				<td align="left" vAlign="center">
-																					<a id="date4" href='javascript:pickDate("date4",document.aimUpdateIndicatorValuesForm.currValDate)'>
-																						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
-																					</a>
-																				</td>
-
-																			</tr>
-
-																			<tr>
-
-																				<td><digi:trn>Comments</digi:trn>
-
-																				</td>
-
-																				<td colspan="4">
-
-																					<textarea name="currValComments" class="inp-text" rows="2" cols="38">${indicator.currentValComments}</textarea>
-
-																				</td>
-
-																			</tr>
-                                                                            <field:display name="Risk" feature="Activity">
-                                                                                <tr>
-                                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
-                                                                                    <td colspan="2">
-                                                                                        <b>
-                                                                                            <digi:trn key="aim:meRisk">Risk</digi:trn>
-                                                                                        </b>
-                                                                                        <c:set var="translation">
-                                                                                            <digi:trn>Please select a risk from below</digi:trn>
-                                                                                        </c:set>
-                                                                                <category:showoptions   firstLine="${translation}" name="aimUpdateIndicatorValuesForm" property="riskId"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text"  />
-                                                                                </td>
-                                                                                </tr>
-                                                                            </field:display>
 
 																			<tr>
 
@@ -835,13 +741,13 @@
 
 																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
 
-<!-- the following will be uncommented further -->
+<!-- the following will be uncommented further -->																	
 <!--																	<input class="dr-menu" type="button" name="addIndicator" value="<digi:trn key="aim:addIndicator">Add Indicator</digi:trn>"-->
 <!---->
 <!--																	property="activityId"-->
 <!---->
 <!--																	onclick="return addIndicators()">-->
-																
+
 																</td></tr>
 
 															</table>

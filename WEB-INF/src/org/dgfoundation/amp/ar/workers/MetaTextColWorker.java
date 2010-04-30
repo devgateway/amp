@@ -43,15 +43,14 @@ public class MetaTextColWorker extends TextColWorker {
 		else if(columnName.indexOf("National Planning Objectives") > -1){ 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
 		}
-		else if(columnName.contains(ArConstants.COLUMN_ANY_SECTOR) && (!columnName.equalsIgnoreCase(ArConstants.COLUMN_SECTOR_GROUP)) && !columnName.equalsIgnoreCase(ArConstants.COLUMN_SECTOR_MINISTRY_CONTACT)) {
+		else if(columnName.contains(ArConstants.COLUMN_ANY_SECTOR) && (!columnName.equalsIgnoreCase(ArConstants.COLUMN_SECTOR_GROUP))) {
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
 		} else if(columnName.equals("Executing Agency")){ 
 			double percentage = rs.getDouble(4);
 			if(!rs.wasNull()){
 				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,percentage));	
 			}
-		} else if( ( columnName.equals(ArConstants.COLUMN_REGION) || columnName.equals(ArConstants.COLUMN_ZONE) || columnName.equals(ArConstants.COLUMN_DISTRICT) )
-			&&  rs.getString(4)!=null && (generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE)){
+		} else if(columnName.equals("Region") &&  rs.getString(4)!=null && (generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE)){
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
 		}	
 		else if(columnName.equals("Componente")){

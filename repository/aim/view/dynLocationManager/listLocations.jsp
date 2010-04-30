@@ -27,13 +27,13 @@
 				<span style="display: none;">${locCV.index}</span> 
 				<span class="spantree">[<digi:trn>${locCV.value }</digi:trn>]</span>
 				<c:if test="${locCV.index < myForm.numOfLayers - 1}">
-					<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 13px; cursor: pointer;" 
+					<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 						title="Add ${locCV.ampCategoryClass.possibleValues[locCV.index+1].value}" 
 						onclick="addLocation(${loc.id}, ${locCV.ampCategoryClass.possibleValues[locCV.index+1].id})" />
 				</c:if>
-				<img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" style="height: 13px; cursor: pointer;" 
+				<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;" 
 						onclick="editLocation(${loc.id})" title="Edit" />
-				<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" style="height: 10px; cursor: pointer;" 
+				<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;" 
 						onclick="deleteLocation(${loc.id})" title="Delete"/>
 				<span class="spantree" style="display: none; color: red;"><digi:trn>ERROR</digi:trn></span>
 				<logic:notEmpty name="loc" property="childLocations">

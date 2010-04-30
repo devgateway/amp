@@ -1,7 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -32,23 +31,13 @@ public class AmpIndicatorValue implements Serializable{
 	private Double value;
 	private int valueType;
 	private AmpCategoryValue logFrame;
-	private AmpCategoryValue riskValue;
+	private AmpIndicatorRiskRatings risk;
 	private Boolean defaultInd;
 	private IndicatorConnection indicatorConnection;
 	private AmpLocation location;
 
 
         private AmpIndicatorSubgroup subgroup;
-        private AmpIndicatorSource source;
-        private AmpCategoryValue indicatorSource;
-
-        public AmpCategoryValue getIndicatorSource() {
-            return indicatorSource;
-        }
-
-        public void setIndicatorSource(AmpCategoryValue indicatorSource) {
-            this.indicatorSource = indicatorSource;
-        }
 
         /*these  helper methods are used
          to set and get date object value to(from) the date input field
@@ -85,14 +74,10 @@ public class AmpIndicatorValue implements Serializable{
 		this.valueDate = valueDate;
 	}
 	public Double getValue() {
-            Double valVisibility=null;
-            if (value != null) {
-                valVisibility=FeaturesUtil.applyThousandsForVisibility(new BigDecimal(value)).doubleValue();
-            }
-            return valVisibility;
+		return FeaturesUtil.applyThousandsForVisibility(value);
 	}
 	public void setValue(Double value) {
-		this.value = FeaturesUtil.applyThousandsForEntry(new BigDecimal(value)).doubleValue();
+		this.value = FeaturesUtil.applyThousandsForEntry(value);
 	}
 	public int getValueType() {
 		return valueType;
@@ -106,11 +91,11 @@ public class AmpIndicatorValue implements Serializable{
 	public void setLogFrame(AmpCategoryValue logFrame) {
 		this.logFrame = logFrame;
 	}
-	public AmpCategoryValue getRiskValue() {
-		return riskValue;
+	public AmpIndicatorRiskRatings getRisk() {
+		return risk;
 	}
-	public void setRiskValue(AmpCategoryValue risk) {
-		this.riskValue = risk;
+	public void setRisk(AmpIndicatorRiskRatings risk) {
+		this.risk = risk;
 	}
 	public IndicatorConnection getIndicatorConnection() {
 		return indicatorConnection;
@@ -140,10 +125,6 @@ public class AmpIndicatorValue implements Serializable{
         return dataIntervalStart;
     }
 
-    public AmpIndicatorSource getSource() {
-        return source;
-    }
-
     public void setLocation(AmpLocation location) {
 		this.location = location;
 	}
@@ -158,10 +139,6 @@ public class AmpIndicatorValue implements Serializable{
 
     public void setDataIntervalStart(Date dataIntervalStart) {
         this.dataIntervalStart = dataIntervalStart;
-    }
-
-    public void setSource(AmpIndicatorSource source) {
-        this.source = source;
     }
 
 

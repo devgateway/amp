@@ -40,8 +40,8 @@
  <td style="text-decoration: none; color: blue;">
 <a href="javascript:fnOnExpand('<%= item.getKey()%>')">+</a></td>
  <td>
-<c:if test="${!empty item.id}"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/group.gif" border="0"/></c:if>
-<c:if test="${empty item.id}"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/site.gif" border="0"/></c:if>
+<c:if test="${!empty item.id}"><digi:img src="module/admin/images/group.gif" border="0"/></c:if>
+<c:if test="${empty item.id}"><digi:img src="module/admin/images/site.gif" border="0"/></c:if>
 </td>
  <td>
 <html:hidden name="item" property="expand" indexed="true" />

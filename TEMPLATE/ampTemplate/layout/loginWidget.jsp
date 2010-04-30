@@ -6,7 +6,6 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<div class="loginWidget">
 
 <logic:present name="isUserLogged" scope="session">
 <div title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
@@ -28,4 +27,3 @@ ${fn:replace(message,quote,escapedQuote)}
 	<digi:trn key="aim:Login">Login</digi:trn>
 </digi:link></div>
 </logic:notPresent>
-</div>

@@ -19,12 +19,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -35,18 +32,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
-import org.dgfoundation.amp.ProperyDescription;
-import org.dgfoundation.amp.PropertyDescPosition;
 import org.dgfoundation.amp.Util;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -56,12 +48,10 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.mondrian.query.MoConstants;
 
 
 /**
@@ -87,34 +77,10 @@ public class AmpARFilter extends PropertyListable {
 	
 	private String CRISNumber;
 	private String budgetNumber;
-	private String lucene = null;
-	
-	private Boolean showArchived	= false;
 	
 	@PropertyListableIgnore
 	private Integer computedYear;
-
-	@PropertyListableIgnore
-	private Collection history = null;
-	@PropertyListableIgnore
-	private Set selectedHistory = null;
-	@PropertyListableIgnore
-	public Set getSelectedHistory() {
-		return selectedHistory;
-	}
-
-	public void setSelectedHistory(Set selectedHistory) {
-		this.selectedHistory = selectedHistory;
-	}
-
-	public Collection getHistory() {
-		return history;
-	}
-
-	public void setHistory(Collection history) {
-		this.history = history;
-	}
-
+	
 	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
 
@@ -125,7 +91,8 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
 	private Set selectedSecondarySectors = null;
-
+	@PropertyListableIgnore
+	private Set relatedSecondaryProgs;
 
 	@PropertyListableIgnore
 	private List nationalPlanningObjectives;
@@ -142,8 +109,6 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set relatedPrimaryProgs;
 
-	@PropertyListableIgnore
-	private Set relatedSecondaryProgs;
 	@PropertyListableIgnore
 	private List secondaryPrograms;
 	private Set selectedSecondaryPrograms;
@@ -203,7 +168,6 @@ public class AmpARFilter extends PropertyListable {
 		this.secondaryPrograms = secondaryPrograms;
 	}
 
-	@ProperyDescription(description = "National Planning Objectives: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getSelectedNatPlanObj() {
 		return selectedNatPlanObj;
 	}
@@ -212,7 +176,6 @@ public class AmpARFilter extends PropertyListable {
 		this.selectedNatPlanObj = selectedNatPlanObj;
 	}
 
-	@ProperyDescription(description = "Primary Programs: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getSelectedPrimaryPrograms() {
 		return selectedPrimaryPrograms;
 	}
@@ -221,7 +184,6 @@ public class AmpARFilter extends PropertyListable {
 		this.selectedPrimaryPrograms = selectedPrimaryPrograms;
 	}
 
-	@ProperyDescription(description = "Secondary Programs: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getSelectedSecondaryPrograms() {
 		return selectedSecondaryPrograms;
 	}
@@ -240,8 +202,6 @@ public class AmpARFilter extends PropertyListable {
 	private Set beneficiaryAgency;
 	private Set<AmpOrganisation> donnorgAgency;
 
-	//measures filters
-	
 	private Set teamAssignedOrgs = null;
 
 	private Set financingInstruments = null;
@@ -257,22 +217,19 @@ public class AmpARFilter extends PropertyListable {
 	private boolean widget = false;
 	private boolean publicView = false;
 	private Boolean budget = null;
-	private Collection<Integer> lineMinRank;
-	private Collection<Integer> planMinRank;
+	private Integer lineMinRank;
+	private Integer planMinRank;
 	private String fromDate;
 	private String toDate;
 	private Integer fromMonth;
 	private Integer yearFrom;
 	private Integer toMonth;
 	private Integer yearTo;
-	private Collection<AmpCategoryValueLocations> locationSelected = null;
-	@PropertyListableIgnore
-	private Collection<AmpCategoryValueLocations> relatedLocations;
-	
+	private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
-	private Boolean unallocatedLocation = null;
+
 	private Integer renderStartYear = null; // the range of dates columns that
 											// has to be render, years not in
 											// range will be computables for
@@ -280,7 +237,6 @@ public class AmpARFilter extends PropertyListable {
 	private Integer renderEndYear = null;
 
 	private DecimalFormat currentFormat = null;
-	private boolean amountinthousand;
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	private String accessType=null;
@@ -290,7 +246,7 @@ public class AmpARFilter extends PropertyListable {
 
 	private String text;
 	private String indexText;
-
+	private static final String initialPledgeFilterQuery = "SELECT distinct(id) FROM amp_funding_pledges WHERE 1=1 ";
 	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
@@ -298,91 +254,30 @@ public class AmpARFilter extends PropertyListable {
 	private String sortBy;
 	private Boolean sortByAsc						= true;
 	private Collection<String> hierarchySorters		= new ArrayList<String>();
-	private Boolean disbursementOrderRejected;
-	private int activitySearchKey;
-	private String byDateSql;
 	
-
-	public String getByDateSql() {
-		return byDateSql;
-	}
-
-	public void setByDateSql(String byDateSql) {
-		this.byDateSql = byDateSql;
-	}
-
-	public int getActivitySearchKey() {
-		return activitySearchKey;
-	}
-
-	public void setActivitySearchKey(int activitySearchKey) {
-		this.activitySearchKey = activitySearchKey;
-	}
-
-
 	private void queryAppend(String filter) {
-		// generatedFilterQuery+=
-		// (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + "
-		// amp_activity_id IN ("+filter+")";
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
-	
-
-	
-	public void generateActivitySearchKeySql(){
-		String searchStr = "";
-		int searchKey = this.getActivitySearchKey();
-		switch(searchKey){
-		case 0:
-		break;
-		case 1:
-			searchStr = " AND amp_activity.name like '%"+this.getIndexText()+"%'";
-		break;
-		case 2:
-			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_objectives v WHERE v.ebody like '%"+this.getIndexText()+"%') ";
-		break;
-		case 3:
-			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_description v WHERE v.ebody like '%"+this.getIndexText()+"%') ";
-		break;
-		case 4:
-			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_cris_number v WHERE v.cris_number like '%"+this.getIndexText()+"%') ";
-		break;
-		case 5:
-			searchStr = " AND amp_activity_id IN (SELECT amp_activity_id FROM v_code_chapitre v WHERE v.code like '%"+this.getIndexText()+"%') ";
-		break;
-		case 6:
-			searchStr = "  ";
-		break;
-		case 7:
-			searchStr = " AND amp_id like '%"+this.getIndexText()+"%' ";
-		break;
-		}
-		if (this.getByDateSql()==null) {
-			this.setByDateSql("");
-		}
-		generatedFilterQuery+=searchStr + this.getByDateSql();
-		
-	}
-	
-
 
 	public void readRequestData(HttpServletRequest request) {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
 		this.setAmpTeams(new TreeSet());
-		Boolean ispublicuser = false;
-		if (request.getSession().getAttribute("publicuser")!=null){
-			ispublicuser = (Boolean) request.getSession().getAttribute("publicuser");
-		}
+		
 		String ampReportId = null ;
 		//Check if the reportid is not nut for public mondrian reports
 		if (request.getParameter("ampReportId")!=null){
 			ampReportId = request.getParameter("ampReportId");
+			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
+					this.generatedFilterQuery = initialPledgeFilterQuery;
+			}
 		}
-		if (ampReportId == null ) {
-			AmpReports ar = (AmpReports) request.getSession().getAttribute("reportMeta");
-			if (!ispublicuser && ar != null){
+		if (ampReportId == null) {
+			AmpReports ar = (AmpReports) request.getSession().getAttribute(
+			"reportMeta");
+			if (ar!=null){
 				ampReportId = ar.getAmpReportId().toString();
 			}
 		}
@@ -408,25 +303,12 @@ public class AmpARFilter extends PropertyListable {
 			if (this.getCurrency() == null)
 				this.setCurrency(tempSettings.getCurrency());
 
-		} else {
-			//Check if the reportid is not null for public mondrian reports
-			if (!ispublicuser && ampReportId !=null){
+		}
+		else {
+			//Check if the reportid is not nut for public mondrian reports
+			if (ampReportId !=null){
 				AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
-				if (ampReport == null){
-					if (request.getSession().getAttribute("publicgeneratedreports")!=null){
-						Collection<AmpReports> pgenerated =  (Collection<AmpReports>) request.getSession().getAttribute("publicgeneratedreports");
-						for (Iterator iterator = pgenerated.iterator(); iterator.hasNext();) {
-							AmpReports storedreport = (AmpReports) iterator.next();
-							if (ampReportId.equalsIgnoreCase(storedreport.getId().toString())){
-								ampReport = storedreport;
-								ispublicuser = true;
-								request.getSession().setAttribute("publicuser", true);
-								break;
-							}
-						}
-					}
-				}
-				
+			
 				//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
 				TreeSet teams=new TreeSet();
 				this.setAccessType("team");
@@ -471,12 +353,16 @@ public class AmpARFilter extends PropertyListable {
 		Date checkDate = null;
 		if (renderStartYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			// Check if there is value on workspace setting
-			if (tempSettings != null && tempSettings.getReportStartYear() != null && tempSettings.getReportStartYear().intValue() != 0) {
+			if (tempSettings != null
+					&& tempSettings.getReportStartYear() != null
+					&& tempSettings.getReportStartYear().intValue() != 0) {
 				this.setRenderStartYear(tempSettings.getReportStartYear());
 			} else { // if not check if the value exist on
 				// global setting
-				gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-				if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
+				 gvalue = FeaturesUtil
+						.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+				if (gvalue != null && !"".equalsIgnoreCase(gvalue)
+						&& Integer.parseInt(gvalue) > 0) {
 					renderStartYear = Integer.parseInt(gvalue);
 				}
 
@@ -539,9 +425,7 @@ public class AmpARFilter extends PropertyListable {
 			this.setWidget(new Boolean(widget).booleanValue());
 
 		try {
-			if(!ispublicuser){
-				this.setAmpReportId(new Long(ampReportId));
-			}
+			this.setAmpReportId(new Long(ampReportId));
 		}
 		catch (NumberFormatException e) {
 			logger.info("NumberFormatException:" + e.getMessage());
@@ -554,80 +438,13 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 	}
 
-
-	
-	private String buildDateAndMeasuresFilter(HttpServletRequest request){
-		boolean applyFilter=false;
-		StringBuffer strWhere=new StringBuffer("select f.amp_activity_id from amp_funding f inner join amp_funding_detail fd on f.amp_funding_id=fd.amp_funding_id where 1=1 ");	
-		if (fromDate != null) 
-			if (fromDate.trim().length() > 0){
-				strWhere.append(" AND DATEDIFF(fd.transaction_date,?) >= 0");
-				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getFromDate()).getTime()),java.sql.Types.DATE));
-				applyFilter=true;
-			}
-		if (toDate != null)
-			if (toDate.trim().length() > 0){
-				strWhere.append(" AND DATEDIFF(?, fd.transaction_date) >= 0");
-				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));
-				applyFilter=true;
-			}
-		
-		if (!applyFilter) return "";
-		
-		AmpReports ar = (AmpReports) request.getSession().getAttribute("reportMeta");
-		Set<AmpReportMeasures> measures=ar.getMeasures();
-		StringBuffer strTransactions =new StringBuffer("");
-		
-		if (measures!=null){
-		
-				for (AmpReportMeasures measure : measures) {
-				
-					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Actual Commitments")){
-						strTransactions.append(" (fd.adjustment_type=0 and  fd.transaction_type=0) or");
-					}
-					
-					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Actual Disbursements")){
-						strTransactions.append("  (fd.adjustment_type=0 and  fd.transaction_type=1) or");
-					}
-					
-					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Actual Expenditures")){
-						strTransactions.append(" (fd.adjustment_type=0 and  fd.transaction_type=2) or");	
-					}
-					
-					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Planned Commitments")){
-						strTransactions.append("  (fd.adjustment_type=1 and  fd.transaction_type=0) or");
-					}
-					
-					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Planned Disbursements")){
-						strTransactions.append("  (fd.adjustment_type=1 and  fd.transaction_type=1) or");
-					}
-					
-					if (measure.getMeasure().getMeasureName().equalsIgnoreCase("Planned Expenditures")){
-						strTransactions.append("  (fd.adjustment_type=1 and  fd.transaction_type=2) or");
-					}
-			}
-				
-				if (strTransactions.length() > 1){
-					strTransactions.delete(strTransactions.length()-3,strTransactions.length());
-					strWhere.append(" and ( ");
-					strWhere.append(strTransactions);
-					strWhere.append(")");
-				}
-			}
-		return strWhere.toString();
-		
-	}
-	
-	public Hits generateFilterQuery(HttpServletRequest request) {
-		indexedParams=new ArrayList<FilterParam>();
-		
-		generateActivitySearchKeySql();
-		Hits hits = null;
-		
-		Boolean ispublicuser = false;
-		if (request.getSession().getAttribute("publicuser")!=null){
-			ispublicuser = (Boolean) request.getSession().getAttribute("publicuser");
+	public void generateFilterQuery(HttpServletRequest request) {
+		if (request.getSession().getAttribute("pledgereport") != null && request.getSession().getAttribute("pledgereport").toString().equalsIgnoreCase("true")){
+			indexedParams=new ArrayList<FilterParam>();
+			return;
 		}
+		
+		indexedParams=new ArrayList<FilterParam>();
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="
 				+ (budget != null ? (budget)?"1":"0" : "null")
@@ -641,31 +458,25 @@ public class AmpARFilter extends PropertyListable {
 		activityStatus.add(Constants.APPROVED_STATUS);
 		activityStatus.add(Constants.EDITED_STATUS);
 		String NO_MANAGEMENT_ACTIVITIES="";
-		if (!ispublicuser){
-			if("Management".equals(this.getAccessType())){
-				TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
+		if("Management".equals(this.getAccessType()))
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") ";
-				//+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				//+ Util.toCSString(ampTeams) + ") )";
-			}else{
-				TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams)
-				+ ") ";
-				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				//+ Util.toCSString(ampTeams) + ") )" ;
-			}
+				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				+ Util.toCSString(ampTeams) + ") )";
+		else{
 			
-			NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-			+ Util.toCSString(ampTeams)
-			+ ") ";
-			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-			//+ Util.toCSString(ampTeams) + ") )" ;
-		}else{
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"+ Constants.APPROVED_STATUS+"' AND (draft is null) OR (draft = 0)";
-			NO_MANAGEMENT_ACTIVITIES = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0)";
-			this.draft = true;
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
+				+ Util.toCSString(ampTeams)
+				+ ") "
+				+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				+ Util.toCSString(ampTeams) + ") )" ;
 		}
+		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
+			+ Util.toCSString(ampTeams)
+			+ ") "
+			+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+			+ Util.toCSString(ampTeams) + ") )" ;
+			
 
 	// computed workspace filter -- append it to the team filter so normal
 	// team activities are also possible
@@ -694,9 +505,9 @@ public class AmpARFilter extends PropertyListable {
 			
 		int c;
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",null, publicView )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null, publicView));
+			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
 		}
-		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null, publicView)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null, publicView) );
+		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 
@@ -731,25 +542,6 @@ public class AmpARFilter extends PropertyListable {
 				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Secondary Program' AND "
 				+ " aap.amp_program_id in ("
 				+ Util.toCSString(secondaryPrograms) + ")";
-		
-		String HISTORY_FILTER_CREATED = null;
-		String HISTORY_FILTER_UPDATED = null;
-		String HISTORY_FILTER_VIEWED = null;
-		// Long userId = ((org.digijava.module.aim.helper.TeamMember)
-		// request.getSession().getAttribute("currentMember")).getMemberId();
-		User user = (User) request.getSession().getAttribute("org.digijava.kernel.user");
-		if (this.history != null && this.history.contains((ArConstants.ACTIVITY_HISTORY_CREATED))) {
-			HISTORY_FILTER_CREATED = "SELECT aa.amp_activity_id FROM amp_activity aa, amp_team_member atm, dg_user du WHERE atm.amp_team_mem_id=aa.activity_creator AND atm.user_=du.id AND du.id = "
-					+ user.getId().toString();
-		} 
-		if (this.history != null && this.history.contains((ArConstants.ACTIVITY_HISTORY_UPDATED))) {
-			HISTORY_FILTER_UPDATED = "SELECT aa.amp_activity_id FROM amp_activity a, dg_user u, amp_activity_access aa WHERE a.amp_activity_id = aa.amp_activity_id AND aa.updated = 1 AND u.id = "
-					+ user.getId().toString();
-		} 
-		if (this.history != null && this.history.contains((ArConstants.ACTIVITY_HISTORY_VIEWED))) {
-			HISTORY_FILTER_VIEWED = "SELECT aa.amp_activity_id FROM amp_activity a, dg_user u, amp_activity_access aa WHERE a.amp_activity_id = aa.amp_activity_id AND aa.viewed = 1 AND u.id = "
-				+ user.getId().toString();
-		}
 
 		// String SECONDARY_PARENT_SECTOR_FILTER=
 		// "SELECT amp_activity_id FROM v_secondary_sectors WHERE amp_sector_id
@@ -768,46 +560,12 @@ public class AmpARFilter extends PropertyListable {
 				+ Util.toCSString(regions) + ")";
 		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("
 				+ Util.toCSString(financingInstruments) + ")";
-		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
-				+ Util.toCSString(lineMinRank) + ")";
-		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank IN ("
-				+ Util.toCSString( planMinRank ) + ")";
-		//String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
-		//		+ (regionSelected==null?null:regionSelected.getIdentifier());
-		
-		String REGION_SELECTED_FILTER = "";
-		if (unallocatedLocation != null) {
-			if (unallocatedLocation == true) {
-				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id NOT IN(SELECT amp_activity_id FROM amp_activity_location)";
-			}
-		}
-		
-		if (locationSelected!=null) {
-			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
-			allSelectedLocations.addAll(locationSelected);
-			
-			DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
-			this.relatedLocations						= new ArrayList<AmpCategoryValueLocations>();
-			this.relatedLocations.addAll(allSelectedLocations);
-			DynLocationManagerUtil.populateWithAscendants(this.relatedLocations, locationSelected);
-			
-			String allSelectedLocationString			= Util.toCSString(allSelectedLocations);
-			String subSelect			= "SELECT aal.amp_activity_id FROM amp_activity_location aal, amp_location al " +
-					"WHERE ( aal.amp_location_id=al.amp_location_id AND " +
-					"al.location_id IN (" + allSelectedLocationString + ") )";
-			
-			if (REGION_SELECTED_FILTER.equals("")) {
-				REGION_SELECTED_FILTER	= subSelect;
-			} else {
-				REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
-			}			
-		}
-		
-		if (!REGION_SELECTED_FILTER.equals("")) {
-			queryAppend(REGION_SELECTED_FILTER);
-		}
-		
-		
+		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="
+				+ lineMinRank;
+		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="
+				+ planMinRank;
+		String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
+				+ (regionSelected==null?null:regionSelected.getIdentifier());
 		StringBuffer actStatusValue = new StringBuffer("");
 		if(approvalStatusSelected!=null){
 			for(String valOption:approvalStatusSelected){
@@ -878,11 +636,6 @@ public class AmpARFilter extends PropertyListable {
 
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSString(donnorgAgency) + ")";
-		
-		String ARCHIVED_FILTER		= "";
-		if ( this.showArchived != null )
-			ARCHIVED_FILTER		= "SELECT amp_activity_id FROM amp_activity WHERE " +
-						((this.showArchived)?"archived=true":"(archived=false or archived is null)");
 
 		/*
 		 * if(fromYear!=null) { AmpARFilterHelper filterHelper =
@@ -940,11 +693,6 @@ public class AmpARFilter extends PropertyListable {
 		}
 
 		
-		if ((fromDate != null)||(toDate != null)){
-			String strMeasure=buildDateAndMeasuresFilter(request);
-			if (strMeasure.length()> 0)
-				queryAppend(strMeasure);
-		}
 		/*
 		if (fromDate != null) 
 			if (fromDate.trim().length() > 0){
@@ -963,7 +711,8 @@ public class AmpARFilter extends PropertyListable {
 				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));
 				
 			}
-		*/
+			*/
+		
 		/*
 		 * if (fromYear==null) fromYear = 0;
 		 * 
@@ -980,23 +729,12 @@ public class AmpARFilter extends PropertyListable {
 		 */
 		if (text != null) {
 			if ("".equals(text.trim()) == false) {
-				String TEXT_FILTER="SELECT a.amp_activity_id from amp_activity a WHERE ";
-				if(text.equals("0-9")){
-					for (int i=0;i<=9;i++){
-						TEXT_FILTER+= " `name` like '"	+i+"%'"; 
-						if(i<9){
-							TEXT_FILTER+=" or ";
-						}
-					}
-				}else{
-					TEXT_FILTER += " `name` like '"	+text+"%'";
-				}
-				
+				String TEXT_FILTER = "SELECT a.amp_activity_id from amp_activity a WHERE a.amp_id="
+						+ text;
 				queryAppend(TEXT_FILTER);
 			}
 		}
-		hits = null;
-		lucene = null;
+
 		if (indexText != null)
 			if ("".equals(indexText.trim()) == false) {
 				String LUCENE_ID_LIST = "";
@@ -1004,13 +742,10 @@ public class AmpARFilter extends PropertyListable {
 				ServletContext ampContext = session.getServletContext();
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
-				
-				String realPath = ampContext.getRealPath("/"); //AMP-7680
-				if (realPath == null)	realPath = "";//because realPath in testCase is always null
 
-				hits = LuceneUtil.search(realPath + LuceneUtil.ACTVITY_INDEX_DIRECTORY, new String[]{"all", LuceneUtil.TITLE_FIELD}, indexText);
+				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.activityIndexDirectory, "all", indexText);
 				logger.info("New lucene search !");
-				if(hits!=null){
+				if(hits!=null)
 				for (int i = 0; i < hits.length(); i++) {
 					Document doc;
 					try {
@@ -1027,10 +762,6 @@ public class AmpARFilter extends PropertyListable {
 						e.printStackTrace();
 					}
 				}
-					sortByAsc=true;
-					lucene = "Hits";
-
-				}
 				logger.info("Lucene ID List:" + LUCENE_ID_LIST);
 				if (LUCENE_ID_LIST.length() < 1) {
 					logger.info("Not found!");
@@ -1039,8 +770,7 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(LUCENE_ID_LIST);
 			}
 
-		String RISK_FILTER = "SELECT con.activity_id from amp_indicator_connection con inner join amp_indicator_values v on v.ind_connect_id =con.id "+
-                "where v.risk_value in ("
+		String RISK_FILTER = "SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("
 				+ Util.toCSString(risks) + ")";
 
 		if (budget != null)
@@ -1066,27 +796,18 @@ public class AmpARFilter extends PropertyListable {
 		if (secondaryPrograms != null && secondaryPrograms.size() != 0) {
 			queryAppend(SECONDARY_PROGRAM_FILTER);
 		}
-		if (HISTORY_FILTER_CREATED != null) {
-			queryAppend(HISTORY_FILTER_CREATED);
-		}
-		if (HISTORY_FILTER_UPDATED != null) {
-			queryAppend(HISTORY_FILTER_UPDATED);
-		}
-		if (HISTORY_FILTER_VIEWED != null) {
-			queryAppend(HISTORY_FILTER_VIEWED);
-		}
 		if (regions != null && regions.size() > 0)
 			queryAppend(REGION_FILTER);
 		if (financingInstruments != null && financingInstruments.size() > 0)
 			queryAppend(FINANCING_INSTR_FILTER);
 		if (risks != null && risks.size() > 0)
 			queryAppend(RISK_FILTER);
-		if ((lineMinRank != null) && (lineMinRank.size() > 0))
+		if ((lineMinRank != null) && (lineMinRank !=-1))
 			queryAppend(LINE_MIN_RANK_FILTER);
-		if ((planMinRank != null)&&(planMinRank.size() > 0))
+		if ((planMinRank != null)&&(planMinRank!=-1))
 			queryAppend(PLAN_MIN_RANK_FILTER);
-		//if (regionSelected != null)
-		//	queryAppend(REGION_SELECTED_FILTER);
+		if (regionSelected != null)
+			queryAppend(REGION_SELECTED_FILTER);
 		if(approvalStatusSelected!=null)
 			queryAppend(ACTIVITY_STATUS);
 		if (approved == true)
@@ -1128,43 +849,19 @@ public class AmpARFilter extends PropertyListable {
 					+ ((jointCriteria)?"1":"0");;
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
-		if (showArchived!=null) {
-			queryAppend(ARCHIVED_FILTER);
-		}
-		
-		
-		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams, publicView);
+		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
 		
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams, publicView )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams, publicView) );
-		} else { 
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams, publicView)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null, publicView) );
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
 		}
+		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 		
-		if (this.isPublicView()){
-			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
-		}
 		
-		return hits;
 	}
 
-	/*private void fillAllLocationWithChild (AmpCategoryValueLocations cvl, Set<AmpCategoryValueLocations> allSelectedLocations){
-		allSelectedLocations.add(cvl);
-		Set<AmpCategoryValueLocations> childLocs = cvl.getChildLocations();
-		Iterator<AmpCategoryValueLocations> iter = childLocs.iterator();
-		while (iter.hasNext()) {
-			AmpCategoryValueLocations cvlChild = DynLocationManagerUtil.getLocation(iter.next().getId(), true);
-			if (cvlChild.getChildLocations().size() > 0) {
-				fillAllLocationWithChild(cvlChild, allSelectedLocations);	
-			} else {
-				allSelectedLocations.add(cvlChild);
-			}
-		}
-	}*/
-	
 	/**
 	 * @return Returns the ampCurrencyCode.
 	 */
@@ -1217,9 +914,6 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	@PropertyListableIgnore
 	public String getGeneratedFilterQuery() {
-		if(this.isPublicView()){
-			return getOffLineQuery(generatedFilterQuery);
-		}
 		return generatedFilterQuery;
 	}
 
@@ -1265,7 +959,6 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return Returns the calendarType.
 	 */
-	@ProperyDescription(description = "", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public AmpFiscalCalendar getCalendarType() {
 		return calendarType;
 	}
@@ -1309,7 +1002,6 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return Returns the statuses.
 	 */
-	@ProperyDescription(description = "Approval Status: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getStatuses() {
 		return statuses;
 	}
@@ -1340,7 +1032,6 @@ public class AmpARFilter extends PropertyListable {
 		this.widget = widget;
 	}
 
-	@ProperyDescription(description = "Activities On Budget: ", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public Boolean getBudget() {
 		return budget;
 	}
@@ -1349,7 +1040,6 @@ public class AmpARFilter extends PropertyListable {
 		this.budget = budget;
 	}
 
-	@ProperyDescription(description = "Risk Level: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set getRisks() {
 		return risks;
 	}
@@ -1379,9 +1069,12 @@ public class AmpARFilter extends PropertyListable {
 			for (int i = 0; i < propertyDescriptors.length; i++) {
 				Method m = propertyDescriptors[i].getReadMethod();
 				Object object = m.invoke(this, new Object[] {});
-				if (object == null || IGNORED_PROPERTIES.contains(propertyDescriptors[i].getName()))
+				if (object == null
+						|| IGNORED_PROPERTIES.contains(propertyDescriptors[i]
+								.getName()))
 					continue;
-				ret.append("<b>").append(propertyDescriptors[i].getName()).append(": ").append("</b>");
+				ret.append("<b>").append(propertyDescriptors[i].getName())
+						.append(": ").append("</b>");
 				if (object instanceof Collection)
 					ret.append(Util.toCSString((Collection) object));
 
@@ -1408,20 +1101,20 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	private static final String IGNORED_PROPERTIES = "class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
-	@PropertyListableIgnore
-	public Collection<Integer> getLineMinRank() {
+
+	public Integer getLineMinRank() {
 		return lineMinRank;
 	}
 
-	public void setLineMinRank(Collection<Integer> lineMinRank) {
+	public void setLineMinRank(Integer lineMinRank) {
 		this.lineMinRank = lineMinRank;
 	}
-	@PropertyListableIgnore
-	public Collection<Integer> getPlanMinRank() {
+
+	public Integer getPlanMinRank() {
 		return planMinRank;
 	}
 
-	public void setPlanMinRank(Collection<Integer> planMinRank) {
+	public void setPlanMinRank(Integer planMinRank) {
 		this.planMinRank = planMinRank;
 	}
 
@@ -1434,17 +1127,15 @@ public class AmpARFilter extends PropertyListable {
 		this.ampReportId = ampReportId;
 	}
 
-	@ProperyDescription(description = "Starting with: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getText() {
 		return text;
 	}
 
 	public void setText(String text) {
-		if (text != null) {
-			if (text.trim().length() == 0)
-				this.text = null;
-			this.text = text;
-		}
+		if (text.trim().length() == 0)
+			this.text = null;
+		this.text = text;
+
 	}
 
 	public void setFromMonth(Integer fromMonth) {
@@ -1512,33 +1203,17 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return the regionSelected
 	 */
-	public Collection<AmpCategoryValueLocations> getLocationSelected() {
-		return locationSelected;
+	public AmpCategoryValueLocations getRegionSelected() {
+		return regionSelected;
 	}
+
 	/**
 	 * @param regionSelected the regionSelected to set
 	 */
-	public void setLocationSelected(Collection<AmpCategoryValueLocations> regionSelected) {
-		this.locationSelected = regionSelected;
-	}
-	
-	/**
-	 * @return the relatedLocations
-	 */
-	@PropertyListableIgnore
-	public Collection<AmpCategoryValueLocations> getRelatedLocations() {
-		return relatedLocations;
+	public void setRegionSelected(AmpCategoryValueLocations regionSelected) {
+		this.regionSelected = regionSelected;
 	}
 
-	/**
-	 * @param relatedLocations the relatedLocations to set
-	 */
-	public void setRelatedLocations(
-			Collection<AmpCategoryValueLocations> relatedLocations) {
-		this.relatedLocations = relatedLocations;
-	}
-
-	@ProperyDescription(description = "Search Text: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getIndexText() {
 		return indexText;
 	}
@@ -1557,7 +1232,6 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	@IgnorePersistence
-	@ProperyDescription(description = "Including Draf Activites: ", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public boolean isDraft() {
 		return draft;
 	}
@@ -1566,7 +1240,6 @@ public class AmpARFilter extends PropertyListable {
 		this.draft = draft;
 	}
 
-	@ProperyDescription(description = "Donor Types: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getDonorTypes() {
 		return donorTypes;
 	}
@@ -1575,7 +1248,6 @@ public class AmpARFilter extends PropertyListable {
 		this.donorTypes = donorTypes;
 	}
 
-	@ProperyDescription(description = "Donors Group: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getDonorGroups() {
 		return donorGroups;
 	}
@@ -1584,7 +1256,6 @@ public class AmpARFilter extends PropertyListable {
 		this.donorGroups = donorGroups;
 	}
 
-	@ProperyDescription(description = "Beneficiary Agencies: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getBeneficiaryAgency() {
 		return beneficiaryAgency;
 	}
@@ -1593,7 +1264,6 @@ public class AmpARFilter extends PropertyListable {
 		this.beneficiaryAgency = beneficiaryAgency;
 	}
 
-	@ProperyDescription(description = "Executing Agencies: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getExecutingAgency() {
 		return executingAgency;
 	}
@@ -1602,7 +1272,6 @@ public class AmpARFilter extends PropertyListable {
 		this.executingAgency = executingAgency;
 	}
 
-	@ProperyDescription(description = "Implementing Agencies: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getImplementingAgency() {
 		return implementingAgency;
 	}
@@ -1611,7 +1280,6 @@ public class AmpARFilter extends PropertyListable {
 		this.implementingAgency = implementingAgency;
 	}
 
-	@ProperyDescription(description = "Sectors: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getSelectedSectors() {
 		return selectedSectors;
 	}
@@ -1629,7 +1297,6 @@ public class AmpARFilter extends PropertyListable {
 		this.secondarySectors = secondarySectors;
 	}
 
-	@ProperyDescription(description = "Secondary Sectors: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set getSelectedSecondarySectors() {
 		return selectedSecondarySectors;
 	}
@@ -1638,7 +1305,6 @@ public class AmpARFilter extends PropertyListable {
 		this.selectedSecondarySectors = selectedSecondarySectors;
 	}
 
-	@ProperyDescription(description = "Type Of Assistance: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Set<AmpCategoryValue> getTypeOfAssistance() {
 		return typeOfAssistance;
 	}
@@ -1681,7 +1347,6 @@ public class AmpARFilter extends PropertyListable {
 		this.currentFormat = currentFormat;
 	}
 
-	@ProperyDescription(description = "From ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getFromDate() {
 		return fromDate;
 	}
@@ -1690,7 +1355,6 @@ public class AmpARFilter extends PropertyListable {
 		this.fromDate = fromDate;
 	}
 
-	@ProperyDescription(description = "To ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getToDate() {
 		return toDate;
 	}
@@ -1699,7 +1363,6 @@ public class AmpARFilter extends PropertyListable {
 		this.toDate = toDate;
 	}
 
-	@ProperyDescription(description = "Approval Status: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Collection<String> getApprovalStatusSelected() {
 		return approvalStatusSelected;
 	}
@@ -1708,7 +1371,6 @@ public class AmpARFilter extends PropertyListable {
 		this.approvalStatusSelected = approvalStatusSelected;
 	}
 
-	@ProperyDescription(description = "Donnor Agency: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = true)
 	public Set<AmpOrganisation> getDonnorgAgency() {
 		return donnorgAgency;
 	}
@@ -1716,8 +1378,6 @@ public class AmpARFilter extends PropertyListable {
 	public void setDonnorgAgency(Set<AmpOrganisation> donnorgAgency) {
 		this.donnorgAgency = donnorgAgency;
 	}
-
-	@ProperyDescription(description = "Workspaces: ", position = PropertyDescPosition.RIGTH, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	@IgnorePersistence
 	public String getAccessType() {
 		return accessType;
@@ -1727,7 +1387,6 @@ public class AmpARFilter extends PropertyListable {
 		this.accessType = accessType;
 	}
 
-	@ProperyDescription(description = "Activities Rejected ByFilter: ", position = PropertyDescPosition.RIGTH, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	@IgnorePersistence
 	public Long getActivitiesRejectedByFilter() {
 		return activitiesRejectedByFilter;
@@ -1745,7 +1404,6 @@ public class AmpARFilter extends PropertyListable {
 		this.teamAccessType = teamAccessType;
 	}
 
-	@PropertyListableIgnore
 	public boolean isJustSearch() {
 		return justSearch;
 	}
@@ -1753,13 +1411,11 @@ public class AmpARFilter extends PropertyListable {
 	public void setJustSearch(boolean justSearch) {
 		this.justSearch = justSearch;
 	}
-
 	@PropertyListableIgnore
 	public ArrayList<FilterParam> getIndexedParams() {
 		return indexedParams;
 	}
 
-	@ProperyDescription(description = "Responsible Agencies: ", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public Set getResponsibleorg() {
 		return responsibleorg;
 	}
@@ -1768,7 +1424,6 @@ public class AmpARFilter extends PropertyListable {
 		this.responsibleorg = responsibleorg;
 	}
 
-	@ProperyDescription(description = "Sorty by: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public String getSortBy() {
 		return sortBy;
 	}
@@ -1777,7 +1432,6 @@ public class AmpARFilter extends PropertyListable {
 		this.sortBy = sortBy;
 	}
 
-	@ProperyDescription(description = "Ascending Sorting: ", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
 	public Boolean getSortByAsc() {
 		return sortByAsc;
 	}
@@ -1786,39 +1440,12 @@ public class AmpARFilter extends PropertyListable {
 		this.sortByAsc = sortByAsc;
 	}
 
-	@ProperyDescription(description = "Hierarchy Sorters: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Collection<String> getHierarchySorters() {
 		return hierarchySorters;
 	}
 
 	public void setHierarchySorters(Collection<String> hierarchySorters) {
 		this.hierarchySorters = hierarchySorters;
-	}
-
-	public void setDisbursementOrderRejected(Boolean b) {
-		this.disbursementOrderRejected = b;
-	}
-
-	@ProperyDescription(description = "Disbursement Order Rejected: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
-	public Boolean getDisbursementOrderRejected() {
-		return this.disbursementOrderRejected;
-	}
-
-	public Boolean getUnallocatedLocation() {
-		return unallocatedLocation;
-	}
-
-	public void setUnallocatedLocation(Boolean unallocatedLocation) {
-		this.unallocatedLocation = unallocatedLocation;
-	}
-
-	@ProperyDescription(description = "Amount in Thousand: ", position = PropertyDescPosition.LEFT, hiddenValue = true, showOnlyIfValueIsTrue = true)
-	public boolean isAmountinthousand() {
-		return amountinthousand;
-	}
-
-	public void setAmountinthousand(boolean amountinthousand) {
-		this.amountinthousand = amountinthousand;
 	}
 
 	public String getCRISNumber() {
@@ -1837,7 +1464,6 @@ public class AmpARFilter extends PropertyListable {
 		this.budgetNumber = budgetNumber;
 	}
 
-	@ProperyDescription(description = "Compuer year: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
 	public Integer getComputedYear() {
 		return computedYear;
 	}
@@ -1847,35 +1473,4 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 
-	public String getLucene() {
-		return lucene;
-	}
-
-	public void setLucene(String luceneIndex) {
-		this.lucene = luceneIndex;
-	}
-	
-
-	/**
-	 * @return the showArchived
-	 */
-	@ProperyDescription(description = "Show Archived: ", position = PropertyDescPosition.LEFT, hiddenValue = false, showOnlyIfValueIsTrue = false)
-	public Boolean getShowArchived() {
-		return showArchived;
-	}
-
-	/**
-	 * @param showArchived the showArchived to set
-	 */
-	public void setShowArchived(Boolean showArchived) {
-		this.showArchived = showArchived;
-	}
-
-	public String getOffLineQuery(String query) {
-		String result = query;
-		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
-		Matcher m = p.matcher(result);
-		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
-		return result;
-	}
 }

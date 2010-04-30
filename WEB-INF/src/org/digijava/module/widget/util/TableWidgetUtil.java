@@ -1,12 +1,18 @@
 package org.digijava.module.widget.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
@@ -16,6 +22,9 @@ import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
+import org.digijava.module.widget.oldTable.DaCell;
+import org.digijava.module.widget.oldTable.DaRow;
+import org.digijava.module.widget.oldTable.DaTable;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.WiRow;
 import org.digijava.module.widget.table.WiTable;
@@ -224,6 +233,54 @@ public class TableWidgetUtil {
 		return results;
 	}
 	
+	/**
+	 * Converts values to helper row beans which include cells with those values.
+	 * @param data
+	 * @return
+	 * @throws DgException
+	 */
+	public static List<DaRow> valuesToRows(Collection<AmpDaValue> data)throws DgException{
+		List<DaRow> rows=null;
+		Map<Long, DaRow> rowsByPk=new HashMap<Long, DaRow>();
+		for (AmpDaValue value : data) {
+			DaRow row=rowsByPk.get(value.getPk());
+			if (null == row){
+				row = new DaRow();
+				rowsByPk.put(value.getPk(), row);
+				row.setPk(value.getPk());
+				row.setCells(new ArrayList<DaCell>());
+			}
+			DaCell cell = new DaCell(value);
+			row.getCells().add(cell);
+		}
+		rows = new ArrayList<DaRow>(rowsByPk.values());
+		for (DaRow daRow : rows) {
+			Collections.sort(daRow.getCells(),new CellOrderNoComparator());
+		}
+		return rows;
+	}
+
+	public static List<DaRow> valuesToRows(Collection<AmpDaColumn> columns, Collection<AmpDaValue> data)throws DgException{
+		List<DaRow> rows=null;
+		Map<Long, DaRow> rowsByPk=new HashMap<Long, DaRow>();
+		
+		for (AmpDaValue value : data) {
+			DaRow row=rowsByPk.get(value.getPk());
+			if (null == row){
+				row = new DaRow();
+				rowsByPk.put(value.getPk(), row);
+				row.setPk(value.getPk());
+				row.setCells(new ArrayList<DaCell>());
+			}
+			DaCell cell = new DaCell(value);
+			row.getCells().add(cell);
+		}
+		rows = new ArrayList<DaRow>(rowsByPk.values());
+		for (DaRow daRow : rows) {
+			Collections.sort(daRow.getCells(),new CellOrderNoComparator());
+		}
+		return rows;
+	}
 	
 	/**
 	 * Creates row with empty values according to columns.
@@ -233,7 +290,7 @@ public class TableWidgetUtil {
 	 * @Deprecated {@link WiTable} should create new empty row when asked, so all these logic is encapsulated in table widget
 	 */
 	@Deprecated
-	public static WiRow createEmptyRow(List<WiColumn> columns, float avoe) throws DgException{
+	public static WiRow createEmptyRow(List<WiColumn> columns) throws DgException{
 		WiRow row = null;
 //		for (WiColumn col : columns) {
 //			WiCell cell = org.digijava.module.widget.table.util.TableWidgetUtil.newCell(value);
@@ -242,6 +299,24 @@ public class TableWidgetUtil {
 		return row;
 	}
 	
+	/**
+	 * Converts row helper beans and their cells back to values beans for DB.
+	 * This will also update pk field for each value bean according their row number.
+	 * @param rows list of rows to convert
+	 * @return list of value bean created from all cells of all rows.
+	 * @throws DgException
+	 */
+	public static List<AmpDaValue> rowsToValues(List<DaRow> rows,Set<AmpDaColumn> columns) throws DgException{
+		List<AmpDaValue> resultValues = new ArrayList<AmpDaValue>(columns.size() * rows.size());
+		Map<Long,AmpDaColumn> columnMap = AmpCollectionUtils.createMap(columns, new TableWidgetUtil.TableWidgetColumnKeyResolver());
+		long pk=0;
+		for (DaRow row : rows) {
+			row.setPk(new Long(pk++));
+			List<AmpDaValue> values=row.getValues(columnMap);
+			resultValues.addAll(values);
+		}
+		return resultValues;
+	}
 
 	/**
 	 * Inserts, updates or deletes value beans depending on their ID.
@@ -301,6 +376,14 @@ public class TableWidgetUtil {
 			throw new DgException("Cannot load widget places!",e);
 		}
 		return places;
+	}
+	
+	//=======session====================
+
+	
+	public static DaTable getTableHelperFromSession(HttpServletRequest request)throws DgException{
+		
+		return null;
 	}
 	
 	//=======COLUMNS====================
@@ -384,6 +467,21 @@ public class TableWidgetUtil {
 		}
 	}
 
+	public static class RowPkComparator implements Comparator<DaRow>{
+		public int compare(DaRow r1, DaRow r2) {
+			return r1.getPk().compareTo(r2.getPk());
+		}
+	}
+	
+	/**
+	 * Compares DaCell helpers by its column order number.
+	 *
+	 */
+	public static class CellOrderNoComparator implements Comparator<DaCell>{
+		public int compare(DaCell c1, DaCell c2) {
+			return c1.getColumnOrderNo().compareTo(c2.getColumnOrderNo());
+		}
+	}
 	
 	//not used yet. will reimplement in AmpCollectionUtils with java generics.
 	public static class ColumnSynzchronizer implements CollectionSynchronizer{
@@ -400,6 +498,12 @@ public class TableWidgetUtil {
 			return 0;
 		}
 		
+	}
+
+	public static DaTable widgetToHelper(AmpDaTable widget) throws DgException{
+		DaTable table=null;
+		table = new DaTable(widget);
+		return table;
 	}
 
 	public Long resolveKey(AmpDaValue element) {

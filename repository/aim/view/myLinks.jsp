@@ -12,7 +12,7 @@
         <ul class="yui-nav">
           <li class="">
           <a title='<digi:trn key="aim:ListofRelatedLinks">Frequently Used Links for Desktop</digi:trn>'>
-          <div style="text-align: center;">
+          <div>
             <digi:trn key="aim:resources">Resources</digi:trn>
           </div>
           </a>
@@ -26,7 +26,7 @@
 	  						<div title="${translation}" style="margin: 2px">
 		               			 <logic:iterate name="myLinks" id="doc" scope="session" type="org.digijava.module.contentrepository.helper.DocumentData"> 
 		                    	   <div style="margin: 2px">
-		                        	
+		                        	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 		                          	<c:if test="${doc.webLink == null}" >
 		                             	<a  href="/contentrepository/downloadFile.do?uuid=<bean:write name='doc' property='uuid'/>">
 		                             	<bean:write name='doc' property='title'/>

@@ -16,13 +16,6 @@ public class AmpColumns  implements Serializable, Comparable
 	private String cellType;
 	private String extractorView;
 	private Set filters;
-	public String getTotalExpression() {
-		return totalExpression;
-	}
-	public void setTotalExpression(String totalExpression) {
-		this.totalExpression = totalExpression;
-	}
-
 	private String tokenExpression;
 	
 	// header calculations
@@ -31,7 +24,6 @@ public class AmpColumns  implements Serializable, Comparable
 	
 	private String relatedContentPersisterClass;
 	private String description;
-	
 	/**
 	 * true if the column data is needed in order for correct filtering to be applied
 	 * @see http://bugs.digijava.org/jira/browse/AMP-3454?focusedCommentId=39811#action_39811
@@ -39,12 +31,15 @@ public class AmpColumns  implements Serializable, Comparable
 	private Boolean filterRetrievable;
 	
 
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+
+    public String getDescription() {
+        return description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 	public Boolean getFilterRetrievable() {
 		return filterRetrievable;
 	}
@@ -135,7 +130,15 @@ public class AmpColumns  implements Serializable, Comparable
 	public void setTokenExpression(String tokenExpression) {
 		this.tokenExpression = tokenExpression;
 	}
-	
+
+	public String getTotalExpression() {
+		return totalExpression;
+	}
+
+	public void setTotalExpression(String totalExpression) {
+		this.totalExpression = totalExpression;
+	}
+
 	public Boolean isShowRowCalculations() {
 		return showRowCalculations;
 	}
@@ -143,4 +146,5 @@ public class AmpColumns  implements Serializable, Comparable
 	public void setShowRowCalculations(Boolean showRowCalculations) {
 		this.showRowCalculations = showRowCalculations;
 	}
+	
 }

@@ -63,7 +63,7 @@ public class DigiConfigManager {
 
     private static Logger logger = Logger.getLogger(DigiConfigManager.class);
 
-    public static final String CONFIG_FILE = "digi.xml";
+    private static final String CONFIG_FILE = "digi.xml";
     private static final String MODULE_CONFIG_FILE = "module-config.xml";
     private static DigiConfig digiConfig = null;
     private static HashMap moduleConfigs = null;
@@ -306,7 +306,7 @@ public class DigiConfigManager {
      * Creates and returns Digester instance to parse module configuration
      * @return Digester instance
      */
-    public static Digester createConfigDigester() {
+    private static Digester createConfigDigester() {
         //Digester digester = new Digester();
         //digester.setValidating(false);
         //digester.setUseContextClassLoader(true);
@@ -346,12 +346,6 @@ public class DigiConfigManager {
         digester.addSetProperties("digi-config/site-domain", "path", "path");
         digester.addBeanPropertySetter("digi-config/site-domain", "content");
 
-        digester.addBeanPropertySetter("digi-config/ecsDisable", "ecsDisable");
-        digester.addBeanPropertySetter("digi-config/ecsServerName", "ecsServerName");
-        digester.addBeanPropertySetter("digi-config/propertiesFile", "propertiesFile");
-        
-        digester.addBeanPropertySetter("digi-config/http-port", "httpPort");
-        
         digester.addSetNext("digi-config/hibernate-classes",
                             "setHibernateClasses");
         digester.addSetNext(
@@ -393,7 +387,6 @@ public class DigiConfigManager {
 
         digester.addBeanPropertySetter("digi-config/enable-logging",
                                        "enableLogging");
-
         digester.addBeanPropertySetter("digi-config/aggregation", "aggregation");
         digester.addBeanPropertySetter("digi-config/search", "search");
         digester.addSetProperties("digi-config/enable-logging", "poolSize",

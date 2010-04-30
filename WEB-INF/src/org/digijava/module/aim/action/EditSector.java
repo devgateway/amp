@@ -36,7 +36,7 @@ public class EditSector extends Action {
 		HttpSession session = request.getSession();
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		
+		String siteId = site.getId()+"";
 		String locale = navigationLanguage.getCode();
 		
 		if (session.getAttribute("ampAdmin") == null) {
@@ -83,54 +83,36 @@ public class EditSector extends Action {
 										if(checkSectorNameCodeIsNull(editSectorForm)){
 											request.setAttribute("event", "view");
 											ActionErrors errors = new ActionErrors();
-											errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,site.getId())));
+											errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,siteId)));
 											if (errors.size() > 0)
 											{
 												saveErrors(request, errors);
 											}
 											refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
-											if (editSectorForm.getTreeView() != null
-													&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-												//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-												return mapping.findForward("editedSecondLevelSectorTree");
-											} else {
-												return mapping.findForward("editedSecondLevelSector");
-											}
+											return mapping.findForward("editedSecondLevelSector");
 										}
 										if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 											request.setAttribute("event", "view");
 											ActionErrors errors = new ActionErrors();
-							        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,site.getId())));
+							        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,siteId)));
 							        		if (errors.size() > 0)
 						        			{
 						        				saveErrors(request, errors);
 						        			}
 							        		refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
-							        		if (editSectorForm.getTreeView() != null
-													&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-												//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-												return mapping.findForward("editedSecondLevelSectorTree");
-											} else {
-												return mapping.findForward("editedSecondLevelSector");
-											}
+											return mapping.findForward("editedSecondLevelSector");
 										}
 										
 										if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
 											request.setAttribute("event", "view");
 											ActionErrors errors = new ActionErrors();
-							        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,site.getId())));
+							        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,siteId)));
 							        		if (errors.size() > 0)
 						        			{
 						        				saveErrors(request, errors);
 						        			}
 							        		refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
-							        		if (editSectorForm.getTreeView() != null
-													&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-												//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-												return mapping.findForward("editedSecondLevelSectorTree");
-											} else {
-												return mapping.findForward("editedSecondLevelSector");
-											}
+											return mapping.findForward("editedSecondLevelSector");
 										}
 										
 										logger.debug("Updating.............................................");
@@ -141,13 +123,7 @@ public class EditSector extends Action {
 										editSectorForm.setSecSchemeCode(secSchemeCode);
 										editSectorForm.setSecSchemeName(secSchemename);
 										logger.debug(" update sector1 Complete");
-										if (editSectorForm.getTreeView() != null
-												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-											return mapping.findForward("editedSecondLevelSectorTree");
-										} else {
-											return mapping.findForward("editedSecondLevelSector");
-										}
+										return mapping.findForward("editedSecondLevelSector");
 								}
 								else if(event.equalsIgnoreCase("update3LevelSector"))
 								 {
@@ -161,55 +137,37 @@ public class EditSector extends Action {
 									if(checkSectorNameCodeIsNull(editSectorForm)){
 										request.setAttribute("event", "view");
 										ActionErrors errors = new ActionErrors();
-										errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,site.getId())));
+										errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,siteId)));
 										if (errors.size() > 0)
 										{
 											saveErrors(request, errors);
 											//session.setAttribute("managingSchemes",errors);
 										}
 										refreshSubSectors(ampSector, sectors, editSectorForm);
-										if (editSectorForm.getTreeView() != null
-												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-											return mapping.findForward("editedThirdLevelSectorTree");
-										} else {
-											return mapping.findForward("editedThirdLevelSector");
-										}
+										return mapping.findForward("editedThirdLevelSector");
 									}
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
 										ActionErrors errors = new ActionErrors();
-						        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,site.getId())));
+						        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,siteId)));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors(ampSector, sectors, editSectorForm);
-						        		if (editSectorForm.getTreeView() != null
-												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-											return mapping.findForward("editedThirdLevelSectorTree");
-										} else {
-											return mapping.findForward("editedThirdLevelSector");
-										}
+										return mapping.findForward("editedThirdLevelSector");
 									}
 									
 									if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
 										request.setAttribute("event", "view");
 										ActionErrors errors = new ActionErrors();
-						        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,site.getId())));
+						        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,siteId)));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors(ampSector, sectors,editSectorForm);
-						        		if (editSectorForm.getTreeView() != null
-												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-											return mapping.findForward("editedThirdLevelSectorTree");
-										} else {
-											return mapping.findForward("editedThirdLevelSector");
-										}
+										return mapping.findForward("editedThirdLevelSector");
 									}
 									
 									logger.debug("Updating.............................................");
@@ -225,13 +183,7 @@ public class EditSector extends Action {
 									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());
 									editSectorForm.setDescription(ampSector.getParentSectorId().getDescription());
 									logger.debug(" update sector2 Complete");
-									if (editSectorForm.getTreeView() != null
-											&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-										//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-										return mapping.findForward("editedThirdLevelSectorTree");
-									} else {
-										return mapping.findForward("editedThirdLevelSector");
-									}
+									return mapping.findForward("editedThirdLevelSector");
 								}
 					 
 							  }
@@ -252,55 +204,37 @@ public class EditSector extends Action {
 									if(checkSectorNameCodeIsNull(editSectorForm)){
 										request.setAttribute("event", "view");
 										ActionErrors errors = new ActionErrors();
-										errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,site.getId())));
+										errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,siteId)));
 										if (errors.size() > 0)
 										{
 											saveErrors(request, errors);
 											//session.setAttribute("managingSchemes",errors);
 										}
 										refreshSubSectors1(ampSector, sectors,editSectorForm);
-										if (editSectorForm.getTreeView() != null
-												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-											return mapping.findForward("editedThirdLevelSectorPlusOneTree");
-										} else {
-											return mapping.findForward("editedThirdLevelSectorPlusOne");
-										}
+										return mapping.findForward("editedThirdLevelSectorPlusOne");
 									}
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
 										ActionErrors errors = new ActionErrors();
-						        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,site.getId())));
+						        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,siteId)));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors1(ampSector, sectors,editSectorForm);
-						        		if (editSectorForm.getTreeView() != null
-												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-											return mapping.findForward("editedThirdLevelSectorPlusOneTree");
-										} else {
-											return mapping.findForward("editedThirdLevelSectorPlusOne");
-										}
+										return mapping.findForward("editedThirdLevelSectorPlusOne");
 									}
 									
 									if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
 										request.setAttribute("event", "view");
 										ActionErrors errors = new ActionErrors();
-						        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,site.getId())));
+						        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,siteId)));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors1(ampSector, sectors,editSectorForm);
-						        		if (editSectorForm.getTreeView() != null
-												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-											return mapping.findForward("editedThirdLevelSectorPlusOneTree");
-										} else {
-											return mapping.findForward("editedThirdLevelSectorPlusOne");
-										}
+										return mapping.findForward("editedThirdLevelSectorPlusOne");
 									}
 									
 									logger.debug("Updating.............................................");
@@ -317,13 +251,7 @@ public class EditSector extends Action {
 									editSectorForm.setDescription(ampSector.getParentSectorId().getDescription());
 									logger.debug(" update sector3 Complete");
 									editSectorForm.setJspFlag(false);
-									if (editSectorForm.getTreeView() != null
-											&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
-										//request.setAttribute("ampSecSchemeIdFromTree", rootId);
-										return mapping.findForward("editedThirdLevelSectorPlusOneTree");
-									} else {
-										return mapping.findForward("editedThirdLevelSectorPlusOne");
-									}
+									return mapping.findForward("editedThirdLevelSectorPlusOne");
 						 }
 						 }
 					}

@@ -88,13 +88,13 @@ private static Logger logger =
 
 
 				if(request.getParameter("key") != null && request.getParameter("type") != null){
-						Long siteId=null;
+						String siteId="";
 
 						if(request.getParameter("type").equalsIgnoreCase("local")){
 
-								siteId= RequestUtils.getSiteDomain(request).getSite().getId();
+								siteId= RequestUtils.getSiteDomain(request).getSite().getId().toString();
 						}else{
-								siteId= DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId();
+								siteId= DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId().toString();
 						}
 
 						tForm.setType(request.getParameter("type"));

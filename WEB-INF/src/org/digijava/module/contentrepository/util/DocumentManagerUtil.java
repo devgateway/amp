@@ -507,9 +507,6 @@ public class DocumentManagerUtil {
 		
 		return size;
 	}
-	public static Node getSupportDocumentNode(Session jcrWriteSession, TeamMember teamMember){
-		return DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "support/docs");
-	}
 	public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
 		String teamId		= "" + teamMember.getTeamId();
 		
@@ -657,6 +654,7 @@ public class DocumentManagerUtil {
 					hasViewRights = true;
 				} else
 					hasViewRights = DocumentManagerRights.hasViewRights(documentNode, request);
+
 				if (hasViewRights == null || !hasViewRights.booleanValue()) {
 					continue;
 				}

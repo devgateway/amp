@@ -3,7 +3,6 @@
  */
 package org.digijava.module.aim.util;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -23,9 +22,9 @@ import org.hibernate.Session;
 public final class EUActivityUtil {
 	private static Logger logger = Logger.getLogger(EUActivityUtil.class);
 
-	public static Collection<EUActivity> getEUActivities(Long actId) {
+	public static Collection getEUActivities(Long actId) {
 		Session session = null;
-		Collection<EUActivity> euActivities = new ArrayList<EUActivity>();
+		Collection euActivities = new ArrayList();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -52,38 +51,38 @@ public final class EUActivityUtil {
 		return euActivities;
 	}
 
-	public static BigDecimal getTotalCostConverted(Collection euActivities,Long desktopCurrencyId) {
-		BigDecimal ret=new BigDecimal(0);
+	public static Double getTotalCostConverted(Collection euActivities,Long desktopCurrencyId) {
+		double ret=0;
 		Iterator i = euActivities.iterator();
 		while (i.hasNext()) {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(desktopCurrencyId);
                         try {
-                                ret =ret.add( element.getTotalCostConverted());
+                                ret += element.getTotalCostConverted();
                         }
                         catch (AimException ex) {
                                 logger.error(
                                     "Unable to get total converted cost=" + ex);
                         }
 		}
-		return ret;
+		return new Double(ret);
 	}
 
-	public static BigDecimal getTotalContributionsConverted(Collection euActivities,Long desktopCurrencyId) {
-		BigDecimal ret=new BigDecimal(0);
+	public static Double getTotalContributionsConverted(Collection euActivities,Long desktopCurrencyId) {
+		double ret=0;
 		Iterator i = euActivities.iterator();
 		while (i.hasNext()) {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(desktopCurrencyId);
                         try {
-                                ret =ret.add( element.getTotalContributionsConverted());
+                                ret += element.getTotalContributionsConverted();
                         }
                         catch (AimException ex) {
                                 logger.error("Unable to get total converted cost contribution" + ex);
                         }
 
 		}
-		return  ret ;
+		return new Double(ret);
 	}
 
 }

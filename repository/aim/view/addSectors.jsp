@@ -14,6 +14,12 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+
 <div id="mySector" style="display: none">
 	<div id="mySectorContent" class="content">
 	</div>
@@ -22,9 +28,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOO.namespace("YAHOO.amp");
+		YAHOOAmp.namespace("YAHOOAmp.amp");
 
-		var myPanel = new YAHOO.widget.Panel("newmySectors", {
+		var myPanel = new YAHOOAmp.widget.Panel("newmySectors", {
 			width:"750px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -99,6 +105,7 @@
 	    //content.style.visibility = "visible";
 		
 		showContent();
+		
 	}
  
 	var responseFailure = function(o){ 
@@ -206,9 +213,7 @@
 			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 			var url = "<%=commentUrl %>";
-			
-			YAHOO.util.Connect.asyncRequest("POST", url, 
-					specialCallback, postString);
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");
@@ -244,8 +249,8 @@
 		var postString		= "edit=true&" + generateFields(1);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
-		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
-		//YAHOO.util.Connect.asyncRequest("POST", url, callback);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		//YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
   											
 	}	
 
@@ -253,7 +258,7 @@
 		var postString		= generateFields(3);
 		<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
 		var url = "<%=Url %>";
-		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
 		checkAndClose=true;
 	}
 	function checkErrorAndClose(){
@@ -279,7 +284,7 @@
 		postString+="&"+generateFields(4);
 		<digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
 		var url = "<%=commentUrl %>?"+postString;
-		YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
 
 	}
 	function checkSectorEmpty()
@@ -360,7 +365,7 @@
 	function selectSector() {
 		<digi:context name="selectSec" property="context/aim/selectSectors.do" />
 		var url = "<%= selectSec %>";
-		YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true");
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true");
 	}
 
 	function searchSector() {
@@ -370,7 +375,7 @@
               var postString		= generateFields(2);
 			  <digi:context name="searchSctr" property="context/aim/searchSectors.do" />
 			  var url = "<%= searchSctr %>";
-			  YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
+			  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
 						 
 			 return true;
 			}
@@ -381,11 +386,11 @@
 
 	function myAddSectors(params) {
 		//alert(params);
-	  
+	 
 	  <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
 
 	  var url = "<%=commentUrl %>";
-	  YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
+	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	  
 	}
 	function removeSelSectors(configId) {

@@ -1,44 +1,22 @@
 package org.digijava.module.dataExchange.util;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpNotes;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.CMSContentItem;
+
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.aim.util.ContactInfoUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -64,16 +42,16 @@ public class ExportBuilder {
 
 	private ObjectFactory objectFactory = new ObjectFactory();
 
-	private Long siteId =  null; //RequestUtils.getSite(request).getSiteId()
+	private String siteId =  null; //RequestUtils.getSite(request).getSiteId()
 
 	private String[] exportLog = null;
 	
-	public ExportBuilder(AmpActivity ampActivity, Long siteId){
+	public ExportBuilder(AmpActivity ampActivity, String siteId){
 		this.ampActivity = ampActivity;
 		this.siteId = siteId;
 	}
 
-	public ExportBuilder(Long ampActivityId, Long siteId) throws AmpExportException{
+	public ExportBuilder(Long ampActivityId, String siteId) throws AmpExportException{
 		try{
 			this.ampActivity = ActivityUtil.loadActivity(ampActivityId);
 			this.siteId = siteId;
@@ -82,21 +60,15 @@ public class ExportBuilder {
 		}	
 	}
 
-	public ExportBuilder(long ampActivityId, Long siteId) throws AmpExportException{
+	public ExportBuilder(long ampActivityId, String siteId) throws AmpExportException{
 		this(new Long(ampActivityId), siteId);
 	}
 
 	public ActivityType getActivityType(AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		ActivityType retValue = objectFactory.createActivityType();
-		if (ampActivity.getAmpId() == null){
-			String msg = "AmpID is empty";
-			this.addToLog(ampActivity, msg);
-			throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
-		}
 		retValue.setDbKey(ampActivity.getAmpId());
 		retValue.setDate(ExportHelper.getGregorianCalendar(ampActivity.getCreatedDate()));
-
-
+		
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
 			if (elem.canExport()){
 				buildActivityType(retValue, elem);
@@ -193,26 +165,16 @@ public class ExportBuilder {
 		} else if (path.equalsIgnoreCase("activity.programs")){
 			if (ampActivity.getActivityPrograms() != null && ampActivity.getActivityPrograms().size() > 0){
 				for (Iterator iterator = ampActivity.getActivityPrograms().iterator(); iterator.hasNext();) {
-					AmpTheme ampTheme = (AmpTheme) iterator.next();
-					float percentage = -1;
-					if (ampActivity.getActPrograms() != null){
-						for (Iterator progIterator = ampActivity.getActPrograms().iterator(); progIterator.hasNext();) {
-							AmpActivityProgram ampActivityProgram = (AmpActivityProgram) progIterator.next();
-							if (ampActivityProgram.getProgram().equals(ampTheme)){
-								percentage = ampActivityProgram.getProgramPercentage();
-								break;
-							}
-						}
-					}
-					if (percentage >= 0){
-							parent.getPrograms().add(buildPercentageCodeValue(ampTheme.getThemeCode(),
-							ampTheme.getName(), percentage));
+					AmpActivityProgram ampProgram = (AmpActivityProgram) iterator.next();
+					if (ampProgram.getProgramPercentage() != null){
+					parent.getPrograms().add(buildPercentageCodeValue(ampProgram.getProgram().getThemeCode(),
+							ampProgram.getProgram().getName(),
+							ampProgram.getProgramPercentage().floatValue()));
 					} else {
 						String msg = "Programs.Precent is empty";
 						this.addToLog(ampActivity, msg);
 						throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
-					
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.notes")){
@@ -312,29 +274,19 @@ public class ExportBuilder {
 				}
 			}
 			
-		} 
-		else if (path.equalsIgnoreCase("activity.donorContacts")){
-			AmpActivityContact donorCont=ContactInfoUtil.getActivityPrimaryContact(ampActivity.getAmpActivityId(), Constants.DONOR_CONTACT);
-			if(donorCont!=null){
-				AmpContact donorContact=donorCont.getContact();
-				List<String> emails=ContactInfoUtil.getContactEmails(donorContact.getId());
-				ContactType cont = buildContactType(donorContact.getName(),donorContact.getLastname(),emails);
-				if (cont != null){
-					parent.getDonorContacts().add(cont);
-				}
+		} else if (path.equalsIgnoreCase("activity.donorContacts")){
+			ContactType cont = buildContactType(ampActivity.getContFirstName(),
+					ampActivity.getContLastName(), ampActivity.getEmail());
+			if (cont != null){
+				parent.getDonorContacts().add(cont);
 			}
 		} else if (path.equalsIgnoreCase("activity.govContacts")){
-			AmpActivityContact mofCont=ContactInfoUtil.getActivityPrimaryContact(ampActivity.getAmpActivityId(), Constants.MOFED_CONTACT);
-			if(mofCont!=null){
-				AmpContact mofedContact=mofCont.getContact();
-				List<String> emails=ContactInfoUtil.getContactEmails(mofedContact.getId());
-				ContactType cont = buildContactType(mofedContact.getName(),mofedContact.getLastname(),emails);
-				if (cont != null){
-					parent.getGovContacts().add(cont);
-				}
-			}			
-		} 
-		else if (path.equalsIgnoreCase("activity.additional")){
+			ContactType cont = buildContactType(ampActivity.getMofedCntFirstName(),
+					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail());
+			if (cont != null){
+				parent.getGovContacts().add(cont);
+			}
+		} else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
 		}
 	}
@@ -354,6 +306,7 @@ public class ExportBuilder {
 	}
 
 	private CodeValueType buildImplementationLevel() throws AmpExportException{
+
 		AmpCategoryValue ampCategoryValue = 
 			CategoryManagerUtil.getAmpCategoryValueFromListByKey(
 					CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
@@ -440,7 +393,7 @@ public class ExportBuilder {
 					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
 		
 		FundingDetailType fDetail = buildFundingDetail(fDetailType, ampfunding.getTransactionDate(), 
-				ampfunding.getTransactionAmount(), ampfunding.getCurrency().getCurrencyCode());
+				ampfunding.getTransactionAmount().longValue(), ampfunding.getCurrency().getCurrencyCode());
 
 
 		switch (ampfunding.getTransactionType().intValue()) {
@@ -508,7 +461,7 @@ public class ExportBuilder {
 			for (AmpFundingMTEFProjection ampProj : ampfunding.getMtefProjections()) {
 				FundingType.Projections proj = objectFactory.createFundingTypeProjections();
 				proj.setType(ampProj.getProjected().getValue());
-				proj.setAmount(new BigDecimal(ampProj.getAmount().toBigInteger()));//ampProj.getAmount());
+				proj.setAmount(ampProj.getAmount().longValue());
 				proj.setCurrency(ampProj.getAmpCurrency().getCurrencyCode());
 
 				Calendar cal = Calendar.getInstance();
@@ -553,8 +506,8 @@ public class ExportBuilder {
 		
 		retValue.setComponentName(component.getTitle());
 		
-		AmpCategoryValue type = ComponentsUtil.getComponentTypeById(component.getType_Id());
-		retValue.setComponentType(buildCodeValue(type.getValue()));
+		AmpComponentType type = ComponentsUtil.getComponentTypeById(component.getType_Id());
+		retValue.setComponentType(buildCodeValue(type.getCode(), type.getName()));
 		
 		ComponentFundingType componentFunding = objectFactory.createComponentFundingType();
 		retValue.getComponentFunding().add(componentFunding);
@@ -618,17 +571,14 @@ public class ExportBuilder {
 		return retValue;
 	}
 	
-	private ContactType buildContactType (String firstName, String lastName, List<String> emails) throws AmpExportException{
+	private ContactType buildContactType (String firstName, String lastName, String mail) throws AmpExportException{
 		ContactType retValue = null;
-		if (firstName != null && firstName.trim().length() > 0 &&lastName != null && lastName.trim().length() > 0 ){
+		if (firstName != null && firstName.trim().length() > 0 &&
+				lastName != null && lastName.trim().length() > 0 ){
 			retValue = objectFactory.createContactType();
 			retValue.setFirstName(firstName);
 			retValue.setLastName(lastName);
-			String contactEmails="";
-			for (String email : emails) {
-				contactEmails+= email+ ";";
-			}			
-			retValue.setEmail(contactEmails);
+			retValue.setEmail(mail);
 		}
 		
 		return retValue;
@@ -710,10 +660,10 @@ public class ExportBuilder {
 		String fDetailType = (detail.getAdjustmentType() == 1) ? 
 				DataExchangeConstants.ADJUSTMENT_TYPE_ACTUAL : 
 					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
-		BigDecimal amount = new BigDecimal(0);
+		long amount = 0;
 		
 		if (detail.getTransactionAmount() != null){
-			amount = detail.getTransactionAmount();
+			amount = detail.getTransactionAmount().longValue();
 		} else {
 			String msg = "AmpFundingDetail.getTransactionAmount is null";
 			this.addToLog(ampActivity, msg);
@@ -724,10 +674,10 @@ public class ExportBuilder {
 	}
 
 	private FundingDetailType buildFundingDetail(FundingDetail fDetail) throws AmpExportException{
-		BigDecimal amount = new BigDecimal(0);
+		long amount = 0;
 		
 		try {
-			amount = new BigDecimal(fDetail.getTransactionAmount());
+			amount = Long.parseLong(fDetail.getTransactionAmount());
 		} catch (Exception e) {
 			String msg = "TransactionAmount is null or not correct";
 			this.addToLog(ampActivity, msg);
@@ -751,17 +701,17 @@ public class ExportBuilder {
 		return retValue;
 	}
 	
-	private FundingDetailType buildFundingDetail(String type, Date date, BigDecimal amount, String currency) throws AmpExportException{
+	private FundingDetailType buildFundingDetail(String type, Date date, long amount, String currency) throws AmpExportException{
 		FundingDetailType retValue = objectFactory.createFundingDetailType();
 		retValue.setType(type);
 		retValue.setDate(ExportHelper.getGregorianCalendar(date));
 		
 		boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
 		if (returnString){
-			amount = amount.multiply(new BigDecimal(1000)) ;
+			amount = amount * 1000;
 		}
 
-		retValue.setAmount(new BigDecimal(amount.toBigInteger()));
+		retValue.setAmount(amount);
 		retValue.setCurrency(currency);
 		
 		return retValue;

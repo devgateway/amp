@@ -16,7 +16,6 @@ public final class ArConstants {
 	public final static MetaInfo []prefixes=new MetaInfo[] {
 		//PLEASE KEEP THE SAME ORDER IN prefixes AND suffixes !!
 		
-		new MetaInfo(GenericViews.HTML2,"/repository/aim/view/ar/html2/"),
 		new MetaInfo(GenericViews.HTML,"/repository/aim/view/ar/html/"),
 		new MetaInfo(GenericViews.XLS,"org.dgfoundation.amp.ar.view.xls."),
 		new MetaInfo(GenericViews.PDF,"org.dgfoundation.amp.ar.view.pdf."),
@@ -26,7 +25,6 @@ public final class ArConstants {
 		};
 
 	public final static MetaInfo []suffixes=new MetaInfo[] {
-		new MetaInfo(GenericViews.HTML2,".jsp"),
 		new MetaInfo(GenericViews.HTML,".jsp"),
 		new MetaInfo(GenericViews.XLS,"XLS"),
 		new MetaInfo(GenericViews.PDF,"PDF"),
@@ -44,13 +42,9 @@ public final class ArConstants {
 	public final static String TERMS_OF_ASSISTANCE="Type Of Assistance";
 	public final static String FINANCING_INSTRUMENT="Financing Instrument";	
 	public final static String YEAR="Year";
-	public final static String FISCAL_Y="FISCAL_Y";
-	public final static String FISCAL_M="FISCAL_M";
-	
 	public final static String QUARTER="Quarter";
 	public final static String MONTH="Month";
 	public final static String PROPOSED_COST="Proposed Cost";
-	
 	public final static String SOURCE_FUNDING="Source Funding";
 	
 	public final static String PERSPECTIVE="Perspective";
@@ -70,11 +64,16 @@ public final class ArConstants {
 	public final static int COMPONENT_TYPE=2;
 	public final static int REGIONAL_TYPE=3;
 	public final static int CONTRIBUTION_TYPE=4;
+	public final static int PLEDGES_TYPE=5;
 	
-	//Meta info values:
+	//metainfo values:
 	public final static String COMMITMENT="Commitments";
 	public final static String DISBURSEMENT="Disbursements";
 	public final static String EXPENDITURE="Expenditures";
+	public final static String PLEDGES_COMMITMENT="Pledges Commitments";
+	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
+	public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
+	
     
 	//Computed Field Constants
     //
@@ -118,7 +117,9 @@ public final class ArConstants {
     public final static String PLANNED_COMMITMENT_COUNT="PLANNED_COMMITMENT_COUNT";
     public final static String PLANNED_DISBURSEMENT_COUNT="PLANNED_DISBURSEMENT_COUNT";
     
-
+    public final static String PLEDGED_TOTAL="PLEDGE_TOTAL";
+    public final static String ACTUAL_PLEDGE_COMMITMENT = "ACTUAL_PLEDGE_COMMITMENT";
+    
     //dates variable names
     public final static String ACTIVITY_CLOSE_DATE_VALUE = "ACTIVITY_CLOSE_DATE_VALUE";
     public final static String ACTUAL_START_DATE_VALUE = "ACTUAL_START_DATE_VALUE";
@@ -129,10 +130,9 @@ public final class ArConstants {
     public final static String PROPOSED_COMPLETION_DATE_VALUE = "PROPOSED_COMPLETION_DATE_VALUE";
     public final static String CURRENT_DATE_VALUE="CURRENT_DATE_VALUE";
     //end computed filds 
-
+    
 	public final static String PLANNED="Planned";
 	public final static String ACTUAL="Actual";
-	
 	
 	//created columns
 	public final static String COLUMN_TOTAL="Total Costs";
@@ -146,12 +146,7 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
 	public final static String COLUMN_REGION="Region";
-	public final static String COLUMN_ZONE="Zone";
-	public final static String COLUMN_DISTRICT="District";
-	
 	public final static String COLUMN_SECTOR_GROUP="Sector Group";
-	public final static String COLUMN_SECTOR_MINISTRY_CONTACT="Sector Ministry Contact";
-	
 	
 	public final static String COLUMN_ANY_NATPROG					= "National Planning Objectives";
 	public final static String COLUMN_ANY_PRIMARYPROG			= "Primary Program";
@@ -164,7 +159,7 @@ public final class ArConstants {
 	public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";
 	public final static String EXECUTION_RATE = "Execution Rate";
 	
-	//maldives only:
+//maldives only:
 //	public final static String SECTOR_PERCENTAGE="Sector Percentage";
 	
 	public final static String PERCENTAGE="Percentage";
@@ -194,11 +189,16 @@ public final class ArConstants {
 	public static final String VIEW_COMPONENT_FUNDING="v_component_funding";
 	public static final String VIEW_REGIONAL_FUNDING="v_regional_funding";
 	public static final String VIEW_CONTRIBUTION_FUNDING="v_contribution_funding";
-	public static final String VIEW_PUBLIC_PREFIX = "cached_";
+	public static final String VIEW_PLEDGES_FUNDING="v_pledges_funding_st";
+	
+	
+	//Columns order names
+	public static final String PLEDGES_COLUMNS="Pledges Columns";
+	
 	//reportsFilter
 	
 	public final static String REPORTS_FILTER="ReportsFilter";
-	
+
 	public final static String COMPUTE_ON_YEAR="ComputeOnYear";
 
 	//the currency in use
@@ -215,16 +215,12 @@ public final class ArConstants {
 	public static final String COLUMN_UNCOMM_CUMULATIVE_BALANCE	= "Uncommitted Cumulative Balance";
 
 	public static final String SUM_OFF_RESULTS = "SUM_OFF_RESULTS";
-	
-	public static final String ACTIVITY_HISTORY_VIEWED = "1";
-	public static final String ACTIVITY_HISTORY_UPDATED = "3";
-	public static final String ACTIVITY_HISTORY_CREATED = "2";
-	
+
 	public static final String TOTAL_PRIOR_ACTUAL_DISBURSEMENT = "TOTAL_PRIOR_ACTUAL_DISBURSEMENT";
 	public static final String TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH = "TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH";
 	
 	public final static String CUMULATED_DISBURSEMENT_SELECTED_YEAR= "CUMULATED_DISBURSEMENT_SELECTED_YEAR";
 	public final static String TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR= "TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR";
 	
-	
+		
 }

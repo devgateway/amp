@@ -13,8 +13,6 @@
 </logic:notEmpty>
 
 <script language="JavaScript">
-	
-
     var continueExecution = true;
     function checkstatus(){
 
@@ -113,7 +111,7 @@ var myTabsObject;
 	function initAllTabs() {
 		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
 		//Initialize all tabs
-		myTabsObject = new YAHOO.widget.TabView("demo"); 
+		myTabsObject = new YAHOOAmp.widget.TabView("demo"); 
 		//Create "More..." tab
 		var objeto = document.createElement("DIV");
 		objeto.innerHTML = "<digi:trn key="aim:moretabs">More Tabs...</digi:trn>";
@@ -122,16 +120,16 @@ var myTabsObject;
 		objeto.id = "moreTabs";
 
 		//Add it to the Tab bar
-		myTabsObject.addTab( new YAHOO.widget.Tab({ 
+		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
 			labelEl: objeto
 			
 		}), myTabsObject.get('tabs').length+1); 
 
 		//Get the position and create the panel
-		var region = YAHOO.util.Dom.getRegion("moreTabs");
+		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
 		var xPos = region.left;
 		var yPos = region.bottom;
-		allTabsPanel = new YAHOO.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
+		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
 		allTabsPanel.setHeader("<digi:trn key="aim:pleaseselect">Please select from the list below</digi:trn>");
 		allTabsPanel.setBody("");
 		allTabsPanel.render(document.body);
@@ -160,7 +158,7 @@ var myTabsObject;
 		objeto.innerHTML = label;
 		objeto.id = "replaceableTab";
 
-		myTabsObject.addTab( new YAHOO.widget.Tab({ 
+		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
 			labelEl: objeto
 			
 		}), myTabsObject.get('tabs').length-1); 
@@ -186,7 +184,7 @@ var myTabsObject;
 		}
 
     function changeTab(e) {  
-		var region = YAHOO.util.Dom.getRegion("moreTabs");
+		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
 		var xPos = region.left;
 		var yPos = region.bottom;
 		allTabsPanel.moveTo(xPos,yPos);
@@ -211,21 +209,27 @@ var myTabsObject;
 		}
 		return false;
 	}
+
+
+	
+
 </script>
 <script language="JavaScript">
+/*	function addActivity() {
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
+	}
+	*/
 
 function toggleSettings(){
 	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
-		currentDisplaySettings.style.display 	= "none";
-		displaySettingsButton.style.color 		= "black";
+		currentDisplaySettings.style.display = "none";
 		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
 	}
 	else
 	{
-		currentDisplaySettings.style.display 	= "block";
-		displaySettingsButton.style.color 		= "3569c1";
+		currentDisplaySettings.style.display = "block";
 		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
 	}
 }
@@ -252,14 +256,15 @@ function toggleSettings(){
 </script>
 	
 <digi:context name="digiContext" property="context" />
+
+
+
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <br />
 <div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
-<table border="0"  cellpadding="0" cellspacing="0" width="100%">
-<tr>
-<td>
-<ul id="MyTabs" class="yui-nav">
+
+<ul id="MyTabs" class="yui-nav"">
 <c:set var="counter" value="0"/> 
 <logic:present name="myTabs" scope="session">
 		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
@@ -283,16 +288,8 @@ function toggleSettings(){
 					</logic:equal>
 		</logic:iterate>
 </logic:present>
-</ul>
-</td>
-<td width="60" align="right" class="yui-nav" valign="bottom">
-<logic:notEmpty name="myTabs" scope="session"> 
-<a style="background-color:#FFFFFF" href="javascript:fontResize('less')">-A</a>&nbsp; <a style="background-color:#FFFFFF" href="javascript:fontResize('reset')">A</a>&nbsp;<a style="background-color:#FFFFFF" href="javascript:fontResize('add')">+A</a>&nbsp;&nbsp;
-</logic:notEmpty>
-</td>
-</tr>
-</table>
-
+	
+</ul>									
 <div class="yui-content" style="display:none">
 </div>
 </div>
@@ -308,7 +305,7 @@ Click on one of the tabs to display activities. You can add more tabs by using t
 	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
 </c:set>
 <script type="text/javascript">
-	loadstatustext='<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
+	loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	startajaxtabs("MyTabs");
 	if(document.getElementById(tabName)){
@@ -324,10 +321,9 @@ DIV.panelList {
 	color:black;
 	background-color:white;
 }
-	
-	
 
 </style>
+<div id="debug"></div>
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
 	<logic:present name="myActiveTabs" scope="session">
     	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
@@ -359,7 +355,6 @@ DIV.panelList {
 </div>
 <c:if test="${showMoreTab}">
 <script language="javascript">
-	YAHOO.util.Event.addListener(window, "load", initAllTabs);
+	YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
 </script>
 </c:if>
-

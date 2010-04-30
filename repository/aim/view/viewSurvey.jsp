@@ -115,7 +115,7 @@ function fnEditProject(id)
 
 											<td>
 
-						<img src="/TEMPLATE/ampTemplate/imagesSource/common/print_icon.gif">
+						<img src="../ampTemplate/images/print_icon.gif">
 
 				<digi:link href="/ParisIndicatorPrintSurvey.do" target="_blank">
 

@@ -1,8 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -67,7 +64,7 @@ public class MonthlyInfoWorker {
      * @param fp
      * @return List
      */
-    public static List<MonthlyComparison> getMonthlyComparisons(FilterParams fp, BigDecimal totalCost) throws DgException {
+    public static List<MonthlyComparison> getMonthlyComparisons(FilterParams fp) throws DgException {
 
 
         List<MonthlyComparison> monthlyData = new ArrayList<MonthlyComparison>();
@@ -99,8 +96,6 @@ public class MonthlyInfoWorker {
                     List monthPlannedComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.PLANNED, month, year);
                     List monthActualComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.ACTUAL, month, year);
                     comparison.setActualCommitment(getSumAmounts(monthActualComm, currCode));
-                    comparison.setUncommittedBalance(totalCost.subtract(comparison.getActualCommitment()));
-                    comparison.setTotalCost(totalCost);
                     comparison.setPlannedCommitment(getSumAmounts(monthPlannedComm, currCode));
 
 
@@ -134,28 +129,28 @@ public class MonthlyInfoWorker {
 
     }
 
-    public static BigDecimal getSumAmounts(List fundingDetails, String currCode) throws DgException {
-        BigDecimal sum = new BigDecimal(0);
+    public static double getSumAmounts(List fundingDetails, String currCode) throws DgException {
+        double sum = 0;
         if (fundingDetails != null && fundingDetails.size() > 0) {
             Iterator<AmpFundingDetail> monthPlannedIter = fundingDetails.iterator();
 
             while (monthPlannedIter.hasNext()) {
                 AmpFundingDetail det = monthPlannedIter.next();
-                BigDecimal rate=new BigDecimal(0);
-                BigDecimal defCurrRate=new BigDecimal(0);
+                double rate;
+                double defCurrRate;
                 java.sql.Date date = new java.sql.Date(det.getTransactionDate().getTime());
-                defCurrRate =new BigDecimal( Util.getExchange(currCode, date));
+                defCurrRate = Util.getExchange(currCode, date);
                 if (det.getFixedExchangeRate() == null) {
 
 
 
-                    rate = new BigDecimal( Util.getExchange(det.getAmpCurrencyId().getCurrencyCode(), date));
+                    rate = Util.getExchange(det.getAmpCurrencyId().getCurrencyCode(), date);
                 } else {
-                    rate = new BigDecimal(det.getFixedExchangeRate());
+                    rate = det.getFixedExchangeRate();
                 }
 
-                MathContext mc = new MathContext(Constants.MATH_CONTEXT_PRECISION ,RoundingMode.HALF_UP);
-                sum = sum.add(det.getTransactionAmount().divide(rate,mc).multiply(defCurrRate,mc));
+
+                sum += det.getTransactionAmount() / rate * defCurrRate;
 
             }
 
@@ -170,8 +165,8 @@ public class MonthlyInfoWorker {
         String currCode = fp.getCurrencyCode();
         int transactionType = fp.getTransactionType();
         List monthlyData = new ArrayList();
-        BigDecimal actualSum = new BigDecimal(0);
-        BigDecimal plannedSum = new BigDecimal(0);
+        Double actualSum = new Double(0);
+        Double plannedSum = new Double(0);
 
 
         /* if (transactionType == Constants.MTEFPROJECTION ) {

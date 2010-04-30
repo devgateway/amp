@@ -2,8 +2,6 @@ package org.digijava.module.message.helper;
 
 import java.util.List;
 
-import org.digijava.module.sdm.dbentity.Sdm;
-
 public class MessageHelper {	
 	private Long msgId;
 	private String name;
@@ -13,9 +11,8 @@ public class MessageHelper {
 	private String from;
 	private List<String> receivers;
 	private String objectURL;
-	private Sdm attachedDocs;
 	
-	public MessageHelper(){
+		public MessageHelper(){
 		
 	}
 	
@@ -75,14 +72,6 @@ public class MessageHelper {
 
 	public void setObjectURL(String objectURL) {
 		this.objectURL = objectURL;
-	}
-
-	public Sdm getAttachedDocs() {
-		return attachedDocs;
-	}
-
-	public void setAttachedDocs(Sdm attachedDocs) {
-		this.attachedDocs = attachedDocs;
 	}
 	
 }

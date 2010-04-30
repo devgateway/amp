@@ -35,7 +35,15 @@ function login()
 
 
 
+function projectFiche(id)
 
+{
+
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
+
+}
 
 
 
@@ -52,6 +60,25 @@ function fnEditProject(id)
    document.aimKnowledgeForm.submit();
 
 }
+
+
+
+function preview(id)
+
+{
+
+
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+
+    document.aimKnowledgeForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+
+	document.aimKnowledgeForm.target = "_self";
+
+    document.aimKnowledgeForm.submit();
+
+}
+
 
 
 </script>
@@ -179,7 +206,7 @@ function fnEditProject(id)
 													<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp; <digi:trn
 														key="aim:managedDocuments">DM-Managed Documents</digi:trn></TD>
 
-													<TD><IMG src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif"
+													<TD><IMG src="../ampTemplate/images/corner-r.gif"
 														width="17" height="17"></TD>
 
 												</TR>
@@ -221,7 +248,7 @@ function fnEditProject(id)
 															<TR bgcolor="#f4f4f2">
 
 																<TD align="right"><IMG alt=Link height=10
-																	src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-gr.gif"></TD>
+																	src="../ampTemplate/images/arrow-gr.gif"></TD>
 
 																<TD width="98%" align="left"><b> <bean:write
 																	name="document" property="name" /></b> - <i>File : <c:out

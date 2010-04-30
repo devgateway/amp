@@ -5,14 +5,14 @@
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="native">
-				<param name="sequence">AMP_EU_ACTIVITY_seq</param>
+				<param name="sequence">EU_ACTIVITY_seq</param>
 			</generator>
 		</id>
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="textId" column="text_id" type="java.lang.String" />
 		<property name="inputs" column="inputs" type="java.lang.String" />
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
-		<property access="field" name="totalCost" column="total_cost" type="java.math.BigDecimal" />
+		<property access="field" name="totalCost" column="total_cost" type="java.lang.Double" />
 		<many-to-one name="totalCostCurrency" column="total_cost_currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="activity" column="amp_activity_id"

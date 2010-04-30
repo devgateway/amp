@@ -258,7 +258,7 @@
                                         <table cellPadding=5 cellSpacing=1 width="100%">
                                             <tr>
                                                 <td>
-                                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
+                                                    <digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
                                                 </td>
                                                 <td>
                                                      <digi:link module="aim"  href="/admin.do" >
@@ -270,7 +270,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
+                                                <digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
                                                 </td>
                                                 <td nowrap>
                                                     <c:set var="trn">

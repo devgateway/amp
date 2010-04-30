@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" %>
+	<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -79,6 +79,11 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <script type="text/javascript">
 
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
+}
 
 function fnEditProject(id)
 {
@@ -88,6 +93,14 @@ function fnEditProject(id)
    document.aimFinancingBreakdownForm.submit();
 }
 
+function preview(id)
+{
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+   document.aimFinancingBreakdownForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimFinancingBreakdownForm.target = "_self";
+   document.aimFinancingBreakdownForm.submit();
+}
 
 </script>
 
@@ -239,78 +252,83 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<TR>
 											<TD width="100%" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" id="dataTable">
-   					  <TR bgcolor="#999999" >
+               					  <TR bgcolor="#999999" >
     									<TD bgcolor="#999999" style="color:black;font-weight:bold;">&nbsp;</TD>
-               	    <field:display name="Funding Organization Id" feature="Funding Information">
+		    	                    	<field:display name="Funding Organization Id" feature="Funding Information">
 		    	                    		<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
-    	                    	</field:display>
+		    	                    	</field:display>
 		    	                    	<field:display name="Funding Organization" feature="Funding Information">
 						                    <TD width="20" bgcolor="#999999" style="color:black"><digi:trn key="aim:organization">Organization</digi:trn></TD>
-				                </field:display>
+						                </field:display>
 
 						                <feature:display module="Funding" name="MTEF Projections">
 											<field:display feature="MTEF Projections" name="MTEFProjections">
 											<td bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:financialProgress:totalProjections_projection">Total Projections</digi:trn></td>
-										  </field:display>
+											</field:display>
 										</feature:display>
 
 						                <field:display name="Total Committed" feature="Commitments">
 											<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalCommitmentsActual">Total Commitments (Actual)</digi:trn></TD>
-								</field:display>
+										</field:display>
                                         <field:display name="Total Ordered" feature="Disbursement Orders">
 			                	         	<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
-	                	        </field:display>
+			                	        </field:display>
 										<field:display name="Total Disbursed" feature="Disbursement">
 			                	         	<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalDisbursementsActual">Total Disbursements (Actual)</digi:trn></TD>
-	                	        </field:display>
+			                	        </field:display>
 			                	        <field:display name="Undisbursed Funds" feature="Funding Information">
 											<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
-								</field:display>
+										</field:display>
 
 										<feature:display module="Funding" name="Expenditures">
                                    
                                             <field:display name="Total Expended" feature="Expenditures">
                                                 <TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalExpendituresActual">Total Expenditures (Actual)</digi:trn></TD>
-                                          </field:display>
+                                            </field:display>
+                                   
                                         </feature:display>
 
 	    	                    	 	<feature:display module="Funding" name="Expenditures">
 		    	                    	 	<field:display name="Unexpended Funds" feature="Funding Information">
 												<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:unExpendedFunds">Unexpended a Funds</digi:trn></TD>
-                                          </field:display>
+											</field:display>
 										</feature:display>
-								      	
-								      	 <TD bgcolor="#999999" style="color:black;font-weight:bold;">Total Estimated Cost</TD>
-                                         <TD bgcolor="#999999" style="color:black;font-weight:bold;">Uncommitted balance</TD>
-	    	                    	 	 
+
 									</TR>
 								<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
 			                    	<TR valign="top">
-			                        <TD align="center" colspan="9"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
+                                    <TD align="center" colspan="7"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
 			                     </TR>
 			                    </logic:empty>
 			                    <logic:notEmpty name="aimFinancingBreakdownForm" property="financingBreakdown">
 								<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown"
 			  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
 															<TR valign="top" bgcolor="#f4f4f2">
-															<TD>&nbsp;</TD>
+				               				<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlFinancialOverview}" property="ampActivityId">
+
+																<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
+															</c:set>
+															<c:set target="${urlFinancialOverview}" property="ampFundingId">
+																<bean:write name="breakdown" property="ampFundingId"/>
+															</c:set>
+															<c:set target="${urlFinancialOverview}" property="tabIndex">
+																<bean:write name="aimFinancingBreakdownForm" property="tabIndex"/>
+															</c:set>
+															<c:set var="translation">
+																<digi:trn key="aim:clickToViewFinancialOverview">
+																Click here to view Financial Overview</digi:trn>
+															</c:set>
+															<TD>&nbsp;
+																		<field:display name="Financial Progress More Info Link"  feature="Funding Information">
+																		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview"
+																		title="${translation}" >
+																			<digi:trn>More info...</digi:trn>
+																		</digi:link>
+																		</field:display>
+															</TD>
 												<field:display name="Funding Organization Id" feature="Funding Information">
 					    	           			<TD>
-						               				<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlFinancialOverview}" property="ampActivityId">
-
-																		<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
-																	</c:set>
-																	<c:set target="${urlFinancialOverview}" property="ampFundingId">
-																		<bean:write name="breakdown" property="ampFundingId"/>
-																	</c:set>
-																	<c:set target="${urlFinancialOverview}" property="tabIndex">
-																		<bean:write name="aimFinancingBreakdownForm" property="tabIndex"/>
-																	</c:set>
-																	<c:set var="translation">
-																		<digi:trn key="aim:clickToViewFinancialOverview">
-																		Click here to view Financial Overview</digi:trn>
-																	</c:set>
 						                  							<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview"
 																		title="${translation}" >
 																		<c:if test="${!empty breakdown.financingId}">
@@ -322,7 +340,8 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																			</c:set>
 																			<c:out value="${translation}"/>
 																		</c:if>
-																	</digi:link>																</TD>
+																	</digi:link>
+																</TD>
 												</field:display>
 											<bean:define id="breakdown" name="breakdown" type="org.digijava.module.aim.helper.FinancingBreakdown" toScope="request" />
 
@@ -356,15 +375,12 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 					      			        <feature:display module="Funding" name="Expenditures">
 							      			        <field:display name="Unexpended Funds" feature="Funding Information">
 							            		      <TD align="right" nowrap="nowrap"><bean:write name="breakdown" property="unExpended"/></TD>
-					            		              
-					      			          </field:display>
+					            		      </field:display>
 					            		    </feature:display>
-                                            	    <TD align="right" nowrap="nowrap"><bean:write name="breakdown" property="totalCost"/></TD>
-                                            		<TD align="right" nowrap="nowrap"><bean:write name="breakdown" property="uncommittedbalance"/></TD>
-												</TR>
-											</logic:iterate>
-											</logic:notEmpty>
-														
+											
+															</TR>
+														</logic:iterate>
+													</logic:notEmpty>
 				                  <TR valign="top">
 														<TD class="note" style="background-color:#FFFFFF;"><digi:trn key="aim:total">Total</digi:trn></TD>
 				                     	<field:display name="Funding Organization Id" feature="Funding Information">
@@ -385,22 +401,21 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 														<field:display name="Total Disbursed" feature="Disbursement"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD>
 														</field:display>
 														<field:display name="Undisbursed Funds" feature="Funding Information"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD>
+                                                        
                                                         </field:display>
-														<feature:display module="Funding" name="Expenditures">
+												
+                                                <feature:display module="Funding" name="Expenditures">
+                                              
                                                 		<field:display name="Total Expended" feature="Expenditures"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD>
                                                 		</field:display>
+                                                        
                                                         </feature:display>
-                                            		<feature:display module="Funding" name="Expenditures">
-													    <field:display name="Unexpended Funds" feature="Funding Information">
-													        <TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD>
-													        
-													    </field:display>
-													</feature:display>
-    								
-    								
-    								                    <TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalCost"/></TD>
-                                                        <TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalUncommitted"/></TD>
-								
+														
+<feature:display module="Funding" name="Expenditures">
+    <field:display name="Unexpended Funds" feature="Funding Information">
+        <TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD>
+    </field:display>
+</feature:display>
 </TR>
 												</TABLE>
 										  </TD>

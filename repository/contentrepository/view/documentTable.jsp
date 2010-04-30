@@ -9,16 +9,20 @@
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
 
-<% request.setAttribute("checkBoxToHide", request.getParameter("checkBoxToHide") );%>
-
+<logic:notEmpty name="checkBoxToHide" scope="request">
+	<bean:define id="checkBoxToHideLocal" value="true"></bean:define>
+</logic:notEmpty> 
+<logic:empty name="checkBoxToHide" scope="request">
+	<bean:define id="checkBoxToHideLocal" value="false"></bean:define>
+</logic:empty> 
 <table id="team_table" bgcolor="white">
 						<thead>
 							<tr>
-								<c:if test="${checkBoxToHide != null && checkBoxToHide == 'false'}">
+								<logic:equal name="checkBoxToHideLocal" value="false">
 									<th><digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn></th>
-								</c:if>
+								</logic:equal>
 								<th><digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
-									<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
 								<th>
                                 	<digi:trn key="contentrepository:TableHeader:ResourceName">Resource Name</digi:trn>   
                                 </th>
@@ -57,11 +61,11 @@
 								</c:set>
 							</logic:equal>
 							<tr>
-								<c:if test="${checkBoxToHide != null && checkBoxToHide == 'false'}">
+								<logic:equal name="checkBoxToHideLocal" value="false">
 									<td>
 	                                    &nbsp;                                                          
 		                              </td>
-		                        </c:if>
+		                        </logic:equal>
 								<td>
 									<bean:write name='documentData' property='title'/>
 									<%-- <script type="text/javascript">
@@ -118,7 +122,7 @@
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 									onClick="downloadFile('<bean:write name='documentData' property='uuid' />');"
 	
-									title="${translation}"><img hspace="2" src= "/TEMPLATE/ampTemplate/imagesSource/resources/check_out.gif" border=0></a>
+									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
 								</c:when>
 								<c:otherwise>
 <!--									<c:set var="translation">-->
@@ -127,7 +131,7 @@
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 									onclick="window.open('${documentData.webLink }')" 
 									onmouseout="UnTip()"
-									onmouseover="Tip('<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn> ${documentData.webLink}')"><img hspace="2" src= "/TEMPLATE/ampTemplate/imagesSource/resources/link_go.gif" border=0/></a>
+									onmouseover="Tip('<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn> ${documentData.webLink}')"><img hspace="2" src= "/repository/contentrepository/view/images/link_go.gif" border=0/></a>
 								</c:otherwise>
 								</c:choose>
 								
@@ -138,7 +142,7 @@
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
 								onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
-								title="<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>"><img hspace="2" src= "/TEMPLATE/ampTemplate/imagesSource/resources/update.gif" border=0></a>
+								title="<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/update.gif" border=0></a>
 								
 								</logic:equal>
 								
@@ -151,7 +155,7 @@
 								<logic:equal name="documentData" property="hasShowVersionsRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}');"
-								title="<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>"><img hspace="2" src= "/TEMPLATE/ampTemplate/imagesSource/resources/version_history.gif" border=0></a>
+								title="<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/version_history.gif" border=0></a>
 								</logic:equal>
 <!--								<c:set var="translation">-->
 <!--									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>-->
@@ -160,7 +164,7 @@
 									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>"><img hspace="2" src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_public.gif" border=0></a>
+									title="<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/make_public.gif" border=0></a>
 									</c:if>
 								</logic:equal>
 								
@@ -172,7 +176,7 @@
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>"><img hspace="2" src= "/TEMPLATE/ampTemplate/imagesSource/publicView/make_private.gif" border=0></a>
+									title="<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/make_private.gif" border=0></a>
 								</logic:equal>
 								
 								</logic:equal>
@@ -183,7 +187,7 @@
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"
-									title="<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>"><img hspace="2" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0></a>
+									title="<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
 								</logic:equal>
 								</td>
 							</tr>							

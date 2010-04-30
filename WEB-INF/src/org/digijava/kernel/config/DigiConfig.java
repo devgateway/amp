@@ -48,14 +48,7 @@ public class DigiConfig {
     private boolean search;
     private String serverType;
 
-    private int httpPort;
-    private int httpsPort;
-    
-    private String ecsDisable;
-    private String ecsServerName;
-    private String propertiesFile;
-    
-	private ParamSafeHTML paramSafehtml;
+    private ParamSafeHTML paramSafehtml;
     private ParamBbTag paramBbTag;
     private ForwardEmails forwardEmails;
     private ExceptionEmails exceptionEmails;
@@ -96,8 +89,6 @@ public class DigiConfig {
         this.configBeans = new HashMap();
         this.services = new HashMap();
         this.caseSensitiveTranslatioKeys=true;
-        this.httpPort = 0;
-        this.httpsPort = 0;
     }
 
     public HibernateClasses getHibernateClasses() {
@@ -369,45 +360,4 @@ public class DigiConfig {
 		this.enableAutoLogin = enableAutoLogin;
 	}
 
-	public int getHttpPort() {
-		return httpPort;
-	}
-
-	public void setHttpPort(int httpPort) {
-		this.httpPort = httpPort;
-	}
-
-	public int getHttpsPort() {
-		return httpsPort;
-	}
-
-	public void setHttpsPort(int httpsPort) {
-		this.httpsPort = httpsPort;
-	}
-
-	public String getEcsDisable() {
-		return ecsDisable;
-	}
-
-	public void setEcsDisable(String ecsDisable) {
-		this.ecsDisable = ecsDisable;
-	}
-
-	public String getEcsServerName() {
-		return ecsServerName;
-	}
-
-	public void setEcsServerName(String ecsServerName) {
-		this.ecsServerName = ecsServerName;
-	}
-
-	public String getPropertiesFile() {
-		return propertiesFile;
-	}
-
-	public void setPropertiesFile(String propertiesFile) {
-		this.propertiesFile = propertiesFile;
-	}
-
-	
 }

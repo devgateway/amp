@@ -13,5 +13,4 @@ public interface WSCurrencyClient {
 	HashMap<String, Double> getCRatesBasedUSD(String[] codeCurrencies);
 	HashMap<String, Double> getCurrencyRates(String[] currencyCode, String baseCurrency) throws Exception;
 	Double getCurrencyRateBasedUSD(String codeCurrency);
-	String getCurrencyRateUrlAddress();
 }

@@ -2,7 +2,6 @@ package org.digijava.module.aim.helper;
 
 public class QuartzJobForm {
     private String name;
-    private String exeTime;
     private String startDateTime;
     private String endDateTime;
     private String nextFireDateTime;
@@ -18,15 +17,7 @@ public class QuartzJobForm {
     private int dayOfMonth;
     private boolean manualJob;
    
-    public String getExeTime() {
-		return exeTime;
-	}
-
-	public void setExeTime(String exeTime) {
-		this.exeTime = exeTime;
-	}
-
-	private String startH;
+    private String startH;
     private String startM;
 
     private String endH;

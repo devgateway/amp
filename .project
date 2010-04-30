@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>amp-head-for-merge</name>
+	<name>amp-head</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -21,7 +21,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/AMP ANT Builder.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/AMP ANT builder.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
@@ -34,7 +34,7 @@
 		<link>
 			<name>digi-src</name>
 			<type>2</type>
-			<location>/home/mihai/C::/home/mihai/workspace/digi/WEB-INF/src</location>
+			<location>/home/mihai/workspace/digi/WEB-INF/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

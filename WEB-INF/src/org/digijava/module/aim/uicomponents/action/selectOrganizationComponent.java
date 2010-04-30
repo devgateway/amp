@@ -1,7 +1,5 @@
 package org.digijava.module.aim.uicomponents.action;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -15,12 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ecs.xhtml.param;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.uicomponents.AddOrganizationButton;
@@ -29,9 +25,7 @@ import org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm
 import org.digijava.module.aim.util.DbUtil;
 
 public class selectOrganizationComponent extends Action {
-	
-	public static final String ROOT_TAG = "ORGANIZATIONS";
-	
+
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
@@ -46,7 +40,7 @@ public class selectOrganizationComponent extends Action {
 			//fill list first
 			fillAllSelectedOgs(oForm);
 			// if has a delegate so call it
-			if (oForm.getDelegateClass() != null && !"".equalsIgnoreCase(oForm.getDelegateClass())) {
+			if (oForm.getDelegateClass() != null && !"".equalsIgnoreCase(oForm.getDelegateClass())) {				
 				//call delegate
 				return executeDelegate(mapping, form, request, response);
 			} else {
@@ -57,21 +51,6 @@ public class selectOrganizationComponent extends Action {
 					return setOrganizationToForm(mapping, form, request, response);
 				}
 			}
-		}else if("validate".equalsIgnoreCase(subAction)){
-			 //creating xml that will be returned
-			int orgsSize=oForm.getAllSelectedOrgsIds()!=null ? oForm.getAllSelectedOrgsIds().size() : 0;
-	        response.setContentType("text/xml");
-	        OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
-	        PrintWriter out = new PrintWriter(outputStream, true);
-	        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-	        xml += "<" + ROOT_TAG + ">";
-	        xml += "<" + "organizatoins amount=\"" + new Long(orgsSize).toString() + "\" />";
-	        xml += "</" + ROOT_TAG + ">";
-	        out.println(xml);
-	        out.close();
-	        // return xml
-	        outputStream.close();
-	        return null;
 		}
 
 		return prepare(mapping, form, request, response);
@@ -120,6 +99,12 @@ public class selectOrganizationComponent extends Action {
 			oForm.setUseClient(false);
 		}
 
+		if ("true".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_USE_ACRONYM))) {
+			oForm.setUseAcronym(true);
+		} else {
+			oForm.setUseAcronym(false);
+		}
+		
 		if (!"".equalsIgnoreCase(collection) && collection != null) {
 			oForm.setMultiSelect(true);
 		} else {
@@ -161,16 +146,9 @@ public class selectOrganizationComponent extends Action {
 		}
 
 		Collection<AmpOrgType> types;
-		if (request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST) != null
-				&& !request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST).equals("")) {		
-			oForm.setOrgTypes(this.getOrgGroupList(request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST)));
-			oForm.setFilterDonorGroups(true);
-		} else {
-			oForm.setOrgTypes(DbUtil.getAllOrgTypes());
-			oForm.setFilterDonorGroups(false);
-		}
+		types = DbUtil.getAllOrgTypes();
+		oForm.setOrgTypes(types);
 		oForm.setTempNumResults(10);
-		
 		return mapping.findForward("forward");
 
 	}
@@ -189,7 +167,7 @@ public class selectOrganizationComponent extends Action {
 		}
 
 		eaForm.setPagesToShow(10);
-		boolean matchWord = "true".equals(eaForm.getMatchEntireWord());
+
 		if (alpha == null || alpha.trim().length() == 0) {
 			//in case of "viewAll" selected organizations shouldn't get lost. in other case(applying above filter), it should be reseted
 			if(request.getParameter("viewAll")==null || ! request.getParameter("viewAll").equalsIgnoreCase("viewAll")){
@@ -207,22 +185,14 @@ public class selectOrganizationComponent extends Action {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for organisations based on the keyword and the
 					// organisation type
-					if(!matchWord)
-						organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
-					else organizationResult= DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId(),matchWord);
-					
+					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
 				} else {
 					// search for organisations based on organisation type only
-					
-						organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId());
-					
+					organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId());
 				}
 			} else if (eaForm.getKeyword().trim().length() != 0) {
 				// search based on the given keyword only.
-				if(!matchWord)
-					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
-				else
-					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(),matchWord);
+				organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
 			} else {
 				// get all organisations since keyword field is blank and org
 				// type field has 'ALL'.
@@ -263,18 +233,15 @@ public class selectOrganizationComponent extends Action {
 			fillAllSelectedOgs(eaForm);
 			if( eaForm.getKeyword()!=null && !"".equals(eaForm.getKeyword().trim()) ) organizationResult=eaForm.getAllOrganization();
 			else{
-			if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
-				if (eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
-					if(!matchWord)
+				if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
+					if (eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
 						organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
-					else
-						organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId(),matchWord);
-				} else{
-					organizationResult = DbUtil.searchForOrganisation(alpha, "", eaForm.getAmpOrgTypeId());
+					} else{
+						organizationResult = DbUtil.searchForOrganisation(alpha, "", eaForm.getAmpOrgTypeId());
+					}
+				} else {
+					organizationResult = DbUtil.searchForOrganisation(alpha, "");
 				}
-			} else {
-				organizationResult = DbUtil.searchForOrganisation(alpha, "");
-			}
 			}
 			
 			eaForm.setCurrentAlpha(alpha);
@@ -350,14 +317,7 @@ public class selectOrganizationComponent extends Action {
 
 		if (eaForm.getNumResults() == 0) {
 			eaForm.setTempNumResults(10);
-			if (request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST) != null
-					&& !request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST).equals("")) {
-				eaForm.setOrgTypes(this.getOrgGroupList(request
-						.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST)));
-				eaForm.setFilterDonorGroups(true);
-			} else {
-				eaForm.setFilterDonorGroups(false);
-			}
+			eaForm.setOrgTypes(DbUtil.getAllOrgTypes());
 			if (eaForm.getAlphaPages() != null)
 				eaForm.setAlphaPages(null);
 		} else {
@@ -386,7 +346,7 @@ public class selectOrganizationComponent extends Action {
 			for (int i = (stIndex - 1); i < edIndex; i++) {
 				tempCol.add(vect.get(i));
 			}
-
+			
 			fillAllSelectedOgs(eaForm);
 
 			eaForm.setOrganizations(tempCol);
@@ -431,10 +391,10 @@ public class selectOrganizationComponent extends Action {
 			if(orgIds!=null && orgIds.size()>0){
 				for (Long orgId : orgIds) {
 					AmpOrganisation org = DbUtil.getOrganisation(orgId);
-				if (!targetCollecion.contains(org)) {
-					targetCollecion.add(org);
+					if (!targetCollecion.contains(org)) {
+						targetCollecion.add(org);
+					}
 				}
-			}
 			}			
 			target.set(eaForm.getTargetForm(), targetCollecion);
 			eaForm.setAfterSelect(true);
@@ -453,21 +413,6 @@ public class selectOrganizationComponent extends Action {
 		return processor.execute(mapping, form, request, response);
 	}
 
-	private Collection<AmpOrgType> getOrgGroupList(String donorGroups) {
-		Collection<AmpOrgType> list = new ArrayList<AmpOrgType>();
-		Collection<AmpOrgType> auxList = new ArrayList<AmpOrgType>();
-		if (donorGroups != null && !donorGroups.equals("")) {
-			String[] paramString = donorGroups.split(",");
-			for (int i = 0; i < paramString.length; i++) {
-				AmpOrgType type = DbUtil.getAmpOrgTypeByCode(paramString[i]);
-				if (type != null) {
-					list.add(type);
-				}
-			}
-		}
-		return list;
-	}
-	
 	private void fillAllSelectedOgs(selectOrganizationComponentForm oForm) {
 		if(oForm.getSelOrganisations()!=null && oForm.getSelOrganisations().length > 0){
 			if(oForm.getAllSelectedOrgsIds()==null){
@@ -480,4 +425,4 @@ public class selectOrganizationComponent extends Action {
 			}
 		}
 	}
-};
+}

@@ -90,7 +90,7 @@ public class ComputedAmountColWorker extends ColumnWorker {
 
 		ComputedAmountCell ret = new ComputedAmountCell(ownerId);
 		ret.setId(id);
-		ret.setAmount(value);
+		ret.setAmount(value.doubleValue());
 		ret.setFromExchangeRate(exchangeRate);
 		ret.setCurrencyDate(currencyDate);
 		ret.setCurrencyCode(currencyCode);
@@ -109,11 +109,10 @@ public class ComputedAmountColWorker extends ColumnWorker {
 	protected Cell getCellFromCell(Cell src) {
 		CategAmountCell categ = (CategAmountCell) src;
 		ComputedAmountCell cell = new ComputedAmountCell();
-		cell.setValuesFromCell((CategAmountCell)src);
+		cell.setValuesFromCell((CategAmountCell) src);
 		return cell;
 	}
-	
-	
+
 	public Cell newCellInstance() {
 		return new ComputedAmountCell();
 

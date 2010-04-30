@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpOrganisation" table="AMP_ORGANISATION" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpOrganisation" table="AMP_ORGANISATION">
 		<cache usage="read-write" />
 		<id name="ampOrgId" column="amp_org_id" type="java.lang.Long">
 			<generator class="native">
@@ -19,6 +19,11 @@
 		<property name="orgGroup" column="org_group" type="java.lang.String" />
 
 		<property name="address" column="address" type="java.lang.String" />
+		<property name="contactPersonName" column="contact_person_name" type="java.lang.String" />
+		<property name="contactPersonTitle" column="contact_person_title" type="java.lang.String" />
+		<property name="email" column="email" type="java.lang.String" />
+		<property name="phone" column="phone" type="java.lang.String" />
+		<property name="fax" column="fax" type="java.lang.String" />
 		<property name="orgUrl" column="org_url" type="java.lang.String" />
 		<property name="acronym" column="acronym" type="java.lang.String" />
 		<property name="segmentCode" column="segment_code" type="java.lang.String" />
@@ -35,17 +40,18 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpPledge" />
 		</set>
 
-		
+		<many-to-one name="orgTypeId" column="org_type_id"
+			class="org.digijava.module.aim.dbentity.AmpOrgType" cascade="none" />
 
 		<many-to-one name="orgGrpId" column="org_grp_id"
 			class="org.digijava.module.aim.dbentity.AmpOrgGroup" cascade="none" />
 
 		<many-to-one name="levelId" column="level_id"
 			class="org.digijava.module.aim.dbentity.AmpLevel" cascade="none" />
-                <many-to-one name="implemLocationLevel" column="imp_level_id"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
-	
+		<many-to-one name="regionId" column="region_id"
+			class="org.digijava.module.aim.dbentity.AmpRegion" cascade="none" />
+
 		<many-to-one name="countryId" column="country_id"
 			class="org.digijava.kernel.dbentity.Country" cascade="none" />
 
@@ -68,6 +74,7 @@
 		</set>
 
 		<set name="calendar" table="AMP_CALENDAR_EVENT_ORGANISATIO" lazy="true">
+			<cache usage="read-write" />
 			<key column="amp_org_id"/>
 			<many-to-many class="org.digijava.module.calendar.dbentity.AmpCalendar"
 				column="CALENDAR_ID" />
@@ -77,45 +84,6 @@
 			<key column="amp_org_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationDocument" />
 		</set>
-
-                <set name="locations" cascade="all-delete-orphan" inverse="true" >
-                    <key column="amp_org_id" />
-                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgLocation" />
-                </set>
-
-                <set name="staffInfos" cascade="all-delete-orphan" inverse="true">
-                    <key column="amp_org_id" />
-                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgStaffInformation" />
-                </set>
-
-                <set name="organizationBudgetInfos" cascade="all-delete-orphan" inverse="true">
-                    <key column="amp_org_id" />
-                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation" />
-                </set>
-                <many-to-one name="country" column="amp_country_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
-
-                <set name="recipients" cascade="all-delete-orphan" inverse="true">
-                    <key column="parent_org_id"/>
-                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRecipient" />
-                </set>
-                
-                <set name="organizationContacts" inverse="true" cascade="delete" lazy="false">
-					<key column="amp_org_id" />
-					<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
-				</set>
-
-                <property name="addressAbroad" column="address_abroad" type="java.lang.String" />
-                <property name="taxNumber" column="tax_number" type="java.lang.String" />
-                <property name="minPlanRegNumb" column="regist_num_min_plan" type="java.lang.String" />
-                <property name="legalPersonNum" column="legal_personality_number" type="java.lang.String" />
-                <property name="legalPersonRegDate" column="legal_personality_reg_date" type="java.util.Date" />
-                <property name="minPlanRegDate" column="min_plan_reg_date" type="java.util.Date" />
-                <property name="primaryPurpose" column="org_primary_purpose" type="text" />
-                <property name="otherInformation" column="org_other_info" type="text" />
-                <property name="lineMinRegDate" column="org_line_ministry_reg_date" type="java.util.Date" />
-                <property name="operFuncApprDate" column="org_oper_func_approval_date" type="java.util.Date" />
-                <property name="receiptLegPersonalityAct" column="org_rec_leg_per_act" type="java.lang.String" />
-                <many-to-one name="region" column="cat_val_loc_region_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 
 	</class>
 

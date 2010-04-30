@@ -57,6 +57,7 @@ public class AdminTableWidgetData extends DispatchAction {
 		dForm.setWidgetId(wTable.getId());
 		dForm.setTable(wTable);
 		dForm.setData(new String[dForm.getRows().size()][dForm.getColumns().size()]);
+		dForm.setTableName(wTable.getDataRows().toString());
 		return mapping.findForward("forward");
 	}
 	
@@ -151,7 +152,7 @@ public class AdminTableWidgetData extends DispatchAction {
 			throws Exception {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		if (null != dForm.getRowIndex() && dForm.getRowIndex()>=0){
-			int insertIndex=dForm.getRowIndex().intValue();
+			int insertIndex=dForm.getRowIndex().intValue()+1;
 			WiTable wTable = TableWidgetUtil.getFromSession(request);
 			wTable.addNewRowAt(insertIndex);
 		}		

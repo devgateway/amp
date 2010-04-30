@@ -3,6 +3,7 @@
 <secondary-pages>
 
     <page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
+	<page name="viewAhSurveis" title=" - View AhSurveis " />
 	<page name="addSectorToIndicator" title="Add Sector" />
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
@@ -117,9 +118,7 @@
 	<page name="removeTeamActivities" title=" - Remove team activities" />
 	<page name="teamWorkspaceOverview" title=" - Team Workspace Setup" />
 	<page name="addTeamActivities" title=" - Team Workspace Setup" />
-	<page name="addTeamActivitiesDocs" title=" - Team Workspace Setup" />
 	<page name="teamActivities" title=" - Team Workspace Setup" />
-	<page name="teamActivitiesDocuments" title=" - Team Workspace Setup" />
 	<page name="teamMembersAdd" title=" - Team Workspace Setup" />
 	<page name="teamMembers" title=" - Team Workspace Setup" />
 	<page name="teamMemberList" title=" - Team Workspace Info" />
@@ -191,7 +190,6 @@
 	<page page="components/selectOrganization" name="aim_orgComponentPopUp" title="AMP - Select Organization" />
 
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
-	<page page="importFunding" name="aim_fundingImportPopupLayout" title="AMP - Import Funding" />
 	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />
     <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />
     <page page="saveErrors" name="aim_saveErrors" title="AMP - Save Activity" />
@@ -218,9 +216,6 @@
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
 	<page page="showDocumentsInPopup"  name="aim_showDocumentsInPopup"  title="AMP - Related Documents"/>
-	
-	<page name="viewActivityHistory" page="viewActivityHistory" title=" - View Activity History"/>
-	<page name="viewActivityDifferences" page="viewActivityDifferences" title=" - View Activity Differences"/>
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />
@@ -256,8 +251,6 @@
 	<page name="addNewLevel2Sector" title=" : Add New Level 2 Sector "/>
 	<page name="addNewLevel3Sector" title=" : Add New Level 3Sector "/>
 	<page name="editLevelEnough" title=" : Edit Level 3Sector "/>
-
-	<page name="viewSchemeTree" title=": View Sector Scheme Tree" />
 
 	<!-- for Components Manager -->
 	<page name="viewComponentTypes" title=": - AMP Component Types"/>
@@ -300,10 +293,6 @@
 	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />
 	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />
 	<page page="viewProjectDescObj" name="aim_projectDetails" title="AMP - Project Details" />
-	
-	<page page="assignActivitiesJSON" name="aim_assignActivitiesJSON" title="AMP - Assign Activities" />
-	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title="AMP - Update Team Member" />
-	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title="AMP - Assign Team Member" />
 
 	<page page="addIssue" name="aim_addIssue" title="AMP - Add Issue" />
 	<page page="addMeasure" name="aim_addMeasure" title="AMP - Add Measure" />
@@ -362,7 +351,7 @@
 
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
 
-	<page page="filters/filterPicker2" name="aim_filterPicker2" title="AMP - Reports Filter Picker" />
+	<page page="ar/filterPicker" name="aim_filterPicker" title="AMP - Reports Filter Picker" />
 	
 	<page page="viewParisIndicatorPopupFilter" name="PI_Filter" title="AMP - PI Reports Filter" />
 	
@@ -370,8 +359,6 @@
 	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlTabWizard" title=" - Tab Wizard" />
 	<page page="reportWizard/saveMessage" name="aim_saveMessage" />
 	<page page="reportWizard/showSelectedFilters" name="aim_showSelectedFilters" />
-	
-	<page page="reportsImpExp/mainImpExp" name="aim_impExpReports" />
 
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
 	<page page="printableActivityRisk" name="aim_printActRisk" title="AMP - Activity-Risk" />
@@ -393,11 +380,11 @@
 	<page name="parisIndicatorEdit" title=" : Paris Indicator Edit" />
 
 	<!-- Paris Indiacator Manager ends-->
-	<page name="firstPagePreview" title="First Page Preview"/>
 	<page name="flagUploader" title=" - Flag uploader/selector" />
 	<!--
 	<page page="uploadFlag" name="aim_uploadFlag" title=" - Upload Flag" />
 	-->
+    <page name="addProposedProjFunding" title="Proposed Project Cost" />
     <page name="printMyDesktop" title="Print Desktop" />
     <page name="addProgramPopup" title="Add Program" />
         <!-- National Planing Dashboard -->
@@ -433,13 +420,11 @@
     <page name="addQuartzJobClass" title="Add Job Class" />
     <page name="editQuartzJobClass" title="Edit Job Class" />
     <page name="quartzJobClassManager" title="Job Class Manager" />
-	<page name="addActivityContactInfo" title="Activity Contact Information"/>
-	<page name="allContacts" page="viewAddressBook" title="Address Book"/>
-	<page name="addContact" page="addEditAmpContact" title="Add/Edit Contact"/>
-    <page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
-	<page name="fmCheck" title="Feature Manager check tool"/>
-	<page name="fmAdvancedPopUp" title="Feature Manager Advanced View PopUp"/>
 
+	<page name="addPledge" page="addPledge" title =" - Add Pledge " />
+	<page name="viewPledgesList" page="viewPledgesList" title =" - Pledges List " />
+	<page page="selectPledgeLocation" name="selectPledgeLocation" title="AMP - Select Location" />
+	
 </secondary-pages>
 <module>
 

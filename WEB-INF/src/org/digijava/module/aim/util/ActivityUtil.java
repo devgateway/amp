@@ -8,23 +8,17 @@ package org.digijava.module.aim.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -32,25 +26,18 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
-import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
+import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
-import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.RequestProcessor;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.action.ShowAddComponent;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityComponente;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
@@ -62,14 +49,12 @@ import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -78,26 +63,23 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
+import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
-import org.digijava.module.aim.dbentity.EUActivity;
-import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.exception.NoDocumentTypeException;
-import org.digijava.module.aim.helper.ActivityDocumentsConstants;
-import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.AmpProjectDonor;
@@ -109,6 +91,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -117,8 +100,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.action.SelectDocumentDM;
-import org.digijava.module.message.helper.RelatedActivity;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -143,12 +124,12 @@ public class ActivityUtil {
   // */
   //I've seen no references so I marked it deprecated
   //@Deprecated
-//  public static Long saveActivity(AmpActivityVersion activity, ArrayList commentsCol,
+//  public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
 //                                  boolean serializeFlag, Long field,
 //                                  Collection relatedLinks, Long memberId,
 //                                  Set<Components<AmpComponentFunding>> ampTempComp,List<IPAContract> contracts) throws Exception {
 //    /*
-//     * calls saveActivity(AmpActivityVersion activity,Long oldActivityId,boolean edit)
+//     * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
 //     * by passing null and false to the paramindicatorseters oldActivityId and edit respectively
 //     * since this is creating a new activity
 //     */
@@ -157,25 +138,24 @@ public class ActivityUtil {
 //  }
 
   /**
-   * Persist an AmpActivityVersion object to the database
+   * Persist an AmpActivity object to the database
    * This function is used to either update an existing activity
    * or creating a new activity. If the parameter 'edit' is set to
    * true the function will update an existing activity with id
    * given by the parameter 'oldActivityId'. If the 'edit' parameter
    * is false, the function will create a new activity
    *
-   * @param activity The AmpActivityVersion object to be persisted
-   * @param oldActivityId The id of the AmpActivityVersion object which is to be updated
+   * @param activity The AmpActivity object to be persisted
+   * @param oldActivityId The id of the AmpActivity object which is to be updated
    * @param edit This boolean variable represents whether to create a new
    * activity object or to update the existing activity object
    * @throws Exception 
    */
 public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	//Retrieving parameters
-	AmpActivityVersion activity = rsp.getActivity();
+	AmpActivity activity = rsp.getActivity();
 	Long oldActivityId = rsp.getOldActivityId();
 	boolean edit = rsp.isEdit();
-	//edit = false;
 	ArrayList commentsCol = rsp.getEaForm().getComments().getCommentsCol();
 	boolean serializeFlag = rsp.getEaForm().isSerializeFlag();
 	Long field = rsp.getField();
@@ -185,8 +165,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	//Set<Components<AmpComponentFunding>> componentsFunding = rsp.getTempComp();
 	List<IPAContract> contracts = rsp.getEaForm().getContracts().getContracts();
 	boolean alwaysRollback = rsp.isAlwaysRollback();
-	List<AmpActivityContact> activityContacts=rsp.getEaForm().getContactInformation().getActivityContacts();
-	AmpActivityGroup usedAmpActivityGroup = null;
 	//***
 	
 	
@@ -194,7 +172,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     logger.debug("In save activity " + activity.getName());
     Session session = null;
     Transaction tx = null;
-    AmpActivityVersion oldActivity = null;
+    AmpActivity oldActivity = null;
 
     Long activityId = null;
     Set fundSet		= null;
@@ -210,23 +188,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
 
-      if (oldActivityId != null && oldActivityId != 0) {
-    	  oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, oldActivityId);
-      }
-      
-      if (edit) { /* edit an existing activity */        
+      if (edit) { /* edit an existing activity */
+        oldActivity = (AmpActivity) session.load(AmpActivity.class,
+                                                 oldActivityId);
 
         activityId = oldActivityId;
 
         activity.setAmpActivityId(oldActivityId);
-        
-        usedAmpActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, oldActivity
-						.getAmpActivityGroup().getAmpActivityGroupId());
-        
-        //creo una nueva actividad a ver q pasa.
-        //oldActivity = new AmpActivityVersion();
-        oldActivity.setAmpActivityId(new Long(oldActivityId.intValue()+1));
-        
 
         if (oldActivity == null) {
           logger.debug("Previous Activity is null");
@@ -404,12 +372,46 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setActualStartDate(activity.getActualStartDate());
         oldActivity.setAmpId(activity.getAmpId());
         oldActivity.setCalType(activity.getCalType());
-        oldActivity.setCondition(activity.getCondition());        
+        oldActivity.setCondition(activity.getCondition());
+        oldActivity.setContFirstName(activity.getContFirstName());
+        oldActivity.setContLastName(activity.getContLastName());
         oldActivity.setContractors(activity.getContractors());
         oldActivity.setDescription(activity.getDescription());
-        oldActivity.setDocumentSpace(activity.getDocumentSpace());        
+        oldActivity.setDocumentSpace(activity.getDocumentSpace());
+        oldActivity.setEmail(activity.getEmail());
         oldActivity.setLanguage(activity.getLanguage());
 
+        oldActivity.setDnrCntTitle(activity.getDnrCntTitle());
+        oldActivity.setDnrCntOrganization(activity.getDnrCntOrganization());
+        oldActivity.setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
+        oldActivity.setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
+
+        oldActivity.setMfdCntTitle(activity.getMfdCntTitle());
+        oldActivity.setMfdCntOrganization(activity.getMfdCntOrganization());
+        oldActivity.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
+        oldActivity.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
+        
+        oldActivity.setPrjCoFirstName(activity.getPrjCoFirstName());
+        oldActivity.setPrjCoLastName(activity.getPrjCoLastName());
+        oldActivity.setPrjCoTitle(activity.getPrjCoTitle());
+        oldActivity.setPrjCoOrganization(activity.getPrjCoOrganization());
+        oldActivity.setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
+        oldActivity.setPrjCoEmail(activity.getPrjCoEmail());
+        oldActivity.setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
+        
+        oldActivity.setSecMiCntFirstName(activity.getSecMiCntFirstName());
+        oldActivity.setSecMiCntLastName(activity.getSecMiCntLastName());
+        oldActivity.setSecMiCntEmail(activity.getSecMiCntEmail());
+        oldActivity.setSecMiCntOrganization(activity.getSecMiCntOrganization());
+        oldActivity.setSecMiCntTitle(activity.getSecMiCntTitle());
+        oldActivity.setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
+        oldActivity.setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
+
+//				oldActivity.setLevel(activity.getLevel()); //TO BE DELETED
+        oldActivity.setModality(activity.getModality());
+        oldActivity.setMofedCntEmail(activity.getMofedCntEmail());
+        oldActivity.setMofedCntFirstName(activity.getMofedCntFirstName());
+        oldActivity.setMofedCntLastName(activity.getMofedCntLastName());
         oldActivity.setName(activity.getName());
         oldActivity.setBudget(activity.getBudget());
         oldActivity.setProjectComments(activity.getProjectComments());
@@ -658,18 +660,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
         session.update(oldActivity);
         activity = oldActivity;
-        
-        /**
-         * ACTIVITY VERSIONING: This section saves a new record in amp_activity_group table.
-         */
-        //TODO: Check for activated versioning.
-        usedAmpActivityGroup.setAmpActivityLastVersion(oldActivity);
-		session.save(usedAmpActivityGroup);
-		oldActivity.setAmpActivityGroup(usedAmpActivityGroup);
-		oldActivity.setModifiedDate(Calendar.getInstance().getTime());
-		oldActivity.setModifiedBy(member);
-		session.update(oldActivity);
-        
         /*
                 // added by Akash
                 // desc: Saving team members in amp_member_activity table in case activity is Approved
@@ -701,6 +691,17 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         logger.debug("creating ....");
         if (activity.getMember() == null) {
                 activity.setMember(new HashSet());
+                Set programs = activity.getActPrograms();
+                if (programs != null) {
+                        Iterator iterProgram = programs.iterator();
+                        while (iterProgram.hasNext()) {
+                                AmpActivityProgram program = (
+                                    AmpActivityProgram) iterProgram.next();
+                                program.setActivity(activity);
+                        }
+
+                }
+
         }
 
         activity.getMember().add(activity.getActivityCreator());
@@ -714,170 +715,22 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          */
         session.save(activity);
         activityId = activity.getAmpActivityId();
-        String ampId=generateAmpId(member.getUser(),activityId, session);
-
-        if (activity.getAmpId()==null){
-            activity.setAmpId(ampId);
-        }
+        String ampId=generateAmpId(member.getUser(),activityId , session);
+        activity.setAmpId(ampId);
         session.update(activity);
         //session.saveOrUpdate(member);
-        
-        /**
-         * ACTIVITY VERSIONING: This section saves a new record in amp_activity_group table.
-         */
-        //TODO: Check for activated versioning.
-				if (oldActivity == null) {
-					// New activity.
-					AmpActivityGroup newActivityGroup = new AmpActivityGroup();
-					newActivityGroup.setAmpActivityLastVersion(activity);
-					session.save(newActivityGroup);
-					activity.setAmpActivityGroup(newActivityGroup);
-					activity.setModifiedDate(Calendar.getInstance().getTime());
-					activity.setModifiedBy(member);
-					session.update(activity);
-				} else if (oldActivity != null && oldActivity.getAmpActivityGroup() != null) {
-					// Edited activity with version group.
-					AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class,
-							oldActivity.getAmpActivityGroup().getAmpActivityGroupId());
-					auxActivityGroup.setAmpActivityLastVersion(activity);
-					session.save(auxActivityGroup);
-					activity.setAmpActivityGroup(auxActivityGroup);
-					activity.setModifiedDate(Calendar.getInstance().getTime());
-					activity.setModifiedBy(member);
-					activity.setAmpActivityPreviousVersion(oldActivity);
-					session.update(activity);
-				} else if (oldActivity != null && oldActivity.getAmpActivityGroup() == null) {
-					// Edited activity with no version group info (activity created BEFORE the versioning system).
-					AmpActivityGroup newActivityGroup = new AmpActivityGroup();
-					newActivityGroup.setAmpActivityLastVersion(activity);
-					session.save(newActivityGroup);
-					activity.setAmpActivityGroup(newActivityGroup);
-					activity.setModifiedDate(Calendar.getInstance().getTime());
-					activity.setModifiedBy(member);
-					activity.setAmpActivityPreviousVersion(oldActivity);
-					session.update(activity);
-					// Add version info to old un-versioned activity.
-					oldActivity.setAmpActivityGroup(newActivityGroup);
-					session.update(oldActivity);
-				}        
      
-      
-	
-     /*if(activity.getComponents()!=null) {
-    	  Collection<AmpComponent> components= activity.getComponents();
-	      for (AmpComponent ampComponent : components) {
-	    	  ampComponent.setActivity(activity);
-	    	  session.save(ampComponent);
-	      	}
-	      }*/
-     
-	      
-      if (activity.getClosingDates() != null) {
-    	  Collection<AmpActivityClosingDates> newClosingDates = activity.getClosingDates();
-    	  // activity.getClosingDates().clear();
-    	  Iterator<AmpActivityClosingDates> iter = newClosingDates.iterator();
-    	  while (iter.hasNext()) {
-    		  AmpActivityClosingDates auxClosingDate = iter.next();
-    		  if (auxClosingDate.getClosingDate() != null) {
-    			  auxClosingDate.setAmpActivityId(activity);
-    			  session.save(auxClosingDate);
-    		  }
-    	  }
-      }
-      
-      }
-
-      // Components section.
-      Map<Long,AmpComponent> componentsMap=new HashMap<Long,AmpComponent>();
-      if(rsp.getEaForm().getComponents().getCompotosave()!=null) {
-    	  Collection<AmpComponent> components = rsp.getEaForm().getComponents().getCompotosave();
-    	  Iterator<AmpComponent> iComponents = components.iterator();
-    	  while(iComponents.hasNext()){
-    		  AmpComponent auxComponent = iComponents.next();
-    		  AmpComponent newComponent = new AmpComponent();
-    		  newComponent.setActivity(activity);
-    		  newComponent.setCode(auxComponent.getCode());
-    		  newComponent.setCreationdate(auxComponent.getCreationdate());
-    		  newComponent.setDescription(auxComponent.getDescription());
-    		  newComponent.setFunding(new HashSet<AmpComponentFunding>());
-    		  newComponent.setTitle(auxComponent.getTitle());
-    		  newComponent.setType(auxComponent.getType());
-    		  newComponent.setUrl(auxComponent.getUrl());
-    		  activity.getComponents().add(newComponent);
-
-    		  session.save(newComponent);
-    		  componentsMap.put(auxComponent.getAmpComponentId(), newComponent);
-    		  Iterator<AmpComponentFunding> iFundings = auxComponent.getFunding().iterator();
-    		  while(iFundings.hasNext()) {
-    			  AmpComponentFunding auxFunding = iFundings.next();
-    			  AmpComponentFunding newFunding = new AmpComponentFunding();
-    			  newFunding.setActivity(activity);
-    			  newFunding.setAdjustmentType(auxFunding.getAdjustmentType());
-    			  //newFunding.setAmpComponentFundingId(auxFunding.getAmpComponentFundingId());
-    			  newFunding.setComponent(newComponent);
-    			  newFunding.setCurrency(auxFunding.getCurrency());
-    			  newFunding.setExchangeRate(auxFunding.getExchangeRate());
-    			  newFunding.setExpenditureCategory(auxFunding.getExpenditureCategory());
-    			  newFunding.setReportingDate(auxFunding.getReportingDate());
-    			  newFunding.setReportingOrganization(auxFunding.getReportingOrganization());
-    			  newFunding.setTransactionAmount(auxFunding.getTransactionAmount());
-    			  newFunding.setTransactionDate(auxFunding.getTransactionDate());
-    			  newFunding.setTransactionType(auxFunding.getTransactionType());
-    			  activity.getComponentFundings().add(newFunding);
-
-    			  session.save(newFunding);
-    		  }    		  
-    	  }    	  
-      }
-      
-      if(activity.getComponentProgress()!=null) {
-    	  Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
-	      for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
-	    	  ampPhysicalPerformance.setAmpActivityId(activity);
-	    	  AmpComponent dbComp=componentsMap.get(ampPhysicalPerformance.getComponent().getAmpComponentId());
-	    	  ampPhysicalPerformance.setComponent(dbComp);
+      if(activity.getComponentProgress()!=null){
+	        Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
+	        for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
+	      	  ampPhysicalPerformance.setAmpActivityId(activity);
 	      	  session.save(ampPhysicalPerformance);
-	  	  }
-      } else {
-    	  if(oldActivity != null && oldActivity.getComponentProgress()!=null) {
-        	  Collection<AmpPhysicalPerformance> oldProgress= oldActivity.getComponentProgress();
-    	      for (AmpPhysicalPerformance ampPhysicalPerformance : oldProgress) {
-    	    	  AmpPhysicalPerformance auxPP = new AmpPhysicalPerformance();
-    	    	  auxPP.setAmpActivityId(activity);
-    	    	  auxPP.setComments(ampPhysicalPerformance.getComments());
-    	    	  
-    	    	  //TODO: Evaluate if the creation of a new component part is needed.
-    	    	  AmpComponent auxComponent = new AmpComponent();
-    	    	  //auxComponent.setActivities(new HashSet());
-    	    	  //auxComponent.getActivities().add(activity);
-    	    	  auxComponent.setCode(ampPhysicalPerformance.getComponent().getCode());
-    	    	  auxComponent.setCreationdate(ampPhysicalPerformance.getComponent().getCreationdate());
-    	    	  auxComponent.setDescription(ampPhysicalPerformance.getComponent().getDescription());
-    	    	  auxComponent.setTitle(ampPhysicalPerformance.getComponent().getTitle());
-    	    	  auxComponent.setType(ampPhysicalPerformance.getComponent().getType());
-    	    	  auxComponent.setUrl(ampPhysicalPerformance.getComponent().getUrl());
-    	    	  auxComponent.setActivity(activity);
-    	    	  auxPP.setComponent(auxComponent);
-    	    	  activity.getComponents().add(auxComponent);
-    	    	  // If the upper code is disabled then enable the following line.
-    	    	  //auxPP.setComponent(ampPhysicalPerformance.getComponent());
-    	    	  
-    	    	  auxPP.setDescription(ampPhysicalPerformance.getDescription());
-    	    	  auxPP.setLanguage(ampPhysicalPerformance.getLanguage());
-    	    	  auxPP.setReportingDate(ampPhysicalPerformance.getReportingDate());
-    	    	  auxPP.setReportingOrgId(ampPhysicalPerformance.getReportingOrgId());
-    	    	  auxPP.setTitle(ampPhysicalPerformance.getTitle());
-    	    	  auxPP.setType(ampPhysicalPerformance.getType());
-    	    	  auxPP.setAmpActivityId(activity);
-
-    	    	  //session.saveOrUpdate(activity);
-    	    	  session.save(auxComponent);
-    	    	  session.save(auxPP);
-    	  	  }
-          }
+	  		}
+	      }
       }
-      
-      /*Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId, session);
+
+      /*
+      Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId, session);
       Iterator<Components<AmpComponentFunding>> componentsFundingIt = componentsFunding.iterator();
       while(componentsFundingIt.hasNext()){
     	  Components<AmpComponentFunding> ampTempComp = componentsFundingIt.next();
@@ -914,9 +767,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	        	  componentFundingCol.remove(ampComp);
 			  }
 	        }
-	      }*/
+	      }
 
-	      /*Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId,ampTempComp.getComponentId(), session);
+
+	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId,ampTempComp.getComponentId(), session);
+
 	      if (ampTempComp.getPhyProgress() != null) {
 				Iterator compItr = ampTempComp.getPhyProgress().iterator();
 				while (compItr.hasNext()) {
@@ -939,114 +794,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			while (componentFundingColIt.hasNext()) {
 				session.delete(componentFundingColIt.next());
 			}
-	  }*/
-      
-      /**
-       * Contact Information
-       */ 
-      
-      // if activity contains contact,which is not in contact list, we should remove it
-      List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
-      if(activityDbContacts!=null && activityDbContacts.size()>0){
-    	  Iterator<AmpActivityContact> iter=activityDbContacts.iterator();
-    	  while(iter.hasNext()){
-    		  AmpActivityContact actContact=iter.next();
-    		  int count=0;
-    		  if(activityContacts!=null){
-    			  for (AmpActivityContact activityContact : activityContacts) {
-					if(activityContact.getId()!=null && activityContact.getId().equals(actContact.getId())){
-						count++;
-						break;
-					}
-				}
-    		  }
-    		  if(count==0){ //if activity contains contact,which is not in contact list, we should remove it
-    			  AmpActivityContact activityCont=(AmpActivityContact)session.get(AmpActivityContact.class, actContact.getId());
-    			  AmpContact cont=activityCont.getContact();
-    			  session.delete(activityCont);
-    			  cont.getActivityContacts().remove(activityCont);
-    			  session.update(cont);    			  		  
-    		  }
-    	  }
-      }
-      //add or edit activity contact and amp contact
-      if(activityContacts!=null && activityContacts.size()>0){
-    	  for (AmpActivityContact activityContact : activityContacts) {
-    	   	//save or update contact
-    		AmpContact contact=activityContact.getContact();
-    		AmpContact ampContact=null;
-    		if(contact.getId()!=null){ //contact already exists.
-    			ampContact=(AmpContact)session.get(AmpContact.class, contact.getId());
-    			ampContact.setName(contact.getName());
-    			ampContact.setLastname(contact.getLastname());
-    			ampContact.setTitle(contact.getTitle());
-    			ampContact.setOrganisationName(contact.getOrganisationName());
-    			ampContact.setCreator(contact.getCreator());
-    			ampContact.setShared(true);
-    			ampContact.setOfficeaddress(contact.getOfficeaddress());
-    			ampContact.setFunction(contact.getFunction());
-    			//remove old properties
-    			List<AmpContactProperty> dbProperties=ContactInfoUtil.getContactProperties(ampContact);
-    			if(dbProperties!=null){
-    				for (AmpContactProperty dbProperty : dbProperties) {
-    					session.delete(dbProperty);
-    				}
-    			}
-    			ampContact.setProperties(null);    			
-    			//remove old organization contacts
-    			List<AmpOrganisationContact> dbOrgConts=ContactInfoUtil.getContactOrganizations(ampContact.getId());
-    			if(dbOrgConts!=null){
-    				for (AmpOrganisationContact orgCont :dbOrgConts) {
-						session.delete(orgCont);
-					}
-    			}
-
-    			ampContact.setOrganizationContacts(null);
-    			session.update(ampContact);    			    			
-    		}else{
-    			session.save(contact);
-    		}
-    		//save properties
-    		if(contact.getProperties()!=null){
-				for (AmpContactProperty formProperty : contact.getProperties()) {
-					if(ampContact!=null){
-						formProperty.setContact(ampContact);
-					}else{
-						formProperty.setContact(contact);
-					}
-					session.save(formProperty);
-				}
-			}
-    		//save cont. organizations
-    		if(contact.getOrganizationContacts()!=null){
-    			for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
-					if(ampContact!=null){
-						orgCont.setContact(ampContact);
-					}else{
-						orgCont.setContact(contact);
-					}
-					session.save(orgCont);
-				}
-    		}
-
-    		//link activity to activityContact
-    		if(activityContact.getId()!=null){
-    			AmpActivityContact ampActContact= new AmpActivityContact();
-    				//(AmpActivityContact)session.get(AmpActivityContact.class, activityContact.getId());
-    			ampActContact.setContact(activityContact.getContact());
-    			ampActContact.setContactType(activityContact.getContactType());
-    			ampActContact.setPrimaryContact(activityContact.getPrimaryContact());
-    			ampActContact.setActivity(activity);
-    			ampActContact.setId(null);
-    			session.save(ampActContact);
-    		}else{
-    			activityContact.setActivity(activity);
-        		session.save(activityContact);
-    		}
-    	  }
-      }
-      
-      
+	  }
+      */
       
       /* Persists comments, of type AmpComments, related to the activity */
       if (commentsCol != null && !commentsCol.isEmpty()) {
@@ -1097,12 +846,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         while (itr.hasNext()) {
           ActivityIndicator actInd = (ActivityIndicator) itr.next();
           
-          AmpCategoryValue risk=null;
+          AmpIndicatorRiskRatings risk=null;
                     
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
           //if actInd.getRisk()==0 , than no Risk is selected
           if(actInd.getRisk()!=null && actInd.getRisk().longValue()>0){
-        	  risk=CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
+        	  risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());  
           }          
 
           AmpCategoryValue categoryValue = null;
@@ -1137,7 +886,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValActual.setValue(new Double(actInd.getCurrentVal()));
         	  indValActual.setComment(actInd.getCurrentValComments());
         	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
-        	  indValActual.setRiskValue(risk);
+        	  indValActual.setRisk(risk);
         	  indValActual.setLogFrame(categoryValue);
         	  indValActual.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValActual);
@@ -1149,7 +898,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValTarget.setValue(new Double(actInd.getTargetVal()));
         	  indValTarget.setComment(actInd.getTargetValComments());
         	  indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
-        	  indValTarget.setRiskValue(risk);
+        	  indValTarget.setRisk(risk);
         	  indValTarget.setLogFrame(categoryValue);
         	  indValTarget.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValTarget);
@@ -1161,7 +910,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValBase.setValue(new Double(actInd.getBaseVal()));
         	  indValBase.setComment(actInd.getBaseValComments());
         	  indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
-        	  indValBase.setRiskValue(risk);
+        	  indValBase.setRisk(risk);
         	  indValBase.setLogFrame(categoryValue);
         	  indValBase.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValBase);
@@ -1173,7 +922,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
         	  indValRevised.setComment(actInd.getRevisedTargetValComments());
         	  indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
-        	  indValRevised.setRiskValue(risk);
+        	  indValRevised.setRisk(risk);
         	  indValRevised.setLogFrame(categoryValue);
         	  indValRevised.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValRevised);
@@ -1196,108 +945,133 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
       }
       
-        	if (contracts != null) {
-				Iterator<IPAContract> ipaConIter = contracts.iterator();
-				while (ipaConIter.hasNext()) {
-					IPAContract auxContract = ipaConIter.next();
-					IPAContract newContract = new IPAContract();
-					newContract.setActivity(activity);
-					newContract.setContractName(auxContract.getContractName());
-					newContract.setDescription(auxContract.getDescription());
-					newContract.setContractingOrganizationText(auxContract.getContractingOrganizationText());
-					newContract.setActivityCategory(auxContract.getActivityCategory());
-					newContract.setStartOfTendering(auxContract.getStartOfTendering());
-					newContract.setSignatureOfContract(auxContract.getSignatureOfContract());
-					newContract.setContractValidity(auxContract.getContractValidity());
-					newContract.setContractCompletion(auxContract.getContractCompletion());
+        String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity.ampActivityId=" + activityId;
+      	IPAContract ipaAux = (IPAContract) session.get(IPAContract.class, activityId);
+        String ids = "";
+        if (contracts != null) {
 
-					newContract.setTotalPrivateContribAmountDate(auxContract.getTotalPrivateContribAmountDate());
-					newContract
-							.setTotalNationalContribIFIAmountDate(auxContract.getTotalNationalContribIFIAmountDate());
-					newContract.setTotalNationalContribRegionalAmountDate(auxContract
-							.getTotalNationalContribRegionalAmountDate());
-					newContract.setTotalNationalContribCentralAmountDate(auxContract
-							.getTotalNationalContribCentralAmountDate());
-					newContract.setTotalECContribINVAmountDate(auxContract.getTotalECContribINVAmountDate());
-					newContract.setTotalECContribIBAmountDate(auxContract.getTotalECContribIBAmountDate());
+            Iterator<IPAContract> ipaConIter = contracts.iterator();
+            while (ipaConIter.hasNext()) {
+                IPAContract contract = ipaConIter.next();
+                contract.setActivity(activity);
+                if (contract.getId() != null) {
+                    IPAContract oldContract = (IPAContract) session.get(IPAContract.class, contract.getId());
+                    oldContract.setContractName(contract.getContractName());
+                    oldContract.setDescription(contract.getDescription());
+                    oldContract.setContractingOrganizationText(contract.getContractingOrganizationText());
+                    oldContract.setActivityCategory(contract.getActivityCategory());
+                    oldContract.setStartOfTendering(contract.getStartOfTendering());
+                    oldContract.setSignatureOfContract(contract.getSignatureOfContract());
+                    oldContract.setContractValidity(contract.getContractValidity());
+                    oldContract.setContractCompletion(contract.getContractCompletion());
 
-					newContract.setTotalECContribIBAmount(auxContract.getTotalECContribIBAmount());
-					newContract.setTotalAmount(auxContract.getTotalAmount());
-					newContract.setContractTotalValue(auxContract.getContractTotalValue());
-					newContract.setTotalAmountCurrency(auxContract.getTotalAmountCurrency());
-					newContract.setDibusrsementsGlobalCurrency(auxContract.getDibusrsementsGlobalCurrency());
-					newContract.setExecutionRate(auxContract.getExecutionRate());
-					newContract.setTotalECContribINVAmount(auxContract.getTotalECContribINVAmount());
-					newContract
-							.setTotalNationalContribCentralAmount(auxContract.getTotalNationalContribCentralAmount());
-					newContract.setTotalNationalContribRegionalAmount(auxContract
-							.getTotalNationalContribRegionalAmount());
-					newContract.setTotalNationalContribIFIAmount(auxContract.getTotalNationalContribIFIAmount());
-					newContract.setTotalPrivateContribAmount(auxContract.getTotalPrivateContribAmount());
-					newContract.setOrganization(auxContract.getOrganization());
-					newContract.setStatus(auxContract.getStatus());
-					newContract.setType(auxContract.getType());
-					newContract.setContractType(auxContract.getContractType());
-					// oldContract.getDisbursements().clear();
-					Set toRetain = new HashSet();
+                    oldContract.setTotalPrivateContribAmountDate(contract.getTotalPrivateContribAmountDate());
+                    oldContract.setTotalNationalContribIFIAmountDate(contract.getTotalNationalContribIFIAmountDate());
+                    oldContract.setTotalNationalContribRegionalAmountDate(contract.getTotalNationalContribRegionalAmountDate());
+                    oldContract.setTotalNationalContribCentralAmountDate(contract.getTotalNationalContribCentralAmountDate());
+                    oldContract.setTotalECContribINVAmountDate(contract.getTotalECContribINVAmountDate());
+                    oldContract.setTotalECContribIBAmountDate(contract.getTotalECContribIBAmountDate());
+                    
+                    oldContract.setTotalECContribIBAmount(contract.getTotalECContribIBAmount());
+                    oldContract.setTotalAmount(contract.getTotalAmount());
+                    oldContract.setContractTotalValue(contract.getContractTotalValue());
+                    oldContract.setTotalAmountCurrency(contract.getTotalAmountCurrency());
+                    oldContract.setDibusrsementsGlobalCurrency(contract.getDibusrsementsGlobalCurrency());
+                    oldContract.setExecutionRate(contract.getExecutionRate());
+                    oldContract.setTotalECContribINVAmount(contract.getTotalECContribINVAmount());
+                    oldContract.setTotalNationalContribCentralAmount(contract.getTotalNationalContribCentralAmount());
+                    oldContract.setTotalNationalContribRegionalAmount(contract.getTotalNationalContribRegionalAmount());
+                    oldContract.setTotalNationalContribIFIAmount(contract.getTotalNationalContribIFIAmount());
+                    oldContract.setTotalPrivateContribAmount(contract.getTotalPrivateContribAmount());
+                    oldContract.setOrganization(contract.getOrganization());
+                    oldContract.setStatus(contract.getStatus());
+                    oldContract.setType(contract.getType());
+                    oldContract.setContractType(contract.getContractType());
+                    //oldContract.getDisbursements().clear();
+                    Set toRetain=new HashSet();
 
-					Set newOrgs = auxContract.getOrganizations();
-					if (newOrgs != null) {
-						newContract.setOrganizations(new HashSet<AmpOrganisation>());
-						Iterator<AmpOrganisation> iter = newOrgs.iterator();
-						while (iter.hasNext()) {
-							AmpOrganisation auxOrg = iter.next();
-							//auxOrg = (AmpOrganisation) session.load(AmpOrganisation.class, auxOrg.getAmpOrgId());
-							newContract.getOrganizations().add(auxOrg);
-						}
-					}
+                    Set newOrgs = contract.getOrganizations();
+                    if (newOrgs != null && newOrgs.size() > 0) {
+                        Iterator<AmpOrganisation> iter = newOrgs.iterator();
+                        while (iter.hasNext()) {
+                            AmpOrganisation newOrg = iter.next();
+                            if (newOrg.getAmpOrgId() != null) {
+                                AmpOrganisation oldDisb = (AmpOrganisation) session.load(AmpOrganisation.class,
+                                        newOrg.getAmpOrgId());
+                                toRetain.add(oldDisb);
+                            } else {
+                                if (oldContract.getOrganization() == null) {
+                                    oldContract.setOrganizations(new HashSet());
+                                }
+                                oldContract.getOrganizations().add(newOrg);
+                                toRetain.add(newOrg);
+                                
+                            }
+                        }
+                        oldContract.getOrganizations().addAll(toRetain);
+                    }
+                    else{
+                        if(oldContract.getOrganizations()!=null){
+                        oldContract.getOrganizations().clear();
+                        }
+                    }
+                    
+                    
+                    Set newDisbs = contract.getDisbursements();
+                    if (newDisbs != null && newDisbs.size() > 0) {
+                        Iterator<IPAContractDisbursement> iterNewDisb = newDisbs.iterator();
+                        while (iterNewDisb.hasNext()) {
+                            IPAContractDisbursement newDisb = iterNewDisb.next();
+                            if (newDisb.getId() != null) {
+                                IPAContractDisbursement oldDisb = (IPAContractDisbursement) session.load(IPAContractDisbursement.class,
+                                        newDisb.getId());
+                                oldDisb.setAdjustmentType(newDisb.getAdjustmentType());
+                                oldDisb.setAmount(newDisb.getAmount());
+                                oldDisb.setCurrency(newDisb.getCurrency());
+                                oldDisb.setDate(newDisb.getDate());
+                                toRetain.add(oldDisb);
+                            } else {
+                                if (oldContract.getDisbursements() == null) {
+                                    oldContract.setDisbursements(new HashSet());
+                                }
+                                newDisb.setContract(oldContract);
+                                oldContract.getDisbursements().add(newDisb);
+                                toRetain.add(newDisb);
+                                
+                            }
+                        }
+                        oldContract.getDisbursements().retainAll(toRetain);
+                    }
+                    else{
+                        if(oldContract.getDisbursements()!=null){
+                        oldContract.getDisbursements().clear();
+                        }
+                    }
 
-					Set<IPAContractDisbursement> newDisbs = auxContract.getDisbursements();
-					if (newDisbs != null) {
-						newContract.setDisbursements(new HashSet<IPAContractDisbursement>());
-						Iterator<IPAContractDisbursement> iterNewDisb = newDisbs.iterator();
-						while (iterNewDisb.hasNext()) {
-							IPAContractDisbursement auxDisb = iterNewDisb.next();
-							//IPAContractDisbursement oldDisb = (IPAContractDisbursement) session.load(IPAContractDisbursement.class, auxDisb.getId());
-							IPAContractDisbursement newDisb = new IPAContractDisbursement();
-							newDisb.setAdjustmentType(auxDisb.getAdjustmentType());
-							newDisb.setAmount(auxDisb.getAmount());
-							newDisb.setCurrency(auxDisb.getCurrency());
-							newDisb.setDate(auxDisb.getDate());
-							newContract.getDisbursements().add(newDisb);
-						}
-					}
-					
-					session.save(newContract);
-				}
-			}
+                    contract=oldContract;
 
-       // Group different versions of the same funding.
-       Iterator<AmpFunding> iterFunding = activity.getFunding().iterator();
-       while(iterFunding.hasNext()) {
-    	   AmpFunding auxFunding = iterFunding.next();
-    	   if(auxFunding.getGroupVersionedFunding() == null) {
-    		   auxFunding.setGroupVersionedFunding(auxFunding.getAmpFundingId());
-    	   }
+                }
+                session.saveOrUpdate(contract);
+                ids += contract.getId() + ", ";
+            }
+            if(ids.length()>2)
+            ids = ids.substring(0, ids.length() - 2);
+
+
+
+        }
+        if (ids.length() != 0) {
+            queryString += " and con.id not in (" + ids + ")";
+        }
+       if(ipaAux != null){//if no row is returned there is an Hibernate exception.
+    	   //session.delete(queryString); This method has been moved to hibernate.classic.Session.delete() and it's Deprecated
        }
-        	
+        
        session.flush();
        if (alwaysRollback == false)
     	  tx.commit(); // commit the transcation
 
-       logger.debug("Activity saved");
-       
-       //Save surveys for new activities.
-       //TODO: Check if this code can be removed, apparently the survey and their responses
-       //are being saved ok.
-       if (!edit) {
-	       session = PersistenceManager.getRequestDBSession();
-	       tx = session.beginTransaction();
-	       AmpActivityVersion savedActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activity.getAmpActivityId());
-	       savedActivity.setSurvey(activity.getSurvey());
-	       session.saveOrUpdate(savedActivity);
-	       tx.commit();
-       }       
+       logger.debug("Activity saved");    
     }
     catch (Exception ex) {
       logger.error("Exception from saveActivity().", ex);
@@ -1326,7 +1100,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				catch (HibernateException e) {
 					logger.error("Rollback failed", e);
 					AMPException ae = ExceptionFactory.newAMPException(Constants.AMP_ERROR_LEVEL_WARNING, false, e);
-					ErrorReportingPlugin.handle(ae, logger);
+					ErrorReporting.handle(ae, logger);
 					exceptionRaised = true;
 				}
 			}
@@ -1335,7 +1109,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			throw savedEx;
     }
     }
-    //session.clear();
+
     return activityId;
   }
 
@@ -1561,12 +1335,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
       String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-     
+    
+      
       Query query = session.createQuery(oql);
 
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
 
-      if (pageStart!=null && rowCount!=null && rowCount.intValue()>=0){
+      if (pageStart!=null && rowCount!=null){
           query.setFirstResult(pageStart);
           query.setMaxResults(rowCount);
       }
@@ -1606,6 +1381,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	      Session session = PersistenceManager.getRequestDBSession();
 	      String oql = "select count(distinct act) from " + AmpActivityProgram.class.getName() + " prog ";
 	      oql += getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
+	      oql += " order by act.name";
 
 	      Query query = session.createQuery(oql);
 
@@ -1883,10 +1659,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
 			session.flush();
-			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
+			result = (AmpActivity) session.get(AmpActivity.class, id);
 			session.evict(result);
-
-			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
+			result = (AmpActivity) session.get(AmpActivity.class, id);
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivity with id=" + id + " not found");
 		} catch (Exception e) {
@@ -1907,25 +1682,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          session = PersistenceManager.getRequestDBSession();
 
       activity = (AmpActivity) session.load(AmpActivity.class,
-          id);
-    }
-    catch (Exception e) {
-      logger.error("Unable to getAmpActivity");
-      e.printStackTrace(System.out);
-    }
-    return activity;
-  }
-
-  public static AmpActivityVersion getAmpActivityVersion(Long id) {
-	  //TODO: This is a mess, shouldn't be here. Check where it is used and change it.
-	  
-    Session session = null;
-    AmpActivityVersion activity = null;
-
-    try {
-         session = PersistenceManager.getRequestDBSession();
-
-      activity = (AmpActivityVersion) session.load(AmpActivityVersion.class,
           id);
     }
     catch (Exception e) {
@@ -2408,7 +2164,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           Components<FundingDetail> components = new Components<FundingDetail>();
           components.setComponentId(ampComp.getAmpComponentId());
           components.setDescription(ampComp.getDescription());
-          components.setType_Id((ampComp.getType()!=null)?ampComp.getType().getId():null);
+          components.setType_Id((ampComp.getType()!=null)?ampComp.getType().getType_id():null);
           components.setTitle(ampComp.getTitle());
           components.setCommitments(new ArrayList());
           components.setDisbursements(new ArrayList());
@@ -2511,11 +2267,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getRequestDBSession();
-      String qryStr = "select a from " + AmpComponentFunding.class.getName() + " a " +
-          "where component = ? and activity = ?";
+    	//session = PersistenceManager.getRequestDBSession();
+      String qryStr = "select a from " + AmpComponentFunding.class.getName() +
+          " a " +
+          "where amp_component_id = '" + componentId + "' and activity_id = '" + activityId +
+          "'";
       Query qry = session.createQuery(qryStr);
-      qry.setLong(0, componentId);
-      qry.setLong(1, activityId);
       col = qry.list();
     }
     catch (Exception e) {
@@ -2539,7 +2296,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       session = PersistenceManager.getRequestDBSession();
       String qryStr = "select a from " + AmpComponentFunding.class.getName() +
-          " a where amp_activity_id = '" + activityId + "'";
+          " a where activity_id = '" + activityId + "'";
       Query qry = session.createQuery(qryStr);
       col = qry.list();
     }
@@ -2828,8 +2585,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     AmpActivity activity = null;
     Session session = null;
     try {
-      session = PersistenceManager.getRequestDBSession();
-      String qryStr = "select a from " + AmpActivityGroup.class.getName() + " gr inner join gr.ampActivityLastVersion a " +
+      session = PersistenceManager.getSession();
+      String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
           "where lower(a.name) = :lowerName";
       Query qry = session.createQuery(qryStr);
       qry.setString("lowerName", name.toLowerCase());
@@ -2840,6 +2597,17 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     catch (Exception e) {
       logger.debug("Exception in isActivityExisting() " + e.getMessage());
+      e.printStackTrace(System.out);
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception ex) {
+          logger.debug("Exception while releasing session " + ex.getMessage());
+        }
+      }
     }
     return activity;
   }
@@ -2899,7 +2667,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
 
   }
-/*
+
   public static boolean canViewActivity(Long actId, TeamMember tm) {
     boolean canView = false;
     Session session = null;
@@ -2954,7 +2722,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     //logger.info("Canview =" + canView);
     return canView;
   }
-*/
+
   public static Collection getDonors(Long actId) {
     Collection col = new ArrayList();
     Session session = null;
@@ -3083,16 +2851,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       {
     	  IPAContract c=(IPAContract) i.next();
     	  cc=c.getTotalAmountCurrency().getCurrencyCode();
-    	  BigDecimal td=new BigDecimal(0);
+    	  double td=0;
     	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
     	  {
     		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
     		  if(cd.getAmount()!=null)
-    			  td=td.add(cd.getAmount());
+    			  td+=cd.getAmount().doubleValue();
     	  }
     	  if(c.getDibusrsementsGlobalCurrency()!=null)
         	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
-    	  c.setTotalDisbursements(td);
+    	  c.setTotalDisbursements(new Double(td));
     	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
 		  c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
 		  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
@@ -3126,8 +2894,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	      contrcats = qry.list();
 	      String cc=currCode;
           
-          BigDecimal usdAmount=new BigDecimal(0);  
-          BigDecimal finalAmount=new BigDecimal(0); 
+          double usdAmount;  
+  		   double finalAmount; 
 
 	      for(Iterator i=contrcats.iterator();i.hasNext();)
 	      {
@@ -3136,18 +2904,18 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    		  cc=c.getTotalAmountCurrency().getCurrencyCode();
 	    	  if(c.getDibusrsementsGlobalCurrency()!=null)
 	          	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
-	    	  BigDecimal td=new BigDecimal(0);
+	    	  double td=0;
 	    	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
 	    	  {
 	    		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
 	    		  if(cd.getAmount()!=null)
      			  {
-     			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount(),cd.getCurrCode());
+     			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount().doubleValue(),cd.getCurrCode());
      			  	finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
-     			  	td=td.add(finalAmount);
+     			  	td+=finalAmount;
      			  }
 	    	  }
-	    	  c.setTotalDisbursements(td);
+	    	  c.setTotalDisbursements(new Double(td));
 	    	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, cc));
  		      c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
 			  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
@@ -3164,16 +2932,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    return  contrcats ;
 	  } 
   
-  	public static BigDecimal computeFundingDisbursementIPA(IPAContract contract, String cc){
+  	public static double computeFundingDisbursementIPA(IPAContract contract, String cc){
   		
   		ArrayList<AmpFundingDetail> disbs1 = (ArrayList<AmpFundingDetail>) DbUtil.getDisbursementsFundingOfIPAContract(contract);	             
         //if there is no disbursement global currency saved in db we'll use the default from edit activity form
         
        if(contract.getTotalAmountCurrency()!=null)
     	   cc=contract.getTotalAmountCurrency().getCurrencyCode();
-       BigDecimal td=new BigDecimal(0) ;
-       BigDecimal usdAmount=new BigDecimal(0);  
-       BigDecimal finalAmount=new BigDecimal(0); 
+        double td=0;
+        double usdAmount=0;  
+		double finalAmount=0; 
 
 		for(Iterator<AmpFundingDetail> j=disbs1.iterator();j.hasNext();)
   	  	{
@@ -3182,7 +2950,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   		  if(fd.getTransactionAmount()!=null)
   			  {
   			  	try {
-					usdAmount = CurrencyWorker.convertToUSD(fd.getTransactionAmount(),fd.getAmpCurrencyId().getCurrencyCode());
+					usdAmount = CurrencyWorker.convertToUSD(fd.getTransactionAmount().doubleValue(),fd.getAmpCurrencyId().getCurrencyCode());
 				} catch (AimException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -3193,7 +2961,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-  			  	td=td.add(finalAmount);
+  			  	td+=finalAmount;
   			  }
   	  	 }
 //      	contract.setFundingTotalDisbursements(td);
@@ -3201,13 +2969,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   		return td;
   	}
   
-  	public static BigDecimal computeExecutionRateFromContractTotalValue(IPAContract c, String currCode){
-  		BigDecimal usdAmount1=new BigDecimal(0);  
-  		BigDecimal finalAmount1=new BigDecimal(0); 
+  	public static double computeExecutionRateFromContractTotalValue(IPAContract c, String currCode){
+  		double usdAmount1=0;  
+		   double finalAmount1=0; 
       	try {
 			if(c.getContractTotalValue()!=null && c.getTotalAmountCurrency().getCurrencyCode()!=null)	
-				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue(),c.getTotalAmountCurrency().getCurrencyCode());
-			else usdAmount1 = new BigDecimal(0);
+				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+			else usdAmount1 = 0.0;
 			} catch (AimException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -3219,20 +2987,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				e.printStackTrace();
 			}	
 		  
-		  BigDecimal execRate=new BigDecimal(0);
-		  if(finalAmount1.doubleValue()!=0)
-			  execRate=c.getFundingTotalDisbursements().divide(finalAmount1, 10, RoundingMode.UP);
+		  double execRate=0;
+		  if(finalAmount1!=0)
+			  execRate=c.getFundingTotalDisbursements()/finalAmount1;
 		  c.setExecutionRate(execRate);
 		  return execRate;
   	}
 
-  	public static BigDecimal computeExecutionRateFromTotalAmount(IPAContract c, String currCode){
-  		BigDecimal usdAmount1=new BigDecimal(0);  
-  		BigDecimal finalAmount1=new BigDecimal(0); 
+  	public static double computeExecutionRateFromTotalAmount(IPAContract c, String currCode){
+  		double usdAmount1=0;  
+		   double finalAmount1=0; 
       	try {
 			if(c.getTotalAmount()!=null && c.getTotalAmountCurrency()!=null )	
-				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount(),c.getTotalAmountCurrency().getCurrencyCode());
-			else usdAmount1=new BigDecimal(0);
+				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+			else usdAmount1=0.0;
 			} catch (AimException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -3244,9 +3012,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				e.printStackTrace();
 			}	
 		  
-			BigDecimal execRate=new BigDecimal(0);
-		  if(finalAmount1.doubleValue()!=0)
-			  execRate=c.getTotalDisbursements().divide(finalAmount1, 10, RoundingMode.UP);
+		  double execRate=0;
+		  if(finalAmount1!=0)
+			  execRate=c.getTotalDisbursements()/finalAmount1;
 		  c.setExecutionRate(execRate);
 		  return execRate;
   	}
@@ -3254,20 +3022,17 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   	
   /*
    * get the list of all the activities
-   * includeUnassigned defines whether we we sohuld get unassigned activities too or just the ones that are assigned to a team
+   * to display in the activity manager of Admin
    */
-  public static List<AmpActivity> getAllActivitiesList(boolean includeUnassigned) {
+  public static List<AmpActivity> getAllActivitiesList() {
     List col = null;
     Session session = null;
     Query qry = null;
 
     try {
       session = PersistenceManager.getRequestDBSession();
-      //String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct";
-      String queryString ="select grp.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" grp";
-      if(!includeUnassigned){
-    	  queryString+=" where grp.ampActivityLastVersion.team is not null";
-      }
+      String queryString = "select ampAct from " + AmpActivity.class.getName() +
+          " ampAct";
       qry = session.createQuery(queryString);
       col = qry.list();
       logger.debug("the size of the ampActivity : " + col.size());
@@ -3278,85 +3043,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return col;
   }
-  
-  public static List<HelperActivity> getAllActivities(){
-	  List<HelperActivity> retVal=null;
-	  List col=null;
-	  Session session = null;
-	  Query qry = null;
-	  String queryString=null;
-	  try {
-	      session = PersistenceManager.getRequestDBSession();	      
-	      queryString ="select group.ampActivityLastVersion.ampActivityId,group.ampActivityLastVersion.name,group.ampActivityLastVersion.ampId,group.ampActivityLastVersion.team from "+ AmpActivityGroup.class.getName()+" group";
-	      qry = session.createQuery(queryString);
-	      col = qry.list();
-	    }
-	    catch (Exception e1) {
-	      logger.error("Could not retrieve the activities list");
-	      e1.printStackTrace(System.out);
-	    }
-	    
-	    if(col!=null){
-	    	retVal=new ArrayList<HelperActivity>(col.size());
-	    	for (Object object : col) {
-	    		Object[] row = (Object[])object;
-	    		Long idRow=(Long)row[0];
-				String nameRow=(String)row[1];
-				String ampIdRow=(String)row[2];
-				AmpTeam teamRow=null;
-				if(row[3]!=null){
-					teamRow=(AmpTeam)row[3];
-				}
-				
-				HelperActivity helperActivity= new HelperActivity(idRow,nameRow,ampIdRow,teamRow);
-				retVal.add(helperActivity);
-			}
-	    }
-	  return retVal;
-  }
-  
-  /**
-   * @author dan
-   * @return
-   */
-  public static List getAllActivitiesByKeys() {
-	    List col = null;
-	    Session session = null;
-	    Query qry = null;
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String queryString = "select ampAct.name, ampAct.ampId, ampAct.budgetCodeProjectID  from " + AmpActivity.class.getName() +
-	          " ampAct";
-	      qry = session.createQuery(queryString);
-	      col = qry.list();
-	      logger.debug("the size of the ampActivity : " + col.size());
-	    }
-	    catch (Exception e1) {
-	      logger.error("Could not retrieve the activities list from getallactivitieslist");
-	      e1.printStackTrace(System.out);
-	    }
-	    return col;
-	  }
-  
-  
-  public static List<AmpActivityVersion> getAllActivityVersionsList() {
-		List col = null;
-		Session session = null;
-		Query qry = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct";
-			qry = session.createQuery(queryString);
-			col = qry.list();
-			logger.debug("the size of the ampActivity : " + col.size());
-		} catch (Exception e1) {
-			logger.error("Could not retrieve the activities list from getallactivitieslist");
-			e1.printStackTrace(System.out);
-		}
-		return col;
-	}
 
   /*
    * get the list of all the activities
@@ -3392,115 +3078,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return col;
   }
-  
-  public static List<HelperActivity> getAllHelperActivitiesByName(String name) {
-	    List col = null;
-	    Session session = null;
-	    Query qry = null;
-	    List<HelperActivity> retVal=null;
-		try {
-		      session = PersistenceManager.getRequestDBSession();		      					  
-		      String queryString ="select grp.ampActivityLastVersion.ampActivityId,grp.ampActivityLastVersion.name,grp.ampActivityLastVersion.ampId,grp.ampActivityLastVersion.team from "+ AmpActivityGroup.class.getName()+" grp "+
-		      " where upper(grp.ampActivityLastVersion.name) like upper('%"+name+"%')";
-		      qry = session.createQuery(queryString);
-		      col = qry.list();
-		}catch (Exception e1) {
-		      logger.error("Could not retrieve the activities list");
-		      e1.printStackTrace(System.out);
-		}
-		    
-		if(col!=null){
-			retVal=new ArrayList<HelperActivity>(col.size());
-		    for (Object object : col) {
-		    	Object[] row = (Object[])object;
-		    	Long idRow=(Long)row[0];
-				String nameRow=(String)row[1];
-				String ampIdRow=(String)row[2];
-				AmpTeam teamRow=null;
-				if(row[3]!=null){
-					teamRow=(AmpTeam)row[3];
-				}
-					
-				HelperActivity helperActivity= new HelperActivity(idRow,nameRow,ampIdRow,teamRow);
-				retVal.add(helperActivity);
-			}
-		}	    
-	    return retVal;
-	  }
-  
-  public static List <AmpActivityGroup> getActivityGroups(Long actId){
-	  List <AmpActivityGroup> retVal=null;
-	  Session session = null;
-	  Query qry = null;
-	  try {
-		  session = PersistenceManager.getRequestDBSession();	      
-	      String queryString ="select group from "+ AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.ampActivityId="+actId;
-	      qry = session.createQuery(queryString);
-	      retVal = qry.list();
-	} catch (Exception e) {
-		logger.error("Could not retrieve groups list");
-	    e.printStackTrace(System.out);
-	}
-	  return retVal;
-  }
 
   /* functions to DELETE an activity by Admin start here.... */
   public static void deleteActivity(Long ampActId) {
-	logger.warn("deleting...");
-	Date startDate = new Date(System.currentTimeMillis());
     Session session = null;
     Transaction tx = null;
 
     try {
-    	session = PersistenceManager.getRequestDBSession();
-    	tx = session.beginTransaction();
+      session = PersistenceManager.getSession();
+      tx = session.beginTransaction();
 
-    	AmpActivityVersion ampAct = (AmpActivityVersion) session.get(AmpActivityVersion.class, ampActId);
-    	AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
+      AmpActivity ampAct = (AmpActivity) session.load(
+          AmpActivity.class, ampActId);
 
-    	if (ampAct == null){
-    	  logger.debug("ActivityVersion is null. Hence no activity with id : " +ampActId);  
-    	}else {    	 
-    	 //Delete access info.
-    	 Query qry = session.createSQLQuery("DELETE FROM amp_activity_access WHERE amp_activity_id = ?");
-    	 qry.setParameter(0, ampActId);
-    	 qry.executeUpdate();
-    	  
-    	   	
-    	 //qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName() + " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = "+ampActId);
-    	 //qry.setParameter(0, ampActId);
-    	 //qry.executeUpdate();
-    	  ampAct.setAmpActivityGroup(null);
-    	  session.update(ampAct);
-    	  auxGroup.getActivities().remove(ampAct);
-    	  session.update(auxGroup);
-
-    	  session.update(ampAct);
-    	  
-    	  
-    	// Delete group info.
-      	List<AmpActivityGroup> groups=getActivityGroups(ampAct.getAmpActivityId());
-      	if(groups!=null && groups.size()>0){
-      		for (AmpActivityGroup ampActivityGroup : groups) {
-      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
-      			if(activityversions!=null && activityversions.size()>0){
-      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
-      					AmpActivityVersion ampActivityVersion=iterator.next();
-      					ampActivityVersion.setAmpActivityGroup(null);
-      					session.update(ampActivityVersion);
-					}
-      			}
-  				session.delete(ampActivityGroup);
-  			}
-      	}
-    	  
-    	  
-    	  //session.update(ampAct);
-    	  //qry = session.createQuery("UPDATE " + AmpActivityGroup.class.getName() + " SET ampActivityLastVersion = NULL WHERE ampActivityGroupId = " + ampActId);
-    	  //qry.setParameter(0, ampActId);
-    	  //qry.executeUpdate(); 
-    	  //TODO: relink ampActivityPreviousVersion if needed (when deleting drafts to older non-draft versions).
-    	  
+      if (ampAct == null)
+        logger.debug("Activity is null. Hence no activity with id : " +
+                     ampActId);
+      else {
         /* delete fundings and funding details */
         Set fundSet = ampAct.getFunding();
         if (fundSet != null) {
@@ -3550,12 +3144,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         /* delete components */
         Set comp = ampAct.getComponents();
         if (comp != null) {
-          /*Iterator compItr = comp.iterator();
+          Iterator compItr = comp.iterator();
           while (compItr.hasNext()) {
             AmpComponent ampComp = (AmpComponent) compItr.next();
             ampComp.getActivities().remove(ampAct);           
             //session.delete(ampComp);
-          }*/
+          }
           ampAct.setComponents(null);
         }
 
@@ -3670,16 +3264,31 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             
           }
         }
+       
+        //	 delete all previous comments
+        ArrayList col = org.digijava.module.aim.util.DbUtil.
+            getAllCommentsByActivityId(ampAct.getAmpActivityId());
+        logger.debug("col.size() [Inside deleting]: " + col.size());
+        if (col != null) {
+          Iterator itr = col.iterator();
+          while (itr.hasNext()) {
+            AmpComments comObj = (AmpComments) itr.next();
+            session.delete(comObj);
+          }
+        }
+        logger.debug("comments deleted");
         
-
+        //Delete the connection with Team.
+        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         Connection con = session.connection();
         Statement stmt = con.createStatement();
+        int deletedRows = stmt.executeUpdate(deleteActivityTeam);
         
         //Delete the connection with amp_physical_performance.
         String deletePhysicalPerformance = "DELETE FROM amp_physical_performance WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         con = session.connection();
         stmt = con.createStatement();
-        int deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
+        deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
         
         //Delete the connection with Indicator Project.
         //String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
@@ -3700,36 +3309,34 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
       }
       
-   
-	/**
-	 *  //Section moved here from ActivityManager.java because it didn't worked there.
-	 *  ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
-		ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session); 
-		ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
-		//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
-		ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
-	 */
-    
-	//ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);	
-	//ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
-	//ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+    //Section moved here from ActivityManager.java because it didn't worked there.
+	ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
+	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
+	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
+	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
+	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
       
-	//Query qry = session.createQuery("DELETE " + AmpActivityGroup.class.getName() + " WHERE ampActivityLastVersion = "+ampActId);
-	  //qry.setParameter(0, ampActId);
-	  //qry.executeUpdate();
-	  
-//	  session.delete(auxGroup);
-    
-	ampAct = (AmpActivityVersion) session.get(AmpActivityVersion.class, ampActId);
-	session.delete(ampAct);  
-	tx.commit();
-    session.flush();
+	  session.delete(ampAct);
+      tx.commit();
+      session.flush();
     }
     catch (Exception e1) {
       logger.error("Could not delete the activity with id : " + ampActId);
       e1.printStackTrace(System.out);
     }
-    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception e2) {
+          logger.error("Release session failed");
+        }
+      }
+    }
   }
 
   public static void deleteActivityAmpComments(Collection commentId, Session session) throws Exception{
@@ -3756,7 +3363,17 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
   }
 
-
+  public static void deleteActivityAmpReportCache(Collection repCache, Session session) throws Exception {
+      if (repCache != null) {
+        Iterator repCacheItr = repCache.iterator();
+        while (repCacheItr.hasNext()) {
+          AmpReportCache reportCache = (AmpReportCache) repCacheItr.next();
+          /*AmpReportCache ampReportCache = (AmpReportCache) session.load
+              (AmpReportCache.class, reportCache.getAmpReportId());*/
+          session.delete(reportCache);
+        }
+      }
+  }
 
   public static void deleteActivityReportLocation(Collection repLoc, Session session) throws Exception {
       if (repLoc != null) {
@@ -3770,14 +3387,35 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
   }
 
+  public static void deleteActivityReportPhyPerformance(Collection phyPerform, Session session) throws Exception {
+      if (phyPerform != null) {
+        Iterator phyPerformItr = phyPerform.iterator();
+        while (phyPerformItr.hasNext()) {
+          AmpReportPhysicalPerformance repPhyTemp = (
+              AmpReportPhysicalPerformance) phyPerformItr.next();
+          /*AmpReportPhysicalPerformance repPhyPerform = (
+              AmpReportPhysicalPerformance) session.load
+              (AmpReportPhysicalPerformance.class, repPhyTemp.getAmpPpId());*/
+          session.delete(repPhyTemp);
+        }
+      }
+  }
 
+  public static void deleteActivityReportSector(Collection repSector, Session session) throws Exception {
+      if (repSector != null) {
+        Iterator repSectorItr = repSector.iterator();
+        while (repSectorItr.hasNext()) {
+          AmpReportSector repSecTemp = (AmpReportSector) repSectorItr.next();
+          /*AmpReportSector ampRepSector = (AmpReportSector) session.load
+              (AmpReportSector.class, repSecTemp.getAmpReportId());*/
+          session.delete(repSecTemp);
+        }
+      }
+  }
 
   public static void deleteActivityIndicators(Collection activityInd, AmpActivity activity, Session session) throws Exception {
-    if(session == null){
-    	session=PersistenceManager.getRequestDBSession();
-    }
-	
-    if (activityInd != null && activityInd.size() > 0) {
+    
+			if (activityInd != null && activityInd.size() > 0) {
 				for (Object indAct : activityInd) {
 
 					AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, ((IndicatorActivity) indAct).getIndicator().getIndicatorId());
@@ -3796,49 +3434,62 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					result = (IndicatorActivity) query.uniqueResult();
 					session.delete(result);*/
 				}
-	}
+			}
   }
 
   /* functions to DELETE an activity by Admin end here.... */
 
 
   public static class ActivityAmounts {
-    private BigDecimal proposedAmout =new BigDecimal(0);
+    private Double proposedAmout;
     @Deprecated
-    private BigDecimal plannedAmount=new BigDecimal(0);
-    private BigDecimal actualAmount=new BigDecimal(0);
-    private BigDecimal actualDisbAmount=new BigDecimal(0);
+    private Double plannedAmount;
+    private Double actualAmount;
+    private Double actualDisbAmount;
 
-    public void AddPalenned(BigDecimal amount) {
-      
-        plannedAmount = plannedAmount.add(amount);
-      
+    public void AddPalenned(double amount) {
+      if (plannedAmount != null) {
+        plannedAmount = new Double(plannedAmount.doubleValue() + amount);
+      }
+      else {
+        plannedAmount = new Double(amount);
+      }
     }
 
-     public void AddActualDisb(BigDecimal amount) {
-        actualDisbAmount = actualDisbAmount.add(amount);
+     public void AddActualDisb(double amount) {
+      if (actualDisbAmount != null) {
+        actualDisbAmount = new Double(actualDisbAmount + amount);
+      }
+      else {
+        actualDisbAmount = amount;
+      }
     }
 
-    public void AddActual(BigDecimal amount) {
-        actualAmount = actualAmount.add(amount);
+    public void AddActual(double amount) {
+      if (actualAmount != null) {
+        actualAmount = new Double(actualAmount.doubleValue() + amount);
+      }
+      else {
+        actualAmount = new Double(amount);
+      }
     }
 
     public String actualAmount() {
-      if (actualAmount == null || actualAmount.doubleValue() == 0d) {
+      if (actualAmount == null || actualAmount == 0) {
         return "N/A";
       }
       return FormatHelper.formatNumber(actualAmount);
     }
 
     public String actualDisbAmount() {
-      if (actualDisbAmount == null || actualDisbAmount.doubleValue() == 0d) {
+      if (actualDisbAmount == null || actualDisbAmount == 0) {
         return "N/A";
       }
       return FormatHelper.formatNumber(actualDisbAmount);
     }
 
     public String plannedAmount() {
-      if (plannedAmount == null|| plannedAmount.doubleValue() == 0d) {
+      if (plannedAmount == null|| plannedAmount == 0) {
         return "N/A";
       }
       return FormatHelper.formatNumber(plannedAmount);
@@ -3851,39 +3502,50 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       return FormatHelper.formatNumber(proposedAmout);
     }
 
-    public void setProposedAmout(BigDecimal proposedAmout) {
-      this.proposedAmout =proposedAmout;
+    public void setProposedAmout(double proposedAmout) {
+      this.proposedAmout = new Double(proposedAmout);
     }
 
 
-      public BigDecimal getActualDisbAmoount() {
-      
+      public double getActualDisbAmoount() {
+          if (actualDisbAmount == null) {
+              return 0;
+          }
           return actualDisbAmount;
       }
 
-     public void setActualDisbAmount(BigDecimal actualDisbAmount) {
+     public void setActualDisbAmount(Double actualDisbAmount) {
           this.actualDisbAmount = actualDisbAmount;
       }
 
-    public BigDecimal getActualAmount() {
-
-      return actualAmount;
+    public double getActualAmount() {
+      if (actualAmount == null) {
+        return 0;
+      }
+      return actualAmount.doubleValue();
     }
 
-    public BigDecimal getPlannedAmount() {
-    	return plannedAmount;
+    public double getPlannedAmount() {
+      if (plannedAmount == null) {
+        return 0;
+      }
+      return plannedAmount.doubleValue();
     }
 
-    public BigDecimal getProposedAmout() {
-       return proposedAmout;
+    public double getProposedAmout() {
+      if (proposedAmout == null) {
+        return 0;
+      }
+      return proposedAmout.doubleValue();
     }
 
   }
 
-  public static ActivityAmounts getActivityAmmountIn(AmpActivity act,String tocode,Float percent) throws Exception {
-    BigDecimal tempProposed = new BigDecimal(0);
-    BigDecimal tempActual = new BigDecimal(0);
-    BigDecimal tempPlanned = new BigDecimal(0);
+  public static ActivityAmounts getActivityAmmountIn(AmpActivity act,
+      String tocode,Long percent) throws Exception {
+    double tempProposed = 0;
+    double tempActual = 0;
+    double tempPlanned = 0;
     ActivityAmounts result = new ActivityAmounts();
 
     AmpCategoryValue statusValue = CategoryManagerUtil.
@@ -3898,7 +3560,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           currencyCode = "USD";
         } //end of AMP-1403
         //apply program percent
-        tempProposed = CurrencyWorker.convert(act.getFunAmount().multiply(new BigDecimal(percent/100)),tocode);
+        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue()*percent/100,tocode);
         result.setProposedAmout(tempProposed);
       }
       else {
@@ -3913,9 +3575,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                   org.digijava.module.aim.logic.FundingCalculationsHelper calculations = new org.digijava.module.aim.logic.FundingCalculationsHelper();
                   calculations.doCalculations(fundDetails, tocode);
                   //apply program percent
-                  result.AddActual(calculations.getTotActualComm().getValue().multiply(new BigDecimal(percent/100)));
-                  result.AddPalenned(calculations.getTotPlannedComm().getValue().multiply(new BigDecimal(percent/100)));
-                  result.AddActualDisb(calculations.getTotActualDisb().getValue().multiply(new BigDecimal(percent/100)));
+                  result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
+                  result.AddPalenned(calculations.getTotPlannedComm().doubleValue()*percent/100);
+                  result.AddActualDisb(calculations.getTotActualDisb().doubleValue()*percent/100);
               }
           }
         }
@@ -4083,8 +3745,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	
 	public static Collection getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
 		  try {
-	            String queryStr	= "SELECT a FROM " + AmpActivityVersion.class.getName() + " a left join a.member m WHERE " +
-	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId) OR (a.modifiedBy=:atmId)";
+	            String queryStr	= "SELECT a FROM " + AmpActivity.class.getName() + " a left join a.member m WHERE " +
+	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)";
 	            Query qry = session.createQuery(queryStr);
 	            qry.setLong("atmId", ampTeamMemberId);
 	            
@@ -4245,33 +3907,33 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          * @param partOfName
          * @return Array of Strings,which have a look like: activity_name(activiti_id) 
          */
-        public static RelatedActivity[] loadRelatedActivities(TeamMember member) throws DgException{
+        public static String[] loadActivitiesNamesAndIds(TeamMember member) throws DgException{
         	Session session=null;
     		String queryString =null;
     		Query query=null;
     		List activities=null;
-    		RelatedActivity [] retValue=null;
+    		String [] retValue=null;
     		try {
                     session=PersistenceManager.getRequestDBSession();
                     
                 Set<String> activityStatus = new HashSet<String>();
                 String teamType=member.getTeamType();
-                activityStatus.add(Constants.APPROVED_STATUS);
-                activityStatus.add(Constants.EDITED_STATUS);
+		activityStatus.add(Constants.APPROVED_STATUS);
+		activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
                     Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
-                    	queryString ="select group.ampActivityLastVersion.name, group.ampActivityLastVersion.ampActivityId from "+AmpActivityGroup.class.getName()+" group left outer join group.ampActivityLastVersion.orgrole r  left outer join group.ampActivityLastVersion.funding f "+
-                    	" where group.ampActivityLastVersion.team in (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) order by group.ampActivityLastVersion.name";
-                    	
+                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
+                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) order by a.name";
+
                     } else {
                         // none computed workspace
-                    	queryString ="select group.ampActivityLastVersion.name, group.ampActivityLastVersion.ampActivityId from " +AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.team in  (" + Util.toCSString(relatedTeams) + ") ";                    	
+                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                            queryString += "  and group.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+                            queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }
-                        queryString += " order by group.ampActivityLastVersion.name ";
+                        queryString += " order by a.name ";
                     }
     			  			
     			query=session.createQuery(queryString);    			
@@ -4280,24 +3942,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			logger.error("couldn't load Activities" + ex.getMessage());	
     			ex.printStackTrace(); 
     		} 
-    		
     		if (activities != null){
-    			retValue=new RelatedActivity[activities.size()];    		
+    			retValue=new String[activities.size()];    		
     			int i=0;
     			for (Object rawRow : activities) {
 					Object[] row = (Object[])rawRow; //:)
-					String nameRow=(String)row[0];
-					Long idRow=(Long)row[1];
+					String nameRow=(String)row[0];			
 					if(nameRow != null){
 					nameRow = nameRow.replace('\n', ' ');
 					nameRow = nameRow.replace('\r', ' ');
 					nameRow = nameRow.replace("\\", "");
 					}
 					//System.out.println(nameRow);
-					retValue[i]=new RelatedActivity();
-					retValue[i].setName(nameRow);
-					retValue[i].setActId(idRow);					
-					i++;
+					retValue[i]=nameRow+"("+row[1]+")";
+					i++;					
 				}
     		}
     		return retValue;
@@ -4315,7 +3973,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		String name=null;
     		try {
     			session=PersistenceManager.getRequestDBSession();
-    			queryString= "select group.ampActivityLastVersion.name  from " + AmpActivityGroup.class.getName()+ " group where group.ampActivityLastVersion.ampActivityId="+actId;
+    			queryString= "select a.name  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
     			query=session.createQuery(queryString);    			
     			name=(String)query.uniqueResult();    			
     		}catch(Exception ex) { 
@@ -4399,10 +4057,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 FundingDetail helperFdet = iter.next();
                 AmpCurrency detCurr = CurrencyUtil.getAmpcurrency(helperFdet.getCurrencyCode());
                 Date date = DateConversion.getDate(helperFdet.getTransactionDate());
-                BigDecimal transAmt = FormatHelper.parseBigDecimal(helperFdet.getTransactionAmount());
-                transAmt=FeaturesUtil.applyThousandsForEntry(transAmt);
-                Double fixedExchangeRate		= FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() );
-                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, fixedExchangeRate);
+                java.sql.Date dt = new java.sql.Date(date.getTime());
+                Double transAmt = new Double(FormatHelper.parseDouble(helperFdet.getTransactionAmount()));
+                if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+                    transAmt *= 1000;
+                }
+                double exchangeRate=(helperFdet.getFixedExchangeRate()!=null)?FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() ):Util.getExchange(detCurr.getCurrencyCode(), dt);
+                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, exchangeRate);
                 ampFundDets.add(fundDet);
             }
         }
@@ -4416,7 +4077,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  Session session=null;
     	  try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString=" select act.modifiedBy from " + AmpActivity.class.getName()+" act where act.ampActivityId="+actId;
+			queryString=" select act.updatedBy from " + AmpActivity.class.getName()+" act where act.ampActivityId="+actId;
 			query=session.createQuery(queryString);
 			updator=(AmpTeamMember)query.uniqueResult();
 		} catch (Exception e) {
@@ -4425,781 +4086,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  return updator;
       }
 
-      /**
-       * Insert into table 'amp_activity_access' a new record to keep track of user�s access to activities.
-       * Related to AMP-4660.
-       * @param user Currently logged user.
-       * @param activityId Accessed activity�s id.
-       * @param isUpdate True if user saved changes on the activity, false if the user accessed Activity Overview.
-       */
-      public static void updateActivityAccess(User user, Long activityId, boolean isUpdate) {
-		try {
-			Session session = PersistenceManager.getRequestDBSession();
-			String sqry = "INSERT INTO amp_activity_access(viewed, updated, change_date, dg_user_id, amp_activity_id) VALUES(?,?,?,?,?)";
-			Query qry = session.createSQLQuery(sqry);
-			qry.setParameter(0, (isUpdate) ? 0 : 1);
-			qry.setParameter(1, (isUpdate) ? 1 : 0);
-			qry.setParameter(2, new Date(System.currentTimeMillis()));
-			qry.setParameter(3, user.getId().intValue());
-			qry.setParameter(4, activityId);
-			qry.executeUpdate();
-			logger.info("Access logued for activity: " + activityId + " - User: " + user.getId());
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-	}
+
 	
-    //WTF!!!!
-      public static Boolean isDraft(Long id) throws DgException {
-    		Session session = PersistenceManager.getRequestDBSession();
-    		try {
-    		Query  query=session.createQuery("select draft from "+AmpActivity.class.getName()+" where ampActivityId=:id");
-    		query.setLong("id", id);
-    		List result=query.list();
-    		Iterator iter=result.iterator();
-    		if (iter.hasNext()){
-    			Boolean value=(Boolean) iter.next();
-    			if (value!=null){
-    				return value;
-    			} 
-    		}
-    		
-    		} catch (Exception e) {
-    			throw new DgException("Cannot load AmpActivity with id " + id, e);
-    		}
-    	 return false; 
-      }
-      
-      public static AmpTeam getActivityTeam(Long id) throws DgException {
-    		Session session = PersistenceManager.getRequestDBSession();
-    		try {
-    		Query  query=session.createQuery("select t.team from "+AmpActivity.class.getName()+" t  where t.ampActivityId=:id");
-    		query.setLong("id", id);
-    		List result=query.list();
-    		Iterator iter=result.iterator();
-    		if (iter.hasNext()){
-    			return (AmpTeam) iter.next();
-    		}
-    		
-    		} catch (Exception e) {
-    			throw new DgException("Cannot load AmpActivity with id " + id, e);
-    		}
-    	 return null;
-    }
-      
-      
-    public static void changeActivityArchiveStatus(Collection<Long> activityIds, boolean status) {
-		try {
-			Session session 			= PersistenceManager.getRequestDBSession();
-			String qryString			= "update " + AmpActivityVersion.class.getName()  + 
-					" av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSString(activityIds) + ")";
-			Query query					= session.createQuery(qryString);
-			query.setBoolean("archived", status);
-			query.executeUpdate();
-			session.flush();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-    }  
-    
-    public static Long getActivityNextVersionId(Long previousVersionId) throws Exception{
-    	Long retVal=null;
-    	Session session=null;
-    	Query qry=null;
-    	String queryString=null;
-    	try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString="select act.ampActivityId from " + AmpActivityVersion.class.getName() +" act where act.ampActivityPreviousVersion.ampActivityId="+previousVersionId;
-			qry=session.createQuery(queryString);
-			retVal=(Long)qry.uniqueResult();
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-    	return retVal;
-    }
-     /**
-     * clones issues information of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-     public static void cloneIssues(AmpActivityVersion oldActivity, AmpActivityVersion activity) {
-        if (oldActivity.getIssues() != null) {
-            Set<AmpIssues> issueSet = new HashSet<AmpIssues>();
-            Iterator<AmpIssues> itrIssues = oldActivity.getIssues().iterator();
-            while (itrIssues.hasNext()) {
-                AmpIssues ampIssue = new AmpIssues();
-                AmpIssues oldIssue = itrIssues.next();
-                ampIssue.setActivity(activity);
-                ampIssue.setName(oldIssue.getName());
-                ampIssue.setIssueDate(oldIssue.getIssueDate());
-                Set<AmpMeasure> measureSet = new HashSet<AmpMeasure>();
-                if (oldIssue.getMeasures() != null) {
-                    Iterator<AmpMeasure> itrMessure = oldIssue.getMeasures().iterator();
-                    while (itrMessure.hasNext()) {
-                        AmpMeasure measure = itrMessure.next();
-                        AmpMeasure ampMeasure = new AmpMeasure();
-                        ampMeasure.setIssue(ampIssue);
-                        ampMeasure.setName(measure.getName());
-                        Set<AmpActor> actorSet = new HashSet<AmpActor>();
-                        if (measure.getActors() != null) {
-                            Iterator<AmpActor> itrActors = measure.getActors().iterator();
-                            while (itrActors.hasNext()) {
-                                AmpActor oldActor = itrActors.next();
-                                AmpActor actor = new AmpActor();
-                                actor.setMeasure(ampMeasure);
-                                actor.setName(oldActor.getName());
-                                actor.setNameTrimmed(oldActor.getNameTrimmed());
-                                actorSet.add(actor);
-                            }
-                        }
-                        ampMeasure.setActors(actorSet);
-                        measureSet.add(ampMeasure);
-                    }
-                }
-                ampIssue.setMeasures(measureSet);
-                issueSet.add(ampIssue);
-            }
-            activity.setIssues(issueSet);
-        }
-    }
-
-     /**
-     * clones contract information of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-
-
-    public static void cloneContracts(AmpActivityVersion oldActivity, AmpActivityVersion activity) {
-        if (oldActivity.getContracts() != null) {
-            Set<IPAContract> contracts = new HashSet<IPAContract>();
-            Iterator<IPAContract> ipaConIter = oldActivity.getContracts().iterator();
-            while (ipaConIter.hasNext()) {
-                IPAContract auxContract = ipaConIter.next();
-                IPAContract newContract = new IPAContract();
-                newContract.setActivity(activity);
-                newContract.setContractName(auxContract.getContractName());
-                newContract.setDescription(auxContract.getDescription());
-                newContract.setContractingOrganizationText(auxContract.getContractingOrganizationText());
-                newContract.setActivityCategory(auxContract.getActivityCategory());
-                newContract.setStartOfTendering(auxContract.getStartOfTendering());
-                newContract.setSignatureOfContract(auxContract.getSignatureOfContract());
-                newContract.setContractValidity(auxContract.getContractValidity());
-                newContract.setContractCompletion(auxContract.getContractCompletion());
-                newContract.setTotalPrivateContribAmountDate(auxContract.getTotalPrivateContribAmountDate());
-                newContract.setTotalNationalContribIFIAmountDate(auxContract.getTotalNationalContribIFIAmountDate());
-                newContract.setTotalNationalContribRegionalAmountDate(auxContract.getTotalNationalContribRegionalAmountDate());
-                newContract.setTotalNationalContribCentralAmountDate(auxContract.getTotalNationalContribCentralAmountDate());
-                newContract.setTotalECContribINVAmountDate(auxContract.getTotalECContribINVAmountDate());
-                newContract.setTotalECContribIBAmountDate(auxContract.getTotalECContribIBAmountDate());
-                newContract.setTotalECContribIBAmount(auxContract.getTotalECContribIBAmount());
-                newContract.setTotalAmount(auxContract.getTotalAmount());
-                newContract.setContractTotalValue(auxContract.getContractTotalValue());
-                newContract.setTotalAmountCurrency(auxContract.getTotalAmountCurrency());
-                newContract.setDibusrsementsGlobalCurrency(auxContract.getDibusrsementsGlobalCurrency());
-                newContract.setExecutionRate(auxContract.getExecutionRate());
-                newContract.setTotalECContribINVAmount(auxContract.getTotalECContribINVAmount());
-                newContract.setTotalNationalContribCentralAmount(auxContract.getTotalNationalContribCentralAmount());
-                newContract.setTotalNationalContribRegionalAmount(auxContract.getTotalNationalContribRegionalAmount());
-                newContract.setTotalNationalContribIFIAmount(auxContract.getTotalNationalContribIFIAmount());
-                newContract.setTotalPrivateContribAmount(auxContract.getTotalPrivateContribAmount());
-                newContract.setOrganization(auxContract.getOrganization());
-                newContract.setStatus(auxContract.getStatus());
-                newContract.setType(auxContract.getType());
-                newContract.setContractType(auxContract.getContractType());
-                Set newOrgs = auxContract.getOrganizations();
-                if (newOrgs != null) {
-                    newContract.setOrganizations(new HashSet<AmpOrganisation>());
-                    newContract.getOrganizations().addAll(newOrgs);
-                }
-                Set<IPAContractDisbursement> newDisbs = auxContract.getDisbursements();
-                if (newDisbs != null) {
-                    newContract.setDisbursements(new HashSet<IPAContractDisbursement>());
-                    Iterator<IPAContractDisbursement> iterNewDisb = newDisbs.iterator();
-                    while (iterNewDisb.hasNext()) {
-                        IPAContractDisbursement auxDisb = iterNewDisb.next();
-                        IPAContractDisbursement newDisb = new IPAContractDisbursement();
-                        newDisb.setAdjustmentType(auxDisb.getAdjustmentType());
-                        newDisb.setAmount(auxDisb.getAmount());
-                        newDisb.setCurrency(auxDisb.getCurrency());
-                        newDisb.setDate(auxDisb.getDate());
-                        newContract.getDisbursements().add(newDisb);
-                    }
-                }
-                contracts.add(newContract);
-            }
-            activity.setContracts(contracts);
-        }
-    }
-
-     /**
-     * clones Cost Information of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-
-    public static void cloneCosts(AmpActivityVersion oldActivity, AmpActivityVersion activity) {
-        if (oldActivity.getCosts() != null) {
-            Set<EUActivity> costs = new HashSet<EUActivity>();
-            Iterator<EUActivity> i = oldActivity.getCosts().iterator();
-            while (i.hasNext()) {
-                EUActivity oldElement = i.next();
-                EUActivity element = new EUActivity();
-                element.setActivity(activity);
-                element.setAssumptions(oldElement.getAssumptions());
-                element.setDesktopCurrencyId(oldElement.getDesktopCurrencyId());
-                element.setDueDate(oldElement.getDueDate());
-                element.setInputs(oldElement.getInputs());
-                element.setName(oldElement.getName());
-                element.setProgress(oldElement.getProgress());
-                element.setTextId(oldElement.getTextId());
-                element.setTotalCost(oldElement.getTotalCost());
-                element.setTotalCostCurrency(oldElement.getTotalCostCurrency());
-                element.setTransactionDate(oldElement.getTransactionDate());
-                if (oldElement.getContributions() != null) {
-                    Iterator<EUActivityContribution> ii = element.getContributions().iterator();
-                    Set<EUActivityContribution> contributions = new HashSet<EUActivityContribution>();
-                    while (ii.hasNext()) {
-                        EUActivityContribution oldElement2 = (EUActivityContribution) ii.next();
-                        EUActivityContribution element2 = new EUActivityContribution();
-                        element2.setAmount(oldElement2.getAmount());
-                        element2.setAmountCurrency(oldElement2.getAmountCurrency());
-                        element2.setDonor(oldElement2.getDonor());
-                        element2.setEuActivity(oldElement2.getEuActivity());
-                        element2.setFinancingInstr(oldElement2.getFinancingInstr());
-                        element2.setFinancingTypeCategVal(oldElement2.getFinancingTypeCategVal());
-                        element2.setTransactionDate(oldElement2.getTransactionDate());
-                        contributions.add(element2);
-                    }
-                    element.setContributions(contributions);
-                }
-                costs.add(element);
-            }
-            activity.setCosts(costs);
-        }
-    }
-
-    /**
-     * clones all Activity Documents of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-    public static void cloneDocs(AmpActivityVersion oldActivity, AmpActivityVersion activity, HttpServletRequest request) throws NoDocumentTypeException {
-        /* Injecting documents into session */
-        SelectDocumentDM.clearContentRepositoryHashMap(request);
-        if (oldActivity.getActivityDocuments() != null && oldActivity.getActivityDocuments().size() > 0) {
-            ActivityDocumentsUtil.injectActivityDocuments(request, oldActivity.getActivityDocuments());
-            /* Saving related documents into AmpActivity */
-            HashSet<String> UUIDs = new HashSet<String>();
-            if (SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false) != null) {
-                UUIDs.addAll(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false));
-            }
-            if (UUIDs != null && UUIDs.size() > 0) {
-                if (activity.getActivityDocuments() == null) {
-                    activity.setActivityDocuments(new HashSet<AmpActivityDocument>());
-                } else {
-                    activity.getActivityDocuments().clear();
-                }
-                Iterator<String> iter = UUIDs.iterator();
-
-                while (iter.hasNext()) {
-                    String uuid = iter.next();
-                    AmpActivityDocument doc = new AmpActivityDocument();
-                    doc.setUuid(uuid);
-                    doc.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-                    activity.getActivityDocuments().add(doc);
-                }
-            }
-            SelectDocumentDM.clearContentRepositoryHashMap(request);
-            /* END -Saving related documents into AmpActivity */
-        }
-    }
-
-    /**
-     * clones all Funding Information of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-    public static void cloneFunding(AmpActivityVersion oldActivity, AmpActivityVersion activity) {
-         activity.setFunAmount(oldActivity.getFunAmount());
-            activity.setFunDate(oldActivity.getFunDate());
-            activity.setCurrencyCode(oldActivity.getCurrencyCode());
-        if (oldActivity.getFunding() != null) {
-            Set<AmpFunding> fundings = new HashSet<AmpFunding>();
-            Iterator<AmpFunding> iterFunding = oldActivity.getFunding().iterator();
-            while (iterFunding.hasNext()) {
-                AmpFunding funding = new AmpFunding();
-                AmpFunding oldFunding = iterFunding.next();
-                funding.setAmpActivityId(activity);
-                funding.setActive(oldFunding.getActive());
-                funding.setDelegatedPartner(oldFunding.getDelegatedPartner());
-                funding.setAmpDonorOrgId(oldFunding.getAmpDonorOrgId());
-                funding.setFinancingId(oldFunding.getFinancingId());
-                funding.setConditions(oldFunding.getConditions());
-                funding.setComments(oldFunding.getComments());
-                funding.setFinancingInstrument(oldFunding.getFinancingInstrument());
-                funding.setTypeOfAssistance(oldFunding.getTypeOfAssistance());
-                funding.setFundingStatus(oldFunding.getFundingStatus());
-                funding.setDonorObjective(oldFunding.getDonorObjective());
-                if (oldFunding.getFundingDetails() != null) {
-                    Set<AmpFundingDetail> fundingDets = new HashSet<AmpFundingDetail>();
-                    Iterator<AmpFundingDetail> iterFundingDet = oldFunding.getFundingDetails().iterator();
-                    while (iterFundingDet.hasNext()) {
-                        AmpFundingDetail ampFundDet = new AmpFundingDetail();
-                        AmpFundingDetail oldFundDet = iterFundingDet.next();
-                        ampFundDet.setTransactionAmount(oldFundDet.getTransactionAmount());
-                        ampFundDet.setAmpCurrencyId(oldFundDet.getAmpCurrencyId());
-                        ampFundDet.setFixedExchangeRate(oldFundDet.getFixedExchangeRate());
-                        ampFundDet.setFixedRateBaseCurrency(oldFundDet.getFixedRateBaseCurrency());
-                        ampFundDet.setTransactionType(oldFundDet.getTransactionType());
-                        ampFundDet.setAdjustmentType(oldFundDet.getAdjustmentType());
-                        ampFundDet.setTransactionDate(oldFundDet.getTransactionDate());
-                        ampFundDet.setExpCategory(oldFundDet.getExpCategory());
-                        ampFundDet.setDisbOrderId(oldFundDet.getDisbOrderId());
-                        ampFundDet.setDisbursementOrderRejected(oldFundDet.getDisbursementOrderRejected());
-                        ampFundDet.setAmpFundingId(funding);
-                        fundingDets.add(ampFundDet);
-                    }
-                    funding.setFundingDetails(fundingDets);
-                }
-                if (oldFunding.getMtefProjections() != null) {
-                    funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
-                    Iterator<AmpFundingMTEFProjection> mtefItr = oldFunding.getMtefProjections().iterator();
-                    while (mtefItr.hasNext()) {
-                        AmpFundingMTEFProjection mtef = mtefItr.next();
-                        AmpFundingMTEFProjection ampmtef = new AmpFundingMTEFProjection();
-                        ampmtef.setAmount(mtef.getAmount());
-                        ampmtef.setAmpFunding(funding);
-                        ampmtef.setAmpCurrency(mtef.getAmpCurrency());
-                        ampmtef.setProjected(mtef.getProjected());
-                        ampmtef.setProjectionDate(mtef.getProjectionDate());
-                        funding.getMtefProjections().add(ampmtef);
-                    }
-                }
-                fundings.add(funding);
-            }
-            activity.setFunding(fundings);
-        }
-    }
-    /**
-     * clones all Regional Funding Information of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-
-    public static void cloneRegionalFunding(AmpActivityVersion oldActivity, AmpActivityVersion activity) {
-        Set<AmpRegionalFunding> regFundings = new HashSet<AmpRegionalFunding>();
-        if (oldActivity.getRegionalFundings() != null) {
-            Iterator<AmpRegionalFunding> itrRegFund = oldActivity.getRegionalFundings().iterator();
-            while (itrRegFund.hasNext()) {
-                AmpRegionalFunding regFund = itrRegFund.next();
-                AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
-                ampRegFund.setTransactionType(regFund.getTransactionType());
-                ampRegFund.setCurrency(regFund.getCurrency());
-                ampRegFund.setRegionLocation(regFund.getRegionLocation());
-                ampRegFund.setActivity(activity);
-                ampRegFund.setTransactionAmount(regFund.getTransactionAmount());
-                ampRegFund.setTransactionDate(regFund.getTransactionDate());
-                ampRegFund.setAdjustmentType(regFund.getAdjustmentType());
-                regFundings.add(ampRegFund);
-            }
-        }
-        activity.setRegionalFundings(regFundings);
-    }
-    
-     /**
-     * clones all Related Organizations Information of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-
-    public static void cloneRelatedOrgStep(AmpActivityVersion oldActivity, AmpActivityVersion activity) {
-        if (oldActivity.getOrgrole() != null) {
-            Set<AmpOrgRole> orgRoles = new HashSet<AmpOrgRole>();
-            Iterator<AmpOrgRole> iterOrgRole = oldActivity.getOrgrole().iterator();
-            while (iterOrgRole.hasNext()) {
-                AmpOrgRole ampOrgRole = new AmpOrgRole();
-                AmpOrgRole oldOrgRole = iterOrgRole.next();
-                ampOrgRole.setActivity(activity);
-                ampOrgRole.setAdditionalInfo(oldOrgRole.getAdditionalInfo());
-                ampOrgRole.setOrganisation(oldOrgRole.getOrganisation());
-                ampOrgRole.setPercentage(oldOrgRole.getPercentage());
-                ampOrgRole.setRole(oldOrgRole.getRole());
-                orgRoles.add(ampOrgRole);
-            }
-            activity.setOrgrole(orgRoles);
-        }
-    }
-    /**
-     * clones all Indentification Informations of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     */
-
-    public static void cloneIdentification(AmpActivityVersion oldActivity,AmpActivityVersion activity) {
-        activity.setAmpId(oldActivity.getAmpId());
-        activity.setName(oldActivity.getName());
-        activity.setBudget(oldActivity.getBudget());
-        activity.setDescription(oldActivity.getDescription());
-        activity.setProjectComments(oldActivity.getProjectComments());
-        activity.setLessonsLearned(oldActivity.getLessonsLearned());
-        activity.setProjectImpact(oldActivity.getProjectImpact());
-        activity.setChapter(oldActivity.getChapter());
-        activity.setActivitySummary(oldActivity.getActivitySummary());
-        activity.setContractingArrangements(oldActivity.getContractingArrangements());
-        activity.setCondSeq(oldActivity.getCondSeq());
-        activity.setLinkedActivities(oldActivity.getLinkedActivities());
-        activity.setConditionality(oldActivity.getConditionality());
-        activity.setProjectManagement(oldActivity.getProjectManagement());
-        activity.setPurpose(oldActivity.getPurpose());
-        activity.setResults(oldActivity.getResults());
-        activity.setObjective(oldActivity.getObjective());
-        activity.setStatusReason(oldActivity.getStatusReason());
-        activity.setContractDetails(oldActivity.getContractDetails());
-        activity.setFY(oldActivity.getFY());
-        activity.setVote(oldActivity.getVote());
-        activity.setSubVote(oldActivity.getSubVote());
-        activity.setSubProgram(oldActivity.getSubProgram());
-        activity.setProjectCode(oldActivity.getProjectCode());
-        activity.setGovernmentApprovalProcedures(oldActivity.getGovernmentApprovalProcedures());
-        activity.setGovAgreementNumber(oldActivity.getGovAgreementNumber());
-        activity.setBudgetCodeProjectID(oldActivity.getBudgetCodeProjectID());
-        activity.setCrisNumber(oldActivity.getCrisNumber());
-        activity.setJointCriteria(oldActivity.getJointCriteria());
-        activity.setHumanitarianAid(oldActivity.getHumanitarianAid());
-        activity.setCondition(oldActivity.getCondition());
-        activity.setLineMinRank(oldActivity.getLineMinRank());
-        activity.setLineMinRank(oldActivity.getPlanMinRank());
-        activity.setProposedApprovalDate(oldActivity.getProposedApprovalDate());
-        activity.setActualApprovalDate(oldActivity.getActualApprovalDate());
-        activity.setProposedStartDate(oldActivity.getProposedStartDate());
-        activity.setActualStartDate(oldActivity.getActualStartDate());
-        activity.setActualCompletionDate(oldActivity.getActualCompletionDate());
-        activity.setOriginalCompDate(oldActivity.getOriginalCompDate());
-        activity.setContractingDate(oldActivity.getContractingDate());
-        activity.setDisbursmentsDate(oldActivity.getDisbursmentsDate());
-        activity.setProposedCompletionDate(oldActivity.getProposedCompletionDate());
-        activity.setClosingDates(new HashSet<AmpActivityClosingDates>());
-        activity.setCategories(new HashSet<AmpCategoryValue>());
-        activity.getCategories().addAll(oldActivity.getCategories());
-     
-        if (oldActivity.getClosingDates() != null) {
-            Iterator<AmpActivityClosingDates> iterClosingDates = oldActivity.getClosingDates().iterator();
-            while (iterClosingDates.hasNext()) {
-                AmpActivityClosingDates oldCloseDate = iterClosingDates.next();
-                AmpActivityClosingDates closeDate = new AmpActivityClosingDates();
-                closeDate.setAmpActivityId(activity);
-                closeDate.setClosingDate(oldCloseDate.getClosingDate());
-                closeDate.setType(oldCloseDate.getType());
-                closeDate.setComments(oldCloseDate.getComments());
-                activity.getClosingDates().add(closeDate);
-            }
-        }
-        Set internalIds = new HashSet();
-        if (oldActivity.getInternalIds() != null) {
-            Iterator<AmpActivityInternalId> iterInternalIds = oldActivity.getInternalIds().iterator();
-            while (iterInternalIds.hasNext()) {
-                AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-                AmpActivityInternalId oldActInternalId = iterInternalIds.next();
-                actInternalId.setAmpActivity(activity);
-                actInternalId.setOrganisation(oldActInternalId.getOrganisation());
-                actInternalId.setInternalId(oldActInternalId.getInternalId());
-                internalIds.add(actInternalId);
-            }
-        }
-        activity.setInternalIds(internalIds);
-        activity.setComments(oldActivity.getComments());
-        activity.setDraft(oldActivity.getDraft());
-    }
-    /**
-     * clones all Reference Docs Informations of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-
-    public static void cloneReferenceDocs(AmpActivityVersion oldActivity, AmpActivityVersion activity) {
-        Set<AmpActivityReferenceDoc> resultRefDocs = new HashSet<AmpActivityReferenceDoc>();
-        if (oldActivity.getReferenceDocs() != null) {
-            Iterator<AmpActivityReferenceDoc> iterReferenceDocs = oldActivity.getReferenceDocs().iterator();
-            while (iterReferenceDocs.hasNext()) {
-                AmpActivityReferenceDoc dbRefDoc = new AmpActivityReferenceDoc();
-                AmpActivityReferenceDoc olddbRefDoc = iterReferenceDocs.next();
-                dbRefDoc.setCreated(olddbRefDoc.getCreated());
-                dbRefDoc.setCategoryValue(olddbRefDoc.getCategoryValue());
-                dbRefDoc.setActivity(activity);
-                dbRefDoc.setComment(olddbRefDoc.getComment());
-                dbRefDoc.setLastEdited(new Date());
-                resultRefDocs.add(dbRefDoc);
-            }
-        }
-        activity.setReferenceDocs(resultRefDocs);
-    }
-     /**
-     * clones all Sector, Location and Program Informations of previous activity.
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     *
-     */
-
-    public static void cloneSecLocProg(AmpActivityVersion oldActivity,AmpActivityVersion activity) {
-        activity.setEqualOpportunity(oldActivity.getEqualOpportunity());
-        activity.setEnvironment(oldActivity.getEnvironment());
-        activity.setMinorities(oldActivity.getMinorities());
-        if (oldActivity.getSectors() != null) {
-            Set<AmpActivitySector> sectors = new HashSet<AmpActivitySector>();
-            Iterator<AmpActivitySector> iterSector = oldActivity.getSectors().iterator();
-            while (iterSector.hasNext()) {
-                AmpActivitySector amps = new AmpActivitySector();
-                AmpActivitySector oldAmps = iterSector.next();
-                amps.setActivityId(activity);
-                amps.setSectorId(oldAmps.getSectorId());
-                amps.setSectorPercentage(oldAmps.getSectorPercentage());
-                amps.setClassificationConfig(oldAmps.getClassificationConfig());
-                sectors.add(amps);
-            }
-            activity.setSectors(sectors);
-        }
-        if (oldActivity.getActPrograms() != null) {
-            Set<AmpActivityProgram> programs = new HashSet<AmpActivityProgram>();
-            Iterator<AmpActivityProgram> iterProgram = oldActivity.getActPrograms().iterator();
-            while (iterProgram.hasNext()) {
-                AmpActivityProgram program = new AmpActivityProgram();
-                AmpActivityProgram oldProgram = iterProgram.next();
-                program.setActivity(activity);
-                program.setProgram(oldProgram.getProgram());
-                program.setProgramPercentage(oldProgram.getProgramPercentage());
-                program.setProgramSetting(oldProgram.getProgramSetting());
-                programs.add(program);
-            }
-            activity.setActPrograms(programs);
-        }
-        activity.setThemeId(oldActivity.getThemeId());
-        activity.setProgramDescription(oldActivity.getProgramDescription());
-        if (oldActivity.getLocations() != null) {
-            Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
-            Iterator<AmpActivityLocation> iterLocation = oldActivity.getLocations().iterator();
-            while (iterLocation.hasNext()) {
-                AmpActivityLocation location = new AmpActivityLocation();
-                AmpActivityLocation oldLoc = iterLocation.next();
-                location.setActivity(activity);
-                location.setLocation(oldLoc.getLocation());
-                location.setLocationPercentage(oldLoc.getLocationPercentage());
-                locations.add(location);
-            }
-            activity.setLocations(locations);
-        }
-    }
-    /**
-     * clones all data of previous activity except M&E indicator values.
-     * the commit must be performed in the caller method
-     * @param oldActivity previous version of activity
-     * @param activity new unsaved version of activity
-     * @param session
-     * @param request to save activity documents
-     * @return
-     * @throws HibernateException
-     */
-
-     public static AmpActivityVersion cloneActivity(AmpActivityVersion oldActivity, Session session,HttpServletRequest request) throws Exception {
-        AmpActivityVersion activity = new AmpActivityVersion();
-        cloneIdentification(oldActivity, activity);
-        cloneReferenceDocs(oldActivity, activity);
-        cloneSecLocProg(oldActivity, activity);
-        cloneRelatedOrgStep(oldActivity, activity);
-        cloneFunding(oldActivity, activity);
-        cloneRegionalFunding(oldActivity, activity);
-        cloneIssues(oldActivity, activity);
-        activity.setComponentFundings(new HashSet<AmpComponentFunding>());
-         if (oldActivity.getComponents() != null) {
-             activity.setComponents(new HashSet<AmpComponent>());
-             Iterator<AmpComponent> iComponents = oldActivity.getComponents().iterator();
-             while (iComponents.hasNext()) {
-                 AmpComponent auxComponent = iComponents.next();
-                 AmpComponent newComponent = new AmpComponent();
-                 newComponent.setActivity(activity);
-                 newComponent.setCode(auxComponent.getCode());
-                 newComponent.setCreationdate(auxComponent.getCreationdate());
-                 newComponent.setDescription(auxComponent.getDescription());
-                 newComponent.setFunding(new HashSet<AmpComponentFunding>());
-                 newComponent.setTitle(auxComponent.getTitle());
-                 newComponent.setType(auxComponent.getType());
-                 newComponent.setUrl(auxComponent.getUrl());
-                 activity.getComponents().add(newComponent);
-                 session.save(newComponent);
-                 if (auxComponent.getFunding() != null) {
-                     Iterator<AmpComponentFunding> iFundings = auxComponent.getFunding().iterator();
-
-                     while (iFundings.hasNext()) {
-                         AmpComponentFunding auxFunding = iFundings.next();
-                         AmpComponentFunding newFunding = new AmpComponentFunding();
-                         newFunding.setActivity(activity);
-                         newFunding.setAdjustmentType(auxFunding.getAdjustmentType());
-                         //newFunding.setAmpComponentFundingId(auxFunding.getAmpComponentFundingId());
-                         newFunding.setComponent(newComponent);
-                         newFunding.setCurrency(auxFunding.getCurrency());
-                         newFunding.setExchangeRate(auxFunding.getExchangeRate());
-                         newFunding.setExpenditureCategory(auxFunding.getExpenditureCategory());
-                         newFunding.setReportingDate(auxFunding.getReportingDate());
-                         newFunding.setReportingOrganization(auxFunding.getReportingOrganization());
-                         newFunding.setTransactionAmount(auxFunding.getTransactionAmount());
-                         newFunding.setTransactionDate(auxFunding.getTransactionDate());
-                         newFunding.setTransactionType(auxFunding.getTransactionType());
-                         activity.getComponentFundings().add(newFunding);
-                     }
-                 }
-             }
-         }
-        activity.setComponentProgress(new HashSet<AmpPhysicalPerformance>());
-        if (oldActivity.getComponentProgress() != null) {
-            Iterator<AmpPhysicalPerformance> itr1 = oldActivity.getComponentProgress().iterator();
-            while (itr1.hasNext()) {
-                AmpPhysicalPerformance phyProg = itr1.next();
-                AmpPhysicalPerformance ampPhyPerf = new AmpPhysicalPerformance();
-                ampPhyPerf.setDescription(phyProg.getDescription());
-                ampPhyPerf.setAmpPpId(phyProg.getAmpPpId());
-                ampPhyPerf.setReportingDate(phyProg.getReportingDate());
-                ampPhyPerf.setTitle(phyProg.getTitle());
-                ampPhyPerf.setAmpActivityId(activity);
-                ampPhyPerf.setComponent(phyProg.getComponent());
-                ampPhyPerf.setComments(phyProg.getComments());
-                session.save(ampPhyPerf);
-                activity.getComponentProgress().add(ampPhyPerf);
-            }
-        }
-        cloneDocs(oldActivity, activity,request);
-        if (oldActivity.getActivityContacts() != null) {
-            Iterator<AmpActivityContact> itrContacts = oldActivity.getActivityContacts().iterator();
-            Set<AmpActivityContact> allContacts = new HashSet<AmpActivityContact>();
-            while (itrContacts.hasNext()) {
-                AmpActivityContact oldContact = itrContacts.next();
-                AmpActivityContact contact = new AmpActivityContact();
-                contact.setActivity(activity);
-                contact.setContact(oldContact.getContact());
-                contact.setContactType(oldContact.getContactType());
-                contact.setPrimaryContact(oldContact.getPrimaryContact());
-                allContacts.add(contact);
-                session.save(contact);
-            }
-            activity.setActivityContacts(allContacts);
-        }
-        cloneCosts(oldActivity, activity);
-        cloneContracts(oldActivity, activity);
-        cloneActivityTeamMemberRelation(activity, oldActivity);
-        return activity;
-    }
-      public static void cloneActivityTeamMemberRelation(AmpActivityVersion activity, AmpActivityVersion oldActivity) {
-        activity.setTeam(oldActivity.getTeam());
-        activity.setCreatedBy(oldActivity.getCreatedBy());
-        activity.setCreatedDate(oldActivity.getCreatedDate());
-        activity.setCreatedAsDraft(oldActivity.isCreatedAsDraft());
-        activity.setApprovalDate(oldActivity.getApprovalDate());
-        activity.setApprovalStatus(oldActivity.getApprovalStatus());
-        activity.setApprovedBy(oldActivity.getApprovedBy());
-        activity.setActivityCreator(oldActivity.getActivityCreator());
-        activity.setMember(new HashSet<AmpTeamMember>());
-        activity.getMember().add(oldActivity.getActivityCreator());
-    }
-
-    public static void cloneIndicatorActivity(AmpActivityVersion oldActivity, Long indId, AmpActivityVersion activity, Session session) throws HibernateException, DgException {
-        List<IndicatorActivity> oldIndConns =IndicatorUtil.getIndicatorActivities(oldActivity.getAmpActivityId());
-        if (oldIndConns != null) {
-            Iterator<IndicatorActivity> itrIndConns = oldIndConns.iterator();
-            while (itrIndConns.hasNext()) {
-                IndicatorActivity oldIndAct = itrIndConns.next();
-                if (indId!=null&&indId.equals(oldIndAct.getIndicator().getIndicatorId())) {
-                    continue;
-                }
-                IndicatorActivity newIndConn = new IndicatorActivity();
-                newIndConn.setActivity(activity);
-                newIndConn.setIndicator(oldIndAct.getIndicator());
-                newIndConn.setRiskValue(oldIndAct.getRiskValue());
-                newIndConn.setValues(new HashSet<AmpIndicatorValue>());
-                if (oldIndAct.getValues() != null) {
-                    Iterator<AmpIndicatorValue> itrIndConnVals = oldIndAct.getValues().iterator();
-                    while (itrIndConnVals.hasNext()) {
-                        AmpIndicatorValue oldValue = itrIndConnVals.next();
-                        AmpIndicatorValue newValue = new AmpIndicatorValue();
-                        newValue.setValueType(oldValue.getValueType());
-                        newValue.setValue(oldValue.getValue());
-                        newValue.setComment(oldValue.getComment());
-                        newValue.setValueDate(oldValue.getValueDate());
-                        newValue.setRiskValue(oldValue.getRiskValue());
-                        newValue.setLogFrame(oldValue.getLogFrame());
-                        newValue.setIndicatorConnection(newIndConn);
-                        newIndConn.getValues().add(newValue);
-                    }
-                }
-                session.saveOrUpdate(newIndConn);
-            }
-        }
-    }
-    
-    public static class HelperActivity{
-		//List<HelperActivity> activities;
-		Long activityId;
-		String name;
-		String ampId;
-		AmpTeam team;
-
-		public HelperActivity () {}
-		
-		public HelperActivity (Long actId,String actName,String ampId,AmpTeam team) {
-			this.activityId=actId;
-			this.name=actName;
-			this.ampId=ampId;
-			this.team=team;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public String getAmpId() {
-			return ampId;
-		}
-		public void setAmpId(String ampId) {
-			this.ampId = ampId;
-		}
-
-		public AmpTeam getTeam() {
-			return team;
-		}
-
-		public void setTeam(AmpTeam team) {
-			this.team = team;
-		}
-
-		public Long getActivityId() {
-			return activityId;
-		}
-		public void setActivityId(Long activityId) {
-			this.activityId = activityId;
-		}	
-		
-	}
-    
-    /**
-    * resolves key from EUActivity
-    * @author dare
-    *
-    */
-    public static class EUActivityKeyResolver implements KeyResolver<Long, EUActivity>{
-	    @Override
-	    public Long resolveKey(EUActivity element) {
-	    	return element.getId();
-	    }
-    }
 } // End

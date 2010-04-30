@@ -140,7 +140,6 @@
     <action name="umViewEditUserForm" path="/um/viewEditUser" scope="session" type="org.digijava.module.um.action.ViewEditUser" validate="false">
       <forward name="forward" path="/showLayout.do?layout=umViewEditUser" />
       <forward name="saved" path="/um/viewAllUsers.do" redirect="false"/>
-      <forward name="assignWorkspace" path="/showLayout.do?layout=assignToWorkspace" redirect="false"/>
     </action>
     <action input="/um/registerUser.do" name="umAddUserForm" path="/um/addWorkSpaceUser" scope="session" type="org.digijava.module.um.action.addWorkSpaceUser" validate="true">
       <forward name="forward" path="/showLayout.do?layout=addWorkSpaceUser" />
@@ -163,5 +162,5 @@
    		<forward name="index" path="/aim/index.do" redirect="true" />
    		<forward name="forward" path="/showLayout.do?layout=umViewAllUsers" /> 
     </action>
-</action-mappings>
+  </action-mappings>
 </struts-config>

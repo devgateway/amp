@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.digijava.module.aim.logic.Logic;
 
 public class Values extends HashMap<String, BigDecimal> {
 
@@ -68,7 +67,7 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, values.get(ArConstants.PLANNED_DISBURSEMENT_FILTERED));
 		this.addValue(ArConstants.PROPOSED_COST, values.get(ArConstants.PROPOSED_COST));
 		this.addValue(ArConstants.COSTING_GRAND_TOTAL, values.get(ArConstants.COSTING_GRAND_TOTAL));
-		
+		this.addValue(ArConstants.TOTAL_COMMITMENTS, values.get(ArConstants.TOTAL_COMMITMENTS));
 
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_COMMITMENT, ac);
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_DISBURSEMENT, ad);
@@ -93,6 +92,9 @@ public class Values extends HashMap<String, BigDecimal> {
 	 * @param cell
 	 */
 	public void collectCellVariables(CategAmountCell cell) {
+
+		this.addValue(ArConstants.TOTAL_COMMITMENTS, TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(cell));
+
 		this.addValue(ArConstants.ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.ACTUAL_DISBURSEMENT, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
 
@@ -104,7 +106,8 @@ public class Values extends HashMap<String, BigDecimal> {
 
 		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluateOriginalvalue(cell));
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluateOriginalvalue(cell));
-
+		//this.addValue(ArConstants.ACTUAL_PLEDGE_COMMITMENT, TokenRepository.buildPledgesCommitmentsLogicalToken().evaluateOriginalvalue(cell));
+		
 		// no filtered, affected by %
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildSelectedYearPlannedDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildCumulatedDisursementsLogicalToken().evaluate(cell));
@@ -117,7 +120,11 @@ public class Values extends HashMap<String, BigDecimal> {
 			this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(cell));
 			this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(cell));
 		}
-
+		/*
+		if (cell.existsMetaString(ArConstants.PLEDGED_TOTAL)){
+			this.addValue(ArConstants.PLEDGED_TOTAL, TokenRepository.buildTotalPledgedLogicalToken().evaluateOriginalvalue(cell));
+		}
+		*/
 		if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) != null) {
 			if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
 				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
@@ -160,6 +167,7 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.addValue(ArConstants.ACTUAL_DISBURSEMENT, values.get(ArConstants.ACTUAL_DISBURSEMENT));
 		this.addValue(ArConstants.PLANNED_COMMITMENT, values.get(ArConstants.PLANNED_COMMITMENT));
 		this.addValue(ArConstants.PLANNED_DISBURSEMENT, values.get(ArConstants.PLANNED_DISBURSEMENT));
+		this.addValue(ArConstants.TOTAL_COMMITMENTS, values.get(ArConstants.TOTAL_COMMITMENTS));
 		this.addValue(ArConstants.TOTAL_ACTUAL_COMMITMENT, values.get(ArConstants.TOTAL_ACTUAL_COMMITMENT));
 		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, values.get(ArConstants.TOTAL_ACTUAL_COMMITMENT));
 		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, values.get(ArConstants.TOTAL_ACTUAL_COMMITMENT));

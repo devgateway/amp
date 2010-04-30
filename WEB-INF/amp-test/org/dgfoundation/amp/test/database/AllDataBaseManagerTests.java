@@ -8,7 +8,6 @@ public class AllDataBaseManagerTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(DataBaseDataTest.class);
-		suite.addTestSuite(StoredObjectsTest.class);
 		return suite;
 	}
 }

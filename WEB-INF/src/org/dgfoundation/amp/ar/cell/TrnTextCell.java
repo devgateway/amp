@@ -28,12 +28,12 @@ public class TrnTextCell extends TextCell{
 	public String getTrasnlatedValue(HttpServletRequest request){
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		Long siteId = site.getId();
+		String siteId = site.getId()+"";
 		String locale = navigationLanguage.getCode();
 		
-		return this.getTranslatedValue(siteId, locale);
+		return this.getTrasnlatedValue(siteId, locale);
 	}
-	public String getTranslatedValue(Long siteId, String locale){
+	public String getTrasnlatedValue(String siteId, String locale){
 		
 		String text;
 		try {
@@ -54,6 +54,6 @@ public class TrnTextCell extends TextCell{
 		{
 			parent=parent.getParent();
 		}
-		return this.getTranslatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
+		return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
 	}
 }

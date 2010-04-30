@@ -42,10 +42,14 @@ import org.apache.struts.tiles.actions.TilesAction;
  * @author not attributable
  * @version 1.0
  */
-public class RenderTeaser extends TilesAction {
+public class RenderTeaser
+    extends TilesAction {
 
-  public ActionForward execute(ComponentContext context,ActionMapping mapping,ActionForm form,
-                               HttpServletRequest request,HttpServletResponse response) throws IOException,
+  public ActionForward execute(ComponentContext context,
+                               ActionMapping mapping,
+                               ActionForm form,
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws IOException,
       ServletException {
 
 /*      SdmForm.ELJInstance instance = new SdmForm.ELJInstance();
@@ -57,6 +61,7 @@ public class RenderTeaser extends TilesAction {
       // ------------------------
 
       sdmForm.setInstance(instance);*/
+
 
     return null;
   }

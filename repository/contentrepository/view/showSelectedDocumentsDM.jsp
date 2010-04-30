@@ -66,13 +66,9 @@
 						viewAllRights		: ${viewAllRights}
 				};
 				</logic:notEmpty>
-				var otherProperties	= new Object();
-				<c:if test="${checkBoxToHide!=null}">
-					otherProperties.checkBoxToHide	= '${checkBoxToHide}'; 
-				</c:if>
 				windowController	= newWindow('${windowName}',false,'selDocumentsDiv');
 				// windowController.setTitle('${windowName}');
-				windowController.populateWithSelDocs('<%=documentsType%>', rights, otherProperties);
+				windowController.populateWithSelDocs('<%=documentsType%>', rights);
 				
 			</script>
 	</c:if>

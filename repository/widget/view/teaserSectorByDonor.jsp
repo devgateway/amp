@@ -6,7 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -29,8 +28,8 @@
 
 <div id="content" class="yui-skin-sam" style="width:100%;z-index: 1;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
-      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
+      <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+      <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
       <div class="longTab">
           <digi:trn key="gis:breakdownbysector">Breakdown by sector</digi:trn>
         </div>
@@ -48,25 +47,14 @@
                 <c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==false}">
                		<digi:trn>All amounts in USD</digi:trn>
                </c:if>
-            <digi:img  src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
+            <digi:img  src="module/widget/images/help1.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
         </td>
     </tr>
 	<tr>
 		<td width="90%">
-			<html:select style="width:420px;" name="gisSectorByDonorTeaserForm" property="selectedDonor" onchange="donorChanged()">
+			<html:select name="gisSectorByDonorTeaserForm" property="selectedDonor" onchange="donorChanged()">
 				<html:option value="-1"><digi:trn key="widget:piechart:allDonorsItem">All Donors</digi:trn></html:option>
-                <c:forEach var="donor" items="${gisSectorByDonorTeaserForm.donors}">
-                    <option value="${donor.ampOrgId}" title="${donor.name}">
-                        <c:choose>
-                            <c:when test="${fn:length(donor.name)>60}">
-                                <c:out value="${fn:substring(donor.name,0,60)}"/>...
-                            </c:when>
-                            <c:otherwise>
-                                 ${donor.name}
-                            </c:otherwise>
-                        </c:choose>
-                    </option>
-                </c:forEach>
+				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="donors" label="name" value="ampOrgId"/>
 			</html:select>
 		</td>
 		<%-- 
@@ -77,47 +65,14 @@
 		</td>
 		--%>		
 		<td nowrap="nowrap" align="right">
-			<table>
-				<tr>
-					<td align="center" colspan="3">
-						Show/Hide
-					</td>
-				</tr>
-				<tr>
-					<td align="center">
-						Labels
-					</td>
-					<td align="center">
-						&nbsp;
-					</td>
-					<td align="center">
-						Legends
-					</td>
-				</tr>
-				<tr>
-					<td align="center">
-						<input type="checkbox" title="Show Labels" name="showLabels" onclick="rechart()" checked="checked">
-					</td>
-					<td align="center">
-						&nbsp;
-					</td>
-					<td align="center">
-						<input type="checkbox" title="Show Legends" name="showLegends"  onclick="rechart()" checked="checked">
-					</td>
-				</tr>
-			</table>
+			<input type="checkbox" title="Show Labels" name="showLabels" onchange="rechart()" checked="checked">
+			&nbsp;
+			<input type="checkbox" title="Show Legends" name="showLegends" onchange="rechart()" checked="checked">
 		</td>
 	</tr>
 	<tr>
-		<td colspan="3">      
-                    <div id="sectorByDonorChartImageDiv" style="display:none">
-                        <img alt="" id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do" onload="loadSectorDonorMap()" usemap="#sectorByDonorChartImageMap" border="0" >
-                    </div>
-                    <div id="sectorByDonorChartImageDivLoad">
-                        <img src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>' alt="">
-                    </div>
-                          <MAP name="sectorByDonorChartImageMap" id="sectorByDonorChartImageMap">
-                    </MAP>
+		<td colspan="3">
+			<img id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do">
 		</td>
 	</tr>
         <tr>

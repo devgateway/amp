@@ -2,17 +2,22 @@ package org.digijava.module.um.form;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.helper.CountryBean;
-import org.digijava.module.aim.helper.UserBean;
 
 public class ViewEditUserForm extends ActionForm {
 
+	
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+	    this.pledger=false;
+	    }
+	
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String email;
@@ -25,8 +30,6 @@ public class ViewEditUserForm extends ActionForm {
 
 	private Long selectedOrgGroupId;
 	private Collection<AmpOrgGroup> orgGroups;
-	
-	
 
 	private String selectedOrgTypeId;
 	private Collection<AmpOrgType> orgTypes;
@@ -34,10 +37,6 @@ public class ViewEditUserForm extends ActionForm {
 	private String selectedOrgName;
 	private Long selectedOrgId;
 	private Collection<AmpOrganisation> orgs;
-	
-	private Collection<AmpOrganisation> assignedOrgs;
-	private Long selAssignedOrgs[];
-
 
 	/* this is the attached org related with gateperm OrgRoleGate */
 	private Long assignedOrgId;
@@ -50,15 +49,10 @@ public class ViewEditUserForm extends ActionForm {
 
 	private String event;
 	private Boolean ban;
+	private Boolean pledger;
 	private String confirmNewPassword;
 	private String newPassword;
 	private Boolean displaySuccessMessage;
-	
-	private Collection<AmpTeam> availableWorkspaces;
-	private Collection<AmpTeamMemberRoles> roles;
-	private Long role;
-	private UserBean userTeamsHolder; //teams, already having this user as tm
-	private Long workspaceId;
 
 	public ViewEditUserForm() {
 
@@ -266,61 +260,18 @@ public class ViewEditUserForm extends ActionForm {
 		this.selectedOrgId = selectedOrgId;
 	}
 
-	public Long getRole() {
-		return role;
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
 	}
 
-	public void setRole(Long role) {
-		this.role = role;
-	}
-
-
-	public UserBean getUserTeamsHolder() {
-		return userTeamsHolder;
-	}
-
-	public void setUserTeamsHolder(UserBean userTeamsHolder) {
-		this.userTeamsHolder = userTeamsHolder;
-	}
-
-	public Long getWorkspaceId() {
-		return workspaceId;
-	}
-
-	public void setWorkspaceId(Long workspaceId) {
-		this.workspaceId = workspaceId;
-	}
-
-	public Collection<AmpTeam> getAvailableWorkspaces() {
-		return availableWorkspaces;
-	}
-
-	public void setAvailableWorkspaces(Collection<AmpTeam> availableWorkspaces) {
-		this.availableWorkspaces = availableWorkspaces;
-	}
-
-	public Collection<AmpTeamMemberRoles> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Collection<AmpTeamMemberRoles> roles) {
-		this.roles = roles;
-	}
-
-	public Collection<AmpOrganisation> getAssignedOrgs() {
-		return assignedOrgs;
-	}
-
-	public void setAssignedOrgs(Collection<AmpOrganisation> assignedOrgs) {
-		this.assignedOrgs = assignedOrgs;
-	}
-
-	public Long[] getSelAssignedOrgs() {
-		return selAssignedOrgs;
-	}
-
-	public void setSelAssignedOrgs(Long[] selAssignedOrgs) {
-		this.selAssignedOrgs = selAssignedOrgs;
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
 	}
 
 }

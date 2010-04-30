@@ -3,12 +3,9 @@
  */
 package org.digijava.module.dataExchange.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
-import org.digijava.module.dataExchange.type.AmpColumnEntry;
 
 /**
  * @author dan
@@ -28,37 +25,7 @@ public class ImportForm extends ActionForm {
 	private String[] options;
 	private String[] selectedOptions;
 	
-	private List allActivitiesFromDB;
-	
-	public List getAllActivitiesFromDB() {
-		return allActivitiesFromDB;
-	}
-
-	public void setAllActivitiesFromDB(List allActivitiesFromDB) {
-		this.allActivitiesFromDB = allActivitiesFromDB;
-	}
-
 	private AmpDEImportLog activityTree = null;
-	
-	private AmpColumnEntry activityStructure = null;
-	
-	private String[] primaryKeys = null;
-
-	public String[] getPrimaryKeys() {
-		return primaryKeys;
-	}
-
-	public void setPrimaryKeys(String[] primaryKeys) {
-		this.primaryKeys = primaryKeys;
-	}
-
-	public AmpColumnEntry getActivityStructure() {
-		return activityStructure;
-	}
-
-	public void setActivityStructure(AmpColumnEntry activityStructure) {
-		this.activityStructure = activityStructure;
-	}
 
 	public String[] getSelectedLanguages() {
 		return selectedLanguages;

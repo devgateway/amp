@@ -62,9 +62,8 @@ public class TemplateAlertActions extends DispatchAction {
 	    	 messagesForm.setMessageName(tempAlert.getName());
 	    	 messagesForm.setDescription(tempAlert.getDescription());
 	    	 messagesForm.setSelectedTrigger(tempAlert.getRelatedTriggerName());
-             messagesForm.setEmailable(tempAlert.getEmailable());
 	    	 //receivers	    	 
-	    	 messagesForm.setReceivers(getMessageRecipients(tempAlert));
+	    	 messagesForm.setReceivers(getMessageRecipients(tempAlert.getId()));
 	     }
 		 
 	     return mapping.findForward("addOrEditPage"); 
@@ -93,49 +92,22 @@ public class TemplateAlertActions extends DispatchAction {
 	    	Calendar cal=Calendar.getInstance();
 	    	newTemplate.setCreationDate(cal.getTime());   	
 	    	newTemplate.setRelatedTriggerName(msgForm.getSelectedTrigger());
-            newTemplate.setEmailable(msgForm.getEmailable());
 	    	        	 	
 	    	//saving template
 	    	AmpMessageUtil.saveOrUpdateMessage(newTemplate);    	
                 	
 	    //the code below is used to create messagesStates in the AmpMessageWorker.java
-			if(messageReceivers!=null && messageReceivers.length>0){
+			if(messageReceivers!=null && messageReceivers.length>0){				
 				for (String receiver : messageReceivers) {				
-					if(receiver.startsWith("m")){			
+					if(receiver.startsWith("m")){//<--this means that receiver is team				
 					//<--receiver is team member
 							Long memId=new Long(receiver.substring(2));
 							AmpTeamMember msgReceiver=TeamMemberUtil.getAmpTeamMember(memId);
 							String teamName = msgReceiver.getAmpTeam().getName();
 							createMessageState(newTemplate,msgReceiver,teamName);							
 						
-					}
-                    else{
-                        if (receiver.startsWith("c")) { // people outside AMP
-                            String externalreceivers = newTemplate.getExternalReceivers();
-                            if (externalreceivers == null) {
-                                externalreceivers = "";
-                            } else {
-                                if (externalreceivers.length() > 0) {
-                                    externalreceivers += ", ";
-                                }
-                            }
-                            receiver=receiver.substring(2);
-                            externalreceivers += receiver;
-                            newTemplate.setExternalReceivers(externalreceivers);
-
-                        }
-                    }
-				}
-                String receivers=newTemplate.getReceivers();
-                if(receivers==null){
-                    receivers="";
-                }
-                if(newTemplate.getExternalReceivers()!=null){
-                    receivers+=newTemplate.getExternalReceivers();
-                }
-                newTemplate.setReceivers(receivers);
-                //saving template
-	    	AmpMessageUtil.saveOrUpdateMessage(newTemplate);
+					}				
+				}		
 			}
 	    	//cleaning form values
 	    	setDefaultValues(msgForm);
@@ -191,9 +163,9 @@ public class TemplateAlertActions extends DispatchAction {
 	 /**
 	  * used to get message recipients, which will be shown on edit Message Page 
 	  */
-	 private static List<LabelValueBean> getMessageRecipients(TemplateAlert temp) throws Exception{
-		 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(temp.getId());
-			List<LabelValueBean> members=new ArrayList<LabelValueBean>();
+	 private static List<LabelValueBean> getMessageRecipients(Long tempId) throws Exception{
+		 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(tempId);
+			List<LabelValueBean> members=null;
 			if(msgStates!=null && msgStates.size()>0){
 				members=new ArrayList<LabelValueBean>();
 				Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
@@ -230,14 +202,6 @@ public class TemplateAlertActions extends DispatchAction {
 					}
 				}
 			}
-         //contacts and external people
-         if (temp.getExternalReceivers() != null) {
-             String[] externalReceivers = temp.getExternalReceivers().split(",");
-             for (int i = 0; i < externalReceivers.length; i++) {
-                 LabelValueBean receiver = new LabelValueBean(externalReceivers[i], "c:" + externalReceivers[i]);
-                 members.add(receiver);
-             }
-         }
 			return members;
 	 }
 	 
@@ -278,6 +242,5 @@ public class TemplateAlertActions extends DispatchAction {
 		 form.setMsgStateId(null);
 		 form.setReceivers(null);
 		 form.setSelectedTrigger(null);
-         form.setEmailable(null);
 	 }
 }

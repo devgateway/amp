@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang.ObjectUtils.Null;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -18,8 +18,6 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class FundingCalculationsHelper {
-	
-	private static Logger logger = Logger.getLogger(FundingCalculationsHelper.class);
 
 	List<FundingDetail> fundDetailList = new ArrayList<FundingDetail>();
 
@@ -109,17 +107,12 @@ public class FundingCalculationsHelper {
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
 
 			double frmExRt = fundDet.getFixedExchangeRate() != null ? fundDet.getFixedExchangeRate() : Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
-			
-			if(frmExRt == 0.0) {
-				frmExRt = 1;
-				logger.warn("frmExRt was 0, changed to 1 or divide operation will fail!!!");
-			}
 
 			if (userCurrencyCode != null)
 				toCurrCode = userCurrencyCode;
 
 			double toExRt = Util.getExchange(toCurrCode, dt);
-			DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount(), frmExRt, toExRt, dt);
+			DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
 
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
@@ -127,12 +120,15 @@ public class FundingCalculationsHelper {
 			fundingDetail.setCurrencyCode(fundDet.getAmpCurrencyId().getCurrencyCode());
 			fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCountryName());
 
-			fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount(), 1, 1));
+			fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
 			fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 
 			fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
-
+			if (fundDet.getPledgeid()!= null){
+				fundingDetail.setPledge(fundDet.getPledgeid().getId());
+			}
+			
 			// TOTALS
 			if (adjType == Constants.PLANNED) {
 				fundingDetail.setAdjustmentTypeName("Planned");

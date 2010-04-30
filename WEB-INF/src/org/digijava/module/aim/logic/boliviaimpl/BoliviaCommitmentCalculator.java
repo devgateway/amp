@@ -1,6 +1,5 @@
 package org.digijava.module.aim.logic.boliviaimpl;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -14,8 +13,8 @@ import org.digijava.module.aim.logic.AmountCalculator;
  */
 public class BoliviaCommitmentCalculator implements AmountCalculator{
 
-	public BigDecimal calculateAmount(Set<CategAmountCell> mergedCells) {
-		BigDecimal ret = new BigDecimal(0);
+	public double calculateAmount(Set<CategAmountCell> mergedCells) {
+		double ret = 0;
 		Iterator<CategAmountCell> i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
@@ -27,7 +26,7 @@ public class BoliviaCommitmentCalculator implements AmountCalculator{
 			
 			 if( ArConstants.ACTUAL.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) || 
 					 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )
-			ret =ret.add( element.getAmount());
+			ret += element.getAmount();
 		}
 		return ret;
 		

@@ -6,10 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.TeamUtil;
@@ -51,7 +48,8 @@ public class ExportUtil {
     }
 	
     
-    public static List<AmpActivity> getActivities(Long teamId, Long[] donorTypes, Long[] donorGroups, Long[] donorAgences,Long[] primarySectors, Long[] secondarySectors) {
+    public static List<AmpActivity> getActivities(Long teamId, Long[] donorTypes, Long[] donorGroups, Long[] donorAgences,
+    		Long[] primarySectors, Long[] secondarySectors) {
     	List<AmpActivity> retValue = null;
         Session session = null;    	
 
@@ -62,9 +60,8 @@ public class ExportUtil {
     	
         try {
             session = PersistenceManager.getRequestDBSession();
-            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivityVersion.class.getName() + " as act, " + 
-            		AmpActivityGroup.class.getName() + " as aag, ");
-            StringBuffer mainWhere =  new StringBuffer(" where aag.ampActivityLastVersion = act.ampActivityId and (act.team=:teamId) ");
+            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivity.class.getName() + " as act, ");
+            StringBuffer mainWhere =  new StringBuffer(" where (act.team=:teamId) ");
             
             if ((primarySectors != null && primarySectors.length > 0) ||
             		(secondarySectors != null && secondarySectors.length > 0)){
@@ -112,7 +109,7 @@ public class ExportUtil {
             }
 
             if ((donorTypes != null && donorTypes.length > 0)){
-            	donorTypesWhere = new StringBuffer(" ( aOrg.orgGrpId.orgType.ampOrgTypeId in ( ");
+            	donorTypesWhere = new StringBuffer(" ( aOrg.orgTypeId.ampOrgTypeId in ( ");
             	for (Long elem : donorTypes) {
             		donorTypesWhere.append(elem);
             		donorTypesWhere.append(", ");
@@ -173,6 +170,7 @@ public class ExportUtil {
             	mainWhere.append(" ) ");
             }
             
+            
             Query qry=session.createQuery(from.toString() + mainWhere.toString() );
             qry.setParameter("teamId", teamId, Hibernate.LONG);
             retValue = qry.list();
@@ -183,5 +181,4 @@ public class ExportUtil {
         }    	
     	return retValue;
     }
-   
 }

@@ -59,10 +59,9 @@ public class AmountCellXLS extends XLSExporter {
 		HSSFCellStyle amountStyle;
 		
 		if(parent instanceof TrailCellsXLS)
-			amountStyle		= this.getAmountHierarchyStyle(parent.getItem().getNearestReportData().getLevelDepth()-1);
-//			if(parent.getItem().getNearestReportData().getLevelDepth()==2) 
-//				amountStyle = this.getAmountHierarchyLevel1Style();
-//			 else amountStyle = this.getAmountHierarchyOtherStyle();
+		if(parent.getItem().getNearestReportData().getLevelDepth()==2) 
+			amountStyle = this.getAmountHierarchyLevel1Style();
+		 else amountStyle = this.getAmountHierarchyOtherStyle();
 		else
 			amountStyle=this.getAmountStyle();
 		
@@ -72,9 +71,10 @@ public class AmountCellXLS extends XLSExporter {
 
 		//DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 		//mf.setMaximumFractionDigits(2);
-		BigDecimal tempAm = ac.getAmount();
-		tempAm = tempAm.setScale(2, BigDecimal.ROUND_DOWN);
-		cell.setCellValue(new Double(tempAm.doubleValue()));
+		double tempAm = ac.getAmount();
+		BigDecimal bd = new BigDecimal(tempAm);
+		bd = bd.setScale(2, BigDecimal.ROUND_UP);
+		cell.setCellValue(new Double(bd.doubleValue()));
 		colId.inc();
 	}
 

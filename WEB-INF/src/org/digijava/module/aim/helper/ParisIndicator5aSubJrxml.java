@@ -127,7 +127,7 @@ public class ParisIndicator5aSubJrxml extends ParisIndicatorJrxml {
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
-                p.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of donors that use all three partner's PFM procedures", this.getLangCode(), this.getSite().getId())) + "]]></text>");
+                p.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of donors that use all three partner's PFM procedures", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
                 p.println("				</staticText>");
 
                 for (int j = 0; j < ((String[]) data.get(0)).length - 1; j++) {

@@ -4,12 +4,10 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -22,8 +20,7 @@ public class IPAContractDisbursement implements Serializable {
 	private static final long serialVersionUID = -4688757182074104911L;
 	private Long id;
 	private Integer adjustmentType;
-	private BigDecimal amount;
-	private transient String stringAmount;
+	private Double amount;
 	private AmpCurrency currency;
 	private Date date;
         private IPAContract contract;
@@ -73,10 +70,10 @@ public class IPAContractDisbursement implements Serializable {
 	public void setAdjustmentType(Integer adjustmentType) {
 		this.adjustmentType = adjustmentType;
 	}
-	public BigDecimal getAmount() {
+	public Double getAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(amount);
 	}
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(Double amount) {
 		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 	}
 	public AmpCurrency getCurrency() {
@@ -96,14 +93,5 @@ public class IPAContractDisbursement implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getStringAmount() {
-		return FormatHelper.formatNumber(this.amount);
-	}
-
-	public void setStringAmount(String stringAmount) {
-		this.stringAmount = stringAmount;
-		this.amount = FormatHelper.parseBigDecimal(stringAmount);
 	}
 }

@@ -35,11 +35,11 @@ public class ComputedMeasureCell extends AmountCell {
 	 * 
 	 * @return Returns the amount.
 	 */
-	public BigDecimal getAmount() {
+	public double getAmount() {
 		BigDecimal ret = new BigDecimal(0);
 		if (id != null)
-			return convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100));
-		
+			return (convert() * (getPercentage() / 100));
+
 		MathExpression math = null;
 		if (this.getColumn().getExpression() != null) {
 			math = MathExpressionRepository.get(this.getColumn().getExpression());
@@ -48,9 +48,9 @@ public class ComputedMeasureCell extends AmountCell {
 		}
 		BigDecimal val=math.result(getValues());
 		if (val!=null){
-			return val;
+			return val.doubleValue();
 		}else{
-			return new BigDecimal(0);
+			return 0d;
 		}
 	}
 

@@ -154,7 +154,7 @@ function toggleSettings(){
 					  </span>				  
 					</td>
 				</tr>
-				<tr>
+				<tr bgcolor="#edf5ff">
 				  <td valign="top">
 				  <div style="padding: 3px; width: 100%; background-color: rgb(204, 219, 255); font-size: 8pt;">
 				  <span style="cursor:pointer; font-style: italic;float:left;color: red;">
@@ -214,105 +214,106 @@ function toggleSettings(){
 						<td colspan="2" valign="top">
 						<div>
 						<div align="center">
-						<table width="100%" border="0" align=center cellPadding=0 cellSpacing=0>
-							<tr style="background-color:#999999; color:#000;  ">
-								<td width="280" height="22" align="center" valign="center">
-								<c:if
+						<table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0  id="dataTable">
+							<tr>
+								<td width="280" height="22" align="center" valign="center" bgcolor="#999999" style="color: black">
+								<c:if 
 									test="${aimAuditLoggerManagerForm.sortBy!='nameasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=nameasc">
-										<b><digi:trn key="aim:name">Name</digi:trn></b>
+										<b><digi:trn key="aim:name">Name</digi:trn></b>									
 									</digi:link>
-								</c:if>
+								</c:if> 
 								<c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='nameasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=namedesc">
-										<b><digi:trn key="aim:name">Name</digi:trn></b>
+										<b><digi:trn key="aim:name">Name</digi:trn></b>									
 									</digi:link>
 							   </c:if>
 							   </td>
-								<td valign="center" align="center"  width="150">
+								<td valign="center" align="center" bgcolor="#999999" style="color: black" width="150">
 								<c:if test="${aimAuditLoggerManagerForm.sortBy!='typeasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=typeasc">
-										<b><digi:trn key="aim:objectType">Object Type</digi:trn></b>
+										<b><digi:trn key="aim:objectType">Object Type</digi:trn></b>									
 									</digi:link>
 								</c:if>
 								<c:if test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='typeasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=typedesc">
-										<b><digi:trn key="aim:objectType">Object Type</digi:trn></b>
+										<b><digi:trn key="aim:objectType">Object Type</digi:trn></b>									
 									</digi:link>
 								</c:if>
 								</td>
-								<td valign="center" align="center" ><c:if
+								<td valign="center" align="center" bgcolor="#999999"
+									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='teamasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=teamasc">
-										<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>
+										<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>									
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='teamasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=teamdesc">
-										<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>
+										<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>									
 									</digi:link>
 								</c:if></td>
-								<td align="center" valign="center" ><c:if
+								<td align="center" valign="center" bgcolor="#999999"
+									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='authorasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=authorasc">
-										<b><digi:trn key="aim:authorName">Author Name</digi:trn></b>
+										<b><digi:trn key="aim:authorName">Author Name</digi:trn></b>									
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='authorasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=authordesc">
-										<b><digi:trn key="aim:authorName">Author Name</digi:trn></b>
+										<b><digi:trn key="aim:authorName">Author Name</digi:trn></b>									
 									</digi:link>
 								</c:if></td>
-								<td width="100" align="center" valign="center"><c:if
+								<td width="100" align="center" valign="center" bgcolor="#999999"
+									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='creationdateasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=creationdateasc">
-										<b><digi:trn key="aim:creationDateLogger">Creation Date</digi:trn></b>
+										<b><digi:trn key="aim:creationDateLogger">Creation Date</digi:trn></b>									
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='creationdateasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=creationdatedesc">
-										<b><digi:trn key="aim:creationDateLogger">Creation Date</digi:trn></b>
+										<b><digi:trn key="aim:creationDateLogger">Creation Date</digi:trn></b>									
 									</digi:link>
 							  </c:if></td>
-								<td width="208" align="center" valign="center"><c:if
+								<td width="208" align="center" valign="center" bgcolor="#999999"
+									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='editorasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=editorasc">
-										<b><digi:trn key="aim:editorName">Editor Name</digi:trn></b>
+										<b><digi:trn key="aim:editorName">Editor Name</digi:trn></b>									
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='editorasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=editordesc">
-										<b><digi:trn key="aim:editorName">Editor Name</digi:trn></b>
+										<b><digi:trn key="aim:editorName">Editor Name</digi:trn></b>									
 									</digi:link>
 								</c:if></td>
-								<td align="center" valign="center" ><c:if
+								<td align="center" valign="center" bgcolor="#999999"
+									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='changedateasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=changedateasc">
-										<b><digi:trn key="aim:changeDate">Change Date</digi:trn></b>
+										<b><digi:trn key="aim:changeDate">Change Date</digi:trn></b>									
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='changedateasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=changedatedesc">
-										<b><digi:trn key="aim:changeDate">Change Date</digi:trn></b>
+										<b><digi:trn key="aim:changeDate">Change Date</digi:trn></b>									
 									</digi:link>
 								</c:if></td>
-								<td width="129" align="center" valign="center">
+								<td width="129" align="center" valign="center" bgcolor="#999999"style="color: black">
 								<c:if test="${aimAuditLoggerManagerForm.sortBy!='actionasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=actionasc">
-										<b><digi:trn key="aim:action">Action</digi:trn></b>
+										<b><digi:trn key="aim:action">Action</digi:trn></b>									
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='actionasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=actiondesc">
-										<b><digi:trn key="aim:action">Action</digi:trn></b>
+										<b><digi:trn key="aim:action">Action</digi:trn></b>									
 									</digi:link>
 								</c:if></td>
 							</tr>
-							</table>
-							</div>
-							<div  style="overflow:auto;width:100%;height:220px;max-height:220px;"  >
-							<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable"    >
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
 								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 								<tr>
@@ -361,20 +362,16 @@ function toggleSettings(){
 									</td>
 								</tr>
 							</logic:iterate>
-							</table>
-							</div>
+						</table>
+						</div>
 						</div>					
 					</td>
 				  </tr>
 					<tr>
-						<td colspan="4" align="left" valign="middle">
-						<div style="float:left;">
-						<table style="padding:5px;">
-						<tr id="rowHighlight">
-
-						
+						<td align="left" valign="middle">
+						<div style="cursor: pointer; font-family: Arial; text-align: left; text-decoration: none;">
+						<br>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage > 1}">
-						    <td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
 							<c:set target="${urlParamsFirst}" property="page" value="1"/>
 							<c:set target="${urlParamsFirst}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
@@ -384,57 +381,48 @@ function toggleSettings(){
 							<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
 								<span style="font-size: 8pt; font-family: Tahoma;">&lt;&lt;</span>							
 							</digi:link>
-							</td>
-							<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
 							<c:set target="${urlParamsPrevious}" property="page" value="${aimAuditLoggerManagerForm.currentPage -1}"/>
 							<c:set target="${urlParamsPrevious}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set var="translation">
 								<digi:trn key="aim:previouspage">Previous Page</digi:trn>
-							</c:set>
-							
+							</c:set>|
 							<digi:link href="/auditLoggerManager.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
 								<digi:trn key="aim:previous">
 									<span style="font-size: 8pt; font-family: Tahoma;">Previous</span>
 								</digi:trn>&nbsp;	
-							</digi:link>
-							</td>
+							</digi:link>|
 						</c:if>
 					<c:set var="length" value="${aimAuditLoggerManagerForm.pagesToShow}"></c:set>
 					<c:set var="start" value="${aimAuditLoggerManagerForm.offset}"/>
-					<logic:iterate name="aimAuditLoggerManagerForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">
-											
+					<logic:iterate name="aimAuditLoggerManagerForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
 						<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 						<c:set target="${urlParams1}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 						<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage == pages && aimAuditLoggerManagerForm.pagesSize > 1}">
-						<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<font color="#FF0000"><%=pages%></font>
-						</td>	
+							|	
 						</c:if>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage != pages && aimAuditLoggerManagerForm.pagesSize > 1}">
-							<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<c:set var="translation">
 								<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
 							</c:set>
 							<digi:link href="/auditLoggerManager.do" name="urlParams1" title="${translation}" >
 								<%=pages%>							
 							</digi:link>
-							</td>
+							|
 						</c:if>
 						</logic:iterate>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage != aimAuditLoggerManagerForm.pagesSize}">
-						    <td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap" />
 							<c:set target="${urlParamsNext}" property="page" value="${aimAuditLoggerManagerForm.currentPage+1}"/>
 							<c:set target="${urlParamsNext}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set var="translation"> <digi:trn key="aim:nextpage">Next Page</digi:trn></c:set>
-							
 							<digi:link  href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
 								<digi:trn key="aim:next"><span style="font-size: 8pt; font-family: Tahoma;">Next</span></digi:trn>
 							</digi:link>
-							<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />
-							</td>
+							<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />|
+							
 						<c:if test="${aimAuditLoggerManagerForm.pagesSize > aimAuditLoggerManagerForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
@@ -444,30 +432,29 @@ function toggleSettings(){
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 						</c:if>
-						<c:set var="translation">
-                        <digi:trn key="aim:lastpage">
-							Last Page
+						<c:set var="translation"> <digi:trn key="aim:lastpage">
+							<span style="font-size: 8pt; font-family: Tahoma;">Last Page</span>
 						</digi:trn>
 						</c:set>
-						<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
 							<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>
-						</digi:link>
-						</td> 
+						</digi:link> 
 					</c:if>
-					<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 					<c:out value="${aimAuditLoggerManagerForm.currentPage}"/>&nbsp; 
 					<digi:trn key="aim:of">
 						<span style="font-size: 8pt; font-family: Tahoma;">of</span>
 					</digi:trn>&nbsp;
 					<span style="font-size: 8pt; font-family: Tahoma;">
 						<c:out value="${aimAuditLoggerManagerForm.pagesSize}"/>
-					</span>	
-			
+					</span>					
+						<a style="float: right; cursor: pointer;" onclick="window.scrollTo(0,0); return false">
+							<digi:trn key="aim:backtotop">Back to Top</digi:trn>
+					</span>
+						<span style="font-size: 10pt; font-family: Tahoma;">↑</span></a>					
 					</td>
+					</div>
 				</tr>
-				</table>
-				</div>				
+				</table>				
 				</td>
  			</tr>
 		</table>	

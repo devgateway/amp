@@ -8,25 +8,20 @@ package org.dgfoundation.amp.visibility;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FMAdvancedModeUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -70,21 +65,14 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	}
 		public int doStartTag() throws JspException {
 	
-			AmpFieldsVisibility fieldsVisibility = null;
-			
-			HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
-			String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
-			
  	   ServletContext ampContext=pageContext.getServletContext();
  try{
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 
-		   if(ampTreeVisibility!=null){
-			   
+		   if(ampTreeVisibility!=null)
 			   if(!existFieldinDB(ampTreeVisibility)){
 				   synchronized (this) {
-					   fieldsVisibility = FeaturesUtil.getFieldVisibility(name);
-					   if(fieldsVisibility==null)
+					   if(FeaturesUtil.getFieldVisibility(name)==null)
 					   {
 		                    AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
 		                    Long id=null;
@@ -92,9 +80,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                    {
 		                        id = featureByNameFromRoot.getId();
 			   			        try {//extra verification...
-			   			        	fieldsVisibility = FeaturesUtil.getFieldVisibility(this.getName());
-			   			        	
-			   			        	if(fieldsVisibility!=null){
+			   			        	if(FeaturesUtil.getFieldVisibility(this.getName())!=null){
 			   			        		FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
 			   			        	} else {
 			   			        		FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
@@ -107,21 +93,13 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                          	throw new JspException(ex);	
 		                           	}
 		                     } else {
-		                    	 logger.debug("Field: "+this.getName() + " has the parent: "+this.getFeature()+ " which doesn't exist in DB");
+		                    	 logger.info("Field: "+this.getName() + " has the parent: "+this.getFeature()+ " which doesn't exist in DB");
 			                    return SKIP_BODY;
 		                     }
 					  }
 				  }
 		   		}
-				if (!source.endsWith("allVisibilityTags.jsp") && (fieldsVisibility == null || (fieldsVisibility != null && !fieldsVisibility.containsSource(source)))){
-//					synchronized (this) {
-						FeaturesUtil.updateFieldVisibilitySource(name, source);
-//					}			   
-				}
-
-		   }
 		   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-
 		   		if(ampTreeVisibility!=null)
 		   		   if(!isFeatureTheParent(ampTreeVisibility)){
 					   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
@@ -133,7 +111,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 //	   }
 	   
  	}catch (Exception e) {
- 		logger.error("error in field visibility. pls check the field: "+this.getName() +" or its parent: "+this.getFeature(), e);
+ 		System.out.println("error in field visibility. pls check the field: "+this.getName() +" or its parent: "+this.getFeature());
  		e.printStackTrace();}
 	   	
  	return EVAL_BODY_BUFFERED;//super.doStartTag();
@@ -142,9 +120,6 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	
 	public int doEndTag() throws JspException 
     {
-		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
-		String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
-		
 		if (bodyContent==null) return  EVAL_PAGE;//SKIP_BODY;
 		if(bodyContent.getString()==null) return EVAL_PAGE;
 		String bodyText = bodyContent.getString();
@@ -174,8 +149,6 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			
  		    AmpFieldsVisibility ampFieldFromTree=ampTreeVisibility.getFieldByNameFromRoot(getName());
  		    
- 		    ampFieldFromTree.setCurrentTemplateId(ampTreeVisibility.getRoot().getId());
-
    			HashMap<String, HttpSession> sessionMap=new HashMap<String, HttpSession>();
    			sessionMap.put("session", pageContext.getSession());
    			
@@ -190,6 +163,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    				//TODO AMP-2579 this IF was added to fix null pointer temporary.
    				if (teamMember!=null && !teamMember.getTeamHead()){
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+   	   			    ServletRequest request = pageContext.getRequest();
    	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
    	   			    if(ampFieldFromTree.getPermission(false)!=null && 
    	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
@@ -204,12 +178,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    				if(dbgFM!=null && "true".compareTo(dbgFM)==0)
    	   				output+=this.createDebugText2(bodyText);
    				else output=bodyText;
-   				
-      			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
-       	   			pageContext.getOut().print(output.trim());
-       			} else {
-       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFieldAdvancedMarkUp(output, this.getName()));
-       			}
+   			   pageContext.getOut().print(output);   			    
    			////System.out.println("FM ::: field:"+this.getName()+" is ACTIVE");
    			} else {
    				////System.out.println("	FM ::: field:"+this.getName()+" is disabled");

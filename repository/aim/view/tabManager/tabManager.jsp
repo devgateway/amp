@@ -14,7 +14,7 @@
 	<digi:trn key="aim:tabmanager:connecionProblem">There was a problem connecting to the server. Please close this panel and try again. </digi:trn>
 </c:set>
 <c:set var="pleaseWaitMsg">
-	<digi:trn>Loading, please wait ...</digi:trn>
+	<digi:trn key="aim:tabmanager:pleasewait">Please wait</digi:trn>
 </c:set>
 
 <script type="text/javascript">
@@ -39,7 +39,7 @@
 	TabManager.prototype.showPanel	= function () {
 		if ( this.panel == null ) {
 			document.getElementById("tabManagerPanel").style.display	= "";
-			this.panel	= new YAHOO.widget.Panel("tabManagerPanel", 
+			this.panel	= new YAHOOAmp.widget.Panel("tabManagerPanel", 
 						{ 	visible:true,
 							width: "400px", 
 							constraintoviewport:true, 
@@ -55,7 +55,7 @@
 		this.hideButton();
 		this.disableButton();
 		this.setFooter("");
-		this.setBody( "<img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
+		this.setBody( "${pleaseWaitMsg}... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
 		this.panel.show();
 		
 		new GetDataManager().getData();
@@ -143,7 +143,7 @@
 	
 	GetDataManager.prototype.getData	= function () {
 		var timestamp		= new Date().getTime();	
-		YAHOO.util.Connect.asyncRequest("GET", "/aim/tabManager.do?get=true&iestamp="+timestamp, this);
+		YAHOOAmp.util.Connect.asyncRequest("GET", "/aim/tabManager.do?get=true&iestamp="+timestamp, this);
 	}
 	
 	function SaveDataManager(destContainerId) {
@@ -181,10 +181,10 @@
 	}
 	SaveDataManager.prototype.saveData				= function () {
 		tabManager.disableButton();
-		tabManager.setFooter( "<img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
+		tabManager.setFooter( "${pleaseWaitMsg}... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
 	
 		var postString		= this.createPostString();
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/tabManager.do", this, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/tabManager.do", this, postString);
 	}
 
 </script>

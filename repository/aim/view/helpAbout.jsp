@@ -20,7 +20,7 @@
 		<p align="center"> Version <tiles:getAsString name="version"/></p>
 		</td>
 		<td width="220"><img width="220" height="149"
-			src="/TEMPLATE/ampTemplate/imagesSource/common/dgf_logo.jpg"></td>
+			src="/TEMPLATE/ampTemplate/images/dgf_logo.jpg"></td>
 	</tr>
 	<tr>
 		<td colspan="2">

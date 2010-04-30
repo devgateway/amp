@@ -140,7 +140,7 @@
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td>
-								<span class=crumb style="visibility: hidden">
+								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home ">
 										<digi:trn key="aim:AmpAdminHome">
@@ -270,13 +270,31 @@ ${fn:replace(message,quote,escapedQuote)}
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%">
-							
+							<tr>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:step9of">
+													Step 9 of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                 <digi:trn key="aim:activity:MonitoringAndEvaluation">
+                                                                                                         Monitoring and Evaluation
+												</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
 										<b><digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn></b>
 										</a>
@@ -307,7 +325,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
-															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif" border=0>
+															<img src= "../ampTemplate/images/arrow_down.gif" border=0>
 														</digi:link>
 													</c:if>
 													<c:if test="${aimEditActivityForm.expIndicatorId!=indicator.indicatorId}">
@@ -319,7 +337,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														</c:set>
 														<c:set target="${urlParams}" property="edit" value="true" />
 														<digi:link href="/detailedIndicator.do" name="urlParams">
-															<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>
+															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
 													<bean:define id="indName">
@@ -424,7 +442,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="baseValDate" />"
 																	class="inp-text" size="10" readonly="true" id="baseValDate">&nbsp;&nbsp;
 																	<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.baseValDate)'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>
@@ -459,7 +477,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="targetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
 																	<a id="date2" href='javascript:pickDate("date2",document.aimEditActivityForm.targetValDate)'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 																</c:if>
@@ -514,7 +532,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="revisedTargetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="revisedTargetValDate">&nbsp;&nbsp;
 																	<a id="date3" href='javascript:pickDate("date3",document.aimEditActivityForm.revTargetValDate)'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>
@@ -540,7 +558,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															id="priorValues" type="org.digijava.module.aim.helper.PriorCurrentValues">
 																<tr bgColor=#f4f4f2>
 																	<td align="center">
-																		<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_dark.gif" border=0>
+																		<img src= "../ampTemplate/images/arrow_dark.gif" border=0>
 																	</td>
 																	<td>
 																		<bean:write name="priorValues" property="currValue" />
@@ -591,7 +609,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="currentValDate" />"
 																	class="inp-text" size="10" readonly="true" id="currValDate">&nbsp;&nbsp;
 																	<a id="date4" href='javascript:pickDate("date4",document.aimEditActivityForm.currValDate)'>
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
 															</tr>
@@ -618,12 +636,12 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td>&nbsp;&nbsp;&nbsp;</td>
 															<td><b>Risk</b></td>
 															<td>
-                                                                <c:set var="translation">
-                                                                    <digi:trn key="aim:addActivityStatusFirstLine">Please select a risk from below</digi:trn>
-                                                                </c:set>
-                                                                <c:if test="${contentDisabled=='true'}">
-                                                                    <category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="riskCollection"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text" outerdisabled="disabled" />
-                                                                </c:if>
+																<html:select property="indicatorRisk" styleClass="inp-text">
+																	<option value="-1">Select Risk</option>
+																	<c:if test="${not empty aimEditActivityForm.riskCollection}">
+																		<html:optionsCollection name="aimEditActivityForm" property="riskCollection" value="ampIndRiskRatingsId" label="ratingName" />
+																	</c:if>
+																</html:select>
 															</td>
 														</tr>
 														<tr><td>&nbsp;</td></tr>
@@ -646,8 +664,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											</logic:notEmpty>
 										</table>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>&nbsp;
-										
+									<tr><td bgColor=#f4f4f2>
+										&nbsp;
 									</td></tr>
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
@@ -689,8 +707,8 @@ ${fn:replace(message,quote,escapedQuote)}
 						</td></tr>
 					</table>
 				</td></tr>
-				<tr><td>&nbsp;
-					
+				<tr><td>
+					&nbsp;
 				</td></tr>
 			</table>
 		</td>

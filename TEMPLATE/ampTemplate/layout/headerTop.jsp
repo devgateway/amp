@@ -3,16 +3,15 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<div class="headerTop">
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <logic:present name="currentMember" scope="session">
 	<script language=javascript>
-	function showUserProfile(email){
+	function showUserProfile(id){
 		<digi:context name="information" property="context/aim/default/userProfile.do" />
 		//openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
-		var param = "~edit=true~email="+email;
+		var param = "~edit=true~id="+id;
 		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
 	</script>
@@ -67,10 +66,6 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
 	font-size:18px;!important
 	letter-spacing:2px;!important
 }
- .logLabel{
-   color: white;
- }
-
 </style>
 <table cellspacing="0" cellPadding="0" border="0" width="100%" vAlign="top" bgcolor="#27415f">
 	<tbody>
@@ -85,31 +80,28 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
                     <digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
             </digi:link>
         </td>
-		<td valign="middle" align="right" width="40%">
-		<digi:insert attribute="logWidget"/>
-		<%-- 
-		 <logic:present name="currentMember" scope="session">
+		<td valign="middle" align="right" width="30%">
+          <logic:present name="currentMember" scope="session">
               <c:set var="translation">
                 <digi:trn key="aim:workspacename">Workspace Name</digi:trn>
               </c:set>
-              <span title="${translation}">
+              <span title="${translation}"'>
                 <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
-                	<strong style="color:#FFFFFF">${teamMember.teamName}</strong>	
+				<!--<a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">-->
+                	<strong style="color:#FFFFFF">${teamMember.teamName}</strong>
+				<!--</a>-->
               </span>
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
               </c:set>
-              
-              <span title="${translation}">
-                <a href="javascript:showUserProfile('${teamMember.email}')" class="header_text">
+              <span title="${translation}"'>
+                <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
                 	${teamMember.memberName}
                 </a>
               </span>
-          </logic:present> 
-          --%>   
-     	</td>
+          </logic:present>        
+		</td>
    	</tr>
    </tbody>
 
 </table>
-</div>

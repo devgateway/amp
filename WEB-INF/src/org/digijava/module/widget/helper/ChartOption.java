@@ -15,16 +15,7 @@ public class ChartOption {
 	private boolean createMap;
 	private String title;
         private String langCode;
-        private Long siteId;
-        private String url;
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
+        private String siteId;
 
         public String getLangCode() {
             return langCode;
@@ -34,16 +25,14 @@ public class ChartOption {
             this.langCode = langCode;
         }
 
-     
+        public String getSiteId() {
+            return siteId;
+        }
+
+        public void setSiteId(String siteId) {
+            this.siteId = siteId;
+        }
 	
-	public Long getSiteId() {
-			return siteId;
-		}
-
-		public void setSiteId(Long siteId) {
-			this.siteId = siteId;
-		}
-
 	public boolean isShowLegend() {
 		return showLegend;
 	}

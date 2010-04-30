@@ -161,8 +161,6 @@
 					</DIV>
 					</TD></TR>
 					</feature:display>
-                     <module:display name="Paris Indicators Project Management" parentModule="PROJECT MANAGEMENT"></module:display>
-                     <feature:display name="Paris Indicators" module="Paris Indicators Project Management"></feature:display>
 					<field:display name="Paris Survey" feature="Paris Indicators">
 				  	<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">

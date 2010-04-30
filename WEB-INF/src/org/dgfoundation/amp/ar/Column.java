@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.search.Hits;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
@@ -53,8 +52,6 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	protected List items;
 
-	private Hits hits = null;
-	
 	protected Viewable parent;
 
 	protected int rowSpan;
@@ -444,14 +441,6 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	public void setExpression(String expression) {
 		this.expression = expression;
-	}
-
-	public Hits getHits() {
-		return hits;
-	}
-
-	public void setHits(Hits hits) {
-		this.hits = hits;
 	}
 	
 	

@@ -8,13 +8,10 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<c:set var="src">
-   <digi:file src="module/aim/addActivityStep2Popin.jsp"/>
-</c:set>
-<jsp:include page="${src}" flush="true" />
+<jsp:include page="/repository/aim/view/addSectors.jsp" flush="true" />
 <script type="text/javascript">
     <!--
-    addLoadEvent(initSectorScript);
+    window.onload=initSectorScript();
     function addSectors() {
        /*openNewWindow(600, 450);
        <digi:context name="selSec" property="context/aim/selectSectors.do" />
@@ -121,12 +118,9 @@
                             </strong>
                         </td>
                         <td  colspan="2">
-                            <html:select name="gisIndicatorSectorRegionForm" property="selIndicator" style="width:200px">
-                                <html:option value="-1"><digi:trn>Select Indicator</digi:trn></html:option>
-                                <c:forEach var="indicator" items="${gisIndicatorSectorRegionForm.indicators}">
-                                    <html:option value="${indicator.indicatorId}"><digi:trn>${indicator.name}</digi:trn></html:option>
-                                </c:forEach>
-<!--                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="indicators" label="name" value="indicatorId"/>-->
+                            <html:select name="gisIndicatorSectorRegionForm" property="selIndicator">
+                                <html:option value="-1">Select Indicator</html:option>
+                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="indicators" label="name" value="indicatorId"/>
                             </html:select>
                         </td>
                         
@@ -150,11 +144,17 @@
                             </td>
                         </c:if>
                         <c:if test="${not empty gisIndicatorSectorRegionForm.sector}">
-                            <td colspan="2">
+                            <td>
                                 ${gisIndicatorSectorRegionForm.sector.name}
+                            </td>
+                            <td>
                                 <input type="button" onclick="addSectors()" value="<digi:trn key='gis:createIndicatorSector:changeSector'>Change Sector</digi:trn>" >
                             </td>
-                        </c:if>                     
+                        </c:if>
+                        
+                   
+                     
+                     
                     </tr>
                     <tr>
                         <td colspan="3">&nbsp;</td>
@@ -167,16 +167,16 @@
                             </strong>
                         </td>
                         <td  colspan="2">
-                            <html:select name="gisIndicatorSectorRegionForm" property="selRegionId" style="width:200px">
-                                <html:option value="-1"><digi:trn>Select Region</digi:trn></html:option>
-                                 <html:option value="-2"><digi:trn>All</digi:trn></html:option>
-                                 <html:option value="-3"><digi:trn>National</digi:trn></html:option>
-                                 <c:forEach var="region" items="${gisIndicatorSectorRegionForm.regions}">
-                                    <html:option value="${region.id}"><digi:trn>${region.name}</digi:trn></html:option>
-                                 </c:forEach>
+                            <html:select name="gisIndicatorSectorRegionForm" property="selRegionId">
+                                <html:option value="-1">Select Region</html:option>
+                                 <html:option value="-2">All</html:option>
+                                 <html:option value="-3">National</html:option>
+                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="regions" label="name" value="id"/>
                             </html:select>
                         </td>
+                        
                     </tr>
+                    
                     <tr>
                         <td colspan="3">
                             <hr>

@@ -2,33 +2,17 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
-import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 
-public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable
-
-{
+public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable{
 	
 	private Long ampOrgTypeId;
 	private String orgType;
 	private String orgTypeCode;
-    @Deprecated
 	private Boolean orgTypeIsGovernmental;
-
-    // NGO, Governmental etc.
-    private String classification;
-
-    public String getClassification() {
-        return classification;
-    }
-
-    public void setClassification(String classification) {
-        this.classification = classification;
-    }
 	//private Set organizations;
 	
 	/**
@@ -69,8 +53,7 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	}
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
-		if(this.orgType == null) return -1;
-		if(((AmpOrgType)arg0).getOrgType() == null) return 1;
+
 		return this.orgType.compareTo(((AmpOrgType)arg0).getOrgType());  
 		//return 0;
 	}
@@ -92,26 +75,5 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	}
 	public void setOrgTypeIsGovernmental(Boolean orgTypeIsGovernmental) {
 		this.orgTypeIsGovernmental = orgTypeIsGovernmental;
-	}
-
-	@Override
-	public Collection<AmpOrgType> getChildren() {
-		return null;
-	}
-
-	@Override
-	public int getCountDescendants() {
-		return 1;
-	}
-
-	@Override
-	public String getLabel() {
-		return this.orgType;
-	}
-
-	@Override
-	public String getUniqueId() {
-		// TODO Auto-generated method stub
-		return this.ampOrgTypeId + "";
 	}
 }

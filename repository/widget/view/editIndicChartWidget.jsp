@@ -84,7 +84,6 @@
 						&nbsp;
 					</td>
 				</tr>
-				<%-- 
 				<tr>
 					<td nowrap="nowrap" align="right">
 						<strong>
@@ -100,7 +99,6 @@
 						<input type="button" value="Unselect All" onclick="unselectAll()">
 					</td>
 				</tr>
-				--%>
 				<tr>
 					<td colspan="2">
 						<hr>

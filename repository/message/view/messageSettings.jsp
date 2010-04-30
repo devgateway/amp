@@ -23,11 +23,11 @@
 
 <script langauage="JavaScript">
 
-	var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
+var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 	var helpForRefreshTime="<digi:trn jsFriendly="true">This indicates the time in minutes the messages count on the user\'s desktop is refreshed.</digi:trn>"
 	var helpForStorage="<digi:trn jsFriendly="true">This indicates the total number of messages that are permissible per type of message <br>i.e. Messages , Alerts , Approvals and Events. Within Messages and Alerts this setting <br>indicates the total number of messages permissible in the Inbox , Sent and Draft messages.</digi:trn>"
 	var helpForAdvanceAlerts='<digi:trn jsFriendly="true">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>'
-	var helpForEmailable="<digi:trn jsFriendly="true">Set this to true to allow all messages to be forwarded to the user\'s email address</digi:trn>"
+	var helpForEmailable="<digi:trn jsFriendly="true">Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>"
 	function validate(record,action,minusAccepted){
 		if(action=='save' && (record==null || record=="" || (minusAccepted==true && record=="-1") )){
 			alert('<digi:trn jsFriendly="true">Please enter data to save</digi:trn>');
@@ -109,8 +109,7 @@
 								</tr><%-- End navigation --%>
 								<TR>
 									<TD>
-										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">
-											
+										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">											
 											<tr>
 												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn>Message Settings</digi:trn> </td>
 											</tr>
@@ -123,7 +122,7 @@
 											<tr>
 												<td align="center" >
 													<digi:trn>Message Refresh Time(minutes)</digi:trn> &nbsp;
-													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgRefreshTimeCurr}</td>
 												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew"/></td>
@@ -135,7 +134,7 @@
 											<tr>
 												<td align="center">
 													<digi:trn>Message Storage Per Message Type</digi:trn>
-													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgStoragePerMsgTypeCurr} </td>
 												<td align="center"><html:text name="messageForm" property="msgStoragePerMsgTypeNew" /> </td>
@@ -144,7 +143,7 @@
 											<tr>
 												<td align="center">
 													<digi:trn>Days of Advance Alert Warnings</digi:trn>
-													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForAdvanceAlerts],Style[13])" onmouseout="htm()"/>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForAdvanceAlerts],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
 												<td align="center"><html:text name="messageForm" property="daysForAdvanceAlertsWarningsNew"/> </td>
@@ -152,8 +151,8 @@
 											</tr>
 											<tr>
 												<td align="center">
-													<digi:trn>Email Messages</digi:trn>
-													<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
+													<digi:trn>Email Alerts</digi:trn>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">
 													<c:if test="${messageForm.emailMsgsCurrent==-1}">
@@ -208,7 +207,7 @@
 													<table cellPadding=3 cellSpacing=1 width="100%">
 														<tr>
 															<td>
-																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="translation">
 																	<digi:trn>Click here to goto Admin Home</digi:trn>
 																</c:set>
@@ -219,12 +218,12 @@
 														</tr>
 														<tr>
 															<td>
-																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="trn">
 								                                  <digi:trn>Click here to view TemplateAlerts Manager</digi:trn>
 								                                </c:set>
 								                                <digi:link module="message" href="/templatesManager.do?actionType=viewTemplates" title="${trn}">
-								                                  <digi:trn>Template Alerts Manager</digi:trn>
+								                                  <digi:trn>TemplateAlerts Manager</digi:trn>
 								                                </digi:link>
 															</td>
 														</tr>

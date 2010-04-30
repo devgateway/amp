@@ -22,19 +22,6 @@
 		refreshThis(myForm,id);
 		openURLinWindow('${contextPath}/widget/adminTableWidgets.do?actType=showColumnPopup');
 	}
-    function validate(){
-		var name = document.gisTableWidgetCreationForm.name.value;
-        var valid=false;
-        if(name.trim()!=""){
-            valid=true;
-        }
-        else{
-            var emptyName = '<digi:trn jsFriendly="true">Please enter the Name</digi:trn>';
-            alert(emptyName);
-        }
-        return valid;
-
-	}
 	function cancelEdit(){
 		var myForm = document.getElementById('tableId').form;
 		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=cancelEdit" />
@@ -166,7 +153,7 @@
 					</td>
 					<td>
 						<c:set var="saveButton"><digi:trn key="gis:saveButton">Save</digi:trn></c:set>
-                        <html:submit title="Save table widget" value="${saveButton}" onclick="return validate()" />
+						<html:submit title="Save table widget" value="${saveButton}" />
 					</td>
 				</tr>
 			</table>
@@ -211,16 +198,16 @@
 							</c:if>			
 						</td>
 						<td>
-							<a href="javascript:deleteCol(${column.id})"><img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>'></a>
+							<a href="javascript:deleteCol(${column.id})"><img border="0" src='<digi:file src="images/deleteIcon.gif"/>'></a>
 						</td>
 						<td>
 							<c:if test="${varStat.first != true}">
-								<a href="javascript:moveUp(${column.id})"><img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/up.gif"/>'></a>
+								<a href="javascript:moveUp(${column.id})"><img border="0" src='<digi:file src="images/up.gif"/>'></a>
 							</c:if>
 						</td>
 						<td>
 							<c:if test="${varStat.last != true}">
-								<a href="javascript:moveDown(${column.id})"><img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/down.gif"/>'></a>
+								<a href="javascript:moveDown(${column.id})"><img border="0" src='<digi:file src="images/down.gif"/>'></a>
 							</c:if>
 						</td>
 					</tr>

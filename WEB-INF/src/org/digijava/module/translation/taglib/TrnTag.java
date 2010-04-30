@@ -75,7 +75,6 @@ public class TrnTag
     private String key = null;
     private Boolean linkAlwaysVisible = null;
     private Boolean jsFriendly = null;
-    private Boolean editorPageHeader = null;
     private String type = null;
     private String siteId = null;
     private String locale = null;
@@ -518,7 +517,7 @@ public class TrnTag
      */
     private String showLinks(char operType) {
         String translatorTag = "";
-        
+
         if (showLinks) {
             if (this.getKey() != null
 					&& (this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln"))) {
@@ -585,7 +584,6 @@ public class TrnTag
     }
 
     private String getTranslationLink(String trnType, char operType) {
-    	boolean showHeader = (this.editorPageHeader==null)?true:this.editorPageHeader.booleanValue();
         String suffix = "L";
         if (!trnType.equals(LOCAL_TRANSLATION)) {
             suffix = "";
@@ -596,7 +594,7 @@ public class TrnTag
         }
         return "<a href=\"" + getHref() +
             "/translation/showTranslate.do?key=" + getGeneratedKey() + siteParam +
-            "&back_url=" + backUrl + "&type=" + trnType + "&pgHeader=" + showHeader + "\">&lt;" + operType +
+            "&back_url=" + backUrl + "&type=" + trnType + "\">&lt;" + operType +
             suffix + "&gt;</a>";
 
     }
@@ -659,14 +657,6 @@ public class TrnTag
 
 	public Boolean getJsFriendly() {
 		return jsFriendly;
-	}
-
-	public void setEditorPageHeader(Boolean showPageHeader) {
-		this.editorPageHeader = showPageHeader;
-	}
-
-	public Boolean getEditorPageHeader() {
-		return editorPageHeader;
 	}
 
 

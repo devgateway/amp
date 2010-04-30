@@ -3,6 +3,7 @@ package org.digijava.module.widget.table.filteredColumn;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class WiColumnDropDownFilter extends WiColumn {
 		super(dbColumn);
 		Site site = RequestUtils.getSite(request);
 	 	org.digijava.kernel.entity.Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);        
-	 	Long siteId = site.getId();
+	 	String siteId = site.getId()+"";
 	 	String locale = navigationLanguage.getCode();
 	 	//get provider of the drop down filter items. current donors.
 	 	provider = TableWidgetUtil.getFilterItemProvider(dbColumn, siteId, locale);
@@ -144,14 +145,6 @@ public class WiColumnDropDownFilter extends WiColumn {
 		return getActiveSubColumn().getCell(rowPk);
 	}
 
-	@Override
-	public void addCellAt(long index) {
-		Collection<WiColumnFilterSubColumn> subColumns = this.columns.values();
-		for (WiColumnFilterSubColumn subColumn : subColumns) {
-			subColumn.addCellAt(index);
-		}
-	}
-
 	/**
 	 * Delegates to active sub column
 	 */
@@ -174,6 +167,16 @@ public class WiColumnDropDownFilter extends WiColumn {
 		}
 	}
 
+	/**
+	 * Delegates to all sub columns because filter column has several sub columns. 
+	 */
+	@Override
+	public void replacePk(Long oldPk, Long newPk) {
+		for (WiColumnFilterSubColumn subColumn : this.columns.values()) {
+			subColumn.replacePk(oldPk, newPk);
+		}
+	}
+	
 	public void setProvider(FilterItemProvider provider) {
 		this.provider = provider;
 	}
@@ -196,23 +199,6 @@ public class WiColumnDropDownFilter extends WiColumn {
 
 	public Long getActiveItemId() {
 		return activeItemId;
-	}
-
-	@Override
-	public WiCell createCell() {
-		WiCellFiltered cell = new WiCellFiltered();
-		cell.setColumn(this);
-		return cell;
-	}
-
-	@Override
-	public WiCell createCell(AmpDaValue value) {
-		WiCellFiltered cell = (WiCellFiltered)this.createCell();
-		cell.setId(value.getId());
-		cell.setPk(value.getPk());
-		cell.setValue(value.getValue());
-		cell.setFilterItemId(((AmpDaValueFiltered) value).getFilterItemId());
-		return cell;
 	}
 	
 }

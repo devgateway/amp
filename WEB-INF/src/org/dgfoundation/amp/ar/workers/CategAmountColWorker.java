@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.poi.hssf.util.HSSFColor.SKY_BLUE;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -27,9 +27,10 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -84,6 +85,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		    return false;
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		
+	
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		//now this is null due we have one field 
 		try {
@@ -164,7 +166,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		int tr_type = -1;
 		int adj_type = -1;
-		BigDecimal tr_amount = rs.getBigDecimal("transaction_amount");
+		double tr_amount = rs.getDouble("transaction_amount");
 		java.sql.Date td= rs.getDate("transaction_date");
 		
 		String currencyCode="";
@@ -176,7 +178,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		String donorGroupName=null;
 		String donorTypeName=null;
 		Double fixedExchangeRate = null;;
-		
+		Double pledgetotal = null;;
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
 
@@ -201,16 +203,9 @@ public class CategAmountColWorker extends ColumnWorker {
 			donorGroupName	= rs.getString("org_grp_name");
 		}
 		
-		
-		//tr_type == DISBURSEMENT_ORDERS
-		if( tr_type == Constants.DISBURSEMENT_ORDER && filter.getDisbursementOrderRejected()!=null){
-			if (columnsMetaData.contains("disb_ord_rej")) {
-				Boolean disbursementOrderRejected = rs.getBoolean("disb_ord_rej");
-				if(!filter.getDisbursementOrderRejected().equals(disbursementOrderRejected))
-					return null;
-			}			
+		if (columnsMetaData.contains("total_pledged")) {
+			pledgetotal	= rs.getDouble("total_pledged");
 		}
-			
 		
 		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
 		boolean skpyCategorize=("false".equalsIgnoreCase(value));
@@ -248,25 +243,19 @@ public class CategAmountColWorker extends ColumnWorker {
 			String regionName = rs.getString("region_name");
 			headMeta= this.getCachedMetaInfo(ArConstants.REGION, regionName);			
 		} else
-		
+			
 		if("component_type".equals(headMetaName)){
 			String componentType = rs.getString("component_type");
 			headMeta= this.getCachedMetaInfo(ArConstants.COMPONENT, componentType);			
-		} else
-	
+		} else	
+
 		if("donor_name".equals(headMetaName)){
 			String donorName = rs.getString("donor_name");
 			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, donorName);			
 		}
+
 		
-		if (filter.isAmountinthousand()){
-			if (tr_amount !=null){
-				acc.setAmount(tr_amount.multiply(new BigDecimal(0.001d)));
-			}
-		}
-		else{
-			acc.setAmount(FeaturesUtil.applyThousandsForVisibility(tr_amount));
-		}
+		acc.setAmount(FeaturesUtil.applyThousandsForVisibility(tr_amount));
 		
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {
@@ -298,7 +287,12 @@ public class CategAmountColWorker extends ColumnWorker {
 		case 4:
 			trStr = ArConstants.DISBURSEMENT_ORDERS;
 			break;
-			
+		case 5:
+			trStr = ArConstants.PLEDGES_COMMITMENT;
+			break;
+		case 6:
+			trStr = ArConstants.PLEDGES_DISBURSEMENT;
+			break;
 		}
 
 		if(trStr!=null) {
@@ -319,8 +313,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		String quarter=null;
 		Comparable month=null;		
 		Integer year=null;
-		String fiscalYear=null;
-		Comparable fiscalMonth=null;
+		
 		if (filter.getCalendarType() != null) {
 			try {
 				ICalendarWorker worker = filter.getCalendarType().getworker();
@@ -328,12 +321,6 @@ public class CategAmountColWorker extends ColumnWorker {
 				month = worker.getMonth();
 				quarter = "Q" + worker.getQuarter();
 				year = worker.getYear();
-				
-				fiscalYear=worker.getFiscalYear();
-				fiscalMonth=worker.getFiscalMonth();
-				
-				
-				
 				//The complete will be used to see if the cell is showable
 				MetaInfo dateInfo = this.getCachedMetaInfo(ArConstants.TRANSACTION_DATE, worker.getDate());
 				acc.getMetaData().add(dateInfo);
@@ -352,15 +339,12 @@ public class CategAmountColWorker extends ColumnWorker {
 			  MetaInfo computedOnYear = this.getCachedMetaInfo(ArConstants.COMPUTE_ON_YEAR, null);
 			  acc.getMetaData().add(computedOnYear);
 		  }
-
-		//Fiscal data
+		  
 		MetaInfo qMs = this.getCachedMetaInfo(ArConstants.QUARTER,quarter);
 		MetaInfo mMs = this.getCachedMetaInfo(ArConstants.MONTH,month);
 		MetaInfo aMs = this.getCachedMetaInfo(ArConstants.YEAR, year);
-		
-		MetaInfo fmMs = this.getCachedMetaInfo(ArConstants.FISCAL_M, fiscalMonth);
-		MetaInfo faMs = this.getCachedMetaInfo(ArConstants.FISCAL_Y, fiscalYear);
 
+		
 		
 		
 		//add the newly created metainfo objects to the virtual funding object
@@ -368,15 +352,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
 		acc.getMetaData().add(mMs);		
-		acc.getMetaData().add(faMs);
-		acc.getMetaData().add(fmMs);
 		acc.getMetaData().add(headMeta);
-	
-		
 		
 		if(this.getViewName().equals("v_proposed_cost")) {
 		    //used as a flag, no value needed
-		    MetaInfo costMs = this.getCachedMetaInfo(ArConstants.PROPOSED_COST, "true");
+		    MetaInfo costMs = this.getCachedMetaInfo(ArConstants.PROPOSED_COST, null);
 		    acc.getMetaData().add(costMs);
 		}
 		
@@ -388,6 +368,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(donorTypeName!=null) {
 			MetaInfo donorTypeMs = this.getCachedMetaInfo(ArConstants.DONOR_TYPE_COL, donorTypeName);
 			acc.getMetaData().add(donorTypeMs);
+		}
+		
+		if(pledgetotal!=null) {
+			MetaInfo pledgedtotalname = this.getCachedMetaInfo(ArConstants.PLEDGED_TOTAL, null);
+			acc.getMetaData().add(pledgedtotalname);
 		}
 		
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT
@@ -405,7 +390,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			if ( currencyCode.equals(filter.getCurrency().getCurrencyCode())   ) 
 				acc.setToExchangeRate( acc.getFromExchangeRate() );
 			else if ( !baseCurrCode.equals(filter.getCurrency().getCurrencyCode()))  
-			acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
+				acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
 		}
 		else 
 			logger.error("The filter.currency property should not be null !");

@@ -1,14 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.ArrayList;
-
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
-public class AmpActivityProgram implements Versionable {
+public class AmpActivityProgram {
 
         private Long ampActivityProgramId;
-        private float programPercentage;
+        private Long programPercentage;
         private AmpTheme program;
         private AmpActivity activity;
         private AmpActivityProgramSettings programSetting;
@@ -16,7 +13,7 @@ public class AmpActivityProgram implements Versionable {
                 return ampActivityProgramId;
         }
 
-        public float getProgramPercentage() {
+        public Long getProgramPercentage() {
                 return programPercentage;
         }
 
@@ -36,7 +33,7 @@ public class AmpActivityProgram implements Versionable {
                 this.ampActivityProgramId = ampActivityProgramId;
         }
 
-        public void setProgramPercentage(float programPercentage) {
+        public void setProgramPercentage(Long programPercentage) {
                 this.programPercentage = programPercentage;
         }
 
@@ -58,30 +55,4 @@ public class AmpActivityProgram implements Versionable {
                 names += "[" + this.program.getName() + "]";
                 return names;
         }
-
-		@Override
-		public boolean equalsForVersioning(Object obj) {
-			AmpActivityProgram aux = (AmpActivityProgram) obj;
-			if (this.program.getAmpThemeId().equals(aux.program.getAmpThemeId())) {
-				return true;
-			}
-			return false;
-		}
-
-		@Override
-		public Output getOutput() {
-			Output out = new Output();
-			out.setOutputs(new ArrayList<Output>());
-			out.getOutputs().add(new Output(null, new String[] { "Name: " }, new Object[] { this.program.getName() }));
-			out.getOutputs()
-				.add(new Output(null, new String[] { "Percentage: " }, new Object[] { this.programPercentage }));
-			return out;
-		}
-
-		@Override
-		public Object getValue() {
-			String ret = "";
-			ret = "" + this.programPercentage; 
-			return ret;
-		}
 }

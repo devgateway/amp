@@ -1,21 +1,35 @@
 package org.digijava.module.autopatcher.core;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
-import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
-import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+
+import org.apache.log4j.Logger;
+import org.digijava.module.autopatcher.dbentity.AmpPatch;
+import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
+import org.digijava.module.autopatcher.schema.Patch;
 
 public class PatcherUtil {
 
@@ -29,6 +43,19 @@ public class PatcherUtil {
 	
 	private static Logger logger = Logger.getLogger(PatcherUtil.class);
 
+	public static Map<String, AmpPatch> getAllRecordedPatches(Session hs) throws HibernateException,
+			SQLException {
+		Query query = hs.createQuery("select p from "
+				+ AmpPatch.class.getName() + " p");
+		List col = query.list();
+		Map<String, AmpPatch> ret=new HashMap<String, AmpPatch>();
+		Iterator i=col.iterator();
+		while (i.hasNext()) {
+			AmpPatch element = (AmpPatch) i.next();
+			ret.put(element.getAbstractLocation(), element);
+		}
+		return ret;
+	}
 
 	public static Set getAllAppliedPatches(Session session) throws HibernateException {
 		
@@ -41,13 +68,25 @@ public class PatcherUtil {
 	
 	}
 	
-	/**
-	 * @deprecated Use {@link XmlPatcherUtil#getFileMD5(File)} instead
-	 */
 	public static String getFileMD5(File f) throws NoSuchAlgorithmException,
 			IOException {
-				return XmlPatcherUtil.getFileMD5(f);
-			}
+		MessageDigest algorithm = MessageDigest.getInstance("MD5");
+		algorithm.reset();
+
+		BufferedInputStream bis = new BufferedInputStream(
+				new FileInputStream(f));
+
+		byte[] buffer = new byte[8192];
+		int read = 0;
+		while ((read = bis.read(buffer)) > 0) {
+			algorithm.update(buffer, 0, read);
+		}
+		bis.close();
+		byte[] md5sum = algorithm.digest();
+		BigInteger bigInt = new BigInteger(1, md5sum);
+		String md5 = bigInt.toString(16);
+		return md5;
+	}
 
 	public static Collection<File> getAllPatchesFiles(String abstractPatchesLocation)
 			throws InvalidPatchRepositoryException {
@@ -68,7 +107,18 @@ public class PatcherUtil {
 		return patchFiles;
 	}
 
-	
+	public static Patch getUnmarshalledPatch(File patchFile)
+			throws JAXBException {
+		JAXBContext jc = JAXBContext
+				.newInstance("org.digijava.module.autopatcher.schema");
+		Unmarshaller m = jc.createUnmarshaller();
+		m.setValidating(true);
+
+		Patch p = (Patch) m.unmarshal(patchFile);
+		
+		return p;
+	}
+
 	/*
 	 
 	public static Collection<File> getAllXMLPatchFiles(String abstractPatchesLocation)

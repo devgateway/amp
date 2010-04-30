@@ -108,7 +108,7 @@
 
 											</TD>
 
-	                              <TD><IMG src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17"></TD>
+	                              <TD><IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17"></TD>
 
    	                        </TR>
 

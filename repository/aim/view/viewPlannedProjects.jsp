@@ -91,7 +91,7 @@
 				<tr>
 				<td width="14" class="r-dotted-lg">&nbsp;</td>
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/print_icon.gif">
+					&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
 					<digi:link href="/htmlViewPlannedProjects.do" target="_blank">
 						Print
 					</digi:link>
@@ -105,7 +105,7 @@
 			<td width="14" class="r-dotted-lg">&nbsp;</td>
 				<td valign="bottom" class="crumb">
 					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
-					&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/pdf_icon.gif" border=0>	
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
 					<digi:link href="" onclick="popup_pdf(''); return false;"> 
 						<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 						</digi:link>
@@ -118,7 +118,7 @@
 				<td width="14" class="r-dotted-lg">&nbsp;</td>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
-							&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border=0>	<digi:link href="" onclick="popup_xls(''); return false;">
+							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	<digi:link href="" onclick="popup_xls(''); return false;">
 								 <digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn>
 								</digi:link>
 		                	</logic:notEmpty>
@@ -132,7 +132,7 @@
 			        <td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
 							&nbsp;&nbsp;
-					<img src="/TEMPLATE/ampTemplate/imagesSource/common/icon_csv.gif" border=0>
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
 					
 						<!--<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>-->
 
@@ -314,7 +314,7 @@
 					Commitments, Disbursements, & Pipeline Projects
 					</digi:trn>
 					</td>
-                    <td bgcolor="#FFFFFF"><img src="/TEMPLATE/ampTemplate/imagesSource/common/corner-r.gif" width="17" height="17"></td>
+                    <td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" width="17" height="17"></td>
                   </tr>
               </table></td>
             </tr>

@@ -5,7 +5,6 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 import java.util.SortedMap;
@@ -27,7 +26,7 @@ public class Components<T> implements Comparable , Serializable{
 	private String url;
 	private Long  type_Id;
 	
-	private SortedMap<Integer,Map<String,BigDecimal>> financeByYearInfo;
+	private SortedMap<Integer,Map<String,Double>> financeByYearInfo;
 	
 	public Components() {}
 	
@@ -196,11 +195,11 @@ public class Components<T> implements Comparable , Serializable{
 		return url;
 	}
 
-	public void setFinanceByYearInfo(SortedMap<Integer,Map<String,BigDecimal>> financeByYearInfo) {
+	public void setFinanceByYearInfo(SortedMap<Integer,Map<String,Double>> financeByYearInfo) {
 		this.financeByYearInfo = financeByYearInfo;
 	}
 
-	public SortedMap<Integer,Map<String,BigDecimal>> getFinanceByYearInfo() {
+	public SortedMap<Integer,Map<String,Double>> getFinanceByYearInfo() {
 		return financeByYearInfo;
 	}
 

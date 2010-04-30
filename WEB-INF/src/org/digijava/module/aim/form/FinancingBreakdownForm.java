@@ -1,4 +1,4 @@
-package org.digijava.module.aim.form;
+package org.digijava.module.aim.form ;
 
 import java.util.Collection;
 
@@ -10,38 +10,21 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
-public class FinancingBreakdownForm extends MainProjectDetailsForm {
+public class FinancingBreakdownForm extends MainProjectDetailsForm
+{
 	public static Logger logger = Logger.getLogger(FinancingBreakdownForm.class);
 
-	private Collection financingBreakdown;
-	private String totalCommitted;
-	private String totalDisbursed;
-	private String totalUnDisbursed;
-	private String totalExpended;
-	private String totalUnExpended;
-	private String totalDisbOrdered;
+	private Collection financingBreakdown ;
+	private String totalCommitted ;
+	private String totalDisbursed ;
+	private String totalUnDisbursed ;
+	private String totalExpended ;
+	private String totalUnExpended ;
+        private String totalDisbOrdered ;
 
-	private String totalCost;
-	private String totalUncommitted;
 
-	public String getTotalCost() {
-		return totalCost;
-	}
-
-	public void setTotalCost(String totalCost) {
-		this.totalCost = totalCost;
-	}
-
-	public String getTotalUncommitted() {
-		return totalUncommitted;
-	}
-
-	public void setTotalUncommitted(String totalUncommitted) {
-		this.totalUncommitted = totalUncommitted;
-	}
-
-	/* For projection */
-	private String totalProjections;
+	/*For projection*/
+	private String totalProjections ;
 
 	private Collection fiscalYears;
 	private long fiscalCalId;
@@ -51,9 +34,13 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm {
 		return totalProjections;
 	}
 
+
+
 	public void setTotalProjections(String totalProjections) {
 		this.totalProjections = totalProjections;
 	}
+
+
 
 	/**
 	 * @return
@@ -61,6 +48,8 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm {
 	public Collection getFinancingBreakdown() {
 		return financingBreakdown;
 	}
+
+
 
 	/**
 	 * @return
@@ -139,34 +128,38 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm {
 		fiscalCalId = i;
 	}
 
-	public void setFiscalYears(Collection c) {
-		fiscalYears = c;
+	public void setFiscalYears(Collection c)
+	{
+		fiscalYears=c;
 	}
 
-	public Collection getFiscalYears() {
+	public Collection getFiscalYears()
+	{
 		return fiscalYears;
 	}
 
-	public ActionErrors validate(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
+	public ActionErrors validate(ActionMapping actionMapping,
+					 			 HttpServletRequest httpServletRequest) {
 		ActionErrors errors = super.validate(actionMapping, httpServletRequest);
-		return errors;
+	 	return errors;
 	}
 
-	public String getTotalDisbOrdered() {
-		return totalDisbOrdered;
-	}
 
-	public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
+        public String getTotalDisbOrdered() {
+                return totalDisbOrdered;
+        }
+
+        public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
 		this.perpsectiveNameTrimmed = perpsectiveNameTrimmed;
 	}
 
-	public void setTotalDisbOrdered(String totalDisbOrdered) {
-		this.totalDisbOrdered = totalDisbOrdered;
-	}
+        public void setTotalDisbOrdered(String totalDisbOrdered) {
+                this.totalDisbOrdered = totalDisbOrdered;
+        }
 
-	public String getSelectedCurrency() {
+        public String getSelectedCurrency(){
 		AmpCurrency c = CurrencyUtil.getCurrencyByCode(this.getCurrency());
 		return c.getCurrencyName();
 	}
-
 }
+

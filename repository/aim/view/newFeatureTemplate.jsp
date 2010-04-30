@@ -32,7 +32,7 @@
 		<tr bgcolor="#ffffff">
 			<html:hidden property="ampFeatures" value="<%=feature.getNameTrimmed() %>" />
 			<td width="9">
-					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
 			</td>																	
 			<td width="100%"> <bean:write name="feature" property="name"/> </td>
 			<td>

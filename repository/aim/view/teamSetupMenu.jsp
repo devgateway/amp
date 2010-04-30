@@ -181,7 +181,7 @@ function putLoading(){
 	var subtabs = document.getElementById("subtabs");
 	
 	if(mainDiv[0]){
-		loadstatustext='&nbsp;&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
+		loadstatustext='&nbsp;&nbsp;&nbsp;<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
 		mainDiv[0].innerHTML = loadstatustext;
 	}
 	if(subtabs){
@@ -431,7 +431,7 @@ function putLoading(){
 						<c:if test="${selectedSubTab  == '0'}">
 						   	<LI>
                                 <span>
-                                <digi:trn>Assigned Activities</digi:trn>								
+                                <digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>								
                                 </span>
 							</LI>
 						</c:if>
@@ -441,7 +441,7 @@ function putLoading(){
 								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesMember">Click here to view member activities</digi:trn>'>
 									<span>
 									<digi:link href="/teamActivityList.do" name="urlParams">
-										<digi:trn>Assigned Activities</digi:trn>
+										<digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>
 									</digi:link>							
 									</span>
 								</div>	
@@ -478,81 +478,7 @@ function putLoading(){
                                     </div>	
                                 </LI>
                             </c:if>					
-                        </c:if>					
-								
-                        <c:if test="${selectedSubTab  == '3'}">
-                             <LI>
-                                     <span>
-                                         <digi:trn>Linked Documents</digi:trn>
-                                     </span>
-                             </LI>
-                         </c:if>
-                         <c:if test="${selectedSubTab != '3'}">
-                             <LI>
-                                 <div title='<digi:trn>Click here to view Documents linked to activities</digi:trn>'>
-                                     <span>
-                                     <digi:link href="/teamActivityDocumentList.do" name="urlParams">
-                                         <digi:trn>Linked Documents</digi:trn>
-                                     </digi:link>							
-                                     </span>
-                                 </div>	
-                             </LI>
-                         </c:if>				
-								
-                        <c:if test="${selectedSubTab  == '4'}">
-                             <LI>
-                                     <span>
-                                         <digi:trn>Unlinked Documents</digi:trn>
-                                     </span>
-                             </LI>
-                         </c:if>
-                         <c:if test="${selectedSubTab != '4'}">
-                             <LI>
-                                 <div title='<digi:trn>Click here to view Documents not linked to activities</digi:trn>'>
-                                     <span>
-                                     <digi:link href="/updateTeamActivity.do~showUnassignedDocs=true" name="urlParams">
-                                         <digi:trn>Unlinked Documents</digi:trn>
-                                     </digi:link>							
-                                     </span>
-                                 </div>	
-                             </LI>
-                         </c:if>
-                          <c:if test="${selectedSubTab  == '5'}">
-                             <LI>
-                                     <span>
-                                         <digi:trn>Non-Archived Activities</digi:trn>
-                                     </span>
-                             </LI>
-                         </c:if>
-                         <c:if test="${selectedSubTab != '5'}">
-                             <LI>
-                                 <div title='<digi:trn>Click here to view  activities</digi:trn>'>
-                                     <span>
-                                     <digi:link href="/teamActivityList.do~showArchivedActivities=false" name="urlParams">
-                                         <digi:trn>Non-Archived Activities</digi:trn>
-                                     </digi:link>							
-                                     </span>
-                                 </div>	
-                             </LI>
-                         </c:if>
-                          <c:if test="${selectedSubTab  == '6'}">
-                             <LI>
-                                     <span>
-                                         <digi:trn>Archived Activities</digi:trn>
-                                     </span>
-                             </LI>
-                         </c:if>
-                         <c:if test="${selectedSubTab != '6'}">
-                             <LI>
-                                 <div title='<digi:trn>Click here to view  activities</digi:trn>'>
-                                     <span>
-                                     <digi:link href="/teamActivityList.do~showArchivedActivities=true" name="urlParams">
-                                         <digi:trn>Archived Activities</digi:trn>
-                                     </digi:link>							
-                                     </span>
-                                 </div>	
-                             </LI>
-                         </c:if>					
+                            </c:if>					
 					</c:if>
 					<c:if test="${selectedTab  == '3'}">
 						<c:if test="${selectedSubTab  == '0'}">

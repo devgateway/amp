@@ -56,7 +56,6 @@ public class UpdateTeamMembers extends Action {
         }
 
         TeamMemberForm upForm = (TeamMemberForm) form;
-        upForm.setSomeError(false);
         ActionErrors errors = new ActionErrors();
         AmpTeam ampTeam = TeamUtil.getAmpTeam(upForm.getTeamId());
         if (upForm.getAction() != null
@@ -79,13 +78,12 @@ public class UpdateTeamMembers extends Action {
                 error.add(ActionErrors.GLOBAL_ERROR,
                           new ActionError(
                               "error.aim.addTeamMember.teamLeadRole"));
-                upForm.setSomeError(true);
             }
             if (role.getRole().equals(teamLead.getRole())) {
                 logger.info("team name = " + ampTeam.getName());
                 logger.info(" team role = " + upForm.getRole());
                 logger.info(" this is the team Id = " + upForm.getTeamId() + " this is the member id = " + upForm.getTeamMemberId());
-                if ( (TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()) != null) && (!TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()).getAmpTeamMemId().equals(upForm.getTeamMemberId()))) {
+                if ( (ampTeam.getTeamLead() != null) && (!ampTeam.getTeamLead().getAmpTeamMemId().equals(upForm.getTeamMemberId()))) {
                     upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 
                     logger.info(" here");
@@ -96,7 +94,6 @@ public class UpdateTeamMembers extends Action {
                         new ActionError(
                             "error.aim.addTeamMember.teamLeadAlreadyExist", msg));
                     saveErrors(request, errors);
-                    upForm.setSomeError(true);
 
                     return mapping.findForward("forward");
                     //return mapping.getInputForward();
@@ -118,14 +115,19 @@ public class UpdateTeamMembers extends Action {
             ampMember.setActivities(temp);
             logger.info(" updating the team member now....");
             DbUtil.update(ampMember);
-//            AmpTeamMember ampTeamHead = TeamMemberUtil.getTeamHead(ampTeam
-//                .getAmpTeamId());
+            AmpTeamMember ampTeamHead = TeamMemberUtil.getTeamHead(ampTeam
+                .getAmpTeamId());
             logger.info(" here finally");
 
             if (ampTeam == null) {
                 logger.debug("ampTeam is null");
             }
 
+            if (ampTeamHead != null) {
+                ampTeam.setTeamLead(ampTeamHead);
+            } else {
+                ampTeam.setTeamLead(null);
+            }
             DbUtil.update(ampTeam);
 
             if (ampTeam != null) {

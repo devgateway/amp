@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action ;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -15,22 +14,18 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.QuarterlyComparisonsForm;
 import org.digijava.module.aim.helper.AllTotals;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
-import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.QuarterlyComparisonsWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.helper.YearlyComparisonsWorker;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -94,23 +89,12 @@ public class QuarterlyComparisonsFilter extends Action	{
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 
-			BigDecimal total = new BigDecimal(0);
-			Long ampActivityId = Long.parseLong(request.getParameter("ampActivityId"));
-			try {
-				AmpActivity activity = ActivityUtil.loadActivity(ampActivityId);
-				total = CurrencyWorker.convert(activity.getFunAmount(), fp.getCurrencyCode());
-				formBean.setTotalCost(total.doubleValue());
-			} catch (DgException e) {
-				logger.error("can't get the total cost",e);
-			}
-			Collection c = QuarterlyComparisonsWorker.getQuarterlyComparisons(fp,total);
+
+			Collection c = QuarterlyComparisonsWorker.getQuarterlyComparisons(fp);
 			if ( c.size() != 0 )
 				formBean.setQuarterlyComparisons(c) ;
-               
-			
-
-			Collection colYearly = YearlyComparisonsWorker.getYearlyComparisons(fp, total);
-               if ( colYearly.size() > 0 )	{
+                             Collection colYearly = YearlyComparisonsWorker.getYearlyComparisons(fp);
+			if ( colYearly.size() > 0 )	{
 				AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(colYearly);
 				formBean.setTotalActualCommitment(allTotals.getTotalActualCommitment());
 				formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
@@ -118,8 +102,7 @@ public class QuarterlyComparisonsFilter extends Action	{
 				formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
                                     formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
 			}
-       		formBean.setUncommittedBalance(total.subtract(new BigDecimal(formBean.getTotalActualCommitment())).doubleValue());
-    		
+			
 		}
 		return null;
 	}

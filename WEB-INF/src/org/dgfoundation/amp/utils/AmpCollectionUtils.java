@@ -2,7 +2,6 @@ package org.dgfoundation.amp.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -235,5 +234,5 @@ public class AmpCollectionUtils {
 		
 		return deleted;
 	}
-
+	
 }

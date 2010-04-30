@@ -13,11 +13,13 @@
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
 <digi:instance property="aimEditActivityForm" />
-									<tr><td class="separator1" title="<digi:trn key="aim:SectorGroupTitle">The Sector Group</digi:trn>">
-										<digi:trn key="aim:sectorGroup">Sector Group</digi:trn>
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:SectorGroupTitle">The Sector Group</digi:trn>">
+										<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b></a>
 									</td></tr>
-									<tr><td>&nbsp;
-										
+									<tr><td bgColor=#f4f4f2>
+										&nbsp;
 									</td></tr>
 									<tr><td><field:display name="Sector Group" feature="Sector Group">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">

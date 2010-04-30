@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -13,7 +12,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
@@ -40,11 +38,6 @@ public class AdminIndicatorChartWidgets extends DispatchAction {
 	public ActionForward list(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		HttpSession session = request.getSession();
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}   
-
 		AdminIndicatorChartsForm cForm = (AdminIndicatorChartsForm)form;
 		List<AmpWidgetIndicatorChart> widgets = ChartWidgetUtil.getAllIndicatorChartWidgets();
 		cForm.setWidgets(widgets);

@@ -19,6 +19,7 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 /**
  * 
@@ -210,9 +211,7 @@ public class ColumnReportData extends ReportData {
 			Iterator<Column> ii = this.getItems().iterator();
 			while (ii.hasNext()) {
 				Column col =  ii.next();
-				Column newCol = col.filterCopy(cat, ids);
-				newCol.setHits(col.getHits());
-				crd.addColumn(newCol);
+				crd.addColumn(col.filterCopy(cat, ids));
 			}
 		}
 
@@ -326,6 +325,7 @@ public class ColumnReportData extends ReportData {
 		
 		List sorterItems = theColumn.getItems();
 		
+		
 		//remove null values
 		i=sorterItems.iterator();
 		while (i.hasNext()) {
@@ -333,12 +333,8 @@ public class ColumnReportData extends ReportData {
 			if(element.getValue()==null) i.remove();
 		}
 		
-		if (theColumn.getHits() == null) {
-			Collections.sort(sorterItems,new Cell.CellComparator());
-		} else {
-			Collections.sort(sorterItems,new Cell.LuceneScoreComparator());
-			sortAscending = true;
-		}
+		
+		Collections.sort(sorterItems,new Cell.CellComparator());
 		
 		//we read all the ownerIds from the sortedItems;
 		List sortedIds=new ArrayList();
@@ -357,7 +353,7 @@ public class ColumnReportData extends ReportData {
 			if(!referenceIds.containsKey(element)) sortedIds.add(0,element);
 		}
 		
-		if(!getSortAscending() && theColumn.getHits() == null) 
+		if(!getSortAscending()) 
 			Collections.reverse(sortedIds);
 		
 		return sortedIds;
@@ -419,7 +415,6 @@ public class ColumnReportData extends ReportData {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			//System.out.println("Setting rowspan for: " + element + " || maxDepth is " + maxDepth);
 			element.setRowSpan(maxDepth + 1);
 		}
 	}
@@ -483,54 +478,11 @@ public class ColumnReportData extends ReportData {
 		return id.toLowerCase().replaceAll(" ",	"");
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Column> getColumns(){
-		return items;
-
-	}
 
 
-	@Override
-	public int getNumOfHierarchyRows() {
-		return 1;
-	}
+
+	
 
 
-	@Override
-	public void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) {
-		this.setRowSpan(0);
-		int realStartRow	= startRow+1;
-		int realEndRow		= endRow+1;
-		//RANGE is [realStartRow, realEndRow]
-		
-		int visibleRows		= this.getVisibleRows();
-		
-		if ( numOfPreviousRows < realEndRow && numOfPreviousRows+visibleRows >= realStartRow ) {
-			// At least some activity rows need to be displayed on this page (there is overlapping)
-			
-			if ( numOfPreviousRows+visibleRows > realEndRow && numOfPreviousRows >= realStartRow) {
-				// partial overlapping end of range
-				this.setRowSpan( realEndRow - numOfPreviousRows + 1 );
-				return;
-			}
-			if ( numOfPreviousRows+visibleRows <= realEndRow && numOfPreviousRows < realStartRow) {
-				// partial overlapping beginning of range
-				this.setRowSpan( numOfPreviousRows+visibleRows - realStartRow + 2 );
-				return;
-			}
-			if ( numOfPreviousRows+visibleRows > realEndRow && numOfPreviousRows < realStartRow) {
-				// full overlapping over both ends of the range
-				this.setRowSpan( realEndRow - realStartRow + 2 );
-				return;
-			}
-			if ( numOfPreviousRows+visibleRows <= realEndRow && numOfPreviousRows >= realStartRow) {
-				// all rows are inside the range
-				this.setRowSpan( visibleRows + 1 );
-				return;
-			}
-			
-		}
-		
-	}
 	
 }

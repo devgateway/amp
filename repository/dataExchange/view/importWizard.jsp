@@ -7,8 +7,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<%@page import="org.digijava.module.dataExchange.util.ExportHelper"%>
-
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -19,6 +17,9 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
 
 <script type="text/javascript">
+  if (YAHOOAmp != null){
+    var YAHOO = YAHOOAmp;
+  }
   var tree;
   
 </script>
@@ -28,10 +29,10 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
-    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
+    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNodeImport.js"></script>
 
 <style type="text/css">
 
@@ -80,7 +81,7 @@ div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
-	width: 200px;
+	width: 300px;
 	padding: 0;
 	margin: 0;
 	z-index: 1;
@@ -99,152 +100,45 @@ div.fakefile2 input{
 
 	<br>
 	<br>
-<digi:instance property="deImportForm" />
+
   
 	<script type="text/javascript">
-	YAHOO.namespace("YAHOO.amp.dataExchangeImport");
-	YAHOO.amp.dataExchangeImport.numOfSteps	= 4;
+	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchangeImport");
+	YAHOOAmp.amp.dataExchangeImport.numOfSteps	= 4;
 		
-	YAHOO.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
+	YAHOOAmp.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
 		
         function navigateTab(value){
-        	YAHOO.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
+        	YAHOOAmp.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
         }
 		
 		
 		function initializeDragAndDrop() {
 			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 			
-			YAHOO.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
-			YAHOO.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
+			YAHOOAmp.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
+			YAHOOAmp.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
 		}
 
-/*
+
     function treeInit() {
-      YAHOO.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
+      YAHOOAmp.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
      
     }
-  */  
+    
 	  function cancelImportManager() {
 	      <digi:context name="url" property="/aim/admin.do" />
 	      window.location="<%= url %>";
 	  }
 
        function importActivities(){
-           var file=document.getElementById('uploadedFile').value;
-           if(file==''){
-               alert("<digi:trn jsFriendly="true">Please choose the file you want to import</digi:trn>");
-               return false;
-           }
             var form = document.getElementById('form');
             form.action = "/dataExchange/import.do~loadFile=true";
             form.target="_self"
             form.submit();
       }
-
-
-       function treeInit() {
-         tabView = new YAHOO.widget.TabView('wizard_container');
-         buildRandomTaskNodeTree();
-       }
-       
-       //handler for expanding all nodes
-       YAHOO.util.Event.on("expand", "click", function(e) {
-         tree.expandAll();
-         YAHOO.util.Event.preventDefault(e);
-       });
-       
-       //handler for collapsing all nodes
-       YAHOO.util.Event.on("collapse", "click", function(e) {
-         tree.collapseAll();
-         YAHOO.util.Event.preventDefault(e);
-       });
-
-       //handler for checking all nodes
-       YAHOO.util.Event.on("check", "click", function(e) {
-         checkAll();
-         YAHOO.util.Event.preventDefault(e);
-       });
-       
-       //handler for unchecking all nodes
-       YAHOO.util.Event.on("uncheck", "click", function(e) {
-         uncheckAll();
-         YAHOO.util.Event.preventDefault(e);
-       });
-
-
-       YAHOO.util.Event.on("getchecked", "click", function(e) {
-         YAHOO.util.Event.preventDefault(e);
-       });
-
-       //Function  creates the tree and 
-       //builds between 3 and 7 children of the root node:
-         function buildRandomTaskNodeTree() {
-       
-         //instantiate the tree:
-             tree = new YAHOO.widget.TreeView("dataImportActivityTree");
-               
-             <bean:define id="tree" name="deImportForm" property="activityStructure" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
-             <%= ExportHelper.renderActivityTree(tree, request) %>
-
-         //The tree is not created in the DOM until this method is called:
-         	tree.expandAll();
-         	checkAll();
-             tree.draw();
-             
-         }
-
-//       var callback = null;
-
-       function buildRandomTaskBranch(node) {
-         if (node.depth < 3) {
-//           YAHOO.log("buildRandomTextBranch: " + node.index);
-           for ( var i = 0; i < Math.floor(Math.random() * 2) ; i++ ) {
-             var tmpNode = new YAHOO.widget.TaskNode(node.label + "-" + i, node, false);
-                     //tmpNode.onCheckClick = onCheckClick;
-             buildRandomTaskBranch(tmpNode);
-           }
-         }
-       }
-
-         function checkAll() {
-             var topNodes = tree.getRoot().children;
-             for(var i=0; i<topNodes.length; ++i) {
-                 topNodes[i].checkAll();
-             }
-         }
-
-         function uncheckAll() {
-             var topNodes = tree.getRoot().children;
-             for(var i=0; i<topNodes.length; ++i) {
-                 topNodes[i].unCheckAll();
-             }
-         }
-
-         // Gets the labels of all of the fully checked nodes
-         // Could be updated to only return checked leaf nodes by evaluating
-         // the children collection first.
-          function getCheckedNodes(nodes) {
-              nodes = nodes || tree.getRoot().children;
-              checkedNodes = [];
-              for(var i=0, l=nodes.length; i<l; i=i+1) {
-                  var n = nodes[i];
-                  //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
-                  if (n.checkState === 2) {
-                      checkedNodes.push(n); // just using label for simplicity
-                      alert(n.aid+' '+n.label);
-                      if (n.hasChildren()) {
-                          checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
-                       }
-                  }
-              }
-
-              return checkedNodes;
-          }  
-
-       
            
-		YAHOO.util.Event.addListener(window, "load", treeInit) ;
+		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 </script>
 
 <script type="text/javascript">
@@ -293,7 +187,7 @@ div.fakefile2 input{
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-		
+		<digi:instance property="deImportForm" />
 		<digi:form action="/import.do" method="post" enctype="multipart/form-data" styleId="form">
 		<span id="formChild" style="display:none;">&nbsp;</span>
      
@@ -333,65 +227,51 @@ div.fakefile2 input{
 				<div id="tab_file_selection" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-					<div style="height: 500px;">
-    					<table cellpadding="5px" width="100%">
+					<div style="height: 255px;">
+    					<table cellpadding="5px" width="80%">
     						<tr>
-    							<td width="50%" valign="top">
-    							<div style="border: 1px grey solid; padding:5px">
-								<div >							
-        									<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
-	        								</digi:trn><br/>
-	        								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-												<input id="uploadedFile" name="uploadedFile" type="file" class="file">												
-											</div>  
-	        									<br/>
-	        								<digi:trn key="aim:pleaseChooseTheOption">Please choose the option for import the activities
-	        								</digi:trn><br/>
-        						</div>
-        						<div>
-        							<html:radio property="selectedOptions" value="insert"><digi:trn key="aim:insertActivity">Insert Activities (insert not existing activities)</digi:trn></html:radio><br/>
-        							<html:radio property="selectedOptions" value="update"><digi:trn key="aim:insertActivity">Update Activities (only existing activities)</digi:trn></html:radio><br/>
-        							<html:radio property="selectedOptions" value="insert&update"><digi:trn key="aim:insertupdateActivity">Insert & Update Activities (insert non existing, update existing)</digi:trn></html:radio>
-    							</div>
-    							</div>
-    							</td>
-    							
-    							<td  width="50%" valign="top" >
-    							<div style="border: 1px grey solid; padding:5px">
-		    							<digi:trn key="aim:pleaseChooseKeysForImport"> Please choose the primary keys for import </digi:trn>: <br/>
-        									<html:checkbox property="primaryKeys" name="deImportForm" value="title">
-        										<digi:trn key="aimm:Title">Title</digi:trn>
-        									</html:checkbox><br/>
-        									<html:checkbox property="primaryKeys" name="deImportForm" value="budgetCode">
-        										<digi:trn key="aimm:BudgetCode">Budget Code</digi:trn>
-        									</html:checkbox><br/>
-        									<html:checkbox property="primaryKeys" name="deImportForm" value="projectId">
-        										<digi:trn key="aimm:projectID">Project ID</digi:trn>
-        									</html:checkbox><br/><br/><br/><br/>
-        									
-        						</div>
-    							</td>
-    						</tr>
-    						<tr>
-        						<td width="47%" align="left" valign="top" colspan="2"> 
-        						
-        							<div id="expandcontractdiv" align="left" style="width:85%">
-					                    <a id="expand" href="#"><digi:trn>Expand all</digi:trn></a>
-					                    <a id="collapse" href="#"><digi:trn>Collapse all</digi:trn></a>
-        							
-					                    <a id="check" href="#"><digi:trn>Check all</digi:trn></a>
-					                    <a id="uncheck" href="#"><digi:trn>Uncheck all</digi:trn></a>
-			                    	</div>
-        						<div id="source_col_div" class="draglist" style="border-width: 0px; width: 100%; height: 300px;">
-			                    	<div id="dataImportActivityTree"></div>
-			                    </div>	      																		
+        						<td width="47%" align="left" valign="top"><br/><br/><br/> 
+        								<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
+        								</digi:trn><br/>
+        								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+											<input id="uploadedFile" name="uploadedFile" type="file" class="file">												
+										</div>        																		
+        						</td>
+        						<td align="left" >
+        							<br/><br/><br/>
+        							<digi:trn key="aim:pleaseChooseTheLanguage">Please choose the language(s) that exist in imported file
+        								</digi:trn><br/>
+        							<table bgcolor="white" width="70%">
+        							<logic:iterate name="deImportForm" property="languages" id="lang">
+        								<tr><td>
+        								<html:multibox property="selectedLanguages">
+        									<bean:write name="lang"/>
+        								</html:multibox>
+        								<bean:write name="lang"/>&nbsp;&nbsp;&nbsp;
+        								</td></tr>
+        							</logic:iterate>
+        							</table>
+        							<br/><br/><br/>
+        							<digi:trn key="aim:pleaseChooseTheOption">Please choose the option for import the activities
+        								</digi:trn><br/>
+        							<table bgcolor="white" width="70%">
+        							<logic:iterate name="deImportForm" property="options" id="option">
+        								<tr><td>
+        								<bean:define id="optionValue">
+                          					<bean:write name="option"/>
+            							</bean:define>
+        								<html:radio property="selectedOptions" value="<%=optionValue%>" styleId="<%=optionValue%>" />
+        								<bean:write name="option"/> <digi:trn>Activity</digi:trn><br/>
+        								</td></tr>
+        							</logic:iterate>
+        							</table>
         						</td>
     						</tr>
     					</table>
 					</div>
 				</div>
                
-				<div id="tab_log_after_import"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
+				<div id="tab_log_after_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                     <div  style="width:100%;height:250px;overflow:auto;text-align: left">
@@ -402,20 +282,20 @@ div.fakefile2 input{
                     </div>
 				</div>
 				
-				<div id="tab_select_activities"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
+				<div id="tab_select_activities"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                    <div id="dataImportTree"></div>
 				</div>
-				<div id="tab_confirm_import"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px; ">
+				<div id="tab_confirm_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-                    <digi:trn>Step 4 Select additional fields</digi:trn>
+                    Step 4 Select additional fields
 				</div>
 				
 			</div>
 		</div>
-<%= ExportHelper.renderHiddenElements(tree) %>
+
 		</digi:form>
 	</td>
 	</tr>

@@ -22,16 +22,16 @@
 
       urlParams="<%=selPrg%>&themeid="+defaultProgramId.value+"&op=add";
 
-      document.selectProgramForm.action = urlParams;
-      document.selectProgramForm.target=window.opener.name;
-      document.selectProgramForm.submit();
+      document.aimEditActivityForm.action = urlParams;
+      document.aimEditActivityForm.target=window.opener.name;
+      document.aimEditActivityForm.submit();
       window.close();
       return true;
     }
 
     function addProgram(pType) {
       <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
-      var prgSels=document.getElementsByName("selPrograms");
+      var prgSels=document.getElementsByName("programs.selPrograms");
       var urlParams;
       var flag=false;
 
@@ -53,9 +53,9 @@
         }
       }
 
-      document.selectProgramForm.action = urlParams;
-      document.selectProgramForm.target=window.opener.name;
-      document.selectProgramForm.submit();
+      document.aimEditActivityForm.action = urlParams;
+      document.aimEditActivityForm.target=window.opener.name;
+      document.aimEditActivityForm.submit();
       window.close();
       return true;
     }
@@ -81,16 +81,16 @@
           var urlParams="<%=selProgram%>&themeid="+selectedProgram.value;
         }
 
-        document.selectProgramForm.action = urlParams;
-        document.selectProgramForm.submit();
+        document.aimEditActivityForm.action = urlParams;
+        document.aimEditActivityForm.submit();
 
       }
 
     function resetResults(){
         <digi:context name="resetPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
         var urlParams="<%=resetPrg%>";
-	    document.selectProgramForm.action = urlParams;
-  		document.selectProgramForm.submit();
+	    document.aimEditActivityForm.action = urlParams;
+  		document.aimEditActivityForm.submit();
     }
 
     function closeWindow(){
@@ -99,7 +99,7 @@
 	-->
 </script>
 
-<digi:instance property="selectProgramForm" />
+<digi:instance property="aimEditActivityForm" />
 <digi:form action="/addProgram.do" method="post">
 	<c:set var="noDefaultProgram">
 		<digi:trn key="aim:noDefaultProgram">
@@ -133,13 +133,13 @@ Default Program
 							<table cellSpacing=2 cellPadding=2>
 								<tr>
 									<td colspan="2" align="center"><c:choose>
-										<c:when test="${selectProgramForm.programType==1}">
+										<c:when test="${aimEditActivityForm.programs.programType==1}">
 											<c:choose>
 												<c:when
-													test="${selectProgramForm.nationalSetting.defaultHierarchy!=null}">
+													test="${aimEditActivityForm.programs.nationalSetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
-														value="${selectProgramForm.nationalSetting.defaultHierarchy.name}" />
-														<html:hidden property="defaultProgramId" value="${selectProgramForm.nationalSetting.defaultHierarchy.ampThemeId}"/>
+														value="${aimEditActivityForm.programs.nationalSetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.programs.nationalSetting.defaultHierarchy.ampThemeId}"/>
 														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
@@ -149,14 +149,14 @@ Default Program
 
 										</c:when>
 
-										<c:when test="${selectProgramForm.programType==2}">
+										<c:when test="${aimEditActivityForm.programs.programType==2}">
 
 											<c:choose>
 												<c:when
-													test="${selectProgramForm.primarySetting.defaultHierarchy!=null}">
+													test="${aimEditActivityForm.programs.primarySetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
-														value="${selectProgramForm.primarySetting.defaultHierarchy.name}" />
-														<html:hidden property="defaultProgramId" value="${selectProgramForm.primarySetting.defaultHierarchy.ampThemeId}"/>
+														value="${aimEditActivityForm.programs.primarySetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.programs.primarySetting.defaultHierarchy.ampThemeId}"/>
 														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
@@ -171,10 +171,10 @@ Default Program
 
 											<c:choose>
 												<c:when
-													test="${selectProgramForm.secondarySetting.defaultHierarchy!=null}">
+													test="${aimEditActivityForm.programs.secondarySetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
-														value="${selectProgramForm.secondarySetting.defaultHierarchy.name}" />
-														<html:hidden property="defaultProgramId" value="${selectProgramForm.secondarySetting.defaultHierarchy.ampThemeId}"/>
+														value="${aimEditActivityForm.programs.secondarySetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.programs.secondarySetting.defaultHierarchy.ampThemeId}"/>
 														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
@@ -185,9 +185,9 @@ Default Program
 										</c:otherwise>
 									</c:choose></td>
 								</tr>
-								<c:if test="${!empty selectProgramForm.programLevels}">
+								<c:if test="${!empty aimEditActivityForm.programs.programLevels}">
 									<c:forEach var="prgLevels" varStatus="varSt"
-										items="${selectProgramForm.programLevels}">
+										items="${aimEditActivityForm.programs.programLevels}">
 										<tr>
 											<td width="120" align="right"><c:if
 												test="${varSt.count==1}">
@@ -196,7 +196,7 @@ Default Program
 												<digi:trn key="aim:subProgramLevel">Sub program level </digi:trn>${varSt.count-1}
                             </c:if></td>
 											<td id="slo${varSt.count}"><html:select
-												property="selPrograms" onchange="reloadProgram(this)"
+												property="programs.selPrograms" onchange="reloadProgram(this)"
 												styleClass="inp-text" >
 												<option value="-1"><digi:trn
 													key="aim:selectProgramOpt">-Select Program-</digi:trn></option>
@@ -213,7 +213,7 @@ Default Program
 											<tr>
 
 												<td><html:button styleClass="dr-menu"
-													property="submitButton" onclick="addNewProgram('${selectProgramForm.programType}')">
+													property="submitButton" onclick="addProgram('${aimEditActivityForm.programs.programType}')">
 													<digi:trn key="btn:add">Add</digi:trn>
 												</html:button></td>
 												<td><html:button styleClass="dr-menu"

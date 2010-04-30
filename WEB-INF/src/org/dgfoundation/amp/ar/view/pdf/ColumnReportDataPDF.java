@@ -71,7 +71,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 		
 		//requirements for translation purposes
 		TranslatorWorker translator=TranslatorWorker.getInstance();
-		Long siteId=parent.getReportMetadata().getSiteId();
+		String siteId=parent.getReportMetadata().getSiteId();
 		String locale=parent.getReportMetadata().getLocale();
 		
 //		title
@@ -83,7 +83,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 			String translatedName=null;
 			try{
 				//translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
-								
+				
 				//AMP-6253  
 				String simplename ="";
 				if (columnReport.getName().indexOf(":")>0){
@@ -139,7 +139,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 					//String prefix="aim:reportBuilder:";
 					
 					try{
-						translatedCellValue=TranslatorWorker.translateText(cellValue,locale,new Long(siteId));
+						translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
 					}catch (WorkerException e)
 						{
 						e.printStackTrace();

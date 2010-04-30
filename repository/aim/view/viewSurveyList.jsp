@@ -126,6 +126,28 @@ function fnEditProject(id)
 
 
 
+function preview(id)
+
+{
+
+
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+
+   document.aimSurveyForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+
+	document.aimSurveyForm.target = "_self";
+
+   document.aimSurveyForm.submit();
+
+}
+
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
+}
+
 
 -->
 

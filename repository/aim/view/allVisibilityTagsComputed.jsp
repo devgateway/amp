@@ -28,7 +28,8 @@
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
 <module:display name="GIS DASHBOARD"></module:display> 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -43,7 +44,7 @@
 <module:display name="PARIS INDICATORS"></module:display> 
 <module:display name="PI Reports" parentModule="REPORTING"></module:display> 
 <module:display name="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Paris Indicators Project Management" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -53,6 +54,8 @@
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display> 
+<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports"></feature:display>
+<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
@@ -152,12 +155,19 @@
 <feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display> 
 <feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display> 
 <feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 
-<feature:display name="Paris Indicators" module="Paris Indicators Project Management"></feature:display>
+<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
 <feature:display name="Physical Progress" module="Components"></feature:display> 
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
 <feature:display name="Planned Disbursements" module="Measures"></feature:display> 
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
+<feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
+<feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
+<feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
+<feature:display name="Pledge Location" module="Pledges"></feature:display> 
+<feature:display name="Pledge Sector" module="Pledges"></feature:display> 
+<feature:display name="Pledge Funding" module="Pledges"></feature:display> 
+<feature:display name="Pledge Additional Information" module="Pledges"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
 <feature:display name="Program" module="Program"></feature:display> 
 <feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 
@@ -197,8 +207,8 @@
 <field:display feature="Identification" name="Objective Verification"></field:display> 
 <field:display feature="Identification" name="Objective"></field:display> 
 <field:display feature="Identification" name="Organizations and Project ID"></field:display> 
-<field:display feature="Identification" name="Project Title"></field:display> 
-<field:display feature="Identification" name="Purpose"></field:display> 
+<field:display feature="Identification" name="Project Title"></field:display>
+ <field:display feature="Identification" name="Purpose"></field:display> 
 <field:display feature="Identification" name="Results"></field:display> 
 <field:display feature="Issues" name="Issue Date"></field:display> 
 <field:display feature="Issues" name="Measures Taken"></field:display> 
@@ -401,9 +411,11 @@
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Base Value" feature="Activity"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display> 
+<field:display name="Related Pledge" feature="Commitments"></field:display>
 <field:display name="Date Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Date Current Value" feature="Activity"></field:display> 
-<field:display name="Date Disbursement" feature="Disbursement"></field:display> 
+<field:display name="Date Disbursement" feature="Disbursement"></field:display>
+<field:display name="Related Pledge" feature="Disbursement"></field:display> 
 <field:display name="Date Disbursement" feature="Funding Information"></field:display> 
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Date Expenditure" feature="Expenditures"></field:display> 
@@ -705,3 +717,17 @@
 <feature:display name="Public Resources" module="Resources"></feature:display>
 <feature:display name="Other Resources" module="Resources"></feature:display>
 
+<feature:display name="Pledges Columns" module="Pledges"></feature:display>
+<field:display feature="Pledges Columns" name="Pledges Titles"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
+<field:display name="Add Pledge Location Button" feature="Pledge Location"></field:display>
+<field:display name="Remove Pledge Location Button" feature="Pledge Location"></field:display>
+<field:display name="Add Pledge Sector Button" feature="Pledge Sector"></field:display>
+<field:display name="Remove Pledge Sector Button" feature="Pledge Sector"></field:display>
+<field:display name="Add Pledge Funding Button" feature="Pledge Funding"></field:display>
+<field:display name="Remove Pledge Funding Button" feature="Pledge Funding"></field:display>
+<field:display name="Alternate Contact 1" feature="Pledge Contact 1"></field:display>
+<field:display name="Alternate Contact 2" feature="Pledge Contact 2"></field:display>

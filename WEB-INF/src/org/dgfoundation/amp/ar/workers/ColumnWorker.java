@@ -47,6 +47,8 @@ public abstract class ColumnWorker {
 	
 	protected boolean debugMode=false;
 	
+	protected boolean pledgereport = false;
+	
 	protected String columnName;
 	
 	protected String sourceName;
@@ -145,8 +147,10 @@ public abstract class ColumnWorker {
 		if (debugMode){
 			//if debug override the query
 			 query = "SELECT * FROM TEST_"+viewName;
+		}else if (pledgereport){
+			query = "SELECT * FROM " + viewName + " WHERE pledge_id IN ("
+			+ condition + " ) "+(internalCondition!=null?internalCondition:"");
 		}
-			
 		
 		try {
 			
@@ -379,5 +383,12 @@ public abstract class ColumnWorker {
 	}
 	
 
+	public boolean ispledgereport() {
+		return pledgereport;
+	}
+
+	public void setPledge(boolean pledgereport) {
+		this.pledgereport = pledgereport;	
+		}
 
 }

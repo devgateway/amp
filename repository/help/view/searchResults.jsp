@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="helpForm" />
-<digi:form action="/helpActions.do?actionType=searchHelpTopicNew"> 
+<digi:form action="/helpActions.do?actionType=searchHelpTopic"> 
 	<table width="100%">
 	<tr>
 		<td>	

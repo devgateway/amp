@@ -1,11 +1,10 @@
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class Commitments {
 	
-	private BigDecimal amount;
+	private double amount;
 	private Long donorId;
 	private String currencyCode;
 	private Date transactionDate;
@@ -13,13 +12,13 @@ public class Commitments {
 	/**
 	 * @return Returns the amount.
 	 */
-	public BigDecimal getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 	/**
 	 * @param amount The amount to set.
 	 */
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 	/**

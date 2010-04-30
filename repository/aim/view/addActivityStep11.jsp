@@ -15,13 +15,10 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<jsp:include page="addActivityStep11Popin.jsp" flush="true" />
-
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <script language="JavaScript">
 	<!--
-/*
+
 	function addEUActivity() {
 			openNewWindow(800, 460);
 			<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do?new" />
@@ -46,7 +43,7 @@
 			document.aimEditActivityForm.submit();
 	}
 
-*/
+
 	function addRegionalFunding() {
 		openNewWindow(650, 500);
 		<digi:context name="addRegFunding" property="context/module/moduleinstance/addRegionalFunding.do?edit=true&regFundAct=show" />
@@ -106,7 +103,7 @@
 								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 									<tr>
 										<td>
-											<span class=crumb style="visibility: hidden">
+											<span class=crumb>
 												<c:if test="${aimEditActivityForm.pageId == 0}">
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
@@ -229,7 +226,7 @@ ${fn:replace(message,quote,escapedQuote)}
 								</table>
 							</td></tr>
 							<tr><td>
-								<table width="100%" cellSpacing="1" cellPadding="4" vAlign="top">
+								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 									<tr>
 										<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
 											<c:if test="${aimEditActivityForm.editAct == false}">
@@ -238,7 +235,10 @@ ${fn:replace(message,quote,escapedQuote)}
 												</digi:trn>
 											</c:if>
 											<c:if test="${aimEditActivityForm.editAct == true}">
-												<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
+												<digi:trn key="aim:editActivity">
+													Edit Activity
+												</digi:trn>:
+													<bean:write name="aimEditActivityForm" property="identification.title"/>
 											</c:if>
 										</td>
 									</tr>
@@ -251,7 +251,22 @@ ${fn:replace(message,quote,escapedQuote)}
 								<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 									<tr><td width="75%" vAlign="top">
 										<table cellPadding=0 cellSpacing=0 width="100%" vAlign="top" >
-											
+											<tr>
+												<td width="100%">
+													<table cellPadding=0 cellSpacing=0 width="100%">
+														<tr>
+															<td width="13" height="20" background="module/aim/images/left-side.gif"></td>
+															<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+                                                                                                                           <digi:trn>
+													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
+                                                                                                                            ${fn:length(aimEditActivityForm.steps)}:
+																<digi:trn key="aim:stepCosting">EU Project Costing</digi:trn>
+															</td>
+															<td width="13" height="20" background="module/aim/images/right-side.gif"></td>
+														</tr>
+													</table>
+												</td>
+											</tr>
 											
 											<feature:display name="Costing" module="Activity Costing">
 											<tr valign="top">
@@ -260,10 +275,14 @@ ${fn:replace(message,quote,escapedQuote)}
 													bgcolor="#006699">
 													<tr>
 															<td bgColor=#f4f4f2 align="center" vAlign="top">
-																<table width="100%">
+																<table width="95%">
 																	<tr>
-																		<td class="separator1" title="<digi:trn key="aim:costing">Costing</digi:trn>">
-																			<digi:trn key="aim:costing">Costing</digi:trn>
+																		<td>
+																			<IMG alt=Link height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			<a title="<digi:trn key="aim:costing">Costing</digi:trn>">
+																				<b><digi:trn key="aim:costing">Costing</digi:trn></b>
+																			</a>
 																		</td>
 																	</tr>
 																	<tr><td>&nbsp;</td></tr>
@@ -281,8 +300,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</td></tr>
 
 
-																	<tr><td>&nbsp;
-																	
+																	<tr><td>
+																	&nbsp;
 																	</td></tr>
 																	<tr><td>
 																	
@@ -341,8 +360,8 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 								</table>
 							</td></tr>
-							<tr><td>&nbsp;
-								
+							<tr><td>
+								&nbsp;
 							</td></tr>
 						</table>
 					</td>

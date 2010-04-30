@@ -63,6 +63,7 @@ Number.prototype.format=function(f){
 		decPart=splitedSource[1];
 	}
 	//now are try to apply grouping format
+	
 	var newEntPart="";
 	if (f.useGroupSymbol){
 		
@@ -102,7 +103,7 @@ Number.prototype.format=function(f){
 			decPart=decPart.substr(0,f.decimalPlaces);
 		}
 	}
-	
+
 	return entPart+f.decimalSymbol+decPart;
 	
 };

@@ -7,7 +7,7 @@
 		<cache usage="read-write" />
 		<id name="ampActivityProgramId" column="amp_activity_program_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_PROGRAM_SEQ</param>
+				<param name="sequence">AMP_ACTIVITY_PROGRAM_seq</param>
 			</generator>
 		</id>
 
@@ -17,7 +17,7 @@
 		<many-to-one name="program" column="amp_program_id"
 			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false"/>
 
-		<property name="programPercentage" column="program_percentage" type="java.lang.Float" />
+		<property name="programPercentage" column="program_percentage" type="java.lang.Long" />
 
 		<many-to-one name="programSetting" column="program_setting"
 			class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" cascade="none"

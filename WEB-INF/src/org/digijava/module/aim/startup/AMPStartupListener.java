@@ -21,12 +21,10 @@ import javax.servlet.http.HttpServlet;
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettings;
-import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -170,9 +168,8 @@ public class AMPStartupListener extends HttpServlet implements
 
 			// Lucene indexation
 			LuceneUtil.checkIndex(sce.getServletContext());
-			//LuceneUtil.createHelp(sce.getServletContext());
+			LuceneUtil.createHelp(sce.getServletContext());
 			//ampContext.setAttribute(Constants.LUCENE_INDEX, idx); //deprecated
-			LuceneWorker.init(sce.getServletContext());
 
 			PermissionUtil.getAvailableGates(ampContext);
 
@@ -187,9 +184,6 @@ public class AMPStartupListener extends HttpServlet implements
 			initializeQuartz(sce);
 
 			CustomFieldsUtil.parseXMLFile(sce.getServletContext().getResourceAsStream("/WEB-INF/custom-fields.xml"));
-			
-			//Update amp_activity view AMP-7616
-			ActivityVersionUtil.updateActivityView();
 			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());

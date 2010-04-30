@@ -2,7 +2,6 @@ package org.digijava.module.widget.action;
 
 import java.awt.Font;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.widget.form.SectorByDonorTeaserForm;
 import org.digijava.module.widget.helper.ChartOption;
@@ -40,7 +38,7 @@ public class ShowSectorByDonorChart extends Action {
         Long[] donorIDs = null;
     	Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		Long siteId = site.getId();
+		String siteId = site.getId()+"";
 		String locale = navigationLanguage.getCode();
         ChartOption opt=createChartOption(cForm,request);
         //from year
@@ -62,16 +60,16 @@ public class ShowSectorByDonorChart extends Action {
         	donorIDs = new Long[1];
         	donorIDs[0] = cForm.getSelectedDonor();
         }
-        
+
         //generate chart
-		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear, toYear, opt);
-		// if no data is available,user should get a message about it.
-		Plot plot = chart.getPlot();
+        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt);
+        //if no data is available,user should get a message about it.
+        Plot plot = chart.getPlot();
         String noDatamessage = TranslatorWorker.translateText("There is no data available for the selected filters. Please adjust the date and/or donor filters",locale,siteId);
         plot.setNoDataMessage(noDatamessage);
-   		Font font = new Font(null, 0, 15);
-		plot.setNoDataMessageFont(font);
-        
+        Font font= new Font(null,0,15);
+        plot.setNoDataMessageFont(font);
+
         ChartRenderingInfo info = new ChartRenderingInfo();
 
         //write image in response
@@ -81,28 +79,14 @@ public class ShowSectorByDonorChart extends Action {
 		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));
 		//fill to years' drop-down
 		cForm.setYearsTo(ChartWidgetUtil.getYears(false));
-
-                //generate map for this graph
-                String map = ChartUtilities.getImageMap("sectorByDonorChartImageMap", info);
-                //String map = getImageMap("npdChartMap", info, new StandardToolTipTagFragmentGenerator(), new StandardURLTagFragmentGenerator());
-                ////System.out.println(map);
-
-                //save map with timestamp from request for later use
-                //timestemp is generated with javascript before sending ajax request.
-                ChartUtil.saveMap(map, cForm.getTimestamp(), request.getSession());
 		boolean amountsInThousands=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equals("true");
 		cForm.setAmountsInThousands(amountsInThousands);
 		return null;
 	}
-	
+
 	private ChartOption createChartOption(SectorByDonorTeaserForm form,HttpServletRequest request){
 		ChartOption opt= new ChartOption();
 
-                // URL
-                String url=RequestUtils.getFullModuleUrl(request);
-                url+="showSectorDonorReport.do";
-                opt.setUrl(url);
-		
 		//TITLE
 		if (form.getShowTitle()==null){
 			opt.setShowTitle(true);
@@ -121,7 +105,7 @@ public class ShowSectorByDonorChart extends Action {
 		}else{
 			opt.setShowLabels(form.getShowLabel());
 		}
-		//HEIGHT		
+		//HEIGHT
 		if (form.getImageHeight() == null){
         	opt.setHeight(new Integer(400));
         }else{
@@ -129,15 +113,15 @@ public class ShowSectorByDonorChart extends Action {
         }
 		//WIDTH
 		if (form.getImageWidth() == null){
-        	opt.setWidth(new Integer(450));
+        	opt.setWidth(new Integer(420));
         }else{
         	opt.setWidth(form.getImageWidth());
         }
-                Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+                String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
                 opt.setSiteId(siteId);
                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);
-		return opt;		
+		return opt;
 	}
 
 }

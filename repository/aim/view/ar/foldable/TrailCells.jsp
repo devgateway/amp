@@ -17,20 +17,13 @@
 <bean:write name="reportData" property="name"/>
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
-<% if (reportData.getLevelDepth() < 3) { %>
-						<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
-					<% } else { %>	
-						<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
-					<% } %>&nbsp;</td>
-		
-
 <% if (reportData.getLevelDepth() < 3) { %>		
 		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;"  class="reportsBorderTD" nowrap>
 	<% } else { %>	
 		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd;border-bottom:1px solid white"  class="reportsBorderTD" nowrap>
 	<% } %>	
 	<c:if test="${!(reportData.name == reportMeta.name)}">		
-		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/TEMPLATE/ampTemplate/imagesSource/common/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
+		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
 	</c:if>		
 	<b> 
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
@@ -74,6 +67,4 @@
 		</c:if>
 		<c:set var="firstCell" value="${false}"></c:set>
 		</logic:iterate>
-		
-		
-		</tr>
+</tr>

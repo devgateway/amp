@@ -76,6 +76,7 @@ public class AddUserForm
     private String selectedCountryResidence;
     private boolean newsLetterRadio;
     private boolean membersProfile;
+    private Boolean pledger;
     private Collection contentLanguages;
     private Collection navigationLanguages;
     private String selectedLanguage;
@@ -576,6 +577,20 @@ public class AddUserForm
 
 	public void setTeamMemberId(Long teamMemberId) {
 		this.teamMemberId = teamMemberId;
+	}
+
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
+	}
+
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
 	}
 
 }

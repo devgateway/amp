@@ -9,10 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,16 +24,9 @@ import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.dataExchange.Exception.AmpImportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
-import org.digijava.module.dataExchange.form.ExportForm;
 import org.digijava.module.dataExchange.form.ImportForm;
-import org.digijava.module.dataExchange.form.ExportForm.LogStatus;
-import org.digijava.module.dataExchange.jaxb.ActivityType;
-import org.digijava.module.dataExchange.util.ExportHelper;
 import org.digijava.module.dataExchange.utils.ImportBuilder;
 import org.springframework.util.FileCopyUtils;
 
@@ -48,8 +37,7 @@ import org.springframework.util.FileCopyUtils;
 public class ImportAction extends MultiAction {
 
 	private static Logger logger = Logger.getLogger(ImportAction.class);
-	private Long siteId = new Long(0);
-	private String locale = "";
+	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.utils.MultiAction#modePrepare(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -58,16 +46,7 @@ public class ImportAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		String str = (String) session.getAttribute("ampAdmin");
-
-		if(!RequestUtils.isAdmin(response, session, request)){
-			return null;
-		}
-		siteId = RequestUtils.getSite(request).getId();
-		locale= RequestUtils.getNavigationLanguage(request).getCode();
-		if(request.getParameter("method")!=null) 
-			return downloadLog(mapping, form, request, response);
+		
 		return modeSelect(mapping, form, request, response);
 	}
 
@@ -85,31 +64,28 @@ public class ImportAction extends MultiAction {
 		session.setAttribute("DEfileUploaded", "false");
 		
 		ImportForm iform = (ImportForm) form;
+		
 		String[] langArray = {"en","fr","es"};
 		if(iform.getLanguages() == null || iform.getLanguages().length < 1) iform.setLanguages(langArray);
 		
-
-		String[] options = {TranslatorWorker.translateText("insert",locale, siteId),TranslatorWorker.translateText("update",locale, siteId),TranslatorWorker.translateText("insert&update",locale, siteId)};
+		String siteId = RequestUtils.getSite(request).getId().toString();
+		String locale= RequestUtils.getNavigationLanguage(request).getCode();
+		String[] options = {TranslatorWorker.translateText("update",locale, siteId),TranslatorWorker.translateText("overwrite",locale, siteId)};
 		if(iform.getOptions() == null || iform.getOptions().length < 1) iform.setOptions(options);
 		
 		if(request.getParameter("loadFile")!=null) {
 			session.setAttribute("DEfileUploaded", "true");
-			return modeLoadFileForLog(mapping, iform, request, response);
+			return modeLoadFile(mapping, iform, request, response);
 		}
 		//if(request.getParameter("import")!=null) return modeUploadedFile(mapping, iform, request, response);
 		if(request.getParameter("saveImport")!=null) 
 			return modeSaveImport(mapping, iform, request, response);
-
-		iform.setActivityStructure(ExportHelper.getActivityStruct("activity","activityStructure","activity",ActivityType.class,true));
-
+	
 		ActionErrors errors = (ActionErrors) session.getAttribute("DEimportErrors");
 		if(errors != null){
 			saveErrors(request, errors);
 			session.setAttribute("DEimportErrors", null);
 		}
-		
-		iform.setAllActivitiesFromDB(ActivityUtil.getAllActivitiesByKeys());
-		
 		return mapping.findForward("forward");
 	}
 
@@ -128,10 +104,13 @@ public class ImportAction extends MultiAction {
         return mapping.findForward("forward");
 	}
 
-	private ActionForward modeLoadFileForLog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
+	private ActionForward modeLoadFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
 		// TODO Auto-generated method stub
 		
 		HttpSession session = request.getSession();
+		String siteId = RequestUtils.getSite(request).getId().toString();
+		String locale= RequestUtils.getNavigationLanguage(request).getCode();
+
 		ImportForm deImportForm= (ImportForm) form;
 		
 		FormFile myFile = deImportForm.getUploadedFile();
@@ -143,117 +122,42 @@ public class ImportAction extends MultiAction {
         	}
         
         InputStream inputStream= new ByteArrayInputStream(fileData);
-      //  InputStream inputStream1= new ByteArrayInputStream(fileData);
+        InputStream inputStream1= new ByteArrayInputStream(fileData);
         
         OutputStream outputStream = new ByteArrayOutputStream(); 
-        FileCopyUtils.copy(inputStream, outputStream);
+        FileCopyUtils.copy(inputStream1, outputStream);
         
         TeamMember tm = null;
         if (session.getAttribute("currentMember") != null)
         	tm = (TeamMember) session.getAttribute("currentMember");
         
         ImportBuilder importBuilder = new ImportBuilder();
-
-        session.setAttribute("DEimportErrors", null);
-        String log = "";
-
-        try{
-        	importBuilder.checkXMLIntegrityNoChunks(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd", new ByteArrayInputStream(outputStream.toString().getBytes()), locale, siteId);
-        }catch(AmpImportException aie){
-        	
-        	log = aie.getMessage();
-        	ActionErrors errors = new ActionErrors();
-        	errors.add("title", new ActionError("error.aim.dataExchange.corruptedFile", log));
-        	request.setAttribute("loadFile",null);
-        	
-        	if (errors.size() > 0){
-        		session.setAttribute("DEimportErrors", errors);
-        	}
-        	
-        	return mapping.findForward("forwardError");
-        }
-        
-        //importBuilder.splitInChunks(inputStream1);
-        
-        importBuilder.setActivityStructure(deImportForm.getActivityStructure());
-        
-        if(deImportForm.getSelectedOptions() !=null && deImportForm.getSelectedOptions().length>0)
-        	importBuilder.setInsertUpdate(deImportForm.getSelectedOptions()[0]);
-        
-        if(deImportForm.getPrimaryKeys() != null)
-	        for (int i = 0; i < deImportForm.getPrimaryKeys().length; i++) {
-	        	importBuilder.getPrimaryKeys().add(deImportForm.getPrimaryKeys()[i]);
-	        	if(deImportForm.getPrimaryKeys()[i].compareTo("title") == 0)
-	        		importBuilder.setTitleKey(true);
-	        	else if(deImportForm.getPrimaryKeys()[i].compareTo("projectId") == 0)
-	        			importBuilder.setProjectIdKey(true);
-	        			else if(deImportForm.getPrimaryKeys()[i].compareTo("budgetCode") == 0)	
-	        					importBuilder.setBudgetCodeKey(true);
+        boolean importOk = false;
+		importOk = importBuilder.splitInChunks(inputStream);
+		if(!importOk) {
+			ActionErrors errors = new ActionErrors();
+			errors.add("title", new ActionError("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
+			request.setAttribute("loadFile",null);
+			
+			if (errors.size() > 0){
+				session.setAttribute("DEimportErrors", errors);
 			}
+			else session.setAttribute("DEimportErrors", null);
+			return mapping.findForward("forwardError");
+		}
+		
+		importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
         
-        importBuilder.setAllActivitiesFromDB(processActivitiesToTreeSet(deImportForm.getAllActivitiesFromDB(),importBuilder));
-        
-        importBuilder.splitInChunks(new ByteArrayInputStream(outputStream.toString().getBytes()));
-        importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd",locale, siteId);
         importBuilder.createActivityTree();
-
+        
         deImportForm.setActivityTree(importBuilder.getRoot());
+        
         session.setAttribute("DELogGenerated", importBuilder.printLogs());
         session.setAttribute("importBuilder", importBuilder);
         session.setAttribute("DEfileUploaded", "true");
-		
-        //importBuilder.saveActivities(request, tm);
-        return mapping.findForward("afterUploadFile");
+        
+		return mapping.findForward("afterUploadFile");
 	}
+
 	
-	private TreeSet<String> processActivitiesToTreeSet(List allActivitiesFromDB, ImportBuilder importBuilder) {
-		// TODO Auto-generated method stub
-		TreeSet<String> result = new TreeSet<String>();
-		String title = "";
-		String ampId = "";
-		String budgetCode = "";
-		
-		for (Iterator it = allActivitiesFromDB.iterator(); it.hasNext();) {
-			Object[] o = (Object[]) it.next();
-			title = (String)o[0];
-			ampId = (String)o[1];
-			budgetCode = (String)o[2];
-			String s= "";
-			if(importBuilder.isTitleKey())
-				s+=title+"###";
-			if(importBuilder.isProjectIdKey())
-				s+=ampId+"###";
-			if(importBuilder.isBudgetCodeKey())
-				s+=budgetCode+"###";
-			result.add(s);
-		}
-		return result;
-	}
-
-	public ActionForward downloadLog(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
-
-		ImportForm eForm = (ImportForm)form;
-
-		response.setContentType("text/html");
-		response.setHeader("content-disposition","attachment; filename=importLog.html"); // file name will generate by date
-		OutputStreamWriter outputStream =  null;
-		HttpSession session = request.getSession();
-		try {
-            outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
-			outputStream.write(session.getAttribute("DELogGenerated").toString());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
-		}
-
-
-		return null;
-
-	}
-
 }

@@ -16,24 +16,51 @@
 			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="MONTH_NAME" levelType="TimeMonths" type="Numeric" />
 		</Hierarchy>
 	</Dimension>
+	
+	<Dimension name="Regions">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="AMP_ACTIVITY_ID" caption="#Regions#">
+			<Table name="CACHED_V_REGIONS"/>
+			<Level name="Region" column="REGION">
+				<NameExpression>
+					<SQL dialect="oracle">
+						nvl(REGION,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level> 
+		</Hierarchy>
+	</Dimension>
+	
+	<Dimension name="Primary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="AMP_ACTIVITY_ID" caption="#Primary_Program#">
+			<Table name="CACHED_V_PRIMARY_PROGRAM"/>
+			<Level name="name" column="NAME" >
+				<NameExpression>
+					<SQL dialect="oracle">
+						nvl(CACHED_V_PRIMARY_PROGRAM.NAME,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Secundary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="AMP_ACTIVITY_ID" caption="#Secundary_Program#">
+			<Table name="CACHED_V_SECUNDARY_PROGRAM" />
+			<Level name="name" column="NAME">
+				<NameExpression>
+					<SQL dialect="oracle">
+						nvl(CACHED_V_SECUNDARY_PROGRAM.NAME,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
 	<Dimension name="Status">
 		<Hierarchy hasAll="true" allMemberCaption="#All_Status#" allMemberName="All Status" primaryKey="AMP_ACTIVITY_ID" caption="#Status#">
 			<Table name="CACHED_V_STATUS" />
 			<Level name="name" column="NAME"/>
 		</Hierarchy>
 	</Dimension>
-	<Dimension name="Sub-Sector">
-		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="AMP_ACTIVITY_ID" caption="#Sub-Sectors#">
-			<Table name="cached_v_sub_sector" />
-			<Level name="sub-sector" column="NAME">
-				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(NAME,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
+	
 	<Cube name="Donor Funding">
 		<Table name="CACHED_V_DONOR_FUNDING" >
 			<SQL dialect="oracle"><![CDATA[CACHED_V_DONOR_FUNDING.AMP_ACTIVITY_ID IN (@donorquery)]]> </SQL>
@@ -76,53 +103,12 @@
 				<Level name="Primary Sector" column="SECTORNAME" />
 			</Hierarchy>
 		</Dimension>
-		<Dimension name="Primary Program">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Primary_Program#">
-			<Level name="Primary Program" column="primary_program_name">
-				<NameExpression>
-					<SQL dialect="mysql">
-						COALESCE(primary_program_name,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	  </Dimension>
-	  <Dimension name="Secundary Program">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Secundary_Program#">
-			<Level name="Secundary Program" column="secundary_program_name">
-				<NameExpression>
-					<SQL dialect="mysql">
-						COALESCE(secundary_program_name,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
-	<Dimension name="National Program">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#National_Program#">
-			<Level name="National Program" column="national_program_name">
-				<NameExpression>
-					<SQL dialect="mysql">
-						COALESCE(national_program_name,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
-	<Dimension name="Regions">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="AMP_ACTIVITY_ID" caption="#Regions#">
-			<Level name="Region" column="REGION">
-				<NameExpression>
-					<SQL dialect="oracle">
-						nvl(REGION,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level> 
-		</Hierarchy>
-	</Dimension>
-		<DimensionUsage name="Sub-Sector" source="Sub-Sector" foreignKey="AMP_ACTIVITY_ID" />
+		
 		<DimensionUsage name="Activity" source="Activity" foreignKey="AMP_ACTIVITY_ID" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="AMP_FUND_DETAIL_ID"/>
+		<DimensionUsage name="Regions" source="Regions" foreignKey="AMP_ACTIVITY_ID"  />
+		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="AMP_ACTIVITY_ID"/>
+		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="AMP_ACTIVITY_ID"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="AMP_ACTIVITY_ID"/>
 		
 		<Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#">

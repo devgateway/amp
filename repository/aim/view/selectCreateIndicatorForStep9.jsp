@@ -46,14 +46,13 @@
                             {
                                 var valid = validateForm();
                                 if (valid == true) {
-                        			<digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
+                        <digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
                                     document.aimIndicatorForm.action = "<%=addNewInd%>";
                                     document.aimIndicatorForm.target = "_self";
                                     document.aimIndicatorForm.submit();				  
                                 }
                                 return valid;
                             }
-
                             function unload(){}
 
                             function validateForm() {
@@ -70,7 +69,6 @@
                                 }
                                 return true;
                             }
-                            
                             function isSearchKeyGiven()
                             {
                                 if(trim(document.aimIndicatorForm.searchkey.value).length == 0)
@@ -115,7 +113,7 @@
                     -->
 </script>
 
-<digi:form action="/selectCreateIndicators.do" type="aimIndicatorForm" name="aimIndicatorFormIndicator">
+<digi:form action="/selectCreateIndicators.do">
     <digi:errors/>
     <html:hidden property="activityId" />
     <html:hidden property="addswitch" />
@@ -145,10 +143,10 @@
                                                         <tr>
                                                             <td><digi:trn key="aim:selsector">Select Sector</digi:trn></td>
                                                             <td>
-                                                                <html:select property="sectorId" styleClass="inp-text">
+                                                                <html:select property="sectorName" styleClass="inp-text">
                                                                     <html:option value="-1">-<digi:trn key="aim:selsector">Select sector</digi:trn>-</html:option>
                                                                     <c:if test="${!empty aimIndicatorForm.allSectors}">
-                                                                        <html:optionsCollection name="aimIndicatorForm" property="allSectors" value="ampSectorId" label="name" />
+                                                                        <html:optionsCollection name="aimIndicatorForm" property="allSectors" value="name" label="name" />						
                                                                     </c:if>
                                                                 </html:select>	
                                                             </td>

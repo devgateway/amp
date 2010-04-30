@@ -598,27 +598,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
                               						</td>
 											</feature:display>
-				                            		
-				                            		
-				                            		  <td bgcolor="#999999"><div align="center" style="font-weight:bold;color:black;">
-
-			                  			              	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<digi:trn >Total Estimated Cost</digi:trn>
-
-													  </div>
-
-			                     		         	</td>	
-												   <td bgcolor="#999999"><div align="center" style="font-weight:bold;color:black;">
-			                  			              	<div align="center">
-
-																<FONT color="blue">*</FONT>
-																			<digi:trn>Uncommitted balance</digi:trn>
-															  </div>
-
-			                     		         	</td>
 				                            		</tr>
 
             				                		<logic:empty name="aimMonthlyInfoForm" property="monthlyInfoList" >
@@ -717,12 +696,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		</td>
 	</feature:display>
-	 																 <td><div align="right">
-                   												     <aim:formatNumber value="${monthlyComparison.totalCost}" />
-                      </div></td>
-                      <td><div align="right">
-                        <aim:formatNumber value="${monthlyComparison.uncommittedBalance}" />
-                      </div></td>
 																	</tr>
 
 																</logic:iterate>
@@ -815,17 +788,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																	</div>
 
-													  </td>
-                                                       </feature:display>
- <td><div align="right"> <span class="note">
-                    <aim:formatNumber value="${aimMonthlyInfoForm.totalCost}" />
-                
-                    </span> </div></td>
-                      <td><div align="right"> <span class="note">
-                    <aim:formatNumber value="${aimMonthlyInfoForm.uncommittedBalance}" />
-                
-                    </span> </div></td>
-</tr>
+													  </td></tr>
+                                                                                                   </feature:display>
+
 															</logic:notEmpty>
 
 		                       					</table>
@@ -842,7 +807,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 															<TD width="15">
 
-																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 															</TD>
 
@@ -886,7 +851,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 															<TD width="15">
 
-																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 															</TD>
 

@@ -8,7 +8,6 @@ public class AllWorkspaceManagerTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(WorkspaceDataTest.class);
-		suite.addTestSuite(WorkspaceActionTest.class);
 		return suite;
 	}
 }

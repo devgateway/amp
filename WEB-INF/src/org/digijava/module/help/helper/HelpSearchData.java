@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class HelpSearchData {
 
-
+	
 	private String titleTrnKey=null;
 	private String topicKey;
 	private String body;
@@ -19,6 +19,7 @@ public class HelpSearchData {
 	public void setBodyKey(String bodyKey) {
 		this.bodyKey = bodyKey;
 	}
+	
 	public String getTitleTrnKey() {
 		return titleTrnKey;
 	}

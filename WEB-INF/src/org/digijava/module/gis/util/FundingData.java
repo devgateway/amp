@@ -1,8 +1,5 @@
 package org.digijava.module.gis.util;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 /**
  * <p>Title: </p>
  *
@@ -17,57 +14,46 @@ import java.util.List;
  */
 public class FundingData {
 
-    private BigDecimal commitment;
-    private BigDecimal disbursement;
-    private BigDecimal expenditure;
-
-    List activityLocationFundingList;
+    private Double commitment;
+    private Double disbursement;
+    private Double expenditure;
 
 
 
     public FundingData() {
-        this.commitment = new BigDecimal(0);
-        this.disbursement = new BigDecimal(0);
-        this.expenditure = new BigDecimal(0);
+        this.commitment = new Double(0);
+        this.disbursement = new Double(0);
+        this.expenditure = new Double(0);
 
     }
 
-    public FundingData(BigDecimal commitment, BigDecimal disbursement, BigDecimal expenditure) {
+    public FundingData(Double commitment, Double disbursement, Double expenditure) {
         this.commitment = commitment;
         this.disbursement = disbursement;
         this.expenditure = expenditure;
     }
 
-    public BigDecimal getCommitment() {
+    public Double getCommitment() {
         return commitment;
     }
 
-    public BigDecimal getDisbursement() {
+    public Double getDisbursement() {
         return disbursement;
     }
 
-    public BigDecimal getExpenditure() {
+    public Double getExpenditure() {
         return expenditure;
     }
 
-    public List getActivityLocationFundingList() {
-        return activityLocationFundingList;
-    }
-
-    public void setCommitment(BigDecimal commitment) {
+    public void setCommitment(Double commitment) {
         this.commitment = commitment;
     }
 
-    public void setDisbursement(BigDecimal disbursement) {
+    public void setDisbursement(Double disbursement) {
         this.disbursement = disbursement;
     }
 
-    public void setExpenditure(BigDecimal expenditure) {
+    public void setExpenditure(Double expenditure) {
         this.expenditure = expenditure;
     }
-
-    public void setActivityLocationFundingList(List activityLocationFundingList) {
-        this.activityLocationFundingList = activityLocationFundingList;
-    }
-
 }

@@ -12,11 +12,13 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <digi:instance property="aimEditActivityForm" />
-								<tr><td class="separator1" title="<digi:trn key="aim:OrganisationResponsible">The responsible Organization</digi:trn>">
-										<digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn>
+								<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:OrganisationResponsible">The responsible Organization</digi:trn>">
+										<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b></a>
 									</td></tr>
-									<tr><td>&nbsp;
-										
+									<tr><td bgColor=#f4f4f2>
+										&nbsp;
 									</td></tr>	
 																
 									<field:display name="Responsible Organization" feature="Responsible Organization">
@@ -40,7 +42,7 @@
 														  
 																<field:display name="Responsible Organization Department/Division"  feature="Responsible Organization">
 															<td width="49%">
-																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.respOrgToInfo(${repOrganisation.ampOrgId})"></html:text>
+																	<digi:trn>Department/Division: </digi:trn><html:text size="30" property="agencies.respOrgToInfo(${repOrganisation.ampOrgId})"></html:text>
 															</td>
 														</field:display>
 														</tr>

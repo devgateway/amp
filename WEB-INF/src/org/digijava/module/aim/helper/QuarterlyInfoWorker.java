@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -79,7 +78,7 @@ public class QuarterlyInfoWorker {
 				
 				if ( CategoryManagerUtil.equalsCategoryValue(type, CategoryConstants.MTEF_PROJECTION_PROJECTION) ) {
 				
-					BigDecimal transactionAmount 	= (BigDecimal) row[0];
+					Double transactionAmount 	= (Double) row[0];
 					
 					Date transactionDate 		= (Date) row[1];
 				
@@ -109,7 +108,7 @@ public class QuarterlyInfoWorker {
 					double fromCurrencyRatio	= Util.getExchange(currencyObject.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
 					double toCurrencyRatio	= Util.getExchange(fp.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
 					
-					BigDecimal convertedAmt = CurrencyWorker.convert1(transactionAmount, fromCurrencyRatio,toCurrencyRatio);
+					Double convertedAmt = CurrencyWorker.convertToDouble(transactionAmount, fromCurrencyRatio,toCurrencyRatio);
 					
 					amounts.add(convertedAmt);
 				}
@@ -145,7 +144,7 @@ public class QuarterlyInfoWorker {
 			iter = c.iterator();
 			while (iter.hasNext()) {
 				Object[] row = (Object[]) iter.next();
-				BigDecimal transactionAmount = (BigDecimal) row[0];
+				Double transactionAmount = (Double) row[0];
 				Date transactionDate = (Date) row[1];
 				// modified by priyajith
 				AmpCurrency curr = (AmpCurrency) row[2];
@@ -155,9 +154,9 @@ public class QuarterlyInfoWorker {
 				fromCurrency = Util.getExchange(curr.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
 				targetCurrency = Util.getExchange(fp.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
 				QuarterlyInfo quarterlyInfo = new QuarterlyInfo();
-				BigDecimal tmpAmt = new BigDecimal(0);
+				double tmpAmt = 0.0;
 				if (transactionAmount != null)
-					tmpAmt = transactionAmount;
+					tmpAmt = transactionAmount.doubleValue();
 				
 				if (fixedRate!=null && fixedRate.doubleValue()!=1
 						&& selCurrency !=null 
@@ -238,7 +237,7 @@ public class QuarterlyInfoWorker {
 		while (iter1.hasNext()) {
 			b = false;
 			Object[] row = (Object[]) iter1.next();
-			BigDecimal transactionAmount = (BigDecimal) row[0];
+			Double transactionAmount = (Double) row[0];
 			Date transactionDate = (Date) row[1];
 			// modified by priyajith
 			AmpCurrency curr = (AmpCurrency) row[2];
@@ -246,9 +245,9 @@ public class QuarterlyInfoWorker {
 			fromCurrency = Util.getExchange(curr.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
 			double targetCurrency = Util.getExchange(selCurrency,new java.sql.Date(transactionDate.getTime()));	
 			//end			
-			BigDecimal tmpAmt = new BigDecimal(0);
+			double tmpAmt = 0.0;
 			if (transactionAmount != null)
-				tmpAmt = transactionAmount;
+				tmpAmt = transactionAmount.doubleValue();
 			
 			if (fixedRate!=null && fixedRate.doubleValue()!=1
 					&& selCurrency !=null 

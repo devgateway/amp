@@ -29,16 +29,6 @@ public class AmpDEImportLog {
 	private String key = null;
 	private Integer counter = null;
 	
-	private boolean existingActivity = false;
-	
-	public boolean isExistingActivity() {
-		return existingActivity;
-	}
-
-	public void setExistingActivity(boolean existingActivity) {
-		this.existingActivity = existingActivity;
-	}
-
 	private Activities activities = null;
 	
 

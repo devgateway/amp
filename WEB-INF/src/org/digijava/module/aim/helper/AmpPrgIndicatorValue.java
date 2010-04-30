@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.digijava.module.aim.dbentity.AmpLocation;
 
-
 public class AmpPrgIndicatorValue implements Serializable
 {
 	//TODO INDIC rename this bean to IndicatorValue - remove Prg and AMP from name.
@@ -13,15 +12,6 @@ public class AmpPrgIndicatorValue implements Serializable
 	private int valueType;
 	private Double valAmount;
 	private AmpLocation location;
-        private Long sourceId;
-
-        public Long getSourceId() {
-            return sourceId;
-        }
-
-        public void setSourceId(Long sourceId) {
-            this.sourceId = sourceId;
-        }
 
 	/**
 	 * @return Returns the indicatorValueId.

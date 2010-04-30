@@ -81,8 +81,7 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	 * @see org.dgfoundation.amp.visibility.AmpObjectVisibility#getTemplate()
 	 */
 	public AmpTemplatesVisibility getTemplate() {
-		if (parent instanceof AmpTemplatesVisibility) return (AmpTemplatesVisibility) parent;
-		return parent.getTemplate();
+		return (AmpTemplatesVisibility) parent;
 	}
 
 	/**

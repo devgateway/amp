@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.helper.ActivityItem;
 
 public class NpdForm extends ActionForm {
 
@@ -32,17 +31,6 @@ public class NpdForm extends ActionForm {
 	private Collection allThemes;
 	private String defaultProgram;
 
-	private Collection<ActivityItem> activities;
-	private String actualSum;
-	private String actualDisbSum;
-	private String plannedCommSum;
-	
-	//activities part
-	private String statusId;
-	private String startYear;
-	private String endYear;
-	private String donorIds;
-	
 	public Collection getAllThemes() {
 		return allThemes;
 	}
@@ -187,67 +175,4 @@ public class NpdForm extends ActionForm {
         this.defCurrency = defCurrency;
     }
 
-	public Collection<ActivityItem> getActivities() {
-		return activities;
-	}
-
-	public void setActivities(Collection<ActivityItem> activities) {
-		this.activities = activities;
-	}
-
-	public String getActualSum() {
-		return actualSum;
-	}
-
-	public void setActualSum(String actualSum) {
-		this.actualSum = actualSum;
-	}
-
-	public String getActualDisbSum() {
-		return actualDisbSum;
-	}
-
-	public void setActualDisbSum(String actualDisbSum) {
-		this.actualDisbSum = actualDisbSum;
-	}
-
-	public String getPlannedCommSum() {
-		return plannedCommSum;
-	}
-
-	public void setPlannedCommSum(String plannedCommSum) {
-		this.plannedCommSum = plannedCommSum;
-	}
-
-	public String getStatusId() {
-		return statusId;
-	}
-
-	public void setStatusId(String statusId) {
-		this.statusId = statusId;
-	}
-
-	public String getStartYear() {
-		return startYear;
-	}
-
-	public void setStartYear(String startYear) {
-		this.startYear = startYear;
-	}
-
-	public String getEndYear() {
-		return endYear;
-	}
-
-	public void setEndYear(String endYear) {
-		this.endYear = endYear;
-	}
-
-	public String getDonorIds() {
-		return donorIds;
-	}
-
-	public void setDonorIds(String donorIds) {
-		this.donorIds = donorIds;
-	}
 }

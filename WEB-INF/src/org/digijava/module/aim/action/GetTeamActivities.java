@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -31,16 +30,12 @@ public class GetTeamActivities
         extends Action {
 
     private static Logger logger = Logger.getLogger(GetTeamActivities.class);
-    
-    public static final String ARCHIVED_PARAMETER	= "selectedSubTab";
-    public static final String ARCHIVED_SUB_TAB		= "6";
-    public static final String UNARCHIVED_SUB_TAB	= "5";
-    public static final String ARCHIVE_COMMAND		= "archive";
-    public static final String UNARCHIVE_COMMAND	= "unarchive";
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
         TeamActivitiesForm taForm = (TeamActivitiesForm) form;
+
         Long id = null;
 
         try {
@@ -135,31 +130,15 @@ public class GetTeamActivities
                     public int compare(Object o1, Object o2) {
                         AmpActivity r1 = (AmpActivity) o1;
                         AmpActivity r2 = (AmpActivity) o2;
-                        if(r1.getDonors() !=null && r2.getDonors()!=null){
-                        	return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
-                        }else if(r1.getDonors() !=null && r2.getDonors()==null){
-                        	return r1.getDonors().trim().toLowerCase().compareTo("");                        	
-                        }else if(r1.getDonors() ==null && r2.getDonors()!=null){
-                        	return r2.getDonors().trim().toLowerCase().compareTo("");
-                        }else{
-                        	return 0;
-                        }                        
+                        
+                        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
                     }
                 };
-                
                 Comparator racronymComp = new Comparator() {
                     public int compare(Object o1, Object o2) {
                     	AmpActivity r1 = (AmpActivity) o1;
                     	AmpActivity r2 = (AmpActivity) o2;
-                    	if(r1.getDonors() !=null && r2.getDonors()!=null){
-                        	return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
-                        }else if(r1.getDonors() !=null && r2.getDonors()==null){
-                        	return -(r1.getDonors().trim().toLowerCase().compareTo(""));                        	
-                        }else if(r1.getDonors() ==null && r2.getDonors()!=null){
-                        	return -(r2.getDonors().trim().toLowerCase().compareTo(""));
-                        }else{
-                        	return 0;
-                        }
+                        return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
                     }
                 };
 
@@ -185,8 +164,6 @@ public class GetTeamActivities
                     }
                 }
                 taForm.setAllActivities(temp);
-                
-                decideArchiveMode(mapping, taForm, request, response);
 
                 int totActivities = taForm.getAllActivities().size();
                 int stIndex = ((page - 1) * numRecords) + 1;
@@ -228,49 +205,4 @@ public class GetTeamActivities
 
         return null;
     }
-    
-    private static void decideArchiveMode(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) {
-    	
-    	TeamActivitiesForm tForm	= (TeamActivitiesForm) form;
-    	String showArchived			= request.getParameter("showArchivedActivities");
-    	String archiveComand		= tForm.getRemoveActivity();
-    	Boolean showArchivedActivities	= null;
-    	tForm.setRemoveActivity(null);
-    	
-    	if ( archiveComand != null ) {
-    		if ( ARCHIVE_COMMAND.equals(archiveComand) )
-    			showArchivedActivities	= false;
-    		if ( UNARCHIVE_COMMAND.equals(archiveComand) )
-    			showArchivedActivities	= true;
-    	}
-    	if ( showArchivedActivities == null && showArchived != null ) 
-    		showArchivedActivities	= Boolean.parseBoolean(showArchived);
-    	
-        if ( showArchivedActivities != null ) {
-        	if ( !showArchivedActivities ) {
-        		request.setAttribute(ARCHIVED_PARAMETER, UNARCHIVED_SUB_TAB);
-        	}
-        	else
-        		request.setAttribute(ARCHIVED_PARAMETER, ARCHIVED_SUB_TAB);
-        	GetTeamActivities.filterArchivedActivities(tForm.getAllActivities(), showArchivedActivities);
-        }
-    }
-    
-    private static void filterArchivedActivities ( Collection activities, boolean archived) {
-    	if (activities != null) {
-    		Iterator<Object> iter	= activities.iterator();
-    		while ( iter.hasNext() ) {
-    			AmpActivity activity	= (AmpActivity) iter.next();
-    			Boolean actArchived		= activity.getArchived();
-    			if (actArchived == null)
-    				actArchived = false;
-    			if ( actArchived != archived ) {
-    				iter.remove();
-    			}
-    		}
-    	}
-    }
 }
-
-
-

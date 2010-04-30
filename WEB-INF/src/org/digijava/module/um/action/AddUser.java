@@ -43,18 +43,14 @@ public class AddUser extends Action {
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
 
-		HttpSession session = request.getSession();
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}
-		
 		AddUserForm registerForm = (AddUserForm) form;
 
 		try {
 			
 			/**
 			 * Test if user is administrator
-			 */			
+			 */
+			HttpSession session		= request.getSession();
 			String ampAdmin			= (String)session.getAttribute("ampAdmin"); 
 			if ( ampAdmin == null || ampAdmin.equals("no") ) {
 				return mapping.findForward("index");
@@ -64,7 +60,6 @@ public class AddUser extends Action {
 			logger.debug("actionFlag: " + actionFlag);
 
 			if ("".equals(actionFlag) || actionFlag == null) {
-					registerForm.setErrors(null);
 
 					// set country resident data
 

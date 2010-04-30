@@ -82,7 +82,7 @@ public class ViewFinancialOverview extends TilesAction {
 									: "null"));
 				Site site = RequestUtils.getSite(request);
 				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				Long siteId = site.getId();
+				String siteId = site.getId().toString();
 				String locale = navigationLanguage.getCode();
 				
 				if (modality != null)

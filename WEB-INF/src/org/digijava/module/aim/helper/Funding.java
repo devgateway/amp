@@ -1,9 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -25,7 +23,7 @@ public class Funding implements Serializable
 	private String orgFundingId;
 	private String signatureDate;
 	//private AmpModality modality;
-	private Collection<FundingDetail> fundingDetails;	// Collection of Funding Details
+	private Collection fundingDetails;	// Collection of Funding Details
 	private Collection<MTEFProjection> mtefProjections;
    	private String currentFunding;
    	private String propStartDate;
@@ -46,8 +44,6 @@ public class Funding implements Serializable
 	private String subtotalExpenditures;
 	private String subtotalActualDisbursementsOrders;
 	private String undisbursementbalance;
-	
-	private Long groupVersionedFunding;
    		
 	public AmpCategoryValue getTypeOfAssistance() {
 		return typeOfAssistance;
@@ -286,57 +282,6 @@ public class Funding implements Serializable
 
 	public void setFundingStatus(AmpCategoryValue fundingStatus) {
 		this.fundingStatus = fundingStatus;
-	}
-	public Collection<FundingDetail> getCommitmentsDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> commitments = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : fundingDetails){
-				if(detail.getTransactionType() == Constants.COMMITMENT) commitments.add(detail);
-			}
-			return commitments;
-		}
-		return fundingDetails;
-	}
-	public Collection<FundingDetail> getDisbursementsDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> disbursements = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : fundingDetails){
-				if(detail.getTransactionType() == Constants.DISBURSEMENT) disbursements.add(detail);
-			}
-			return disbursements;
-		}
-		return fundingDetails;
-	}
-	
-	public Collection<FundingDetail> getDisbursementOrdersDetails() {
-		
-		if(fundingDetails != null){
-			List<FundingDetail> disbursementOrder = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : fundingDetails){
-				if(detail.getTransactionType() == Constants.DISBURSEMENT_ORDER) disbursementOrder.add(detail);
-			}
-			return disbursementOrder;
-		}
-		return fundingDetails;
-	}
-
-	public Collection<FundingDetail> getExpendituresDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> expenditures = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : fundingDetails){
-				if(detail.getTransactionType() == Constants.EXPENDITURE) expenditures.add(detail);
-			}
-			return expenditures;
-		}
-		return fundingDetails;
-	}
-
-	public Long getGroupVersionedFunding() {
-		return groupVersionedFunding;
-	}
-
-	public void setGroupVersionedFunding(Long groupVersionedFunding) {
-		this.groupVersionedFunding = groupVersionedFunding;
 	}
 	
 }

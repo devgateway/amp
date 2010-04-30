@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<jsp:include page="addActivityStep2Popin.jsp" flush="true" />
+<jsp:include page="addSectors.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -75,30 +75,23 @@ function validate(field) {
 }
 }
 
-
 function selectLocation() {
-	var params="levelId="+document.getElementsByName("location.levelId")[0].value;
-	params+="&implemLocationLevel="+document.getElementsByName("location.implemLocationLevel")[0].value;
-	params+="&edit=false";
-	params+="&showLocLevelSelect=false";
-    params+="&implemLevel=" + document.getElementsByName("location.levelId")[0].value;
-    params+="&showLocLevelSelect=false";
-    params+="&implemLevel=" + document.getElementsByName("location.levelId")[0].value;
-	myAddLocation(params);
+  openNewWindow(600, 500);
+  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=false" />
+  document.aimEditActivityForm.action = "<%= selectLoc %>";
+  document.aimEditActivityForm.target = popupPointer.name;
+  document.aimEditActivityForm.submit();
 }
 
 
  function addSectors(editAct,configId) {
-	myAddSectors("edit=true&configId="+configId);	  
-}
-
-function removeSelSectors(configId) {
-	var flag = validate(2);
-    if (flag == false) return false;
-    document.aimEditActivityForm.action = "/addActivity.do?remSectors=true&configId="+configId;
-    document.aimEditActivityForm.target = "_self";
-    document.aimEditActivityForm.submit();
-    return true;
+/*  openNewWindow(600, 450);
+  document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
+  document.aimEditActivityForm.target = popupPointer.name;
+  document.aimEditActivityForm.submit();
+*/ 
+     //alert("configId="+configId);
+	 myAddSectors("edit=true&configId="+configId);	  
 }
 
 function resetAll(){
@@ -123,9 +116,10 @@ function removeSelLocations(){
 function removeAllLocations(){
   try{
   
+  	//var checkedItems = document.getElementsById("selLocs");
   	var checkedItems = document.aimEditActivityForm.selLocs;
   	if(checkedItems.length > 0){
-	  for(a=0;a<checkedItems.length;a++){
+	  	for(a=0;a<checkedItems.length;a++){
 	  	checkedItems[a].checked = true;
 	  }
 	  removeSelLocations();
@@ -142,6 +136,11 @@ function removeAllLocations(){
   
   }
   
+  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
+  document.aimEditActivityForm.action = "<%= remLocs %>";
+  document.aimEditActivityForm.target = "_self"
+  document.aimEditActivityForm.submit();
+  return true;
 }
 
 function locationLevelChanged(){
@@ -199,48 +198,6 @@ function popupwin(){
   winpopup.document.write('</font>\n');
   winpopup.document.write('</body>\n</html>\n');
   winpopup.document.close();
-}
-
-function dividePercentages(config){
-	var i;
-	var j;
-	var conf=document.getElementById(config+'Config');
-   	if (conf != null){
-   		var rows=conf.getElementsByTagName('tr');
-   		var qty=rows.length;
-   		var percent= ""+100/qty;
-   		if (percent.indexOf('.')!=-1){
-   			var temp = percent.substring(0,percent.indexOf('.'));
-       		percent = temp + percent.substr(percent.indexOf('.'),4);
-   		}
-   		var rest = 0;	
-   		var lastI = 0;
-   		var lastJ = 0;
-    	for ( i = 0; i < rows.length; i++) {
-    		var inputs = rows[i].getElementsByTagName('input');
-			for ( j = 0; j < inputs.length; j++) {
-				if (inputs[j].type == 'text'){
-	    			inputs[j].value = percent;
-			    	//inputs[j].readOnly = true;
-			    	//inputs[j].style.backgroundColor= '#DDDDDD';
-			    	rest = rest + (percent*1);
-			    	lastI = i;
-			    	lastJ = j;
-		    	}
-			}
-		}
-		var restStr = ""+rest;
-		restStr = restStr.substr(0,restStr.indexOf('.')+4);
-		var tempNum = 100 - (restStr*1);
-		restStr = ""+tempNum;
-		var lastValue = (tempNum*1) + (percent*1)
-		var lastValueStr = ""+lastValue;
-    	if (lastValueStr.indexOf('.')!=-1){
-    		temp = lastValueStr.substring(0,lastValueStr.indexOf('.'));
-    		lastValueStr = temp + lastValueStr.substr(lastValueStr.indexOf('.'),4);
-    	}
-    	rows[lastI].getElementsByTagName('input')[lastJ].value = lastValueStr;
-   	}
 }
 
 function validateSectorPercentage(){
@@ -347,10 +304,7 @@ function validateSectorPercentage(){
                 sum+=parseFloat(val);
             }
         }
-        var sumStr = ""+sum;
-    	sumStr = sumStr.substr(0,sumStr.indexOf('.')+4);
-    	sum = sumStr*1; //this line were added to cut the result of sum, because there is a bug in the javascript calculation (45.45 + 9.09 = 54.540000000000006)
-    	         
+                 
         if (sum!=100&&sum>0) {
             if(i==1){
                sum_prim_sector=true;    
@@ -480,13 +434,11 @@ function validateLocationPercentage(){
     if(val=="") {
     	val=0;
     }
-   	sum = sum + (val*1);
+    sum = sum + parseFloat(val);
     i = i + 1;
   }
-	var sumStr = ""+sum;
-	sumStr = sumStr.substr(0,sumStr.indexOf('.')+4);
-	sum = sumStr*1; //this line were added to cut the result of sum, because there is a bug in the javascript calculation (45.45 + 9.09 = 54.540000000000006)
-	
+
+
 	if (checkoutSum){
 	 	if (sum!=100){
 	 		 alert("${errMsgSumPercentage}");
@@ -513,7 +465,7 @@ function fnChk(frmContrl, f){
   </digi:trn>
   </c:set>
   
-  if (isNaN(frmContrl.value) || frmContrl.value<0 ) {
+  if (isNaN(frmContrl.value)) {
     alert("${errMsgAddSectorNumericValue}");
     frmContrl.value = "";
     //frmContrl.focus();
@@ -548,12 +500,19 @@ function fnChk(frmContrl, f){
   return true;
 }
 
-function addProgram(programType,programSettingsId) {	
-	if(programSettingsId!=undefined){
-		myAddProgram("edit=true&programType="+programType+"&programSettingsId="+programSettingsId);	
-	}else{
-		myAddProgram("edit=true&programType="+programType);
-	}
+function addProgram(programType) {
+		
+		openNewRsWindow(750, 550);
+		<digi:context name="taddProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+
+                var url="<%= taddProgram %>&programType="+programType;
+         //       alert(programType + " "+url);
+	  	document.aimEditActivityForm.action =url ;
+
+		document.aimEditActivityForm.target = popupPointer.name;
+
+		document.aimEditActivityForm.submit();
+
 }
 
 
@@ -589,7 +548,7 @@ function remProgram(programType) {
 			}
 		}		
 }
---> 
+-->
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -658,8 +617,8 @@ function remProgram(programType) {
       <td width="100%" vAlign="top" align="left" class=r-dotted-lg>
         <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
           <tr>
-            <td class=r-dotted-lg width="10">&nbsp;
-            
+            <td class=r-dotted-lg width="10">
+            &nbsp;
             </td>
             <td align=left vAlign=top>
               <table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
@@ -668,7 +627,7 @@ function remProgram(programType) {
                     <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
                       <tr>
                         <td>
-                          <span class=crumb style="visibility: hidden">
+                          <span class=crumb>
                             <c:if test="${aimEditActivityForm.pageId == 0}">
                               <c:set property="translation" var="trans" >
                                 <digi:trn key="aim:clickToViewAdmin">
@@ -787,7 +746,7 @@ function remProgram(programType) {
                 </tr>
                 <tr>
                   <td>
-                    <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top">
+                    <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
                       <tr>
                         <td height=16 vAlign=center width="100%">
                           <span class=subtitle-blue>
@@ -833,11 +792,33 @@ function remProgram(programType) {
                   <td>
                     <table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
                       <tr>
-                        <td width="100%" vAlign="top">
+                        <td width="75%" vAlign="top">
                           <table cellPadding=0 cellSpacing=0 width="100%">
                           	<tr>
                           		<td>
                           			<table width="100%">
+                          				<tr>
+                          				    <td width="100%">
+				                                <table cellPadding=0 cellSpacing=0 width="100%" border=0>
+				                                  <tr>
+				                                    <td width="13" height="20" background="module/aim/images/left-side.gif">
+				                                    &nbsp
+				                                    </td>
+				                                    <td vAlign="center" align="center" class="textalb" height="20" bgcolor="#006699">
+                                                                   <digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
+                                                                         ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                 <digi:trn key="aim:activity:LocationSectors">
+                                                                                                     Location | Sectors
+                                                                                                 </digi:trn>
+				                                   		
+				                                    </td>
+				                                    <td width="13" height="20" background="module/aim/images/right-side.gif">
+				                                    &nbsp
+				                                    </td>
+				                                  </tr>
+			                                	</table>
+			                              </td>
+			                            </tr>
 			                            <feature:display name="Location" module="Project ID and Planning">
 			                              <tr>
 			                                <td width="100%" bgcolor="#f4f4f2">
@@ -847,29 +828,29 @@ function remProgram(programType) {
 			                              </tr>
 			                            </feature:display>
 			                            <tr>
-			                              <td>&nbsp;
-			                              
+			                              <td>
+			                              &nbsp;
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Sectors" module="Project ID and Planning">
 			                            	<jsp:include page="addActivityStep2Sector.jsp"/>
 										</feature:display>
 			                            <tr>
-			                              <td>&nbsp;
-			                              
+			                              <td>
+			                              &nbsp;
 			                              </td>
 			                            </tr>                            
 			                            <tr>
-			                              <td>&nbsp;
-			                              
+			                              <td>
+			                              &nbsp;
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Program" module="Program">
 			                              <jsp:include page="addActivityStep2Program.jsp"/>
 			                            </feature:display>
 			                            <tr>
-			                              <td>&nbsp;
-			                              
+			                              <td>
+			                              &nbsp;
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues">
@@ -882,8 +863,8 @@ function remProgram(programType) {
 
 										<feature:display name="Step2" module="Custom Fields">
 				                            <tr>
-				                              <td>&nbsp;
-				                              
+				                              <td>
+				                              &nbsp;
 				                              </td>
 				                            </tr>			                            
 			                            	<tr>
@@ -949,8 +930,8 @@ function remProgram(programType) {
       </td>
     </tr>
     <tr>
-      <td>&nbsp;
-      
+      <td>
+      &nbsp;
       </td>
     </tr>
   </table>

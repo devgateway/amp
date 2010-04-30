@@ -5,7 +5,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -182,7 +181,7 @@ public class ParisIndicatorReport extends Action {
                 }
                 if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
                     svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
-                        svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId(), RequestUtils.getNavigationLanguage(request).getCode()));
+                        svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId().toString(), RequestUtils.getNavigationLanguage(request).getCode()));
                     svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
                     if(svForm.getPrint() != null && svForm.getPrint().equals("true")){
                     	svForm.setPrint("false");
@@ -203,7 +202,7 @@ public class ParisIndicatorReport extends Action {
                 Collection spCol = DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(), svForm.getDonor(),
                     svForm.getOrgGroup(), status, svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(),
                     svForm.getCurrency(), svForm.getTermAssist(), financingInstrument,
-                    svForm.getSector(), svForm.getCalendar(), RequestUtils.getSite(request).getId(), RequestUtils.getNavigationLanguage(request).getCode());
+                    svForm.getSector(), svForm.getCalendar(), RequestUtils.getSite(request).getId().toString(), RequestUtils.getNavigationLanguage(request).getCode());
 
                 svForm.setDonorsColl(spCol);
 
@@ -212,10 +211,10 @@ public class ParisIndicatorReport extends Action {
                         int dnSize = svForm.getDonorsColl().size() - 1;
                         int lastIndex = Integer.parseInt(svForm.getNumColsCalculated()) - 1;
                         int numCols = svForm.getCloseYear().intValue() - svForm.getStartYear().intValue() + 1;
-                        String donor[] = {TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Less than 10%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))
-                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 10 to 50%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))
-                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 50 to 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))
-                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("More than 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))};
+                        String donor[] = {TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Less than 10%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))
+                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 10 to 50%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))
+                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 50 to 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))
+                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("More than 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))};
                         
                         String dnIndc5Row[] = null;
                         int answers[] = new int[numCols];
@@ -230,9 +229,9 @@ public class ParisIndicatorReport extends Action {
 
                         // creating header row
                         if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
-                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using all three partner's PFM procedures", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()));
+                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using all three partner's PFM procedures", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()));
                         else
-                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using national procurement systems", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()));
+                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using national procurement systems", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()));
 
                         for (; j < numCols; j++)
                             dnIndc5Row[j + 1] = Integer.toString(svForm.getStartYear().intValue() + j);
@@ -244,27 +243,27 @@ public class ParisIndicatorReport extends Action {
                             itr1 = svForm.getDonorsColl().iterator();
                             while (itr1.hasNext()) {
                                 ParisIndicator pi = (ParisIndicator) itr1.next();
-                                if (TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId())).equalsIgnoreCase(pi.getDonor()))
+                                if (TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString())).equalsIgnoreCase(pi.getDonor()))
                                     continue;
                                 j = 0;
                                 itr2 = pi.getAnswers().iterator();
                                 while (itr2.hasNext()) {
-                                    BigDecimal[] tempBD = ((BigDecimal[]) itr2.next());
+                                    temp = (double[]) itr2.next();
                                     switch (cntr) {
                                         case 0:
-                                            if (tempBD[lastIndex].doubleValue() < 10)
+                                            if (temp[lastIndex] < 10)
                                                 answers[j] += 1;
                                             break;
                                         case 1:
-                                            if (tempBD[lastIndex].doubleValue() >= 10 && tempBD[lastIndex].doubleValue() < 50)
+                                            if (temp[lastIndex] >= 10 && temp[lastIndex] < 50)
                                                 answers[j] += 1;
                                             break;
                                         case 2:
-                                            if (tempBD[lastIndex].doubleValue() >= 50 && tempBD[lastIndex].doubleValue() <= 90)
+                                            if (temp[lastIndex] >= 50 && temp[lastIndex] <= 90)
                                                 answers[j] += 1;
                                             break;
                                         case 3:
-                                            if (tempBD[lastIndex].doubleValue() > 90)
+                                            if (temp[lastIndex] > 90)
                                                 answers[j] += 1;
                                     }
                                     j++;
@@ -285,10 +284,10 @@ public class ParisIndicatorReport extends Action {
                     }
                 }
             } catch (NumberFormatException nex) {
-                logger.error(nex);
+                logger.debug(nex);
                 nex.printStackTrace(System.out);
             } catch (Exception ex) {
-                logger.error(ex);
+                logger.debug(ex);
                 ex.printStackTrace(System.out);
             }
 
@@ -367,24 +366,24 @@ public class ParisIndicatorReport extends Action {
 
     private String clacTargetValue(AmpAhsurveyIndicatorCalcFormula fl, List donorCol, boolean lastColumn) {
         try {
-        if (donorCol != null && fl != null && fl.getCalcFormula() != null) {
-            if(donorCol.size() == 0) {
-            	return null;
-            }
-        	ParisIndicator donor = (ParisIndicator) donorCol.get(0);
-            ArrayList answ1 = donor.getAnswers();
-            BigDecimal[] ans1 = (BigDecimal[]) answ1.get(0);
-            if (ans1 != null) {
-                String formula = null;
-                if (lastColumn) {
-                    formula = getFormulaText(fl, ans1[ans1.length - 1].doubleValue());
-                } else {
-                    formula = getFormulaText(fl, ans1[0].doubleValue());
-                }
-
-                return String.valueOf(AmpMath.calcExp(formula));
-            }
-        }
+	    	if (donorCol != null && fl != null && fl.getCalcFormula() != null) {
+	            if(donorCol.size() == 0) {
+	            	return null;
+	            }
+	        	ParisIndicator donor = (ParisIndicator) donorCol.get(0);
+	            ArrayList answ1 = donor.getAnswers();
+	            double ans1[] = (double[]) answ1.get(0);
+	            if (ans1 != null) {
+	                String formula = null;
+	                if (lastColumn) {
+	                    formula = getFormulaText(fl, ans1[ans1.length - 1]);
+	                } else {
+	                    formula = getFormulaText(fl, ans1[0]);
+	                }
+	
+	                return String.valueOf(AmpMath.calcExp(formula));
+	            }
+	        }
         } catch (NumberFormatException e){
         	logger.error(e);
         }
@@ -443,17 +442,17 @@ public class ParisIndicatorReport extends Action {
                     ArrayList answ2 = donor.getAnswers();
 
                     for (int i = 0; i < answ1.size(); i++) {
-                        BigDecimal ans1[] = (BigDecimal[]) answ1.get(i);
-                        BigDecimal ans2[] = (BigDecimal[]) answ2.get(i);
+                        double ans1[] = (double[]) answ1.get(i);
+                        double ans2[] = (double[]) answ2.get(i);
                         for (int j = st; j < ans1.length; j++) {
                         	//This method should not exist :( but for now if the value is < 0 then make it 0, otherwise a 100% percentage will become 98%, etc.
-                        	if(ans2[j].doubleValue()<0) {
-                        		ans2[j] = new BigDecimal(0);
+                        	if(ans2[j]<0) {
+                        		ans2[j] = 0;
                         	}
-                        	if(ans1[j].doubleValue()<0) {
-                        		ans1[j] = new BigDecimal(0);
+                        	if(ans1[j]<0) {
+                        		ans1[j] = 0;
                         	}
-                            ans2[j] = ans2[j].add(ans1[j]);
+                            ans2[j] += ans1[j];
                         }
                     }
                 }

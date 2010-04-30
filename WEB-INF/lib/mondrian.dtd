@@ -5,7 +5,7 @@
 
 <!--
      This is the XML model for Mondrian schemas.
-     Revision is $Id: //open/mondrian-release/3.0/src/main/mondrian/olap/Mondrian.xml#3 $
+     Revision is $Id: mondrian.dtd,v 1.3 2009-02-19 16:08:31 ddimunzio Exp $
   -->
 <!--
      A CubeDimension is either a usage of a Dimension ('shared

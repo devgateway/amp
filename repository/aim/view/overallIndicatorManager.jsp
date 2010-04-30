@@ -142,7 +142,7 @@
 																		</td>
 																		<td>
 																			<img id="img1" alt=""
-																				src="/TEMPLATE/ampTemplate/imagesSource/common/tab-right1.gif"
+																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif"
 																				width="20" height="19" />
 																		</td>
 																		<feature:display name="NPD Dashboard" module="National Planning Dashboard">
@@ -164,7 +164,7 @@
 																		</feature:display>
 																		<td>
 																			<img id="img2" alt=""
-																				src="/TEMPLATE/ampTemplate/imagesSource/common/tab-rightselected1.gif"
+																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
 																				width="20" height="19" />
 																		</td>
 																		<td noWrap height=17>
@@ -186,7 +186,7 @@
 																		</td>
 																		<td>
 																			<img id="img3" alt=""
-																				src="/TEMPLATE/ampTemplate/imagesSource/common/tab-rightselected1.gif"
+																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
 																				width="20" height="19" />
 																		</td>
 																	</tr>
@@ -212,14 +212,14 @@
 															<td >
 															<table  cellPadding=3 cellSpacing=1>
 			<tr>
-			<td><img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0>  Level 1, </td>
-			<td>	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square1.gif" border=0>  Level 2, </td>
-			<td>	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square2.gif" border=0>  Level 3, </td>
-			<td>	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square3.gif" border=0>  Level 4, </td>
-			<td>	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square4.gif" border=0>  Level 5, </td>
-			<td>	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square5.gif" border=0>  Level 6, </td>
-			<td>	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square6.gif" border=0>  Level 7, </td>
-			<td>	<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square7.gif" border=0>  Level 8. </td>
+			<td><img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1, </td>
+			<td>	<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2, </td>
+			<td>	<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3, </td>
+			<td>	<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4, </td>
+			<td>	<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5, </td>
+			<td>	<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6, </td>
+			<td>	<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7, </td>
+			<td>	<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8. </td>
 			</tr>
 			</table>	
 															</td>
@@ -232,7 +232,7 @@
 																											
 																			<tr bgcolor="#FFFFFF">
 																				<td align="left" width=85%>
-																					<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" border=0>&nbsp;<b>
+																					<img src= "../ampTemplate/images/arrow-014E86.gif" border=0>&nbsp;<b>
 																						<bean:write name="prgIndicators" property="programName"/></b>
 																				</td>
 																						<c:if test="${aimAllIndicatorForm.programId!=prgIndicators.programId or aimAllIndicatorForm.indicatorFlag==false}">
@@ -258,7 +258,7 @@
 																							<logic:iterate name="prgIndicators"	property="allPrgIndicators" id="ampPrgIndicator" type="org.digijava.module.aim.helper.AllPrgIndicators">
 																							<tr bgcolor="#ffffff">
 																								<td width="9">
-																									<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																									<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																								</td>
 																								<td width=160>
 																									<jsp:useBean id="urlParams11" type="java.util.Map"	class="java.util.HashMap" />
@@ -287,7 +287,7 @@
 																											<digi:link href="/editAllIndicator.do"
 																													name="urlParams11" title="${clickToDeleteIndicator}"
 																																onclick="return deletePrgIndicator()">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																													<img src="../ampTemplate/images/trash_12.gif" border=0>
 																											</digi:link>
 																								</td>
 																							</tr>
@@ -328,7 +328,7 @@
 																											<tr>
 																												<td width=2%>
 																													<img
-																														src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"
+																														src="../ampTemplate/images/arrow_right.gif"
 																														border=0>
 																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
@@ -346,7 +346,7 @@
 																										<table width="97%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -374,7 +374,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams1" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -412,7 +412,7 @@
 																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
 																											<tr>
 																												<td width="3%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square1.gif" border=0>
+																													<img src= "../ampTemplate/images/square1.gif" border=0>
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -429,7 +429,7 @@
 																										<table width="95%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -457,7 +457,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams2" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -495,7 +495,7 @@
 																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
 																											<tr>
 																												<td width="4%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square2.gif" border=0>
+																													<img src= "../ampTemplate/images/square2.gif" border=0>
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -512,7 +512,7 @@
 																										<table width="93%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -540,7 +540,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams3" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -578,7 +578,7 @@
 																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
 																											<tr>
 																												<td width="5%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square3.gif" border=0>
+																													<img src= "../ampTemplate/images/square3.gif" border=0>
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -595,7 +595,7 @@
 																										<table width="91%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -623,7 +623,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams4" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -661,7 +661,7 @@
 																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
 																											<tr>
 																												<td width="6%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square4.gif" border=0>
+																													<img src= "../ampTemplate/images/square4.gif" border=0>
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -678,7 +678,7 @@
 																										<table width="89%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -706,7 +706,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams5" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -744,7 +744,7 @@
 																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
 																											<tr>
 																												<td width="7%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square5.gif" border=0>
+																													<img src= "../ampTemplate/images/square5.gif" border=0>
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -761,7 +761,7 @@
 																										<table width="87%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -789,7 +789,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams6" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -827,7 +827,7 @@
 																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
 																											<tr>
 																												<td width="8%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square6.gif" border=0>
+																													<img src= "../ampTemplate/images/square6.gif" border=0>
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -844,7 +844,7 @@
 																										<table width="85%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -872,7 +872,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams7" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -910,7 +910,7 @@
 																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
 																											<tr>
 																												<td width="9%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square7.gif" border=0>
+																													<img src= "../ampTemplate/images/square7.gif" border=0>
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -927,7 +927,7 @@
 																										<table width="83%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -955,7 +955,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams8" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -1024,7 +1024,7 @@
 																type="org.digijava.module.aim.helper.AllActivities">
 																<tr>
 																	<td align="left">
-																		<img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"
+																		<img src="../ampTemplate/images/arrow-014E86.gif"
 																			border=0>
 																		&nbsp;
 																		<b> <bean:write name="projIndicators"
@@ -1044,12 +1044,12 @@
 																						<td width="9">
 																							<c:if
 																								test="${allMEIndicators.defaultInd == true}">
-																								<img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif"
+																								<img src="../ampTemplate/images/bullet_red.gif"
 																									border=0>
 																							</c:if>
 																							<c:if
 																								test="${allMEIndicators.defaultInd == false}">
-																								<img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif"
+																								<img src="../ampTemplate/images/bullet_grey.gif"
 																									border=0>
 																							</c:if>
 																						</td>
@@ -1085,7 +1085,7 @@
 																							<digi:link href="/editAllIndicator.do"
 																								name="urlParams22" title="${clickToDeleteIndicator}"
 																								onclick="return deleteProjIndicator()">
-																								<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
+																								<img src="../ampTemplate/images/trash_12.gif"
 																									border=0>
 																							</digi:link>
 																						</td>
@@ -1137,13 +1137,13 @@
 								border=1>
 								<tr bgcolor="#ffffff">
 									<td width="9">
-										<img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
+										<img src="../ampTemplate/images/bullet_red.gif" border=0>
 									</td>
 									<td width="100">
 										<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
 									</td>
 									<td width="9">
-										<img src="/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" border=0>
+										<img src="../ampTemplate/images/bullet_grey.gif" border=0>
 									</td>
 									<td>
 										<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>

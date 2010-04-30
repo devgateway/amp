@@ -16,13 +16,13 @@
 		<logic:iterate name="aimEditActivityForm" property="customFieldsSteps" id="step" indexId="stepIdx">
 								<logic:equal name="step" property="step" value="${stepNumber}">
 									<tr><td>
-										<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b>
 											<digi:trn key="aim:customfields:step_name:${stepNumber}"><c:out value="${step.name}"/></digi:trn>
 										</b>
 									</td></tr>
-									<tr><td>&nbsp;
-										
+									<tr><td>
+										&nbsp;
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
@@ -50,10 +50,10 @@
 																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].strDate" size="10"
 																styleId="customField${index}_input_text" styleClass="inp-text" readonly="true" />																
 																<a id="customField_clear${index}" href="javascript:clearDate(document.aimEditActivityForm.customField${index}_input_text, 'customField_clear${index}')">
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
 																<a id="customField_date${index}" href='javascript:pickDateWithClear("customField_date${index}",document.aimEditActivityForm.customField${index}_input_text,"customField_clear${index}")'>
-																	<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</c:when>
 															<c:when test="<%=customField instanceof RadioOptionCustomField%>">
@@ -67,7 +67,8 @@
 																<c:out value="${customField.labelTrue}"/>
 															</c:when>
 															<c:otherwise>
-																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value" size="40" styleId="originalAppDate" styleClass="inp-text" maxlength="250"/>																														
+																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value" size="40"
+																styleId="originalAppDate" styleClass="inp-text" />																														
 															</c:otherwise>
 														</c:choose>
 														</a>

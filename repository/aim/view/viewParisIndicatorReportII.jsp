@@ -484,17 +484,17 @@ function toggleSettings(){
 								<tr>
 									<td noWrap align=left valign="center">
 										<a href="" onclick="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />');return false;" paramName="indcId" paramId="indcId" target="_blank">
-											<digi:img width="17" height="20" hspace="2" vspace="2"src="/TEMPLATE/ampTemplate/imagesSource/common/pdf.gif" border="0" alt="Export to PDF" />
+											<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 										</a>
 									</td>
 									<td noWrap align=left valign="center">
 										<a href="" onclick="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />');return false;" paramName="indcId" paramId="indcId" target="_blank">
-											<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
+											<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
 										</a>
 									</td>				
 									<td noWrap align=left valign="center">
 										<a href="#" paramName="indcId" paramId="indcId" onclick="javascript:openPrinter(); return false;" paramName="indcId" paramId="indcId" target="_blank">
-											<digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly" />
+											<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
 										</a>
 									</td>
 								</tr>
@@ -534,7 +534,7 @@ function toggleSettings(){
 									<ul id="MyTabs" class="yui-nav"">
 										<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator" indexId="tabIndex">
 											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-											<c:if test="${report.indicatorCode != '10b'&&report.indicatorCode != '8'}">
+											<c:if test="${report.indicatorCode != '10b'}">
 <!--								            	<feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">-->
 													<c:set target="${urlParams}" property="indcId" value="${report.ampIndicatorId}" />
 													<c:set target="${urlParams}" property="reset" value="true" />
@@ -573,7 +573,7 @@ function toggleSettings(){
 							</tr>
 							<tr>
 								<td style="padding:5">
-									<strong><p><img src="/TEMPLATE/ampTemplate/imagesSource/common/info.png" width="15" height="15"><digi:trn key="aim:parisIndicator:name"> ${aimParisIndicatorReportForm.indicatorName}</digi:trn></p></strong>
+									<strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15"><digi:trn key="aim:parisIndicator:name"> ${aimParisIndicatorReportForm.indicatorName}</digi:trn></p></strong>
 									<c:if test="${aimParisIndicatorReportForm.indicatorCode == 6}">
 										[<digi:trn key="aim:numParallelPIU">Number Of Parallel PIUs</digi:trn>]
 									</c:if>

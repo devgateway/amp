@@ -10,7 +10,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="previewLogframeUtil.jsp" flush="true" />
-<jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <jsp:include page="overviewOptionsPopupUtil.jsp" flush="true" />
 
 <style type="text/css">
@@ -60,27 +59,18 @@ function fnEditProject(id)
 {
 	
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-    document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~resetMessages=true~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
+    document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
     
 }
 
-function fnShowHistory(id) {
-	//alert(id);
-	//document.aimChannelOverviewForm.action = "/aim/viewActivityHistory.do~activityId=" + id;
-	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityHistory.do" />
-   	document.aimChannelOverviewForm.action = "<%=addUrl%>~activityId=" + id;
-	document.aimChannelOverviewForm.target = "_self";
-	document.aimChannelOverviewForm.submit();
-}
-
 function preview(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
-   document.aimMainProjectDetailsForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
-	document.aimMainProjectDetailsForm.target = "_self";
-   document.aimMainProjectDetailsForm.submit();
+   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
+	document.aimChannelOverviewForm.target = "_self";
+   document.aimChannelOverviewForm.submit();
 }
 </script>
 
@@ -311,7 +301,7 @@ html>body #mainEmpty {
 				<feature:display name="Preview Activity" module="Previews">
 					<field:display feature="Preview Activity" name="Preview Button">
 						<a href="/aim/viewActivityPreview.do~pageId=2~activityId=<%=request.getParameter("ampActivityId")%>~isPreview=1" target="_blank" onclick="javascript:preview(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
-							<img src="/TEMPLATE/ampTemplate/imagesSource/common/tangopack_preview.png" border="0"></a>
+							<img src="/repository/aim/images/tangopack_preview.png" border="0"></a>
 					</field:display>
 				</feature:display>
 			</module:display>
@@ -320,7 +310,7 @@ html>body #mainEmpty {
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
 	                		<a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
-								<img src="/TEMPLATE/ampTemplate/imagesSource/common/tangopack_edit.png" border="0"></a>&nbsp;
+								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
 						</logic:equal>
 					</field:display>
 				</feature:display>
@@ -332,14 +322,12 @@ html>body #mainEmpty {
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="validate">
 							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
 								<a href="" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:validate'>Validate</digi:trn>">
-									<img src="/TEMPLATE/ampTemplate/imagesSource/common/tangopack_validate2.png" border="0"></a>&nbsp;
+									<img src="/repository/aim/images/tangopack_validate2.png" border="0"></a>&nbsp;
 							</c:if>
 						</logic:equal>
 					</field:display>
 				</feature:display>
 			</module:display>
-			<a style="cursor:pointer" target="_blank" onclick="javascript:previewHistory(document.getElementById('tempActivity').value); return false;" title="<digi:trn>View History</digi:trn>">
-				<img src="/repository/aim/images/activity_history.png" border="0"></a>&nbsp;
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Logframe" module="Previews">
 					<field:display name="Logframe Preview Button" feature="Logframe">
@@ -547,8 +535,7 @@ html>body #mainEmpty {
 									</LI>
 								</logic:notEqual>
 							 </field:display>
-                                <module:display name="Paris Indicators Project Management" parentModule="PROJECT MANAGEMENT"></module:display>
-                                <feature:display name="Paris Indicators" module="Paris Indicators Project Management"></feature:display>
+						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
 						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 								   <LI>						

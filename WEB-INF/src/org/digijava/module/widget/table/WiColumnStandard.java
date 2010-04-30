@@ -38,30 +38,20 @@ public class WiColumnStandard extends WiColumn {
                 cell.saveData(dbSession, dbColumn);
             }
             for (WiCell trashedCell : trashedCells) {
-            	if (trashedCell.getId() !=null  && trashedCell.getId()>0){
-                    trashedCell.removeData(dbSession, dbColumn);
-            	}
+                trashedCell.removeData(dbSession, dbColumn);
             }
-            this.clearTrashedCells();
         } catch (HibernateException e) {
 			throw new DgException("cannot save column, ID="+getId(),e);
         }
     }
      
 	@Override
-	public WiCell createCell() {
-		WiCellStandard cell = new WiCellStandard();
-		cell.setColumn(this);
-		return cell;
-	}
-
-	@Override
-	public WiCell createCell(AmpDaValue value) {
-		WiCellStandard cell = (WiCellStandard)this.createCell();
-		cell.setId(value.getId());
-		cell.setPk(value.getPk());
-		cell.setValue(value.getValue());
-		return cell;
+	public void replacePk(Long oldPk, Long newPk) {
+		WiCell cell = removeCellWithPk(oldPk);
+		if (cell!=null){
+			cell.setPk(newPk);
+			setCell(cell);
+		}
 	}
 
 

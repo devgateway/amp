@@ -43,16 +43,13 @@
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
 <script type="text/javascript">
-
-    var  moreSettingsPanel = null;
-    
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
 messageObj.setWaitMessage('Loading message - please wait....');
 messageObj.setShadowOffset(5);	// Large shadow
@@ -161,7 +158,6 @@ background-color: yellow;
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>" ></script>
 
 <!-- END - For DHTML Tab View of Filters -->
@@ -191,19 +187,19 @@ saveReportEngine	= null;
 			currentReportId	= ${reportObject.ampReportId};
 		</logic:present>	
 		
-		YAHOO.namespace("YAHOO.amptab");
-		YAHOO.amptab.init = function() {
-		    		var tabView = new YAHOO.widget.TabView('tabview_container');
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
+		YAHOOAmp.amptab.init = function() {
+		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 		};
 
-		YAHOO.amptab.handleCloseAbout = function() {
+		YAHOOAmp.amptab.handleCloseAbout = function() {
 			if(navigator.appName == 'Microsoft Internet Explorer'){
 				//window.location.reload();
 				//history.go(-1);
 			}
 		}
 		
-		YAHOO.amptab.handleClose = function() {
+		YAHOOAmp.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
@@ -211,7 +207,7 @@ saveReportEngine	= null;
 			wrapper.appendChild(filter);
 		};
 
-		YAHOO.amptab.handleCloseShowFormat = function() {
+		YAHOOAmp.amptab.handleCloseShowFormat = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('customFormat');
 			if (filter.parent != null)
@@ -237,6 +233,16 @@ saveReportEngine	= null;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
+
+		var myPanel3 = new YAHOO.widget.Panel("new3", {
+			width:"300px",
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true} );
 		    
 		    var myPanel4 = new YAHOO.widget.Panel("new4", {
 			width:"450px",
@@ -248,7 +254,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 
-		    var myPanel5 = new YAHOO.widget.Panel("new5", {
+		    var myPanel5 = new YAHOOAmp.widget.Panel("new5", {
 				width:"480px",
 			    fixedcenter: true,
 			    constraintoviewport: true,
@@ -258,9 +264,9 @@ saveReportEngine	= null;
 			    modal:true,
 			    draggable:true} );
 	
-	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
-	myPanel5.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseAbout);
-	myPanel4.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseShowFormat);
+	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
+	myPanel4.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseShowFormat);
 		    
 	function initScripts() {
 	
@@ -276,7 +282,12 @@ saveReportEngine	= null;
 		myPanel2.render(document.body);
 		myPanel2EmptyBody	= true;
 		
-		var msgP4='\n<digi:trn >Please select report settings</digi:trn>';
+		var msgP3='\n<digi:trn key="rep:filter:selectRange">Please select range</digi:trn>';
+		myPanel3.setHeader(msgP3);
+		myPanel3.setBody("");
+		myPanel3.render(document.body);
+		
+		var msgP4='\n<digi:trn key="rep:filter:SetFormat">Please select format</digi:trn>';
 		myPanel4.setHeader(msgP4);
 		myPanel4.setBody("");
 		myPanel4.render(document.body);
@@ -295,14 +306,11 @@ saveReportEngine	= null;
 	}
 	
 	function showFilter() {
-		YAHOO.amptab.init();
-		YAHOO.amptab.afterFiltersLoad();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("myFilter");
-		element.style.display 	= "block";
-		element.style.height	= "380px";
+		element.style.display = "inline";
 		
 		myPanel1.setBody(element);
-		myPanel1.cfg.setProperty("height", "400px" );
 		myPanel1.center();
 		myPanel1.show();
 
@@ -333,7 +341,7 @@ saveReportEngine	= null;
 	}
 
 	function showAbout() {
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("customAbout");
 		element.style.display = "inline";
 		myPanel5.setBody(element);
@@ -353,7 +361,7 @@ saveReportEngine	= null;
 	}
 	
 	function showFormat(){
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		initFormatPopup();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";
@@ -409,6 +417,18 @@ saveReportEngine	= null;
 	function hideSorter() {
 		myPanel2.hide();
 	}
+	function showRange(){
+		YAHOOAmp.amptab.init();
+		var element = document.getElementById("myRange");
+		element.style.display = "inline";
+		
+		myPanel3.setBody(element);
+		myPanel3.center();
+		myPanel3.show();	
+	}
+	function hideRange() {
+		myPanel3.hide();
+	}
 	
 	function hideFilter() {
 		myPanel1.hide();
@@ -437,26 +457,10 @@ function resetFormat(){
 	document.aimReportsFilterPickerForm3.submit();
 }
 
-function ResetCustom() {
-	aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
-	aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
-	aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
-	aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>
-	aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
-	aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true"
-	aimReportsFilterPickerForm3.customUseGrouping.checked = "true";
-	aimReportsFilterPickerForm3.customGroupCharacter.value = ".";
-	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
-	aimReportsFilterPickerForm3.customGroupSize.value = 3;
-	aimReportsFilterPickerForm3.amountinthousands.checked = "false";
-	initFormatPopup();
-	document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
-	document.aimReportsFilterPickerForm3.renderEndYear.value=-1;
-	if (aimReportsFilterPickerForm3.currency)
-		aimReportsFilterPickerForm3.currency.value=aimReportsFilterPickerForm3.defaultCurrency.value;
-}
 
 function initFormatPopup(){
+		
+		
 		var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
 		
 		if (decimalSymbol=="CUSTOM"){
@@ -479,11 +483,7 @@ function initFormatPopup(){
 	
 		var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 	
-		if (!customUseGrouping){
-			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=true;
-		}else{
-			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=false;
-			}
+		document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=!customUseGrouping;
 		var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
 		document.aimReportsFilterPickerForm3.customGroupSize.disabled=!customUseGrouping;
 		document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("CUSTOM"!=customGroupCharacter));
@@ -507,7 +507,6 @@ function changeFormat(){
 	
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
 	
-	var amountinthousands=document.aimReportsFilterPickerForm3.amountinthousands.checked;
 	
 	var num=Number(123456789.928);
 
@@ -565,7 +564,7 @@ function validateFormat(){
 }
 
 
-	addLoadEvent(initScripts);
+	window.onload=initScripts;
 
 
 	var msg0="<digi:trn key="rep:pop:pleasewait..."> Please wait...</digi:trn>";
@@ -620,7 +619,7 @@ function validateFormat(){
 	
 	
 	function makeScroll (){
-		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
+		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
 		createCookie('report_scrolling',currentReportId,1);
 		showScroll();
 		//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
@@ -638,7 +637,7 @@ function validateFormat(){
 	
 	var enableLink=function(){
 	if (document.getElementById("frezzlink")){
-		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
+		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
 		if (scrolling){
 			//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
 			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
@@ -670,7 +669,7 @@ function validateFormat(){
 		
 	//-----------------------
 	function showScroll(){
-		var wait = new YAHOO.widget.Panel("wait",   
+		var wait = new YAHOOAmp.widget.Panel("wait",   
 	        { width:"240px",  
 	          fixedcenter:true,  
 	          close:false,  
@@ -704,169 +703,6 @@ function validateFormat(){
 			window.setTimeout(call,200);
 		}
 
-
-var normalStyleOrgValue=null;
-var headerStyleOrgValue=null;
-var aHrefStyleOrgValue=null;
-	
-function fontResize(param){
-	if (normalStyleOrgValue==null){
-		normalStyleOrgValue=parseFloat($('td.reportsBorderTD').css('font-size'));
-	}
-	if (headerStyleOrgValue==null){
-		headerStyleOrgValue=parseFloat($('td.clsTableTitleCol>a').css('font-size'));
-	}
-	if (aHrefStyleOrgValue==null){
-		aHrefStyleOrgValue=parseFloat($('td.reportsBorderTD>a').css('font-size'));
-	}
-
-	var normalStyleCurValue=parseFloat($('td.reportsBorderTD').css('font-size'));
-	var headerStyleCurValue=parseFloat($('td.clsTableTitleCol>a').css('font-size'));
-	var aHrefStyleCurValue=parseFloat($('td.reportsBorderTD>a').css('font-size'));
-
-
-	var normalStyleNextVal=normalStyleCurValue;
-	var headerStyleNextVal=headerStyleCurValue;
-	var aHrefStyleNextVal=headerStyleCurValue;
-
-	var step=1;	
-	if (param=='add'){
-		normalStyleNextVal++;
-		headerStyleNextVal++;
-		aHrefStyleNextVal++;
-	}
-	if (param=='less'){
-		normalStyleNextVal--;
-		headerStyleNextVal--;
-		aHrefStyleNextVal--;
-	}
-	if (param=='reset'){
-		normalStyleNextVal=normalStyleOrgValue;
-		headerStyleNextVal=headerStyleOrgValue;
-		aHrefStyleNextVal=aHrefStyleOrgValue;
-	}
-
-
-	
-	$('td.reportsBorderTD').css('font-size',normalStyleNextVal+'px');
-	$('td.clsTableTitleCol>a').css('font-size',headerStyleNextVal+'px');
-	$("td.reportsBorderTD>a").css('font-size',aHrefStyleNextVal+'px');
-
-
-	
-	createCookie('normalStyleOrgValue',normalStyleOrgValue,10); 
-	createCookie('headerStyleOrgValue',headerStyleOrgValue,10); 
-	createCookie('aHrefStyleOrgValue',aHrefStyleOrgValue,10); 
-
-	createCookie('normalStyleNextVal',normalStyleNextVal,10); 
-	createCookie('headerStyleNextVal',headerStyleNextVal,10); 
-	createCookie('aHrefStyleNextVal',aHrefStyleNextVal,10); 
-
-	
-	
-}
-function fontResizeFromCookies(){
-	normalStyleOrgValue=readCookie("normalStyleOrgValue");
-	headerStyleOrgValue=readCookie("headerStyleOrgValue");
-	aHrefStyleOrgValue=readCookie("aHrefStyleOrgValue");
-    var normalStlNextVal=readCookie("normalStyleNextVal");
-    var headerStlNextVal=readCookie("headerStyleNextVal");
-    var aHrefStlNextVal=readCookie("aHrefStyleNextVal");
-    if(normalStlNextVal!=null){
-      $('td.reportsBorderTD').css('font-size',normalStlNextVal+'px');
-    }
-     if(headerStlNextVal!=null){
-      $('td.clsTableTitleCol>a').css('font-size',headerStlNextVal+'px');
-    }
-     if(aHrefStlNextVal!=null){
-     	$("td.reportsBorderTD>a").css('font-size',aHrefStlNextVal+'px');
-    }
-}
-
-
-var items=new Array();
-var currentRMenu=null;
-function reportOptions(element,id){
-	//cargar opciones
-	if (currentRMenu!=null){
-		currentRMenu.destroy();
-		}
-	var itemsUrl='/aim/reportMenuAction.do?action=getOPtions&id='+id;
-
-	var oMenu = new YAHOO.widget.Menu("reportMenu", { fixedcenter: false,srcElement:element,context:[element, "tl", "bl"] }); 
-	//if(oMenu.getItems().length==0){
-		$.get(itemsUrl,'',function(data){
-		for (i=0;i < data.childNodes[0].childNodes.length;i++){
-				var node=data.childNodes[0].childNodes[i]
-				var strUrl=node.getAttribute('url')+id;
-				var confirmation=node.getAttribute('confirmation');
-				var text=data.childNodes[0].childNodes[i].childNodes[0].nodeValue
-	
-				var oItem = oMenu.addItem(new YAHOO.widget.MenuItem(text));
-				oItem.cfg.setProperty("url",strUrl);
-				oMenu.addItem(oItem);
-				
-			}
-		oMenu.render(document.body);
-		oMenu.show();
-		currentRMenu=oMenu;
-		}); 
-	
-	//}else{
-	//	oMenu.render(document.body);
-	//	oMenu.show();
-	//}
-}
-
-
-function showDiv(){
-    if(moreSettingsPanel!=null){
-        moreSettingsPanel.destroy();
-    }
-    /* 
-     * some messages need long time to load, 
-     * that is why we create blank panel here, so user will see blank panel
-     * before function call is completed
-     */
-    
-    //create div to hold selected message
-    var div=document.createElement('DIV');
-    div.id="moreSettingsPanel";
-    
-    document.body.appendChild(div);
-    
-    var divHead=document.createElement('DIV');
-    divHead.className="hd";
-    divHead.innerHTML="Detailed List";
-    div.appendChild(divHead);
-
-   
-    // create body div to hold selected message
-    var divBody=document.createElement('DIV');
-    divBody.style.padding="5";
-    divBody.className="bd";
-	divBody.overflow="auto",
-    
-    divBody.id="msg_bd";
-    divBody.className='scrollable'
-    var moreDiv = document.getElementById('morePropId');
-    divBody.innerHTML=moreDiv.innerHTML;
-    div.appendChild(divBody);
-    
-    moreSettingsPanel = new YAHOO.widget.Panel("moreSettingsPanel",{
-        width: 600,
-        constraintoviewport: true,
-        fixedcenter: true,
-        Underlay:"shadow",
-        modal: true,
-        close:true, 
-        visible:true, 
-        draggable:true} );
-    moreSettingsPanel.render();
-
-    
-}
-
 </script>
 <style type="text/css">
 .mask {
@@ -875,19 +711,6 @@ function showDiv(){
   filter: alpha(opacity=80);
   background-color:#2f2f2f;
 }
-#reportMenu {
-	width:70px;
-}
-#reportMenu ul li a {
-	font-size:9px;
-	padding:3px !important;
-	text-transform:uppercase;
-	text-decoration:none
-}
-
- .scrollable {
-            height: 400px; overflow: auto;
- }	
 </style>
 
 

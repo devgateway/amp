@@ -1,6 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -18,9 +17,9 @@ public class AmpPhysicalComponentReport {
 			private Date signatureDate;
 			private Date actualStartDate;
 			private Date plannedCompletionDate;
-			private BigDecimal actualCommitment;
+			private Double actualCommitment;
 			private String commCurrencyCode;
-			private BigDecimal actualExpenditure;
+			private Double actualExpenditure;
 			private String expCurrencyCode;
 			private String status;	
 			private Date reportingDate;
@@ -72,8 +71,8 @@ public class AmpPhysicalComponentReport {
 			return signatureDate;
 		}
 
-		public BigDecimal getActualCommitment() {
-					 return FeaturesUtil.applyThousandsForVisibility(actualCommitment)	;
+		public Double getActualCommitment() {
+					 return FeaturesUtil.applyThousandsForVisibility(actualCommitment);
 		  }
 
 		   public String getCommCurrencyCode() {
@@ -81,7 +80,7 @@ public class AmpPhysicalComponentReport {
 		  }
 
 		 
-		  public BigDecimal getActualExpenditure() {
+		  public Double getActualExpenditure() {
 					 return FeaturesUtil.applyThousandsForVisibility(actualExpenditure);
 		  }
 
@@ -173,7 +172,7 @@ public class AmpPhysicalComponentReport {
 			signatureDate = date;
 		}
 
-		  public void setActualCommitment(BigDecimal actualCommitment) {
+		  public void setActualCommitment(Double actualCommitment) {
 					 this.actualCommitment = FeaturesUtil.applyThousandsForEntry(actualCommitment);
 		  }
 
@@ -182,7 +181,7 @@ public class AmpPhysicalComponentReport {
 		  }
 
 	
-		  public void setActualExpenditure(BigDecimal actualExpenditure) {
+		  public void setActualExpenditure(Double actualExpenditure) {
 					 this.actualExpenditure = FeaturesUtil.applyThousandsForEntry(actualExpenditure);
 		  }
 

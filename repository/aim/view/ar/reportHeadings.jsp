@@ -22,7 +22,6 @@
   <%for (int curDepth = 0; curDepth <= columnReport
   .getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title="Report Headings">
-  <td  align="center" style="background-color:#999999;color:black;" class="clsTableTitleCol" width="20">&nbsp;</td>
   <%boolean first=true; %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
      <%
@@ -77,10 +76,10 @@
             
 	            <c:if test="${subColumn.name == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
-	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align="absmiddle" border="0"/>
+	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	              <logic:equal name="columnReport" property="sortAscending" value="true">
-	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align="absmiddle" border="0"/>
+	                <img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	            </c:if>
             
@@ -108,10 +107,10 @@
 	            
 				<c:if test="${subColumn.name == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
-	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/down.gif" align="absmiddle" border="0"/>
+	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	              <logic:equal name="columnReport" property="sortAscending" value="true">
-	                <img src= "/TEMPLATE/ampTemplate/imagesSource/common/up.gif" align="absmiddle" border="0"/>
+	                <img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	            </c:if>
 	                    		
@@ -123,9 +122,6 @@
       </logic:iterate>
       
     </logic:iterate>
-  
- 		
-  
   </tr>
 
   <%}

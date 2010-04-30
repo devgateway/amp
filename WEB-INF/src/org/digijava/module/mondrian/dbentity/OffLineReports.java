@@ -20,7 +20,15 @@ public class OffLineReports {
 	private String measures;
 	private String columns;
 	private java.sql.Timestamp creationdate;
-	
+	private java.lang.Integer type;
+	public java.lang.Integer getType() {
+		return type;
+	}
+
+	public void setType(java.lang.Integer type) {
+		this.type = type;
+	}
+
 	public long getId() {
 		return id;
 	}

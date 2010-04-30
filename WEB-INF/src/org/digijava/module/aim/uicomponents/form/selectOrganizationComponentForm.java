@@ -18,8 +18,6 @@ public class selectOrganizationComponentForm extends ActionForm {
 	private int tempNumResults;
 	private int numResults;
 	private String keyword="";
-	private String matchEntireWord="";
-
 	private Collection<AmpOrganisation> allOrganization = null;
 
 	private Collection<AmpOrganisation> organizations = null;
@@ -44,7 +42,6 @@ public class selectOrganizationComponentForm extends ActionForm {
 	boolean refreshParent;
 	private String delegateClass;
 	private HashMap<String, String> aditionalParameters=new HashMap<String, String>();
-	private boolean filterDonorGroups;
 	
 	private List<Long> allSelectedOrgsIds; //used to hold all selected organisations (when going to another page, previously selected orgs were lost)
 	
@@ -61,6 +58,15 @@ public class selectOrganizationComponentForm extends ActionForm {
 	boolean useClient;
 	private String valueHoder="";
 	private String nameHolder="";
+	boolean useAcronym;
+	
+	public boolean isUseAcronym() {
+		return useAcronym;
+	}
+
+	public void setUseAcronym(boolean useAcronym) {
+		this.useAcronym = useAcronym;
+	}
 
 	public boolean isUseClient() {
 		return useClient;
@@ -110,7 +116,6 @@ public class selectOrganizationComponentForm extends ActionForm {
 		this.ampOrgTypeId = null;
 		delegateClass ="";
 		callbackFunction = null;
-		this.matchEntireWord="";
 	}
 
 	private int selectedOrganisationFromPages;
@@ -349,14 +354,6 @@ public class selectOrganizationComponentForm extends ActionForm {
 		this.styleClass = styleClass;
 	}
 
-	public boolean isFilterDonorGroups() {
-		return filterDonorGroups;
-	}
-
-	public void setFilterDonorGroups(boolean filterDonorGroups) {
-		this.filterDonorGroups = filterDonorGroups;
-	}
-	
 	public List<Long> getAllSelectedOrgsIds() {
 		return allSelectedOrgsIds;
 	}
@@ -364,12 +361,6 @@ public class selectOrganizationComponentForm extends ActionForm {
 	public void setAllSelectedOrgsIds(List<Long> allSelectedOrgsIds) {
 		this.allSelectedOrgsIds = allSelectedOrgsIds;
 	}
-	public String getMatchEntireWord() {
-		return matchEntireWord;
-	}
-
-	public void setMatchEntireWord(String matchEntireWord) {
-		this.matchEntireWord = matchEntireWord;
-	}
+	
 	
 }

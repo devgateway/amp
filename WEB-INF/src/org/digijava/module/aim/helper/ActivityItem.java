@@ -72,7 +72,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 
 	private ActivityUtil.ActivityAmounts amounts;
     // percent of specific program assigned
-    private Float percent;
+    private Long percent;
     // used only for program percent applying
     private AmpActivity act;
 
@@ -101,7 +101,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
      * @see ActivityItem#ActivityItem(AmpActivity)
 	 */
 
-    public ActivityItem(AmpActivity act,Float percent) {
+    public ActivityItem(AmpActivity act,Long percent) {
         this.act=act;
         this.percent=percent;
 
@@ -117,7 +117,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null, request);
 	}
 
-    public ActivityItem(AmpActivity entity,String curenncyCode,Float percent, HttpServletRequest request) throws Exception{
+    public ActivityItem(AmpActivity entity,String curenncyCode,Long percent, HttpServletRequest request) throws Exception{
         this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent, request);
 	}
 
@@ -127,11 +127,11 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
-		public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode,Float percent, HttpServletRequest request) throws Exception {
+	public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode,Long percent, HttpServletRequest request) throws Exception {
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 				
-		Long siteId=site.getId();
+		String siteId=site.getId().toString();
 		String locale=navigationLanguage.getCode();			
 		if (entity != null) {
 			AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
@@ -163,11 +163,6 @@ public class ActivityItem implements Comparable<ActivityItem>{
 				}else{
 					actualDisbAmount=amounts.actualDisbAmount();
 				}
-				if(!amounts.plannedAmount().equalsIgnoreCase("N/A")){
-					plannedAmount=FormatHelper.formatNumber(amounts.getPlannedAmount());
-				}else{
-					plannedAmount=amounts.plannedAmount();
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -198,10 +193,9 @@ public class ActivityItem implements Comparable<ActivityItem>{
 			result += " " + PARAM_ID + "=\"" + id.toString()+ "\"";
 			result += " " + PARAM_STATUS + "=\"" + getStatusValue() + "\"";
 			result += " " + PARAM_NAME + "=\"" + getNameValue() + "\"";
-			//result += " " + PARAM_PROPOSED_AMOUNT + "=\"" + getProposedAmount() + "\"";
+			result += " " + PARAM_PROPOSED_AMOUNT + "=\"" + getProposedAmount() + "\"";
 			result += " " + PARAM_ACTUAL_AMOUNT + "=\"" + getActualAmount() + "\"";
 			result += " " + PARAM_ACTUAL_DISB_AMOUNT + "=\"" + getActualDisbAmount()+ "\"";
-			result += " " + PARAM_PLANNED_AMOUNT + "=\"" + getPlannedAmount()+ "\"";
 			result += " " + PARAM_DATE + "=\"" + getStartDate() + "\"";
 			result += ">";
 			result += "<" + DONORS_TAG_NAME + ">";
@@ -237,7 +231,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 				
-		Long siteId=site.getId();
+		String siteId=site.getId().toString();
 		String locale=navigationLanguage.getCode();		
 		List<LabelValueBean> result = new ArrayList<LabelValueBean>();
 		if (donors != null && donors.size() > 0){
@@ -294,14 +288,6 @@ public class ActivityItem implements Comparable<ActivityItem>{
 		return endDate;
 	}
 
-	public List<LabelValueBean> getDonors() {
-		return donors;
-	}
-
-	public void setDonors(List<LabelValueBean> donors) {
-		this.donors = donors;
-	}
-
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
@@ -345,11 +331,11 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	public void setAmounts(ActivityUtil.ActivityAmounts amounts) {
 		this.amounts = amounts;
 	}
-      public Float getPercent() {
+      public Long getPercent() {
         return percent;
     }
 
-    public void setPercent(Float percent) {
+    public void setPercent(Long percent) {
         this.percent = percent;
     }
 

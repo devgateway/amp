@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,11 +29,9 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DesktopUtil;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ShowDesktopActivities extends TilesAction {
 
@@ -181,8 +178,7 @@ public class ShowDesktopActivities extends TilesAction {
 						dForm.setFltrStatus(null);
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.ACTIVITY_RISK_FILTER)) {
 						if (ampContext.getAttribute(Constants.ME_FEATURE) != null) {
-                            Collection<AmpCategoryValue> risks=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
-							dForm.setActivityRisks(risks);
+							dForm.setActivityRisks(MEIndicatorsUtil.getAllIndicatorRisks());
 						}
 					}
 				}
@@ -268,7 +264,7 @@ public class ShowDesktopActivities extends TilesAction {
 
 			itr = null;
 
-			BigDecimal grandTotal = DesktopUtil.updateProjectTotals(
+			double grandTotal = DesktopUtil.updateProjectTotals(
 					dForm.getActivities(),currCode);
 
 			dForm.setTotalCommitments(mf.format(grandTotal));

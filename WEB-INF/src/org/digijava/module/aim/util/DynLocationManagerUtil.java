@@ -29,8 +29,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.NonUniqueResultException;
-import org.hibernate.Hibernate;
-import org.hibernate.LazyInitializationException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -578,7 +576,7 @@ public class DynLocationManagerUtil {
 	 * @param id
 	 * @param initChildLocs child locations are lazily initialized, so if you want to access them put "true" here
 	 * @return
-	 */	
+	 */
 	public static AmpCategoryValueLocations getLocation(Long id, boolean initChildLocs) {
 		Session dbSession										= null;
 		try {
@@ -590,7 +588,7 @@ public class DynLocationManagerUtil {
 			qry.setLong("id", id);
 			AmpCategoryValueLocations returnLoc		= (AmpCategoryValueLocations)qry.uniqueResult();
 			if ( initChildLocs )
-				logger.debug( returnLoc.getName() + " has " + returnLoc.getChildLocations().size() + " children." );
+				returnLoc.getChildLocations().size();
 			return returnLoc;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -603,128 +601,43 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
-	public static AmpCategoryValueLocations getLocationOpenedSession(Long id) {
-		Session dbSession										= null;
-		try {
-			dbSession			= PersistenceManager.getRequestDBSession();
-			String queryString 	= "select loc from "
-				+ AmpCategoryValueLocations.class.getName()
-				+ " loc where (loc.id=:id)" ;			
-			Query qry			= dbSession.createQuery(queryString);
-			qry.setLong("id", id);
-			AmpCategoryValueLocations returnLoc		= (AmpCategoryValueLocations)qry.uniqueResult();
-			return returnLoc;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		return null;
-	}
-
 	
-	public static AmpCategoryValueLocations getLocationByIdRequestSession(Long id) {
-		Session dbSession										= null;
-		try {
-			dbSession			= PersistenceManager.getRequestDBSession();
-			
-			AmpCategoryValueLocations returnLoc		= (AmpCategoryValueLocations) dbSession.get(AmpCategoryValueLocations.class, id);
-			return returnLoc;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		return null;
-	}
-	
-	public static void populateWithDescendants(Collection <AmpCategoryValueLocations> destCollection, 
-									Collection<AmpCategoryValueLocations> locations ) {
-		
-		
-		if (  locations != null ) {
-			Iterator<AmpCategoryValueLocations> iterLoc	= locations.iterator();
-			while (iterLoc.hasNext()) {
-				AmpCategoryValueLocations loc	 = 
-					DynLocationManagerUtil.getLocation(iterLoc.next().getId(), true);
-				Set<AmpCategoryValueLocations> childrenLocs		= loc.getChildLocations();
-				if ( childrenLocs  != null && childrenLocs.size() > 0 ) {
-					destCollection.addAll(childrenLocs);
-					populateWithDescendants(destCollection, childrenLocs );
+	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry() throws Exception  {
+		TreeSet<AmpCategoryValueLocations> returnSet			= new TreeSet<AmpCategoryValueLocations>(alphabeticalLocComp);
+		String defCountryIso	= FeaturesUtil.getDefaultCountryIso();
+		if ( defCountryIso != null ) {
+			Set<AmpCategoryValueLocations> allRegions	= 
+								getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+			if ( allRegions != null && allRegions.size() > 0 ) {
+				Iterator<AmpCategoryValueLocations> regIter	= allRegions.iterator();
+				while ( regIter.hasNext() ) {
+					AmpCategoryValueLocations reg		= regIter.next();
+					AmpCategoryValueLocations country	= getAncestorByLayer( reg, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+					if ( defCountryIso.equals( country.getIso() )  ) {
+						returnSet.add(reg);
+					}
 				}
 			}
 		}
-	}
-	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 
-			Collection<AmpCategoryValueLocations> locations ) {
-		if (  locations != null ) {
-			Iterator<AmpCategoryValueLocations> iterLoc	= locations.iterator();
-			while (iterLoc.hasNext()) {
-				AmpCategoryValueLocations loc	 = iterLoc.next();
-				
-				while (loc.getParentLocation() != null){
-					loc		= loc.getParentLocation();
-					destCollection.add(loc);
-				}
-			}
-		}
-		
-	}
-	
-	
-	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws Exception  {
-		AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(  
-				FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-		country 					= getLocationOpenedSession( country.getId() );
-		
-		return country.getChildLocations();
-	}
-	
-	public static List<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry() throws Exception  {
-		AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(  FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-		List<AmpCategoryValueLocations> returnSetLocations = new ArrayList<AmpCategoryValueLocations>();
-			AmpCategoryValueLocations coun = getLocation(country.getId(), true);
-			AmpCategoryClass acc = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
-			int maxLevelLocation = getCategoryValueByClass(acc).size();
-			Set<AmpCategoryValueLocations> childLocs = coun.getChildLocations();
-			Iterator<AmpCategoryValueLocations> iter = childLocs.iterator();
-			while (iter.hasNext()) {
-				AmpCategoryValueLocations cvl = getLocation(iter.next().getId(), true);
-				//cvl.getParentCategoryValue().getIndex();
-				loopChildLocation(0, cvl, maxLevelLocation , returnSetLocations);	
-			}
-		return returnSetLocations;
+		else
+			throw new Exception("No default country iso could be retrieved!");
+		return returnSet;
 	} 
-	
-	private static void loopChildLocation (int level, AmpCategoryValueLocations cvl, int maxLevel, List<AmpCategoryValueLocations> returnSetLocations){
-		cvl.setName(tabulateByLevel(level) + cvl.getName());
-		returnSetLocations.add(cvl);
-		Set<AmpCategoryValueLocations> childLocs = cvl.getChildLocations();
-		Iterator<AmpCategoryValueLocations> iter = childLocs.iterator();
-		while (iter.hasNext()) {
-			AmpCategoryValueLocations cvlChild = getLocation(iter.next().getId(), true);
-			int levelTemp = level;
-			levelTemp++;
-			if (levelTemp < maxLevel) {
-				loopChildLocation(levelTemp, cvlChild, maxLevel, returnSetLocations);	
-			} else {
-				cvlChild.setName(tabulateByLevel(level) + cvlChild.getName());
-				returnSetLocations.add(cvlChild);
-			}
-		}
-	}
-	
-	public static String tabulateByLevel (int level){
-		if (level == 0)
-			return "";
-		String tab = " ";
-		for (int i = 0; i < level; i++) {
-			tab += "--";
-		}
-		tab += " ";
-		return tab;
-	}
 	
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
 		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 	}
 	
+	public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
+		try {
+			AmpCategoryValue layer		= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLayer);
+			return getLocationsByLayer(layer);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static AmpCategoryValueLocations getAncestorByLayer (AmpCategoryValueLocations loc, HardCodedCategoryValue hcValue) {
 		if ( loc == null )
 			logger.error ("loc parameter in getAncestorByLayer should not be null");
@@ -768,44 +681,6 @@ public class DynLocationManagerUtil {
 			return returnSet;
 		return null;
 	}
-	
-	public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
-		try {
-			AmpCategoryValue layer		= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLayer);
-			return getLocationsByLayer(layer);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static Set<AmpCategoryValue> getCategoryValueByClass(AmpCategoryClass acc) {
-		TreeSet<AmpCategoryValue> returnSet			= new TreeSet<AmpCategoryValue>();
-		Session dbSession										= null;
-		try {
-			dbSession			= PersistenceManager.getSession();
-			String queryString 	= "select cv from "
-				+ AmpCategoryValue.class.getName()
-				+ " cv where (cv.ampCategoryClass=:accId) ";
-			Query qry			= dbSession.createQuery(queryString);
-			qry.setLong("accId", acc.getId() );
-			returnSet.addAll( qry.list() );
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
-		if (returnSet.size() > 0 )
-			return returnSet;
-		return null;
-	}
-	
 	
 	public static List<String> getParents( AmpCategoryValueLocations loc ) {
 		ArrayList<String> returnList		= new ArrayList<String>();

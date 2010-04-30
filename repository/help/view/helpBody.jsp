@@ -8,19 +8,17 @@
 
 <style type="text/css">
 
-	.highlight {background-color:silver; }
+.highlight {background-color:silver; }
 
-	.bodyFull { display : none; }
-	.bodyShort { display : block; }
 
 </style>
 
 <script type="text/javascript">
 
-function showBody(title){
-    var topic=$(title).parents("div:eq(1)");
-	$(topic).find("div.bodyShort").toggle();
-	$(topic).find("div.bodyFull").toggle();
+function showBody(){
+$("#bodyShort").hide();
+$("#bodyFull").show();
+
 }
 </script>
 

@@ -21,9 +21,11 @@ import org.digijava.module.aim.form.AddOrgGroupForm;
 import org.digijava.module.aim.util.DbUtil;
 
 public class EditOrgGroup extends Action {
+
 	private static Logger logger = Logger.getLogger(EditOrgGroup.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
@@ -65,42 +67,34 @@ public class EditOrgGroup extends Action {
 		}
 
 		if ("save".equals(action)) {
-			//check whether org group with this name exists
-			int groupsAmountWithGivenName=DbUtil.getOrgGroupsAmount(editForm.getOrgGrpName(),editForm.getAmpOrgGrpId());
-			if(groupsAmountWithGivenName>0){
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationGroupManager.saveOrgGroupError"));
-	            saveErrors(request, errors);
-	            return mapping.findForward("forward");
-			}else{
-				if (session.getAttribute("ampOrgGrp") != null) {
-					session.removeAttribute("ampOrgGrp");
-				}
-				AmpOrgGroup ampGrp = new AmpOrgGroup();
-				ampGrp.setOrgGrpName(editForm.getOrgGrpName());
-				ampGrp.setOrgGrpCode(editForm.getOrgGrpCode());
-				AmpOrgType ot = DbUtil.getOrgType(editForm.getOrgTypeId());
-				ampGrp.setOrgType(ot);
-				ARUtil.clearOrgGroupTypeDimensions();
 
-				if ((editForm.getAmpOrgGrpId().longValue() ==0)||(editForm.getAmpOrgGrpId().longValue() ==-1)) {
-					DbUtil.add(ampGrp);
-					if (editForm.getAmpOrgId() != null) {
-						editForm.setFlag("refreshParent");
-						return mapping.findForward("popup");
-						
-					} else {
-						return mapping.findForward("added");
-					}
+			if (session.getAttribute("ampOrgGrp") != null) {
+				session.removeAttribute("ampOrgGrp");
+			}
+			AmpOrgGroup ampGrp = new AmpOrgGroup();
+			ampGrp.setOrgGrpName(editForm.getOrgGrpName());
+			ampGrp.setOrgGrpCode(editForm.getOrgGrpCode());
+			AmpOrgType ot = DbUtil.getOrgType(editForm.getOrgTypeId());
+			ampGrp.setOrgType(ot);
+			ARUtil.clearOrgGroupTypeDimensions();
+
+			if ((editForm.getAmpOrgGrpId().longValue() ==0)||(editForm.getAmpOrgGrpId().longValue() ==-1)) {
+				DbUtil.add(ampGrp);
+				if (editForm.getAmpOrgId() != null) {
+					editForm.setFlag("refreshParent");
+					return mapping.findForward("popup");
+					
 				} else {
-					ampGrp.setAmpOrgGrpId(editForm.getAmpOrgGrpId());
-					DbUtil.update(ampGrp);
-					if (editForm.getAmpOrgId() != null) {
-						editForm.setFlag("refreshParent");
-						return mapping.findForward("popup");
-					} else {
-						return mapping.findForward("added");
-					}
+					return mapping.findForward("added");
+				}
+			} else {
+				ampGrp.setAmpOrgGrpId(editForm.getAmpOrgGrpId());
+				DbUtil.update(ampGrp);
+				if (editForm.getAmpOrgId() != null) {
+					editForm.setFlag("refreshParent");
+					return mapping.findForward("popup");
+				} else {
+					return mapping.findForward("added");
 				}
 			}
 

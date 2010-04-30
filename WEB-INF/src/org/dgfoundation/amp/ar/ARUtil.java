@@ -53,8 +53,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 
-import edu.emory.mathcs.backport.java.util.Collections;
-
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -65,44 +63,24 @@ public final class ARUtil {
 	/**
 	 * 
 	 * @param getTabs if null gets both reports and tabs, on true only tabs, on false only reports
-	 * @param filterForName - reports name filter
 	 * @return list of public reports
 	 */
-	public static ArrayList getAllPublicReports(Boolean getTabs,String filterForName) {
+	public static ArrayList getAllPublicReports(Boolean getTabs) {
 		Session session = null;
 		ArrayList col = new ArrayList();
 		String tabFilter	= "";
-		String nameFilter ="";
 
 		if ( getTabs!=null ) {
 			tabFilter	= "r.drilldownTab=:getTabs AND";
 		}
-		if(filterForName!=null){
-			if(filterForName.equals("0-9%")) {
-				nameFilter+="( ";
-				for (int i=0;i<=9;i++){
-					nameFilter+=" r.name like '" + i + "%'";
-					if(i<9){
-						nameFilter+=" or ";
-					}
-				}
-				nameFilter+=" ) and ";
- 		   }else if (!filterForName.equals("")) { //any letter
- 			   nameFilter = " lower(r.name) like lower(:nameFilter) and";
- 		   }		   
-		}
-		
 		try {
 
 			session = PersistenceManager.getSession();
-			String queryString = "select r from " + AmpReports.class.getName()+ " r " + "where ( " + tabFilter + nameFilter + " r.publicReport=true)";
+			String queryString = "select r from " + AmpReports.class.getName()
+					+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
 			Query qry = session.createQuery(queryString);
-			if ( getTabs!=null ){
+			if ( getTabs!=null )
 				qry.setBoolean("getTabs", getTabs);
-			}
-			if(filterForName!=null && !filterForName.equals("0-9%")){
-				qry.setParameter("nameFilter", filterForName);
-			}
 
 			Iterator itrTemp = qry.list().iterator();
 			AmpReports ar = null;
@@ -142,43 +120,23 @@ public final class ARUtil {
 	public static GroupReportData generateReport(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
-		HttpSession httpSession = request.getSession();
+
 		String ampReportId = request.getParameter("ampReportId");
-		
-		Boolean ispublicuser = (Boolean) httpSession.getAttribute("publicuser");
-		if (ispublicuser == null) {
-			ispublicuser = false;
-		}
-		TeamMember teamMember = null;
-		AmpReports r = null;
+		if (ampReportId == null)
+			ampReportId = (String) request.getAttribute("ampReportId");
+		HttpSession httpSession = request.getSession();
 		Session session = PersistenceManager.getSession();
-		if (ispublicuser){
-			if (request.getSession().getAttribute("publicgeneratedreports")!=null && ampReportId !=null){
-				Collection<AmpReports> pgenerated =  (Collection<AmpReports>) request.getSession().getAttribute("publicgeneratedreports");
-				for (Iterator iterator = pgenerated.iterator(); iterator.hasNext();) {
-					AmpReports storedreport = (AmpReports) iterator.next();
-					if (ampReportId!= null && ampReportId.equalsIgnoreCase(storedreport.getId().toString())){
-						r = storedreport;
-						ispublicuser = true;
-						request.getSession().setAttribute("publicuser", true);
-						break;
-					}
-				}
-			}else if (httpSession.getAttribute("newpublicreport")!=null){
-				r = (AmpReports) httpSession.getAttribute("newpublicreport");
-			}
-		}else{
-			if (ampReportId == null){
-				ampReportId = (String) request.getAttribute("ampReportId");
-			}
-			teamMember = (TeamMember) httpSession.getAttribute("currentMember");
-			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
-		}
+
+		TeamMember teamMember = (TeamMember) httpSession
+				.getAttribute("currentMember");
+
+		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
+				ampReportId));
 		
 		// the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		Long siteId = site.getId();
+		String siteId = site.getId().toString();
 		String locale = navigationLanguage.getCode();
 
 		r.setSiteId(siteId);
@@ -234,8 +192,8 @@ public final class ARUtil {
 		return ret;
 	}
 
-	public static Collection<AmpOrgGroup> filterDonorGroups(Collection donorGroups) {
-		Collection<AmpOrgGroup> ret = new ArrayList<AmpOrgGroup>();
+	public static Collection filterDonorGroups(Collection donorGroups) {
+		Collection ret = new ArrayList<AmpOrgGroup>();
 		if (donorGroups == null) {
 			logger
 					.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");
@@ -253,9 +211,6 @@ public final class ARUtil {
 			}
 			ret.add(grp);
 		}
-		
-		Collections.sort((List)ret, new DbUtil.HelperAmpOrgGroupNameComparator());
-		
 		return ret;
 	}
 
@@ -332,7 +287,7 @@ public final class ARUtil {
 			Iterator i = columns.iterator();
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();
-				int order = element.getOrderId().intValue();
+				 int order = element.getOrderId().intValue();
 				if (order - 1 == x)
 					orderedColumns.add(element);
 			}

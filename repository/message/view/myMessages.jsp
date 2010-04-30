@@ -149,7 +149,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
-      td1.innerHTML=''+
+      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>';
       <feature:display name="Message tab" module="Messages">
       	tr1.appendChild(td1);
@@ -160,7 +160,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
-      td1.innerHTML=''+
+      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+''+newalerts+'</a>';
       <feature:display name="Alert tab" module="Messages">
  		tr1.appendChild(td1);
@@ -171,7 +171,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
      var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
-      td1.innerHTML=''+
+      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+''+newapprovals+'</a>';
       <feature:display name="Approval Tab" module="Messages">
       	tr1.appendChild(td1);
@@ -182,7 +182,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
-      td1.innerHTML=''+
+      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+''+newcalevents+'</a>';
       <feature:display name="Event Tab" module="Messages">
       	tr1.appendChild(td1);
@@ -214,8 +214,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
         <ul class="yui-nav">
           <li class="">
             <a title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-          
-            <div style="text-align: center;">
+            <div>
               <digi:trn key="message:myMessages">My Messages</digi:trn>
             </div>
 			</a>

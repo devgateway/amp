@@ -9,8 +9,12 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %> 
 <%@ taglib uri="/taglib/category" prefix="category" %>
+            
+
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 
@@ -75,7 +79,7 @@ function autosum(){
 	return true; 
 }
 
-function validatef(){
+function validate(){
     if (trim(document.aimIPAContractForm.contractName.value) == "") {
         <c:set var="translation">
         <digi:trn key="aim:pleaseEnterContractName">Please enter Contract Name</digi:trn>
@@ -267,17 +271,17 @@ function generateFields(){
 
 function addDisb() {
 	var postString		= "addFields=true&"+generateFields();
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
 function orgsAdded() {
 	var postString		= generateFields();
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
 function delOrgs() {
 	var postString		= "removeOrgs=true&" + getCheckedFields("selOrgs")+"&"+generateFields();
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
 }
 
 function getCheckedFields(name) {
@@ -302,7 +306,7 @@ function getCheckedFields(name) {
 
 function delDisb() {
 	var postString		= "removeFields=true&" + getCheckedFields("selContractDisbursements")+"&"+generateFields();
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
 
@@ -336,18 +340,18 @@ SaveReportEngine.prototype.saveContract	= function () {
 	var postString		= "save=true&"+generateFields();
 	//alert (postString);
 	
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", this, postString);
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", this, postString);
 }
 
 mySaveReportEngine = new SaveReportEngine();
-addLoadEvent(autosum);
+window.onload=autosum;
 -->
 </script>
 
 <!-- code for rendering that nice calendar -->
 
 
-<body>
+<body onload="load()">
 <digi:instance property="aimIPAContractForm" />
 <digi:form action="/editIPAContract.do" method="post">
 
@@ -433,7 +437,7 @@ addLoadEvent(autosum);
 			<td align="left">
 				<html:text readonly="true" size="9" property="startOfTendering" styleClass="inp-text" styleId="startOfTendering"/>
 				<a id ="startOfTenderingDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","startOfTendering",-250,-230)'>
-					<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
 		</field:display>
@@ -445,7 +449,7 @@ addLoadEvent(autosum);
 			<td align="left">
 				<html:text readonly="true" size="9" property="contractValidity" styleClass="inp-text" styleId="contractValidity"/>
 				<a id="contractValidityDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","contractValidity",-250,-230)'>
-					<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
 		</field:display>
@@ -469,7 +473,7 @@ addLoadEvent(autosum);
 			<td align="left">
 				<html:text readonly="true" size="9" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
 				<a id="signatureOfContractDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","signatureOfContract",-250,-230)'>
-					<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
 		</field:display>
@@ -480,7 +484,7 @@ addLoadEvent(autosum);
 			<td align="left">
 				<html:text readonly="true" size="9" property="contractCompletion" styleClass="inp-text" styleId="contractCompletion"/>
 				<a id="contractCompletionDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","contractCompletion",-250,-230)'>
-					<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
 		</field:display>
@@ -612,7 +616,7 @@ addLoadEvent(autosum);
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate1" property="totalECContribIBAmountDate"/>
 					<a id="fimage1" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate1",-250,-230)'>
-						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 				</td>
 		    </field:display>
@@ -627,7 +631,7 @@ addLoadEvent(autosum);
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate2" property="totalECContribINVAmountDate"/>
 					<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate2",-250,-230)'>
-						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 				</td>
 			</field:display>
@@ -650,7 +654,7 @@ addLoadEvent(autosum);
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate3" property="totalNationalContribCentralAmountDate"/>
 						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate3",-250,-230)'>
-							<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 						</a>
 					</td>
  				</field:display>
@@ -665,7 +669,7 @@ addLoadEvent(autosum);
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate4" property="totalNationalContribIFIAmountDate"/>
 						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate4",-250,-230)'>
-							<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 						</a>
 					</td>
 				</field:display>
@@ -682,7 +686,7 @@ addLoadEvent(autosum);
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate5" property="totalNationalContribRegionalAmountDate"/>
 						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate5",-250,-230)'>
-							<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 						</a>
 					</td>
 				</field:display>
@@ -705,7 +709,7 @@ addLoadEvent(autosum);
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate6" property="totalPrivateContribAmountDate"/>
 					<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate6",-250,-230)'>
-						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 				</td>
 			</tr>
@@ -820,7 +824,7 @@ addLoadEvent(autosum);
 								<html:option value="1"><digi:trn key="aim:ipa:popup:planned">Planned</digi:trn></html:option>							
 							</html:select>
 							&nbsp;
-							<html:text indexed="true" name="contractDisbursement" property="stringAmount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
+							<html:text indexed="true" name="contractDisbursement" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
 							&nbsp;
 							<html:select name="contractDisbursement" indexed="true" property="currCode" styleClass="inp-text">
 								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
@@ -828,7 +832,7 @@ addLoadEvent(autosum);
 							&nbsp;
 							<html:text readonly="true" size="9" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
 							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date${idx.count}",-250,-230)'>
-								<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
 						</td>
 						</tr>
@@ -842,7 +846,7 @@ addLoadEvent(autosum);
 	<tr>
 		<td colspan="2" align="center">
 			<field:display name="Contracting Save Button" feature="Contracting">
-				<html:button property="submit" styleClass="dr-menu" onclick="validatef()"><digi:trn key="aim:save">Save</digi:trn></html:button>
+				<html:button property="submit" styleClass="dr-menu" onclick="validate()"><digi:trn key="aim:save">Save</digi:trn></html:button>
 			</field:display>
 			&nbsp;&nbsp;
 			<field:display name="Contracting Cancel Saving" feature="Contracting">

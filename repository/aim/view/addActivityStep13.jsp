@@ -10,21 +10,23 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-latest.pack.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.disable.text.select.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
 <!-- Stylesheet of AMP -->
-<digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+<!--  -->
+
 
 <div id="myContract" style="display: none">
 	<div id="myContractContent" class="content">
@@ -32,20 +34,15 @@
 	</div>
 </div>
 
-<div id="popin2" style="display: none">
-	<div id="popinContent2" class="content">
-	</div>
-</div>
 
 <script type="text/javascript">
-<!--
-		YAHOO.namespace("YAHOO.amptab");
-		YAHOO.amptab.init = function() {
-		    		var tabView = new YAHOO.widget.TabView('tabview_container');
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
+		YAHOOAmp.amptab.init = function() {
+		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 		};
 		
 		/*
-		YAHOO.amptab.handleClose = function() {
+		YAHOOAmp.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
@@ -53,8 +50,8 @@
 			wrapper.appendChild(filter);
 		};
 		*/
-			
-	    var myPanelIPAContracting = new YAHOO.widget.Panel("newmyContract", {
+		    
+	    var myPanelIPAContracting = new YAHOOAmp.widget.Panel("newmyContract", {
 			width:"730px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -67,45 +64,14 @@
 		    }
 		     );
 	
-		var myPanel2 = new YAHOO.widget.Panel("newpopins", {
-			width:"300px",
-			height:"200px",
-			fixedcenter: true,
-		    constraintoviewport: false,
-		    underlay:"none",
-		    close:true,
-		    visible:false,
-		    modal:true,
-		    draggable:true,
-		    context: ["showbtn", "tl", "bl"]
-		    });
-		
-	//myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
-	var panelStart, panelStart2;
-	var checkAndClose2=false;	    
+	//myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+	var panelStart;	    
 	function initScripts() {
 		var msgIPAPanel='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
 		myPanelIPAContracting.setHeader(msgIPAPanel);
 		myPanelIPAContracting.setBody("");
-		myPanelIPAContracting.beforeHideEvent.subscribe(function() {
-			panelStart=1;
-			if(calendarObjForForm.isVisible()){
-				calendarObjForForm.hide();
-			}
-		});		
-		
 		myPanelIPAContracting.render(document.body);
 		panelStart = 0;
-		
-		var msgP2='\n<digi:trn key="aim:selectOrganization">Select Organization</digi:trn>';
-		myPanel2.setHeader(msgP2);
-		myPanel2.setBody("");
-		myPanel2.beforeHideEvent.subscribe(function() {
-			panelStart2=1;
-		});		
-		myPanel2.render(document.body);
-		panelStart2 = 0;
-		
 	}
 	
 	function showSave() {
@@ -138,7 +104,7 @@
 		}
 	}
 
-	addLoadEvent(initScripts);
+	window.onload=initScripts();
 	
 	<logic:present parameter="displayAdd" >
 			var current2 = window.onload;
@@ -147,7 +113,7 @@
 				showSave();
         	};
 	</logic:present>
--->	
+	
 </script>
 <style type="text/css">
 	.mask {
@@ -163,12 +129,7 @@
 	    background-color:fff; 
 	    padding:10px; 
 	} 
-	#popin2 .content { 
-	    overflow:auto; 
-	    height:455px; 
-	    background-color:fff; 
-	    padding:10px; 
-	} 
+	
 </style>
 
 
@@ -234,12 +195,12 @@
     
 	function addContract(){
         var postString		= "new=true";
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 	}
     
     function editContract(indexId) {
         var postString		= "editEU=true&indexId="+indexId;
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
     }
     
     function deleteContract(indexId) {
@@ -255,366 +216,9 @@
     function validateForm() {
         return true;
     }
+    -->
+    </script>
 
-	var responseSuccess2 = function(o){
-		/* Please see the Success Case section for more
-		 * details on the response object's properties.
-		 * o.tId
-		 * o.status
-		 * o.statusText
-		 * o.getResponseHeader[ ]
-		 * o.getAllResponseHeaders
-		 * o.responseText
-		 * o.responseXML
-		 * o.argument
-		 */
-			var response = o.responseText; 
-			var content = document.getElementById("popinContent2");
-		    //response = response.split("<!")[0];
-			content.innerHTML = response;
-		    //content.style.visibility = "visible";
-			
-			showContent2();
-		}
-	 
-		var responseFailure2 = function(o){ 
-		// Access the response object's properties in the 
-		// same manner as listed in responseSuccess( ). 
-		// Please see the Failure Case section and 
-		// Communication Error sub-section for more details on the 
-		// response object's properties.
-			//alert("Connection Failure!"); 
-		}  
-	
-	var callback2 =
-	{ 
-		success:responseSuccess2, 
-		failure:responseFailure2 
-	};
-/*	function showContent2(){
-		var element = document.getElementById("popin2");
-		element.style.display = "inline";
-		myPanel2.setBody(element);
-		document.getElementById("popin2").scrollTop=0;
-		myPanel2.show();
-	}*/
-	function showContent2(){
-		var element = document.getElementById("popin2");
-		element.style.display = "inline";
-		if (panelStart2 < 1){
-			myPanel2.setBody(element);
-		}
-		if (panelStart2 < 2){
-			document.getElementById("popin2").scrollTop=0;
-			myPanel2.show();
-			panelStart2 = 2;
-		}
-		checkErrorAndClose2();
-	}
-	function checkErrorAndClose2(){
-		if(checkAndClose2==true){
-			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-				myclose2();
-				refreshPage2();
-			}
-			checkAndClose2=false;			
-		}
-	}
-	function refreshPage2(){
-		orgsAdded();
-		//document.aimEditActivityForm.step.value = "13";
-		//document.aimEditActivityForm.action = "/aim/addActivity.do?edit=true";
-		//document.aimEditActivityForm.target = "_self";
-		//document.aimEditActivityForm.submit();
-	}
-
-	function myclose2(){
-		var content = document.getElementById("popinContent2");
-		content.innerHTML="";
-		panelStart2=1;
-		myPanel2.hide();
-	
-	}
-
-	function closeWindow() {
-		myclose2();
-	}
-	function showPanelLoading(msg){
-		myPanel2.setHeader(msg);		
-		var content = document.getElementById("popinContent2");
-		content.innerHTML = '<div style="text-align: center">' + 
-		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
-		showContent2();
-	}
-
-	function resetForm() {
-		document.aimSelectOrganizationForm.ampOrgTypeId.value=-1;
-		document.aimSelectOrganizationForm.keyword.value="";
-		document.aimSelectOrganizationForm.tempNumResults.value=10;
-	
-	}
-	
-	function selectOrg(params1, params2, params3, params4) {
-		myPanel2.cfg.setProperty("width","600px");
-		myPanel2.cfg.setProperty("height","500px");
-		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
-		showPanelLoading(msg);
-		YAHOO.util.Connect.asyncRequest("POST", params1, callback2);
-	}
-
-	function checkNumeric(objName,comma,period,hyphen)
-	{
-		var numberfield = objName;
-		if (chkNumeric(objName,comma,period,hyphen) == false)
-		{
-			numberfield.select();
-			numberfield.focus();
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	function chkNumeric(objName,comma,period,hyphen)
-	{
-// only allow 0-9 be entered, plus any values passed
-// (can be in any order, and don't have to be comma, period, or hyphen)
-// if all numbers allow commas, periods, hyphens or whatever,
-// just hard code it here and take out the passed parameters
-		var checkOK = "0123456789" + comma + period + hyphen;
-		var checkStr = objName;
-		var allValid = true;
-		var decPoints = 0;
-		var allNum = "";
-
-		for (i = 0;  i < checkStr.value.length;  i++)
-		{
-			ch = checkStr.value.charAt(i);
-			for (j = 0;  j < checkOK.length;  j++)
-			if (ch == checkOK.charAt(j))
-			break;
-			if (j == checkOK.length)
-			{
-				allValid = false;
-				break;
-			}
-			if (ch != ",")
-			allNum += ch;
-		}
-		if (!allValid)
-		{
-			alertsay = "Please enter only numbers in the \"Number of results per page\"."
-			alert(alertsay);
-			return (false);
-		}
-	}
-
-
-
-	function validate() {
-		var checkboxes=$("#searchResults").find("input.orgsMultibox:checked");
-		if(checkboxes!=null && checkboxes.length>0){
-			return true;
-		}
-		return false;
-		
-	}
-	
-	
-	function setOrganization(id) {
-		<digi:context name="selOrg" property="/aim/selectOrganizationComponent.do"/>
-	    //document.aimSelectOrganizationForm.action = "<%= selOrg %>&id="+id;
-		document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
-	    //document.aimSelectOrganizationForm.submit();
-	    checkAndClose=true;
-		var urlParams="<%=selOrg%>";
-		var params="edit=true&orgSelReset=false&subAction=organizationSelected&id="+id;
-		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback2);
-		    
-		//return true;
-	}
-	
-	function selectOrganization() {
-
-		var flag = validate();
-		if (flag == true){
-			processAddOrganizations();
-		}else{
-			<digi:context name="selOrg" property="/aim/selectOrganizationComponent.do?subAction=validate"/>
-			document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
-		    checkAndClose=true;
-			var urlParams="<%=selOrg%>";		
-			YAHOO.util.Connect.asyncRequest("POST", urlParams, validationCallback);	
-		}
-	}
-
-	function processAddOrganizations(){
-		<digi:context name="selOrg" property="/aim/selectOrganizationComponent.do"/>;
-		document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
-		checkAndClose2=true;
-		var url = "<%=selOrg %>";
-		var params = "?edit=true&orgSelReset=false&subAction=organizationSelected"+getParams(); 
-		YAHOO.util.Connect.asyncRequest("POST", url+params, callback2);
-	}
-
-	function resetForm() {
-		document.aimSelectOrganizationForm.ampOrgTypeId.value=-1;
-		document.aimSelectOrganizationForm.keyword.value="";
-		document.aimSelectOrganizationForm.tempNumResults.value=10;
-	
-	}
-
-	function selectOrganizationPages(page) {
-	   <digi:context name="searchOrg" property="/aim/selectOrganizationComponent.do" />
-
-	   document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=page;
-	   var urlParams="<%=searchOrg%>";
-	   var params="edit=true&orgSelReset=false&subAction=selectPage&page="+page;
-	   if(document.getElementsByName("selOrganisations")!=null){
-			var sectors = document.getElementsByName("selOrganisations").length;
-			for(var i=0; i< sectors; i++){
-				if(document.getElementsByName("selOrganisations")[i].checked){
-					params+="&"+document.getElementsByName("selOrganisations")[i].name+"="+document.getElementsByName("selOrganisations")[i].value;
-				}
-			}
-		}
-	   YAHOO.util.Connect.asyncRequest("POST", urlParams, callback2,params);
-	}	
-	function getParams(){
-		ret="";
-		ret+="&selectedOrganisationFromPages="+document.getElementsByName('selectedOrganisationFromPages')[0].value+
-		"&keyword="+document.getElementsByName('keyword')[0].value +
-		"&matchEntireWord="+document.getElementsByName('matchEntireWord')[0].checked +
-		"&ampOrgTypeId="+document.getElementsByName('ampOrgTypeId')[0].value +
-		"&tempNumResults="+document.getElementsByName('tempNumResults')[0].value;
-		//else if (type==3){//add sectors chosen from the list
-		if(document.getElementsByName("selOrganisations")!=null){
-			var sectors = document.getElementsByName("selOrganisations").length;
-			for(var i=0; i< sectors; i++){
-				if(document.getElementsByName("selOrganisations")[i].checked){
-					ret+="&"+document.getElementsByName("selOrganisations")[i].name+"="+document.getElementsByName("selOrganisations")[i].value;
-				}
-			}
-		}
-	
-		return ret;
-	}
-	function searchOrganization() {
-		if(checkNumeric(document.aimSelectOrganizationForm.tempNumResults	,'','','')==true)
-		{
-			if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
-				  alert ("Invalid value at 'Number of results per page'");
-				  document.aimSelectOrganizationForm.tempNumResults.focus();
-				  //return false;
-			} else {
-				 <digi:context name="searchOrg" property="/aim/selectOrganizationComponent.do"/>
-			    var url = "<%=searchOrg %>"
-				var params = "?edit=true&subAction=search"+getParams();    
-			    YAHOO.util.Connect.asyncRequest("POST", url+params, callback2);
-			    //return true;
-			}
-		}
-		else return false;
-	}
-
-
-	function searchAlpha(val) {
-		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
-			  alert ("Invalid value at 'Number of results per page'");
-			  document.aimEditActivityForm.tempNumResults.focus();
-			  //return false;
-		} else {
-			 <digi:context name="searchOrg" property="/aim/selectOrganizationComponent.do"/>
-		     var urlParams = "<%=searchOrg %>"
-			 var params = "alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";
-		     if(document.getElementsByName("selOrganisations")!=null){
-					var sectors = document.getElementsByName("selOrganisations").length;
-					for(var i=0; i< sectors; i++){
-						if(document.getElementsByName("selOrganisations")[i].checked){
-							params+="&"+document.getElementsByName("selOrganisations")[i].name+"="+document.getElementsByName("selOrganisations")[i].value;
-						}
-					}
-				}
-			 YAHOO.util.Connect.asyncRequest("POST",urlParams,callback2,params);
-		     
-			 //return true;
-		}
-	}
-		
-	function searchAlphaAll(val) {
-		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
-			  alert ("Invalid value at 'Number of results per page'");
-			  document.aimSelectOrganizationForm.tempNumResults.focus();
-			  //return false;
-		} else {
-			 <digi:context name="searchOrg" property="/aim/selectOrganizationComponent.do"/>
-			  //  document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
-		      var aux= document.aimSelectOrganizationForm.tempNumResults.value;
-		      document.aimSelectOrganizationForm.tempNumResults.value=1000000;
-		     //document.aimSelectOrganizationForm.submit();
-
-			   var urlParams="<%=searchOrg%>";
-			   var params="?edit=true&subAction=search&tempNumResults=1000000&viewAll=viewAll";
-			   if(document.getElementsByName("selOrganisations")!=null){
-					var sectors = document.getElementsByName("selOrganisations").length;
-					for(var i=0; i< sectors; i++){
-						if(document.getElementsByName("selOrganisations")[i].checked){
-							params+="&"+document.getElementsByName("selOrganisations")[i].name+"="+document.getElementsByName("selOrganisations")[i].value;
-						}
-					}
-				}
-
-			   YAHOO.util.Connect.asyncRequest("POST", urlParams, callback2,params);
-			   document.aimSelectOrganizationForm.tempNumResults.value=aux;		      
-			  //return true;
-		}
-	}
-
-	var responseSuccessValidation = function(o){
-		/* Please see the Success Case section for more
-		 * details on the response object's properties.
-		 * o.tId
-		 * o.status
-		 * o.statusText
-		 * o.getResponseHeader[ ]
-		 * o.getAllResponseHeaders
-		 * o.responseText
-		 * o.responseXML
-		 * o.argument
-		 */		
-		var root=o.responseXML.getElementsByTagName('ORGANIZATIONS')[0].childNodes[0];
-	    var selOrgs=root.getAttribute('amount');
-	    if(selOrgs=='0'){
-	    	<c:set var="translation">
-	    		<digi:trn>Please choose an organization to add</digi:trn>
-	    	</c:set>
-	    	alert("${translation}");
-	        checkAndClose2=false;
-	        return false;
-	    }else{
-	    	processAddOrganizations();
-	    }		
-	}	
-
-	var responseFailureValidation = function(o){ 
-	// Access the response object's properties in the 
-	// same manner as listed in responseSuccess( ). 
-	// Please see the Failure Case section and 
-	// Communication Error sub-section for more details on the 
-	// response object's properties.
-		alert("Connection Failure!"); 
-	}  
-
-	var validationCallback = 
-	{ 
-		success:responseSuccessValidation, 
-		failure:responseFailureValidation 
-	};
-	-->
-</script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
@@ -647,7 +251,7 @@
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td><jsp:include page="t.jsp"/>
-								<span class=crumb style="visibility: hidden">
+								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
@@ -749,7 +353,8 @@
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
+									<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -762,7 +367,24 @@
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-							
+							<tr>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+                                                                                             <digi:trn>
+													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
+                                                                                            ${fn:length(aimEditActivityForm.steps)}:
+												 <digi:trn key="aim:stepContracting">IPA Contracting</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 							<tr><td>
 							<field:display name="Add IPA Contract" feature="Contracting">
 								<div style="width:99.5%;height:18px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
@@ -910,7 +532,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 <aim:formatNumber value="${contract.totalAmount}" />
+			                                                 ${contract.totalAmount}
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -921,7 +543,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:contractTotalValue">Contract Total Value</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                <aim:formatNumber value="${contract.contractTotalValue}" /> 
+			                                                 ${contract.contractTotalValue}
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -939,7 +561,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 <aim:formatNumber value="${contract.totalECContribIBAmount}" />
+			                                                  ${contract.totalECContribIBAmount}
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -950,7 +572,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 <aim:formatNumber value="${contract.totalECContribINVAmount}" />
+			                                                 ${contract.totalECContribINVAmount}
 			                                                ${contract.totalAmountCurrency}
 			                                             </td>
 			                                         </tr>   
@@ -968,7 +590,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 <aim:formatNumber value="${contract.totalNationalContribCentralAmount}" />
+			                                                 ${contract.totalNationalContribCentralAmount}
 			                                                 ${contract.totalAmountCurrency} 
 			                                             </td>
 			                                         </tr>
@@ -979,7 +601,7 @@
 			                                                 <b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
-			                                                 <aim:formatNumber value="${contract.totalNationalContribRegionalAmount}" /> 
+			                                                 ${contract.totalNationalContribRegionalAmount} 
 				                                               ${contract.totalAmountCurrency}
 			                                              </td>
 			                                          </tr>
@@ -990,7 +612,7 @@
 			                                                  <b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			                                                  <aim:formatNumber value="${contract.totalNationalContribIFIAmount}" />
+			                                                  ${contract.totalNationalContribIFIAmount}
 			                                                 ${contract.totalAmountCurrency}
 			                                              </td>
 			                                          </tr>
@@ -1006,7 +628,7 @@
 			                                                  <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			                                                  <aim:formatNumber value="${contract.totalPrivateContribAmount}" />
+			                                                  ${contract.totalPrivateContribAmount}
 			                                                  ${contract.totalAmountCurrency}
 			                                              </td>
 			                                          </tr>
@@ -1018,9 +640,9 @@
 			                                                  <b><digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              									<aim:formatNumber value="${contract.totalDisbursements}" /> &nbsp;
+			              									${contract.totalDisbursements} &nbsp;
 			              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-			              										&nbsp; ${contract.totalAmountCurrency}"
+			              										&nbsp; ${contract.totalAmountCurrency}
 			              									</logic:empty>
 			              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
 			              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
@@ -1044,7 +666,7 @@
 			                                                  <b><digi:trn key="aim:IPA:popup:totalFundingDisbursements">Total Funding Disbursements</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              									<aim:formatNumber value="${contract.fundingTotalDisbursements}" /> &nbsp;
+			              									${contract.fundingTotalDisbursements} &nbsp;
 			              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
 			              										&nbsp; ${contract.totalAmountCurrency}
 			              									</logic:empty>
@@ -1094,7 +716,7 @@
 			                                                                       </c:if>
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
-			                                                                       <aim:formatNumber value="${disbursement.amount}" />
+			                                                                       ${disbursement.amount}
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                      ${disbursement.currency.currencyName} 
@@ -1141,7 +763,7 @@
 			                                                                       </c:if>
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
-			                                                                      <aim:formatNumber value="${fundingDetail.transactionAmount}" />
+			                                                                       ${fundingDetail.transactionAmount}
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                      ${fundingDetail.currencyCode} 
@@ -1174,8 +796,8 @@
 	                               </logic:notEmpty>
 								  <!-- end contents -->
 								</td></tr>
-                                <tr><td>&nbsp;
-                                    
+                                <tr><td>
+                                    &nbsp;
                                 </td></tr>
 						</table>
 						</td>

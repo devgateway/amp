@@ -52,11 +52,13 @@ public class ViewSelectActivityTabs extends Action {
 			throws IOException, ServletException {
 		//
 		ActionForward actionForward = null;
+		HttpSession session = request.getSession();
 		ampContext = getServlet().getServletContext();
 
 		String urlParams = "&";
 		String paramName = "";
-		for (Enumeration enumeration = request.getParameterNames(); enumeration.hasMoreElements();) {
+		for (Enumeration enumeration = request.getParameterNames(); enumeration
+				.hasMoreElements();) {
 			paramName = (String) enumeration.nextElement();
 			if(urlParams.equals("&"))
 				urlParams += paramName + "=" + request.getParameter(paramName);
@@ -64,11 +66,10 @@ public class ViewSelectActivityTabs extends Action {
 				urlParams += "&" + paramName + "=" + request.getParameter(paramName);
 			
 		}
-		
-		
 		synchronized (ampContext) {
 			//
-			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext
+					.getAttribute("ampTreeVisibility");
 			//
 			String type = "";
 			String name = "";
@@ -83,19 +84,28 @@ public class ViewSelectActivityTabs extends Action {
 				forward = fmTabs[i][2];
 				//
 				if (type.equals("field")) {
-					fieldsVisibility = ampTreeVisibility.getFieldByNameFromRoot(name);
+					fieldsVisibility = ampTreeVisibility
+							.getFieldByNameFromRoot(name);
 					if (fieldsVisibility != null) {
-						isVisible = fieldsVisibility.isVisibleTemplateObj(ampTreeVisibility.getRoot().getTemplate());
+						isVisible = fieldsVisibility
+								.isVisibleTemplateObj(ampTreeVisibility
+										.getRoot().getTemplate());
 					}
 				} else if (type.equals("feature")) {
-					featuresVisibility = ampTreeVisibility.getFeatureByNameFromRoot(name);
+					featuresVisibility = ampTreeVisibility
+							.getFeatureByNameFromRoot(name);
 					if (featuresVisibility != null) {
-						isVisible = featuresVisibility.isVisibleTemplateObj(ampTreeVisibility.getRoot().getTemplate());
+						isVisible = featuresVisibility
+								.isVisibleTemplateObj(ampTreeVisibility
+										.getRoot().getTemplate());
 					}
 				} else if (type.equals("module")) {
-					modulesVisibility = ampTreeVisibility.getModuleByNameFromRoot(name);
+					modulesVisibility = ampTreeVisibility
+							.getModuleByNameFromRoot(name);
 					if (modulesVisibility != null) {
-						isVisible = modulesVisibility.isVisibleTemplateObj(ampTreeVisibility.getRoot());
+						isVisible = modulesVisibility
+								.isVisibleTemplateObj(ampTreeVisibility
+										.getRoot());
 					}
 				}
 				if (isVisible) {
@@ -103,7 +113,7 @@ public class ViewSelectActivityTabs extends Action {
 				}
 			}
 		}
-		//
+		// 
 		return new ActionForward(actionForward.getPath() + urlParams);
 	}
 }

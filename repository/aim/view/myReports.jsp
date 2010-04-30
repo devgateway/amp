@@ -30,8 +30,7 @@ return false;
                         <ul class="yui-nav">
                           <li class="">
                           <a title='<digi:trn key="aim:PortfolioOfReports">Portfolio Reports </digi:trn>'>
-                    
-                          <div style="text-align: center;">
+                          <div>
                           	<digi:trn key="aim:portfolioReports">Reports</digi:trn>
                           </div>
                           </a>
@@ -54,7 +53,7 @@ return false;
 
 					<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
 						<div style="margin:2px">
-							
+							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 							<digi:link title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
 			                    <c:if test="${fn:length(report.name) > 50}" >
 			                    <c:out value="${fn:substring(report.name, 0, 50)}" />...

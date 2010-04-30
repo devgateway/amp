@@ -19,7 +19,7 @@
 									<c:out value="${ampMeasures.measureName}"/>
 								</digi:trn>
 								<logic:notEmpty name="ampMeasures" property="description" >
-									<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" title="<digi:trn>${ampMeasures.description}</digi:trn>">
+									<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn>${ampMeasures.description}</digi:trn>">
 								</logic:notEmpty>
 							</li>
 					</feature:display>

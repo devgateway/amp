@@ -22,267 +22,136 @@
 
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
 
-
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 <!-- dynamic tooltip -->
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
-<script language="JavaScript">
-<!--
-	function expandIssue(issueId){
-		addExpandedIssue(issueId);
-		var imgId='#img_expI_'+issueId;
-		var imghId='#img_colI_'+issueId;
-		var divId='#div_issue_'+issueId;
-		$(imghId).show();
-		$(imgId).hide();
-		$(divId).show('fast');
-	}       
-	
-	function collapseIssue(issueId){
-		removeExpandedIssue(issueId);
-		var imgId='#img_expI_'+issueId;
-		var imghId='#img_colI_'+issueId;
-		var divId='#div_issue_'+issueId;
-		$(imghId).hide();
-		$(imgId).show();
-		$(divId).hide('fast');
-	}
-     
-	function expandMeasure(measId){
-		addExpandedMeasure(measId);
-		var imgId='#img_expM_'+measId;
-		var imghId='#img_colM_'+measId;
-		var divId='#div_measure_'+measId;
-		$(imghId).show();
-		$(imgId).hide();
-		$(divId).show('fast');
-	}       
-	
-	function collapseMeasure(measId){
-		removeExpandedMeasure(measId);
-		var imgId='#img_expM_'+measId;
-		var imghId='#img_colM_'+measId;
-		var divId='#div_measure_'+measId;
-		$(imghId).hide();
-		$(imgId).show();
-		$(divId).hide('fast');
-	}
 
-	function expandIssuesExpanded(){
-		var tmp = document.getElementById("issuesExpanded").value;
-		//alert(tmp);
-		var spl = tmp.split("_");
-		for ( var i = 0; i < spl.length; i++) {
-			if (!isNaN(spl[i]))
-				expandIssue(spl[i]);
-		}
-	}
 
-	function expandMeasuresExpanded(){
-		var tmp = document.getElementById("measuresExpanded").value;
-		//alert(tmp);
-		var spl = tmp.split("_");
-		for ( var i = 0; i < spl.length; i++) {
-			if (!isNaN(spl[i]))
-				expandMeasure(spl[i]);
-		}
-	}
-	
-	function addExpandedIssue(issueId){
-		if (!isNaN(issueId)) {
-			var tmp = document.getElementById("issuesExpanded").value;
-			if (tmp.indexOf(issueId)==-1) {
-				document.getElementById("issuesExpanded").value = tmp + "_" + issueId;
-			}
-		}
-		
-	}
-
-	function removeExpandedIssue(issueId){
-		var tmp = document.getElementById("issuesExpanded").value;
-		var spl = tmp.split("_");
-		var ret = "";
-		for ( var int = 0; int < spl.length; int++) {
-			if (spl[i] != issueId){
-				ret = ret + "_" + spl[i];
-			}
-		}
-		document.getElementById("issuesExpanded").value = ret;
-	}
-
-	function addExpandedMeasure(measId){
-		if (!isNaN(measId)) {
-			var tmp = document.getElementById("measuresExpanded").value;
-			if (tmp.indexOf(measId)==-1) {
-				document.getElementById("measuresExpanded").value = tmp + "_" + measId;
-			}
-		}
-	}
-
-	function removeExpandedMeasure(measId){
-		var tmp = document.getElementById("measuresExpanded").value;
-		var spl = tmp.split("_");
-		var ret = "";
-		for ( var int = 0; int < spl.length; int++) {
-			if (spl[i] != measId){
-				ret = ret + "_" + spl[i];
-			}
-		}
-		document.getElementById("measuresExpanded").value = ret;
-	}
-
-	function myAddIssues(){
-		addIssues(document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
-	}
-
-	function myUpdateIssues(id){
-		updateIssues(id,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
-	}
-
-	function myAddMeasures(issueId){
-		addMeasures(issueId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
-	}
-
-	function myUpdateMeasures(issueId,measureId){
-		updateMeasures(issueId,measureId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
-	}
-	
-	function myAddActors(issueId,measureId){
-		addActors(issueId,measureId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
-	}
-
-	function myUpdateActor(issueId,measureId,actorId){
-		updateActor(issueId,measureId,actorId,document.getElementById("issuesExpanded").value,document.getElementById("measuresExpanded").value);
-	}
--->
-</script>
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
 
 <digi:instance property="aimEditActivityForm" />
 
-					<html:hidden property="issues.issuesExpanded" styleId="issuesExpanded"/>
-  					<html:hidden property="issues.measuresExpanded" styleId="measuresExpanded"/>
-  					<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
+					<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 						<feature:display name="Issues" module="Issues">
 							<field:display name="Issues" feature="Issues">
-								<table width="100%" bgcolor="#f4f4f2">
+								<table width="95%" bgcolor="#f4f4f2">
 
-									<tr><td class="separator1" title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
-										<digi:trn key="aim:issues">Issues</digi:trn>
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
+										<b><digi:trn key="aim:issues">Issues</digi:trn></b></a>
 									</td></tr>
-									<tr><td>&nbsp;
-										
+									<tr><td>
+										&nbsp;
 									</td></tr>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="issues.issues">
 											<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
 												<tr><td align="center">
-													<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center">
+													<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
 														<%--<tr bgcolor="#d7eafd">--%>
+														<% int i = 1;
+															String rowClass = "";
+														%>
 
 														<logic:iterate name="aimEditActivityForm" property="issues.issues"
 														id="issues" type="org.digijava.module.aim.helper.Issues">
+														<% if ((i % 2) != 0) {
+															rowClass = "rowAlternate";
+															} else {
+															rowClass = "rowNormal";
+															}
+															i++;
+														%>
 
-														<tr>
-															<td vAlign="center" align="left">
-															<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
-																<tr class="rowIssue" >
-																	<td  align="left">
-<!--																	    <IMG src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"/>-->
-																			<img id="img_expI_<c:out value="${issues.id}"/>" onclick="expandIssue(<c:out value="${issues.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif"/>
-																			<img id="img_colI_<c:out value="${issues.id}"/>" onclick="collapseIssue(<c:out value="${issues.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif"  style="display : none;"/>
-
-																		<a href="javascript:myUpdateIssues('<c:out value="${issues.id}"/>')">
-																		<c:out value="${issues.name}"/></a>
-																		 &nbsp;
-																		<field:display feature="Issues" name="Issue Date">
-																			<c:out value="${issues.issueDate}"/>
-																		</field:display>
-																		<a href="javascript:removeIssue('${issues.id}')" >
-																			<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" />
-																		</a> 
-																	</td>
-																	<td align="right">
-																		<field:display feature="Issues" name="Measures Taken">
-																			<field:display name="Add Measures Link" feature="Issues">
-																				<a href="javascript:myAddMeasures('<c:out value="${issues.id}"/>')">
-																					<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
-																				</a>
-																			</field:display>													
-																		</field:display>
-																	</td>
-																</tr>
-															</table>
+														<tr class="<%=rowClass%>">
+															<td vAlign="center" align="left" bgcolor="#dbe5f1">
+															  <div style="display:block;padding:2px;font-size:10pt;">
+																<c:out value="${issues.name}"/>
+																<field:display feature="Issues" name="Issue Date">
+  																<br/>
+																	<strong><c:out value="${issues.issueDate}"/></strong>
+																</field:display>
+																<br/>
+																</div>
+																<button onclick="updateIssues('<c:out value="${issues.id}"/>');return false;" title="Edit this issue"  class="buton">Edit issue</button>
+																<button onclick="removeIssue('${issues.id}');return false;" title="Delete this issue" class="buton">Delete issue</button>
+<!--
+																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')"  title="Edit this issue"><digi:img src="../ampTemplate/images/application_edit.png" border="0"/></a>
+																<a href="javascript:removeIssue('${issues.id}')" title="Delete this issue"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
+-->
+																<field:display feature="Issues" name="Measures Taken">
+																	<field:display name="Add Measures Link" feature="Issues">
+																		<button class="buton" href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
+																			<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
+																		</button>
+																	</field:display>													
+																</field:display>
 															</td>
 														</tr>
 														<field:display feature="Issues" name="Measures Taken">
-														<tr>
+														<tr class="<%=rowClass%>">
 															<td vAlign="center" align="left">
-																<div id="div_issue_<c:out value="${issues.id}"/>" style="display : none;">
-																<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
+																<table width="100%" cellPadding=2 cellSpacing=1 vAlign="top" border=0
+																bgcolor="#dddddd">
 																	<logic:notEmpty name="issues" property="measures">
 																	<logic:iterate name="issues" property="measures" id="measure"
 																	 type="org.digijava.module.aim.helper.Measures">
-																	<tr class="rowMeasure">
-																		<td vAlign="center" align="left" width="3">
-																			<IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
+																	<tr class="<%=rowClass%>">
+																		<td vAlign="top" align="left" width="3">
+																			<digi:img src="../ampTemplate/images/link_out_bot.gif" border="0" />
 																		</td>
-																		<td vAlign="center" align="left" >
-																		    <img id="img_expM_<c:out value="${measure.id}"/>" onclick="expandMeasure(<c:out value="${measure.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_plus.gif"/>
-																			<img id="img_colM_<c:out value="${measure.id}"/>" onclick="collapseMeasure(<c:out value="${measure.id}"/>)" src="/TEMPLATE/ampTemplate/imagesSource/common/tree_minus.gif"  style="display : none;"/>
-																			<a href="javascript:myUpdateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
-																			<c:out value="${measure.name}"/> </a>
-																			<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
-																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
-																			</a>
-																		</td>
-																		<td align="right">
+																		<td vAlign="center" align="left" bgcolor="#dedede">
+																			<div style="display:block;font-size:10pt;">
+																			<c:out value="${measure.name}"/>
+																			<br/>
+																			<br/>
+<!--
+       																<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" title="Edit this measure"><digi:img src="../ampTemplate/images/application_edit.png" border="0"/></a>
+      																<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" title="Delete this measure"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
+-->
+      																</div>
+      																<button class="buton" onclick="updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Edit this measure">Edit measure</button>
+      																<button class="buton" onclick="removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Delete this measure">Delete measure</button>
 																			<field:display name="Add Actors Link" feature="Issues">
-																				<a href="javascript:myAddActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></a>
-																			</field:display>																		
+																				<button class="buton" href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
+																			</field:display>
 																		</td>
 																	</tr>
-																	<tr class="rowActor">
+																	<tr class="<%=rowClass%>">
 																		<td vAlign="center" align="left" width="3">
 																		</td>
-																		<td vAlign="center" align="left" colspan="2">
+																		<td vAlign="center" align="left" >
 																		  <field:display name="Actors" feature="Issues">
-																			<div id="div_measure_<c:out value="${measure.id}"/>" style="display : none;">
-																				<table cellPadding=4 cellSpacing=1 vAlign="top" border=0>
+																			<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
+																			bgcolor="#dddddd">
 																				<logic:notEmpty name="measure" property="actors">
 																				<logic:iterate name="measure" property="actors" id="actor"
 																				 type="org.digijava.module.aim.dbentity.AmpActor">
-																				<tr>
+																				<tr class="<%=rowClass%>">
 																					<td vAlign="center" align="left" width="3">
-																						&nbsp;&nbsp;
+       																			<digi:img src="../ampTemplate/images/link_out_bot.gif" border="0" />
 																					</td>
-																					<td vAlign="center" align="left">
-																					    <IMG src="/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif"/>
-																						<a href="javascript:myUpdateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
-																							<c:out value="${actor.name}"/>
-																						</a>
-																					</td>
-																					<td  align="left">
-																						<a href="javascript:removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
-																							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
-																						</a>																					
+																					<td vAlign="center" align="left" style="border:1px solid #cecece;" >
+      																			<div style="display:block;">
+																						<c:out value="${actor.name}"/>
+																						</div>
+																						<br/>
+																						<button class="buton" onclick="updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;">Edit actor</button>
+																						<button class="buton" onclick="removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;">Delete actor</button>
 																					</td>
 																				</tr>
 																				</logic:iterate>
 																				</logic:notEmpty>
 																			</table>
-																			</div>
 																		  </field:display>
 																		</td>
 																	</tr>
 																	</logic:iterate>
 																	</logic:notEmpty>
 																</table>
-																</div>
 															</td>
 														</tr>
 														</field:display>
@@ -294,7 +163,7 @@
 															
 															<field:display name="Add Issues Button" feature="Issues">
 
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="myAddIssues()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
 																		<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 																</html:button>
 
@@ -308,7 +177,7 @@
 											<field:display name="Add Issues Button" feature="Issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="myAddIssues()">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
 															<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 													</html:button>
 
@@ -321,7 +190,3 @@
 								</field:display>
 							</feature:display>
 						</module:display>
-				<script language="JavaScript">
-					expandIssuesExpanded();
-					expandMeasuresExpanded();
-				</script>

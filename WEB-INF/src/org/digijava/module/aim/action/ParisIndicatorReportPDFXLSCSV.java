@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -85,7 +84,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				int arrSize = ans.size();
 				rowCnt1 = rowCnt1 + 1;
 				for (int i = 0; i < arrSize; i++) {
-					BigDecimal test[] = (BigDecimal[]) ans.get(i);
+					double test[] = (double[]) ans.get(i);
 					for (int j = 0; j < test.length; j++) {
 						b1++;
 					}
@@ -116,19 +115,19 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					data2[row][col] = name;
 
 					for (int i = 0; i < arrSize; i++) {
-						BigDecimal test[] = (BigDecimal[]) ans.get(i);
+						double test[] = (double[]) ans.get(i);
 
 						for (int j = 0; j < test.length; j++) {
 							col++;
-							BigDecimal val = test[j];
+							double val = test[j];
 
-							if (val.doubleValue() == -1) {
+							if (val == -1) {
 								data2[row][col] = "n.a.";
 								// //System.out.println(
 								// " this sis where na is coming "+ col);
 							} else {
-								BigDecimal d = new BigDecimal(Math.round(val.doubleValue()));
-								int temp1 = d.intValue();
+								double d = Math.round(val);
+								int temp1 = (int) d;
 								data2[row][col] = temp1 + "";
 								// data2[row][col] = mf.format(temp1);
 							}
@@ -203,12 +202,12 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					data2[row][col] = name;
 
 					for (int i = 0; i < arrSize; i++) {
-						BigDecimal test[] = (BigDecimal[]) ans.get(i);
+						double test[] = (double[]) ans.get(i);
 						for (int j = 0; j < test.length; j++) {
 							col++;
 							data2[row][col] = "" + yr;
 							col++;
-							data2[row][col] = "" + test[j].longValue();
+							data2[row][col] = "" + (long) test[j];
 							yr = yr + 1;
 
 							logger.info(" this is the 6th report " + b1

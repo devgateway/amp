@@ -12,7 +12,6 @@
 		<property name="readPermission" column="read_permission" type="java.lang.Boolean" />
 		<property name="writePermission" column="write_permission" type="java.lang.Boolean" />
 		<property name="deletePermission" column="delete_permission" type="java.lang.Boolean" />
-		<property name="byDefault" column="byDefault" type="java.lang.Boolean" />
 
 		<many-to-one name="user" column="user_" class="org.digijava.kernel.user.User" cascade="none" />
 		<many-to-one name="ampTeam" column="amp_team_id"
@@ -64,12 +63,6 @@
 			<cache usage="read-write" />
 			<key column="receiver_id" />
 			<one-to-many class="org.digijava.module.message.dbentity.AmpMessageState" />
-		</set>
-		
-		<set name="contacts" inverse="true" cascade="delete">
-			<cache usage="read-write" />
-			<key column="creator_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpContact" />
 		</set>
 	</class>
 </hibernate-mapping>

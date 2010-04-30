@@ -60,6 +60,9 @@ public class ShowEditCalendarItem
 	Calendar event = null;
 
 	calendForm.loadCalendar();
+	// get user navigation languge
+	Locale navigationLanguge = user.getUserLangPreferences().
+	      getNavigationLanguage();
 
 	//get countries list
 	Collection countries = TrnUtil.getCountries(RequestUtils.

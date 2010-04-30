@@ -17,25 +17,17 @@ function myclearDate(editBox, clearLink, checkboxId){
 }
 </script>
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
-
 <digi:instance property="aimEditActivityForm" />
-									<tr><td class="separator1">
-										<digi:trn key="aim:planning">Planning</digi:trn>
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<b><digi:trn key="aim:planning">Planning</digi:trn></b>
 									</td></tr>
-									<tr><td>&nbsp;
-										
+									<tr><td>
+										&nbsp;
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-											<field:display name="Line Ministry Rank" feature="Planning"></field:display>
-											<bean:define id="contentDisabled">false</bean:define>
-											<c:set var="contentDisabled">
-											<field:display name="Line Ministry Rank" feature="Planning">false</field:display>
-											</c:set>
-											<c:if test="${contentDisabled==''}">
-												<c:set var="contentDisabled">true</c:set>
-											</c:if>											
+										<field:display name="Line Ministry Rank" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">&nbsp;
@@ -46,31 +38,28 @@ function myclearDate(editBox, clearLink, checkboxId){
 													<table cellPadding=0 cellSpacing=0>
 														<tr>
 															<td>
-																<c:set var="translation">
-																	<digi:trn key="aim:addActivityStatusFirstLine">-Select Rank-</digi:trn>
-																</c:set>
 																<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">
-																	<c:if test="${contentDisabled=='true'}">
-					                                                	<category:showoptions   firstLine="${translation}"  name="aimEditActivityForm" property="planning.lineMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.LINE_MINISTRY_RANK_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
-					                                                </c:if>
-					                                                <c:if test="${contentDisabled=='false'}">
-					                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.lineMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.LINE_MINISTRY_RANK_KEY %>" styleClass="inp-text" />
-					                                                </c:if>
+																	<html:select name="aimEditActivityForm" property="planning.lineMinRank" styleClass="inp-text">
+																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
+																		<c:forEach var="lmr" items="${aimEditActivityForm.planning.actRankCollection}" >
+																			<c:choose>
+																				<c:when test="${lmr == aimEditActivityForm.planning.lineMinRank}">
+																					<option value='<c:out value="${lmr}" />' selected><c:out value="${lmr}"/></option>
+																				</c:when>
+																				<c:otherwise>
+																					<option value='<c:out value="${lmr}" />'><c:out value="${lmr}"/></option>
+																				</c:otherwise>
+																			</c:choose>
+																		</c:forEach>
+																	</html:select>
 																</a>
 															</td>
 														</tr>
 													</table>
 												</td>
 											</tr>
-											<field:display name="Ministry of Planning Rank" feature="Planning"></field:display>
-											<bean:define id="contentDisabled">false</bean:define>
-											<c:set var="contentDisabled">
-											<field:display name="Ministry of Planning Rank" feature="Planning">false</field:display>
-											</c:set>
-											<c:if test="${contentDisabled==''}">
-												<c:set var="contentDisabled">true</c:set>
-											</c:if>											
-
+										</field:display>
+										<field:display name="Ministry of Planning Rank" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">&nbsp;
@@ -82,18 +71,30 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
-																	<c:if test="${contentDisabled=='true'}">
-					                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.planMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.MINISTRY_PLANNING_RANK_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
-					                                                </c:if>
-					                                                <c:if test="${contentDisabled=='false'}">
-					                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.planMinRank"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.MINISTRY_PLANNING_RANK_KEY %>"  styleClass="inp-text" />
-					                                                </c:if>
+																	<html:select property="planning.planMinRank" styleClass="inp-text">
+																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
+							<c:forEach var="mpr"
+								items="${aimEditActivityForm.planning.actRankCollection}">
+								<c:choose>
+									<c:when
+										test="${mpr == aimEditActivityForm.planning.planMinRank}">
+										<option value='<c:out value="${mpr}" />' selected><c:out
+											value="${mpr}" /></option>
+									</c:when>
+									<c:otherwise>
+										<option value='<c:out value="${mpr}" />'><c:out
+											value="${mpr}" /></option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</html:select>
 																</a>
 															</td>
 														</tr>
 													</table>
 												</td>
 											</tr>
+											</field:display>
 											<field:display name="Overall Cost" feature="Planning">
 											<logic:present name="aimEditActivityForm" property="overallCost">
 											<tr>
@@ -146,10 +147,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear1" href='javascript:clearDate(document.getElementById("originalAppDate"), "clear1")'>
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
-																	<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -176,10 +177,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear2" href='javascript:myclearDate(document.getElementById("revisedAppDate"), "clear2", "sameAs1")'>
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>
-																<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -212,10 +213,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear3" href='javascript:clearDate(document.getElementById("originalStartDate"), "clear3")'>
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("originalStartDate"), "clear3")'>
-																<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -242,10 +243,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear4" href="javascript:myclearDate(document.aimEditActivityForm.revisedStartDate, 'clear4', 'sameAs2')">
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.revisedStartDate,"clear4")'>
-																<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -278,10 +279,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear5" href="javascript:clearDate(document.aimEditActivityForm.contractingDate, 'clear5')">
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date5" href='javascript:pickDateWithClear("date5",document.aimEditActivityForm.contractingDate,"clear5")'>
-																<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -308,10 +309,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear6" href="javascript:clearDate(document.aimEditActivityForm.disbursementsDate, 'clear6')">
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date6" href='javascript:pickDateWithClear("date6",document.aimEditActivityForm.disbursementsDate,"clear6")'>
-																<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td>&nbsp;
@@ -341,10 +342,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear7" href="javascript:clearDate(document.aimEditActivityForm.proposedCompDate, 'clear7')">
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date7" href='javascript:pickDateWithClear("date7",document.aimEditActivityForm.proposedCompDate,"clear7")'>
-																	<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -371,10 +372,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear8" href="javascript:clearDate(document.aimEditActivityForm.currentCompDate, 'clear8')">
-																 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date8" href='javascript:pickDateWithClear("date8",document.aimEditActivityForm.currentCompDate,"clear8")'>
-																<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td>&nbsp;
@@ -396,11 +397,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 											</c:if>											
 											<tr>
 												<td bgcolor="#ffffff">
-													<a class="requiredField">
-														*&nbsp;<digi:trn key="aim:status">Status</digi:trn>
-													</a>												  
+												<FONT color=red>*</FONT>&nbsp;
+												<digi:trn key="aim:status">Status</digi:trn>												  
 												<a href="javascript:popupwin('activity_status')">
-												<img src="/TEMPLATE/ampTemplate/imagesSource/common/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width=10 height=10 border=0></a>
+												<img src="../ampTemplate/images/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">
 													<c:set var="translation">
@@ -441,4 +441,5 @@ function myclearDate(editBox, clearLink, checkboxId){
 	clearDisplay(document.aimEditActivityForm.proposedCompDate, "clear7");
 	clearDisplay(document.aimEditActivityForm.currentCompDate, "clear8");
 	
-</script>							
+</script>
+									

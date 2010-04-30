@@ -112,7 +112,7 @@
 
 						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-							<IMG height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width=15>
+							<IMG height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 
 							<jsp:useBean id="urlChannelOverview" type="java.util.Map" class="java.util.HashMap"/>
 

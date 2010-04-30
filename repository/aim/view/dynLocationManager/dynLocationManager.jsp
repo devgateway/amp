@@ -179,7 +179,7 @@
 
 	
 
-	YAHOO.util.Event.addListener(window, "load", initTree) ;
+	YAHOOAmp.util.Event.addListener(window, "load", initTree) ;
 </script>
 <bean:define id="myForm" toScope="request" name="aimDynLocationManagerForm" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="90%" class="box-border-nopadding">
@@ -239,7 +239,7 @@
 										<ul>
 											<li noDrag="true">
 												<a class="atree" id="a-locations"><digi:trn>Locations</digi:trn></a>
-												<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_plus.png" style="height: 13px; cursor: pointer;" 
+												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 														onclick="addLocation(-1, ${aimDynLocationManagerForm.firstLayerId})" 
 														title="Add ${aimDynLocationManagerForm.implementationLocation.possibleValues[0]}" />
 												<jsp:include page="listLocations.jsp" />

@@ -28,20 +28,13 @@
   }  
   function MyaddUserOrTeam(){
     var list = document.getElementById('selreceivers');
-    var MyContacts=new Array();
 	var orphands=new Array();
-	var orpIndex = 0; //teams and team members
-	var index = 0; //contact
+	var orpIndex = 0;
     for(var i=0; i<list.length;i++){
       if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
          orphands[orpIndex]=list.options[i];
          orpIndex++;
       }
-
-      if(list.options[i].value.indexOf('c')==0){
-        	MyContacts[index]=list.options[i];
-        	index++;
-        }
     }
     if(orpIndex!=0){
        registerOrphanMember(orphands);
@@ -49,12 +42,6 @@
 
 	//add teams and members
   	addUserOrTeam();//fills out the list with teams and members
-
-  	if(index != 0){
- 	   for(var j=0; j<index; j++){
- 	      list.options.add(MyContacts[j]);
- 	   }
-     }
 
   }
 
@@ -65,12 +52,6 @@
 		}
 		if(document.getElementById('triggerSelect').value== -1 ){
 			alert('Please Select Related Trigger');
-			return false;
-		}
-        var emailable='<digi:trn jsFriendly="true">Please select value</digi:trn>';
-        if(document.getElementById('emailableSelect').value== -1 ){
-			alert(emailable);
-            document.getElementById('emailableSelect').focus();
 			return false;
 		}
 		return true;
@@ -108,32 +89,6 @@
     	
     	return true;
 	}
-
-    function addExtraReceivers(receiver){
-		var list = document.getElementById('selreceivers');
-	    if (list == null || receiver == null || receiver.value == null || receiver.value == "") {
-	      return;
-	    }
-
-		var guestVal=receiver.value;
-
-		if(guestVal.length>0){
-			addOption(list,guestVal,'c:'+guestVal);
-		}
-
-		receiver.value = "";
-	}
-
-	function addOption(list, text, value){
-	    if (list == null) {
-	      return;
-	    }
-	    var option = document.createElement("OPTION");
-	    option.value = value;
-	    option.text = text;
-	    list.options.add(option);
-	    return false;
-	  }
 
 </script>
 <style  type="text/css">
@@ -253,17 +208,7 @@
 																							</logic:iterate>
 																						</html:select> 
 																					</td>
-																				</tr>
-                                                                                <tr>
-																					<td align="right"><digi:trn>Email alert</digi:trn><font color="red">*</font></td>
-																					<td align="left">
-																						<html:select property="emailable" name="messageForm" styleClass="inp-text" styleId="emailableSelect">
-                                                                                            <html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
-																							<html:option value="false"><digi:trn>No</digi:trn></html:option>
-                                                                                            <html:option value="true"><digi:trn>Yes</digi:trn></html:option>
-																						</html:select>
-																					</td>
-																				</tr>
+																				</tr>													
 																				<tr>
 																					<td nowrap="nowrap" valign="top" align="right"><digi:trn>Receivers</digi:trn><font color="red">*</font></td>
 																                    <td>
@@ -273,7 +218,7 @@
 																                                    <table border="0" width="100%">																                                        
 																                                        <tr>
 																                                            <td>
-																                                              <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:220px; height: 150px;">
+																                                              <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
@@ -302,27 +247,17 @@
 																                                    <table border="0" width="100%" cellpadding="0">																                                       
 																                                        <tr>
 																                                            <td nowrap="nowrap" valign="top">
-                                                                                                                <table border="0" width="100%">
-                                                                                                                    <tr height="25px">
-                                                                                                                        <td>
-                                                                                                                            <input type="text" id="additionalEmail" style="width:200px;font-size:100%">
-
-                                                                                                                        </td>
-                                                                                                                        <td>
-                                                                                                                            <html:button property="" onclick="addExtraReceivers(document.getElementById('additionalEmail'))">Add</html:button>
-                                                                                                                           
-                                                                                                                        </td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td valign="top">
-                                                                                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width: 220px; height: 125px;">
-                                                                                                                                <c:if test="${!empty messageForm.receivers}">
-                                                                                                                                    <html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
-                                                                                                                                </c:if>
-                                                                                                                            </html:select>
-                                                                                                                        </td>
-                                                                                                                    </tr>
-                                                                                                                </table>
+																                                                <table border="0" width="100%">																                                                   
+																                                                    <tr>
+																                                                        <td valign="top">																
+																                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
+																                                              					<c:if test="${!empty messageForm.receivers}">
+																	                                                              	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
+																	                                                              </c:if>                
+																                                                            </html:select>
+																                                                        </td>																                                                        
+																                                                    </tr>
+																                                                </table>
 																                                            </td>
 																                                        </tr>
 																                                    </table>

@@ -14,25 +14,19 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
     private String formulaText;
     private String baseLineValue;
     private String targetValue;
+    private Collection columns;
     private Long columnIndex;
     private boolean formulaEnabled;
     private String constantName;
 
-
-    private Collection surveis;
-
-
-    public Collection getSurveis() {
-        return surveis;
-    }
-
-    public void setSurveis(Collection surveis) {
-        this.surveis = surveis;
-    }
+    private Collection ahsurveyIndicatorCalcFormulas;
 
     public ViewAhSurveyFormulasForm() {
     }
 
+    public Collection getAhsurveyIndicatorCalcFormulas() {
+        return ahsurveyIndicatorCalcFormulas;
+    }
 
     public String getAction() {
         return action;
@@ -40,6 +34,10 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
 
     public Long getColumnIndex() {
         return columnIndex;
+    }
+
+    public Collection getColumns() {
+        return columns;
     }
 
     public String getConstantName() {
@@ -78,6 +76,10 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
         return formulaEnabled;
     }
 
+    public void setAhsurveyIndicatorCalcFormulas(Collection ahsurveyIndicatorCalcFormulas) {
+        this.ahsurveyIndicatorCalcFormulas = ahsurveyIndicatorCalcFormulas;
+    }
+
     public void setFormulaText(String formulaText) {
         this.formulaText = formulaText;
     }
@@ -88,6 +90,10 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
 
     public void setConstantName(String constantName) {
         this.constantName = constantName;
+    }
+
+    public void setColumns(Collection columns) {
+        this.columns = columns;
     }
 
     public void setColumnIndex(Long columnIndex) {

@@ -18,7 +18,7 @@
     	var amount=num.value;
     	var validChars= "0123456789.";
     	var dotsAmount=0; //there should be only one '.' character and not at the beggining like .3 or 0.2.6
-    	var errorMsg='<digi:trn jsFriendly="true">Please enter numeric value only</digi:trn>';
+    	var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
     	var errorAppeared=false;
     	for (var i = 0;  i < amount.length;  i++) {
     		var ch = amount.charAt(i);
@@ -81,30 +81,11 @@
               }	
           }
           //for every actual value we should have base and target values
-          var msg='';
           if(baseValue==0||targetValue==0){
-              msg='<digi:trn key="gis:addEditValue:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn>';
+              var msg='<digi:trn key="gis:addEditValue:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn>';
               alert(msg);
               return false;	
           }
-        var dates=$("input[@id^='txtDate']");
-        var amounts=$("input[@id^='val_']");
-        for(var j=0;j<dates.length;j++){
-            if(amounts[j].value.trim()==''||amounts[j].value=='0.0'){
-                msg='<digi:trn jsFriendly="true">Please enter amounts</digi:trn>';
-                alert(msg);
-                amounts[j].focus();
-                return false;
-
-            }
-            if(dates[j].value.trim()==''){
-                msg='<digi:trn jsFriendly="true">Please choose date</digi:trn>';
-                alert(msg);
-                dates[j].focus();
-                return false;
-
-            }
-        }
           return true;
       }
 </script>
@@ -157,6 +138,7 @@
                             &nbsp;
                         </td>
                     </tr>
+                    <tr>
                     <c:if test="${!empty gisIndicatorSectorRegionForm.values}">
                         <c:forEach var="values" varStatus="index" items="${gisIndicatorSectorRegionForm.values}">
                             <tr>
@@ -175,7 +157,7 @@
                                 <td  height="10" align="center" nowrap="nowrap">
                                     <html:text name="values" property="valueDateString" indexed="true" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
                                     <a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
-                                        <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0> 
+                                        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
                                     </a> 
                                     
                                 </td>
@@ -184,7 +166,7 @@
                                 <td align="center">
                                     <a href="javascript:deleteData('${index.count-1}')"> 
                                         <!-- newly added value has no id in db before the save operation, so to refer values we will use their order id in the list -->
-                                        <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete indicator value" />
+                                        <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
                                     </a>
                                 </td>
                             </tr>        

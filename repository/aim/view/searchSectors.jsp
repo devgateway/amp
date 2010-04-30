@@ -257,23 +257,23 @@
 										</td>
 										<td width="100">
 												<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
-														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border="0">
+														<img src= "../ampTemplate/images/link_out_bot.gif" border="0">
 		 												<b>[${searchedSectors.sectorName}]<b>
 										 	    </c:if>
 										
 												<c:if test="${!empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name }">
-													    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border="0">
+													    <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
 													    [${searchedSectors.sectorName}]<br>
-													    <img src= "/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border="0">
+													    <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
 													    <b>[${searchedSectors.subsectorLevel1Name}]<b>
 												</c:if>
 												
 												<c:if test="${!empty searchedSectors.subsectorLevel1Name && !empty searchedSectors.subsectorLevel2Name}">
-													     <img src= "/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border="0">
+													     <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
 													     [${searchedSectors.sectorName}]<br>
-													     <img src= "/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border="0">
+													     <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
 													     [${searchedSectors.subsectorLevel1Name}]<br>
-													     <img src= "/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border="0">
+													     <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
 													    <b>[${searchedSectors.subsectorLevel2Name}]</b>
 												</c:if>
 											</td>

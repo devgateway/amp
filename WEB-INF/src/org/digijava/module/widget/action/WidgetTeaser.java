@@ -1,7 +1,6 @@
 package org.digijava.module.widget.action;
 
 import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,12 +12,9 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
-import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
-import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
-import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.form.WidgetTeaserForm;
 import org.digijava.module.widget.helper.WidgetVisitor;
 import org.digijava.module.widget.helper.WidgetVisitorAdapter;
@@ -65,7 +61,7 @@ public class WidgetTeaser extends TilesAction {
                 WidgetVisitor adapter=new WidgetVisitorAdapter(){
                     @Override
                     public void visit(AmpWidgetIndicatorChart chart){
-                        rendertype.add(WidgetUtil.CHART_INDICATOR);
+			rendertype.add(WidgetUtil.CHART_INDICATOR);
                     }
                      @Override
                     public void visit(AmpWidgetOrgProfile orgProfile){
@@ -76,18 +72,6 @@ public class WidgetTeaser extends TilesAction {
                     @Override
                     public void visit(AmpDaTable table){
                          rendertype.add(WidgetUtil.TABLE);
-                    }
-                    @Override
-                    public void visit(AmpSectorTableWidget sectorTable){
-                         rendertype.add(WidgetUtil.SECTOR_TABLE);
-                    }
-                    @Override
-                    public void visit(AmpParisIndicatorTableWidget table){
-                         rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
-                    }
-                    @Override
-                    public void visit(AmpWidgetTopTenDonorGroups table) {
-                        rendertype.add(WidgetUtil.TOP_TEN_DONORS);
                     }
                 };
                 widget.accept(adapter);

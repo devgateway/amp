@@ -29,7 +29,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
+import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.digijava.kernel.exception.ExceptionHelper;
 import org.digijava.kernel.exception.ExceptionInfo;
 import org.digijava.module.exception.form.DigiExceptionReportForm;
@@ -82,9 +82,9 @@ public final class ShowExceptionReport
             formReport.setEmail(currentUser.getEmail());
         }
         
-        if (exceptionInfo != null && exceptionInfo.getException() != null){
-        	ErrorReportingPlugin.handle(exceptionInfo.getException(), null, request);
-        }
+        if (exceptionInfo != null && exceptionInfo.getException() != null)
+        	ErrorReporting.handle(exceptionInfo.getException(), null, request);
+        
         
         //generate a unique sufix
         long rand = System.currentTimeMillis();

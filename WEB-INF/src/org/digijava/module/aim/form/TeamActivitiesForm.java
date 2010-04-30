@@ -3,7 +3,6 @@ package org.digijava.module.aim.form;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.message.helper.RelatedActivity;
 
 public class TeamActivitiesForm extends ActionForm {
 
@@ -27,15 +26,8 @@ public class TeamActivitiesForm extends ActionForm {
 	private String sortOrder = null;
 	private Long dnrTeamId;
 	private boolean donorFlag = false;
-
-	private Collection documents;
-	private Collection allDocuments;
-	private Long selActDocuments[];
-	private String uuid[];
-	private String removeDocument;
-	private Long selectedActId;
-	private RelatedActivity[] relatedActivities;
 	
+
     /**
      * @return Returns the activities.
      */
@@ -270,47 +262,4 @@ public class TeamActivitiesForm extends ActionForm {
 	public void setMembers(Collection members) {
 		this.members = members;
 	}
-	public Collection getDocuments() {
-		return this.documents;
-	}
-	public void setDocuments(Collection documents) {
-		this.documents = documents;
-	}
-	public Collection getAllDocuments() {
-		return this.allDocuments;
-	}
-	public void setAllDocuments(Collection allDocuments) {
-		this.allDocuments = allDocuments;
-	}
-	public Long[] getSelActDocuments() {
-		return this.selActDocuments;
-	}
-	public void setSelActDocuments(Long[] selActDocuments) {
-		this.selActDocuments = selActDocuments;
-	}
-	public String getRemoveDocument() {
-		return this.removeDocument;
-	}
-	public void setRemoveDocument(String removeDocument) {
-		this.removeDocument = removeDocument;
-	}
-	public String[] getUuid() {
-		return this.uuid;
-	}
-	public void setUuid(String[] uuid) {
-		this.uuid = uuid;
-	}
-	public Long getSelectedActId() {
-		return selectedActId;
-	}
-	public void setSelectedActId(Long selectedActId) {
-		this.selectedActId = selectedActId;
-	}
-	public RelatedActivity[] getRelatedActivities() {
-		return relatedActivities;
-	}
-	public void setRelatedActivities(RelatedActivity[] relatedActivities) {
-		this.relatedActivities = relatedActivities;
-	}
-	
 }

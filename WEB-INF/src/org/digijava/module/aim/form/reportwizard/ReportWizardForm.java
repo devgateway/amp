@@ -6,12 +6,7 @@ package org.digijava.module.aim.form.reportwizard;
 import java.util.Collection;
 import java.util.HashMap;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 /**
@@ -43,8 +38,8 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean publicReport 		= false;
 	private Boolean useFilters			= false;
 	
-	private Boolean allowEmptyFundingColumns = false;
-	
+	private Boolean allowEmptyFundingColumns	= false;
+		
 	public Long getReportId() {
 		return reportId;
 	}

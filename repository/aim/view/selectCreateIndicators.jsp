@@ -8,8 +8,159 @@
 <digi:instance property="aimIndicatorForm" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<script language="JavaScript">
+    <!--
+    function searchIndicators()
+    {	
+                        <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?showAddIndPage=false" />
+                                document.aimIndicatorForm.action = "<%=searchInd%>";
+                                document.aimIndicatorForm.target = "_self";
+                                document.aimIndicatorForm.submit();	
+                            }
+                            function addIndicatorTL(addbutton)
+                            {
+                                var emptychk = false;
+                                if(addbutton == '1')
+                                    emptychk = doesItHaveValue1();
+                                if(addbutton == '2')
+                                    emptychk = doesItHaveValue2()
+                                if(emptychk == true)
+                                {
+                        <digi:context name="addInd" property="context/module/moduleinstance/addIndicatorsTL.do"/>
+                                    document.aimIndicatorForm.action = "<%=addInd%>~forStep9=true";
+                                    document.aimIndicatorForm.target = window.opener.name;
+                                    document.aimIndicatorForm.submit();
+                                    window.close();
+                                }        
+                            }
 
-<digi:form action="/selectCreateIndicators.do" type="aimIndicatorForm" name="aimIndicatorFormIndicator">
+
+                            function addNewIndicatorTL(selectedSectsSize)
+                            {	
+                                var valid = validateForm(selectedSectsSize);
+                                if (valid == true) {
+                        <digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
+                                    document.aimIndicatorForm.action = "<%=addNewInd%>";
+                                    document.aimIndicatorForm.target = "_self";
+                                    document.aimIndicatorForm.submit();
+                                }
+                                return valid;
+                            }
+                            function unload(){}
+
+                            function validateForm(selectedSectsSize) {
+        
+                                var values = document.getElementsByTagName("forEach");
+                
+                                if (document.aimIndicatorForm.indicatorName.value.length == 0) {
+                                    alert("Please enter indicator name");
+                                    document.aimIndicatorForm.indicatorName.focus();
+                                    return false;
+                                }
+
+                                if(selectedSectsSize!=1) {
+                                    alert("Please add Sectors");
+                                    return false;
+                                }
+                
+                                return true;
+                            }
+        
+                            function isSearchKeyGiven()
+                            {
+                                if(trim(document.aimIndicatorForm.searchkey.value).length == 0)
+                                {
+                                    alert("Please give a Keyword to search");
+                                    document.aimIndicatorForm.searchkey.focus();
+                                    return false;
+                                }
+                                return true;
+                            }
+                            function doesItHaveValue1()
+                            {
+                                if(document.aimIndicatorForm.selectedIndicators.value == '')
+                                {
+                                    alert("Please select an Indicator");
+                                    document.aimIndicatorForm.selectedIndicators.focus();
+                                    return false;
+                                }
+                                return true;
+                            }
+                            function doesItHaveValue2()
+                            {
+                                if(document.aimIndicatorForm.selIndicators.value == null)
+                                {
+                                    alert("Please select an Indicator");
+                                    return false;
+                                }
+                                return true;
+                            }
+        
+                            function closeWindow () {
+                                window.close();
+                            }
+        
+                            function clearform() {
+                <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?action=clear"/>
+                        document.aimIndicatorForm.action = "<%= searchInd%>";
+                        document.aimIndicatorForm.submit();
+                    }
+        
+                    function addSectors() {		
+                <digi:context name="addSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
+                        openURLinWindow('<%= addSector%>',550,400);
+          
+            <digi:context name="justSubmit" property="context/module/moduleinstance/sectorActions.do?actionType=justSubmit" /> 
+                    aimIndicatorForm.action = "<%=justSubmit%>";  
+                    aimIndicatorForm.submit();    
+                }
+
+                function removeSelSectors() {	
+                    if (validateSector()) {
+                        <digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
+                                    document.aimIndicatorForm.action = "<%= remSec%>";
+                                    document.aimIndicatorForm.target = "_self"
+                                    document.aimIndicatorForm.submit();
+                                    return true;			
+                                }else {
+                                    return false;
+                                }
+                            }
+        
+                            function validateSector(){
+                                if (document.aimIndicatorForm.selActivitySector.checked != null) {
+                                    if (document.aimIndicatorForm.selActivitySector.checked == false) {
+                                        alert("Please choose a sector to remove");
+                                        return false;
+                                    }
+                                } else {
+                                    var length = document.aimIndicatorForm.selActivitySector.length;
+                                    var flag = 0;
+                                    for (i = 0;i < length;i ++) {
+                                        if (document.aimIndicatorForm.selActivitySector[i].checked == true) {
+                                            flag = 1;
+                                            break;
+                                        }
+                                    }
+
+                                    if (flag == 0) {
+                                        alert("Please choose a sector to remove");
+                                        return false;
+                                    }
+                                }
+                                return true;	
+                            }
+        
+                            function gotoCreateIndPage() {
+                <digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
+                        document.aimIndicatorForm.action = "<%=addIndPage%>";		
+                        document.aimIndicatorForm.submit();
+                    }
+        
+                    -->
+</script>
+
+<digi:form action="/selectCreateIndicators.do">
     
     <html:hidden property="activityId" />
     <html:hidden property="addswitch" />
@@ -39,10 +190,10 @@
                                                     <tr>
                                                         <td><digi:trn key="aim:selsector">Select Sector</digi:trn></td>
                                                         <td>
-                                                            <html:select property="sectorId" styleClass="inp-text">
+                                                            <html:select property="sectorName" styleClass="inp-text">
                                                                 <html:option value="-1">-<digi:trn key="aim:selsector">Select sector</digi:trn>-</html:option>
                                                                 <c:if test="${!empty aimIndicatorForm.allSectors}">
-                                                                    <html:optionsCollection name="aimIndicatorForm" property="allSectors" value="ampSectorId" label="name" />
+                                                                    <html:optionsCollection name="aimIndicatorForm" property="allSectors" value="name" label="name" />						
                                                                 </c:if>
                                                             </html:select>	
                                                         </td>
@@ -143,7 +294,7 @@
                                                             <tr>
                                                                 <td><digi:trn key="aim:indicatorName">Indicator Name</digi:trn><font color="red">*</font></td>
                                                                 <td>
-                                                                    <html:text property="indicatorName" size="20" styleClass="inp-text" maxlength="50"/>	
+                                                                    <html:text property="indicatorName" size="20" styleClass="inp-text"/>	
                                                                 </td>
                                                             </tr>
                                                             <tr>

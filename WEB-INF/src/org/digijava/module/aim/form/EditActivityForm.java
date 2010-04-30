@@ -6,7 +6,6 @@
 package org.digijava.module.aim.form;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -22,14 +21,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpChapter;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -41,7 +38,6 @@ import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.CustomFieldStep;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -53,9 +49,8 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class EditActivityForm extends ActionForm implements Serializable {
@@ -80,9 +75,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private String stepFailureText[];
 	private String step = null;
 	private int pageId;
-	//TODO: FFerreyra. See if this can be put someplace more meaningful, probably it's own form.
-	private FormFile fileImport = null;
-
+	
 	private String currCode;
 	private Collection currencies;
 	private boolean serializeFlag;
@@ -109,7 +102,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public class Contracts {
 		private List contracts;
-		private BigDecimal ipaBudget = null;
+		private Double ipaBudget = null;
 		private Integer selContractId;
 		private String contractDetails = null;
 		
@@ -137,11 +130,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.contracts = contracts;
 		}
 
-		public BigDecimal getIpaBudget() {
+		public Double getIpaBudget() {
 			return ipaBudget;
 		}
 
-		public void setIpaBudget(BigDecimal ipaBudget) {
+		public void setIpaBudget(Double ipaBudget) {
 			this.ipaBudget = ipaBudget;
 		}
 	}
@@ -763,8 +756,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public class Planning {
 
 		private Collection actRankCollection;
-		private Long lineMinRank;
-		private Long planMinRank;
+		private String lineMinRank;
+		private String planMinRank;
 		private String originalAppDate;
 		private String revisedAppDate;
 		private String originalStartDate;
@@ -795,19 +788,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.activityCloseDates = activityCloseDates;
 		}
 
-		public Long getLineMinRank() {
+		public String getLineMinRank() {
 			return lineMinRank;
 		}
 
-		public void setLineMinRank(Long lineMinRank) {
+		public void setLineMinRank(String lineMinRank) {
 			this.lineMinRank = lineMinRank;
 		}
 
-		public Long getPlanMinRank() {
+		public String getPlanMinRank() {
 			return planMinRank;
 		}
 
-		public void setPlanMinRank(Long planMinRank) {
+		public void setPlanMinRank(String planMinRank) {
 			this.planMinRank = planMinRank;
 		}
 
@@ -938,6 +931,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		
 		private Long parentLocId;
 		
+		private Long [] userSelectedLocs;
+		
 		@Deprecated
 		private Long impRegion; // Implementation region
 		@Deprecated
@@ -970,8 +965,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private int pagesSize;
 		
 		private boolean noMoreRecords=false;
-		
-		private boolean allowDividePercentageButton	= true;
 		
 		
 		public boolean isNoMoreRecords() {
@@ -1249,18 +1242,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setParentLocId(Long parentLocId) {
 			this.parentLocId = parentLocId;
 		}
-		/**
-		 * @return the allowDividePercentageButton
-		 */
-		public boolean getAllowDividePercentageButton() {
-			return allowDividePercentageButton;
+
+		public Long[] getUserSelectedLocs() {
+			return userSelectedLocs;
 		}
 
-		/**
-		 * @param allowDividePercentageButton the allowDividePercentageButton to set
-		 */
-		public void setAllowDividePercentageButton(boolean allowDividePercentageButton) {
-			this.allowDividePercentageButton = allowDividePercentageButton;
+		public void setUserSelectedLocs(Long[] userSelectedLocs) {
+			this.userSelectedLocs = userSelectedLocs;
 		}
 
 		public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -1499,7 +1487,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Collection activityComponentes;
 		private String multiSectorSelecting;
 		private Long selActivityComponentes[];
-		private Collection<AmpCategoryValue> allCompsType;
+		private ArrayList<AmpComponentType> allCompsType;
 		private Long selectedType;
 		private String newCompoenentName;
 		private Collection allComps;
@@ -1510,22 +1498,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long componentId;
 		private double compTotalDisb;
 		private Collection<Components<FundingDetail>> selectedComponents;
-		private String[] selComp;
+		private Long[] selComp;
 		private Long[] selCompSectors;
 		private String currencyCode;
 		private String componentRepDate;
         private String fundingCurrCode;
-        private Collection<AmpComponent> compotosave;
-       
-        public void setCompotosave(Collection<AmpComponent> compotosave) {
-			this.compotosave = compotosave;
-		}
 
-		public Collection<AmpComponent> getCompotosave() {
-			return compotosave;
-		}
-
-		public String getFundingCurrCode() {
+        public String getFundingCurrCode() {
             return fundingCurrCode;
         }
 
@@ -1557,20 +1536,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selectedComponents = selectedComponents;
 		}
 
-		public String[] getSelComp() {
+		public Long[] getSelComp() {
 			return selComp;
 		}
 
-		public void setSelComp(String[] selComp) {
+		public void setSelComp(Long[] selComp) {
 			this.selComp = selComp;
 		}
 
-		public Collection<AmpCategoryValue> getAllCompsType() {
+		public ArrayList<AmpComponentType> getAllCompsType() {
 			return allCompsType;
 		}
 
-		public void setAllCompsType(Collection<AmpCategoryValue> componentstype) {
-			this.allCompsType = componentstype;
+		public void setAllCompsType(ArrayList<AmpComponentType> allCompsType) {
+			this.allCompsType = allCompsType;
 		}
 
 		public Long getSelectedType() {
@@ -1589,7 +1568,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.newCompoenentName = newCompoenentName;
 		}
 
-		public Collection<AmpCategoryClass> getAllComps() {
+		public Collection getAllComps() {
 			return allComps;
 		}
 
@@ -1692,8 +1671,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long actorId;
 		
 		private String issueDate;
-		private String issuesExpanded;
-		private String measuresExpanded;
 		
 
 		public String getActor() {
@@ -1759,34 +1736,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setMeasureId(Long measureId) {
 			this.measureId = measureId;
-		}
-
-		/**
-		 * @return the issuesExpanded
-		 */
-		public String getIssuesExpanded() {
-			return issuesExpanded;
-		}
-
-		/**
-		 * @param issuesExpanded the issuesExpanded to set
-		 */
-		public void setIssuesExpanded(String issuesExpanded) {
-			this.issuesExpanded = issuesExpanded;
-		}
-
-		/**
-		 * @return the measuresExpanded
-		 */
-		public String getMeasuresExpanded() {
-			return measuresExpanded;
-		}
-
-		/**
-		 * @param measuresExpanded the measuresExpanded to set
-		 */
-		public void setMeasuresExpanded(String measuresExpanded) {
-			this.measuresExpanded = measuresExpanded;
 		}
 
 	}
@@ -2024,6 +1973,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private Collection organizations;
 		private Collection<AmpCurrency> validcurrencies;
+		private Collection<FundingPledges> pledgeslist;
 		private boolean dupFunding;
 		private String orgName;
 		
@@ -2067,7 +2017,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private long transIndexId;
         private String fundingCurrCode;
         private int selectedMTEFProjectionYear;
+        
+        public Collection<FundingPledges> getPledgeslist() {
+			return pledgeslist;
+		}
 
+		public void setPledgeslist(Collection<FundingPledges> pledgeslist) {
+			this.pledgeslist = pledgeslist;
+		}
+        
         public String getFundingCurrCode() {
             return fundingCurrCode;
         }
@@ -2143,7 +2101,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 
 		public ProposedProjCost getProProjCost() {
-			if(proProjCost == null) proProjCost = new ProposedProjCost();
 			return proProjCost;
 		}
 
@@ -2193,51 +2150,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 
 		public List<FundingDetail> getFundingDetails() {
-			return fundingDetails;
-		}
-
-		public List<FundingDetail> getCommitmentsDetails() {
-			if(fundingDetails != null){
-				List<FundingDetail> commitments = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.COMMITMENT) commitments.add(detail);
-				}
-				return commitments;
-			}
-			return fundingDetails;
-		}
-		
-		public List<FundingDetail> getDisbursementsDetails() {
-			if(fundingDetails != null){
-				List<FundingDetail> disbursements = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.DISBURSEMENT) disbursements.add(detail);
-				}
-				return disbursements;
-			}
-			return fundingDetails;
-		}
-		
-		public List<FundingDetail> getDisbursementOrdersDetails() {
-			
-			if(fundingDetails != null){
-				List<FundingDetail> disbursementOrder = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.DISBURSEMENT_ORDER) disbursementOrder.add(detail);
-				}
-				return disbursementOrder;
-			}
-			return fundingDetails;
-		}
-
-		public List<FundingDetail> getExpendituresDetails() {
-			if(fundingDetails != null){
-				List<FundingDetail> expenditures = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.EXPENDITURE) expenditures.add(detail);
-				}
-				return expenditures;
-			}
 			return fundingDetails;
 		}
 
@@ -2656,6 +2568,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selFundingOrgs = selFundingOrgs;
 		}
 
+	
+
 		public Long[] getSelRegFundings() {
 			return selRegFundings;
 		}
@@ -2699,167 +2613,288 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return (FundingOrganization) ((ArrayList) getFunding().fundingOrganizations).get(index);
 	}
 	
-	public class ActivityContactInfo{
-		
-		private List<AmpActivityContact> activityContacts; //holds all activity contacts
-		private List<AmpActivityContact> mofedContacts;
-		private List<AmpActivityContact> donorContacts;
-		private List<AmpActivityContact> sectorMinistryContacts;
-		private List<AmpActivityContact> projCoordinatorContacts;
-		private List<AmpActivityContact> implExecutingAgencyContacts;
-		
-		private String[] primaryDonorContIds;
-		private String[] primaryMofedContIds;
-		private String[] primaryProjCoordContIds;
-		private String[] primarySecMinContIds;
-		private String[] primaryImplExecutingContIds;
-		private Boolean resetDonorIds;
-		private Boolean resetMofedIds;
-		private Boolean resetProjCoordIds;
-		private Boolean resetSecMinIds;
-		private Boolean resetImplExecutingIds;
-		
-		
-		private List<AmpContact> contacts; //holds all existing contacts
-		private String primaryContact;
-		private Boolean primaryAllowed; //defines whether activity contact can be primary or not. primary contact must be one for each type(mofed,donor,e.t.c.)
-		private String contactType;		
-		
-		private String temporaryId; //contact's temporary id		
+	public class ContactInformation {
+		private String dnrCntFirstName;
+		private String dnrCntLastName;
+		private String dnrCntEmail;
+		private String dnrCntTitle;
+		private String dnrCntOrganization;
+		private String dnrCntPhoneNumber;
+		private String dnrCntFaxNumber;
+		private String mfdCntFirstName;
+		private String mfdCntLastName;
+		private String mfdCntEmail;
+		private String mfdCntTitle;
+		private String mfdCntOrganization;
+		private String mfdCntPhoneNumber;
+		private String mfdCntFaxNumber;
+		private String prjCoFirstName;
+		private String prjCoLastName;
+		private String prjCoEmail;
+		private String prjCoTitle;
+		private String prjCoOrganization;
+		private String prjCoPhoneNumber;
+		private String prjCoFaxNumber;
+		private String secMiCntFirstName;
+		private String secMiCntLastName;
+		private String secMiCntEmail;
+		private String secMiCntTitle;
+		private String secMiCntOrganization;
+		private String secMiCntPhoneNumber;
+		private String secMiCntFaxNumber;
 
-		
-		public String[] getPrimaryDonorContIds() {
-			return primaryDonorContIds;
+		private String contFirstName;
+		private String contLastName;
+		private String email;
+
+		public String getContFirstName() {
+			return contFirstName;
 		}
-		public void setPrimaryDonorContIds(String[] primaryDonorContIds) {
-			this.primaryDonorContIds = primaryDonorContIds;
+
+		public void setContFirstName(String contFirstName) {
+			this.contFirstName = contFirstName;
 		}
-		public String[] getPrimaryMofedContIds() {
-			return primaryMofedContIds;
+
+		public String getContLastName() {
+			return contLastName;
 		}
-		public void setPrimaryMofedContIds(String[] primaryMofedContIds) {
-			this.primaryMofedContIds = primaryMofedContIds;
+
+		public void setContLastName(String contLastName) {
+			this.contLastName = contLastName;
 		}
-		public String[] getPrimaryProjCoordContIds() {
-			return primaryProjCoordContIds;
+
+		public String getEmail() {
+			return email;
 		}
-		public void setPrimaryProjCoordContIds(String[] primaryProjCoordContIds) {
-			this.primaryProjCoordContIds = primaryProjCoordContIds;
+
+		public void setEmail(String email) {
+			this.email = email;
 		}
-		public String[] getPrimarySecMinContIds() {
-			return primarySecMinContIds;
+
+		public String getDnrCntFirstName() {
+			return dnrCntFirstName;
 		}
-		public void setPrimarySecMinContIds(String[] primarySecMinContIds) {
-			this.primarySecMinContIds = primarySecMinContIds;
+
+		public void setDnrCntFirstName(String dnrCntFirstName) {
+			this.dnrCntFirstName = dnrCntFirstName;
 		}
-		
-		public List<AmpActivityContact> getMofedContacts() {
-			return mofedContacts;
+
+		public String getDnrCntLastName() {
+			return dnrCntLastName;
 		}
-		public void setMofedContacts(List<AmpActivityContact> mofedContacts) {
-			this.mofedContacts = mofedContacts;
+
+		public void setDnrCntLastName(String dnrCntLastName) {
+			this.dnrCntLastName = dnrCntLastName;
 		}
-		public List<AmpActivityContact> getDonorContacts() {
-			return donorContacts;
+
+		public String getDnrCntEmail() {
+			return dnrCntEmail;
 		}
-		public void setDonorContacts(List<AmpActivityContact> donorContacts) {
-			this.donorContacts = donorContacts;
+
+		public void setDnrCntEmail(String dnrCntEmail) {
+			this.dnrCntEmail = dnrCntEmail;
 		}
-		public List<AmpActivityContact> getSectorMinistryContacts() {
-			return sectorMinistryContacts;
+
+		public String getDnrCntTitle() {
+			return dnrCntTitle;
 		}
-		public void setSectorMinistryContacts(
-				List<AmpActivityContact> sectorMinistryContacts) {
-			this.sectorMinistryContacts = sectorMinistryContacts;
+
+		public void setDnrCntTitle(String dnrCntTitle) {
+			this.dnrCntTitle = dnrCntTitle;
 		}
-		public List<AmpActivityContact> getProjCoordinatorContacts() {
-			return projCoordinatorContacts;
+
+		public String getDnrCntOrganization() {
+			return dnrCntOrganization;
 		}
-		public void setProjCoordinatorContacts(
-				List<AmpActivityContact> projCoordinatorContacts) {
-			this.projCoordinatorContacts = projCoordinatorContacts;
+
+		public void setDnrCntOrganization(String dnrCntOrganization) {
+			this.dnrCntOrganization = dnrCntOrganization;
 		}
-		public List<AmpActivityContact> getActivityContacts() {
-			return activityContacts;
+
+		public String getDnrCntPhoneNumber() {
+			return dnrCntPhoneNumber;
 		}
-		public void setActivityContacts(List<AmpActivityContact> activityContacts) {
-			this.activityContacts = activityContacts;
+
+		public void setDnrCntPhoneNumber(String dnrCntPhoneNumber) {
+			this.dnrCntPhoneNumber = dnrCntPhoneNumber;
 		}
-		public List<AmpContact> getContacts() {
-			return contacts;
+
+		public String getDnrCntFaxNumber() {
+			return dnrCntFaxNumber;
 		}
-		public void setContacts(List<AmpContact> contacts) {
-			this.contacts = contacts;
+
+		public void setDnrCntFaxNumber(String dnrCntFaxNumber) {
+			this.dnrCntFaxNumber = dnrCntFaxNumber;
 		}
-		
-		public String getPrimaryContact() {
-			return primaryContact;
+
+		public String getMfdCntFirstName() {
+			return mfdCntFirstName;
 		}
-		public void setPrimaryContact(String primaryContact) {
-			this.primaryContact = primaryContact;
+
+		public void setMfdCntFirstName(String mfdCntFirstName) {
+			this.mfdCntFirstName = mfdCntFirstName;
 		}
-		public String getContactType() {
-			return contactType;
+
+		public String getMfdCntLastName() {
+			return mfdCntLastName;
 		}
-		public void setContactType(String contactType) {
-			this.contactType = contactType;
+
+		public void setMfdCntLastName(String mfdCntLastName) {
+			this.mfdCntLastName = mfdCntLastName;
 		}
-		public Boolean getPrimaryAllowed() {
-			return primaryAllowed;
+
+		public String getMfdCntEmail() {
+			return mfdCntEmail;
 		}
-		public void setPrimaryAllowed(Boolean primaryAllowed) {
-			this.primaryAllowed = primaryAllowed;
+
+		public void setMfdCntEmail(String mfdCntEmail) {
+			this.mfdCntEmail = mfdCntEmail;
 		}
-		public Boolean getResetDonorIds() {
-			return resetDonorIds;
+
+		public String getMfdCntTitle() {
+			return mfdCntTitle;
 		}
-		public void setResetDonorIds(Boolean resetDonorIds) {
-			this.resetDonorIds = resetDonorIds;
+
+		public void setMfdCntTitle(String mfdCntTitle) {
+			this.mfdCntTitle = mfdCntTitle;
 		}
-		public Boolean getResetMofedIds() {
-			return resetMofedIds;
+
+		public String getMfdCntOrganization() {
+			return mfdCntOrganization;
 		}
-		public void setResetMofedIds(Boolean resetMofedIds) {
-			this.resetMofedIds = resetMofedIds;
+
+		public void setMfdCntOrganization(String mfdCntOrganization) {
+			this.mfdCntOrganization = mfdCntOrganization;
 		}
-		public Boolean getResetProjCoordIds() {
-			return resetProjCoordIds;
+
+		public String getMfdCntPhoneNumber() {
+			return mfdCntPhoneNumber;
 		}
-		public void setResetProjCoordIds(Boolean resetProjCoordIds) {
-			this.resetProjCoordIds = resetProjCoordIds;
+
+		public void setMfdCntPhoneNumber(String mfdCntPhoneNumber) {
+			this.mfdCntPhoneNumber = mfdCntPhoneNumber;
 		}
-		public Boolean getResetSecMinIds() {
-			return resetSecMinIds;
+
+		public String getMfdCntFaxNumber() {
+			return mfdCntFaxNumber;
 		}
-		public void setResetSecMinIds(Boolean resetSecMinIds) {
-			this.resetSecMinIds = resetSecMinIds;
+
+		public void setMfdCntFaxNumber(String mfdCntFaxNumber) {
+			this.mfdCntFaxNumber = mfdCntFaxNumber;
 		}
-		public List<AmpActivityContact> getImplExecutingAgencyContacts() {
-			return implExecutingAgencyContacts;
+
+		public String getPrjCoFirstName() {
+			return prjCoFirstName;
 		}
-		public void setImplExecutingAgencyContacts(
-				List<AmpActivityContact> implExecutingAgencyContacts) {
-			this.implExecutingAgencyContacts = implExecutingAgencyContacts;
+
+		public void setPrjCoFirstName(String prjCoFirstName) {
+			this.prjCoFirstName = prjCoFirstName;
 		}
-		public String[] getPrimaryImplExecutingContIds() {
-			return primaryImplExecutingContIds;
+
+		public String getPrjCoLastName() {
+			return prjCoLastName;
 		}
-		public void setPrimaryImplExecutingContIds(String[] primaryImplExecutingContIds) {
-			this.primaryImplExecutingContIds = primaryImplExecutingContIds;
+
+		public void setPrjCoLastName(String prjCoLastName) {
+			this.prjCoLastName = prjCoLastName;
 		}
-		public Boolean getResetImplExecutingIds() {
-			return resetImplExecutingIds;
+
+		public String getPrjCoEmail() {
+			return prjCoEmail;
 		}
-		public void setResetImplExecutingIds(Boolean resetImplExecutingIds) {
-			this.resetImplExecutingIds = resetImplExecutingIds;
+
+		public void setPrjCoEmail(String prjCoEmail) {
+			this.prjCoEmail = prjCoEmail;
 		}
-		public String getTemporaryId() {
-			return temporaryId;
+
+		public String getPrjCoTitle() {
+			return prjCoTitle;
 		}
-		public void setTemporaryId(String temporaryId) {
-			this.temporaryId = temporaryId;
+
+		public void setPrjCoTitle(String prjCoTitle) {
+			this.prjCoTitle = prjCoTitle;
 		}
-		
+
+		public String getPrjCoOrganization() {
+			return prjCoOrganization;
+		}
+
+		public void setPrjCoOrganization(String prjCoOrganization) {
+			this.prjCoOrganization = prjCoOrganization;
+		}
+
+		public String getPrjCoPhoneNumber() {
+			return prjCoPhoneNumber;
+		}
+
+		public void setPrjCoPhoneNumber(String prjCoPhoneNumber) {
+			this.prjCoPhoneNumber = prjCoPhoneNumber;
+		}
+
+		public String getPrjCoFaxNumber() {
+			return prjCoFaxNumber;
+		}
+
+		public void setPrjCoFaxNumber(String prjCoFaxNumber) {
+			this.prjCoFaxNumber = prjCoFaxNumber;
+		}
+
+		public String getSecMiCntFirstName() {
+			return secMiCntFirstName;
+		}
+
+		public void setSecMiCntFirstName(String secMiCntFirstName) {
+			this.secMiCntFirstName = secMiCntFirstName;
+		}
+
+		public String getSecMiCntLastName() {
+			return secMiCntLastName;
+		}
+
+		public void setSecMiCntLastName(String secMiCntLastName) {
+			this.secMiCntLastName = secMiCntLastName;
+		}
+
+		public String getSecMiCntEmail() {
+			return secMiCntEmail;
+		}
+
+		public void setSecMiCntEmail(String secMiCntEmail) {
+			this.secMiCntEmail = secMiCntEmail;
+		}
+
+		public String getSecMiCntTitle() {
+			return secMiCntTitle;
+		}
+
+		public void setSecMiCntTitle(String secMiCntTitle) {
+			this.secMiCntTitle = secMiCntTitle;
+		}
+
+		public String getSecMiCntOrganization() {
+			return secMiCntOrganization;
+		}
+
+		public void setSecMiCntOrganization(String secMiCntOrganization) {
+			this.secMiCntOrganization = secMiCntOrganization;
+		}
+
+		public String getSecMiCntPhoneNumber() {
+			return secMiCntPhoneNumber;
+		}
+
+		public void setSecMiCntPhoneNumber(String secMiCntPhoneNumber) {
+			this.secMiCntPhoneNumber = secMiCntPhoneNumber;
+		}
+
+		public String getSecMiCntFaxNumber() {
+			return secMiCntFaxNumber;
+		}
+
+		public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
+			this.secMiCntFaxNumber = secMiCntFaxNumber;
+		}
+
 	}
 
 	public class Comments {
@@ -3241,7 +3276,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public int getStartPage() {
 			return startPage;
 		}
- 
+
 		public void setStartPage(int startPage) {
 			this.startPage = startPage;
 		}
@@ -3371,10 +3406,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 
 	public class Costing {
-		private BigDecimal allCosts;
+		private Double allCosts;
 		private List costs;
-		private BigDecimal overallCost = null;
-		private BigDecimal overallContribution = null;
+		private Double overallCost = null;
+		private Double overallContribution = null;
 
 		public List getCosts() {
 			return costs;
@@ -3384,27 +3419,27 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.costs = costs;
 		}
 
-		public BigDecimal getOverallCost() {
+		public Double getOverallCost() {
 			return overallCost;
 		}
 
-		public void setOverallCost(BigDecimal overallCost) {
+		public void setOverallCost(Double overallCost) {
 			this.overallCost = overallCost;
 		}
 
-		public BigDecimal getOverallContribution() {
+		public Double getOverallContribution() {
 			return overallContribution;
 		}
 
-		public void setOverallContribution(BigDecimal overallContribution) {
+		public void setOverallContribution(Double overallContribution) {
 			this.overallContribution = overallContribution;
 		}
 
-		public BigDecimal getAllCosts() {
+		public Double getAllCosts() {
 			return allCosts;
 		}
 
-		public void setAllCosts(BigDecimal allCosts) {
+		public void setAllCosts(Double allCosts) {
 			this.allCosts = allCosts;
 		}
 
@@ -3895,8 +3930,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	 * This is the survey helper object for the actual or last edited survey.
 	 */
 	private Survey survey = null;
-	private ActivityContactInfo contactInformation;
-	//	private ContactInformation contactInfo;	
+	
 	/**
 	 * This collection holds Survey objects (helpers) that have been edited.
 	 */
@@ -3905,7 +3939,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	/**
 	 * This collection holds AmpAHsurvey objects (surveys) that have been edited.
 	 */
-	private Set<AmpAhsurvey> ampAhsurveys;	
+	private Set<AmpAhsurvey> ampAhsurveys;
+	
+	private ContactInformation contactInfo;
 	private Comments comments = null;
 	private PhisycalProgress phisycalProgress;
 	private IndicatorME indicatorME = null;
@@ -3913,16 +3949,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Costing costing = null;
 	private Issues issues = null;
 	private boolean totDisbIsBiggerThanTotCom;
-	private boolean ignoreDistBiggerThanComm = false;
-	
-
-	public boolean isIgnoreDistBiggerThanComm() {
-		return ignoreDistBiggerThanComm;
-	}
-
-	public void setIgnoreDistBiggerThanComm(boolean ignoreDistBiggerThanComm) {
-		this.ignoreDistBiggerThanComm = ignoreDistBiggerThanComm;
-	}
 	
 	public Set<Survey> getSurveys() {
 		return surveys;
@@ -3994,11 +4020,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.funding = null;
 			this.oldFunding = null;
 			this.survey = null;
-			this.contracts = null;
-			//this.contactInfo = null;
-			this.contactInformation=null;
 			this.surveys = null;
 			this.ampAhsurveys = null;
+			this.contactInfo = null;
 			this.agencies = null;
 			this.indicatorME = null;
             this.fundingCurrCode=null;
@@ -4239,20 +4263,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return this.survey;
 	}
 
-//	public ContactInformation getContactInfo() {
-//		if (this.contactInfo == null) {
-//			this.contactInfo = new ContactInformation();
-//		}
-//		return this.contactInfo;
-//
-//	}
-	
-	public ActivityContactInfo getContactInformation() {
-		if(this.contactInformation==null){
-			this.contactInformation=new ActivityContactInfo ();
+	public ContactInformation getContactInfo() {
+		if (this.contactInfo == null) {
+			this.contactInfo = new ContactInformation();
 		}
-		return this.contactInformation;
-	}	
+		return this.contactInfo;
+
+	}
 
 	public Comments getComments() {
 		if (this.comments == null) {
@@ -4466,12 +4483,5 @@ public class EditActivityForm extends ActionForm implements Serializable {
         this.regFundingPageCurrCode = regfundingPageCurrCode;
     }
 
-	public void setFileImport(FormFile fileImport) {
-		this.fileImport = fileImport;
-	}
-
-	public FormFile getFileImport() {
-		return fileImport;
-	}
-
 }
+

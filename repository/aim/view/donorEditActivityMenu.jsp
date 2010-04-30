@@ -142,7 +142,7 @@ bgcolor="#006699">
 
 		<td>
 
-			<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 
 			<c:set var="translation">
 
@@ -176,7 +176,7 @@ bgcolor="#006699">
 
 					<td bgcolor="#3399ff" height="19">
 
-			<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 
 			<span class="textalb">
 
@@ -209,7 +209,7 @@ bgcolor="#006699">
 
 		<td>
 
-			<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<c:set var="translation">
 			<digi:trn key="aim:clickToAdd/ParisIndicator">Add / Update Paris Indicator</digi:trn>
 			</c:set>
@@ -236,7 +236,7 @@ bgcolor="#006699">
 
 					<td bgcolor="#3399ff" height="19">
 
-						<IMG alt=Link height=10 src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-th-BABAB9.gif" width=15>
+						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 
 						<span class="textalb">
 

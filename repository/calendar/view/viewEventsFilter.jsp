@@ -36,26 +36,8 @@ function changeDonorsAndEventTypesState(){
 	changeEventTypesState();
 }
 
-function openPrinter(){
-var view = document.getElementById("printView").value;
-var date = document.getElementById("printDate").value;
-var myDate = new Date(date)
-
-if(view!= null)
-     {
- 		window.open('/calendar/showCalendarView.do~filterInUse=false~view='+view+'~date='+myDate.valueOf()+'~print=true','mywindow','toolbar=no,location=no, width=1010,height=600", directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
-	}
-}
-
 function changeDonorsState(){	
-	var donors = new Array();
-	var inputs = document.getElementsByTagName("input");
-	var j = 0;
-	for (var i = 0; i < inputs.length; i++) {
-		if(inputs[i].id.indexOf("donors_") == 0){
-			donors[j++]=inputs[i];
-		}
-	}
+	var donors= $("input[@id^='donors_']");
 	var resetDonors=true;
 	for(var i=0;i<donors.length;i++){
 		if(donors[i].checked){
@@ -71,14 +53,7 @@ function changeDonorsState(){
 }
 
 function changeEventTypesState(){
-	var evntTypes = new Array();
-	var inputs = document.getElementsByTagName("input");
-	var j = 0;
-	for (var i = 0; i < inputs.length; i++) {
-		if(inputs[i].id.indexOf("evType_") == 0){
-			evntTypes[j++]=inputs[i];
-		}
-	}
+	var evntTypes= $("input[@id^='evType_']");
 	var resetEventTypes=true;
 	for(var i=0;i<evntTypes.length;i++){
 		if(evntTypes[i].checked){
@@ -169,16 +144,14 @@ function changeEventTypesState(){
 	  <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
 	  <digi:trn>&nbsp;Public events</digi:trn>
 	</div>
-	<div style="padding:5px;width:200px;height:28px;">
+	<div style="padding:5px;width:250px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
-			<input type="submit" value="<digi:trn>Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
+			<input type="submit" value="<digi:trn>Run Filter</digi:trn>" style="min-width:88px;" onclick="changeDonorsAndEventTypesState();"/>
 		</field:display>
 	    &nbsp;
 	    <field:display name="Reset Filter Button" feature="Filter">
-	    	<input type="reset" value="<digi:trn>Reset</digi:trn>" />
+	    	<input type="reset" value="<digi:trn>Reset</digi:trn>" style="width:88px;" />
 	    </field:display>
-	    &nbsp;
-	      <input type="button" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
 	</div>
 </feature:display>
 

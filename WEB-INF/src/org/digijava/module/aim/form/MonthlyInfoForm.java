@@ -2,7 +2,6 @@
 
 package org.digijava.module.aim.form;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,54 +11,52 @@ import java.util.List;
 public class MonthlyInfoForm extends DetailedInfoForm {
 
     private List monthlyInfoList;
-    private BigDecimal totalPlanned;
-    private BigDecimal totalActual;
-    private BigDecimal totalActualCommitment;
-    private BigDecimal totalPlannedDisbursement;
-    private BigDecimal totalActualDisbursement;
-    private BigDecimal totalActualExpenditure;
-    private BigDecimal totalPlannedExpenditure;
-    private BigDecimal totalDisbOrder;
-    private BigDecimal totalCost;
-    private BigDecimal uncommittedBalance;
+    private Double totalPlanned;
+    private Double totalActual;
+    private Double totalActualCommitment;
+    private Double totalPlannedDisbursement;
+    private Double totalActualDisbursement;
+    private Double totalActualExpenditure;
+    private Double totalPlannedExpenditure;
+    private Double totalDisbOrder;
 
-    public BigDecimal getTotalActualCommitment() {
+    public Double getTotalActualCommitment() {
         return totalActualCommitment;
     }
 
-    public void setTotalActualCommitment(BigDecimal totalActualCommitment) {
+    public void setTotalActualCommitment(Double totalActualCommitment) {
         this.totalActualCommitment = totalActualCommitment;
     }
 
-    public BigDecimal getTotalActualDisbursement() {
+    public Double getTotalActualDisbursement() {
         return totalActualDisbursement;
     }
 
-    public void setTotalActualDisbursement(BigDecimal totalActualDisbursement) {
+    public void setTotalActualDisbursement(Double totalActualDisbursement) {
         this.totalActualDisbursement = totalActualDisbursement;
     }
 
-    public BigDecimal getTotalActualExpenditure() {
+    public Double getTotalActualExpenditure() {
         return totalActualExpenditure;
     }
 
-    public void setTotalActualExpenditure(BigDecimal totalActualExpenditure) {
+    public void setTotalActualExpenditure(Double totalActualExpenditure) {
         this.totalActualExpenditure = totalActualExpenditure;
     }
 
-    public BigDecimal getTotalDisbOrder() {
+    public Double getTotalDisbOrder() {
         return totalDisbOrder;
     }
 
-    public void setTotalDisbOrder(BigDecimal totalDisbOrder) {
+    public void setTotalDisbOrder(Double totalDisbOrder) {
         this.totalDisbOrder = totalDisbOrder;
     }
 
-    public BigDecimal getTotalPlannedDisbursement() {
+    public Double getTotalPlannedDisbursement() {
         return totalPlannedDisbursement;
     }
 
-    public void setTotalPlannedDisbursement(BigDecimal totalPlannedDisbursement) {
+    public void setTotalPlannedDisbursement(Double totalPlannedDisbursement) {
         this.totalPlannedDisbursement = totalPlannedDisbursement;
     }
    
@@ -72,43 +69,27 @@ public class MonthlyInfoForm extends DetailedInfoForm {
         this.monthlyInfoList = monthlyInfoList;
     }
 
-    public BigDecimal getTotalActual() {
+    public Double getTotalActual() {
         return totalActual;
     }
 
-    public void setTotalActual(BigDecimal totalActual) {
+    public void setTotalActual(Double totalActual) {
         this.totalActual = totalActual;
     }
 
-    public BigDecimal getTotalPlanned() {
+    public Double getTotalPlanned() {
         return totalPlanned;
     }
 
-    public void setTotalPlanned(BigDecimal totalPlanned) {
+    public void setTotalPlanned(Double totalPlanned) {
         this.totalPlanned = totalPlanned;
     }
 
-    public BigDecimal getTotalPlannedExpenditure() {
+    public Double getTotalPlannedExpenditure() {
         return totalPlannedExpenditure;
     }
 
-    public void setTotalPlannedExpenditure(BigDecimal totalPlannedExpenditure) {
+    public void setTotalPlannedExpenditure(Double totalPlannedExpenditure) {
         this.totalPlannedExpenditure = totalPlannedExpenditure;
     }
-
-	public BigDecimal getTotalCost() {
-		return totalCost;
-	}
-
-	public void setTotalCost(BigDecimal totalCost) {
-		this.totalCost = totalCost;
-	}
-
-	public BigDecimal getUncommittedBalance() {
-		return uncommittedBalance;
-	}
-
-	public void setUncommittedBalance(BigDecimal uncommittedBalance) {
-		this.uncommittedBalance = uncommittedBalance;
-	}
 }

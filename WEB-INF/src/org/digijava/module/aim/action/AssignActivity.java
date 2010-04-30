@@ -59,13 +59,10 @@ public class AssignActivity extends Action {
 							.getProjectChannelOverview(actId);
 					AmpTeam ampTeam = TeamUtil.getAmpTeam(aForm.getTeamId());
 					activity.setTeam(ampTeam);
-					/*
-					 The team is already set on the activity
 					if(ampTeam.getActivityList()==null){
 						ampTeam.setActivityList(new HashSet());
 					}
 					ampTeam.getActivityList().add(activity);
-					*/
 					DbUtil.update(activity);
 				//UpdateDB.updateReportCache(actId);
 				}

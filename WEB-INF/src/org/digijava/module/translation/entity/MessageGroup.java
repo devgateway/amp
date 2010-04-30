@@ -1,10 +1,8 @@
 package org.digijava.module.translation.entity;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +15,6 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Trn;
@@ -28,40 +25,15 @@ import org.digijava.module.translation.util.HashKeyPatch;
  * They also should have same hash key but generated preferably from English translation
  * @author Irakli Kobiashvili
  * @see HashKeyPatch
- * @see PatcherMessageGroup
  *
  */
 public class MessageGroup {
 	
     private static Logger logger = Logger.getLogger(MessageGroup.class);	
 	
-    /**
-     * Translation key.
-     */
 	private String key = null;
 	private String keyWords = null;
-	
-	/**
-	 * DigiSite for which translation is made. 
-	 * In AMP this is always 3 - site_id of AMP site in dg_site table.
-	 */
-	private Long siteId = null;
-	
-	/**
-	 * default text from which key was generated.
-	 * Not mandatory!
-	 * Currently {@link Message} has not such property but we are going to add for AMP-6663
-	 */
-	private String defaultText;
-	
-	/**
-	 * Hit score for search results and sorting.
-	 */
-	private Float score;
-	
-	/**
-	 * Map of messages for each/available language. keys in the map are language iso.
-	 */
+	private String siteId = null;
 	private Map<String, Message> messages = null;
 	
 	/**
@@ -83,7 +55,7 @@ public class MessageGroup {
 		this.setSiteId(message.getSiteId());
 		addMessage(message);
 	}
-	
+
 	/**
 	 * Creates message group from XML trn tag.
 	 * @param trn tag object
@@ -97,22 +69,22 @@ public class MessageGroup {
 	 * @param trn tag object.
 	 * @param currentSiteId site ID in string form. can be retrieved from request.
 	 */
-	public MessageGroup(Trn trn,Long currentSiteId){
+	public MessageGroup(Trn trn,String currentSiteId){
 		this.messages = new HashMap<String, Message>();
 		
 		//KeyWords
 		this.keyWords = trn.getKeywords();
 		
 		//SiteID
-		this.siteId = (currentSiteId==null)?Long.parseLong(trn.getSiteId()):currentSiteId;
+		this.siteId = (currentSiteId==null)?trn.getSiteId():currentSiteId;
 		if (this.siteId == null){
 			try {
 				Site site = TranslatorWorker.getInstance("").getDefaultSite();
-				this.siteId = site.getId();//unfortunately in AMP we use PK instead of string siteID value.
+				this.siteId = site.getId().toString();//unfortunately in AMP we use PK instead of string siteID value.
 			} catch (WorkerException e) {
 				e.printStackTrace();
 				logger.warn("Using hardcoded siteId=3 because of previouse error for translation with key="+key);
-				this.siteId=new Long(3);
+				this.siteId="3";
 			}
 		}
 		
@@ -158,11 +130,6 @@ public class MessageGroup {
 		if (message==null || !message.getKey().equals(this.key)){
 			throw new IllegalArgumentException("Cannot add null message or message with different key");
 		}
-		//FIXME temporary solution cos this will not include trns which has changed even English text.
-		if (message.getKey().equalsIgnoreCase("en")){
-			this.defaultText = message.getMessage();
-		}
-		//END of temporary solution
 		doPutMessage(message);
 	}
 	
@@ -199,11 +166,11 @@ public class MessageGroup {
 	}
 
 	/**
-	 * Returns hash code of key which itself is hash code of English message.
+	 * Returns hash code of key which itself is hash code of english message.
+	 * TODO check carefully if this is not buggy.
 	 */
 	public int hashCode() {
 		//TODO this is not good idea because key generation may change in TranslatorWorker.generateKey()
-		//FIXME it has been change so this is already not good idea! Think how to correctly generate key. from default text?
 		return key.hashCode();
 	}
 
@@ -216,12 +183,12 @@ public class MessageGroup {
 	}
 	
 	/**
-	 * Retrieves message by language code from the group.
-	 * @param locale language code of the message to retrieve from this group. Mast not be NULL.
+	 * Rertives message by language code from the group.
+	 * @param locale language code of the message to retrive from this group.
 	 * @return
 	 */
 	public Message getMessageByLocale(String locale){
-		return messages.get(locale.toLowerCase());
+		return messages.get(locale);
 	}
 	
 	/**
@@ -230,17 +197,6 @@ public class MessageGroup {
 	 */
 	public Collection<Message> getAllMessages(){
 		return this.messages.values();
-	}
-
-	/**
-	 * Returns all messages sorted by message language weight
-	 * @return list of sorted messages of the group
-	 * @see TrnUtil.MessageLocaleWeightComparator
-	 */
-	public List<Message> getSortedMessages(){
-		List<Message> messageList = new ArrayList<Message>(this.messages.values());
-		Collections.sort(messageList, new TrnUtil.MessageLocaleWeightComparator());
-		return messageList;
 	}
 	
 	/**
@@ -257,9 +213,9 @@ public class MessageGroup {
 	}
 	
 	/**
-	 * Retrieves language tag with language code set to English.
-	 * @param languages list of language tags.
-	 * @return English language tag, or null of not found.
+	 * Retrives lang tag with language code set to English.
+	 * @param languages list of lang tags.
+	 * @return English lang tag, or null of not found.
 	 */
 	private Language getEnglishLanguageTag(List<Language> languages){
 		Language retValue=null;
@@ -282,7 +238,7 @@ public class MessageGroup {
 				trn.setKeywords(msg.getKeyWords());
 			}
 			if(trn.getSiteId()==null){
-				trn.setSiteId(msg.getSiteId().toString());
+				trn.setSiteId(msg.getSiteId());
 			}
 			//creating Language
 			Language lang=of.createLanguage();
@@ -311,39 +267,11 @@ public class MessageGroup {
 		return keyWords;
 	}
 
-	public void setSiteId(Long siteId) {
+	public void setSiteId(String siteId) {
 		this.siteId = siteId;
 	}
 
-	public Long getSiteId() {
+	public String getSiteId() {
 		return siteId;
-	}
-
-	public void setDefaultText(String defaultText) {
-		this.defaultText = defaultText;
-	}
-
-	public String getDefaultText() {
-		String result = defaultText;
-		if (result==null){
-			Message msg = getMessageByLocale("en");
-			if (msg != null){
-				result = msg.getMessage(); 
-			}else if (this.messages!=null && this.messages.size()>0){
-				msg = this.messages.values().iterator().next();
-				result = msg.getMessage();
-			}else{
-				result = "Empty";
-			}
-		}
-		return result;
-	}
-
-	public void setScore(Float score) {
-		this.score = score;
-	}
-
-	public Float getScore() {
-		return score;
 	}
 }

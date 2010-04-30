@@ -26,7 +26,6 @@
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
 <script type="text/javascript">
 function openFieldPermissionsPopup(fieldId) {
@@ -584,7 +583,7 @@ return myMatches;
 		idOfFolderTrees[index] = dhtmlArray[index].id;
 	}
 
-	var myTabs = new YAHOO.widget.TabView("demo");
+	var myTabs = new YAHOOAmp.widget.TabView("demo");
 	myTabs.set('activeIndex', 0);
 	
 </script>

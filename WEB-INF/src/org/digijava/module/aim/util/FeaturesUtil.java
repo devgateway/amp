@@ -1,13 +1,11 @@
 package org.digijava.module.aim.util;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -25,25 +23,15 @@ import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
-import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceFeature;
-import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceField;
-import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceModule;
-import org.digijava.module.aim.fmtool.util.FMToolConstants;
-import org.digijava.module.aim.form.FMAdvancedForm;
-import org.digijava.module.aim.helper.FMAdvancedDisplay;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.Logic;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -89,14 +77,14 @@ public class FeaturesUtil {
 		return false;
 	}
 	
-	public static BigDecimal applyThousandsForVisibility(BigDecimal amount) {
+	public static Double applyThousandsForVisibility(Double amount) {
 		if(amount==null) return null;
-		return amount.multiply("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?new BigDecimal(0.001d): new BigDecimal(1));
+		return amount*("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
 	}
 
-	public static BigDecimal applyThousandsForEntry(BigDecimal amount) {
+	public static Double applyThousandsForEntry(Double amount) {
 		if(amount==null) return null;
-		return amount.multiply(("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?new BigDecimal(1000):new BigDecimal(1)));
+		return amount*("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?1000:1);
 	}
 
 	
@@ -588,40 +576,6 @@ public class FeaturesUtil {
 		return col;
 	}
 
-	public static AmpHomeThumbnail getAmpHomeThumbnail(int placeholder) {
-		Session session = null;
-		Query q = null;
-		Collection c = null;
-		AmpHomeThumbnail thumbnail = null;
-		
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select a from " + AmpHomeThumbnail.class.getName()
-			+ " a where (a.placeholder=:placeholder) ";
-			q = session.createQuery(queryString);
-			q.setParameter("placeholder", placeholder, Hibernate.INTEGER);
-			c = q.list();
-			if(c.size()!=0)
-				thumbnail=(AmpHomeThumbnail) c.iterator().next();
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
-
-		return thumbnail;
-	}
-	
 	public static Collection getAllCountryFlags() {
 		Session session = null;
 		Collection col = new ArrayList();
@@ -900,13 +854,13 @@ public class FeaturesUtil {
 			return new Long(Long.parseLong(globalValue));
 		return new Long( -1);
 	}
-	
+
 	public static String[] getGlobalSettingsStringArray(String key) {
 		String[] ret = null;
-		ret = getGlobalSettingValue(key).split(";");
-		return ret;
+ 	 	ret = getGlobalSettingValue(key).split(";");
+ 	 	return ret;
 	}
-
+	
 	/*
 	 * edited by Govind G Dalwani
 	 */
@@ -1372,110 +1326,6 @@ public class FeaturesUtil {
 		return ft;
 	}
 
-	
-	public static AmpTemplatesVisibility updateTemplateAndFme(Long id, LinkedList<FMAdvancedDisplay> fmeList) throws DgException {
-        Transaction tx = null;
-		Session session = null;
-		AmpTemplatesVisibility retValue = null;
-
-		try {
-		
-			session = PersistenceManager.getRequestDBSession();
-
-            tx = session.beginTransaction();
-			
-			retValue = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, id);
-
-			for (FMAdvancedDisplay item : fmeList) {
-				AmpObjectVisibility obj = null;
-				if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_MODULE)){
-					obj = FeaturesUtil.getModuleById(item.getId());
-					if (item.isVisible()){
-						retValue.getItems().add(obj);
-						obj.getTemplates().add(retValue);
-					} else {
-						retValue.removeModule(obj);
-						obj.removeTemplate(retValue);
-						unvisibleSubModules((AmpModulesVisibility)obj, retValue, session);
-					}
-				} else if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_FEATURE)){
-					obj = FeaturesUtil.getFeatureById(item.getId());
-					if (item.isVisible()){
-						retValue.getFeatures().add(obj);
-						obj.getTemplates().add(retValue);
-					} else {
-						retValue.removeFeature(obj);
-						obj.removeTemplate(retValue);
-						unvisibleSubFields((AmpFeaturesVisibility)obj, retValue, session);
-					}
-				} else if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_FIELD)){
-					obj = FeaturesUtil.getFieldById(item.getId());
-					if (item.isVisible()){
-						retValue.getFields().add(obj);
-						obj.getTemplates().add(retValue);
-					} else {
-						retValue.removeFiled(obj);
-						obj.removeTemplate(retValue);
-					}
-				}
-				session.update(obj);
-				session.update(retValue);
-			}	
-			tx.commit();
-			session.flush();
-			
-			List list = session.createQuery("from " + AmpModulesVisibility.class.getName()).list();
-			TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
-			mySet.addAll(list);
-			retValue.setAllItems(mySet);
-		
-		} catch (HibernateException ex) {
-			logger.debug("Exception from fixModulesDuplicates", ex);
-			throw new DgException(ex);
-		} finally{ 
-            if (tx != null && !tx.wasCommitted()) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }				
-		}
-		
-		return retValue;
-	}
-	
-	
-	private static void unvisibleSubModules(AmpModulesVisibility module, AmpTemplatesVisibility template, Session session) throws HibernateException{
-		for (Iterator iterator = module.getSubmodules().iterator(); iterator.hasNext();) {
-			AmpModulesVisibility item = (AmpModulesVisibility) iterator.next();
-			template.removeModule(item);
-			item.removeTemplate(template);
-			unvisibleSubModules(item, template, session);
-			session.update(item);
-		}
-		unvisibleSubFeatures(module, template, session);
-	}
-
-	private static void unvisibleSubFeatures(AmpModulesVisibility module, AmpTemplatesVisibility template, Session session) throws HibernateException{
-		for (Iterator iterator = module.getItems().iterator(); iterator.hasNext();) {
-			AmpFeaturesVisibility item = (AmpFeaturesVisibility) iterator.next();
-			template.removeFeature(item);
-			item.removeTemplate(template);
-			unvisibleSubFields(item, template, session);
-			session.update(item);
-		}	
-	}
-
-	private static void unvisibleSubFields(AmpFeaturesVisibility module, AmpTemplatesVisibility template, Session session) throws HibernateException{
-		for (Iterator iterator = module.getItems().iterator(); iterator.hasNext();) {
-			AmpFieldsVisibility item = (AmpFieldsVisibility) iterator.next();
-			template.removeFiled(item);
-			item.removeTemplate(template);
-			session.update(item);
-		}	
-	}
-	
 	/**
 	 *
 	 * @author dan
@@ -2142,9 +1992,7 @@ public class FeaturesUtil {
 			field.setName(fieldName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				field.setHasLevel(false);
-			else 
-				field.setHasLevel(false);
-			
+			else field.setHasLevel(false);
 			session.save(field);
 			tx.commit();
 			
@@ -2205,9 +2053,7 @@ public class FeaturesUtil {
 			feature.setName(featureName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				feature.setHasLevel(false);
-			else 
-				feature.setHasLevel(true);
-		
+			else feature.setHasLevel(true);
 			session.save(feature);
 			tx.commit();
 			tx = session.beginTransaction();
@@ -2252,10 +2098,7 @@ public class FeaturesUtil {
 			module.setName(moduleName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				module.setHasLevel(false);
-			else 
-				module.setHasLevel(true);
-			
-
+			else module.setHasLevel(true);
 			session.save(module);
 			tx.commit();
 			tx = session.beginTransaction();
@@ -2281,46 +2124,6 @@ public class FeaturesUtil {
 		return;
 	}
 
-	public static void updateModuleVisibilitySource(String name, String source) {
-//		if (true)
-//			return;
-		Session session = null;
-		Transaction tx = null;
-		
-		if (source != null)
-		try {
-			session = PersistenceManager.getRequestDBSession();
-
-			String sql = "select a from " + AmpModulesVisibility.class.getName() + " a where (a.name=:name) ";
-			Query q = session.createQuery(sql);
-			q.setParameter("name", name, Hibernate.STRING);
-			List<AmpModulesVisibility> modules = q.list();
-
-			if (modules != null && !modules.isEmpty()){
-				AmpModulesVisibility module = modules.get(0);
-				if (!module.containsSource(source)){
-					tx = session.beginTransaction();
-					module.addAmpFeatureSource(new AmpFeatureSourceModule(source));
-					session.update(module);
-					tx.commit();
-				}
-			}
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace();
-		} finally{ 
-            if (tx != null && !tx.wasCommitted()) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }				
-		}
-	}
-	
-	
 	/**
 	 * @author dan
 	 */
@@ -2335,7 +2138,7 @@ public class FeaturesUtil {
 			module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
 			moduleParent = getModuleVisibility(moduleParentName);
 			module.setParent(moduleParent);
-			session.update(module);
+			session.save(module);
 			tx.commit();
 		}
 		catch (Exception ex) {
@@ -2355,51 +2158,12 @@ public class FeaturesUtil {
 		return;
 	}
 
-	
-	public static void updateFieldVisibilitySource(String name, String source) {
-//		if (true)
-//			return;
-		Session session = null;
-		Transaction tx = null;
-		
-		if (source != null)
-		try {
-			session = PersistenceManager.getRequestDBSession();
 
-			String sql = "select a from " + AmpFieldsVisibility.class.getName() + " a where (a.name=:name) ";
-			Query q = session.createQuery(sql);
-			q.setParameter("name", name, Hibernate.STRING);
-			List<AmpFieldsVisibility> fields = q.list();
-			
-			if (fields != null && !fields.isEmpty()){
-				AmpFieldsVisibility field = fields.get(0);
-
-				if (!field.containsSource(source)){
-					tx = session.beginTransaction();
-					field.addAmpFeatureSource(new AmpFeatureSourceField(source));
-					session.update(field);
-					tx.commit();
-				}
-			}
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace();
-		} finally{ 
-            if (tx != null && !tx.wasCommitted()) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }				
-		}
-	}	
-	
 	/**
 	 * @author dan
 	 */
-	public static void updateFieldWithFeatureVisibility(Long featureId, String fieldName) {
+	public static void updateFieldWithFeatureVisibility(Long featureId,
+			String fieldName) {
 		Session session = null;
 		AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
 		AmpFieldsVisibility field = new AmpFieldsVisibility();
@@ -2439,48 +2203,6 @@ public class FeaturesUtil {
 		return;
 	}
 
-	public static void updateFeatureVisibilitySource(String name, String source) {
-//		if (true)
-//			return;
-		Session session = null;
-		Transaction tx = null;
-		
-		if (source != null)
-		try {
-			session = PersistenceManager.getRequestDBSession();
-
-			String sql = "select a from " + AmpFeaturesVisibility.class.getName() + " a where (a.name=:name) ";
-			Query q = session.createQuery(sql);
-			q.setParameter("name", name, Hibernate.STRING);
-			List<AmpFeaturesVisibility> features = q.list();
-
-			if (features != null && !features.isEmpty()){
-				AmpFeaturesVisibility feature = features.get(0);
-				
-				if (!feature.containsSource(source)){
-					tx = session.beginTransaction();
-					feature.addAmpFeatureSource(new AmpFeatureSourceFeature(source));
-					session.update(feature);
-					tx.commit();
-				}
-			
-			}
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace();
-		} finally{ 
-            if (tx != null && !tx.wasCommitted()) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }				
-		}
-	}	
-	
-	
 	/**
 	 * @author dan
 	 */
@@ -2873,21 +2595,34 @@ public class FeaturesUtil {
 	/**
 	 * @author dan
 	 */
-	public static AmpCategoryValue getFilter(String ratingName) {
-		AmpCategoryValue airr = null;
+	public static AmpIndicatorRiskRatings getFilter(String ratingName) {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+		AmpIndicatorRiskRatings airr = null;
+
 		try {
-            Collection<AmpCategoryValue> risks=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
-			Iterator<AmpCategoryValue> itr = risks.iterator();
-			if (itr.hasNext()) {
-				AmpCategoryValue temp =  itr.next();
-                if(temp.getValue().equals(ratingName)){
-                    airr = temp;
-                }
-			}
-		
+			session = PersistenceManager.getSession();
+			qryStr = "select f from " + AmpIndicatorRiskRatings.class.getName() +
+			" f" +
+			" where f.ratingName = '" + ratingName + "'";
+			qry = session.createQuery(qryStr);
+			col = qry.list();
+			airr = (AmpIndicatorRiskRatings) col.iterator().next();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
 		}
 		return airr;
 	}
@@ -3105,65 +2840,7 @@ public class FeaturesUtil {
 
 	}
 
-	public static AmpModulesVisibility getModuleById(Long id){
-		AmpModulesVisibility retValue=null;
-		Session session = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select mv from " + AmpModulesVisibility.class.getName()+ " mv where mv.id=:ident " ;
-			Query qry = session.createQuery(queryString);
-			qry.setLong("ident", id);
-			if (qry.list() != null && qry.list().size() > 0) {
-				retValue = (AmpModulesVisibility) qry.uniqueResult();
-			}
-		} catch (Exception e) {
-			logger.error(e);
-		}
-
-		return retValue;
-	}
-
-	public static AmpFeaturesVisibility getFeatureById(Long id){
-		AmpFeaturesVisibility retValue=null;
-		Session session = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select mv from " + AmpFeaturesVisibility.class.getName()+ " mv where mv.id=:ident " ;
-			Query qry = session.createQuery(queryString);
-			qry.setLong("ident", id);
-			if (qry.list() != null && qry.list().size() > 0) {
-				retValue = (AmpFeaturesVisibility) qry.uniqueResult();
-			}
-		} catch (Exception e) {
-			logger.error(e);
-		}
-
-		return retValue;
-	}
-
-	public static AmpFieldsVisibility getFieldById(Long id){
-		AmpFieldsVisibility retValue=null;
-		Session session = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select mv from " + AmpFieldsVisibility.class.getName()+ " mv where mv.id=:ident " ;
-			Query qry = session.createQuery(queryString);
-			qry.setLong("ident", id);
-			if (qry.list() != null && qry.list().size() > 0) {
-				retValue = (AmpFieldsVisibility) qry.uniqueResult();
-			}
-		} catch (Exception e) {
-			logger.error(e);
-		}
-
-		return retValue;
-	}
-	
-	
-	public static AmpCategoryValue getDefaultComponentType() {
+	public static AmpComponentType getDefaultComponentType() {
 		String defaultComponentTypeIdStr = getGlobalSettingValue("Default Component Type");
 		return ComponentsUtil.getComponentTypeById(Long.parseLong(defaultComponentTypeIdStr));
 	}

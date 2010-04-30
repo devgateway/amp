@@ -21,7 +21,6 @@
 <!-- dynamic tooltip -->
 
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <style type="text/css"> 
 	#demo .yui-nav li {
@@ -73,15 +72,15 @@ function saveClicked() {
   document.aimGlobalSettingsForm.submit();
 
 }
-function validateCustomFields(form){
+function validateCustomFields(form) {
 	if (typeof form.gsfValue != "undefined") {
-		if (form.gsfValue.value==''){
-			alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)	
-			return false;
-		}
-	} else {
-		if (form.listOfValues.value==''){
-			alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)	
+ 		if (form.gsfValue.value=='') {
+ 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)        
+ 	 		return false;
+ 		}
+ 	} else {
+ 	 	if (form.listOfValues.value=='') {
+ 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)        
 			return false;
 		}
 	}
@@ -175,80 +174,45 @@ function createDateString(monthId, dayId) {
 }
 
 function saveAllSettings(){
-	var allvalues='';
-	for (i=0;i < document.aimGlobalSettingsForm.length -1;i++) {
+    var allvalues='';
+    for (i=0;i < document.aimGlobalSettingsForm.length -1;i++) {
 		if (document.aimGlobalSettingsForm[i].globalId) {
-			if (!validateCustomFields(document.aimGlobalSettingsForm[i])) {
-				return false;
+        	if (!validateCustomFields(document.aimGlobalSettingsForm[i])) {
+            	return false;
 			}
-			var id=document.aimGlobalSettingsForm[i].globalId.value;
-			if (typeof document.aimGlobalSettingsForm[i].gsfValue != "undefined") {
-				var opt = document.aimGlobalSettingsForm[i].gsfValue;
-				var val=document.aimGlobalSettingsForm[i].gsfValue.value;
-				allvalues=allvalues+id+"="+val+"&";
+            var id=document.aimGlobalSettingsForm[i].globalId.value;
+            if (typeof document.aimGlobalSettingsForm[i].gsfValue != "undefined") {
+            	var opt = document.aimGlobalSettingsForm[i].gsfValue;
+                var val=document.aimGlobalSettingsForm[i].gsfValue.value;
+                allvalues=allvalues+id+"="+val+"&";
 			} else {
-				// Code for multiselect.
-				var opt = document.aimGlobalSettingsForm[i].listOfValues;
-				var selected = new Array();
-				var index = 0;
-				var val = id + '=';
-				for (var intLoop=0; intLoop < opt.length; intLoop++) {
-					if (opt[intLoop].selected) {
-						index = selected.length;
-						selected[index] = new Object;
-						selected[index].value = opt[intLoop].value;
-						selected[index].index = intLoop;
-						val = val + selected[index].value + ';';
+            	// Code for multiselect.
+                var opt = document.aimGlobalSettingsForm[i].listOfValues;
+                var selected = new Array();
+                var index = 0;
+                var val = id + '=';
+                for (var intLoop=0; intLoop < opt.length; intLoop++) {
+                	if (opt[intLoop].selected) {
+                    	index = selected.length;
+                        selected[index] = new Object;
+                        selected[index].value = opt[intLoop].value;
+                        selected[index].index = intLoop;
+                        val = val + selected[index].value + ';';
 					}
 				}
-				val = val + "&";
-				allvalues = allvalues + val;
-			}
-		}
-	}
-	//alert(allvalues);
-	document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].allValues.value=allvalues;
+                val = val + "&";
+                allvalues = allvalues + val;
+        	}
+    	}
+    }
+    //alert(allvalues);
+    document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].allValues.value=allvalues;
 	return true;
 }
 
 function setIndex(index){
 		document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].indexTab.value=index;
 	}
-
-var seconds, minutes, hour, ampm
-function InitClock(){
-	<% Date date = new java.util.Date();%> 
-    hour = <%=date.getHours()>12?date.getHours()-12:date.getHours()%>
-    minutes = <%=date.getMinutes()%>
-    seconds = <%=date.getSeconds()%>
-    ampm = '<%=date.getHours()>12?"PM":"AM"%>'
-    
-}
-function runClock(){
-	seconds++
-	if ( seconds > 59 ) {
-		seconds = 0
-		minutes++
-		if ( minutes > 59 ) {
-			minutes = 0	
-			hour++
-			if ( hour > 12 ) {
-				hour = 1	
-			}
-		}
-	}
-	var clockValue = ""
-		clockValue += (hour < 10)? "0" + hour : hour
-		clockValue += (minutes < 10) ? ":0" + minutes : ":" + minutes
-		clockValue += (seconds < 10) ? ":0" + seconds : ":" + seconds
-		clockValue += "  "+ampm
-    document.getElementsByName('serverClock')[0].value = clockValue
-    setTimeout("runClock()",1000)
-}
-function startClock(){
-	InitClock();
-	runClock();	
-}
 --></script>
 
 
@@ -314,7 +278,7 @@ function startClock(){
 									<!-- End - Sorting settings based on its name  -->
 
 								<logic:iterate name="sections"  id="sectionName">
-								<div class="yui-hidden">
+								<div>
 									<font style="color:black;font-size:14pt;font-weight:bold"">									
 									<digi:trn key="aim:global:section:${sectionName}">${sectionName}</digi:trn>
 									</font>
@@ -337,7 +301,7 @@ function startClock(){
 			                            <tr>
 			                               <td width="60%">
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
-			                                   <img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              
+			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              
 			                                 </logic:notEmpty>
 			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
 										   </td>
@@ -374,14 +338,14 @@ function startClock(){
 			                                    <digi:trn key="aim:gloablSetting:predefinedFormat">(Predefined Format)</digi:trn> <br>
 			                                    
 			                                    <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text> 
-			                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn> 	
-												
-												<%}else if(globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Budget Support for PI 9".trim())) {%>
+			                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn>
+
+ 												<%}else if(globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Budget Support for PI 9".trim())) {%>
 													<html:select property="listOfValues" styleClass="inp-text;width:100%" multiple="true" name="globalSett">
-				                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
-				                                        <html:option value="${global.key}">${global.value}</html:option>
-				                                      </logic:iterate>
-				                                    </html:select>
+														<logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
+															<html:option value="${global.key}">${global.value}</html:option>
+														</logic:iterate>
+													</html:select> 	
 			                                    <%}else { %>
 			                                    
 			                                    <html:select   property="gsfValue" alt="prueba"  style="width:100%"  styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>'>
@@ -509,7 +473,11 @@ function startClock(){
 				                                    		</select>
 				                                    		<br/>
 				                                    		<digi:trn key="aim:globalSettings:ServerTime">Server Time</digi:trn>:&nbsp; 
-				                                    	     <input type="text" name="serverClock" size="10" readonly="readonly">
+				                                    		<% java.text.DateFormat formatter = new java.text.SimpleDateFormat("hh:mm:ss a"); 
+				                                    		   String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(new java.util.Date());
+						                                    %> 
+						                                    <%= sdate +" "+formatter.format( new java.util.Date() ) %>  
+				                                    	
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_timeout_currency_update"}'>
 				                                            <% 
@@ -639,7 +607,7 @@ function startClock(){
 				                                    		%>
 															</select>
 															<%
-															if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1") && AuditCleaner.getInstance().getNextcleanup() != null){
+															if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1")){
 																String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(AuditCleaner.getInstance().getNextcleanup()); %>
 																<br>
 																<digi:trn key="aim:globalSettings:NextCleanUp">Next Audit Cleanup:</digi:trn>
@@ -661,13 +629,6 @@ function startClock(){
 				                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 				                                    			<html:option value="true"><digi:trn key="aim:globalsettings:true">true</digi:trn></html:option>
 				                                    			<html:option value="false"><digi:trn key="aim:globalsettings:false">false</digi:trn></html:option>
-				                                    		</html:select>
-				                                    	</c:when>
-				                                    	<c:when test='${type == "t_secure_values"}'>
-				                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
-				                                    			<html:option value="off"><digi:trn key="aim:globalsettings:secure:off">off</digi:trn></html:option>
-				                                    			<html:option value="login-only"><digi:trn key="aim:globalsettings:secure:login-only">login-only</digi:trn></html:option>
-				                                    			<html:option value="everything"><digi:trn key="aim:globalsettings:secure:everything">everything</digi:trn></html:option>
 				                                    		</html:select>
 				                                    	</c:when>
 				                                    	<c:otherwise>
@@ -742,12 +703,11 @@ function setHoveredTable(tableId, hasHeaders) {
 }
 </script>
 <script type="text/javascript">
-	var myTabs = new YAHOO.widget.TabView("demo");
+	var myTabs = new YAHOOAmp.widget.TabView("demo");
 	myTabs.set('activeIndex',<%=aimGlobalSettingsForm.getIndexTab()%>);
 
 	<logic:iterate name="sections"  id="sectionName">
 		setStripsTable("${sectionName}", "tableEven", "tableOdd");
 	</logic:iterate>
-	startClock();
 	
 </script>

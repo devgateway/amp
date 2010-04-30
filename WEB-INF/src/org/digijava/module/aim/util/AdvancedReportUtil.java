@@ -32,8 +32,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * AdvancedReportUtil.java
@@ -46,10 +44,8 @@ public final class AdvancedReportUtil {
     
     private static Logger logger = Logger.getLogger(AdvancedReportUtil.class);
     
-   public static void saveReport(AmpReports ampReports, AmpTeamMember member)
+	public static void saveReport(AmpReports ampReports,Long ampTeamId,Long ampMemberId,boolean teamLead)
 	{
-    	
-    	
 		Session session = null;
 		Transaction tx = null;
 		String queryString=null;
@@ -69,14 +65,14 @@ public final class AdvancedReportUtil {
 			}
 				
 			
-			AmpTeam ampTeam = member.getAmpTeam();
+			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
 			
 			String tempQry = "select teamRep from "
 				+ AmpTeamReports.class.getName()
 				+ " teamRep where (teamRep.team=:tId) and "
 				+ " (teamRep.report=:rId)";
 			Query tmpQry = session.createQuery(tempQry);
-			tmpQry.setParameter("tId",ampTeam.getAmpTeamId(),Hibernate.LONG);
+			tmpQry.setParameter("tId",ampTeamId,Hibernate.LONG);
 			tmpQry.setParameter("rId",ampReports.getAmpReportId(),Hibernate.LONG);
 			Iterator tmpItr = tmpQry.list().iterator();
 			if (!tmpItr.hasNext()) {
@@ -116,7 +112,7 @@ public final class AdvancedReportUtil {
 				if(ampReports.getOwnerId()!=null){
 					ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, ampReports.getOwnerId().getAmpTeamMemId());	
 				}else {
-					ampTeamMember = member;	
+					ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
 				}					
 				Set reportSet = ampTeamMember.getReports();
 				
@@ -159,7 +155,7 @@ public final class AdvancedReportUtil {
 						pageCode = pageCode + ampReports.getName().charAt(j+1);
 			}
 			ampPages.setPageCode(pageCode);
-			ampPages.setAmpTeamId(ampTeam.getAmpTeamId());
+			ampPages.setAmpTeamId(ampTeamId);
 			session.save(ampPages);
 			
 			
@@ -196,26 +192,6 @@ public final class AdvancedReportUtil {
 				}
 			}
 			
-			if (ampReports.getDrilldownTab()){
-				//auto save report as tab if there is a free position https://jira.dgfoundation.org/browse/AMP-7472
-			  Collection<AmpDesktopTabSelection> tabs=ampTeamMember.getDesktopTabSelections();
-			  int pos=-1;
-			  if (tabs.isEmpty()){
-				  pos=0;
-			  }else if (tabs.size() < 5){
-				  pos=tabs.size();
-			  }
-			  if (pos != -1){
-				AmpDesktopTabSelection newTab=new AmpDesktopTabSelection();
-			  	newTab.setOwner(ampTeamMember);
-			  	newTab.setReport(ampReports);
-			  	newTab.setIndex(pos);
-			  	if ( !tabs.contains(newTab) ) {
-				  	ampTeamMember.getDesktopTabSelections().add(newTab);
-				  	session.save(ampTeamMember);
-			  	}
-			  }
-			}
 			tx.commit(); 
 
 		}
@@ -274,6 +250,16 @@ public final class AdvancedReportUtil {
 		{
 			logger.error(e);
 			////System.out.println(" Error in getColumnList()  :  " + e);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		return coll;
@@ -323,7 +309,52 @@ public final class AdvancedReportUtil {
 		}
 		return coll;
 	}
-
+	
+	
+	public static Collection getMeasureListbyType(String type)
+	{
+		Session session = null;
+		String sqlQuery = "";
+		boolean flag =false;
+		Iterator iter = null;
+		Collection coll = new ArrayList();
+		Query query = null;
+		AmpMeasures ampMeasures = new AmpMeasures();
+		try
+		{
+			session = PersistenceManager.getSession();
+			sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c where c.type=:type";
+			query = session.createQuery(sqlQuery);
+			query.setString("type", type);
+			if (query != null) 
+			{
+				iter = query.list().iterator();
+				while (iter.hasNext()) 
+				{
+					ampMeasures = (AmpMeasures) iter.next();
+					coll.add(ampMeasures);
+				}
+				flag = true;
+			}
+			return coll;
+		}
+		catch(Exception e)
+		{
+			logger.error(e);
+			////System.out.println(" Error in getMeasureList()  :  " + e);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coll;
+	}
 	@Deprecated
 	public static AmpTeamMember checkDuplicateReportName(String reportTitle){
 		AmpTeamMember teamMember=null;

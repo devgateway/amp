@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
@@ -128,6 +129,8 @@ public class RegisterUser extends Action {
                                 String description = "Welcome to AMP!"+ '\n'+'\n'+"We must first verify your email address before you become a full registered member (with login privileges)." +'\n'+ "In order to verify your email and complete the registration process, please click on the link below. " +
                                       '\n'+link+ "confirmRegisteration.do?id="+id;
                                DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
+                  
+				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);
 
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());

@@ -20,8 +20,6 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.form.ComponentTypeForm;
 import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class UpdateComponentType extends Action {
 	private static Logger logger = Logger.getLogger(UpdateComponentType.class);
@@ -70,14 +68,20 @@ public class UpdateComponentType extends Action {
 		if (compForm.getId()==0) {
 			if(existComponent != null) addErrorsToSession(request);
 			else{
-				AmpCategoryValue type = new AmpCategoryValue();
-				type.setValue(compForm.getName());
+				AmpComponentType type = new AmpComponentType();
+				type.setName(compForm.getName());
+				type.setCode(compForm.getCode());
+				type.setEnable(compForm.getEnable());
+				type.setSelectable(compForm.getSelectable());
 				ComponentsUtil.addNewComponentType(type);
 			}
 		} else {
-			AmpCategoryValue type = ComponentsUtil.getComponentTypeById(compForm.getId());
+			AmpComponentType type = ComponentsUtil.getComponentTypeById(compForm.getId());
 			if(existComponent != null && existComponent.getType_id().equals(compForm.getId())){
-				type.setValue(compForm.getName());
+				type.setName(compForm.getName());
+				type.setCode(compForm.getCode());
+				type.setEnable(compForm.getEnable());
+				type.setSelectable(compForm.getSelectable());
 				ComponentsUtil.addNewComponentType(type);
 			}
 			else  addErrorsToSession(request);
@@ -99,7 +103,7 @@ public class UpdateComponentType extends Action {
 	}
 	
 	public void addErrorsToSession(HttpServletRequest request) throws java.lang.Exception{
-		Long siteId = RequestUtils.getSite(request).getId();
+		String siteId = RequestUtils.getSite(request).getId().toString();
 		String locale= RequestUtils.getNavigationLanguage(request).getCode();
 		HttpSession session = request.getSession();
 		ActionErrors errors = new ActionErrors();
@@ -119,10 +123,14 @@ public class UpdateComponentType extends Action {
 		ComponentTypeForm compForm = (ComponentTypeForm) form;
 		Long id=Long.parseLong(request.getParameter("id"));
 		
-		AmpCategoryValue type=ComponentsUtil.getComponentTypeById(id);
+		AmpComponentType type=ComponentsUtil.getComponentTypeById(id);
 		if (type!=null){
-			compForm.setId(type.getId());
-			compForm.setName(type.getValue());
+			compForm.setId(type.getType_id());
+			compForm.setName(type.getName());
+			compForm.setCode(type.getCode());
+			compForm.setEnable(type.getEnable());
+			compForm.setSelectable(type.getSelectable());
+			
 		}
 		return mapping.findForward("edit");
 

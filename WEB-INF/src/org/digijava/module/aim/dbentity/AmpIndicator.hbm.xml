@@ -19,8 +19,8 @@
 		<many-to-one name="indicatorsCategory" column="indicators_category"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
-		<many-to-one name="risk" column="risk_value"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		<many-to-one name="risk" column="risk"
+			class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />
 
 		<set name="sectors" table="AMP_SECTOR_INDICATOR" lazy="true" cascade="none">
 			<key column="indicator_id" />

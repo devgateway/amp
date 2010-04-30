@@ -19,6 +19,11 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
@@ -34,9 +39,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOO.namespace("YAHOO.amp");
+		YAHOOAmp.namespace("YAHOOAmp.amp");
 
-		var myPanel = new YAHOO.widget.Panel("newmyCurrencyRate", {
+		var myPanel = new YAHOOAmp.widget.Panel("newmyCurrencyRate", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -48,22 +53,19 @@
 		    context: ["showbtn", "tl", "bl"]
 		    });
 	var panelStart=0;
-	var checkAndClose=false;
+	//var ready=false;
 	function initCurrencyScripts() {
 		var msg='\n<digi:trn key="aim:addCurrencyRate">Add Currency Rate</digi:trn>';
 		myPanel.setHeader(msg);
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
 			panelStart=1;
-			if(calendarObjForForm.isVisible()){
-				calendarObjForForm.hide();
-			}
 		}); 
 		
 		myPanel.render(document.body);
 	}
 	//this is called from editActivityMenu.jsp
-	addLoadEvent(initCurrencyScripts);
+	window.onload=initCurrencyScripts();
 -->	
 </script>
 <style type="text/css">
@@ -141,23 +143,12 @@
 			myPanel.show();
 			panelStart = 2;
 		}
-		checkErrorAndClose();
+		load();
 	}
-    function checkErrorAndClose(){
-    	if(checkAndClose==true){
-    		if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-    			//close the pop in
-    			myclose();
-    			//refresh parent page
-    			refreshPage();
-    		}
-    		checkAndClose=false;			
-    	}
-        }
 
 	function generateFields(type){
 		var ret="";
-		if(type==1){
+		if(type==1){//add sector  or reload sectors
 			ret=
 			"updateCRateId="   	+(document.getElementsByName("updateCRateId")[0].value==""?"\"\"":document.getElementsByName("updateCRateId")[0].value)+"&"+
 			"doAction="		    +(document.getElementsByName("doAction")[0].value==""?"\"\"":document.getElementsByName("doAction")[0].value)+"&"+
@@ -174,32 +165,27 @@
 		return ret;
 	}
 	function myclose(){
-		var content = document.getElementById("myContentContent");
-		content.innerHTML="";
 		myPanel.hide();	
 		panelStart=1;
+	
 	}
 
 	function myAddExchangeRate(){
-		showPanelLoading();
 		var postString		= "reset=true&"+generateFields(1);
+		//alert(postString);
+		ready=true;
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
-		YAHOO.util.Connect.asyncRequest("POST", url, callback);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
 	function myEditExchangeRate(date,code){
-		showPanelLoading();
+		//var postString		= "reset=true&"+generateFields(1);
 		var postString="doAction=showRates&updateCRateCode="+code+"&updateCRateDate="+date+"&reset=false";
+		//alert(postString);
+		ready=true;
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
-		YAHOO.util.Connect.asyncRequest("POST", url, callback);
-	}
-	function showPanelLoading(){
-		  var content = document.getElementById("myContentContent");
-			content.innerHTML = '<div style="text-align: center">' + 
-			'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-			'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
-		  showContent();
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
 
 	-->
@@ -255,20 +241,19 @@ function saveRate() {
 	
 	if (valid == true) {
 		var postString		= generateFields(2);
+
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
-		checkAndClose=true;
-		YAHOO.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
 	}
 	return valid;
 }
-function refreshPage() {
+function reload() {
 	document.aimCurrencyRateForm.submit();
 }
 
 function load() {
-	if(document.getElementsByName('updateCRateCode')[0]!=null)
-		document.aimCurrencyRateFormPop.updateCRateCode.focus();
+	document.aimCurrencyRateFormPop.updateCRateCode.focus();
 }
 
 function closePopup() {

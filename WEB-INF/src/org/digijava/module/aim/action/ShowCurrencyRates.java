@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -21,9 +20,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyRateLoader;
@@ -46,12 +42,6 @@ public class ShowCurrencyRates extends Action {
 
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-
-		HttpSession session = request.getSession();
-		
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
                 Boolean isFromAdminHome=crForm.isClean();
@@ -143,15 +133,7 @@ public class ShowCurrencyRates extends Action {
 		if (!filtered) {
 			tempList = new ArrayList(crForm.getAllRates());
 		}
-		
-		if (crForm.getFilterByBaseCode() != null && crForm.getFilterByBaseCode().trim().length() > 0){
-			tempList = filterByBaseCode(tempList, crForm.getFilterByBaseCode().toUpperCase());	
-		}
-		else{
-			crForm.setFilterByBaseCode(baseCurrency);			
-			tempList = filterByBaseCode(tempList, baseCurrency.toUpperCase());
-		}
-		
+
 		if (crForm.getNumResultsPerPage() == 0) {
 			crForm.setNumResultsPerPage(Constants.NUM_RECORDS);
 		}
@@ -210,19 +192,6 @@ public class ShowCurrencyRates extends Action {
 		timePeriods.add(new LabelValueBean("Year","5"));
 		timePeriods.add(new LabelValueBean("ALL",String.valueOf(ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES)));		
 		return timePeriods;
-	}
-	private ArrayList filterByBaseCode(ArrayList tempList, String baseCode){
-		logger.debug("Filtering based on base code ....");
-		ArrayList baseCodeList = new ArrayList();
-		Iterator itr = tempList.iterator();
-		CurrencyRates cRates = null;
-		while (itr.hasNext()) {
-			cRates = (CurrencyRates) itr.next();
-			if (cRates.getFromCurrencyCode().toUpperCase().equals(baseCode)){
-				baseCodeList.add(cRates);
-			}
-		}
-		return baseCodeList;
 	}
 
 }

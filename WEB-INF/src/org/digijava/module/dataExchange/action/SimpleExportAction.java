@@ -5,19 +5,19 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -26,16 +26,13 @@ public class SimpleExportAction extends Action {
 
 	private static Logger logger = Logger.getLogger(SimpleExportAction.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-
-		HttpSession session = request.getSession();		
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}
-		
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		//
 		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-Disposition","inline; filename=export.csv ");
+		response.setHeader("Content-Disposition",
+				"inline; filename=export.csv ");
 		//
 		StringBuffer buffer = new StringBuffer();
 		//

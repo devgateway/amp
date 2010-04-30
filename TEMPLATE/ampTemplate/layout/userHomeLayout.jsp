@@ -17,10 +17,14 @@
 
 	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-    <script language="JavaScript" type="text/javascript">
-	  <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
-    </script>
+
+	
+    
+
 	<digi:context name="digiContext" property="context"/>
+
+
+
 	<HEAD>
 
 		<TITLE>
@@ -47,18 +51,21 @@
         <!-- Dependencies --> 
         <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
         <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/yui/container.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
 
         <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />

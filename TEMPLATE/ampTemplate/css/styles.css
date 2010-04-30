@@ -1,21 +1,3 @@
-.loading {
- 	width: 200px;
- 	height: 100px;
- 	position: absolute;
- 	left: 50%;
- 	top: 50%;
- 	margin-top: -50px;
- 	margin-left: -100px;
- 	text-align: center;
-}
-
-p.load 
-{
-	border-style:solid;
-	border-width:1px;
-	border-color:#27415f;
-	background-color: #FFFFFF;
-}
 
 A:link 
 {

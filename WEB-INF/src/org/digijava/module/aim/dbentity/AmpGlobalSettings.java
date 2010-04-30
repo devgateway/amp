@@ -78,7 +78,4 @@ public class AmpGlobalSettings implements Serializable {
 	public void setListOfValues(String[] listOfValues) {
 		this.listOfValues = listOfValues;
 	}
-	
-	
-	
 }

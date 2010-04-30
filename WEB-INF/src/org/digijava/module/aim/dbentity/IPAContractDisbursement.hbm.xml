@@ -10,7 +10,7 @@
 			</generator>
 		</id>
 		<property name="adjustmentType" column="adjustment_type" type="java.lang.Integer" />
-		<property access="field" name="amount" column="amount" type="java.math.BigDecimal" />
+		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 		<many-to-one name="currency" column="currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="contract" column="ipa_contract_id"

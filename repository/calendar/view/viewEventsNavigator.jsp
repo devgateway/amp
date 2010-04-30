@@ -56,10 +56,10 @@ function selectCalendarType(view, type) {
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
                                     		<a id="clear1" href="javascript:clearDate(document.calendarViewForm.customViewStartDate, 'clear1')" style="text-decoration:none">
-									 			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="CLEAR"/>
+									 			<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 											</a>
                                     		<a id="date1" href='javascript:pickDateWithClear("date1",document.calendarViewForm.customViewStartDate,"clear1")' style="text-decoration:none">
-												<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="START DATE" border=0>
+												<img src="../ampTemplate/images/show-calendar.gif" alt="START DATE" border=0>
 											</a>
                                    		</td>
                                    	</tr>
@@ -111,10 +111,10 @@ function selectCalendarType(view, type) {
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
                                     		<a id="clear2" href="javascript:clearDate(document.calendarViewForm.customViewEndDate, 'clear2')" style="text-decoration:none">
-									 			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="CLEAR"/>
+									 			<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 											</a>
                                     		<a id="date2" href='javascript:pickDateWithClear("date2",document.calendarViewForm.customViewEndDate,"clear2")' style="text-decoration:none">
-												<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="END DATE" border=0>
+												<img src="../ampTemplate/images/show-calendar.gif" alt="END DATE" border=0>
 											</a>
 										</td>
 									</tr>
@@ -163,7 +163,7 @@ function selectCalendarType(view, type) {
         <tr>
             <td style="text-align:right;">
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
-                  <digi:img src="/TEMPLATE/ampTemplate/imagesSource/calendar/Previous.png" border="0" alt=""/>
+                  <digi:img src="module/calendar/images/Previous.png" border="0" alt=""/>
                 </a>
             </td>
             <td align="center" style="font-size:12px;font-family: Tahoma;">
@@ -190,7 +190,7 @@ function selectCalendarType(view, type) {
             </td>
             <td>
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.rightTimestamp}');return(false);">
-                  <digi:img src="/TEMPLATE/ampTemplate/imagesSource/calendar/Next.png" border="0" alt=""/>                 
+                  <digi:img src="module/calendar/images/Next.png" border="0" alt=""/>                 
                 </a>
             </td>
         </tr>

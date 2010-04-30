@@ -10,39 +10,34 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%> 
 <%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
 <%@page import="java.util.Collections"%>
-<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
 <%-- <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" /> --%>
 
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
-
 <digi:instance property="aimReportsFilterPickerForm" />
 
 <digi:form action="/reportsFilterPicker.do">
 
-
-<html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
 	
 
 <div id="tabview_container" class="yui-navset">
 	<ul class="yui-nav">
-		<li class="selected"><a href="#keyword"><div><digi:trn>Keyword & Calendar</digi:trn></div></a> </li>
-		<li><a href="#financing"><div><digi:trn>Financing & Location</digi:trn></div></a> </li>
-                <li><a href="#sectorsprograms"><div><digi:trn>Sectors & Programs</digi:trn></div></a> </li>
-		<li><a href="#donors"><div><digi:trn>Donors & Agencies</digi:trn></div></a> </li>
-		<li><a href="#status"><div><digi:trn>Status & Ministry Rank</digi:trn></div></a> </li>
+		<li class="selected"><a href="#keyword"><div><digi:trn key="rep:filer:tab:KeywordAndCalendar">Keyword & Calendar</digi:trn></div></a> </li>
+		<li><a href="#financing"><div><digi:trn key="rep:filer:tab:FinancingAndLocation">Financing & Location</digi:trn></div></a> </li>
+                <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
+		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
+		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
 		<feature:display name="Computed Columns Filters" module="Filter Section">
-		<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
+			<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
 		</feature:display>
 	</ul>
 	<div class="yui-content" style="background-color: #EEEEEE">
-		<div id="keyword" class="yui-tab-content">
+		<div id="keyword" >
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
 		<tr valign="top"><td align="center">
@@ -67,6 +62,7 @@
 				</tr>
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
+				
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><b><digi:trn
 						key="rep:filter:ApprovalStatus">Approval Status</digi:trn></b><br/>
@@ -91,9 +87,9 @@
 							*&nbsp;<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
 						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
-						<html:option value="2" style="color:green">
-							*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
-						</html:option>
+							<html:option value="2" style="color:green">
+								*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
+							</html:option>
 						</module:display>
 						<html:option value="4" style="color:blue">
 							&nbsp;<digi:trn key="rep:filter:ValidatedActivities" >Validated Activities</digi:trn>
@@ -104,9 +100,9 @@
 						</html:option>
 						</logic:notEqual>
 						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
-						<html:option value="0" style="color:green">
-							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
-						</html:option>
+							<html:option value="0" style="color:green">
+								<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
+							</html:option>
 						</module:display>
 					</html:select>
 					</td>
@@ -186,7 +182,7 @@
 					<td colspan="2" align="left">
 					<html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
 					<a id="date1" href='javascript:pickDateById("date1","fromDate")'>
-						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 					</td>
 					
@@ -194,33 +190,10 @@
 					<td colspan="2" align="left">
 					<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
 					<a id="date2" href='javascript:pickDateById("date2","toDate")'>
-						<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 					</td>
 				</tr>
-                    <tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
-	                <tr bgcolor="#EEEEEE">
-	                    <td colspan="5"><b><digi:trn key="rep:filter:History">History</digi:trn></b><br/>
-	                    </td>
-	                </tr>
-                    <tr bgcolor="#EEEEEE">
-                    <td colspan="4" align="left">
-                        <html:select property="selectedHistory" multiple="false" style="width: 300px" styleClass="inp-text">
-                        <html:option value="0">
-                            <digi:trn key="rep:filer:All">All</digi:trn>
-                        </html:option>
-                        <html:option value="<%=ArConstants.ACTIVITY_HISTORY_VIEWED%>">
-                            <digi:trn key="rep:filer:Viewed">Viewed</digi:trn>
-                        </html:option>
-                        <html:option value="<%=ArConstants.ACTIVITY_HISTORY_CREATED%>">
-                            <digi:trn key="rep:filter:Created">Created</digi:trn>
-                        </html:option>
-                        <html:option value="<%=ArConstants.ACTIVITY_HISTORY_UPDATED%>">
-                            <digi:trn key="rep:filter:Updated">Updated</digi:trn>
-                        </html:option>
-                    </html:select>
-                    </td>
-                </tr>
 		</table>
 			</td> 
 				</tr>
@@ -243,7 +216,7 @@
 			
 		</table>
 		</div>
-		<div id="financing" class="yui-hidden">
+		<div id="financing" style="display: none;">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 		<tr valign="top">
@@ -333,18 +306,14 @@
 					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<td colspan="5"><html:select multiple="true" size="3" property="regionSelected"
+					<td colspan="5"><html:select property="regionSelected"
 						style="width: 300px" styleClass="inp-text">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
 						<html:optionsCollection property="regionSelectedCollection"
 							label="name" value="id" />
-					</html:select>
-					<br/>
-					<html:checkbox property="unallocatedLocation" value="true" />
-						<digi:trn key="rep:filer:Unallocated">Unallocated</digi:trn>
-					</td>
+					</html:select></td>
 				</tr>
 				<field:display name="Project Category" feature="Identification">
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
@@ -364,32 +333,6 @@
 					</td>
 				</tr>
 				</field:display>
-				
-				<field:display name="Project Category" feature="Identification">
-				<tr bgcolor="#EEEEEE">
-					<td colspan="5">&nbsp;</td>
-				</tr>
-				<tr bgcolor="#EEEEEE">
-					<td colspan="5">
-					<digi:trn key="aim:DisbursementOrder">Disbursement Orders</digi:trn>
-					</td>
-				</tr>
-				<tr bgcolor="#EEEEEE">
-					<td colspan="5">
-					<html:select property="disbursementOrder" style="width: 200px" styleClass="inp-text" >
-						<html:option value="-1">
-							<digi:trn key="rep:filer:All">All</digi:trn>
-						</html:option>
-						<html:option value="0">
-							<digi:trn key="aim:DisbursementOrderRejected">No Rejected</digi:trn>
-						</html:option>
-						<html:option value="1">
-							<digi:trn key="aim:DisbursementOrderNoRejected">Rejected</digi:trn>
-						</html:option>
-					</html:select>
-					</td>
-				</tr>
-				</field:display>
 
 
 				</table>
@@ -397,7 +340,7 @@
 		</tr>
 		</table>
 		</div>
-                <div id="sectorsprograms" class="yui-hidden">
+                <div id="sectorsprograms" style="display: none;">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 		
@@ -444,20 +387,20 @@
 					</td>
 				</tr>
 				</field:display>
-                            </table>
+			</table>
                         </td>
                         <td>
                             <c:set var="tooltip_translation">
 					<digi:trn key="rep:filter:programOfInterest">Specify the   programs   of interest.</digi:trn>
 			</c:set>
-                            <table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
+                <table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
                 <field:display name="National Planning Objectives" feature="NPD Programs">
-			<tr bgcolor="#EEEEEE">
+                <tr bgcolor="#EEEEEE">
 					<td colspan="5">
 						<b><digi:trn key="rep:filter:Programs"> Programs</digi:trn></b><br>
 					</td>
 				</tr>
-				<tr bgcolor="#EEEEEE">
+                <tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:nationalPlanningObjectives">National Planning Objectives</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
@@ -509,7 +452,7 @@
 		</table>
           
 		</div>
-		<div id="donors" class="yui-hidden">
+		<div id="donors" style="display: none;">
 			<br/>
 			<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 				<tr valign="top">
@@ -662,7 +605,7 @@
           </td></tr>
           </table>
 		</div>
-		<div id="status" class="yui-hidden">
+		<div id="status" style="display: none;">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 			<tr valign="top">
@@ -692,13 +635,13 @@
 				<field:display name="Risk" feature="Activity">
 				<tr>
 						<td>
-                            <b>
-                                <digi:trn key="aim:meRisk">Risk</digi:trn>
-                            </b>
-                            <c:set var="translation">
-                                <digi:trn key="aim:addActivityStatusFirstLine">Please select a risk from below</digi:trn>
-                            </c:set>
-                            <category:showoptions   firstLine="${translation}" name="aimReportsFilterPickerForm" property="selectedRisks"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text" multiselect="true" />
+							<b><digi:trn key="rep:filer:RisksTitle">Risks</digi:trn></b> <br />
+							<html:select multiple="true" style="width: 300px"
+								property="selectedRisks" size="3" styleClass="inp-text">
+								<html:optionsCollection property="risks"
+									value="ampIndRiskRatingsId" label="ratingName" />
+							</html:select>
+														
 						</td>
 				</tr>
 				</field:display>
@@ -763,7 +706,7 @@
 		</table>
 		</div>
 		<feature:display name="Computed Columns Filters" module="Filter Section">
-		<div id="CCSettings" class="yui-hidden">
+		<div id="CCSettings" >
 			<br>
 			<br>
 			<table width="100%" cellpadding="1" cellspacing="1" >
@@ -785,8 +728,6 @@
 		</feature:display> 
 	</div>
 	
-
-
 </div>
 <div style="background-color: #EEEEEE; ">
 	<br />
@@ -795,7 +736,7 @@
 			<td align="center" colspan="5">
 			<html:hidden property="ampReportId" />
 			<html:hidden property="defaultCurrency" />
-			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
+			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="submitFilters()"
 				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
 			<html:button onclick="resetFilter();" styleClass="dr-menu"
 				property="reset">

@@ -19,8 +19,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -28,13 +26,12 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
-import org.digijava.module.aim.helper.CategoryDatasetHolder;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -44,7 +41,7 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CustomCategoryDataset;
-import org.digijava.module.aim.helper.CategoryDatasetHelper;
+
 /**
  * NPD Indicators graph generator action.
  * Generates different (currently only one) types of graphs for specified indicators
@@ -73,16 +70,15 @@ public class getNPDgraph extends Action {
 
             //session for storing latest map for graph
             HttpSession session = request.getSession();
-            
-            CategoryDatasetHolder datasetHolder=null;
+
+            CategoryDataset dataset = null;
             if (currentThemeId != null && currentThemeId.longValue() > 0) {
                 AmpTheme currentTheme = ProgramUtil.getThemeObject(currentThemeId);
-                datasetHolder=createPercentsDataset(currentTheme, selIndicators, selYears,request);
-                
+
+
+                dataset = createPercentsDataset(currentTheme, selIndicators, selYears,request);
             }
-            CategoryDataset dataset=datasetHolder!=null?datasetHolder.getDataset():null;
-            boolean fixedRange = datasetHolder!=null?datasetHolder.isFixedRange():true;
-            JFreeChart chart = ChartUtil.createChart(dataset, ChartUtil.CHART_TYPE_BAR,fixedRange);
+            JFreeChart chart = ChartUtil.createChart(dataset, ChartUtil.CHART_TYPE_BAR);
 
 
             ChartRenderingInfo info = new ChartRenderingInfo();
@@ -93,23 +89,13 @@ public class getNPDgraph extends Action {
     		Long teamId=TeamUtil.getCurrentTeam(request).getAmpTeamId();
     		NpdSettings npdSettings=NpdUtil.getCurrentSettings(teamId);            
             Double angle=null;
-            CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
-            CategoryAxis categoryaxis = categoryplot.getDomainAxis();
-            if(npdSettings.getAngle()!=null){	    
+            
+            if(npdSettings.getAngle()!=null){
+        		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+                CategoryAxis categoryaxis = categoryplot.getDomainAxis();
             	angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
                 categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
             }
-
-            List categories = categoryplot.getCategories();
-            if (categories != null) {
-                Iterator<CategoryDatasetHelper> iter = categories.iterator();
-                while (iter.hasNext()) {
-                    CategoryDatasetHelper category = (CategoryDatasetHelper) iter.next();
-                    categoryaxis.addCategoryLabelToolTip(category, category.getFullName());
-                }
-
-            }
-           
             
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
             		npdSettings.getHeight().intValue(), info);
@@ -133,15 +119,11 @@ public class getNPDgraph extends Action {
 
 
     // TODO This method should be moved to NPD or chart util.
-    private CategoryDatasetHolder createPercentsDataset(AmpTheme currentTheme,long[] selectedIndicators, String[] selectedYears, HttpServletRequest request)
+    private CategoryDataset createPercentsDataset(AmpTheme currentTheme,
+                                                  long[] selectedIndicators, String[] selectedYears, HttpServletRequest request)
             throws AimException {
-    	
-    	CategoryDatasetHolder retValue= new CategoryDatasetHolder();
+
         CustomCategoryDataset dataset = new CustomCategoryDataset();
-        boolean fixedRange=true;
-        String baseValueSource="";
-        String actualValueSource="";
-        String targetValueSource="";
 
         if (selectedIndicators != null && currentTheme.getIndicators() != null) {
             Arrays.sort(selectedIndicators);
@@ -158,13 +140,11 @@ public class getNPDgraph extends Action {
                 int pos = Arrays.binarySearch(selectedIndicators, indicator.getIndicatorId().longValue());
 
                 if (pos >= 0) {
-                 
+                	String key="aim:NPD:"+indicator.getName();
+                	String displayLabel = CategoryManagerUtil.translate(key, request, indicator.getName());
+                    
                     
                     try {
-                        Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
-                        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
-                        String indicatorNameTranslated = TranslatorWorker.translateText(indicator.getName(), langCode, siteId);
-                        CategoryDatasetHelper category = new CategoryDatasetHelper(indicatorNameTranslated, indicator.getIndicatorId());
                         Collection<AmpIndicatorValue> indValues = item.getValues();  // ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
                        
                         Map<String, AmpIndicatorValue> actualValues = new HashMap<String, AmpIndicatorValue>(); // map to store latest actual values group by year
@@ -233,121 +213,104 @@ public class getNPDgraph extends Action {
                          
                            // show data restrict to selected date range, here we choose target and base values.
                            if (selectedYears!=null){
-                        for (String selectedYear : selectedYears) {
-                            AmpIndicatorValue actValue = actualValues.get(selectedYear);
-                            AmpIndicatorValue targValue = null;
-                            AmpIndicatorValue basValue = null;
-                            List<Integer> years = new ArrayList(targetVals.keySet());
-                            // sort target years
-                            Collections.sort(years);
-                            
-                            List<Integer> baseYears = new ArrayList(baseVals.keySet());
-                            // sort base years
-                            Collections.sort(baseYears);
-                         
-                            /* to select target value for selected year we must remember:
-                             * 1) if actual value in selected year exists: 
-                             * target value's date must be equal or greater than actual value's date in selected year.
-                             * 2) if there is no actual value in 
-                             * this year the year of target value must be equal or greater than selected year.
-                             */
-                            Double targetValue = null;
-                            Double baseValue = null;
-                            Double actualValue = null;
-                            Integer targetYear=null;
-                            Integer baseYear=null;
-                            AmpCategoryValue indicatorSource = null;
-                            if (actValue == null) {
-                                actualValue = new Double(0);
-                            } else {
-                                actualValue = actValue.getValue();
-                            }
-                            for (Integer year : years) {
-                                if (Integer.parseInt(selectedYear) <= year) {
-                                    ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
-                                    for (AmpIndicatorValue value : targValues) {
-                                        if (targValue == null || targValue.getValueDate().after(value.getValueDate())) {
-                                            if (actValue == null) {
-                                                targValue = value;
-                                                targetYear=year;
-                                            } else {
-                                                if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
-                                                    targValue = value;
-                                                    indicatorSource=actValue.getIndicatorSource();
-                                                    if(indicatorSource!=null){
-                                                        actualValueSource=indicatorSource.getValue();
-                                                    }
-                                                    targetYear=year;
-                                                }
-                                            }
-                                        }
-
-
-                                    }
-                                }
-                            }
-                            
-                             /* to select base value for selected year we must remember:
-                             * 1) if actual value in selected year exists: 
-                             * base value's date must be equal or less than actual value's date in selected year.
-                             * 2) if there is no actual value in 
-                             * this year the year of base value must be equal or less than selected year.
-                             */
-                            for (Integer year : baseYears) {
-                                if (Integer.parseInt(selectedYear) >= year) {
+                               for (String selectedYear : selectedYears) {
                                    
-                                    ArrayList<AmpIndicatorValue> basValues = baseVals.get(year);
-                                    if (basValues != null) {
-                                        for (AmpIndicatorValue value : basValues) {
-                                            if (basValue == null || basValue.getValueDate().before(value.getValueDate())) {
-                                                if (actValue == null) {
-                                                    basValue = value;
-                                                    baseYear=year;
-                                                } else {
-                                                    if (value.getValueDate().before(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
-                                                        basValue = value;
-                                                        baseYear=year;
-                                                    }
-                                                }
-                                            }
+                                   AmpIndicatorValue actValue = actualValues.get(selectedYear);
+                                   AmpIndicatorValue targValue = null;
+                                   AmpIndicatorValue basValue = null;
+                                   List<Integer> years = new ArrayList(targetVals.keySet());
+                                   // sort target years
+                                   Collections.sort(years);
+                                   
+                                   List<Integer> baseYears = new ArrayList(baseVals.keySet());
+                                   // sort base years
+                                   Collections.sort(baseYears);
+                                
+                                   /* to select target value for selected year we must remember:
+                                    * 1) if actual value in selected year exists: 
+                                    * target value's date must be equal or greater than actual value's date in selected year.
+                                    * 2) if there is no actual value in 
+                                    * this year the year of target value must be equal or greater than selected year.
+                                    */
+                                   Double targetValue = null;
+                                   Double baseValue = null;
+                                   Double actualValue = null;
+                                   Integer targetYear=null;
+                                   Integer baseYear=null;
+                                   
+                                   for (Integer year : years) {
+                                       if (Integer.parseInt(selectedYear) <= year) {
+                                           ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
+                                           for (AmpIndicatorValue value : targValues) {
+                                               if (targValue == null || targValue.getValueDate().after(value.getValueDate())) {
+                                                   if (actValue == null) {
+                                                       targValue = value;
+                                                       actualValue = new Double(0);
+                                                       targetYear=year;
+                                                   } else {
+                                                       if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
+                                                           targValue = value;
+                                                           actualValue = actValue.getValue();
+                                                           targetYear=year;
+                                                       }
+                                                   }
+                                               }
 
 
-                                        }
+                                           }
+                                       }
+                                   }
+                                   
+                                    /* to select base value for selected year we must remember:
+                                    * 1) if actual value in selected year exists: 
+                                    * base value's date must be equal or less than actual value's date in selected year.
+                                    * 2) if there is no actual value in 
+                                    * this year the year of base value must be equal or less than selected year.
+                                    */
+                                   for (Integer year : baseYears) {
+                                       if (Integer.parseInt(selectedYear) >= year) {
+                                          
+                                           ArrayList<AmpIndicatorValue> basValues = baseVals.get(year);
+                                           if (basValues != null) {
+                                               for (AmpIndicatorValue value : basValues) {
+                                                   if (basValue == null || basValue.getValueDate().before(value.getValueDate())) {
+                                                       if (actValue == null) {
+                                                           basValue = value;
+                                                           baseYear=year;
+                                                       } else {
+                                                           if (value.getValueDate().before(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
+                                                               basValue = value;
+                                                               baseYear=year;
+                                                           }
+                                                       }
+                                                   }
 
-                                    }
-                                }
-                            }
 
+                                               }
 
+                                           }
+                                       }
+                                   }
+                                
+                               
+                                   if(basValue==null){
+                                       baseValue=new Double(0);
+                                   }
+                                   else{
+                                       baseValue=basValue.getValue();
+                                   }
+                                      if(targValue==null){
+                                       targetValue=new Double(0);
+                                   }
+                                   else{
+                                       targetValue=targValue.getValue();
+                                   }
+                                // create dataset for graph
+                                   dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(targetValue,targetYear, selectedYear)});
+                                    Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
+                                    dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
 
-                            if (basValue == null) {
-                                baseValue = new Double(0);
-                            } else {
-                                indicatorSource = basValue.getIndicatorSource();
-                                baseValue = basValue.getValue();
-                                if (indicatorSource != null) {
-                                    baseValueSource = indicatorSource.getValue();
-                                }
-                            }
-                            if (targValue == null) {
-                                targetValue = new Double(0);
-                            } else {
-                                indicatorSource = targValue.getIndicatorSource();
-                                targetValue = targValue.getValue();
-                                if (targValue.getIndicatorSource() != null) {
-                                    targetValueSource = indicatorSource.getValue();
-                                }
-                            }
-                         // create dataset for graph
-                            dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear,baseValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(targetValue,targetYear, selectedYear,targetValueSource)});
-                            Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
-                            dataset.addValue(realActual.doubleValue(), selectedYear, category);
-                            
-                            if(realActual.doubleValue()<0D || realActual.doubleValue()>1D){ //in any realActual is less/more then 0/100,then chart range shouldn't be 0-100%
-                            	fixedRange=false;
-                            }
-
-                        }
+                               }
                         	   
                            }
                     } catch (Exception ex) {
@@ -358,26 +321,24 @@ public class getNPDgraph extends Action {
             }
 
         }
-        retValue.setDataset(dataset);
-        retValue.setFixedRange(fixedRange);
-        return retValue;
+        return dataset;
 
     }
 
 
-    public String formatValue(Double val,Integer year,String selctedYear,String source) {
+    public String formatValue(Double val,Integer year,String selctedYear) {
         String retVal="0";
         if (val != null) {
             retVal=val.toString();
             if(year!=null){
-                retVal+=" ("+year.toString()+", Source:"+ source+") ";
+                retVal+=" ("+year.toString()+") ";
             }
             else{
-                retVal+=" ("+selctedYear+", Source:"+ source+") ";
+                retVal+=" ("+selctedYear+") ";
             }
         }
         else{
-            retVal+=" ("+selctedYear+", Source:"+ source+") ";
+            retVal+=" ("+selctedYear+") ";
         }
         return retVal;
     }

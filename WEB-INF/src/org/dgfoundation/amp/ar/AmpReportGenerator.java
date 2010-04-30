@@ -20,10 +20,10 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.lucene.search.Hits;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -38,7 +38,6 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.util.LuceneUtil;
 
 /**
  * 
@@ -52,7 +51,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected int extractableCount;
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode=false;
-	private Hits hits = null;
+	private boolean pledgereport=false;
 	
 
 	/**
@@ -184,18 +183,13 @@ public class AmpReportGenerator extends ReportGenerator {
 			while (i.hasNext()) {
 				AmpReportColumn rcol = (AmpReportColumn) i.next();
 				AmpColumns col = rcol.getColumn();
-				String cellTypeName = col.getCellType();
-				String extractorView = "";
-				if (col.getExtractorView()!=null && this.filter.isPublicView()){
-					extractorView = ArConstants.VIEW_PUBLIC_PREFIX+col.getExtractorView();
-				}else{
-					extractorView  = col.getExtractorView();
-				}
 				logger.info("Extracting column " + col.getColumnName()
-						+ " with view " + extractorView);
-				
+						+ " with view " + col.getExtractorView());
+				String cellTypeName = col.getCellType();
+				String extractorView = col.getExtractorView();
 				String columnName = col.getColumnName();
-				String relatedContentPersisterClass = col.getRelatedContentPersisterClass();
+				String relatedContentPersisterClass = col
+						.getRelatedContentPersisterClass();
 
 				logger.debug("Seeking class " + cellTypeName);
 
@@ -244,13 +238,9 @@ public class AmpReportGenerator extends ReportGenerator {
 				
 				
 				ce.setDebugMode(debugMode);
+				ce.setPledge(pledgereport);
 				
 				Column column = ce.populateCellColumn();
-				
-				column.setHits(this.hits);
-				if (this.hits != null ){
-					LuceneUtil.addHitsToCell((CellColumn)column);
-				}
 
 				if (relatedContentPersisterClass != null) {
 					column.setRelatedContentPersisterClass(Class
@@ -367,6 +357,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			ac.setExtractorView(ArConstants.VIEW_REGIONAL_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.CONTRIBUTION_TYPE)
 			ac.setExtractorView(ArConstants.VIEW_CONTRIBUTION_FUNDING);
+		if (reportMetadata.getType().intValue() == ArConstants.PLEDGES_TYPE)
+			ac.setExtractorView(ArConstants.VIEW_PLEDGES_FUNDING);
 
 		ColumnFilterGenerator.attachHardcodedFilters(ac);
 
@@ -413,7 +405,11 @@ public class AmpReportGenerator extends ReportGenerator {
 				AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
 				
-				if (element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || element.getExpression()!=null)
+				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
+						element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
+						element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) ||
+						element.getExpression()!=null
+						)
 					continue;
 
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
@@ -460,6 +456,21 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		
 		//end computted measures
+		
+		// we create the total commitments column
+
+		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
+			TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(ArConstants.TOTAL_COMMITMENTS);
+			Iterator i = funding.iterator();
+			while (i.hasNext()) {
+				AmountCell element = (AmountCell) i.next();
+				// we do not care here about filtering commitments, that is done
+				// at UndisbursedAmountCell level
+				tac.addCell(element);
+			}
+
+			newcol.getItems().add(tac);
+		}
 		
 		newcol.setName(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL: ArConstants.COLUMN_TOTAL);
 
@@ -529,7 +540,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		createTotals();
 		AmpARFilter arf = (AmpARFilter) filter;
 
-		if (!arf.isWidget() && !("N".equals(reportMetadata.getOptions()))) {
+		if (!arf.isWidget()) {
 			categorizeData();
 		}
 		
@@ -563,7 +574,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.addReport(reportChild);
 		
 		// if it's a tab reports just remove funding
-		if (arf.isWidget() || ("N".equals(reportMetadata.getOptions()))){
+		if (arf.isWidget()){
 			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);	
 		}else {
 			// perform removal of funding column when report has only Computed measures , or it a tab report
@@ -632,7 +643,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				fakeC.setOwnerId(id);
 				//
 				// requirements for translation purposes
-				Long siteId = rd.getParent().getReportMetadata().getSiteId();
+				String siteId = rd.getParent().getReportMetadata().getSiteId();
 				String locale = rd.getParent().getReportMetadata().getLocale();
 				String text = fakeC.getValue().toString();
 				String translatedText = null;
@@ -707,8 +718,14 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns = new GroupColumn(ArConstants.COLUMN_RAW_DATA);
 		this.filter = filter;
 		extractableCount = 0;
-
-		this.hits = filter.generateFilterQuery(request);
+		
+		if (!(reportMetadata.getType()==ArConstants.PLEDGES_TYPE)){
+			filter.generateFilterQuery(request);
+		}else {
+			pledgereport = true;
+			request.getSession().setAttribute("pledgereport", "true");
+			filter.generateFilterQuery(request);
+		}
 		
 		debugMode=(request.getParameter("debugMode")!=null);
 
@@ -756,7 +773,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		fakeC.setOwnerId( activityId );
 		
 		// requirements for translation purposes
-		Long siteId = rd.getParent().getReportMetadata().getSiteId();
+		String siteId = rd.getParent().getReportMetadata().getSiteId();
 		String locale = rd.getParent().getReportMetadata().getLocale();
 		String text = fakeC.getValue().toString();
 		String translatedText = null;

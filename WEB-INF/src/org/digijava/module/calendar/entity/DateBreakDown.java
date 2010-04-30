@@ -68,11 +68,14 @@ public class DateBreakDown {
         hour = calendar.get(calendar.HOUR_OF_DAY);
         minute = calendar.get(calendar.MINUTE);
         //
-		Long siteId = null;
-        String locale = null;
-        if (request != null){
-	       siteId = RequestUtils.getSite(request).getId();
-	       locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
+        String siteId = "";
+        String locale = ""; 
+        if (request == null){
+        	siteId = CalendarThread.getSite().getId().toString();
+        	locale = CalendarThread.getLocale().getCode();
+        }else{
+           siteId = RequestUtils.getSite(request).getId()+"";
+  	       locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
         }
         
         if (locale != null) {
@@ -225,7 +228,7 @@ public class DateBreakDown {
     private static String getDayOfWeekName(int index, int type) {
         String dayName[][] = {
             {
-            "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}, {
+            "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}, {
             "E", "S", "M", "R", "H", "A", "K"}
         };
         int calendarType = type == CalendarOptions.CALENDAR_TYPE_GREGORIAN ?

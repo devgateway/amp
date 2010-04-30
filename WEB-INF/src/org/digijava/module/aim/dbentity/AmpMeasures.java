@@ -17,14 +17,7 @@ public class AmpMeasures  implements Serializable, Comparable
 	private Set reports;
 	private String expression;
 	private String description;
-	private Boolean allowSplitbyCateg;
-
-	public Boolean isAllowSplitbyCateg() {
-		return allowSplitbyCateg;
-	}
-	public void setAllowSplitbyCateg(Boolean allowSplitbyCateg) {
-		this.allowSplitbyCateg = allowSplitbyCateg;
-	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -71,14 +64,12 @@ public class AmpMeasures  implements Serializable, Comparable
 		AmpMeasures auxColumn=(AmpMeasures) o;
 		return this.getMeasureName().compareTo(auxColumn.getMeasureName());
 	}
-	public String toString(){
-		return this.measureName;
-	}
 	
+
 	public String getExpression() {
 		return expression;
 	}
-	
+
 	public void setExpression(String expression) {
 		this.expression = expression;
 	}

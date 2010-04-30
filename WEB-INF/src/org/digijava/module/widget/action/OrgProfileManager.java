@@ -1,26 +1,19 @@
 package org.digijava.module.widget.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.orgProfile.util.OrgProfileUtil;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.form.OrgProfileWidgetForm;
-import org.digijava.module.widget.helper.WidgetUpdatePlaceHelper;
 import org.digijava.module.widget.util.OrgProfileWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 
@@ -43,14 +36,7 @@ public class OrgProfileManager  extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         
-       
-    	HttpSession session = request.getSession();
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}   
-
-    	OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
-    	orgForm.setPlaces(WidgetUtil.getAllOrgProfilePlaces());
+        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
         orgForm.setOrgProfilePages(OrgProfileWidgetUtil.getAllOrgProfileWidgets());
         return mapping.findForward("forward");
 
@@ -105,15 +91,47 @@ public class OrgProfileManager  extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;          
-        String[] selPlaceId = orgForm.getSelectedId().split(",");
-        for(int i=0;i<selPlaceId.length;i++ ){
-            String placeId=selPlaceId[i];
-            Collection<AmpDaWidgetPlace> places=new ArrayList<AmpDaWidgetPlace>();
-            AmpDaWidgetPlace place=WidgetUtil.getPlace(Long.parseLong(placeId));
-            places.add(place);
-            AmpWidgetOrgProfile widget=orgForm.getOrgProfilePages().get(i);
-            WidgetUtil.updatePlacesWithWidget(places,widget);
+        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
+        AmpWidgetOrgProfile orgProfWidget = null;
+        List<AmpDaWidgetPlace> oldPlaces = null;
+        List<AmpDaWidgetPlace> newPlaces = null;
+
+        if (orgForm.getId() == null||orgForm.getId()==0) {
+            orgProfWidget = new AmpWidgetOrgProfile();
+        } else {
+            orgProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(orgForm.getId());
+            oldPlaces = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
+        }
+        orgProfWidget.setType(orgForm.getType());
+        /*
+         * Name is used in  the Widget Place Manager,
+         * We could force the user to enter it manually,
+         * but it will be hard  to explain them why we need specify name twice 
+         * cause from user perspective name and type are the same...
+        */
+        String name="";
+        switch(orgForm.getType().intValue()){
+            case WidgetUtil.ORG_PROFILE_SUMMARY: name="Summary"; break;
+             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID: name="Type of Aid"; break;
+              case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB: name="Pledges/Comm/Disb"; break;
+               case WidgetUtil.ORG_PROFILE_ODA_PROFILE: name="ODA Profile"; break;
+                case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN: name="Sector Breakdown"; break;
+                  case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN: name="Regional Breakdown"; break;
+                   case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION: name="Paris Declaration"; break;
+        }
+        orgProfWidget.setName(name);
+        OrgProfileWidgetUtil.saveWidget(orgProfWidget);
+        if (orgForm.getSelPlaces() != null && orgForm.getSelPlaces().length > 0) {
+            newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());
+            if (oldPlaces != null && newPlaces != null) {
+                Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
+                WidgetUtil.updatePlacesWithWidget(oldPlaces, orgProfWidget);
+                WidgetUtil.updatePlacesWithWidget(deleted, null);
+            } else {
+                WidgetUtil.updatePlacesWithWidget(newPlaces, orgProfWidget);
+            }
+        } else {
+            WidgetUtil.clearPlacesForWidget(orgProfWidget.getId());
         }
        return viewAll(mapping, form, request, response);
 

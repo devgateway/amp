@@ -70,8 +70,6 @@ function create(){
 function saveTreeState(){
 
      var xmlString = document.getElementById("xmlString").value;
-     //======= URL Encoded Character is %26 for &. and we have &amp; that need to replace there are ajax sending problrm ====== //
- replacedXmlString = xmlString.replace(/&amp;/,"%26");
 
 
      //======= URL Encoded Character is %26 for &. and we have &amp; that need to replace there are ajax sending problrm ====== //
@@ -132,7 +130,7 @@ function GetXmlHttpObj()	{
 
    function showProgress(name)
    {
-      var prg = '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" alt="loading..."/>Saving...';
+      var prg = '<img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="loading..."/>Saving...';
        var progressViewer = document.getElementById(name);
        progressViewer.innerHTML = prg;
    }
@@ -149,7 +147,15 @@ function GetXmlHttpObj()	{
 </script>
 
 
+<style type="text/css">
 
+  .link{
+      cursor:pointer;
+      font-size:10px;
+   }
+
+
+</style>
 
 <div id="content"  class="yui-skin-sam" style="width:100%;">
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">

@@ -12,15 +12,15 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
-
 <%@page import="org.digijava.module.aim.util.DbUtil"%>
 <%@page import="org.digijava.module.aim.form.ActivityForm"%><digi:instance property="aimEditActivityForm"/>
 
 
-								<table width="100%" bgcolor="#f4f4f2">
-									<tr><td class="separator1" title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
-										<digi:trn key="aim:components">Components</digi:trn>
+								<table width="95%" bgcolor="#f4f4f2">
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
+										<b><digi:trn key="aim:components">Components</digi:trn></b></a>
 									</td></tr>
 									<tr><td>&nbsp;
 										
@@ -101,10 +101,10 @@
 													class="box-border-nopadding">
 														<tr>
 															<td>
-																<logic:iterate id="type" name="aimEditActivityForm" property="components.allCompsType" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
+																<logic:iterate id="type" name="aimEditActivityForm" property="components.allCompsType" type="org.digijava.module.aim.dbentity.AmpComponentType">
 																	<b>
-																		<%if (selComponents.getType_Id().longValue()==type.getId().longValue()){%>
-																	 		<digi:trn key="aim:type">Type:</digi:trn> <%=type.getValue()%>	
+																		<%if (selComponents.getType_Id().longValue()==type.getType_id().longValue()){%>
+																	 		<digi:trn key="aim:type">Type:</digi:trn> <%=type.getName()%>	
 																		<%} %>
 																	</b>
 																</logic:iterate>
@@ -113,7 +113,7 @@
 														<tr bgcolor="#fffffc">
 															<td vAlign="center" align="left" width="95%">
 																<html:multibox property="components.selComp"  styleId="selComp">
-																	<c:out value="${selComponents.title}"/>
+																	<c:out value="${selComponents.componentId}"/>
 																</html:multibox>
 																
 																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>
@@ -317,7 +317,7 @@
 																			<% String url1 =
 																			"/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
 																			<digi:link href="<%=url1%>">
-																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"
+																				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"
 																				alt="Delete this physical progress"/>
 																			</digi:link>
 																		</td>																			

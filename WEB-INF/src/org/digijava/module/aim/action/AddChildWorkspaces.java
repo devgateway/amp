@@ -105,7 +105,6 @@ public class AddChildWorkspaces extends Action {
 		}
 	}
 		
-		request.getSession().setAttribute("overwriteChildWorkspaces", "no");
 		return mapping.findForward(dest);
 	}
 }

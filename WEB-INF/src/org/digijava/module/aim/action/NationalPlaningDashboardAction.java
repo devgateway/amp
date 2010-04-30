@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,10 +24,10 @@ import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NationalPlaningDashboardForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
@@ -43,11 +42,6 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-
-/**
- *
- * This code has been refactoring to remove old entities, nothing else has been changed.
- */
 
 public class NationalPlaningDashboardAction extends DispatchAction {
 
@@ -178,26 +172,27 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 		if (theme != null && theme.getIndicators() != null) {
 			for (Iterator iter = theme.getIndicators().iterator(); iter
 					.hasNext();) {
-				IndicatorTheme indicat = (IndicatorTheme) iter.next();
-				Collection indValues =indicat.getValues();
+				AmpThemeIndicators indicat = (AmpThemeIndicators) iter.next();
+				Collection indValues = ProgramUtil
+						.getThemeIndicatorValuesDB(indicat.getAmpThemeIndId());
 				if (indValues != null && indValues.size() > 0) {
 					if (result == null) {
 						result = new ArrayList();
 					}
 					for (Iterator valIterator = indValues.iterator(); valIterator
 							.hasNext();) {
-						AmpIndicatorValue dbValue = (AmpIndicatorValue) valIterator
+						AmpThemeIndicatorValue dbValue = (AmpThemeIndicatorValue) valIterator
 								.next();
 						if ((start == null && end == null)
-								|| ((dbValue.getValueDate() != null) && ((start != null
+								|| ((dbValue.getCreationDate() != null) && ((start != null
 										&& end == null && dbValue
-										.getValueDate().after(start))
+										.getCreationDate().after(start))
 										|| (start == null && end != null && dbValue
-												.getValueDate().before(end)) || (start != null
+												.getCreationDate().before(end)) || (start != null
 										&& end != null
-										&& dbValue.getValueDate().after(
+										&& dbValue.getCreationDate().after(
 												start) && dbValue
-										.getValueDate().before(end))
+										.getCreationDate().before(end))
 
 								))
 
@@ -222,8 +217,8 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 			int i = 0;
 			Iterator iter = indicators.iterator();
 			while (iter.hasNext()) {
-				IndicatorTheme item = (IndicatorTheme) iter.next();
-				ids[i++] = item.getId().longValue();
+				AmpThemeIndicators item = (AmpThemeIndicators) iter.next();
+				ids[i++] = item.getAmpThemeIndId().longValue();
 			}
 		}
 		return ids;
@@ -271,7 +266,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 				dataset = createPercentsDataset(currentTheme, selIndicators, selYears);
 			}
-			JFreeChart chart = ChartUtil.createChart(dataset,ChartUtil.CHART_TYPE_BAR,true);
+			JFreeChart chart = ChartUtil.createChart(dataset,ChartUtil.CHART_TYPE_BAR);
 
 			response.setContentType("image/png");
 			ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, ChartUtil.CHART_WIDTH,ChartUtil.CHART_HEIGHT);
@@ -336,15 +331,17 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 			Iterator iter = currentTheme.getIndicators().iterator();
 			while (iter.hasNext()) {
-				IndicatorTheme item = (IndicatorTheme) iter.next();
+				AmpThemeIndicators item = (AmpThemeIndicators) iter.next();
 
 				int pos = Arrays.binarySearch(selectedIndicators, item
-						.getId().longValue());
+						.getAmpThemeIndId().longValue());
 
 				if (pos >= 0) {
-					String displayLabel = item.getTheme().getName();
+					String displayLabel = item.getName();
 					try {
-						Set indValues = item.getValues();
+						Collection indValues = ProgramUtil
+								.getThemeIndicatorValues(item
+										.getAmpThemeIndId());
 						for (Iterator valueIter = indValues.iterator(); valueIter
 								.hasNext();) {
 							AmpPrgIndicatorValue valueItem = (AmpPrgIndicatorValue) valueIter
@@ -384,39 +381,39 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 			Set sortedIndicators=new TreeSet(currentTheme.getIndicators());
 			Iterator iter = sortedIndicators.iterator();
 			while (iter.hasNext()) {
-				IndicatorTheme item = (IndicatorTheme) iter.next();
+				AmpThemeIndicators item = (AmpThemeIndicators) iter.next();
 
-				int pos = Arrays.binarySearch(selectedIndicators, item.getId().longValue());
+				int pos = Arrays.binarySearch(selectedIndicators, item.getAmpThemeIndId().longValue());
 
 				if (pos >= 0) {
-					String displayLabel = item.getTheme().getName();
+					String displayLabel = item.getName();
 					try {
-						Set indValues = item.getValues();
+						Collection indValues = ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
 						Map actualValues = new HashMap();
 						Double targetValue = null;
 						Double baseValue = null;
 						
 						//arrage all values by types
 						for (Iterator valueIter = indValues.iterator(); valueIter.hasNext();) {
-							AmpIndicatorValue valueItem = (AmpIndicatorValue) valueIter.next();
+							AmpThemeIndicatorValue valueItem = (AmpThemeIndicatorValue) valueIter.next();
 							
 							//target value
 							if (valueItem.getValueType() == 0) {
-								targetValue = valueItem.getValue();
+								targetValue = valueItem.getValueAmount();
 							}
 							//actual Value
 							if (valueItem.getValueType() == 1 && isInSelectedYears(valueItem, selectedYears)) {
-								Date actualDate = valueItem.getValueDate();
+								Date actualDate = valueItem.getCreationDate();
 								String year = extractYearString(actualDate);
 								//for every year we should have only latest actual value
 								//so check if we already have atual value fro this year
-								AmpIndicatorValue v = (AmpIndicatorValue) actualValues.get(year);
+								AmpThemeIndicatorValue v = (AmpThemeIndicatorValue) actualValues.get(year);
 								if (v == null ){
 									//if not then store this actual value
 									actualValues.put(year, valueItem);
 								}else{
 									//if we have valu, chack and store latest value
-									Date crDate = v.getValueDate();
+									Date crDate = v.getCreationDate();
 									if (crDate !=null && crDate.compareTo(actualDate) < 0){
 										actualValues.put(year, valueItem);
 									}
@@ -424,7 +421,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 							}
 							//base value - not used
 							if (valueItem.getValueType() == 2) {
-								baseValue = valueItem.getValue();
+								baseValue = valueItem.getValueAmount();
 							}
 						}
 						if (actualValues.size() == 0) {
@@ -438,9 +435,9 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 						
 						if (selectedYears != null){
 							for (int i = 0; i < selectedYears.length; i++) {
-								AmpIndicatorValue actualValue = (AmpIndicatorValue) actualValues.get(selectedYears[i]);
+								AmpThemeIndicatorValue actualValue = (AmpThemeIndicatorValue) actualValues.get(selectedYears[i]);
 								if (actualValue != null){
-									Double realActual = actualValue.getValue();
+									Double realActual = actualValue.getValueAmount();
 									if (realActual != null) {
 										realActual = new Double(realActual.doubleValue()/ targetValue.doubleValue());
 										dataset.addValue(realActual.doubleValue(),selectedYears[i],displayLabel);
@@ -469,8 +466,8 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 	}
 
-	public static boolean isInSelectedYears(AmpIndicatorValue value, String[] selYars){
-		String sYear = extractYearString(value.getValueDate());
+	public static boolean isInSelectedYears(AmpThemeIndicatorValue value, String[] selYars){
+		String sYear = extractYearString(value.getCreationDate());
 		for (int i = 0; i < selYars.length; i++) {
 			if (selYars[i].equals(sYear)){
 				return true;
@@ -492,18 +489,19 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 		return sYear;
 	}
 	
-	public static BigDecimal getAmountSum(List actList) throws AimException {
-		BigDecimal mnt = new BigDecimal(0);
+	public static Double getAmountSum(List actList) throws AimException {
+		Double mnt = null;
 		if (actList != null) {
 			AmpActivity act;
 			Iterator actItr = actList.iterator();
 			while (actItr.hasNext()) {
 				act = (AmpActivity) actItr.next();
 				if (act!=null && act.getFunAmount() != null) {
-					BigDecimal usdVal = CurrencyWorker.convert(act.getFunAmount(), act.getCurrencyCode());
+					double usdVal = CurrencyWorker.convert(act.getFunAmount().doubleValue(), act.getCurrencyCode());
                     if(mnt!=null){
-                      mnt=mnt.add(usdVal);
-                    
+                        mnt = new Double(mnt.doubleValue() + usdVal);
+                    }else{
+                        mnt = new Double(usdVal);
 				}
 			}
 			}

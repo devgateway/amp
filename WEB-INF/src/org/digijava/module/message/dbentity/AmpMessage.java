@@ -1,29 +1,26 @@
 package org.digijava.module.message.dbentity;
 
-import java.io.Serializable;
 import java.util.Date;
-
-import org.digijava.module.sdm.dbentity.Sdm;
 
 /**
  * General AMP Message.
  * @author Dare Roinishvili
  *
  */
-public abstract class AmpMessage implements Serializable {
+public abstract class AmpMessage {
 	private Long id;
 	
 	/**
 	 * name or subject of message.
 	 */
 	private String name;
-	private Long priorityLevel; //low, high e.t.c.
+	private Long priorityLevel; //low, high e.t.c. 
 	private Long messageType; //alert,approvals,system message e.t.c.
-	private String senderType;
+	private String senderType;	
 	private Long senderId;  //if user sends alert, then it's that user's id... vtqvat user daregistrirda,anu User manager agzavnis da romeli useric daregistrirda imis,id iqneba
 	private Date creationDate; //date when it was created
     private String objectURL;
-    private Long relatedActivityId;
+    private Long relatedActivityId;    
     
     private String senderName;  //sender name
 
@@ -43,29 +40,21 @@ public abstract class AmpMessage implements Serializable {
 	 * this field holds Id of the forwarded message, if it exists 
 	 */
 	private AmpMessage forwardedMessage;
-	
-	/**
-	 * holds replied message , if it exists
-	 */
-	private AmpMessage repliedMessage;
+        
         
 	/**
 	 * this field holds list of receivers
 	 */
-    private String receivers; // name and surnames of receivers separeted by comma
-    
-    private String externalReceivers; //contacts + people outside AMP
-    
-    private Sdm attachedDocs; //for attaching files
+        private String receivers; // name and surnames of receivers separeted by comma
+
+        public String getReceivers() {
+            return receivers;
+        }
+
+        public void setReceivers(String receivers) {
+            this.receivers = receivers;
+        }
         
-
-    public String getReceivers() {
-    	return receivers;
-    }
-
-    public void setReceivers(String receivers) {
-        this.receivers = receivers;
-    }       
     
 
 	/**
@@ -172,29 +161,6 @@ public abstract class AmpMessage implements Serializable {
 	public void setRelatedActivityId(Long relatedActivityId) {
 		this.relatedActivityId = relatedActivityId;
 	}
+        
 
-	public Sdm getAttachedDocs() {
-		return attachedDocs;
-	}
-
-	public void setAttachedDocs(Sdm attachedDocs) {
-		this.attachedDocs = attachedDocs;
-	}
-
-	public AmpMessage getRepliedMessage() {
-		return repliedMessage;
-	}
-
-	public void setRepliedMessage(AmpMessage repliedMessage) {
-		this.repliedMessage = repliedMessage;
-	}
-
-	public String getExternalReceivers() {
-		return externalReceivers;
-	}
-
-	public void setExternalReceivers(String externalReceivers) {
-		this.externalReceivers = externalReceivers;
-	}        
-
-}
+        }

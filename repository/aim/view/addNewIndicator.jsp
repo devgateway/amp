@@ -120,8 +120,7 @@ function addNewIndicator(){
 }
 
 function addSectors() {
-
- 		openNewWindow(600, 450);
+		openNewWindow(600, 450);
 		<digi:context name="addSector" property="context/module/moduleinstance/selectSectorForind.do?edit=true" />
 	  	document.aimNewIndicatorForm.action = "<%= addSector %>";
 		document.aimNewIndicatorForm.target = popupPointer.name;
@@ -139,7 +138,6 @@ function removeSelSectors() {
           return true;
 }
 
-
 function selectProgram(){
 
   <digi:context name="selPrg" property="context/module/moduleinstance/selectProgramForIndicator.do" />
@@ -155,7 +153,7 @@ function selectActivity(){
 function closeWindow() {
 		window.close();
 	}
-function removeActivity(id) {
+	function removeActivity(id) {
 	<c:set var="translation">
 		<digi:trn key="admin:deleteThisActivity">Do you want to delete this Activity?</digi:trn>
 	</c:set>
@@ -178,7 +176,7 @@ function removeActivity(id) {
 </script>
 <digi:instance property="aimNewIndicatorForm" />
 <digi:form action="/addNewIndicator.do" method="post">
-
+    
 <script language="javascript">
 <c:if test="${aimNewIndicatorForm.action=='added'}">
     window.opener.location.href = window.opener.location.href;
@@ -186,7 +184,7 @@ function removeActivity(id) {
     window.close();
 </c:if>
   
-</script>    
+</script>
  <!-- <html:hidden property="type" value="3"/> --> 
   <html:hidden property="trType" value="3"/>
   <html:hidden property="category" value="-1"/> 
@@ -214,7 +212,7 @@ function removeActivity(id) {
             <span style="color:Red;">*</span>
             </td>
             <td>
-              <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;" maxlength="255"/>
+              <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;"/>
             </td>
           </tr>
           

@@ -73,13 +73,13 @@ public abstract class ARDimension {
     public static boolean isLinkedWith(ReportData parent, Cell childCell) {
 	//we get the dimension worker    
 	// requirements for translation purposes
-	Long siteId = parent.getReportMetadata().getSiteId();
+	String siteId = parent.getReportMetadata().getSiteId();
 	String locale = parent.getReportMetadata().getLocale();
 	String text = ArConstants.UNALLOCATED;
 	String translatedTextUnallocated = null;
 	//String prefix = "aim:reportGenerator:"; not used, trn hash keys used.
 	try {
-		translatedTextUnallocated = TranslatorWorker.translateText(text, locale, new Long(siteId));
+		translatedTextUnallocated = TranslatorWorker.translateText(text, locale, siteId);
 	} catch (WorkerException e) {
 		e.printStackTrace();
 	}

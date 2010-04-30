@@ -4,16 +4,16 @@
 	<div id="myPLogframeContent" class="content">
 		===== ERROR =====
 	</div>
-    </div>
+</div>
 
 
 <script type="text/javascript">
-	YAHOO.namespace("YAHOO.amptab");
-	YAHOO.amptab.init = function() {
-	    		var tabView = new YAHOO.widget.TabView('tabview_container');
+	YAHOOAmp.namespace("YAHOOAmp.amptab");
+	YAHOOAmp.amptab.init = function() {
+	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 	};
 		
-    var myPanelLogframe = new YAHOO.widget.Panel("newmyPLogframe", {
+    var myPanelLogframe = new YAHOOAmp.widget.Panel("newmyPLogframe", {
 		width:"800px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
@@ -36,11 +36,12 @@
 	
 	function showPLogframe() {
 		var content = document.getElementById("myPLogframeContent");
-		var element5 = document.getElementById("myPLogframe");
-        var loading='\n<digi:trn>Loading, please wait...</digi:trn>';
-		content.innerHTML = '<p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>'+loading+'</b></font></p>';
-		//if (panelFirstShow == 1){
-			myPanelLogframe.setBody(element5.innerHTML);
+		var element5 = document.getElementById("myPLogframe"); 
+		var loading='\n<digi:trn>Loading...</digi:trn>';
+		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>'+loading+'</b></font></p>';
+		//if (panelFirstShow == 1){ 
+			element5.style.display = "inline";
+			myPanelLogframe.setBody(element5);
 			panelFirstShow = 0;
 		//}
 		document.getElementById("myPLogframeContent").scrollTop=0;
@@ -51,7 +52,7 @@
 	}
 
 
-    var responseSuccessLogframe = function(o){
+    var responseSuccessLogframe = function(o){ 
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -86,7 +87,7 @@
 	{
         var postString		= "pageId=1&step=1&action=edit&surveyFlag=true&logframepr=true&activityId=" + id + "&actId=" + id;
         showPLogframe();
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/editActivity.do", logframeCallback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editActivity.do", logframeCallback, postString);
 	}
 	
 	function previewLogFrameClicked() {
@@ -94,15 +95,15 @@
 		if (flag == true) {
 	        var postString		= "edit=true&logframe=true&currentlyEditing=true&step=9&pageId=1";
 	        showPLogframe();
-			YAHOO.util.Connect.asyncRequest("POST", "/aim/previewActivity.do", logframeCallback, postString);
+			YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/previewActivity.do", logframeCallback, postString);
 		}
 	}
 
 	var currentLogframe = window.onload;
-	addLoadEvent(function() {
+	window.onload = function() {
         currentLogframe.apply(currentLogframe);
-   	});
-   	addLoadEvent(initScriptsLogframe);
+   	};
+	initScriptsLogframe();
 
 </script>
 <style type="text/css">

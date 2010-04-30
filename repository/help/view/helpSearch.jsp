@@ -13,10 +13,6 @@
 
 <script language="JavaScript">
 
-<digi:context name="helpActionUrl" property="context/module/moduleinstance/helpActions.do" />
-
-
-
 function showHint(str,event){
 	
 if(event.keyCode != 13){
@@ -85,11 +81,7 @@ function select(title){
 function search(){
  
 	var key = document.getElementById("selected").value;
-    if( key.replace(/^\s+|\s+$/g,"").length==0){
-        var msg="<digi:trn>Please provide search criteria</digi:trn>";
-        alert(msg);
-        return;
-    }
+	
 	xmlHttp=GetXmlHttpObject()
 	if (xmlHttp==null){
  			alert ("Browser does not support HTTP Request")
@@ -144,9 +136,8 @@ function search(){
 			"ý","%fd",
 			"þ","%fe",
 			"ÿ","%ff");
-
- 	var actionUrl = '<%=helpActionUrl%>';
-	var urls = actionUrl + '?actionType=searchHelpTopicNew';
+ 	
+	var urls="/help/helpActions.do?actionType=searchHelpTopic";
 	url=urls+"&key="+key;
 	
 	for( i=0; i<baseChars.length; i+=2){
@@ -182,19 +173,14 @@ function stChang(){
  {
 	
     document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.replace(/�/g,"&#233;");
-	//document.getElementById("bodyhelp").style.border="1px solid #white";
-	$('.resultTitle').click(function(){
-		showBody(this);
-	});
-	
+	document.getElementById("bodyhelp").style.border="1px solid #white";
   } 
 }
-
 function enter(event) {
 	if(event.keyCode == 13){
 		search();	
-	}
-}
+		}
+	  }
 
 </script>
 <style type="text/css">
@@ -203,6 +189,7 @@ function enter(event) {
 .whiteThing { background-color: #FFF;}
 
 </style>
+
 	<div id="content" class="yui-skin-sam" style="width: 100%;">
 	<div id="demo" class="yui-navset"
 		style="font-family: Arial, Helvetica, sans-serif;">

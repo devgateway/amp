@@ -165,27 +165,3 @@ SaveReportEngine.prototype.saveReport	= function () {
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
 	
 }
-SaveReportEngine.prototype.runReport	= function () {
-	//if ( this.titlePanel != null )
-		//this.titlePanel.hide();
-	//this.divEl.style.visibility		= "";
-	//this.divEl.innerHTML			= "<img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
-	
-	var postString		= "reportTitle="+getReportTitle() + "&reportDescription="+getReportDescription() + "&reportPeriod="+getReportPeriod() + 
-						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
-						"&desktopTab="+getDesktopTab() +
-						"&publicReport="+getPublicReport() +
-						"&hideActivities="+getHideActivities() +
-						"&useFilters="+getUseFilters()+
-						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
-						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ 
-						"&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies")+
-						"&runreport=true"
-						;
-	
-	//alert(postString);
-	window.open("/aim/reportWizard.do?"+postString);
-	window.location.replace("/aim/reportWizard.do?tabs=false");
-	//YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
-	
-}

@@ -24,13 +24,6 @@
 	  height: 92%;
 	  overflow: auto;
 	}
-	
-.rowIssue { background-color: #B2C2D2; }
-
-.rowMeasure { background-color: #E2E3DE; }
-
-.rowActor { background-color: #FFFFFF; }
-	
 </style>
 
 <script language="JavaScript" type="text/javascript">
@@ -63,8 +56,8 @@ function checkallIssues() {
 
 ///CONVERT POPUP TO POPIN CODE 
 		//POPIN DEFINITION
-		YAHOO.namespace("YAHOO.amptab");
-			var myPanel1 = new YAHOO.widget.Panel("new", {
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
+			var myPanel1 = new YAHOOAmp.widget.Panel("new", {
 			width:"550px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -74,11 +67,6 @@ function checkallIssues() {
 		    modal:true,
 		    draggable:true} 
 		    );
-		myPanel1.beforeHideEvent.subscribe(function() {
-			if(calendarObjForForm.isVisible()){
-				calendarObjForForm.hide();
-			}
-		});		
 	
 	
 
@@ -117,47 +105,47 @@ function checkallIssues() {
 	        	} 
         }
 	    
-	  function addIssues(issuesExpanded,measuresExpanded){
+	  function addIssues(){
 	 			 myPanel1.setHeader('<digi:trn key="aim:addIssue">Add Issue</digi:trn>');
 	  			 <digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
- 				var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId=-1",callback);
+ 				var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issueId=-1",callback);
         }
        
        
        
-       function updateIssues(id,issuesExpanded,measuresExpanded) {
+       function updateIssues(id) {
      		   myPanel1.setHeader('<digi:trn key="aim:updateIssue">Update Issue</digi:trn>');
 			<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
-			var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+id,callback);
+			var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issueId="+id,callback);
 		}
         
         
-	function addMeasures(issueId,issuesExpanded,measuresExpanded) {
+	function addMeasures(issueId) {
 	 	  myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 		 <digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		 var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+issueId+"&issues.measureId=-1",callback);
+		 var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId=-1",callback);
 	}
 
 
-	function updateMeasures(issueId,measureId,issuesExpanded,measuresExpanded) {
+	function updateMeasures(issueId,measureId) {
 		myPanel1.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
 		<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
 	}
 	
 	
-	function addActors(issueId,measureId,issuesExpanded,measuresExpanded) {
+	function addActors(issueId,measureId) {
 		myPanel1.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.actorId=-1",callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId=-1",callback);
 	}
 
 
 
-	function updateActor(issueId,measureId,actorId,issuesExpanded,measuresExpanded) {
+	function updateActor(issueId,measureId,actorId) {
 		myPanel1.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOO.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issuesExpanded="+issuesExpanded+"&issues.measuresExpanded="+measuresExpanded+"&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
 	}
 
 //END POPIN
@@ -316,7 +304,7 @@ function addPhyProgess(id,comp) {
 
 		}
 		reusableDialog.setHeader("<digi:trn key="aim:physicalprogress">Physical Progress</digi:trn>");
-		var connectionObject =YAHOO.util.Connect.asyncRequest('GET', url,callbackDialog);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', url,callbackDialog);
 }
 
        
@@ -475,8 +463,6 @@ function removeSelComponents() {
   <html:hidden property="reset" />
   <html:hidden property="location.country" />
   <html:hidden property="editAct" />
-	<html:hidden property="issues.issuesExpanded"/>
-	<html:hidden property="issues.measuresExpanded"/>
 
   <input type="hidden" name="edit" value="true">
   <c:set var="stepNm">
@@ -545,7 +531,7 @@ function removeSelComponents() {
                     <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
                       <tr>
                         <td>
-                          <span class=crumb style="visibility: hidden">
+                          <span class=crumb>
                             <c:if test="${aimEditActivityForm.pageId == 0}">
                               <c:set property="translation" var="trans" >
                                 <digi:trn key="aim:clickToViewAdmin">
@@ -697,6 +683,40 @@ function removeSelComponents() {
 						<tr><td width="75%" vAlign="top">
 
 						<table cellPadding=0 cellSpacing=0 width="100%">
+
+							<tr>
+
+								<td width="100%">
+
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+
+										<tr>
+
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+
+											</td>
+
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+
+												<digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of</digi:trn>  ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                 <digi:trn key="aim:activity:Components">
+                                                                                                 Components
+                                                                                                 </digi:trn>
+
+											</td>
+
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+
+											</td>
+
+										</tr>
+
+									</table>
+
+								</td>
+
+							</tr>
+
 							<tr><td width="100%" bgcolor="#f4f4f2">
 
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
@@ -721,7 +741,7 @@ function removeSelComponents() {
 								</td></tr>
 									
 									<tr>
-										<td bgColor=#f4f4f2>&nbsp; </td>
+										<td bgColor=#f4f4f2> &nbsp;</td>
 									</tr>
 <!--
 
@@ -824,11 +844,11 @@ function editFunding(id){
 	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
 
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
-	var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%= addComp %>&fundId="+id,callbackDialog);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%= addComp %>&fundId="+id,callbackDialog);
 
 	//IE 7 BUG :S
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
-	var cObj = YAHOO.util.Connect.asyncRequest('POST', "<%= addComp %>&fundId="+id, callbackPost);
+	var cObj = YAHOOAmp.util.Connect.asyncRequest('POST', "<%= addComp %>&fundId="+id, callbackPost);
 }
 
 
@@ -837,14 +857,14 @@ function addComponents()
 {
 	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=show" />
-	var connectionObject =YAHOO.util.Connect.asyncRequest('GET', "<%=addComp%>",callbackDialog);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addComp%>",callbackDialog);
 
 }
 
 function postComponentForm(action){
 	var formObject = document.aimAddComponentForm;
-	YAHOO.util.Connect.setForm(formObject);
-	var cObj = YAHOO.util.Connect.asyncRequest('POST', action, callbackPost);
+	YAHOOAmp.util.Connect.setForm(formObject);
+	var cObj = YAHOOAmp.util.Connect.asyncRequest('POST', action, callbackPost);
 }
 
 function addComponent(){
@@ -878,8 +898,8 @@ function validateEnter(e) {
 }
 
 
-YAHOO.namespace("YAHOO.amptab");
-	var reusableDialog = new YAHOO.widget.Dialog("new", {
+YAHOOAmp.namespace("YAHOOAmp.amptab");
+	var reusableDialog = new YAHOOAmp.widget.Dialog("new", {
 	width:"850px",
 	height:"450px",
 	fixedcenter: true,
@@ -897,16 +917,13 @@ YAHOO.namespace("YAHOO.amptab");
 	if (div!=null){
 		div.parentNode.removeChild(div)
 	}
-	if(calendarObjForForm.isVisible()){
-		calendarObjForForm.hide();
-	}	
 }); 
 
 	var divDialog=null;
 	var callbackPost = { 
  	   		success: function(o) {
 					//Extract javascript and execute it
- 	   				eval(o.responseText.substr(o.responseText.lastIndexOf('<script language=\"JavaScript\"')+30,o.responseText.lastIndexOf("</script")-30-o.responseText.lastIndexOf('<script language=\"JavaScript\"')));
+					eval(o.responseText.substr(o.responseText.indexOf('<script language=\"JavaScript\"')+30,o.responseText.indexOf("</script")-30-o.responseText.indexOf('<script language=\"JavaScript\"')));
         	} 
     }
 	

@@ -9,9 +9,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-public class AmpTeam  implements Serializable, Comparable, Identifiable, Versionable {
+public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	
 	private Long ampTeamId;
 
@@ -21,6 +20,8 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	private Boolean computation;
 
 	private String description;
+
+	private AmpTeamMember teamLead; // Denotes the Team Leader
 
 	//private String type; 			// Whether Bilateral or Multilateral
 	
@@ -36,7 +37,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	// added for donor-access
 	private String teamCategory;	// Donor or Mofed team
 	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
-	//private Set<AmpActivity> activityList;		// activities assigned to donor team
+	private Set<AmpActivity> activityList;		// activities assigned to donor team
 	
 	private Set organizations;		// activities assigned to donor team
 	private NpdSettings npdSettings;
@@ -71,6 +72,13 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	}
 
 	/**
+	 * @return teamLeadId
+	 */
+	public AmpTeamMember getTeamLead() {
+		return teamLead;
+	}
+
+	/**
 	 * @param ampTeamId
 	 */
 	public void setAmpTeamId(Long ampTeamId) {
@@ -89,6 +97,13 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @param teamLeadId
+	 */
+	public void setTeamLead(AmpTeamMember teamLead) {
+		this.teamLead = teamLead;
 	}
 
 //	public String getType() {
@@ -139,19 +154,15 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	/**
 	 * @return Returns the activityList.
 	 */
-	/*
 	public Set<AmpActivity> getActivityList() {
 		return activityList;
 	}
-	*/
 	/**
 	 * @param activityList The activityList to set.
 	 */
-	/*
 	public void setActivityList(Set<AmpActivity> activityList) {
 		this.activityList = activityList;
 	}
-	*/
 	/**
 	 * @return Returns the relatedTeam.
 	 */
@@ -234,19 +245,5 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		this.childrenWorkspaces = childrenWorkspaces;
 	}
 
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		return this.equals(obj);
-	}
 
-	@Override
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Output getOutput() {
-		return new Output(null, new String[] { this.name }, new Object[] { "" });
-	}
 }

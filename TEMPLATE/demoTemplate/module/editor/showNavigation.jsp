@@ -30,6 +30,6 @@
 						</digi:link>
 					&nbsp;
 				</td>
-				<td width="1"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/navLinkSep.gif"/></td>				
+				<td width="1"><digi:img src="images/ui/header/navLinkSep.gif"/></td>				
 			</logic:iterate>
 </logic:present>

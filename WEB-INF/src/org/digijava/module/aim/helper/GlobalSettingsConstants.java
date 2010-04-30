@@ -49,13 +49,13 @@ public class GlobalSettingsConstants {
     
     public static final String ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS = "Alert if sum of disbursments is bigger than sum of commitments";
     
+    public static final String ECS_ENABLED = "ECS Enabled";
+    
+    public static final String AMP_SERVER_NAME= "AMP Server Name";
+    
     public static final String NEW_FIELDS_VISIBILITY= "New fields Visibility";    
     
     public static final String BASE_CURRENCY= "Base Currency";
-
-    public static final String SECURE_SERVER= "Secure Server";
     
     public static final String BUDGET_SUPPORT_FOR_PI9 = "Budget Support for PI 9";
-    
-    public static final String ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES = "Allow percentages for all countries";
 }

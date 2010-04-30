@@ -1,6 +1,11 @@
 package org.digijava.module.aim.action;
 
-import java.util.Date;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -10,14 +15,18 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
+import org.apache.lucene.store.Directory;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.codehaus.swizzle.confluence.Confluence;
+import org.codehaus.swizzle.confluence.Page;
+import org.codehaus.swizzle.confluence.PageSummary;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
-import org.digijava.kernel.util.RequestUtils;
+import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -58,10 +67,7 @@ public class LuceneIndex extends Action {
 							HttpServletResponse response) throws java.lang.Exception {
 
 		  HttpSession session = request.getSession();
-		  if (!RequestUtils.isAdmin(response, session, request)) {
-			  return null;
-		  }
-		  
+
 		  ServletContext ampContext = session.getServletContext();
 		  
 		  String action = request.getParameter("action");
@@ -77,7 +83,7 @@ public class LuceneIndex extends Action {
 				  String field = request.getParameter("field");
 				  String search = request.getParameter("search");
 
-				  Hits hits = LuceneUtil.search(LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
+				  Hits hits = LuceneUtil.search(LuceneUtil.activityIndexDirectory, field, search);
 				  for(int i = 0; i < hits.length(); i++) {
 					   Document doc = hits.doc(i);
 					   AmpActivity act = ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
@@ -91,7 +97,7 @@ public class LuceneIndex extends Action {
 					  String field = request.getParameter("field");
 					  String search = request.getParameter("search");
 
-					  LuceneUtil.deleteActivity(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
+					  LuceneUtil.deleteActivity(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.activityIndexDirectory, field, search);
 				  }
 				  else{
 					  if ("checked".compareTo(action) == 0){
@@ -119,15 +125,8 @@ public class LuceneIndex extends Action {
 							  //throw new RuntimeException("manual test of unchecked exception");
 						  }
 						  else
-							  if ("random".compareTo(action) == 0){
-								  Date date = new Date();
-								  AMPException ae = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, new Exception("symulated random error:" + date.toString()));
-								  ae.addTag("random");
-								  throw ae;
+							  if ("confluence".compareTo(action) == 0){
 							  }
-							  else
-								  if ("confluence".compareTo(action) == 0){
-								  }
 					  }
 				  }
 		  }

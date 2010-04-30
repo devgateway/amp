@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -23,9 +24,7 @@ public class WorkspaceManager extends Action {
 
 	private static Logger logger = Logger.getLogger(WorkspaceManager.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
@@ -36,7 +35,8 @@ public class WorkspaceManager extends Action {
 				return mapping.findForward("index");
 			}
 		}
-
+		
+		int NUM_RECORDS = 10000;
 		Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
 		
@@ -55,18 +55,41 @@ public class WorkspaceManager extends Action {
 	         keywords.add(st.nextToken().toLowerCase());
 	     }
 
+		String temp = request.getParameter("page"); 
+		if (temp != null) {
+			wsForm.setPage(Integer.parseInt(temp));
+		} else if (wsForm.getPage() <= 0) {
+			wsForm.setPage(1);
+		}
+		
 		Collection<AmpTeam> ampWorkspaces = (Collection<AmpTeam>) session.getAttribute("ampWorkspaces");
 		if (ampWorkspaces == null) {
 			ampWorkspaces = TeamUtil.getAllTeams();
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
 		}
-		
+
+		if(wsForm.getNumPerPage()!=-1) {
+			NUM_RECORDS =wsForm.getNumPerPage();
+		}else {
+			NUM_RECORDS =ampWorkspaces.size();
+		}
+
+		/*
+		 * check whether the numPages is less than the page . if yes return
+		 * error.
+		 */
+
+		int currPage = wsForm.getPage();
+		int stIndex = ((currPage - 1) * NUM_RECORDS);
+		int edIndex = stIndex + NUM_RECORDS;
+
 		Collection<AmpTeam> colAt=new ArrayList<AmpTeam>();
 		for (AmpTeam at : ampWorkspaces) {
 			at.setChildrenWorkspaces(TeamUtil.getAllChildrenWorkspaces(at.getAmpTeamId()));
 			colAt.add(at);
 		}
 		Vector<AmpTeam> vect = new Vector<AmpTeam>();
+		//vect.addAll(ampWorkspaces);
 		vect.addAll(colAt);
 		String workspaceType = wsForm.getWorkspaceType();
 		for (AmpTeam ampTeam : vect) {
@@ -82,7 +105,23 @@ public class WorkspaceManager extends Action {
 			  }
 			}
 		}
+		//pages
+		int numPages = workspaces.size() / NUM_RECORDS;
+		numPages += (workspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
+		//workspaces for current page
+		if(edIndex>workspaces.size()){
+			edIndex=workspaces.size();
+		}
+		workspaces=((List)workspaces).subList(stIndex, edIndex);
 		
+		Collection<Integer> pages = null;
+		if (numPages > 1) {
+			pages = new ArrayList<Integer>();
+			for (int i = 0; i < numPages; i++) {
+				Integer pageNum = new Integer(i + 1);
+				pages.add(pageNum);
+			}
+		}
 		Collection<AmpTeam> workspacesFiltered=new ArrayList<AmpTeam>();
 		if(!workspaces.isEmpty())
 		{
@@ -99,14 +138,11 @@ public class WorkspaceManager extends Action {
 				if(found) workspacesFiltered.add(team);
 			}
 		}
-		
-		if(workspacesFiltered.isEmpty() && keywords.isEmpty()){
-			wsForm.setWorkspaces(workspaces);
-		}else {			
-			wsForm.setWorkspaces(workspacesFiltered);
-		}
-		
+		if(workspacesFiltered.isEmpty() && keywords.isEmpty())
+		  wsForm.setWorkspaces(workspaces);
+		else wsForm.setWorkspaces(workspacesFiltered);
+		wsForm.setPages(pages);
+
 		return mapping.findForward("forward");
 	}
-
 }

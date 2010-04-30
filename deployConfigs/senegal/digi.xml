@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE digi-common [
         <!ENTITY commonEntities SYSTEM "digi-common.xml">
-		<!ENTITY patchesDir SYSTEM "patches-dir.xml">
 ]>
 
 <digi-config>
@@ -28,19 +27,13 @@
 	</exception-emails>
 	
 	<enable-autologin>true</enable-autologin>
-
-	<!-- ECS Service -->
-	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.senegal</ecsServerName>
-	<!-- <propertiesFile></propertiesFile> -->
-	<!--             -->
     
-    <!--<service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
+    <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
             <description>Advanced Database Patcher Module</description>
-            &patchesDir;
+            <property name="patchesDir">patches</property>
     </service>
 	
 
-	-->&commonEntities;
+	&commonEntities;
 	
 </digi-config>

@@ -70,12 +70,11 @@ public class ViewAmp
         HttpSession session = request.getSession();
         session.setAttribute("isUserLogged",
                 new String("true"));
-        session.removeAttribute("publicuser");
         
         String siteAdmin = (String) session.getAttribute("ampAdmin");
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         
-        Collection<AmpTeamMember> members = TeamMemberUtil.getTeamMembers(user.getEmail());
+        Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         session.setAttribute(Constants.USER_WORKSPACES, members);
         
         if (tm != null && tm.getTeamId() != null &&
@@ -91,16 +90,12 @@ public class ViewAmp
         	response.sendRedirect("selectTeam.do");
         	return null;
         }
- 
-        LoginForm lForm = (LoginForm) form; // login form instance
-       for (AmpTeamMember ampTeamMember : members) {
-		
-    	   if ((ampTeamMember.getByDefault()!=null)&&(ampTeamMember.getByDefault())){
-			 request.getSession().setAttribute("j_autoWorkspaceId",ampTeamMember.getAmpTeamMemId().toString());
-			 response.sendRedirect("selectTeam.do");
 
-		}
-	}
+
+
+
+        // No menber info means that we could not set it automatically
+        LoginForm lForm = (LoginForm) form; // login form instance
        
         lForm.setMembers(members);
 
@@ -151,7 +146,7 @@ public class ViewAmp
         Collection members = TeamMemberUtil.getTeamMembers(usr.getEmail());
         if (members == null || members.size() == 0) {
         	String locale = RequestUtils.getNavigationLanguage(request).getCode();
-			Long siteId = RequestUtils.getSite(request).getId();
+			String siteId = RequestUtils.getSite(request).getId()+"";
 			//
 			if (siteAdmin == true) { // user is a site admin
                 // set the session variable 'ampAdmin' to the value 'yes'
@@ -166,7 +161,6 @@ public class ViewAmp
 					tm.setTeamName("AMP Administrator");
 					e.printStackTrace();
 				}
-                tm.setEmail(usr.getEmail());
                 session.setAttribute("currentMember", tm);
                 PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
                 // show the index page with the admin toolbar at the bottom
@@ -306,6 +300,7 @@ public class ViewAmp
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());
+            tm.setPledger(member.getUser().getPledger());
             tm.setRoleId(member.getAmpMemberRole()
                     .getAmpTeamMemRoleId());
             tm.setRoleName(member.getAmpMemberRole().getRole());

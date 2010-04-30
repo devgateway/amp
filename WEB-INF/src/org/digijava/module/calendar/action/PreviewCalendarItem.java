@@ -61,6 +61,10 @@ public class PreviewCalendarItem
         CalendarItemForm calendForm = (CalendarItemForm) form;
         User user = RequestUtils.getUser(request);
 
+        // get user navigation langugae
+        Locale navigationLanguge = user.getUserLangPreferences().
+            getNavigationLanguage();
+
         String param = request.getParameter("CreateOrEdit");
 
         calendForm.setPreview(true);

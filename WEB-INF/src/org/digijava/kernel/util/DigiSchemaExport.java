@@ -54,7 +54,7 @@ public class DigiSchemaExport {
         else {
             logger.info("Working for the whole database");
         }
-        
+
         DigiConfigManager.initialize("./repository");
         PersistenceManager.initialize(false, moduleName);
         try {

@@ -10,10 +10,9 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
 
-public class AmpTeamMember implements Serializable, Versionable {
+public class AmpTeamMember implements Serializable {
 
 	private Long ampTeamMemId;
 	private User user;
@@ -27,11 +26,6 @@ public class AmpTeamMember implements Serializable, Versionable {
 	private Set links;
 	private Set logs;
 	private Set<AmpMessageState> messages;
-	private Set<AmpContact> contacts;
-	private Boolean byDefault=Boolean.FALSE;
-	
-	
-
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
@@ -44,14 +38,6 @@ public class AmpTeamMember implements Serializable, Versionable {
 
 	public Set getReports() {
 			  return this.reports;
-	}
-
-	public Boolean getByDefault() {
-		return byDefault;
-	}
-
-	public void setByDefault(Boolean byDefault) {
-		this.byDefault = byDefault;
 	}
 
 	/**
@@ -205,31 +191,10 @@ public class AmpTeamMember implements Serializable, Versionable {
 		this.messages = messages;
 	}
 
-	public Set<AmpContact> getContacts() {
-		return contacts;
-	}
-
-	public void setContacts(Set<AmpContact> contacts) {
-		this.contacts = contacts;
-	}
-
-
-		public boolean equalsForVersioning(Object obj) {
-		return this.equals(obj);
-	}
-
-
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	
-	public Output getOutput() {
-		return new Output(null, new String[] { user.getLastName(), ", ", user.getFirstNames() }, new Object[] { "" });
-	}
-
 	
 
-	
 }

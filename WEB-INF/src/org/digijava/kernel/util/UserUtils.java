@@ -527,20 +527,6 @@ public class UserUtils {
 		user.setSalt(new Long(password.trim().hashCode()).toString());
 	}
 	
-    /**
-     * check if user is build in admin
-     * @param email
-     * @return
-     */
-    public static boolean isBuildInAdmin(String email){
-    	if (email.trim().equalsIgnoreCase("system@digijava.org") || 
-    		email.trim().equalsIgnoreCase("admin@mofed.gov") ||
-    		email.trim().equalsIgnoreCase("admin@amp.org"))
-    		return true;
-    	return false;
-    }    	
-    
-    	
 	/**
 	 * checks whether user is admin or not 
 	 * @return

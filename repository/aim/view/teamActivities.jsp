@@ -5,16 +5,13 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
-<%@page import="org.digijava.module.aim.action.GetTeamActivities"%><style>
+<style>
 .contentbox_border{
 	border: 	1px solid #666666;
 	width: 		750px;
 	background-color: #f4f4f2;
 }
 </style>
- <digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
@@ -109,10 +106,7 @@
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();
 	}
-	function submitArchiveCmd(archive) {
-		document.aimTeamActivitiesForm.removeActivity.value = archive;
-		document.aimTeamActivitiesForm.submit();
-	}
+
 -->
 
 </script>
@@ -222,9 +216,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="2" scope="request"/>
-									<c:if test="${selectedSubTab==null}">
-										<c:set var="selectedSubTab" value="0" scope="request"/>
-									</c:if>
+									<c:set var="selectedSubTab" value="0" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
@@ -315,32 +307,14 @@ function setHoveredTable(tableId, hasHeaders) {
 														</td>
 													</tr>
 													<tr>
-														<td align="center" colspan="2">
+														<td align="center" colspan=2>
 															<table cellspacing="5" width="100%">
 																<tr>
 																	<td align="center">
                                                                     <br />
-                                                                    	<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
-                                                                    	<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
-                                                                    	<c:choose>
-	                                                                    	<c:when test="${selectedSubTab==unarchivedTab}">
-	                                                                    		<c:set var="archiveActs"><%=GetTeamActivities.ARCHIVE_COMMAND %></c:set>
-	                                                                    		<html:submit onclick="submitArchiveCmd('${archiveActs}')" styleClass="dr-menu" property="submitButton">
-																					<digi:trn>Archive Activities</digi:trn>
-																				</html:submit>																				
-																			</c:when>
-																			<c:when test="${selectedSubTab==archivedTab}">
-																				<c:set var="unArchiveActs"><%=GetTeamActivities.UNARCHIVE_COMMAND %></c:set>
-																				<html:submit onclick="submitArchiveCmd('${unArchiveActs}')" styleClass="dr-menu" property="submitButton">
-																					<digi:trn>Unarchive Activities</digi:trn>
-																				</html:submit>
-																			</c:when>
-																			<c:otherwise>
-																			<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
-																				<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
-																			</html:submit>
-																			</c:otherwise>
-																		</c:choose>
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
+																			<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
+																		</html:submit>
 																	</td>
 																</tr>
 															</table>
@@ -351,60 +325,24 @@ function setHoveredTable(tableId, hasHeaders) {
 											</td>
 										</tr>
 										<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
-                                            <c:set var="lastPage">
-                                                ${fn:length(aimTeamActivitiesForm.pages)}
-                                            </c:set>
-
 											<tr>
-												<td class="yui-skin-sam">
-                                                    <c:choose>
-                                                        <c:when test="${aimTeamActivitiesForm.currentPage>1}">
-                                                            <a class="yui-pg-first"  href="javascript:page(1)">
-                                                                << <digi:trn>first</digi:trn>
-                                                            </a>
-                                                            <a class="yui-pg-previous" href="javascript:page(${aimTeamActivitiesForm.currentPage-1})">
-                                                                < <digi:trn key="aim:previous">prev</digi:trn>
-                                                            </a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="yui-pg-first">
-                                                                << <digi:trn>first</digi:trn>
-                                                            </span>
-                                                            <span class="yui-pg-previous ">
-                                                                < <digi:trn key="aim:previous">prev</digi:trn>
-                                                            </span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                    <logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
-                                                        <bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
+												<td>
+													<digi:trn key="aim:pages">
+														Pages :
+													</digi:trn>
+														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
+													  	<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
 
-                                                        <% if (currPage.equals(pages)) {%>
-                                                        <span class="yui-pg-current-page yui-pg-page"><%=pages%></span>
-                                                        <%	} else {%>
-                                                        <c:set var="translation">
-                                                            <digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-                                                        </c:set>
-                                                        <a class="yui-pg-page yuipaginationsimul" href="javascript:page(<%=pages%>)" title="${translation}"><%=pages%></a>
-                                                        <% }%>
-                                                    </logic:iterate>
-                                                    <c:choose>
-                                                        <c:when test="${currPage<lastPage}">
-                                                            <a class="yui-pg-next"  href="javascript:page(${currPage+1})">
-                                                                <digi:trn>Next</digi:trn> &gt;
-                                                            </a>
-                                                            <a class="yui-pg-last" href="javascript:page(${lastPage})">
-                                                                <digi:trn key="aim:previous">Last</digi:trn>&gt;&gt;
-                                                            </a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="yui-pg-next">
-                                                                <digi:trn>Next</digi:trn> &gt;
-                                                            </span>
-                                                            <span class="yui-pg-last">
-                                                                <digi:trn>Last</digi:trn> &gt;&gt;
-                                                            </span>
-                                                        </c:otherwise>
-                                                    </c:choose>
+														<% if (currPage.equals(pages)) { %>
+																<%=pages%>
+														<%	} else { %>
+															<c:set var="translation">
+																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+															</c:set>
+															<a href="javascript:page(<%=pages%>)" title="${translation}"><%=pages%></a>
+														<% } %>
+														|&nbsp;
+													</logic:iterate>
 												</td>
 											</tr>
 										</logic:notEmpty>

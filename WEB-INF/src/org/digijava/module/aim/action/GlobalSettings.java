@@ -101,15 +101,12 @@ public class GlobalSettings extends Action {
 		
 		Collection col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
-			try{
 			FeaturesUtil.setGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
 	    	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
 	    	FeaturesUtil.switchLogicInstance();	    	
-			}catch(Exception e){
-				e.printStackTrace();
-			}
+	     	
 	    	ServletContext ampContext = this.getServlet().getServletContext();
 			AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
 			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"));
@@ -124,9 +121,10 @@ public class GlobalSettings extends Action {
 			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr.next();
 			
 			//TODO: Add a new field to identify fields that need multiselect activated.
-			if(ampGS.getGlobalSettingsValue().indexOf(";") != -1) {
-				ampGS.setListOfValues(ampGS.getGlobalSettingsValue().split(";"));
-			}
+	 	 	if(ampGS.getGlobalSettingsValue().indexOf(";") != -1) {
+	 	 		ampGS.setListOfValues(ampGS.getGlobalSettingsValue().split(";"));
+	 	 	}
+	 	 	
 			gsForm.setGlobalSettingType(ampGS.getGlobalSettingsName(), ampGS.getGlobalSettingsPossibleValues());
 			
 			/**
@@ -378,12 +376,8 @@ public class GlobalSettings extends Action {
 		if ( criterion!=null && criterion.startsWith("t_")  ) {
 			if (criterion.equals("t_Integer") || criterion.equals("t_static_range") ){
 				try{
-					if (Integer.parseInt(value)< 0) {
-						return false;
-					} else {
 					Integer.parseInt(value);
 					return true;
-					}
 				}
 				catch(Exception E) { // value is not an integer
 					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));

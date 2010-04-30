@@ -3,8 +3,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -152,7 +150,7 @@ public class EditEUActivity extends MultiAction {
 				euaf.setName(element.getName());
 				euaf.setProgress(element.getProgress());
 				euaf.setTextId(element.getTextId());
-				euaf.setTotalCost(element.getTotalCost().setScale(2, RoundingMode.HALF_UP).toString());
+				euaf.setTotalCost(element.getTotalCost().toString());
 				euaf.setTotalCostCurrencyId(element.getTotalCostCurrency().getAmpCurrencyId());
 				euaf.setDueDate(DateTimeUtil.parseDateForPicker2(element.getDueDate()));
 
@@ -167,11 +165,11 @@ public class EditEUActivity extends MultiAction {
 				Iterator ii=element.getContributions().iterator();
 				while (ii.hasNext()) {
 					EUActivityContribution element2 = (EUActivityContribution) ii.next();
-					euaf.getContrAmountList().add(element2.getAmount().setScale(2, RoundingMode.HALF_UP).toString());
+					euaf.getContrAmountList().add(element2.getAmount().toString());
 					euaf.getContrCurrIdList().add(element2.getAmountCurrency().getAmpCurrencyId().toString());
 					AmpOrganisation o =  DbUtil.getOrganisation( element2.getDonor().getAmpOrgId());
 					euaf.getContrDonorIdList().add(o.getAmpOrgId().toString());
-					euaf.getContrDonorNameList().add(o.getAcronym());
+					euaf.getContrDonorNameList().add(o.getName());
 					euaf.getContrFinInstrIdList().add(element2.getFinancingInstr().getId());
 					euaf.getContrFinTypeIdList().add(element2.getFinancingTypeCategVal().getId());
 				}
@@ -240,7 +238,7 @@ public class EditEUActivity extends MultiAction {
                 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
                 Site site = RequestUtils.getSite(request);
         		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-        		
+        		siteId = site.getId()+"";
         		locale = navigationLanguage.getCode();	
         		
 		Long currencyId = tm.getAppSettings().getCurrencyId();
@@ -264,7 +262,7 @@ public class EditEUActivity extends MultiAction {
                       TranslatorWorker.translateText(totalCostCurr.getCurrencyName(), request) + 
                       TranslatorWorker.translateText(" please use the default currency: ", request)  + 
                       TranslatorWorker.translateText(baseCurr.getCurrencyName(), request)  )
-                  );   
+                  );
                 }
                    else{
                      Object[] currencies = eaf.getContrCurrId();
@@ -276,7 +274,7 @@ public class EditEUActivity extends MultiAction {
                          double exchangeRate = CurrencyUtil.getExchangeRate(
                              currCode);
                          if (exchangeRate == 1.0 &&!currCode.equals( baseCurrCode )) {
-                            errors.add("title", new ActionError(
+                           errors.add("title", new ActionError(
                                "error.aim.addActivity.noExchangeRateIsDefined", 
                                TranslatorWorker.translateText("There is no exchange rate defined for the currency: ",request) + 
                                TranslatorWorker.translateText(totalCostCurr.getCurrencyName(),request) + 
@@ -293,7 +291,7 @@ public class EditEUActivity extends MultiAction {
 			Double.parseDouble(eaf.getTotalCost());
 		} catch (NumberFormatException e) {
 			errors.add("title", new ActionError(
-					"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,site.getId())));
+					"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,siteId)));
 		}
 
 		try {
@@ -303,32 +301,26 @@ public class EditEUActivity extends MultiAction {
 		} catch (ParseException e) {
 			//System.out.println("Exception:"+e);
 			errors.add("title", new ActionError(
-					"error.aim.euactivity.dueDate", TranslatorWorker.translateText("Please pick the Due Date",locale,site.getId())));
+					"error.aim.euactivity.dueDate", TranslatorWorker.translateText("Please pick the Due Date",locale,siteId)));
 		}
 		if("".equalsIgnoreCase(eaf.getName())) errors.add("title", new ActionError(
-		"error.aim.euactivity.noactivityname", TranslatorWorker.translateText("Please enter the activity name",locale,site.getId())));
+		"error.aim.euactivity.noactivityname", TranslatorWorker.translateText("Please enter the activity name",locale,siteId)));
 		if(hasInvalidAmounts(eaf.getContrAmountList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,site.getId())));
+		"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrDonorIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.selectDonor", TranslatorWorker.translateText("Please pick the Donors from the drop down lists",locale,site.getId())));
+		"error.aim.euactivity.selectDonor", TranslatorWorker.translateText("Please pick the Donors from the drop down lists",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrCurrIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.selectCurrency", TranslatorWorker.translateText("Please pick the Currencies from the drop down lists",locale,site.getId())));
+		"error.aim.euactivity.selectCurrency", TranslatorWorker.translateText("Please pick the Currencies from the drop down lists",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrFinInstrIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.contrFinInstr", TranslatorWorker.translateText("Please pick the Financing Instruments from the drop down lists",locale,site.getId())));
+		"error.aim.euactivity.contrFinInstr", TranslatorWorker.translateText("Please pick the Financing Instruments from the drop down lists",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrFinTypeIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.contrFinType", TranslatorWorker.translateText("Please pick the Financing Types from the drop down lists",locale,site.getId())));
+		"error.aim.euactivity.contrFinType", TranslatorWorker.translateText("Please pick the Financing Types from the drop down lists",locale,siteId)));
 
 
 
 		saveErrors(request, errors);
 
-		if(!errors.isEmpty()) {
-			eaf.setSomeError(true);
-			return modeFinalize(mapping, form, request, response);
-		}
-		else{
-			eaf.setSomeError(false);
-		}
+		if(!errors.isEmpty()) return modeFinalize(mapping, form, request, response);
 
 		return modeSave(mapping, form, request, response);
 
@@ -420,7 +412,7 @@ public class EditEUActivity extends MultiAction {
 		eua.setName(euaf.getName());
 		eua.setProgress(euaf.getProgress());
 		eua.setTextId(euaf.getTextId());
-		eua.setTotalCost(new BigDecimal(euaf.getTotalCost()));
+		eua.setTotalCost(new Double(euaf.getTotalCost()));
 		eua.setTotalCostCurrency((AmpCurrency) sess.load(AmpCurrency.class, euaf
 				.getTotalCostCurrencyId()));
 		eua.setTransactionDate(new Date(System.currentTimeMillis()));
@@ -433,7 +425,7 @@ public class EditEUActivity extends MultiAction {
 
 			EUActivityContribution eac=new EUActivityContribution();
 			eac.setEuActivity(eua);
-			eac.setAmount(new BigDecimal((String) euaf.getContrAmountList().get(i)));
+			eac.setAmount(new Double((String) euaf.getContrAmountList().get(i)));
 			eac.setAmountCurrency((AmpCurrency) sess.load(AmpCurrency.class,new Long((String) euaf.getContrCurrIdList().get(i))));
 			eac.setDonor((AmpOrganisation) sess.load(AmpOrganisation.class,new Long((String) euaf.getContrDonorIdList().get(i))));
 			//eac.setFinancingInstrument((AmpModality) sess.load(AmpModality.class,new Long((String) euaf.getContrFinInstrIdList().get(i))));

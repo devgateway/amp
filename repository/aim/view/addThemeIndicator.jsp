@@ -9,12 +9,11 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
-<jsp:include page="addThemeIndicatorPopin.jsp" flush="true" />
+
 <script language="JavaScript">
     var openImg;
     var closeImg;
@@ -32,9 +31,9 @@
 	<!--
 	function validate()
 	{
-		var err1="<digi:trn jsFriendly='true'>Please enter Indicator name</digi:trn>";
-		var err2="<digi:trn jsFriendly='true'>Please enter Indicator code</digi:trn>";
-		var err3="<digi:trn jsFriendly='true'>Please enter Indicator type</digi:trn>";
+		var err1="<digi:trn key='admin:enterindicatorname'>Please enter Indicator name</digi:trn>";
+		var err2="<digi:trn key='admin:enterindicatorcode'>Please enter Indicator code</digi:trn>";
+		var err3="<digi:trn key='admin:enterindicatortype'>Please enter Indicator type</digi:trn>";
 		
 		if (trim(document.aimThemeForm.name.value).length == 0)
 		{
@@ -86,11 +85,26 @@
 	}
 
 
+function addIndicator(id){
+  <digi:context name="addIndicator" property="context/module/moduleinstance/assignNewIndicator.do" />
+  openURLinWindow("<%= addIndicator %>?parentid=" + id + "&type=program",800, 500);
+}
+
+
+function editIndicator(id,parentid,type){
+  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
+  openURLinWindow("<%=viewEditIndicator%>?id=" + id + "&parentid="+parentid+"&type=program&event=edit",500, 300);
+}
+
+function addData(id){
+  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do" />
+  openURLinWindow("<%= addEditIndicator %>?parent=" + id,575, 300);
+}
 
 function checkValues(){
   var values=getTypeValues();
-  var err1="<digi:trn jsFriendly='true'>Please specify only one target value</digi:trn>";
-  var err2="<digi:trn jsFriendly='true'>Please specify dates for all indicators</digi:trn>";
+  var err1="<digi:trn key='admin:onlyonetargetvalue'>Please specify only one target value</digi:trn>";
+  var err2="<digi:trn key='admin:datesallindicators'>Please specify dates for all indicators</digi:trn>";
 	
   if (values.length !=null){
     var targets=0;
@@ -119,7 +133,7 @@ function checkValues(){
 
 function checkBaseValues(){
   var values=getTypeValues();
-  var err1 = "<digi:trn jsFriendly='true'>Please specify only one Base value</digi:trn>";
+  var err1 = "<digi:trn key='admin:onlyonebasevalues'>Please specify only one Base value</digi:trn>";
   if (values.length !=null){
     var targets=0;
     for (var i=0; i< values.length; i++){
@@ -171,14 +185,14 @@ function load(){}
 
 function unload(){}
 
-/*function closeWindow(){
+function closeWindow(){
 	<digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
 	document.aimThemeForm.action = "<%=closeInd%>";
 	document.aimThemeForm.submit();
 	window.close();
 	return true;
-}*/
-/*
+}
+
   function closeWindow(indiType)
   {
     <digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
@@ -187,10 +201,14 @@ function unload(){}
     document.aimThemeForm.submit();
     window.close();
   }
-*/
+
   function trim(s) {
     return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
   }
+
+
+
+
   
   function showhide(what,what2){
 
@@ -214,29 +232,30 @@ function unload(){}
    // validate indicator
    
   function validate(field) {
-	  var err1 = "<digi:trn jsFriendly='true'>Please choose a indicator to remove</digi:trn>";
-	  var msg = "<digi:trn jsFriendly='true'>Are you sure you want to remove the selected indicator(s)?</digi:trn>";
+	  var err1 = "<digi:trn key='admin:chooseindicatorremove'>Please choose a indicator to remove</digi:trn>";
+	  var msg = "<digi:trn key='admin:confirmremoveindicator'>Are you sure you want to remove the selected indicator(s)?</digi:trn>";
 	  if (field == 2) {
 	  
 	  	if (document.aimThemeForm.indicatorsId.checked != null) {
 	  		if (document.aimThemeForm.indicatorsId.checked == false) {
 	  			alert(err1);
-	    		return false;
-	  		}	  	
+	    return false;
+	  	}
+	  	
 		} else {
 	  		var length = document.aimThemeForm.indicatorsId.length;
 	  		var flag = 0;
 	  
-	  		for (i = 0;i < length;i ++) {
-	    		if (document.aimThemeForm.indicatorsId[i].checked == true) {
-	      			flag = 1;
-	     			break;
-	    		}
-	  		}
-	  		if (flag == 0) {
-	  			alert(err1);
-		    	return false;
-		  	}
+	  	for (i = 0;i < length;i ++) {
+	    	if (document.aimThemeForm.indicatorsId[i].checked == true) {
+	      flag = 1;
+	     break;
+	    }
+	  }
+	  	if (flag == 0) {
+	  		alert(err2);
+		    return false;
+		  }
 		}
 		
 		var validate = window.confirm(msg); 
@@ -343,7 +362,7 @@ function unload(){}
 								</tr>
 						    	<tr>
 									<td width="9" height="15" bgcolor="#ffffff" id="menu1" onClick="showhide(menu1outline${prgIndicatorItr.indicatorThemeId},menu1sign${prgIndicatorItr.indicatorThemeId})" >
-												<img id="menu1sign${prgIndicatorItr.indicatorThemeId}" src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" valign="bottom">
+												<img id="menu1sign${prgIndicatorItr.indicatorThemeId}" src= "../ampTemplate/images/arrow_right.gif" valign="bottom">
 									</td>
 									<td align="left" width="60%" bgcolor="#f4f4f2">
 										<b>${prgIndicatorItr.indicator.name}</b>
@@ -392,11 +411,8 @@ function unload(){}
 													     <td align="center" valign="middle" width="120">
 													       <b><font color="white"><digi:trn key="aim:addtheme:creationdate">Creation Date</digi:trn></font></b>
 													     </td>
-													     <td align="center" valign="middle" width="120">
+													     <td align="center" valign="middle" width="120" colspan="3">
 													       <b><font color="white"><digi:trn key="aim:addtheme:location">Location</digi:trn></font></b>
-													     </td>
-                                                                                                              <td align="center" valign="middle" width="120">
-													       <b><font color="white"><digi:trn key="aim:addtheme:location">Source</digi:trn></font></b>
 													     </td>
 													</tr>
 														<logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">
@@ -419,15 +435,11 @@ function unload(){}
 																			<c:if test="${!empty loc.location.name}">
 															                	[${loc.location.name}]
 															                </c:if>
-															                </c:if>
+																		</c:if>
 																		<c:if test="${empty prgIndicatorValues.location}">
 																			<span>[<span style="color:Red"><digi:trn key="aim:addeditdata:national">National</digi:trn></span>]</span>
 																		</c:if>
-                                                                                                                                                &nbsp;
 																	</td>
-                                                                                                                                        <td bgcolor="#f4f4f2" align="center">
-                                                                                                                                                <category:getoptionvalue  categoryValueId="${prgIndicatorValues.sourceId}" categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_SOURCE_KEY%>"  />
-                                                                                                                                        </td>
 																</tr>
 															</logic:iterate>
 														</logic:notEmpty>
@@ -454,4 +466,4 @@ function unload(){}
 </tr>
 </table>
 </body>
-</digi:form>
+</digi:form> 

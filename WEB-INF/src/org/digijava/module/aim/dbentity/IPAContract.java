@@ -1,28 +1,20 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * @author mihai
  *
  */
-public class IPAContract implements Serializable, Versionable {
+public class IPAContract implements Serializable {
 
     private static final long serialVersionUID = 2485772788422409800L;
     private Long id;
@@ -44,28 +36,28 @@ public class IPAContract implements Serializable, Versionable {
     private Date totalECContribINVAmountDate;
     private Date totalECContribIBAmountDate;
     
-    private BigDecimal totalECContribIBAmount;
-    private BigDecimal totalAmount;
-    private BigDecimal contractTotalValue;
+    private Double totalECContribIBAmount;
+    private Double totalAmount;
+    private Double contractTotalValue;
     private AmpCurrency totalAmountCurrency;
     private AmpCurrency dibusrsementsGlobalCurrency;
-    private BigDecimal totalECContribINVAmount;
-    private BigDecimal totalNationalContribCentralAmount;
-    private BigDecimal totalNationalContribRegionalAmount;
-    private BigDecimal totalNationalContribIFIAmount;
-    private BigDecimal totalPrivateContribAmount;
+    private Double totalECContribINVAmount;
+    private Double totalNationalContribCentralAmount;
+    private Double totalNationalContribRegionalAmount;
+    private Double totalNationalContribIFIAmount;
+    private Double totalPrivateContribAmount;
     private Set disbursements;
     private AmpActivity activity;
     private AmpOrganisation organization;
     private Set<AmpOrganisation> organizations;
     private AmpCategoryValue status;
     //this disbursements and executionRate are used in Montenegro
-    private BigDecimal totalDisbursements;
-    private BigDecimal executionRate;
+    private Double totalDisbursements;
+    private Double executionRate;
     //burkina mission - exchange rate is computed based on the disbursement entered in funding step and total amount
     //of the contract (contractTotalValue)
-    private BigDecimal fundingTotalDisbursements;
-    private BigDecimal fundingExecutionRate;
+    private Double fundingTotalDisbursements;
+    private Double fundingExecutionRate;
     
     private AmpCategoryValue type;
     private AmpCategoryValue contractType;
@@ -220,54 +212,54 @@ public class IPAContract implements Serializable, Versionable {
         this.startOfTendering = startOfTendering;
     }
 
-    public BigDecimal getTotalECContribIBAmount() {
+    public Double getTotalECContribIBAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalECContribIBAmount);
     }
 
-    public void setTotalECContribIBAmount(BigDecimal totalECContribIBAmount) {
+    public void setTotalECContribIBAmount(Double totalECContribIBAmount) {
         this.totalECContribIBAmount = FeaturesUtil.applyThousandsForEntry(totalECContribIBAmount);
     }
     
-    public BigDecimal getTotalECContribINVAmount() {
+    public Double getTotalECContribINVAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalECContribINVAmount);
     }
 
-    public void setTotalECContribINVAmount(BigDecimal totalECContribINVAmount) {
+    public void setTotalECContribINVAmount(Double totalECContribINVAmount) {
         this.totalECContribINVAmount = FeaturesUtil.applyThousandsForEntry(totalECContribINVAmount);
     }
 
-    public BigDecimal getTotalNationalContribCentralAmount() {
+    public Double getTotalNationalContribCentralAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalNationalContribCentralAmount);
     }
 
     public void setTotalNationalContribCentralAmount(
-    		BigDecimal totalNationalContribCentralAmount) {
+            Double totalNationalContribCentralAmount) {
         this.totalNationalContribCentralAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribCentralAmount);
     }
 
-    public BigDecimal getTotalNationalContribIFIAmount() {
+    public Double getTotalNationalContribIFIAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalNationalContribIFIAmount);
     }
 
     public void setTotalNationalContribIFIAmount(
-    		BigDecimal totalNationalContribIFIAmount) {
+            Double totalNationalContribIFIAmount) {
         this.totalNationalContribIFIAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribIFIAmount);
     }
 
-    public BigDecimal getTotalNationalContribRegionalAmount() {
+    public Double getTotalNationalContribRegionalAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalNationalContribRegionalAmount);
     }
 
     public void setTotalNationalContribRegionalAmount(
-    		BigDecimal totalNationalContribRegionalAmount) {
+            Double totalNationalContribRegionalAmount) {
         this.totalNationalContribRegionalAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribRegionalAmount);
     }
 
-    public BigDecimal getTotalPrivateContribAmount() {
+    public Double getTotalPrivateContribAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalPrivateContribAmount);
     }
 
-    public void setTotalPrivateContribAmount(BigDecimal totalPrivateContribAmount) {
+    public void setTotalPrivateContribAmount(Double totalPrivateContribAmount) {
         this.totalPrivateContribAmount = FeaturesUtil.applyThousandsForEntry(totalPrivateContribAmount);
     }
 
@@ -279,11 +271,11 @@ public class IPAContract implements Serializable, Versionable {
 		this.contractValidity = contractValidity;
 	}
 
-	public BigDecimal getTotalAmount() {
+	public Double getTotalAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(totalAmount);
 	}
 
-	public void setTotalAmount(BigDecimal totalAmount) {
+	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = FeaturesUtil.applyThousandsForEntry(totalAmount);
 	}
 
@@ -295,19 +287,19 @@ public class IPAContract implements Serializable, Versionable {
 		this.totalAmountCurrency = totalAmountCurrency;
 	}
 
-	public BigDecimal getTotalDisbursements() {
+	public Double getTotalDisbursements() {
 		return FeaturesUtil.applyThousandsForVisibility(totalDisbursements);
 	}
 
-	public void setTotalDisbursements(BigDecimal totalDisbursements) {
+	public void setTotalDisbursements(Double totalDisbursements) {
 		this.totalDisbursements = FeaturesUtil.applyThousandsForEntry(totalDisbursements);
 	}
 
-	public BigDecimal getExecutionRate() {
+	public Double getExecutionRate() {
 		return executionRate;
 	}
 
-	public void setExecutionRate(BigDecimal executionRate) {
+	public void setExecutionRate(Double executionRate) {
 		this.executionRate = executionRate;
 	}
 
@@ -395,217 +387,28 @@ public class IPAContract implements Serializable, Versionable {
 		this.contractType = contractType;
 	}
 
-	public BigDecimal getContractTotalValue() {
+	public Double getContractTotalValue() {
 		return FeaturesUtil.applyThousandsForVisibility(contractTotalValue);
 	}
 
-	public void setContractTotalValue(BigDecimal contractTotalValue) {
+	public void setContractTotalValue(Double contractTotalValue) {
 		this.contractTotalValue = FeaturesUtil.applyThousandsForEntry(contractTotalValue);
 	}
 
-	public BigDecimal getFundingTotalDisbursements() {
+	public Double getFundingTotalDisbursements() {
 		return FeaturesUtil.applyThousandsForVisibility(fundingTotalDisbursements);
 	}
 
-	public void setFundingTotalDisbursements(BigDecimal fundingTotalDisbursements) {
+	public void setFundingTotalDisbursements(Double fundingTotalDisbursements) {
 		this.fundingTotalDisbursements = FeaturesUtil.applyThousandsForEntry(fundingTotalDisbursements);
 	}
 
-	public BigDecimal getFundingExecutionRate() {
+	public Double getFundingExecutionRate() {
 		return fundingExecutionRate;
 	}
 
-	public void setFundingExecutionRate(BigDecimal fundingExecutionRate) {
+	public void setFundingExecutionRate(Double fundingExecutionRate) {
 		this.fundingExecutionRate = fundingExecutionRate;
 	}
-
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		IPAContract auxIPA = (IPAContract) obj;
-		if (auxIPA.getContractName().toLowerCase().trim().equals(this.contractName.toLowerCase().trim())) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public Output getOutput() {
-		Output out = new Output();
-		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(new Output(null, new String[] { "Contract Name: " }, new Object[] { this.contractName }));
-		if (this.description != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Description: " }, new Object[] { this.description }));
-		}
-		if (this.activityCategory != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Category: " }, new Object[] { this.activityCategory
-							.getEncodedValue() }));
-		}
-		if (this.contractType != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Type: " }, new Object[] { this.contractType
-							.getEncodedValue() }));
-		}
-		if (this.status != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Status: " }, new Object[] { this.status
-							.getEncodedValue() }));
-		}
-
-		if (this.startOfTendering != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Start of Tendering: " },
-							new Object[] { this.startOfTendering }));
-		}
-		if (this.signatureOfContract != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Signature of Contract: " },
-							new Object[] { this.signatureOfContract }));
-		}
-		if (this.contractValidity != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contract Validity Date: " },
-							new Object[] { this.contractValidity }));
-		}
-		if (this.organizations != null) {
-			Iterator<AmpOrganisation> iterOrgs = this.organizations.iterator();
-			while (iterOrgs.hasNext()) {
-				AmpOrganisation auxOrg = iterOrgs.next();
-				out.getOutputs().add(
-						new Output(null, new String[] { "<br />", "Contract Organization: " }, new Object[] { auxOrg
-								.getAcronymAndName() }));
-			}
-		}
-		if (this.contractingOrganizationText != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contractor Name: " },
-							new Object[] { this.contractingOrganizationText }));
-		}
-		if (this.contractCompletion != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contract Completion: " },
-							new Object[] { this.contractCompletion }));
-		}
-		if (this.totalAmount != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Amount: " }, new Object[] { this.totalAmount,
-							" - ", this.totalAmountCurrency.getCurrencyCode() }));
-		}
-		if (this.contractTotalValue != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contract Total Value: " },
-							new Object[] { this.contractTotalValue }));
-		}
-		if (this.totalECContribIBAmount != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total EC Contribution IB: " }, new Object[] {
-							this.totalECContribIBAmount, " - ", this.totalECContribIBAmountDate }));
-		}
-		if (this.totalECContribINVAmount != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total EC Contribution INV: " }, new Object[] {
-							this.totalECContribINVAmount, " - ", this.totalECContribINVAmountDate }));
-		}
-		if (this.totalNationalContribCentralAmount != null) {
-			out.getOutputs()
-					.add(
-							new Output(null, new String[] { "<br />", "Total National Central Contribution: " },
-									new Object[] { this.totalNationalContribCentralAmount, " - ",
-											this.totalNationalContribCentralAmountDate }));
-		}
-		if (this.totalNationalContribIFIAmount != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total National IFIs Contribution: " }, new Object[] {
-							this.totalNationalContribIFIAmount, " - ", this.totalNationalContribIFIAmountDate }));
-		}
-		if (this.totalNationalContribRegionalAmount != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total National Regional Contribution: " },
-							new Object[] { this.totalNationalContribRegionalAmount, " - ",
-									this.totalNationalContribRegionalAmountDate }));
-		}
-		if (this.totalPrivateContribAmount != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Private Contribution: " }, new Object[] {
-							this.totalPrivateContribAmount, " - ", this.totalPrivateContribAmountDate }));
-		}
-		if (this.totalDisbursements != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Disbursements: " },
-							new Object[] { this.totalDisbursements }));
-		}
-		if (this.executionRate != null) {
-			out.getOutputs()
-					.add(
-							new Output(null, new String[] { "<br />", "Execution Rate: " },
-									new Object[] { this.executionRate }));
-		}
-		if (this.fundingTotalDisbursements != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Funding Disbursements: " },
-							new Object[] { this.fundingTotalDisbursements }));
-		}
-		if (this.disbursements != null) {
-			List auxDisbList = new ArrayList(this.disbursements);
-			Collections.sort(auxDisbList, disbComparator);
-			Iterator<IPAContractDisbursement> iterDisb = auxDisbList.iterator();
-			while (iterDisb.hasNext()) {
-				IPAContractDisbursement auxDisb = iterDisb.next();
-				out.getOutputs().add(
-						new Output(null, new String[] { "<br />", "Disbursements: " }, new Object[] {
-								(auxDisb.getAdjustmentType() == 0 ? "Actual" : "Planned"), " - ", auxDisb.getAmount(),
-								" - ", auxDisb.getCurrency(), " - ", auxDisb.getDate() }));
-			}
-		}
-		return out;
-	}
-
-	@Override
-	public Object getValue() {
-		String ret = "";
-		ret = ret + this.description + "-" + this.contractCompletion + "-" + this.contractTotalValue + "-"
-				+ (this.contractType != null ? this.contractType.getEncodedValue() : "") + "-"
-				+ (this.activityCategory != null ? this.activityCategory.getEncodedValue() : "") + "-"
-				+ this.contractValidity + "-"
-				+ (this.dibusrsementsGlobalCurrency != null ? this.dibusrsementsGlobalCurrency.getCurrencyCode() : "")
-				+ "-" + this.executionRate + "-" + this.fundingExecutionRate + "-" + this.fundingTotalDisbursements
-				+ "-" + (this.organization != null ? this.organization.getOrgCode() : "") + "-"
-				+ this.signatureOfContract + "-" + this.startOfTendering + "-"
-				+ (this.status != null ? this.status.getEncodedValue() : "") + "-" + this.totalAmount + "-"
-				+ this.totalAmountCurrency + "-" + this.totalDisbursements + "-" + this.totalECContribIBAmount + "-"
-				+ this.totalECContribIBAmountDate + "-" + this.totalECContribINVAmount + "-"
-				+ this.totalECContribINVAmountDate + "-" + this.totalNationalContribCentralAmount + "-"
-				+ this.totalNationalContribCentralAmountDate + "-" + this.totalNationalContribIFIAmount + "-"
-				+ this.totalNationalContribIFIAmountDate + "-" + this.totalNationalContribRegionalAmount + "-"
-				+ this.totalNationalContribRegionalAmountDate + "-" + this.totalPrivateContribAmount + "-"
-				+ this.totalPrivateContribAmountDate + (this.type != null ? this.type.getEncodedValue() : "");
-		if (this.disbursements != null) {
-			List auxDisbList = new ArrayList(this.disbursements);
-			Collections.sort(auxDisbList, disbComparator);
-			Iterator<IPAContractDisbursement> iterDisb = auxDisbList.iterator();
-			while (iterDisb.hasNext()) {
-				IPAContractDisbursement auxDisb = iterDisb.next();
-				ret = ret + auxDisb.getAdjustmentType() + "-" + auxDisb.getAmount() + "-" + auxDisb.getCurrency() + "-"
-						+ auxDisb.getDate();
-			}
-		}
-		return ret;
-	}
-	
-	private Comparator disbComparator = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			IPAContractDisbursement aux1 = (IPAContractDisbursement) o1;
-			IPAContractDisbursement aux2 = (IPAContractDisbursement) o2;
-			if (aux1.getAdjustmentType().equals(aux2.getAdjustmentType())) {
-				if (aux1.getAmount().equals(aux2.getAmount())) {
-					return aux1.getDate().compareTo(aux2.getDate());
-				} else {
-					return aux1.getAmount().compareTo(aux2.getAmount());
-				}
-			} else {
-				return aux1.getAdjustmentType().compareTo(aux2.getAdjustmentType());
-			}
-		}
-	};
+		
 }

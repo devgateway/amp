@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.util.ActivityUtil.HelperActivity;
 
 public class ActivityForm extends ActionForm implements Serializable {
 
@@ -21,8 +20,6 @@ public class ActivityForm extends ActionForm implements Serializable {
 	private String keyword;
 	private String lastKeyword;
 	
-	private int type = -1;
-	
 	private int tempNumResults = 10;
 	
 	private int page;
@@ -34,10 +31,7 @@ public class ActivityForm extends ActionForm implements Serializable {
     private int pagesToShow;
     private int offset;
     private Integer currentPage;
-    private Collection pages = null;    
-   
-    List<HelperActivity> activities=null;
-    List<HelperActivity> activitiesForPage;
+    private Collection pages = null;
     
 	/**
 	 * @return Returns the activityList.
@@ -180,27 +174,5 @@ public class ActivityForm extends ActionForm implements Serializable {
 		this.lastKeyword = lastKeyword;
 	}
 
-	public int getType() {
-		return type;
-	}
 
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public List<HelperActivity> getActivities() {
-		return activities;
-	}
-
-	public void setActivities(List<HelperActivity> activities) {
-		this.activities = activities;
-	}
-
-	public List<HelperActivity> getActivitiesForPage() {
-		return activitiesForPage;
-	}
-
-	public void setActivitiesForPage(List<HelperActivity> activitiesForPage) {
-		this.activitiesForPage = activitiesForPage;
-	}
 }

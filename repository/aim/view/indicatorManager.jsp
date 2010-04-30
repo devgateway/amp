@@ -102,7 +102,7 @@
 																																</digi:link>
 																											 			</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img1" alt="" src="/TEMPLATE/ampTemplate/imagesSource/common/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                          <img id="img1" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
 																														<c:set var="MultiProgramIndicators">
@@ -115,7 +115,7 @@
 																																</digi:link>
 																														</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img2" alt="" src="/TEMPLATE/ampTemplate/imagesSource/common/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                          <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
 																														<c:set var="EProjectIndicators">
@@ -129,7 +129,7 @@
 																																</digi:link>
 																														</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img3" alt="" src="/TEMPLATE/ampTemplate/imagesSource/common/tab-right1.gif" width="20" height="19" />
+                                                                                                                          <img id="img3" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif" width="20" height="19" />
                                                                                                                         </td>
 																												</tr>
 																										</table>
@@ -162,10 +162,10 @@
 																	<tr bgcolor="#ffffff">
 																	<td width="9">
 																		<c:if test="${indicators.defaultInd == true}">
-																			<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
+																			<img src= "../ampTemplate/images/bullet_red.gif" border=0>
 																		</c:if>
 																		<c:if test="${indicators.defaultInd == false}">
-																			<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" border=0>
+																			<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
 																		</c:if>
 																	</td>
 																	<td>
@@ -192,7 +192,7 @@
 																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																		</c:set>
 																		<a href="javascript:deleteIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
-																			<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0>
+																			<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																		</a>
 																	</td>
 																	</tr>
@@ -232,13 +232,13 @@
 		<table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
 			<tr bgcolor="#ffffff">
 				<td width="9">
-					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_red_sq.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
 				</td>
 				<td width="100">
 					<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
 				</td>
 				<td width="9">
-					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/bullet_grey_sq.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
 				</td>
 				<td>
 					<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>

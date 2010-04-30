@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -57,12 +56,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
     private List secondaryPrograms;
     private List nationalPlanObjectivePrograms;
 	private Collection<ActivitySector> activitySectors;
-	//contact Information
-	private AmpActivityContact primaryDonorContact;
-	private AmpActivityContact primaryMofedContact;
-	private AmpActivityContact primaryprojCoordinatorContact;
-	private AmpActivityContact primarySectorMinistryContact;
-	private AmpActivityContact primaryImplExecutingAgencyContact;
 	
 	private Collection<FinancingBreakdown> financingBreakdown;
         
@@ -90,7 +83,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Collection closingDates;
 	
 	private Integer countryIndex;
-
+	
 	private List<Integer> numOfLocationsPerLayer;
 
 	/**
@@ -172,6 +165,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private ArrayList<AmpCategoryValue> typesOfAssistance;
 	private ArrayList<AmpCategoryValue> modalities;
 	private ArrayList<AmpCategoryValue> fundingStatuses;
+	
 
 	private Collection relOrgs;
 
@@ -704,82 +698,10 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 			this.countryIndex = countryIndex;
 		}
 
-		public AmpActivityContact getPrimaryDonorContact() {
-			return primaryDonorContact;
-		}
-
-		public void setPrimaryDonorContact(AmpActivityContact primaryDonorContact) {
-			this.primaryDonorContact = primaryDonorContact;
-		}
-
-		public AmpActivityContact getPrimaryMofedContact() {
-			return primaryMofedContact;
-		}
-
-		public void setPrimaryMofedContact(AmpActivityContact primaryMofedContact) {
-			this.primaryMofedContact = primaryMofedContact;
-		}
-
-		public AmpActivityContact getPrimaryprojCoordinatorContact() {
-			return primaryprojCoordinatorContact;
-		}
-
-		public void setPrimaryprojCoordinatorContact(
-				AmpActivityContact primaryprojCoordinatorContact) {
-			this.primaryprojCoordinatorContact = primaryprojCoordinatorContact;
-		}
-
-		public AmpActivityContact getPrimarySectorMinistryContact() {
-			return primarySectorMinistryContact;
-		}
-
-		/**
-		 * @return the primaryImplExecutingAgencyContact
-		 */
-		public AmpActivityContact getPrimaryImplExecutingAgencyContact() {
-			return primaryImplExecutingAgencyContact;
-		}
-
-		/**
-		 * @param primaryImplExecutingAgencyContact the primaryImplExecutingAgencyContact to set
-		 */
-		public void setPrimaryImplExecutingAgencyContact(
-				AmpActivityContact primaryImplExecutingAgencyContact) {
-			this.primaryImplExecutingAgencyContact = primaryImplExecutingAgencyContact;
-		}
-
-		/**
-		 * @param primarySectorMinistryContact the primarySectorMinistryContact to set
-		 */
-		public void setPrimarySectorMinistryContact(
-				AmpActivityContact primarySectorMinistryContact) {
-			this.primarySectorMinistryContact = primarySectorMinistryContact;
-		}
-
-		/**
-		 * @return the modalities
-		 */
-		public ArrayList<AmpCategoryValue> getModalities() {
-			return modalities;
-		}
-
-		/**
-		 * @param modalities the modalities to set
-		 */
-		public void setModalities(ArrayList<AmpCategoryValue> modalities) {
-			this.modalities = modalities;
-		}
-
-		/**
-		 * @return the fundingStatuses
-		 */
 		public ArrayList<AmpCategoryValue> getFundingStatuses() {
 			return fundingStatuses;
 		}
 
-		/**
-		 * @param fundingStatuses the fundingStatuses to set
-		 */
 		public void setFundingStatuses(ArrayList<AmpCategoryValue> fundingStatuses) {
 			this.fundingStatuses = fundingStatuses;
 		}
@@ -791,4 +713,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		public void setNumOfLocationsPerLayer(List<Integer> numOfLocationsPerLayer) {
 			this.numOfLocationsPerLayer = numOfLocationsPerLayer;
 		}
+	  
+
+		  
 }

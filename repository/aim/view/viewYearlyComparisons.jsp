@@ -573,7 +573,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 			            		                  
 			            		                  <feature:display module="Funding" name="Expenditures">
-			            		                  <td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
+			            		                  	<td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
 			                  			              	<div align="center">
 
@@ -586,29 +586,6 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 			                     		         	</td>
 			                     		         	
 												</feature:display>
-												
-												<td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
-
-			                  			              	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<digi:trn >Total Estimated Cost</digi:trn>
-
-													  </div>
-
-			                     		         	</td>	
-													<td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
-
-			                  			              	<div align="center">
-
-																<FONT color="blue">*</FONT>
-																			<digi:trn>Uncommitted balance</digi:trn>
-															  </div>
-
-			                     		         	</td>
-												
-												  	
                             						</tr>
 
 			                            			<logic:empty name="aimYearlyComparisonsForm" property="yearlyComparisons">
@@ -685,39 +662,20 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 			      	                        		<td>
 
 																	<div align="right">
-
 																		<aim:formatNumber  value="${yearlyComparisons.actualDisbursement}" />
-
 																	</div>
 
 																</td>
-  																		<feature:display module="Funding" name="Expenditures">
-				                  	            						<td>
+  <feature:display module="Funding" name="Expenditures">
+				                  	            	<td>
 
-																			<div align="right">
+																	<div align="right">
+																		<aim:formatNumber  value="${yearlyComparisons.actualExpenditure}" />
+													</div>
 
-																			<aim:formatNumber  value="${yearlyComparisons.actualExpenditure}" />
-																			</div>
+											  </td>
 
-											 							 </td>
-
-  																		</feature:display>
-			               	           			
-			               	           										<td>
-	
-																			<div align="right">
-
-																			<aim:formatNumber  value="${aimYearlyComparisonsForm.totalCost}" />
-																			</div>
-
-											 							 </td>
-											 							 <td>
-
-																			<div align="right">
-																				<aim:formatNumber  value="${yearlyComparisons.uncommittedBalance}" />
-																			</div>
-
-											 							 </td>
+  </feature:display>
 			               	           			</tr>
 
 															</logic:iterate>
@@ -814,24 +772,6 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 													  </td>
 </feature:display>
-			<td>
-	
-																			<div align="right">
-	<aim:formatNumber  value="${aimYearlyComparisonsForm.totalCost}" />
-
-																			
-																			</div>
-
-											 							 </td>
-											 							 <td>
-
-																			<div align="right">
-	<aim:formatNumber  value="${aimYearlyComparisonsForm.uncommittedBalance}" />
-
-																	
-																			</div>
-
-											 							 </td>
 			      			                      </tr>
 
 			               			             </logic:notEmpty>
@@ -856,7 +796,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 															<TD width="15">
 
-																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 															</TD>
 
@@ -905,7 +845,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 															<TD width="15">
 
-																<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 															</TD>
 

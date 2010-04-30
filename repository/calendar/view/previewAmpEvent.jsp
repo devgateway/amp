@@ -28,43 +28,16 @@ function deleteEvent(){
 	if(confirm(err))
 	{
 		document.getElementById('hdnMethod').value = "delete";
-		document.calendarEventForm.submit();
 		return true;
-	} else {
-		return false;
 	}
-	
+	return false;
 }
-
-
-function openPrinter(){
-	var id = document.getElementById('id').value;
-
-	//<digi:context name="rev" property="/calendar/showCalendarEvent.do~method=print~resetForm=true" />
-		//openURLinWindow("<%=rev%>",1024,768);
-	window.open('/calendar/showCalendarEvent.do~method=print~resetForm=true~calendarId='+id+'','mywindow','toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
-		
-	}
-
-function getWeekdays(){
-   var weekDays = document.getElementById('weekDays').value;
-   var myDays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-   var result = "";
-   var days = weekDays.split("",weekDays.length);
-    for(i=0; i<weekDays.length; i++){
-    
-    	var wday = myDays[days[i]];
-    	result +=wday+",";  	
-        }
-    return result;
- }
-
 </script>
 
 <digi:form action="/showCalendarEvent.do">
 
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
-  <html:hidden styleId="id" name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
   <table width="530">
   	 <tr>
@@ -227,42 +200,6 @@ function getWeekdays(){
 				                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
 				              </td>
 				            </tr>
-				            <c:if test="${not empty calendarEventForm.typeofOccurrence}">
-					            <tr height="5px"><td colspan="2"></td></tr>
-					            <tr>
-					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-					                <digi:trn>Recurring Event</digi:trn>:
-					              </td>
-					              <td style="font-family: Tahoma;font-size: 12px;">
-					         		<html:hidden name="calendarEventForm" property="typeofOccurrence" value="${calendarEventForm.typeofOccurrence}"/>
-									<html:hidden name="calendarEventForm" property="recurrPeriod" value="${calendarEventForm.recurrPeriod}"/>
-									<html:hidden name="calendarEventForm" property="occurrWeekDays" value="${calendarEventForm.occurrWeekDays}"/>
-				                	<html:hidden name="calendarEventForm" property="selectedStartMonth" value="${calendarEventForm.selectedStartMonth}"/>
-									<html:hidden name="calendarEventForm" property="selectedStartYear" value="${calendarEventForm.selectedStartYear}"/>
-									<html:hidden name="calendarEventForm" property="recurrStartDate" value="${calendarEventForm.recurrStartDate}"/>
-				                each 
-					               ${calendarEventForm.recurrPeriod} 
-					               ${calendarEventForm.typeofOccurrence}
-					               <input type="hidden" value="${calendarEventForm.occurrWeekDays}" id="weekDays"/>
-					               <script language="javascript">
-					               document.write(getWeekdays());
-						             </script>
-					                 <!--<c:if test="${calendarEventForm.selectedStartMonth != 0}"> ${calendarEventForm.selectedStartMonth}</c:if>
-					                  <c:if test="${calendarEventForm.selectedStartYear != 0}"> ${calendarEventForm.selectedStartYear}</c:if>
-					                 <c:if test="${calendarEventForm.recurrStartDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
-					                  
-					              --></td>
-					            </tr>
-					            <tr>
-					            <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-					                <digi:trn>Recurring Event End Date</digi:trn>:
-					              </td>
-					               <td style="font-family: Tahoma;font-size: 12px;">
-				                		<html:hidden name="calendarEventForm" property="recurrEndDate" value="${calendarEventForm.recurrEndDate}"/>
-				                		<c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrEndDate}</c:if>
-					               </td>
-					            </tr>
-				            </c:if>
 				            <tr height="5px"><td colspan="2">&nbsp;</td></tr>
 				            <tr>
 				              <td>
@@ -273,14 +210,13 @@ function getWeekdays(){
 				                	&nbsp;
 				                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
 				                	&nbsp;
-				                	<input type="button" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
+				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
 				                </c:if>
 				                <c:if test="${calendarEventForm.actionButtonsVisible==false}">
 				                	&nbsp;
 				                	<input type="submit" style="width: 100px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
 				                	&nbsp;
 				                </c:if>
-				               <input type="button" value="<digi:trn>Print</digi:trn>" onclick="openPrinter();" />
 				              </td>
 				            </tr>
 				          </table>
@@ -288,6 +224,7 @@ function getWeekdays(){
 				      </td>
 				    </tr>
 				</logic:notEmpty>
+                
              </table>
        		</td>
     	</tr>
@@ -296,3 +233,4 @@ function getWeekdays(){
 </tr>
 </table>
 </digi:form>
+

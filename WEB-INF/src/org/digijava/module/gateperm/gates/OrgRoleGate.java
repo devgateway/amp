@@ -7,18 +7,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
 
+import org.hibernate.Session;
+
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
-import org.hibernate.Session;
 
 /**
  * Implements logic for organization roles user access filtering. users are assigned to organizations through the um
@@ -94,7 +95,8 @@ public class OrgRoleGate extends Gate {
 	
 	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
 	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-	User user = (User) session.load(User.class, atm.getUser().getId());
+	PersistenceManager.releaseSession(session);
+	User user = atm.getUser();
 
 	String paramRoleCode = parameters.poll().trim();
 
@@ -104,19 +106,17 @@ public class OrgRoleGate extends Gate {
 	if (ampa != null) {	    
 	    if (ampa.getOrgrole() == null)
 		return false;
-	    
-	    for(AmpOrganisation org : user.getAssignedOrgs()) {
-		    Iterator i = ampa.getOrgrole().iterator();
-		    while (i.hasNext()) {
-			AmpOrgRole element = (AmpOrgRole) i.next();
-			String roleCode = element.getRole().getRoleCode();
-			if (roleCode.equals(paramRoleCode)
-				&& element.getOrganisation().getAmpOrgId().equals(org))
-			    return true;
-		    }
+	    Iterator i = ampa.getOrgrole().iterator();
+	    while (i.hasNext()) {
+		AmpOrgRole element = (AmpOrgRole) i.next();
+		String roleCode = element.getRole().getRoleCode();
+		if (roleCode.equals(paramRoleCode)
+			&& element.getOrganisation().getAmpOrgId().equals(user.getAssignedOrgId()))
+		    return true;
 	    }
+	    
+
 	}
-	PersistenceManager.releaseSession(session);
 //	if (a != null) {
 //	    if (a.getRelOrgs() == null)
 //		return false;

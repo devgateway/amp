@@ -61,27 +61,21 @@
 				<c:forEach var="widgetTable" items="${gisTableWidgetCreationForm.tables}" varStatus="stat">
 					<tr>
 						<td>
-							<html:link href="/widget/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">
-							     <digi:trn key="${widgetTable.name}">${widgetTable.name}</digi:trn>
-							</html:link>
+							<html:link href="/widget/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">${widgetTable.name}</html:link>
 						</td>
 						<td nowrap="nowrap">
 						 	${widgetTable.code}
 						</td>
-						<td nowrap="nowrap">							
-						 	<digi:link href="/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">
-						 		Add/Edit Data
-						 	</digi:link>
-						 	&nbsp;&nbsp;
+						<td nowrap="nowrap">
 							<c:set var="titleEdit"><digi:trn key="gis:titleEdit">Edit</digi:trn></c:set>
 						 	<digi:link href="/adminTableWidgets.do~actType=startEdit~id=${widgetTable.id}" title="titleEdit">
-						 		<img border="0" src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" title="${titleEdit}">
+						 		<img border="0" src="/repository/message/view/images/edit.gif" title="${titleEdit}">
 						 	</digi:link>
 						 	&nbsp;&nbsp;
 							<c:set var="titleDelete"><digi:trn key="gis:titleDelete">Delete</digi:trn></c:set>
 						 	<digi:link onclick="return askToDelete()" href="/adminTableWidgets.do~actType=delete~id=${widgetTable.id}">
-						 		<img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>' title="${titleDelete}">
-						 	</digi:link>				
+						 		<img border="0" src='<digi:file src="images/deleteIcon.gif"/>' title="${titleDelete}">
+						 	</digi:link>
 						</td>
 					</tr>
 				</c:forEach>

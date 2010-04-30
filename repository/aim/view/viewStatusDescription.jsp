@@ -5,7 +5,6 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ page import = "org.digijava.module.aim.form.EditActivityForm" %>
 
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 <table cellpadding="30" width="100%">
@@ -13,13 +12,10 @@
 		<td>
 			<table width="100%">	  	
 				<tr>				   
-				    <td> <img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif"/>
+				    <td> <img src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif"/>
 				    	<digi:edit key="aim:statusDescription:${param.catEditKey}">no description</digi:edit><br>
-							<digi:secure actions="ADMIN, TRANSLATE">								
+							<digi:secure actions="ADMIN, TRANSLATE">
 								<script language="JavaScript">
-									var actName=document.getElementById('actTitle');
-									<%request.getSession().setAttribute("activityFieldName","Status Description");									  
-									%>
 									  document.write('<A HREF=${contextPath}/editor/showEditText.do?id=aim:statusDescription:${param.catEditKey}&lang=en&body=no%20text%20preview&referrer='+location.href+'>');
 								      document.write('Edit');        
 								      document.write('</A>');

@@ -3,35 +3,17 @@ package org.digijava.module.widget.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
-import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
-import org.digijava.module.widget.helper.ActivitySectorDonorFunding;
-import org.digijava.module.widget.helper.TopDonorGroupHelper;
 import org.digijava.module.widget.helper.WidgetPlaceHelper;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -52,19 +34,17 @@ public class WidgetUtil {
 	public static final int EMBEDED = 2;
 	public static final int TABLE = 3;
 	public static final int CHART_INDICATOR = 4;
-    public static final int ORG_PROFILE = 5;
-    public static final int SECTOR_TABLE = 6;
-    public static final int PARIS_INDICAROR_TABLE = 7;
-    public static final int TOP_TEN_DONORS = 8;
         
-    // org profile pages
-    public static final int ORG_PROFILE_SUMMARY = 1;
-    public static final int ORG_PROFILE_TYPE_OF_AID = 2;
-    public static final int ORG_PROFILE_PLEDGES_COMM_DISB = 3;
-    public static final int ORG_PROFILE_ODA_PROFILE = 4;
-    public static final int ORG_PROFILE_SECTOR_BREAKDOWN = 5;
-    public static final int ORG_PROFILE_REGIONAL_BREAKDOWN = 6;
-    public static final int ORG_PROFILE_PARIS_DECLARATION = 7;
+        public static final int ORG_PROFILE = 5;
+        
+        // org profile pages
+        public static final int ORG_PROFILE_SUMMARY = 1;
+        public static final int ORG_PROFILE_TYPE_OF_AID = 2;
+        public static final int ORG_PROFILE_PLEDGES_COMM_DISB = 3;
+        public static final int ORG_PROFILE_ODA_PROFILE = 4;
+        public static final int ORG_PROFILE_SECTOR_BREAKDOWN = 5;
+        public static final int ORG_PROFILE_REGIONAL_BREAKDOWN = 6;
+        public static final int ORG_PROFILE_PARIS_DECLARATION = 7;
               
 	
 	
@@ -136,7 +116,7 @@ public class WidgetUtil {
 		List<AmpDaWidgetPlace> result=null;
 		Session session = PersistenceManager.getRequestDBSession();
         // org profile places are starting with orgprof_chart_place prefix
-		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p where p.name like 'orgprof_chart_place%' order by p.name";
+		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p where p.name like 'orgprof_chart_place%' order by p.lastRendered desc";
 		try {
 			Query q=session.createQuery(oql);
 			result = q.list();
@@ -276,52 +256,6 @@ public class WidgetUtil {
 		return places;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<AmpDaWidgetPlace> getPlacesWithID(Long[] pids) throws DgException{
-		List<AmpDaWidgetPlace> places = new ArrayList<AmpDaWidgetPlace>(pids.length);
-		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where (p.id in ( ";
-		for (int i = 0; i < pids.length; i++) {
-			oql+=""+pids[i];
-			if (i<pids.length-1){
-				oql+=",";
-			}
-		}
-		oql += " )) ";
-		Session session = PersistenceManager.getRequestDBSession();
-		try {
-			Query query = session.createQuery(oql);
-			places = query.list();
-		} catch (Exception e) {
-			logger.error(e);
-			throw new DgException("cannot search widget places!",e);
-		}
-		return places;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static List<AmpWidgetOrgProfile> getNewWidgetWithID(Long[] pids) throws DgException{
-		List<AmpWidgetOrgProfile> places = new ArrayList<AmpWidgetOrgProfile>(pids.length);
-		String oql = "select p from "+AmpWidgetOrgProfile.class.getName()+" as p where (p.id in ( ";
-		for (int i = 0; i < pids.length; i++) {
-			oql+=""+pids[i];
-			if (i<pids.length-1){
-				oql+=",";
-			}
-		}
-		oql += " )) ";
-		Session session = PersistenceManager.getRequestDBSession();
-		try {
-			Query query = session.createQuery(oql);
-			places = query.list();
-		} catch (Exception e) {
-			logger.error(e);
-			throw new DgException("cannot search widget places!",e);
-		}
-		return places;
-	}
-	
-	
-	
 	/**
 	 * Retrieves places with IDs specified.
 	 * @param pids id's of places.
@@ -350,55 +284,54 @@ public class WidgetUtil {
 		return places;
 	}
 
-    /**
+	  /**
 	 * Removes assignment to this widget from all widget place objects.
 	 * Used when deleting widget.
 	 * @param widgetId
 	 * @throws DgException
 	 */
-	public static void clearPlacesForWidget(Long widgetId) throws DgException{
-		   Session session = PersistenceManager.getRequestDBSession();
-           clearPlacesForWidget(widgetId, session);
-	}
+        public static void clearPlacesForWidget(Long widgetId) throws DgException {
+            Session session = PersistenceManager.getRequestDBSession();
+            clearPlacesForWidget(widgetId, session);
+         }
 
-	/**
-	 * Removes assignment to this widget from all widget place objects.
-     * Used when deleting widget.
-     * @param widgetId
-     * @throws DgException
-     */
-    public static void clearPlacesForWidget(Long widgetId, Session session) throws DgException {
-        List<AmpDaWidgetPlace> places = getWidgetPlaces(widgetId);
-        if (places != null && places.size() > 0) {
+         /**
+         * Removes assignment to this widget from all widget place objects.
+         * Used when deleting widget.
+         * @param widgetId
+         * @throws DgException
+         */
+        public static void clearPlacesForWidget(Long widgetId, Session session) throws DgException {
+            List<AmpDaWidgetPlace> places = getWidgetPlaces(widgetId);
+            if (places != null && places.size() > 0) {
 
-            Transaction tx = null;
-            try {
-                if (session == null) {
-                    /* we will use this in the Junit tests mainly because
-                    getRequestDBSession() don't work there*/
-                    session = PersistenceManager.getSession();
-                }
-                tx = session.beginTransaction();
-                for (AmpDaWidgetPlace place : places) {
-                    place.setAssignedWidget(null);
-                    session.update(place);
-                }
-                tx.commit();
-            } catch (Exception e) {
-                if (tx != null) {
-                    try {
-                        tx.rollback();
-                    } catch (Exception e1) {
-                        logger.error(e1);
-                        throw new DgException("Cannot rallback places clearing", e1);
+                Transaction tx = null;
+                try {
+                    if (session == null) {
+                        /* we will use this in the Junit tests mainly because
+                        getRequestDBSession() don't work there*/
+                        session = PersistenceManager.getSession();
                     }
+                    tx = session.beginTransaction();
+                    for (AmpDaWidgetPlace place : places) {
+                        place.setAssignedWidget(null);
+                        session.update(place);
+                    }
+                    tx.commit();
+                } catch (Exception e) {
+                    if (tx != null) {
+                        try {
+                            tx.rollback();
+                        } catch (Exception e1) {
+                            logger.error(e1);
+                            throw new DgException("Cannot rallback places clearing", e1);
+                        }
+                    }
+                    logger.error(e);
+                    throw new DgException("Cannot clear rallbacks", e);
                 }
-                logger.error(e);
-                throw new DgException("Cannot clear rallbacks", e);
             }
         }
-    }
-	
 	/**
 	 * Deletes widget place from db.
 	 * @param placeId
@@ -409,21 +342,20 @@ public class WidgetUtil {
 		deleteWidgetPlace(place);
 	}
 
-     /**
-     * Deletes widget place from db.
-     * @param widget
-     * @throws DgException
-     */
-    public static void deleteWidgetPlace(AmpDaWidgetPlace place) throws DgException {
-        try {
-            Session session = PersistenceManager.getRequestDBSession();
-            deleteWidgetPlace(place, session);
-        } catch (Exception ex) {
-            throw new DgException("Cannot delete Widget OrgProfile!", ex);
+        /**
+         * Deletes widget place from db.
+         * @param widget
+         * @throws DgException
+         */
+        public static void deleteWidgetPlace(AmpDaWidgetPlace place) throws DgException {
+            try {
+                Session session = PersistenceManager.getRequestDBSession();
+                deleteWidgetPlace(place, session);
+            } catch (Exception ex) {
+                throw new DgException("Cannot delete Widget!", ex);
+            }
+
         }
-
-    }
-
 	/**
 	 * Deletes widget place from db.
 	 * @param place
@@ -593,191 +525,4 @@ public class WidgetUtil {
             return exists;
             
         }
-
-      @SuppressWarnings("unchecked")
-	public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException {
-        List<TopDonorGroupHelper> donorGroups = new ArrayList<TopDonorGroupHelper>();
-        Date fromDate = null;
-		Date toDate = null;
-		if (fromYear!=null && toYear!=null){
-			/**
-			 * we should get default calendar and from/to dates should be taken according to it.
-			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from
-			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July
-			 */
-			Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
-			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
-			fromDate=ChartWidgetUtil.getStartOfYear(fromYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
-			//we need data including the last day of toYear,this is till the first day of toYear+1
-			int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
-			toDate =new Date(ChartWidgetUtil.getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
-		}		
-        Session session = PersistenceManager.getRequestDBSession();
-        String queryString = " select new   org.digijava.module.widget.helper.TopDonorGroupHelper(orgGrp.orgGrpName, sum(fd.transactionAmountInUSD)) ";
-        queryString += " from ";
-        queryString += AmpFundingDetail.class.getName() +
-                " as fd  inner join fd.ampFundingId f ";
-        queryString += " inner join f.ampDonorOrgId org  ";
-        queryString += " inner join org.orgGrpId orgGrp ";
-        queryString += "  inner join f.ampActivityId act ";
-        queryString += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
-        queryString += " and act.team is not null ";
-        queryString += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)  ";
-        queryString += " group by orgGrp.ampOrgGrpId ";
-        queryString += " order by sum(fd.transactionAmountInUSD) desc ";
-        try {
-            Query query = session.createQuery(queryString);
-            query.setDate("startDate", fromDate);
-            query.setDate("endDate", toDate);
-            donorGroups = query.list();
-            if(donorGroups !=null&&donorGroups.size()>10){
-               //selected 10 donor groups
-               donorGroups=donorGroups.subList(0, 10);
-            }
-        } catch (Exception e) {
-            logger.error(e);
-            throw new DgException("cannot load top donors!", e);
-        }
-        return donorGroups;
-    }
-
-     public static Collection<ActivitySectorDonorFunding> getDonorSectorFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, TeamMember teamMember) throws DgException {
-        Map<Long, ActivitySectorDonorFunding> activityFundingInfos = new HashMap<Long, ActivitySectorDonorFunding>();
-        if (sectorIds != null) {
-            for (Long sectId : sectorIds) {
-                List<Long> ids = new ArrayList<Long>();
-                ids.add(sectId);
-                List<AmpSector> sectors = SectorUtil.getAllDescendants(sectId);
-                for (AmpSector sector : sectors) {
-                    ids.add(sector.getAmpSectorId());
-                }
-                Long[] sectIds = new Long[ids.size()];
-                ids.toArray(sectIds);
-                // get all findings...
-                List result = getFunding(donorIDs, fromDate, toDate, sectIds, teamMember);
-                //Process grouped data
-                if (result != null) {
-
-                    for (Object row : result) {
-                        Object[] rowData = (Object[]) row;
-                        AmpActivitySector activitySector = (AmpActivitySector) rowData[0];
-                        AmpSector sector = activitySector.getSectorId();
-                        AmpActivity activity = activitySector.getActivityId();
-                        Long activityId = activitySector.getActivityId().getAmpActivityId();
-                        AmpOrganisation org = (AmpOrganisation) rowData[1];
-                        /*we are not interested in all sectors of activity, only selected ones,
-                        same with donors*/
-                        ActivitySectorDonorFunding activityFundngObj = activityFundingInfos.get(activityId);
-                        //if not create and add to map
-                        if (activityFundngObj == null) {
-                            activityFundngObj = new ActivitySectorDonorFunding();
-                            activityFundngObj.setActivity(activity);
-                            activityFundngObj.setSectors(new ArrayList<AmpSector>());
-                            activityFundngObj.setDonorOrgs(new ArrayList<AmpOrganisation>());
-                            activityFundingInfos.put(activityId, activityFundngObj);
-
-                        }
-
-                        if (!activityFundngObj.getSectors().contains(sector)) {
-                            activityFundngObj.getSectors().add(sector);
-                        }
-                        if (!activityFundngObj.getDonorOrgs().contains(org)) {
-                            activityFundngObj.getDonorOrgs().add(org);
-                        }
-                    }
-                    for (Iterator<ActivitySectorDonorFunding> it = activityFundingInfos.values().iterator(); it.hasNext();) {
-                        ActivitySectorDonorFunding actSectDonFund = it.next();
-                        // get funding for particular activity
-                        getFunding(actSectDonFund, fromDate, toDate);
-                    }
-                }
-
-            }
-        }
-
-        return activityFundingInfos.values();
-
-    }
-
-    public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, TeamMember tm) throws DgException {
-        String oql = "select  actSec, f.ampDonorOrgId ";
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec ";
-        oql += " inner join actSec.sectorId sec ";
-        oql += " inner join actSec.activityId act ";
-        oql += " inner join actSec.classificationConfig config ";
-        oql += " where  fd.adjustmentType = 1 ";
-        if (donorIDs != null && donorIDs.length > 0) {
-            oql += " and (f.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(donorIDs) + ") ) ";
-        }
-        oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
-        oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIds) + ") ";
-        oql += " and config.name='Primary' ";
-        oql += ChartWidgetUtil.getTeamQuery(tm);
-        oql += " order by actSec";
-        Session session = PersistenceManager.getRequestDBSession();
-        @SuppressWarnings(value = "unchecked")
-        List result = null;
-        try {
-            Query query = session.createQuery(oql);
-            if (fromDate != null && toDate != null) {
-                query.setDate("fDate", fromDate);
-                query.setDate("eDate", toDate);
-                query.setLong("teamId", tm.getTeamId());
-            }
-            result = query.list();
-        } catch (Exception e) {
-            throw new DgException("Cannot load sector fundings by donors from db", e);
-        }
-        return result;
-    }
-
-    @SuppressWarnings("unchecked")
-	public static void getFunding(ActivitySectorDonorFunding activityFundngObj, Date fromDate, Date toDate) throws DgException {
-        AmpActivity activity = activityFundngObj.getActivity();
-        List<AmpSector> sectors = activityFundngObj.getSectors();
-        List<AmpOrganisation> donors = activityFundngObj.getDonorOrgs();
-        Long[] sectorIDs = new Long[sectors.size()];
-        Long[] donorIDs = new Long[donors.size()];
-        int index = 0;
-        for (AmpSector sector : sectors) {
-            sectorIDs[index] = sector.getAmpSectorId();
-            index++;
-        }
-        index = 0;
-        for (AmpOrganisation organisation : donors) {
-            donorIDs[index] = organisation.getAmpOrgId();
-            index++;
-        }
-
-        String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec ";
-        oql += " inner join actSec.sectorId sec ";
-        oql += " inner join actSec.activityId act ";
-        oql += " inner join actSec.classificationConfig config ";
-        oql += " where  fd.adjustmentType = 1 ";
-        oql += " and (f.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(donorIDs) + ") ) ";
-        oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
-        oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIDs) + ") ";
-        oql += " and act=:actId ";
-        oql += " and config.name='Primary' ";
-        oql += " order by actSec";
-        Session session = PersistenceManager.getRequestDBSession();
-        Query query = session.createQuery(oql);
-        if (fromDate != null && toDate != null) {
-            query.setDate("fDate", fromDate);
-            query.setDate("eDate", toDate);
-            query.setLong("actId", activity.getAmpActivityId());
-        }
-
-        List<AmpFundingDetail> fundingDets = query.list();
-        FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        cal.doCalculations(fundingDets, "USD");
-        activityFundngObj.setCommitment(cal.getTotActualComm());
-        activityFundngObj.setDisbursement(cal.getTotActualDisb());
-        activityFundngObj.setExpenditure(cal.getTotActualExp());
-    }
 }

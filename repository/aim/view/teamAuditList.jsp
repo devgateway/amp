@@ -32,7 +32,6 @@
 }
 
 </style>
- <digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
 <script language="javascript">
 function showUser(email){
 	if (email != ""){
@@ -293,39 +292,31 @@ function setHoveredTable(tableId, hasHeaders) {
 						</td>
 						</tr>
 						<tr>
-						<td align="left" valign="middle" class="yui-skin-sam">
+						<td align="left" valign="middle">
 						<div style="cursor: pointer; font-family: Arial; text-align: left; text-decoration: none;">
 						<br>
-                        <c:choose>
-                            <c:when test="${aimTeamAuditListForm.currentPage > 1}">
-                                <jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
-                                <c:set target="${urlParamsFirst}" property="page" value="1"/>
-                                <c:set target="${urlParamsFirst}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
-                                <c:set var="translation">
-                                    <digi:trn key="aim:firstpage">First Page</digi:trn>
-                                </c:set>
-                                <digi:link styleClass="yui-pg-first"  href="/teamAuditList.do" style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
-                                    &lt;&lt;<digi:trn>first</digi:trn>
-                                </digi:link>
-                                <jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
-                                <c:set target="${urlParamsPrevious}" property="page" value="${aimTeamAuditListForm.currentPage -1}"/>
-                                <c:set target="${urlParamsPrevious}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
-                                <c:set var="translation">
-                                    <digi:trn key="aim:previouspage">Previous Page</digi:trn>
-                                </c:set>
-                                <digi:link  styleClass="yui-pg-previous" href="/teamAuditList.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
-                                    &lt; <digi:trn key="aim:previous">prev</digi:trn>
-                                </digi:link>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="yui-pg-first">
-                                    &lt;&lt; <digi:trn>first</digi:trn>
-                                </span>
-                                <span class="yui-pg-previous ">
-                                    &lt;<digi:trn key="aim:previous">prev</digi:trn>
-                                </span>
-                            </c:otherwise>
-                        </c:choose>
+						<c:if test="${aimTeamAuditListForm.currentPage > 1}">
+							<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+							<c:set target="${urlParamsFirst}" property="page" value="1"/>
+							<c:set target="${urlParamsFirst}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
+							<c:set var="translation">
+								<digi:trn key="aim:firstpage">First Page</digi:trn>
+							</c:set>
+							<digi:link href="/teamAuditList.do" style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+								<span style="font-size: 8pt; font-family: Tahoma;">&lt;&lt;</span>							
+							</digi:link>
+							<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+							<c:set target="${urlParamsPrevious}" property="page" value="${aimTeamAuditListForm.currentPage -1}"/>
+							<c:set target="${urlParamsPrevious}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
+							<c:set var="translation">
+								<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+							</c:set>|
+							<digi:link href="/teamAuditList.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+								<digi:trn key="aim:previous">
+									<span style="font-size: 8pt; font-family: Tahoma;">Previous</span>
+								</digi:trn>&nbsp;	
+							</digi:link>|
+						</c:if>
 					<c:set var="length" value="${aimTeamAuditListForm.pagesToShow}"></c:set>
 					<c:set var="start" value="${aimTeamAuditListForm.offset}"/>
 					<logic:iterate name="aimTeamAuditListForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
@@ -333,29 +324,30 @@ function setHoveredTable(tableId, hasHeaders) {
 						<c:set target="${urlParams1}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
 						<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
 						<c:if test="${aimTeamAuditListForm.currentPage == pages && aimTeamAuditListForm.pagesSize > 1}">
-						 <span class="yui-pg-current-page yui-pg-page"><%=pages%></span>
+							<font color="#FF0000"><%=pages%></font>
+							|						
 						</c:if>
 						<c:if test="${aimTeamAuditListForm.currentPage != pages && aimTeamAuditListForm.pagesSize > 1}">
 							<c:set var="translation">
 								<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
 							</c:set>
-                            <digi:link href="/teamAuditList.do" name="urlParams1" title="${translation}" styleClass="yui-pg-page">
+							<digi:link href="/teamAuditList.do" name="urlParams1" title="${translation}" >
 								<%=pages%>							
 							</digi:link>
+							|
 						</c:if>
 						</logic:iterate>
-                        <c:choose>
-						<c:when test="${aimTeamAuditListForm.currentPage != aimTeamAuditListForm.pagesSize && aimTeamAuditListForm.pagesSize != 0}">
+						<c:if test="${aimTeamAuditListForm.currentPage != aimTeamAuditListForm.pagesSize && aimTeamAuditListForm.pagesSize != 0}">
 							<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap" />
 							<c:set target="${urlParamsNext}" property="page" value="${aimTeamAuditListForm.currentPage+1}"/>
 							<c:set target="${urlParamsNext}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
 							<c:set var="translation"> 
 								<digi:trn key="aim:nextpage">Next Page</digi:trn>
 							</c:set>
-                            <digi:link styleClass="yui-pg-next" href="/teamAuditList.do"  name="urlParamsNext" title="${translation}">
-								 <digi:trn>Next</digi:trn> &gt;
+							<digi:link  href="/teamAuditList.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
+								<digi:trn key="aim:next"><span style="font-size: 8pt; font-family: Tahoma;">Next</span></digi:trn>
 							</digi:link>
-							<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />
+							<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />|
 							
 						<c:if test="${aimTeamAuditListForm.pagesSize > aimTeamAuditListForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="page" value="${aimTeamAuditListForm.pagesSize}" />
@@ -366,23 +358,14 @@ function setHoveredTable(tableId, hasHeaders) {
 							<c:set target="${urlParamsLast}" property="page" value="${aimTeamAuditListForm.pagesSize}" />
 							<c:set var="translation"> 
 								<digi:trn key="aim:lastpage">
-									Last Page
+									<span style="font-size: 8pt; font-family: Tahoma;">Last Page</span>
 								</digi:trn>
 							</c:set>
-                                <digi:link  styleClass="yui-pg-last" href="/teamAuditList.do"  name="urlParamsLast" title="${translation}">
-								  <digi:trn>Last</digi:trn> &gt;&gt;
+							<digi:link href="/teamAuditList.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
+								<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>
 							</digi:link>
 						</c:if> 
-					</c:when>
-                      <c:when test="${aimTeamAuditListForm.pagesSize != 0}">
-                          <span class="yui-pg-next">
-                              <digi:trn>Next</digi:trn> &gt;
-                          </span>
-                          <span class="yui-pg-last">
-                              <digi:trn>Last</digi:trn> &gt;&gt;
-                          </span>
-                       </c:when>
-                     </c:choose>
+					</c:if>
 					<c:out value="${aimTeamAuditListForm.currentPage}"/>&nbsp; 
 					<digi:trn key="aim:of">
 						<span style="font-size: 8pt; font-family: Tahoma;">of</span>

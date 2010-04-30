@@ -24,6 +24,8 @@ package org.digijava.kernel.exception;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;

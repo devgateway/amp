@@ -83,6 +83,8 @@ public class RegisterUser extends Action {
 			// set organization name
 			user.setOrganizationName(userRegisterForm.getOrganizationName());
 
+			user.setPledger(userRegisterForm.getPledger());
+			
 			user.setOrganizationTypeOther(new String(" "));
 			
 
@@ -137,7 +139,7 @@ public class RegisterUser extends Action {
 				return (mapping.getInputForward());
 			} else {
 				
- 				
+ 				/* Ignore on MEGE !! */
  				String des1 = "Welcome to AMP!";
  				String des2 = "AMP Administrator has created your user profile.";
  				String des3 = "Your login information:";
@@ -148,7 +150,7 @@ public class RegisterUser extends Action {
 				
 
 				TranslatorWorker transwob = new TranslatorWorker();
-				Long siteId = RequestUtils.getSite(request).getId();
+				String siteId = RequestUtils.getSite(request).getId().toString();
 				String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 				try { 
 				des1 = transwob.translateText(des1, null, langCode, siteId);
@@ -174,6 +176,7 @@ public class RegisterUser extends Action {
 
                     DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
                 }	
+                 /* END - Ignore on MEGE !! */ 
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
 				Long uid[] = new Long[1];
@@ -195,7 +198,7 @@ public class RegisterUser extends Action {
 		else{
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-			Long siteId = site.getId();
+			String siteId = site.getId()+"";
 			String locale = navigationLanguage.getCode();
 			userRegisterForm.addError("error.aim.addUser.success", TranslatorWorker.translateText("User registered successfully",locale,siteId));
 			userRegisterForm.reset(mapping, request);

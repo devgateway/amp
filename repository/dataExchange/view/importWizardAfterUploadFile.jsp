@@ -18,6 +18,9 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
 
 <script type="text/javascript">
+  if (YAHOOAmp != null){
+    var YAHOO = YAHOOAmp;
+  }
   var tree;
   
 </script>
@@ -27,7 +30,7 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
     <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNodeImport.js"></script>
@@ -53,56 +56,56 @@
 
   <digi:instance property="deImportForm" />
 	<script type="text/javascript">
-	YAHOO.namespace("YAHOO.amp.dataExchangeImport");
-	YAHOO.amp.dataExchangeImport.numOfSteps	= 4;
+	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchangeImport");
+	YAHOOAmp.amp.dataExchangeImport.numOfSteps	= 4;
 		
-	YAHOO.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
+	YAHOOAmp.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
 		
         function navigateTab(value){
-        	YAHOO.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
+        	YAHOOAmp.amp.dataExchangeImport.tabView.set("activeIndex", YAHOO.amp.dataExchangeImport.tabView.get("activeIndex")+value);
         }
 		
 		
 		function initializeDragAndDrop() {
 			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 			
-			YAHOO.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
-			YAHOO.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
+			YAHOOAmp.amp.dataExchangeImport.tabView 		= new YAHOO.widget.TabView('wizard_container');
+			YAHOOAmp.amp.dataExchangeImport.tabView.addListener("contentReady", treeInit);
 		}
 
 
     function treeInit() {
-      YAHOO.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
+      YAHOOAmp.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
       buildRandomTaskNodeTree();
     }
     
     //handler for expanding all nodes
-    YAHOO.util.Event.on("expand", "click", function(e) {
+    YAHOOAmp.util.Event.on("expand", "click", function(e) {
       tree.expandAll();
-      YAHOO.util.Event.preventDefault(e);
+      YAHOOAmp.util.Event.preventDefault(e);
     });
     
     //handler for collapsing all nodes
-    YAHOO.util.Event.on("collapse", "click", function(e) {
+    YAHOOAmp.util.Event.on("collapse", "click", function(e) {
       tree.collapseAll();
-      YAHOO.util.Event.preventDefault(e);
+      YAHOOAmp.util.Event.preventDefault(e);
     });
 
     //handler for checking all nodes
-    YAHOO.util.Event.on("check", "click", function(e) {
+    YAHOOAmp.util.Event.on("check", "click", function(e) {
       checkAll();
-      YAHOO.util.Event.preventDefault(e);
+      YAHOOAmp.util.Event.preventDefault(e);
     });
     
     //handler for unchecking all nodes
-    YAHOO.util.Event.on("uncheck", "click", function(e) {
+    YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
       uncheckAll();
-      YAHOO.util.Event.preventDefault(e);
+      YAHOOAmp.util.Event.preventDefault(e);
     });
 
 
-    YAHOO.util.Event.on("getchecked", "click", function(e) {
-      YAHOO.util.Event.preventDefault(e);
+    YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
+      YAHOOAmp.util.Event.preventDefault(e);
     });
 
     //Function  creates the tree and 
@@ -110,15 +113,13 @@
       function buildRandomTaskNodeTree() {
     
       //instantiate the tree:
-          tree = new YAHOO.widget.TreeView("dataImportTree");
+          tree = new YAHOOAmp.widget.TreeView("dataImportTree");
           
           
           <bean:define id="tree" name="deImportForm" property="activityTree" type="org.digijava.module.dataExchange.dbentity.AmpDEImportLog" toScope="page"/>
           <%= DataExchangeUtils.renderActivityTree(tree) %>
           
       //The tree is not created in the DOM until this method is called:
-      	  tree.expandAll();
-          checkAll();
           tree.draw();
           //alert(tree.getNodeCount());
           
@@ -176,7 +177,7 @@
 			var listitems= mylist.getElementsByTagName("li");
 			if(listitems == null || listitems.length < 1)
 			{
-				alert('<digi:trn>Please choose at least one activity to import</digi:trn>');
+				alert("Please choose at least one activity to import");
 				return;
 			}
        		
@@ -185,16 +186,8 @@
             form.target="_self"
             form.submit();
       }
-
-       function generateLog(){
-           var form = document.getElementById('form');
-           form.action = "/dataExchange/import.do?method=generateLog";
-           form.target="_self"
-           form.submit();
-        }
-          
-		YAHOO.util.Event.addListener(window, "load", treeInit) ;
-		
+           
+		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
 
@@ -211,7 +204,7 @@
 		<span id="formChild" style="display:none;">&nbsp;</span>
      
         <span class="subtitle-blue">
-          &nbsp;<digi:trn>Data Importer</digi:trn>
+          &nbsp;Data Importer
         </span>		
 		
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">
@@ -227,17 +220,17 @@
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
 					<logic:equal name="fileUploaded" value="false">
-	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div><digi:trn>1. File Selection and Staging Area</digi:trn></div></a> </li>
-		    			<li id="tab_log_after_import" class="disabled"><a href="#log_after_import"><div><digi:trn>2. Log after Import</digi:trn></div></a> </li>
-		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div><digi:trn>3. Select Activities</digi:trn></div></a> </li>
-		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div><digi:trn>4. Confirm Import</digi:trn></div></a> </li>
+	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div>1. File Selection and Staging Area</div></a> </li>
+		    			<li id="tab_log_after_import" class="disabled"><a href="#log_after_import"><div>2. Log after Import</div></a> </li>
+		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
+		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div>4. Confirm Import</div></a> </li>
 					</logic:equal>
 					
 					<logic:equal name="fileUploaded" value="true">
-	    				<li id="tab_file_selection" class="disabled"><a href="#file_selection"><div><digi:trn>1. File Selection and Staging Area</digi:trn></div></a> </li>
-		    			<li id="tab_log_after_import" class="selected"><a href="#log_after_import"><div><digi:trn>2. Log after Import</digi:trn></div></a> </li>
-		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div><digi:trn>3. Select Activities</digi:trn></div></a> </li>
-		    			<li id="tab_confirm_import" class="enabled"><a href="#confirm_import"><div><digi:trn>4. Confirm Import</digi:trn></div></a> </li>
+	    				<li id="tab_file_selection" class="disabled"><a href="#file_selection"><div>1. File Selection and Staging Area</div></a> </li>
+		    			<li id="tab_log_after_import" class="selected"><a href="#log_after_import"><div>2. Log after Import</div></a> </li>
+		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
+		    			<li id="tab_confirm_import" class="enabled"><a href="#confirm_import"><div>4. Confirm Import</div></a> </li>
 					</logic:equal>    		
 					
 					    		
@@ -287,12 +280,9 @@
 					</div>
 				</div>
                
-				<div id="tab_log_after_import"  class="yui-hidden" align="center" style="padding: 0px 0px 1px 0px;">
+				<div id="tab_log_after_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-					<div style="width:100%; height:20px;text-align: right;">
-						Download the log file from <html:link style="color:red" href="/dataExchange/import.do?method=generateLog"> here </html:link>
-					</div>                    
                     <div  style="width:100%;height:250px;overflow:auto;text-align: left">
                     	<logic:notEqual name="DELogGenerated" scope="session" value="false">
 							<%= session.getAttribute("DELogGenerated") %>
@@ -301,24 +291,24 @@
                     </div>
 				</div>
 				
-				<div id="tab_select_activities"  class="yui-hidden" align="left" style="padding: 0px 0px 1px 0px;">
+				<div id="tab_select_activities"  class="yui-tab-content" align="left" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                     
                     <div id="expandcontractdiv" align="left">
-	                    <a id="expand" href="#"><digi:trn>Expand all</digi:trn></a>
-	                    <a id="collapse" href="#"><digi:trn>Collapse all</digi:trn></a>
+	                    <a id="expand" href="#">Expand all</a>
+	                    <a id="collapse" href="#">Collapse all</a>
 	                  
-	                    <a id="check" href="#"><digi:trn>Check all</digi:trn></a>
-	                    <a id="uncheck" href="#"><digi:trn>Uncheck all</digi:trn></a>
+	                    <a id="check" href="#">Check all</a>
+	                    <a id="uncheck" href="#">Uncheck all</a>
                     </div>
                     
                    <div id="dataImportTree"></div>
 				</div>
-				<div id="tab_confirm_import"  class="yui-hidden" align="left" style="padding: 0px 0px 1px 0px;">
+				<div id="tab_confirm_import"  class="yui-tab-content" align="left" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-                    <digi:trn>Step 4 Select additional fields</digi:trn>
+                    Step 4 Select additional fields
                     <div align="left">
 					<ul id="id_activities" >
 					</ul>

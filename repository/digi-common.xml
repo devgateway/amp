@@ -13,11 +13,6 @@
     <!-- Enable/disable AccessLogger -->
 	<enable-logging>true</enable-logging>
 	
-	<!-- Configure HTTP and HTTPS port -->
-	<http-port>80</http-port>
-	<https-port>443</https-port>
-	
-	
 	<!-- Hibernate class -->
 	<hibernate-classes required="false">              
 		<!-- kernel classes -->
@@ -56,20 +51,8 @@
             <description>Digi's feed publishing service</description>
      </service>
 
+	
 
-	 <service id="XmlPatcherService" class="org.digijava.module.xmlpatcher.core.XmlPatcherService">
-            <description>XML Patcher Module</description>
-            
-            <!--
-			By adding those two properties, the patcher will read first any patch from any folder that contains
-			..AMP113a.. first and then ... AMP113b... etc...
-			-->
-			
-			<!-- 
-            <property name="schedulerProperties(locationPriority)">AMP113a,AMP113b,AMP113c.....</property> 
-            <property name="schedulerName">LocationPriorityXmlPatcherScheduler</property>
-             -->
-   	 </service>
 
     <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">
         <description>Service to determine which agents will use SSO</description> 
@@ -94,6 +77,9 @@
             <description>This service will delete the audit log</description>
     </service>
 
+	<service id="ampSyncECSService" class="org.dgfoundation.amp.error.quartz.ECSService">
+            <description>This service will sync error log with ECS Server</description>
+    </service>
 
      <config-bean id="proxyHelperConfig" class="org.digijava.kernel.util.ProxyHelperConfig">
           <property name="initializeUser">false</property>

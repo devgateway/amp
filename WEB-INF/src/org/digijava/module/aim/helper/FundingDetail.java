@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 /**
  * @author jose
  *
@@ -33,8 +34,22 @@ public class FundingDetail implements Serializable, Comparable
     private String disbOrderId;
     private IPAContract contract;
     private Boolean disbursementOrderRejected;        
+    private Long pledge;
+    
+       
+	public Long getPledge() {
+		if (pledge!=null){
+			return pledge;
+		}else{
+			return 0L;
+		}
+	}
 
-        public IPAContract getContract() {
+	public void setPledge(Long pledge) {
+		this.pledge = pledge;
+	}
+
+		public IPAContract getContract() {
             return contract;
         }
 

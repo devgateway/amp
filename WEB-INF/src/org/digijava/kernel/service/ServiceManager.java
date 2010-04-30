@@ -73,14 +73,12 @@ public class ServiceManager {
                 continue;
             }
 
-            boolean shutdown=false;
-            
             try {
                 service.init(this.serviceContext);
             }
             catch (ServiceException ex1) {
                 logger.error("Error initializing service " + serviceId, ex1);
-                shutdown=true;
+                continue;
             }
             boolean stop = false;
             boolean destroy = false;
@@ -91,7 +89,6 @@ public class ServiceManager {
                 logger.error("Error calling create() for service " + serviceId,
                              ex2);
                 destroy = true;
-                shutdown=true;
             }
             if (!destroy) {
                 try {
@@ -102,7 +99,6 @@ public class ServiceManager {
                                  serviceId, ex2);
                     stop = true;
                     destroy = true;
-                    shutdown=true;
                 }
             }
 
@@ -130,7 +126,6 @@ public class ServiceManager {
                 services.put(serviceId, service);
                 logger.info("Service " + serviceId + " was deployed successfully");
             }
-            if(shutdown) throw new RuntimeException("One service failed to start/init. Shutting down");
         }
     }
 

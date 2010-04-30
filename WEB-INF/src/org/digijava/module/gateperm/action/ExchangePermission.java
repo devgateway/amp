@@ -260,7 +260,7 @@ public class ExchangePermission extends MultiAction {
 			if(clusterId!=null && !clusterId.equals("")) {
 				Identifiable ident = PermissionUtil.getIdentifiableByClusterIdentifier(clusterId, GatePermConst.availablePermissiblesBySimpleNames
 						.get(pm.getPermissibleCategory()));
-				pm.setObjectIdentifier( (String)ident.getIdentifier());
+				pm.setObjectIdentifier((Long) ident.getIdentifier());
 			}
 			pm.setPermission(p);
 		}

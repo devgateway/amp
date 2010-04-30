@@ -35,7 +35,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.CMSContentItem;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
@@ -168,7 +167,7 @@ public class TeamMemberUtil {
 			// end
 		} catch (Exception ex) {
 			logger.error("Unable to get team member ", ex);
-		}
+		} 
 		return ampMember;
 	}
 
@@ -371,7 +370,7 @@ public class TeamMemberUtil {
 		Collections.sort((List<TeamMember>)members, new TeamMemberUtil.TeamMemberComparator());
 		return members;
 	}
-
+	
 	private static class TeamMemberComparator implements Comparator<TeamMember> {
     	Locale locale;
         Collator collator;
@@ -387,7 +386,7 @@ public class TeamMemberUtil {
         public int compare(TeamMember o1, TeamMember o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-
+            
             int result = (o1.getMemberName()==null || o2.getMemberName()==null)?0:collator.compare(o1.getMemberName().toLowerCase(), o2.getMemberName().toLowerCase());
             return result;
         }
@@ -758,7 +757,7 @@ public class TeamMemberUtil {
 		} catch (Exception e) {
 			logger.error("Exception in getTeamMemberInformation() : ", e);
 			e.printStackTrace(System.out);
-		}
+		} 
 
 		return info;
 	}
@@ -889,7 +888,7 @@ public class TeamMemberUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tm from " + AmpTeamMember.class.getName() +
-			  " tm where (tm.user=:user) order by ampTeam.name";
+			  " tm where (tm.user.id=:user)";
 			qry = session.createQuery(queryString);
 			qry.setCacheable(true);
 			qry.setLong("user",user.getId());
@@ -909,16 +908,16 @@ public class TeamMemberUtil {
 		Collections.sort(col, alphabeticalTeamComp);
 		return col;
 	}
-
+	
 	public static Comparator<AmpTeamMember> alphabeticalTeamComp		=
 		new Comparator<AmpTeamMember>() {
 			public int compare(AmpTeamMember o1,
 					AmpTeamMember o2) {
 				return o1.getAmpTeam().getName().compareTo(o2.getAmpTeam().getName());
 			}
-		};
+		};  
 
-
+	
 	public static Collection getTMTeamMembers(String email) {
 		 User user = org.digijava.module.aim.util.DbUtil.getUser(email);
 		 if (user == null) return null;
@@ -1502,17 +1501,17 @@ public class TeamMemberUtil {
             for (int i = 0; i < id.length; i++) {
                 if (id[i] != null) {
                     AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, id[i]);
-//                    if (isTeamLead(ampMember)) {
-//                        AmpTeam team = ampMember.getAmpTeam();
-//                        team.setTeamLead(null);
-//                        session.update(team);
-//                    }
-
+                    if (isTeamLead(ampMember)) {
+                        AmpTeam team = ampMember.getAmpTeam();
+                        team.setTeamLead(null);
+                        session.update(team);
+                    }
+                    
                     AmpTeamMember teamHead = getTeamHead(ampMember.getAmpTeam().getAmpTeamId());
-
+                    
                     Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
                     removeLinksFromATMToActivity(relatedActivities, ampMember, teamHead);
-
+                   
                     String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member.ampTeamMemId=:Id ";
                     qry = session.createQuery(queryString);
                     qry.setParameter("Id", ampMember.getAmpTeamMemId(), Hibernate.LONG);
@@ -1522,16 +1521,16 @@ public class TeamMemberUtil {
 								.hasNext();) {
 							AmpCalendarAttendee callatt = (AmpCalendarAttendee) iterator.next();
 							session.delete(callatt);
-
+							
 						}
-                    }
-
+                    }                    
+                   
                     // Verify for reports that are owned by this user and delete them
                     //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
                     queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
                     qry = session.createQuery(queryString);
                     qry.setParameter("oId", ampMember.getAmpTeamMemId(), Hibernate.LONG);
-
+                    
                     Collection memReports = qry.list();
                     if (memReports != null && !memReports.isEmpty()) {
                         for (Iterator rpIter = memReports.iterator(); rpIter.hasNext(); ) {
@@ -1549,7 +1548,7 @@ public class TeamMemberUtil {
                                     session.update(set);
                                 }
                             }
-
+                            		
                             // delete related information before we delete the report
                             String deleteTeamReports = " select tr from " + AmpTeamReports.class.getName() + " tr where (tr.report=:ampReportId)";
                             Query qryaux = session.createQuery(deleteTeamReports);
@@ -1562,7 +1561,7 @@ public class TeamMemberUtil {
                             		session.delete(atr);
 								}
                             }
-
+                            
                             // session.delete(deleteTeamReports);
                             session.delete(rep);
                         }
@@ -1594,7 +1593,7 @@ public class TeamMemberUtil {
                             session.delete(cal);
                         }
                     }
-
+                   
 
                     qryStr = "select a from " + AmpApplicationSettings.class.getName() +
                         " a where (a.member.ampTeamMemId=:memberId)";
@@ -1607,12 +1606,12 @@ public class TeamMemberUtil {
                         if (itr.hasNext()) {
                             logger.info("Got the app settings..");
                             AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
-                            ampAppSettings.setDefaultTeamReport(null);
+                            ampAppSettings.setDefaultTeamReport(null);                            
                             session.delete(ampAppSettings);
                             logger.info("deleted the app settings..");
                         }
                     }
-
+                    
                     session.delete(ampMember);
                 }
             }
@@ -1631,34 +1630,34 @@ public class TeamMemberUtil {
         }
     }
 
-//	private static boolean isTeamLead(AmpTeamMember member) {
-//		Session session = null;
-//
-//		try {
-//			session = PersistenceManager.getSession();
-//			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,
-//					member.getAmpTeam().getAmpTeamId());
-//			if(ampTeam!=null)
-//				if(ampTeam.getTeamLead()!=null)
-//					if(ampTeam.getTeamLead().getAmpTeamMemId()!=null)
-//						if (ampTeam.getTeamLead().getAmpTeamMemId().
-//									equals(member.getAmpTeamMemId())) {
-//								return true;
-//			}
-//		} catch (Exception e) {
-//			logger.error("Unable to update team page filters" + e.getMessage());
-//			e.printStackTrace(System.out);
-//		} finally {
-//			try {
-//				if (session != null) {
-//					PersistenceManager.releaseSession(session);
-//				}
-//			} catch (Exception ex) {
-//				logger.error("releaseSession() failed");
-//			}
-//		}
-//		return false;
-//	}
+	private static boolean isTeamLead(AmpTeamMember member) {
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,
+					member.getAmpTeam().getAmpTeamId());
+			if(ampTeam!=null)
+				if(ampTeam.getTeamLead()!=null)
+					if(ampTeam.getTeamLead().getAmpTeamMemId()!=null)
+						if (ampTeam.getTeamLead().getAmpTeamMemId().
+									equals(member.getAmpTeamMemId())) {
+								return true;
+			}
+		} catch (Exception e) {
+			logger.error("Unable to update team page filters" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return false;
+	}
 	/**
 	 * Retrieves current TeamMember from request
 	 * @param HttpServletRequest request
@@ -1669,31 +1668,18 @@ public class TeamMemberUtil {
 		AmpTeamMember currentAmpTeamMember=getAmpTeamMember(currentTeamMember.getMemberId());
 		return currentAmpTeamMember;
 	}
+        public static List getTeamMemberbyUserId(Long userId) throws Exception{
 
-	public static List getTeamMemberbyUserId(Long userId) throws Exception{
-		Session session = null;
-        Query qry = null;
-        List teamMembers = null;
-        try {
-        	session = PersistenceManager.getRequestDBSession();
-            String queryString = "select tm.ampTeamMemId from "+ AmpTeamMember.class.getName()+ " tm where (tm.user.id=:user)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("user",userId, Hibernate.LONG);
-            teamMembers= qry.list();
-       }catch (HibernateException ex) {
-            logger.error("Unable to get team member", ex);
-            throw ex;
-       }
-       return teamMembers;
-    }
 
-        public static List getAmpTeamMembersbyDgUserId(Long userId) throws Exception{
             Session session = null;
             Query qry = null;
             List teamMembers = null;
+
             try {
                     session = PersistenceManager.getRequestDBSession();
-                    String queryString = "select tm from "+ AmpTeamMember.class.getName() + " tm where (tm.user.id=:user)";
+                    String queryString = "select tm.ampTeamMemId from "
+                                    + AmpTeamMember.class.getName()
+                                    + " tm where (tm.user.id=:user)";
                     qry = session.createQuery(queryString);
                     qry.setParameter("user",userId, Hibernate.LONG);
                     teamMembers= qry.list();
@@ -1702,6 +1688,32 @@ public class TeamMemberUtil {
                     logger.error("Unable to get team member", ex);
                     throw ex;
             }
+
+            return teamMembers;
+
+    }
+
+        public static List getAmpTeamMembersbyDgUserId(Long userId) throws Exception{
+
+
+            Session session = null;
+            Query qry = null;
+            List teamMembers = null;
+
+            try {
+                    session = PersistenceManager.getRequestDBSession();
+                    String queryString = "select tm from "
+                                    + AmpTeamMember.class.getName()
+                                    + " tm where (tm.user.id=:user)";
+                    qry = session.createQuery(queryString);
+                    qry.setParameter("user",userId, Hibernate.LONG);
+                    teamMembers= qry.list();
+            }
+            catch (HibernateException ex) {
+                    logger.error("Unable to get team member", ex);
+                    throw ex;
+            }
+
             return teamMembers;
 
         }
@@ -1727,13 +1739,10 @@ public class TeamMemberUtil {
     		if ( act.getActivityCreator() != null && act.getActivityCreator().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			act.setActivityCreator(null);
     		}
-            if ( act.getModifiedBy() != null && act.getModifiedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
-    			act.setModifiedBy(null);
-    		}
     		if ( act.getApprovedBy() != null && act.getApprovedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			//if we are deleting the team leader we shouldn't set him as TL
     			if ((teamHead!=null) && (!atm.equals(teamHead))){
-    			act.setApprovedBy(teamHead);
+    				act.setApprovedBy(teamHead);
     			}else{
     				act.setApprovedBy(null);
     			}
@@ -1750,27 +1759,5 @@ public class TeamMemberUtil {
     		}
     	}
     }
-    
-    public static void saveOrUpdateTM(AmpTeamMember tm) throws AimException{
-    	Session sess = null;
-        Transaction tx = null;
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            tx=sess.beginTransaction();
-            sess.saveOrUpdate(tm);
-            tx.commit();
-        } catch (Exception e) {
-        	if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception ex ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", ex);
-				}			
-			}
-			throw new AimException("update failed",e);
-        }
-    }  
- 
 
 }

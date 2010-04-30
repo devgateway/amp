@@ -16,6 +16,7 @@
 		<property name="measures" column="measures" type="java.lang.String"/>
 		<property name="columns" column="columns" type="java.lang.String"/>
 		<property name="creationdate" column="creationdate" type="java.sql.Timestamp"/>
+		<property name="type" column="type" type="java.lang.Integer"/>
 		<many-to-one name="ownerId" column="ownerId" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 	</class>
 </hibernate-mapping>

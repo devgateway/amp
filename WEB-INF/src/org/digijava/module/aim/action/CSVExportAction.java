@@ -29,7 +29,6 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -69,7 +68,6 @@ public class CSVExportAction
 	    response.setContentType("application/vnd.ms-excel");
 	    response.setHeader("Content-Disposition",
 	                       "inline; filename=data.csv ");
-        XLSExporter.resetStyles();
 	
 	    HSSFWorkbook wb = new HSSFWorkbook();
 	
@@ -102,7 +100,7 @@ public class CSVExportAction
 	    Site site = RequestUtils.getSite(request);
 	    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 	
-	    Long siteId=site.getId();
+	    String siteId=site.getSiteId();
 	    String locale=navigationLanguage.getCode();	
 	    
 	    String translatedNotes = "";
@@ -181,7 +179,7 @@ public class CSVExportAction
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		
-		Long siteId=site.getId();
+		String siteId=site.getSiteId();
 		String locale=navigationLanguage.getCode();
 		
 		session.setAttribute("sessionExpired", true);

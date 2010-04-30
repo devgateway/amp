@@ -2,7 +2,11 @@ package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
 
-public class Constants {
+
+
+
+public class Constants
+{
 
 	public static class GlobalSettings {
 		public static final String YEAR_RANGE_START			= "Year Range Start";
@@ -16,7 +20,6 @@ public class Constants {
 	public static final int EXPENDITURE = 2 ;
     public static final int DISBURSEMENT_ORDER = 4 ;
 	public static final int MTEFPROJECTION = 3 ;
-	public static final int PROJECT_COST = 10 ;
 	public static final int PLANNED = 0 ;
 	public static final int ACTUAL = 1 ;
 	public static final int FROM_YEAR = 1983 ;
@@ -97,6 +100,9 @@ public class Constants {
 	//added in burkina
 	public static final String GLOBALSETTINGS_DEFAULT_EX_RATE_SEPARATOR="Default Exchange Rate Separator";
 	
+	public static final String GLOBALSETTINGS_ECS="ECS Enabled";
+	
+
 	public static final String CURRENCY_RATE_DEAFULT_START_DATE = "25/04/2005";
 	public static final String CURRENCY_RATE_DEAFULT_END_DATE = "01/05/2005";
 
@@ -340,34 +346,7 @@ public class Constants {
     public static final String UNIFIED_JNDI_ALIAS="java:comp/env/ampDS";
     public static final String JNP_URL="jnp://localhost:1099";
     
-    //contact information 
-    public static final String DONOR_CONTACT = "DONOR_CONT";
-    public static final String MOFED_CONTACT = "MOFED_CONT";
-    public static final String SECTOR_MINISTRY_CONTACT = "SECTOR_MINISTRY_CONT";
-    public static final String PROJECT_COORDINATOR_CONTACT = "PROJ_COORDINATOR_CONT";
-    public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT= "IMPL_EXEC_AGENCY_CONT";
-    //contact parameter names
-    public static final String CONTACT_PROPERTY_NAME_EMAIL="contact email";
-    public static final String CONTACT_PROPERTY_NAME_PHONE="contact phone";
-    public static final String CONTACT_PROPERTY_NAME_FAX="contact fax";
-    //contact information pagination elements
-    public static final int CONTACTS_PER_PAGE=15;
-    public static final int PAGES_TO_SHOW=5;
-    //Pagination for Reports and Tabs
-	public static final Integer VIEWABLE_PAGES = 9;
-
-    // Organization type 
-    public static final String ORG_TYPE_GOVERNMENTAL = "GOVERNMENTAL";
-    public static final String ORG_TYPE_NGO = "NGO";
-    public static final String ORG_TYPE_REGIONAL = "REGIONAL";
-
-    // Organization information
-    public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_ADMIN= 1;
-    public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_PROGRAM = 2;
-
     public static final int NUM_OF_CHARS_IMPUTATION = 22;
     
     public static final int NUM_OF_CHARS_CODE_CHAPITRE = 11;
-    
-    public static final int MATH_CONTEXT_PRECISION = 10;  
 }

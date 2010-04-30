@@ -12,8 +12,6 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
 import org.digijava.module.message.helper.ReciverName;
-import org.digijava.module.message.helper.RelatedActivity;
-import org.digijava.module.sdm.dbentity.Sdm;
 
 public class AmpMessageForm extends ActionForm {
 	/**
@@ -39,22 +37,16 @@ public class AmpMessageForm extends ActionForm {
 	private int tabIndex=0;		//which tab we are viewing(messages tab, alerts, approvals ...)
 	private String childTab; //child tab on tabIndex. used to separate received messages from sent of draft 
 	private MessageHelper forwardedMsg;
-	private MessageHelper repliedMsg;
 	private String objectURL;
 	private int allmsg;
 	private List<ReciverName> receivesrsNameMail;
 	private List<ReciverName> receivesrsTheamName;
-	//holds attached files	
-	private Sdm sdmDocument;
-	private int attachmentsSize;
 	
-	//private int setAsAlert;
-	private String setAs; //normal message, alert or approval
+	private int setAsAlert;
 	private boolean deleteActionWasCalled;
 	
-	private RelatedActivity[] relatedActivities;
-	private Long selectedActId;
-	private String relatedActivityName;
+	private String[] relatedActivities;
+	private String selectedAct;
 	
 	private String [] allPages;
 
@@ -63,11 +55,11 @@ public class AmpMessageForm extends ActionForm {
 	private String lastPage;
 	private int pagesToShow;
 	private int offset;
-    private String removeStateIds;
+        private String removeStateIds;
         
-    private int hiddenMsgCount;  
-    
-    private String[] contacts;
+        private int hiddenMsgCount;
+
+      
 	
 	/**
 	 * used to separate different kinds of messages
@@ -111,15 +103,6 @@ public class AmpMessageForm extends ActionForm {
 	
 	
 	private FormFile fileUploaded;
-    private Boolean emailable;
-
-    public Boolean getEmailable() {
-        return emailable;
-    }
-
-    public void setEmailable(Boolean emailable) {
-        this.emailable = emailable;
-    }
 	
 
 	public List<TemplateAlert> getTemplates() {
@@ -334,7 +317,7 @@ public class AmpMessageForm extends ActionForm {
 	
 	public Collection<Team> getTeamMapValues(){
 		return (Collection<Team>)teamsMap.values();
-	}	
+	}
 
 	public List<LabelValueBean> getReceivers() {
 		return receivers;
@@ -408,6 +391,13 @@ public class AmpMessageForm extends ActionForm {
 		this.childTab = childTab;
 	}
 
+	public int getSetAsAlert() {
+		return setAsAlert;
+	}
+
+	public void setSetAsAlert(int setAsAlert) {
+		this.setAsAlert = setAsAlert;
+	}
 
 	public MessageHelper getForwardedMsg() {
 		return forwardedMsg;
@@ -494,6 +484,22 @@ public class AmpMessageForm extends ActionForm {
 			this.objectURL = objectURL;
 		}
 
+		public String[] getRelatedActivities() {
+			return relatedActivities;
+		}
+
+		public void setRelatedActivities(String[] relatedActivities) {
+			this.relatedActivities = relatedActivities;
+		}
+
+		public String getSelectedAct() {
+			return selectedAct;
+		}
+
+		public void setSelectedAct(String selectedAct) {
+			this.selectedAct = selectedAct;
+		}
+
 		public boolean isInboxFull() {
 			return inboxFull;
 		}
@@ -558,68 +564,6 @@ public class AmpMessageForm extends ActionForm {
 					this.fileUploaded = fileUploaded;
 				}
 
-				public RelatedActivity[] getRelatedActivities() {
-					return relatedActivities;
-				}
 
-				public void setRelatedActivities(RelatedActivity[] relatedActivities) {
-					this.relatedActivities = relatedActivities;
-				}
-
-				public Long getSelectedActId() {
-					return selectedActId;
-				}
-
-				public void setSelectedActId(Long selectedActId) {
-					this.selectedActId = selectedActId;
-				}
-
-				public String getRelatedActivityName() {
-					return relatedActivityName;
-				}
-
-				public void setRelatedActivityName(String relatedActivityName) {
-					this.relatedActivityName = relatedActivityName;
-				}
-
-				public Sdm getSdmDocument() {
-					return sdmDocument;
-				}
-
-				public void setSdmDocument(Sdm sdmDocument) {
-					this.sdmDocument = sdmDocument;
-				}
-
-				public int getAttachmentsSize() {
-					return attachmentsSize;
-				}
-
-				public void setAttachmentsSize(int attachmentsSize) {
-					this.attachmentsSize = attachmentsSize;
-				}
-
-				public String getSetAs() {
-					return setAs;
-				}
-
-				public void setSetAs(String setAs) {
-					this.setAs = setAs;
-				}
-
-				public MessageHelper getRepliedMsg() {
-					return repliedMsg;
-				}
-
-				public void setRepliedMsg(MessageHelper repliedMsg) {
-					this.repliedMsg = repliedMsg;
-				}
-
-				public String[] getContacts() {
-					return contacts;
-				}
-
-				public void setContacts(String[] contacts) {
-					this.contacts = contacts;
-				}	
-				
+	
 	}

@@ -18,18 +18,17 @@
 
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/tree.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/yahoo-min.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/yui/treeview-min.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/yahoo.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/event.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/treeview.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-
-<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
@@ -40,154 +39,10 @@
 <c:set var="hideCurrSettings">
 	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn>
 </c:set>
-<div id="popin" style="display: none">
-	<div id="popinContent" class="content">
-	</div>
-</div>
-<script type="text/javascript">
-<!--
-
-		YAHOO.namespace("YAHOO.amp");
-
-		var myPanel = new YAHOO.widget.Panel("newpopins", {
-			width:"700px",
-			fixedcenter: true,
-		    constraintoviewport: false,
-		    underlay:"none",
-		    close:true,
-		    visible:false,
-		    modal:true,
-		    draggable:true,
-		    context: ["showbtn", "tl", "bl"]
-		    });
-	var panelStart
-	var checkAndClose=false, extraActions = false;
-
-	function initPopinScript() {
-		var msg='\n<digi:trn>Title</digi:trn>';
-		myPanel.setHeader(msg);
-		myPanel.setBody("");
-		myPanel.beforeHideEvent.subscribe(function() {
-			panelStart=1;
-		}); 
-		myPanel.render(document.body);
-		panelStart = 0;
-	}
--->	
-</script>
-<style type="text/css">
-	.mask {
-	  -moz-opacity: 0.8;
-	  opacity:.80;
-	  filter: alpha(opacity=80);
-	  background-color:#2f2f2f;
-	}
-	
-	#popin .content { 
-	    overflow:auto; 
-	    height:455px; 
-	    background-color:fff; 
-	    padding:10px; 
-	} 
-	.bd a:hover {
-  		background-color:#ecf3fd;
-		font-size: 10px; 
-		color: #0e69b3; 
-		text-decoration: none	  
-	}
-	.bd a {
-	  	color:black;
-	  	font-size:10px;
-	}
-    .yui-panel .hd {
-        white-space:normal;
-    }
-		
-</style>
 
 <script language="JavaScript">
+var filter; // Filter panel
 
-    function mapCallBack(status, statusText, responseText, responseXML){
-       window.location.reload();
-    }
-    var responseSuccess = function(o){
-		var response = o.responseText;
-		var content = document.getElementById("popinContent");
-		content.innerHTML = response;
-		showContent();
-	}
-	var responseFailure = function(o){
-		alert("Connection Failure!");
-	}
-	var callback =
-	{
-		success:responseSuccess,
-		failure:responseFailure
-	};
-	function showContent(){
-		var element = document.getElementById("popin");
-		element.style.display = "inline";
-		if (panelStart < 1){
-			myPanel.setBody(element);
-		}
-		if (panelStart < 2){
-			document.getElementById("popin").scrollTop=0;
-			myPanel.show();
-			panelStart = 2;
-		}
-		checkErrorAndClose();
-	}
-	function checkErrorAndClose(){
-		if(checkAndClose==true){
-			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-				myclose();
-				refreshPage();
-			}
-			checkAndClose=false;
-		}
-		if(extraActions == true){
-			setUpWin();
-			extraActions = false;
-		}
-	}
-	function refreshPage(){
-
-	}
-
-	function myclose(){
-		var content = document.getElementById("popinContent");
-		content.innerHTML="";
-		myPanel.hide();
-		panelStart=1;
-
-	}
-	function closeWindow() {
-		myclose();
-	}
-	function showPanelLoading(msg){
-		myPanel.setHeader(msg);
-		var content = document.getElementById("popinContent");
-		content.innerHTML = '<div style="text-align: center">' + 
-			'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-			'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
-		showContent();
-	}
-function initFilterPanel(){
-    var filterDiv = document.getElementById('filter');
-    filterDiv.style.display="block";
-    filterDiv.stytelvisibility="visible";
-    filter=new YAHOO.widget.Panel("filter",{
-            width:"400px",
-            fixedcenter: true,
-            constraintoviewport: true,
-            Underlay:"shadow",
-            modal: true,
-            close:true,
-            visible:false,
-            draggable:true} );
-    filter.render(); // Filter panel
-}
-    
 /*
  *    method to expand or colapse
  *    filter settings
@@ -208,8 +63,23 @@ function toggleSettings(){
 
 // show filter window
 function showFilter(){
-  filter.show();
+    var filterDiv = document.getElementById('filter');
+    filterDiv.style.display="block";
+    filterDiv.stytelvisibility="visible";
+    filter=new YAHOO.widget.Panel("filter",{
+            width:"400px",
+            fixedcenter: true,
+            constraintoviewport: true,
+            Underlay:"shadow",
+            modal: true,
+            close:true,
+            visible:true,
+            draggable:true} );
+    filter.render();
 }
+
+
+
 </script>
 
 <style type="text/css">
@@ -240,7 +110,7 @@ function showFilter(){
 </c:set>
 <html:hidden property="defaultProgram" styleId="defaultProgram"/>
 <script language="javascript" type="text/javascript">
-    var filter;
+
 	var ptree;
 	var curProgId;
 	var curProgNodeIndex;
@@ -267,30 +137,30 @@ function showFilter(){
 	var progNodeHistory = [];
     var pr;
     var lastTimeStamp;
-	var strNoActivities="<digi:trn>No Activities</digi:trn>";
-	var strTotal="<digi:trn>Totals:</digi:trn>";
+	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
+	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-	var strThousands="<digi:trn>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
+	var strThousands="<digi:trn key='aim:NPD:amountThousandsOfDollarsLabel'>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
 </gs:test>
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
 	var strThousands="${aimNPDForm.defCurrency}";
 </gs:test>
-	var strPlanned="<digi:trn>Planned Commitments</digi:trn>";
-	var strActual="<digi:trn>Actual Commitments</digi:trn>";
+	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
+	var strActual="<digi:trn key='aim:NPD:sumactualCommitments'>Actual Commitments</digi:trn>";
     var strActualDisb="<digi:trn>Actual Disbursements</digi:trn>";
-	var strProposed="<digi:trn>Proposed Project Cost</digi:trn>";
+	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
 	var actCurrPage=1;
 	var actMaxPages=0;
-	var pgNext='<digi:trn>Next</digi:trn>';
-	var pgPrev='<digi:trn>Prev</digi:trn>';
-	var pgLast='<digi:trn>Last</digi:trn>';
-	var pgFirst='<digi:trn>First</digi:trn>';
-	var pgPagesLabel='<digi:trn>Pages:</digi:trn>';
-	var status='<digi:trn>Status</digi:trn>';
-	var title='<digi:trn>Title</digi:trn>';
-	var strDate='<digi:trn>Start Date</digi:trn>';
-	var donor='<digi:trn>Donor</digi:trn>';
-	var plannedComm='<digi:trn>Planned Commitments</digi:trn>';
+	var pgNext='<digi:trn key="aim:npd:pagination:next">Next</digi:trn>';
+	var pgPrev='<digi:trn key="aim:npd:pagination:prev">Prev</digi:trn>';
+	var pgLast='<digi:trn key="aim:npd:pagination:last">Last</digi:trn>';
+	var pgFirst='<digi:trn key="aim:npd:pagination:first">First</digi:trn>';
+	var pgPagesLabel='<digi:trn key="aim:npd:pagination:pageslabel">Pages:</digi:trn>';
+	var status='<digi:trn key="aim:npd:status">Status</digi:trn>';
+	var title='<digi:trn key="aim:npd:titl">Title</digi:trn>';
+	var strDate='<digi:trn key="aim:npd:strdate">Start Date</digi:trn>';
+	var donor='<digi:trn key="aim:npd:donor">Donor</digi:trn>';
+
 
 	function changeOptions(indics,years,locations){
         selIndicatorIDs=new Array();
@@ -308,7 +178,7 @@ function showFilter(){
 
     function openOptionsWindow(){
       if(curProgId==null){
-      	var msg='<digi:trn>please first select program in the tree</digi:trn>';
+      	var msg='<digi:trn key="aim:plsSelectProgram">please first select program in the tree</digi:trn>';
         alert(msg);
       }else{
         var url=addActionToURL('npdOptions.do');
@@ -325,38 +195,29 @@ function showFilter(){
             url += pd + 'selYears=' + selYear[y];
           }
         }
-        //var win=openURLinResizableWindow(url,600,400);
-		var msg='\n<digi:trn>Change Options</digi:trn>';
-		showPanelLoading(msg);
-		YAHOO.util.Connect.asyncRequest("POST", url, callback);			
-    
+        var win=openURLinResizableWindow(url,600,400);
       }
     }
 
 	function getInidcatorsParam(){
-		var params = getURL();
+		var params = p1d + 'programId='+curProgId;
 		if(selYear!=null){
 			for (var y=0; y<selYear.length; y++){
 				params += pd + 'selYears=' + selYear[y];
 			}
-		}		
-		return params;       
+		}
+		return params;
 	}
 
 	function openGridWindow(showGraph){
 		if (curProgId !=null){
-			var msg='\n<digi:trn>NPD Print</digi:trn>';
-			showPanelLoading(msg);
-			
 			var url=addActionToURL('npdGrid.do');
 			var params = getInidcatorsParam();
 			if (showGraph == true ){
 				params += pd + 'mode=1';
-				extraActions = true;
 			}
 			url += params;
-			YAHOO.util.Connect.asyncRequest("POST", url, callback);
-			//var win = openURLinResizableWindow(url,600,600);
+			var win = openURLinResizableWindow(url,600,600);
 		}
 	}
 
@@ -389,7 +250,7 @@ function showFilter(){
 		return url;
 	}
 
-	function updateMapCallBack(status, statusText, responseText, responseXML){
+	function mapCallBack(status, statusText, responseText, responseXML){
 		updateMap(responseText);
 	}
 
@@ -412,7 +273,7 @@ function showFilter(){
 		var url=constructMapUrl(timestamp);
 
 		var async=new Asynchronous();
-		async.complete=updateMapCallBack;
+		async.complete=mapCallBack;
 		async.call(url);
 	}
 
@@ -670,15 +531,16 @@ function showFilter(){
 
 		//create TreeView Object for specified with ID HTML object.
 		ptree=new jktreeview("tree");
-    
-	
+
+		//setup click event
+		ptree.labelCkick=treeNodeLabelWasClicked;
+
 		//build nodes
 		buildTree(programList,ptree,"");
-      
+
 		//draw tree
 		ptree.treetop.draw();
-        ptree.treetop.collapseAll();
-         
+
 		openNodeIter=0;
 
 		//open nodes
@@ -690,9 +552,6 @@ function showFilter(){
 		setNumOfPrograms(myXML);
 		addRootListener();
 		addEventListeners();
-        $("a[class='ygtvspacer']").each(function(index){
-    jQuery(this).removeAttr('href').css('text-decoration', 'none');
-     });
 
 		createPanel("Info","<i>info</i>");
 
@@ -711,12 +570,12 @@ function showFilter(){
 				//prepare node data
 				var prgID=prg.getAttribute("id");
 				var prgName=prg.getAttribute("name");
-				var prgURL="javascript:browseProgram('"+prgID+"')";
+				var prgURL="../../aim/nationalPlaningDashboard.do";//URL is not used currently //"javascript:browseProgram('"+prgID+"')";
 				var prgParent=target;
 				//create tree view node object
-                var progHTML="<div><a href=\""+prgURL+"\" id=\"prog_"+prgID+"\" class=\"ygtvlabel\">"+prgName+"</a></div><div id=\"indTreeList"+prgID+"\" style=\"display:none\">"+getIndicatorsHTML(prg)+"</div>"
-				var thisNode=treeObj.addHTMLItem(progHTML,prgParent,prgURL);
-
+				var thisNode=treeObj.addItem(prgName,prgParent,prgURL);
+				//set new field, this is used in node HTML geeration
+				thisNode.programId=prgID;
 				//save node if it is parent of current or current program
 				if(toBeOpened(prgID)==true){
 					openNodes[openNodes.length]=thisNode;
@@ -725,7 +584,7 @@ function showFilter(){
 				if(prgID==curProgId){
 					curProgNodeIndex=thisNode.index;
 				}
-    
+				thisNode.indicators=getIndicatorsHTML(prg);
 				var subNodes=prg.childNodes;
 				//recurs on children programs
 				if(subNodes != null){
@@ -968,6 +827,8 @@ function showFilter(){
 			return;
 		}
 
+
+
 		//sum labels
 		var labelsTR1 = document.createElement('TR');
 		var titleLabelTD=document.createElement('TD');
@@ -986,13 +847,10 @@ function showFilter(){
 		strDateLabelTD.innerHTML='<b>'+strDate+' </b>';
 		labelsTR1.appendChild(strDateLabelTD);
 
-		//var labelTD1 = document.createElement('TD');
-		//labelTD1.innerHTML='<feature:display name="Proposed Project Cost" module="Funding"><b>'+strProposed+' </b></feature:display> ';
-		//labelsTR1.appendChild(labelTD1);
+		var labelTD1 = document.createElement('TD');
+		labelTD1.innerHTML='<feature:display name="Proposed Project Cost" module="Funding"><b>'+strProposed+' </b></feature:display> ';
+		labelsTR1.appendChild(labelTD1);
 
-		var plCommTD=document.createElement('TD');
-		plCommTD.innerHTML='<b>'+plannedComm+' </b>';
-		labelsTR1.appendChild(plCommTD);
 		
 		var labelTD3 = document.createElement('TD');
 		labelTD3.innerHTML='<b>'+strActual+' </b>';
@@ -1018,7 +876,7 @@ function showFilter(){
 				var actTDname = document.createElement('TD');
 				var actAname = document.createElement('a');
 				actAname.innerHTML=actList[i].getAttribute('name');
-				var actURL = addActionToURL('showPrinterFriendlyPage.do~edit=true~activityid=');
+				var actURL = addActionToURL('aim/showPrinterFriendlyPage.do~edit=true~activityid=');
 				actURL+=actList[i].getAttribute('id');
 				actAname.href=actURL;
 				actAname.target='_blank';
@@ -1040,21 +898,14 @@ function showFilter(){
                            
                             
 				//amount
-				//var actTDproposedAmount = document.createElement('TD');
-				//actTDproposedAmount.innerHTML = '<feature:display name="Proposed Project Cost" module="Funding">'+actList[i].getAttribute('proposedAmount')+'</feature:display>';
-				//if(actTDproposedAmount.innerHTML == "N/A"){
-				//   actTDproposedAmount.innerHTML = "--"
-				//}
-				//actTR.appendChild(actTDproposedAmount);
-
-				//planned commitments
-				var actTDPlannedComm = document.createElement('TD');
-				actTDPlannedComm.innerHTML = actList[i].getAttribute('plannedAmount');
-				if(actTDPlannedComm.innerHTML == "N/A"){
-					actTDPlannedComm.innerHTML = "--"
+				var actTDproposedAmount = document.createElement('TD');
+				actTDproposedAmount.innerHTML = '<feature:display name="Proposed Project Cost" module="Funding">'+actList[i].getAttribute('proposedAmount')+'</feature:display>';
+				if(actTDproposedAmount.innerHTML == "N/A"){
+				   actTDproposedAmount.innerHTML = "--"
 				}
-				actTR.appendChild(actTDPlannedComm);
-								
+				actTR.appendChild(actTDproposedAmount);
+
+				
 
 				var actTDActualAmount = document.createElement('TD');
 				actTDActualAmount.innerHTML = actList[i].getAttribute('actualAmount');
@@ -1091,13 +942,10 @@ function showFilter(){
 		lastTD.innerHTML='<strong>'+strTotal+' </strong>';
 		lastTR.appendChild(lastTD);
 
-		//var propSumTD = document.createElement('TD');
-		//propSumTD.innerHTML= '<feature:display name="Proposed Project Cost" module="Funding">'+root.getAttribute('proposedSum')+'</feature:display>';
-		//lastTR.appendChild(propSumTD);
-		
-		var plannedCommSumTD=document.createElement('TD');
-		plannedCommSumTD.innerHTML=root.getAttribute('plannedCommSum');
-		lastTR.appendChild(plannedCommSumTD);
+		var propSumTD = document.createElement('TD');
+		propSumTD.innerHTML= '<feature:display name="Proposed Project Cost" module="Funding">'+root.getAttribute('proposedSum')+'</feature:display>';
+		lastTR.appendChild(propSumTD);
+
 		
 
 		var actSumTD = document.createElement('TD');
@@ -1305,7 +1153,7 @@ function showFilter(){
 		var par=firstTR.parentNode;
 		clearActivityTable(firstTR);
 		var tr=document.createElement('tr');
-		var str='<td align="center" colspan="6"><img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" alt="loading..."/>loading...</td>';
+		var str='<td align="center" colspan="6"><img src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="loading..."/>loading...</td>';
 		tr.innerHTML=str;
 		par.appendChild(tr);
 	}
@@ -1387,10 +1235,9 @@ function showFilter(){
 	}
 
 	function loadInitial(){
+
 		setupYears();
 		initTree();
-		initPopinScript();
-        initFilterPanel();
 	}
 
 	/**
@@ -1414,10 +1261,11 @@ function showFilter(){
 	}
 	/* Adds listeners for all elemets in the tree */
 	function addEventListeners () {
-         $("a[id^='prog_']").each(function(index){
-							YAHOO.util.Event.addListener(jQuery(this), "mouseover", eventFunction);
-							YAHOO.util.Event.addListener(jQuery(this), "mouseout", hidePanel);
-       });
+		for(var j=1;j<=numOfPrograms;j++){
+							var n	= document.getElementById('ygtvlabelel'+j);
+							YAHOO.util.Event.addListener(n, "mouseover", eventFunction);
+							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);
+		}
 	}
 	/* Function that is executed when mouse over an element */
 	function eventFunction(e) {
@@ -1428,7 +1276,7 @@ function showFilter(){
 	/* Extracts the id (database id of AmpTheme) from the href property */
 	function getIdFromHref( href ) {
 		var start	= href.indexOf("('");
-		var end		= href.indexOf("')");
+		var end		= href.indexOf("',");
 		return href.substring(start+2, end);
  	}
  	/* Creates the panel used to show information */
@@ -1491,7 +1339,7 @@ function showFilter(){
  			themeArray[pid]	= panelBody;
 
  	}
- 	addLoadEvent(loadInitial);
+	window.onload=loadInitial;
 </script>
 <script language="javascript" type="text/javascript">
     <c:forEach var="theme" items="${aimNPDForm.allThemes}">
@@ -1520,161 +1368,6 @@ function showFilter(){
 
     </c:forEach>
 </script>
-<style>
-
-	table#indres {
-		border : silver solid;
-		border-width: 1px 1px 0px 0px;
-		
-	}
-
-	table#indres td{
-		border : silver solid;
-		border-width: 0px 0px 1px 1px;
-		
-	}
-
-</style>
-
-<script language="javascript" type="text/javascript">
-
-	function getDescription() {
-	document.getElementById("t1").innerHTML="txt";	
-		
-	}
-	
-	function setUpWin(){
-		showGraph();
-		setExcelURL();
-	}
-	
-	function showGraph(){
-		var getImage  = document.getElementById('graph');
-		if (getImage != null){
-			getImage.src = curGraphURL;
-		}
-	}
-	
-	function setExcelURL(){
-		/*var exportLink  = document.getElementById('export2xsl');
-		var url = addActionToURL('exportIndicators2xsl.do');
-		var params = getInidcatorsParam();
-		exportLink.href=url+params;
-		*/
-	}
-
-	//window.onload=setUpWin;
-
-</script>
-<script language="javascript" type="text/javascript">
-
-	var localIndicators=[];
-
-    function selectAllIndicators(){
-        $("input[name^='selIndicators']").each(
-        function (i){
-             this.checked=true;
-        } 
-    );
-    }
-    function deselectAllIndicators(){
-    var allChkboxes=$("input[name^='selIndicators']:checked").each(
-    function (i){
-        this.checked=false;
-    }
-    );
-    }
-	
-
-	function getSelectedIndicators(){
-		var localIndicators=document.getElementsByName('selIndicators');
-		var res=[];
-		if (localIndicators != null){
-			for (var i=0;i<localIndicators.length;i++){
-				var chbx=localIndicators[i];
-				if (chbx.checked) {
-					res[res.length]=chbx.value;
-				}
-			}
-		}
-		return res;
-	}
-	
-	function getSelectedYears(){
-		var localYears = document.getElementsByName('selYears');
-		var res = [];
-		if (localYears !=null){
-			for (var i=0;i<localYears.length;i++){
-				var chbx=localYears[i];
-				if (chbx.checked) {
-					res[res.length]=chbx.value;
-				}
-			}
-		}
-		return res;
-	}
-
-	function doChanges(){
-		var ins=getSelectedIndicators();
-		var yrs=getSelectedYears();
-		yrs.sort();
-		var partialUrl=addActionToURL('saveDefaultYearsForGraph.do');
-		var url=getUrl2(partialUrl);
-		var async=new Asynchronous();
-		async.complete=emptyFunction;
-		async.call(url);
-		changeOptions(ins,yrs,null);
-		closeWindow();
-	}
-	
-	function getUrl2(url){
-		var locYears = document.getElementsByName('selYears');		
-		var result=url;
-		if(locYears.length>0){
-			var res;		
-			for (var i = 0; i < locYears.length; i++) {
-				if(locYears[i].checked){
-					res=locYears[i].value;	
-					result+='~selYears='+res;			
-				}
-			}			
-		}		
-		return result;
-	}
-	
-	function emptyFunction (){
-	}
-
-	function checkYearsRules(){
-		var locYears = document.getElementsByName('selYears');
-		var cou=0;
-		for(var i=0;i<locYears.length;i++){
-			if (locYears[i].checked == true) cou++;
-		}
-		if (cou > 5) return false;
-		return true;
-	}
-</script>
-<digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
-<style type="text/css" media="print">
-#newpopins_c{
-     top:50px !important;
-     left:50px !important;
-}
-#newpopins{
-     height: 100%;
-     width: 100% !important;
-     border: none; 
-}
-#newpopins .content{
-     height: auto;
-     width: auto;
-}
-#newpopins_h,.noPrint,.dr-dialogmenu {
-  display : none;
-}
-</style>
-<div class="noPrint">
 <input type="hidden" id="hdYears" value=""/>
 <input type="hidden" id="hdIndicators" value=""/>
 <c:forEach var="sys" items="${aimNPDForm.selYears}">
@@ -1752,7 +1445,7 @@ function showFilter(){
 							<tr>
 								<td valign="top">
 									<div id="divGraphLoading" style="vertical-align: middle; display: none; width: ${aimNPDForm.graphWidth}px; height: ${aimNPDForm.graphHeight}px" align="center">
-										<digi:img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>
+										<digi:img src="images/amploading.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>
 									</div>
 									<div id="divGraphImage" style="display: block">
 										<digi:context name="showChart" property="/module/moduleinstance/npdGraph.do"/>
@@ -1933,7 +1626,3 @@ function showFilter(){
 </div>
 
 </digi:form>
-<script type="text/javascript">
-     addLoadEvent(delBody);
-</script>
-</div>

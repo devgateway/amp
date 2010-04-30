@@ -313,7 +313,7 @@
 
 											<td align=top vAlign=top>
 
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<c:set var="translation">
 
@@ -339,7 +339,7 @@
 
 											<td align=top vAlign=top>
 
-												<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<c:set var="translation">
 

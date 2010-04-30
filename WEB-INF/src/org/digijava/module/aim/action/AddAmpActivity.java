@@ -4,9 +4,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.RepositoryException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +25,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -42,11 +42,10 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -60,7 +59,6 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -70,6 +68,7 @@ import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ChapterUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
@@ -88,6 +87,8 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
@@ -204,37 +205,23 @@ public class AddAmpActivity extends Action {
 
      //set the contracts, if available
      //eaForm.getCurrCode()
-    	if(eaForm.getActivityId()!=null) {
-    		if(eaForm.getContracts().getContracts()==null) {
-	    		List<IPAContract> contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
-	    		eaForm.getContracts().setContracts(contracts);
-	    		Iterator<IPAContract> iIPA = eaForm.getContracts().getContracts().iterator();
-	    		while(iIPA.hasNext()) {
-	    			Iterator<AmpOrganisation> iOrg = iIPA.next().getOrganizations().iterator();
-	    			while(iOrg.hasNext()) {
-	    				iOrg.next().getAmpOrgId();
-	    			}	    			
-	    		}
-    		}
-    	}
+    if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null)){
+           List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
+           eaForm.getContracts().setContracts(contracts);
+     }
 
+     // load all pledges
+     ArrayList<FundingPledges> pledges = new ArrayList<FundingPledges>();
+     eaForm.getFunding().setPledgeslist(pledges);
+      
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-      
-   
-      //Get components types from category class
-      Collection<AmpCategoryValue> componentstype = null;
-		try {
-			componentstype = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.COMPONET_TYPE_KEY, null, request);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-      	
-      	eaForm.getComponents().setAllCompsType(componentstype);
+      ArrayList<AmpComponentType> ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
+      eaForm.getComponents().setAllCompsType(ampComponentTypes);
       
       
        if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0 && eaForm.getIndicator().getIndicatorsME()==null){
-              List indicators=IndicatorUtil.getActivityIndHelperBeans(eaForm.getActivityId());
+              List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());                                        
               eaForm.getIndicator().setIndicatorsME(indicators);            
        }
 
@@ -249,38 +236,6 @@ public class AddAmpActivity extends Action {
     				 	eaForm.getFunding().getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
     					}
     			}
-      }
-      if (eaForm.getAgencies().getExecutingAgencies() == null) {
-          eaForm.getAgencies().setExecutingAgencies(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setExecutingOrgToInfo(new HashMap<String, String>());
-      }
-      if (eaForm.getAgencies().getImpAgencies() == null) {
-          eaForm.getAgencies().setImpAgencies(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setImpOrgToInfo(new HashMap<String, String>());
-      }
-      if (eaForm.getAgencies().getBenAgencies() == null) {
-          eaForm.getAgencies().setBenAgencies(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setBenOrgToInfo(new HashMap<String, String>());
-      }
-      if (eaForm.getAgencies().getConAgencies() == null) {
-          eaForm.getAgencies().setConAgencies(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setConOrgToInfo(new HashMap<String, String>());
-      }
-      if (eaForm.getAgencies().getReportingOrgs() == null) {
-          eaForm.getAgencies().setReportingOrgs(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setRepOrgToInfo(new HashMap<String, String>());
-      }
-      if (eaForm.getAgencies().getSectGroups() == null) {
-          eaForm.getAgencies().setSectGroups(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setSectOrgToInfo(new HashMap<String, String>());
-      }
-      if (eaForm.getAgencies().getRegGroups() == null) {
-          eaForm.getAgencies().setRegGroups(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setRegOrgToInfo(new HashMap<String, String>());
-      }
-      if (eaForm.getAgencies().getRespOrganisations() == null) {
-          eaForm.getAgencies().setRespOrganisations(new ArrayList<AmpOrganisation>());
-          eaForm.getAgencies().setRespOrgToInfo(new HashMap<String, String>());
       }
 
 
@@ -297,7 +252,7 @@ public class AddAmpActivity extends Action {
 							eaForm.setSurvey(null);
 						}
 						eaForm.setActivityId(null);
-						eaForm.getMessages().clear();
+						
                         SelectDocumentDM.clearContentRepositoryHashMap(request);
                         eaForm.getPrograms().setActPrograms(null);
                         eaForm.setEditAct(false);
@@ -319,7 +274,10 @@ public class AddAmpActivity extends Action {
 
 	//===============Sectors START===========================
 
-	if (request.getParameter("remSectors") != null) {
+		// Add sectors
+	if (request.getParameter("addSector") != null) {
+		return addSector(mapping, session, eaForm);
+	}else if (request.getParameter("remSectors") != null) {
 		return removeSector(mapping, request, session, eaForm);
     }
     //
@@ -350,18 +308,15 @@ public class AddAmpActivity extends Action {
 	*/
 
     //eaForm.setAllComps(ActivityUtil.getAllComponentNames());
-    ProposedProjCost propProjCost=null;
-      if (eaForm.getFunding().getProProjCost() != null) {
-         propProjCost = eaForm.getFunding().getProProjCost();
-        if (propProjCost.getCurrencyCode() == null) {
-           propProjCost.setCurrencyCode(eaForm.getFundingCurrCode());
-        }
+    ProposedProjCost propProjCost = null;
+    if (eaForm.getFunding().getProProjCost() != null) {
+      propProjCost = eaForm.getFunding().getProProjCost();
+      if (propProjCost.getCurrencyCode() == null &&
+          propProjCost.getFunAmount() == null &&
+          propProjCost.getFunDate() == null) {
+        eaForm.getFunding().setProProjCost(null);
       }
-      else{
-          propProjCost =new ProposedProjCost();
-          propProjCost.setCurrencyCode(eaForm.getFundingCurrCode());
-      }
-     eaForm.getFunding().setProProjCost(propProjCost);
+    }
 
     try {
 
@@ -434,8 +389,8 @@ public class AddAmpActivity extends Action {
         if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0){
             eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
       	  }else{
-        	  synchronized (ampContext) {
-	        	  //ampContext=this.getServlet().getServletContext();
+      		  synchronized (ampContext) {
+      			  //ampContext=this.getServlet().getServletContext();
 	        	  AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	        	 // AmpModulesVisibility moduleToTest=FeaturesUtil.getModuleVisibility("Activity Approval Process");
 	        	  AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot("Activity Approval Process");
@@ -447,7 +402,6 @@ public class AddAmpActivity extends Action {
             }
       }
       else {
-    	  /*
         String sessId = session.getId();
         ArrayList sessList = (ArrayList) ampContext.getAttribute(
             org.digijava.module.aim.helper.Constants.SESSION_LIST);
@@ -462,7 +416,7 @@ public class AddAmpActivity extends Action {
           RequestDispatcher rd = getServlet().getServletContext()
               .getRequestDispatcher(url);
           rd.forward(request, response);
-        }*/
+        }
 
         synchronized (ampContext) {
           HashMap tsList = (HashMap) ampContext.getAttribute(org.digijava.
@@ -483,41 +437,11 @@ public class AddAmpActivity extends Action {
       }
       else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
         eaForm.setStep("1");
-        String newID = null;
-        // If this is not a new activity then create a new ID string.
-        if (eaForm.isEditAct()) {
-        	newID = eaForm.getEditKey().substring(0, eaForm.getEditKey().lastIndexOf("-"));
-        	newID = newID + "-" + System.currentTimeMillis();
-        } else {
-        	newID = "";
-        }
-        
         // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
         session.setAttribute("activityName", eaForm.getIdentification().getTitle());
         session.setAttribute("activityFieldName", request.getParameter("fieldName"));
         String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.getNavigationLanguage(request).getCode()+
-            "&newId=" + newID + "&referrer=" + eaForm.getContext() +"/aim/addActivity.do?edit=true";
-        
-        		// Replace the old id.
-        		String auxOldId = eaForm.getEditKey();
-				if (eaForm.isEditAct()) {
-					Class auxClass = EditActivityForm.Identification.class;
-					Field[] fields = auxClass.getDeclaredFields();
-					for (int i = 0; i < fields.length; i++) {
-						Field auxField = fields[i];
-						if (auxField.getType().getName().equals("java.lang.String")) {
-							String methodName = auxField.getName().substring(0, 1).toUpperCase() + auxField.getName().substring(1);
-							Method auxMethod = auxClass.getMethod("get" + methodName, null);
-							String auxValue = (String) auxMethod.invoke(eaForm.getIdentification(), null);
-							if(auxValue != null && auxValue.equals(auxOldId)) {
-								auxMethod = auxClass.getMethod("set" + methodName, String.class);
-								auxMethod.invoke(eaForm.getIdentification(), newID);
-							}
-						}
-					}
-
-				}
-        
+            "&referrer=" + eaForm.getContext() +"/aim/addActivity.do?edit=true";
         response.sendRedirect(eaForm.getContext() + url);
       }
       else if (eaForm.getStep().equals("1_5")) { // show the 'Refernces' step page.
@@ -525,43 +449,12 @@ public class AddAmpActivity extends Action {
       }
       else if (eaForm.getStep().equals("2.2")) { // shows the edit page of the editor module
           eaForm.setStep("2");
-          
-          String newID = null;
-          // If this is not a new activity then create a new ID string.
-          if (eaForm.isEditAct()) {
-          	newID = eaForm.getEditKey().substring(0, eaForm.getEditKey().lastIndexOf("-"));
-          	newID = newID + "-" + System.currentTimeMillis();
-          } else {
-          	newID = "";
-          }
-          
           // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
-          session.setAttribute("activityName", eaForm.getIdentification().getTitle());
-          session.setAttribute("activityFieldName", request.getParameter("fieldName"));
-          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() + "&lang="
-						+ RequestUtils.getNavigationLanguage(request).getCode() + "&newId=" + newID + "&referrer="
-						+ eaForm.getContext() + "/aim/addActivity.do?edit=true";
-
-          
-          		// Replace the old id.
-          		String auxOldId = eaForm.getEditKey();
-  				if (eaForm.isEditAct()) {
-  					Class auxClass = EditActivityForm.CrossCuttingIssues.class;
-  					Field[] fields = auxClass.getDeclaredFields();
-  					for (int i = 0; i < fields.length; i++) {
-  						Field auxField = fields[i];
-  						if (auxField.getType().getName().equals("java.lang.String")) {
-  							String methodName = auxField.getName().substring(0, 1).toUpperCase() + auxField.getName().substring(1);
-  							Method auxMethod = auxClass.getMethod("get" + methodName, null);
-  							String auxValue = (String) auxMethod.invoke(eaForm.getCrossIssues(), null);
-  							if(auxValue != null && auxValue.equals(auxOldId)) {
-  								auxMethod = auxClass.getMethod("set" + methodName, String.class);
-  								auxMethod.invoke(eaForm.getCrossIssues(), newID);
-  							}
-  						}
-  					}
-  				}
-          
+          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
+                        getNavigationLanguage(request).
+                        getCode()+
+              "&referrer=" + eaForm.getContext() +
+              "/aim/addActivity.do?edit=true";
           response.sendRedirect(eaForm.getContext() + url);
         }
       else if (eaForm.getStep().equals("2")) { // show the step 2 page.
@@ -583,7 +476,7 @@ public class AddAmpActivity extends Action {
         return mapping.findForward("addActivityStep7");
       }
       else if (eaForm.getStep().equals("8")) { // show the step 7 page.
-    	  return showStep8(mapping, request, eaForm);
+        return mapping.findForward("addActivityStep8");
       }
       else if (eaForm.getStep().equals("11")) { // show the step 11 page.
         return mapping.findForward("addActivityStep11");
@@ -615,48 +508,6 @@ public class AddAmpActivity extends Action {
     }
     return null;
   }
-
-private ActionForward showStep8(ActionMapping mapping,HttpServletRequest request, EditActivityForm eaForm) {
-	ActivityContactInfo contactInfo=eaForm.getContactInformation();
-	//if several contact types(donor and mofed for example) contained same contact,then
-	//after editing contact,edited one should be replaced in all contact types.
-	  if(request.getSession().getAttribute("contactToBeReplaced")!=null){
-		
-		  List<AmpActivityContact> allContacts=new ArrayList<AmpActivityContact>();
-			if(contactInfo.getDonorContacts()!=null && contactInfo.getDonorContacts().size()>0){
-				allContacts.addAll(contactInfo.getDonorContacts());
-			}
-			if(contactInfo.getMofedContacts()!=null && contactInfo.getMofedContacts().size()>0){
-				allContacts.addAll(contactInfo.getMofedContacts());
-			}
-			if(contactInfo.getSectorMinistryContacts()!=null && contactInfo.getSectorMinistryContacts().size()>0){
-				allContacts.addAll(contactInfo.getSectorMinistryContacts());
-			}
-			if(contactInfo.getProjCoordinatorContacts()!=null && contactInfo.getProjCoordinatorContacts().size()>0){
-				allContacts.addAll(contactInfo.getProjCoordinatorContacts());
-			}
-			if(contactInfo.getImplExecutingAgencyContacts()!=null && contactInfo.getImplExecutingAgencyContacts().size()>0){
-				allContacts.addAll(contactInfo.getImplExecutingAgencyContacts());
-			}    			
-			
-			
-			AmpContact contact=(AmpContact)request.getSession().getAttribute("contactToBeReplaced");
-	    	
-		  	if(contact!=null && contact.getId()!=null && allContacts!=null){
-		  		replaceOldContactWithNew(contact,allContacts);
-		  	}
-		  	request.getSession().removeAttribute("contactToBeReplaced");
-	  }
-	return mapping.findForward("addActivityStep8");
-}
-  
-  private void replaceOldContactWithNew(AmpContact contact,List<AmpActivityContact> allContacts){
-		for (AmpActivityContact ampActivityContact : allContacts) {
-			if(ampActivityContact.getContact().getId()!=null && ampActivityContact.getContact().getId().equals(contact.getId())){
-				ampActivityContact.setContact(contact);
-			}			
-		}
-	}
 
 /*
 private ActionForward removeComponentes(ActionMapping mapping,
@@ -817,7 +668,196 @@ private ActionForward removeSector(ActionMapping mapping,
       return mapping.findForward("addActivityStep2");
 }
 
+private ActionForward addSector(ActionMapping mapping, HttpSession session,
+		EditActivityForm eaForm) {
+	Object searchedsector = session.getAttribute("add");
 
+	if (searchedsector != null && searchedsector.equals("true")) {
+		Collection selectedSecto = (Collection) session
+				.getAttribute("sectorSelected");
+		Collection<ActivitySector> prevSelSectors = eaForm.getSectors()
+				.getActivitySectors();
+
+		if (selectedSecto != null) {
+			Iterator<ActivitySector> itre = selectedSecto.iterator();
+			while (itre.hasNext()) {
+				ActivitySector selectedSector = (ActivitySector) itre
+						.next();
+
+				boolean addSector = true;
+				if (prevSelSectors != null) {
+					Iterator<ActivitySector> itr = prevSelSectors
+							.iterator();
+					while (itr.hasNext()) {
+						ActivitySector asec = (ActivitySector) itr
+								.next();
+
+						if (asec.getSectorName().equals(selectedSector.getSectorName())) {
+							if (selectedSector.getSubsectorLevel1Name() == null) {
+								addSector = false;
+								break;
+							}
+							if (asec.getSubsectorLevel1Name() != null) {
+								if (asec.getSubsectorLevel1Name().equals(selectedSector.getSubsectorLevel1Name())) {
+									if (selectedSector.getSubsectorLevel2Name() == null) {
+										addSector = false;
+										break;
+									}
+									if (asec.getSubsectorLevel2Name() != null) {
+										if (asec.getSubsectorLevel2Name().equals(selectedSector.getSubsectorLevel2Name())) {
+											addSector = false;
+											break;
+										}
+									} else {
+										addSector = true;
+										break;
+									}
+								}
+							} else {
+								addSector = true;
+								break;
+							}
+						}
+					}
+				}
+
+				if (addSector) {
+					// if an activity already has one or more
+					// sectors,than after adding new one
+					// the percentages must equal blanks and user should
+					// fill them
+	                if (prevSelSectors != null) {
+	                    Iterator iter = prevSelSectors.iterator();
+	                    boolean firstSecForConfig = true;
+                        while (iter.hasNext()) {
+                            ActivitySector actSect = (ActivitySector) iter
+                                .next();
+                            if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+                            	if(actSect.getSectorPercentage() != null && actSect.getSectorPercentage()==100f){
+                            		actSect.setSectorPercentage(0f);
+                            	}	
+                            		
+                                firstSecForConfig = false;
+                                break;
+                            }
+
+                        }
+                        if (firstSecForConfig) {
+	                        selectedSector.setSectorPercentage(100f);
+	                    }
+	                    prevSelSectors.add(selectedSector);
+	                } else {
+	                    selectedSector.setSectorPercentage(new Float(
+	                        100));
+	                    prevSelSectors = new ArrayList<ActivitySector> ();
+	                    prevSelSectors.add(selectedSector);
+	                }
+				}
+
+				eaForm.getSectors().setActivitySectors(prevSelSectors);
+			}
+
+		}
+		session.removeAttribute("sectorSelected");
+		session.removeAttribute("add");
+	    session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());
+	    eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+	    eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+	    session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
+	    session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
+		return mapping.findForward("addActivityStep2");
+
+	} else {
+		ActivitySector selectedSector = (ActivitySector) session
+				.getAttribute("sectorSelected");
+		Collection<ActivitySector> prevSelSectors = eaForm
+		.getSectors().getActivitySectors();
+
+		boolean addSector = true;
+		if (prevSelSectors != null) {
+			Iterator<ActivitySector> itr = prevSelSectors.iterator();
+			while (itr.hasNext()) {
+				ActivitySector asec = (ActivitySector) itr.next();
+				if (asec.getSectorName().equals(
+						selectedSector.getSectorName())) {
+					if (selectedSector.getSubsectorLevel1Name() == null) {
+						addSector = false;
+						break;
+					}
+					if (asec.getSubsectorLevel1Name() != null) {
+						if (asec
+								.getSubsectorLevel1Name()
+								.equals(
+										selectedSector
+												.getSubsectorLevel1Name())) {
+							if (selectedSector.getSubsectorLevel2Name() == null) {
+								addSector = false;
+								break;
+							}
+							if (asec.getSubsectorLevel2Name() != null) {
+								if (asec
+										.getSubsectorLevel2Name()
+										.equals(
+												selectedSector
+														.getSubsectorLevel2Name())) {
+									addSector = false;
+									break;
+								}
+							} else {
+								addSector = false;
+								break;
+							}
+						}
+					} else {
+						addSector = false;
+						break;
+					}
+				}
+			}
+		}
+
+	    if (addSector) {
+	        // if an activity already has one or more sectors,than after
+	        // adding new one
+	        // the percentages must equal blanks and user should fill
+	        // them
+	        if (prevSelSectors != null) {
+	            Iterator iter = prevSelSectors.iterator();
+	            boolean firstSecForConfig = true;
+	            while (iter.hasNext()) {
+	                ActivitySector actSect = (ActivitySector) iter
+	                    .next();
+	                if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+	                	if(actSect.getSectorPercentage()==100f){
+	                		actSect.setSectorPercentage(0.0f);
+	                	}                            	
+	                    firstSecForConfig = false;
+	                    break;
+	                }
+
+	            }
+	            if (firstSecForConfig) {
+	                selectedSector.setSectorPercentage(100f);
+	            }
+	            prevSelSectors.add(selectedSector);
+	        } else {
+	            selectedSector.setSectorPercentage(new Float(
+	                100));
+	            prevSelSectors = new ArrayList<ActivitySector> ();
+	            prevSelSectors.add(selectedSector);
+	        }
+	    }
+		eaForm.getSectors().setActivitySectors(prevSelSectors);
+		session.removeAttribute("sectorSelected");
+	    session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());
+	    eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+	    eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+	    session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
+	    session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
+		return mapping.findForward("addActivityStep2");
+
+	}
+}
 
 private ActionForward showStep9(ActionMapping mapping,
 		HttpServletRequest request, HttpSession session, TeamMember teamMember,
@@ -950,31 +990,15 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	
 	
-	    	Collection<EUActivity> euActs = EUActivityUtil.getEUActivities(eaForm.getActivityId());
-	    	// EUActivities = same as Costs
-	    	Collection<EUActivity> formEuActs=eaForm.getCosting().getCosts();
-	    	if(formEuActs!=null && formEuActs.size()>0){
-		    	if(euActs==null){
-		    		euActs=new ArrayList<EUActivity>();
-		    	}
-		    	Map<Long,EUActivity> euActMap=AmpCollectionUtils.createMap(euActs, new ActivityUtil.EUActivityKeyResolver());
-		    	for (EUActivity object : formEuActs) {
-			    	EUActivity euActivity=euActMap.get(object.getId());
-			    	if(euActivity==null){ //db euactivities don't contain form activity, then it should be inserted in the collection,that is shown on preview activity
-			    		euActs.add(object);
-			    	}
-		    	}
-	    	}
+	        Collection euActs = EUActivityUtil.getEUActivities(eaForm.getActivityId());
+	        // EUActivities = same as Costs
 	        request.setAttribute("costs", euActs);
 	        request.setAttribute("actId", eaForm.getActivityId());
-	        if(eaForm.getActivityId()!=null){
-	        	int risk = IndicatorUtil.getOverallRisk(eaForm.getActivityId());
-		        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
-		        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
-		        request.setAttribute("overallRisk", riskName);
-		        request.setAttribute("riskColor", rskColor);
-	        }	        
-	        
+	        int risk = MEIndicatorsUtil.getOverallRisk(eaForm.getActivityId());
+	        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
+	        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
+	        request.setAttribute("overallRisk", riskName);
+	        request.setAttribute("riskColor", rskColor);
 	
 	        Long prev = new Long( -1);
 	        Long next = new Long( -1);
@@ -1058,39 +1082,37 @@ private ActionForward showStep9(ActionMapping mapping,
 	              eaForm.getIndicator().setCurrentVal(null);
 	              eaForm.getIndicator().setCurrentValDate(null);
 	              eaForm.getIndicator().setIndicatorRisk(null);
-	              eaForm.getContracts().setIpaBudget(new BigDecimal(0));
+	              eaForm.getContracts().setIpaBudget(new Double(0));
 	              
 	              
 	
 	            }
 	
-	            BigDecimal totalEUContrib = new BigDecimal(0);
+	            Double totalEUContrib = new Double(0);
 	            
 	            if (eaForm.getContracts().getContracts() != null){
 	            	Iterator it2 = eaForm.getContracts().getContracts().iterator();
 	            	while (it2.hasNext()) {
 	            		IPAContract contr = (IPAContract) it2.next();
-	            		totalEUContrib =totalEUContrib.add( contr.getTotalECContribIBAmount());
-	            		totalEUContrib =totalEUContrib.add( contr.getTotalECContribINVAmount());
+	            		totalEUContrib += contr.getTotalECContribIBAmount();
+	            		totalEUContrib += contr.getTotalECContribINVAmount();
 	            	}
 	            }
 	            eaForm.getContracts().setIpaBudget(totalEUContrib);
 	            //get the levels of risks
 	
 	            Long defaultCurrency=teamMember.getAppSettings().getCurrencyId();
-		        BigDecimal allCosts=new BigDecimal(0);
+		        double allCosts=0;
 		        if(eaForm.getCosting().getCosts() != null)
 		        	for(Iterator it=eaForm.getCosting().getCosts().iterator();it.hasNext();)
 		        	{
 		        		EUActivity euAct=(EUActivity) it.next();
 		        		euAct.setDesktopCurrencyId(defaultCurrency);
-		        		allCosts=allCosts.add(euAct.getTotalCostConverted());
+		        		allCosts+=euAct.getTotalCostConverted();
 		        	}
-	            eaForm.getCosting().setAllCosts(allCosts);
-	                 if ((eaForm.getIndicator().getIndicatorsME() != null) && (!eaForm.getIndicator().getIndicatorsME().isEmpty())) {
-                      Collection<AmpCategoryValue> risks = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
-                      eaForm.getIndicator().setRiskCollection(risks);
-                  }
+	            eaForm.getCosting().setAllCosts(new Double(allCosts));
+	            if ((eaForm.getIndicator().getIndicatorsME() != null) && (!eaForm.getIndicator().getIndicatorsME().isEmpty()))
+	              eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 	            request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 	            return mapping.findForward("previewLogframe");
 	          }
@@ -1134,10 +1156,8 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
 	          }
 	
 	          //get the levels of risks
-    if (eaForm.getIndicator().getIndicatorsME() != null && !eaForm.getIndicator().getIndicatorsME().isEmpty()) {
-        Collection<AmpCategoryValue> risks = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
-        eaForm.getIndicator().setRiskCollection(risks);
-    }
+	          if (eaForm.getIndicator().getIndicatorsME()!=null && !eaForm.getIndicator().getIndicatorsME().isEmpty())
+	            eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 	
 	          return mapping.findForward("addActivityStep10");
 }
@@ -1178,7 +1198,6 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
         			SurveyFunding auxSurveyFunding = new SurveyFunding();
         			AmpOrganisation auxOrganization = DbUtil.getOrganisation(fundingOrganization.getAmpOrgId());
         			auxSurveyFunding.setAcronim(auxOrganization.getOrgCode());
-        			auxSurveyFunding.setOrgID(fundingOrganization.getAmpOrgId());
         			//TODO: Check if the user entered a second time and changed the Point of Delivery Donor.
         			auxSurveyFunding.setDeliveryDonorName(auxOrganization.getName());
         			auxSurveyFunding.setFundingOrgName(auxOrganization.getName());
@@ -1476,18 +1495,18 @@ private ActionForward showStep1(ActionMapping mapping,
   
 
 	if (eaForm.getCosting().getCosts() != null && eaForm.getCosting().getCosts().size() != 0) {
-	  BigDecimal grandCost = new BigDecimal(0);
-	  BigDecimal grandContribution = new BigDecimal(0);
+	  double grandCost = 0;
+	  double grandContribution = 0;
 	  Long currencyId = teamMember.getAppSettings().getCurrencyId();
 	  Iterator i = eaForm.getCosting().getCosts().iterator();
 	  while (i.hasNext()) {
 	    EUActivity element = (EUActivity) i.next();
 	    element.setDesktopCurrencyId(currencyId);
-	    grandCost =grandCost.add(element.getTotalCostConverted());
-	    grandContribution =grandContribution.add(element.getTotalContributionsConverted());
+	    grandCost += element.getTotalCostConverted();
+	    grandContribution += element.getTotalContributionsConverted();
 	  }
-	  eaForm.getCosting().setOverallCost(grandCost);
-	  eaForm.getCosting().setOverallContribution(grandContribution);
+	  eaForm.getCosting().setOverallCost(new Double(grandCost));
+	  eaForm.getCosting().setOverallContribution(new Double(grandContribution));
 
 	}
 

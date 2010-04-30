@@ -52,8 +52,7 @@
     <property name="doc.src" value="./src/java"/>
     <property name="gen-src" value="./gen-src"/>
 
-	<property name="gen-src" value="./gen-src"/>
-	
+
     <!-- classpath for Struts 1.1 -->
     <path id="compile.classpath">
         <fileset dir="${lib}">
@@ -121,13 +120,7 @@
     </xjc>
     <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi">
     	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>
-    </xjc>    
-    <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">
-         	<produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>
-        </xjc>
-        <xjc destdir="${gen-src}" schema="./doc/amp-message-templates.xsd" package="org.digijava.module.message.jaxb">
-            <produces dir="${gen-src}" includes="org/digijava/module/message/jaxb/*.java"/>
-        </xjc>
+    </xjc>
    </target>
 	  
 
@@ -287,18 +280,16 @@
 	
 	<target name="runTest" depends="compileTest">
 		<mkdir dir="test-reports"/>
-    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes" fork="true">
-    	<jvmarg value="-Dhibernate.connection.release_mode=on_close"/>
+    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
     	  <classpath refid="run.classpath"/>
     	 	<formatter type="xml"/>
-    		 <test   name="org.dgfoundation.amp.test.AllTest" haltonfailure="no"  todir="test-reports" />
+    		 <test   name="org.dgfoundation.amp.test.AllTest" haltonfailure="no"  todir="test-reports"/>
     	</junit>
     </target>
 
 	<target name="runTestByTarget" depends="compileTest">
 			<mkdir dir="test-reports"/>
-	    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes" fork="true">
-	    	<jvmarg value="-Dhibernate.connection.release_mode=on_close"/>
+	    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
 	    	  <classpath refid="run.classpath"/>
 	    	 	<formatter type="xml"/>
 	    		 <test   name="org.dgfoundation.amp.test.${test-class}" haltonfailure="no"  todir="test-reports"/>
@@ -383,24 +374,20 @@
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>	
-			<transaction>CREATE DATABASE ${clean.db}</transaction>
-			<transaction>CREATE VIEW ${clean.db}.amp_activity (mycol) AS SELECT 'abc'</transaction>
+			<transaction>CREATE DATABASE ${clean.db}</transaction>		
 		</sql>
 		
 		<echo message="Creating Hibernate table structure and keys..."/>
 		<antcall target="database"/>
-		
+	
 		<echo message="Exporting stored functions from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
 			<classpath refid="compile.classpath"/>
-			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,') ', IF( LENGTH(returns)>0 ,' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}'</transaction>
+			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,') RETURNS ',returns,' ',body, ';;') FROM proc WHERE db='${clean.source}'</transaction>
 		</sql>
 		<echo message="Exporting views from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
 			<classpath refid="compile.classpath"/>
-			<transaction>SET foreign_key_checks = 0</transaction>
-			<transaction>drop view if exists ${clean.db}.amp_activity</transaction>
-			<transaction>SET foreign_key_checks = 1</transaction>
 			<transaction>SELECT concat('CREATE OR REPLACE VIEW ',table_name,' AS ',view_definition,';;') FROM views WHERE table_schema='${clean.source}'</transaction>
 		</sql>
 		<replace file="tmp_${clean.db}_ddl_copy.sql" token="`${clean.source}`." value=""/>
@@ -410,18 +397,14 @@
 		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
-			<!-- 
 			<transaction>INSERT IGNORE AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>
-			-->
 			<transaction>INSERT IGNORE amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>
 			<transaction>INSERT IGNORE amp_category_value (SELECT * from ${clean.source}.amp_category_value)</transaction>
 			<transaction>INSERT IGNORE amp_category_value_location (SELECT * from ${clean.source}.amp_category_value_location)</transaction>
 			<transaction>INSERT IGNORE amp_columns (SELECT * from ${clean.source}.amp_columns)</transaction>
 			<transaction>INSERT IGNORE amp_columns_order (SELECT * from ${clean.source}.amp_columns_order)</transaction>
 			<transaction>INSERT IGNORE amp_columns_filters (SELECT * from ${clean.source}.amp_columns_filters)</transaction>
-			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
 			<transaction>INSERT IGNORE amp_currency (SELECT * from ${clean.source}.amp_currency)</transaction>
-			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
 			<transaction>INSERT IGNORE amp_global_settings (SELECT * from ${clean.source}.amp_global_settings)</transaction>
 			<transaction>INSERT IGNORE amp_level (SELECT * from ${clean.source}.amp_level)</transaction>
 			<transaction>INSERT IGNORE amp_measures (SELECT * from ${clean.source}.amp_measures)</transaction>
@@ -466,18 +449,6 @@
 			<transaction>INSERT IGNORE amp_theme (SELECT * from ${clean.source}.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  ${clean.source}.amp_theme at,  ${clean.source}.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>
 			<transaction>INSERT IGNORE amp_program_settings (SELECT * from ${clean.source}.amp_program_settings WHERE default_hierarchy=2)</transaction>
 			<transaction>INSERT IGNORE amp_field (SELECT * from ${clean.source}.amp_field)</transaction>
-			
-			<!-- populating the db -->
-			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
-			<transaction>INSERT IGNORE amp_role (SELECT * from ${clean.source}.amp_role)</transaction>
-			<transaction>INSERT IGNORE amp_org_type (SELECT * from ${clean.source}.amp_org_type)</transaction>
-			<transaction>INSERT IGNORE amp_org_group (SELECT * from ${clean.source}.amp_org_group)</transaction>
-			<transaction>INSERT IGNORE amp_organisation (SELECT * from ${clean.source}.amp_organisation)</transaction>
-			<transaction>INSERT IGNORE amp_sector (SELECT * from ${clean.source}.amp_sector)</transaction>
-			<transaction>INSERT IGNORE amp_theme (SELECT * from ${clean.source}.amp_theme)</transaction>
-			<transaction>INSERT IGNORE amp_program_settings (SELECT * from ${clean.source}.amp_program_settings)</transaction>
-			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
-			<!-- END populating the db -->
 			<transaction>CREATE TABLE util_global_settings_possible_ LIKE ${clean.source}.util_global_settings_possible_</transaction><transaction>INSERT IGNORE util_global_settings_possible_ (SELECT * from ${clean.source}.util_global_settings_possible_)</transaction>
 			<transaction>CREATE TABLE qrtz_blob_triggers LIKE ${clean.source}.qrtz_blob_triggers</transaction><transaction>INSERT IGNORE qrtz_blob_triggers (SELECT * from ${clean.source}.qrtz_blob_triggers)</transaction>
 			<transaction>CREATE TABLE qrtz_calendars LIKE ${clean.source}.qrtz_calendars</transaction><transaction> INSERT IGNORE qrtz_calendars (SELECT * from ${clean.source}.qrtz_calendars)</transaction>
@@ -493,45 +464,18 @@
 			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT IGNORE qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>
 			
 			<!-- create cached table mockups -->
-			 
 			<transaction>CREATE TABLE cached_amp_activity LIKE ${clean.source}.cached_amp_activity</transaction>
-			
 			<transaction>CREATE TABLE cached_v_donor_date_hierarchy LIKE ${clean.source}.cached_v_donor_date_hierarchy</transaction>
 			<transaction>CREATE TABLE cached_v_donor_funding LIKE ${clean.source}.cached_v_donor_funding</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_0 LIKE ${clean.source}.cached_v_nationalobjectives_level_0</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_1 LIKE ${clean.source}.cached_v_nationalobjectives_level_1</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_2 LIKE ${clean.source}.cached_v_nationalobjectives_level_2</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_3 LIKE ${clean.source}.cached_v_nationalobjectives_level_3</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_4 LIKE ${clean.source}.cached_v_nationalobjectives_level_4</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_5 LIKE ${clean.source}.cached_v_nationalobjectives_level_5</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_6 LIKE ${clean.source}.cached_v_nationalobjectives_level_6</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_7 LIKE ${clean.source}.cached_v_nationalobjectives_level_7</transaction>
-			<transaction>CREATE TABLE cached_v_nationalobjectives_level_8 LIKE ${clean.source}.cached_v_nationalobjectives_level_8</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_0 LIKE ${clean.source}.cached_v_primaryprogram_level_0</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_1 LIKE ${clean.source}.cached_v_primaryprogram_level_1</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_2 LIKE ${clean.source}.cached_v_primaryprogram_level_2</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_3 LIKE ${clean.source}.cached_v_primaryprogram_level_3</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_4 LIKE ${clean.source}.cached_v_primaryprogram_level_4</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_5 LIKE ${clean.source}.cached_v_primaryprogram_level_5</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_6 LIKE ${clean.source}.cached_v_primaryprogram_level_6</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_7 LIKE ${clean.source}.cached_v_primaryprogram_level_7</transaction>
-			<transaction>CREATE TABLE cached_v_primaryprogram_level_8 LIKE ${clean.source}.cached_v_primaryprogram_level_8</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_0 LIKE ${clean.source}.cached_v_secondaryprogram_level_0</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_1 LIKE ${clean.source}.cached_v_secondaryprogram_level_1</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_2 LIKE ${clean.source}.cached_v_secondaryprogram_level_2</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_3 LIKE ${clean.source}.cached_v_secondaryprogram_level_3</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_4 LIKE ${clean.source}.cached_v_secondaryprogram_level_4</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_5 LIKE ${clean.source}.cached_v_secondaryprogram_level_5</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_6 LIKE ${clean.source}.cached_v_secondaryprogram_level_6</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_7 LIKE ${clean.source}.cached_v_secondaryprogram_level_7</transaction>
-			<transaction>CREATE TABLE cached_v_secondaryprogram_level_8 LIKE ${clean.source}.cached_v_secondaryprogram_level_8</transaction>
-			<transaction>CREATE TABLE cached_v_sectors LIKE ${clean.source}.cached_v_sectors</transaction>
-			<transaction>CREATE TABLE cached_v_sub_sectors LIKE ${clean.source}.cached_v_sub_sectors</transaction>
-			<transaction>CREATE TABLE cached_v_m_regions LIKE ${clean.source}.cached_v_m_regions</transaction>
-			<transaction>CREATE TABLE cached_v_secondary_sectors LIKE ${clean.source}.cached_v_secondary_sectors</transaction>
-			<transaction>CREATE TABLE cached_v_secondary_sub_sectors LIKE ${clean.source}.cached_v_secondary_sub_sectors</transaction>
+			<transaction>CREATE TABLE cached_v_national_program LIKE ${clean.source}.cached_v_national_program</transaction>
+			<transaction>CREATE TABLE cached_v_primary_program LIKE ${clean.source}.cached_v_primary_program</transaction>	
+			<transaction>CREATE TABLE cached_v_primary_sector LIKE ${clean.source}.cached_v_primary_sector</transaction>
+			<transaction>CREATE TABLE cached_v_regions LIKE ${clean.source}.cached_v_regions</transaction>
+			<transaction>CREATE TABLE cached_v_sec_sub_sector LIKE ${clean.source}.cached_v_sec_sub_sector</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_program LIKE ${clean.source}.cached_v_secondary_program</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_sector LIKE ${clean.source}.cached_v_secondary_sector</transaction>
 			<transaction>CREATE TABLE cached_v_status LIKE ${clean.source}.cached_v_status</transaction>
-		
+			<transaction>CREATE TABLE cached_v_sub_sector LIKE ${clean.source}.cached_v_sub_sector</transaction>
 			
 			<!-- mandatory custom indexes -->
 			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>
@@ -562,15 +506,12 @@
 	
 	<target name="copyForAnySQL">
 		<condition property="dbName" value="mysql">
-			<not>
-				<isset property="dbName"/>				
-			</not>
-		</condition>
+		 	<not>
+		 		<isset property="dbName"/>                              
+		 	</not>
+		 </condition>
 		 <echo message="Using ${dbName} Configuration" />
 		<copy file="${dbConfigs}/${dbName}/hibernate-dialect.xml" todir="${src}" overwrite="true"/>
-		<copy file="${dbConfigs}/${dbName}/jackrabbit-schema.xml" todir="${jackrabbit}" overwrite="true"/>
-		<copy file="${dbConfigs}/${dbName}/patches-dir.xml" todir="${repository}" overwrite="true"/>
-		<copy file="${dbConfigs}/${dbName}/quartz.properties" todir="${src}" overwrite="true"/>
 		<copy file="${dbConfigs}/${dbName}/refresh_mondrian_cache.sql" todir="${RefreshMondrian}" overwrite="true"/>
 		<copy file="${dbConfigs}/${dbName}/AMP.xml" todir="${MondrianConfig}" overwrite="true"/>
 	</target>	

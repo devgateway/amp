@@ -13,15 +13,12 @@
   <link rel="stylesheet" type="text/css" href="../../../wcf/table/xtable.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/tree/xtree.css">
   
-
-<%@page import="org.dgfoundation.amp.ar.AmpARFilter"%>
-<%@page import="org.dgfoundation.amp.ar.ArConstants"%><html>
+<html>
  <jsp:include page="saveReport.jsp" flush="true" />
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body bgcolor=white>
-
 <digi:form action="/showreport.do"  method="post">
 <%-- include query and title, so this jsp may be used with different queries --%>
 <wcf:include id="include01" httpParam="pagename" prefix="/WEB-INF/queries/" suffix=".jsp"/>
@@ -39,15 +36,6 @@
 
 <jp:chart baseDisplayURL="/aim/DisplayChart.img" id="chart01" query="#{query01}" visible="false" controllerURL="/mondrian/showreport.do"/>
 
-<%
-	AmpARFilter filter = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-	String showsave = "true";
-	if (filter!=null && filter.isPublicView()){
-		showsave = "false";
-	}else{
-		showsave = "true";
-	}
-%>
 
 <wcf:form id="chartform01" xmlUri="/WEB-INF/jpivot/chart/chartpropertiesform.xml" model="#{chart01}" visible="false"/>
 <wcf:table id="query01.drillthroughtable" visible="false" selmode="none" editable="true"/>
@@ -56,7 +44,9 @@
 <%-- define a toolbar --%>
 <wcf:toolbar  id="toolbar01" bundle="com.tonbeller.jpivot.toolbar.resources">
   <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}"/>
+  <%-- 
   <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}"/>
+   --%>
   <wcf:scriptbutton id="sortConfigButton" tooltip="toolb.table.config" img="sort-asc" model="#{sortform01.visible}"/>
   <wcf:separator/>
   <wcf:scriptbutton id="levelStyle" tooltip="toolb.level.style" img="level-style" model="#{table01.extensions.axisStyle.levelStyle}"/>
@@ -77,10 +67,9 @@
   <wcf:imgbutton id="printpdf" tooltip="toolb.print" img="print" href="../../../Print.out?cube=01&type=1"/>
   <wcf:imgbutton id="printxls" tooltip="toolb.excel" img="excel" href="../../../Print.out?cube=01&type=0"/>
   <wcf:separator/>
-  <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()" visibleRef="<%=showsave%>"/>
-  
-  
+  <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()"/>
  </wcf:toolbar>
+
 
 <%-- render toolbar --%>
 <wcf:render ref="toolbar01" xslUri="/WEB-INF/jpivot/toolbar/htoolbar.xsl" xslCache="false"/>
@@ -102,12 +91,14 @@
   	<h3>MDX Query Editor</h3>
   	<wcf:render ref="mdxedit01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 </c:if>
-</logic:present>
+ </logic:present>
  --%>
 <%-- sort properties --%>
 <wcf:render ref="sortform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
+
 <%-- chart properties --%>
 <wcf:render ref="chartform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
+
 <%-- print properties --%>
 <wcf:render ref="printform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
@@ -132,9 +123,9 @@
 <wcf:render ref="query01.drillthroughtable" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
 
 <!-- Chart -->
-<div>
-	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
-</div>
+<p>
+	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl" xslCache="true"/>
+<p>
 <table>
 	<tr>
     	<td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">

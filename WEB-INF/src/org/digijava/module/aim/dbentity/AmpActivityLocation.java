@@ -1,14 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
-import org.digijava.module.aim.util.Output;
-
 /**
  * Connection between Activity and Sector.
  * This class initially was added to add percentage for Bolivia. AMP-2250
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable {
+public class AmpActivityLocation {
 	private Long id;
 	private AmpActivity activity;
 	private AmpLocation location;
@@ -38,28 +36,5 @@ public class AmpActivityLocation implements Versionable {
 	public void setLocationPercentage(Float locationPercentage) {
 		this.locationPercentage = locationPercentage;
 	}
-	
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		AmpActivityLocation aux = (AmpActivityLocation) obj;
-		if (this.location.equalsForVersioning(aux.getLocation())) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	@Override
-	public Output getOutput() {
-		Output out = this.location.getOutput();
-		out.getOutputs().add(
-				new Output(null, new String[] { " Percentage: " },
-						new Object[] { this.locationPercentage != null ? this.locationPercentage : new Float(0) }));
-		return out;
-	}
-
-	@Override
-	public Object getValue() {
-		return this.locationPercentage != null ? this.locationPercentage : new Float(0);
-	}
 }

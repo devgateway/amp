@@ -8,8 +8,6 @@
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
  <digi:ref href="css/dhtmlxtree.css" type="text/css" rel="stylesheet" />
 
-
-
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxtree.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlXTree_xw.js"/>"></script>
@@ -72,24 +70,9 @@
   <div id="log"></div>
   <!--<div id="xmlString"></div>-->
   <input type="hidden" id="xmlString"/>
-  
-  <!-- DragAndDrop works only Help Administrators members group  -->   
-  <script type="text/javascript">
-			function isDragable(){
-					return false;
-				}
-  </script>
-   
- 	<digi:secure group="Help Administrators">
-		 <script type="text/javascript">
-			function isDragable(){
-					return true;
-				}
-	 	</script>
- 	</digi:secure>
- 	
- 	
+ 
 <script type="text/javascript">
+
 
 
 // DOMParser for IE
@@ -127,14 +110,7 @@ if (typeof DOMParser == "undefined") {
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
-				
-				// DragAndDrop works only Help Administrators members group   
-	        if(isDragable()){ 
-		   	 		tree.enableDragAndDrop(true);
-	        	}else{
-	        		tree.enableDragAndDrop(false);
-		        }
-	        
+            tree.enableDragAndDrop(true);
             tree.setDragBehavior("complex");
             tree.setOnClickHandler(tonclick);
             var xml ='<?xml version="1.0" encoding="iso-8859-1"?>';
@@ -181,10 +157,9 @@ if (typeof DOMParser == "undefined") {
 	 		return
 	 	}
 	 	$("#bodyhelp").show();
-        var lastTimeStamp = new Date().getTime();
 
 	 	var urlact="/help/helpActions.do?actionType=getbody"
-		urlact=urlact+"&body="+str+"&lastTimeStamp="+lastTimeStamp;
+		urlact=urlact+"&body="+str
 		xmlHttp.open("GET",urlact,true)
 		xmlHttp.onreadystatechange=stateChange
 		xmlHttp.send(null)
@@ -197,7 +172,7 @@ function stateChange(){
 		 
 	 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("help:"));
      document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("help:"));
-     document.getElementById("bodyhelp").style.border="1px solid white";
+     document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
 
    }
 

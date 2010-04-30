@@ -1,9 +1,6 @@
 package org.digijava.module.aim.util;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,11 +22,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
@@ -52,12 +49,9 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpField;
@@ -69,18 +63,17 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgLocation;
-import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportLog;
+import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -92,13 +85,12 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
-import org.digijava.module.aim.dbentity.EUActivity;
-import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
@@ -120,7 +112,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.mondrian.query.MoConstants;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.hibernate.Hibernate;
@@ -129,12 +120,17 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.action.EntityUpdateAction;
+import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.EUActivityContribution;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
         
-    public static String filter(String text) {
-		String result = null;             
+           public static String filter(String text) {
+
+		String result = null;
+             
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
 			result = result.replaceAll(">", "&gt;");
@@ -143,10 +139,13 @@ public class DbUtil {
 			result = result.replaceAll("\"", "&quot;");
 			
 		}
+                
+
 		return result;
+
 	}
-    
-	public static String getDescParsed(String str) {
+	public static String getDescParsed(String str)
+	{
 		StringBuffer strbuff = new StringBuffer();
 		char[] ch = new char[str.length()];
 
@@ -433,7 +432,7 @@ public class DbUtil {
     }
 
     
-    public static int countActivitiesByQuery(String sQuery, ArrayList<FilterParam> params,Boolean cached) {
+    public static int countActivitiesByQuery(String sQuery, ArrayList<FilterParam> params) {
     	
     	Session sess=null;
     	Connection conn=null;
@@ -451,12 +450,9 @@ public class DbUtil {
     		}
     		
     		int ii=0;
-    		String query;
-    		if (!cached){
-    			query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("+ sQuery + " ) ";
-    		}else {
-    			query = "SELECT count(*) FROM "+ MoConstants.CACHED_ACTIVITY_TABLE +" WHERE amp_activity_id IN ("+ sQuery + " ) ";
-    		}
+
+    		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
+    				+ sQuery + " ) ";
     		//System.out.println("MASTER query count activities::: " + query);
     		PreparedStatement ps;
     		
@@ -723,26 +719,19 @@ public class DbUtil {
         Object o = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             o = session.load(c, id);
 
         } catch (Exception e) {
             logger.error("Uanble to get object of class " + c.getName() + " width id=" + id + ". Error was:" + e);
-        } 
-        return o;
-    }
-    
-    public static Object get(Class c, Serializable id) {
-        Session session = null;
-        Object o = null;
+        } finally {
 
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            o = session.load(c, id);
-
-        } catch (Exception e) {
-            logger.error("Uanble to get object of class " + c.getName() + " width id=" + id + ". Error was:" + e);
-        } 
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (Exception ex) {
+                logger.error("releaseSession() failed " + ex);
+            }
+        }
         return o;
     }
 
@@ -1118,7 +1107,7 @@ public class DbUtil {
 				return total;
     }
 
-    public static BigDecimal getTotalDonorFund(Long ampFundingId,
+    public static double getTotalDonorFund(Long ampFundingId,
                                            Integer transactionType, Integer adjustmentType) {
 
         logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
@@ -1129,8 +1118,8 @@ public class DbUtil {
         Query q = null;
         List list = null;
         Iterator iter = null;
-        BigDecimal total = new BigDecimal(0);
-        
+        Double total = new Double(0.0);
+        ;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -1149,7 +1138,7 @@ public class DbUtil {
             if (list.size() != 0) {
                 iter = list.iterator();
                 while (iter.hasNext()) {
-                    total = (BigDecimal) iter.next();
+                    total = (Double) iter.next();
                 }
             }
         } catch (Exception ex) {
@@ -1157,7 +1146,7 @@ public class DbUtil {
         }
 
         logger.debug("getTotalDonorFund() total : " + total);
-        return total;
+        return total.doubleValue();
     }
 
     public static Collection getYearlySum(Long ampFundingId,
@@ -1510,22 +1499,22 @@ public class DbUtil {
      * @author Priyajith C
      */
     // Retreives all organisation;
-    public static Collection<AmpOrganisation> getAllOrganisation() {
+    public static Collection getAllOrganisation() {
         Session session = null;
         Query qry = null;
-        Collection<AmpOrganisation> organisations = new ArrayList<AmpOrganisation>();
+        Collection organisation = new ArrayList();
 
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select o from "
                 + AmpOrganisation.class.getName() + " o order by name asc";
             qry = session.createQuery(queryString);
-            organisations = qry.list();
+            organisation = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get all organisations");
             logger.debug("Exceptiion " + e);
         }
-        return organisations;
+        return organisation;
     }
 
     public static Collection<AmpFiscalCalendar> getAllFisCalenders() {
@@ -1535,7 +1524,8 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select f from " + AmpFiscalCalendar.class.getName() + " f where f.name is not null";
+            String queryString = "select f from "
+                + AmpFiscalCalendar.class.getName() + " f";
             qry = session.createQuery(queryString);
             fisCals = qry.list();
         } catch (Exception e) {
@@ -1740,6 +1730,7 @@ public class DbUtil {
             if (itr.hasNext()) {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }
+            
         } catch (Exception e) {
             logger.error("Unable to get TeamAppSettings", e);
         }
@@ -1763,7 +1754,7 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
                 if(ampAppSettings!=null) break;
             }
-            PersistenceManager.releaseSession(session);
+            
         } catch (Exception e) {
             logger.error("Unable to get TeamAppSettings", e);
         }
@@ -2439,9 +2430,8 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
-                + " inner join org.orgGrpId grp "
                 + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
-                + keyword + "%') and grp.orgType=:orgType";
+                + keyword + "%') and org.orgTypeId=:orgType";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
@@ -2451,44 +2441,6 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection searchForOrganisation(String keyword, Long orgType, boolean matchExactWord) {
-        Session session = null;
-        Collection col = null;
-        Collection result = new ArrayList();
-        keyword = keyword.toLowerCase();
-        
-        try {
-            session = PersistenceManager.getRequestDBSession();
-//            String queryString = "select distinct org from "
-//                + AmpOrganisation.class.getName() + " org "
-//                + " inner join org.orgGrpId grp "
-//                + "where (lower(acronym) REGEXP '[[:<:]](" + keyword + ")[[:>:]]' or lower(name) REGEXP '[[:<:]](" + keyword + ")[[:>:]]') and grp.orgType=:orgType";
-            String queryString = "select distinct org from "
-                + AmpOrganisation.class.getName() + " org "
-                + " inner join org.orgGrpId grp "
-                + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
-                + keyword + "%') and grp.orgType=:orgType";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("orgType", orgType, Hibernate.LONG);
-            col = qry.list();
-            StringTokenizer st = new StringTokenizer("");
-            for (Iterator it = col.iterator(); it.hasNext();) {
-				AmpOrganisation org = (AmpOrganisation) it.next(); 
-			     st = new StringTokenizer(org.getName().toLowerCase() +" "+org.getAcronym().toLowerCase());
-			     while (st.hasMoreTokens()) {
-			         if(keyword.compareTo(st.nextToken()) == 0)
-			        	 {
-			        	 	result.add(org);
-			        	 	break;
-			        	 }
-			     }
-			}
-        } catch (Exception ex) {
-            logger.error("Unable to search ", ex);
-        }
-        return result;//col;
-    }
-    
     public static Collection searchForOrganisation(String keyword) {
         Session session = null;
         Collection col = null;
@@ -2506,44 +2458,6 @@ public class DbUtil {
             logger.error("Unable to search ", ex);
         }
         return col;
-    }
-    
-    public static Collection searchForOrganisation(String keyword, boolean matchExactWord) {
-        Session session = null;
-        Collection col = null;
-        Collection result = new ArrayList();
-        keyword=keyword.toLowerCase();
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-//            String queryString = "select distinct org from "
-//                + AmpOrganisation.class.getName() + " org "
-//                + "where  REGEX(lower(acronym),'[[:<:]](" + keyword + ")[[:>:]]') or  REGEX(lower(name), '[[:<:]](" + keyword + ")[[:>:]]')";
-            String queryString = "select distinct org from "
-                + AmpOrganisation.class.getName() + " org "
-                + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
-                + keyword + "%')";
-
-            Query qry = session.createQuery(queryString);
-            col = qry.list();
-            StringTokenizer st = new StringTokenizer("");
-            for (Iterator it = col.iterator(); it.hasNext();) {
-				AmpOrganisation org = (AmpOrganisation) it.next();
-			     st = new StringTokenizer(org.getName().toLowerCase()+" "+org.getAcronym().toLowerCase());
-			     while (st.hasMoreTokens()) {
-			         if(keyword.compareTo(st.nextToken()) == 0)
-			        	 {
-			        	 	result.add(org);
-			        	 	break;
-			        	 }
-			     }
-			}
-           
-
-        } catch (Exception ex) {
-            logger.error("Unable to search ", ex);
-        }
-        return result;//col;
     }
 
     /**
@@ -2589,8 +2503,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
-                    + " inner join org.orgGrpId grp "
-                + "where grp.orgType=:orgType and ((lower(acronym) like '%" + keyword +
+                + "where org.orgTypeId=:orgType and ((lower(acronym) like '%" + keyword + 
                 "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
                 + keyword + "%')";
             Query qry = session.createQuery(queryString);
@@ -2601,47 +2514,7 @@ public class DbUtil {
         }
         return col;
     }
-
-    public static Collection searchForOrganisation(String namesFirstLetter, String keyword, Long orgType, boolean matchWord) {
-        Session session = null;
-        Collection col = null;
-        Collection result = new ArrayList();
-        if(keyword.length()!=0){
-        	keyword=keyword.toLowerCase();
-        }
-        namesFirstLetter=namesFirstLetter.toLowerCase();
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-//            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
-//                    + " inner join org.orgGrpId grp "
-//                + "where grp.orgType=:orgType and ((lower(acronym) REGEXP '[[:<:]](" + keyword + ")[[:>:]]' and lower(name) like '"+namesFirstLetter+"%') or (lower(name) like '"+namesFirstLetter+ "%"
-//                + keyword + "%' and lower(name) REGEXP '[[:<:]](" + keyword + ")[[:>:]]'))";
-            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
-	            + " inner join org.orgGrpId grp "
-		        + "where grp.orgType=:orgType and ((lower(acronym) like '%" + keyword +
-		        "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
-		        + keyword + "%')";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("orgType", orgType, Hibernate.LONG);
-            col = qry.list();
-            StringTokenizer st = new StringTokenizer("");
-            for (Iterator it = col.iterator(); it.hasNext();) {
-				AmpOrganisation org = (AmpOrganisation) it.next(); 
-			     st = new StringTokenizer(org.getName().toLowerCase()+org.getAcronym().toLowerCase());
-			     while (st.hasMoreTokens()) {
-			         if(keyword.compareTo(st.nextToken()) == 0)
-			        	 {
-			        	 	result.add(org);
-			        	 	break;
-			        	 }
-			     }
-			}
-        } catch (Exception ex) {
-            logger.debug("Unable to search " + ex);
-        }
-        return result;//col;
-    }
+    
 
     public static Collection searchForOrganisationByType(Long orgType) {
         Session session = null;
@@ -2651,8 +2524,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
-                +" inner join org.orgGrpId grp "
-                + "where grp.orgType=:orgType";
+                + "where org.orgTypeId=:orgType";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
@@ -2670,10 +2542,9 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            session.clear();
             queryString = " select org from " + AmpOrganisation.class.getName() +" org ";
             if(!includeWeirdOrgs){
-               queryString +=  " where org.name not like '%x_%' and org.orgGrpId.orgType.orgTypeCode in ('BIL','MUL','Private') ";
+               queryString +=  " where org.name not like '%x_%' and org.orgTypeId.orgTypeCode in ('BIL','MUL','Private') ";
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
@@ -2701,9 +2572,8 @@ public class DbUtil {
             AmpOrgType tMul=getAmpOrgTypeByCode("MUL");
 
             session = PersistenceManager.getRequestDBSession();
-            queryString = " select org from " + AmpOrganisation.class.getName() +" org "
-                     + " inner join org.orgGrpId grp "
-                + " where grp.orgType='" + tBil.getAmpOrgTypeId() + "' or grp.orgType='" + tMul.getAmpOrgTypeId() + "' order by org.name";
+            queryString = " select org from " + AmpOrganisation.class.getName()
+                + " org where org.orgTypeId='" + tBil.getAmpOrgTypeId() + "' or org.orgTypeId='" + tMul.getAmpOrgTypeId() + "' order by org.name";
             q = session.createQuery(queryString);
             organizations = q.list();
 
@@ -2758,7 +2628,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = " select org from " + AmpOrganisation.class.getName() + " org where org.orgGrpId=:orgGroupId order by org.name";
+            queryString = " select org from " + AmpOrganisation.class.getName() + " org where org.orgGrpId=:orgGroupId";
             q = session.createQuery(queryString);
             q.setLong("orgGroupId", orgGroupId);
             organizations = q.list();
@@ -2809,9 +2679,8 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct gr from " + AmpOrgGroup.class.getName()
                     +" gr "
-                + " inner join gr.orgType t where t.classification is NULL or t.classification!=:gov order by gr.orgGrpName asc";
+                + " inner join gr.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by gr.orgGrpName asc";
             qry = session.createQuery(queryString);
-            qry.setString("gov", Constants.ORG_TYPE_GOVERNMENTAL);
             groups = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get all organisation groups", e);
@@ -2937,7 +2806,7 @@ public class DbUtil {
         return col;
     }
 
-    public static void add(Object object) throws DgException {
+    public static void add(Object object) {
         logger.debug("In add " + object.getClass().getName());
         Session sess = null;
         Transaction tx = null;
@@ -2948,7 +2817,7 @@ public class DbUtil {
             sess.save(object);
             tx.commit();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Unable to add "+object.getClass().getName());
             e.printStackTrace();
             if (tx != null) {
                 try {
@@ -2957,7 +2826,6 @@ public class DbUtil {
                     logger.error("rollback() failed", ex);
                 }
             }
-            throw new DgException(e);
         }
     }
 
@@ -2967,9 +2835,8 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            tx=sess.beginTransaction();
             sess.update(object);
-            tx.commit();
+            sess.flush();
         } catch (Exception e) {
         	logger.error(e);
         } finally { 
@@ -2987,240 +2854,24 @@ public class DbUtil {
         }
     }
 
-    public static void saveOrg(AmpOrganisation org) throws DgException {
+    public static void updateOrg(Object object) {
         Session sess = null;
         Transaction tx = null;
 
         try {
             sess = PersistenceManager.getRequestDBSession();
             tx = sess.beginTransaction();
-            sess.clear();
-            Set<AmpOrganisationContact> organisationContacts=org.getOrganizationContacts(); //form org contacts
-            if (org.getAmpOrgId() != null) {
-                String name = org.getName();
-                String dacOrgCode = org.getDacOrgCode();
-                String orgIsoCode = org.getOrgIsoCode();
-                String description = org.getDescription();
-                String orgCode = org.getOrgCode();
-                AmpFiscalCalendar ampFiscalCalId = org.getAmpFiscalCalId();
-                String budgetOrgCode = org.getBudgetOrgCode();
-                String acronymAndName = org.getAcronymAndName();
-                AmpOrgGroup orgGrpId = org.getOrgGrpId();
-                String address = org.getAddress();
-                String orgUrl = org.getOrgUrl();
-                String acronym = org.getAcronym();
-                AmpLevel levelId = org.getLevelId();
-                AmpCategoryValueLocations region = org.getRegion();
-                AmpCategoryValue implemLocationLevel = org.getImplemLocationLevel();
-                Set<AmpOrgLocation> locations = org.getLocations();
-                AmpCategoryValueLocations country = org.getCountry();
-                String addressAbroad = org.getAddressAbroad();
-                String taxNumber = org.getTaxNumber();
-                String primaryPurpose = org.getPrimaryPurpose();
-                String minPlanRegNumb = org.getMinPlanRegNumb();
-                String legalPersonNum = org.getLegalPersonNum();
-                Date legalPersonRegDate = org.getLegalPersonRegDate();
-                Date minPlanRegDate = org.getMinPlanRegDate();
-                String segmentCode = org.getSegmentCode();
-                Set sectors = org.getSectors();
-                Set<AmpOrganisationDocument> documents = org.getDocuments();
-                Set fundingDetails = org.getFundingDetails();
-                String otherInformation = org.getOtherInformation();
-                Date lineMinRegDate = org.getLineMinRegDate();
-                Date operFuncApprDate = org.getOperFuncApprDate();
-                String receiptLegPersonalityAct = org.getReceiptLegPersonalityAct();
-                org = (AmpOrganisation) sess.get(AmpOrganisation.class, org.getAmpOrgId());
-                org.setName(name);
-                org.setDacOrgCode(dacOrgCode);
-                org.setOrgIsoCode(orgIsoCode);
-                org.setDescription(description);
-                org.setOrgCode(orgCode);
-                org.setAmpFiscalCalId(ampFiscalCalId);
-                org.setBudgetOrgCode(budgetOrgCode);
-                org.setAcronymAndName(acronymAndName);
-                org.setAcronym(acronym);
-                org.setAddress(address);
-                org.setOrgUrl(orgUrl);
-                org.setOrgGrpId(orgGrpId);
-                org.setLevelId(levelId);
-                org.setRegion(region);
-                org.setCountry(country);
-                org.setSegmentCode(segmentCode);
-                org.setImplemLocationLevel(implemLocationLevel);
-                org.setAddressAbroad(addressAbroad);
-                org.setTaxNumber(taxNumber);
-                org.setPrimaryPurpose(primaryPurpose);
-                org.setMinPlanRegNumb(minPlanRegNumb);
-                org.setLegalPersonNum(legalPersonNum);
-                org.setLegalPersonRegDate(legalPersonRegDate);
-                org.setMinPlanRegDate(minPlanRegDate);
-                org.setOperFuncApprDate(operFuncApprDate);
-                org.setLineMinRegDate(lineMinRegDate);
-                org.setReceiptLegPersonalityAct(receiptLegPersonalityAct);
-                org.setOtherInformation(otherInformation);
-                if(org.getLocations()==null){
-                    org.setLocations(new HashSet<AmpOrgLocation>());
-                }
-                org.getLocations().clear();
-                if(locations!=null){
-                    Iterator<AmpOrgLocation> locationIter=locations.iterator();
-                    while(locationIter.hasNext()){
-                        AmpOrgLocation location=locationIter.next();
-                        if(location.getAmpOrgLocId()!=null){
-                           AmpOrgLocation oldLocation=(AmpOrgLocation)sess.get(AmpOrgLocation.class, location.getAmpOrgLocId());
-                           oldLocation.setPercent(location.getPercent());
-                           org.getLocations().add(oldLocation);
-                        }
-                        else{
-                             org.getLocations().add(location);
-                        }
+            AmpOrganisation org = (AmpOrganisation) object;
+            HashSet sect = new HashSet();
+            Iterator i = org.getSectors().iterator();
+            while (i.hasNext()) {
+                AmpSector e = (AmpSector) i.next();
+                sect.add(sess.load(AmpSector.class, e.getAmpSectorId()));
 
-                    }
-                }
-               
-                if(org.getSectors()==null){
-                    org.setSectors(new HashSet());
-                }
-                org.getSectors().clear();
-                if(sectors!=null){
-                    org.getSectors().addAll(sectors);
-                }
-                if(org.getFundingDetails()==null){
-                    org.setFundingDetails(new HashSet());
-                }
-                org.getFundingDetails().clear();
-                if(fundingDetails!=null){
-                    org.getFundingDetails().addAll(fundingDetails);
-                }
-                
-                if(org.getDocuments()==null){
-                    org.setDocuments(new HashSet<AmpOrganisationDocument>());
-                }
-                org.getDocuments().clear();
-                if(documents!=null){
-                    org.getDocuments().addAll(documents);
-                }
-             
-
-
-                if (org.getOrganizationContacts() != null) {
-                    for (AmpOrganisationContact ampOrganisationContact : org.getOrganizationContacts()) {
-                        AmpContact contact = ampOrganisationContact.getContact();
-                        contact.getOrganizationContacts().remove(ampOrganisationContact);
-                        sess.delete(ampOrganisationContact);
-                    }
-                    org.getOrganizationContacts().clear();
-
-                }
             }
-        
-           /**
-            * contact information
-           */            
-                        
-            if(org.getAmpOrgId()!=null){ //edit
-           	   List<AmpOrganisationContact> orgDBContacts=ContactInfoUtil.getOrganizationContacts(org.getAmpOrgId());
-           	   // if organization contains contact,which is not in form contact list, we should remove it
-           	   if(orgDBContacts!=null && orgDBContacts.size()>0){
-           		   Iterator<AmpOrganisationContact> iter=orgDBContacts.iterator();
-           		   while(iter.hasNext()){
-                  		  AmpOrganisationContact dbOrgContact=iter.next();
-                  		  int count=0;
-                  		  if(organisationContacts!=null){
-                  			  for (AmpOrganisationContact formOrgCont : organisationContacts) {
-              					if(formOrgCont.getId()!=null && formOrgCont.getId().equals(dbOrgContact.getId())){
-              						count++;
-              						break;
-              					}
-              				}
-                  		  }
-                  		  if(count==0){ //if organization contains contact,which is not in contact list, we should remove it
-                  			  AmpOrganisationContact orgCont=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, dbOrgContact.getId());
-                  			  AmpContact cont=orgCont.getContact();
-                  			  sess.delete(orgCont);
-                  			  cont.getOrganizationContacts().remove(orgCont);
-                  			  sess.update(cont);
-                  			  org.getOrganizationContacts().remove(orgCont);
-                  		  }
-                  	  }
-           	   	}
-              }
-            
-             if(organisationContacts!=null){
-             	//this will remove all organisation contact which are linked to this organisation
-             	for (Iterator iterator = organisationContacts.iterator(); iterator.hasNext();) {
-             		AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator.next();
- 					if(org.getAmpOrgId()!=null){
- 						if(ampOrganisationContact.getId()!=null){
- 							AmpContact cont=ampOrganisationContact.getContact();
- 							AmpOrganisationContact contToBeRemoved=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, ampOrganisationContact.getId()) ;
- 							if(contToBeRemoved!=null){
- 								sess.delete(contToBeRemoved);
- 	 							cont.getOrganizationContacts().remove(contToBeRemoved);
- 	 							
- 	 							org.getOrganizationContacts().remove(contToBeRemoved);
- 							}
- 							 							
- 						}
- 					}
- 				}
-             	
-             	//now re-save all organisation contacts
-             	for (AmpOrganisationContact organizationContact : organisationContacts) {
- 					//save or update contact
-             		AmpContact contact=organizationContact.getContact();
-                		AmpContact ampContact=null;
-                		if(contact.getId()!=null){ //contact already exists.
-                			ampContact=(AmpContact)sess.get(AmpContact.class, contact.getId());
-                			ampContact.setName(contact.getName());
-                			ampContact.setLastname(contact.getLastname());
-                			ampContact.setTitle(contact.getTitle());
-                			ampContact.setOrganisationName(contact.getOrganisationName());
-                			ampContact.setCreator(contact.getCreator());
-                			ampContact.setShared(true);
-                			ampContact.setOfficeaddress(contact.getOfficeaddress());
-                			ampContact.setFunction(contact.getFunction());
-                			//remove old properties
-                			if(ampContact.getProperties()!=null){
-                				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
-                					sess.delete(dbProperty);
-                				}
-                			}
-                			ampContact.setProperties(null);
-                			sess.update(ampContact);
-                		}else{
-                			sess.save(contact);
-                		}
-                		
-                		//save properties
-                		if(contact.getProperties()!=null){
-            				for (AmpContactProperty formProperty : contact.getProperties()) {
-            					if(ampContact!=null){
-            						formProperty.setContact(ampContact);
-            					}else{
-            						formProperty.setContact(contact);
-            					}
-            					sess.save(formProperty);
-            				}
-            			}
-                		               		
-                		//link org to cont
-                		AmpOrganisationContact newOrgCont=new AmpOrganisationContact();
-                		organizationContact.setOrganisation(org);
-                		organizationContact.setPrimaryContact(organizationContact.getPrimaryContact());
-            			if(ampContact!=null){
-            				organizationContact.setContact(ampContact);
-    					}else{
-    						organizationContact.setContact(contact);
-    					}
-                		sess.save(organizationContact);
-                		
-                		
- 				}
-             }
-       
-            sess.saveOrUpdate(org);
-            sess.flush();
+            org.setSectors(sect);
+
+            sess.update(org);
             tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update", e);
@@ -3231,11 +2882,10 @@ public class DbUtil {
                     logger.error("rollback() failed", ex);
                 }
             }
-              throw new DgException(e);
         }
     }
 
-    public static void delete(Object object) {
+    public static void delete(Object object) throws JDBCException {
         Session sess = null;
         Transaction tx = null;
 
@@ -3246,31 +2896,29 @@ public class DbUtil {
             sess.delete(object);
             //sess.flush();
             tx.commit();
-            PersistenceManager.releaseSession(sess);
         } catch (Exception e) {
-        	e.printStackTrace();
+            if (e instanceof JDBCException)
+                throw (JDBCException) e;
             logger.error("Exception " + e.toString());
             try {
                 tx.rollback();
             } catch (HibernateException ex) {
                 logger.error("rollback() failed");
                 logger.error(ex.toString());
-    }
+            }
         }
     }
-    
+
     public static void deleteAllStamps(String idxName){
 		Connection con;
 		try {
 			con = PersistenceManager.getSession().connection();
-			con.setAutoCommit(false);
 			con.createStatement().execute("DELETE FROM amp_lucene_index WHERE idxName like '" + idxName + "'");
 			con.commit();
 		} catch (Exception e) {
 			logger.error("Error while trying to delete Lucene db stamps: ", e);
 		}
     }
-   
     
     public static void deleteStatus(Long id) {
         AmpStatus oldStatusItem = new AmpStatus();
@@ -3746,7 +3394,7 @@ public class DbUtil {
  									.getTransactionDate().getTime()));
 
                 	 DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
-							.getTransactionAmount(),
+							.getTransactionAmount().doubleValue(),
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
 											.getTime()));
@@ -3772,7 +3420,7 @@ public class DbUtil {
 					logger.debug("From Currency: " + fromCurrency);
 
 					DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
-							.getTransactionAmount(),
+							.getTransactionAmount().doubleValue(),
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
 											.getTime()));
@@ -4048,7 +3696,7 @@ public class DbUtil {
         return project;
     }
 
-    public static BigDecimal getDonorFund(Long ampFundingId,
+    public static double getDonorFund(Long ampFundingId,
                                       Integer transactionType, Integer adjustmentType) {
         logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
                      + " transactionType " + transactionType + " adjustmentType "
@@ -4057,7 +3705,7 @@ public class DbUtil {
         Query q = null;
         List list = null;
         Iterator iter = null;
-        BigDecimal total =new BigDecimal(0);
+        double total = 0.0;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -4081,7 +3729,8 @@ public class DbUtil {
                 fundDetails = (AmpFundingDetail) iter.next();
                 if (fundDetails.getAmpCurrencyId().getCurrencyCode().equals(
                     "USD")) { //logger.debug("equals USD");
-                    total = total.add(fundDetails.getTransactionAmount());
+                    total = total
+                        + fundDetails.getTransactionAmount().doubleValue();
                 } else { //logger.debug(" not equal to USD ") ;
                     double fromCurrency = Util.getExchange(fundDetails
                         .getAmpCurrencyId().getCurrencyCode(),new java.sql.Date(fundDetails.getTransactionDate().getTime()));
@@ -4089,7 +3738,10 @@ public class DbUtil {
                     //total = total +
                     // CurrencyWorker.convert(fundDetails.getTransactionAmount().doubleValue(),"USD")
                     // ;
-                    total = total.add(CurrencyWorker.convert1(fundDetails.getTransactionAmount(),fromCurrency, toCurrency));
+                    total = total
+                        + CurrencyWorker.convert1(fundDetails
+                                                  .getTransactionAmount().doubleValue(),
+                                                  fromCurrency, toCurrency);
                     //logger.debug("AFTER conversion total is " + total);
                 }
 
@@ -4100,14 +3752,14 @@ public class DbUtil {
         return total;
     }
 
-    public static BigDecimal getDonorFundbyFiscalYear(Long ampFundingId,
+    public static double getDonorFundbyFiscalYear(Long ampFundingId,
                                                   Integer transactionType, Integer adjustmentType,
                                                   Integer fiscalYear) {
         Session session = null;
         Query q = null;
         List list = null;
         Iterator iter = null;
-        BigDecimal total = new BigDecimal(0);
+        double total = 0.0;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -4140,12 +3792,14 @@ public class DbUtil {
 
                 if (fundDetails.getAmpCurrencyId().getCurrencyCode().equals(
                     "USD")) {
-                    total = total.add(fundDetails.getTransactionAmount());
+                    total = total
+                        + fundDetails.getTransactionAmount().doubleValue();
                     logger.debug("if total " + total);
                 } else {
-                    total = total.add(CurrencyWorker.convert1(fundDetails
-                                                  .getTransactionAmount(),
-                                                  fromCurrency, toCurrency));
+                    total = total
+                        + CurrencyWorker.convert1(fundDetails
+                                                  .getTransactionAmount().doubleValue(),
+                                                  fromCurrency, toCurrency);
                     logger.debug(" else total " + total);
                 }
 
@@ -4157,7 +3811,7 @@ public class DbUtil {
         return total;
     }
 
-    public static BigDecimal getDonorFundbyFiscalYear(Long ampFundingId,
+    public static double getDonorFundbyFiscalYear(Long ampFundingId,
                                                   Integer transactionType, Integer adjustmentType,
                                                   Integer fiscalYear, Integer fiscalQuarter) {
         /*
@@ -4170,7 +3824,7 @@ public class DbUtil {
         Query q = null;
         List list = null;
         Iterator iter = null;
-        BigDecimal total = new BigDecimal(0);
+        double total = 0.0;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -4197,9 +3851,13 @@ public class DbUtil {
                 fundDetails = (AmpFundingDetail) iter.next();
                 if (fundDetails.getAmpCurrencyId().getCurrencyCode().equals(
                     "USD")) {
-                    total = total.add(fundDetails.getTransactionAmount());
+                    total = total
+                        + fundDetails.getTransactionAmount().doubleValue();
                 } else {
-                    total = total.add(CurrencyWorker.convert(fundDetails.getTransactionAmount(),"USD"));
+                    total = total
+                        + CurrencyWorker.convert(fundDetails
+                                                 .getTransactionAmount().doubleValue(),
+                                                 "USD");
 
                 }
 
@@ -4523,11 +4181,126 @@ public class DbUtil {
         return ampTermsAssist;
     }
 
+    public static Collection getAmpReportSector(Long ampActivityId) {
+        Session session = null;
+        ArrayList sectors = new ArrayList();
 
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select a from "
+                + AmpReportSector.class.getName() + " a "
+                + "where (a.ampActivityId=:ampActivityId)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                AmpReportSector act = (AmpReportSector) itr.next();
+                if (sectors.indexOf(act.getSectorName()) == -1)
+                    sectors.add(act.getSectorName());
+            }
 
+        } catch (Exception ex) {
+            logger.error("Unable to get activity sectors" + ex);
+        }
+        return sectors;
+    }
 
+    public static Collection getAmpReportSectorId(Long ampActivityId) {
+        Session session = null;
+        Collection sectors = new ArrayList();
 
-    
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select a from "
+                + AmpReportSector.class.getName() + " a "
+                + "where (a.ampActivityId=:ampActivityId)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                AmpReportSector act = (AmpReportSector) itr.next();
+                //	AmpSector
+                // ampSector=DbUtil.getAmpParentSector(act.getAmpSectorId());
+                sectors.add(act);
+            }
+
+        } catch (Exception ex) {
+            logger.warn("Unable to get activity sectors" + ex);
+        }
+        return sectors;
+    }
+
+    public static Collection getAmpReportSectors(String inClause) {
+        Session session = null;
+        ArrayList sectors = new ArrayList();
+        ArrayList activityId = new ArrayList();
+
+        try {
+            logger.debug("Team Id:" + inClause);
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select report from "
+                + AmpReportCache.class.getName()
+                + " report where (report.ampTeamId in(" + inClause
+                + ")) and (report.reportType='1') group by report.ampActivityId";
+            Query qry = session.createQuery(queryString);
+            Iterator itr = qry.list().iterator();
+            inClause = null;
+            while (itr.hasNext()) {
+                AmpReportCache ampReportCache = (AmpReportCache) itr.next();
+                if (inClause == null)
+                    inClause = "'" + ampReportCache.getAmpActivityId() + "'";
+                else
+                    inClause = inClause + ",'"
+                        + ampReportCache.getAmpActivityId() + "'";
+            }
+            logger.debug("Activity Id:" + inClause);
+            queryString = "select sector from "
+                + AmpReportSector.class.getName()
+                + " sector where (sector.ampActivityId in(" + inClause
+                + ")) order by sector.sectorName,sector.ampActivityId";
+            AmpProjectBySector ampProjectBySector = null;
+            //			logger.debug("Query String: " + queryString);
+            qry = session.createQuery(queryString);
+            //			qry.setParameter("ampTeamId",ampTeamId,Hibernate.LONG);
+            //			logger.debug("Size: " + qry.list().size());
+            itr = qry.list().iterator();
+            int flag = 0;
+            while (itr.hasNext()) {
+                AmpReportSector ampReportSector = (AmpReportSector) itr.next();
+                if (ampProjectBySector == null) {
+//					logger.debug("Start: ");
+                    ampProjectBySector = new AmpProjectBySector();
+                    ampProjectBySector.setAmpActivityId(new ArrayList());
+                } else if (! (ampProjectBySector.getSector().getAmpSectorId()
+                              .equals(ampReportSector.getAmpSectorId()))) {
+                    ampProjectBySector.getAmpActivityId().addAll(activityId);
+                    sectors.add(ampProjectBySector);
+                    ampProjectBySector = new AmpProjectBySector();
+                    ampProjectBySector.setAmpActivityId(new ArrayList());
+                    activityId.clear();
+                    flag = 0;
+                }
+                if (flag == 0) {
+                    ampProjectBySector.setSector(ampReportSector);
+                    flag = 1;
+                }
+                if (activityId.indexOf(ampReportSector.getAmpActivityId()) == -1) {
+//					logger.debug("Id: " + ampReportSector.getAmpActivityId());
+                    activityId.add(ampReportSector.getAmpActivityId());
+                }
+                if (!itr.hasNext()) {
+                    ampProjectBySector.getAmpActivityId().addAll(activityId);
+                    sectors.add(ampProjectBySector);
+                }
+            }
+
+            logger.debug("Sectors size: " + sectors.size());
+
+        } catch (Exception ex) {
+            logger.error("Unable to get activity sectors" + ex.getMessage());
+        }
+        return sectors;
+    }
 
     public static Collection getAmpReportLocation(Long ampActivityId) {
         Session session = null;
@@ -4743,7 +4516,7 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection<AmpStatus> getAllActivityStatus() {
+    public static Collection getAllActivityStatus() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -4796,7 +4569,7 @@ public class DbUtil {
     				CategoryConstants.FINANCING_INSTRUMENT_KEY);
     }
 
-    public static Collection<AmpOrganisation> getAllDonorOrgs() {
+    public static Collection getAllDonorOrgs() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -4811,24 +4584,6 @@ public class DbUtil {
             ex.printStackTrace(System.out);
         }
         return col;
-    }
-
-    public static Collection<AmpOrganisation> getDonorOrgsByGroupId(Long orgGroupId) throws  DgException{
-        Session session = null;
-        Collection<AmpOrganisation> organizations = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select distinct org from " + AmpFunding.class.getName()
-                + " f inner join f.ampDonorOrgId org where org.orgGrpId=:orgGroupId";
-            Query qry = session.createQuery(queryString);
-            qry.setLong("orgGroupId", orgGroupId);
-            organizations = qry.list();
-        } catch (Exception ex) {
-            logger.debug("Unable to get organizations : " + ex);
-            throw new DgException(ex);
-        }
-        return organizations;
     }
 
     public static Collection getAllOrgGrpBeeingUsed(){
@@ -4849,7 +4604,7 @@ public class DbUtil {
 
     }
 
-    public static Collection<AmpOrgGroup> getAllOrgGroups() {
+    public static Collection getAllOrgGroups() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -4907,8 +4662,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct aot.* from amp_org_type aot " +
-                                                    "inner join AMP_ORG_GROUP aog on  (aog.org_type = aot.amp_org_type_id) "+
-					            "inner join amp_organisation ao on (ao.org_grp_id  = aog.amp_org_grp_id) " +
+					            "inner join amp_organisation ao on (ao.org_type_id = aot.amp_org_type_id) " +
 					            "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) " +
 					            "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) ";                       
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgType.class);
@@ -4961,24 +4715,6 @@ public class DbUtil {
             logger.error("Unable to get Org Group" + ex);
         }
         return grp;
-    }
-    
-    public static int getOrgGroupsAmount(String groupName,Long groupId) throws Exception{
-    	Session session = null;
-    	Query qry =null;
-    	int count=0;
-    	try {
-    		session = PersistenceManager.getRequestDBSession();
-            String queryString = "select count(*) from " + AmpOrgGroup.class.getName()+ " grp " + "where grp.orgGrpName='"+groupName+"'";
-            if(groupId!=null && groupId.longValue()!=0){
-            	queryString += " and grp.ampOrgGrpId!="+groupId;
-            }
-            qry = session.createQuery(queryString);
-            count=((Integer)qry.uniqueResult()).intValue();
-		} catch (Exception e) {
-			logger.error("unable to get org. group count " + e);
-		}
-    	return count;
     }
 
     public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(Long orgType) {
@@ -5079,16 +4815,23 @@ public class DbUtil {
         Session sess = null;
         Query qry = null;
         String queryString = null;
+
         try {
             sess = PersistenceManager.getRequestDBSession();
-            
+            queryString = "select o from " + AmpOrganisation.class.getName()
+                + " o where (o.orgTypeId=:orgTypeId)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+            if (null != qry.list() && qry.list().size() > 0)
+                return true;
+            else {
                 queryString = "select o from " + AmpOrgGroup.class.getName()
                     + " o where (o.orgType=:orgTypeId)";
                 qry = sess.createQuery(queryString);
                 qry.setParameter("orgTypeId", Id, Hibernate.LONG);
                 if (null != qry.list() && qry.list().size() > 0)
                     return true;
-            
+            }
         } catch (Exception e) {
             logger.debug("Exception from chkOrgTypeReferneces(): " + e);
             e.printStackTrace(System.out);
@@ -5118,24 +4861,6 @@ public class DbUtil {
             logger.debug("Exception from getOrgType() : " + e.getMessage());
         }
         return ot;
-    }
-    
-    public static int getOrgTypesAmount(String name,Long groupId) throws Exception{
-    	Session sess = null;
-        Query qry = null;
-        int count=0;
-        try {
-        	 sess = PersistenceManager.getRequestDBSession();
-             String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where o.orgType='"+name+"'";
-             if(groupId!=null && groupId.longValue()!=0){
-            	 queryString += " and o.ampOrgTypeId!="+groupId;
-             }
-             qry = sess.createQuery(queryString);
-             count=((Integer)qry.uniqueResult()).intValue();
-		} catch (Exception e) {
-			logger.error("Exception while getting org types amount:" +e.getMessage());
-		}
-        return count;
     }
 
     public static Collection getOrgByCode(String action, String code, Long id) {
@@ -5288,7 +5013,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select o from " + AmpComments.class.getName()
-                + " o where o.ampActivityId=:aid";
+                + " o "
+                + "where (o.ampActivityId=:aid)";
             qry = session.createQuery(queryString);
             qry.setParameter("aid", aid, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -5389,7 +5115,28 @@ public class DbUtil {
         return year.intValue();
     }
 
-   
+    public static ArrayList getAmpReportPhysicalPerformance(Long ampActivityId) {
+        Session session = null;
+        ArrayList progress = new ArrayList();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select a from "
+                + AmpReportPhysicalPerformance.class.getName() + " a "
+                + "where (a.ampActivityId=:ampActivityId)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                AmpReportPhysicalPerformance act = (AmpReportPhysicalPerformance) itr.next();
+                progress.add(act.getTitle() + " : " + act.getDescription());
+            }
+
+        } catch (Exception ex) {
+            logger.error("Unable to get activity sectors" + ex);
+        }
+        return progress;
+    }
 
     public static Group getGroup(String key, Long siteId) {
         Session session = null;
@@ -5596,12 +5343,7 @@ public class DbUtil {
     						Funding fund = (Funding) itr2.next();
     						AmpFunding ampFunding = new AmpFunding();
     						ampFunding.setAmpDonorOrgId(DbUtil.getOrganisation(fOrg.getAmpOrgId()));
-    						if (ampFunding.getAmpDonorOrgId().getOrgGrpId().getOrgType().getOrgTypeCode()
-									.equalsIgnoreCase("BIL")
-									|| ampFunding.getAmpDonorOrgId().getOrgGrpId().getOrgType().getOrgTypeCode()
-											.equalsIgnoreCase("MUL")) {
-								fundingSet.add(ampFunding);
-							}
+    						fundingSet.add(ampFunding);
     					}
     				}
     			}
@@ -5669,11 +5411,9 @@ public class DbUtil {
                             if (svy.getPointOfDeliveryDonor() != null) {
                                 svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
                                 svfund.setAcronim(svy.getPointOfDeliveryDonor().getAcronym());
-                                svfund.setOrgID(svy.getPointOfDeliveryDonor().getAmpOrgId());
                             } else {
                                 svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
                                 svfund.setAcronim(svy.getAmpDonorOrgId().getAcronym());
-                                svfund.setOrgID(svy.getAmpDonorOrgId().getAmpOrgId());
                             }
 
                             survey.add(svfund);
@@ -5695,13 +5435,6 @@ public class DbUtil {
         logger.debug("survey.size() : " + survey.size());
         return survey;
     }
-    
-    public static Collection<AmpAhsurvey> getAllSurveysByActivityWithoutAdding(Long id) throws DgException {
-		Session session = PersistenceManager.getRequestDBSession();
-		AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
-		return activity.getSurvey();
-
-	}
     
     public static Collection getAllSurveysByActivity(Long activityId) {
         ArrayList survey = new ArrayList();
@@ -5837,8 +5570,7 @@ public class DbUtil {
             Query query = session.createQuery(qry);
             query.setParameter("surveyId", surveyId, Hibernate.LONG);
             response = query.list();
-            
-     
+
             qry = "select fund from " + AmpFunding.class.getName()
                 + " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
             query = session.createQuery(qry);
@@ -5917,9 +5649,6 @@ public class DbUtil {
 
                                 ques.setResponse(res.getResponse());
                                 ques.setResponseId(res.getAmpReponseId());
-                                if(res.getAmpReponseId() == null) {
-                                	logger.warn("ES NULLLLLLLLLLLLLLLL");
-                                }
                                 break;
                             }
                         }
@@ -5941,14 +5670,13 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            //survey = (AmpAhsurvey) session.load(AmpAhsurvey.class, surveyId);
             String qry = "select svy from " + AmpAhsurvey.class.getName()
                 + " svy where (svy.ampAHSurveyId=:surveyId)";
             Query q = session.createQuery(qry);
             q.setParameter("surveyId", surveyId, Hibernate.LONG);
             survey = (AmpAhsurvey) q.list().get(0);
         } catch (Exception ex) {
-            logger.error("Unable to get survey : ", ex);
+            logger.debug("Unable to get survey : ", ex);
         }
         return survey;
     }
@@ -6009,7 +5737,6 @@ public class DbUtil {
             }
             activity.getSurvey().add(survey);
             survey.setAmpAHSurveyId(null);
-            survey.setResponses(new HashSet<AmpAhsurveyResponse>());
             
             //setup responses.
             Iterator itr1 = indicators.iterator();
@@ -6026,34 +5753,6 @@ public class DbUtil {
                     survey.getResponses().add(res);
                 }
             }
-    }
-    
-    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity) throws DgException {
-		Session session = PersistenceManager.getRequestDBSession();
-    	
-		AmpAhsurvey newSurvey = new AmpAhsurvey();
-		newSurvey.setAmpActivityId(activity);
-		newSurvey.setAmpAHSurveyId(null);
-		newSurvey.setAmpDonorOrgId(survey.getAmpDonorOrgId());
-		newSurvey.setPointOfDeliveryDonor(survey.getPointOfDeliveryDonor());
-		newSurvey.setResponses(new HashSet<AmpAhsurveyResponse>());
-		Iterator iterResponses = survey.getResponses().iterator();
-		while(iterResponses.hasNext()){
-			AmpAhsurveyResponse res = (AmpAhsurveyResponse) iterResponses.next();
-			AmpAhsurveyResponse newResponse = new AmpAhsurveyResponse();
-			newResponse.setAmpAHSurveyId(newSurvey);
-			newResponse.setAmpQuestionId(res.getAmpQuestionId());
-			newResponse.setAmpReponseId(null);
-			newResponse.setResponse(res.getResponse());
-			//res.setAmpAHSurveyId(newSurvey);
-			newSurvey.getResponses().add(newResponse);
-			//session.saveOrUpdate(newResponse);
-		}
-		if(activity.getSurvey() == null) {
-			activity.setSurvey(new HashSet<AmpAhsurvey>());
-		}
-		activity.getSurvey().add(newSurvey);
-		//session.saveOrUpdate(newSurvey);
     }
 
     public static void saveSurveyResponses(Long surveyId, Collection indicator) {
@@ -6112,7 +5811,7 @@ public class DbUtil {
         }
     }
 
-    public static Collection<AmpAhsurveyIndicator> getAllAhSurveyIndicators() {
+    public static Collection getAllAhSurveyIndicators() {
         Collection responses = new ArrayList();
         Session session = null;
 
@@ -6141,7 +5840,7 @@ public class DbUtil {
                 .list().get(0);
 
         } catch (Exception ex) {
-            logger.error("Unable to get survey indicator : " + ex.getMessage());
+            logger.debug("Unable to get survey indicator : " + ex.getMessage());
             ex.printStackTrace(System.out);
         }
         return indc;
@@ -6168,7 +5867,7 @@ public class DbUtil {
   
     public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup,
         AmpCategoryValue statusCM, int startYear, int closeYear, String currency, String termAssist, AmpCategoryValue financingInstr,
-        String sector, String calendar, Long site, String lang) {
+        String sector, String calendar, String site, String lang) {
 
         Session session = null;
         ArrayList responses = new ArrayList();
@@ -6177,14 +5876,13 @@ public class DbUtil {
         int NUM_ANSWER_COLUMNS = 4;
         int YEAR_RANGE = (closeYear - startYear + 1);
         int indcFlag = 0, index = 0, j = 0, convYr = 0;
-        BigDecimal sum = new BigDecimal(0);
-        double fromExchangeRate = 0.0, toExchangeRate = 0.0, ansToQues4 = 0.0;
+        double sum = 0.0, fromExchangeRate = 0.0, toExchangeRate = 0.0, ansToQues4 = 0.0;
         Date startDates[] = null;
         Date endDates[] = null;
-        BigDecimal answersRow[] = null;
-        BigDecimal allDnRow[] = null;
+        double answersRow[] = null;
+        double allDnRow[] = null;
         boolean answers[] = null;
-        BigDecimal percent = null;
+        Double percent = null;
         NumberFormat formatter = new DecimalFormat("#.##");
         String date = null;
         Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
@@ -6253,30 +5951,20 @@ public class DbUtil {
                 responses.add(all);
                 if (indcFlag != 6) {
                     for (int i = 0; i < YEAR_RANGE; i++) {
-                        answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
-                        answersRow[0] = new BigDecimal(startYear + i);
-                        for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
-                        	answersRow[k] = new BigDecimal(0.0);
-                        }
+                        answersRow = new double[NUM_ANSWER_COLUMNS];
+                        answersRow[0] = startYear + i;
                         ( (ParisIndicator) responses.get(0)).getAnswers().add(answersRow);
                     }
-                } else {
-                    ( (ParisIndicator) responses.get(0)).getAnswers().add(new BigDecimal[NUM_ANSWER_COLUMNS]);
-                    for (int m = 0; m < ( (ParisIndicator) responses.get(0)).getAnswers().size(); m++) {
-                    	for (int k = 0; k < NUM_ANSWER_COLUMNS; k++) {
-                        	((BigDecimal[])( (ParisIndicator) responses.get(0)).getAnswers().get(m))[k] = new BigDecimal(0);
-                        }
-                    }
-                }
+                } else
+                    ( (ParisIndicator) responses.get(0)).getAnswers().add(new double[NUM_ANSWER_COLUMNS]);
 
                 itr1 = surveyDonors.iterator();
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
-                    AmpOrgType orgType=dnOrg.getOrgGrpId().getOrgType();
-                    if (orgType != null) {
-                        if (!orgType.getOrgTypeCode().equalsIgnoreCase("bil") &&
-                            !orgType.getOrgTypeCode().equalsIgnoreCase("mul")) {
+                    if (dnOrg.getOrgTypeId() != null) {
+                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
                             continue;
                         }
                     }
@@ -6308,22 +5996,15 @@ public class DbUtil {
                     }
 
                     pi.setAnswers(new ArrayList());
-                    if (indcFlag == 6) {
-                        answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
-                        for (int k = 0; k < NUM_ANSWER_COLUMNS; k++) {
-                        	answersRow[k] = new BigDecimal(0.0);
-                        }
-                    }
+                    if (indcFlag == 6)
+                        answersRow = new double[NUM_ANSWER_COLUMNS];
                     //logger.debug("surveySet.size() : " + surveySet.size());
                     boolean[][] answersColl = getSurveyReportAnswer(indcCode, surveySet);
                     for (int i = 0; i < YEAR_RANGE; i++) {
                         if (indcFlag != 6) {
                             // answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
-                            answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
-                            for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
-                            	answersRow[k] = new BigDecimal(0.0);
-                            }
-                            answersRow[0] = new BigDecimal(startYear + i);
+                            answersRow = new double[NUM_ANSWER_COLUMNS];
+                            answersRow[0] = (startYear + i);
                         }
                         AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
 
@@ -6401,7 +6082,7 @@ public class DbUtil {
                             if (null != answers) {
                                 indc6Break:
                                     for (j = 0; j < answers.length; j++) {
-                                    sum = new BigDecimal(0);
+                                    sum = 0.0;
                                     if (answers[j]) {
                                         /*
                                          if (indcFlag == 6) {
@@ -6429,7 +6110,7 @@ public class DbUtil {
                             				if (activityStartYear != 0 && activityEndYear != 0) {
                             					//If start or end year is equals to actual year in the for cycle.
                             					if(activityStartYear == i+startYear || activityEndYear == i+startYear) {
-                            						answersRow[i].add(new BigDecimal(1));
+                            						answersRow[i] += 1;
                             					}
                             				}
                                     		continue;
@@ -6452,17 +6133,16 @@ public class DbUtil {
                                                 		continue;
                                                 	}
                                                 }
-                                                //TODO: get rid of hardcoded values and check for the french string "Support Budg�taire Direct".
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) 
-                                                    			& !fund.getFinancingInstrument().getId().equals(new Long(84))) {
+                                                    	if ( !ArrayUtils.contains(FeaturesUtil.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
+                                                    			fund.getFinancingInstrument().getId().toString())) {
                                                             logger.warn(fund.getFinancingInstrument().getValue());
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)
-                                                        		|| fund.getFinancingInstrument().getId().equals(new Long(84))) {
+                                                        if (ArrayUtils.contains(FeaturesUtil.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
+                                                    			fund.getFinancingInstrument().getId().toString())) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }
@@ -6495,7 +6175,7 @@ public class DbUtil {
                                                             }
                                                             // For indc-6: (Q9 = yes) & there is an actual-disb in the year
                                                             /*if (indcFlag == 6) {
-                                                                answersRow[i]=  answersRow[i].add(new BigDecimal(1));
+                                                                answersRow[i] += 1;
                                                                 break indc6Break;
                                                             }*/
                                                             // Filtering by currency here
@@ -6515,8 +6195,8 @@ public class DbUtil {
                                                                 else
                                                                     toExchangeRate = Util.getExchange(currency, new java.sql.Date(fundtl.getTransactionDate().getTime()));
                                                             }
-                                                            sum =sum.add( CurrencyWorker.convert1(fundtl.getTransactionAmount(),
-                                                                fromExchangeRate, toExchangeRate));
+                                                            sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
+                                                                fromExchangeRate, toExchangeRate);
                                                         }
                                                     //}
                                                 }
@@ -6525,10 +6205,10 @@ public class DbUtil {
                                     }
                                     if (indcFlag != 6) {
                                         if ("4".equalsIgnoreCase(indcCode)) {
-                                            percent = sum.multiply(new BigDecimal(ansToQues4));
-                                            sum = percent;
+                                            percent = new Double(sum * ansToQues4);
+                                            sum = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                         }
-                                        answersRow[j + 1] = answersRow[j + 1].add(sum);
+                                        answersRow[j + 1] += sum;
                                     }
                                 }
                             } else
@@ -6541,57 +6221,60 @@ public class DbUtil {
                         // computing last two columns of indicator-5a report
                         if (indcFlag == 5) {
                             //calculating percentage for second-last column here
-                            sum = answersRow[NUM_ANSWER_COLUMNS - 7].add(answersRow[NUM_ANSWER_COLUMNS - 6]).add(answersRow[NUM_ANSWER_COLUMNS - 5]);
-                            if (answersRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0.0)
-                                answersRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0) ;
+                            sum = answersRow[NUM_ANSWER_COLUMNS - 7] + answersRow[NUM_ANSWER_COLUMNS - 6]
+                                + answersRow[NUM_ANSWER_COLUMNS - 5];
+                            if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+                                answersRow[NUM_ANSWER_COLUMNS - 2] = -1.0;
                             else {
-                                sum =sum.divide(new BigDecimal(3), RoundingMode.HALF_UP);
-                                percent = sum.multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP) ;
+                                sum /= 3;
+                                percent = new Double( (sum * 100) / answersRow[NUM_ANSWER_COLUMNS - 3]);
                                 try{
-                                	answersRow[NUM_ANSWER_COLUMNS - 2] = percent;
+                                	answersRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                 }catch(Exception e){
                                 	e.printStackTrace();
                                 }
                             }
                         }
                         // calculating final percentage here
-                        if ( (indcFlag == 5 || indcFlag == 7) && answersRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0.0)
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0)	;
-                        else if ( (indcFlag == 0 || indcFlag == 9) && answersRow[NUM_ANSWER_COLUMNS - 2].doubleValue() == 0.0)
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
+                        if ( (indcFlag == 5 || indcFlag == 7) && answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+                        else if ( (indcFlag == 0 || indcFlag == 9) && answersRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
                         else {
                             try {
                                 if (indcFlag == 5)
-                                    percent = answersRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
+                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 4]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 7)
-                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
+                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 2]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 9) {
-                                    sum = answersRow[NUM_ANSWER_COLUMNS - 4].add(answersRow[NUM_ANSWER_COLUMNS - 3]);
-                                    percent = sum.multiply(new BigDecimal(100)).divide( answersRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP);
+                                    sum = answersRow[NUM_ANSWER_COLUMNS - 4] + answersRow[NUM_ANSWER_COLUMNS - 3];
+                                    percent = new Double( (100 * sum) / answersRow[NUM_ANSWER_COLUMNS - 2]);
                                 } else
-                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP);
-                                   answersRow[NUM_ANSWER_COLUMNS - 1] = percent;
+                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
+                                //answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                answersRow[NUM_ANSWER_COLUMNS - 1] = percent;
+                                //logger.debug("final-% : " + answersRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
                                 logger.debug("percentage is NaN");
-                                answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(0.0);
+                                answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
                             }
                         }
                         pi.getAnswers().add(answersRow);
 
                         // getting results year-wise for all-donor row
-                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
+                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
                         for (j = 1; j < (NUM_ANSWER_COLUMNS - 1); j++) {
                             if (indcFlag == 5 && j == (NUM_ANSWER_COLUMNS - 2))
                                 break;
-                            allDnRow[j] = allDnRow[j].add(answersRow[j]);
+                            allDnRow[j] += answersRow[j];
                         }
                     }
                     if (indcFlag == 6) {
                         pi.getAnswers().add(answersRow);
                         responses.add(pi);
-                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(0));
+                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(0));
                         for (j = 0; j < NUM_ANSWER_COLUMNS; j++) {
-                            allDnRow[j] =allDnRow[j].add(answersRow[j]);
+                            allDnRow[j] += answersRow[j];
                         }
                     } else
                         responses.add(pi);
@@ -6600,39 +6283,40 @@ public class DbUtil {
                 if (indcFlag != 6) {
                     // calculating final percentage for all-donors row
                     for (j = 0; j < YEAR_RANGE; j++) {
-                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
+                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
                         if (indcFlag == 5) {
                             //calculating percentage for second-last column here
-                            sum = allDnRow[NUM_ANSWER_COLUMNS - 7].add( allDnRow[NUM_ANSWER_COLUMNS - 6]).add( allDnRow[NUM_ANSWER_COLUMNS - 5]);
-                            if (allDnRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0)
-                                allDnRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0);
+                            sum = allDnRow[NUM_ANSWER_COLUMNS - 7] + allDnRow[NUM_ANSWER_COLUMNS - 6]
+                                + allDnRow[NUM_ANSWER_COLUMNS - 5];
+                            if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+                                allDnRow[NUM_ANSWER_COLUMNS - 2] = -1.0;
                             else {
-                                sum =sum.divide(new BigDecimal(3), RoundingMode.HALF_UP) ;
-                                percent = sum.divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP).multiply(new BigDecimal(100));
-                                allDnRow[NUM_ANSWER_COLUMNS - 2] = percent;
+                                sum /= 3;
+                                percent = new Double( (sum * 100) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
+                                allDnRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                             }
                         }
                         // calculating final percentage here
-                        if ( (indcFlag == 5 || indcFlag == 7) && allDnRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0)
-                            allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
-                        else if ( (indcFlag == 0 || indcFlag == 9) && allDnRow[NUM_ANSWER_COLUMNS - 2].doubleValue() == 0)
-                            allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
+                        if ( (indcFlag == 5 || indcFlag == 7) && allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+                            allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+                        else if ( (indcFlag == 0 || indcFlag == 9) && allDnRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
+                            allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
                         else {
                             try {
                                 if (indcFlag == 5)
-                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
+                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 4]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 7)
-                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100 )).divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
+                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 2]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 9) {
-                                    sum = allDnRow[NUM_ANSWER_COLUMNS - 4].add(allDnRow[NUM_ANSWER_COLUMNS - 3]) ;
-                                    percent =sum.multiply(new BigDecimal(100)).divide(allDnRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP) ;
+                                    sum = allDnRow[NUM_ANSWER_COLUMNS - 4] + allDnRow[NUM_ANSWER_COLUMNS - 3];
+                                    percent = new Double( (100 * sum) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
                                 } else
-                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100 )).divide(allDnRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP);
-                                allDnRow[NUM_ANSWER_COLUMNS - 1] = percent;
+                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 3]) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
+                                allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                 //logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
                                 logger.error("percentage[all-donors row] is NaN");
-                                allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(0.0);
+                                allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
                             }
                         }
                     }
@@ -6660,9 +6344,11 @@ public class DbUtil {
 				int auxYear = startYear - 1;
 				for (int i = 0; i < startDates.length; i++) {
 					auxYear++;
-					if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
-							&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
-						ret = auxYear;
+					if(startDates[i] != null && endDates[i]!=null) {
+						if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
+								&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
+							ret = auxYear;
+						}
 					}
 				}
 			}
@@ -6700,7 +6386,7 @@ public class DbUtil {
         return result;
     }
 
-    public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear, Long site, String lang) {
+    public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear, String site, String lang) {
         Session session = null;
         String qry = null;
         ArrayList responses = new ArrayList();
@@ -6710,8 +6396,8 @@ public class DbUtil {
         boolean orgGroupFlag = false;
         int NUM_ANSWER_COLUMNS = 4, i = 0, j = 0;
         int YEAR_RANGE = (closeYear - startYear + 1);
-        BigDecimal answersRow[] = null;
-        BigDecimal allDnRow[] = null;
+        double answersRow[] = null;
+        double allDnRow[] = null;
         Iterator itr1 = null, itr2 = null;
         Double percent = null;
         NumberFormat formatter = new DecimalFormat("#.##");
@@ -6757,21 +6443,17 @@ public class DbUtil {
                 all.setAnswers(new ArrayList());
                 responses.add(all);
                 for (i = 0; i < YEAR_RANGE; i++) {
-                    answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
-                    answersRow[0] = new BigDecimal(startYear + i);
-                    for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
-                    	answersRow[k] = new BigDecimal(0.0);
-                    }
+                    answersRow = new double[NUM_ANSWER_COLUMNS];
+                    answersRow[0] = startYear + i;
                     ( (ParisIndicator) responses.get(0)).getAnswers().add(answersRow);
                 }
                 itr1 = sortedDonors.iterator();
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
-                    AmpOrgType orgType=dnOrg.getOrgGrpId().getOrgType();
-                    if (orgType != null) {
-                        if (!orgType.getOrgTypeCode().equalsIgnoreCase("bil") &&
-                            !orgType.getOrgTypeCode().equalsIgnoreCase("mul")) {
+                    if (dnOrg.getOrgTypeId() != null) {
+                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
                             continue;
                         }
                     }
@@ -6795,44 +6477,34 @@ public class DbUtil {
                     }
                     pi.setAnswers(new ArrayList());
                     for (i = 0; i < YEAR_RANGE; i++) {
-                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
+                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
                         // answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
-                        answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
-                        answersRow[0] = new BigDecimal(startYear + i);
-                        for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
-                        	answersRow[k] = new BigDecimal(0.0);
-                        }
+                        answersRow = new double[NUM_ANSWER_COLUMNS];
+                        answersRow[0] = (startYear + i);
                         itr2 = dnOrg.getCalendar().iterator();
                         while (itr2.hasNext()) {
                             AmpCalendar ampCal = (AmpCalendar) itr2.next();
-                            String eventTypeName="";
-                            if(ampCal.getEventsType()!=null){
-                            	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCal.getEventsType().getId());
-                            	if (ampCategoryValue != null){
-                            		eventTypeName=ampCategoryValue.getValue();
-                            	}
-                            }                            
-                            if ("Mission".equalsIgnoreCase(eventTypeName)) {
+                            if ("Mission".equalsIgnoreCase(ampCal.getEventType().getName())) {
                                 Calendar cal = (Calendar) ampCal.getCalendarPK().getCalendar();
-                                if (answersRow[0].doubleValue() == Double.parseDouble(year.format(cal.getStartDate())) ||
-                                    answersRow[0].doubleValue() == Double.parseDouble(year.format(cal.getEndDate()))) {
+                                if (answersRow[0] == Double.parseDouble(year.format(cal.getStartDate())) ||
+                                    answersRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
                                     // checking if the Mission is 'joint'
                                     if (null != ampCal.getOrganisations() && ampCal.getOrganisations().size() > 1) {
-                                        answersRow[1] = answersRow[1].add(new BigDecimal(1));
-                                        allDnRow[1] = allDnRow[1].add(new BigDecimal(1));
+                                        answersRow[1] += 1;
+                                        allDnRow[1] += 1;
                                     }
                                     // total number of Missions
-                                    answersRow[2] = answersRow[2].add(new BigDecimal(1));
-                                    allDnRow[2] = allDnRow[2].add(new BigDecimal(1));
+                                    answersRow[2] += 1;
+                                    allDnRow[2] += 1;
                                 }
                             }
                         }
                         // calculating final percentage here
-                        if (answersRow[2].doubleValue() == 0)
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
+                        if (answersRow[2] == 0)
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
                         else {
-                            percent = new Double( (100 * answersRow[1].doubleValue()) / answersRow[2].doubleValue());
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(formatter.format(percent));
+                            percent = new Double( (100 * answersRow[1]) / answersRow[2]);
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
                         }
                         pi.getAnswers().add(answersRow);
                     }
@@ -6860,12 +6532,12 @@ public class DbUtil {
                 }*/
                 // calculating final percentage for all-donors row
                 for (j = 0; j < YEAR_RANGE; j++) {
-                    allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
-                    if (allDnRow[2].doubleValue() == 0)
-                        allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
+                    allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
+                    if (allDnRow[2] == 0)
+                        allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
                     else {
-                        percent = new Double( (100 * allDnRow[1].doubleValue()) / allDnRow[2].doubleValue());
-                        allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(formatter.format(percent));
+                        percent = new Double( (100 * allDnRow[1]) / allDnRow[2]);
+                        allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
                     }
                 }
             } else
@@ -7051,9 +6723,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select com from " + AmpComments.class.getName()
-                + " com  where com.ampActivityId.ampActivityId=:ampActId";
+                + " com " + " where (com.ampActivityId=:ampActId)";
             qry = session.createQuery(queryString);
-            qry.setLong("ampActId", ampActId);
+            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
             col = qry.list();
         } catch (Exception e1) {
             logger.error("could not retrieve AmpComments " + e1.getMessage());
@@ -7063,7 +6735,7 @@ public class DbUtil {
     }
 
     /* get ampActivity physical component report of a particular activity specified by ampActId */
-    public static Collection<AmpPhysicalComponentReport> getActivityPhysicalComponentReport(Long ampActId) {
+    public static Collection getActivityPhysicalComponentReport(Long ampActId) {
         Session session = null;
         Collection col = null;
         Query qry = null;
@@ -7083,10 +6755,29 @@ public class DbUtil {
         return col;
     }
 
-   
+    /* get amp report cache of a particular activity specified by ampActId */
+    public static Collection getActivityReportCache(Long ampActId) {
+        Session session = null;
+        Collection col = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select repCache from "
+                + AmpReportCache.class.getName()
+                + " repCache "
+                + " where (repCache.ampActivityId=:ampActId)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+            col = qry.list();
+        } catch (Exception e1) {
+            logger.error("could not retrieve AmpReportCache " + e1.getMessage());
+            e1.printStackTrace(System.out);
+        }
+        return col;
+    }
 
     /* get amp report location of a particular activity specified by ampActId */
-    public static Collection<AmpReportLocation> getActivityReportLocation(Long ampActId) {
+    public static Collection getActivityReportLocation(Long ampActId) {
         Session session = null;
         Collection col = null;
         Query qry = null;
@@ -7106,10 +6797,50 @@ public class DbUtil {
         return col;
     }
 
+    /* get amp activity report physical performance of a particular activity specified by ampActId */
+    public static Collection getActivityRepPhyPerformance(Long ampActId) {
+        Session session = null;
+        Collection col = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select phyPer from "
+                + AmpReportPhysicalPerformance.class.getName()
+                + " phyPer "
+                + " where (phyPer.ampActivityId=:ampActId)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+            col = qry.list();
+        } catch (Exception e1) {
+            logger.error("could not retrieve AmpReportPhysicalPerformance " + e1.getMessage());
+            e1.printStackTrace(System.out);
+        }
+        return col;
+    }
 
+    /* get amp activity report sector of a particular activity specified by ampActId */
+    public static Collection getActivityReportSector(Long ampActId) {
+        Session session = null;
+        Collection col = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select repSector from "
+                + AmpReportSector.class.getName()
+                + " repSector "
+                + " where (repSector.ampActivityId=:ampActId)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+            col = qry.list();
+        } catch (Exception e1) {
+            logger.error("could not retrieve AmpReportSector " + e1.getMessage());
+            e1.printStackTrace(System.out);
+        }
+        return col;
+    }
 
     /* get amp ME indicator value of a particular activity specified by ampActId */
-    public static Collection<IndicatorActivity> getActivityMEIndValue(Long ampActId) {
+    public static Collection getActivityMEIndValue(Long ampActId) {
 		try {
 
 			Collection<IndicatorActivity> activityInd = null;
@@ -7252,38 +6983,23 @@ public class DbUtil {
 
 
 
-    public static class HelperUserNameComparatorAsc implements Comparator {
+    public static class HelperUserNameComparator implements Comparator {
         public int compare(Object obj1, Object obj2) {
             User user1 = (User) obj1;
             User user2 = (User) obj2;
             return user1.getName().compareTo(user2.getName());
         }
     }
-    public static class HelperUserNameComparatorDesc implements Comparator {
-        public int compare(Object obj1, Object obj2) {
-            User user1 = (User) obj1;
-            User user2 = (User) obj2;
-            return user2.getName().compareTo(user1.getName());
-        }
-    }
-
     /**
      * //for sorting users by Email
      * @author dare
      *
      */
-    public static class HelperEmailComparatorAsc implements Comparator {
+    public static class HelperEmailComparator implements Comparator {
         public int compare(Object obj1, Object obj2) {
             User user1 = (User) obj1;
             User user2 = (User) obj2;
             return user1.getEmail().compareTo(user2.getEmail());
-        }
-    }
-    public static class HelperEmailComparatorDesc implements Comparator {
-        public int compare(Object obj1, Object obj2) {
-            User user1 = (User) obj1;
-            User user2 = (User) obj2;
-            return user2.getEmail().compareTo(user1.getEmail());
         }
     }
 
@@ -7383,7 +7099,7 @@ public class DbUtil {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
 
-            int result = (o1.getOrgType()==null ||  o2.getOrgType()==null)?0:collator.compare(o1.getOrgType(), o2.getOrgType());
+            int result = collator.compare(o1.getOrgType(), o2.getOrgType());
             return result;
         }
     }
@@ -7512,14 +7228,14 @@ public class DbUtil {
             collator.setStrength(Collator.TERTIARY);
     		int result=0;
     		//such long and complicated case is necessary because orgType maybe empty for organisation
-                AmpOrgType orgType1=o1.getOrgGrpId().getOrgType();
-                AmpOrgType orgType2=o1.getOrgGrpId().getOrgType();
-    		if (orgType1!=null && orgType2!=null) {
+    		if (o1.getOrgTypeId()!=null && o2.getOrgTypeId()!=null) {
+    			AmpOrgType orgType1=o1.getOrgTypeId();
+    			AmpOrgType orgType2=o2.getOrgTypeId();
     			result=new HelperAmpOrgTypeNameComparator().compare(orgType1, orgType2);
-    		} else if (orgType2==null&&orgType1!=null){
-    			result=collator.compare(orgType1.getOrgType(), "");
-    		}else if (orgType1==null&&orgType2!=null){
-    			result=collator.compare("", orgType2.getOrgType());
+    		} else if (o2.getOrgTypeId()==null&&o1.getOrgTypeId()!=null){
+    			result=collator.compare(o1.getOrgTypeId().getOrgType(), "");
+    		}else if (o1.getOrgTypeId()==null&&o2.getOrgTypeId()!=null){
+    			result=collator.compare("", o2.getOrgTypeId().getOrgType());
     		}
     		return result;
 
@@ -7619,68 +7335,4 @@ public class DbUtil {
 		return item;
 	}
 
-      public static class HelperAmpOrgRecipientByOrgId implements Comparator<AmpOrgRecipient> {
-        public int compare(AmpOrgRecipient o1, AmpOrgRecipient o2) {
-            return o2.getOrganization().getAmpOrgId().compareTo(o1.getOrganization().getAmpOrgId());
-        }
-    }
-
-     public static class HelperAmpOrgRecipientByOrgName implements Comparator<AmpOrgRecipient> {
-
-        Locale locale;
-        Collator collator;
-
-        public HelperAmpOrgRecipientByOrgName(){
-            this.locale=new Locale("en", "EN");
-        }
-
-        public HelperAmpOrgRecipientByOrgName(String iso) {
-            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-        }
-
-        public int compare(AmpOrgRecipient o1, AmpOrgRecipient o2) {
-            collator = Collator.getInstance(locale);
-            collator.setStrength(Collator.TERTIARY);
-            return collator.compare(o1.getOrganization().getName().toLowerCase(), o2.getOrganization().getName().toLowerCase());
-    
-        }
-    }
-
-     /**
-	 * Calls all getter methods inside a given object that return a Set or
-	 * Collection intance, In case of an Hibernate object this will cause the
-	 * collections to populate and avoid later a LazyInizializationException.
-	 * 
-	 * @param object
-	 * @param refresh Call session.refresh if true.
-	 * @return The same object.
-	 * @throws Exception
-	 */
-     public static Object populateCollections(Object object, boolean refresh) throws Exception {
-		if (refresh) {
-			Session session = PersistenceManager.getRequestDBSession();
-			session.refresh(object);
-		}
-		Method[] methods = object.getClass().getMethods();
-		for (int i = 0; i < methods.length; i++) {
-			Method auxMethod = methods[i];
-			Class returnType = auxMethod.getReturnType();
-			if (returnType != null
-					&& auxMethod.getName().startsWith("get")
-					&& (returnType.toString().equals("interface java.util.Collection") || returnType.toString().equals(
-							"interface java.util.Set"))) {
-				try {
-					Object result = auxMethod.invoke(object, null);
-					if (result != null && result.getClass().getName().equals("org.hibernate.collection.PersistentSet")) {
-						// This line will popupate the collection.
-						logger.warn("invoke method: " + auxMethod + " - " + ((Set) result).size());
-					}
-				} catch (Exception e) {
-					logger.error(auxMethod);
-					logger.error(e);
-				}
-			}
-		}
-		return object;
-	}
-}
+                }

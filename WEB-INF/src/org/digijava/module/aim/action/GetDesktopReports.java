@@ -16,7 +16,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -26,7 +25,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.hibernate.Session;
 
 public class GetDesktopReports extends TilesAction {
 	private static Logger logger	= Logger.getLogger( GetDesktopReports.class );
@@ -36,20 +34,20 @@ public class GetDesktopReports extends TilesAction {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+		
 		if (tm != null) {
 				Collection reports = new ArrayList();
 				//Adding the default team report
 				AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
-
+				
 				AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 				//ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
-
+				
 				// The userReports are shown in the upper left corner widget on My Desktop. 
 				// It has nothing to do with the tabs
 				ArrayList userReports = (ArrayList) TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId(), false);
-
-				ArrayList userActiveTabs = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null,true,tm.getMemberId(), null);
-
+				
+				ArrayList userActiveTabs = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null,true,tm.getMemberId());
 				if (defaultTeamReport != null){
 					Iterator iter = userActiveTabs.iterator();
 					boolean found = false;
@@ -84,7 +82,7 @@ public class GetDesktopReports extends TilesAction {
 				session.setAttribute(Constants.MY_ACTIVE_TABS, sortedActiveTabs);
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
                 session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
-                
+
                 /* Setting Team Members tabs */
                 AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(tm.getMemberId());
                 Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
@@ -104,7 +102,7 @@ public class GetDesktopReports extends TilesAction {
                 if ( defaultTeamReport!=null && !defaultTeamReportAdded )
             		tabs.add( defaultTeamReport );
                 session.setAttribute( Constants.MY_TABS , tabs);
-                		        
+
 				/* Setting default_team_report in session */
 				ApplicationSettings appSettings	= tm.getAppSettings();
 				if ( appSettings != null ) {
@@ -147,7 +145,7 @@ public class GetDesktopReports extends TilesAction {
 				if(tm.getTeamHead()) session.setAttribute(Constants.TEAM_Head,"yes");
 					else session.setAttribute(Constants.TEAM_Head,"no");
 		} else {
-			Collection reports=ARUtil.getAllPublicReports(null,null);
+			Collection reports=ARUtil.getAllPublicReports(null);
 			session.setAttribute(Constants.MY_REPORTS,reports);
 		}
 		return null;

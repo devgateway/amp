@@ -68,10 +68,10 @@
 																styleId="issueDate" styleClass="inp-text" readonly="true"/> 
 																
 																<a id="clear1" href="javascript:clearDate(document.getElementById('issueDate'), 'clear1')">
-	 	    														<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
+	 	    														<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 																</a>
 																<a id="date1" href='javascript:pickDateWithClear("date1", document.getElementById("issueDate"),"clear1")'>
-																<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a></td>
 								  </tr>
 								  </field:display>

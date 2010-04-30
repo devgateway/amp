@@ -78,39 +78,26 @@ public class SelectSector extends Action {
 			}
 			
 			AmpSectorScheme defClassification=config.getClassification();
-			ssForm.setShowCodeBesideName(defClassification.getSecSchemeShowName()==null?false:defClassification.getSecSchemeShowName().booleanValue());
 			Collection secSchemes = new ArrayList() ;
                         secSchemes.add(defClassification);
 			ssForm.setSectorSchemes(secSchemes);
 			ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
-			Collection parentSectors;
-			if(ssForm.isShowCodeBesideName()){
-				parentSectors=SectorUtil.getAllParentSectorsSortedByCode(ssForm.getSectorScheme());
-				
-			}else{
-				parentSectors=SectorUtil.getAllParentSectors(ssForm.getSectorScheme());
-			}
+			Collection parentSectors = SectorUtil
+			.getAllParentSectors(ssForm.getSectorScheme());
 			ssForm.setParentSectors(parentSectors);
 			ssForm.setChildSectorsLevel1(null);
 			ssForm.setChildSectorsLevel2(null);
 			ssForm.setSector(new Long(-1));
 			ssForm.setSubsectorLevel1(new Long(-1));
-			ssForm.setSubsectorLevel2(new Long(-1));
-			
+			ssForm.setSubsectorLevel2(new Long(-1));			
 		} else if (ssForm.getSector() == null
 				|| ssForm.getSector().equals(new Long(-1))) {
 			// if a sector scheme is selected and the parent sectors of that
 			// scheme are not
 			// loaded, load all the parent sectors and reset the child sectors.
 			Long sectorSchemeId = ssForm.getSectorScheme();
-			Collection parentSectors;
-			if(ssForm.isShowCodeBesideName()){
-				parentSectors=SectorUtil.getAllParentSectorsSortedByCode(ssForm.getSectorScheme());
-				
-			}else{
-				parentSectors=SectorUtil.getAllParentSectors(ssForm.getSectorScheme());
-			}
-			
+			Collection parentSectors = SectorUtil
+					.getAllParentSectors(sectorSchemeId);
 			ssForm.setParentSectors(parentSectors);
 			ssForm.setChildSectorsLevel1(null);
 			ssForm.setChildSectorsLevel2(null);
@@ -124,21 +111,9 @@ public class SelectSector extends Action {
 			// loaded and the subsectors
 			// list is not loaded, load them
 			Long parSector = ssForm.getSector();
-			Collection childSectors;
-			if(ssForm.isShowCodeBesideName()){
-				childSectors = SectorUtil.getAllChildSectorsSortBySectorCode(parSector);
-			}
-			else{
-				childSectors = SectorUtil.getAllChildSectors(parSector);
-			}
-
-			Collection parentSectors;
-			if(ssForm.isShowCodeBesideName()){
-				parentSectors=SectorUtil.getAllParentSectorsSortedByCode(ssForm.getSectorScheme());
-				
-			}else{
-				parentSectors=SectorUtil.getAllParentSectors(ssForm.getSectorScheme());
-			}
+			Collection childSectors = SectorUtil.getAllChildSectors(parSector);
+			Collection parentSectors = SectorUtil
+			.getAllParentSectors(ssForm.getSectorScheme());
 			ssForm.setParentSectors(parentSectors);
 			ssForm.setChildSectorsLevel1(childSectors);
 			ssForm.setChildSectorsLevel2(null);
@@ -150,14 +125,7 @@ public class SelectSector extends Action {
 			// loaded and the subsectors
 			// list is not loaded, load them
 			Long parSector = ssForm.getSubsectorLevel1();
-			Collection childSectors;
-			if(ssForm.isShowCodeBesideName()){
-				childSectors = SectorUtil.getAllChildSectorsSortBySectorCode(parSector);
-			}
-			else{
-				childSectors = SectorUtil.getAllChildSectors(parSector);
-			}
-			
+			Collection childSectors = SectorUtil.getAllChildSectors(parSector);
 			ssForm.setChildSectorsLevel2(childSectors);
 			ssForm.setSubsectorLevel2(new Long(-1));			
 		}

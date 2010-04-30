@@ -43,12 +43,6 @@ function removeChildWorkspace(id) {
 }
 
 function update(action) {
-    if(document.aimUpdateWorkspaceForm.teamName.value.trim()==''){
-        var message="<digi:trn jsFriendly="true">Please enter name</digi:trn>";
-        alert(message)
-        document.aimUpdateWorkspaceForm.teamName.focus();
-        return false;
-    }
 	var id = document.aimUpdateWorkspaceForm.teamId.value;
 	<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
 	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
@@ -169,7 +163,6 @@ function updateChild(action) {
 																<digi:trn key="aim:teamName">
 																Team Name
 																</digi:trn>
-                                                                 <font size="2" color="#FF0000">*</font>
 															</td>
 															<td align="left">
 																<html:text property="teamName" size="50" styleClass="inp-text" />
@@ -248,7 +241,7 @@ function updateChild(action) {
 																		<td align="right" width="10">
 																			<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																			<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																		 	<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
+																		 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
 																			border="0" alt="Remove this child workspace"/></a>&nbsp;
 																			</c:if>
 																		</td>

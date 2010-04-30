@@ -1,1 +1,1 @@
-<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+<property name="dialect">org.hibernate.dialect.MySQLDialect</property>

@@ -100,7 +100,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    	Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 				
-		 
+		 String siteId=site.getSiteId();
 		 String locale=navigationLanguage.getCode();
 		
 		 
@@ -188,7 +188,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
-    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,site.getId());
+    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,siteId);
     		String script = "<script>opener.close();" 
     			+ "alert('"+ alert +"');" 
     			+ "window.location=('"+ url +"');"
@@ -217,7 +217,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			String translatedCurrentFilter="";
 			String translatedAmount="";
 			String translatedReportDescription="Description:";
-			
+			String siteId=site.getSiteId();
 			// HEADER/FOOTER logo/statement				
 			if (this.request.getAttribute("logoOptions").equals("0")) {//disabled
 				// do nothing 
@@ -252,7 +252,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				String stmt = "";
 				try {
 					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
-					stmt = TranslatorWorker.translateText("Report Name", locale,site.getId());
+					stmt = TranslatorWorker.translateText("Report Name", locale,siteId);
 				} catch (WorkerException e){
 				    logger.error("Error translating ", e);}
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -276,26 +276,26 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			//
 			try{	
 			    
-			    translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:",locale,site.getId());
+			    translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:",locale,siteId);
 			    translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 			    
                 String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
                 if(currencyCode != null) {
-                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,site.getId());
-                    translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,site.getId());
+                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                    translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,siteId);
         			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
                 }
                 else
                 {
-                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,site.getId());
-                    translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,site.getId());
+                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                    translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
                 }
                 	
                 if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){	
-                	translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,site.getId());
+                	translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
                 }
 			    translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
-			    translatedReportDescription=TranslatorWorker.translateText("Description:",locale,site.getId());
+			    translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
 			
 			}catch (WorkerException e){
 			    logger.error("Error translating ", e);}
@@ -306,7 +306,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			pdfc.setPaddingBottom(10);
 			pdfc.setPaddingTop(10);
 			pdfc.setColspan(rd.getTotalDepth());
-			table.addCell(pdfc);
+			table.addCell(pdfc);		
 						
 			
 			if(!"".equalsIgnoreCase(r.getReportDescription())){
@@ -338,11 +338,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	        	    while (keys.hasNext()) {
 	        		String key = keys.next();
 	        		
-        		    //String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,site.getId());
-        		    String translatedName=TranslatorWorker.translateText(key,locale,site.getId());
+        		    //String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,siteId);
+        		    String translatedName=TranslatorWorker.translateText(key,locale,siteId);
         		    translatedName=("".equalsIgnoreCase(translatedName))?key:translatedName;
 				    
-				    String translatedValue=TranslatorWorker.translateText(props.get(key).toString(),locale,site.getId());
+				    String translatedValue=TranslatorWorker.translateText(props.get(key).toString(),locale,siteId);
 				    translatedValue=("".equalsIgnoreCase(translatedValue))?props.get(key).toString():translatedValue;
 				
 	        		strFilters.append(translatedName);
@@ -378,9 +378,9 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	  
 	    PdfContentByte cb = writer.getDirectContent();
 	    cb.saveState();  
-	    
+	    String siteId = site.getSiteId();
     	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
-    	    r.setSiteId((site.getId()));
+    	    r.setSiteId(siteId);
     	    r.setLocale(locale);
     	    BaseFont font = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1250,false);
     	    // HEADER/FOOTER logo/statement				
@@ -415,7 +415,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				String stmt = "";
 				try {
 					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
-					stmt = TranslatorWorker.translateText("Report Name", locale,site.getId());
+					stmt = TranslatorWorker.translateText("Report Name", locale,siteId);
 				} catch (WorkerException e){
 				    logger.error("Error translating ", e);}
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -438,13 +438,13 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     	    StringBuffer text =new StringBuffer();
     		
 //    	    if (r.getFormatedUpdatedDate() != null) {
-//    		text.append( TranslatorWorker.translate("rep:print:lastupdate", locale, site.getId()));
+//    		text.append( TranslatorWorker.translate("rep:print:lastupdate", locale, siteId));
 //    		text.append(" ");
 //    		text.append(r.getFormatedUpdatedDate());
 //    		text.append(" ");
 //    	    } 
     	    if(r.getUser()!=null){
-    		String translatedUser=TranslatorWorker.translateText("User :", locale, site.getId());
+    		String translatedUser=TranslatorWorker.translateText("User :", locale, siteId);
     		if ("".equalsIgnoreCase(translatedUser)){
     		    	translatedUser="User:";
     		   }
@@ -473,7 +473,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    textBase = document.bottom() - 30;
 	    StringBuffer pageText=new StringBuffer();
 	    //TODO TRN: Key is all right here but lets think about using body as translation.
-	    String translatedPage=TranslatorWorker.translateText("Page", locale, site.getId());
+	    String translatedPage=TranslatorWorker.translateText("Page", locale, siteId);
 	   if ("".equalsIgnoreCase(translatedPage)){
 	       translatedPage="Page:";
 	   }

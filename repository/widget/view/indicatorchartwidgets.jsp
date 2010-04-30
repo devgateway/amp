@@ -78,7 +78,7 @@
 							</a>
 							&nbsp;
 							<a href="/widget/indicatorchartwidgets.do~actType=delete~widgetId=${wi.id}">
-								<img border="0" src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"/>'>
+								<img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
 							</a>
 						</td>
 					</tr>

@@ -14,7 +14,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -29,20 +28,11 @@ public class RemoveComponent extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		String comp[] = eaForm.getComponents().getSelComp();
+		Long comp[] = eaForm.getComponents().getSelComp();
 		for (int i = 0;i < comp.length; i++) {
-		    for (Iterator iterator = eaForm.getComponents().getCompotosave().iterator(); iterator.hasNext();) {
-				AmpComponent component = (AmpComponent) iterator.next();
-				if (component.getTitle().trim().equalsIgnoreCase(comp[i].trim())){
-					iterator.remove();
-					for (Iterator iterator2 = eaForm.getComponents().getSelectedComponents().iterator(); iterator2.hasNext();) {
-						org.digijava.module.aim.helper.Components<FundingDetail> selectedcompo = (org.digijava.module.aim.helper.Components<FundingDetail>) iterator2.next();
-						if (selectedcompo.getTitle().trim().equalsIgnoreCase(comp[i].trim())){
-							iterator2.remove();
-						}
-					}
-				}
-			}
+		    Components temp = new Components();
+		    temp.setComponentId(comp[i]);
+		    eaForm.getComponents().getSelectedComponents().remove(temp);
 		}
 		eaForm.getComponents().setSelComp(null);
 		Double totdisbur=0d;

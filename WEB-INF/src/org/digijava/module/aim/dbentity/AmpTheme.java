@@ -1,23 +1,16 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.HierarchyListable;
-import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-import edu.emory.mathcs.backport.java.util.TreeSet;
-
-public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Versionable, HierarchyListable
+public class AmpTheme implements Serializable, Identifiable, ARDimensionable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivity activityId;
@@ -48,14 +41,12 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Ve
 	private String outputs;
 	private String beneficiaries;
 	private String environmentConsiderations;
-	private BigDecimal externalFinancing;
-	private BigDecimal internalFinancing;
-	private BigDecimal totalFinancing;
-	
-	private transient Collection<AmpTheme> transientChildren;
+	private Double externalFinancing;
+	private Double internalFinancing;
+	private Double totalFinancing;
 	
 	private String programviewname;
-    //    private Set programSettings;
+        private Set programSettings;
 
 	public Set getActivities() {
 		return activities;
@@ -290,17 +281,17 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Ve
 		return encodeName;
 	}
 
-//        public Set getProgramSettings() {
-//                return programSettings;
-//        }
-//
-//        public void setEncodeName(String encodeName) {
-//		this.encodeName = encodeName;
-//	}
-//
-//        public void setProgramSettings(Set programSettings) {
-//                this.programSettings = programSettings;
-//        }
+        public Set getProgramSettings() {
+                return programSettings;
+        }
+
+        public void setEncodeName(String encodeName) {
+		this.encodeName = encodeName;
+	}
+
+        public void setProgramSettings(Set programSettings) {
+                this.programSettings = programSettings;
+        }
 
         public Object getIdentifier() {
            return this.getAmpThemeId();
@@ -314,42 +305,42 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Ve
 		/**
 		 * @return the totalFinancing
 		 */
-		public BigDecimal getTotalFinancing() {
+		public Double getTotalFinancing() {
 			return FeaturesUtil.applyThousandsForVisibility(totalFinancing);
 		}
 
 		/**
 		 * @param totalFinancing the totalFinancing to set
 		 */
-		public void setTotalFinancing(BigDecimal totalFinancing) {
+		public void setTotalFinancing(Double totalFinancing) {
 			this.totalFinancing = FeaturesUtil.applyThousandsForEntry(totalFinancing);
 		}
 
 		/**
 		 * @return the externalFinancing
 		 */
-		public BigDecimal getExternalFinancing() {
+		public Double getExternalFinancing() {
 			return FeaturesUtil.applyThousandsForVisibility(externalFinancing);
 		}
 
 		/**
 		 * @param externalFinancing the externalFinancing to set
 		 */
-		public void setExternalFinancing(BigDecimal externalFinancing) {
+		public void setExternalFinancing(Double externalFinancing) {
 			this.externalFinancing = FeaturesUtil.applyThousandsForEntry(externalFinancing);
 		}
 
 		/**
 		 * @return the internalFinancing
 		 */
-		public BigDecimal getInternalFinancing() {
+		public Double getInternalFinancing() {
 			return FeaturesUtil.applyThousandsForVisibility(internalFinancing);
 		}
 
 		/**
 		 * @param internalFinancing the internalFinancing to set
 		 */
-		public void setInternalFinancing(BigDecimal internalFinancing) {
+		public void setInternalFinancing(Double internalFinancing) {
 			this.internalFinancing = FeaturesUtil.applyThousandsForEntry(internalFinancing);
 		}
 
@@ -366,47 +357,4 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Ve
 			return NPODimension.class;
 		}
 
-		@Override
-		public boolean equalsForVersioning(Object obj) {
-			return this.equals(obj);
-		}
-
-		@Override
-		public Object getValue() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Output getOutput() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Collection<AmpTheme> getChildren() {
-			if (transientChildren == null)
-				transientChildren	= new TreeSet( new HierarchyListableComparator() );
-			return transientChildren;
-		}
-
-		@Override
-		public int getCountDescendants() {
-			int ret = 1;
-			if ( this.getChildren() != null ) {
-				for ( HierarchyListable hl: this.getChildren() )
-					ret += hl.getCountDescendants();
-			}
-			return ret;
-		}
-
-		@Override
-		public String getLabel() {
-			return this.name;
-		}
-
-		@Override
-		public String getUniqueId() {
-			return this.ampThemeId + "";
-		}
 }

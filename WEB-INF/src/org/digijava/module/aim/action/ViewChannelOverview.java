@@ -28,15 +28,12 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -56,7 +53,6 @@ import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -158,20 +154,7 @@ public class ViewChannelOverview extends TilesAction {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			try {
-				DbUtil.populateCollections(activity, true);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				logger.error(e1);
-				e1.printStackTrace();
-			}
 
-			//Lazy init Locations so JSP can display
-			Set loc = activity.getLocations();
-			if (loc != null)
-				loc.size();
-			
 			formBean.clearMessages();
 			AmpTeam ampTeam=TeamUtil.getAmpTeam(teamMember.getTeamId());
 			boolean hasTeamLead=true;
@@ -288,7 +271,6 @@ public class ViewChannelOverview extends TilesAction {
 		    if (fp == null) {
 		    	fp = new FilterParams();
 		    }
-		  
 		    if (fp.getCurrencyCode() == null)
 			{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
@@ -375,9 +357,8 @@ public class ViewChannelOverview extends TilesAction {
 				                relOrg.setAcronym(auxOrgRel.getAcronym());
 				                relOrg.setOrgCode(auxOrgRel.getOrgCode());
 				                relOrg.setBudgetOrgCode(auxOrgRel.getBudgetOrgCode());
-                                                AmpOrgGroup orgGrp = auxOrgRel.getOrgGrpId();
-				                relOrg.setOrgGrpId(orgGrp);
-				                relOrg.setOrgTypeId(orgGrp.getOrgType());
+				                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+				                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
 				                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 				                relOrg.setAdditionalInformation( orgRole.getAdditionalInfo() );
 				                if (!relOrgs.contains(relOrg)) {
@@ -395,8 +376,7 @@ public class ViewChannelOverview extends TilesAction {
 					                relOrg.setOrgCode(auxOrgRel.getOrgCode());
 					                relOrg.setBudgetOrgCode(auxOrgRel.getBudgetOrgCode());
 					                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-					                if(auxOrgRel.getOrgGrpId()!=null)
-					                	relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
+					                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
 					                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 					                if (!relOrgs.contains(relOrg)) {
 					                	relOrgs.add(relOrg);
@@ -445,27 +425,8 @@ public class ViewChannelOverview extends TilesAction {
 		            CategoryConstants.ACCHAPTER_NAME, activity.getCategories())
 		            )
 		            );
-				    
-				    //contact information
-				    AmpActivityContact primaryDonorContact=null;
-				    AmpActivityContact primaryMofedContact=null;
-				    AmpActivityContact primaryProjCoordContact=null;
-				    AmpActivityContact primarySecMinContact=null;
-				    AmpActivityContact primaryImplExAgencyCont=null;
-				    try {
-						primaryDonorContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.DONOR_CONTACT);
-						primaryMofedContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.MOFED_CONTACT);
-						primaryProjCoordContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.PROJECT_COORDINATOR_CONTACT);
-						primarySecMinContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.SECTOR_MINISTRY_CONTACT);
-						primaryImplExAgencyCont=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					formBean.setPrimaryDonorContact(primaryDonorContact);
-					formBean.setPrimaryMofedContact(primaryMofedContact);
-					formBean.setPrimaryprojCoordinatorContact(primaryProjCoordContact);
-					formBean.setPrimarySectorMinistryContact(primarySecMinContact);
-					formBean.setPrimaryImplExecutingAgencyContact(primaryImplExAgencyCont);
+
+
           	        
           	        // queryString = "select distinct f.typeOfAssistance.value from " +
 //                      AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
@@ -483,13 +444,12 @@ public class ViewChannelOverview extends TilesAction {
           
 		
 		}
-		//AMP-4660: Add filters for viewed, created and updated activities.
-		ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),formBean.getId(), false);
 		
 		return null;
 	}
 
-	private ChannelOverviewForm setUniqueModalitiesToForm(ChannelOverviewForm formBean, AmpActivity activity) {
+	private ChannelOverviewForm setUniqueModalitiesToForm(
+			ChannelOverviewForm formBean, AmpActivity activity) {
 		Set<AmpFunding> fundings = activity.getFunding();
 		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
 		ArrayList<AmpCategoryValue> modalities = new ArrayList<AmpCategoryValue>();
@@ -563,7 +523,7 @@ public class ViewChannelOverview extends TilesAction {
 		}
 	}
 	  private ChannelOverviewForm setSectorsToForm(ChannelOverviewForm form, AmpActivity activity) {
-			Collection sectors =ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId()); // activity.getSectors();
+			Collection sectors = activity.getSectors();
 
 			if (sectors != null && sectors.size() > 0) {
 				List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();

@@ -41,7 +41,7 @@ public class ViewUserProfile
             long id = Long.parseLong(request.getParameter("id"));
             userid = new Long(id);
         }
-        if (request.getParameter("email") != null && !request.getParameter("email").equals("")) {
+        if (request.getParameter("email") != null && request.getParameter("email") != "") {
             email = request.getParameter("email");
             user= DbUtil.getUser(email);
             userid = user.getId();
@@ -61,7 +61,14 @@ public class ViewUserProfile
                 return mapping.getInputForward();
             }
         } else if (member != null) {
-        	user = DbUtil.getUser(member.getUser().getId());    
+        	user = DbUtil.getUser(member.getUser().getId()); 
+        	if(user.getAssignedOrgId()!=null && user.getOrganizationName() == null) {
+                AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
+                if(organization != null){
+                	user.setOrganizationName( organization.getName() );
+                }
+
+            }
             if(user!=null) 
             	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
         }

@@ -290,7 +290,7 @@ function isInvalid(field){
 
 																	<tr>
 																		<td width="169" align="right" height="30">
-                                                                 			<digi:trn key="aim:viewEditUser:selectOrgVeified">Select Organization To Add as Verified</digi:trn> 
+                                                                 			<digi:trn key="aim:viewEditUser:verifiedAssignedOrg">Verified Assigned Organisation</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
                                                                     		<html:select name="umViewEditUserForm" property="assignedOrgId" style="font-family:verdana;font-size:11px;width:180px;">
@@ -306,51 +306,9 @@ function isInvalid(field){
 																            </html:select>
 																		</td>
 																	</tr>
-																	
 																	<tr>
-																		<td width="169" align="right" height="30">
-                                                                 			&nbsp;
-																		</td>
-																	
-																		<td>
-														  					<input type="button" value="Add Organisation" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>																		
-																		</td>
+																		<td>&nbsp;</td>
 																	</tr>
-																	
-																	<tr>
-																	<td width="169" align="right" height="30">
-																		<digi:trn key="aim:viewEditUser:verifiedAssignedOrgs">Verified Assigned Organisations</digi:trn>
-																	</td>
-																	<td>
-																	<table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
-																		<logic:iterate id="org" name="umViewEditUserForm" property="assignedOrgs">
-														<tr>
-															<td width="2%">
-																<html:multibox name="umViewEditUserForm" property="selAssignedOrgs">
-																	<bean:write name="org" property="ampOrgId" scope="page"/>
-																</html:multibox>
-															</td>
-															<td align="left" width="49%">
-																<bean:write name="org" property="name" scope="page"/>
-															</td>													
-														</tr>
-														</logic:iterate>
-													</table>
-														</td></tr>
-														
-														<tr>
-																		<td width="169" align="right" height="30">
-                                                                 			&nbsp;
-																		</td>
-																	
-																		<td>
-																		<logic:notEmpty name="umViewEditUserForm" property="assignedOrgs">
-														  					<input type="button" value="Remove Organisations" onclick="goAction('delOrgs');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
-														  				</logic:notEmpty>																			
-																		</td>
-																	</tr>
-																	
-										
 																	<tr>
 																		<td width="169" align="right" height="30">
                                                                      		 <digi:trn key="aim:viewEditUser:languageSettings">Language settings</digi:trn>
@@ -367,6 +325,14 @@ function isInvalid(field){
 																                  <html:optionsCollection name="umViewEditUserForm" property="languages" value="code" label="name"/>
 																                </c:if>
 																             </html:select>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td width="169" align="right" height="30">
+                                                                     		 <digi:trn key="um:pledgesUser">Pledges User</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+          																	<html:checkbox property="pledger" styleClass="inp-text"/>
 																		</td>
 																	</tr>
 																	<tr>
@@ -414,7 +380,7 @@ function isInvalid(field){
 																	</tr>
 																	<tr>
 																		<c:set var="errMsg">
-																           <digi:trn jsFriendly="true">
+																           <digi:trn key="aim:viewEditUser:errorMessage" jsFriendly="true">
 																              Either fields are blank or their values do not match
 																            </digi:trn>
 																        </c:set>
@@ -426,15 +392,6 @@ function isInvalid(field){
 																                <digi:trn key="aim:viewEditUser:resetPasswordButton" jsFriendly="true">Reset </digi:trn>
 																              </c:set>
                                                               				<input type="button" value="${translation}" onclick="resetPasswordFields()" style="font-family:verdana;font-size:11px;"/></td>
-																		</td>
-																	</tr>
-																	<tr height="5px"><td colspan="2">&nbsp;</td></tr>
-																	<tr>
-																		<td colspan="2" align="center">
-																			<c:set var="trn">
-																                <digi:trn jsFriendly="true">Assign User To Workspace</digi:trn>
-																              </c:set>
-                                                              				<input type="button" value="${trn}" onclick="goAction('gotoAssignWorkspacePage')" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
 																	</tr>
 																</table>
@@ -450,3 +407,15 @@ function isInvalid(field){
         </table>
         <br />
 </digi:form>
+
+
+
+
+
+
+
+
+
+
+
+

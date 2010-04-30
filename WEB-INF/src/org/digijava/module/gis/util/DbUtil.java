@@ -1,14 +1,16 @@
 package org.digijava.module.gis.util;
 
-import java.text.Collator;
-import java.util.ArrayList;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -18,16 +20,12 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.digijava.module.aim.action.IndicatorValues;
+import java.util.ArrayList;
+import org.digijava.module.aim.dbentity.AmpSector;
 
 /**
  * <p>Title: </p>
@@ -86,12 +84,11 @@ public class DbUtil {
                     GisMap.class,
                     new Long(id));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String gg = null;
         } finally {
             try {
                 PersistenceManager.releaseSession(session);
             } catch (Exception ex2) {
-                ex2.printStackTrace();
             }
         }
         return gisMap;
@@ -126,6 +123,7 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
+
             Query q = session.createQuery("select sec.sectorId, count(*) from " +
                                           AmpActivitySector.class.getName() +
                                           " sec where exists (from " +
@@ -148,94 +146,95 @@ public class DbUtil {
 
     public static Collection getPrimaryToplevelSectors(){
         Collection retVal = null;
+
         try {
             retVal = SectorUtil.getSectorLevel1(new Integer(SectorUtil.getPrimaryConfigClassificationId().intValue()));
         } catch (DgException ex) {
-            ex.printStackTrace();
+            String ggg="123";
         }
         return retVal;
     }
 
     public static List getSectorFoundings(Long sectorId) {
 
-        List subSectorIds = null;
-        if (sectorId > -1) {
-            subSectorIds = getSubSectorIdsWhereclause(sectorId);
-        }
-        List retVal = null;
-        Session session = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            Query q = null;
-            if (sectorId > -1) {
+       List subSectorIds = null;
+       if (sectorId > -1) {
+           subSectorIds = getSubSectorIdsWhereclause(sectorId);
+       }
+       List retVal = null;
+       Session session = null;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           Query q = null;
+           if (sectorId > -1) {
 
-                StringBuffer whereCaluse = new StringBuffer();
-                Iterator parentIt = subSectorIds.iterator();
-                while (parentIt.hasNext()) {
-                    Long parSecId = (Long) parentIt.next();
-                    whereCaluse.append(parSecId.longValue());
-                    if (parentIt.hasNext()) {
-                        whereCaluse.append(",");
-                    }
-                }
-                StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
-                qs.append(AmpActivitySector.class.getName());
-                qs.append(" sec where sec.sectorId in (");
-                qs.append(whereCaluse);
-                qs.append(")");
-                qs.append(" and sec.activityId.team is not null");
-                q = session.createQuery(qs.toString());
-           } else {
-                q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");
-            }
-            retVal = q.list();
-        } catch (Exception ex) {
-            logger.debug("Unable to get sector fundings from DB", ex);
-        }
-        return retVal;
-    }
+               StringBuffer whereCaluse = new StringBuffer();
+               Iterator parentIt = subSectorIds.iterator();
+               while (parentIt.hasNext()) {
+                   Long parSecId = (Long) parentIt.next();
+                   whereCaluse.append(parSecId.longValue());
+                   if (parentIt.hasNext()) {
+                       whereCaluse.append(",");
+                   }
+               }
+               StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
+               qs.append(AmpActivitySector.class.getName());
+               qs.append(" sec where sec.sectorId in (");
+               qs.append(whereCaluse);
+               qs.append(")");
+               q = session.createQuery(qs.toString());
+          } else {
+               q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");
+           }
+           retVal = q.list();
+       } catch (Exception ex) {
+           logger.debug("Unable to get sector fundings from DB", ex);
+       }
+       return retVal;
+   }
 
-    public static List getSubSectorIdsWhereclause(Long sectorId) {
-        List param = new ArrayList();
-        param.add(sectorId);
-        List childIds = new ArrayList();
-        getSubSectorIds(param, childIds);
-        childIds.add(sectorId);
-        return childIds;
-    }
+   public static List getSubSectorIdsWhereclause(Long sectorId) {
+       List param = new ArrayList();
+       param.add(sectorId);
+       List childIds = new ArrayList();
+       getSubSectorIds(param, childIds);
+       childIds.add(sectorId);
+       return childIds;
+   }
 
-    public static void getSubSectorIds(List sectorIds, List childIds) {
-            Session session = null;
-            StringBuffer whereCaluse = new StringBuffer();
-            Iterator parentIt = sectorIds.iterator();
-            while (parentIt.hasNext()) {
-                Long parSecId = (Long) parentIt.next();
-                whereCaluse.append(parSecId.longValue());
-                if (parentIt.hasNext()) {
-                    whereCaluse.append(",");
-                }
-            }
-            List local = null;
-            try {
-                session = PersistenceManager.getRequestDBSession();
-                Query q = null;
-                StringBuffer qs = new StringBuffer("select sec.ampSectorId from ");
-                qs.append(AmpSector.class.getName());
-                qs.append(" sec where sec.parentSectorId.ampSectorId in ");
-                qs.append("(");
-                qs.append(whereCaluse);
-                qs.append(")");
-                q = session.createQuery(qs.toString());
-                local = q.list();
-            } catch (Exception ex) {
-                logger.debug("Unable to get sector IDs from DB", ex);
-            }
+   public static void getSubSectorIds(List sectorIds, List childIds) {
+           Session session = null;
+           StringBuffer whereCaluse = new StringBuffer();
+           Iterator parentIt = sectorIds.iterator();
+           while (parentIt.hasNext()) {
+               Long parSecId = (Long) parentIt.next();
+               whereCaluse.append(parSecId.longValue());
+               if (parentIt.hasNext()) {
+                   whereCaluse.append(",");
+               }
+           }
+           List local = null;
+           try {
+               session = PersistenceManager.getRequestDBSession();
+               Query q = null;
+               StringBuffer qs = new StringBuffer("select sec.ampSectorId from ");
+               qs.append(AmpSector.class.getName());
+               qs.append(" sec where sec.parentSectorId.ampSectorId in ");
+               qs.append("(");
+               qs.append(whereCaluse);
+               qs.append(")");
+               q = session.createQuery(qs.toString());
+               local = q.list();
+           } catch (Exception ex) {
+               logger.debug("Unable to get sector IDs from DB", ex);
+           }
 
-            if (!local.isEmpty()) {
-                childIds.addAll(local);
-                getSubSectorIds(local, childIds);
-            }
-    }
+           if (!local.isEmpty()) {
+               childIds.addAll(local);
+               getSubSectorIds(local, childIds);
+           }
+   }
+
 
     public static List getIndicatorsForSector(Long sectorId, int mapLevel) {
        List retVal = null;
@@ -245,12 +244,14 @@ public class DbUtil {
 
            StringBuffer querySrc = new StringBuffer();
            querySrc.append("select distinct ds.indicator.indicatorId, ds.indicator.name from ");
-           querySrc.append(IndicatorConnection.class.getName());
-           querySrc.append(" ds");
-           querySrc.append(" where ds.sector.ampSectorId=:sectorId and");
-           querySrc.append(" (ds.location.regionLocation.parentCategoryValue.value='Region' or");
-           querySrc.append(" ds.location.regionLocation.parentCategoryValue.value='District')");
-           querySrc.append(" group by ds.indicator.indicatorId order by ds.indicator.name");
+           querySrc.append(IndicatorSector.class.getName());
+           querySrc.append(" ds where ds.sector.ampSectorId=:sectorId order by ds.indicator.name");
+
+           /*
+           Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from " +
+                                         IndicatorSector.class.getName() +
+                                         " ds where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
+*/
            Query q = session.createQuery(querySrc.toString());
            q.setParameter("sectorId", sectorId, Hibernate.LONG);
            List allIndicatorList = q.list();
@@ -262,9 +263,10 @@ public class DbUtil {
            querySrc1.append(" ds where ds.indicatorConnection.sector.ampSectorId=:sectorId and");
 
            if (mapLevel == 2) {
-               querySrc1.append(" ds.indicatorConnection.location.regionLocation.parentCategoryValue.value='Region'");
+               querySrc1.append(" ds.indicatorConnection.location.region is not null and");
+               querySrc1.append(" ds.indicatorConnection.location.zone is null");
            } else if (mapLevel == 3) {
-               querySrc1.append(" ds.indicatorConnection.location.regionLocation.parentCategoryValue.value='District'");
+               querySrc1.append(" ds.indicatorConnection.location.zone is not null");
            }
            Query q1 = session.createQuery(querySrc1.toString());
            q1.setParameter("sectorId", sectorId, Hibernate.LONG);
@@ -282,13 +284,17 @@ public class DbUtil {
 
                retVal.add(filtered);
            }
+
+
+
        } catch (Exception ex) {
            logger.debug("Unable to get indicators from DB", ex);
        }
        return retVal;
    }
 
-   public static List getIndicatorValuesForSectorIndicator(Long sectorId,Long indicatorId, Integer year, Long subgroupId, int areaLevel) {
+   public static List getIndicatorValuesForSectorIndicator(Long sectorId,
+              Long indicatorId, Integer year, Long subgroupId, int areaLevel) {
           List retVal = null;
           Session session = null;
           try {
@@ -297,9 +303,9 @@ public class DbUtil {
               StringBuffer queryString = new StringBuffer();
 
               if (areaLevel==GisMap.MAP_LEVEL_REGION) {
-                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode, indVal.source from ");
+                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode from ");
               } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
-                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode, indVal.source from ");
+                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode from ");
               }
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");
@@ -332,21 +338,20 @@ public class DbUtil {
           return retVal;
    }
 
-   public static List getIndicatorValuesForSectorIndicator(Long sectorId,Long indicatorId, DateInterval interval, Long subgroupId, int areaLevel) {
+   public static List getIndicatorValuesForSectorIndicator(Long sectorId,
+              Long indicatorId, DateInterval interval, Long subgroupId, int areaLevel) {
           List retVal = null;
-          List qResult = null;
           Session session = null;
           try {
               session = PersistenceManager.getRequestDBSession();
 
               StringBuffer queryString = new StringBuffer();
 
-//              if (areaLevel==GisMap.MAP_LEVEL_REGION) {
-                  queryString.append("select indVal, indConn.location.regionLocation.name from ");
-                  /*
+              if (areaLevel==GisMap.MAP_LEVEL_REGION) {
+                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode from ");
               } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
-                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode, indVal.source from ");
-              }*/
+                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode from ");
+              }
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");
               queryString.append(IndicatorSector.class.getName());
@@ -373,33 +378,21 @@ public class DbUtil {
               }
 
 
-              qResult = q.list();
+              retVal = q.list();
           } catch (Exception ex) {
               logger.debug("Unable to get indicators from DB", ex);
-          }
-
-          if (qResult != null) {
-              retVal = new ArrayList();
-              Iterator it = qResult.iterator();
-              while (it.hasNext()) {
-                  Object[] tmpObj = (Object[])it.next();
-                  AmpIndicatorValue indValObj = (AmpIndicatorValue)tmpObj[0];
-                  String locCode = (String)tmpObj[1];
-                  Object[] actualObj = new Object[3];
-                  actualObj[0] = indValObj.getValue();
-                  actualObj[1] = locCode;
-                  actualObj[2] = indValObj.getSource();
-
-                  retVal.add(actualObj);
-              }
           }
           return retVal;
    }
 
 
-   public static List getIndicatorValuesForSectorIndicator(Long sectorId,Long indicatorId, Long subgroupId) {
+   public static List getIndicatorValuesForSectorIndicator(Long sectorId,
+           Long indicatorId, Long subgroupId) {
+
        return getIndicatorValuesForSectorIndicator(sectorId, indicatorId, new Integer(-1), subgroupId, GisMap.MAP_LEVEL_REGION);
    }
+
+
 
     public static Double getActivityFoundings(Long activityId) {
         Double retVal = null;
@@ -407,7 +400,10 @@ public class DbUtil {
         GisMap map = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("select sum(fd.transactionAmount) from " + AmpFundingDetail.class.getName() + " fd where fd.ampFundingId.ampActivityId.ampActivityId=:activityId");
+            Query q = session.createQuery("select sum(fd.transactionAmount) from " +
+                                          AmpFundingDetail.class.getName() +
+                                          " fd where fd.ampFundingId.ampActivityId.ampActivityId=:activityId");
+
             q.setParameter("activityId", activityId, Hibernate.LONG);
             List tmpLst = q.list();
             if (!tmpLst.isEmpty())
@@ -423,7 +419,10 @@ public class DbUtil {
             Session session = null;
             try {
                 session = PersistenceManager.getRequestDBSession();
-                Query q = session.createQuery("select sum(fd.transactionAmount) from " +AmpFundingDetail.class.getName() + " fd where fd.ampFundingId.ampActivityId.ampActivityId in ("+ActIdWhereclause + ")");
+                Query q = session.createQuery("select sum(fd.transactionAmount) from " +
+                                              AmpFundingDetail.class.getName() +
+                                              " fd where fd.ampFundingId.ampActivityId.ampActivityId in ("+
+                                              ActIdWhereclause + ")");
                 List tmpLst = q.list();
                 if (!tmpLst.isEmpty())
                 retVal = (Double)tmpLst.get(0);
@@ -445,8 +444,11 @@ public class DbUtil {
        Session session = null;
        try {
            session = PersistenceManager.getRequestDBSession();
-           String query=" from " + IndicatorSector.class.getName() + " indsec ";
+           String query=" from " +
+                                         IndicatorSector.class.getName() +
+                                         " indsec ";
            Query q = session.createQuery(query);
+
            retVal = q.list();
        } catch (Exception ex) {
            logger.debug("Unable to get indicators from DB", ex);
@@ -460,12 +462,15 @@ public class DbUtil {
      * @return IndicatorSector list size
      *
      */
+
     public static int getAllIndicatorSectorsSize() {
         int retVal = 0;
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            String query = "select count(indsec) from " +IndicatorSector.class.getName() +" indsec ";
+            String query = "select count(indsec) from " +
+                    IndicatorSector.class.getName() +
+                    " indsec ";
             Query q = session.createQuery(query);
             if (q.uniqueResult() != null) {
                 retVal = (Integer) q.uniqueResult();
@@ -474,55 +479,6 @@ public class DbUtil {
             logger.debug("Unable to get indicators from DB", ex);
         }
         return retVal;
-    }
-
-    public static List<IndicatorSector> searchIndicatorSectors(String sortBy,String keyword,Long sectorId , Long regionId){
-    	List<IndicatorSector> retVal = null;
-    	Session session = null;
-    	String queryString =null;
-		Query query=null;
-    	try{
-    		session = PersistenceManager.getRequestDBSession();
-            queryString="select indsec from " + IndicatorSector.class.getName() + " indsec inner join indsec.location loc inner join loc.location reg";
-            if((keyword!=null && keyword.length()>0) || sectorId!=null || regionId != null ) {
-            	queryString+=" where ";
-            }
-            //filter
-            if(keyword!=null && keyword.length()>0){
-            	queryString+=" indsec.indicator.name like '%" +keyword+ "%'";
-            }
-            if(sectorId!=null){
-            	if(keyword!=null && keyword.length()>0){
-            		queryString += " and ";
-            	}
-            	queryString+= " indsec.sector.ampSectorId="+sectorId;
-            }
-            if(regionId !=null){
-            	if((keyword!=null && keyword.length()>0) || sectorId!=null){
-            		queryString += " and ";
-            	}
-            	queryString+= " indsec.location.location.id="+regionId;
-            }
-            //sort
-            if(sortBy==null || sortBy.equals("nameAscending")){
-				queryString += " order by indsec.indicator.name" ;
-			}else if(sortBy.equals("nameDescending")){
-				queryString += " order by indsec.indicator.name desc" ;
-			}else if(sortBy.equals("sectNameAscending")){
-				queryString += " order by indsec.sector.name" ;
-			}else if(sortBy.equals("sectNameDescending")){
-				queryString += " order by indsec.sector.name desc" ;
-			}else if(sortBy.equals("regionNameAscending")){
-				queryString += " order by indsec.location.location.name" ;
-			}else if(sortBy.equals("regionNameDescending")){
-				queryString += " order by indsec.location.location.name desc" ;
-			}
-            query=session.createQuery(queryString);
-			retVal=query.list();
-    	}catch (Exception e) {
-    		logger.debug("Unable to get indicators from DB", e);
-		}
-    	return retVal;
     }
 
     public static List getIndicatorSectorsForCurrentPage(Integer[] page,int numberPerPage,String keyWord) {
@@ -544,6 +500,8 @@ public class DbUtil {
                // If all records were deleted we need to navigate to the previous page
                retVal=getIndicatorSectorsForCurrentPage(page,numberPerPage,keyWord);
            }
+
+
        } catch (Exception ex) {
            logger.debug("Unable to get indicators from DB", ex);
        }
@@ -560,7 +518,7 @@ public class DbUtil {
             String query = "select distinct indval.valueDate from " +
                     AmpIndicatorValue.class.getName() +
                     " indval where indval.valueDate is not null order by indval.valueDate desc";
-             Query q = session.createQuery(query);
+            Query q = session.createQuery(query);
 
              retVal=new ArrayList();
 
@@ -576,6 +534,7 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.debug("Unable to get indicators from DB", ex);
         }
+
        return retVal;
    }
 
@@ -594,11 +553,13 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.debug("Unable to get indicators from DB", ex);
         }
+
        return retVal;
    }
 
 
-   public static List getAvailYearsForSectorIndicator(Long sectorId,Long indicatorId, int mapLevel, Long subgroupId) {
+   public static List getAvailYearsForSectorIndicator(Long sectorId,
+              Long indicatorId, int mapLevel, Long subgroupId) {
           List retVal = null;
           Session session = null;
           try {
@@ -633,11 +594,13 @@ public class DbUtil {
           return retVal;
    }
 
-   public static List getAvailDateIntervalsForSectorIndicator(Long sectorId,Long indicatorId, int mapLevel, Long subgroupId) {
+   public static List getAvailDateIntervalsForSectorIndicator(Long sectorId,
+              Long indicatorId, int mapLevel, Long subgroupId) {
           List retVal = null;
           Session session = null;
           try {
               session = PersistenceManager.getRequestDBSession();
+
               StringBuffer queryString = new StringBuffer("select distinct indVal.dataIntervalStart, indVal.dataIntervalEnd from ");
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");
@@ -653,6 +616,7 @@ public class DbUtil {
               queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
               queryString.append(" and indConn.id=indVal.indicatorConnection.id order by indVal.dataIntervalStart desc");
 
+
               Query q = session.createQuery(queryString.toString());
 
               q.setParameter("sectorId", sectorId, Hibernate.LONG);
@@ -667,7 +631,8 @@ public class DbUtil {
    }
 
 
-   public static List getAvailSubgroupsForSectorIndicator(Long sectorId,Long indicatorId, int mapLevel) {
+   public static List getAvailSubgroupsForSectorIndicator(Long sectorId,
+              Long indicatorId, int mapLevel) {
           List retVal = null;
           Session session = null;
           try {
@@ -702,146 +667,7 @@ public class DbUtil {
           return retVal;
    }
 
-   public static List<String> getAvailSubgroupsForSectorIndicator(Long sectorId,Long indicatorId) {
-	   List<String> retVal = null;
-       Session session = null;
-       try {
-    	   session = PersistenceManager.getRequestDBSession();
-    	   String queryString="select distinct indVal.subgroup.subgroupName from " + AmpIndicatorValue.class.getName() + " indVal, " +
-    	   IndicatorSector.class.getName()+ " indConn where indConn.sector.ampSectorId="+sectorId+" and indConn.indicator.indicatorId="+indicatorId
-    	   +" and indConn.id=indVal.indicatorConnection.id order by year(indVal.valueDate) desc";
-    	   Query q = session.createQuery(queryString);
-    	   retVal=q.list();
-		} catch (Exception e) {
-			logger.debug("Unable to get indicator years from DB", e);
-			e.printStackTrace();
-		}
-       return retVal;
-   }
 
-   public static class HelperIndicatorNameAscComparator implements Comparator<IndicatorSector> {
-       Locale locale;
-       Collator collator;
 
-       public HelperIndicatorNameAscComparator(){
-           this.locale=new Locale("en", "EN");
-       }
 
-       public HelperIndicatorNameAscComparator(String iso) {
-           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-       }
-
-       public int compare(IndicatorSector o1, IndicatorSector o2) {
-           collator = Collator.getInstance(locale);
-           collator.setStrength(Collator.TERTIARY);
-
-           int result = collator.compare(o1.getIndicator().getName(), o2.getIndicator().getName());
-           return result;
-       }
-   }
-
-   public static class HelperIndicatorNameDescComparator implements Comparator<IndicatorSector> {
-       Locale locale;
-       Collator collator;
-
-       public HelperIndicatorNameDescComparator(){
-           this.locale=new Locale("en", "EN");
-       }
-
-       public HelperIndicatorNameDescComparator(String iso) {
-           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-       }
-
-       public int compare(IndicatorSector o1, IndicatorSector o2) {
-           collator = Collator.getInstance(locale);
-           collator.setStrength(Collator.TERTIARY);
-
-           int result = -collator.compare(o1.getIndicator().getName(), o2.getIndicator().getName());
-           return result;
-       }
-   }
-
-   public static class HelperSectorNameAscComparator implements Comparator<IndicatorSector> {
-       Locale locale;
-       Collator collator;
-
-       public HelperSectorNameAscComparator(){
-           this.locale=new Locale("en", "EN");
-       }
-
-       public HelperSectorNameAscComparator(String iso) {
-           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-       }
-
-       public int compare(IndicatorSector o1, IndicatorSector o2) {
-           collator = Collator.getInstance(locale);
-           collator.setStrength(Collator.TERTIARY);
-
-           int result = collator.compare(o1.getSector().getName(), o2.getSector().getName());
-           return result;
-       }
-   }
-
-   public static class HelperSectorNameDescComparator implements Comparator<IndicatorSector> {
-       Locale locale;
-       Collator collator;
-
-       public HelperSectorNameDescComparator(){
-           this.locale=new Locale("en", "EN");
-       }
-
-       public HelperSectorNameDescComparator(String iso) {
-           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-       }
-
-       public int compare(IndicatorSector o1, IndicatorSector o2) {
-           collator = Collator.getInstance(locale);
-           collator.setStrength(Collator.TERTIARY);
-
-           int result = - collator.compare(o1.getSector().getName(), o2.getSector().getName());
-           return result;
-       }
-   }
-
-   public static class HelperRegionNameAscComparator implements Comparator<IndicatorSector> {
-       Locale locale;
-       Collator collator;
-
-       public HelperRegionNameAscComparator(){
-           this.locale=new Locale("en", "EN");
-       }
-
-       public HelperRegionNameAscComparator(String iso) {
-           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-       }
-
-       public int compare(IndicatorSector o1, IndicatorSector o2) {
-           collator = Collator.getInstance(locale);
-           collator.setStrength(Collator.TERTIARY);
-
-           int result = collator.compare(o1.getLocation().getLocation().getName(), o2.getLocation().getLocation().getName());
-           return result;
-       }
-   }
-
-   public static class HelperRegionNameDescComparator implements Comparator<IndicatorSector> {
-       Locale locale;
-       Collator collator;
-
-       public HelperRegionNameDescComparator(){
-           this.locale=new Locale("en", "EN");
-       }
-
-       public HelperRegionNameDescComparator(String iso) {
-           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-       }
-
-       public int compare(IndicatorSector o1, IndicatorSector o2) {
-           collator = Collator.getInstance(locale);
-           collator.setStrength(Collator.TERTIARY);
-
-           int result = - collator.compare(o1.getLocation().getLocation().getName(), o2.getLocation().getLocation().getName());
-           return result;
-       }
-   }
 }

@@ -29,9 +29,6 @@ public class IndicatorGridItem {
 	private String actualValue = " - ";
 	private String targetValue = " - ";
 	private String baseValue = " - ";
-        private String actualValueSource="-";
-        private String targetValueSource = " - ";
-	private String baseValueSource = " - ";
 
 	/**
 	 * Constructs new object from set of indicator values
@@ -116,23 +113,14 @@ public class IndicatorGridItem {
                             
                               if (latestValue != null) {
                                 this.actualValue = latestValue.getValue().toString();
-                                if(latestValue.getIndicatorSource()!=null){
-                                    this.actualValueSource=latestValue.getIndicatorSource().getValue();
-                                }
                                 latestValue = null;
                             }   
 			
                         if(latestBaseValue!=null){
                             this.baseValue=latestBaseValue.getValue().toString();
-                             if (latestBaseValue.getIndicatorSource() != null) {
-                                this.baseValueSource = latestBaseValue.getIndicatorSource().getValue();
-                            }
                         }
                          if(latestTarValue!=null){
                             this.targetValue=latestTarValue.getValue().toString();
-                            if (latestTarValue.getIndicatorSource() != null) {
-                                this.targetValueSource= latestTarValue.getIndicatorSource().getValue();
-                            }
                         }
 		}
 	}
@@ -175,29 +163,5 @@ public class IndicatorGridItem {
 	public void setBaseValue(String baseValue) {
 		this.baseValue = baseValue;
 	}
-
-        public String getActualValueSource() {
-            return actualValueSource;
-        }
-
-        public void setActualValueSource(String actualValueSource) {
-            this.actualValueSource = actualValueSource;
-        }
-
-        public String getBaseValueSource() {
-            return baseValueSource;
-        }
-
-        public void setBaseValueSource(String baseValueSource) {
-            this.baseValueSource = baseValueSource;
-        }
-
-        public String getTargetValueSource() {
-            return targetValueSource;
-        }
-
-        public void setTargetValueSource(String targetValueSource) {
-            this.targetValueSource = targetValueSource;
-        }
-
+	
 }

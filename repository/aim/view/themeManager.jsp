@@ -8,17 +8,77 @@
 <%@ page import = "org.digijava.module.aim.util.ProgramUtil" %>
 <%@ page import = "java.util.Collection" %>
 <%@page import="java.util.Iterator"%>
-<digi:instance property="aimThemeForm" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-<jsp:include page="themeManagerPopin.jsp" flush="true"/>
-<script language="JavaScript">
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<script language="JavaScript">
 	<!--
+		function validate()
+		{
+			if (trim(document.aimThemeForm.programName.value).length == 0)
+			{
+				alert("Please enter Program name");
+				document.aimThemeForm.programName.focus();
+				return false;
+			}			
+			if (document.aimThemeForm.programType.value == -1)
+			{
+				alert("Please Select a  Program type");
+				document.aimThemeForm.programType.focus();
+				return false;
+			}
+			if (trim(document.aimThemeForm.programType.value).length == 0)
+			{
+				alert("Please enter Program type");
+				document.aimThemeForm.programType.focus();
+				return false;
+			}
+			return true;
+		}
+		function saveProgram()
+		{
+			var temp = validate();
+			if (temp == true)
+			{
+				<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
+				document.aimThemeForm.action = "<%=addThm%>";
+				document.aimThemeForm.target = "context/module/moduleinstance/addNewTheme.do";
+				document.aimThemeForm.submit();
+			}
+			return true;
+		}
+
+		function addProgram()
+		{
+			openNewWindow(600,500);
+			<digi:context name="addNewTh" property="context/module/moduleinstance/addTheme.do?event=add"/>
+			document.aimThemeForm.action = "<%=addNewTh%>";
+			document.aimThemeForm.target = popupPointer.name;
+			document.aimThemeForm.submit();
+			return true;
+		}
+
+
+		function addSubProgram(rutId,id,level,name)
+		{
+			openNewWindow(600,500);
+			<digi:context name="subProgram" property="context/module/moduleinstance/addTheme.do?event=addSubProgram"/>
+			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
+			document.aimThemeForm.target = popupPointer.name;
+			document.aimThemeForm.submit();
+		}
 
 
 		
-	
+		function editProgram(id)
+		{
+			openNewWindow(600,500);
+			<digi:context name="editTh" property="context/module/moduleinstance/addTheme.do?event=edit"/>
+			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id;
+			document.aimThemeForm.target = popupPointer.name;
+			document.aimThemeForm.submit();
+
+		}
 		function assignIndicators(id)
 		{
 
@@ -65,46 +125,28 @@
 		var divId='#div_theme_'+progId;
 		$(imghId).hide();
 		$(imgId).show();
-		$(divId).hide();
-	}
-     
+		$(divId).hide('fast');
+	}       
+       
 	function expandAll(){
-        $("img[id^='img_']").hide();
-		$("img[id^='imgh_']").show('fast');;
-		$("div[id^='div_theme_']").show('fast');
-
-    }
+                $("img[@id^='img_']"+':visible').slideUp('fast');
+		$("img[@id^='imgh_']"+':hidden').slideDown('fast');;
+		$("div[@id^='div_theme_']").slideDown('fast');
+               
+         }
          function collapseAll(){
-        $("img[id^='imgh_']").hide();
-        $("img[id^='img_']").show('fast');
-        $("div[id^='div_theme_']").hide();
-    }
+              $("img[@id^='imgh_']"+':visible').slideUp('fast');
+              $("img[@id^='img_']"+':hidden').slideDown('fast');
+	      $("div[@id^='div_theme_']"+':visible').slideUp('fast');
+         }
+        
+
+
 	-->
 </script>
 
-<style type="text/css">
-<!--
-.tableEven {
-	background-color:#dbe5f1;
-	font-size:8pt;
-	padding:2px;
-}
-
-.tableOdd {
-	background-color:#FFFFFF;
-	font-size:8pt;
-	padding:2px;
-}
- 
-.Hovered {
-	background-color:#a5bcf2;
-	font-size:8pt;
-	padding:2px;
-}
--->
-</style>
 <digi:errors/>
-
+<digi:instance property="aimThemeForm" />
 <digi:form action="/themeManager.do" method="post">
 
 <digi:context name="digiContext" property="context" />
@@ -114,9 +156,10 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <%-- End of Logo--%>
 
-	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="0">
+	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="1">
 	<tr>
-		<td align=left vAlign=top width=750 border="0">
+		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td align=left class=r-dotted-lg vAlign=top width=750 border="0">
 			<table cellPadding=5 cellSpacing=0 width="100%" border="0">
 				<tr><%-- Start Navigation --%>
 					<td height=33><span class=crumb>
@@ -129,7 +172,7 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:multiprogramanmanager">
-							Multi Program Manager
+							Multi Program Manage
 						</digi:trn>
 					</td>
 				</tr><%-- End navigation --%>
@@ -137,7 +180,7 @@
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:multiprogramanmanager">
-							Multi Program Manager
+							Multi Program Manage
 						</digi:trn>
 						</span>
 					</td>
@@ -160,7 +203,7 @@
 										<!-- AMP-1655 -->
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border="0">
+					<table width="100%" cellspacing=1 cellSpacing=1 border="0" class="r-dotted-lg">
 					<tr><td noWrap width=600 vAlign="top">
 							<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 								<tr bgColor=#ffffff>
@@ -169,7 +212,7 @@
 												<tr><td>
 													<digi:errors/>
 												</td></tr>
-												<tr><td bgColor=#cccccc class=box-title height="20" align="center">
+												<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 														<digi:trn key="aim:listofPrograms">
 																List of Programs
 														</digi:trn>
@@ -227,31 +270,30 @@
 													</tr>
 											<tr>
 												<td>
-												<div  style="overflow:auto;width:100%;height:220px;max-height:220px;"  >
+												
 												<!-- AMP-2204 -->
 														<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>
 														<%= ProgramUtil.renderLevel(firstLevel,0,request) %>
-												</div>
 												</td>											
 											
 											<tr align="center" bgcolor="#ffffff">
 												<td>
 													<input class="button" type="button" name="addBtn" value="<digi:trn key="aim:addProgramMPM">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
 													<input class="button" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()" style="font-family:verdana;font-size:11px;">
-													<input class="button" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
+                                                                                                        <input class="button" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
 												</td>
 											</tr>
 											<tr>
 											
 												<td  width="20%" nowrap="nowrap"> <digi:trn key="aim:subprogramleves">Sub Program leves</digi:trn> :
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square1.gif" border=0><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square2.gif" border=0><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square3.gif" border=0><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square4.gif" border=0><digi:trn key="aim:subproglevel_5">  Level 5</digi:trn>,
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square5.gif" border=0><digi:trn key="aim:subproglevel_6">  Level 6</digi:trn>,
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square6.gif" border=0><digi:trn key="aim:subproglevel_7">  Level 7</digi:trn>,
-												<img src= "/TEMPLATE/ampTemplate/imagesSource/common/square7.gif" border=0><digi:trn key="aim:subproglevel_8">  Level 8</digi:trn>.
+												<img src= "../ampTemplate/images/arrow_right.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
+												<img src= "../ampTemplate/images/square1.gif" border=0><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
+												<img src= "../ampTemplate/images/square2.gif" border=0><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
+												<img src= "../ampTemplate/images/square3.gif" border=0><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,
+												<img src= "../ampTemplate/images/square4.gif" border=0><digi:trn key="aim:subproglevel_5">  Level 5</digi:trn>,
+												<img src= "../ampTemplate/images/square5.gif" border=0><digi:trn key="aim:subproglevel_6">  Level 6</digi:trn>,
+												<img src= "../ampTemplate/images/square6.gif" border=0><digi:trn key="aim:subproglevel_7">  Level 7</digi:trn>,
+												<img src= "../ampTemplate/images/square7.gif" border=0><digi:trn key="aim:subproglevel_8">  Level 8</digi:trn>.
 												</td>
 											</tr>
 														<logic:empty name="aimThemeForm" property="themes">

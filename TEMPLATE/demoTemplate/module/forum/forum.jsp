@@ -16,12 +16,12 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="250">
 	<tr>
-		<td width="10" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserTitleLeft.gif"/></td>
+		<td width="10" height="25"><digi:img src="images/ui/teaserTitleLeft.gif"/></td>
 		<td width="100%" height="25" class="teaserTitleBody">&nbsp;<digi:trn key="forum:discussionForum">Discussion forum</digi:trn></td>
-		<td width="5" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserTitleRight.gif"/></td>
+		<td width="5" height="25"><digi:img src="images/ui/teaserTitleRight.gif"/></td>
 	</tr>
 	<tr>
-		<td width="10" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserExtrainfoLeft.gif"/></td>
+		<td width="10" height="25"><digi:img src="images/ui/teaserExtrainfoLeft.gif"/></td>
 		<td width="100%" height="25" class="teaserExtraBody">
 		&nbsp;
 			<logic:present name="forumForm" property="forum">
@@ -32,10 +32,10 @@
 			</logic:notPresent>
 			
 		</td>
-		<td width="5" height="25"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserExtrainfoRight.gif"/></td>
+		<td width="5" height="25"><digi:img src="images/ui/teaserExtrainfoRight.gif"/></td>
 	</tr>
 	<tr>
-	<td class="bodyLeftTile" width="10"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/></td>
+	<td class="bodyLeftTile" width="10"><digi:img src="images/ui/spacer.gif"/></td>
 	<td class="bodyField" width="100%">
 	<!-- Body -->
 		<table border="0"	 cellpadding="0" cellspacing="3" width="100%">
@@ -100,7 +100,7 @@
 					</tr>
 					<tr>
 						<td class="contentSplitter" height="4">
-							<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif" height="4"/>
+							<digi:img src="images/ui/spacer.gif" height="4"/>
 						</td>
 					</tr>						
 				</logic:iterate>
@@ -113,13 +113,13 @@
 		</table>
 	<!-- Body -->
 	</td>
-	<td class="bodyRightTile" width="10"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/></td>
+	<td class="bodyRightTile" width="10"><digi:img src="images/ui/spacer.gif"/></td>
 	</tr>
 	
 	<tr>
-	<td width="10" height="11"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserBottomLeft.gif"/></td>
-	<td width="100%" height="11" class="teaserBottomBody"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/spacer.gif"/></td>
-	<td width="5" height="11"><digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/teaserBottomRight.gif"/></td>
+	<td width="10" height="11"><digi:img src="images/ui/teaserBottomLeft.gif"/></td>
+	<td width="100%" height="11" class="teaserBottomBody"><digi:img src="images/ui/spacer.gif"/></td>
+	<td width="5" height="11"><digi:img src="images/ui/teaserBottomRight.gif"/></td>
 	</tr>	
 </table>
 

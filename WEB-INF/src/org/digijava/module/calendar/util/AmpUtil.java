@@ -12,15 +12,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
+import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.entity.AmpCalendarGraph;
 import org.digijava.module.calendar.entity.AmpCalendarGraphItem;
@@ -29,8 +33,6 @@ import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.DateNavigatorItem;
 import org.digijava.module.calendar.exception.CalendarException;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new
@@ -282,20 +284,25 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
             DateNavigatorItem navigatorItem = (DateNavigatorItem) it.next();
             int	itemStartTimestamp = getNavigatorItemLeftTimestamp(navigatorItem.getDateBreakDown(), view);
             int itemEndTimestamp = getNavigatorItemRightTimestamp(navigatorItem.getDateBreakDown(), view);
-            String  eventTypeName=null;
-        	if(ampCalendar.getEventsType()!=null){
-            	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
-            	if (ampCategoryValue != null){
-            		eventTypeName=ampCategoryValue.getValue();
-            	}
-            }
-            ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(eventTypeName, calendarStartTimestamp,
+            ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(ampCalendar.getEventType().getColor(), calendarStartTimestamp,
                 calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
         }
         return ampCalendarGraph;
     }
 
- static AmpCalendarGraph getAmpCalendarGraph(AmpCalendar ampCalendar,
+    public static void deleteEventType(Long eventTypeId) throws CalendarException{
+        AmpEventType eventType=AmpDbUtil.getEventType(eventTypeId);
+        AmpDbUtil.deleteEventType(eventType);
+    }
+
+    public static void createEventType(String name,String color) throws CalendarException{
+        AmpEventType newEventType=new AmpEventType();
+        newEventType.setName(name);
+        newEventType.setColor(color);
+        AmpDbUtil.saveEventType(newEventType);
+    }
+
+    private static AmpCalendarGraph getAmpCalendarGraph(AmpCalendar ampCalendar,
         int[] subItemLeftTimestamps, int[] subItemRightTimestamp,int calendartype ) throws
         CalendarException {
         AmpCalendarGraph ampCalendarGraph = new AmpCalendarGraph(ampCalendar);
@@ -317,15 +324,9 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
 		 }
         
         for(int i = 0; i < subItemLeftTimestamps.length; i++) {
-        	String  eventTypeName=null;
-        	if(ampCalendar.getEventsType()!=null){
-            	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
-            	if (ampCategoryValue != null){
-            		eventTypeName=ampCategoryValue.getValue();
-            	}
-            }
-        	
-            ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(eventTypeName, calendarStartTimestamp,calendarEndTimestamp, subItemLeftTimestamps[i],
+            ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(
+                ampCalendar.getEventType().getColor(), calendarStartTimestamp,
+                calendarEndTimestamp, subItemLeftTimestamps[i],
                 subItemRightTimestamp[i]));
         }
         return ampCalendarGraph;

@@ -53,19 +53,19 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>"></script>
 
 <script type="text/javascript">
-	YAHOO.namespace("YAHOO.amptab");
-	YAHOO.amptab.init = function() {
-		var tabView = new YAHOO.widget.TabView('tabview_container');
+	YAHOOAmp.namespace("YAHOOAmp.amptab");
+	YAHOOAmp.amptab.init = function() {
+		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 	};
 
-	YAHOO.amptab.handleCloseAbout = function() {
+	YAHOOAmp.amptab.handleCloseAbout = function() {
 		if (navigator.appName == 'Microsoft Internet Explorer') {
 			//window.location.reload();
 			//history.go(-1);
 		}
 	}
 
-	var myPanel5 = new YAHOO.widget.Panel("new5", {
+	var myPanel5 = new YAHOOAmp.widget.Panel("new5", {
 		width :"480px",
 		fixedcenter :true,
 		constraintoviewport :true,
@@ -76,11 +76,11 @@
 		draggable :true
 	});
 
-	myPanel5.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseAbout);
+	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
 
 	var bandera = 0;
 
-	YAHOO.amptab.initScripts	= function () {
+	YAHOOAmp.amptab.initScripts	= function () {
 		var msgP5 = '\n<digi:trn key="aim:aboutamp">About AMP</digi:trn>';
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("Example");
@@ -88,7 +88,7 @@
 	};
 
 	function showAbout() {
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("customAbout");
 		element.style.display = "inline";
 		if(bandera == 0){
@@ -98,7 +98,7 @@
 		myPanel5.center();
 		myPanel5.show();
 	}
-	YAHOO.util.Event.addListener(window, "load", YAHOO.amptab.initScripts) ;
+	YAHOOAmp.util.Event.addListener(window, "load", YAHOOAmp.amptab.initScripts) ;
 </script>
 
 <style type="text/css">

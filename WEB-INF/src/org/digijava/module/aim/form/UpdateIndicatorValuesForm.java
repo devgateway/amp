@@ -25,61 +25,6 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	
 	private Collection indicators;
 	private Long expIndicatorId;
-    private Long indicatorConId;
-    private Long riskId;
-    private Long logFrameId;
-    private Float currentVal;
-	private String currValDate;
-	private String currValComments;
-
-    public String getCurrValComments() {
-        return currValComments;
-    }
-
-    public void setCurrValComments(String currValComments) {
-        this.currValComments = currValComments;
-    }
-
-    public String getCurrValDate() {
-        return currValDate;
-    }
-
-    public void setCurrValDate(String currValDate) {
-        this.currValDate = currValDate;
-    }
-
-    public Float getCurrentVal() {
-        return currentVal;
-    }
-
-    public void setCurrentVal(Float currentVal) {
-        this.currentVal = currentVal;
-    }
-    
-
-    public Long getLogFrameId() {
-        return logFrameId;
-    }
-
-    public void setLogFrameId(Long logFrameId) {
-        this.logFrameId = logFrameId;
-    }
-
-    public Long getRiskId() {
-        return riskId;
-    }
-
-    public void setRiskId(Long riskId) {
-        this.riskId = riskId;
-    }
- 
-    public Long getIndicatorConId() {
-        return indicatorConId;
-    }
-
-    public void setIndicatorConId(Long indicatorConId) {
-        this.indicatorConId = indicatorConId;
-    }
 	
 	/**
 	 * @return Returns the activityId.

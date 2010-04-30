@@ -41,7 +41,8 @@ import org.digijava.module.sdm.dbentity.SdmItem;
  * @version 1.0
  */
 
-public class SdmForm extends ActionForm {
+public class SdmForm
+    extends ActionForm {
 
   public static class SdmItemInfo {
 

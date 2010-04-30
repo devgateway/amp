@@ -40,7 +40,7 @@
 	<c:if test="${reportData.levelDepth == 3}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 			<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 15px;padding-right: 3px">
-				<img src="/TEMPLATE/ampTemplate/imagesSource/common/hierarchies.gif" align="top">
+				<img src="module/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
 			<!-- *************************************************** 
 					WARNING:
@@ -54,7 +54,7 @@
 	<c:if test="${reportData.levelDepth == 4}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 		<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 25px;padding-right: 3px">
-			<img src="/TEMPLATE/ampTemplate/imagesSource/common/hierarchies.gif" align="top">
+			<img src="module/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
 			<!-- *************************************************** 
 					WARNING:

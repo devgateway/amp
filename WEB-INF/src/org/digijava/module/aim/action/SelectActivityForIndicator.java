@@ -100,7 +100,7 @@ public class SelectActivityForIndicator
             } 
             
             
-            Collection<AmpActivity> actCol = ActivityUtil.getAllActivitiesList(true);
+            Collection<AmpActivity> actCol = ActivityUtil.getAllActivitiesList();
             if(actCol != null) {
                 List<AmpActivity> actList = new ArrayList<AmpActivity>(actCol);
                 if(actList != null && newIndForm.getKeyword() != null) {

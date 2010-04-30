@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -19,43 +19,42 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-latest.pack.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.disable.text.select.js"/>"></script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <!--  -->
-<jsp:include page="addOrganizationPopin.jsp" flush="true" />
 
-<div id="popin" style="display: none">
-	<div id="popinContent" class="content">
-	</div>
-</div>
 <script type="text/javascript">
 <!--
 
-	YAHOO.namespace("YAHOO.amp");
+		YAHOO.namespace("YAHOO.amp");
+
+		var myPanel = new YAHOO.widget.Panel("newmyComment", {
+			width:"600px",
+			fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true
+		    });
 	
-	var myPanel = new YAHOO.widget.Panel("newpopins", {
-		width:"600px",
-		fixedcenter: true,
-	    constraintoviewport: false,
-	    underlay:"none",
-	    close:true,
-	    visible:false,
-	    modal:true,
-	    draggable:true,
-	    context: ["showbtn", "tl", "bl"]
-	    });
-	var panelStart=0;
-	var checkAndClose=false;
-	var refresh=true;
 	function initStep1Scripts() {
 		var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
 		myPanel.setHeader(msg);
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
-			panelStart=1;
+			delCommentContent=true;
+			showContent();
 		}); 
 		myPanel.render(document.body);
 	}
@@ -71,25 +70,16 @@
 	  background-color:#2f2f2f;
 	}
 	
-	#popin .content { 
+	#myComment .content { 
 	    overflow:auto; 
 	    height:455px; 
 	    background-color:fff; 
 	    padding:10px; 
-	    width: 98%;
 	} 
-	.bd a:hover {
-  		background-color:#ecf3fd;
-		font-size: 10px; 
-		color: #0e69b3; 
-		text-decoration: none	  
-	}
-	.bd a {
-	  	color:black;
-	  	font-size:10px;
-	}
-		
+	
 </style>
+
+
 
 <script language="JavaScript">
     <!--
@@ -113,11 +103,7 @@
 	 * o.argument
 	 */
 		var response = o.responseText; 
-		var content = document.getElementById("popinContent");
-	    //response = response.split("<!")[0];
-		content.innerHTML = response;
-	    //content.style.visibility = "visible";
-		showContent();
+		showContent(response);
 	}
 	var delCommentContent=false;	 
 	var responseFailure = function(o){ 
@@ -133,46 +119,14 @@
 		success:responseSuccess, 
 		failure:responseFailure 
 	};
-	function showContent(){
-		var element = document.getElementById("popin");
-		element.style.display = "inline";
-		if (panelStart < 1){
-			myPanel.setBody(element);
-		}
-		if (panelStart < 2){
-			document.getElementById("popin").scrollTop=0;
-			myPanel.show();
-			panelStart = 2;
-		}
-		checkErrorAndClose();
-	}
-	function checkErrorAndClose(){
-		if(checkAndClose==true){
-			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-				myclose();
-				refreshPage();
-			}
-			checkAndClose=false;			
-		}
-	}
-	function refreshPage(){
-		if(refresh==true){
-			submitAfterSelectingOrg();
-		}else{
-			refresh=true;
-		}
+
+	function commentWin(commentId){
+		delCommentContent=false;
+		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
+		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
 
-	function myclose(){
-		myPanel.hide();	
-		panelStart=1;
-	
-	}
-	function closeWindow() {
-		myclose();
-	}
-
-	/*
 	function showContent(content){
 		if(delCommentContent==true){
 			myPanel.setBody("");
@@ -180,40 +134,17 @@
 			showComment(content);
 		}
 	}
-	
 	function showComment(content) {
 		myPanel.setBody(content);
 		myPanel.show();
 	}	
-	*/
-	
-	function showPanelLoading(msg){
-		myPanel.setHeader(msg);		
-		var content = document.getElementById("popinContent");
-		content.innerHTML = '<div style="text-align: center">' + 
-			'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-			'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
-					
-		showContent();
-	}
-	
-	function commentWin(commentId){
-		var msg='\n<digi:trn>Add/Edit Comment</digi:trn>';
-		showPanelLoading(msg);
-		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
-		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
-		YAHOO.util.Connect.asyncRequest("POST", url, callback);
-	}
-
 	function saveComment(){
-		refresh=false;
-		checkAndClose=true;
-		var postString = generateFields("");
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		var postString		= generateFields("");
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 	 function editDelete() {
 		var postString		= generateFields("edit=true");
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 
 	function message(val1,val2) {
@@ -227,7 +158,6 @@
 		if (flag == true) {
 			document.getElementById('actionFlag').value = val1;
 			document.getElementById('ampCommentId').value = val2;
-			document.getElementById('commentText').value = "";
 			editDelete();
 		}
 	}
@@ -254,6 +184,7 @@
 		else{
 			saveComment();
 		}
+		myclose();
 	}
 	
 	function trim ( inputStringTrim ) {
@@ -273,10 +204,10 @@
 </script>
 <script language="JavaScript">
 <!--
-	 
+	
 function checkSelOrgs() {
 	<c:set var="translation">
-		<digi:trn>Please choose an organization to remove</digi:trn>
+		<digi:trn key="aim:chooseOrganizationToRemove">Please choose an organization to remove</digi:trn>
 	</c:set>
 	
 	if (document.getElementsByName('identification.selOrgs').checked != null) { // only one org. added
@@ -448,7 +379,7 @@ function popupwin() {
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td><jsp:include page="t.jsp"/>
-								<span class=crumb style="visibility: hidden">
+								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
@@ -494,17 +425,17 @@ ${fn:replace(message,quote,escapedQuote)}
 					</table>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top">
+					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
-							<td height=16 vAlign=center width="100%">
-                            <span class="subtitle-blue">
+							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn>Title:</digi:trn>&nbsp;<bean:write name="aimEditActivityForm" property="identification.title"/>
+									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
+:
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
-                            </span>
 							</td>
 						</tr>
 					</table>
@@ -512,26 +443,40 @@ ${fn:replace(message,quote,escapedQuote)}
 				<tr> <td>
 					<digi:errors/>
 				</td></tr>
-				<logic:iterate id="element" name="aimEditActivityForm" property="messages">
-                	<tr><td><digi:trn key="${element.key}">
-                    	<font color="#FF0000"><bean:write name="element" property="value"/></font>
-                    </digi:trn></td></tr>
-                </logic:iterate>
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+							<tr>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												 <digi:trn>Step</digi:trn> 1 <digi:trn>of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                           <digi:trn key="IdentificationAndPlanning"> 
+                                                                                                               Identification | Planning </digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 							<tr><td bgcolor="#f4f4f2" width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-							<tr><td bgColor="#ffffff" align="center" vAlign="top">
+							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
 
-								<table width="100%" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<feature:display name="Identification" module="Project ID and Planning">
 									&nbsp;
 									</feature:display>
-									<tr><td class="separator1">
-										<digi:trn key="aim:identification">Identification</digi:trn>
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<b><digi:trn key="aim:identification">Identification</digi:trn></b>
+
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									

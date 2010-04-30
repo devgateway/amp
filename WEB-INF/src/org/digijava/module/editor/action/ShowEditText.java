@@ -176,7 +176,6 @@ public class ShowEditText
                 formBean.setLang(editor.getLanguage());
             }
             formBean.setContent(editor.getBody());
-            formBean.setOriginalContent(formBean.getContent());
             formBean.setKey(editor.getEditorKey());
             formBean.setTitle(editor.getTitle());
 
@@ -186,9 +185,6 @@ public class ShowEditText
             formBean.setContent("default");
         }
 
-        if (formBean.getNoPageHeader()!=null && formBean.getNoPageHeader().booleanValue()){
-        	return mapping.findForward("hideHeader");
-        }
         return mapping.findForward("forward");
     }
 }

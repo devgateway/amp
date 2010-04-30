@@ -25,7 +25,6 @@ public class DocumentManagerForm extends ActionForm {
 	private String uuid						= null;
 	private Collection<DocumentData> myPersonalDocuments	= null;
 	private Collection<DocumentData> myTeamDocuments		= null;
-	private Collection<DocumentData> supportDocuments		= null;
 	
 	
 	private Collection<DocumentData> otherDocuments		= null;
@@ -259,14 +258,6 @@ public class DocumentManagerForm extends ActionForm {
 	 */
 	public void setMessages(HashMap<String, String> messages) {
 		this.messages = messages;
-	}
-
-	public Collection<DocumentData> getSupportDocuments() {
-		return this.supportDocuments;
-	}
-
-	public void setSupportDocuments(Collection<DocumentData> supportDocuments) {
-		this.supportDocuments = supportDocuments;
 	}
 
 

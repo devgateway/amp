@@ -17,8 +17,6 @@ public class AmpApplicationSettings implements Serializable {
 	private AmpTeamMember member;
 
 	private Integer defaultRecordsPerPage;
-
-	private Integer defaultViewablePages;
 	
 	private Integer reportStartYear;
 	
@@ -142,13 +140,5 @@ public class AmpApplicationSettings implements Serializable {
 
 	public void setValidation(String validation) {
 		this.validation = validation;
-	}
-
-	public void setDefaultViewablePages(Integer defaultViewablePages) {
-		this.defaultViewablePages = defaultViewablePages;
-	}
-
-	public Integer getDefaultViewablePages() {
-		return defaultViewablePages;
 	}
 }

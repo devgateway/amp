@@ -14,16 +14,9 @@
 
 <script type="text/javascript">
 	function addColumnToWidget(myForm){
-       var name = myForm.colName.value;
-        if(name!=""){
-            myForm.target=window.opener.name;
-            myForm.submit();
-            window.close();
-        }
-        else{
-            var emptyName = '<digi:trn jsFriendly="true">Please enter the Name</digi:trn>';
-            alert(emptyName);
-        }
+		myForm.target=window.opener.name;
+		myForm.submit();
+		window.close();
 	}
 	$(document).ready(function(){
 		var mainTextBox = document.getElementsByName('colName')[0];

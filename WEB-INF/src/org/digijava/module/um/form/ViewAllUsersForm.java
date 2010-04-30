@@ -1,14 +1,15 @@
 package org.digijava.module.um.form;
 
-import java.util.Collection;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.UserBean;
 
-public class ViewAllUsersForm   extends ActionForm {
+public class ViewAllUsersForm
+    extends ActionForm {
     private String keyword;
     private int type=-1;
     private Collection<UserBean> users;
@@ -25,8 +26,6 @@ public class ViewAllUsersForm   extends ActionForm {
     //amount of results per page
     private int tempNumResults;
     private int numResults;
-   
-	private int numUsers;
     private Collection pages = null;
     //this field is used to sort user by name,email or workspace
     private String sortBy;
@@ -37,7 +36,6 @@ public class ViewAllUsersForm   extends ActionForm {
     private int pagesSize;
     
     private boolean showBanned	= false;
-	private String sortDir;
     
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
           //pages = null;
@@ -120,16 +118,7 @@ public class ViewAllUsersForm   extends ActionForm {
 
     public void setUsers(Collection<UserBean> users) {
         this.users = users;
-        this.setNumUsers(users.size());
     }
-    
-    public int getNumUsers() {
-		return numUsers;
-	}
-
-	public void setNumUsers(int numUsers) {
-		this.numUsers = numUsers;
-	}
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
@@ -217,13 +206,6 @@ public class ViewAllUsersForm   extends ActionForm {
 
 	public void setShowBanned(boolean showBanned) {
 		this.showBanned = showBanned;
-	}
-
-	public void setSortDir(String sortDir) {
-		this.sortDir = sortDir;
-	}
-	public String getSortDir() {
-		return sortDir;
 	}
 
 	

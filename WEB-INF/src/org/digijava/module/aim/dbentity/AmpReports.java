@@ -5,7 +5,6 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,14 +16,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.ecs.storage.Hash;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
-import org.digijava.module.aim.ar.impexp.annotations.TransformerAnn;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
-public class AmpReports implements Comparable, LoggerIdentifiable , Serializable {
+public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	private Long ampReportId;
 
@@ -39,34 +37,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	// private String description;
 	private String reportDescription;
 
-	@TransformerAnn(
-			expTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyExpTransformerFactory", 
-			impTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyImpTransformerFactory"
-	)
 	private String options;
 
-	@TransformerAnn(
-			expTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyExpTransformerFactory", 
-			impTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyImpTransformerFactory"
-	)
-	private Boolean hideActivities=Boolean.FALSE;
-
-	public Long getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(Long siteId) {
-		this.siteId = siteId;
-	}
+	private Boolean hideActivities;
 
 	private Boolean drilldownTab;
 
 	private Boolean publicReport;
 
-	@TransformerAnn(
-			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.TypePropertyExpTransformerFactory",
-			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.TypePropertyImpTransformerFactory"
-	)
 	private Long type;
 
 	// private AmpReportsOptions ampReportsOptions;
@@ -74,25 +52,12 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	private Set members;
 
-
-	@TransformerAnn(
-			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
-			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
-	)
 	private Set<AmpReportColumn> columns;
 
 	private List orderedColumns;
-	
-	@TransformerAnn(
-			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
-			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
-	)
+
 	private Set<AmpReportHierarchy> hierarchies;
 
-	@TransformerAnn(
-			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
-			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
-	)
 	private Set<AmpReportMeasures> measures;
 
 	private Set reportMeasures;
@@ -105,7 +70,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	// to be set in order to get information for translation purposes in pdf and
 	// excel reports
-	private Long siteId;
+	private String siteId;
 
 	private String locale;
 
@@ -121,10 +86,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	
 	private Set<AmpFilterData> filterDataSet;
 	
-	@TransformerAnn(
-			expTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyExpTransformerFactory", 
-			impTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyImpTransformerFactory"
-	)
 	private Boolean allowEmptyFundingColumns;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
@@ -340,9 +301,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	 *            The hideActivities to set.
 	 */
 	public void setHideActivities(Boolean hideActivities) {
-		if (hideActivities==null){
-			hideActivities=Boolean.FALSE;
-		}
 		this.hideActivities = hideActivities;
 	}
 
@@ -393,6 +351,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 		this.locale = locale;
 	}
 
+	public String getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
+	}
+
 	public Object getObjectType() {
 		// TODO Auto-generated method stub
 		return this.getClass().getName();
@@ -401,7 +367,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	public Object getIdentifier() {
 		// TODO Auto-generated method stub
 		return this.getAmpReportId().toString();
-	}	
+	}
 
 	public Long getId() {
 		return this.getAmpReportId();
@@ -516,18 +482,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	public void setAllowEmptyFundingColumns(Boolean allowEmptyFundingColumns) {
 		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
-	}
-	
-	public int getNumOfHierarchies() {
-		int ret	= 0;
-		if ( this.hierarchies != null )
-			ret	= this.hierarchies.size();
-		return ret;
-	}
-	
-	@Override
-	public String toString() {
-		return this.name;
 	}
 	
 }

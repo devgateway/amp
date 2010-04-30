@@ -445,15 +445,6 @@ public final class Util {
 		return gc.get(Calendar.YEAR);
 	}
 
-	public static String collectionToString ( Collection<? extends Object> col) {
-		String str	= "";
-		if (col != null && col.size() > 0) {
-			for ( Object o: col ) {
-				str		+= o.toString() + ", ";
-			}
-			return str.substring(0, str.length()-2);
-		}
-		return str;
-	}
+	
 
 }

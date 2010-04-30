@@ -14,10 +14,11 @@ import java.io.Serializable;
  * @since 29.08.2007
  */
 public class PermissionMap implements Serializable,Comparable {
-
+	
+	private static final long serialVersionUID = -7294750950373378335L;
 	protected Long id;
 	protected String permissibleCategory;
-	protected String objectIdentifier;
+	protected Long objectIdentifier;
 	protected Permission permission;
 	
 	public String toString() {
@@ -47,7 +48,12 @@ public class PermissionMap implements Serializable,Comparable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+	public Long getObjectIdentifier() {
+		return objectIdentifier;
+	}
+	public void setObjectIdentifier(Long objectId) {
+		this.objectIdentifier = objectId;
+	}
 	public Permission getPermission() {
 		return permission;
 	}
@@ -71,19 +77,5 @@ public class PermissionMap implements Serializable,Comparable {
 	    if(this.getObjectLabel()!=null && pm.getObjectLabel()!=null) return this.getObjectLabel().compareTo(pm.getObjectLabel());
 	    if(this.getObjectIdentifier()!=null && pm.getObjectIdentifier()!=null) return this.getObjectIdentifier().compareTo(pm.getObjectIdentifier());
 	    return this.getPermissibleCategory().compareTo(pm.getPermissibleCategory());
-	}
-
-	/**
-	 * @return the objectIdentifier
-	 */
-	public String getObjectIdentifier() {
-		return objectIdentifier;
-	}
-
-	/**
-	 * @param objectIdentifier the objectIdentifier to set
-	 */
-	public void setObjectIdentifier(String objectIdentifier) {
-		this.objectIdentifier = objectIdentifier;
 	}
 }

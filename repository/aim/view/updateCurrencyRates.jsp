@@ -124,7 +124,7 @@ function closePopup() {
 											</td>
 											<td align="left" vAlign="center">&nbsp;
 								 				<a id="date1" href='javascript:pickDateCurrency("date1",document.aimCurrencyRateFormPop.updateCRateDate)'>
-													<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 												</a>
 											</td>
 										</tr>

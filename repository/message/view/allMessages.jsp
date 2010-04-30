@@ -10,16 +10,14 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
-
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
-<digi:ref rel="stylesheet" type="text/css" href="css/paginator.css" />
+
 <!-- Yahoo Panel --> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-dom-event.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/container-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dragdrop-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/yahoo-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>"></script>
 
 <style>
 <!--
@@ -81,9 +79,6 @@
 .userMsg{
 background-color:yellow;
 }
- .scrollable {
-            height: 400px; overflow: auto; width:100%;
- }
 
 -->
 </style>
@@ -101,33 +96,31 @@ background-color:yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script langauage="JavaScript">
 
-    var  selectedMessagePanel;
-    var noMsgs="<digi:trn>No Messages Present</digi:trn>";
-    var noAlerts="<digi:trn>No Alerts Present</digi:trn>";
-    var noApprovals="<digi:trn>No Pending Approvals</digi:trn>";
-    var noEvents="<digi:trn>No Upcoming Events</digi:trn>";
-   	var from='<digi:trn>From</digi:trn>';
-    var to='<digi:trn>To</digi:trn>';
-	var date='<digi:trn>Date</digi:trn>';
-	var prLevel='<digi:trn>Priority</digi:trn>';
-	var desc='<digi:trn>Message Details</digi:trn>';
-	var editBtn='<digi:trn>Edit</digi:trn>';
-	var fwdBtn='<digi:trn>Forward</digi:trn>';
-	var deleteBtn='<digi:trn>Delete</digi:trn>';
-	var pagesTrn='<digi:trn>Pages</digi:trn>';
-	var ofTrn='<digi:trn>of</digi:trn>';
-	var firstPage='<digi:trn>click here to go to first page</digi:trn>';
-	var prevPage='<digi:trn>click here to go to previous page</digi:trn>';
-	var nextPage='<digi:trn>Click here to go to next page</digi:trn>';
-	var lastPg='<digi:trn>click here to go to last page</digi:trn>';
-	var referenceURL='<digi:trn>Reference URL</digi:trn>'; 
-	var attachmedFiles='<digi:trn>Attached Files</digi:trn>';
-    var forwardClick='<digi:trn> Click on this icon to forward message&nbsp;</digi:trn>';
-    var editClick='<digi:trn> Click on this icon to edit message&nbsp;</digi:trn>';
-    var replyClick='<digi:trn> Click on this icon to reply message&nbsp;</digi:trn>';
-    var deleteClick='<digi:trn> Click on this icon to delete message&nbsp;</digi:trn>';
-    var viewMessage='<digi:trn> Click here to view the message</digi:trn>';
-    var viewDetails='<digi:trn>Click here to view details</digi:trn>';
+        var  selectedMessagePanel;
+    var noMsgs="<digi:trn key="message:noMessages">No Messages Present</digi:trn>";
+    var noAlerts="<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>";
+    var noApprovals="<digi:trn key='message:noPendingApprovals'>No Pending Approvals</digi:trn>";
+    var noEvents="<digi:trn key='message:noUpcomingEvents'>No Upcoming Events</digi:trn>";
+   	var from='<digi:trn key="message:from">From</digi:trn>';
+    var to='<digi:trn key="message:to">To</digi:trn>';
+	var date='<digi:trn key="message:date">Date</digi:trn>';
+	var prLevel='<digi:trn key="message:priority">Priority</digi:trn>';
+	var desc='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
+	var editBtn='<digi:trn key="message:Edit">Edit</digi:trn>';
+	var fwdBtn='<digi:trn key="message:Forward">Forward</digi:trn>';
+	var deleteBtn='<digi:trn key="message:delete">Delete</digi:trn>';
+	var pagesTrn='<digi:trn key="message:pages">Pages</digi:trn>';
+	var ofTrn='<digi:trn key="message:of">of</digi:trn>';
+	var firstPage='<digi:trn key="message:firstPage">click here to go to first page</digi:trn>';
+	var prevPage='<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>';
+	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
+	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
+	var referenceURL='<digi:trn key="message:referenceURL">Reference URL</digi:trn>';
+    var forwardClick='<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>';
+    var editClick='<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>';
+    var deleteClick='<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>';
+    var viewMessage='<digi:trn key="message:ClickViewMessage"> Click here to view the message</digi:trn>';
+    var viewDetails='<digi:trn key="message:ClickViewDetails">Click here to view details</digi:trn>';
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -137,8 +130,8 @@ background-color:yellow;
 	//used to hold already rendered messages
 	var myArray=new Array();
 	
-	addLoadEvent(getMessages);
-	addLoadEvent(delBody);	
+	window.onload=getMessages;
+		
 	//setting timer to check for new messages after specified time	
 	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
@@ -152,7 +145,7 @@ background-color:yellow;
     }
     
     function closeWindow() {	
-       selectedMessagePanel.hide();
+       selectedMessagePanel.destroy();
     }
     
     /*code below doesn't look good... but still
@@ -203,20 +196,18 @@ background-color:yellow;
         //create div to hold selected message
         var div=document.createElement('DIV');
         div.id="selectedMessagePanel";
-        
         document.body.appendChild(div);
-       
+	
         // create body div to hold selected message
         var divBody=document.createElement('DIV');
         divBody.className="bd";
         divBody.id="msg_bd";
-        divBody.className='scrollable'
-        divBody.innerHTML='<digi:img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/><digi:trn>Loading, please wait ...</digi:trn>';
+        divBody.innerHTML='<digi:img src="images/amploading.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>';
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
-            width: 600,
-            constraintoviewport: true,
-            fixedcenter: true,
+            x:"20",
+            y:"20",
+            constraintoviewport: true, 
             Underlay:"shadow", 
             modal: true,
             close:true, 
@@ -231,7 +222,7 @@ background-color:yellow;
         }
         else{
             url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgStateId='+id); 
-            markMessageAsRead(id);            
+            markMsgeAsRead(id);            
         }			
         var async=new Asynchronous();
         async.complete=viewMsg;
@@ -251,20 +242,24 @@ background-color:yellow;
         divBody.innerHTML=responseText;
 	}
         
-    function unCheckMessages() {
-        var chk= $("input[id^='delChkbox_']:checked");
-        if(chk.length>0){
-            var msg='<digi:trn>Please uncheck or delete selected message(s)</digi:trn>';
-            alert(msg);
-            return false;
+       function unCheckMessages() {
+            var chk=document.messageForm.getElementsByTagName('input');
+            for(var i=0;i<chk.length;i++){
+                if(chk[i].type == 'checkbox'&&chk[i].checked){
+                    alert("Please uncheck or delete selected message(s)");
+                    return false;
+                }
+            }
+            return true;
         }
-        return true;
-    }
-        function getSelectedMessagesIds() {
+        function deleteMessageIds() {
+            var chk=document.messageForm.getElementsByTagName('input');
             var msgIds='';
-           $("input[id^='delChkbox_']:checked").each(function(){
-                msgIds+=this.value+',';
-            })            
+            for(var i=0;i<chk.length;i++){
+                if(chk[i].type == 'checkbox'&&chk[i].checked){
+                    msgIds+=chk[i].value+',';
+                }
+            }
            if(msgIds.length>0){
                msgIds=msgIds.substring(0,msgIds.length-1);
            }
@@ -277,37 +272,37 @@ background-color:yellow;
                 flag=true;
             }
             if(msgId==null){
-                msgId=getSelectedMessagesIds();
+                msgId=deleteMessageIds();
                 if(msgId.length==0){
-                	var msg='<digi:trn>Please select messages</digi:trn>';
-                    alert(msg);
+                    alert("Please select messages");
                      flag=false;  
                 }
                 else{
                     if(deleteMsgs()){                                                         
                          flag=true;  
                    }
-                }                
+                }
+                
             }
                     
             
            
 		if(flag){
 			//remove current element from array
-            var idsArray=msgId.split(',');
-            var tbl=document.getElementById('msgsList');
-            for(var i=0;i<idsArray.length;i++){
-				var index=getIndexOfElement(idsArray[i]);
-				if(index!=-1){
-					myArray.splice(index,1);	
-					//removing TR from rendered messages list
-								
-					var img=document.getElementById(idsArray[i]+'_plus');
-					var imgTD=img.parentNode;
-					var msgTR=imgTD.parentNode;
-					tbl.tBodies[0].removeChild(msgTR);
-                }
-            }
+                        var idsArray=msgId.split(',');
+                        var tbl=document.getElementById('msgsList');
+                        for(var i=0;i<idsArray.length;i++){
+			var index=getIndexOfElement(idsArray[i]);
+			if(index!=-1){
+				myArray.splice(index,1);	
+				//removing TR from rendered messages list
+							
+				var img=document.getElementById(idsArray[i]+'_plus');
+				var imgTD=img.parentNode;
+				var msgTR=imgTD.parentNode;
+				tbl.tBodies[0].removeChild(msgTR);
+                        }
+                        }
                 
                                 
                                 /* 
@@ -358,7 +353,8 @@ background-color:yellow;
 				url+='~timeStamp='+lastTimeStamp;
 				var async=new Asynchronous();
 				async.complete=buildMessagesList;
-				async.call(url);				
+				async.call(url);		
+				
 		}
 	}
 	
@@ -431,7 +427,7 @@ background-color:yellow;
 	        stateId=group_id.slice(ind+4);   
 	    }else{
 	     	stateId=group_id;
-	     	markMessageAsRead( stateId);          
+	        markMsgeAsRead( stateId);          
 	    }
 	       
 	    for(var j=0;j<messages.length;j++){ 
@@ -452,25 +448,6 @@ background-color:yellow;
 	    }
 	    $('#msg_'+group_id).toggle('fast');                
 	}
-	
-	//this is new function
-	function markMessageAsRead(group_id){
-		var selMsgsIds;
-		if(group_id!=null){
-			selMsgsIds=group_id;
-		}else{
-			selMsgsIds=getSelectedMessagesIds();
-			if(selMsgsIds.length==0){
-                alert("Please select messages");
-                return false;  
-            }
-		}
-		var partialUrl=addActionToURL('messageActions.do');
-		var url=getUrl(partialUrl,selMsgsIds);
-		var async=new Asynchronous();
-		async.complete=makeRead;
-		async.call(url);
-	}
                   
 	function markMsgeAsRead(group_id){
         var partialUrl=addActionToURL('messageActions.do');
@@ -488,23 +465,8 @@ background-color:yellow;
 		result+='~timeStamp='+lastTimeStamp;
 		return result;
 	}
-
-	function makeRead (status, statusText, responseText, responseXML){		
-		var messages=responseXML.getElementsByTagName('Messaging')[0].childNodes;
-		if(messages!=null){
-			for (var i=0;i<messages.length;i++){
-				var stateId=messages[i].getAttribute('id');
-				var isRead=messages[i].getAttribute('read');
-				if(isRead){
-					var myid='#'+stateId+'_unreadLink';
-					$(myid).css("color","");		
-				}
-			}
-			deselectAllCheckboxes();
-		}
-	}
 	
-	function oldmakeRead (status, statusText, responseText, responseXML){		
+	function makeRead (status, statusText, responseText, responseXML){		
 		var root=responseXML.getElementsByTagName('Messaging')[0].childNodes[0];
 		var stateId=root.getAttribute('id');
 		var isRead=root.getAttribute('read');
@@ -573,7 +535,9 @@ background-color:yellow;
                             }
 				else{
                        
-                    messages=root.childNodes;
+                                     messages=root.childNodes;
+                                
+                  
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
 					//while (tblBody.childNodes.length>0){
 					//	tblBody.removeChild(tblBody.childNodes[0]);
@@ -592,15 +556,16 @@ background-color:yellow;
 											var pagParams=paginationTag.childNodes[0];
 											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
 											if(wasDelteActionCalled=='true'){
-                                                var msgTR;												
+                                                                                                var msgTR;
+												
 												if(browser=="Microsoft Internet Explorer"){
-										   			msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');										   			
+										   			msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
+										   			
 												}else{
-                                                    msgTR=document.createElement('TR');      	
+                                                                                                msgTR=document.createElement('TR');      	
                                                     msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                               	}
-                                               	var color=++j;                                    
-                                                msgTR=paintTr(msgTR,color);                                                                                                
+                                               	}                                                  var color=++j;                                    
+                                                                                                msgTR=paintTr(msgTR,color);                                                                                                
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
 												myArray[myArray.length]=msgId;										
 											}else{
@@ -609,7 +574,8 @@ background-color:yellow;
 												if(browser=="Microsoft Internet Explorer"){
 									   				msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');	
 												}else{
-                                                 	msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                                                                                                        
+                                                                                                        msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
 												}
 												msgTr=paintTr(msgTr,i);
 												createTableRow(tbl,msgTR,messages[i],true);
@@ -626,15 +592,16 @@ background-color:yellow;
 						for(var i=0;i<messages.length;i++){				
 							var msgId=messages[i].getAttribute('id');
 							myArray[i]=msgId;							
-							//creating tr                                       
+							//creating tr
+                                       
 							var isMsgRead=messages[i].getAttribute('read');					
 							if(browser=="Microsoft Internet Explorer"){
 								var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
 							}else{
-                                var msgTr=document.createElement('TR');	
+                                            var msgTr=document.createElement('TR');	
  		 						msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
                         	}
-                            msgTr=paintTr(msgTr,i);
+                                         msgTr=paintTr(msgTr,i);
 							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
         	                var tablBody= tbl.getElementsByTagName("tbody");
                             tablBody[0].appendChild(myTR);            																				
@@ -668,16 +635,11 @@ background-color:yellow;
 			var paginationParams=paginationTag.childNodes[0];
 			if(paginationParams!=null){
 				var paginationTD=document.createElement('TD');
-                paginationTD.className= "yui-skin-sam";
-				var paginationTDContent='';
+				var paginationTDContent=pagesTrn+':';
 					if(currentPage>1){
 						var prPage=currentPage-1;
-						paginationTDContent+='<a class="yui-pg-first" href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt;<digi:trn>first</digi:trn></a> ';
-						paginationTDContent+='<a class="yui-pg-previous" href="javascript:goToPage('+prPage+')" title="'+prevPage+'" >&lt;<digi:trn key="aim:previous">prev</digi:trn> </a>';
-					}
-                    else{
-                        paginationTDContent+='<span class="yui-pg-first">&lt;&lt; <digi:trn>first</digi:trn> </span> ';
-						paginationTDContent+='<span class="yui-pg-previous">&lt;<digi:trn>prev</digi:trn> </span>';
+						paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
+						paginationTDContent+='<a href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > &lt; </a>';								
 					}
 					paginationTDContent+='&nbsp';
 					if(allPages!=null){
@@ -694,19 +656,14 @@ background-color:yellow;
 							toIndex=currentPage+2;
 						}
 						for(var i=fromIndex;i<=toIndex;i++){
-							if(i<=allPages && i==page) {paginationTDContent+='<span class="yui-pg-current-page yui-pg-page">'+i+'</span>';}
-							if(i<=allPages && i!=page) {paginationTDContent+='<a class="yui-pg-page" href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>'; }
+							if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>|&nbsp;';}
+							if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
 						}
 					}
 					if(page<allPages){
 						var nextPg=page+1;									
-						paginationTDContent+='<a class="yui-pg-next" href="javascript:goToPage('+nextPg+')" title="'+nextPage+'"><digi:trn jsFriendly="true">Next</digi:trn>&gt;</a>';
-						paginationTDContent+='<a class="yui-pg-last" href="javascript:goToPage('+allPages+')" title="'+lastPg+'"><digi:trn jsFriendly="true">Last</digi:trn>&gt;&gt;</a>';
-					}
-                    else{
-                       paginationTDContent+='<span class="yui-pg-next"><digi:trn jsFriendly="true">Next</digi:trn>&gt;</span>';
-                       paginationTDContent+='<span class="yui-pg-last"><digi:trn jsFriendly="true">Last</digi:trn>&gt;&gt;</span>';
-
+						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
+						paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
 					}	
 					paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
 				paginationTD.innerHTML=	paginationTDContent;						
@@ -716,8 +673,7 @@ background-color:yellow;
 	
 	
 	//creates table rows with message information
-	//actionsbuttonVisible= false when we are drawing farwarded message, cos it shouldn't have forward/edit/delete/reply links
-	function createTableRow(tbl,msgTr,message,actionsbuttonVisible){
+	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
 	    
 		var msgId=message.getAttribute('id');	//message state id
                 var messageId=message.getAttribute('msgId');
@@ -732,26 +688,30 @@ background-color:yellow;
                 var newMsgId=message.getAttribute('parentStateId');// id of the hierarchy end for forwarding messages
 		//create image's td
 		var imgTD=document.createElement('TD');
-        if(newMsgId!=null){
-        	msgId+='_fId'+newMsgId; // create id for forwarded message
-        }               
-		imgTD.vAlign='top';               
-        imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/TEMPLATE/ampTemplate/imagesSource/messages/unread.gif" title="<digi:trn>Click on this icon to expand message&nbsp;</digi:trn>"/>'+
-			'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/TEMPLATE/ampTemplate/imagesSource/messages/read.gif" style="display : none" <digi:trn> Click on this icon to collapse message&nbsp;</digi:trn>/>';
-
-	   msgTr.appendChild(imgTD);               
+               
+                if(newMsgId!=null){
+                    msgId+='_fId'+newMsgId; // create id for forwarded message
+    
+                }
+               
+		imgTD.vAlign='top';	
+               
+                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
+				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
+                    msgTr.appendChild(imgTD);
+                
+               
 					
 		//message name and description
 		var nameTD=document.createElement('TD');				
 		var msgName; 
-               //  if(message.childNodes!=null&&message.childNodes.length>0){
-               //      msgName="FW: "+message.getAttribute('name');
-               //  }
-               //  else{
-               //       msgName=message.getAttribute('name');               
-               //  }
-               msgName=message.getAttribute('name');
-                if(actionsbuttonVisible){
+                 if(message.childNodes!=null&&message.childNodes.length>0){
+                     msgName="FW: "+message.getAttribute('name');
+                 }
+                 else{
+                      msgName=message.getAttribute('name');
+                 }
+                if(fwdOrEditDel){
                     nameTD.width='70%';}
                 else{
                     nameTD.width='95%';
@@ -760,7 +720,7 @@ background-color:yellow;
 		//creating visible div for message name
 		var nameDiv=document.createElement('DIV');
                 var visId;
-                 if(!actionsbuttonVisible){
+                 if(!fwdOrEditDel){
                     visId=newMsgId+'_'+msgId+'_dots'
                 }
                 else{
@@ -773,18 +733,20 @@ background-color:yellow;
 		if(isMsgRead=='false'){
 			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; style="color:red;" title="'+viewMessage+'">'+msgName+'</A>';   
 		}else {
-            if(isDraft==null||isDraft=='false'){
-            	sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
-            }else{
-             	sp.innerHTML=msgName;
-            }			
+                    if(isDraft==null||isDraft=='false'){
+                        sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
+                    }
+                    else{
+                        sp.innerHTML=msgName;
+                    }
+			
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);
 					
 		//creating hidden div for message description.It'll become visible after user clicks on twistie
 		var descDiv=document.createElement('DIV');
-        var invId='msg_'+msgId;
+                var invId='msg_'+msgId;
 		descDiv.setAttribute("id",invId);	
 		descDiv.style.display='none';
 		//creating table inside hidden div
@@ -795,56 +757,67 @@ background-color:yellow;
 				var fromTR=document.createElement('TR');
 					var fromTD1=document.createElement('TD');
 					fromTD1.innerHTML='<strong>'+from+'</strong>';
-					fromTR.appendChild(fromTD1);
+				fromTR.appendChild(fromTD1);
 					//getting sender
 					var fromTD2=document.createElement('TD');
 					var msgSender=message.getAttribute('from');
-                    	if(fromTD2.textContent==undefined){
-                        	var mytool=msgSender;
-							var temp_array=mytool.split(";");
-							fromTD2.innerText = temp_array[0];
-                        }else{
-                         	var mytool=msgSender;
-							var temp_array=mytool.split(";");
-							fromTD2.textContent = temp_array[0];
-                       }
+                                        if(fromTD2.textContent==undefined){
+                                            var mytool=msgSender;
+											var temp_array=mytool.split(";");
+											fromTD2.innerText = temp_array[0];
+                                            
+                                            
+                                        }
+                                        else{
+                                            var mytool=msgSender;
+											var temp_array=mytool.split(";");
+											fromTD2.textContent = temp_array[0];
+                                            
+                                            
+                                            
+                                        }
 				fromTR.appendChild(fromTD2);
 			divTblBody.appendChild(fromTR);
                         
-                var toTR=document.createElement('TR');
-                	var toTD1=document.createElement('TD');
-                	toTD1.innerHTML='<strong>'+to+'</strong>';
-                toTR.appendChild(toTD1);
-                	//getting receives
-                	var toTD2=document.createElement('TD');
-                	var msgReceiver=message.getAttribute('to');
-                	var receiver_array=msgReceiver.split(";");
-                    if(receiver_array.length>5){
-                    	msgReceiver="";
-                        for(var j=0;j<5;j++){
-                        	if(receiver_array[j].indexOf("@") != -1){
-                            	msgReceiver+=receiver_array[j];
-                            }
-                            if(j!=4){
-                            	msgReceiver+="";
-                            }
-                            else{
-                                msgReceiver+="......";
-                            }
-                        }
-                       }
+                                var toTR=document.createElement('TR');
+                                var toTD1=document.createElement('TD');
+                                toTD1.innerHTML='<strong>'+to+'</strong>';
+                                toTR.appendChild(toTD1);
+                                //getting receives
+                                var toTD2=document.createElement('TD');
+                                var msgReceiver=message.getAttribute('to');
+                                var receiver_array=msgReceiver.split(";");
+                                if(receiver_array.length>5){
+                                 msgReceiver="";
+                                 for(var j=0;j<5;j++){
+                                   if(receiver_array[j].indexOf("@") != -1){
+                                    	msgReceiver+=receiver_array[j];
+                                    }
+                                    if(j!=4){
+                                        msgReceiver+="";
+                                    }
+                                    else{
+                                         msgReceiver+="......";
+                                    }
+                                 }
+                                 
+                                }
                                 if(toTD2.textContent==undefined){
+                                
                                             var mytool=msgReceiver;
 											var temp_array=mytool.split(";");
 											toTD2.innerText = temp_array[0];
+                                
 	                                     //toTD2.innerText=msgReceiver;
                                 }
                                 else{
-	                       	        var mytool=msgReceiver;
-		  							var temp_array=mytool.split(";");
-									toTD2.textContent = temp_array[0];
-                                    //toTD2.textContent=msgReceiver;
-                                }                                  
+                                	       var mytool=msgReceiver;
+											var temp_array=mytool.split(";");
+											toTD2.textContent = temp_array[0];
+                                	
+                                    		//toTD2.textContent=msgReceiver;
+                                }
+                                  
                                
                                 toTR.appendChild(toTD2);
                                 divTblBody.appendChild(toTR);
@@ -873,41 +846,21 @@ background-color:yellow;
 					else if(priority==3){priorityTD2.innerHTML='Critical';}
 					else if(priority==0){priorityTD2.innerHTML='None';}
 				priorityTR.appendChild(priorityTD2);
-			divTblBody.appendChild(priorityTR);
-					//getting attachments
-					var attachments=message.getAttribute('attachments');
-					if(attachments!=null){
-						var attachmentsTR=document.createElement('TR');
-						var attachmentsTD1=document.createElement('TD');
-						attachmentsTD1.innerHTML='<strong>'+attachmedFiles+'</strong>';
-						attachmentsTR.appendChild(attachmentsTD1);
-
-						var attachmentsTD2=document.createElement('TD');
-						var innerHTMLString='';
-						var attachmentLinks=attachments.split(",");
-						for(var i=0;i<attachmentLinks.length;i++){							
-							innerHTMLString+=attachmentLinks[i];								
-						}
-						attachmentsTD2.innerHTML=innerHTMLString;
-						
-						attachmentsTR.appendChild(attachmentsTD2);
-						divTblBody.appendChild(attachmentsTR);
-					}
-					
+			divTblBody.appendChild(priorityTR);	
+				
 					//getting URL
 					var objectURL=message.getAttribute('objURL');
-                    if(objectURL!='null'){
-						var objURLTR=document.createElement('TR');
-						var objURLTD1=document.createElement('TD');
-                        objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
-						objURLTR.appendChild(objURLTD1);
+                                        if(objectURL!='null'){
+				var objURLTR=document.createElement('TR');
+					var objURLTD1=document.createElement('TD');
+                                        objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
+				objURLTR.appendChild(objURLTD1);
+					var objURLTD2=document.createElement('TD');
+                    objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
 
-						var objURLTD2=document.createElement('TD');
-                    	objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
-
-						objURLTR.appendChild(objURLTD2);
-						divTblBody.appendChild(objURLTR);
-                    }	
+				objURLTR.appendChild(objURLTD2);
+			divTblBody.appendChild(objURLTR);
+                                    }	
 				
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
@@ -952,75 +905,44 @@ background-color:yellow;
         nameTD.appendChild(descDiv);
         msgTr.appendChild(nameTD);
         
-        if(actionsbuttonVisible){
-        	//reply button
-        	if(isDraft!='true'){
-        		replyTD=document.createElement('TD');
-            	replyTD.width='10%';
-            	replyTD.align='center';
-            	replyTD.vAlign="top";
-            	replyTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&reply=fillForm&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+replyClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/reply.gif" border=0 hspace="2" /></digi:link>';
-            	msgTr.appendChild(replyTD);
-        	}        	
-			// forward or edit link
-			fwdOrEditTD=document.createElement('TD');
-			fwdOrEditTD.width='10%';
-			fwdOrEditTD.align='center';
-	                fwdOrEditTD.vAlign="top";
-			
-			if(isDraft=='true'){
-	            fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
-			}else{
-				fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
-			}
-			msgTr.appendChild(fwdOrEditTD);	
-						
-			//delete link
-			var deleteTD=document.createElement('TD');
-			deleteTD.width='10%';
-			deleteTD.align='center';
-	        deleteTD.vAlign="top";
-			//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-			deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
-			msgTr.appendChild(deleteTD);
-	        //delete checkbox
-			var deleteTDCheckbox=document.createElement('TD');
-			deleteTDCheckbox.width='10%';
-			deleteTDCheckbox.align='center';
-	                deleteTDCheckbox.vAlign="top";
-	                var deleteCheckbox=document.createElement('input');
-	                deleteCheckbox.type='checkbox';
-	                deleteCheckbox.id='delChkbox_'+msgId;
-			deleteCheckbox.value=msgId;
-	                deleteTDCheckbox.appendChild(deleteCheckbox);
-			msgTr.appendChild(deleteTDCheckbox);
-	    }
+        if(fwdOrEditDel){
+		// forward or edit link
+		fwdOrEditTD=document.createElement('TD');
+		fwdOrEditTD.width='10%';
+		fwdOrEditTD.align='center';
+                fwdOrEditTD.vAlign="top";
+		
+		if(isDraft=='true'){
+                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
+		}else{
+			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
+		}
+		msgTr.appendChild(fwdOrEditTD);	
+					
+		//delete link
+		var deleteTD=document.createElement('TD');
+		deleteTD.width='10%';
+		deleteTD.align='center';
+                deleteTD.vAlign="top";
+		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
+		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
+		msgTr.appendChild(deleteTD);
+                //delete link
+		var deleteTDCheckbox=document.createElement('TD');
+		deleteTDCheckbox.width='10%';
+		deleteTDCheckbox.align='center';
+                deleteTDCheckbox.vAlign="top";
+                var deleteCheckbox=document.createElement('input');
+                deleteCheckbox.type='checkbox';
+		deleteCheckbox.value=msgId;
+                deleteTDCheckbox.appendChild(deleteCheckbox);
+		msgTr.appendChild(deleteTDCheckbox);
+                }
+					
 		return msgTr;			
 	
 	}
-
-	function selectAllCheckboxes(){
-		var allChkboxes=$("input[id^='delChkbox_']");
-		if(allChkboxes!=null && allChkboxes.length>0){
-			for(var i=0;i<allChkboxes.length;i++){
-				allChkboxes[i].checked=true;
-			}
-		}
-	}
-	function deselectAllCheckboxes(){
-		var allChkboxes=$("input[id^='delChkbox_']");
-		if(allChkboxes!=null && allChkboxes.length>0){
-			for(var i=0;i<allChkboxes.length;i++){
-				allChkboxes[i].checked=false;
-			}
-		}
-	}
-
-	function createMessage(){
-		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels";
-		messageForm.target = "_self";
-		messageForm.submit();	
-	}
+        
  
 $(document).ready(function(){
 	   $("#displaySettingsButton").toggle(function(){
@@ -1035,9 +957,9 @@ $(document).ready(function(){
 	     	$("#show").show('fast');
 	   	});
 });
-
+        
 </script>
-<table cellSpacing="0" cellPadding="0" vAlign="top" align="left" width="100%">
+<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr>
 <td width="100%">
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
@@ -1045,62 +967,68 @@ $(document).ready(function(){
 </tr>
 <tr>
 <td>
-<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="780" border="0">
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780 border="0">
     <tr>
-   <td width="20">&nbsp;</td>
-		<td align="left" vAlign="top" width="750">
-			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
+   <td width=20>&nbsp;</td>
+		<td align=left vAlign=top width=750>
+			<table cellPadding=5 cellSpacing=0 width="100%" border="0">
 				<tr>
-					<td height="33"><span class="crumb">
+					<td height=33><span class=crumb>
 						<c:set var="translation">
-							<digi:trn>Click here to view MyDesktop</digi:trn>
+							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 						</c:set>
 						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" onclick="return unCheckMessages()">
-						<digi:trn>Portfolio</digi:trn>
+						<digi:trn key="aim:portfolio">
+						Portfolio
+						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn>Message Module</digi:trn>
-                        &nbsp;&gt;&nbsp;
-                        <c:choose>
-		                    <c:when test="${messageForm.tabIndex==1}">
-		                    	<digi:trn>Messages</digi:trn>
-		                    </c:when>
-		                    <c:when test="${messageForm.tabIndex==2}">
-		                    	<digi:trn>Alerts</digi:trn>
-		                    </c:when>
-		                    <c:when test="${messageForm.tabIndex==3 && sessionScope.currentMember.teamAccessType != 'Management'}">
-		                    	<digi:trn>Approvals</digi:trn>
-		                    </c:when>
-	                        <c:otherwise>
-	                        	<digi:trn>Calendar Events</digi:trn>
-	                        </c:otherwise>
-                        </c:choose>
-                        <c:if test="${messageForm.tabIndex!=4}">
-	                    	&nbsp;&gt;&nbsp;
-	                    	<c:choose>
-		                    	<c:when test="${messageForm.childTab=='inbox'}">
-		                        	<digi:trn>Inbox</digi:trn>
-		                        </c:when>
-		                        <c:when test="${messageForm.childTab=='sent'}">
-		                        	<digi:trn>Sent</digi:trn>
-		                        </c:when>
-		                        <c:otherwise>
-		                        	<digi:trn>Draft</digi:trn>	
-		                        </c:otherwise>
-	                        </c:choose>                                                    
-                         </c:if>
-                        </span>
+						<digi:trn key="aim:MessageModule">
+						Message Module 
+						</digi:trn>
+                                                &nbsp;&gt;&nbsp;
+                                                 <c:choose>
+	                                                <c:when test="${messageForm.tabIndex==1}">
+	                                                   <digi:trn key="message:Messages">Messages</digi:trn>
+	                                                </c:when>
+	                                                <c:when test="${messageForm.tabIndex==2}">
+	                                                  <digi:trn key="message:Alerts">Alerts</digi:trn>
+	                                                </c:when>
+	                                                <c:when test="${messageForm.tabIndex==3&&sessionScope.currentMember.teamAccessType != 'Management'}">
+	                                                  <digi:trn key="message:approvals">Approvals</digi:trn>
+	                                                </c:when>
+	                                                <c:otherwise>
+	                                                   <digi:trn key="message:ebents">Calendar Events</digi:trn>
+	                                                </c:otherwise>
+                                                </c:choose>
+                                                <c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
+	                                                &nbsp;&gt;&nbsp;
+	                                                <c:choose>
+		                                                 <c:when test="${messageForm.childTab=='inbox'}">
+		                                                    <digi:trn key="message:inbox">Inbox</digi:trn>
+		                                                </c:when>
+		                                                <c:when test="${messageForm.childTab=='sent'}">
+		                                                  <digi:trn key="message:sent">Sent</digi:trn>
+		                                                </c:when>
+		                                                <c:otherwise>
+		                                                     <digi:trn key="message:draft">Draft</digi:trn>	
+		                                                </c:otherwise>
+	                                                </c:choose>                                                    
+                                                </c:if>
+                                             </span>
 					</td>
 				</tr>
 				<tr>
-					<td height="16" vAlign="middle" width="571">
+					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
-							<digi:trn>Message Module</digi:trn>
+							<digi:trn key="aim:MessageModule">
+								Message Module 
+							</digi:trn>
 						</span>
 					</td>
 				</tr>
 				<tr>
                 	<td noWrap vAlign="top">
-						<TABLE cellPadding="0" cellSpacing="0" width="100%"	valign="top" align="left" border="0" >
+						<TABLE cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left" border="0" >
 	        				<TR>
 	        					<TD STYLE="width:750">
                                 	<DIV id="tabs">
@@ -1110,17 +1038,17 @@ $(document).ready(function(){
                                          		<LI>
                                             		<a name="node">
                                       					<div>
-															<digi:trn>Messages</digi:trn>							
+															<digi:trn key="message:Messages">Messages</digi:trn>							
                                                			</div>
                                               		</a>
-                                                </LI>
-											</c:if> 
-											<c:if test="${messageForm.tabIndex!=1}">
+                                                    </LI>
+												</c:if> 
+												<c:if test="${messageForm.tabIndex!=1}">
                                                 	<LI>
                                                     	<span>
                                     						<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
-                                                        		<div title='<digi:trn>List of Messages associated with Team</digi:trn>'>
-	                 												<digi:trn>Messages</digi:trn>
+                                                        		<div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
+	                 												<digi:trn key="message:Messages">Messages</digi:trn>
                                                             	</div>
 	                 										</a>
                                                         </span>
@@ -1132,7 +1060,7 @@ $(document).ready(function(){
                                             	<LI>
                                                  	<a name="node">
                                                     	<div>
-															<digi:trn>Alerts</digi:trn>							
+															<digi:trn key="message:Alerts">Alerts</digi:trn>							
                                                          </div>
                                                       </a>
                                                  </LI>
@@ -1141,8 +1069,8 @@ $(document).ready(function(){
 											<LI>
                                             	<span>
 													<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
-                                                    	<div title='<digi:trn>List of Alerts associated with Team</digi:trn>'>
-															<digi:trn>Alerts</digi:trn>
+                                                    	<div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
+															<digi:trn key="message:Alerts">Alerts</digi:trn>
                                                         </div>
 													</a>							
                                                 </span>
@@ -1155,7 +1083,7 @@ $(document).ready(function(){
                                                     <LI>
                                                         <a name="node">
                                                             <div>
-																<digi:trn>Approvals</digi:trn>
+																<digi:trn key="message:approvals">Approvals</digi:trn>
                                                         	</div>
                                                         </a>
                                                     </LI>
@@ -1164,8 +1092,8 @@ $(document).ready(function(){
                                                     <LI>
                                                         <span>
 															<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
-                                                            	<div title='<digi:trn>List of Approvals associated with Team</digi:trn>'>
-																	<digi:trn>Approvals</digi:trn>
+                                                            	<div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
+																	<digi:trn key="message:approvals">Approvals</digi:trn>
                                                             	</div>
 															</a>
                                                         </span>
@@ -1187,217 +1115,153 @@ $(document).ready(function(){
                                             		<LI>
                                                 		<span>
 															<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
-                                                        		<div title='<digi:trn>List of Events associated with Team</digi:trn>'>
-																	<digi:trn>Calendar Events</digi:trn>
+                                                        		<div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
+																	<digi:trn key="message:ebents">Calendar Events</digi:trn>
                                                         		 </div>
 															</a>
                                                      	</span>
                                                   	</LI>
 												</c:if>	
-								</feature:display>						
-							</UL>					
-						</DIV>
+											</feature:display>						
+											</UL>						
+										</DIV>
                     	<div id="main">
 						<DIV id="subtabs">
 	                        <div style="pa">
 	                        	<UL>
 	                        	<feature:display name="Message tab" module="Messages">
 	                        	<c:if test="${messageForm.tabIndex==1}">    
-		                        	<field:display name="Inbox Message" feature="Message tab">                                                                
-										<c:if test="${messageForm.childTab=='inbox'}">
-	                                    	<LI>
-	                                        	<span>
-	                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
-	                                             </span>
-	                                         </LI>
-										</c:if>
-										<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-	                                    	<LI>
-	                                        	<div>
-	                                            	<span>
-	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                    	<digi:trn>Inbox</digi:trn>
-	                                                     </a>&nbsp;&nbsp;|							
-	                                                 </span>
-	                                             </div>	
-	                                        </LI>
-	                                    </c:if>
-									</field:display>
-									<field:display name="Sent Message" feature="Message tab">		
-									<c:if test="${messageForm.childTab=='sent'}">
-	                             		<LI>
-	                                		<span>
-	                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
-	                                		</span>
-	                                	</LI>
+	                        	<field:display name="Inbox Message" feature="Message tab">                                                                
+									<c:if test="${messageForm.childTab=='inbox'}">
+                                    	<LI>
+                                        	<span>
+                                        		<digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;&nbsp;|					
+                                             </span>
+                                         </LI>
 									</c:if>
-									<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-	                                	<LI>
-	                                    	<div>
-	                                         	<span>
-	                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                 	<digi:trn>Sent</digi:trn>
-	                                                 </a>&nbsp;&nbsp;|							
-	                                             </span>
-	                                        </div>	
-	                                    </LI>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:inbox">Inbox</digi:trn>
+                                                     </a>&nbsp;&nbsp;|							
+                                                 </span>
+                                             </div>	
+                                        </LI>
+                                    </c:if>
+								</field:display>
+								<field:display name="Sent Message" feature="Message tab">		
+								<c:if test="${messageForm.childTab=='sent'}">
+                             		<LI>
+                                		<span>
+                                			<digi:trn key="message:sent">Sent</digi:trn>&nbsp;&nbsp;|					
+                                		</span>
+                                	</LI>
+								</c:if>
+								<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
+                                	<LI>
+                                    	<div>
+                                         	<span>
+                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                 	<digi:trn key="message:sent">Sent</digi:trn>
+                                                 </a>&nbsp;&nbsp;|							
+                                             </span>
+                                        </div>	
+                                    </LI>
+								</c:if>
+								</field:display>		 
+								<field:display name="Draft Message" feature="Message tab">		
+									<c:if test="${messageForm.childTab=='draft'}">
+                                    	<LI>
+                                        	<span>
+                                            	<digi:trn key="message:draft">Draft</digi:trn>					
+                                            </span>
+                                        </LI>
 									</c:if>
-									</field:display>		 
-									<field:display name="Draft Message" feature="Message tab">		
-										<c:if test="${messageForm.childTab=='draft'}">
-	                                    	<LI>
-	                                        	<span>
-	                                            	<digi:trn>Draft</digi:trn>					
-	                                            </span>
-	                                        </LI>
-										</c:if>
-										<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-	                                    	<LI>
-	                                        	<div>
-	                                            	<span>
-	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                    	<digi:trn>Draft</digi:trn>
-	                                                     </a>							
-	                                                 </span>
-	                                              </div>	
-	                                        </LI>
-										</c:if>
-									</field:display>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:draft">Draft</digi:trn>
+                                                     </a>							
+                                                 </span>
+                                              </div>	
+                                        </LI>
+									</c:if>
+								</field:display>
 								</c:if>
 								</feature:display>
 								<feature:display name="Alert tab" module="Messages">
 	                        	<c:if test="${messageForm.tabIndex==2}">    
-		                        	<field:display name="Inbox Alert" feature="Alert tab">                                                                
-										<c:if test="${messageForm.childTab=='inbox'}">
-	                                    	<LI>
-	                                        	<span>
-	                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
-	                                             </span>
-	                                         </LI>
-										</c:if>
-										<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-	                                    	<LI>
-	                                        	<div>
-	                                            	<span>
-	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                    	<digi:trn>Inbox</digi:trn>
-	                                                     </a>&nbsp;&nbsp;|							
-	                                                 </span>
-	                                             </div>	
-	                                        </LI>
-	                                    </c:if>
-									</field:display>
-									<field:display name="Sent Alert" feature="Alert tab">		
-									<c:if test="${messageForm.childTab=='sent'}">
-	                             		<LI>
-	                                		<span>
-	                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
-	                                		</span>
-	                                	</LI>
+	                        	<field:display name="Inbox Alert" feature="Alert tab">                                                                
+									<c:if test="${messageForm.childTab=='inbox'}">
+                                    	<LI>
+                                        	<span>
+                                        		<digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;&nbsp;|					
+                                             </span>
+                                         </LI>
 									</c:if>
-									<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-	                                	<LI>
-	                                    	<div>
-	                                         	<span>
-	                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                 	<digi:trn>Sent</digi:trn>
-	                                                 </a>&nbsp;&nbsp;|							
-	                                             </span>
-	                                        </div>	
-	                                    </LI>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:inbox">Inbox</digi:trn>
+                                                     </a>&nbsp;&nbsp;|							
+                                                 </span>
+                                             </div>	
+                                        </LI>
+                                    </c:if>
+								</field:display>
+								<field:display name="Sent Alert" feature="Alert tab">		
+								<c:if test="${messageForm.childTab=='sent'}">
+                             		<LI>
+                                		<span>
+                                			<digi:trn key="message:sent">Sent</digi:trn>&nbsp;&nbsp;|					
+                                		</span>
+                                	</LI>
+								</c:if>
+								<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
+                                	<LI>
+                                    	<div>
+                                         	<span>
+                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                 	<digi:trn key="message:sent">Sent</digi:trn>
+                                                 </a>&nbsp;&nbsp;|							
+                                             </span>
+                                        </div>	
+                                    </LI>
+								</c:if>
+								</field:display>		 
+								<field:display name="Draft Alert" feature="Alert tab">		
+									<c:if test="${messageForm.childTab=='draft'}">
+                                    	<LI>
+                                        	<span>
+                                            	<digi:trn key="message:draft">Draft</digi:trn>					
+                                            </span>
+                                        </LI>
 									</c:if>
-									</field:display>		 
-									<field:display name="Draft Alert" feature="Alert tab">		
-										<c:if test="${messageForm.childTab=='draft'}">
-	                                    	<LI>
-	                                        	<span>
-	                                            	<digi:trn>Draft</digi:trn>					
-	                                            </span>
-	                                        </LI>
-										</c:if>
-										<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-	                                    	<LI>
-	                                        	<div>
-	                                            	<span>
-	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                    	<digi:trn>Draft</digi:trn>
-	                                                     </a>							
-	                                                 </span>
-	                                              </div>	
-	                                        </LI>
-										</c:if>
-									</field:display>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:draft">Draft</digi:trn>
+                                                     </a>							
+                                                 </span>
+                                              </div>	
+                                        </LI>
+									</c:if>
+								</field:display>
 								</c:if>
 								</feature:display>
-								<feature:display name="Approval Tab" module="Messages">
-	                        	<c:if test="${messageForm.tabIndex==3 && sessionScope.currentMember.teamAccessType != 'Management'}">    
-		                        	<field:display name="Inbox Approval" feature="Approval Tab">                                                                
-										<c:if test="${messageForm.childTab=='inbox'}">
-	                                    	<LI>
-	                                        	<span>
-	                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
-	                                             </span>
-	                                         </LI>
-										</c:if>
-										<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-	                                    	<LI>
-	                                        	<div>
-	                                            	<span>
-	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                    	<digi:trn>Inbox</digi:trn>
-	                                                     </a>&nbsp;&nbsp;|							
-	                                                 </span>
-	                                             </div>	
-	                                        </LI>
-	                                    </c:if>
-									</field:display>
-									<field:display name="Sent Approval" feature="Approval Tab">		
-										<c:if test="${messageForm.childTab=='sent'}">
-		                             		<LI>
-		                                		<span>
-		                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
-		                                		</span>
-		                                	</LI>
-										</c:if>
-										<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-		                                	<LI>
-		                                    	<div>
-		                                         	<span>
-		                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-		                                                 	<digi:trn>Sent</digi:trn>
-		                                                 </a>&nbsp;&nbsp;|							
-		                                             </span>
-		                                        </div>	
-		                                    </LI>
-										</c:if>
-									</field:display>		 
-									<field:display name="Draft Approval" feature="Approval Tab">		
-										<c:if test="${messageForm.childTab=='draft'}">
-	                                    	<LI>
-	                                        	<span>
-	                                            	<digi:trn>Draft</digi:trn>					
-	                                            </span>
-	                                        </LI>
-										</c:if>
-										<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-	                                    	<LI>
-	                                        	<div>
-	                                            	<span>
-	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-	                                                    	<digi:trn>Draft</digi:trn>
-	                                                     </a>							
-	                                                 </span>
-	                                              </div>	
-	                                        </LI>
-										</c:if>
-									</field:display>
-								</c:if>
-								</feature:display>
-								<LI style="float: right;">
+												 <LI style="float: right;">
 									               <div>
 													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
-														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;"><digi:trn>Show more information</digi:trn> &gt;&gt;</div>
-														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;"><digi:trn>Hide more information</digi:trn>
+														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;"><digi:trn key="message:show">Show more information</digi:trn> &gt;&gt;</div>
+														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;"><digi:trn key="message:hide">Hide more information</digi:trn>
 														</div>
                                                      </span>
 												   </div>	
@@ -1408,7 +1272,7 @@ $(document).ready(function(){
 			                                        <table  cellpadding="1" cellspacing="1" style="clear:both; padding:4px; border:silver dotted 1px;">
 														<tr>
 															<td colspan="4" class="settings" nowrap>
-																<strong><digi:trn>Total Number</digi:trn></strong> :		
+																<strong><digi:trn key="message:totalNum">Total Number</digi:trn></strong> :		
 															</td>
 															<td colspan="4" class="settings" id="totalNumber">
 																	${messageForm.allmsg}
@@ -1416,39 +1280,49 @@ $(document).ready(function(){
 														</tr>
                                                         <tr>
 															<td colspan="4" class="settings" nowrap>
-																<strong><digi:trn>Total Number Of Hidden </digi:trn></strong>:		
+																<strong><digi:trn key="message:numofhidden">Total Number Of Hidden </digi:trn></strong>:		
 															</td>
-															<td colspan="4"  class="settings" id="totalHidden">																
-																${messageForm.hiddenMsgCount}																
+															<td colspan="4"  class="settings" id="totalHidden">
+																
+																	${messageForm.hiddenMsgCount}
+																
 															</td>
 														</tr>
 														<tr>
 															<td colspan="4" class="settings" nowrap>
-																<strong><digi:trn>Admin Settings</digi:trn></strong>:
+																<strong><digi:trn key="message:adminSetings">Admin Settings</digi:trn></strong>:
 														
 															</td>
 															<td colspan="4" class="settings" id="adimSettings">
-																	<digi:trn>Message Refresh Time(minutes)</digi:trn>:  ${messageForm.msgRefreshTimeCurr} |
-																	<digi:trn>Message Storage Per Message Type</digi:trn>:  ${messageForm.msgStoragePerMsgTypeCurr} |
-																	<digi:trn>Days of Advance Alert Warnings</digi:trn>:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |																	
-																	<digi:trn>Email Alerts</digi:trn>:																	
+																	<digi:trn key="message:refreshtime">Message Refresh Time(minutes)</digi:trn>:  ${messageForm.msgRefreshTimeCurr} |
+																	<digi:trn key="message:storepermess">Message Storage Per Message Type</digi:trn>:  ${messageForm.msgStoragePerMsgTypeCurr} |
+																	<digi:trn key="message:alertwarnings">Days of Advance Alert Warnings</digi:trn>:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |																	
+																	<digi:trn key="message:emailalerts">Email Alerts</digi:trn>:
+																	
 																	<c:if test="${empty messageForm.emailMsgsCurrent ||messageForm.emailMsgsCurrent==0}">
-																		<digi:trn>No</digi:trn>
+																		<digi:trn key="message:No">No</digi:trn>
 																	</c:if>
 																	<c:if test="${messageForm.emailMsgsCurrent==1}">
-																		<digi:trn>Yes</digi:trn>
+																		<digi:trn key="message:yes">Yes</digi:trn>
 																	</c:if>
-																	<br>																	
+																	<br>
+																	
 															</td>
+															
 														</tr>
+									
+						
 													</table>
 											   </div>   
                                                 &nbsp;
-                                             </DIV>					
+                                             </DIV>
+					
                                         </div>
                                         	</TD>					
 						</TR>
-                        <TR>
+                                              <TR>
+                                              
+                        
 							<TD bgColor="#ffffff" class="contentbox_border" align="left">
 								<TABLE id="msgsList" border="1">
 									<TR class="usersg" id="blankRow">
@@ -1456,83 +1330,77 @@ $(document).ready(function(){
 										
 										</TD>
 									</TR>			
-								</TABLE>                              
+								</TABLE>
 							</TD>
 						</TR>
-                        <TR>                   
+                                                <TR>
+                                                      
+                                               
 							<TD bgColor="#ffffff"  align="left">
 								<TABLE >
 									<TR id="paginationPlace"><TD colspan="4"></TD></TR>			
 								</TABLE>
 							</TD>
-                        </TR>
-                        <TR>
-                        	<TD ALIGN="RIGHT">
-                            	<input type="button" onclick="createMessage()" value="<digi:trn>Create Message</digi:trn>" class="dr-menu" />
-                                <input type="button" onclick="selectAllCheckboxes()" value="<digi:trn>Select All</digi:trn>" class="dr-menu" />
-                                <input type="button" onclick="deselectAllCheckboxes()" value="<digi:trn>Deselect All</digi:trn>" class="dr-menu" />
-                                <input type="button" onclick="deleteMessage()" value="<digi:trn>Delete Selected Messages</digi:trn>" class="dr-menu" />
-                                <input type="button" onclick="markMessageAsRead()" value="<digi:trn>Mark As Read</digi:trn>" class="dr-menu" />
-                            </TD>
-                         </TR>
-                         <TR>
-                         	<TD>&nbsp;</TD>
-                         </TR>
-                         <TR>
-                         	<TD>
-                            	<TABLE width="750px">
-                                	<TR>
-                                    	<TD COLSPAN="2">
-                                        	<strong><digi:trn>Icons Reference</digi:trn></strong>
-                                        </TD>
-                                    </TR>
-                                    <TR>
-                                    	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/messages/unread.gif" vspace="2" border="0" align="absmiddle" />
-                                        	<digi:trn> Click on this icon to expand message&nbsp;</digi:trn>
-                                        	<br />
-                                        </TD>
-                                    </TR>
-                                    <TR>
-                                    	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/messages/read.gif" vspace="2" border="0" align="absmiddle" />
-                                        	<digi:trn>Click on this icon to collapse message&nbsp;</digi:trn>
-                                            <br/>
-                                        </TD>
-                                     </TR>
-                                      <TR>
-                                        <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/messages/reply.gif" vspace="2" border="0" align="absmiddle" />
-                                        	<digi:trn>Click on this icon to reply to a message</digi:trn>
-                                        </TD>
-                                     </TR>
-                                     <TR>
-                                        <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/messages/finalForward.gif" vspace="2" border="0" align="absmiddle" />
-                                        	<digi:trn>Click on this icon to forward message&nbsp;</digi:trn>
-                                            <br />
-                                        </TD>
-                                     </TR>
-                                     <TR>
-                                     	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" vspace="2" border="0" align="absmiddle" />
-                                        	<digi:trn>Click on this icon to edit message&nbsp;</digi:trn>
-                                            <br />
-                                        </TD>
-                                     </TR>
-                                     <TR>
-                                     	<TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" align="absmiddle" />
-                                        	<digi:trn>Click on this icon to delete message&nbsp;</digi:trn>
-                                            <br />
-                                        </TD>
-                                     </TR>
-                                  </TABLE>
-                               </TD>
-                           </TR>                      
-                       </TABLE>				
-                   </td>
-                </tr>
-            </table>
-            </td>
-            </tr>
-            </table>
-		</td>
-	</tr>
-</table>
+                                                        </TR>
+                                                          <TR>
+                                                              <TD ALIGN="RIGHT"><input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>" class="dr-menu" /></TD>
+                                                        </TR>
+                                                        <TR >
+                                                            <TD>&nbsp;</TD>
+                                                        </TR>
+                                                        <TR>
+                                                        <TD>
+                                                            <TABLE width="750px">
+                                                            <TR>
+                                                                <TD COLSPAN="2">
+                                                                <strong><digi:trn key="message:IconReference">Icons Reference</digi:trn></strong>
+                                                            </TD>
+                                                            </TR>
+                                                            <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unread.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickExpandMessage"> Click on this icon to expand message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                             <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/read.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickCollapseMessage">Click on this icon to collapse message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                            <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/finalForward.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickForwardMessage">Click on this icon to forward message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                            <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickEditMessage">Click on this icon to edit message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                             <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickDeleteMessage">Click on this icon to delete message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                        </TABLE>
+                                                        </TD>
+                                                    </TR>
+						
+                                              
+                                             </TABLE>				
+                                                 
+                                         </td>
+                                     </tr>
+                                 </table>
+                             </td>
+                         </tr>
+                     </table>
+                 </td>
+             </tr>
+         </table>
 
 </digi:form>

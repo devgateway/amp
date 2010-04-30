@@ -27,14 +27,14 @@ public class GetIndicatorValues extends Action {
 		UpdateIndicatorValuesForm uIndValForm = (UpdateIndicatorValuesForm) form;
 		Long indValId = new Long(-1);
 		String temp = request.getParameter("indValId");
-		if (temp != null&&!temp.trim().equals("")) {
+		if (temp != null) {
 			try {
 				indValId = new Long(Long.parseLong(temp));
 				if (uIndValForm.getIndicators() != null) {
 					Iterator itr = uIndValForm.getIndicators().iterator();
 					while (itr.hasNext()) {
 						ActivityIndicator actInd = (ActivityIndicator) itr.next();
-						if (actInd.getIndicatorValId()!=null&&actInd.getIndicatorValId().equals(indValId)) {
+						if (actInd.getIndicatorValId().equals(indValId)) {
 							uIndValForm.setBaseVal(actInd.getBaseVal());
 							uIndValForm.setBaseValDate(actInd.getBaseValDate());
 							uIndValForm.setTargetVal(actInd.getTargetVal());
@@ -44,14 +44,6 @@ public class GetIndicatorValues extends Action {
 							uIndValForm.setExpIndicatorId(actInd.getIndicatorId());
 							uIndValForm.setRevisedTargetVal(actInd.getRevisedTargetVal());
 							uIndValForm.setRevisedTargetValDate(actInd.getRevisedTargetValDate());
-                            uIndValForm.setRiskId(actInd.getRisk());
-                            if(actInd.getIndicatorsCategory()!=null){
-                                     uIndValForm.setLogFrameId(actInd.getIndicatorsCategory().getId());
-                            }
-                            uIndValForm.setCurrentVal(actInd.getCurrentVal());
-                            uIndValForm.setCurrValDate(actInd.getCurrentValDate());
-                            uIndValForm.setCurrValComments(actInd.getCurrentValComments());
-
 							//uIndValForm.setActivityId(actInd.getActivityId());
 							break;
 						}
@@ -62,8 +54,7 @@ public class GetIndicatorValues extends Action {
 				logger.error(nfe.getMessage());
 			}
 		} else {
-			uIndValForm.setRiskId(0l);
-            uIndValForm.setLogFrameId(0l);
+			uIndValForm.setExpIndicatorId(new Long(-1));
 		}
 		
 		return mapping.findForward("forward");

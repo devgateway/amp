@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -94,8 +93,7 @@ public class ShowUserRegister extends Action {
 					registerForm.setNavigationLanguages(sortedLanguages);
 
 					// set organisation types
-					registerForm.setOrgTypeColl(new TreeSet());
-					registerForm.getOrgTypeColl().addAll(DbUtil.getAllOrgTypes());
+					registerForm.setOrgTypeColl(DbUtil.getAllOrgTypes());
 
 			}
 			else if ("typeSelected".equals(actionFlag)) {
@@ -110,7 +108,6 @@ public class ShowUserRegister extends Action {
 
 		} catch (Exception e) {
 			logger.error("Exception from ShowUserRegister :" + e);
-			e.printStackTrace();
 			return mapping.findForward(null);
 		}
 

@@ -59,9 +59,6 @@
 			fixedTrim = fixedTrim.substring(0, fixedTrim.length - 1); }
 		return fixedTrim
 	}
-    function resetRadioButtons(){
-        $("input:radio").attr("checked", false);
-    }
 
 </script>
 
@@ -79,9 +76,9 @@
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+	  <td align=left class=r-dotted-lg vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
+		  <tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
 
@@ -115,24 +112,19 @@
 						<digi:errors/>
 					</td>
 				</tr>
-                <tr>
-                    <td><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></td>
-                </tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
 					<tr>
-						<td noWrap width=571 vAlign="top">
-							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<td width=571 align="center" vAlign="top" noWrap>
+					  <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
+									<td vAlign="top" width="100%">&nbsp;
+										
 									</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
 										<table bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
-                                           
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
@@ -145,75 +137,61 @@
 																	<b><digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn></b>
 																</logic:equal>
 															</td>
-														</tr>                                      
+														</tr>
 														<!-- Page Logic -->
 														<tr>
 															<td width="100%">
 																<table width="100%" cellPadding=3 cellSpacing=3 border=0 bgColor=#f4f4f2>
-																	<tr>
+															  <tr>
 																		<td width="30%" align="right">
-																		<font size="2" color="#FF0000">*</font><digi:trn key="aim:orgTypeName">Name</digi:trn>	</td>
+																		<digi:trn key="aim:orgTypeName">Name</digi:trn>	</td>
 																	    <td width="30%" >
 																	          <html:text property="orgType" size="35" />
 																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	       <font size="2" color="#FF0000">*</font><digi:trn key="aim:orgTypeCode">Type
+																	        <digi:trn key="aim:orgTypeCode">Type
                                                                             Code</digi:trn>
 																		</td>
 																		<td width="30%">
 																           <html:text property="orgTypeCode" size="15" />
 																		</td>
 																	</tr>
-                                                                    <tr/>
 																	<tr>
-                                                                        <td colspan="2" align="center">
-                                                                            <fieldset style="width: 40%;border-color: #000000; text-align: left;border-style:dotted">
-                                                                            <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
-                                                                            <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
-                                                                            <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
-                                                                            <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="dr-menu"/>
-                                                                            </fieldset>
-                                                                        </td>
+																		<td width="30%" align="right">
+																	        <digi:trn key="aim:orgTypeIsGovernmental">Is Governmental</digi:trn>
+																		</td>
+																		<td width="30%">
+																           <html:checkbox property="orgTypeIsGovernmental"/>
+																		</td>
 																	</tr>
-                                                                    <tr/>                                                                    
-																	<tr>
-																		<td colspan="2" width="60%"  align="center">
+																	<tr align="center">
+																		<td colspan="2" width="60%">
 																			<table width="100%" cellspacing="5">
 																				<tr>
-																					<td width="45%" align="right">
+																					<td align="center">
 																						<c:set var="translation">
 																							<digi:trn key="aim:btnSave">Save</digi:trn>
 																						</c:set>
-																						<input type="button" value="${translation}" class="dr-menu" onclick="check()">
-																					</td>
-																					<td width="8%" align="left">
-																						<c:set var="translation">
-																							<digi:trn key="aim:btnReset">Reset</digi:trn>
-																						</c:set>
-																						<input type="reset" value="${translation}" class="dr-menu">
-																					</td>
-																					<td width="45%" align="left">
+																						<input type="button" value="${translation}" class="dr-menu" onclick="check()">																					
 																						<c:set var="translation">
 																							<digi:trn key="aim:btnCancel">Cancel</digi:trn>
 																						</c:set>
-																						<input type="button" value="${translation}" class="dr-menu" onclick="move()">
-																					</td>
-																				</tr>
-																			</table>
-																		</td>
-																	</tr>
-																	<logic:equal name="aimAddOrgTypeForm" property="deleteFlag" value="delete" >
-																		<tr>
-																			<td colspan="2" width="60%"  align="center">
+																						<input type="button" value="${translation}" class="dr-menu" onclick="move()">	
+                                                                                        		<logic:equal name="aimAddOrgTypeForm" property="deleteFlag" value="delete" >
+																		
 																				<c:set var="translation">
 																					<digi:trn key="aim:btnDeleteThisType">Delete this Type</digi:trn>
 																				</c:set>
 																				<input type="button" value="${translation}" class="dr-menu" onclick="msg()">
-																			</td>
-																		</tr>
-																	</logic:equal>
+																			
+																	</logic:equal>																				</td>
+																				</tr>
+																			</table>
+																	  </td>
+																  </tr>
+															
 																	<logic:equal name="aimAddOrgTypeForm" property="deleteFlag" value="orgReferences" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
@@ -225,7 +203,7 @@
 																		</tr>
 																	</logic:equal>
 																</table>
-															</td>
+														  </td>
 														</tr>
 													<!-- end page logic -->
 													</table>
@@ -236,20 +214,19 @@
 									</td>
 								</tr>
 								<tr>
-									<td bgColor=#f4f4f2>
-										&nbsp;
+									<td bgColor=#f4f4f2>&nbsp;
+										
 									</td>
 								</tr>
 							</table>
 						</td>
-						<!-- <td noWrap width=100% vAlign="top"> -->
+						<td noWrap width=100% vAlign="top"> 
 						</td>
-					</tr>
+		    </tr>
 				</table>
-			</td>
+	  </td>
 		</tr>
 	</table>
 	</td>
 	</tr>
-</table>
 </digi:form>

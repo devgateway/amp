@@ -5,13 +5,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.form.WidgetPlacesForm;
@@ -33,12 +31,6 @@ public class AdminWidgetPlaces extends DispatchAction {
 	public ActionForward list(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		HttpSession session = request.getSession();
-		
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}
-		
 		WidgetPlacesForm pform = (WidgetPlacesForm)form;
 		List<AmpDaWidgetPlace> places = WidgetUtil.getAllPlaces();
 		if (places !=null && places.size()>0){

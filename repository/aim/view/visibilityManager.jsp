@@ -117,7 +117,7 @@
 										<table cellPadding=5 cellSpacing=1 width="100%">
 											<tr>
 												<td>
-													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:clickToManageTemplates">Click here to Manage the Templates </digi:trn>
 														</c:set>
@@ -129,7 +129,7 @@
 											</tr>
 											<tr>
 												<td>
-													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:addNewTemplate">Click here to Add a New Template </digi:trn>
 														</c:set>
@@ -141,7 +141,7 @@
 											</tr>
 											<tr>
 												<td>
-													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToManageFieldsFeaturesModule">Click here to Field, Features and Modules </digi:trn>
 													</c:set>
@@ -156,7 +156,7 @@
 									
 											<tr>
 												<td>
-													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:setTemplateInUse">Click here to Set the Template in use</digi:trn>
 													</c:set>
@@ -164,15 +164,6 @@
 												</td>
 											</tr>
 
-											<tr>
-												<td>
-													<digi:img src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" 	width="15" height="10"/>
-													<c:set var="translation">
-														<digi:trn key="aim:setTemplateInUse">Click here to check feature manager</digi:trn>
-													</c:set>
-													<digi:link href="/fmCheck.do?method=show" title="${translation}" ><digi:trn key="aim:GlobalSettings">Feature Manager Checking Tool</digi:trn></digi:link>
-												</td>
-											</tr>
 
 											<!-- end of other links -->
 										</table>

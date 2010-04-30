@@ -30,14 +30,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,6 +54,7 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.translation.entity.AdvancedTrnItem;
 import org.digijava.module.translation.form.TranslationForm;
 import org.digijava.module.translation.form.TranslationPermissionsForm;
@@ -66,6 +64,8 @@ import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class TranslationManager {
     private static Logger logger = Logger.getLogger(TranslationManager.class);
@@ -390,7 +390,8 @@ public class TranslationManager {
         TranslatorWorker trnWorker = TranslatorWorker.getInstance(oneKey);
 
         Message srcMsg = null;
-        srcMsg = trnWorker.getByKey(oneKey, srcLocale,siteId);
+        srcMsg = trnWorker.getByKey(oneKey, srcLocale,
+                               String.valueOf(siteId));
         if (srcMsg != null) {
             if (siteId != 0) {
                 item.trnType = AdvancedTrnItem.LOCAL_TRN;
@@ -402,12 +403,12 @@ public class TranslationManager {
         else {
             if (rootSiteId != null) {
                 srcMsg = trnWorker.getByKey(oneKey, srcLocale,
-                                       rootSiteId);
+                                       rootSiteId.toString());
                 if (srcMsg != null) {
                     item.trnType = AdvancedTrnItem.GROUP_TRN;
                 }
                 else {
-                    srcMsg = trnWorker.getByKey(oneKey, srcLocale, new Long(0));
+                    srcMsg = trnWorker.getByKey(oneKey, srcLocale, "0");
                     if (srcMsg != null) {
                         item.trnType = AdvancedTrnItem.GLOBAL_TRN;
                     }

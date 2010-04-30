@@ -42,11 +42,10 @@ public class Message implements Serializable{
 	private String locale;
 	private Timestamp created;
 	private Timestamp lastAccessed;
-	private Long siteId;
+	private String siteId;
 	private String keyWords;
     private int hashCode;
     private boolean hasHashCode;
-    private String originalMessage;
 
 	public Message(){
         hasHashCode = false;
@@ -125,7 +124,7 @@ public class Message implements Serializable{
 			return false;
 		Message castOther = (Message) other;
         return compareStrings(this.key, castOther.key) &&
-            this.siteId.equals(siteId) &&
+            compareStrings(this.siteId, castOther.siteId) &&
             compareStrings(this.locale, castOther.locale);
         //return this.key.equals()
         /*
@@ -168,7 +167,7 @@ public class Message implements Serializable{
 	/**
 	 * @return
 	 */
-	public Long getSiteId() {
+	public String getSiteId() {
 		return siteId;
 	}
 
@@ -176,7 +175,7 @@ public class Message implements Serializable{
 	/**
 	 * @param timestamp
 	 */
-	public void setSiteId(Long timestamp) {
+	public void setSiteId(String timestamp) {
 		siteId = timestamp;
 	}
 
@@ -204,10 +203,5 @@ public class Message implements Serializable{
 	public String getKeyWords() {
 		return keyWords;
 	}
-	public void setOriginalMessage(String originalMessage) {
-		this.originalMessage = originalMessage;
-	}
-	public String getOriginalMessage() {
-		return originalMessage;
-	}
+
 }

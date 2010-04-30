@@ -2,6 +2,7 @@ package org.digijava.module.widget.form;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.widget.dbentity.AmpWidget;
+import org.digijava.module.widget.oldTable.DaTable;
 import org.digijava.module.widget.table.WiTable;
 
 /**
@@ -24,6 +25,7 @@ public class WidgetTeaserForm extends ActionForm {
 	 */
 	private String embeddedHtml;
 	private AmpWidget widget;
+	private DaTable table;
 	private WiTable tableWidget;
 	/**
 	 * multi-purpose ID.
@@ -31,24 +33,6 @@ public class WidgetTeaserForm extends ActionForm {
 	 */
 	private Long id;
 	private boolean showPlaceInfo;
-    private String selectedFromYear;
-	private String selectedToYear;
-
-    public String getSelectedFromYear() {
-        return selectedFromYear;
-    }
-
-    public void setSelectedFromYear(String selectedFromYear) {
-        this.selectedFromYear = selectedFromYear;
-    }
-
-    public String getSelectedToYear() {
-        return selectedToYear;
-    }
-
-    public void setSelectedToYear(String selectedToYear) {
-        this.selectedToYear = selectedToYear;
-    }
         
         // used for Org Profile to determine which chart/text render
         private Long type;
@@ -90,6 +74,12 @@ public class WidgetTeaserForm extends ActionForm {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public DaTable getTable() {
+		return table;
+	}
+	public void setTable(DaTable table) {
+		this.table = table;
 	}
 	public String getPlaceName() {
 		return placeName;

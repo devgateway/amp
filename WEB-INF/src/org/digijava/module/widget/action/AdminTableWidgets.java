@@ -20,7 +20,6 @@ import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.dbentity.AmpDaTable;
@@ -268,11 +267,6 @@ public class AdminTableWidgets extends DispatchAction {
 	public ActionForward list(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		HttpSession session = request.getSession();
-		
-		if (!RequestUtils.isAdmin(response, session, request)) {
-			return null;
-		}   
 		
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
 
@@ -695,11 +689,7 @@ public class AdminTableWidgets extends DispatchAction {
 		cForm.setColPattern(col.getPattern());
 		cForm.setColColumnEdit(true);
 		cForm.setColumnTypes(getColumnTypes());
-        Long type=null;
-        if(col.getColumnType()!=null){
-            type=col.getColumnType().longValue()-1;
-        }
-		cForm.setColSelectedType(type);
+		cForm.setColSelectedType(null);
 		return mapping.findForward("showAddColumnPopup");
 	}
 	

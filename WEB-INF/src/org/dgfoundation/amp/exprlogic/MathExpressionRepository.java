@@ -5,8 +5,6 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -67,8 +65,6 @@ public class MathExpressionRepository {
 
 	public static final String EXECUTION_RATE = "executionRate";
 
-	public static final String TOTAL_COMMITMENTS = "totalCommitments";
-
 	/** NIGER COLUMNS */
 
 	public static final String PRIOR_ACTUAL_DISBURSEMENT = "priorActualDisbursements";
@@ -80,10 +76,10 @@ public class MathExpressionRepository {
 	public static final String CONSUMPTION_RATE = "consumptionRate";
 
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENT = "selectedYearPlannedDisbursement";
-
-	private static final String ACTUAL_PROJECT_DURATION = "actualProjecDuration";
-
-	private static final String PROPOSED_PROJECT_DURATION = "proposedProjectDuration";
+	
+	//public static final String PLEDGES_COMMITMENT_GAP = "commitmentgap";
+	
+	//public static final String PLEDGES_TOTAL = "totalpledge";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -92,7 +88,7 @@ public class MathExpressionRepository {
 	 */
 
 	static {
-		buildTotalCommitment();
+		// Build all expression
 		buildOverageProjects();
 		buildAgeOfProject();
 		buildPredictabilityOfFunding();
@@ -128,6 +124,8 @@ public class MathExpressionRepository {
 		buildCumulatedDisbursements();
 		buildConsumptionRate();
 		buildSelectdYearOfPlannedDisbursements();
+//		buildPledgesGap();
+//		buildTotalPledged();
 	}
 
 	/**
@@ -176,7 +174,7 @@ public class MathExpressionRepository {
 	 */
 	private static void buildAverageSizeofProjects() {
 		try {
-			MathExpression divide = new MathExpression(MathExpression.Operation.DIVIDE, expresions.get(TOTAL_COMMITMENTS), ArConstants.COUNT_PROJECTS);
+			MathExpression divide = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.TOTAL_COMMITMENTS, ArConstants.COUNT_PROJECTS);
 			expresions.put(AVERAGE_SIZE_OF_PROJECT, divide);
 		} catch (Exception e) {
 			logger.error(e);
@@ -514,8 +512,7 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 *Consumption Rate (Cumulated Disbursements of Selected year / Selected
-	 * Year of Planned Disbursements) * 100
+	 *Consumption Rate (Cumulated Disbursements of Selected year / Selected Year of Planned Disbursements) * 100
 	 */
 	private static void buildConsumptionRate() {
 		try {
@@ -528,6 +525,9 @@ public class MathExpressionRepository {
 		}
 	}
 
+	/**
+	 * Current Year Planned Disbursements
+	 */
 	private static void buildSelectdYearOfPlannedDisbursements() {
 		try {
 
@@ -537,21 +537,26 @@ public class MathExpressionRepository {
 			logger.error(e);
 		}
 	}
-
-	private static void buildTotalCommitment() {
+	
+	/*
+	private static void buildPledgesGap() {
 		try {
-			MathExpression m = null;
-			if (FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED).equalsIgnoreCase("ON")) {
-				m = new MathExpression(MathExpression.Operation.ADD, ArConstants.ACTUAL_COMMITMENT, ArConstants.PLANNED_COMMITMENT);
-			} else {
-				m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT, new BigDecimal(1));
-			}
-			expresions.put(TOTAL_COMMITMENTS, m);
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLEDGED_TOTAL, ArConstants.ACTUAL_PLEDGE_COMMITMENT);
+			expresions.put(PLEDGES_COMMITMENT_GAP, m1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
 
+	private static void buildTotalPledged() {
+		try {
+			MathExpression pledgedtotal = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.PLEDGES_TOTAL_PLEDGED, new BigDecimal(1));
+			expresions.put(PLEDGES_TOTAL, pledgedtotal);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}*/
+	
 	/**
 	 * Get The expression by Key
 	 * 
@@ -562,34 +567,6 @@ public class MathExpressionRepository {
 		if (expresions.get(key) == null) {
 			logger.error("Invalid Expression Key :" + key);
 		}
-		if (TOTAL_COMMITMENTS.equalsIgnoreCase(key)){
-			//refresh just in case global setting changed
-			buildTotalCommitment();
-		}
 		return expresions.get(key);
-	}
-
-
-	/**
-	 * 	Actual End Date - Actual Start Date 
-	 */
-	private static void buildActualProjectDuration() {
-		try {
-			MathExpression dateDiff = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.ACTUAL_COMPLETION_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
-			expresions.put(ACTUAL_PROJECT_DURATION, dateDiff);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
-	/**
-	 * Proposed End Date - Planned Start Date 
-	 */
-	private static void buildProposedProjectDuration() {
-		try {
-			MathExpression dateDiff = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.PROPOSED_COMPLETION_DATE_VALUE, ArConstants.PROPOSED_START_DATE_VALUE);
-			expresions.put(PROPOSED_PROJECT_DURATION, dateDiff);
-		} catch (Exception e) {
-			logger.error(e);
-		}
 	}
 }

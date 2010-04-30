@@ -19,7 +19,6 @@
 package org.digijava.module.editor.taglib;
 
 import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -27,24 +26,22 @@ import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.request.Site;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.request.Site;
 
-public class EditTag extends BodyTagSupport {
+public class EditTag
+    extends javax.servlet.jsp.tagext.BodyTagSupport {
 
-	private static final long serialVersionUID = 1L;
-
-	private static Logger logger = Logger.getLogger(EditTag.class);
+    private static Logger logger = Logger.getLogger(EditTag.class);
 
     private String key;
     private String editorBody;
-    private String displayText = "E";
     private boolean showOnlyTitle = false;
-    private boolean noPageHeader = false;
 
     /**
      * Process the start of this tag.
@@ -108,7 +105,7 @@ public class EditTag extends BodyTagSupport {
         HttpServletRequest request = (HttpServletRequest) pageContext.
             getRequest();
 
-//        User user = RequestUtils.getUser(request);
+        User user = RequestUtils.getUser(request);
         BodyContent body = getBodyContent();
         String editTag = "";
 
@@ -131,26 +128,24 @@ public class EditTag extends BodyTagSupport {
         }
 
         if (admin) {
-        	StringBuffer buffer = new StringBuffer();
             if (getEditorBody() != null) {
-            	buffer.append(getEditorBody());
+                editTag = getEditorBody() + "<a href=\"" +
+                    DgUtil.getSiteUrl(RequestUtils.getSite(request), request) +
+                    "/editor/showEditText.do?id=" + getKey() +"&lang="+RequestUtils.
+                        getNavigationLanguage(request).
+                        getCode()+
+                    "&referrer=" + refUrl +
+                    "\">E</a>";
             }
-            buffer.append("<a href=\"");
-            buffer.append(DgUtil.getSiteUrl(RequestUtils.getSite(request), request));
-            buffer.append("/editor/showEditText.do?id=");
-            buffer.append(getKey());
-            buffer.append("&lang=");
-            buffer.append(RequestUtils.getNavigationLanguage(request).getCode());
-            if (this.noPageHeader){
-            	buffer.append("&noPageHeader=true");
+            else {
+              editTag = "<a href=\"" +
+                    DgUtil.getSiteUrl(RequestUtils.getSite(request), request) +
+                    "/editor/showEditText.do?id=" + getKey() +"&lang="+RequestUtils.
+                        getNavigationLanguage(request).
+                        getCode()+"&referrer=" + refUrl +
+                    "\">E</a>";
+            
             }
-            buffer.append("&referrer=");
-            buffer.append(refUrl);
-            buffer.append("\">");
-            buffer.append(displayText);
-            buffer.append("</a>");
-    
-            editTag = buffer.toString();
         }
         else {
             if (getEditorBody() != null) {
@@ -196,21 +191,5 @@ public class EditTag extends BodyTagSupport {
     public void setShowOnlyTitle(boolean showOnlyTitle) {
         this.showOnlyTitle = showOnlyTitle;
     }
-
-	public String getDisplayText() {
-		return displayText;
-	}
-
-	public void setDisplayText(String displayText) {
-		this.displayText = displayText;
-	}
-
-	public boolean isNoPageHeader() {
-		return noPageHeader;
-	}
-
-	public void setNoPageHeader(boolean noPageHeader) {
-		this.noPageHeader = noPageHeader;
-	}
 
 }

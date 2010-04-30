@@ -1,100 +1,97 @@
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
-
 /**
- * 
+ *
  * @author
  */
 public class MonthlyComparison implements Comparable<MonthlyComparison> {
 
-	private String month;
-	private int monthNumber;
-	private int fiscalYear;
-	private BigDecimal plannedCommitment;
-	private BigDecimal actualCommitment;
-	private BigDecimal plannedDisbursement;
-	private BigDecimal actualDisbursement;
-	private BigDecimal plannedExpenditure;
-	private BigDecimal actualExpenditure;
-	private BigDecimal disbOrders;
-	private BigDecimal totalCost;
-	private BigDecimal uncommittedBalance;
+    private String month;
+    private int monthNumber; 
+    private int fiscalYear;
+    private double plannedCommitment;
+    private double actualCommitment;
+    private double plannedDisbursement;
+    private double actualDisbursement;
+    private double plannedExpenditure;
+    private double actualExpenditure;
+    private double disbOrders;
 
-	public String getMonth() {
-		return month;
-	}
+    public String getMonth() {
+        return month;
+    }
 
-	public BigDecimal getActualCommitment() {
-		return actualCommitment;
-	}
+    public double getActualCommitment() {
+        return actualCommitment;
+    }
 
-	public void setActualCommitment(BigDecimal actualCommitment) {
-		this.actualCommitment = actualCommitment;
-	}
+    public void setActualCommitment(double actualCommitment) {
+        this.actualCommitment = actualCommitment;
+    }
 
-	public BigDecimal getActualDisbursement() {
-		return actualDisbursement;
-	}
+    public double getActualDisbursement() {
+        return actualDisbursement;
+    }
 
-	public void setActualDisbursement(BigDecimal actualDisbursement) {
-		this.actualDisbursement = actualDisbursement;
-	}
+    public void setActualDisbursement(double actualDisbursement) {
+        this.actualDisbursement = actualDisbursement;
+    }
 
-	public BigDecimal getActualExpenditure() {
-		return actualExpenditure;
-	}
+    public double getActualExpenditure() {
+        return actualExpenditure;
+    }
 
-	public void setActualExpenditure(BigDecimal actualExpenditure) {
-		this.actualExpenditure = actualExpenditure;
-	}
+    public void setActualExpenditure(double actualExpenditure) {
+        this.actualExpenditure = actualExpenditure;
+    }
 
-	public BigDecimal getDisbOrders() {
-		return disbOrders;
-	}
+    public double getDisbOrders() {
+        return disbOrders;
+    }
 
-	public void setDisbOrders(BigDecimal disbOrders) {
-		this.disbOrders = disbOrders;
-	}
+    public void setDisbOrders(double disbOrders) {
+        this.disbOrders = disbOrders;
+    }
 
-	public int getFiscalYear() {
-		return fiscalYear;
-	}
+    public int getFiscalYear() {
+        return fiscalYear;
+    }
 
-	public void setFiscalYear(int fiscalYear) {
-		this.fiscalYear = fiscalYear;
-	}
+    public void setFiscalYear(int fiscalYear) {
+        this.fiscalYear = fiscalYear;
+    }
 
-	public BigDecimal getPlannedCommitment() {
-		return plannedCommitment;
-	}
+    public double getPlannedCommitment() {
+        return plannedCommitment;
+    }
 
-	public void setPlannedCommitment(BigDecimal plannedCommitment) {
-		this.plannedCommitment = plannedCommitment;
-	}
+    public void setPlannedCommitment(double plannedCommitment) {
+        this.plannedCommitment = plannedCommitment;
+    }
 
-	public BigDecimal getPlannedDisbursement() {
-		return plannedDisbursement;
-	}
+    public double getPlannedDisbursement() {
+        return plannedDisbursement;
+    }
 
-	public void setPlannedDisbursement(BigDecimal plannedDisbursement) {
-		this.plannedDisbursement = plannedDisbursement;
-	}
+    public void setPlannedDisbursement(double plannedDisbursement) {
+        this.plannedDisbursement = plannedDisbursement;
+    }
 
-	public BigDecimal getPlannedExpenditure() {
-		return plannedExpenditure;
-	}
+    public double getPlannedExpenditure() {
+        return plannedExpenditure;
+    }
 
-	public void setPlannedExpenditure(BigDecimal plannedExpenditure) {
-		this.plannedExpenditure = plannedExpenditure;
-	}
+    public void setPlannedExpenditure(double plannedExpenditure) {
+        this.plannedExpenditure = plannedExpenditure;
+    }
 
-	public void setMonth(String month) {
-		this.month = month;
-	}
+    public void setMonth(String month) {
+        this.month = month;
+    }
 
+	@Override
 	public int compareTo(MonthlyComparison o) {
-		if (Integer.valueOf(this.fiscalYear).compareTo(o.fiscalYear) != 0)
+		if (Integer.valueOf(this.fiscalYear).compareTo(o.fiscalYear) !=0 ) 
 			return Integer.valueOf(this.fiscalYear).compareTo(o.fiscalYear);
 		else
 			return Integer.valueOf(this.monthNumber).compareTo(o.monthNumber);
@@ -107,21 +104,4 @@ public class MonthlyComparison implements Comparable<MonthlyComparison> {
 	public int getMonthNumber() {
 		return monthNumber;
 	}
-
-	public BigDecimal getTotalCost() {
-		return totalCost;
-	}
-
-	public void setTotalCost(BigDecimal totalCost) {
-		this.totalCost = totalCost;
-	}
-
-	public BigDecimal getUncommittedBalance() {
-		return uncommittedBalance;
-	}
-
-	public void setUncommittedBalance(BigDecimal uncommittedBalance) {
-		this.uncommittedBalance = uncommittedBalance;
-	}
-
 }

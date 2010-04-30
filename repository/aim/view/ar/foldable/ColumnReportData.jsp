@@ -6,8 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
-<%@page import="org.digijava.kernel.mail.util.DbUtil"%><bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
+<bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 <bean:define id="bckColor" value="true" toScope="page"/>
 
@@ -41,18 +40,7 @@
 %>
 
 <bean:define id="bckColor" value="false" toScope="page"/>
-
 <tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#ffffff', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#ffffff', '#a5bcf2', '#FFFF00');" style="<%=display%>">
-	<logic:present name="currentMember" scope="session">
-		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center"">
-			<div id="div_img_<%=rowIdx%>">
-				<img style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/repository/aim/images/reportOptions.png" border="0">
-			</div>
-				</td>
-	</logic:present>
-	<logic:notPresent name="currentMemeber" scope="session">
-		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center"">&nbsp;</td>
-	</logic:notPresent>
 	<c:if test="${addFakeColumn}">
 			<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
 		</c:if>
@@ -63,29 +51,14 @@
 		<bean:define id="bckColor" name="bckColor" type="java.lang.String" toScope="request"/>		
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 	</logic:iterate>
-	</td>
-		
-	
 </tr>
 <% } else { %>
 <bean:define id="bckColor" value="true" toScope="page"/>
 <tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#dbe5f1', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#dbe5f1', '#a5bcf2', '#FFFF00');" style="<%=display%>">
-	
-	<logic:present name="currentMember" scope="session">
-		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center">
-			<div id="div_img_<%=rowIdx%>">
-				<img  style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/repository/aim/images/reportOptions.png" border="0">
-			</div>
-			
-		</td>
-		
-	</logic:present>
-	<logic:notPresent name="currentMemeber" scope="session">
-		<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD"  align="center">&nbsp;</td>
-	</logic:notPresent>
 		<c:if test="${addFakeColumn}">
 				<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
 		</c:if>
+		
 		<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
@@ -93,11 +66,6 @@
 		<bean:define id="bckColor" name="bckColor" type="java.lang.String" toScope="request"/>		
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>			
 		</logic:iterate>
-	</td>	
-	
-	
-	
-
 </tr>
 <% 
 	}

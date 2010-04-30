@@ -1,10 +1,9 @@
 package org.digijava.module.widget.util;
 
 import java.text.NumberFormat;
-
-import org.digijava.module.aim.helper.FormatHelper;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.data.category.CategoryDataset;
+import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  *
@@ -12,9 +11,7 @@ import org.jfree.data.category.CategoryDataset;
  */
 public class WidgetCategoryItemLabelGenerator extends StandardCategoryItemLabelGenerator {
 
-	private static final long serialVersionUID = 1L;
-
-	public WidgetCategoryItemLabelGenerator() {
+    public WidgetCategoryItemLabelGenerator() {
         super();
     }
 

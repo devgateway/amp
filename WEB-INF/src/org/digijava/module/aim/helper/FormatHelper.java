@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -53,26 +52,6 @@ public class FormatHelper {
 		return formatNumber(d1 - d2);
 	}                      
     
-        
-        public static BigDecimal parseBigDecimal(String number) {
-        	BigDecimal result = null;
-        	if(number!=null){
-        		if("".equalsIgnoreCase(number)){
-        			result = new BigDecimal(0);
-                 }else{
-                	 DecimalFormat formater = getDecimalFormat();
-                     try {    
-                  	   result = new BigDecimal(formater.parse(number).toString());                                                                                       
-                  	 } catch (ParseException e) {                                                                                                                 
-                        logger.error("Error parsing String to double", e);
-                     }
-                 }
-        	}
-            return result;
-        }                                                                                                                                                    
-                                
-     
-        
     public static String formatNumber(double nr) {
     	
     	Double number;
@@ -108,7 +87,7 @@ public class FormatHelper {
     }
 
    
-   public static String formatNumberUsingCustomFormat(Number number){
+   public static String formatNumberUsingCustomFormat(double number){
 	   DecimalFormat formater = null;     
 	   String result;  
 	   if (tlocal.get()!=null){

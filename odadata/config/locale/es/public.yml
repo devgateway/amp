@@ -1,7 +1,0 @@
-es:   
-  user_sessions:
-    login_success: ¡Bienvenido {{name}}! Usted ha ingresado al sistema.
-    logout_success: Usted ha salido del sistema con éxito. Adios.
-    new:
-      title: "¡Por favor ingrese al sistema!"
-      submit: Ingresar

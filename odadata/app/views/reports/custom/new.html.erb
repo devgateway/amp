@@ -112,6 +112,10 @@
         </li>
 -->
         <li>
+        	<%= check_box_tag "report[fields][]", "private_support" %>
+        	<%= Project.human_attribute_name('private_support') %>
+        </li>
+        <li>
         	<%= check_box_tag "report[fields][]", "government_counterpart" %>
         	<%= Project.human_attribute_name('government_counterpart') %>
         </li>

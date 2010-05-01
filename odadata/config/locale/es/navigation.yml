@@ -1,60 +1,64 @@
 es:
   navigation:
-    logout: Salir
-    language: Idioma
-    language_es: Español
-    language_en: Inglés
-    
+    logout: Log out
+    language: 'Língua'
+    language_es: 'Português'
+    language_en: 'Inglês'
+
     default:
-      home: Inicio
-      bluebook: Blue Book UE
-      search_by: 
-        head: Buscar Proyectos
-        donor: Donante
-        sector: Sectores
-        location: Localidades
+      home: Principal
+      donor_profiles:
+        head: Perfis dos Doadores
+        donor: Doadores
+        un_agencies: 'Agências da ONU'
+      search_by:
+        head: Busca de proyectos por
+        donor: Doador
+        sector: Sector
+        location: 'Localizacão'
         mdgs: ODM
-      links: Enlaces
-      downloads: Descargas
+      links: Links
+      downloads: Downloads
       resources: Recursos
-      odadata_manual: Manual ODAnic
-      glossary: Glosario ODAnic
-      dac_manual: Manual CAD-CRS
-      exchange_rates: Tasas de Cambio
-      design_own: 'Diseña Reporte'
-      help: Ayuda
-      feedback: Comentarios de ODAnic
-      support: Soporte técnico
-      
+      odadata_manual: Manual ODAdata
+      glossary: 'Glossário ODAdata'
+      dac_manual: Manual DAC/CRS
+      exchange_rates: 'Taxas de Câmbio'
+      design_own: 'Desenhe o seu próprio relatório'
+      help: Ajuda
+      feedback: Feedback sobre ODAdata
+      support: 'Apoio Técnico'
+
     focal_point:
-      donor_info: Info Donante
-      donor_details: Detalles de Donante
-      accounts: Cuentas de Ingreso
-      projects: Proyectos
-      reports_on: Reportes sobre
-      new_project: Añadir Nuevo
-      draft_projects: Borrador
-      published_projects: Publicado
-      deleted_projects: Papelera de Reciclaje
-      bluebook: UE Blue Book
-      design_own: 'Diseña Reporte'
-      strategy: Estrategia del País
-      financial_consistency: Regularidad de Financiamiento
-      exchange_rates: Tasas de Cambio
-      manuals: Manuales
-      data_input_manual: Manual de Ingreso de Datos
-      data_input_glossary: Glosario de Ingreso de Datos
-      dac_crs_manual: DAC-CRS Manual
-      country_manual: ODAnic Manual
-      contact: Contacto
-      
+      donor_info: Info dos Doadores
+      donor_details: Detalhes dos Doadores
+      accounts: Utilizadores
+      projects: Projectos
+      reports_on: 'Relatórios sobre'
+      new_project: Adicionar Novo
+      draft_projects: Propostas
+      published_projects: Publicados
+      deleted_projects: Reciclagem
+      bluebook: EU Blue Book
+      donor_atlas: Info dos Doadores
+      design_own: 'Desenhe o seu próprio relatório'
+      strategy: 'Estratégia Nacional'
+      financial_consistency: 'Coerência Financial'
+      exchange_rates: 'Taxas de Câmbio'
+      manuals: Manuais
+      data_input_manual: Entrada de Dados Manual
+      data_input_glossary: 'Entrada de Dados Glossário'
+      dac_crs_manual: Manual DAC-CRS
+      country_manual: Manual ODAdata
+      contact: Contato
+
     admin:
-      gen_conf: Configuración General
-      op_cl_data_input: Abrir/Cerrar Ingreso de Datos
-      glossary: Glosario
-      donor_admin: Administración de Donantes
-      exchange_rates: Tasas de cambio
-      agencies_top: Agencias / Contrapartes
-      agencies: Agencias
-      gov_counterpart: Homólogo Gubermental
-      scrollbars: Señales de Pantalla
+      gen_conf: 'Geral Configuração'
+      op_cl_data_input: Abrir e fechar de dados de entrada
+      glossary: 'Glossário'
+      donor_admin: 'Doadores Administração'
+      exchange_rates: 'Taxas de Câmbio'
+      agencies_top: 'Agências'
+      agencies: 'Agências'
+      gov_counterpart: 'Governo Contrapartida'
+      scrollbars: News Tickers

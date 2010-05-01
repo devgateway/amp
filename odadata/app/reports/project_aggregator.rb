@@ -60,11 +60,11 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   end
   
   provides :total_commitments do |p|
-    p.total_commitments(Time.now.year - 1)
+    p.total_commitments()
   end
   
   provides :total_disbursements do |p|
-    p.total_payments(Time.now.year - 1)
+    p.total_payments()
   end
   
   provides :commitments_forecast do |p|

@@ -142,14 +142,14 @@ es:
         logout: Sair
       default:
         short_title: Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
-        design_own: Desenhe o seu próprio relatório
+        design_own: Desenhe o relatório
         links: Links
         downloads: Downloads
         exchange_rates: Taxas de Câmbio
         resources: Recursos
       focal_point:
         short_title: Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
-        design_own: Desenhe o seu próprio relatório
+        design_own: Desenhe o relatório
         bluebook: EU Blue Book
         projects: Projectos
         new_project: Adicionar Novo

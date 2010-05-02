@@ -77,7 +77,10 @@ es:
       yearly_analytic_works_head: Country analytic works in this calendar year
       gbs_head: Apoio directo ao OE
       details_title: Informação dos Funcionários
-  donor:
+  donors:
+    form:
+      submit: Salvar
+      back: Voltar
     edit:
       title: Editar Doador
     index:
@@ -86,7 +89,7 @@ es:
       edit: Editar
       delete: Eliminar
       agencies: Agências doadoras ({{total}})
-      logins: Contas
+      login: Contas
       new: Adicionar novos doadores
     new:
       title: Adicionar novo doador
@@ -94,6 +97,10 @@ es:
       title: Ficha de doador para  <i>{{donor}}</i>
 
   exchange_rates:
+    form:
+      submit: Salvar
+    error:
+      year_already_taken: Ano já está tomada.
     edit:
       title: Editar Taxa de Câmbio
       back: Anterior

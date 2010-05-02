@@ -4,7 +4,7 @@ class ExchangeRate < ActiveRecord::Base
   # Validation
   validates_presence_of :currency, :euro_rate, :source
   validates_inclusion_of :source, :in => SOURCES
-  validates_uniqueness_of :year, :scope => [:source, :currency]
+  validates_uniqueness_of :year, :scope => [:source, :currency], :message => I18n.t("exchange_rates.error.year_already_taken")
   validates_numericality_of :euro_rate
   
   class << self

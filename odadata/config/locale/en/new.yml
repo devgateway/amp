@@ -77,7 +77,10 @@ en:
       yearly_analytic_works_head: Country analytic works in this calendar year
       gbs_head: General Budget Support
       details_title: Staff Information
-  donor:
+  donors:
+    form:
+      submit: Save
+      back: Back
     edit:
       title: Edit Donor
     index:
@@ -86,7 +89,7 @@ en:
       edit: Edit
       delete: Delete
       agencies: Donor Agencies ({{total}})
-      logins: Login Accounts
+      login: Login Accounts
       new: Add new donor
     new:
       title: Add New Donor
@@ -94,6 +97,10 @@ en:
       title: Donor Fact Sheet for <i>{{donor}}</i>
 
   exchange_rates:
+    form:
+      submit: Save
+    error:
+      year_already_taken: Year already taken.
     edit:
       title: Edit Exchange Rate
       back: Back

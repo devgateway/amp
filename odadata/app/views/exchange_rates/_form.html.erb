@@ -2,7 +2,10 @@
 	<% f.field_set do %>
 	  <%= f.hidden_field :source %>
 		<li><%= f.text_field :currency %></li>
-		<li><%= f.year_select :year, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year+5 %></li>
+		<li>
+                <%= f.year_select :year, Project::FIRST_YEAR_OF_RELEVANCE-1, Time.now.year+5 %>
+                <%= error_message_on @exchange_rate, :year, "","","error_message" %><br>
+                </li>
 		<li><%= f.text_field :euro_rate %></li>
 	<% end %>
 	

@@ -8,6 +8,7 @@ class ProjectsController < ApplicationController
 
   def index
     @status = params[:status].to_i || 0
+    MultiCurrency.output_currency = params[:currency] || current_donor.currency
     @projects = current_donor.projects.paginate(:all, :conditions => { :data_status => @status },
       :page => params[:page], :per_page => 15, :order => "donor_project_number ASC")
   end

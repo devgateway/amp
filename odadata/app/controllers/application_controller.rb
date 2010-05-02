@@ -36,7 +36,7 @@ protected
   end
     
   def set_output_currency
-    MultiCurrency.output_currency = params[:currency] || "EUR"
+    MultiCurrency.output_currency = params[:currency] || DEFAULT_CURRENCY
   end
   
   def reset_exchange_rate_sources

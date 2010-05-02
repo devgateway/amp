@@ -19,7 +19,8 @@ class ProjectsController < ApplicationController
     #  @project = Project.find(params[:id], :include => [:donor])
     #  @finances = @project.fundings.find(:all, :order => "year ASC")
     #end
-    
+    MultiCurrency.output_currency = params[:currency] || current_donor.andand.currency || DEFAULT_CURRENCY
+
     @project = Project.find(params[:id])
   end
    

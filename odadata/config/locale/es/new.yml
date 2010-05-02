@@ -198,7 +198,7 @@ es:
       submit: Guardar projecto
       stages:
         profile_information: Informações do Perfil
-        sector_agencies: Sector / Agências
+        sector_agencies: Especificações
         goals: ODM
         funding: Financiamento
         historic_funding: Financiamento Histórico

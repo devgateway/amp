@@ -198,7 +198,7 @@ en:
       submit: Save project
       stages:
         profile_information: Profile Information
-        sector_agencies: Sector / Agencies
+        sector_agencies: Specifications
         goals: MDGs
         funding: Funding
         historic_funding: Historic Funding

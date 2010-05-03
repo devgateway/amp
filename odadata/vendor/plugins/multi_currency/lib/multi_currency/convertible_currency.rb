@@ -3,13 +3,13 @@ module MultiCurrency
     include Comparable
     include ActionView::Helpers::NumberHelper
   
-    attr_reader :base_value, :currency, :nature
+    attr_reader :base_value, :currency, :year, :nature
   
     # The nature attribute can be one of "historic, current and forecasts" and is required to allow the use of
     # different exchange rate tables
-    def initialize(value, currency = nil, base_year = Time.now.year, nature = 'current')
+    def initialize(value, currency = nil, base_year = nil, nature = 'current')
       @currency = currency
-      @year = base_year || Time.now.year
+      @year = base_year
       @nature = nature || 'current'
   
       case value
@@ -30,19 +30,19 @@ module MultiCurrency
     # = General Calculations =
     # ========================
     def +(other)
-      ConvertibleCurrency.new(@base_value + other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
+      operation_on_common_currency(self, other, :+)
     end
   
     def -(other)
-      ConvertibleCurrency.new(@base_value - other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
+      operation_on_common_currency(self, other, :-)
     end
   
     def /(other)
-      ConvertibleCurrency.new(@base_value / other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
+      operation_on_common_currency(self, other, :/)
     end
   
     def *(other)
-      ConvertibleCurrency.new(@base_value * other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
+      operation_on_common_currency(self, other, :*)
     end
   
     def ==(other)
@@ -107,6 +107,12 @@ module MultiCurrency
       end
   
       ConvertibleCurrency.new(@base_value * rate, currency, @year)
+    end
+    
+  private
+    def operation_on_common_currency(a, b, operation)
+      year = (a.year == b.year) ? a.year : nil
+      ConvertibleCurrency.new(a.base_value.send(operation, b.to_currency(a.currency, b.year).base_value), a.currency || b.currency, year)
     end
   end
 end

@@ -260,7 +260,7 @@
 										<tr>
 										<td width="2"> 
 										</td>
-										<td width="100">
+										<td>
 												<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
 														<img src= "/TEMPLATE/ampTemplate/imagesSource/common/link_out_bot.gif" border="0">
 		 												<b>[${searchedSectors.sectorName}]<b>
@@ -283,7 +283,6 @@
 												</c:if>
 											</td>
 										</tr>	
-										</tr>
 									</logic:iterate>
 									<tr>
 										<td align="center" colspan="3">

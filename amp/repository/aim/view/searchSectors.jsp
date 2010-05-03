@@ -152,6 +152,11 @@
 <html:hidden property="sectorReset" value="false" />
 <html:hidden property="someError"/>
 <input type="hidden" name="edit" value="true" />
+<div id="sectorSelectedDiv" style="display: none">
+    <c:forEach var="selSectorId" items="${aimSelectSectorForm.selSectors}">
+        <input type="hidden" value="${selSectorId}" id="chkid${selSectorId}">
+    </c:forEach>
+</div>
 
 
 
@@ -236,7 +241,7 @@
 										<tr>
 											<td bgcolor=#ECF3FD colspan="5" >
 												&nbsp;&nbsp;
-												<html:multibox property="selSectors">
+												<html:multibox property="selSectors" onclick="selectUnSelect(this)">
 													<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
 															${searchedSectors.sectorId}
 											 	    </c:if>

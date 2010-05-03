@@ -32,7 +32,7 @@ module OdaMap
 private
     def build_expression(prj)
       # This highlights all regions for national projects
-      return nil if prj.districts.empty?
+      return nil if prj.districts.empty? && prj.provinces_with_total_coverage.empty?
       
       district_ids = prj.district_ids
       

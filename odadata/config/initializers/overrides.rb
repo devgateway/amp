@@ -15,6 +15,8 @@ class ActiveRecord::Base
     # This is used to retrieve human option names which are stored alongside attribute
     # names in the according translation file now.
     def human_option_name(attribute_name, option_name, options = {})
+      return 'n/a' unless option_name
+      
       defaults = self_and_descendants_from_active_record.map do |klass|
         "#{klass.name.underscore}.#{attribute_name}.options.#{option_name}"
       end

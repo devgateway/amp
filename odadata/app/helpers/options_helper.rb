@@ -1,6 +1,7 @@
 module OptionsHelper
   def option_text_by_id(klass, method, options_array, id)
-    klass.send(:human_option_name, method, (options_array.rassoc(id).first)) unless id.nil?
+    option_key = options_array.rassoc(id).try(:first)
+    klass.send(:human_option_name, method, option_key) unless id.nil?
   end
   
   # Use to savely get a value from a model.

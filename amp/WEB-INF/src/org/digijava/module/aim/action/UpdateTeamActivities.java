@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.ConcurrentModificationException;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -42,6 +43,10 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionError;
+
 
 public class UpdateTeamActivities extends Action {
 
@@ -302,7 +307,15 @@ public class UpdateTeamActivities extends Action {
 						while (i.hasNext()) {
 							data = (DocumentData) i.next();
 							if (data.getUuid().equals(aad.getUuid())) {
-								i.remove();
+								try {
+									i.remove();
+								} catch (ConcurrentModificationException ex) {
+									logger.error("Modified by other user", ex);
+									ActionErrors errors = new ActionErrors();
+							          errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							              "error.aim.activityModofiedByOther"));
+							          saveErrors(request, errors);
+								}
 							}
 						}
 					}

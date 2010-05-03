@@ -4,9 +4,16 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   end
   
   def prepare
-    unless @options[:funding_details].blank?
+    if @fields.include?("historic_funding")
+      pos = @fields.index("historic_funding")
+      
+      @fields.insert(pos, "historic_commitments", "historic_disbursements")
+      @fields.delete_if { |v| v == "historic_funding" }
+    end
+      
+    unless @options[:funding_details].blank?    
       pos = @fields.index("funding_details")
-    
+      
       new_fields = @options[:funding_details].inject([]) do |tmp, y|
         tmp << "total_commitments_#{y}"
         tmp << "total_disbursements_#{y}"
@@ -65,6 +72,14 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   
   provides :total_disbursements do |p|
     p.total_payments()
+  end
+  
+  provides :historic_commitments do |p|
+    p.historic_funding.commitments
+  end
+  
+  provides :historic_disbursements do |p|
+    p.historic_funding.payments
   end
   
   provides :commitments_forecast do |p|

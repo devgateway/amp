@@ -308,6 +308,8 @@ en:
     custom:
       new:
         funds_for: Funding information {{year}}
+        funding_forecasts_for: Forecasts {{year}}
+        historic_funding: Historic funding
         output_fields:
           heading: Fields to display
           

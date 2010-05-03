@@ -200,13 +200,25 @@
          	<%= check_box_tag "report[fields][]", "total_disbursements", true %>
          	<%= Project.human_attribute_name('total_disbursements') %>
          </li>
-
-         <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year+2) do |year| %>
+         
+         <li>
+           <%= check_box_tag "report[fields][]", "historic_funding" %>
+           <%= t('.historic_funding') %>
+         </li>
+          
+         <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year) do |year| %>
          	<li>
          		<%= check_box_tag "report[fields][]", "funding_details[#{year}]" %>
          		<%= t('.funds_for', :year => year) %>
          	</li>
          <% end %>
+         
+         <% (Time.now.year + 1).upto(Time.now.year + 3) do |year| %>
+          	<li>
+          		<%= check_box_tag "report[fields][]", "funding_details[#{year}]" %>
+          		<%= t('.funding_forecasts_for', :year => year) %>
+          	</li>
+          <% end %>
          
          <li>
           	<%= check_box_tag "report[fields][]", "undisbursed", true %>

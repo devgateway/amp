@@ -178,6 +178,10 @@ en:
         undisbursed:
           label: Undisbursed Funds
           report_heading: Undisbursed
+        historic_commitments:
+          label: Historic Commitments
+        historic_disbursements:
+          label: Historic Disbursements
         total_commitments_in:
           label: Total Commitments {{year}}
         total_disbursements_in:

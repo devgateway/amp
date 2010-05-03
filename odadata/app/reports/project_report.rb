@@ -76,7 +76,7 @@ module Reports
     class HTML < ProjectFormatter
       renders :html, :for => [ProjectReport]
       
-      format_column(:factsheet_link) { |r| %{<a href="/projects/#{r}"><img src="/images/details.gif" width="10" height="14" alt="Factsheet" /></a>} }
+      format_column(:factsheet_link) { |r| %{<a href="/projects/#{r}" onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;"><img src="/images/details.gif" width="10" height="14" alt="Factsheet" /></a>} }
       format_column(:description) { |r| short_expander_tag(r) }
       format_column(:comment) { |r| short_expander_tag(r) }
       format_column(:markers) { |r| markers_list(r) }

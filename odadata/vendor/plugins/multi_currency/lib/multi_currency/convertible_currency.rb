@@ -21,8 +21,6 @@ module MultiCurrency
         else
           @base_value = value.gsub(/\D(\d{3})/, '\1').sub(/\D(\d{1,2})$/, '.\1').to_f
         end
-
-#        @base_value = value.gsub(/\D(\d{1,2})$/, '.\1').to_f
       else
         @base_value = value.to_f
       end
@@ -32,19 +30,19 @@ module MultiCurrency
     # = General Calculations =
     # ========================
     def +(other)
-      ConvertibleCurrency.new(@base_value + other.to_currency(@currency).base_value, @currency || other.currency)
+      ConvertibleCurrency.new(@base_value + other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
     end
   
     def -(other)
-      ConvertibleCurrency.new(@base_value - other.to_currency(@currency).base_value, @currency || other.currency)
+      ConvertibleCurrency.new(@base_value - other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
     end
   
     def /(other)
-      ConvertibleCurrency.new(@base_value / other.to_currency(@currency).base_value, @currency || other.currency)
+      ConvertibleCurrency.new(@base_value / other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
     end
   
     def *(other)
-      ConvertibleCurrency.new(@base_value * other.to_currency(@currency).base_value, @currency || other.currency)
+      ConvertibleCurrency.new(@base_value * other.to_currency(@currency, @year).base_value, @currency || other.currency, @year)
     end
   
     def ==(other)

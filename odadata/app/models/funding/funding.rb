@@ -11,10 +11,10 @@ class Funding < ActiveRecord::Base
   # For the current year it sums up only the payments of
   # quarters that have passed already!
   def payments
-    #quarters = ((year != Time.now.year) || (Time.now.quarter > 1)) ?
-    #  (2..5) : (2..Time.now.quarter)
-    quarters = (2..5)  
-    quarters.inject(0) { |sum, q| self.send("payments_q#{q-1}") + sum }.to_currency(self.currency, self.year)
+    quarters = ((year != Time.now.year) || (Time.now.quarter > 1)) ?
+      (2..5) : (2..Time.now.quarter)
+      
+    quarters.inject(0.to_currency(self.currency, self.year)) { |sum, q| self.send("payments_q#{q-1}") + sum }
   end
   
   def has_data?

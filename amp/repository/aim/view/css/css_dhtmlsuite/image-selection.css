@@ -1,0 +1,68 @@
+/************************************************************************************************************
+
+	DHTML Suite for Applications
+	(C) www.dhtmlgoodies.com, Janury 2007
+
+	CSS for the DHTMLSuite.imageSelection class.
+	
+	
+	www.dhtmlgoodies.com
+	Alf Magne Kalleland
+
+************************************************************************************************************/
+
+/* Mane selection div - the dragable rectangle */
+#DHTMLSuite_imageSelectionSel{
+	position:absolute;
+	overflow:hidden;
+	border:1px solid #316AC5;	/* Blue border */
+	z-index:5000000;
+}
+/* Transparent div inside the image selection div */
+#DHTMLSuite_imageSelection_transparentDiv{	/* This is the transparent div placed inside #DHTMLSuite_imageSelection */
+	filter:alpha(opacity=50);
+	opacity:0.5;
+	-moz-opacity:0.5;
+	background-color:#6097f0;	/* Blue background color */
+	position:absolute;
+	left:-5px;
+	top:-5px;
+	width:200%;
+	height:200%;
+}
+
+/* Div for the drag process - dragging images */
+#DHTMLSuite_imageSelectionDrag{
+	position:absolute;
+	border:1px solid #316AC5;
+	z-index:5000000;
+	overflow:hidden;
+	width:107px;
+}
+
+#DHTMLSuite_imageSelectionDrag #DHTMLSuite_imageSelectionDragContent{
+	padding:0px;
+	z-index:5;
+	position:relative;
+}
+
+/* Div for the drag process - small boxes for each image. These divs are placed inside #DHTMLSuite_imageSelectionDragContent */
+#DHTMLSuite_imageSelectionDrag .DHTMLSuite_imageSelectionDragBox{	/* Individual box for each image */
+	width:35px;
+	height:35px;
+	float:left;
+	background-repeat:no-repeat;
+	background-position:center center;
+
+}
+
+/* Div inside the div with id #DHTMLSuite_imageSelectionDrag - it could be transparent or not, that's your choice */
+#DHTMLSuite_imageSelectionDrag .DHTMLSuite_imageSelectionDrag_transparentDiv{
+	background-color:#c6d6ef;	/* Blue background color */
+	position:absolute;
+	left:-5px;
+	top:-5px;
+	width:200%;
+	height:200%;
+	z-index:4;
+}

@@ -85,7 +85,7 @@ es:
         government_project_code:
           label: 'Código Orçamental do Governo'
         private_support:
-          label: 'Apoio Privado'
+          label: Apoio ao sector privado
           options:
             does_not_apply: 'Não se aplica'
             do_not_know: 'Não sei se aplica'

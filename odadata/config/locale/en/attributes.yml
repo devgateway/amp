@@ -85,7 +85,7 @@ en:
         government_project_code:
           label: Government Budget Code
         private_support:
-          label: Private Support
+          label: Private Sector Support
           options:
             does_not_apply: Does not apply
             do_not_know: Do not know if applies

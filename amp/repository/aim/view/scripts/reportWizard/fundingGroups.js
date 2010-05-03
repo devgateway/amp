@@ -60,16 +60,59 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				,'Project Title'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Region','Status','Primary Sector','Primary Sector Sub-Sector'
+				'Region'
+				,'Status'
+				,'Primary Sector'
+				,'Primary Sector Sub-Sector'
+				,'National Planning Objectives'
+				,'National Planning Objectives Level 1'
+				,'National Planning Objectives Level 2'
+				,'National Planning Objectives Level 3'
+				,'National Planning Objectives Level 4'
+				,'National Planning Objectives Level 5'
+				,'National Planning Objectives Level 6'
+				,'National Planning Objectives Level 7'
+				,'National Planning Objectives Level 8'
+				,'Primary Program'
+				,'Primary Program Level 1'
+				,'Primary Program Level 2'
+				,'Primary Program Level 3'
+				,'Primary Program Level 4'
+				,'Primary Program Level 5'
+				,'Primary Program Level 6'
+				,'Primary Program Level 7'
+				,'Primary Program Level 8'
+				,'Componente', 
+				'Secondary Program'
+				,'Secondary Program Level 1'
+				,'Secondary Program Level 2'
+				,'Secondary Program Level 3'
+				,'Secondary Program Level 4'
+				,'Secondary Program Level 5'
+				,'Secondary Program Level 6'
+				,'Secondary Program Level 7'
+				,'Secondary Program Level 8'
+				
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Status'
+				 'Component Type'
+				,'Status'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
-				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
-				'Secondary Program', 'Primary Sector Sub-Sector',
-				'Status', 'Primary Sector', 'A.C. Chapter',
-				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By'
+				'Costing Donor'
+				,'Parent National Planning Objectives'
+				,'National Planning Objectives'
+				,'Primary Program'
+				,'Secondary Program'
+				,'Primary Sector Sub-Sector'
+				,'Status'
+				,'Primary Sector'
+				,'A.C. Chapter'
+				,'Accession Instrument'
+				,'Donor'
+				,'Secondary Sector'
+				,'Secondary Sector Sub-Sector'
+				,'Activity Created By'
 			);
 
 function insertColInfo (id, name) {
@@ -102,7 +145,6 @@ function checkSelectedHierarchies() {
 	var selColEl		= document.getElementById("dest_col_ul") ;
 	var cols			= selColEl.getElementsByTagName("li");
 	var hiers			= selHierEl.getElementsByTagName("li");
-	
 	var srcHierEl		= document.getElementById("source_hierarchies_ul") ;
 	var srcHiers		= srcHierEl.getElementsByTagName("li");
 	
@@ -143,7 +185,6 @@ function getColDbId( liEl ) {
 
 function generateHierarchies(e) {
 	checkSelectedHierarchies();
-	
 	var newDDObj		= new MyDragAndDropObject();
 	var ulEl			= document.getElementById("dest_col_ul") ;
 	var hierUlEl		= document.getElementById("source_hierarchies_ul") ;

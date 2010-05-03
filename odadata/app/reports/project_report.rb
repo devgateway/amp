@@ -1,6 +1,6 @@
 module Reports  
   class ProjectReport < Ruport::Controller::Table
-    AGGREGATEABLE_COLS = %w(total_commitments total_disbursements commitments_forecast disbursements_forecast total_cofunding)
+    AGGREGATEABLE_COLS = %w(total_commitments total_disbursements undisbursed historic_commitments historic_disbursements commitments_forecast disbursements_forecast total_cofunding)
     
     prepare :columns
     stage :format_columns, :table_structure, :table_header, :table_body, :table_footer, :output

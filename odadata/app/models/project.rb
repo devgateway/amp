@@ -356,7 +356,7 @@ protected
   end
 
   def valid_mdg_relevances
-    if self.mdg_relevances.empty?
+    if self.mdg_relevances.empty? && self.target_ids.empty?
       errors.add('target_ids', I18n.t("projects.error.missing_mdgs"))
     end
   end

@@ -111,8 +111,12 @@ module MultiCurrency
     
   private
     def operation_on_common_currency(a, b, operation)
-      year = (a.year == b.year) ? a.year : nil
-      ConvertibleCurrency.new(a.base_value.send(operation, b.to_currency(a.currency, b.year).base_value), a.currency || b.currency, year)
+      return a unless b
+      
+      year = (a.year == b.try(:year)) ? a.year : nil
+      converted_b = b.to_currency(a.currency, (b.try(:year) || year)).base_value
+      
+      ConvertibleCurrency.new(a.base_value.send(operation, converted_b), (a.currency || b.currency), year)
     end
   end
 end

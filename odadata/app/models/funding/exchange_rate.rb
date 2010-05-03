@@ -12,7 +12,8 @@ class ExchangeRate < ActiveRecord::Base
       if year
         find_precise_rate(from, to, year, source)
       else
-        find_average_rate(from, to, source)
+        find_precise_rate(from, to, Time.now.year, source)
+        #find_average_rate(from, to, source)
       end
     end
     

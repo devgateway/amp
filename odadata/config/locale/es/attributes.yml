@@ -275,7 +275,7 @@ es:
         institutions_responsible_for_oda:
           label: 'Sistema de Gestão para a ODA'
         total_staff_in_country:
-          label: 'Pessoal Total no País
+          label: 'Pessoal Total no País'
         total_expatriate_staff:
           label: Total de pessoal expatriado
         total_local_staff:

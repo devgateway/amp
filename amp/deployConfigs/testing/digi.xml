@@ -10,8 +10,8 @@
 	</smtp>
 
 	
-     <logon-site id="dglogin" host="">http://testing.ampdev.net/login</logon-site>
-     <site-domain id="dgDomain" host="">http://testing.ampdev.net/</site-domain> 
+     <logon-site id="dglogin" host="">http://testing113.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="">http://testing113.ampdev.net/</site-domain> 
 
      
     <server-type caseSensitiveTranslatioKeys="false"/>

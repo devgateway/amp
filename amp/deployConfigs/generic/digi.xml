@@ -12,8 +12,8 @@
 	</smtp>	
 
 	
-    <logon-site id="dglogin" host="">http://generic.ampdev.net/login</logon-site>
-    <site-domain id="dgDomain" host="">http://generic.ampdev.net/</site-domain>
+    <logon-site id="dglogin" host="">http://amp200.ampdev.net/login</logon-site>
+    <site-domain id="dgDomain" host="">http://amp200.ampdev.net/</site-domain>
          
       
       <server-type caseSensitiveTranslatioKeys="false"/>

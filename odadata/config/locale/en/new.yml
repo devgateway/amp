@@ -377,7 +377,7 @@ en:
       index:
         no_projects: Number of Projects
         list: List
-        region: Region
+        region: Province
         details: Details
         title: Projects by Province
         show_municipalities: Show Districts

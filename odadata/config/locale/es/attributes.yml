@@ -214,9 +214,9 @@ es:
 
       geo_relevance:
         province:
-          label: Localidad
+          label: Província
         district:
-          label: Distritos
+          label: Localidad
         amount:
           label: Montante em %
 

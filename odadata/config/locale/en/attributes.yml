@@ -218,7 +218,7 @@ en:
         
       geo_relevance:
         province: 
-          label: Region
+          label: Province
         district: 
           label: Districts
         amount: 

@@ -375,7 +375,7 @@ es:
       index:
         no_projects: Número de Projectos
         list: Lista
-        region: Região
+        region: Província
         details: Detalhes
         title: Projetos de Província
         show_municipalities: Mostrar Distritos

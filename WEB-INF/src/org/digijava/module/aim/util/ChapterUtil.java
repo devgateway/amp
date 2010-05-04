@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.ss.usermodel.Cell;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpChapter;
@@ -97,10 +98,10 @@ public class ChapterUtil {
 		return ret;
 	}
 
-	public static String getNumberFromCell(HSSFCell c) {
-		if (c.getCellType() == HSSFCell.CELL_TYPE_STRING) {
+	public static String getNumberFromCell(Cell c) {
+		if (c.getCellType() == Cell.CELL_TYPE_STRING) {
 			return c.getStringCellValue();
-		} else if (c.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+		} else if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 			return df.format(c.getNumericCellValue());
 		} else
 			throw new RuntimeException("Unsupported Cell Type "

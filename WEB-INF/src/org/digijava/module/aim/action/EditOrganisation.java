@@ -41,6 +41,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -53,6 +54,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ParisUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.JDBCException;
@@ -949,6 +951,13 @@ public class EditOrganisation
 			}
         	ParisUtil.deleteAhSurvey(ahsurvey.getAmpAHSurveyId());
         }
+        
+        List<AmpTeam> releatedTeams = TeamUtil.getTeamByOrg(editForm.getAmpOrgId());
+ 	 	if (releatedTeams != null && !releatedTeams.isEmpty()){
+ 	        editForm.setFlag("teamReferences");
+ 	 		editForm.setActionFlag("edit");
+ 	 		return mapping.findForward("forward");
+ 	 	}
         
         //org.setSurvey(null);
         try{

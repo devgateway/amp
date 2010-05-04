@@ -7,7 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <%@page import="org.digijava.kernel.translator.TranslatorWorker"%>
+
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
+<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 
 <!-- generate total row -->
 <tr>
@@ -67,6 +69,9 @@
 	</td>
 	<c:set var="firstCell" value="${true}"></c:set>
 	<c:set var="t3" value="${false}"></c:set>
+	<c:if test="${reportMeta.hideActivities != null && reportMeta.hideActivities }">
+		<c:set var="firstCell" value="${false}"></c:set>
+	</c:if>
 	
 	<logic:iterate name="reportData" property="trailCells"  id="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="page">
 			<c:if test="${cell!=null}">
@@ -79,9 +84,9 @@
 					<c:set var="t1" value="${total!=null}"/>
 					<c:set var="t2" value="${token!=null}"/>
 					<c:set var="t3" value="${t1||t2}"/>
-			</c:if>	
+				</c:if>	
 			</c:if>
-		<c:if test="${firstCell == false || t3}">
+		<c:if test="${ firstCell == false || t3}">
 				<c:if test="${reportData.levelDepth == 1}">
 					<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
 				</c:if>

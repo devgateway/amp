@@ -76,15 +76,15 @@
 																</field:display>
 																<br/>
 																</div>
-																<button onclick="updateIssues('<c:out value="${issues.id}"/>');return false;" title="Edit this issue"  class="buton">Edit issue</button>
-																<button onclick="removeIssue('${issues.id}');return false;" title="Delete this issue" class="buton">Delete issue</button>
+																<button onclick="updateIssues('<c:out value="${issues.id}"/>');return false;" title="Edit this issue"  class="buton"><digi:trn>Edit issue</digi:trn></button>
+																<button onclick="removeIssue('${issues.id}');return false;" title="Delete this issue" class="buton"><digi:trn>Delete issue</digi:trn></button>
 <!--
 																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')"  title="Edit this issue"><digi:img src="../ampTemplate/images/application_edit.png" border="0"/></a>
 																<a href="javascript:removeIssue('${issues.id}')" title="Delete this issue"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
 -->
 																<field:display feature="Issues" name="Measures Taken">
 																	<field:display name="Add Measures Link" feature="Issues">
-																		<button class="buton" href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
+																		<button onclick="javascript:addMeasures('<c:out value="${issues.id}"/>'); return false;" class="buton">
 																			<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
 																		</button>
 																	</field:display>													
@@ -116,7 +116,7 @@
       																<button class="buton" onclick="updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Edit this measure">Edit measure</button>
       																<button class="buton" onclick="removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Delete this measure">Delete measure</button>
 																			<field:display name="Add Actors Link" feature="Issues">
-																				<button class="buton" href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
+																				<a href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
 																			</field:display>
 																		</td>
 																	</tr>

@@ -5,7 +5,7 @@
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_COLUMNS_seq</param>
+				<param name="sequence">AMP_COLUMNS_ORDER_seq</param>
 			</generator>
 		</id>
 		<property column="columnName" name="columnName" type="java.lang.String" />

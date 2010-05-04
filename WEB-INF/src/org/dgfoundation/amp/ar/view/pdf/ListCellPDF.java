@@ -14,10 +14,10 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  * 
@@ -54,7 +54,7 @@ public class ListCellPDF extends PDFExporter {
 			res+=element.toString();
 			if(i.hasNext()) res+=", ";
 		}
-		PdfPCell pdfc = new PdfPCell(new Paragraph(res,new Font(Font.COURIER, 10)));
+		PdfPCell pdfc = new PdfPCell(new Paragraph(res,new Font(Font.FontFamily.COURIER, 10)));
 		table.addCell(pdfc);
 	}
 

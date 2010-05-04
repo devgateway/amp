@@ -36,7 +36,9 @@ public class AmpApplicationSettings implements Serializable {
 								 */
 
 	private AmpReports defaultTeamReport;
-        private Integer defaultReportsPerPage;
+    private Integer defaultReportsPerPage;
+        
+    private Integer allowAddTeamRes;
 
   public AmpReports getDefaultTeamReport() {
 		return defaultTeamReport;
@@ -141,4 +143,19 @@ public class AmpApplicationSettings implements Serializable {
 	public void setValidation(String validation) {
 		this.validation = validation;
 	}
+
+	/**
+	 * @return the allowAddTeamRes
+	 */
+	public Integer getAllowAddTeamRes() {
+		return allowAddTeamRes;
+	}
+
+	/**
+	 * @param allowAddTeamRes the allowAddTeamRes to set
+	 */
+	public void setAllowAddTeamRes(Integer allowAddTeamRes) {
+		this.allowAddTeamRes = allowAddTeamRes;
+	}
+	
 }

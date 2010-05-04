@@ -102,7 +102,7 @@
 												</digi:trn>
 												 ---
 											</html:option>
-											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" 
+											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegionsUnique" 
 											value="id" label="name" />										
 										</html:select>										
 									</c:if>

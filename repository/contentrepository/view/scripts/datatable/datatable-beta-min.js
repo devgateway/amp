@@ -1680,8 +1680,14 @@ YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
 YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
 	var oDate = oData;
 	if (oDate) {
-		elCell.innerHTML = (oDate.getMonth() + 1) + "/" + oDate.getDate() + "/"
+		try {
+			var formatter		= new FormatDateHelper(oData);
+			elCell.innerHTML	= formatter.formatDate();
+		}
+		catch(err) {
+			elCell.innerHTML = (oDate.getMonth() + 1) + "/" + oDate.getDate() + "/"
 				+ oDate.getFullYear();
+		}
 	} else {
 		elCell.innerHTML = "";
 	}

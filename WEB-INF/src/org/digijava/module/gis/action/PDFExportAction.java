@@ -73,21 +73,22 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Document;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPCellEvent;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPageEvent;
-import com.lowagie.text.pdf.PdfWriter;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPCellEvent;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEvent;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class PDFExportAction extends Action implements PdfPageEvent {
 	protected static Logger logger = Logger.getLogger(PDFExportAction.class);
@@ -331,7 +332,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         }
         //Translation for Result Matrix
         //Paragraph title = new Paragraph(TranslatorWorker.translate("gis:resultsmatrix", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
-        Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix:", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
+        Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix:", locale, siteId) + countryName, new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD));
 
         String generatedOnTranslation = TranslatorWorker.translateText("gis:generatedon", locale, siteId);
         if(generatedOnTranslation == null || generatedOnTranslation.equals(""))
@@ -339,7 +340,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		Paragraph updateDate = new Paragraph(generatedOnTranslation
 				+ FormatHelper.formatDate(new Date(System.currentTimeMillis()))
-				+ "\n\n", new Font(Font.HELVETICA, 6, Font.BOLDITALIC));
+				+ "\n\n", new Font(Font.FontFamily.HELVETICA, 6, Font.BOLDITALIC));
 
 		document.add(title);
 		document.add(updateDate);
@@ -374,7 +375,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Output Indicators", locale, siteId)+"\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
@@ -382,7 +383,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.setBorder(Rectangle.NO_BORDER);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -395,14 +396,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
 		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 
 		float[] layoutExAidResourcesWidths = { 1f, 1f };
 		PdfPTable layoutExAidResources = new PdfPTable(
@@ -414,7 +415,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutExAidResources.addCell(table1ExAidResources);
 
 		layoutExAidResources.addCell(" ");
-		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: Official government sources", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: Official government sources", locale, siteId), new Font(Font.FontFamily.HELVETICA, 6)));
 
 		layoutExAidResources.addCell(" ");
 
@@ -444,7 +445,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Total resources", locale, siteId) + "\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
@@ -452,7 +453,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.setBorder(Rectangle.NO_BORDER);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -465,14 +466,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
 		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 
 		float[] layoutTotalResourcesWidths = {1f };
 		PdfPTable layoutTotalResources = new PdfPTable(
@@ -484,7 +485,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 //		PdfPTable tableTotalResources2 = getWidgetTable("table_place6");
 //		layoutTotalResources.addCell(tableTotalResources2);
 
-		layoutTotalResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: Ministry of Finance", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutTotalResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: Ministry of Finance", locale, siteId), new Font(Font.FontFamily.HELVETICA, 6)));
 
 		layoutCell.addElement(layoutTotalResources);
 		generalBox.addCell(layoutCell);
@@ -512,14 +513,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Aid Effectiveness Process Indicators", locale, siteId) + "\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -533,14 +534,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setPadding(0);
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(0);
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 
 		float[] layoutAEIndicatorsWidths = { 1f, 1f };
 		PdfPTable layoutAEIndicators = new PdfPTable(layoutAEIndicatorsWidths);
@@ -558,7 +559,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if(table3AEIndicators != null)
 			layoutAEIndicators.addCell(table3AEIndicators);
 		layoutAEIndicators.addCell(" ");
-		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId) , new Font(Font.HELVETICA, 6)));
+		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId) , new Font(Font.FontFamily.HELVETICA, 6)));
 		layoutAEIndicators.addCell(" ");
 
 
@@ -591,7 +592,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("External Aid Resources", locale, siteId) + "\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
@@ -599,7 +600,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.setBorder(Rectangle.NO_BORDER);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -612,14 +613,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
 		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 
 		float[] layoutExAidResourcesWidths = { 1f, 1f };
 		PdfPTable layoutExAidResources = new PdfPTable(layoutExAidResourcesWidths);
@@ -631,7 +632,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		layoutExAidResources.addCell(" ");
 		//widget:sourceAMPdatabase
-		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: AMP database", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: AMP database", locale, siteId), new Font(Font.FontFamily.HELVETICA, 6)));
 
 		layoutExAidResources.addCell(" ");
 
@@ -662,14 +663,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		//gis:breakdownbysector
 
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Breakdown by sector", locale, siteId) + "\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -682,19 +683,19 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
 		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 		layoutCell.addElement(imgChart);
 
 		PdfPCell textCell = new PdfPCell();
 		textCell.setPadding(2);
-		textCell.setBackgroundColor(new Color(206,226,251));
+		textCell.setBackgroundColor(new BaseColor(206,226,251));
 		//widget:piechart:allAmountsin000USD
 		String selectedDonorTranslation = TranslatorWorker.translateText("Selected donor", locale, siteId);
 		if(selectedDonorTranslation == null || selectedDonorTranslation.equals(""))
@@ -703,16 +704,16 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if(selectedYearTranslation == null || selectedYearTranslation.equals(""))
 			selectedYearTranslation = "Selected year";
 
-		textCell.addElement(new Paragraph(TranslatorWorker.translateText("All amounts in 000s of USD", locale, siteId) + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n" + selectedYearTranslation + ": " + selectedYear + "\n\n", new Font(Font.HELVETICA, 6)));
+		textCell.addElement(new Paragraph(TranslatorWorker.translateText("All amounts in 000s of USD", locale, siteId) + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n" + selectedYearTranslation + ": " + selectedYear + "\n\n", new Font(Font.FontFamily.HELVETICA, 6)));
 
 		generalBox.addCell(textCell);
 		PdfPCell text2Cell = new PdfPCell();
 		text2Cell.setPadding(2);
-		text2Cell.setBackgroundColor(new Color(206,226,251));
+		text2Cell.setBackgroundColor(new BaseColor(206,226,251));
 		//widget:SourceAmpdatabase
 
 
-		text2Cell.addElement(new Paragraph(TranslatorWorker.translateText("Source: AMP database", locale, siteId), new Font(Font.HELVETICA, 6)));
+		text2Cell.addElement(new Paragraph(TranslatorWorker.translateText("Source: AMP database", locale, siteId), new Font(Font.FontFamily.HELVETICA, 6)));
 
 		generalBox.addCell(layoutCell);
 		generalBox.addCell(text2Cell);
@@ -741,14 +742,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		//gis:regionalview
 
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Regional View", locale, siteId) + "\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -761,20 +762,20 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
 		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 		layoutCell.addElement(imgMap);
 		generalBox.addCell(layoutCell);
 
 		PdfPCell textCell = new PdfPCell();
 		textCell.setPadding(2);
-		textCell.setBackgroundColor(new Color(206,226,251));
+		textCell.setBackgroundColor(new BaseColor(206,226,251));
 		//gis:minmax:message
 		//TODO TRN: no record for this key.
 		String selectedSectorTranslation = TranslatorWorker.translateText("gis:selectedSector", locale, siteId);
@@ -790,7 +791,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				+"Regions with the highest (MAX) value are shaded light green. "
 				+"For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
 
-		textCell.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(Font.HELVETICA, 6)));
+		textCell.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(Font.FontFamily.HELVETICA, 6)));
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
@@ -841,14 +842,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		//gis:millenniumdevelopmentgoals
 
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Millennium Development Goals", locale, siteId) + "\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -861,14 +862,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
 		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 
 		float[] chartsWidths = { 1f, 1f, 1f };
 		PdfPTable layoutCharts = new PdfPTable(chartsWidths);
@@ -952,7 +953,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		legendTextCell.setBorder(Rectangle.NO_BORDER);
 		//widget:SourceOfficialgovernmentsources
 
-		legendTextCell.addElement(new Paragraph(TranslatorWorker.translateText("Source: Official government sources", locale, siteId), new Font(Font.HELVETICA, 6)));
+		legendTextCell.addElement(new Paragraph(TranslatorWorker.translateText("Source: Official government sources", locale, siteId), new Font(Font.FontFamily.HELVETICA, 6)));
 
 		PdfPTable legendTable = new PdfPTable(1);
 		legendTable.setWidthPercentage(100f);
@@ -990,14 +991,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		//gis:resourcesatglance
 
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Resources at a glance", locale, siteId) + "\n", new Font(
-				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+				Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+		secondCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 10f)));
 
 		//Add rounded tab
 		headerTable.addCell(firstCell);
@@ -1010,15 +1011,15 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
 		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setBackgroundColor(new BaseColor(34, 46, 93));
 		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		lineCell.addElement(new Phrase(" ", new Font(Font.FontFamily.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
 		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206,226,251));
+		layoutCell.setBackgroundColor(new BaseColor(206,226,251));
 
 		float[] resourcesAtAGlanceWidths = { 2f, 1f };
 		PdfPTable layoutResourcesAtAGlance = new PdfPTable(
@@ -1051,7 +1052,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.addElement(layoutResourcesAtAGlance);
 		//widget:SourceOECD
 
-		layoutCell.addElement(new Paragraph(TranslatorWorker.translateText("Source: OECD", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutCell.addElement(new Paragraph(TranslatorWorker.translateText("Source: OECD", locale, siteId), new Font(Font.FontFamily.HELVETICA, 6)));
 
 		generalBox.addCell(layoutCell);
 
@@ -1093,7 +1094,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				Font fontHeader = new Font();
 				fontHeader.setSize(5);
 				fontHeader.setStyle(Font.BOLD);
-				fontHeader.setColor(new Color(255, 255, 255));
+				fontHeader.setColor(new BaseColor(255, 255, 255));
 	
 				Font fontCell = new Font();
 				fontCell.setSize(4);
@@ -1110,7 +1111,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	
 					PdfPCell cell = new PdfPCell(new Phrase(columnName,
 							fontHeader));
-					cell.setBackgroundColor(new Color(34, 46, 93));
+					cell.setBackgroundColor(new BaseColor(34, 46, 93));
 	
 					pdfTable.addCell(cell);
 				}
@@ -1118,11 +1119,11 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				int counter = 0;
 				for (WiRow row : rows) {
 					List<WiCell> cells = row.getCells();
-					Color cellColor;
+					BaseColor cellColor;
 					if (counter % 2 == 0)
-						cellColor = new Color(255, 255, 255);
+						cellColor = new BaseColor(255, 255, 255);
 					else
-						cellColor = new Color(219, 229, 241);
+						cellColor = new BaseColor(219, 229, 241);
 					counter++;
 	
 					for (WiCell cell : cells) {
@@ -1472,8 +1473,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		public void cellLayout(PdfPCell cell, Rectangle rect,
 				PdfContentByte[] canvas) {
 			PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
-			cb.setColorStroke(new Color(255, 255, 255));
-			cb.setColorFill(new Color(34, 46, 93));
+			cb.setColorStroke(new BaseColor(255, 255, 255));
+			cb.setColorFill(new BaseColor(34, 46, 93));
 			roundRectangleUpper(cb, rect.getLeft(), rect.getBottom(), rect
 					.getWidth()-2, rect.getHeight(), 4);
 			cb.fill();

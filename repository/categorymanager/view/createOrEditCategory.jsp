@@ -218,11 +218,11 @@
 					<html:textarea property="description" cols="20" rows="4" />
 				</td>
 				<td valign="middle">
-					<%-- <html:checkbox property="isMultiselect" />
+					<html:checkbox property="isMultiselect" />
 					<digi:trn key="aim:categoryManagerAllowMultiselect">
 						Should <strong>multiselect</strong> be allowed for this category
 					</digi:trn> 
-					<br /> --%>
+					<br />
 					<html:checkbox property="isOrdered" />
 					<digi:trn key="aim:categoryManagerIsOrdered">
 						Should the values be presented in <strong>alphabetical order</strong> 

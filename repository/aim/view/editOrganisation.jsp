@@ -414,6 +414,11 @@ function loadPage()
 							it is currently rererenced by Activities !</font>
 						</digi:trn> </b>
 					</logic:equal> 
+					<logic:equal name="aimAddOrgForm" property="flag" value="teamReferences">
+						<b><font color="#FF0000"><digi:trn>
+							 Can not delete this organization as it is currently rererenced by Teams !
+						</digi:trn></font></b>
+					</logic:equal> 
 
 					<logic:equal name="aimAddOrgForm" property="flag"
 						value="orgReferences">

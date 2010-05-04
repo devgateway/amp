@@ -16,10 +16,11 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  * 
@@ -54,7 +55,7 @@ public class TrailCellsPDF extends PDFExporter {
 	public void generate() {
 		//generate totals:
 		ReportData grd=(ReportData) item;
-		Font totalFont = new Font(Font.COURIER, 10, Font.BOLD);
+		Font totalFont = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
 		
 		if(grd.getParent()!=null) {
 			
@@ -103,7 +104,7 @@ public class TrailCellsPDF extends PDFExporter {
 			PdfPCell pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
 			
 			pdfc.setColspan(grd.getSourceColsCount().intValue());
-			currentBackColor=new  Color(235,235,235);
+			currentBackColor=new BaseColor(235,235,235);
 			
 			pdfc.setBackgroundColor(currentBackColor);
 			table.addCell(pdfc);

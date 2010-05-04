@@ -20,6 +20,12 @@ public class FormatHelper {
 
     
     public static ThreadLocal<DecimalFormat> tlocal = new ThreadLocal<DecimalFormat>();
+
+    public FormatHelper() {
+    	super();
+    	tlocal.set(null);
+    }
+    
     	
     	/**                                                                                                                                                  
         * Parse a String tring based on Global Setting Format to Double                                                                                     
@@ -91,7 +97,7 @@ public class FormatHelper {
 	   DecimalFormat formater = null;     
 	   String result;  
 	   if (tlocal.get()!=null){
-		   formater=tlocal.get();
+		   formater= tlocal.get();
 		   result = formater.format(number);  
 		   return result;
 	   }else{
@@ -183,7 +189,7 @@ public class FormatHelper {
 	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
 	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
 	DecimalFormat formater = new DecimalFormat(format, decSymbols);
-	
+	tlocal.set(formater);
 	return formater;
     }
     

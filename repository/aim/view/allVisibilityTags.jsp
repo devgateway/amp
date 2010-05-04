@@ -145,6 +145,7 @@
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
+<feature:display name="Page Size" module="Report and Tab Options"></feature:display>
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
@@ -249,7 +250,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="AMP ID"></field:display> 
 <field:display feature="Identification" name="Data Source"></field:display> 
 <field:display feature="Identification" name="Computation"></field:display>
-<field:display feature="Identification" name="Description"></field:display>
+<field:display feature="Identification" name="Project Description"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
 <field:display feature="Identification" name="Project Comments"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 
@@ -287,7 +288,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Actors" feature="Issues"></field:display> 
 <field:display name="Actual Approval Date" feature="Planning" ></field:display> 
-<field:display name="Actual Approval Date" feature="Planning"></field:display> 
+<field:display name="Final Date for Disbursements Comments" feature="Planning"></field:display>
+<field:display name="Current Completion Date Comments" feature="Planning"></field:display> 
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 
 <field:display name="Actual Start Date" feature="Planning"></field:display> 
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display> 
@@ -481,7 +483,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Delete Regional Funding Button" feature="Regional Funding"></field:display> 
 <field:display name="Description Text Box" feature="Create Message Form"></field:display> 
 <field:display name="Description" feature="Admin - Component"></field:display> 
-<field:display name="Description" feature="Identification"></field:display> 
 <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Order Number" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Orders Tab" feature="Disbursement Orders"></field:display> 

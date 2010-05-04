@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.contentrepository.helper.CrConstants;
 
 public class UpdateAppSettingsForm extends ActionForm {
 
@@ -58,6 +60,9 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private Collection reports;
 
         private int defReportsPerPage;
+
+    private Collection<KeyValue> possibleValsAddTR;
+	private Integer allowAddTeamRes	= CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER; 
 
   public Collection getReports() {
 		return reports;
@@ -240,4 +245,33 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.errors = errors;
 	}
 
+	/**
+	 * @return the allowAddTeamRes
+	 */
+	public Integer getAllowAddTeamRes() {
+		return allowAddTeamRes;
+	}
+
+	/**
+	 * @param allowAddTeamRes the allowAddTeamRes to set
+	 */
+	public void setAllowAddTeamRes(Integer allowAddTeamRes) {
+		this.allowAddTeamRes = allowAddTeamRes;
+	}
+
+	/**
+	 * @return the possibleValsAddTR
+	 */
+	public Collection<KeyValue> getPossibleValsAddTR() {
+		return possibleValsAddTR;
+	}
+
+	/**
+	 * @param possibleValsAddTR the possibleValsAddTR to set
+	 */
+	public void setPossibleValsAddTR(Collection<KeyValue> possibleValsAddTR) {
+		this.possibleValsAddTR = possibleValsAddTR;
+	}
+
+	
 }

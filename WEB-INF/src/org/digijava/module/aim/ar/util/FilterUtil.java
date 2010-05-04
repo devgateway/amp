@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
@@ -50,14 +51,24 @@ public class FilterUtil {
 		if (arf.getSelectedSectors() != null && arf.getSelectedSectors().size() > 0) {
 
 			arf.setSectors(SectorUtil.getSectorDescendents( arf.getSelectedSectors() ));
+			
+			arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
+			arf.getSectorsAndAncestors().addAll( arf.getSectors() );
+			arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors( arf.getSelectedSectors() ) );
 		} else {
 			arf.setSectors(null);
+			arf.setSectorsAndAncestors(null);
 		}
 
 		if (arf.getSelectedSecondarySectors() != null && arf.getSelectedSecondarySectors().size() > 0) {
 			arf.setSecondarySectors(SectorUtil.getSectorDescendents( arf.getSelectedSecondarySectors() ));
+			
+			arf.setSecondarySectorsAndAncestors( new HashSet<AmpSector>() );
+			arf.getSecondarySectorsAndAncestors().addAll( arf.getSecondarySectors() );
+			arf.getSecondarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(arf.getSelectedSecondarySectors()) );
 		} else {
 			arf.setSecondarySectors(null);
+			arf.setSecondarySectorsAndAncestors(null);
 		}
 
 

@@ -799,11 +799,13 @@ public class LocationUtil {
 		try {
                     
 			session = PersistenceManager.getRequestDBSession();
+			loc = (AmpCategoryValueLocations) session.load(AmpCategoryValueLocations.class, id);
+			/*
 			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
                         " vl where vl.id=:id" ;
 			Query qry = session.createQuery(queryString);
                         qry.setLong("id", id);
-			loc = (AmpCategoryValueLocations)qry.uniqueResult();
+			loc = (AmpCategoryValueLocations)qry.uniqueResult();*/
 		} catch (Exception e) {
 			logger.error("Unable to get location from database "
 					+ e.getMessage());
@@ -815,33 +817,37 @@ public class LocationUtil {
          
          /**
          * Saves location into the database
+         * @param b 
          * @param AmpCategoryValueLocations bean
          * @throws DgException 
          */
          
-       public static void saveLocation(AmpCategoryValueLocations loc) throws DgException{
+       public static void saveLocation(AmpCategoryValueLocations loc, boolean editing) throws DgException{
         Session session = null;
         Transaction tx = null;
 
-        /*  country check for duplicate iso and iso3 codes */
-        boolean isCountry	=  
-        	CategoryManagerUtil.equalsCategoryValue( loc.getParentCategoryValue(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-        if ( isCountry ) {
-        	AmpCategoryValueLocations tempLoc	= 
-        		DynLocationManagerUtil.getLocationByIso(loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-        	if ( tempLoc != null ) 
-        		throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso", loc.getParentCategoryValue().getValue() );
-        	tempLoc	= 
-        		DynLocationManagerUtil.getLocationByIso3(loc.getIso3(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-        	if ( tempLoc != null ) 
-        		throw new DuplicateLocationCodeException("There is already a country with the same iso 3!", "iso3", loc.getParentCategoryValue().getValue() );
+        if (!editing){
         	
+        	/*  country check for duplicate iso and iso3 codes */
+        	boolean isCountry	=  
+        		CategoryManagerUtil.equalsCategoryValue( loc.getParentCategoryValue(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        	if ( isCountry ) {
+        		AmpCategoryValueLocations tempLoc	= 
+        			DynLocationManagerUtil.getLocationByIso(loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+        		if ( tempLoc != null ) 
+        			throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso", loc.getParentCategoryValue().getValue() );
+        		tempLoc	= 
+        			DynLocationManagerUtil.getLocationByIso3(loc.getIso3(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+        		if ( tempLoc != null ) 
+        			throw new DuplicateLocationCodeException("There is already a country with the same iso 3!", "iso3", loc.getParentCategoryValue().getValue() );
+        		
+        	}
+        	
+        	AmpCategoryValueLocations tempLoc	= 
+        		DynLocationManagerUtil.getLocationByName(loc.getName(), loc.getParentCategoryValue(), loc.getParentLocation() );
+        	if ( tempLoc != null ) 
+        		throw new DuplicateLocationCodeException("There is already a location with the same name!", "name", loc.getParentCategoryValue().getValue() );
         }
-        
-        AmpCategoryValueLocations tempLoc	= 
-        	DynLocationManagerUtil.getLocationByName(loc.getName(), loc.getParentCategoryValue(), loc.getParentLocation() );
-        if ( tempLoc != null ) 
-        	throw new DuplicateLocationCodeException("There is already a location with the same name!", "name", loc.getParentCategoryValue().getValue() );
         
 //        if ( loc.getCode() != null && loc.getCode().length() > 0 ) {
 //		        AmpCategoryValueLocations tempLoc	= 

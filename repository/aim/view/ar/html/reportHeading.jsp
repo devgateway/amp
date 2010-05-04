@@ -27,9 +27,11 @@
   %>
   <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
+  <c:if test="${reportMeta.hideActivities != null && reportMeta.hideActivities }">
+  	<td style="background-color:#EAEAEA;" class="clsTableTitleColHtml">&nbsp;</td>
+  </c:if>
   <%boolean first=true; %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
-       
       <%
       column.setCurrentDepth(curDepth);
       	int rowsp = column.getCurrentRowSpan();
@@ -97,7 +99,6 @@
         			if(subColumn.getName().length()<5){%>
         				<td style="background-color:#EAEAEA; margin-left: 2px; margin-right: 2px;" class="clsTableTitleColHtml" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
-							
 					<%}else{%>
 						<td class="clsTableTitleColHtml" style="background-color:#EAEAEA;text-decoration: none;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>	

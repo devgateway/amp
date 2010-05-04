@@ -73,6 +73,8 @@ public class AmpARFilter extends PropertyListable {
 	// private Set donors=null; //not used anymore
 	@PropertyListableIgnore
 	private Set sectors = null;
+	@PropertyListableIgnore
+	private Set sectorsAndAncestors	= null;
 	private Set selectedSectors = null;
 	
 	private String CRISNumber;
@@ -91,6 +93,10 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
 	private Set selectedSecondarySectors = null;
+	@PropertyListableIgnore
+	private Set secondarySectorsAndAncestors = null;
+	
+	
 	@PropertyListableIgnore
 	private Set relatedSecondaryProgs;
 
@@ -459,7 +465,8 @@ public class AmpARFilter extends PropertyListable {
 		activityStatus.add(Constants.EDITED_STATUS);
 		String NO_MANAGEMENT_ACTIVITIES="";
 		if("Management".equals(this.getAccessType()))
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND draft<>true AND " +
+					"amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				+ Util.toCSString(ampTeams) + ") )";
@@ -486,10 +493,10 @@ public class AmpARFilter extends PropertyListable {
 				
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
-						Util.toCSString(activityStatus)	+") )";
+						Util.toCSString(activityStatus)	+")  )";
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
-						Util.toCSString(activityStatus)	+") )";
+						Util.toCSString(activityStatus)	+")  )";
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 //					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
@@ -905,8 +912,25 @@ public class AmpARFilter extends PropertyListable {
 	 * @param sectors
 	 *            The sectors to set.
 	 */
-	public void setSectors(Set sectors) {
+	public void setSectors(Set sectors )  {
 		this.sectors = sectors;
+	}
+	
+	
+
+	/**
+	 * @return the sectorsAndAncestors
+	 */
+	@PropertyListableIgnore
+	public Set getSectorsAndAncestors() {
+		return sectorsAndAncestors;
+	}
+
+	/**
+	 * @param sectorsAndAncestors the sectorsAndAncestors to set
+	 */
+	public void setSectorsAndAncestors(Set sectorsAndAncestors) {
+		this.sectorsAndAncestors = sectorsAndAncestors;
 	}
 
 	/**
@@ -1295,6 +1319,21 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setSecondarySectors(Set secondarySectors) {
 		this.secondarySectors = secondarySectors;
+	}
+	
+	/**
+	 * @return the secondarySectorsAndAncestors
+	 */
+	@PropertyListableIgnore
+	public Set getSecondarySectorsAndAncestors() {
+		return secondarySectorsAndAncestors;
+	}
+
+	/**
+	 * @param secondarySectorsAndAncestors the secondarySectorsAndAncestors to set
+	 */
+	public void setSecondarySectorsAndAncestors(Set secondarySectorsAndAncestors) {
+		this.secondarySectorsAndAncestors = secondarySectorsAndAncestors;
 	}
 
 	public Set getSelectedSecondarySectors() {

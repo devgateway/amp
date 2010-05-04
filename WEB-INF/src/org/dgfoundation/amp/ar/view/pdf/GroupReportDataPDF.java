@@ -13,10 +13,11 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  * 
@@ -26,9 +27,9 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class GroupReportDataPDF extends PDFExporter {
 
-    	private static Color alternateColorA=new Color(185,219,243);
-    	private static Color alternateColorB=new Color(0,156,205);
-    	private static Color lastedUsedColor=null;
+    	private static BaseColor alternateColorA=new BaseColor(185,219,243);
+    	private static BaseColor alternateColorB=new BaseColor(0,156,205);
+    	private static BaseColor lastedUsedColor=null;
     	/**
 	 * @param parent
 	 */
@@ -51,7 +52,7 @@ public class GroupReportDataPDF extends PDFExporter {
 	public void generate() {
 	  	GroupReportData grd=(GroupReportData) item;
 		Font titleFont;
-		 titleFont = new Font(Font.COURIER, 13, Font.BOLD);
+		 titleFont = new Font(Font.FontFamily.COURIER, 13, Font.BOLD);
 				
 		if((grd.getParent()!=null)&&(!grd.getName().equalsIgnoreCase(grd.getParent().getName()))) {
 		    	PdfPCell pdfc = new PdfPCell(new Paragraph(grd.getName(),titleFont));

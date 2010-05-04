@@ -371,7 +371,7 @@ public class AmountCell extends Cell {
 		
 		
 		if (sectorPercentColName!=null
-				&& sourceCol.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR)) {
+				&& sourceCol.getName().endsWith(ArConstants.COLUMN_ANY_SECTOR)) {
 			// we forget the sector percentage, and apply the sub-sector
 			// percentage:
 			columnPercent.remove(sectorPercentColName);

@@ -14,7 +14,9 @@ import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.Workspace;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
@@ -104,8 +106,8 @@ public class NodeWrapper {
 			}
 			
 			if ( !errorAppeared ) {			
-				populateNode(newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
-					contentType, docType , teamMember.getEmail() );
+				populateNode(isANewVersion, newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
+					contentType, docType , teamMember.getEmail(), teamMember.getTeamId() );
 			} 
 			
 			this.node		= newNode;
@@ -190,8 +192,8 @@ public class NodeWrapper {
 			}
 			
 			if ( !errorAppeared ) {
-				populateNode(newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
-					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail() );
+				populateNode(isANewVersion,newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
+					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId() );
 			} 
 			
 			this.node		= newNode;
@@ -210,9 +212,13 @@ public class NodeWrapper {
 		
 	}
 	
-	private void populateNode(Node newNode, String doTitle, String docDescr, String docNotes, String contentType, Long cmDocType, String user) {
+	private void populateNode(boolean isANewVersion,Node newNode, String doTitle, String docDescr, String docNotes, String contentType, Long cmDocType, 
+			String user, Long teamId) {
 		try{
-			
+			if (!isANewVersion) {
+				newNode.setProperty( CrConstants.PROPERTY_CREATOR, user );
+				newNode.setProperty( CrConstants.PROPERTY_CREATOR_TEAM, teamId);
+			}
 			if ( docDescr == null )
 				docDescr = "";
 			if ( docNotes == null )
@@ -229,7 +235,8 @@ public class NodeWrapper {
 			if(cmDocType != null) newNode.setProperty( CrConstants.PROPERTY_CM_DOCUMENT_TYPE, cmDocType );
 			else logger.error("Doctype is null. It is ok if the file is importing using IDML");
 			newNode.setProperty( CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
-			newNode.setProperty( CrConstants.PROPERTY_CREATOR, user );
+			newNode.setProperty( CrConstants.PROPERTY_VERSION_CREATOR, user );
+			newNode.setProperty( CrConstants.PROPERTY_VERSION_CREATOR_TEAM, teamId);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -441,6 +448,49 @@ public class NodeWrapper {
 		
 		
 	} 
+	
+	public String getCreator() {
+		Property creator		=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CREATOR);
+		if ( creator != null ) {
+			try {
+				return creator.getString();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		return null;
+	}
+	public Long getCreatorTeam() {
+		Property creatorTeam		=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CREATOR_TEAM);
+		if ( creatorTeam != null ) {
+			try {
+				return creatorTeam.getLong();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		return null;
+	}
+	
+	public Boolean isTeamDocument() {
+		try {
+			Workspace workspace			= node.getSession().getWorkspace();
+			String path					= node.getCorrespondingNodePath( workspace.getName() );
+			if ( path.contains(CrConstants.TEAM_PATH_ITEM) ) {
+				return new Boolean(true);
+			}
+			else 
+				return new Boolean(false);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	
 	public Boolean deleteNode(HttpServletRequest request) throws Exception  {
 		String uuid		= node.getUUID();

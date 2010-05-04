@@ -90,7 +90,7 @@ public class XLSExportAction extends Action {
 		String sortBy=(String) session.getAttribute("sortBy");
 		if(sortBy!=null) rd.setSorterColumn(sortBy); 
 			
-		XLSExporter.resetStyles();
+		//XLSExporter.resetStyles();
 	        
 		
 		HSSFWorkbook wb = new HSSFWorkbook();
@@ -246,7 +246,12 @@ public class XLSExportAction extends Action {
 				colId.reset();
 			}
 		grdx.generate();
-		sheet.autoSizeColumn((short)0);
+		try{
+			sheet.autoSizeColumn((short)0);
+		}
+		catch (ClassCastException e) {
+			throw e;
+		}
 		
 		rowId.inc();
 		colId.reset();

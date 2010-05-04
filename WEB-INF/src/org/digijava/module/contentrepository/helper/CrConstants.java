@@ -18,6 +18,9 @@ public class CrConstants {
 	public static final String PROPERTY_CONTENT_TYPE				= "ampdoc:contentType";
 	public static final String PROPERTY_ADDING_DATE					= "ampdoc:addingDate";
 	public static final String PROPERTY_CREATOR						= "ampdoc:creator";
+	public static final String PROPERTY_CREATOR_TEAM				= "ampdoc:creatorTeam";
+	public static final String PROPERTY_VERSION_CREATOR				= "ampdoc:versionCreator";
+	public static final String PROPERTY_VERSION_CREATOR_TEAM		= "ampdoc:versionCreatorTeam";
 	public static final String PROPERTY_VERSION_NUMBER				= "ampdoc:versionNumber";
 	public static final String PROPERTY_DATA						= "ampdoc:data";
 	public static final String PROPERTY_LINK						= "ampdoc:link";
@@ -33,4 +36,13 @@ public class CrConstants {
 	public static final String REQUEST_GET_SHOW_DOCS				= "showOnlyDocs";
 	
 	public static final String REQUEST_UPDATED_DOCUMENTS_IN_SESSION	= "updatedDocumentList";
+	
+	
+	public static final Integer TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER			= 1;
+	public static final Integer TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER		= 2;
+	public static final Integer TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER	= 3;
+	
+	
+	public static final String TEAM_PATH_ITEM						= "team";
+	
 }

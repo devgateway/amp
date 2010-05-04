@@ -504,9 +504,13 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.getSelectedSectors().addAll(selectedSectors);
 
 			arf.setSectors(SectorUtil.getSectorDescendents(selectedSectors));
+			arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
+			arf.getSectorsAndAncestors().addAll( arf.getSectors() );
+			arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedSectors) );
 		} else {
 			arf.setSectors(null);
 			arf.setSelectedSectors(null);
+			arf.setSectorsAndAncestors(null);
 		}
 
 		if (selectedSecondarySectors != null && selectedSecondarySectors.size() > 0) {
@@ -514,9 +518,14 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.getSelectedSecondarySectors().addAll(selectedSecondarySectors);
 
 			arf.setSecondarySectors(SectorUtil.getSectorDescendents(selectedSecondarySectors));
+			
+			arf.setSecondarySectorsAndAncestors( new HashSet<AmpSector>() );
+			arf.getSecondarySectorsAndAncestors().addAll( arf.getSecondarySectors() );
+			arf.getSecondarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedSecondarySectors) );
 		} else {
 			arf.setSecondarySectors(null);
 			arf.setSelectedSecondarySectors(null);
+			arf.setSecondarySectorsAndAncestors(null);
 		}
 
 		Set selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
@@ -602,7 +611,11 @@ public class ReportsFilterPicker extends MultiAction {
 		if (filterForm.getComputedYear()!=-1){
 			arf.setComputedYear(filterForm.getComputedYear());
 		}else{
-			arf.setComputedYear(curYear);
+			if (FeaturesUtil.isVisibleFeature("Computed Columns Filters", this.getServlet().getServletContext() ) )
+				arf.setComputedYear(curYear);
+			else
+				arf.setComputedYear(null);
+					
 		}
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getCurrency());

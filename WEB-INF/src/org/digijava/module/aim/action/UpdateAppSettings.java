@@ -37,11 +37,13 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UpdateAppSettingsForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -56,6 +58,8 @@ public class UpdateAppSettings extends Action {
 			throws java.lang.Exception {
 
 		UpdateAppSettingsForm uForm = (UpdateAppSettingsForm) form;
+		this.populatePossibleValsAddTR(uForm);
+		
 		logger.debug("In updtate app settings");
 		HttpSession session = request.getSession();
 
@@ -129,6 +133,7 @@ public class UpdateAppSettings extends Action {
 				if (reportEndYear == null) {
 					reportEndYear = 0;
 				}
+				uForm.setAllowAddTeamRes( ampAppSettings.getAllowAddTeamRes() );
 				uForm.setDefReportsPerPage(reportsPerPage);
 				uForm.setReportStartYear(reportStartYear);
 				uForm.setReportEndYear(reportEndYear);
@@ -256,6 +261,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setLanguage(uForm.getLanguage());
 				ampAppSettings.setValidation(uForm.getValidation());
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
+				ampAppSettings.setAllowAddTeamRes( uForm.getAllowAddTeamRes() );
 				//
 				AmpReports ampReport = DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
 				//
@@ -426,5 +432,18 @@ public class UpdateAppSettings extends Action {
 			}
 		}
 
+	}
+	
+	private void populatePossibleValsAddTR (UpdateAppSettingsForm uForm) {
+		if (uForm.getPossibleValsAddTR() == null || uForm.getPossibleValsAddTR().size() == 0 ) {
+			KeyValue elem1	= new KeyValue(CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER.toString(), "Managed by Workspace Manager");
+			KeyValue elem2	= new KeyValue(CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER.toString(), "Workspace Members Allowed to Add New Resources");
+			KeyValue elem3	= new KeyValue(CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER.toString(), "Workspace Members Allowed to Add New Resources and Versions");
+			
+			uForm.setPossibleValsAddTR(new ArrayList<KeyValue>() );
+			uForm.getPossibleValsAddTR().add(elem1);
+			uForm.getPossibleValsAddTR().add(elem2);
+			uForm.getPossibleValsAddTR().add(elem3);
+		}
 	}
 }

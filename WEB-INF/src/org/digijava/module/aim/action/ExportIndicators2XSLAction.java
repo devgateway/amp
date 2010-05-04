@@ -58,7 +58,7 @@ public class ExportIndicators2XSLAction extends Action {
 		Collection<IndicatorGridRow> rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
 				.getSelYears());
 
-		XLSExporter.resetStyles();
+		//XLSExporter.resetStyles();
 
 		HSSFWorkbook wb = new HSSFWorkbook();
 		String sheetName = mainProg.getName();

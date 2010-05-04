@@ -107,7 +107,7 @@
 															var implemLocationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
 															if(implemLocationLevelSelect!=null){
 			                                              		implemLocationLevelSelect.onchange=function() {
-			                                              			removeAllLocations();
+			                                              			//removeAllLocations();
 			                                              			updateAddLocationButton();
 			                                              		}
 															}

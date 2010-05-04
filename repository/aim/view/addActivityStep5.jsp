@@ -356,6 +356,7 @@ function removeSelPhyProgress() {
     }
     function totalsPage() {
        var currency=document.aimEditActivityForm.fundingCurrCode.value;
+       //alert (currency);
        // the edit=true parameter needs to be added to each request so that AMPActionServlet knows the user hasn't left the Activity Wizard
        var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=true&edit=true';
        var async=new Asynchronous();
@@ -699,10 +700,12 @@ function removeSelComponents() {
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 
 												<digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of</digi:trn>  ${fn:length(aimEditActivityForm.steps)}:
-                                                                                                 <digi:trn key="aim:activity:Components">
-                                                                                                 Components
-                                                                                                 </digi:trn>
-
+                                                   <feature:display name="Components" module="Components">
+                                                     <digi:trn key="aim:activity:Components">Components</digi:trn>
+                                                  </feature:display>
+                                               <feature:display name="Issues" module="Issues">
+                                               	 <digi:trn key="aim:activity:Issues">Issues</digi:trn>
+											   </feature:display>
 											</td>
 
 											<td width="13" height="20" background="module/aim/images/right-side.gif">

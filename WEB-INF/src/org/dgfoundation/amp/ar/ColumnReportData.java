@@ -14,12 +14,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.MetaTextCell;
+import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 /**
  * 
@@ -95,16 +97,36 @@ public class ColumnReportData extends ReportData {
 			throws UnidentifiedItemException, IncompatibleColumnException {
 		
 		/** 
-		 * activitiesInColReport contains all activity ids in this report (ColumnReportData). 
+		 * There are 2 problems (bugs) handled in the lines below, while splitting horizontally by categ:
+		 * 
+		 * 1)Problem: If you do a report with hierarchy Sector and Sub-Sector and you have an activity which belongs to 
+		 * Sector A (no sub-sector) and Sub-Sector b1 (which is a sub-sector of sector B) then in the Sector A 
+		 * hierarchy your activity doesn't appear.
+		 *  
+		 * Solution: activitiesInColReport contains all activity ids in this report (ColumnReportData). 
 		 * While we find activities that need to me moved to a category, we remove their ID from activitiesInColReport. (check below)
 		 * At the end, if we still have activities in activitiesInColReport, they will be moved to the unallocated hierarchy.
 		 * This can happen, for example, if you do a report with hierarchy Sector and Sub-Sector and you have an activity
 		 * which belongs to Sector A (no sub-sector) and Sub-Sector b1 (which is a sub-sector of B). Since our activity would have 
 		 * information on the Sub-Sector column (b1) the engine does not that it should also appear in hierachy A in the 
-		 * 'Unallocated' sub-hierarchy. Check AmpReportGenerator.createHierachies() for more info. 
+		 * 'Unallocated' sub-hierarchy. Check AmpReportGenerator.createHierachies() for more info.
+		 * 
+		 *  2)Problem: If you do a report with hierarchy Sub-Sector and you have an activity which belongs to 
+		 * Sector A (no sub-sector) - 10% and Sub-Sector b1 - 90% (which is a sub-sector of sector B) then in the report you 
+		 * only see the activity under Sub-Sector b1. (Same goes for locations and programs).
+		 * ( https://jira.dgfoundation.org/browse/AMP-8141 )
+		 * 
+		 * Solution: for Region hierarchy. Add percentages for activities. If it doesn't add up to 100% create fake cell with the 
+		 * rest of the percentage and add that cell to unallocated hierarchy.
+		 * 
+		 * ToDO: Solution for other hierarchies
+		 * 
 		 */
 		Collection<Long> activitiesInColReport		= this.getOwnerIds();
-		Cell fakeCell												= AmpReportGenerator.generateFakeCell(this, null);
+		
+		/*	percentagesMap will hold the added percentages (on the splitting categ) for each activity */
+		HashMap<Long,Double>	percentagesMap		= new HashMap<Long, Double>();
+		Cell fakeCell								= AmpReportGenerator.generateFakeCell(this, null);
 		
 		/* map where we hold for each new ReportData the activities that it will contain. */
 		HashMap<ColumnReportData, Set<Long>> catToIds			= new HashMap<ColumnReportData, Set<Long>> ();
@@ -165,6 +187,21 @@ public class ColumnReportData extends ReportData {
 				if (element.compareTo(cat) == 0){
 					Long id		= element.getOwnerId();
 					ids.add( id );
+
+					/* Adding region percentages for each activity (for problem 2) */
+					AmpARFilter filterObj	= cat.getColumn().getWorker().getGenerator().getFilter();
+					if ( ArConstants.COLUMN_REGION.equals(cat.getColumn().getName()) && 
+							filterObj.getRegionSelected() == null &&  
+							element instanceof MetaTextCell ) {
+						MetaInfo<Double> mInfo	= ((MetaTextCell)element).getMetaInfo(ArConstants.PERCENTAGE);
+						if ( mInfo != null && mInfo.getValue() > 0) {
+							Double percentage 		= mInfo.getValue();
+							Double tempPerc			= percentagesMap.get(id);
+							percentagesMap.put(id, (tempPerc!=null?tempPerc:0.0) + percentage );
+						}
+					}
+					
+					
 					
 					/* We remove the ids that appear in a category */
 					activitiesInColReport.remove( id );
@@ -181,6 +218,20 @@ public class ColumnReportData extends ReportData {
 			}*/
 		}
 		
+		/* Adding fake MetaTextCells for the percentages that don't add up to 100% */
+		if ( percentagesMap.size() > 0 ) {
+			Iterator<Entry<Long, Double>> iter	= percentagesMap.entrySet().iterator();
+			while ( iter.hasNext() ) {
+				Entry<Long, Double> e		= iter.next();
+				if ( e.getValue() < 100.0 ) {
+					fakeCell	= AmpReportGenerator.generateFakeCell(this, e.getKey());
+					fakeCell			= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, 100.0-e.getValue() );
+					( (CellColumn)keyCol ).addCell(fakeCell);
+				}
+				else
+					iter.remove();
+			}
+		}
 		/* We create fake cells for all activities that would otherwise just disappear in the newly create GroupReportData */
 		for ( Long id: activitiesInColReport ){
 			logger.info("The following activity needs to be added to the Unallocated category: " + id );
@@ -188,7 +239,8 @@ public class ColumnReportData extends ReportData {
 			( (CellColumn)keyCol ).addCell(fakeCell);
 		}
 		/* If the unallocated category doesn't already exist we need to create it */
-		if ( activitiesInColReport.size() > 0 && !existsUnallocatedCateg  ) {
+		if ( (activitiesInColReport.size() > 0 || percentagesMap.size() > 0 ) 
+				&& !existsUnallocatedCateg  ) {
 			logger.info("Unallocated category was not created for " + keyCol.getColumnId() + ". Adding it now.");
 			ColumnReportData crd	= new ColumnReportData( (String) keyCol.getColumnId() + ": " + fakeCell.toString() );
 			crd.setSplitterCell(fakeCell);
@@ -206,6 +258,7 @@ public class ColumnReportData extends ReportData {
 			/* If this is the Unallocated category we add all remaining activity IDs to it*/
 			if ( crd.getSplitterCell().compareTo(fakeCell) == 0 ) {
 				ids.addAll( activitiesInColReport );
+				ids.addAll( percentagesMap.keySet() ) ;
 			}
 			
 			Iterator<Column> ii = this.getItems().iterator();
@@ -478,6 +531,7 @@ public class ColumnReportData extends ReportData {
 		return id.toLowerCase().replaceAll(" ",	"");
 	}
 
+	
 
 
 

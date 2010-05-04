@@ -1,10 +1,12 @@
-<style type="text/css">
+
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%><style type="text/css">
 
 .yui-tt{ background: LightYellow; border-color: black }
 
 .all_markup {margin:1em} 
 .all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 90%} 
-.all_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: #ffcccc 1px solid;border-bottom: #cccccc 1px solid;}
+.all_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
 .all_markup .yui-dt-even {background-color:#FFFFFF;} 
@@ -18,7 +20,7 @@
 
 .versions_markup {margin:1em; overflow: auto; } 
 .versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
-.versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: #ffcccc 1px solid;border-bottom: #cccccc 1px solid;}
+.versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
 .versions_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
@@ -53,7 +55,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
+
 
 
 <%@page import="java.net.URLDecoder"%>
@@ -95,6 +99,9 @@
 	YAHOO.namespace("YAHOO.amp.table");
 
 	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn key="aim:noRecordsFound">No records found</digi:trn>";
+
+	/* Check FormatDateHelper.js for more information */
+	FormatDateHelper.prototype.formatString		= '<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)%>';
 	
 	/* AJAX Callback object for showing versions*/
 	var callbackForVersions	= {
@@ -264,7 +271,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
 		    {key:"type",text:"${trans_headerType}",sortable:true},
 	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-	        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+	        {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
 	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
 	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
 	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
@@ -277,7 +284,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
     		    {key:"type",text:"${trans_headerType}",sortable:true},
     	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-    	        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+    	        {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
     	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
     	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
     	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
@@ -288,7 +295,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
       			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
        		    {key:"type",text:"${trans_headerType}",sortable:true},
        	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-        	    {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+        	    {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
 	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
             	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
 	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
@@ -296,7 +303,6 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	    ];
 	}
     this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
-
     var markup	 				= YAHOO.util.Dom.get(markupName);
     //var datasource				= YAHOO.util.DataSource(markup);
     var options					= {
@@ -304,7 +310,6 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 									rowsPerPage:10,
 							        pageLinksLength:2												        
 	                			  };
-
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
@@ -318,17 +323,28 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
 /* Ajax function that creates a callback object after a delete command 
 was issued in order to delete the respective row/document*/
-function getCallbackForDelete (row, table) {
+function getCallbackForDelete (rows, table) {
 	callbackForDelete = {
 		success: function(o) {
+			//debugger;
 			YAHOO.amp.panels[2].setBody(o.responseText);
 			if (document.getElementById("successfullDiv") != null) {
-				if (YAHOO.amp.table.teamtable != null)
-						YAHOO.amp.table.teamtable.deleteRow(row);
-				if (YAHOO.amp.table.mytable != null)
-						YAHOO.amp.table.mytable.deleteRow(row);		
-				for (i=0; i<YAHOO.amp.datatables.length; i++) {
-						YAHOO.amp.datatables[i].deleteRow(row);
+				if (rows != null) {
+					if (YAHOO.amp.table.teamtable != null) {
+						for (var i=0; i<rows.length; i++) {
+							YAHOO.amp.table.teamtable.deleteRow(rows[i]);
+						}
+					}
+					if (YAHOO.amp.table.mytable != null)
+						for (var i=0; i<rows.length; i++) {
+							YAHOO.amp.table.mytable.deleteRow(rows[i]);
+						}
+					//alert(YAHOO.amp.datatables.length + "|" + YAHOO.amp.num_of_tables);		
+					for (var ii=0; ii<YAHOO.amp.datatables.length; ii++) {
+						for (var i=0; i<rows.length; i++) {
+							YAHOO.amp.datatables[ii].deleteRow(rows[i]);
+						}
+					}
 				}
 			}
 			else 
@@ -344,12 +360,21 @@ function getCallbackForDelete (row, table) {
 }
 /* Function called after clicking delete */
 function deleteRow(uuid, o) {
-	var a			= document.getElementById('a'+uuid);
-	var possibleRow	= a;
-	while (true) {
-		possibleRow	= possibleRow.parentNode;
-		if (possibleRow.nodeName.toLowerCase()=="tr")
-				break;
+	var links			= document.getElementsByTagName('a');
+	var possibleRows	= new Array();
+	if (links != null) {
+		for (var i=0; i<links.length; i++) {
+			if ( links[i].id == ("a"+uuid) ) {
+				var possibleRow	= links[i];
+				while (true) {
+					possibleRow	= possibleRow.parentNode;
+					if (possibleRow.nodeName.toLowerCase()=="tr") {
+							possibleRows.push(possibleRow);
+							break;
+					}
+				}
+			}
+		}
 	}
 	if ( confirmDelete() ) {
 		//var translation2				= "${translation2}";
@@ -357,7 +382,7 @@ function deleteRow(uuid, o) {
 		//YAHOO.amp.panels[2].setFooter("<div align='right'><button type='button' onClick='hidePanel(2)'>Close</button></div>");
 		//showPanel(2);
 		//YAHOO.amp.table.dataTable.deleteRow(possibleRow);
-		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRow, YAHOO.amp.table.dataTable));
+		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRows, YAHOO.amp.table.dataTable));
 		
 	}
 }
@@ -694,12 +719,11 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 	var divId					= "other_markup" + num;
 	callbackForOtherDocuments	= {
 		success: function(o) {
+					//alert("C1");
 					containerElement.innerHTML	= "<div class='all_markup' align='center' id='"+divId+"'>" + o.responseText + "</div>";
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
 					datatable.subscribe("checkboxClickEvent", datatable.onEventSelectRow);
-					//
-	
-					YAHOO.amp.datatables[YAHOO.amp.num_of_tables-1] = datatable;
+					YAHOO.amp.datatables.push( datatable );
 					windowController.datatable	= datatable;
 				
 					//createToolTips(containerElement);

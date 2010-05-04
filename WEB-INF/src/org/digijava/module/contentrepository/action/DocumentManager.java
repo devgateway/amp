@@ -86,6 +86,11 @@ public class DocumentManager extends Action {
 	}
 	
 	private boolean ajaxDocumentList(HttpServletRequest myRequest, DocumentManagerForm myForm) {
+		// UGLY HACK. This needs to be re-written
+		if ( myRequest.getHeader("referer")!=null && myRequest.getHeader("referer").contains("documentManager.do") ) {
+			myRequest.setAttribute("checkBoxToHide", true);
+		}
+			
 		Session jcrWriteSession			= 	DocumentManagerUtil.getWriteSession(myRequest);
 		if ( !isLoggeedIn(myRequest) || myRequest.getParameter(CrConstants.GET_PUBLIC_DOCUMENTS) != null ) {
 			HashMap<String, CrDocumentNodeAttributes> uuidMap		= CrDocumentNodeAttributes.getPublicDocumentsMap(true);
@@ -174,7 +179,9 @@ public class DocumentManager extends Action {
 							nodeWrapper.saveNode(jcrWriteSession);
 				}
 			}
-			if ( myForm.getType() != null && myForm.getType().equals("team") && teamMember.getTeamHead() ) {
+			if ( myForm.getType() != null && myForm.getType().equals("team") && 
+					DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) {
+				
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
 					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, teamHomeNode , false, errors);
@@ -189,6 +196,8 @@ public class DocumentManager extends Action {
 					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, vNode , true, errors);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
+						if ( nodeWrapper.isTeamDocument() ) 
+							myForm.setType("team");
 					}
 				}
 			}

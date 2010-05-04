@@ -84,6 +84,7 @@ import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -112,6 +113,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.hibernate.Hibernate;
@@ -2870,6 +2872,16 @@ public class DbUtil {
 
             }
             org.setSectors(sect);
+            
+            Collection<AmpUserExtension> userExtensions	= 
+            	AmpUserUtil.getAmpUserExtensionByOrgId(org.getAmpOrgId());
+            
+            if ( userExtensions != null ) {
+            	for (AmpUserExtension userExt: userExtensions) {
+            		userExt.setOrgGroup(org.getOrgGrpId());
+            		userExt.setOrgType(org.getOrgTypeId());
+            	}
+            }
 
             sess.update(org);
             tx.commit();
@@ -2913,6 +2925,7 @@ public class DbUtil {
 		Connection con;
 		try {
 			con = PersistenceManager.getSession().connection();
+			con.setAutoCommit(false);
 			con.createStatement().execute("DELETE FROM amp_lucene_index WHERE idxName like '" + idxName + "'");
 			con.commit();
 		} catch (Exception e) {

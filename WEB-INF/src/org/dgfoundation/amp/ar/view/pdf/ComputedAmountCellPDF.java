@@ -15,7 +15,7 @@ import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.TokenRepository;
 
-import com.lowagie.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPTable;
 
 public class ComputedAmountCellPDF extends CategAmountCellPDF {
 

@@ -77,6 +77,8 @@ public class ColumnReportDataXLS extends XLSExporter {
 				this.setOwnerId(element);
 				row = sheet.createRow(rowId.shortValue());
 				Iterator ii = columnReport.getItems().iterator();
+				if ( this.regularStyle == null )
+					this.getRegularStyle();
 				HSSFCell cell=this.getCell(regularStyle);
 				colId.inc();
 				while (ii.hasNext()) {

@@ -555,6 +555,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
         /* Injecting documents into session */
         SelectDocumentDM.clearContentRepositoryHashMap(request);
+        request.getParameterMap().put("viewAllRights", "true");
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
         		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
         

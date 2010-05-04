@@ -2,6 +2,8 @@ package org.digijava.module.widget.util;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,7 +87,6 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.chart.axis.NumberAxis;
 import org.digijava.module.aim.util.SectorUtil;
-import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
@@ -1113,25 +1114,45 @@ public class ChartWidgetUtil {
 
             }
             sectors = query.list();
-            // calculate funding for all sectors
-            DecimalWraper totAllSeqtors= getSectorFunding(startDate,endDate,orgID,orgGroupId,transactionType,null,currCode, tm);;
+            // to calculate funding for all sectors
+            Double totAllSectors = new Double(0);
             Iterator<AmpSector> sectorIter = sectors.iterator();
-            double others=0;
+            double others = 0;
+            Map<Long, DonorSectorFundingHelper> sectorsMap = new HashMap<Long, DonorSectorFundingHelper>();
             while (sectorIter.hasNext()) {
                 AmpSector sector = sectorIter.next();
                 // calculate funding for each sector
-                DecimalWraper total=getSectorFunding(startDate,endDate,orgID,orgGroupId,transactionType,sector.getAmpSectorId(),currCode, tm);
-                double percent=total.doubleValue()/totAllSeqtors.doubleValue();
-                // the sectors which percent is less then 5% should be group in "Others"
-                if (percent > 0.05) {
-                    ds.setValue(sector.getName(), total.doubleValue());
-                } else {
-                    others+=total.doubleValue();
+                DecimalWraper amount = getSectorFunding(startDate, endDate, orgID, orgGroupId, transactionType, sector.getAmpSectorId(), currCode, tm);
+                AmpSector topLevelSector = SectorUtil.getTopLevelParent(sector);
+                Long topSectorId = topLevelSector.getAmpSectorId();
+                // getting object from map
+                DonorSectorFundingHelper sectorFundngObj = sectorsMap.get(topSectorId);
+                //if not create and add to map
+                if (sectorFundngObj == null) {
+                    sectorFundngObj = new DonorSectorFundingHelper(topLevelSector);
+                    sectorsMap.put(topSectorId, sectorFundngObj);
                 }
-                
+                //add amount to sector
+                sectorFundngObj.addFunding(amount.doubleValue());
+                // adding to total funding amount
+                totAllSectors += amount.doubleValue();
             }
-            if(others>0){
-                  ds.setValue("Others", others);
+            if (!sectorsMap.isEmpty()) {
+                Collection<DonorSectorFundingHelper> secFundCol = sectorsMap.values();
+                Iterator<DonorSectorFundingHelper> secFundColIter = secFundCol.iterator();
+                while (secFundColIter.hasNext()) {
+                    DonorSectorFundingHelper sectorFunding = secFundColIter.next();
+                    Double percent = sectorFunding.getFounding() / totAllSectors;
+                    if (percent > 0.05) {
+                        ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding());
+                    } else {
+                        others += sectorFunding.getFounding();
+
+                    }
+                }
+            }
+            if (others > 0) {
+                ds.setValue("Others", others);
             }
         } catch (Exception e) {
             logger.error(e);

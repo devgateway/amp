@@ -190,6 +190,8 @@ function toggleSettings(){
                                  			<html:option value="30">30 <digi:trn key="aim:days">Days</digi:trn></html:option>
                                  			<html:option value="60">60 <digi:trn key="aim:days">Days</digi:trn></html:option>
                                  			<html:option value="90">90 <digi:trn key="aim:days">Days</digi:trn></html:option>
+                                 			<html:option value="180">180 <digi:trn key="aim:days">Days</digi:trn></html:option>
+                                 			<html:option value="360">360 <digi:trn key="aim:days">Days</digi:trn></html:option>
                                  	</html:select>
                                  	</td>
                                  </tr>

@@ -42,20 +42,20 @@ import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Document;
-import com.lowagie.text.ExceptionConverter;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPageEvent;
-import com.lowagie.text.pdf.PdfWriter;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.ExceptionConverter;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEvent;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * 
@@ -206,171 +206,172 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	}
 
 	public void onStartPage(PdfWriter writer, Document arg1) {
-	  	if(PDFExporter.headingCells==null) return;
-		  PdfContentByte cb = writer.getDirectContent();
-		  cb.saveState();
-			PdfPTable table = new PdfPTable(PDFExporter.widths);
-			
-			table.setWidthPercentage(100);
-			
-		  	String translatedCurrency="";
-			String translatedCurrentFilter="";
-			String translatedAmount="";
-			String translatedReportDescription="Description:";
-			String siteId=site.getSiteId();
-			// HEADER/FOOTER logo/statement				
-			if (this.request.getAttribute("logoOptions").equals("0")) {//disabled
-				// do nothing 
-			} else if (this.request.getAttribute("logoOptions").equals("1")) {//enabled																		 	                	                
-				if (this.request.getAttribute("logoPositionOptions").equals("0")) {//header						
-					Image logo = null;
-					int end = this.request.getRequestURL().length() - "/aim/pdfExport.do".length();
-					String urlPrefix = this.request.getRequestURL().substring(0, end); 
-					try {
-						logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
-					} catch (BadElementException e) {
-						e.printStackTrace();
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					PdfPCell pdfc;	
-					pdfc = new PdfPCell(logo);
-					pdfc.setPaddingBottom(10);
-					pdfc.setPaddingTop(10);
-					pdfc.setPaddingLeft(10);
-					pdfc.setColspan(rd.getTotalDepth());
-					table.addCell(pdfc);
-				} else if (this.request.getAttribute("logoPositionOptions").equals("1")) {//footer
-					// see endPage function
-				}				
-			}
-            if (this.request.getAttribute("statementOptions").equals("0")) {//disabled
-				// do nothing 
-			} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
-				String stmt = "";
+		if(PDFExporter.headingCells==null) 
+			return;
+		PdfContentByte cb = writer.getDirectContent();
+		cb.saveState();
+		PdfPTable table = new PdfPTable(PDFExporter.widths);
+
+		table.setWidthPercentage(100);
+
+		String translatedCurrency="";
+		String translatedCurrentFilter="";
+		String translatedAmount="";
+		String translatedReportDescription="Description:";
+		String siteId=site.getSiteId();
+		// HEADER/FOOTER logo/statement				
+		if (this.request.getAttribute("logoOptions").equals("0")) {//disabled
+			// do nothing 
+		} else if (this.request.getAttribute("logoOptions").equals("1")) {//enabled																		 	                	                
+			if (this.request.getAttribute("logoPositionOptions").equals("0")) {//header						
+				Image logo = null;
+				int end = this.request.getRequestURL().length() - "/aim/pdfExport.do".length();
+				String urlPrefix = this.request.getRequestURL().substring(0, end); 
 				try {
-					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
-					stmt = TranslatorWorker.translateText("Report Name", locale,siteId);
-				} catch (WorkerException e){
-				    logger.error("Error translating ", e);}
-				stmt += " " + FeaturesUtil.getCurrentCountryName();
-				if (this.request.getAttribute("dateOptions").equals("0")) {//disabled
-					// no date
-				} else if (this.request.getAttribute("dateOptions").equals("1")) {//enable		
-					stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
-				}				 	                	                
-				if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header		
-					PdfPCell pdfc;
-					Font font = new Font(Font.COURIER, 8, Font.COURIER);		
-					pdfc = new PdfPCell(new Paragraph(stmt, font));
-					pdfc.setPaddingBottom(10);
-					pdfc.setPaddingTop(10);
-					pdfc.setColspan(rd.getTotalDepth());
-					table.addCell(pdfc);
-				} else if (this.request.getAttribute("statementPositionOptions").equals("1")) {//footer
-					// see endPage function
-				}				
+					logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
+				} catch (BadElementException e) {
+					e.printStackTrace();
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				PdfPCell pdfc;	
+				pdfc = new PdfPCell(logo);
+				pdfc.setPaddingBottom(10);
+				pdfc.setPaddingTop(10);
+				pdfc.setPaddingLeft(10);
+				pdfc.setColspan(rd.getTotalDepth());
+				table.addCell(pdfc);
+			} else if (this.request.getAttribute("logoPositionOptions").equals("1")) {//footer
+				// see endPage function
+			}				
+		}
+		if (this.request.getAttribute("statementOptions").equals("0")) {//disabled
+			// do nothing 
+		} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
+			String stmt = "";
+			try {
+				//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
+				stmt = TranslatorWorker.translateText("This REPORT was created by AMP", locale,siteId);
+			} catch (WorkerException e){
+				logger.error("Error translating ", e);}
+			stmt += " " + FeaturesUtil.getCurrentCountryName();
+			if (this.request.getAttribute("dateOptions").equals("0")) {//disabled
+				// no date
+			} else if (this.request.getAttribute("dateOptions").equals("1")) {//enable		
+				stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+			}				 	                	                
+			if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header		
+				PdfPCell pdfc;
+				Font font = new Font(Font.FontFamily.COURIER, 8, Font.NORMAL);		
+				pdfc = new PdfPCell(new Paragraph(stmt, font));
+				pdfc.setPaddingBottom(10);
+				pdfc.setPaddingTop(10);
+				pdfc.setColspan(rd.getTotalDepth());
+				table.addCell(pdfc);
+			} else if (this.request.getAttribute("statementPositionOptions").equals("1")) {//footer
+				// see endPage function
+			}				
+		}
+		//
+		try{	
+
+			translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:",locale,siteId);
+			translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
+
+			String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
+			if(currencyCode != null) {
+				//translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
+				translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,siteId);
+				translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
 			}
-			//
-			try{	
-			    
-			    translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:",locale,siteId);
-			    translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
-			    
-                String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
-                if(currencyCode != null) {
-                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
-                    translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,siteId);
-        			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
-                }
-                else
-                {
-                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
-                    translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
-                }
-                	
-                if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){	
-                	translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
-                }
-			    translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
-			    translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
-			
-			}catch (WorkerException e){
-			    logger.error("Error translating ", e);}
-		    	
-			PdfPCell pdfc;
-			Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);				
-			pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
-			pdfc.setPaddingBottom(10);
-			pdfc.setPaddingTop(10);
-			pdfc.setColspan(rd.getTotalDepth());
-			table.addCell(pdfc);		
-						
-			
-			if(!"".equalsIgnoreCase(r.getReportDescription())){
-	        		pdfc = new PdfPCell(new Paragraph(translatedReportDescription+" "+r.getReportDescription()));
-	        		pdfc.setColspan(rd.getTotalDepth());
-	        		table.addCell(pdfc);
-	        	}
-			
-			
-			pdfc = null;
-			//translatedNotes
-			//ArConstants.SELECTED_CURRENCY
-			//Currency
-			Font currencyFont = new Font(Font.COURIER, 10, Font.ITALIC);
-			pdfc = new PdfPCell(new Paragraph(translatedAmount+": "+translatedCurrency,currencyFont));
-			pdfc.setPaddingBottom(2);
-			pdfc.setPaddingTop(2);
-			pdfc.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-			pdfc.setPaddingLeft(20);
+			else
+			{
+				//translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+				translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
+			}
+
+			if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){	
+				translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
+			}
+			translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
+			translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
+
+		}catch (WorkerException e){
+			logger.error("Error translating ", e);}
+
+		PdfPCell pdfc;
+		Font titleFont = new Font(Font.FontFamily.COURIER, 16, Font.BOLD);				
+		pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
+		pdfc.setPaddingBottom(10);
+		pdfc.setPaddingTop(10);
+		pdfc.setColspan(rd.getTotalDepth());
+		table.addCell(pdfc);		
+
+
+		if(!"".equalsIgnoreCase(r.getReportDescription())){
+			pdfc = new PdfPCell(new Paragraph(translatedReportDescription+" "+r.getReportDescription()));
 			pdfc.setColspan(rd.getTotalDepth());
 			table.addCell(pdfc);
-			//filters
-			Map<String, Object> props=arf.getPropertiesMap();
-			
-			Iterator<String> keys=props.keySet().iterator();
-			StringBuffer strFilters=new StringBuffer();
-			
-	        	try {
-	        	    while (keys.hasNext()) {
-	        		String key = keys.next();
-	        		
-        		    //String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,siteId);
-        		    String translatedName=TranslatorWorker.translateText(key,locale,siteId);
-        		    translatedName=("".equalsIgnoreCase(translatedName))?key:translatedName;
-				    
-				    String translatedValue=TranslatorWorker.translateText(props.get(key).toString(),locale,siteId);
-				    translatedValue=("".equalsIgnoreCase(translatedValue))?props.get(key).toString():translatedValue;
-				
-	        		strFilters.append(translatedName);
-	        		strFilters.append(":");
-	        		strFilters.append(translatedValue);
-	        	        strFilters.append(",");
-	        	    }
-	        	} catch (WorkerException e) {
-	        	    logger.error("Error translating", e);
-	        	}
-			
-	        	strFilters.delete(strFilters.length()-2,strFilters.length());
-	        	try {
-	        		//adding the table to the document before adding cells avoid stack overflow error, we can flush the memory and send the content to the client
-	        
-	        	Iterator i=PDFExporter.headingCells.iterator();
-        			while (i.hasNext()) {
-        				PdfPCell element = (PdfPCell) i.next();
-        				table.addCell(element);
-        				writer.flush();
-        			}
-        			arg1.add(table);
-				
-			    
-			} catch (Exception e) {
-				logger.error("Error onStartPage",e);
+		}
+
+
+		pdfc = null;
+		//translatedNotes
+		//ArConstants.SELECTED_CURRENCY
+		//Currency
+		Font currencyFont = new Font(Font.FontFamily.COURIER, 10, Font.ITALIC);
+		pdfc = new PdfPCell(new Paragraph(translatedAmount+": "+translatedCurrency,currencyFont));
+		pdfc.setPaddingBottom(2);
+		pdfc.setPaddingTop(2);
+		pdfc.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+		pdfc.setPaddingLeft(20);
+		pdfc.setColspan(rd.getTotalDepth());
+		table.addCell(pdfc);
+		//filters
+		Map<String, Object> props=arf.getPropertiesMap();
+
+		Iterator<String> keys=props.keySet().iterator();
+		StringBuffer strFilters=new StringBuffer();
+
+		try {
+			while (keys.hasNext()) {
+				String key = keys.next();
+
+				//String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,siteId);
+				String translatedName=TranslatorWorker.translateText(key,locale,siteId);
+				translatedName=("".equalsIgnoreCase(translatedName))?key:translatedName;
+
+				String translatedValue=TranslatorWorker.translateText(props.get(key).toString(),locale,siteId);
+				translatedValue=("".equalsIgnoreCase(translatedValue))?props.get(key).toString():translatedValue;
+
+				strFilters.append(translatedName);
+				strFilters.append(":");
+				strFilters.append(translatedValue);
+				strFilters.append(",");
 			}
-		
+		} catch (WorkerException e) {
+			logger.error("Error translating", e);
+		}
+
+		strFilters.delete(strFilters.length()-2,strFilters.length());
+		try {
+			//adding the table to the document before adding cells avoid stack overflow error, we can flush the memory and send the content to the client
+
+			Iterator i=PDFExporter.headingCells.iterator();
+			while (i.hasNext()) {
+				PdfPCell element = (PdfPCell) i.next();
+				table.addCell(element);
+				writer.flush();
+			}
+			arg1.add(table);
+
+
+		} catch (Exception e) {
+			logger.error("Error onStartPage",e);
+		}
+		cb.restoreState();
 	}
 
 	public void onEndPage(PdfWriter writer, Document document) {
@@ -484,7 +485,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    cb.setTextMatrix(document.right() - textSize - adjust, textBase);
 	    cb.showText(pageText.toString());
 	    cb.endText();
-    	    cb.restoreState();
+    	cb.restoreState();
 	
 	} catch (Exception e) {
 		e.printStackTrace();

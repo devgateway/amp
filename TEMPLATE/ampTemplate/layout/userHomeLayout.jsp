@@ -38,7 +38,11 @@
 					<%=title%>
 				</digi:trn>
 		</TITLE>
+		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 
+		<META HTTP-EQUIV="Expires" CONTENT="0">
+
+		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
 
 		<script language="javascript">
 

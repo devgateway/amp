@@ -79,7 +79,11 @@ public class AddNewLocation extends Action {
                 location.setGsLong(addRegForm.getGsLong());
                 
                 try {
-                	LocationUtil.saveLocation(location);
+                	
+                	if (addRegForm.getEditedId() != null)
+                		LocationUtil.saveLocation(location, true);
+                	else
+                		LocationUtil.saveLocation(location, false);
                 	
                 	if ( CategoryManagerUtil.equalsCategoryValue(location.getParentCategoryValue(), 
                 					CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {

@@ -2477,5 +2477,21 @@ public class TeamUtil {
         }
 
     }
-
+    
+    public static List<AmpTeam> getTeamByOrg(Long orgId) {
+ 	 	List<AmpTeam> retValue = new ArrayList<AmpTeam>();
+ 	 	if (orgId != null ){
+ 	 		Collection<AmpTeam> teams = getAllTeams();
+ 	 		for (AmpTeam ampTeam : teams) {
+ 	 			for (Iterator iterator = ampTeam.getOrganizations().iterator(); iterator.hasNext();) {
+ 	 				AmpOrganisation org = (AmpOrganisation) iterator.next();
+ 	 				if (org.getAmpOrgId().equals(orgId)){
+ 	 					retValue.add(ampTeam);
+ 	 					break;
+ 	 				}
+ 	 			}
+ 	 		}
+ 	 	}
+ 	 	return retValue;
+    }
 }

@@ -852,11 +852,11 @@ public class SaveActivity extends Action {
 				actLoc.setActivity(activity);//activity);
 				actLoc.getActivity().setAmpActivityId(eaForm.getActivityId());
 				actLoc.setLocation(ampLoc);
-				Double percent=FormatHelper.parseDouble(loc.getPercent());
-                                        if(percent==null){
-				percent=new Double(0);
-                                        }
-                                        actLoc.setLocationPercentage(percent.floatValue());
+				Double percent=null;
+				if(loc.getPercent()!=null && loc.getPercent().length()>0) {
+					percent=FormatHelper.parseDouble(loc.getPercent());
+					actLoc.setLocationPercentage(percent.floatValue());
+				}
 				locations.add(actLoc);
 				//locations.add(ampLoc);
 				//AMP-2250
@@ -1331,7 +1331,7 @@ public class SaveActivity extends Action {
 				AmpIssues ampIssue = new AmpIssues();
 				ampIssue.setActivity(activity);
 				ampIssue.setName(issue.getName());
-				if (issue.getIssueDate()!=null){
+				if (issue.getIssueDate()!=null && issue.getIssueDate().trim().length()>0){
 					ampIssue.setIssueDate(FormatHelper.parseDate(issue.getIssueDate()).getTime());
 				}
 				Set measureSet = new HashSet();

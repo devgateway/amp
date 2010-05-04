@@ -764,6 +764,46 @@ public class SectorUtil {
 		}
 		return ampSector;
 	}
+	
+	public static Collection<AmpSector> getAmpParentSectors(Collection<AmpSector> sectors) {
+		if ( sectors != null ) {
+			ArrayList<AmpSector> retList	= new ArrayList<AmpSector>();
+			for (AmpSector sector: sectors) {
+				retList.addAll( SectorUtil.getAmpParentSectors( sector.getAmpSectorId() ) );
+			}
+			return retList;
+		}
+		return null;
+	}
+	
+	public static Collection<AmpSector> getAmpParentSectors(Long ampSectorId) {
+		Session session = null;
+		Query q = null;
+		Collection<AmpSector> ret	= new ArrayList<AmpSector>();
+		String queryString = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+
+			AmpSector ampSector = (AmpSector)session.load(AmpSector.class , ampSectorId );
+			while (ampSector.getParentSectorId() != null) {
+				ampSector = ampSector.getParentSectorId();
+				ret.add( ampSector );
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp sub sectors from database "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return ret;
+	}
 
 	public static ArrayList getDonorSectors(Long ampSecSchemeId,
 			Long ampActivityId) {
@@ -950,12 +990,22 @@ public class SectorUtil {
 					ret.add(ampSector);
 					Collection<AmpSector> dbChildReturnSet = 
 							SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
+					
 					Iterator<AmpSector> iterSub = dbChildReturnSet.iterator();
 					while (iterSub.hasNext()) {
 						AmpSector ampSubSector = (AmpSector) iterSub.next();
 						String temp = " -- " + ampSubSector.getName();				
 						ampSubSector.setName(temp);
 						ret.add(ampSubSector);
+						
+						Collection<AmpSector> dbChildReturnSet2		= 
+							SectorUtil.getAllChildSectors( ampSubSector.getAmpSectorId() );
+						if ( dbChildReturnSet2!=null && dbChildReturnSet2.size()>0 ) {
+							for (AmpSector ampSubSubSector: dbChildReturnSet2 ) {
+								ampSubSubSector.setName( " -- -- " +ampSubSubSector.getName() );
+								ret.add(ampSubSubSector);
+							}
+						}
 					}
 				}
 			}
@@ -1560,4 +1610,11 @@ public class SectorUtil {
 			}
 		}
                 */
+    // This recursive method helps the generateLevelHierarchy method.
+	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
+		if (topLevelSector.getParentSectorId() != null) {
+			topLevelSector = getTopLevelParent(topLevelSector.getParentSectorId());
+		}
+		return topLevelSector;
+	}
 }

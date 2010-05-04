@@ -5,10 +5,14 @@ import javax.jcr.Workspace;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 
 public class DocumentManagerRights {
 	
@@ -22,7 +26,8 @@ public class DocumentManagerRights {
 		if (manuallySetNoDeleteFlag != null) {
 			result = result && manuallySetNoDeleteFlag;
 		}
-		return result && isOwnerOrTeamLeader(node, request);
+		return result && 
+		( isOwnerOrTeamLeader(node, request) || (isCreator(node, request)&&isCreatorTeam(node, request)) );
 	}
 	
 	public static Boolean hasViewRights (Node node, HttpServletRequest request) {
@@ -46,7 +51,10 @@ public class DocumentManagerRights {
 		if (manuallySetNoVersioningFlag != null) {
 			result = result && manuallySetNoVersioningFlag;
 		}
-		return result && isOwnerOrTeamLeader(node, request);
+		return result && 
+		( isOwnerOrTeamLeader(node, request) || (isCreator(node, request)&&isCreatorTeam(node, request)) || 
+				(isAllowedVersioningTeamResourcesForMembers(request)&&isCreatorTeam(node, request)&&isTeamDocument(node, request)) 
+		);
 	}
 	
 	public static Boolean hasVersioningRights (Node node, HttpServletRequest request) {
@@ -55,7 +63,10 @@ public class DocumentManagerRights {
 		if (manuallySetNoVersioningFlag != null) {
 			result = result && manuallySetNoVersioningFlag;
 		}
-		return result && isOwnerOrTeamLeader(node, request);
+		return result && 
+			( isOwnerOrTeamLeader(node, request) || (isCreator(node, request)&&isCreatorTeam(node, request)) || 
+					(isAllowedVersioningTeamResourcesForMembers(request)&&isCreatorTeam(node, request)&&isTeamDocument(node, request)) 
+			);
 	}
 	
 	public static Boolean hasMakePublicRights (Node node, HttpServletRequest request) {
@@ -66,6 +77,19 @@ public class DocumentManagerRights {
 	}
 	public static Boolean hasDeleteRightsOnPublicVersion(Node node, HttpServletRequest request) {
 		return true && isOwnerOrTeamLeader(node, request);
+	}
+	public static Boolean hasAddResourceToTeamResourcesRights(HttpServletRequest request) {
+		return isTeamLeader(request) || isAllowedAddTeamResourcesForMembers(request);
+	}
+	
+	
+	private static Boolean isTeamLeader( HttpServletRequest request ) {
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		if ( teamMember.getTeamHead() ) {
+			return true;
+		}
+		return false;
 	}
 	
 	private static Boolean isOwnerOrTeamLeader(Node node, HttpServletRequest request) {
@@ -172,6 +196,48 @@ public class DocumentManagerRights {
 			return result;
 		}
 		return null;
+	}
+	private static Boolean isAllowedAddTeamResourcesForMembers (HttpServletRequest request) {
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(tm.getTeamId());
+		if ( sett.getAllowAddTeamRes() == null )
+			return false;
+		return sett.getAllowAddTeamRes() >= CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER ;		
+		
+	}
+	private static Boolean isAllowedVersioningTeamResourcesForMembers (HttpServletRequest request) {
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(tm.getTeamId());
+		if ( sett.getAllowAddTeamRes() == null )
+			return false;
+		return sett.getAllowAddTeamRes() >= CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER ;		
+		
+	}
+	private static Boolean isCreator(Node node, HttpServletRequest request) {
+		NodeWrapper nw = new NodeWrapper(node);
+		
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		
+		if ( tm.getEmail().equals(nw.getCreator()) ) {
+			return true;
+		}
+		else
+			return false;
+	}
+	private static Boolean isCreatorTeam(Node node, HttpServletRequest request) {
+		NodeWrapper nw = new NodeWrapper(node);
+		
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		
+		if ( tm.getTeamId().equals(nw.getCreatorTeam()) ) {
+			return true;
+		}
+		else
+			return false;
 	}
 
 }

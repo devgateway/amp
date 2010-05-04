@@ -18,11 +18,15 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+//import com.itextpdf.text.pdf.Element;
+//import com.itextpdf.text.pdf.Font;
+//import com.itextpdf.text.pdf.Paragraph;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  * 
@@ -58,7 +62,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
 
-		Font titleFont = new Font(Font.COURIER, Font.DEFAULTSIZE, Font.BOLD);
+		Font titleFont = new Font(Font.FontFamily.COURIER, Font.DEFAULTSIZE, Font.BOLD);
 		
 		
 		ReportData parent=(ReportData)columnReport.getParent();
@@ -113,67 +117,77 @@ public class ColumnReportDataPDF extends PDFExporter {
 		
 		
 		// headings
-		Font font = new Font(Font.COURIER, 9, Font.BOLD);
-		font.setColor(new Color(255,255,255));
+		Font font = new Font(Font.FontFamily.COURIER, 9, Font.BOLD);
+		font.setColor(new BaseColor(255,255,255));
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false)  {
 			PDFExporter.headingCells=new ArrayList();
 			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
-		
+			
 			for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
-			Iterator i = columnReport.getItems().iterator();
-			while (i.hasNext()) {
-				
-				Column col = (Column) i.next();
-				col.setCurrentDepth(curDepth);
-				int rowsp = col.getCurrentRowSpan();
-				Iterator ii = col.getSubColumnList().iterator();
-				
-				if(ii.hasNext())
-				while (ii.hasNext()) {
-					Column element2 = (Column) ii.next();
-					//element2.setMaxNameDisplayLength(16);
+				Iterator i = columnReport.getItems().iterator();
+				while (i.hasNext()) {
 					
-					String cellValue=element2.getName(metadata.getHideActivities());
-					//this value should be translated
-					String translatedCellValue=new String();
-					//String prefix="aim:reportBuilder:";
+					Column col = (Column) i.next();
+					col.setCurrentDepth(curDepth);
+					int rowsp = col.getCurrentRowSpan();
+					Iterator ii = col.getSubColumnList().iterator();
 					
-					try{
-						translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
-					}catch (WorkerException e)
-						{
-						e.printStackTrace();
-						
-						}
-					PdfPCell pdfc=null;
-					font.setSize(9);
-					if(translatedCellValue.compareTo("")==0){
-					    if(cellValue.length() < 18){
-						font.setSize(12);
-					    }
-					    pdfc = new PdfPCell(new Paragraph(cellValue,font));
-					   	
-					}else{
-					    if(translatedCellValue.length() < 18){
-						font.setSize(12);
-					    }
-					    pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
-					   }
-					
-					pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
-					pdfc.setColspan(element2.getWidth());
-					pdfc.setBackgroundColor(new Color(51,102,153));
-					//table.addCell(pdfc);
-					headingCells.add(pdfc);
-				} else {
-					PdfPCell pdfc = new PdfPCell(new Paragraph(""));
-					pdfc.setColspan(col.getWidth());
-					pdfc.setBackgroundColor(new Color(51,102,153));
-					//table.addCell(pdfc);
-					headingCells.add(pdfc);
+					if(ii.hasNext())
+						while (ii.hasNext()) {
+							Column element2 = (Column) ii.next();
+							//element2.setMaxNameDisplayLength(16);
+							
+							String cellValue=element2.getName(metadata.getHideActivities());
+							//this value should be translated
+							String translatedCellValue=new String();
+							//String prefix="aim:reportBuilder:";
+							
+							try{
+								translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
+							}catch (WorkerException e)
+								{
+								e.printStackTrace();
+								
+								}
+							PdfPCell pdfc=null;
+							font.setSize(9);
+							if(translatedCellValue.compareTo("")==0){
+							    if(cellValue.length() < 18){
+								font.setSize(12);
+							    }
+							    pdfc = new PdfPCell(new Paragraph(cellValue,font));
+							   	
+							}else{
+							    if(translatedCellValue.length() < 18){
+								font.setSize(12);
+							    }
+							    pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
+							   }
+							
+							pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
+							pdfc.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							pdfc.setColspan(element2.getWidth());
+							if (rowsp > 1){
+								pdfc.setRowspan(rowsp);
+							}
+							pdfc.setBackgroundColor(new BaseColor(51,102,153));
+							//table.addCell(pdfc);
+							headingCells.add(pdfc);
+						} 
+					else {
+						// PREVIOUS CODE to simulate rowspan
+						/*
+						PdfPCell pdfc = new PdfPCell(new Paragraph(""));
+						pdfc.setColspan(col.getWidth());
+						if (rowsp > 1)
+							pdfc.setRowspan(rowsp);
+						pdfc.setBackgroundColor(new BaseColor(51,102,153));
+						//table.addCell(pdfc);
+						headingCells.add(pdfc);
+						*/
+					}
 				}
 			}
-		}
 		}
 
 		// add data

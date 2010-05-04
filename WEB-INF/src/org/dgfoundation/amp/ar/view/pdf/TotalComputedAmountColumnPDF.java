@@ -6,7 +6,7 @@ package org.dgfoundation.amp.ar.view.pdf;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 
-import com.lowagie.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  * 

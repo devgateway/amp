@@ -13,7 +13,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+
+<%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%><jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <%@include file="addDocumentPanel.jsp" %>
 
@@ -278,13 +279,13 @@ function setHoveredTable(tableId, hasHeaders) {
 			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
 			        	<tr>
 			        	<td>
-						<c:if test="${isTeamLeader}">
+						<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
 							<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
                             	<digi:trn key="contentrepository:addResource">
 		 	    	       				Add Resource ...    							
 	 	    	       			</digi:trn>            
 							</button>
-						</c:if>
+						<%}%>
 						</td>
 						</tr>
 					</table>	

@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
+import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -91,10 +92,9 @@ public class AmpReportGenerator extends ReportGenerator {
 			//split column for type of assistance ONLY when TOA is added as column
 			if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
 					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
-				ret.add(ArConstants.TERMS_OF_ASSISTANCE);											
-			}
+					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
+				}
 
-			
 		}
 		return ret;
 	}
@@ -767,8 +767,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		attachFundingMeta();
 	}
 	
-	public static Cell generateFakeCell (ColumnReportData rd, Long activityId) {
-		Cell fakeC = new TextCell();
+	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId) {
+		TextCell fakeC = new TextCell();
 		fakeC.setValue(ArConstants.UNALLOCATED);
 		fakeC.setOwnerId( activityId );
 		
@@ -787,6 +787,14 @@ public class AmpReportGenerator extends ReportGenerator {
 			translatedText = text;
 		//
 		fakeC.setValue(translatedText);
+		return fakeC;
+	}
+	
+	public static MetaTextCell generateFakeMetaTextCell(TextCell cell, Double percentage) {
+		MetaTextCell fakeC				= new MetaTextCell(cell);
+		Set<MetaInfo<Double>> metaSet	= new HashSet<MetaInfo<Double>>();
+		metaSet.add( new MetaInfo<Double>(ArConstants.PERCENTAGE, percentage) );
+		fakeC.setMetaData(metaSet);
 		return fakeC;
 	}
 

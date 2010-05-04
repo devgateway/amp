@@ -2063,7 +2063,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public Collection<AmpCategoryValueLocations> getFundingRegions() {
 			return fundingRegions;
 		}
-
+		
+		public Collection<AmpCategoryValueLocations> getFundingRegionsUnique() {
+			Collection<AmpCategoryValueLocations> unique = new ArrayList<AmpCategoryValueLocations>();
+			Iterator<AmpCategoryValueLocations> it = fundingRegions.iterator();
+			while (it.hasNext()) {
+				AmpCategoryValueLocations val = (AmpCategoryValueLocations) it.next();
+				if (!unique.contains(val))
+					unique.add(val);
+			}
+			return unique;
+		}
+				
+				
 		public void setFundingRegions(Collection<AmpCategoryValueLocations> fundingRegions) {
 			this.fundingRegions = fundingRegions;
 		}

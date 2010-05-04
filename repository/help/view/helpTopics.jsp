@@ -143,7 +143,9 @@ if (typeof DOMParser == "undefined") {
 
 
     function show(str){
-
+		if (str == null){
+			return;
+		}
 	  if (str.length==0){
 			 	document.getElementById("bodyhelp").innerHTML="";
 
@@ -211,13 +213,16 @@ function  getFirstChild(nl){
    	nd = nl.item(i);
 
    	x= nd.firstChild;
-   	while (x.nodeType!=1){
-   	  x=x.nextSibling;
-   	  }
-   		return x.attributes.getNamedItem("id").nodeValue;
-   		
+   	if (x == null){
+   		return null;
    	}
-   }
+   	while (x.nodeType!=1){
+   		x=x.nextSibling;
+   	}
+   	return x.attributes.getNamedItem("id").nodeValue;
+   		
+  }
+}
 
 </script>
 

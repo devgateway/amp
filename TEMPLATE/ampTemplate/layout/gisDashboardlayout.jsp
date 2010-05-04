@@ -86,7 +86,10 @@ else {
 	<digi:context name="digiContext" property="context"/>
 	<HEAD>
 		<TITLE><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></TITLE>
-			
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">		
+		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+     	<META HTTP-EQUIV="EXPIRES" CONTENT="0">		
 		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 	    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />

@@ -291,6 +291,23 @@ function checkYear( year, base, range ) {
 														</td>
 													</tr>
 													<tr>
+														<td bgcolor="#f4f4f2"  align="right" width="50%">
+															<digi:trn>Rights for Team Resources</digi:trn>
+														</td>
+														<td align="left" width="50%" bgcolor="#f4f4f2">
+															<html:select property="allowAddTeamRes" styleClass="inp-text">
+																<c:forEach var="element" items="${aimUpdateAppSettingsForm.possibleValsAddTR}">
+																	<c:set var="trn">
+																		<digi:trn>${element.value}</digi:trn>
+																	</c:set>
+																	<html:option value="${element.key}">
+																		${trn}
+																	</html:option>
+																</c:forEach>
+															</html:select>
+														</td>
+													</tr>
+													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2" >
 															<table cellspacing="10">
 																<tr>

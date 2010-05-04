@@ -16,6 +16,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
@@ -153,6 +154,34 @@ public class AmpUserUtil {
             qry = session.createQuery(queryString);
             qry.setLong("ext", user.getId());
 			result =(AmpUserExtension) qry.uniqueResult();
+
+		}
+		 catch (Exception e) {
+			throw new AimException("Cannot retrive AmpUserExtension", e);
+		}
+		return result;
+		
+	}
+	
+    /**
+	 * Retrieves user extension .
+	 * @param org an AmpOrganisation that the user belongs to 
+	 * @return db entity
+	 * @throws AimException
+	 */
+
+	public static Collection<AmpUserExtension> getAmpUserExtensionByOrgId(Long orgId)
+			throws AimException {
+         Collection<AmpUserExtension> result = null;
+        Session session = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select ext from " + AmpUserExtension.class.getName() + " ext"
+                    + " where ext.organization=:orgId";
+            qry = session.createQuery(queryString);
+            qry.setLong("orgId", orgId);
+			result = qry.list();
 
 		}
 		 catch (Exception e) {

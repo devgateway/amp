@@ -267,6 +267,7 @@
 						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
 					</td>
 				</tr>
+				<field:display name="On/Off Budget" feature="Budget">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5" styleClass="inp-text">
 						<html:checkbox property="selectedBudget" value="1" />&nbsp;
@@ -274,6 +275,7 @@
 
 					</td>
 				</tr>
+				</field:display>
 				<tr>
 					<td colspan="5" valign="top"><field:display
 						name="Joint Criteria" feature="Budget">

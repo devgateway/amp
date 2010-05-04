@@ -24,7 +24,7 @@
 	int indexE = 0;
 %>
 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+
 <digi:instance property="aimEditActivityForm" />
 
 

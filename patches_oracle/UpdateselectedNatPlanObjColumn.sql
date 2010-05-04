@@ -1,0 +1,2 @@
+UPDATE amp_columns_filters SET amp_columns_filters.column_id = (SELECT ac.columnId from amp_columns ac 
+WHERE ac.columnName = 'National Planning Objectives Level 1') WHERE amp_columns_filters.bean_field_name = 'selectedNatPlanObj';

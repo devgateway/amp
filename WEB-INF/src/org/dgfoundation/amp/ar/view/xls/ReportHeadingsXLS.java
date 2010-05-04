@@ -72,7 +72,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 			
 			HSSFCell cell1 =  this.getCell(row,this.getRegularStyle());
 			cell1.setCellValue("");
-			colId.inc();
+			colId.inc();			
 			Iterator i = columnReport.getItems().iterator();
 			//int cellCount = 0;
 			while (i.hasNext()) {
@@ -105,11 +105,17 @@ public class ReportHeadingsXLS extends XLSExporter {
 						if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities()))){
 						
 						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
-						HSSFCellStyle style = cell.getCellStyle();
+						HSSFCellStyle style = null;
+						try{	
+							style = cell.getCellStyle();
+						}
+						catch (ClassCastException ex) {
+							
+							throw ex;
+						}
 						style.setWrapText(true);
 						cell.setCellStyle(style);
 						String cellValue=element2.getName(metadata.getHideActivities());
-						
 						//if (rowId.value == 8){
 						if (rowId.value < 10 && cellValue.length() > 0){
 							//here we set the cell width
@@ -150,11 +156,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 							cell.setCellValue(cellValue);
 						else 
 							cell.setCellValue(translatedCellValue);
-						
-						// ////System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
-						// depth="+curDepth+" "+element2.getName	());
-						// create spanning
-						if(rowsp>1) makeRowSpan(rowsp-1);
+
+						if(rowsp>1) makeRowSpan(rowsp-1,true);
 						
 						if (element2.getWidth() > 1)
 							makeColSpan(element2.getWidth(),true);
@@ -165,10 +168,18 @@ public class ReportHeadingsXLS extends XLSExporter {
 					}		
 				}
 				else {
-					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities())) && col.getWidth() ==1 ){
-					HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
-					cell.setCellValue(col.getName());
-					makeColSpan(col.getWidth(),true);
+					//add padding cells before creating a colspan here. Making a colspan before these cells are created 
+					//will make the borders look ugly
+					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities()))){
+						if(col.getWidth()>1) {
+							for(int k=0;k<col.getWidth();k++) {
+								HSSFCell cell = row.getCell(colId.intValue()+k);
+								if(cell==null) cell=row.createCell(colId.intValue()+k);
+								cell.setCellStyle(this.getHighlightedStyle(true));
+							}
+						}
+
+					 if(col.getWidth()==1) makeColSpan(col.getWidth(),true);
 					}
 				}
 			}

@@ -387,8 +387,10 @@ en:
       funding:
         commitments: 
           label: Commitments
-        payments: 
+        payments:
           label: Disbursements
+        undisbursed:
+          label: Undisbursed
         payments_q1: 
           label: Disbursements 1st Quarter
         payments_q2: 

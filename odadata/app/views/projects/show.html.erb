@@ -84,7 +84,7 @@
 			<dd><%= @project.delegated_cooperation %></dd>
 		<% end %>
 	</dl>
-	
+
 	<dl>
 		<dt><%= t('.totals') %></dt>
 		<dd>
@@ -94,6 +94,8 @@
 				
 		        <dt><%= Funding.human_attribute_name('commitments') %></dt>
 		        <dd><%= @project.total_commitments %></dd>
+		        <dt><%= Funding.human_attribute_name('undisbursed') %></dt>
+		        <dd><%= @project.undisbursed %></dd>
 			</dl>
 		</dd>
 		
@@ -102,10 +104,10 @@
 	    	<dd>
 				<dl>
 	            	<dt class="first"><%= HistoricFunding.human_attribute_name('payments') %></dt>
-					<dd class="first"><%= @project.historic_funding.payments %></dd>
+			<dd class="first"><%= @project.historic_funding.payments %></dd>
 					
 	                <dt><%= HistoricFunding.human_attribute_name('commitments') %></dt>
-	           	    <dd><%= @project.historic_funding.commitments %></dd>
+	           	<dd><%= @project.historic_funding.commitments %></dd>
 				</dl>
 			</dd>
 		<% end %>
@@ -114,13 +116,10 @@
 	    	<dt><%= t('.funding', :year => f.year) %></dt>
 	        <dd>
 				<dl>
-	            	<dt class="first"><%= Funding.human_attribute_name('commitments') %></dt>
-					<dd class="first"><%= f.commitments %></dd>
-					
-	            	<dt><%= Funding.human_attribute_name('payments') %></dt>
-					<dd><%= f.payments %></dd>
-					
-					
+	            	<dt class="first"><%= Funding.human_attribute_name('payments') %></dt>
+					<dd class="first"><%= f.payments %></dd>
+	            	<dt><%= Funding.human_attribute_name('commitments') %></dt>
+					<dd><%= f.commitments %></dd>
 					<dt><%= Funding.human_attribute_name('payments_q1') %></dt>
 					<dd><%= f.payments_q1 %></dd>
 					

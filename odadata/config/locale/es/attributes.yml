@@ -385,6 +385,8 @@ es:
           label: Compromissos
         payments:
           label: Desembolsos
+        undisbursed:
+          label: 'Fundos não desembolsos'
         payments_q1:
           label: 'Desembolosos 1º Trimestre'
         payments_q2:

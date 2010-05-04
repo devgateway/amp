@@ -26,13 +26,13 @@
                 </li>
                 <li class="fifty" style="height:360px;">
                   <%= f.text_field :oda_on_budget_1 %>
-                  <%= f.select :oda_on_budget_1_currency, ExchangeRate.available_currencies.map { |c| [c, c] } %>
+                  <%= f.select :oda_on_budget_1_currency, ExchangeRate.available_currencies.map { |c| [c, c] }, :selected => @donor.currency %>
                   <%= f.text_field :oda_on_budget_2 %>
-                  <%= f.select :oda_on_budget_2_currency, ExchangeRate.available_currencies.map { |c| [c, c] } %>
+                  <%= f.select :oda_on_budget_2_currency, ExchangeRate.available_currencies.map { |c| [c, c] }, :selected => @donor.currency %>
                   <%= f.text_field :oda_on_budget_3 %>
-                  <%= f.select :oda_on_budget_3_currency, ExchangeRate.available_currencies.map { |c| [c, c] } %>
+                  <%= f.select :oda_on_budget_3_currency, ExchangeRate.available_currencies.map { |c| [c, c] }, :selected => @donor.currency %>
 		  <%= f.text_field :oda_on_budget_4 %>
-                  <%= f.select :oda_on_budget_4_currency, ExchangeRate.available_currencies.map { |c| [c, c] } %>
+                  <%= f.select :oda_on_budget_4_currency, ExchangeRate.available_currencies.map { |c| [c, c] }, :selected => @donor.currency %>
                 </li>
                 <li>
 		  <%= f.text_field :parallel_piu, :size => 5 %>

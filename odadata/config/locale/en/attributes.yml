@@ -316,14 +316,26 @@ en:
           label: "Co-ordinated works:"
         gbs_multiyear_agreement:
           label: Multi year agreement
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_multiyear_agreement_years:
           label: "Amount of years:"
         gbs_question_1:
           label: Were your financial commitments for GBS in year n made within 4 weeks after the JR in year n-1?
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_question_2:
           label: Have your organization disbursed all the committed funds in this year as scheduled?
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_question_3:
           label: Have your organization disbursed all the committed funds according to the quarterly disbursement schedule agreed?
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_question_4:
           label: Is it possible to identify specific categories of items NOT recorded in the State Budget that should have been recorded?<br> Please, indicate the items.
         

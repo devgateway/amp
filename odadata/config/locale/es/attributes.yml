@@ -312,14 +312,26 @@ es:
           label: "Obras coordenadas:"
         gbs_multiyear_agreement:
           label: Acordo multi ano
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_multiyear_agreement_years:
-          label: '"Número de anos:"'
+          label: "Número de anos:"
         gbs_question_1:
           label: 'Foram os seus compromissos financeiros para GBS no ano n feito dentro de 4 semanas após o JR no ano n-1?'
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_question_2:
           label: 'Se sua agência paga todos os fundos autorizados neste ano, como programad?'
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_question_3:
           label: 'Se sua agência paga todos os fundos comprometidos de acordo com o cronograma de desembolso trimestrais de acordo?'
+          options:
+            donor_yes: "Yes"
+            donor_no: "No"
         gbs_question_4:
           label: 'É possível identificar categorias específicas de itens que não constem do Orçamento do Estado que deveria ter sido gravada<br> Por favor, indique os itens.'
 

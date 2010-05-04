@@ -26,10 +26,13 @@ class ProjectsController < ApplicationController
    
   def new
     @project = current_donor.projects.build
-    
+
     setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
     setup_record_range(@project.funding_forecasts, Time.now.year+1, (Time.now.year+1)+Project::FORECAST_RANGE)
+    @project.build_historic_funding
+    set_funding_currency
   end
+
 
   def create    
     @project = current_donor.projects.build(params[:project])
@@ -48,6 +51,7 @@ class ProjectsController < ApplicationController
     
     setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
     setup_record_range(@project.funding_forecasts, Time.now.year+1, (Time.now.year+1)+Project::FORECAST_RANGE)
+#    @project.historic_funding
   end
   
   def update  
@@ -144,4 +148,11 @@ private
     
     association
   end
+
+  def set_funding_currency
+    @project.fundings.each { |f| f.currency = @project.project_currency }
+    @project.funding_forecasts.each { |f| f.currency = @project.project_currency }
+    @project.historic_funding.currency = @project.project_currency
+  end
+
 end

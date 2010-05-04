@@ -20,8 +20,9 @@
                 <dt><%= Project.human_attribute_name('government_counterpart') %></dt>
 		<dd><%=@project.government_counterpart.andand.code %> <%= @project.government_counterpart.andand.name %></dd>
 		
-		<dt><%= Project.human_attribute_name('country_strategy') %></dt>
+<!--		<dt><%= Project.human_attribute_name('country_strategy') %></dt>
 		<dd><%= @project.country_strategy.andand.strategy_number || t('.country_strategy_unavailable') %></dd>
+-->
 	</dl>
 	
 	<div class="map_image">
@@ -34,7 +35,13 @@
 	    <dt class="first"><%= Project.human_attribute_name('prj_status') %></dt>
 	    <dd class="first"><%= option_text_by_id(Project, :prj_status, Project::STATUS_OPTIONS, @project.prj_status) %></dd>
 	    
-	    <dt><%= Project.human_attribute_name('actual_start_end') %></dt>
+	    <dt><%= Project.human_attribute_name('recipient_country_budget_nr') %></dt>
+	    <dd><%= @project.recipient_country_budget_nr %></dd>
+
+            <dt><%= Project.human_attribute_name('government_project_code') %></dt>
+	    <dd><%= @project.government_project_code %></dd>
+
+            <dt><%= Project.human_attribute_name('actual_start_end') %></dt>
 	    <dd><%= @project.actual_start || 'n/a' %> / <%= @project.actual_end || 'n/a' %></dd>
 	    
 	    <dt><%= Project.human_attribute_name('planned_start_end') %></dt>
@@ -66,6 +73,11 @@
 	    
 	    <dt><%= Project.human_attribute_name('grant_loan') %></dt>
 	    <dd><%= option_text_by_id(Project, :grant_loan, Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
+            <dt><%= Project.human_attribute_name('on_off_budget') %></dt>
+                            <dd><%= option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, @project.on_off_budget) %></dd>
+
+            <dt><%= Project.human_attribute_name('on_off_treasury') %></dt>
+                            <dd><%= option_text_by_id(Project, :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS, @project.on_off_treasury) %></dd>
 		
 		<% if @project.delegated_cooperation %>
 			<dt><%= DelegatedCooperation.human_attribute_name('delegated_by') %></dt>
@@ -108,11 +120,6 @@
 	            	<dt><%= Funding.human_attribute_name('payments') %></dt>
 					<dd><%= f.payments %></dd>
 					
-	            	<dt><%= Funding.human_attribute_name('on_budget') %></dt>
-					<dd><%= option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
-					
-	            	<dt><%= Funding.human_attribute_name('on_treasury') %></dt>
-					<dd><%= option_text_by_id(Project, :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
 					
 					<dt><%= Funding.human_attribute_name('payments_q1') %></dt>
 					<dd><%= f.payments_q1 %></dd>
@@ -139,12 +146,14 @@
 	            	<dt><%= FundingForecast.human_attribute_name('commitments') %></dt>
 					<dd><%= f.commitments %></dd>
 					
+<!--
 	            	<dt><%= FundingForecast.human_attribute_name('on_budget') %></dt>
 					<dd><%= option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
 	
 	            	<dt><%= FundingForecast.human_attribute_name('on_treasury') %></dt>
 					<dd><%= option_text_by_id(Project, :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
 	        	</dl>
+-->
 			</dd>
 	    <% end %>
 	</dl>

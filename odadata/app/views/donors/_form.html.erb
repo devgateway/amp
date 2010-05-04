@@ -22,7 +22,7 @@
 		<li><%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %></li>
 	<% end %>
 		<li><%= f.check_box :cofunding_only %></li>
-		<li><%= f.check_box :bluebook_donor %></li>
+		<!--<li><%= f.check_box :bluebook_donor %></li>-->
 	
 	<div class="buttonHolder"><%= f.submit %></div>
 <% end %>

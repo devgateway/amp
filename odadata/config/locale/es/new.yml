@@ -1,12 +1,12 @@
 es:
   pagination:
     previous_page: Anterior
-    next_page: Próxima
+    next_page: 'Próxima'
 
   agencies:
     index:
       title: Lista de Agências
-      empty: Não existem agências do banco de dados. Por favor, adicione suas agências.
+      empty: 'Não existem agências no banco de dados. Por favor, adicione suas agências.'
       new: Adicione Agência
       edit: Editar
     new:
@@ -20,7 +20,7 @@ es:
 
   consistencies:
     show:
-      title: Coerência Financeiro Detalhes
+      title: 'Coerência Financeiro Detalhes'
       year: Ano
       total_commitments: Total compromisso
       total_payments: Total desembolso
@@ -32,22 +32,22 @@ es:
       delete: Eliminar
     _focal_sectors:
       amount: Montante
-      national_sector: Sector é nacional
-      focal_regions: Focal Regiões
+      national_sector: 'Sector é nacional'
+      focal_regions: 'Provincías Focais'
     edit:
       title: Editar Estratégia Nacional
       back: Anterior
     index:
-      title: País estratégias e programação detalhes
-      empty: Você não possui estratégias de país
+      title: 'Estratégias do país e detalhes da programação'
+      empty: 'Você não possui estratégias de país'
       edit: Editar
       show: Mostrar
       new: Adicionar nova estratégia nacional
     new:
       title: Adicionar nova estratégia nacional
     show:
-      details: País estratégias e programação detalhes
-      general: Informações Gerais
+      details: 'Estratégias do país e detalhes da programação'
+      general: 'Informações Gerais'
       total_oda_commitments: Total Compromisso ODA
       total_oda_disbursements: Total Desembolso ODA
 
@@ -60,35 +60,35 @@ es:
       edit: Editar
       delete: Eliminar
       confirm_delte: Tem certeza de que deseja excluir "{{agency}}"?
-      empty: Não agências existem para este doadores. Por favor, crie uma nova agência.
+      empty: 'Não agências existem para este doadores. Por favor, crie uma nova agência.'
       new:
-        title: Adicione Agência de Doador {{donor}}
+        title: 'Adicione Agência de Doador {{donor}}'
         back: Anterior
 
   donor_details:
-    general_info: Informações Gerais
+    general_info: 'Informações Gerais'
     donor_profile: Perfil dos doadores
     edit:
       title: Editar Contato Detalhes
       saved: Gravado com sucesso
     form:
-      total_oda_classification_title: "Total amount of ODA to GoM (ON Budget) that"
-      yearly_missions_head: Donor missions to the field undertaken in this calendar year
-      yearly_analytic_works_head: Country analytic works in this calendar year
+      total_oda_classification_title: '"A quantidade total de ODA para o GoM (no orçamento) que"'
+      yearly_missions_head: 'Missões de doadores para o campo realizadas neste ano civil'
+      yearly_analytic_works_head: 'Obras analítica do país neste ano civil'
       gbs_head: Apoio directo ao OE
-      details_title: Informação dos Funcionários
+      details_title: 'Informação dos Funcionários'
   donors:
     form:
       submit: Salvar
-      back: Voltar
+      back: Anterior
     edit:
       title: Editar Doador
     index:
-      title: Doadores / Co-financiamento doadores Lista
-      empty: Não existem os doadores no banco de dados. Por favor, crie um novo doador.
+      title: Lista dos Doadores / Co-financiamento doadores
+      empty: 'Não existem os doadores no banco de dados. Por favor, adicionar um novo doador.'
       edit: Editar
       delete: Eliminar
-      agencies: Agências doadoras ({{total}})
+      agencies: ;Agências doadoras ({{total}})'
       login: Contas
       new: Adicionar novos doadores
     new:
@@ -100,37 +100,37 @@ es:
     form:
       submit: Salvar
     error:
-      year_already_taken: Ano já está tomada.
+      year_already_taken: 'Ano já está tomada.'
     edit:
       title: Editar Taxa de Câmbio
       back: Anterior
     index:
-      title: "{{source}} Taxa de Câmbio"
-      empty: Não Câmbio existem no banco de dados. Crie uma nova taxa de câmbio.
+      title: '"{{source}} Taxa de Câmbio"'
+      empty: 'Não câmbio existem no banco de dados. Adicione uma nova taxa de câmbio.'
       new: Nova taxa de câmbio
       edit: Editar
     new:
-      title: Nova {{source}} Taxa de Câmbio
+      title: 'Nova {{source}} Taxa de Câmbio'
       back: Anterior
 
   layouts:
     application:
       custom_title: ODAmoz - {{page_title}}
-      standard_title: ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
+      standard_title: 'ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
     report_window:
       custom_title: ODAmoz Relatorio - {{page_title}}
-      standard_title: ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
+      standard_title: 'ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
     donor_info:
       custom_title: ODAmoz Relatorio - {{page_title}}
-      standard_title: ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
+      standard_title: 'ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
     odamap:
-      title: ODAmap - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
+      title: 'ODAmap - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
     currency_reports_window:
       no_results_message: Sua busca retornou nenhum resultado. Por favor, tente expandir a consulta.
-      print: Impressão
+      print: 'Impressão'
       close_window: Fechar a janela
     graph_window:
-      print: Impressão
+      print: 'Impressão'
       close_window: Fechar a janela
     currency_selector:
       currency_selection: Selecione Moeda
@@ -138,18 +138,18 @@ es:
       close_window: Fechar a janela
     header:
       admin:
-        gen_conf: Geral Configuração
+        gen_conf: 'Geral Configuração'
         op_cl_data_input: Abrir e fechar de dados de entrada
-        glossary: Glossário
-        donor_admin: Doadores Administração
+        glossary: 'Glossário'
+        donor_admin: 'Doadores Administração'
         exchange_rates: Taxas de Câmbio
-        agencies_top: Agências
-        agencies: Agências
+        agencies_top: 'Agências'
+        agencies: 'Agências'
         gov_counterpart: Governo Contrapartida
         logout: Sair
       default:
-        short_title: Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
-        design_own: Desenhe o relatório
+        short_title: 'Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
+        design_own: 'Desenhe o relatório'
         links: Links
         downloads: Downloads
         exchange_rates: Taxas de Câmbio
@@ -167,21 +167,21 @@ es:
         donor_info: Info dos Doadores
         donor_details: Detalhes dos Doadores
         accounts: Contas
-        strategy: Estratégia Nacional
-        exchange_rates: Taxas de Câmbio
-        financial_consistency: Coerência Financial
+        strategy: 'Estratégia Nacional'
+        exchange_rates: 'Taxas de Câmbio'
+        financial_consistency: 'Coerência Financial'
         manuals: Manuais
         data_input_manual: Entrada de Dados Manual
-        data_input_glossary: Entrada de Dados Glossário
+        data_input_glossary: 'Entrada de Dados Glossário'
         dac_crs_manual: Manual DAC-CRS
         country_manual: Manual ODAdata
         contact: Contacto
         logout: Sair
-        short_title: Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
+        short_title: 'Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
 
   odamap:
     index:
-      next_step: Próximo passo
+      next_step: 'Próximo passo'
       add_remove: Clique para adicionar um ou mais locais. Clique novamente para remover.
       locations: Locais
       donor: Doador
@@ -193,12 +193,12 @@ es:
 
   projects:
     form:
-      previous_step: Próximo
-      next_step: Anterior
+      previous_step: Anterior
+      next_step: 'Próxima'
       submit: Guardar projecto
       stages:
-        profile_information: Informações do Perfil
-        sector_agencies: Especificações
+        profile_information: 'Informações do Perfil'
+        sector_agencies: 'Especificações'
         goals: ODM
         funding: Financiamento
         historic_funding: Financiamento Histórico
@@ -211,20 +211,20 @@ es:
     funding_form:
       cofunding_title: Co-Financiamento de Doadores e Valores
       add_cofunding_donor: Adicionar outro doador
-      add_cofunding_agency: Adicione uma outra agência
+      add_cofunding_agency: 'Adicione uma outra agência'
       project_currency: Moeda Utilizada
-      change_currency_confirmation: Isto irá limpar todos os valores. Você tem certeza?
-      forecasts_title: Previsões {{year}}
+      change_currency_confirmation: 'Isto irá limpar todos os valores. Você tem certeza?'
+      forecasts_title: 'Previsões {{year}}'
     historic_funding_form:
-      historic_funding: Histórico de financiamento (até o final do ano {{year}})
+      historic_funding: 'Histórico de financiamento (até o final do ano {{year}})'
     regular_funding:
-      title: Finanças {{year}}
+      title: 'Finanças {{year}}'
     implementing_agency:
       prompt: Por favor seleccione
       delete_associated: Eliminar
     profile_information_form:
       prompt: Por favor seleccione
-      country_strategy_unavailable: Não é ligado a qualquer estratégia
+      country_strategy_unavailable: 'Não é ligado a qualquer estratégia'
     goals_form:
       mdg_caption: "Meta {{number}}: {{name}}"
     project:
@@ -236,22 +236,22 @@ es:
       factsheet: Ficha
     sector_agencies_form:
       prompt: Por favor seleccione
-      not_avail: Não disponível
+      not_avail: 'Não disponível'
       add_sector: Adicionar outro setor
       add_implementing_agency: Adicionar Canal de Entrega
       add_contracted_agency: Adicionar Extensão
-      del_no: Não
+      del_no: 'Não'
       del_yes: Sim
       geo_usage: |
          Por favor, selecione a localização deste projecto.<br />
          Se você não selecionar nenhum, será considerado um projeto nacional.
       geo_relevances_title: Locais do Projeto
       add_location: Adicionar outro local
-      sector_relevances: Sectores Prioritários do Projeto
+      sector_relevances: 'Sectores Prioritários do Projeto'
     cofunding_agency:
-      label: Co-Financiamento Agência / ONG
+      label: 'Co-Financiamento Agência / ONG'
       prompt: Por favor seleccione
-      delete: Eliminar essa agência
+      delete: 'Eliminar essa agência'
     cofunding_donor:
       label: Doador Co-financiador
       prompt: Por favor seleccione
@@ -259,55 +259,55 @@ es:
     delete_associated: Eliminar
 
     sector_relevance:
-      no_subsector: Não Sub-Setor
+      no_subsector: 'Não Sub-Setor'
       prompt: Por favor seleccione
       delete: Eliminar
     edit:
       title: Editar Projecto "{{project}}"
     index:
       donor: Doador
-      project_no: Número do Projecto
+      project_no: 'Número do Projecto'
       project_title: Título do Projecto
       total_commitments: Total compromissos
       disbursed: Desembolsos {{year}}
-      disbursement_forecast: Previsão de Desembolso  {{year}}
-      title: Lista <i>{{status}}</i> Projectps
+      disbursement_forecast: 'Previsão de Desembolso  {{year}}'
+      title: Lista <i>{{status}}</i> Projectos
       empty: Por favor, adicione seus projectos.
     new:
       title: Adicionar Novo Projecto
     show:
-      print: Impressão
+      print: 'Impressão'
       close_window: Fechar a janela
       title: Ficha do proyecto para <i>{{project}}</i>
-      project_information: Informações sobre o Projecto
-      funding_information: Informação de Financiamento
+      project_information: 'Informações sobre o Projecto'
+      funding_information: 'Informação de Financiamento'
       totals: Totais de financiamento
-      historic: Financiamento Histórico
+      historic: 'Financiamento Histórico'
       funding: Financiamento {{year}}
-      funding_forecast: Previsões de Financiamentos {{year}}
-      classification: Classificação
+      funding_forecast: 'Previsões de Financiamentos {{year}}'
+      classification: 'Classificação'
       markers: Markers
       mdgs: ODM
-      focal_regions: Focal Regiões
+      focal_regions: 'Provincías Focais'
       all_district: Todos os distritos
-      country_strategy_unavailable: Não é ligado a qualquer estratégia
+      country_strategy_unavailable: 'Não é ligado a qualquer estratégia'
       national: Nacional
     show_map:
       project: Projecto
       geo_list: Províncias e Distritos
       national: Projeto Nacional
-      map_legend: "Áreas de destaque são as regiões / distritos focais do projeto"
+      map_legend: '"Áreas de destaque são as provincías / distritos focais do projeto"'
     error:
-      donor_project_number_taken: Número do projeto já existe
-      must_be_present_if_signed: "{{attribute}} deve estar presente em projectos assinados"
-      must_be_present_if_ongoing: "{{attribute}} deve estar presente em projetos em curso"
-      total_amount_location_invalid: "A soma das percentagens de localização deve ser de 100%, mas é {{total}}%"
-      total_amount_sector_invalid: "A soma das percentagens do setor deve ser de 100%, mas é  {{total}}%"
-      missing_mdgs: "Por favor, preencha as informações dos ODM."
+      donor_project_number_taken: 'Número do projeto já existe'
+      must_be_present_if_signed: '"{{attribute}} deve estar presente em projectos assinados"'
+      must_be_present_if_ongoing: '"{{attribute}} deve estar presente em projetos em curso"'
+      total_amount_location_invalid: '"A soma das percentagens de localização deve ser de 100%, mas é {{total}}%"'
+      total_amount_sector_invalid: '"A soma das percentagens do setor deve ser de 100%, mas é  {{total}}%"'
+      missing_mdgs: '"Por favor, preencha as informações dos ODM."'
   reports:
     custom:
       new:
-        funds_for: Informação de financiamento {{year}}
+        funds_for: 'Informação de financiamento {{year}}'
         output_fields:
           heading: Campos para mostrar
 
@@ -315,27 +315,27 @@ es:
           donors_and_un_agencies:  Doador e NU
           sectors: DAC Sectores
           location: Local
-          mdg: Objectivos de Desenvolvimento do Milénio
-          on_off_budget: No/Fora Orçamento
-          on_off_treasury: Fora da Conta Única do Tesouro
+          mdg: 'Objectivos de Desenvolvimento do Milénio'
+          on_off_budget: 'No/Fora Orçamento'
+          on_off_treasury: 'No/Fora da Conta Única do Tesouro'
           aid_modality: Modalidade de Ajuda
-          type_of_implementation: Tipo de Implementação
+          type_of_implementation: 'Tipo de Implementação'
           prj_status: Status do Projecto
 
         output_options:
-          heading: Opções de saída
-          format: Formato de saída
-          rates: Taxas de Câmbio
-          disaggregation: Desagregação
+          heading: 'Opções de saída'
+          format: 'Formato de saída'
+          rates: 'Taxas de Câmbio'
+          disaggregation: 'Desagregação'
 
         disaggregation:
           by_sector: Desagregar financimento por by DAC-CRS Sector
-          by_location: Desagregar financimento por Localização
+          by_location: 'Desagregar financimento por Localização'
 
         rates:
-          historic: Histórico
+          historic: 'Histórico'
           current: Corrente
-          forecasts: Previsões
+          forecasts: 'Previsões'
 
         currency: Moeda
         all: Todos
@@ -344,11 +344,11 @@ es:
         xls_output: Excel
         web_output: Consulta
       show:
-        title: Relatório personalizado
+        title: 'Relatório personalizado'
     districts:
       index:
         title: Projectos de <i>{{province}}</i> por Distritos
-        no_projects: Número de Projetos
+        no_projects: 'Número de Projetos'
         list: Lista
         municipality: Distrito
         map: ODAmap
@@ -357,7 +357,7 @@ es:
     donors:
       index:
         title: Projectos de Doador
-        no_projects: Número de Projectos
+        no_projects: 'Número de Projectos'
         list: Lista
         donor: Doador
         map: ODAmap
@@ -366,25 +366,25 @@ es:
     mdgs:
       index:
         title: Projectos de MDG
-        no_projects: Número de Projectos
+        no_projects: 'Número de Projectos'
         list: Lista
         map: ODAmap
       show:
         title: Projectos de {{mdg}}
     provinces:
       index:
-        no_projects: Número de Projectos
+        no_projects: 'Número de Projectos'
         list: Lista
-        region: Província
+        region: 'Província'
         details: Detalhes
-        title: Projetos de Província
+        title: 'Projetos de Província'
         show_municipalities: Mostrar Distritos
         map: ODAmap
       show:
         title: Projectos de {{province}}
     sectors:
       index:
-        no_projects: Número de Projectos
+        no_projects: 'Número de Projectos'
         list: Lista
         map: Mapa
         title: Projectos por Sector
@@ -392,7 +392,7 @@ es:
       show:
         title: Projects de {{sector}}
     totals:
-      forecast: Previsão
+      forecast: 'Previsão'
       commitments_payments_selection: Selecione Compromissos / Desembolsos
 
   settings:
@@ -406,9 +406,9 @@ es:
 
   static:
     data_input_closed:
-      title: A entrada de dados está fechada.
+      title: 'A entrada de dados está fechada.'
       please_wait: Por favor, aguarde o próximo ciclo de atualização ou contacte o Mestre Punto Focal.
-      redirect: Você será redirecionado de volta em poucos segundos.
+      redirect: 'Você será redirecionado de volta em poucos segundos.'
     downloads:
       title: Downloads
       available_shortly: Nenhum
@@ -427,8 +427,8 @@ es:
 
   user_sessions:
     new:
-      title: Por favor entrar!
-      submit: Enviar
+      title: 'Por favor entrar!'
+      submit: 'Iniciar Sessão'
 
   users:
     edit:
@@ -440,64 +440,64 @@ es:
       role: Papel do usuário
       edit: Editar conta
       delete: Eliminar conta
-      new: Criar novo usuário
+      new: C'riar novo usuário'
     new:
       title: Adicionar nova conta
       back: Anterior
 
   donor_profiles:
       title: Doador
-      un_agencies: Agências da NU
+      un_agencies: 'Agências da NU'
       head: Perfis dos Doadores
       donor: Doador
       donor_report: Relatorio do Doador
       institutional_framework:
         head: Quadro Institucional
-        institutions_responsible_for_oda: Sistema de Gestão para a ODA
-        total_staff_in_country: Pessoal Total no País
+        institutions_responsible_for_oda: 'Sistema de Gestão para a ODA'
+        total_staff_in_country: 'Pessoal total no país'
         total_expatriate_staff: Total de pessoal expatriado
-        total_local_staff: Total Local Funcionários
+        total_local_staff: 'Total funcionários locais'
       contact:
         head: Contato
-        address: Endereço
+        address: 'Endereço'
         phone: Telefone
         email: Email
-        website: Website
+        website: Sitio Web
       aid_at_a_glance:
         head: Ajuda num ápice
-        grant_total_oda: Concessão ODA / Total ODA
-        loan_total_oda: Empréstimo ODA / Total ODA
+        grant_total_oda: 'Donativo ODA / Total ODA'
+        loan_total_oda: 'Empréstimo ODA / Total ODA'
       oda_breakdown:
-        head: ODA Repartição
+        head: 'ODA Repartição'
         multilateral_total_oda: Multilateral ODA / Total ODA
         bilateral_total_oda: Bilateral ODA / Total ODA
         support_ngos_total: Support a ONGs / Total ODA
-        top_regions: 3 Regiões Máximos
+        top_regions: '3 Provincías Máximos'
         only_national: Apenas actividades nacionais.
       donor_details:
         oda_on_budget_head: "Montante total de ODA para o GoM (no orçamento) que:"
-        oda_on_budget_1: utilizados procedimentos nacionais da execução do orçamento
-        oda_on_budget_2: utilizados procedimentos nacionais de relatórios financial
-        oda_on_budget_3: utilizados procedimentos nacionais de auditoria
-        oda_on_budget_4: utilizados sistemas de compras nacionais no calendário
-        parallel_piu: Número de unidades paralelas de implementação do projecto (UPI) usados neste ano civil?
-        yearly_missions_head: Missões de doadores para o campo realizadas neste ano civil
-        yearly_missions: "Número de missões:"
-        yearly_coordinated_missions: "'Missões coordenadas:"
-        yearly_analytic_works_head: Obras analíticas de paaís neste ano civil
-        yearly_analytic_works: "Número de obras:"
+        oda_on_budget_1: 'utilizados procedimentos nacionais da execução do orçamento'
+        oda_on_budget_2: 'utilizados procedimentos nacionais de relatórios financial'
+        oda_on_budget_3: 'utilizados procedimentos nacionais de auditoria'
+        oda_on_budget_4: 'utilizados sistemas de compras nacionais no calendário'
+        parallel_piu: 'Número de unidades paralelas de implementação do projecto (UPI) usados neste ano civil?'
+        yearly_missions_head: 'Missões de doadores para o campo realizadas neste ano civil'
+        yearly_missions: '"Número de missões:"'
+        yearly_coordinated_missions: '"Missões coordenadas:"'
+        yearly_analytic_works_head: 'Obras analíticas de país neste ano civil'
+        yearly_analytic_works: '"Número de obras:"'
         yearly_coordinated_analytic_works: "Obras coordenadas:"
-        gbs_head: Apoio ao Orçamento Geral
+        gbs_head: 'Apoio ao Orçamento Geral'
         gbs_multiyear_agreement: Acordo multi ano
-        gbs_multiyear_agreement_years: "'Número de anos:"
-        gbs_question_1: Foram os seus compromissos financeiros para GBS no ano n feito dentro de 4 semanas após o JR no ano n-1?
+        gbs_multiyear_agreement_years: '"Número de anos:"'
+        gbs_question_1: 'Foram os seus compromissos financeiros para GBS no ano n feito dentro de 4 semanas após o JR no ano n-1?'
         gbs_question_2: Se sua agência paga todos os fundos autorizados neste ano, como programad?
-        gbs_question_3: Se sua agência paga todos os fundos comprometidos de acordo com o cronograma de desembolso trimestrais de acordo?
-        gbs_question_4: É possível identificar categorias específicas de itens que não constem do Orçamento do Estado que deveria ter sido gravada<br> Por favor, indique os itens.
+        gbs_question_3: 'Se sua agência paga todos os fundos comprometidos de acordo com o cronograma de desembolso trimestrais de acordo?'
+        gbs_question_4: 'É possível identificar categorias específicas de itens que não constem do Orçamento do Estado que deveria ter sido gravada<br> Por favor, indique os itens.'
       disbursements:
         head: Desembolsos
-        in_millions: em Milhões
-        grant: Concessão
-        loan: Empréstimo
+        in_millions: 'em Milhões'
+        grant: 'Donativo'
+        loan: 'Empréstimo'
         total: Total
-        forecast: Previsões
+        forecast: 'Previsões'

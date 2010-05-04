@@ -3,11 +3,11 @@ es:
     attributes:
       donor_details:
         total_staff_in_country:
-          label: 'Funcionários Total no País'
+          label: 'Funcionários total no país'
         total_expatriate_staff:
           label: 'Total de pessoal expatriado'
         total_local_staff:
-          label: 'Total Local Funcionários'
+          label: 'Total Funcionários locais'
       project:
         factsheet_link:
           report_heading: "" # left blank on purpose
@@ -22,7 +22,7 @@ es:
         oecd_number:
           label: 'Número OECD'
         recipient_country_budget_nr:
-          label: 'Número do Projeto Moçambique'
+          label: 'Número do Projecto Moçambique'
         title:
           label: 'Título do Projecto / Programa'
           description: Single-line glossary entry
@@ -50,13 +50,13 @@ es:
         actual_end:
           label: 'Data da Conclusão Real'
         actual_start_end:
-          label: Actual Start - End
+          label: 'Início - Conclusão Real'
         planned_start_end:
-          label: Planned Start - End
+          label: 'Início - Conclusão Planificado'
         implementing_agencies:
           label: Canal de Entrega
         contracted_agencies:
-          label: 'Extensão'
+          label: 'Agência da Extensão'
         national_regional:
           label: 'Implementação Nacional/Regional'
           options:
@@ -71,7 +71,7 @@ es:
             multilateral: Multilateral
             ngo_implementation: 'ONG Execução'
         aid_modality:
-          label: 'Tipo de Modalidade de Ajuda'
+          label: 'Modalidade de Ajuda'
         on_off_treasury:
           label: 'No/Fora da Conta Única do Tesouro'
           options:
@@ -90,15 +90,15 @@ es:
             does_not_apply: 'Não se aplica'
             do_not_know: 'Não sei se aplica'
             direct_support: 'Apoio directo ao sector privado'
-            indirect_support_private_sector: Indirect support to PS by means of PS
-            indirect_support_public_sector: Indirect support to PS by means of public sector
+            indirect_support_private_sector: 'Apoio indireto ao setor privado por meio do sector privado'
+            indirect_support_public_sector: 'Apoio indireto ao setor privado por meio do sector público'
         enters_in:
           label: Entra em
           options:
-              in_kind_cash: In kind convertible in cash
-              in_kind_non_cash: In kind non convertible in cash
-              in_cash_under_donor: In kind under donor management
-              in_cash_under_beneficiary: In kind under beneficiary management
+              in_kind_cash: 'Em espécie para ser convertido em moeda'
+              in_kind_non_cash: 'Em espécie para não ser convertido em moeda'
+              in_cash_under_donor: 'Em espécie sujeito a gestão do doador'
+              in_cash_under_beneficiary: 'Em espécie sujeito a gestão do UGB'
         loan_to_public_enterprises:
           label: 'Empréstimo para empresas públicas'
           options:
@@ -109,7 +109,7 @@ es:
         grant_loan:
           label: Tipo de Financiamento
           options:
-            grant: 'Concessão'
+            grant: 'Donativo'
             loan: 'Empréstimo'
         delegated_cooperation:
           label: 'Cooperação delegada'
@@ -165,8 +165,8 @@ es:
         sector_relevances:
           label: Sectores
         geo_relevances:
-          label: 'Regiões'
-          report_heading: 'Regiões'
+          label: 'Província'
+          report_heading: 'Província'
         sectors:
           label: Sectores
         updated_at:
@@ -216,7 +216,7 @@ es:
         province:
           label: Província
         district:
-          label: Localidad
+          label: Distrito
         amount:
           label: Montante em %
 
@@ -245,7 +245,7 @@ es:
         bluebook_donor:
           label: Applies to Bluebook
         code:
-          label: Donor Code
+          label: 'Código Doador'
         currency:
           label: Moeda
         field_office_address:
@@ -273,55 +273,55 @@ es:
         second_focal_point_email:
           label: Second Focal Point Email
         institutions_responsible_for_oda:
-          label: Institution Responsible for ODA
+          label: 'Sistema de Gestão para a ODA'
         total_staff_in_country:
-          label: Total Staff in Country
+          label: 'Pessoal Total no País
         total_expatriate_staff:
-          label: Total Expatriate Staff
+          label: Total de pessoal expatriado
         total_local_staff:
-          label: Total Local Staff
+          label: 'Total funcionários locais'
         flag:
           label: Country Flag or Organisation Logo
         profile_picture:
           label: Representative Picture of Donor Country (for EU Blue Book)
         oda_on_budget_1:
-          label: used national budget execution procedures
+          label: 'utilizados procedimentos nacionais da execução do orçamento'
         oda_on_budget_1_currency:
           label: "Moeda"
         oda_on_budget_2:
-          label: used national financial reporting procedures
+          label: 'utilizados procedimentos nacionais de relatórios financial'
         oda_on_budget_2_currency:
           label: "Moeda"
         oda_on_budget_3:
-          label: used national auditing procedures
+          label: 'utilizados procedimentos nacionais de auditoria'
         oda_on_budget_3_currency:
           label: "Moeda"
         oda_on_budget_4:
-          label: used national procurement systems in calendar
+          label: 'utilizados sistemas de compras nacionais no calendário'
         oda_on_budget_4_currency:
           label: "Moeda"
         parallel_piu:
-          label: Number of parallel project implementation units (PIU) used in this calendar year?
+          label: 'Número de unidades paralelas de implementação do projecto (UPI) usados neste ano civil?'
         yearly_missions:
-          label: "Number of missions:"
+          label: '"Número de missões:"'
         yearly_coordinated_missions:
-          label: "Co-ordinated missions:"
+          label: '"Missões coordenadas:"'
         yearly_analytic_works:
-          label: "Number of works:"
+          label: '"Número de obras:"'
         yearly_coordinated_analytic_works:
-          label: "Co-ordinated works:"
+          label: "Obras coordenadas:"
         gbs_multiyear_agreement:
-          label: Multi year agreement
+          label: Acordo multi ano
         gbs_multiyear_agreement_years:
-          label: "Amount of years:"
+          label: '"Número de anos:"'
         gbs_question_1:
-          label: Were your financial commitments for GBS in year n made within 4 weeks after the JR in year n-1?
+          label: 'Foram os seus compromissos financeiros para GBS no ano n feito dentro de 4 semanas após o JR no ano n-1?'
         gbs_question_2:
-          label: Have your organization disbursed all the committed funds in this year as scheduled?
+          label: 'Se sua agência paga todos os fundos autorizados neste ano, como programad?'
         gbs_question_3:
-          label: Have your organization disbursed all the committed funds according to the quarterly disbursement schedule agreed?
+          label: 'Se sua agência paga todos os fundos comprometidos de acordo com o cronograma de desembolso trimestrais de acordo?'
         gbs_question_4:
-          label: Is it possible to identify specific categories of items NOT recorded in the State Budget that should have been recorded?<br> Please, indicate the items.
+          label: 'É possível identificar categorias específicas de itens que não constem do Orçamento do Estado que deveria ter sido gravada<br> Por favor, indique os itens.'
 
       exchange_rate:
         currency:

@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -52,8 +53,6 @@ import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * 

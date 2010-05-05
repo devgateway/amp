@@ -119,7 +119,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   def monetary_field(method, options = {})
     value = object.send(method)
     
-    text_field(method, options.merge({ :class => "monetary", :value => value.to_s(false) })) +
+    text_field(method, options.merge({ :class => "monetary", :value => value.raw_to_s })) +
       @template.content_tag(:span, value.currency, :class => "currency")
   end
   

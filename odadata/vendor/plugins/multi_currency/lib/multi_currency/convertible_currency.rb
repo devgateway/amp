@@ -78,6 +78,17 @@ module MultiCurrency
         number
       end
     end
+    
+    # Convert into string without respecting the output currency
+    def raw_to_s(unit = false)
+      number = number_with_delimiter(self.to_i)
+  
+      if @currency && unit
+        number + " #{@currency}"
+      else
+        number
+      end
+    end
   
     def to_currency(currency = nil, base_year = nil)
       self.in(currency)

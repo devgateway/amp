@@ -191,6 +191,11 @@ class Project < ActiveRecord::Base
         cloned_instance.send("build_#{assoc_name}", objects.clone.attributes.except(:project_id))
       end
     end
+      
+    # HABTM associations
+    [:target_ids].each do |assoc|
+      cloned_instance.send("#{assoc}=", self.send(assoc))
+    end
     
     cloned_instance
   end

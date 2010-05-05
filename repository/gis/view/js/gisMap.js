@@ -739,8 +739,10 @@
 		if (busy) {
 			document.getElementById("busyIndicator").style.visibility = "visible";
 			
-			document.getElementsByName("mapLevelRadio")[0].disabled = true;
-			document.getElementsByName("mapLevelRadio")[1].disabled = true;
+            if (document.getElementsByName("mapLevelRadio") != null) {
+			    document.getElementsByName("mapLevelRadio")[0].disabled = true;
+			    document.getElementsByName("mapLevelRadio")[1].disabled = true;
+            }
 			document.getElementById("sectorsMapCombo").disabled = true;
 			document.getElementById("indicatorsCombo").disabled = true;
 			document.getElementById("indicatorSubgroupCombo").disabled = true;
@@ -755,9 +757,10 @@
 				   !actionGetSubgroups &&
 				   !actionGetYears) {
 			document.getElementById("busyIndicator").style.visibility = "hidden";
-			
-			document.getElementsByName("mapLevelRadio")[0].disabled = false;
-			document.getElementsByName("mapLevelRadio")[1].disabled = false;
+			if (document.getElementsByName("mapLevelRadio") != null) {
+			    document.getElementsByName("mapLevelRadio")[0].disabled = false;
+			    document.getElementsByName("mapLevelRadio")[1].disabled = false;
+            }
 			document.getElementById("sectorsMapCombo").disabled = false;
 			document.getElementById("indicatorsCombo").disabled = false;
 			document.getElementById("indicatorSubgroupCombo").disabled = false;

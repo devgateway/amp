@@ -739,7 +739,7 @@
 		if (busy) {
 			document.getElementById("busyIndicator").style.visibility = "visible";
 			
-            if (document.getElementsByName("mapLevelRadio") != null) {
+            if (document.getElementsByName("mapLevelRadio")[0] != null) {
 			    document.getElementsByName("mapLevelRadio")[0].disabled = true;
 			    document.getElementsByName("mapLevelRadio")[1].disabled = true;
             }
@@ -757,7 +757,7 @@
 				   !actionGetSubgroups &&
 				   !actionGetYears) {
 			document.getElementById("busyIndicator").style.visibility = "hidden";
-			if (document.getElementsByName("mapLevelRadio") != null) {
+			if (document.getElementsByName("mapLevelRadio")[0] != null) {
 			    document.getElementsByName("mapLevelRadio")[0].disabled = false;
 			    document.getElementsByName("mapLevelRadio")[1].disabled = false;
             }

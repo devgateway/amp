@@ -124,6 +124,9 @@ es:
     donor_info:
       custom_title: ODAmoz Relatorio - {{page_title}}
       standard_title: 'ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
+    donor_report_window:
+      custom_title: ODAmoz Relatorio - {{page_title}}
+      standard_title: 'ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
     odamap:
       title: 'ODAmap - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'
     currency_reports_window:
@@ -502,3 +505,14 @@ es:
         loan: 'Empréstimo'
         total: Total
         forecast: 'Previsões'
+  donor_info:
+    donor_report:
+      show:
+        on_off_treasury: CUT
+        on_off_budget: Orçamento
+        on_value: "No"
+        off_value: "Fora"
+        committed: Compromisso
+        disbursed: Desembolso
+        print: Print
+        close_window: Close

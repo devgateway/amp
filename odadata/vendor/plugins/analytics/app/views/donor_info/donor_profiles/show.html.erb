@@ -16,7 +16,7 @@
 			<font size="3"><b><%= @donor.name %></b></font>
 
                         <br>
-                        <%= link_to nav.t("donor_report"), :controller => 'donor_report', :action => 'show', :id => @donor %>
+                        <%= link_to nav.t("donor_report"), {:controller => 'donor_report', :action => 'show', :id => @donor }, :popup => ['Contents', 'height=600,width=920,scrollbars=yes'] %>
 			</center>
 		</td>
 		<td width=40% valign=top>

@@ -124,6 +124,9 @@ en:
     donor_info:
       custom_title: ODAmoz Report - {{page_title}}
       standard_title: ODAmoz - Official Development Assistance to Mozambique Database
+    donor_report_window:
+      custom_title: ODAmoz Report - {{page_title}}
+      standard_title: ODAmoz - Official Development Assistance to Mozambique Database
     odamap: 
       title: ODAmap - Official Development Assistance to Mozambique Database
     currency_reports_window:
@@ -504,3 +507,14 @@ en:
         loan: Loan
         total: Total
         forecast: Forecasts
+  donor_info:
+    donor_report:
+      show:
+        on_off_treasury: CUT
+        on_off_budget: Budget
+        on_value: "On"
+        off_value: "Off"
+        committed: Committed
+        disbursed: Disbursed
+        print: Print
+        close_window: Close

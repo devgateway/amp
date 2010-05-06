@@ -1,45 +1,29 @@
-<style>
-  TABLE.donor_report
-  {
-    padding:0px 0px 0px 0px;
-  }
-  TH
-  {
-    border: 1px groove #cecece;
-    background-color:#e0e0e0;
-    text-align:center;
-    padding:0px 10px 0px 10px;
-    
-  }
-  TD
-  {
-     font-size:10px;
-  }
+<br>
+<br>
+<a class="prt" href="#" onclick="window.close();"><%= t('.close_window') %></a><a class="prt" href="#" onclick="window.print();"><%= t('.print') %></a>
+<br>
+<br>
 
-</style>
-<div style="overflow:auto;width:880px;border:1px solid #cecece;">
-
-<table class="donor_report" cellspacing="0" cellpadding="0">
+<table class="donor_report" cellspacing="0" cellpadding="0" style="table-layout: fixed;border-spacing:0px;">
   <tr>
-    <th style="border-bottom:0px;">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <th style="border-bottom:0px;width:210px;">&nbsp;
     </th>
 <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
-    <th colspan="2"><%= y %></th>
+    <th colspan="2" style="border-bottom:0px;width:200px;text-align:center;"><%= y %></th>
 <% end %>
-    <th colspan="2">CUT</th>
-    <th colspan="2">Budget</th>
+    <th colspan="2" style="border-bottom:0px;width:200px;text-align:center;"><%= t('.on_off_treasury') %></th>
+    <th colspan="2" style="border-bottom:0px;width:200px;text-align:center;"><%= t('.on_off_budget') %></th>
   </tr>
   <tr>
     <th style="border-top:0px;">&nbsp;</th>
 <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
-    <th style="font-size:10px;">Committed</th>
-    <th style="font-size:10px;">Disbursed</th>
+    <th style="font-size:10px;text-align:center;"><%= t('.committed') %></th>
+    <th style="font-size:10px;text-align:center;"><%= t('.disbursed') %></th>
 <% end %>
-    <th style="font-size:10px;">On</th>
-    <th style="font-size:10px;">Off</th>
-    <th style="font-size:10px;">On</th>
-    <th style="font-size:10px;">Off</th>
+    <th style="font-size:10px;text-align:center;"><%= t('.on_value') %></th>
+    <th style="font-size:10px;text-align:center;"><%= t('.off_value') %></th>
+    <th style="font-size:10px;text-align:center;"><%= t('.on_value') %></th>
+    <th style="font-size:10px;text-align:center;"><%= t('.off_value') %></th>
   </tr>
 <% AidModality.all.group_by(&:group_name).each do | toagroup |%>
   <%
@@ -68,19 +52,19 @@
       <strong><%= toagroup[0] %></strong>
     </td>
       <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
-          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"></td>
-          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= toagroup[1].inject(0.to_currency(@currency)) { |sum, p| sum + @donor.commitments_by_aid_modality(y)[p.id] } %></td>
+          <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= toagroup[1].inject(0.to_currency(@currency)) { |sum, p| sum + @donor.payments_by_aid_modality(y)[p.id] } %></td>
       <% end %>
-    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
-    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
-    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;">-</td>
-    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;">-</td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= toagroup[1].inject(0.to_currency(@currency)) { |sum, p| sum + @donor.payments_on_cut_by_aid_modality[p.id] } %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= toagroup[1].inject(0.to_currency(@currency)) { |sum, p| sum + @donor.payments_off_cut_by_aid_modality[p.id] } %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid #cecece;"><%= toagroup[1].inject(0.to_currency(@currency)) { |sum, p| sum + @donor.payments_on_budget_by_aid_modality[p.id] } %></td>
+    <td align="center" style="border-bottom:1px solid #cecece;border-right:1px solid black;"><%= toagroup[1].inject(0.to_currency(@currency)) { |sum, p| sum + @donor.payments_off_budget_by_aid_modality[p.id] } %></td>
   </tr>
   <%
     toagroup[1].each do |am|
     %>
   <tr>
-    <td style="padding-left:20px;background-color:#e0e0e0;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;font-size:10px;">
+    <td style="padding-left:20px;background-color:#eaeaea;border-bottom:1px groove #cecece;border-right:1px groove #cecece;border-left:1px groove #cecece;font-size:10px;">
       <%= am.name %>
     </td>
       <% (Project::FIRST_YEAR_OF_RELEVANCE_DONOR_REPORT..Time.now.year+4).to_a.map do |y| %>
@@ -196,4 +180,3 @@
   </tr>
 
 </table>
-  </div>

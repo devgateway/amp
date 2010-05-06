@@ -4,7 +4,7 @@ unloadable
   def show
     @currency = params[:currency].nil? ? DEFAULT_CURRENCY : params[:currency]
     @donor = Donor.find(params[:id])
-
+    render :layout => 'donor_report_window'
   end
 
 end

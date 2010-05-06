@@ -29,7 +29,7 @@ module Reports
         if r.empty?
           I18n.t('options.national')
         else
-          provinces_with_amounts = r.group_by(&:province).map { |p, a| [p.name, a.sum(&:amount)] }
+          provinces_with_amounts = r.group_by(&:province).map { |p, a| [p.name, a.sum { |t| t.amount || 0 }] }
           provinces_with_amounts.sort! { |a, b| b[1] <=> a[1] }
           provinces_with_amounts.map { |(p, a)| "#{p} (#{number_to_percentage(a, :precision => 1)})" }.join('<br />')
         end

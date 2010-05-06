@@ -197,8 +197,8 @@ var initMap = function() {
 		maxResolution: 0.01991484375,
 		numZoomLevels: 5
 	}
-	
-			
+
+
 	map = new OpenLayers.Map( 'map', options );
 	layer = new OpenLayers.Layer.WMS( "Nicaragua",
 	        "/odamap/wxs", {layers: 'basic', format: 'png'},

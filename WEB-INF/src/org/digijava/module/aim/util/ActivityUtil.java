@@ -414,6 +414,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setMofedCntLastName(activity.getMofedCntLastName());
         oldActivity.setName(activity.getName());
         oldActivity.setBudget(activity.getBudget());
+        oldActivity.setChapter(activity.getChapter());
         oldActivity.setProjectComments(activity.getProjectComments());
         oldActivity.setObjective(activity.getObjective());
         oldActivity.setResults(activity.getResults());

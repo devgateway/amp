@@ -256,7 +256,10 @@ public class SaveActivity extends Action {
 			activity.setProjectImpact(eaForm.getIdentification().getProjectImpact());
 		}
 
-		activity.setChapter(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
+		if(eaForm.getIdentification().getBudgetCheckbox()==null || eaForm.getIdentification().getBudgetCheckbox().equals("false"))
+			activity.setChapter(null);
+		else
+			activity.setChapter(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
 		
 		if (eaForm.getIdentification().getActivitySummary() == null
 				|| eaForm.getIdentification().getActivitySummary().trim().length() == 0) {

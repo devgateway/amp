@@ -13,7 +13,7 @@ class Reports::MdgsController < ReportsController
   
   def map
     @mdg = Mdg.find(params[:id])
-    @projects = @mdg.projects.published.paginate(:all,
+    @projects = @mdg.projects.published.non_national.paginate(:all,
       :page => params[:page], :per_page => 5, :order => "donor_project_number ASC")
       
     respond_to do |format|

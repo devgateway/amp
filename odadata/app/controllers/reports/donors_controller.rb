@@ -14,7 +14,7 @@ module Reports
     
     def map
       @donor = Donor.find(params[:id])
-      @projects = @donor.projects.published.paginate(:all,
+      @projects = @donor.projects.published.non_national.paginate(:all,
         :page => params[:page], :per_page => 5, :order => "donor_project_number ASC")
         
       respond_to do |format|

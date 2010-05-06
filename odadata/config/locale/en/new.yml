@@ -348,6 +348,7 @@ en:
           
         currency: Currency
         all: all
+        national: National
         check_uncheck_all: Check / Uncheck all
         
         xls_output: Excel Sheet

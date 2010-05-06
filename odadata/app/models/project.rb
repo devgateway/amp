@@ -123,6 +123,8 @@ class Project < ActiveRecord::Base
   
   named_scope :national, :joins => "LEFT OUTER JOIN geo_relevances ON geo_relevances.project_id = projects.id", 
     :conditions => "geo_relevances.province_id IS NULL"
+  named_scope :non_national, :joins => "LEFT OUTER JOIN geo_relevances ON geo_relevances.project_id = projects.id", 
+      :conditions => "geo_relevances.province_id IS DISTINCT FROM NULL"
       
   ##
   # Callbacks

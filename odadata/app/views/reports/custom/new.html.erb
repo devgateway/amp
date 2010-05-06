@@ -277,12 +277,16 @@
             <% if column == 1 %>
               <li class="all"><%= check_box_tag "provinces[]", "all", true %>all</a>
             <% end %>
-
+            
             <% for province in provinces %>
               <li class="tooltip" title="<%= province.name %>">
               	<%= check_box_tag "provinces[]", province.id %><%= province.name -%>
               </li>
             <% end %>
+            
+            <% if column == 3 %>
+              <li><%= check_box_tag "provinces[]", "national" %><strong><%= t('.national') %></strong></a>
+            <% end %>  
           </ul>
         <% end %>
       </div>

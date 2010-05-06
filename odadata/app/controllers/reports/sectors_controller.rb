@@ -13,7 +13,7 @@ class Reports::SectorsController < ReportsController
   
   def map
     @sector = DacSector.find(params[:id])
-    @projects = @sector.projects.published.paginate(:all,
+    @projects = @sector.projects.published.non_national.paginate(:all,
       :page => params[:page], :per_page => 5, :order => "donor_project_number ASC")
       
     respond_to do |format|

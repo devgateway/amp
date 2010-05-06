@@ -3,7 +3,17 @@ class Reports::CustomController < ReportsController
     :donors => lambda { |m, v| ["donors.id IN (?)", v] },
     :targets => lambda { |m, v| ["mdg_relevances.mdg_id IN (?)", v] },
     :sectors => lambda { |m, v| ["sector_relevances.dac_sector_id IN (?)", v] },
-    :provinces => lambda { |m, v| ["geo_relevances.province_id IN (?)", v] },
+    :provinces => lambda { |m, v| 
+      conditions = returning([]) do |c|
+        c << "geo_relevances.province_id IS NULL" if v.delete("national")
+        c << "geo_relevances.province_id IN (?)" unless v.empty?
+      end
+      
+      ary = [conditions.join(" OR ")]
+      ary << v unless v.empty?
+      
+      ary 
+    },
     :districts => lambda { |m, v| ["geo_relevances.district_id IN (?)", v] },
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 

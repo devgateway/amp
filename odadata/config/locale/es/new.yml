@@ -345,6 +345,7 @@ es:
 
         currency: Moeda
         all: Todos
+        national: National
         check_uncheck_all: Marcar / Desmarcar todos
 
         xls_output: Excel

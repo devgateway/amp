@@ -77,9 +77,9 @@ module ApplicationHelper
     strip_html_tags(r).to_html
   end
   
-  def icon_link_to(icon_name, link_options, alt_text = nil)
+  def icon_link_to(icon_name, link_path, alt_text = nil, link_options = {})
     icon_tag = image_tag("icons/#{icon_name}.png", :size => "16x16", :alt => alt_text)
-    link_to icon_tag, link_options, :class => "icon", :title => alt_text
+    link_to icon_tag, link_path, link_options, { :class => "icon", :title => alt_text }
   end
   
   ##

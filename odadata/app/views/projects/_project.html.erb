@@ -33,7 +33,9 @@
 		<% end %>
 		
 		<% if project.data_status != Project::DELETED %>
-		  <%= icon_link_to 'page_white_delete', update_status_project_path(project, :status => Project::DELETED), t('.delete') %>
+		  <%= icon_link_to 'page_white_delete', update_status_project_path(project, :status => Project::DELETED), t('.delete'),
+		        :confirm => t('.delete_confirmation', :project => project.donor_project_number)
+		  %>
 		<% end %>
 	</td>
 </tr>

@@ -34,7 +34,9 @@ public class SelectSectorAF extends SelectorAction{
 			javax.servlet.http.HttpServletResponse response) throws Exception {
 		
 		EditActivityForm 	eaForm 	= (EditActivityForm) getForm(request,"aimEditActivityForm");
-		addSector(mapping,request,eaForm);
+        if (eaForm != null) {
+            addSector(mapping, request, eaForm);
+        }
 		
 		return null;
 	}

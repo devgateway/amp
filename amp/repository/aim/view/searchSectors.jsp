@@ -151,6 +151,7 @@
 <digi:form action="/addSelectedSectors.do" method="post">
 <html:hidden property="sectorReset" value="false" />
 <html:hidden property="someError"/>
+<html:hidden property="multiple"/>
 <input type="hidden" name="edit" value="true" />
 <div id="sectorSelectedDiv" style="display: none">
     <c:forEach var="selSectorId" items="${aimSelectSectorForm.selSectors}">

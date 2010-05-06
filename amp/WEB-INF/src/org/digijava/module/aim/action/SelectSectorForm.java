@@ -38,6 +38,15 @@ public class SelectSectorForm extends ActionForm {
 	private boolean someError;
 	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
 	private boolean showCodeBesideName;
+    private boolean multiple;
+
+    public boolean isMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(boolean multiple) {
+        this.multiple = multiple;
+    }
     public boolean isShowCodeBesideName() {
 		return showCodeBesideName;
 	}

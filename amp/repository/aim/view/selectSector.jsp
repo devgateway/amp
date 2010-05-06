@@ -168,6 +168,7 @@ function checkNumeric(objName,comma,period,hyphen)
 <digi:form action="/selectSectors.do?edit=${param.edit}" method="post">
 
 <html:hidden property="sectorReset" value="false"/>
+<html:hidden property="multiple"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">

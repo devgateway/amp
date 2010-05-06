@@ -17,6 +17,8 @@ es:
       title: Editar Agência
       submit: Atualizar Agência
       back: Anterior
+    form:
+      submit: Salvar Agência
 
   consistencies:
     show:
@@ -443,7 +445,9 @@ es:
     new:
       title: Adicionar nova conta
       back: Anterior
-
+    form:
+      submit: Guardar conta
+        
   donor_profiles:
       title: Doador
       un_agencies: 'Agências da NU'

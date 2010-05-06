@@ -3,28 +3,31 @@
 if params[:un] == "yes"
 %>
 	<tr>
-		<td class="head"><%=t("donor_profiles.un_agencies")%></td>
+		<td class="head"><%=t("donor_profiles.un_agency")%></td>
 	</tr>
-	<% Donor.un_agencies.ordered.each do |d| %>
+	<% Donor.un_agency.ordered.each do |d| %>
 		<tr>
 			<td><%= link_to(d.name.titleize, donor_info_donor_profile_path(d.id)) %></a></td>
 		</tr>
 	<% end %>
+        <tr>
+                <td><%= link_to("All Aggregated Donor Report", {:controller => :donor_report, :action => :show, :donor_type => 'un_agency'}, :popup => ['Contents', 'height=600,width=920,scrollbars=yes'])  %></td>
+        </tr>
 <%
 else
 %>
 	<tr>
 		<td class="head"><%=t("donor_profiles.title")%></td>
 	</tr>
-	<% Donor.countries.ordered.each do |d| %>
+	<% Donor.country.ordered.each do |d| %>
 		<tr>
 			<td><%= link_to(d.name.titleize, donor_info_donor_profile_path(d.id)) %></a></td>
 		</tr>
 	<% end %>
+        <tr>
+                <td><%= link_to("All Aggregated Donor Report", :controller => :donor_report, :action => :show, :donor_type => 'country') %></td>
+        </tr>
 <%
 end
 %>
-        <tr>
-                <td>All Aggregated Donor Report</td>
-        </tr>
 </table>

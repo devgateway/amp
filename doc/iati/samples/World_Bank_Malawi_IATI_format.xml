@@ -3,13 +3,13 @@
     <iati-activity default-currency="USD" xml:lang="en">
         <activity-website>http://web.worldbank.org/external/projects/main?pagePK=64283627&amp;piPK=73230&amp;theSitePK=40941&amp;menuPK=228424&amp;Projectid=P084404</activity-website>
         <reporting-org>World Bank</reporting-org>
-        <other-identifier owner-ref="" owner-name="World Bank">P084404</other-identifier>
+        <other-identifier owner-ref="WB" owner-name="World Bank">P084404</other-identifier>
         <title>Southern African Power Market Program:  Mozambique-Malawi Transmission Interconnection Project</title>
         <description></description>
-        <recipient-country code="">Africa</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">MULTIPLE GOVERNMENTS</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MULTIPLE AGENCIES</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country> 
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="MGV" type="" xml:lang="">MULTIPLE GOVERNMENTS</participating-org>
+        <participating-org role="implementing" ref="MAG" type="" xml:lang="">MULTIPLE AGENCIES</participating-org>
         <sector vocabulary="WB" ref="LD" percentage="100">Power</sector>
         <finance-type ref="loan" xml:lang="en">Adaptable Program Loan</finance-type>
         <contact-info>
@@ -17,34 +17,34 @@
             <person-name>Mills, Robert</person-name>
         </contact-info>
         <total-cost></total-cost>
-        
-        <transaction flow="incoming" ref="" type="commitment">
-            <value currency="" value-date="2007-07-17" type="">48000000</value>
-            <provider-org provider-activity-id="IDA43530" ref="" type=""/>
+        <aid-type>Loan</aid-type>
+        <transaction flow="" ref="" type="commitment">
+            <value currency="USD" value-date="2007-07-17" type="">48000000</value>
+            <provider-org provider-activity-id="IDA43530" ref="WB" type="">World Bank</provider-org>
+            <aid-type>Loan</aid-type>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2013-06-30" type="">0</value>
-            <provider-org provider-activity-id="IDA43530" ref="" type=""/>
+            <value currency="USD" value-date="2013-06-30" type="">0</value>
+            <provider-org provider-activity-id="IDA43530" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2007-07-17" type="">45000000</value>
-            <provider-org provider-activity-id="IDA43540" ref="" type=""/>
+            <value currency="USD" value-date="2007-07-17" type="">45000000</value>
+            <provider-org provider-activity-id="IDA43540" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2013-06-30" type="">1942087.5</value>
-            <provider-org provider-activity-id="IDA43540" ref="" type=""/>
+            <value currency="USD" value-date="2013-06-30" type="">1942087</value>
+            <provider-org provider-activity-id="IDA43540" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
+    
     <iati-activity default-currency="USD" xml:lang="en">
         <activity-website>http://web.worldbank.org/external/projects/main?pagePK=64283627&amp;piPK=73230&amp;theSitePK=40941&amp;menuPK=228424&amp;Projectid=P107545</activity-website>
         <reporting-org>World Bank</reporting-org>
         <other-identifier owner-ref="" owner-name="World Bank">P107545</other-identifier>
         <title>MAP Additional Financing</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang=""/>
-        <participating-org role="implementing" ref="" type="" xml:lang=""/>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
         <sector vocabulary="WB" ref="JA" percentage="100">Health</sector>
         <finance-type ref="loan" xml:lang="en">Specific Investment Loan</finance-type>
         <contact-info>
@@ -52,6 +52,7 @@
             <person-name>Dutta, Sheila</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
         <activity-website>http://web.worldbank.org/external/projects/main?pagePK=64283627&amp;piPK=73230&amp;theSitePK=40941&amp;menuPK=228424&amp;Projectid=P106671</activity-website>
@@ -59,10 +60,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P106671</other-identifier>
         <title>Agriculture Development Program SLM</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">MALAWI GOVERNMENT</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF AGRICULTURE AND FOOD SECURITY</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country> 
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="FAO" type="" xml:lang="FAO">MINISTRY OF AGRICULTURE AND FOOD SECURITY</participating-org>
         <sector vocabulary="WB" ref="AH" percentage="51">Crops</sector>
         <sector vocabulary="WB" ref="BC" percentage="20">Central government administration</sector>
         <sector vocabulary="WB" ref="AB" percentage="15">Agricultural extension and research</sector>
@@ -74,17 +75,19 @@
             <person-name>Rohrbach, David</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
     </iati-activity>
+    
     <iati-activity default-currency="USD" xml:lang="en">
         <activity-website>http://web.worldbank.org/external/projects/main?pagePK=64283627&amp;piPK=73230&amp;theSitePK=40941&amp;menuPK=228424&amp;Projectid=P110157</activity-website>
         <reporting-org>World Bank</reporting-org>
         <other-identifier owner-ref="" owner-name="World Bank">P110157</other-identifier>
         <title>Second National Water Development Project - Additional Financing (ACGF)</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF IRRIGATION AND WATER DEVELOPMENT</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country> 
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="210" type="" xml:lang="">MINISTRY OF IRRIGATION AND WATER DEVELOPMENT</participating-org>
         <sector vocabulary="WB" ref="WC" percentage="37">Water supply</sector>
         <sector vocabulary="WB" ref="BC" percentage="37">Central government administration</sector>
         <sector vocabulary="WB" ref="WA" percentage="26">Sanitation</sector>
@@ -94,17 +97,19 @@
             <person-name>Makino, Midori</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
     </iati-activity>
+    
     <iati-activity default-currency="USD" xml:lang="en">
         <activity-website>http://web.worldbank.org/external/projects/main?pagePK=64283627&amp;piPK=73230&amp;theSitePK=40941&amp;menuPK=228424&amp;Projectid=P073821</activity-website>
         <reporting-org>World Bank</reporting-org>
         <other-identifier owner-ref="" owner-name="World Bank">P073821</other-identifier>
         <title>Multi-Sectoral AIDS Project (MAP)</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">NATIONAL AIDS COMMISSION</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="NAC" type="" xml:lang="">NATIONAL AIDS COMMISSION</participating-org>
         <sector vocabulary="WB" ref="BC" percentage="47">Central government administration</sector>
         <sector vocabulary="WB" ref="JB" percentage="38">Other social services</sector>
         <sector vocabulary="WB" ref="JA" percentage="10">Health</sector>
@@ -115,13 +120,14 @@
             <person-name>Dutta, Sheila</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2003-07-29" type="">35000000</value>
-            <provider-org provider-activity-id="IDAH0620" ref="" type=""/>
+            <value currency="USD" value-date="2003-07-29" type="">35000000</value>
+            <provider-org provider-activity-id="IDAH0620" ref="" type="WB">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2008-12-31" type="">37459999.99</value>
-            <provider-org provider-activity-id="IDAH0620" ref="" type=""/>
+            <value currency="USD" value-date="2008-12-31" type="">37459999</value>
+            <provider-org provider-activity-id="IDAH0620" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -130,10 +136,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P075247</other-identifier>
         <title>Community-Based Rural Land Development Project</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF LANDS, PHYSICAL PLANNING, AND SURVEYS</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="MLPPS" type="" xml:lang="">MINISTRY OF LANDS, PHYSICAL PLANNING, AND SURVEYS</participating-org>
         <sector vocabulary="WB" ref="AZ" percentage="89">General agriculture, fishing and forestry sector</sector>
         <sector vocabulary="WB" ref="BH" percentage="6">Sub-national government administration</sector>
         <sector vocabulary="WB" ref="BC" percentage="5">Central government</sector>
@@ -143,13 +149,14 @@
             <person-name>Tchale, Hardwick</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2004-04-13" type="">27000000</value>
-            <provider-org provider-activity-id="IDAH0810" ref="" type=""/>
+            <value currency="USD" value-date="2004-04-13" type="">27000000</value>
+            <provider-org provider-activity-id="IDAH0810" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2009-06-30" type="">22885788.29</value>
-            <provider-org provider-activity-id="IDAH0810" ref="" type=""/>
+            <value currency="USD" value-date="2009-06-30" type="">22885788</value>
+            <provider-org provider-activity-id="IDAH0810" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -158,10 +165,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P070235</other-identifier>
         <title>Regional Trade Facilitation Project - Malawi</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">MINISTRY OF FINANCE</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">AFRICAN TRADE INSURANCE AGENCY</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="WB">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="MOF" type="" xml:lang="">MINISTRY OF FINANCE</participating-org>
+        <participating-org role="implementing" ref="AFTIA" type="" xml:lang="">AFRICAN TRADE INSURANCE AGENCY</participating-org>
         <sector vocabulary="WB" ref="FD" percentage="100">Non-compulsory pensions, insurance and contractual savings</sector>
         <finance-type ref="loan" xml:lang="en">Specific Investment Loan</finance-type>
         <contact-info>
@@ -169,21 +176,22 @@
             <person-name>Archondo, Sherri Ellen</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2001-04-03" type="">10973490.09</value>
-            <provider-org provider-activity-id="IDA34920" ref="" type=""/>
+            <value currency="USD" value-date="2001-04-03" type="">10973490</value>
+            <provider-org provider-activity-id="IDA34920" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2011-06-30" type="">5573490.1</value>
-            <provider-org provider-activity-id="IDA34920" ref="" type=""/>
+            <value currency="USD" value-date="2011-06-30" type="">5573490</value>
+            <provider-org provider-activity-id="IDA34920" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2001-04-03" type="">4026509.91</value>
-            <provider-org provider-activity-id="IDA3492A" ref="" type=""/>
+            <value currency="USD" value-date="2001-04-03" type="">4026509</value>
+            <provider-org provider-activity-id="IDA3492A" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2011-06-30" type="">4601530.96</value>
-            <provider-org provider-activity-id="IDA3492A" ref="" type=""/>
+            <value currency="USD" value-date="2011-06-30" type="">4601530</value>
+            <provider-org provider-activity-id="IDA3492A" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -192,10 +200,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P115226</other-identifier>
         <title>Community Based Rural Land Development Project</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF LANDS AND NATUARAL RESOURCES</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="MOLANR" type="" xml:lang="">MINISTRY OF LANDS AND NATUARAL RESOURCES</participating-org>
         <sector vocabulary="WB" ref="BL" percentage="89">Public administration- Agriculture, fishing and forestry</sector>
         <sector vocabulary="WB" ref="AZ" percentage="11">General agriculture, fishing and forestry sector</sector>
         <finance-type ref="loan" xml:lang="en">Specific Investment Loan</finance-type>
@@ -204,6 +212,7 @@
             <person-name>Tchale, Hardwick</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
         <activity-website>http://web.worldbank.org/external/projects/main?pagePK=64283627&amp;piPK=73230&amp;theSitePK=40941&amp;menuPK=228424&amp;Projectid=P103773</activity-website>
@@ -211,10 +220,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P103773</other-identifier>
         <title>Business Environment Strengthening Technical Assistance (BESTAP)</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF INDUSTRY TRADE AND PRIVATE SECTOR DEVELOPMENT</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="MOIT" type="" xml:lang="">MINISTRY OF INDUSTRY TRADE AND PRIVATE SECTOR DEVELOPMENT</participating-org>
         <sector vocabulary="WB" ref="BC" percentage="58">Central government administration</sector>
         <sector vocabulary="WB" ref="YZ" percentage="25">General industry and trade sector</sector>
         <sector vocabulary="WB" ref="BG" percentage="8">Law and justice</sector>
@@ -226,13 +235,14 @@
             <person-name>Maimbo, Samuel Munzele</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2007-05-24" type="">15000000</value>
-            <provider-org provider-activity-id="IDAH2930" ref="" type=""/>
+            <value currency="USD" value-date="2007-05-24" type="">15000000</value>
+            <provider-org provider-activity-id="IDAH2930" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2012-12-31" type="">2123468.87</value>
-            <provider-org provider-activity-id="IDAH2930" ref="" type=""/>
+            <value currency="USD" value-date="2012-12-31" type="">2123468</value>
+            <provider-org provider-activity-id="IDAH2930" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -241,10 +251,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P070823</other-identifier>
         <title>Education Sector Support Project 1</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF EDUCATION</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="MoEST" type="" xml:lang="">MINISTRY OF EDUCATION</participating-org>
         <sector vocabulary="WB" ref="BZ" percentage="45">General public administration sector</sector>
         <sector vocabulary="WB" ref="ET" percentage="38">Tertiary education</sector>
         <sector vocabulary="WB" ref="ES" percentage="13">Secondary education</sector>
@@ -255,13 +265,14 @@
             <person-name>Rojas, Carlos A.</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2005-05-03" type="">32200000</value>
-            <provider-org provider-activity-id="IDAH1590" ref="" type=""/>
+            <value currency="USD" value-date="2005-05-03" type="">32200000</value>
+            <provider-org provider-activity-id="IDAH1590" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2010-09-15" type="">17828267.23</value>
-            <provider-org provider-activity-id="IDAH1590" ref="" type=""/>
+            <value currency="USD" value-date="2010-09-15" type="">17828267</value>
+            <provider-org provider-activity-id="IDAH1590" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -270,10 +281,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P105256</other-identifier>
         <title>Agricultural Sector Development</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF AGRICULTURE; MINISTRY OF IRRIG. AND WTR. DEV.</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="FAO" type="" xml:lang="">MINISTRY OF AGRICULTURE</participating-org>
         <sector vocabulary="WB" ref="AH" percentage="48">Crops</sector>
         <sector vocabulary="WB" ref="BC" percentage="28">Central government administration</sector>
         <sector vocabulary="WB" ref="AZ" percentage="10">General agriculture, fishing and forestry sector</sector>
@@ -285,13 +296,14 @@
             <person-name>Rohrbach, David</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2008-06-24" type="">32000000</value>
-            <provider-org provider-activity-id="IDA44760" ref="" type=""/>
+            <value currency="USD" value-date="2008-06-24" type="">32000000</value>
+            <provider-org provider-activity-id="IDA44760" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2013-09-15" type="">0</value>
-            <provider-org provider-activity-id="IDA44760" ref="" type=""/>
+            <value currency="USD" value-date="2013-09-15" type="">0</value>
+            <provider-org provider-activity-id="IDA44760" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -300,10 +312,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P096336</other-identifier>
         <title>Second National Water Development Project</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF WATER AND IRRIGATION DEVELOPMENT</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="MoIWD" type="" xml:lang="">MINISTRY OF WATER AND IRRIGATION DEVELOPMENT</participating-org>
         <sector vocabulary="WB" ref="WC" percentage="37">Water supply</sector>
         <sector vocabulary="WB" ref="BC" percentage="37">Central government administration</sector>
         <sector vocabulary="WB" ref="WA" percentage="24">Sanitation</sector>
@@ -315,21 +327,22 @@
             <person-name>Makino, Midori</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2007-05-24" type="">22500000</value>
-            <provider-org provider-activity-id="IDAH2940" ref="" type=""/>
+            <value currency="USD" value-date="2007-05-24" type="">22500000</value>
+            <provider-org provider-activity-id="IDAH2940" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2012-10-31" type="">6353263.49</value>
-            <provider-org provider-activity-id="IDAH2940" ref="" type=""/>
+            <value currency="USD" value-date="2012-10-31" type="">6353263</value>
+            <provider-org provider-activity-id="IDAH2940" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2007-05-24" type="">27500000</value>
-            <provider-org provider-activity-id="IDA43070" ref="" type=""/>
+            <value currency="USD" value-date="2007-05-24" type="">27500000</value>
+            <provider-org provider-activity-id="IDA43070" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2012-10-31" type="">0</value>
-            <provider-org provider-activity-id="IDA43070" ref="" type=""/>
+            <value currency="USD" value-date="2012-10-31" type="">0</value>
+            <provider-org provider-activity-id="IDA43070" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -338,10 +351,8 @@
         <other-identifier owner-ref="" owner-name="World Bank">P084148</other-identifier>
         <title>Irrigation, Rural Livelihoods and Agricultural Development Project</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang=""/>
-        <participating-org role="implementing" ref="" type="" xml:lang=""/>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
         <sector vocabulary="WB" ref="AZ" percentage="35">General agriculture, fishing and forestry sector</sector>
         <sector vocabulary="WB" ref="AI" percentage="30">Irrigation and drainage</sector>
         <sector vocabulary="WB" ref="AB" percentage="20">Agricultural extension and research</sector>
@@ -353,13 +364,14 @@
             <person-name>Tchale, Hardwick</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2005-11-29" type="">40000000</value>
-            <provider-org provider-activity-id="IDAH1900" ref="" type=""/>
+            <value currency="USD" value-date="2005-11-29" type="">40000000</value>
+            <provider-org provider-activity-id="IDAH1900" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2012-06-30" type="">13860672.41</value>
-            <provider-org provider-activity-id="IDAH1900" ref="" type=""/>
+            <value currency="USD" value-date="2012-06-30" type="">13860672</value>
+            <provider-org provider-activity-id="IDAH1900" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -368,10 +380,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P110446</other-identifier>
         <title>Malawi Third Social Action Fund (MASAF 3) APL II (LDF Mechanism)</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF THE REPUBLIC OF MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF FINANCE (MASAF UNIT)</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="MOF" type="" xml:lang="">MINISTRY OF FINANCE (MASAF UNIT)</participating-org>
         <sector vocabulary="WB" ref="JB" percentage="46">Other social services</sector>
         <sector vocabulary="WB" ref="EZ" percentage="30">General education sector</sector>
         <sector vocabulary="WB" ref="BC" percentage="11">Central government administration</sector>
@@ -383,13 +395,14 @@
             <person-name>Cornelius, Sabine</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2008-06-20" type="">50000000</value>
-            <provider-org provider-activity-id="IDA44830" ref="" type=""/>
+            <value currency="USD" value-date="2008-06-20" type="">50000000</value>
+            <provider-org provider-activity-id="IDA44830" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2013-09-30" type="">0</value>
-            <provider-org provider-activity-id="IDA44830" ref="" type=""/>
+            <value currency="USD" value-date="2013-09-30" type="">0</value>
+            <provider-org provider-activity-id="IDA44830" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -398,10 +411,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P057761</other-identifier>
         <title>INFRASTRUCTURE SERVICES</title>
         <description></description>
-        <recipient-country code="">Malawi</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOM</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">MINISTRY OF ECONOMIC DEVELOPMENT AND PLANNING</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="GOM" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="MEPD" type="" xml:lang="">MINISTRY OF ECONOMIC DEVELOPMENT AND PLANNING</participating-org>
         <sector vocabulary="WB" ref="TA" percentage="45">Roads and highways</sector>
         <sector vocabulary="WB" ref="WZ" percentage="28">General water, sanitation and flood protection sector</sector>
         <sector vocabulary="WB" ref="LD" percentage="13">Power</sector>
@@ -413,13 +426,14 @@
             <person-name>Woldu, Mathewos</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
         <transaction flow="" ref="" type="commitment">
-            <value currency="" value-date="2006-06-27" type="">40000000</value>
-            <provider-org provider-activity-id="IDAH2420" ref="" type=""/>
+            <value currency="USD" value-date="2006-06-27" type="">40000000</value>
+            <provider-org provider-activity-id="IDAH2420" ref="WB" type="">World Bank</provider-org>
         </transaction>
         <transaction flow="" ref="" type="disbursment">
-            <value currency="" value-date="2011-11-30" type="">5840695.55</value>
-            <provider-org provider-activity-id="IDAH2420" ref="" type=""/>
+            <value currency="USD" value-date="2011-11-30" type="">5840695</value>
+            <provider-org provider-activity-id="IDAH2420" ref="WB" type="">World Bank</provider-org>
         </transaction>
     </iati-activity>
     <iati-activity default-currency="USD" xml:lang="en">
@@ -428,10 +442,10 @@
         <other-identifier owner-ref="" owner-name="World Bank">P111432</other-identifier>
         <title>RCIP3 - Regional Communications Infrastructure Program - Phase 3</title>
         <description></description>
-        <recipient-country code="">Africa</recipient-country>
-        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
-        <participating-org role="beneficiary" ref="" type="" xml:lang="">MOZAMBIQUE, TANZANIA, MALAWI</participating-org>
-        <participating-org role="implementing" ref="" type="" xml:lang="">RELEVANT MINISTRY IN CHARGE OF TELECOMMUNICATIONS PORTFOLIO</participating-org>
+        <recipient-country code="87226" ref="MWI">Malawi</recipient-country> 
+        <participating-org role="donor" ref="WB" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="MTM" type="" xml:lang="">MOZAMBIQUE, TANZANIA, MALAWI</participating-org>
+        <participating-org role="implementing" ref="RMCT" type="" xml:lang="">RELEVANT MINISTRY IN CHARGE OF TELECOMMUNICATIONS PORTFOLIO</participating-org>
         <sector vocabulary="WB" ref="CT" percentage="60">Telecommunications</sector>
         <sector vocabulary="WB" ref="CA" percentage="20">Information technology</sector>
         <sector vocabulary="WB" ref="BM" percentage="17">Public administration- Information and communications</sector>
@@ -443,5 +457,6 @@
             <person-name>Gallegos, Doyle</person-name>
         </contact-info>
         <total-cost></total-cost>
+        <aid-type>Loan</aid-type>
     </iati-activity>
 </iati-activities>

@@ -51,7 +51,11 @@
           <xsl:value-of select="other-identifier"/>
         </xsl:attribute>
         <assigningOrg>
-          <xsl:value-of select="other-identifier/@owner-name"/>
+        <!--owner-ref is used for the organization code-->
+          <xsl:attribute name="code">
+            <xsl:value-of select="other-identifier/@owner-ref"/>
+          </xsl:attribute>
+            <xsl:value-of select="other-identifier/@owner-name"/>
         </assigningOrg>
       </id>
       <title>
@@ -63,6 +67,7 @@
       <description>
         <xsl:value-of select="description[@type='summary']"/>
       </description>
+      
       <location locationType="Country">
         <xsl:attribute name="iso3">
           <xsl:value-of select="recipient-country/@ref"/>
@@ -71,13 +76,18 @@
           <xsl:value-of select="recipient-country"/>
         </xsl:attribute>
         <locationName>
+        <!--I will use code attibute for the country code it have to be changed-->
           <xsl:attribute name="code">
-            <xsl:value-of select="recipient-country"/>
+            <xsl:value-of select="recipient-country/@code"/>
           </xsl:attribute>
           <xsl:value-of select="recipient-country"/>
         </locationName>
-        <!-- This is a fixed value what does it means?-->
       </location>
+      
+      <!-- Bill asked me to remove this section for now until they do the final 
+         version which will include all locations levels, i'm leaving only country 
+        section beacuse we need a location in order to import the activity
+        
       <location locationType="Region">
         <xsl:attribute name="iso3">
           <xsl:value-of select="recipient-country/@ref"/>
@@ -85,10 +95,17 @@
         <xsl:attribute name="countryName">
           <xsl:value-of select="recipient-country"/>
         </xsl:attribute>
+        <xsl:attribute name="percentage">
+          <xsl:value-of select="percentage"/>
+        </xsl:attribute>
         <locationName>
+          <xsl:attribute name="code">
+            <xsl:value-of select="target-location/@vocabulary"/>
+          </xsl:attribute>
           <xsl:value-of select="target-location[@type='un-ocha-province']"/>
         </locationName>
       </location>
+      -->
       <!--I had to add a check here because the importer give and error-->
       <xsl:if test="activity-date[@type='start']!=''">
         <proposedStartDate>
@@ -108,7 +125,7 @@
       <status>
         <xsl:value-of select="activity-status/@ref"/>
       </status>
-      <!--Modified-->
+      <!--Modified, no itereation before only one sector was taken-->
       <xsl:for-each select="sector">
         <sectors>
           <xsl:attribute name="percentage">
@@ -150,7 +167,7 @@
       <xsl:value-of select="../aid-type"/>
     </assistanceType>
      <!--IATI schema Does Not Have This Field-->
-    <financingInstrument>Donation</financingInstrument>
+    <financingInstrument>Direct Project Support</financingInstrument>
     <xsl:choose>
       <xsl:when test="@type='Planned Disbursement'">
         <disbursements>
@@ -219,11 +236,12 @@
       </xsl:if>
     </assistanceType>
     <!--IATI schema Does Not Have This Field-->
-    <financingInstrument>Donation</financingInstrument>
+    <financingInstrument>Direct Project Support</financingInstrument>
     <xsl:choose>
       <xsl:when test="@type='disbursment'">
          <disbursements>
             <!--If currency code is empty then take the default currency-->
+            <!--I am not sure if a transacation element could contain more than 1 value element-->
             <xsl:attribute name="currency">
               <xsl:choose>
                 <xsl:when test="value/@currency!=''">
@@ -279,7 +297,9 @@
   </funding>
   </xsl:for-each>
   <!--End Actual -->
+  <!--Funding Section-->
   
+  <!--Iteration added here for related Orgs.-->
   <xsl:for-each select="participating-org"> 
     <relatedOrgs>
     <xsl:choose>
@@ -301,13 +321,13 @@
     </xsl:choose>
     <xsl:attribute name="code">
       <!--We have to figure out where this value is in IATI-->
-      <xsl:value-of select="ref"/>  
+      <xsl:value-of select="@ref"/>  
     </xsl:attribute> 
     <xsl:value-of select="."/>
   </relatedOrgs>
   </xsl:for-each>    
       
-  
+  <!--No chahnges here-->
     <xsl:apply-templates select="incoming-contribution[status='Commitment' or status='Paid contribution']"/>
       <additional field="ocha-activities" type="String">
         <xsl:value-of select="description[@type='activities']"/>

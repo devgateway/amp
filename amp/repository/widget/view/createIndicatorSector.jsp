@@ -8,21 +8,12 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<c:set var="src">
-   <digi:file src="module/aim/addActivityStep2Popin.jsp"/>
-</c:set>
-<jsp:include page="${src}" flush="true" />
+<jsp:include page="indicatorSectorPopin.jsp" flush="true" />
 <script type="text/javascript">
     <!--
     addLoadEvent(initSectorScript);
     function addSectors() {
-       /*openNewWindow(600, 450);
-       <digi:context name="selSec" property="context/aim/selectSectors.do" />
-       document.gisIndicatorSectorRegionForm.action = "${selSec}";
-       document.gisIndicatorSectorRegionForm.target = popupPointer.name;
-       document.gisIndicatorSectorRegionForm.submit();
-       */
-       myAddSectors("");
+       myAddSectors("multiple=false");
     }
               
     function addSector(param){

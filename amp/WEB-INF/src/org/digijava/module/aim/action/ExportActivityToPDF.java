@@ -1455,17 +1455,14 @@ public class ExportActivityToPDF extends Action {
 	
 	//cuts <p> and </p> tags from editTag value
 	private String processEditTagValue(HttpServletRequest request,String editTagKey) throws Exception {
-		int startInex;
-		int endIndex;
-		String projectComments=getEditTagValue(request,editTagKey);
-		if(projectComments!=null){
-			startInex=projectComments.indexOf("<p>");
-			endIndex=projectComments.indexOf("</p>");
-			if(startInex!=-1 && endIndex!=-1 && startInex<endIndex){
-				projectComments=projectComments.substring(startInex+3, endIndex);
-			}
+		String result=getEditTagValue(request,editTagKey);
+		if(result!=null){
+			result=result.replaceAll("\\<.*?>","");
+            result=result.replaceAll("&lt;", "<");
+			result = result.replaceAll("&gt;",">");
+            result = result.replaceAll("&amp;","&");
 		}		
-		return projectComments;
+		return result;
 	}
 
 	private void buildIssuesPart(EditActivityForm myForm, PdfPTable mainLayout,String locale,Long siteId,ServletContext ampContext)	throws WorkerException {

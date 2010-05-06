@@ -23,14 +23,14 @@
 
 <div id="leftColumn">
 	<a href="/odamap" target="_blank" ><IMG SRC="/images/Mozambique.gif" border="1" alt="ODAmap" /></a>
-	<%=t 'map_image_link' %> 
+	<%=t '.map_image_link' %> 
 </div>
 
 <div id="centerColumn">
 	<div id="shortIntro">
-		<%=t 'introduction_short' %>
+		<%= render :partial => "intro_short" %>
 		<p align="right">
-			<%= link_to_function t('.read_more') , nil do |page| 
+			<%= link_to_function t('.read_more'), nil do |page| 
 				page[:shortIntro].hide
 				page[:longIntro].show 
 			end %>
@@ -38,7 +38,7 @@
 	</div>
 	
 	<div id="longIntro" style="display: none">
-		<%=t 'introduction_long' %>
+		<%= render :partial => "intro_long" %>
 		<p align="right">
 			<%= link_to_function t('.back'), nil do |page| 
 				page[:longIntro].hide

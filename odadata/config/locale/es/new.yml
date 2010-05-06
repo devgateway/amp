@@ -421,11 +421,49 @@ es:
       back: Anterior
       read_more: Leia mais
       introduction_short: |
-          <p>ODAmoz is a new EC funded electronic tool that provides information on Official Development Assistance (ODA) to Mozambique. It was created in response to the Paris Declaration advocating for strengthened coordination and harmonization among Donors and alignment with the Government of Mozambique. </p>
-          <p>ODAmoz enables to track Donors&#39; and United Nations Agencies&#39; projects and programmes in the country: where they are operating, who finances them, and which organization implements them. </p>
-          <p>It is a user-friendly database, accessible to all through the internet. Its &quot;Design your own report&quot; function makes it easy to search for specific information through a set of predefined criteria (donor, sector, location, project status, funding type and MDGs) and offers tables and geographic maps (ODAmap) for analysis. </p>
-          <p>Welcome to ODAmoz!</p>
+          <p>ODAmoz 2.0 é a versão actualizada da base de dados electrónico financiado pelo  CE que fornece uma informação da Ajuda Oficial para o Desenvolvimento (ODA a Moçambique). A versão original foi criado em resposta à Declaração de Paris para defender uma melhor coordenação e harmonização entre os doadores e o alinhamento com o Governo de Moçambique. Após 4 anos, tinha provado necessário para actualizar a base técnica de um modelo mais sofisticado, a fim de satisfazer as necessidades crescentes e mais complexas do governo e seus parceiros de desenvolvimento. Além disso, o sistema se tornou mais user-friendly de acordo com pedidos e feedback de todos os usuários.</p>
+          <p>A ODAmoz permite captar projectos e Programas dos doadores e Agências das Nações Unidas a operarem no país. </p>
+          <p>È uma Base de Dados simples, acessível a todos por via da “Internet”. A opção de “Desenhar o seu Próprio Relatório” facilita a busca da informação específica através de um critério pré – definido (Doador, Sector, localização, estado do projecto, financiamento às ODMs e oferece tabelas e mapas geográficas (ODAmap) para análise. </p>
+          <p>Bem-vindo a ODAmoz!</p>
       map_image_link: Clique no mapa para ODAmap
+      introduction_long: |
+        <p><strong>Historial</strong><br>
+        Em 2005, a Delegação da União europeia em Moçambique contratou um consultor no contexto da iniciativa piloto sobre a harmonização de forma a estabelecer entre outros uma Base de Dados de projectos da EU. Esta Base de Dados foi centralizada e deu acesso a todas as informações sobre as actividades dos estados membros da EU operando no país.<br><br>
+        A partir do processo de harmonização global dos doadores em Moçambique no âmbito da Declaração de Paris, foi acordado que a Base de Dados da EU incluísse <strong>todos</strong> os doadores operando no país e incluísse a Base de Dados das Nações Unidas formando-se uma nova Base de Dados chamada “ODAmoz”.<br><br>
+        Esta iniciativa foi assegurada pelo Grupo dos parceiros internacionais com vista a simplificação e harmonização da cooperação no país.<br><br>
+        Com vista a necessidade de garantir a apropriação do Governo de Moçambique e assegurar a administração apropriada do projecto, a gestão da ODAmoz foi passada para uma Direcção específica do Ministério da Planificação e Desenvolvimento: Direcção de Investimento e Cooperação (DIC) em Setembro 2006 e <strong>Comité de Gestão</strong> criada nos finais de 2006, composto por Doadores e representantes do Governo moçambicano.<br><br>
+        </p>
+        <p><strong>Objectivos</strong><br>
+        O Objectivo principal e o foco da ODAmoz são fornecer aos doadores / financiadores um instrumento, baseado na codificação intersectorial OECD / DAC, para cumprir com as suas obrigações através do Governo de Moçambique produzindo relatórios dos desembolsos trimestrais (vide o download).<br><br>
+        Também fornece ao Governo de Moçambique, aos doadores e ao Público em Geral uma informação rápida dos doadores e das agências das Nações Unidas em termos de compromissos dos projectos.<br><br>
+        </p>
+        <p><strong>Período das Actualizações</strong>
+        Como foi referido anteriormente, ODAmoz apresenta os relatórios sobre os desembolsos trimestrais e previsões dos valores para os <strong>três anos seguintes de acordo com o cenário fiscal de Médio prazo</strong>.<br><br>
+
+        O Comité de Gestão acordou fazer uma ligação entre o procedimento de actualização da Base de Dados com o Ciclo Geral do Orçamental do Estado moçambicano. Assim, as datas de actualização serão como se segue:<br>
+        1º trimestre:	1 de Abril - 15 de Maio<br>
+        2º trimestre:	1 de Julho – 15 de Agosto<br>
+        3º trimestre:	1 de Outubro – 15 de Novembro<br>
+        4º trimestre / Relatório Annual:	15 de Janeiro – 15 de Fevereiro<br>
+        <p>
+        <strong>Especificidades dos Relatórios das Nações Unidas</strong><br>
+        Por causa das especificidades das Nações Unidas e modalidades de financiamento heterogéneas (os montantes próprios e co-financiamentos) e a dificuldade de as separar, <strong>foi acordado que estes podem reportar todos os fundos (mesmo quando possível os reportados pelos doadores)</strong>. Os respectivos doadores que implementam o projecto via NU deverão explicitar na codificação do projecto que é via NU, por ex: um projecto nº 99ACPMOZ011, via UNDP deve-se inserir na <strong>ODAmoz</strong> como 9ACPMOZ011/UNDP.<br><br>
+        Os totais dos Doadores e das Agências das por causa disso não deverão ser somados de forma a se evitar duplicações. Na busca do relatório por doador e Agência das NU também já há separação. Está previsto para permitir esse tipo de busca para cada relatório.<br><br>
+        Referir que esta solução não é definitiva, pois nem sempre possibilita a visualização da imagem real dos projectos ao nível da implementação.<br><br>
+        </p>
+        <p>
+        <strong>Responsabilidade</strong><br>
+        Cada doador e Agências das Nações Unidas seleccionaram um ponto focal responsável pela recolha da informação, seu registo na Base de Dados e actualização “on-line” numa base trimestral. Os dados completos e fiáveis são referentes aos desembolsos, as promessas são baseadas em estimativas.<br><br>
+        O Ministério da Planificação (MPD) através da Direcção de investimento e Cooperação (DIC) tem a responsabilidade de uma visão geral da Base de Dados e produção de Relatórios trimestrais sobre os desembolsos dos doadores.<br><br>
+        </p>
+        <p><strong>Visão da “ODAmoz”</strong><br>
+        A ODAmoz está tornando-se cada vez mais inclusiva em termos de doadores e é vista como um instrumento muito útil, por exemplo, nas discussões entre o Governo de Moçambique com os parceiros internacionais e no fornecimento de uma única fonte de informação sobre todos os doadores envolvidos que estão a rever as suas estratégias.<br><br>
+        A intenção é, entre outras, treinar pontos focais em cada sector como utilizadores no Governo de Moçambique para uma exploração completa das potencialidades da “ODAmoz”.<br><br>
+        </p>
+
+
+
+
     links:
       title: Línks
 

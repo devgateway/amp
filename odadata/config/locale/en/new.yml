@@ -117,6 +117,8 @@ en:
       back: Back
   
   layouts:
+    footer:
+      text: ODAdata 2.6d - ODAdata is an aid information management system of the Development Gateway
     application:
       custom_title: ODAmoz - {{page_title}}
       standard_title: ODAmoz - Official Development Assistance to Mozambique Database

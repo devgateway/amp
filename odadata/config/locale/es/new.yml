@@ -117,6 +117,8 @@ es:
       back: Anterior
 
   layouts:
+    footer:
+      text: ODAdata 2.6d - ODAdata é um sistema de gestão de informação da ajuda do Development Gateway.
     application:
       custom_title: ODAmoz - {{page_title}}
       standard_title: 'ODAmoz - Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique'

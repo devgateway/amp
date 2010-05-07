@@ -75,11 +75,11 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   end
   
   provides :historic_commitments do |p|
-    p.historic_funding.commitments
+    p.historic_funding.andand.commitments
   end
   
   provides :historic_disbursements do |p|
-    p.historic_funding.payments
+    p.historic_funding.andand.payments
   end
   
   provides :commitments_forecast do |p|

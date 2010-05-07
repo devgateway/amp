@@ -238,6 +238,7 @@ es:
     project:
       edit: Editar projecto
       delete: Eliminar projecto
+      delete_confirmation: Tem certeza de que deseja mover "{{project}}" para Projetos excluídos
       publish: Publicar projecto
       edit_and_draft: Editar projecto
       clone: Clonar & Editar

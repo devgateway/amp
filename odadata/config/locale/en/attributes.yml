@@ -366,7 +366,7 @@ en:
         flag: 
           label: Country Flag or Organisation Logo
         profile_picture: 
-          label: Representative Picture of Donor Country (for EU Blue Book)
+          label: Representative Picture of Donor Country
         oda_on_budget_1:
           label: used national budget execution procedures
         oda_on_budget_1_currency:

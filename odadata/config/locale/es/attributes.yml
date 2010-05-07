@@ -368,9 +368,9 @@ es:
         total_local_staff:
           label: 'Total funcionários locais'
         flag:
-          label: Country Flag or Organisation Logo
+          label: Bandeira ou logotipo
         profile_picture:
-          label: Representative Picture of Donor Country (for EU Blue Book)
+          label: Imagem representativa de país doador
         oda_on_budget_1:
           label: 'utilizados procedimentos nacionais da execução do orçamento'
         oda_on_budget_1_currency:

@@ -466,7 +466,7 @@ es:
         
   donor_profiles:
       title: Doador
-      un_agencies: 'Agências da ONU'
+      un_agency: 'Agências da ONU'
       head: Perfis dos Doadores
       donor: Doador
       donor_report: Relatorio do Doador

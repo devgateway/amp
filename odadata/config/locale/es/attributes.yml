@@ -284,6 +284,10 @@ es:
             published: Publicado
             deleted: Eliminado
             completed: Concluído
+        historic_commitments:
+          label: Compromissos históricos
+        historic_disbursements:
+          label: Desembolsos históricos
 
       sector_relevance:
         dac_sector:

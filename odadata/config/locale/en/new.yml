@@ -315,6 +315,10 @@ en:
       missing_mdgs: "Please complete the MDG information."
   reports:
     custom:
+      donors:
+        title: Doadores
+      un_agencies:
+        title: Agências ONU
       new:
         funds_for: Funding information {{year}}
         funding_forecasts_for: Forecasts {{year}}
@@ -520,6 +524,9 @@ en:
   donor_info:
     donor_report:
       show:
+        total_oda_to_gom: Total ODA to GoM
+        total_non_gom_oda: Total non-Gom ODA
+        total_oda_to_moz: Total ODA to Mozambque
         on_off_treasury: CUT
         on_off_budget: Budget
         on_value: "On"

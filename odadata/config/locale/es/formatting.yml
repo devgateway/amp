@@ -6,9 +6,9 @@ es:
     # These are also the defaults for 'currency', 'percentage', 'precision', and 'human'
     format:
       # Sets the separator between the units, for more precision (e.g. 1.0 / 2.0 == 0.5)
-      separator: "."
+      separator: ","
       # Delimets thousands (e.g. 1,000,000 is a million) (always in groups of three)
-      delimiter: ","
+      delimiter: "."
       # Number of decimals, behind the separator (the number 1 with a precision of 2 gives: 1.00)
       precision: 3
     
@@ -19,8 +19,8 @@ es:
         format: "%u%n"
         unit: "$"
         # These three are to override number.format and are optional
-        separator: "."
-        delimiter: ","
+        separator: ","
+        delimiter: "."
         precision: 2
     
     # Used in number_to_percentage()
@@ -129,7 +129,7 @@ es:
       # Use the strftime parameters for formats.
       # When no format has been given, it uses default.
       # You can provide other formats here if you like!
-      default: "%Y-%m-%d"
+      default: "%d-%m-%Y"
       short: "%b %d"
       long: "%B %d, %Y"
     

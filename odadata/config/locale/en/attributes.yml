@@ -13,28 +13,42 @@ en:
           report_heading: "" # left blank on purpose
         donor: 
           label: Donor
+          description: "Name of Donor such as France or EC, includes in the website sometimes also UN agancies (e.g. Donor Profiles includes Profiles of donors and UN agencies)."
         donor_agency: 
           label: Donor Agency
+          description: Name of Donor Agency of the respective Donor Countries. Focal Points will find only donor agencies of their respective Donor Country.
         donor_project_number: 
           label: Donor Project Number
+          description: "Enter the number, or combination of letters and numbers used by the donor agency to identify the activity"
         government_counterpart:
           label: Government Counterpart
         oecd_number: 
           label: OECD Number
+          description: "Unique Project Number given by the OECD DAC on first reporting of the project to the OECD. In 10 digits: YYYYxxxxxx"
         recipient_country_budget_nr: 
           label: Mozambican Project Number
+          description: |
+            The Mozambican Budget Number will be created automatically from the information entered in ODAmoz. 
+            Budget Numbers will be only created for projects ON Budget.
         title: 
           label: Project / Programme Title
-          description: Single-line glossary entry
+          description: Official Title of the Project used internally by the Donor/ UN agency
         description: 
           label: Brief Project Description
-          description: |+
-            This is an example multi-line
-            glossary entry.
         country_strategy: 
           label: Related Country Strategy
         prj_status: 
           label: Project Status
+          description: |
+            Please enter here the Status of the Project/ Program. 
+
+            If a project has been changed to the next level, e.g. from planned to ongoing, it is not possible to change this back after it has been published, because certain other fields will be conected to these status. 
+            - planned but not yet signed (all fields still can be changed)
+            - signed but not yet disbursed (Committments will be fixed, Disbursement forecasts will be fixed, Planned start and end dates will be mandatory)
+            - ongoing (planned start and end dates will be fixed, actual start and end dates becomes mandatory, Committments will be fixed, Committment forecasts will be fixed, disbursement forecasts will be fixed) 
+            - completed (all field will be frozen)
+
+            In case of an error please contact the Master Focal Point or the Donor Coordinator.
           options:
             planned: Planned but not yet signed
             signed: Signed but not yet disbursed
@@ -43,28 +57,57 @@ en:
             completed: Completed
         planned_start: 
           label: Planned Start Date
+          description: |
+            The expected date in the planning phase of a project when that project will be starting. 
+            When the project status of a project is still "planned" ("planned but not yet signed" & "signed but not yet disbursed") 
+            this date should be inserted. In the later ongoing stages of a project, these dates will be fixed and cannot be changed.
         planned_end: 
           label: Planned End Date
+          description: |
+            The expected date in the planning phase of a project when that project will be completed. 
+            When the project status of a project is still "planned" ("planned but not yet signed" & "signed but not yet disbursed") 
+            this date should be inserted. In the later ongoing stages of a project, these dates will be fixed and cannot be changed
         actual_start:
           label: Actual Start Date
+          description: |
+            The date when a given project starts. 
+            When the project status of a project is changed from "planned" 
+            ("planned but not yet signed" & "signed but not yet disbursed") to "ongoing" the "actual start date" becomes mandatory.
         actual_end:
           label: Actual End Date
+          description: |
+            The date when a given project has been completed. 
+            When the project status of a project is changed from "planned" 
+            ("planned but not yet signed" & "signed but not yet disbursed") to "ongoing" the "actual end date" becomes mandatory.
         actual_start_end:
           label: Actual Start - End
         planned_start_end:
           label: Planned Start - End
         implementing_agencies: 
           label: Channel of Delivery
+          description: |
+            The Channel of Delivery is the implementing agency in charge of implementing the project. 
+            The Channel of Delivery can be an NGO, a ministry or any other organization.
         contracted_agencies: 
           label: Extending Agencies
+          description: |
+            The extending agency is a third party outside of the channel of delivery to serve as an intermediary between the donor and the channel of delivery. 
+            The Contracted Agency can be an NGO, a ministry or any other organization. Channel of Delivery and Extending Agencies can be the same.
         national_regional: 
           label: National / Regional
+          description: |
+            This field is meant to give information on whether the project is part of a National or Regional Strategy 
+            and if it is Regional whether the national or country component is financially clearly distinguishable
           options:
             national: National
             regional: Regional
             regional_with_nicaraguan_component_available: Regional with Nicaraguan Component Available
         type_of_implementation: 
           label: Type of Implementation
+          description: |
+            Following possibilities exist: Multilateral: if the Project/Program is implemented via a UN Agency/Multilateral such as e.g. 
+            the World Bank / ADB/ UNDP Bilateral: if the Project/Program is implemented as direct agreement between Donor and GoN 
+            meaning not via UN Agency/Multilateral or NGO NGO: if the Project/Program is implemented via NGOs.
           options:
             not_available: Not available
             bilateral: Bilateral
@@ -72,13 +115,22 @@ en:
             ngo_implementation: NGO Implementation
         aid_modality: 
           label: Aid Modality
+          description: Aid modalities are the ways in which aid is provided by donors to partner governments.
         on_off_treasury:
           label: On/Off Treasury
+          description: |
+            On treasury: External financing disbursed into the main revenue funds of government and managed through government’s systems. 
+            (CUT - Conta unica de tesoru) If a project is ON Budget and goes throught CUT than it is ON Treasury. 
+            An ON Budget project can be ON or OFF Treasury, but an OFF Budget project cannot be ON Treasury.
           options:
             on_treasury: On Treasury
             off_treasury: Off Treasury
         on_off_budget:
           label: On/Off Budget
+          description: |
+            On budget: External financing, including programme and project financing, and its intended use reported in the budget documentation. 
+            In ODAmoz a project is ON budget if it has a Mozambican Beneficiary (UGB). In this case a Mozambican Budget Number will be created. 
+            If it is OFF Budget it will not be on Treasury and will not receive a Mozambican Budget Number.
           options:
             on_budget: On Budget
             off_budget: Off Budget
@@ -108,11 +160,17 @@ en:
             public_enterprises: Public Enterprises
         grant_loan: 
           label: Type of Funding
+          description: |
+            Grant: Transfers made in cash, goods or services for which no repayment is required.
+            Loan: Transfers for which repayment is required.
           options:
             grant: Grant
             loan: Loan
         delegated_cooperation: 
           label: Delegated Cooperation
+          description: |
+            Financial delegation of the funds by Donors towards the Donor reporting. The Donor reporting must have implementation responsibility. 
+            This is not to be confounded with Common Fund and Co-Financing arrangements.
           options:
             "yes": "Yes"
             "no": "No"
@@ -120,10 +178,15 @@ en:
           label: Delegated by
         website: 
           label: Project Internet Link
+          description: A direct web link to existing, more detailed project information on the internet.
         comments: 
           label: Comments
+          description: Any other information not covered by the data fields relevant to the understanding of the activity.
         officer_responsible: 
           label: Project Contact Person
+          description: |
+            Either a person who directly answers questions, inquiries or feedbacks, or an administrative assistant who coordinates them. 
+            Please enter here the name, phone number and email address of the Project Contact Person.
         officer_responsible_name: 
           label: Name
         officer_responsible_phone: 
@@ -166,6 +229,10 @@ en:
           label: Project's Focal Sectors
         geo_relevances: 
           label: Project's Focal Regions
+          description: |
+            This field shows the geographic location of their individual activities up to distric level. 
+            A project can be asigned to more than one province and district. Please select a Province from the drop down list. 
+            If no province has been selected the project will be automatically entered as a national project.
           report_heading: Focal Regions
         sectors: 
           label: Sectors
@@ -177,6 +244,7 @@ en:
           label: Total Disbursements
         undisbursed:
           label: Undisbursed Funds
+          description: The actual amount of expected disbursments (in original currency) still available at current date/ moment for a given grant or loan.
           report_heading: Undisbursed
         historic_commitments:
           label: Historic Commitments
@@ -196,10 +264,12 @@ en:
           label: Disbursements Forecast {{year}}
         cofundings: 
           label: Co-Funding
+          description: A project that is jointly financed and managed by two or more donors or donor agencies.
         mdgs: 
           label: MDGs
         project_currency:
           label: Currency
+          description: Projects should be entered in the original currency from the donor project agreement.
         data_status:
           label: Data Status
           options:
@@ -211,10 +281,14 @@ en:
       sector_relevance:
         dac_sector: 
           label: DAC / CRS Sector
+          description: |
+            The selection of more than one sector is possible. 
+            When selecting more than one sector, please identify the percentage of that project that is going to each sector.
         crs_sector: 
           label: CRS Sector
         amount: 
           label: Amount in %
+          description: The percentage of project funds that is going to a selected DAC Sector.
         
       geo_relevance:
         province: 
@@ -223,6 +297,7 @@ en:
           label: Districts
         amount: 
           label: Amount in %
+          description: The percentage of a given project that is going to a selected Province.
         
       user:
         name: 
@@ -383,6 +458,7 @@ en:
       cofunding:
         donor: 
           label: Co-Funding Donor
+          description: A donor that is co-funding a given project. Enter the Name(s) of the Co-Funding Donor(s)
         amount: 
           label: Amount of Funding
         currency: 
@@ -393,14 +469,28 @@ en:
       historic_funding:
         commitments: 
           label: Commitments
+          description: |
+            A firm obligation, expressed in writing and backed by the necessary funds, 
+            undertaken by an official donor to provide specified assistance to a recipient country or a multilateral organisation. 
+            Bilateral commitments are recorded in the full amount of expected transfer, 
+            irrespective of the time required for the completion of disbursements.
         payments: 
           label: Disbursements
+          description: Funds up to 2006 include the total amount of funds disbursed by a project.
       
       funding:
         commitments: 
           label: Commitments
+          description: |
+            A firm obligation, expressed in writing and backed by the necessary funds, 
+            undertaken by an official donor to provide specified assistance to a recipient country or a multilateral organisation. 
+            Bilateral commitments are recorded in the full amount of expected transfer, 
+            irrespective of the time required for the completion of disbursements.
         payments:
           label: Disbursements
+          description: |
+            The release of funds to or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements 
+            record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor.
         undisbursed:
           label: Undisbursed
         payments_q1: 
@@ -419,8 +509,12 @@ en:
       funding_forecast:
         commitments: 
           label: Commitments
+          description: |
+            If funding for an existing project is planned 
+            to be extended in the furture or in case a project is in the planned but not yet signed status.
         payments: 
           label: Disbursements
+          description: The amount of a given grant or loan (in original currency) that has been planned to be paid on a given future date.
         on_budget: 
           label: On/Off Budget
         on_treasury: 

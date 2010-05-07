@@ -189,7 +189,7 @@ var initAttributeSliders = function() {
 		}
    );
 };
-			
+
 var initMap = function() {
 	var options = {
 		controls: [new OpenLayers.Control.MouseDefaults()],
@@ -203,18 +203,18 @@ var initMap = function() {
 	layer = new OpenLayers.Layer.WMS( "Nicaragua",
 	        "/odamap/wxs", {layers: 'basic', format: 'png'},
 			{singleTile: false, transitionEffect: 'resize'});		
-      	
+
 	//map.addControl( new OpenLayers.Control.LayerSwitcher() );
 	map.addControl(new OpenLayers.Control.PanZoomBar());
 	//vectors = new OpenLayers.Layer.Vector("Selected Features");
 	//map.addLayers([layer, vectors]);
 	map.addLayer(layer);
-					
+
 	// Add locations to list
 	map.events.register('click', map, function (e) {
 		var coord = new OpenLayers.Pixel(e.xy.x, e.xy.y);
 		var lonlat = map.getLonLatFromPixel(coord);
-		
+
 		$.ajax({
 		  async: false,
 			cache: false,
@@ -232,6 +232,6 @@ var initMap = function() {
 			}
 		});
 	});
-		
+
 	map.zoomToMaxExtent();
 };

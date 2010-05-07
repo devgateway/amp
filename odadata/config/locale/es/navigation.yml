@@ -6,6 +6,7 @@ es:
     language_en: 'Inglês'
 
     default:
+      virtual_working_group: Virtual Working Group
       home: Principal
       donor_profiles:
         head: Perfis dos Doadores

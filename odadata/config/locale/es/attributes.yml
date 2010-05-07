@@ -13,19 +13,30 @@ es:
           report_heading: "" # left blank on purpose
         donor:
           label: Doador
+          description: |
+            Nome do Doador tais como a França ou CE, inclui no sítio as vezes também agências das NU 
+            (ex. Perfis do Doador inclui Perfis dos Doadores e agências das NU).
         donor_agency:
           label: 'Agência Doadora'
+          description: |
+            Nome da Agência Doadora dos respectivos Países Doadores. 
+            Os Pontos Focais irão encontrar apenas agências doadoras dos seus respectivos Países Doadores
         donor_project_number:
           label: 'Número do Projeto do Doador'
+          description: 'Digite o número, ou uma combinação de letras e números utilizadas pela agência doadora para identificar a actividade.'
         government_counterpart:
           label: Contraparte do Governo
         oecd_number:
           label: 'Número OECD'
+          description: 'Número Único do Projecto atribuído pela OCDE CAD no primeiro relato do projecto à OCDE. De 10 dígitos: YYYYxxxxxx'
         recipient_country_budget_nr:
           label: 'Número do Projecto Moçambique'
+          description: |
+            O Código Orçametal Moçambicano será automaticamente criado a partir das informações introduzidas na ODAmoz. 
+            Os Códigos serão criados apenas para projectos INSCRITOS no OE. 
         title:
           label: 'Título do Projecto / Programa'
-          description: Single-line glossary entry
+          description: 'Título Oficial do Projecto utilizado internamente pelo Doador/agência das NU'
         description:
           label: 'Breve Descrição'
           description: |+
@@ -35,6 +46,16 @@ es:
           label: Related Country Strategy
         prj_status:
           label: 'Status do Projecto'
+          description: |
+            Por favor, introduza aqui a Situação do Projecto/Programa. 
+
+            Se um projecto foi alterado para o próximo nível, ex. de planificado para em curso, não é possível alterar isto de novo após ter sido publicado, porque certos outros campos estarão ligados a estas situações.  
+            - planificado mas ainda não assinado (todos os campos ainda podem ser alterados) 
+            - assinado mas ainda não desembolsado (Os Compromissos serão fixados, as previsões de Desembolsos serão fixadas, as datas planificados de início e fim serão obrigatórias)
+            - em curso (as datas planificadas de início e fim serão fixadas, as datas reais de início e fim tornar-se-ão obrigatórias, as previsões de Compromissos serão fixadas, as previsões de desembolsos serão fixadas) 
+            - concluído (todos os campos serão congelados)
+
+            No caso de um erro, por favor contactar o Ponto Focal Administrador ou o Coodenador do Doador.
           options:
             planned: 'Planejado, mas ainda não assinou'
             signed: 'Assinado, mas ainda não desembolsadas'
@@ -43,28 +64,57 @@ es:
             completed: 'Concluído'
         planned_start:
           label: 'Data do Início Planificado'
+          description: |
+            A data prevista na fase de planificação de um projecto quando este mesmo projecto irá iniciar. 
+            Quando a situação do projecto for ainda "planificado"  ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") esta data deve ser inserida. 
+            Nas fases posteriores em curso de um projecto, essas datas serão fixadas e não podem ser alteradas.
         planned_end:
           label: 'Data da Conclusão Planificada'
+          description: |
+            A data prevista na fase de planificação de um projecto sobre quando este projecto será concluído. 
+            Quando a situação do projecto de um projecto ainda for "planificado" ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") esta data deve ser inserida. 
+            Nas fases em curso posteriores de um projecto, estas datas serão fixadas e não podem ser alteradas. 
         actual_start:
           label: 'Data do Início Real'
+          description: |
+            A data em que um dado projecto inicia. Quando a situação do projecto de um projecto é alterada de "planificado" 
+            ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") para "em curso" a " data real do início" 
+            se torna obrigatória.
         actual_end:
           label: 'Data da Conclusão Real'
+          description: |
+            A data em que se conclui um dado projecto. Quando a situação do projecto de um projecto é alterada de "planificado" 
+            ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") para "em curso" a " data real do fim" 
+            se torna obrigatória.
         actual_start_end:
           label: 'Início - Conclusão Real'
         planned_start_end:
           label: 'Início - Conclusão Planificado'
         implementing_agencies:
           label: Canal de Entrega
+          description: |
+            O canal de entrega é a agência implementadora encarregada da implementação do projecto. 
+            O Canal de Entrega pode ser uma ONG, um ministério ou qualquer outra organização.
         contracted_agencies:
           label: 'Agência da Extensão'
+          description: |
+            Uma agência intermediária é uma terceira parte fora do canal de entrega para servir como intermediária entre o doador e o canal de entrega. 
+            A Agência Contratada pode ser uma ONG, um ministério ou qualquer outra organização. 
+            O Canal de Entrega e a Agência Intermediária podem ser a mesma entidade.
         national_regional:
           label: 'Implementação Nacional/Regional'
+          description: |
+            Este campo serve para fornecer informações sobre se o projecto é parte integrante de uma Estratégia Nacional 
+            ou Regional ou se a componente do país é, em termos financeiros, claramente distinta.
           options:
             national: Nacional
             regional: Regional
             regional_with_nicaraguan_component_available: Regional with Nicaraguan Component Available
         type_of_implementation:
           label: 'Tipo de Implementação'
+          description: |
+            As seguintes possibilidades existem: Multilateral: se o Projecto/Programa é implementado via uma Agência das NU/Multilateral tais como por ex. o Banco Mundial / BAD/ PNUD Bilateral: 
+            se o Projecto/Programa é implementado como acordo directo entre o Doador e o GdM, quer dizer, não via uma Agência das NU/Multilateral ou ONG: se o Projecto/Programa é implementado via ONGs.
           options:
             not_available: 'Não disponível'
             bilateral: Bilateral
@@ -72,13 +122,22 @@ es:
             ngo_implementation: 'ONG Execução'
         aid_modality:
           label: 'Modalidade de Ajuda'
+          description: As modalidades de ajuda são as formas em que a ajuda é disponibilizada pelos doadores aos governos parceiros.
         on_off_treasury:
           label: 'No/Fora da Conta Única do Tesouro'
+          description: |
+            No tesouro: Financiamento externo desembolsado para o principal fundo de receita do governo e gerido através dos sistemas públicos (CUT - Conta Única de Tesouro). 
+            Se um projecto for INSCRITO no OE e passa pela CUT, então é NO Tesouro. 
+            Um projecto INSCRITO no OE pode ser NO ou FORA do Tesouro, mas um projecto FORA do OE não pode ser NO Tesouro.
           options:
             on_treasury: 'No da Conta Única do Tesouro'
             off_treasury: 'Fora da Conta Única do Tesouro'
         on_off_budget:
           label: 'No/Fora Orçamento'
+          description: |
+            Inscrito no OE: Financiamento externo, incluindo financiamento de programas e projectos e a sua utilização prevista é relatada na documentação orçamental. 
+            Na ODAmoz um projecto diz-se Inscrito no Orçamento caso tiver um Beneficiário Moçambicano (UGB). Neste caso será criado um Código Orçamental Moçambicano. 
+            Se for FORA do OE não estará no Tesouro e não receberá um Código Orçamental Moçambicano.
           options:
             on_budget: 'No Orçamento'
             off_budget: 'Fora Orçamento'
@@ -108,11 +167,18 @@ es:
             public_enterprises: 'Empresas Públicas'
         grant_loan:
           label: Tipo de Financiamento
+          description: |
+            Doação: Transferências feitas em dinheiro vivo, bens ou serviços para as quais não é necessária nenhum pagamento.
+            Empréstimo: Transferências para as quais é preciso pagamento.
           options:
             grant: 'Donativo'
             loan: 'Empréstimo'
         delegated_cooperation:
           label: 'Cooperação delegada'
+          description: |
+            Delegação financeira dos fundos por Doadores através de relato do Doador. 
+            O relato do Doador deve ter responsabilidade de implementação. 
+            Isto não é para ser confundido com Fundo Comum e acordos de Co-financiamento
           options:
             "yes": Sim
             "no": 'Não'
@@ -120,10 +186,15 @@ es:
           label: Delegada pelo
         website:
           label: 'Sítio'
+          description: 'Um link online para informações existentes do projecto mais detalhadas na internet.'
         comments:
           label: 'Comentários'
+          description: Qualquer outra informação não abrangida pelos campos dos dados relevante para a compreensão da actividade.
         officer_responsible:
           label: 'Informação de contacto'
+          description: |
+            Tanto a pessoa que responde directamente às perguntas, solicitações como feedback ou um assitente administrativo que os coordena. 
+            Por favor digite aqui o nome, número de telefone e endereço electrónico da Pessoa de Contacto do Projecto.
         officer_responsible_name:
           label: Nome
         officer_responsible_phone:
@@ -164,8 +235,15 @@ es:
             principal_objective: Principal Objective
         sector_relevances:
           label: Sectores
+          description: |
+            É possível a selecção de mais do que um sector. 
+            Quando seleccionar mais do que um sector, por favor identifique a percentagem deste projecto que será canalizada para cada sector.
         geo_relevances:
           label: 'Província'
+          description: |
+            Este campo mostra a localização geográfica das actividades individuais até ao nível distrital. 
+            Um projecto pode ser atribuído a mais do que uma província e distrito. Por favor, seleccione uma Província da lista em suspensão. 
+            Caso não for seleccionado nenhuma província, o projecto será automaticamente introduzido como um projecto nacional.
           report_heading: 'Província'
         sectors:
           label: Sectores
@@ -178,6 +256,7 @@ es:
         undisbursed:
           label: 'Fundos não desembolsos'
           report_heading: 'Não desembolsos'
+          description: 'O montante real dos desembolsos previstos (em moeda original) ainda disponível na data/momento actual para uma dada doação ou empréstimo.'
         total_commitments_in:
           label: Total compromisso {{year}}
         total_disbursements_in:
@@ -192,10 +271,12 @@ es:
           label: 'Previsões de Desembolsos {{year}}'
         cofundings:
           label: 'Co-financiamento'
+          description: Um projecto que é conjuntamente financiado e gerido por dois ou mais doadores ou agências doadoras.
         mdgs:
           label: ODM
         project_currency:
           label: Moeda Utilizada
+          description: Os Projectos devem ser introduzidos em moeda original do acordo do projecto com o doador.
         data_status:
           label: Data Status
           options:
@@ -211,6 +292,7 @@ es:
           label: Sector OCDE/CAD
         amount:
           label: Montante sectorial em %
+          description: A percentagem dos fundos do projecto que será canalizada para um Sector CAD seleccionado.
 
       geo_relevance:
         province:
@@ -219,6 +301,7 @@ es:
           label: Distrito
         amount:
           label: Montante em %
+          description: A percentagem de um dado projecto que será canalizada para um Província seleccionada.
 
       user:
         name:
@@ -379,6 +462,7 @@ es:
       cofunding:
         donor:
           label: Doador Co-financiador
+          description: Um doador que está a co-financiar um dado projecto. Introduza o(s) Nome(s) do(s) Doadore(s) Co-financiadore(s).
         amount:
           label: Montante
         currency:
@@ -395,8 +479,15 @@ es:
       funding:
         commitments:
           label: Compromissos
+          description: |
+            Uma firme obrigação, expressa por escrito e suportada pelos fundos necessários, assumida por 
+            doador oficial para fornecer assistência especificada a um país recipiente ou uma organização multilateral. 
+            Os compromissos bilaterais são registados no montante total da transferência prevista, independentemente do tempo necessário para a conclusão dos desembolsos.
         payments:
           label: Desembolsos
+          description: |
+            A libertação de fundos ou a compra de bens ou serviços a favor de um recipiente; ou seja, o montante gasto para o efeito.
+            Os desembolsos registam as transferências internacionais reais de recursos financeiros ou de bens ou serviços estimados a custa do doador.
         undisbursed:
           label: 'Fundos não desembolsos'
         payments_q1:
@@ -415,8 +506,13 @@ es:
       funding_forecast:
         commitments:
           label: Compromissos
+          descriptions: |
+            Se o financiamento para um projecto existente for planificado para ser prolongado no futuro ou no caso de um projecto estiver 
+            na situação de planificado mas ainda não assinado.
         payments:
           label: Desembolsos
+          description: |
+            O montante de uma dada doação ou empréstimo (em moeda original) que foi planificado para ser pago numa dada data futura.
         on_budget:
           label: 'No/Fora Orçamento'
         on_treasury:

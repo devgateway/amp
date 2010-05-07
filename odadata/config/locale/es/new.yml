@@ -314,6 +314,8 @@ es:
     custom:
       new:
         funds_for: 'Informação de financiamento {{year}}'
+        funding_forecasts_for: Previsão do financiamento {{year}}
+        historic_funding: Informação de financiamento antes de 2006
         output_fields:
           heading: Campos para mostrar
 

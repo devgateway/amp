@@ -12,7 +12,7 @@ es:
         donor: Doadores
         un_agencies: 'Agências da ONU'
       search_by:
-        head: Busca de proyectos por
+        head: Busca de projectos por
         donor: Doador
         sector: Sector
         location: 'Localizacão'

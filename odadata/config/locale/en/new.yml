@@ -375,6 +375,7 @@ en:
         title: Projects of {{donor}}
     mdgs:
       index:
+        mdg: Goal
         title: Projects by MDG
         no_projects: Number of Projects
         list: List

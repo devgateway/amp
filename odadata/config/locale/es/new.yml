@@ -374,6 +374,7 @@ es:
         title: Projectos de {{donor}}
     mdgs:
       index:
+        mdg: Objetivo
         title: Projectos de MDG
         no_projects: 'Número de Projectos'
         list: Lista

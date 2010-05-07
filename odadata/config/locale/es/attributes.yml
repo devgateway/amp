@@ -124,23 +124,23 @@ es:
           label: 'Modalidade de Ajuda'
           description: As modalidades de ajuda são as formas em que a ajuda é disponibilizada pelos doadores aos governos parceiros.
         on_off_treasury:
-          label: 'No/Fora da Conta Única do Tesouro'
+          label: 'No/Fora da CUT'
           description: |
             No tesouro: Financiamento externo desembolsado para o principal fundo de receita do governo e gerido através dos sistemas públicos (CUT - Conta Única de Tesouro). 
             Se um projecto for INSCRITO no OE e passa pela CUT, então é NO Tesouro. 
             Um projecto INSCRITO no OE pode ser NO ou FORA do Tesouro, mas um projecto FORA do OE não pode ser NO Tesouro.
           options:
-            on_treasury: 'No da Conta Única do Tesouro'
-            off_treasury: 'Fora da Conta Única do Tesouro'
+            on_treasury: 'No da CUT'
+            off_treasury: 'Fora da CUT'
         on_off_budget:
-          label: 'No/Fora Orçamento'
+          label: 'No/Fora Orçamento de Estado'
           description: |
             Inscrito no OE: Financiamento externo, incluindo financiamento de programas e projectos e a sua utilização prevista é relatada na documentação orçamental. 
             Na ODAmoz um projecto diz-se Inscrito no Orçamento caso tiver um Beneficiário Moçambicano (UGB). Neste caso será criado um Código Orçamental Moçambicano. 
             Se for FORA do OE não estará no Tesouro e não receberá um Código Orçamental Moçambicano.
           options:
-            on_budget: 'No Orçamento'
-            off_budget: 'Fora Orçamento'
+            on_budget: 'No Orçamento do Estado'
+            off_budget: 'Fora Orçamento do Estado'
         government_project_code:
           label: 'Código Orçamental do Governo'
         private_support:
@@ -499,9 +499,9 @@ es:
         payments_q4:
           label: 'Desembolosos 4º Trimestre'
         on_budget:
-          label: 'No/Fora Orçamento'
+          label: 'No/Fora Orçamento do Estado'
         on_treasury:
-          label: 'No/Fora da Conta Única do Tesouro'
+          label: 'No/Fora da CUT'
 
       funding_forecast:
         commitments:
@@ -514,9 +514,9 @@ es:
           description: |
             O montante de uma dada doação ou empréstimo (em moeda original) que foi planificado para ser pago numa dada data futura.
         on_budget:
-          label: 'No/Fora Orçamento'
+          label: 'No/Fora Orçamento do Estado'
         on_treasury:
-          label: 'No/Fora da Conta Única do Tesouro'
+          label: 'No/Fora da CUT'
 
       delegated_cooperation:
         delegating_donor:

@@ -7,7 +7,7 @@ if params[:un] == "yes"
 	</tr>
 	<% Donor.un_agency.ordered.each do |d| %>
 		<tr>
-			<td><%= link_to(d.name.titleize, donor_info_donor_profile_path(d.id)) %></a></td>
+			<td><%= link_to(d.name, donor_info_donor_profile_path(d.id)) %></a></td>
 		</tr>
 	<% end %>
         <tr>
@@ -21,7 +21,7 @@ else
 	</tr>
 	<% Donor.country.ordered.each do |d| %>
 		<tr>
-			<td><%= link_to(d.name.titleize, donor_info_donor_profile_path(d.id)) %></a></td>
+			<td><%= link_to(d.name, donor_info_donor_profile_path(d.id)) %></a></td>
 		</tr>
 	<% end %>
         <tr>

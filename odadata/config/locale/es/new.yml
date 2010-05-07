@@ -74,7 +74,7 @@ es:
       title: Editar Contato Detalhes
       saved: Gravado com sucesso
     form:
-      total_oda_classification_title: '"A quantidade total de ODA para o GoM (no orçamento) que"'
+      total_oda_classification_title: 'A quantidade total de ODA para o GoM (no orçamento) que'
       yearly_missions_head: 'Missões de doadores para o campo realizadas neste ano civil'
       yearly_analytic_works_head: 'Obras analítica do país neste ano civil'
       gbs_head: Apoio directo ao OE
@@ -108,7 +108,7 @@ es:
       title: Editar Taxa de Câmbio
       back: Anterior
     index:
-      title: '"{{source}} Taxa de Câmbio"'
+      title: '{{source}} Taxa de Câmbio'
       empty: 'Não câmbio existem no banco de dados. Adicione uma nova taxa de câmbio.'
       new: Nova taxa de câmbio
       edit: Editar
@@ -286,7 +286,7 @@ es:
     show:
       print: 'Impressão'
       close_window: Fechar a janela
-      title: Ficha do proyecto para <i>{{project}}</i>
+      title: Ficha do projecto para <i>{{project}}</i>
       project_information: 'Informações sobre o Projecto'
       funding_information: 'Informação de Financiamento'
       totals: Totais de financiamento
@@ -304,14 +304,14 @@ es:
       project: Projecto
       geo_list: Províncias e Distritos
       national: Projeto Nacional
-      map_legend: '"Áreas de destaque são as provincías / distritos focais do projeto"'
+      map_legend: 'Áreas de destaque são as provincías / distritos focais do projeto'
     error:
       donor_project_number_taken: 'Número do projeto já existe'
-      must_be_present_if_signed: '"{{attribute}} deve estar presente em projectos assinados"'
-      must_be_present_if_ongoing: '"{{attribute}} deve estar presente em projetos em curso"'
-      total_amount_location_invalid: '"A soma das percentagens de localização deve ser de 100%, mas é {{total}}%"'
-      total_amount_sector_invalid: '"A soma das percentagens do setor deve ser de 100%, mas é  {{total}}%"'
-      missing_mdgs: '"Por favor, preencha as informações dos ODM."'
+      must_be_present_if_signed: '{{attribute}} deve estar presente em projectos assinados'
+      must_be_present_if_ongoing: '{{attribute}} deve estar presente em projetos em curso'
+      total_amount_location_invalid: 'A soma das percentagens de localização deve ser de 100%, mas é {{total}}%'
+      total_amount_sector_invalid: 'A soma das percentagens do setor deve ser de 100%, mas é  {{total}}%'
+      missing_mdgs: 'Por favor, preencha as informações dos ODM.'
   reports:
     custom:
       new:
@@ -322,12 +322,13 @@ es:
           heading: Campos para mostrar
 
         criteria:
+          title: Critérios de filtro
           donors_and_un_agencies:  Doador e NU
           sectors: DAC Sectores
           location: Local
           mdg: 'Objectivos de Desenvolvimento do Milénio'
-          on_off_budget: 'No/Fora Orçamento'
-          on_off_treasury: 'No/Fora da Conta Única do Tesouro'
+          on_off_budget: 'No/Fora Orçamento do Estado'
+          on_off_treasury: 'No/Fora da CUT'
           aid_modality: Modalidade de Ajuda
           type_of_implementation: 'Tipo de Implementação'
           prj_status: Status do Projecto
@@ -339,7 +340,7 @@ es:
           disaggregation: 'Desagregação'
 
         disaggregation:
-          by_sector: Desagregar financimento por by DAC-CRS Sector
+          by_sector: Desagregar financimento por DAC-CRS Sector
           by_location: 'Desagregar financimento por Localização'
 
         rates:
@@ -366,6 +367,11 @@ es:
       show:
         title: Projectos de {{district}}
     donors:
+      map:
+        title: Projectos do {{donor}}
+        pattern: Padrão
+        project: Projecto
+        fact_sheet: Ficha descriptiva
       index:
         title: Projectos de Doador
         no_projects: 'Número de Projectos'
@@ -447,7 +453,7 @@ es:
       role: Papel do usuário
       edit: Editar conta
       delete: Eliminar conta
-      new: C'riar novo usuário'
+      new: Criar novo usuário
     new:
       title: Adicionar nova conta
       back: Anterior
@@ -491,14 +497,14 @@ es:
         oda_on_budget_4: 'utilizados sistemas de compras nacionais no calendário'
         parallel_piu: 'Número de unidades paralelas de implementação do projecto (UPI) usados neste ano civil?'
         yearly_missions_head: 'Missões de doadores para o campo realizadas neste ano civil'
-        yearly_missions: '"Número de missões:"'
-        yearly_coordinated_missions: '"Missões coordenadas:"'
+        yearly_missions: 'Número de missões:'
+        yearly_coordinated_missions: 'Missões coordenadas:'
         yearly_analytic_works_head: 'Obras analíticas de país neste ano civil'
-        yearly_analytic_works: '"Número de obras:"'
+        yearly_analytic_works: 'Número de obras:'
         yearly_coordinated_analytic_works: "Obras coordenadas:"
         gbs_head: 'Apoio ao Orçamento Geral'
         gbs_multiyear_agreement: Acordo multi ano
-        gbs_multiyear_agreement_years: '"Número de anos:"'
+        gbs_multiyear_agreement_years: 'Número de anos:'
         gbs_question_1: 'Foram os seus compromissos financeiros para GBS no ano n feito dentro de 4 semanas após o JR no ano n-1?'
         gbs_question_2: Se sua agência paga todos os fundos autorizados neste ano, como programad?
         gbs_question_3: 'Se sua agência paga todos os fundos comprometidos de acordo com o cronograma de desembolso trimestrais de acordo?'
@@ -514,7 +520,7 @@ es:
     donor_report:
       show:
         on_off_treasury: CUT
-        on_off_budget: Orçamento
+        on_off_budget: Orçamento do Estado
         on_value: "No"
         off_value: "Fora"
         committed: Compromisso

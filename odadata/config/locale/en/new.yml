@@ -323,6 +323,7 @@ en:
           heading: Fields to display
           
         criteria:
+          title: Filter criteria
           donors_and_un_agencies: Donors & UN Agencies
           sectors: DAC Sectors
           location: Location
@@ -367,6 +368,11 @@ en:
       show:
         title: Projects of {{district}}
     donors:
+      map:
+        title: Projects of {{donor}}
+        pattern: Pattern
+        project: Project
+        fact_sheet: Fact Sheet
       index:
         title: Projects by Donor
         no_projects: Number of Projects

@@ -37,15 +37,18 @@ public class AuditLoggerManager extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		AuditLoggerManagerForm vForm = (AuditLoggerManagerForm) form;
-
+logger.info("ok1");
 		if (request.getParameter("clean") != null) {
 			if (vForm.getUseraction().equalsIgnoreCase("delete")) {
 				AuditLoggerUtil.DeleteLogsByPeriod(vForm.getFrecuency());
 			} else if (vForm.getUseraction().equalsIgnoreCase("export")) {
-
+				logger.info("ok2");
 				OutputStream out = response.getOutputStream();
+				logger.info("ok3");
 				try {
+					logger.info("ok4");
 					XlsMaker(vForm, request, response).write(out);
+					logger.info("ok5");
 					out.flush();
 					out.close();
 					return null;
@@ -174,13 +177,15 @@ public class AuditLoggerManager extends MultiAction {
 	
 	private HSSFWorkbook XlsMaker( AuditLoggerManagerForm form, HttpServletRequest request, HttpServletResponse response) {
 		int interval = Integer.parseInt(form.getFrecuency());
+		logger.info("XlsMaker1");
 		Collection<AmpAuditLogger> Xlslogs=AuditLoggerUtil.getLogByPeriod(interval);
+		logger.info("XlsMaker2");
 		Collections.sort((List<AmpAuditLogger>) Xlslogs);
 		HSSFWorkbook wb = new HSSFWorkbook();
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "inline; filename=Audit-logger.xls");
 		HSSFSheet sheet = wb.createSheet("Audit-logger.xls");
-		
+		logger.info("XlsMaker3");
 		HSSFRow row = sheet.createRow((short)(0));
 		HSSFRichTextString str = null;
 		HSSFFont titlefont = wb.createFont();
@@ -236,7 +241,7 @@ public class AuditLoggerManager extends MultiAction {
 		str = new HSSFRichTextString("Action");
 		cell.setCellValue(str);
 		cell.setCellStyle(tstyle);
-		
+		logger.info("XlsMaker4");
 		style.setFont(font);
 		int i = 1;
 		for (Iterator iterator = Xlslogs.iterator(); iterator.hasNext();) {
@@ -284,6 +289,7 @@ public class AuditLoggerManager extends MultiAction {
 			cell.setCellStyle(style);
 			i++;
 		}
+		logger.info("XlsMaker5");
 		sheet.autoSizeColumn((short)0);
 		sheet.autoSizeColumn((short)1);
 		sheet.autoSizeColumn((short)2);
@@ -292,7 +298,7 @@ public class AuditLoggerManager extends MultiAction {
 		sheet.autoSizeColumn((short)5);
 		sheet.autoSizeColumn((short)6);
 		sheet.autoSizeColumn((short)7);
-		
+		logger.info("XlsMaker6");
 		return wb;
 		
 		

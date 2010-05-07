@@ -14,16 +14,30 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 	var addLocationButton	= new ButtonWrapper('add_location_button');
+	var locationDividePercentsEqually	= new ButtonWrapper('divide_loc_percents_equally');
 	function updateAddLocationButton() {
-		var locationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
+		var locationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];		
 		if ( locationLevelSelect.selectedIndex > 0 ) {
 			addLocationButton.enable();
 		}
-		else
+		else {
 			addLocationButton.disable();
+		}
+
+		// if 100 can't divide on location amount without remain, button should be disabled 		
+		var locations=$("#locsTable").find("input.selLocsMultibox");
+		if(locations.length!=0){
+			if(100%locations.length==0){
+				locationDividePercentsEqually.enable();
+			}else{
+				locationDividePercentsEqually.disable();
+			}	
+		}		
+			
 	}
 	YAHOO.util.Event.on(window, "load", updateAddLocationButton);
 </script>
@@ -128,9 +142,7 @@
                                 <tr>
                                   	<td align="left">
                                     <b>
-                                      <digi:trn key="aim:location">
-                                      Location
-                                      </digi:trn>
+                                      <digi:trn>Location</digi:trn>
                                     </b>
                                   	</td>
                                 </tr>
@@ -155,13 +167,13 @@
                                       						<td>
                                       							<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
                                        								<div id="locationConfig">
-                                      									<table cellSpacing="0" cellPadding="0" border="0"	bgcolor="#ffffff" width="100%">
+                                      									<table cellSpacing="0" cellPadding="0" border="0"	bgcolor="#ffffff" width="100%" id="locsTable">
 																			<tbody>
                                             									<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
                                               										<tr>
 									                                              		<field:display name="Region" feature="Location">
 									                                                        <td width="3" vAlign="center">
-									                                                        <html:multibox property="location.selLocs" styleId="selLocs">
+									                                                        <html:multibox property="location.selLocs" styleId="selLocs" styleClass="selLocsMultibox">
 									                                                          <bean:write name="selectedLocs" property="locId" />
 									                                                        </html:multibox>
 									                                                        </td>
@@ -222,7 +234,7 @@
 																					<c:set var="dividePercentageButtonStyle">color:black</c:set>
 																				</c:if>
 																				<html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('location');" style="${dividePercentageButtonStyle}" 
-																						disabled="${!aimEditActivityForm.location.allowDividePercentageButton}">
+																						disabled="${!aimEditActivityForm.location.allowDividePercentageButton}" styleId="divide_loc_percents_equally">
 																					<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																				</html:button>                                                            
                                         									</td>	

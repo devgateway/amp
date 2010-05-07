@@ -764,21 +764,8 @@ function remProgram(programType) {
                                    <c:if test="${!index.first}">
                                        <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
                                    </c:if>
-                                   
-                                   
-                                   
-                               </c:if>
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                           </c:forEach>
-                            
-                           
-								
+                               </c:if>                               
+                           </c:forEach>	
                           </span>
                         </td>
                       </tr>

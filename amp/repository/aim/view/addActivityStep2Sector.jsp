@@ -15,14 +15,35 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-    function addSector(param)
-    {
+    function addSector(param){
         
         <digi:context name="addSec" property="context/addActivity.do" />
         document.aimEditActivityForm.action = "<%= addSec %>?step=2";
         document.aimEditActivityForm.target = "_self";
         document.aimEditActivityForm.submit();
     }
+
+ 	// if 100 can't divide on sector amount without remain, button should be disabled    
+	function updateSectorsDividePercentsButton() {
+		var divideButtons= $("input[id^='divide_sect_percents_equally_']");
+		if(divideButtons!=null && divideButtons.length>0){
+			for(var i=0;i<divideButtons.length;i++){
+				var butId=divideButtons[i].id;
+				var sectTableIdPrefix=butId.substring(butId.lastIndexOf('_'));
+				var sectDividePercentsEqually	= new ButtonWrapper(butId);
+				var sectors=$("#sectTable"+sectTableIdPrefix).find("input.selSecMultibox");
+				if(sectors.length!=0){
+					if(100%sectors.length==0){
+						sectDividePercentsEqually.enable();
+					}else{
+						sectDividePercentsEqually.disable();
+					}	
+				}				
+			}
+		}
+			
+	}
+	YAHOO.util.Event.on(window, "load", updateSectorsDividePercentsButton);
     </script>
 
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css/activityform_style.css" type="text/css">
@@ -113,13 +134,13 @@
                                                         	<div id="secondaryConfig">
 															<c:set var="percentageType" value="secondary"/>
 															</logic:equal>
-                                                    			<table cellSpacing="0" cellPadding="0" border="0" bgcolor="#ffffff" width="100%">
+                                                    			<table cellSpacing="0" cellPadding="0" border="0" bgcolor="#ffffff" width="100%" id="sectTable_${percentageType}">
                                                        				<tbody>
                                                         				<c:forEach var="activitySectors" items="${aimEditActivityForm.sectors.activitySectors}" varStatus="index">
                                                             				<c:if test="${activitySectors.configId==config.id}">
                                                                 				<tr> 
                                                                     				<td width="3%" vAlign="middle">
-				                                                                        <html:multibox property="sectors.selActivitySectors" styleId="selActivitySectors" disabled="${contentDisabled}">
+				                                                                        <html:multibox property="sectors.selActivitySectors" styleId="selActivitySectors" disabled="${contentDisabled}" styleClass="selSecMultibox">
 				                                                                            <c:if test="${activitySectors.subsectorLevel1Id == -1}">
 				                                                                            ${activitySectors.sectorId}
 				                                                                            </c:if>
@@ -194,7 +215,7 @@
 		                                                            </field:display>
 		                                                        </td>
                                                        		 	<td> &nbsp;
-	                                                               <html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('${percentageType}');">
+	                                                               <html:button styleClass="dr-menu" property="submitButton" onclick="dividePercentages('${percentageType}');" styleId="divide_sect_percents_equally_${percentageType}">
 																		<digi:trn key="dividePercentagesEqually">Divide percentages equally</digi:trn>
 																	</html:button>                                                         
                                                         		</td>

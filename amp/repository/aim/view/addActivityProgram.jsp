@@ -102,23 +102,16 @@
 <digi:instance property="selectProgramForm" />
 <digi:form action="/addProgram.do" method="post">
 	<c:set var="noDefaultProgram">
-		<digi:trn key="aim:noDefaultProgram">
-Default program is not selected
-</digi:trn>
+		<digi:trn>Default program is not selected</digi:trn>
 	</c:set>
 	<c:set var="defaultProgram">
-		<digi:trn key="aim:defaultProgram">
-Default Program
-</digi:trn>
+		<digi:trn>Default Program</digi:trn>
 	</c:set>
 
-
-
-	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+	<table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
 		<tr>
 			<td vAlign="top">
-			<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%"
-				class=box-border-nopadding>
+			<table bgcolor="#f4f4f2" cellPadding="5" cellSpacing="5" width="100%"class="box-border-nopadding">
 				<tr>
 					<td align=left vAlign=top>
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%"

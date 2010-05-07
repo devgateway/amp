@@ -1,20 +1,20 @@
-/* Inicialización en español para la extensión 'UI date picker' para jQuery. */
+/* Inicializaciï¿½n en espaï¿½ol para la extensiï¿½n 'UI date picker' para jQuery. */
 /* Traducido por Vester (xvester@gmail.com). */
 jQuery(function($){
-	$.datepicker.regional['es'] = {clearText: 'Limpiar', clearStatus: '',
-		closeText: 'Cerrar', closeStatus: '',
+	$.datepicker.regional['es'] = {clearText: 'Limpar', clearStatus: '',
+		closeText: 'Fechar', closeStatus: '',
 		prevText: '&lt;Ant', prevStatus: '',
-		nextText: 'Sig&gt;', nextStatus: '',
-		currentText: 'Hoy', currentStatus: '',
-		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-		monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
-		'Jul','Ago','Sep','Oct','Nov','Dic'],
+		nextText: 'Seg&gt;', nextStatus: '',
+		currentText: 'Hoje', currentStatus: '',
+		monthNames: ['Janeiro','Fevereiro', 'MarÃ§o', 'Abril', 'Maio', 'Junho',
+                'Julian','Agosto','Setembro','Outubro','November','Dezembro'],
+		monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun',
+		'Jul','Ago','Set','Out','Nov','Dez'],
 		monthStatus: '', yearStatus: '',
 		weekHeader: 'Sm', weekStatus: '',
-		dayNames: ['Domingo','Lunes','Martes','Mi&eacute;rcoles','Jueves','Viernes','S&aacute;dabo'],
-		dayNamesShort: ['Dom','Lun','Mar','Mi&eacute;','Juv','Vie','S&aacute;b'],
-		dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','S&aacute;'],
+		dayNames: ['Domingo','Segunda-feira','TerÃ§a-feira','Quarta-feira','Quinta-feira','Sexta-feira','SÃ¡bado'],
+		dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','S&aacute;b'],
+		dayNamesMin: ['Do','Se','Ma','Qua','Qui','Sex','Sab'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
 		dateFormat: 'dd/mm/yy', firstDay: 0, 
 		initStatus: '', isRTL: false};

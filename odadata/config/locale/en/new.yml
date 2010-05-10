@@ -469,6 +469,7 @@ en:
 
   donor_profiles:
       title: Donors
+      un_agencies: UN Agencies
       un_agency: UN Agencies
       head: Donor Profiles
       donor: Donor

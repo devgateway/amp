@@ -51,6 +51,12 @@ class ProjectsController < ApplicationController
     
     setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
     setup_record_range(@project.funding_forecasts, Time.now.year+1, (Time.now.year+1)+Project::FORECAST_RANGE)
+    if @project.historic_funding.nil?
+      @project.build_historic_funding
+      puts "Creating historic funding"
+    else
+      puts "not Creating historic funding"
+    end
 #    @project.historic_funding
   end
   

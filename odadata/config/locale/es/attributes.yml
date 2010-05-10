@@ -142,7 +142,7 @@ es:
             on_budget: 'No Orçamento do Estado'
             off_budget: 'Fora Orçamento do Estado'
         government_project_code:
-          label: 'Código Orçamental do Governo'
+          label: 'Fonte de Recursos'
         private_support:
           label: Apoio ao sector privado
           options:

@@ -24,7 +24,7 @@ en:
       odadata_manual: ODAdata Manual
       glossary: ODAdata Glossary
       dac_manual: DAC-CRS Manual
-      exchange_rates: Exchange Rates
+      exchange_rates: "{{source}} Exchange Rates"
       design_own: Design own report
       help: Help
       feedback: Feedback on ODAdata

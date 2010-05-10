@@ -1,4 +1,6 @@
 es:
+  options:
+    prompt: Por favor seleccione
   pagination:
     previous_page: Anterior
     next_page: 'Próxima'

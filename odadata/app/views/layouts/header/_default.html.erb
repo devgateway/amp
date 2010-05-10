@@ -67,7 +67,9 @@
 			<ul>
               <li><%= link_to nav.t('links'), links_path %></li>
               <li><%= link_to nav.t('downloads'), downloads_path %></li>
-              <li><%= link_to nav.t('exchange_rates'), exchange_rates_path %></li>
+              <% for source in ExchangeRate::SOURCES %>
+                <li><%= link_to  nav.t('exchange_rates', :source => ExchangeRate.human_option_name(:source, source)), exchange_rates_path(:source => source) %></li>
+              <% end %>
 			</ul>
 		</li>
 		<li>

@@ -165,6 +165,7 @@ es:
         exchange_rates: Taxas de Câmbio
         resources: Recursos
       focal_point:
+        exchange_rates: '{{source}} Taxa de Câmbio'
         short_title: Base de Dados da Ajuda Oficial para o Desenvolvimento a Moçambique
         design_own: Desenhe o relatório
         bluebook: EU Blue Book
@@ -178,7 +179,6 @@ es:
         donor_details: Detalhes dos Doadores
         accounts: Contas
         strategy: 'Estratégia Nacional'
-        exchange_rates: 'Taxas de Câmbio'
         financial_consistency: 'Coerência Financial'
         manuals: Manuais
         data_input_manual: Entrada de Dados Manual

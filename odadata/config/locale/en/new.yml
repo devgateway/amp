@@ -165,6 +165,7 @@ en:
         exchange_rates: Exchange Rates
         resources: Resources
       focal_point:
+        exchange_rates: '{{source}} Exchange Rate'
         short_title: Official Development Assistance <br/>to Mozambique Database
         design_own: Design own report
         bluebook: EU Blue Book
@@ -178,7 +179,6 @@ en:
         donor_details: Donor Details
         accounts: Login Accounts    
         strategy: Country Strategy
-        exchange_rates: Exchange Rates
         financial_consistency: Financial Consistency
         manuals: Manuals
         data_input_manual: Data Input Manual

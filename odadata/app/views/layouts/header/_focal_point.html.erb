@@ -76,7 +76,9 @@
 				<li><%= link_to t('.donor_details'), edit_donor_details_path(current_donor) %></li>
 				<!--<li><%= link_to t('.strategy'), country_strategies_path %></li>-->
 				<!--<li><%= link_to t('.financial_consistency'), consistency_path %></li>-->
-				<li><%= link_to t('.exchange_rates'), exchange_rates_path %></li>
+              <% for source in ExchangeRate::SOURCES %>
+                <li><%= link_to  t('.exchange_rates', :source => ExchangeRate.human_option_name(:source, source)), exchange_rates_path(:source => source) %></li>
+              <% end %>
 				<li><%= link_to t('.accounts'), users_path %></li>
 			</ul>
 		</li>

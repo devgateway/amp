@@ -1,8 +1,6 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -17,12 +15,11 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.form.ComponentTypeForm;
-import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.util.ComponentsUtil;
 
 public class UpdateComponentType extends Action {
@@ -120,17 +117,15 @@ public class UpdateComponentType extends Action {
 		Iterator it = com.iterator();
 		while (it.hasNext()) {
 			AmpComponentType componentType = (AmpComponentType) it.next();
-			Set<org.digijava.module.aim.dbentity.AmpComponent> components = componentType.getComponents();
-			Set<org.digijava.module.aim.dbentity.AmpComponent> componentsToDel = componentType.getComponents();
-			Iterator<org.digijava.module.aim.dbentity.AmpComponent> iter = components.iterator();
+			Set<AmpComponent> components = componentType.getComponents();
+			Iterator<AmpComponent> iter = components.iterator();
 			while (iter.hasNext()) {
-				org.digijava.module.aim.dbentity.AmpComponent ampComponent = (org.digijava.module.aim.dbentity.AmpComponent) iter.next();
-				if (ComponentsUtil.getComponentFunding(ampComponent.getAmpComponentId()) == null || ComponentsUtil.getComponentFunding(ampComponent.getAmpComponentId()).size() == 0){
-					componentsToDel.remove(ampComponent);
-					ComponentsUtil.deleteComponent(ampComponent.getAmpComponentId());
+				AmpComponent ampComp = (AmpComponent) iter.next();
+				if (ComponentsUtil.getComponentFunding(ampComp.getAmpComponentId()) == null || ComponentsUtil.getComponentFunding(ampComp.getAmpComponentId()).size() == 0){
+					iter.remove();
+					ComponentsUtil.deleteComponent(ampComp.getAmpComponentId());
 				}
 			}
-			componentType.setComponents(componentsToDel);
 		}
 		ComponentTypeForm compForm = (ComponentTypeForm) form;
 		compForm.setComponentTypesList(com);

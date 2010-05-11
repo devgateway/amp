@@ -12,6 +12,7 @@ es:
         head: Perfis dos Doadores
         donor: Doadores
         un_agencies: 'Agências da ONU'
+        un_agency: 'Agências da ONU'
       search_by:
         head: Busca de projectos por
         donor: Doador

@@ -7,74 +7,60 @@
 	<author>Gabriel Inchauspe</author>
 	<description>Fill amp_ahsurvey_question table.</description>
 
-	<trigger type="all">
-		<condition type="custom">
-			<script returnVar="y">
-				<lang type="hql">select count(*) from org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType</lang>
-			</script>
-			<test>y != 0</test>
-		</condition>
-		<condition type="custom">
-			<script returnVar="x">
-				<lang type="hql">select count(*) from org.digijava.module.aim.dbentity.AmpAhsurveyQuestion</lang>
-			</script>
-			<test>x == 0</test>
-		</condition>
-	</trigger>
 	<apply>
 		<script>
 			<lang type="sql" delimiter=";">
                 INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("1", "Is this project corresponding to aid flows to the government sector?", "1", "1", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("1", "In this project / activity, do the disbursements made by this development partner correspond to aid flows in support to the government sector?", "1", "1", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "In this project / activity, do the disbursements made by this development partner correspond to aid flows in support to the government sector?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("2", "Are disbursements of this project reported on the national budget?", "1", "2", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("2", "In this project / activity, are disbursements made by this development partner reported in the national budget?", "1", "2", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "In this project / activity, are disbursements made by this development partner reported in the national budget?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("3", "Is the project part of a coordinated programme?", "2", "3", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("3", "In this project / activity, is the funding provided by this particular development partner part of a coordinated programme?", "2", "3", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "In this project / activity, is the funding provided by this particular development partner part of a coordinated programme?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("4", "What is the technical co-operation share of this project/programme?", "2", "4", "3", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("4", "In this project / activity, what is the technical co-operation share in the funding of this particular development partner?", "2", "4", "3", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "In this project / activity, what is the technical co-operation share in the funding of this particular development partner?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("5", "Does this project use the national budget execution procedures?", "3", "5", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("5", "Does this development partner, in this particular project / activity, use the national budget execution procedures?", "3", "5", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "Does this development partner, in this particular project / activity, use the national budget execution procedures?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("6", "Does this project use the national financial reporting procedures?", "3", "6", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("6", "Does this development partner, in this particular project / activity, use the national financial reporting procedures?", "3", "6", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "Does this development partner, in this particular project / activity, use the national financial reporting procedures?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("7", "Does this project use the national auditing procedures?", "3", "7", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("7", "Does this development partner, in this particular project / activity, use the national auditing procedures?", "3", "7", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "Does this development partner, in this particular project / activity, use the national auditing procedures?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("8", "Is this project managed using the national procurement procedures?", "4", "8", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("8", "Does this development partner, in this particular project / activity, use the national procurement procedures?", "4", "8", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "Does this development partner, in this particular project / activity, use the national procurement procedures?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("9", "Does the project use a parallel Project Implementation Unit (PIU)?", "5", "9", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("9", "Does this development partner, in this particular project / activity, use a parallel Project Implementation Unit (PIU)?", "5", "9", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "Does this development partner, in this particular project / activity, use a parallel Project Implementation Unit (PIU)?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
 				VALUES("10", "Difference(%) between planned and actual disbursements.", "6", "10", "2", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				ON DUPLICATE KEY UPDATE question_text = "Difference(%) between planned and actual disbursements.";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
 				VALUES("11", "Is this project provided in the context of a programme-based approach?", "7", "11", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				ON DUPLICATE KEY UPDATE question_text = "Is this project provided in the context of a programme-based approach?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
 				VALUES("12", "Is this mission joint?", "8", "12", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				ON DUPLICATE KEY UPDATE question_text = "Is this mission joint?";
 				
 				INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
-				VALUES("13", "Is this country analytic work  joint?", "9", "13", "1", NULL)
-				ON DUPLICATE KEY UPDATE amp_question_id = amp_question_id;
+				VALUES("13", "Is this country analytic work joint?", "9", "13", "1", NULL)
+				ON DUPLICATE KEY UPDATE question_text = "Is this country analytic work joint?";
 			</lang>
 		</script>
 	</apply>

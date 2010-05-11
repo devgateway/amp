@@ -7,14 +7,6 @@
 	<author>Gabriel Inchauspe</author>
 	<description>Fill amp_ahsurvey_question_type table.</description>
 
-	<trigger type="any">
-		<condition type="custom">
-			<script returnVar="x">
-				<lang type="hql">select count(*) from org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType</lang>
-			</script>
-			<test>x == 0</test>
-		</condition>
-	</trigger>
 	<apply>
 		<script>
 			<lang type="sql" delimiter=";">

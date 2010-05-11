@@ -16,7 +16,8 @@
  
    
     function getGraphMap(type){
-        var url="/widget/getWidgetMap.do?type="+type;
+        var lastTimeStamp = new Date().getTime();
+        var url="/widget/getWidgetMap.do?type="+type+'&timestamp='+lastTimeStamp;
         var async=new Asynchronous();
         async.complete=mapCallBack;
         async.call(url);

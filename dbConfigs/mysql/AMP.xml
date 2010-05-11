@@ -4,7 +4,10 @@
 <Schema name="AMP">
 <Dimension name="Activity">
 		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberCaption="#All_Activities#" allMemberName="All Activities" caption="#Activity#">
-			<Table name="cached_amp_activity" />
+			<!-- Limit the activities showed to those belonging to the workspace selected  -->
+			<Table name="cached_amp_activity">
+				<SQL dialect="mysql"><![CDATA[cached_amp_activity.amp_activity_id IN (@donorquery)]]> </SQL>
+			</Table>
 			<Level name="Activity Title" column="name" table="cached_amp_activity" uniqueMembers="true" />
 			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true" />
 		</Hierarchy>

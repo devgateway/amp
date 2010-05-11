@@ -722,6 +722,7 @@
 <field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display name="Add Pledge Location Button" feature="Pledge Location"></field:display>
 <field:display name="Remove Pledge Location Button" feature="Pledge Location"></field:display>

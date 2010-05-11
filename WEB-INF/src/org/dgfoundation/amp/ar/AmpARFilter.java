@@ -264,7 +264,11 @@ public class AmpARFilter extends PropertyListable {
 	private void queryAppend(String filter) {
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
-
+	
+	private void PledgequeryAppend(String filter) {
+		generatedFilterQuery += " AND id IN (" + filter + ")";
+	}
+	
 	public void readRequestData(HttpServletRequest request) {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
@@ -447,6 +451,41 @@ public class AmpARFilter extends PropertyListable {
 	public void generateFilterQuery(HttpServletRequest request) {
 		if (request.getSession().getAttribute("pledgereport") != null && request.getSession().getAttribute("pledgereport").toString().equalsIgnoreCase("true")){
 			indexedParams=new ArrayList<FilterParam>();
+		
+			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
+				+ Util.toCSString(donnorgAgency) + ")";
+			
+			String REGION_SELECTED_FILTER = "SELECT v.pledge_id FROM v_pledges_regions v WHERE region_id ="
+				+ (regionSelected==null?null:regionSelected.getIdentifier());
+			
+			String FINANCING_INSTR_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
+				+ Util.toCSString(financingInstruments) + ")";
+			
+			String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE terms_assist_code IN ("
+				+ Util.toCSString(typeOfAssistance) + ")";
+			
+			String SECTOR_FILTER = "SELECT pledge_id FROM amp_funding_pledges_sector ps, amp_sector s, amp_classification_config c "
+				+ "WHERE ps.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
+				+ "AND c.name='Primary' AND ps.amp_sector_id in ("
+				+ Util.toCSString(sectors) + ")";
+			
+			if (donnorgAgency != null && donnorgAgency.size() > 0){
+					PledgequeryAppend(DONNOR_AGENCY_FILTER);
+			}
+			if (regionSelected != null){
+				PledgequeryAppend(REGION_SELECTED_FILTER);
+			}
+			if (financingInstruments != null && financingInstruments.size() > 0){
+				PledgequeryAppend(FINANCING_INSTR_FILTER);
+			}
+			if (typeOfAssistance != null && typeOfAssistance.size() > 0){
+				PledgequeryAppend(TYPE_OF_ASSISTANCE_FILTER);
+			}
+			/*
+			if (sectors != null && sectors.size() != 0) {
+				PledgequeryAppend(SECTOR_FILTER);
+			}
+			*/
 			return;
 		}
 		

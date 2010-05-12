@@ -181,7 +181,25 @@ var myTabsObject;
 		allTabsPanel.hide();
 		startajaxtabs("MyTabs");
 		reloadTab("MyTabs",id);
+		hideMoreTabs();
+	}
+
+	function hideMoreTabs(){
+		if(isListEmpty()){
+			var l = document.getElementById('MyTabs').getElementsByTagName("li").length;
+			document.getElementById('MyTabs').getElementsByTagName("li")[l-1].style.display='none';
 		}
+	}
+
+	function isListEmpty(){
+		var len = document.getElementById("scrollableDiv").getElementsByTagName("DIV").length;
+		for (i = 0; i < len; i++){	
+			if(document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display != 'none'){
+				return false;
+			}
+		}
+		return true;
+	}
 
     function changeTab(e) {  
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");

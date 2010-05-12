@@ -4,9 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.ViewIndicatorsForm;
 import org.digijava.module.aim.util.IndicatorUtil;
 
@@ -15,7 +19,14 @@ public class RemoveIndicator extends Action {
 		 ViewIndicatorsForm allIndForm = (ViewIndicatorsForm) form;
 		 String id = request.getParameter("indicatorId");
 		 if (id != null){ 
-			 IndicatorUtil.deleteIndicator(new Long(id));
+			 if (IndicatorUtil.getAllConnectionsOfIndicator(IndicatorUtil.getIndicator(new Long(id))) == null || IndicatorUtil.getAllConnectionsOfIndicator(IndicatorUtil.getIndicator(new Long(id))).size() == 0){
+				 IndicatorUtil.deleteIndicator(new Long(id));
+			 } else {
+				 ActionErrors errors=new ActionErrors();
+				 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.unableToRemoveIndicator", TranslatorWorker.translateText("Indicator is been used by activity or theme", request)));
+				 saveErrors(request, errors);
+				 request.getSession().setAttribute("removeIndicatorErrors", errors);
+			 }
 	     }
 		 return mapping.findForward("viewAll");
 	 }

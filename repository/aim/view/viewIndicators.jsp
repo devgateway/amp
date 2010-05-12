@@ -130,7 +130,7 @@ a.itr:hover {
           </tr>
           <tr>
             <td height=16 vAlign="center" width="100%">
-              <digi:errors />
+              <span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>
               <c:if test="${!empty aimViewIndicatorsForm.themeName}">
                 This indicator assigned to <span style="color:Red;">${aimViewIndicatorsForm.themeName}</span> 
                 <c:if test="${aimViewIndicatorsForm.flag == 'project'}">

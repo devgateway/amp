@@ -171,6 +171,7 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
+	<!-- 
 	<Dimension name="Currency">
 		<Hierarchy hasAll="true" allMemberCaption="#All Currencies#" allMemberName="All Currencies" primaryKey="amp_activity_id" caption="#Currency#">
 			<Level name="currency" column="currency_code">
@@ -183,7 +184,7 @@
 			<level name="Amounts" column="raw_amount" formatter="org.digijava.module.mondrian.Formatter.CurrencyFormatter"/>
 		</Hierarchy>
 	</Dimension>
-	
+	 -->
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id" />

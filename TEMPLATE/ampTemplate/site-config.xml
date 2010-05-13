@@ -7,7 +7,7 @@
 	<site-layout>
             <layout name="orgProfileLayout" extends="default" file="orgProfileLayout.jsp">
 			<put name="title">Organization Profile View</put>
-                        <put-item name="headerTop" file="headerTop.jsp"/>
+            <put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayout"/>
@@ -55,7 +55,7 @@
 		</layout>
 		<layout name="helpLayout" file="helpLayout.jsp">
 			<put name="title">Help</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
@@ -64,7 +64,7 @@
 		</layout>
 		<layout name="helpAdminLayout" file="helpAdminLayout.jsp">
 			<put name="title">Help admin</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
@@ -98,7 +98,7 @@
 		 
 		<layout name="ampMessageLayout" file="ampMessagesLayout.jsp">
 			<put name="title">MESSAGES</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
@@ -115,6 +115,8 @@
 		</layout>
 
 		<layout name="headerMiddleLayout2" file="headerMiddle2.jsp">
+		<put name="version">1.14</put>
+ 	 	<put name="build_version">ALPHA</put>
 	    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
@@ -144,7 +146,7 @@
 		
 		<layout name="default">
 			<put name="title">AMP Default Template</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
@@ -154,7 +156,7 @@
 		<layout name="logoutLayout" file="logoutLayout.jsp">
 			<put-item name="logout" module="aim" instance="default" teaser="logout"/>
 			<put name="title">AMP - Logout</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
@@ -170,7 +172,7 @@
 		</layout>
 		<layout name="editor">
 			<put name="title">AMP Editor</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
@@ -189,14 +191,16 @@
 		<!-- login page Layout -->
 		<layout name="login">
 			<put name="title">- Home</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout2"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
  			<put-item name="loginWidget" file="loginWidget2.jsp"/>
-			<put-item name="body" file="loginLayout.jsp"/>
+			<put-item name="body" file="welcomeLayout.jsp"/>
 		</layout>
-		
+		<layout name="headerTopLayout" file="headerTop.jsp">
+ 	 	    <put-item name="logWidget" file="loginWidget3.jsp"/>
+ 	 	</layout>
 		<layout name="loginBody" file="loginLayout.jsp">
 			<put name="title">Please log in</put>
 			<put-item name="header" layout="headerLayout"/>
@@ -208,7 +212,7 @@
 
 		<layout name="tabLayout" file="tabLayout.jsp">
 			<put name="title">AMP Tab Layout</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="tabHeader" module="aim" instance="default" teaser="mainProjectDetails"/>
@@ -413,7 +417,7 @@
 		<!-- AIM DESKTOP LAYOUT -->
 
 		<layout name="userHomeLayout" file="userHomeLayout.jsp">
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="myDesktop" module="aim" instance="default" teaser="myDesktop"/>
@@ -428,7 +432,7 @@
 
 		<layout name="publicReportsViewLayout" file="userHomeLayout.jsp">
 			<put name="title">- Public View</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
@@ -461,7 +465,7 @@
 		<!-- START ADD/EDIT LAYOUT	-->
 		<layout name="addEditLayout" file="addEditLayout.jsp">
 			<put name="title">AMP</put>
-			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="addEditNavigator" module="aim" instance="default" teaser="addEditNavigator"/>

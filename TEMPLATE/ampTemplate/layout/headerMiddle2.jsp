@@ -16,6 +16,8 @@
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
+		<script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
+ 	 	<script type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
         <!-- Source File -->
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
@@ -28,7 +30,10 @@
 
         <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
-
+		<jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
+ 		<div id="customAbout" style="display: none" class="content">
+ 			<jsp:include page="/repository/aim/view/helpAbout.jsp" />
+ 		</div>
 
 <c:set var="message">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
@@ -38,7 +43,7 @@
 <c:set var="msg">
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
-
+<%org.digijava.kernel.request.SiteDomain siteDomain = null;%>
 <logic:notPresent name="currentMember">
 <% 
 String publicView=FeaturesUtil.getGlobalSettingValue("Public View");
@@ -111,6 +116,7 @@ border-right:1px solid white;
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">
           <ul class="first-of-type">
+			<%-- 
             <li class="yuiampmenuitem">
                 <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
                 <digi:trn key="aim:newUserRegistration">
@@ -118,6 +124,49 @@ border-right:1px solid white;
                 </digi:trn>
 	            </digi:link>
             </li>
+			--%>
+			
+		<li class="yuiampmenuitem">
+ 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="/viewTeamreports.do?tabs=false">
+ 	 			<digi:trn key="">reports</digi:trn>
+ 	 		</a>
+ 	 	</li>
+ 	 	<li class="yuiampmenuitem">
+ 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="#">
+ 	 			<digi:trn key="">resources</digi:trn>
+ 	 		</a>
+ 	 	</li>
+ 	 	<li class="yuiampmenuitem">
+ 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="#">
+ 	 			<digi:trn key="">projects</digi:trn>
+ 	 		</a>
+ 	 	</li>
+ 	 	<module:display name="HELP">
+ 	 		<li class="yuiampmenuitem">
+ 	 			<span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right:0px">
+ 	 				<digi:trn key="help:help">HELP</digi:trn>
+ 	 			</span>
+ 	 			<a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+ 	 				<img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+ 	 			</a>
+ 	 			<div id="help" class="yuiampmenu" style="opacity:0.9;">
+ 	 				<div class="bd">
+ 	 					<ul>
+ 	 						<feature:display name="About AMP" module="HELP">
+ 	 							<li>
+ 	 								<%siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE); 
+ 	 								session.setAttribute("site", siteDomain);%>
+ 	 								<a class="yuiampmenuitemlabel" href="" target="name"       onClick="showAbout(); return false;">
+ 	 	                               <digi:trn key="aim:aboutamp">About AMP</digi:trn>
+ 	 	                            </a>
+ 	 					       </li>
+ 	 	                   </feature:display>                                      
+ 	                   </ul>
+ 	 				</div>
+ 	 			</div>              
+ 	 		</li>
+ 	 	</module:display> 
+
             <feature:display name="Language Option" module="Tools">
 		            <li>
 		                <a href="#" class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;border-right:0px;">

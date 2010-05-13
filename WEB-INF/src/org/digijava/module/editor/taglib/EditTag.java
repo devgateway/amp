@@ -41,6 +41,7 @@ public class EditTag
 
     private String key;
     private String editorBody;
+    private String displayText = "E";
     private boolean showOnlyTitle = false;
 
     /**
@@ -135,7 +136,7 @@ public class EditTag
                         getNavigationLanguage(request).
                         getCode()+
                     "&referrer=" + refUrl +
-                    "\">E</a>";
+                    "\">"+displayText+"</a>";
             }
             else {
               editTag = "<a href=\"" +
@@ -143,7 +144,7 @@ public class EditTag
                     "/editor/showEditText.do?id=" + getKey() +"&lang="+RequestUtils.
                         getNavigationLanguage(request).
                         getCode()+"&referrer=" + refUrl +
-                    "\">E</a>";
+                    "\">"+displayText+"</a>";
             
             }
         }
@@ -191,5 +192,12 @@ public class EditTag
     public void setShowOnlyTitle(boolean showOnlyTitle) {
         this.showOnlyTitle = showOnlyTitle;
     }
-
+    
+    public String getDisplayText() {
+ 	 	return displayText;
+ 	}
+ 	
+	public void setDisplayText(String displayText) {
+ 		this.displayText = displayText;
+ 	}
 }

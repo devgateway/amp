@@ -38,6 +38,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 
 public class FeaturesUtil {
 
@@ -576,6 +577,35 @@ public class FeaturesUtil {
 		return col;
 	}
 
+	public static AmpHomeThumbnail getAmpHomeThumbnail(int placeholder) {
+ 	 	Session session = null;
+ 	 	Query q = null;
+ 	 	Collection c = null;
+ 	 	AmpHomeThumbnail thumbnail = null;
+	 	try {
+ 	 		session = PersistenceManager.getSession();
+ 	 		String queryString = new String();
+ 	 		queryString = "select a from " + AmpHomeThumbnail.class.getName()
+ 	 		+ " a where (a.placeholder=:placeholder) ";
+ 	 		q = session.createQuery(queryString);
+ 	 		q.setParameter("placeholder", placeholder, Hibernate.INTEGER);
+ 	 		c = q.list();
+ 	 		if(c.size()!=0)
+ 	 			thumbnail=(AmpHomeThumbnail) c.iterator().next();
+ 	 	} catch (Exception ex) {
+ 	 		logger.error("Exception : " + ex.getMessage());
+ 	 	} finally {
+ 	 		if (session != null) {
+ 	 			try {
+ 	 				PersistenceManager.releaseSession(session);
+ 	 			} catch (Exception rsf) {
+ 	 				logger.error("Release session failed :" + rsf.getMessage());
+ 	 			}
+ 	 		}
+ 	 	}
+ 	 	return thumbnail;
+ 	}
+	
 	public static Collection getAllCountryFlags() {
 		Session session = null;
 		Collection col = new ArrayList();

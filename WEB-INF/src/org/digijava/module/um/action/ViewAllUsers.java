@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -21,6 +22,7 @@ import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.um.form.ViewAllUsersForm;
 import org.digijava.module.um.util.AmpUserUtil;
+import org.digijava.kernel.util.RequestUtils;
 	
 	public class ViewAllUsers
 	    extends Action {
@@ -33,6 +35,11 @@ import org.digijava.module.um.util.AmpUserUtil;
 	    	if(request.getParameter("reset")!=null && request.getParameter("reset").equals("true")){
 	    		vwForm.reset(mapping, request);    		
 	    	}
+	    	
+            HttpSession session = request.getSession();
+            if (!RequestUtils.isAdmin(response, session, request)) {
+            	return null;
+            }
 	    	
 	    	RepairDbUtil.repairBannedUsersAreStillInATeam();
 	    	

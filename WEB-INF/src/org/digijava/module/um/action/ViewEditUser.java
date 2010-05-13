@@ -66,7 +66,10 @@ public class ViewEditUser extends Action {
         }else{
             return mapping.findForward("forward");
         }
-
+        
+        if (!RequestUtils.isAdmin(response, session, request)) {
+        	return null;
+        }
 
         try {
             langPref = UserUtils.getUserLangPreferences(user, curSite);

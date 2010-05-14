@@ -58,6 +58,7 @@ class ProjectsController < ApplicationController
       puts "not Creating historic funding"
     end
 #    @project.historic_funding
+    set_funding_currency
   end
   
   def update  

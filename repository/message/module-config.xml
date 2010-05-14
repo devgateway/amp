@@ -14,6 +14,12 @@
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.AmpMessageSettings
 			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpEmail
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpEmailReceiver
+			</hibernate-class>
 			
 		</hibernate-classes>
 </module-config>

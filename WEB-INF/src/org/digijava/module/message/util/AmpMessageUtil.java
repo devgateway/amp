@@ -14,6 +14,8 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.message.dbentity.AmpEmail;
+import org.digijava.module.message.dbentity.AmpEmailReceiver;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
@@ -834,5 +836,87 @@ public class AmpMessageUtil {
         SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		String result = formater.format(date);
 		return result;	
+	}
+	
+	/**
+	 * @return AmpEmails that were sent by Quartz to all AmpEmailReceivers
+	 */
+	public static List<AmpEmail> loadSentEmails(){
+		List<AmpEmail> emails=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			//select a1.email_id,count(a1.receiver_id) as delivered,(select count(receiver_id) from amp_email_receiver a2 where a1.email_id=a2.email_id group by a2.email_id) as totalReceivers
+			//from amp_email_receiver a1 where a1.status="sent" group by a1.email_id having totalReceivers=delivered
+			queryString="select rec1.email from " +AmpEmailReceiver.class.getName()+" rec1 where "
+			+" rec1.status like '"+MessageConstants.SENT_STATUS+"' group by rec1.email having count(rec1.id)=(select count(rec2.id) from "+AmpEmailReceiver.class.getName()
+			+" rec2 where rec2.email=rec1.email group by rec2.email)";			
+			query=session.createQuery(queryString);
+			emails=query.list();
+		} catch (Exception e) {
+			logger.error("couldn't load Emails" + e.getMessage());	
+		}
+		return emails;
+	}
+	
+	/**
+	 * @return List of receiver who should get Emails
+	 */
+	public static List<AmpEmailReceiver> loadReceiversToGetEmails(){
+		List<AmpEmailReceiver> receivers=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {			
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select rec from " + AmpEmailReceiver.class.getName() +" rec where rec.status not like '"+MessageConstants.SENT_STATUS+"'";
+			query=session.createQuery(queryString);
+			receivers=query.list();
+		} catch (Exception e) {
+			logger.error("couldn't load Receivers" + e.getMessage());	
+		}
+		return receivers;
+	}
+	
+	public static List<Long> loadReceiversIdsToGetEmails(){
+		List<Long> ids=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {			
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select rec.id from " + AmpEmailReceiver.class.getName() +" rec where rec.status not like '"+MessageConstants.SENT_STATUS+"'";
+			query=session.createQuery(queryString);
+			ids=query.list();
+		} catch (Exception e) {
+			logger.error("couldn't load Receivers" + e.getMessage());	
+		}
+		return ids;
+	}
+	
+	public static AmpEmail getAmpEmail(Long id){
+		AmpEmail email=null;
+		Session session=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			email=(AmpEmail)session.load(AmpEmail.class, id);
+		} catch (Exception e) {
+			logger.error("couldn't load Email" + e.getMessage());	
+		}
+		return email;
+	}
+	
+	public static AmpEmailReceiver getAmpEmailReceiver(Long id){
+		AmpEmailReceiver email=null;
+		Session session=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			email=(AmpEmailReceiver)session.load(AmpEmailReceiver.class, id);
+		} catch (Exception e) {
+			logger.error("couldn't load Email Receiver" + e.getMessage());	
+		}
+		return email;
 	}
 }

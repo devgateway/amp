@@ -2855,6 +2855,32 @@ public class DbUtil {
 			}
         }
     }
+    
+    /**
+     * general function to save/update object
+     * @param object
+     * @throws Exception
+     */
+    public static void saveOrUpdateObject(Object object) throws Exception{
+    	Session session = null;
+    	Transaction tx=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			tx=session.beginTransaction();
+			session.saveOrUpdate(object);
+			tx.commit();
+		}catch(Exception ex) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("update failed",ex);
+		}
+    }
 
     public static void updateOrg(Object object) {
         Session sess = null;

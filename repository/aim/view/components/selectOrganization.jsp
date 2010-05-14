@@ -358,6 +358,31 @@
 													</logic:equal>
 												</tr>
 											</logic:iterate>
+											<!-- code recheck selOrganisations lost by pagination -->
+									<c:if
+										test="${aimSelectOrganizationForm.allSelectedOrgsIds != null}">
+											<c:forEach
+												items="${aimSelectOrganizationForm.allSelectedOrgsIds}"
+												var="itemy">
+												<c:set var="mio">
+													<c:out value="${itemy}" />
+												</c:set>
+											    	<script language="javascript">
+															 for(var i = 0; i < 10; i++){
+
+																 var chekbox = document.getElementsByName("selOrganisations")[i];
+															     var elebox = chekbox.value ;
+				                                                if(elebox==${mio}){
+				                                                	chekbox.checked = true;
+				                                                    }
+															 }
+														</script>
+											</c:forEach>
+									</c:if>
+                                  <!-- end code recheck selOrganisations lost by pagination -->
+											
+											
+											
 											<tr>
 												<td align="center" colspan="3">
 													<table cellPadding=5>

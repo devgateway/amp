@@ -150,7 +150,7 @@ en:
               in_kind_cash: In kind convertible in cash
               in_kind_non_cash: In kind non convertible in cash
               in_cash_under_donor: In cash under donor management
-              in_cash_under_beneficiary: In kind cash beneficiary management
+              in_cash_under_beneficiary: In cash under beneficiary management
         loan_to_public_enterprises:
           label: Loan to public enterprises
           options:

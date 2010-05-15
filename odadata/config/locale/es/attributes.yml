@@ -156,8 +156,8 @@ es:
           options:
               in_kind_cash: 'Em espécie para ser convertido em moeda'
               in_kind_non_cash: 'Em espécie para não ser convertido em moeda'
-              in_cash_under_donor: 'Em espécie sujeito a gestão do doador'
-              in_cash_under_beneficiary: 'Em espécie sujeito a gestão do UGB'
+              in_cash_under_donor: 'Em moeda sujeito a gestão do doador'
+              in_cash_under_beneficiary: 'Em moeda sujeito a gestão do UGB'
         loan_to_public_enterprises:
           label: 'Empréstimo para empresas públicas'
           options:

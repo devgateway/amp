@@ -100,7 +100,6 @@ es:
           description: |
             Uma agência intermediária é uma terceira parte fora do canal de entrega para servir como intermediária entre o doador e o canal de entrega. 
             A Agência Contratada pode ser uma ONG, um ministério ou qualquer outra organização. 
-            O Canal de Entrega e a Agência Intermediária podem ser a mesma entidade.
         national_regional:
           label: 'Implementação Nacional/Regional'
           description: |

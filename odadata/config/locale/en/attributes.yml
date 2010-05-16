@@ -92,7 +92,7 @@ en:
           label: Extending Agencies
           description: |
             The extending agency is a third party outside of the channel of delivery to serve as an intermediary between the donor and the channel of delivery. 
-            The Contracted Agency can be an NGO, a ministry or any other organization. Channel of Delivery and Extending Agencies can be the same.
+            The Contracted Agency can be an NGO, a ministry or any other organization.
         national_regional: 
           label: National / Regional
           description: |

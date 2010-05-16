@@ -244,6 +244,7 @@ es:
       publish: Publicar projecto
       edit_and_draft: Editar projecto
       clone: Clonar & Editar
+      recycle: Recuperar projecto
       factsheet: Ficha
     sector_agencies_form:
       prompt: Por favor seleccione

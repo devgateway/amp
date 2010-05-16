@@ -243,6 +243,7 @@ en:
       publish: Publish project
       edit_and_draft: Edit project (moves it to drafts)
       clone: Clone & Edit
+      recycle: Restore project
       delete_confirmation: Are you sure that you would like to move "{{project}}" to the delete projects?
       factsheet: Factsheet
     sector_agencies_form:

@@ -37,25 +37,25 @@
 			:include_blank => t('.prompt'), :translate => true %></li>
     
   <li class="fifty">
-  	<%= f.text_field :planned_start, :readonly =>true,
+    <%= f.date_select :planned_start,
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED) %>
   	<%= error_message_on(:project, :planned_start, "","", "error_message" ) %>
   </li>
 
   <li class="fifty">
-    <%= f.text_field :planned_end, :readonly =>true,
-          :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED) %>
+    <%= f.date_select :planned_end,
+  	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED) %>
     <%= error_message_on(:project, :planned_end, "","", "error_message" ) %>
   </li>
   
   <li class="fifty">
-  	<%= f.text_field :actual_start, :readonly =>true,
+  	<%= f.date_select :actual_start,
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
   	<%= error_message_on(:project, :actual_start, "","", "error_message" ) %>
   </li>
 
   <li class="fifty">
-    <%= f.text_field :actual_end, :readonly =>true,
+    <%= f.date_select :actual_end,
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
     <%= error_message_on(:project, :actual_end, "","", "error_message" ) %>
   </li>

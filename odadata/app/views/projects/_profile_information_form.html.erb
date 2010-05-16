@@ -1,21 +1,3 @@
-<script language="javascript">
-	// TODO: Create datepicker css class and move this into application.js
-  $(document).ready(function(){
-		$.datepicker.setDefaults({
-      showOn: "button", 
-      buttonImage: "/images/datepicker.png", 
-      buttonImageOnly: true,
-      dateFormat: 'yy-mm-dd'
-    });
-
-    $('#project_planned_end:not(:disabled)').datepicker();
-    $('#project_planned_start:not(:disabled)').datepicker();
-    $('#project_actual_end:not(:disabled)').datepicker();
-    $('#project_actual_start:not(:disabled)').datepicker();
-	});
-</script>
-
-
 <% f.field_set do %>
 	<li><%= f.text_field :title, :size => 80, :class => "large" %></li>
 	<li><%= f.text_area  :description, :rows => 10, :class => "large" %></li>

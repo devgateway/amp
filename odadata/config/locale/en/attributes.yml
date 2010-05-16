@@ -15,7 +15,7 @@ en:
           label: Donor
           description: "Name of Donor such as France or EC, includes in the website sometimes also UN agancies (e.g. Donor Profiles includes Profiles of donors and UN agencies)."
         donor_agency: 
-          label: Donor Agency
+          label: Donor Agency / UN Agency
           description: Name of Donor Agency of the respective Donor Countries. Focal Points will find only donor agencies of their respective Donor Country.
         donor_project_number: 
           label: Donor Project Number

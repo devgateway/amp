@@ -17,7 +17,7 @@ es:
             Nome do Doador tais como a França ou CE, inclui no sítio as vezes também agências das NU 
             (ex. Perfis do Doador inclui Perfis dos Doadores e agências das NU).
         donor_agency:
-          label: 'Agência Doadora'
+          label: 'Agência Doadora / Agência ONU'
           description: |
             Nome da Agência Doadora dos respectivos Países Doadores. 
             Os Pontos Focais irão encontrar apenas agências doadoras dos seus respectivos Países Doadores

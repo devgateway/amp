@@ -49,10 +49,10 @@
 	    
 	    <%# recipient/region/income code here?! %>
 	    
-<!--
-	    <dt><%#= Project.human_attribute_name('national_regional') %></dt>
-	    <dd><%#= option_text_by_id(Project, :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
--->
+
+	    <dt><%= Project.human_attribute_name('national_regional') %></dt>
+	    <dd><%= option_text_by_id(Project, :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
+
 	    <dt><%= Project.human_attribute_name('type_of_implementation') %></dt>
 	    <dd><%= option_text_by_id(Project, :type_of_implementation, Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
 

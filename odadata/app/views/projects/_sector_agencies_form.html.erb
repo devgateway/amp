@@ -57,10 +57,10 @@
 <% end %>
 
 <% f.field_set do%>	
-<!--
-	<li class="fifty"><%#= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
+
+	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
 				:include_blank => t('.prompt'), :translate => true %></li>
--->
+
 				
 	<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
 				:include_blank => t('.prompt'), :translate => true %></li>

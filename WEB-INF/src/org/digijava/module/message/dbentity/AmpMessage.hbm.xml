@@ -26,6 +26,7 @@
 			class="org.digijava.module.message.dbentity.AmpMessage" cascade="none" />
 
 		<property name="receivers" column="receivers" type="text" />
+		<property name="externalReceivers" column="external_receivers" type="text" />
 		<property name="senderName" column="sender_name" type="text" />
 		<property name="objectURL" column="object_URL" type="java.lang.String" />
 		<property name="relatedActivityId" column="related_act_id" type="java.lang.Long" />

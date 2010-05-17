@@ -375,33 +375,37 @@ public class AmpMessageActions extends DispatchAction {
     }
 
     public ActionForward makeMsgRead(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-
+    	
     	AmpMessageState state=null;
-    	Long msgStateId=null;
+    	//Long msgStateId=null;
     	if(request.getParameter("msgStateId")!=null){
-    		msgStateId=new Long(request.getParameter("msgStateId"));
-    		state=AmpMessageUtil.getMessageState(msgStateId);
-    		if(state.getSenderId()==null){
-    			state.setRead(true);
-    		}
-    		AmpMessageUtil.saveOrUpdateMessageState(state);
-
+    		String[] messageIds=request.getParameter("msgStateId").split(",");
     		//creating xml that will be returned
     		response.setContentType("text/xml");
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     		xml += "<" + ROOT_TAG +">";
-    		xml+="<"+"message id=\""+msgStateId+"\" ";
-    		xml+="read=\""+state.getRead()+"\" ";
-                xml+="msgId=\""+state.getMessage().getId()+"\" ";
-    		xml+="/>";
+    		
+    		for (String msgStateId : messageIds) {
+    			state=AmpMessageUtil.getMessageState(new Long(msgStateId));
+        		if(state.getSenderId()==null){
+        			state.setRead(true);
+        		}
+        		AmpMessageUtil.saveOrUpdateMessageState(state);
+        		
+        		xml+="<"+"message id=\""+msgStateId+"\" ";
+        		xml+="read=\""+state.getRead()+"\" ";
+                    xml+="msgId=\""+state.getMessage().getId()+"\" ";
+        		xml+="/>";
+			}    		
     		xml+="</"+ROOT_TAG+">";
     		out.println(xml);
 			out.close();
 			// return xml
 			outputStream.close();
     	}
+    	
     	return null;
     }
 
@@ -465,10 +469,10 @@ public class AmpMessageActions extends DispatchAction {
    /**
      * used when user clicks on forward link
      */
-    public ActionForward forwardMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public ActionForward replyOrForwardMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
         setDefaultValues(messagesForm);
-    	if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){
+    	if( (request.getParameter("reply")!=null && request.getParameter("reply").equals("fillForm")) || ( request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm") ) ){
     		Long stateId=new Long(request.getParameter("msgStateId"));
         	AmpMessageState oldMsgsState=AmpMessageUtil.getMessageState(stateId);
         	AmpMessage msg=oldMsgsState.getMessage();
@@ -487,10 +491,31 @@ public class AmpMessageActions extends DispatchAction {
                         }
                     }
                 }
+           //RE or FWD
+           MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
 
-            messagesForm.setMessageName("FWD: "+ msg.getName());
-        	MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
-        	messagesForm.setForwardedMsg(msgHelper);
+           if(request.getParameter("reply")!=null && request.getParameter("reply").equals("fillForm")){
+        	   messagesForm.setMessageName("RE: "+ msg.getName());
+//        	   messagesForm.setRepliedMsg(msgHelper);
+        	   //receiver- The suer who's message we reply(in case of User Message)
+        	   if(msg.getSenderType().equals(MessageConstants.SENDER_TYPE_USER)){
+        		   Long messageCreatorId=msg.getSenderId();
+            	   AmpTeamMember creator=TeamMemberUtil.getAmpTeamMember(messageCreatorId);
+            	   if(creator!=null){
+            		   List<LabelValueBean> receivers=new ArrayList<LabelValueBean>();
+            		   AmpTeam creatorTeam=creator.getAmpTeam();
+            		   LabelValueBean teamLabel=new LabelValueBean("---"+creatorTeam.getName()+"---","t:"+creatorTeam.getAmpTeamId().toString());
+            		   receivers.add(teamLabel);
+            		   LabelValueBean tm=new LabelValueBean(creator.getUser().getFirstNames() + " " + creator.getUser().getLastName(),"m:" + creator.getAmpTeamMemId().toString());
+            		   receivers.add(tm);
+            		   messagesForm.setReceivers(receivers);
+            	   }
+        	   }        	   
+           }else if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){
+        	   messagesForm.setMessageName("FWD: "+ msg.getName());
+        	   messagesForm.setForwardedMsg(msgHelper);
+           }
+           //related activity possibilities
             HttpSession session = request.getSession();
             TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
             messagesForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds(teamMember));
@@ -708,7 +733,7 @@ public class AmpMessageActions extends DispatchAction {
 
 
     	List<AmpMessageState> statesList=AmpMessageUtil.loadMessageStates(messageForm.getMessageId());
-    	List<Long> statesMemberIds=new ArrayList<Long>();
+//    	List<Long> statesMemberIds=new ArrayList<Long>();
     	if(statesList==null){
     		statesList=new ArrayList<AmpMessageState>();
     	}
@@ -735,6 +760,39 @@ public class AmpMessageActions extends DispatchAction {
                         addrCol.add(new InternetAddress(TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmail()));
                     }
 
+                }
+                
+                if(receiver.startsWith("c")){ //contacts or people outside AMP
+                	receiver=receiver.substring(2); //we should send email to contacts, regardless setting value in Message Manager
+                	String email=receiver;
+                	if(receiver.indexOf("<")!=-1){
+                		email=receiver.substring(receiver.indexOf("<")+1, receiver.indexOf(">"));
+                	}	
+                	
+                	String receivers = message.getReceivers();
+                    if (receivers == null) {
+                    	receivers = "";
+                    } else {
+                    	if (receivers.length() > 0) {
+                    		receivers += ", ";
+                        }
+                    }
+                    receivers+=receiver;
+                    message.setReceivers(receivers);
+                        
+                    receivers=message.getExternalReceivers();
+                    if (receivers == null) {
+                    	receivers = "";
+                    } else {
+                     	if (receivers.length() > 0) {
+                     		receivers += ", ";
+                     	}
+                    }
+
+                    receivers+=receiver;
+                    message.setExternalReceivers(receivers);                		
+                	
+                	addrCol.add(new InternetAddress(email));
                 }
             }
 

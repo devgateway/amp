@@ -43,9 +43,22 @@
 
 -->
 </style>
-
+<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <script langauage="JavaScript">
+	var messageHelp='<digi:trn>Message Help</digi:trn>';
+	var relatedActs='<digi:trn>Type first letter of activity to view suggestions</digi:trn>';
+	var extraReceivers='<digi:trn>Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
+	var tmHelp='<digi:trn>A user may appear in more than one workspace.\n Be sure to choose the correct workspace and user within the workspace.</digi:trn>';
 
+    function showMessagesHelpTooltip() {
+        var div=document.getElementById("createMessagesHelpTooltip");
+    	div.style.display = "block";
+    }
+	function hideMessagesHelpTooltip(){
+  		document.getElementById("createMessagesHelpTooltip").style.display = "none";
+	}
+    
+    
   function MyremoveUserOrTeam(){
   	var orphands=new Array();
     var list = document.getElementById('selreceivers');
@@ -61,23 +74,36 @@
     }
     removeUserOrTeam();
   }  
+  
   function MyaddUserOrTeam(){
     var list = document.getElementById('selreceivers');
+    var MyContacts=new Array();
 	var orphands=new Array();
-	var orpIndex = 0;
+	var orpIndex = 0; //teams and team members
+	var index = 0; //contact
     for(var i=0; i<list.length;i++){
-      if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
-         orphands[orpIndex]=list.options[i];
-         orpIndex++;
-      }
+		if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
+			orphands[orpIndex]=list.options[i];
+			orpIndex++;
+		}
+
+		if(list.options[i].value.indexOf('c')==0){
+        	MyContacts[index]=list.options[i];
+        	index++;
+        }
     }
     if(orpIndex!=0){
-       registerOrphanMember(orphands);
+		registerOrphanMember(orphands);
     }
 
 	//add teams and members
   	addUserOrTeam();//fills out the list with teams and members
 
+  	if(index != 0){
+		for(var j=0; j<index; j++){
+			list.options.add(MyContacts[j]);
+		}
+	}
   }
 	
   function validate(){
@@ -156,6 +182,32 @@
     	
     	return true;
 	}
+	
+	function addContact(contact){
+		var list = document.getElementById('selreceivers');
+	    if (list == null || contact == null || contact.value == null || contact.value == "") {
+	      return;
+	    }
+
+		var guestVal=contact.value;
+			
+		if(guestVal.length>0){			
+			addOption(list,guestVal,'c:'+guestVal);
+		}	
+
+		contact.value = "";
+	}
+	
+	function addOption(list, text, value){
+	    if (list == null) {
+	      return;
+	    }
+	    var option = document.createElement("OPTION");
+	    option.value = value;
+	    option.text = text;
+	    list.options.add(option);
+	    return false;
+	}	
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
@@ -321,10 +373,17 @@
 																	<tr>
 																	  <field:display name="Related Activity Dropdown" feature="Create Message Form">
 																		<td align="right" nowrap="nowrap"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
-																		<td align="left">
+																		<td align="left"  nowrap="nowrap">
 																			<div id="statesautocomplete"> 
-																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:320px;font-size:100%"></html:text>																			    
+																				<html:text property="selectedAct" name="messageForm" style="width:320px;font-size:100%"></html:text>
+																				<img alt="" src="../ampTemplate/images/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    																			    
 																				<div id="statescontainer" style="width:320px;"></div> 
+                                       											<div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; left:400px;  border: 1px solid silver;">
+                                                                                    <TABLE WIDTH='200px' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
+                                                                                        <TR style="background-color:#376091"><TD style="color:#FFFFFF" nowrap><digi:trn>Message Help</digi:trn></TD></TR>
+                                                                                        <TR style="background-color:#FFFFFF"><TD><digi:trn>Type first letter of activity to view suggestions</digi:trn></TD></TR>
+                                                                                    </TABLE>
+                                                                            	</div>																				
 																			</div>																		
 																		</td>
 																	  </field:display>																			
@@ -353,12 +412,15 @@
 																      </tr>	
                                                                        <tr>
                                                                        		<field:display name="Recievers" feature="Create Message Form">
-																					<td nowrap="nowrap" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
+																					<td nowrap="nowrap" align="right">
+																						<digi:trn key="message:Receevers">Receivers</digi:trn>
+																						<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
+																					</td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>
 																                                <td valign="top">
-																                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px" >
+																                                   <select multiple="multiple" size="12" id="whoIsReceiver"  class="inp-text" style="width:200px" >
 																										<logic:empty name="messageForm" property="teamMapValues">
 																											<option value="-1">No receivers</option>
 																										</logic:empty>
@@ -381,7 +443,13 @@
 																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
-																                                	<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
+															                                		<div id="contactsAutocomplete"">
+															                                			<input type="text" id="contactInput" style="width:200px;font-size:100%">																                                			     
+																										<html:button property="" onclick="addContact(document.getElementById('contactInput'))">Add</html:button>
+												                                						<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,extraReceivers],Style[15])" onmouseout="htm()"/>
+																										<div id="contactsContainer" style="width:220px;"></div>		
+																									</div>																													
+																                                	<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="10" styleClass="inp-text" style="width:200px">
 																                                    	<c:if test="${!empty messageForm.receivers}">
 																	                                    	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
 																	                                    </c:if>                

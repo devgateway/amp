@@ -47,6 +47,8 @@ public abstract class AmpMessage {
 	 */
         private String receivers; // name and surnames of receivers separeted by comma
 
+        private String externalReceivers; //contacts + people outside AMP
+        
         public String getReceivers() {
             return receivers;
         }
@@ -161,6 +163,15 @@ public abstract class AmpMessage {
 	public void setRelatedActivityId(Long relatedActivityId) {
 		this.relatedActivityId = relatedActivityId;
 	}
+
+	public String getExternalReceivers() {
+		return externalReceivers;
+	}
+
+	public void setExternalReceivers(String externalReceivers) {
+		this.externalReceivers = externalReceivers;
+	}
         
 
-        }
+	
+}

@@ -96,7 +96,7 @@ background-color:yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script langauage="JavaScript">
 
-        var  selectedMessagePanel;
+    var  selectedMessagePanel;
     var noMsgs="<digi:trn key="message:noMessages">No Messages Present</digi:trn>";
     var noAlerts="<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>";
     var noApprovals="<digi:trn key='message:noPendingApprovals'>No Pending Approvals</digi:trn>";
@@ -118,6 +118,7 @@ background-color:yellow;
 	var referenceURL='<digi:trn key="message:referenceURL">Reference URL</digi:trn>';
     var forwardClick='<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>';
     var editClick='<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>';
+    var replyClick='<digi:trn> Click on this icon to reply message&nbsp;</digi:trn>';
     var deleteClick='<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>';
     var viewMessage='<digi:trn key="message:ClickViewMessage"> Click here to view the message</digi:trn>';
     var viewDetails='<digi:trn key="message:ClickViewDetails">Click here to view details</digi:trn>';
@@ -242,29 +243,31 @@ background-color:yellow;
         divBody.innerHTML=responseText;
 	}
         
-       function unCheckMessages() {
-            var chk=document.messageForm.getElementsByTagName('input');
-            for(var i=0;i<chk.length;i++){
-                if(chk[i].type == 'checkbox'&&chk[i].checked){
-                    alert("Please uncheck or delete selected message(s)");
-                    return false;
-                }
-            }
-            return true;
-        }
-        function deleteMessageIds() {
-            var chk=document.messageForm.getElementsByTagName('input');
-            var msgIds='';
-            for(var i=0;i<chk.length;i++){
-                if(chk[i].type == 'checkbox'&&chk[i].checked){
-                    msgIds+=chk[i].value+',';
-                }
-            }
-           if(msgIds.length>0){
-               msgIds=msgIds.substring(0,msgIds.length-1);
-           }
-            return msgIds;
-        }
+    function unCheckMessages() {
+         var chk=document.messageForm.getElementsByTagName('input');
+         for(var i=0;i<chk.length;i++){
+             if(chk[i].type == 'checkbox'&&chk[i].checked){
+                 alert("Please uncheck or delete selected message(s)");
+                 return false;
+             }
+         }
+         return true;
+     }
+
+     function deleteMessageIds() {
+         return getSelectedMessagesIds();
+     }     
+
+	function getSelectedMessagesIds() {
+		var msgIds='';
+		$("input[@id^='delChkbox_']:checked").each(function(){
+	        msgIds+=this.value+',';
+	    })            
+		if(msgIds.length>0){
+	       msgIds=msgIds.substring(0,msgIds.length-1);
+		}
+	    return msgIds;
+	}     
 	
 	function deleteMessage(msgId) {
             var flag=false;
@@ -272,7 +275,7 @@ background-color:yellow;
                 flag=true;
             }
             if(msgId==null){
-                msgId=deleteMessageIds();
+                msgId=getSelectedMessagesIds();
                 if(msgId.length==0){
                     alert("Please select messages");
                      flag=false;  
@@ -289,71 +292,71 @@ background-color:yellow;
            
 		if(flag){
 			//remove current element from array
-                        var idsArray=msgId.split(',');
-                        var tbl=document.getElementById('msgsList');
-                        for(var i=0;i<idsArray.length;i++){
-			var index=getIndexOfElement(idsArray[i]);
-			if(index!=-1){
-				myArray.splice(index,1);	
-				//removing TR from rendered messages list
+			var idsArray=msgId.split(',');
+			var tbl=document.getElementById('msgsList');
+			for(var i=0;i<idsArray.length;i++){
+				var index=getIndexOfElement(idsArray[i]);
+				if(index!=-1){
+					myArray.splice(index,1);	
+					//removing TR from rendered messages list
 							
-				var img=document.getElementById(idsArray[i]+'_plus');
-				var imgTD=img.parentNode;
-				var msgTR=imgTD.parentNode;
-				tbl.tBodies[0].removeChild(msgTR);
-                        }
-                        }
+					var img=document.getElementById(idsArray[i]+'_plus');
+					var imgTD=img.parentNode;
+					var msgTR=imgTD.parentNode;
+					tbl.tBodies[0].removeChild(msgTR);
+				}
+			}
                 
                                 
-                                /* 
-                                 * after we delete row we need to repaint remain rows
-                                 *  its also reattachs mouse out event to rows: 
-                                 * (returns to row it basic (new) color)
-                                 */
-                                var trs;
-                               if(tbl.tBodies.length>0){
-                                   trs=tbl.tBodies[0].rows;
-                               }
+			 /* 
+			  * after we delete row we need to repaint remain rows
+			  *  its also reattachs mouse out event to rows: 
+			  * (returns to row it basic (new) color)
+			  */
+			var trs;
+			if(tbl.tBodies.length>0){
+			    trs=tbl.tBodies[0].rows;
+			}
                                 
-                                if(trs!=null&&trs.length>0){
-                               
-                                var startIndex=0;
-                                if(trs[0].id=='blankRow'){
-                                    startIndex=1;
-                                }
-                                for(var i=startIndex;i<trs.length;i++){
-                                    if(startIndex==1){
-                                        var className='';
-                                        if(i!=1&&i%2==0){
-                                            trs[i].className = 'trOdd';
-                                            className="this.className='trOdd'";
-
-                                        }
-                                        else{
-                                            trs[i].className='trEven';
-                                            className="this.className='trEven'";
-                                        }
-                                        var setBGColor = new Function(className);
-                                        trs[i].onmouseout=setBGColor;
-                                    }
-                                    else{
-                                        trs[i]=paintTr(trs[i],i);
-                                    }
-                                    
-                                
-                                }
-                                }
-				//removing record from db
-				var url=addActionToURL('messageActions.do');	
-				url+='~actionType=removeSelectedMessage';
-				url+='~editingMessage=false';
-				url+='~removeStateIds='+msgId;
-				url+='~page='+currentPage;
-				lastTimeStamp = new Date().getTime();
-				url+='~timeStamp='+lastTimeStamp;
-				var async=new Asynchronous();
-				async.complete=buildMessagesList;
-				async.call(url);		
+			if(trs!=null&&trs.length>0){
+			
+				var startIndex=0;
+				if(trs[0].id=='blankRow'){
+			   		startIndex=1;
+				}
+				for(var i=startIndex;i<trs.length;i++){
+				    if(startIndex==1){
+				        var className='';
+				        if(i!=1&&i%2==0){
+				            trs[i].className = 'trOdd';
+				            className="this.className='trOdd'";
+				
+				        }
+				        else{
+				            trs[i].className='trEven';
+				            className="this.className='trEven'";
+				        }
+				        var setBGColor = new Function(className);
+				        trs[i].onmouseout=setBGColor;
+				    }
+				    else{
+				        trs[i]=paintTr(trs[i],i);
+				    }
+				    
+				
+				}
+			}
+			//removing record from db
+			var url=addActionToURL('messageActions.do');	
+			url+='~actionType=removeSelectedMessage';
+			url+='~editingMessage=false';
+			url+='~removeStateIds='+msgId;
+			url+='~page='+currentPage;
+			lastTimeStamp = new Date().getTime();
+			url+='~timeStamp='+lastTimeStamp;
+			var async=new Asynchronous();
+			async.complete=buildMessagesList;
+			async.call(url);		
 				
 		}
 	}
@@ -362,7 +365,7 @@ background-color:yellow;
 		return confirm("Are You Sure You Want To Remove This Message ?");
 	}
         
-        function deleteMsgs(){
+    function deleteMsgs(){
 		return confirm("Are You Sure You Want To Remove Selected Messages ?");
 	}
         
@@ -393,11 +396,11 @@ background-color:yellow;
 		getMessages();		
 	}
         
-        function toggleGr(id){
-            $('#'+id+'_minus'+':visible').slideUp('fast');
-            $('#'+id+'_plus'+':hidden').slideDown('fast');
-            $('#msg_'+id+':visible').slideUp('fast');
-        }
+    function toggleGr(id){
+        $('#'+id+'_minus'+':visible').slideUp('fast');
+        $('#'+id+'_plus'+':hidden').slideDown('fast');
+        $('#msg_'+id+':visible').slideUp('fast');
+    }
         
    
         
@@ -448,7 +451,26 @@ background-color:yellow;
 	    }
 	    $('#msg_'+group_id).toggle('fast');                
 	}
-                  
+               
+	//this is new function
+	function markMessageAsRead(group_id){
+		var selMsgsIds;
+		if(group_id!=null){
+			selMsgsIds=group_id;
+		}else{
+			selMsgsIds=getSelectedMessagesIds();
+			if(selMsgsIds.length==0){
+                alert("Please select messages");
+                return false;  
+            }
+		}
+		var partialUrl=addActionToURL('messageActions.do');
+		var url=getUrl(partialUrl,selMsgsIds);
+		var async=new Asynchronous();
+		async.complete=makeRead;
+		async.call(url);
+	}
+	                  
 	function markMsgeAsRead(group_id){
         var partialUrl=addActionToURL('messageActions.do');
 		var url=getUrl(partialUrl,group_id);
@@ -467,14 +489,18 @@ background-color:yellow;
 	}
 	
 	function makeRead (status, statusText, responseText, responseXML){		
-		var root=responseXML.getElementsByTagName('Messaging')[0].childNodes[0];
-		var stateId=root.getAttribute('id');
-		var isRead=root.getAttribute('read');
-		if(isRead){
-			var myid='#'+stateId+'_unreadLink';
-			$(myid).css("color","");		
+		var messages=responseXML.getElementsByTagName('Messaging')[0].childNodes;
+		if(messages!=null){
+			for (var i=0;i<messages.length;i++){
+				var stateId=messages[i].getAttribute('id');
+				var isRead=messages[i].getAttribute('read');
+				if(isRead){
+					var myid='#'+stateId+'_unreadLink';
+					$(myid).css("color","");		
+				}
+			}
+			deselectAllCheckboxes();
 		}
-		
 	}
 	
 	function getMessages(){
@@ -492,50 +518,49 @@ background-color:yellow;
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
-                var browser=navigator.appName;
+		var browser=navigator.appName;
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
 			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
-                        var informationTag=mainTag.getElementsByTagName('Information')[0];
-                        var totalNumber=document.getElementById('totalNumber');
-                         var totalHidden=document.getElementById('totalHidden');
-                        if(totalNumber!=null&&totalHidden!=null){
-                             totalNumber.innerHTML=informationTag.getAttribute("total");
-                              totalHidden.innerHTML=informationTag.getAttribute("totalHidden");
-                        }
+			var informationTag=mainTag.getElementsByTagName('Information')[0];
+			var totalNumber=document.getElementById('totalNumber');
+			var totalHidden=document.getElementById('totalHidden');
+			if(totalNumber!=null&&totalHidden!=null){
+				totalNumber.innerHTML=informationTag.getAttribute("total");
+				totalHidden.innerHTML=informationTag.getAttribute("totalHidden");
+			}
                        
 			//messages start
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
-                           if(!root.hasChildNodes()&& firstEntry==0){
-                               var newTR=document.createElement('TR');
-                                var newTD=document.createElement('TD');
-                                switch (document.messageForm.tabIndex.value){
-                                case "2":
-                                    newTD.innerHTML=noAlerts;
-                                    break;
-                                case "3":
-                                    newTD.innerHTML=noApprovals;
-                                    break;
-                                case "4":
-                                    newTD.innerHTML=noEvents;
-                                    break;
-                        
-                                default :newTD.innerHTML=noMsgs;
-                                }
+				if(!root.hasChildNodes()&& firstEntry==0){
+					var newTR=document.createElement('TR');
+					var newTD=document.createElement('TD');
+                    switch (document.messageForm.tabIndex.value){
+                    case "2":
+                        newTD.innerHTML=noAlerts;
+                        break;
+                    case "3":
+                        newTD.innerHTML=noApprovals;
+                        break;
+                    case "4":
+                        newTD.innerHTML=noEvents;
+                        break;
+            
+                    default :newTD.innerHTML=noMsgs;
+                    }
                                 
-                                newTD.colSpan=4;
-                                newTR.appendChild(newTD);
-                                newTR.id="noMsg";
-                                var tableBody= tbl.getElementsByTagName("tbody");
-                                tableBody[0].appendChild(newTR);
-                                firstEntry++;
-                                return;
+					newTD.colSpan=4;
+					newTR.appendChild(newTD);
+					newTR.id="noMsg";
+					var tableBody= tbl.getElementsByTagName("tbody");
+					tableBody[0].appendChild(newTR);
+					firstEntry++;
+					return;
                                
-                            }
-				else{
+				} else {
                        
-                                     messages=root.childNodes;
+					messages=root.childNodes;
                                 
                   
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
@@ -544,7 +569,7 @@ background-color:yellow;
 					//}
 					if(myArray!=null && myArray.length>0){
 						var whereToInsertRow=1;						
-							for(var i=0;i<messages.length;i++){
+						for(var i=0;i<messages.length;i++){
 							var msgId=messages[i].getAttribute('id');
                                                        
 							for(var j=0;j<myArray.length;j++){
@@ -556,16 +581,17 @@ background-color:yellow;
 											var pagParams=paginationTag.childNodes[0];
 											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
 											if(wasDelteActionCalled=='true'){
-                                                                                                var msgTR;
+                                                var msgTR;
 												
 												if(browser=="Microsoft Internet Explorer"){
 										   			msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
 										   			
 												}else{
-                                                                                                msgTR=document.createElement('TR');      	
+                                                    msgTR=document.createElement('TR');      	
                                                     msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                               	}                                                  var color=++j;                                    
-                                                                                                msgTR=paintTr(msgTR,color);                                                                                                
+                                               	}                                                 
+                                               	var color=++j;                                    
+                                                msgTR=paintTr(msgTR,color);                                                                                                
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
 												myArray[myArray.length]=msgId;										
 											}else{
@@ -575,7 +601,7 @@ background-color:yellow;
 									   				msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');	
 												}else{
                                                                                                         
-                                                                                                        msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                                                    msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
 												}
 												msgTr=paintTr(msgTr,i);
 												createTableRow(tbl,msgTR,messages[i],true);
@@ -588,7 +614,7 @@ background-color:yellow;
 								}
 							}
 						}		
-					}else {
+					} else {
 						for(var i=0;i<messages.length;i++){				
 							var msgId=messages[i].getAttribute('id');
 							myArray[i]=msgId;							
@@ -598,10 +624,10 @@ background-color:yellow;
 							if(browser=="Microsoft Internet Explorer"){
 								var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
 							}else{
-                                            var msgTr=document.createElement('TR');	
+                               	var msgTr=document.createElement('TR');	
  		 						msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
                         	}
-                                         msgTr=paintTr(msgTr,i);
+                            msgTr=paintTr(msgTr,i);
 							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
         	                var tablBody= tbl.getElementsByTagName("tbody");
                             tablBody[0].appendChild(myTR);            																				
@@ -622,8 +648,8 @@ background-color:yellow;
 				}
 				//pagination end
 			}
+		}
 	}
-     }
        	
 	function setupPagionation (paginationTag,page,allPages){
 		currentPage=page;
@@ -632,100 +658,100 @@ background-color:yellow;
 			paginationTR.removeChild(paginationTR.firstChild);
 		}
 		
-			var paginationParams=paginationTag.childNodes[0];
-			if(paginationParams!=null){
-				var paginationTD=document.createElement('TD');
-				var paginationTDContent=pagesTrn+':';
-					if(currentPage>1){
-						var prPage=currentPage-1;
-						paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
-						paginationTDContent+='<a href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > &lt; </a>';								
+		var paginationParams=paginationTag.childNodes[0];
+		if(paginationParams!=null){
+			var paginationTD=document.createElement('TD');
+			var paginationTDContent=pagesTrn+':';
+				if(currentPage>1){
+					var prPage=currentPage-1;
+					paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
+					paginationTDContent+='<a href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > &lt; </a>';								
+				}
+				paginationTDContent+='&nbsp';
+				if(allPages!=null){
+					var fromIndex=1;
+					if((currentPage-2)<1){
+						fromIndex=1;
+					}else{
+						fromIndex=currentPage-2;
 					}
-					paginationTDContent+='&nbsp';
-					if(allPages!=null){
-						var fromIndex=1;
-						if((currentPage-2)<1){
-							fromIndex=1;
-						}else{
-							fromIndex=currentPage-2;
-						}
-						var toIndex;
-						if(currentPage+2>allPages){
-							toIndex=allPages;
-						}else{
-							toIndex=currentPage+2;
-						}
-						for(var i=fromIndex;i<=toIndex;i++){
-							if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>|&nbsp;';}
-							if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
-						}
+					var toIndex;
+					if(currentPage+2>allPages){
+						toIndex=allPages;
+					}else{
+						toIndex=currentPage+2;
 					}
-					if(page<allPages){
-						var nextPg=page+1;									
-						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
-						paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
-					}	
-					paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
-				paginationTD.innerHTML=	paginationTDContent;						
-				paginationTR.appendChild(paginationTD);						
-			}
-		}				
+					for(var i=fromIndex;i<=toIndex;i++){
+						if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>|&nbsp;';}
+						if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
+					}
+				}
+				if(page<allPages){
+					var nextPg=page+1;									
+					paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
+					paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
+				}	
+				paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
+			paginationTD.innerHTML=	paginationTDContent;						
+			paginationTR.appendChild(paginationTD);						
+		}
+	}				
 	
 	
 	//creates table rows with message information
 	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
 	    
 		var msgId=message.getAttribute('id');	//message state id
-                var messageId=message.getAttribute('msgId');
-                var isDraft=message.getAttribute('isDraft');
-                var sateId;
-                if(msgId==null){
-                    msgId=messageId;
-                }
-                else{
-                    sateId=msgId;
-                }
-                var newMsgId=message.getAttribute('parentStateId');// id of the hierarchy end for forwarding messages
+        var messageId=message.getAttribute('msgId');
+        var isDraft=message.getAttribute('isDraft');
+        var sateId;
+        if(msgId==null){
+            msgId=messageId;
+        }
+        else{
+            sateId=msgId;
+        }
+        var newMsgId=message.getAttribute('parentStateId');// id of the hierarchy end for forwarding messages
 		//create image's td
 		var imgTD=document.createElement('TD');
                
-                if(newMsgId!=null){
-                    msgId+='_fId'+newMsgId; // create id for forwarded message
-    
-                }
+        if(newMsgId!=null){
+            msgId+='_fId'+newMsgId; // create id for forwarded message
+
+        }
                
 		imgTD.vAlign='top';	
                
-                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
-				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
-                    msgTr.appendChild(imgTD);
+		imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
+			'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
+		msgTr.appendChild(imgTD);
                 
                
 					
 		//message name and description
 		var nameTD=document.createElement('TD');				
 		var msgName; 
-                 if(message.childNodes!=null&&message.childNodes.length>0){
-                     msgName="FW: "+message.getAttribute('name');
-                 }
-                 else{
-                      msgName=message.getAttribute('name');
-                 }
-                if(fwdOrEditDel){
-                    nameTD.width='70%';}
-                else{
-                    nameTD.width='95%';
-                }
+        if(message.childNodes!=null&&message.childNodes.length>0){
+            msgName="FW: "+message.getAttribute('name');
+        }
+        else{
+             msgName=message.getAttribute('name');
+        }
+        if(fwdOrEditDel){
+            nameTD.width='70%';}
+        else{
+            nameTD.width='95%';
+        }
                    
 		//creating visible div for message name
 		var nameDiv=document.createElement('DIV');
-                var visId;
-                 if(!fwdOrEditDel){
-                    visId=newMsgId+'_'+msgId+'_dots'
-                }
-                else{
-                   visId=+msgId+'_dots' 
-                }
+        var visId;
+        if(!fwdOrEditDel){
+            visId=newMsgId+'_'+msgId+'_dots'
+        }
+        else{
+           visId=+msgId+'_dots' 
+        }
                 
 		nameDiv.setAttribute("id",visId);	
 		var sp=document.createElement('SPAN');
@@ -733,12 +759,12 @@ background-color:yellow;
 		if(isMsgRead=='false'){
 			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; style="color:red;" title="'+viewMessage+'">'+msgName+'</A>';   
 		}else {
-                    if(isDraft==null||isDraft=='false'){
-                        sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
-                    }
-                    else{
-                        sp.innerHTML=msgName;
-                    }
+            if(isDraft==null||isDraft=='false'){
+                sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
+            }
+            else{
+                sp.innerHTML=msgName;
+            }
 			
 		}
 		nameDiv.appendChild(sp);
@@ -746,142 +772,131 @@ background-color:yellow;
 					
 		//creating hidden div for message description.It'll become visible after user clicks on twistie
 		var descDiv=document.createElement('DIV');
-                var invId='msg_'+msgId;
+		var invId='msg_'+msgId;
 		descDiv.setAttribute("id",invId);	
 		descDiv.style.display='none';
 		//creating table inside hidden div
-			var divTable=document.createElement('TABLE');
-                        var divTblBody=document.createElement('TBODY');
-                        divTable.appendChild(divTblBody);
-			divTable.width='100%';
-				var fromTR=document.createElement('TR');
-					var fromTD1=document.createElement('TD');
-					fromTD1.innerHTML='<strong>'+from+'</strong>';
-				fromTR.appendChild(fromTD1);
-					//getting sender
-					var fromTD2=document.createElement('TD');
-					var msgSender=message.getAttribute('from');
-                                        if(fromTD2.textContent==undefined){
-                                            var mytool=msgSender;
-											var temp_array=mytool.split(";");
-											fromTD2.innerText = temp_array[0];
-                                            
-                                            
-                                        }
-                                        else{
-                                            var mytool=msgSender;
-											var temp_array=mytool.split(";");
-											fromTD2.textContent = temp_array[0];
-                                            
-                                            
-                                            
-                                        }
-				fromTR.appendChild(fromTD2);
-			divTblBody.appendChild(fromTR);
+		var divTable=document.createElement('TABLE');
+		var divTblBody=document.createElement('TBODY');
+		divTable.appendChild(divTblBody);
+		divTable.width='100%';
+		var fromTR=document.createElement('TR');
+		var fromTD1=document.createElement('TD');
+		fromTD1.innerHTML='<strong>'+from+'</strong>';
+		fromTR.appendChild(fromTD1);
+		//getting sender
+		var fromTD2=document.createElement('TD');
+		var msgSender=message.getAttribute('from');
+		if(fromTD2.textContent==undefined){
+			var mytool=msgSender;
+			var temp_array=mytool.split(";");
+			fromTD2.innerText = temp_array[0];
+		} else{
+			var mytool=msgSender;
+			var temp_array=mytool.split(";");
+			fromTD2.textContent = temp_array[0];
+		}
+		fromTR.appendChild(fromTD2);
+		divTblBody.appendChild(fromTR);
                         
-                                var toTR=document.createElement('TR');
-                                var toTD1=document.createElement('TD');
-                                toTD1.innerHTML='<strong>'+to+'</strong>';
-                                toTR.appendChild(toTD1);
-                                //getting receives
-                                var toTD2=document.createElement('TD');
-                                var msgReceiver=message.getAttribute('to');
-                                var receiver_array=msgReceiver.split(";");
-                                if(receiver_array.length>5){
-                                 msgReceiver="";
-                                 for(var j=0;j<5;j++){
-                                   if(receiver_array[j].indexOf("@") != -1){
-                                    	msgReceiver+=receiver_array[j];
-                                    }
-                                    if(j!=4){
-                                        msgReceiver+="";
-                                    }
-                                    else{
-                                         msgReceiver+="......";
-                                    }
-                                 }
-                                 
-                                }
-                                if(toTD2.textContent==undefined){
-                                
-                                            var mytool=msgReceiver;
-											var temp_array=mytool.split(";");
-											toTD2.innerText = temp_array[0];
-                                
-	                                     //toTD2.innerText=msgReceiver;
-                                }
-                                else{
-                                	       var mytool=msgReceiver;
-											var temp_array=mytool.split(";");
-											toTD2.textContent = temp_array[0];
-                                	
-                                    		//toTD2.textContent=msgReceiver;
-                                }
-                                  
-                               
-                                toTR.appendChild(toTD2);
-                                divTblBody.appendChild(toTR);
-                        
-				var receivedTR=document.createElement('TR');
-					var receivedTD1=document.createElement('TD');
-					receivedTD1.innerHTML='<strong>'+date+'</strong>';							
-				receivedTR.appendChild(receivedTD1);
-							
-					//getting received date
-					var receivedTD2=document.createElement('TD');
-					var received=message.getAttribute('received');
-					receivedTD2.innerHTML=received;
-				receivedTR.appendChild(receivedTD2);
-			divTblBody.appendChild(receivedTR);						
-				var priorityTR=document.createElement('TR');
-					var priorityTD1=document.createElement('TD');
-					priorityTD1.innerHTML='<strong>'+prLevel+'</strong>';
-				priorityTR.appendChild(priorityTD1);
-								
-					var priorityTD2=document.createElement('TD');
-					//getting priority level
-					var priority=message.getAttribute('priority');
-					if(priority==1){priorityTD2.innerHTML='low';}
-					else if(priority==2){priorityTD2.innerHTML='Medium';}
-					else if(priority==3){priorityTD2.innerHTML='Critical';}
-					else if(priority==0){priorityTD2.innerHTML='None';}
-				priorityTR.appendChild(priorityTD2);
-			divTblBody.appendChild(priorityTR);	
-				
-					//getting URL
-					var objectURL=message.getAttribute('objURL');
-                                        if(objectURL!='null'){
-				var objURLTR=document.createElement('TR');
-					var objURLTD1=document.createElement('TD');
-                                        objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
-				objURLTR.appendChild(objURLTD1);
-					var objURLTD2=document.createElement('TD');
-                    objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
+		var toTR=document.createElement('TR');
+		var toTD1=document.createElement('TD');
+		toTD1.innerHTML='<strong>'+to+'</strong>';
+		toTR.appendChild(toTD1);
+		//getting receives
+		var toTD2=document.createElement('TD');
+		var msgReceiver=message.getAttribute('to');
+		var receiver_array=msgReceiver.split(";");
+		if(receiver_array.length>5){
+ 			msgReceiver="";
+ 			for(var j=0;j<5;j++){
+   				if(receiver_array[j].indexOf("@") != -1){
+    				msgReceiver+=receiver_array[j];
+    			}
+    			if(j!=4){
+        			msgReceiver+="";
+    			}else{
+         			msgReceiver+="......";
+    			}
+ 			}
+		}
 
-				objURLTR.appendChild(objURLTD2);
-			divTblBody.appendChild(objURLTR);
-                                    }	
+		if(toTD2.textContent==undefined){
+			var mytool=msgReceiver;
+			var temp_array=mytool.split(";");
+			toTD2.innerText = temp_array[0];
+			//toTD2.innerText=msgReceiver;
+		} else{
+			var mytool=msgReceiver;
+			var temp_array=mytool.split(";");
+			toTD2.textContent = temp_array[0];
+			//toTD2.textContent=msgReceiver;
+		}
+                       
+                    
+		toTR.appendChild(toTD2);
+		divTblBody.appendChild(toTR);
+                       
+		var receivedTR=document.createElement('TR');
+		var receivedTD1=document.createElement('TD');
+		receivedTD1.innerHTML='<strong>'+date+'</strong>';							
+		receivedTR.appendChild(receivedTD1);
+							
+		//getting received date
+		var receivedTD2=document.createElement('TD');
+		var received=message.getAttribute('received');
+		receivedTD2.innerHTML=received;
+		receivedTR.appendChild(receivedTD2);
+		divTblBody.appendChild(receivedTR);						
+		var priorityTR=document.createElement('TR');
+		var priorityTD1=document.createElement('TD');
+		priorityTD1.innerHTML='<strong>'+prLevel+'</strong>';
+		priorityTR.appendChild(priorityTD1);
+								
+		var priorityTD2=document.createElement('TD');
+		//getting priority level
+		var priority=message.getAttribute('priority');
+			if(priority==1){priorityTD2.innerHTML='low';}
+			else if(priority==2){priorityTD2.innerHTML='Medium';}
+			else if(priority==3){priorityTD2.innerHTML='Critical';}
+			else if(priority==0){priorityTD2.innerHTML='None';}
+		
+		priorityTR.appendChild(priorityTD2);
+		divTblBody.appendChild(priorityTR);	
 				
-				var detailsTR=document.createElement('TR');
-					var detailsTD1=document.createElement('TD');
-                                        detailsTD1.width='30%';
-					detailsTD1.innerHTML='<strong>'+desc+'</strong>';
-				detailsTR.appendChild(detailsTD1);
-					
-					var detailsTD2=document.createElement('TD');
-					//getting description
-					var description=message.getAttribute('msgDetails');
-                                        if(description!='null'){
-                                            description=description.substring(0,34);
-                                            detailsTD2.innerHTML=description+" .........";
-                                        }
-                                        else{
-                                            detailsTD2.innerHTML="&nbsp";
-                                        }					
-				detailsTR.appendChild(detailsTD2);
-			divTblBody.appendChild(detailsTR);
-                        
-        // create forwarded messages
+		//getting URL
+		var objectURL=message.getAttribute('objURL');
+       	if(objectURL!='null'){
+			var objURLTR=document.createElement('TR');
+			var objURLTD1=document.createElement('TD');
+			objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
+			objURLTR.appendChild(objURLTD1);
+			var objURLTD2=document.createElement('TD');
+			objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
+
+			objURLTR.appendChild(objURLTD2);
+			divTblBody.appendChild(objURLTR);
+		}	
+				
+		var detailsTR=document.createElement('TR');
+		var detailsTD1=document.createElement('TD');
+              detailsTD1.width='30%';
+		detailsTD1.innerHTML='<strong>'+desc+'</strong>';
+		detailsTR.appendChild(detailsTD1);
+			
+		var detailsTD2=document.createElement('TD');
+		//getting description
+		var description=message.getAttribute('msgDetails');
+              if(description!='null'){
+              	description=description.substring(0,34);
+                  detailsTD2.innerHTML=description+" .........";
+              }else{
+               	detailsTD2.innerHTML="&nbsp";
+              }					
+		detailsTR.appendChild(detailsTD2);
+		divTblBody.appendChild(detailsTR);
+                      
+      		// create forwarded messages
         if(message.childNodes!=null&&message.childNodes.length>0){
             var forwardedTb=document.createElement('TABLE');
             forwardedTb.width="100%";
@@ -904,45 +919,78 @@ background-color:yellow;
         descDiv.appendChild(divTable);	
         nameTD.appendChild(descDiv);
         msgTr.appendChild(nameTD);
-        
+      
         if(fwdOrEditDel){
-		// forward or edit link
-		fwdOrEditTD=document.createElement('TD');
-		fwdOrEditTD.width='10%';
-		fwdOrEditTD.align='center';
-                fwdOrEditTD.vAlign="top";
-		
-		if(isDraft=='true'){
-                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
-		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
-		}
-		msgTr.appendChild(fwdOrEditTD);	
-					
-		//delete link
-		var deleteTD=document.createElement('TD');
-		deleteTD.width='10%';
-		deleteTD.align='center';
-                deleteTD.vAlign="top";
-		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
-		msgTr.appendChild(deleteTD);
-                //delete link
-		var deleteTDCheckbox=document.createElement('TD');
-		deleteTDCheckbox.width='10%';
-		deleteTDCheckbox.align='center';
-                deleteTDCheckbox.vAlign="top";
-                var deleteCheckbox=document.createElement('input');
-                deleteCheckbox.type='checkbox';
-		deleteCheckbox.value=msgId;
-                deleteTDCheckbox.appendChild(deleteCheckbox);
-		msgTr.appendChild(deleteTDCheckbox);
-                }
+        
+        	if(isDraft!='true'){
+        		replyTD=document.createElement('TD');
+            	replyTD.width='10%';
+            	replyTD.align='center';
+            	replyTD.vAlign="top";
+            	replyTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&reply=fillForm&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+replyClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/reply.gif" border=0 hspace="2" /></digi:link>';
+            	msgTr.appendChild(replyTD);
+        	}    
+        	        
+			// forward or edit link
+			fwdOrEditTD=document.createElement('TD');
+			fwdOrEditTD.width='10%';
+			fwdOrEditTD.align='center';
+			fwdOrEditTD.vAlign="top";
+			
+			if(isDraft=='true'){
+	            fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
+			}else{
+				fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
+			}
+			msgTr.appendChild(fwdOrEditTD);	
+						
+			//delete link
+			var deleteTD=document.createElement('TD');
+			deleteTD.width='10%';
+			deleteTD.align='center';
+	        deleteTD.vAlign="top";
+			//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
+			deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
+			msgTr.appendChild(deleteTD);
+			
+	        //delete link
+			var deleteTDCheckbox=document.createElement('TD');
+			deleteTDCheckbox.width='10%';
+			deleteTDCheckbox.align='center';
+	        deleteTDCheckbox.vAlign="top";
+	        var deleteCheckbox=document.createElement('input');
+	        deleteCheckbox.type='checkbox';
+	        deleteCheckbox.id='delChkbox_'+msgId;
+			deleteCheckbox.value=msgId;
+	        deleteTDCheckbox.appendChild(deleteCheckbox);
+			msgTr.appendChild(deleteTDCheckbox);
+        }
 					
 		return msgTr;			
-	
 	}
-        
+       
+	function selectAllCheckboxes(){
+		var allChkboxes=$("input[@id^='delChkbox_']");
+		if(allChkboxes!=null && allChkboxes.length>0){
+			for(var i=0;i<allChkboxes.length;i++){
+				allChkboxes[i].checked=true;
+			}
+		}
+	}
+	function deselectAllCheckboxes(){
+		var allChkboxes=$("input[@id^='delChkbox_']");
+		if(allChkboxes!=null && allChkboxes.length>0){
+			for(var i=0;i<allChkboxes.length;i++){
+				allChkboxes[i].checked=false;
+			}
+		}
+	}
+
+	function createMessage(){
+		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels";
+		messageForm.target = "_self";
+		messageForm.submit();	
+	}        
  
 $(document).ready(function(){
 	   $("#displaySettingsButton").toggle(function(){
@@ -1343,7 +1391,13 @@ $(document).ready(function(){
 							</TD>
                                                         </TR>
                                                           <TR>
-                                                              <TD ALIGN="RIGHT"><input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>" class="dr-menu" /></TD>
+                                                              <TD ALIGN="RIGHT">
+								                            	<input type="button" onclick="createMessage()" value="<digi:trn>Create Message</digi:trn>" class="dr-menu" />
+								                                <input type="button" onclick="selectAllCheckboxes()" value="<digi:trn>Select All</digi:trn>" class="dr-menu" />
+								                                <input type="button" onclick="deselectAllCheckboxes()" value="<digi:trn>Deselect All</digi:trn>" class="dr-menu" />
+                                                              	<input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>" class="dr-menu" />
+								                                <input type="button" onclick="markMessageAsRead()" value="<digi:trn>Mark As Read</digi:trn>" class="dr-menu" />
+                                                              </TD>
                                                         </TR>
                                                         <TR >
                                                             <TD>&nbsp;</TD>

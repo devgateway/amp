@@ -143,6 +143,7 @@ public class ImportBuilder {
 			activity.setCategories( new HashSet() );
 		}
 		
+		//activity.setCreatedAsDraft(false);
 		activity.setCreatedAsDraft(false);
 	}
 	

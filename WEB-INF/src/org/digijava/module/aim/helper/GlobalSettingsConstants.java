@@ -49,6 +49,8 @@ public class GlobalSettingsConstants {
     
     public static final String ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS = "Alert if sum of disbursments is bigger than sum of commitments";
     
+    public static final String ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT = "Alert if sum of expenditures is bigger than sum of disbursments";
+    
     public static final String ECS_ENABLED = "ECS Enabled";
     
     public static final String AMP_SERVER_NAME= "AMP Server Name";

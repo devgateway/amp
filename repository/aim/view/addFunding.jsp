@@ -109,6 +109,7 @@
 	function validateAmounts(){
     	var totalComms	= 0;
     	var totalDisbs	= 0;
+    	var totalExpen	= 0;
     	var rows = getCommitmentRows();
     	for(i=0; rows!=0 && i<rows; i++){
     		var adjLabel="fundingDetail["+i+"].adjustmentType";
@@ -127,6 +128,10 @@
 			} else {
 				if ((document.getElementsByName(transTypeLabel)[0].value == 1) && (document.getElementsByName(adjLabel)[0].value == 1)) {
 					totalDisbs	+= amount;
+				} else {
+					if ((document.getElementsByName(transTypeLabel)[0].value == 2) && (document.getElementsByName(adjLabel)[0].value == 1)) {
+						totalExpen	+= amount;
+					}
 				}
 			}
 		}
@@ -137,14 +142,22 @@
 		if (new Boolean(value)){%>
 		if (totalDisbs > totalComms) {
 			var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you want to save the funding ?</digi:trn>";
-			if(confirm(Warn)) {	
-					return true;
-				} else {
+			if(!confirm(Warn)) {	
 					return false;	
 				}
 		}
 	<%}%>
-		
+
+	<%
+	value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT);
+	if (new Boolean(value)){%>
+	if (totalExpen > totalDisbs) {
+		var Warn="<digi:trn key="aim:addFunding:warn:expenSupDisb">Sum of Expenditures is bigger than sum of Disbursments. Do you want to save the funding ?</digi:trn>";
+		if(!confirm(Warn)) {	
+				return false;	
+			}
+		}
+	<%}%>
 		
 
 

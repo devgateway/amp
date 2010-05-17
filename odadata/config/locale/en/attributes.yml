@@ -135,7 +135,7 @@ en:
             on_budget: On Budget
             off_budget: Off Budget
         government_project_code:
-          label: Government Budget Code
+          label: Fonte de Recurso
         private_support:
           label: Private Sector Support
           options:

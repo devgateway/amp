@@ -1422,6 +1422,11 @@ $(document).ready(function(){
                                                                     <br />
                                                             </TD>
                                                             </TR>
+						                                     <TR>
+							                                     <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/reply.gif" vspace="2" border="0" align="absmiddle" />
+								                                     <digi:trn>Click on this icon to reply to a message</digi:trn>
+							                                     </TD>
+						                                     </TR>                                                            
                                                             <TR>
                                                                 <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/finalForward.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickForwardMessage">Click on this icon to forward message&nbsp;</digi:trn>

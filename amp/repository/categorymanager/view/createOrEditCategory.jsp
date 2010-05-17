@@ -203,6 +203,12 @@
 			rows = null;
 		}
 	}
+	function cancel()
+	 {
+		window.location="/categorymanager/categoryManager.do";
+		return true;
+	 }
+	
 </script>
 
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="900">
@@ -243,7 +249,7 @@
 						<html:hidden property="submitPressed" value="false" />
 						<table cellpadding="5px" cellspacing="5px" valign="top" width="100%">
 							<tr>
-								<td width="35%" valign="top">
+								<td width="35%" valign="top" class="box-border-nopadding">
 									<table cellpadding="5px" width="100%">
 										<tr>
 											<td width="20%" align="right">
@@ -287,29 +293,18 @@
 												<digi:trn key="aim:categoryManagerAddKey">Key:</digi:trn>
 											</td>
 											<td >
-												<c:set var="keyTextReadonly" value="false" />
+												<c:set var="keyTextReadonly" value="true" />
 												<c:set var="keyTextColorStyle" value="color: black; background-color:white; border-style: none; text-decoration: none;" />
 												<c:if test="${myForm.advancedMode}">
 													<c:set var="keyTextReadonly" value="false" />
-													<c:set var="keyTextColorStyle" value="color: black; background-color:white; " />
+													<c:set var="keyTextColorStyle" value="" />
 												</c:if>
-												<html:text property="keyName" readonly="${keyTextReadonly}" size="30%" />
-											</td>
-										</tr>
-										<tr>
-											<td align="right"/>
-											<td >
-												<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">
-													<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
-													<digi:trn key="aim:categoryManagerSubmit">
-															Submit
-													</digi:trn>
-												</button>
+												<html:text property="keyName" readonly="${keyTextReadonly}" style="${keyTextColorStyle}" size="30%"/>
 											</td>
 										</tr>
 									</table>
 								</td>
-								<td width="65%" valign="top">
+								<td width="65%" valign="top" class="box-border-nopadding">
 									<table>
 										<logic:notEmpty name="cmCategoryManagerForm" property="editedCategoryId">
 											<tr>
@@ -523,32 +518,34 @@
 									</table>
 								</td>
 							</tr>
+							<tr>
+							<td colspan="2" align="center">
+<!--								<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">-->
+<!--									<img src="/TEMPLATE/ampTemplate/imagesSource/common/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />-->
+<!--									<digi:trn key="aim:categoryManagerSubmit">-->
+<!--											Submit-->
+<!--									</digi:trn>-->
+<!--								</button>-->
+								<c:set var="translation">
+									<digi:trn>
+										Save
+									</digi:trn>
+								</c:set>
+								<input type="submit" value="${translation}" class="dr-menu" onclick="return doSubmit()"/>
+								&nbsp;&nbsp;&nbsp;
+								<c:set var="translation">
+									<digi:trn>
+										Cancel
+									</digi:trn>
+								</c:set>
+								<input name="" value="${translation}" onclick="cancel()" class="dr-menu" type="button">
+							</td>
+							</tr>
 						</table>
 						</digi:form>
 					</td>
 				</tr>
 			</table>
-		<%-- 
-		
-		</div>
-					
-					<button type="button" title="<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>" onclick="addNewValue(-1)" class="buton" 
-						style="vertical-align:bottom; padding: 1px;">
-						<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
-						<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>
-					</button>
-				</td>
-			</tr>
-		</table>
-		<br />
-		<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">
-			<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
-			<digi:trn key="aim:categoryManagerSubmit">
-					Submit
-			</digi:trn>
-		</button>
-	</digi:form>
-		--%>					
 		</td>
 	</tr>
 </table>

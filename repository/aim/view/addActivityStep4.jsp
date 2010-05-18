@@ -459,7 +459,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Actual/Planned Commitments" feature="Regional Funding">
                                                                                                    		<td><digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td>
                                                                                                     </field:display>
-																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td align="right">
+																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td>
 																									<FONT color=blue>*</FONT>
 																									<c:out value="${commitment.transactionAmount}"/></td></field:display>
 																									<field:display name="Currency Commitments" feature="Regional Funding"><td><c:out value="${commitment.currencyCode}"/></td></field:display>

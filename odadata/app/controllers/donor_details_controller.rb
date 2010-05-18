@@ -8,12 +8,12 @@ class DonorDetailsController < ApplicationController
 
   def update
     if @donor.update_attributes(params[:donor])
-      flash[:notice] = lc(:saved)
+      flash[:notice] = I18n.t(:saved)
       # TODO: Proper redirect path after donor factsheets are created
       #redirect_to donor_path(@donor)
       redirect_to projects_path
     else
-      flash[:error] = lc(:save_failed)
+      flash[:error] = I18n.t(:save_failed)
       render :action => 'edit'
     end
   end

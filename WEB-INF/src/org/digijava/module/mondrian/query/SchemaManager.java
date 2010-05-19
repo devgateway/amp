@@ -125,6 +125,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Pledges Actual Disbursements#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_DISBURSEMENTS, locale, siteId));
 			shema = shema.replaceAll("#Commitment Gap#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_COMMITMENTS_GAP, locale, siteId));
 			
+			shema = shema.replaceAll("@currency", QueryThread.getCurrency());
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

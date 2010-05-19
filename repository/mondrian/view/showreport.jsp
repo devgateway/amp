@@ -13,6 +13,23 @@
   <link rel="stylesheet" type="text/css" href="../../../wcf/table/xtable.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/tree/xtree.css">
   
+  <script language="JavaScript">
+<!--
+function go()
+	{
+    	 <digi:context name="changecurrency" property="context/module/moduleinstance/showreport.do"/>
+		 url = "<%= changecurrency %>?pagename=query&id=<%=request.getParameter("id")%>";
+		//alert(url);
+	    ShowReportForm.action = url;
+    	ShowReportForm.target = "_self";
+    	ShowReportForm.submit();
+    	return true;
+	}
+
+-->
+</script>
+
+  
 <html>
  <jsp:include page="saveReport.jsp" flush="true" />
 <head>
@@ -20,6 +37,7 @@
 </head>
 <body bgcolor=white>
 <digi:form action="/showreport.do"  method="post">
+
 <%-- include query and title, so this jsp may be used with different queries --%>
 <wcf:include id="include01" httpParam="pagename" prefix="/WEB-INF/queries/" suffix=".jsp"/>
 <c:if test="${query01 == null}">
@@ -44,9 +62,9 @@
 <%-- define a toolbar --%>
 <wcf:toolbar  id="toolbar01" bundle="com.tonbeller.jpivot.toolbar.resources">
   <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}"/>
-  <%-- 
+   
   <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}"/>
-   --%>
+  
   <wcf:scriptbutton id="sortConfigButton" tooltip="toolb.table.config" img="sort-asc" model="#{sortform01.visible}"/>
   <wcf:separator/>
   <wcf:scriptbutton id="levelStyle" tooltip="toolb.level.style" img="level-style" model="#{table01.extensions.axisStyle.levelStyle}"/>
@@ -68,6 +86,8 @@
   <wcf:imgbutton id="printxls" tooltip="toolb.excel" img="excel" href="../../../Print.out?cube=01&type=0"/>
   <wcf:separator/>
   <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()"/>
+  <wcf:separator/>
+  
  </wcf:toolbar>
 
 
@@ -84,14 +104,9 @@
 
 <%-- render navigator --%>
 <wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
-<%-- edit mdx --%>
-<%-- 
-<logic:present name="currentMember" scope="session">
-	<c:if test="${mdxedit01.visible}">
+<%-- edit mdx
   	<h3>MDX Query Editor</h3>
   	<wcf:render ref="mdxedit01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
-</c:if>
- </logic:present>
  --%>
 <%-- sort properties --%>
 <wcf:render ref="sortform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
@@ -113,7 +128,18 @@
 </logic:iterate>
 </span>
 
-
+<table>
+	<tr>
+		<td>
+			<digi:trn>Select Currency</digi:trn> 
+		</td>
+		<td>
+			<html:select property="currency" styleClass="dr-menu" onchange="go();">
+    			<html:optionsCollection name="ShowReportForm" property="currencies" value="currencyCode" label="currencyName"/>
+			</html:select>
+		</td>
+	</tr>
+</table>
 <p>
 <wcf:render ref="table01" xslUri="/WEB-INF/jpivot/table/mdxtable.xsl" xslCache="true"/>
 <p>
@@ -125,7 +151,7 @@
 <!-- Chart -->
 <p>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl" xslCache="true"/>
-<p>
+<p>	
 <table>
 	<tr>
     	<td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">

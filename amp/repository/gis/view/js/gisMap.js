@@ -46,6 +46,8 @@
 	var actionGetIndicatorValues = false;
 	var actionGetSubgroups = false;
 	var actionGetYears = false;
+    var actionGetDonors = false;
+    var actionChangeFundType = false;
 	
 	$(document).ready(function(){
 		actionImgLoading = false;
@@ -61,14 +63,18 @@
 		
 		jQuery.fn.getImageMap = function() {
 			var mapLevel = jQuery.fn.getRadioValue();
-			if (mapLevel == null) {
-				mapLevel = 2;
-			}
+            
+            if (mapLevel == null) mapLevel = 2;
+            
+            
+            
 			var indYear = $("#indicatorYearCombo").val();
 			var requestURL = "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&width=" + canvasWidth + "&height=" + canvasHeight;
 			if (!imageMapLoaded) {
 				actionGetImageMap = true;
-
+				if (mapLevel == null) {
+					mapLevel = 2;
+				}
 				$.get(requestURL, addImageMap, "xml");
 				imageMapLoaded = false;
 			}
@@ -84,12 +90,11 @@
 		
 		jQuery.fn.geIndicatorsValues = function() {
 			var mapLevel = jQuery.fn.getRadioValue();
+			var indYear = $("#indicatorYearCombo").val();
+			var requestURL = "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear;
 			if (mapLevel == null) {
 				mapLevel = 2;
 			}
-			var indYear = $("#indicatorYearCombo").val();
-			var requestURL = "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear;
-
 			$.get(requestURL, jQuery.fn.indicatorsValuesReady, "xml");
 			actionGetIndicatorValues = true;
 		}
@@ -189,6 +194,146 @@
 			}
 		}
 		
+        jQuery.fn.sectorSelectedFin = function(sect){
+            var selSector = sect;
+            var mapLevel = jQuery.fn.getRadioValue();
+            var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+            var toYear = document.getElementsByName('selectedToYear')[0].value;
+            var fundingType = document.getElementById('fundingType').value;
+            
+            var uniqueStr = (new Date()).getTime();
+            if (mapLevel == null) {
+                mapLevel = 2;
+            }
+            //setBusy(true);
+            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            
+            $("#testMap").attr({src: newUrl});
+            if (sect > 0) {
+                jQuery.fn.getDataForSectorFin(sect);
+            } else {
+                fundingDataByRegion = new Array();
+            }
+            
+            window.setTimeout(jQuery.fn.getSectorDonors, 0);
+        }
+        
+        jQuery.fn.donorSelectedFin = function(donorId){
+            var selSector = $("#sectorsMapComboFin").val();
+            var mapLevel = jQuery.fn.getRadioValue();
+            var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+            var toYear = document.getElementsByName('selectedToYear')[0].value;
+            var fundingType = document.getElementById('fundingType').value;
+            
+            var uniqueStr = (new Date()).getTime();
+            jQuery.fn.initIndicatorCombo();
+            if (mapLevel == null) {
+                mapLevel = 2;
+            }
+            //setBusy(true);
+            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + selSector + "&donorId=" + donorId + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            
+            $("#testMap").attr({src: newUrl});
+            jQuery.fn.getDataForSectorFin(selSector);
+        }
+        
+        jQuery.fn.fundTypeSelectedFin = function(fundingType){
+            var selSector = $("#sectorsMapComboFin").val();
+            
+            if (selSector > 0) {
+                var mapLevel = jQuery.fn.getRadioValue();
+                var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+                var toYear = document.getElementsByName('selectedToYear')[0].value;
+                var donorId = document.getElementById('donorsCombo').value;
+                
+                var uniqueStr = (new Date()).getTime();
+                jQuery.fn.initIndicatorCombo();
+                if (mapLevel == null) {
+                    mapLevel = 2;
+                }
+                //setBusy(true);
+                var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + selSector + "&donorId=" + donorId + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+                
+                $("#testMap").attr({src: newUrl});
+                jQuery.fn.getDataForSectorFin(selSector);
+            }
+            
+        }
+        
+        jQuery.fn.getDataForSectorFin = function(sect) {
+            var mapLevel = jQuery.fn.getRadioValue();
+            if (mapLevel == null) {
+                mapLevel = 2;
+            }
+            var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+            var toYear = document.getElementsByName('selectedToYear')[0].value;
+            var uniqueStr = (new Date()).getTime();
+            var donorId = document.getElementById('donorsCombo').value;
+            
+            var requestURL = "../../gis/getFoundingDetails.do?action=getFinansialDataXML&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&donorId=" + donorId + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            
+            $.get(requestURL, jQuery.fn.dataForSectorReadyFin, "xml");
+            actionSectorData = true;
+        }
+        
+        jQuery.fn.dataForSectorReadyFin = function(data, textStatus) {
+                actionSectorData = false;
+                totalCommitmentFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment").value;
+                totalDisbursementFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement").value;
+                totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
+                
+                
+                var regionDataList = data.getElementsByTagName('region');
+                fundingDataByRegion = new Array();
+                var regIndex = 0;
+                for (regIndex = 0; regIndex < regionDataList.length; regIndex ++) {
+                    var regData = regionDataList[regIndex];
+                    var regionDataMap = new Array();
+                    regionDataMap[0] = regData.attributes.getNamedItem("reg-code").value;
+                    regionDataMap[1] = regData.attributes.getNamedItem("fundingCommitment").value;
+                    regionDataMap[2] = regData.attributes.getNamedItem("fundingDisbursement").value;
+                    regionDataMap[3] = regData.attributes.getNamedItem("fundingExpenditure").value;
+
+                    fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
+                }
+        }
+        
+        jQuery.fn.getSectorDonors = function() {
+            var mapLevel = jQuery.fn.getRadioValue()
+            if (mapLevel == null) {
+                mapLevel = 2;
+            }
+            var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+            var toYear = document.getElementsByName('selectedToYear')[0].value;
+            var selSector = $("#sectorsMapComboFin").val();
+            var uniqueStr = (new Date()).getTime();
+            
+            var requestURL = "../../gis/getFoundingDetails.do?action=getSectorDonorsXML&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + selSector + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            $.get(requestURL, jQuery.fn.sectorDonorsReady, "xml");
+        }
+        
+        jQuery.fn.sectorDonorsReady = function(data, textStatus) {
+                actionGetIndicators = false;
+                var donors = data.getElementsByTagName('donor');
+                var indIndex = 0;
+                var donorCmb = $("#donorsCombo");
+                donorCmb.html("");
+                var noneOpt = $("<option value='-1'>All</option>");
+                donorCmb.append(noneOpt);
+                
+                for (index = 0; index < donors.length; index ++) {
+                    var donorData = donors[index]; 
+                    var valueId = donorData.attributes.getNamedItem("id").value;
+                    var valueName  = donorData.attributes.getNamedItem("name").value;
+                    var donorOption = $("<option value='"+valueId+"'>"+valueName+"</option>");
+                    donorCmb.append(donorOption);
+                }
+                
+        }
+        
+        
+        
+        
 		jQuery.fn.getDataForSector = function(sect) {
 			var mapLevel = jQuery.fn.getRadioValue();
 			if (mapLevel == null) {
@@ -269,6 +414,7 @@
 				}
 				jQuery.fn.initIndicatorValues();
 		}
+        
 		jQuery.fn.indicatorSelected = function (ind) {
 			
 			jQuery.fn.initSubgroupCombo();
@@ -399,30 +545,47 @@
 				$("#mapCanvasContainer").scrollLeft(x * deltaCanvasWidth / deltaCursorWidth);
 				$("#mapCanvasContainer").scrollTop(y * deltaCanvasHeight / deltaCursorHeight);
 			}
-		
+		/*
 		jQuery.fn.mapYearChanged = function (){
 			jQuery.fn.sectorSelected(sec);
 		}
-		
+		  */
 
 		
 		$("#testMap").getImageMap();
 		$("#testMap").chekIndicatorValues();
-		$("#testMap").bind("load", function(){
-			actionImgLoading = false;
-			$("#testMap").getImageMap();
-			$("#testMap").chekIndicatorValues();
-		});
 		$("input[name='mapLevelRadio']").click(function(){
 			var mapLevel = $("input[name='mapLevelRadio']:checked").val();
 			jQuery.fn.mapLevelChange(mapLevel);
-			$("#testMap").getImageMap();
 		});
 		$("#sectorsMapCombo").change(function(){
 			var sector = $("#sectorsMapCombo option:selected").val();
 			jQuery.fn.sectorSelected(sector);
 			actionImgLoading = false;
 		});
+        
+        
+        $("#sectorsMapComboFin").change(function(){
+            var sector = $("#sectorsMapComboFin option:selected").val();
+            jQuery.fn.sectorSelectedFin(sector);
+            actionImgLoading = false;
+        });
+        
+        $("#donorsCombo").change(function(){
+            var donor = $("#donorsCombo option:selected").val();
+            jQuery.fn.donorSelectedFin(donor);
+            actionImgLoading = false;
+        });
+        
+        $("#fundingType").change(function(){
+            var fndType = $("#fundingType option:selected").val();
+            jQuery.fn.fundTypeSelectedFin(fndType);
+            actionImgLoading = false;
+        });
+        
+        
+        
+        
 		$("#indicatorsCombo").change(function(){
 			var inic = $("#indicatorsCombo option:selected").val();
 			jQuery.fn.indicatorSelected(inic);
@@ -432,15 +595,24 @@
 			jQuery.fn.subgroupSelected(subgr);
 		});
 		$("#selectedFromYear").change(function(){
-			var sector = $("#sectorsMapCombo option:selected").val();
-			jQuery.fn.sectorSelected(sector);
+            
+            if ($("#sectorsMapCombo")[0] != null) {
+                jQuery.fn.sectorSelected($("#sectorsMapCombo option:selected").val());
+            } else if ($("#sectorsMapComboFin")[0] != null) {
+                jQuery.fn.sectorSelectedFin($("#sectorsMapComboFin option:selected").val());
+            }
 			actionImgLoading = false;
 		});
 		$("#selectedToYear").change(function(){
-			var sector = $("#sectorsMapCombo option:selected").val();
-			jQuery.fn.sectorSelected(sector);
+			if ($("#sectorsMapCombo") != null) {
+                jQuery.fn.sectorSelected($("#sectorsMapCombo option:selected").val());
+            } else if ($("#sectorsMapComboFin") != null) {
+                jQuery.fn.sectorSelectedFin($("#sectorsMapComboFin option:selected").val());
+            }
 			actionImgLoading = false;
 		});
+        
+        
 		
 		$("#mapNav").toggle(
 			function(){
@@ -605,7 +777,14 @@
 		if (regCode.indexOf("Lake")<0){
 			var mouseEvent = null;
 			document.getElementById("tooltipRegionContainer").innerHTML = regName;
-		
+            if (document.getElementById("tooltipDonorContainer") != null) {
+                var selIdx = document.getElementById("donorsCombo").selectedIndex;
+                var selected_text = document.getElementById("donorsCombo").options[selIdx].text;
+
+                document.getElementById("tooltipDonorContainer").innerHTML = selected_text;
+            }
+        
+        
 			document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund;
 			document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund;
 			document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
@@ -623,9 +802,11 @@
 			document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2] + note;
 			
 			
-			document.getElementById("tooltipIndUnit").innerHTML = selIndicatorUnit;
-			document.getElementById("tooltipIndVal").innerHTML = getRegIndicatorValue(regCode);
-			document.getElementById("tooltipIndSrc").innerHTML = getRegIndicatorSource(regCode);
+            if (document.getElementById("tooltipIndUnit") != null) {
+			    document.getElementById("tooltipIndUnit").innerHTML = selIndicatorUnit;
+			    document.getElementById("tooltipIndVal").innerHTML = getRegIndicatorValue(regCode);
+			    document.getElementById("tooltipIndSrc").innerHTML = getRegIndicatorSource(regCode);
+            }
 			
 		
 			
@@ -640,6 +821,8 @@
 			
 		}
 	}
+    
+
 	
 	function hideRegionTooltip() {
 		document.getElementById("tooltipContainer").style.display = "none";
@@ -742,7 +925,11 @@
 	
 	
 	function mapYearChanged(){
-		sectorSelected(document.getElementById('sectorsMapCombo').value);
+        if (document.getElementById('sectorsMapCombo') != null) {
+		    sectorSelected(document.getElementById('sectorsMapCombo').value);
+        } else if ((document.getElementById('sectorsMapComboFin') != null)) {
+            sectorSelectedFin(document.getElementById('sectorsMapComboFin').value);
+        }
 	}
 	
 	function getComboSelectedText(obj) {
@@ -782,14 +969,18 @@
 	}
 	
 	function setBusy(busy) {
-		
-		/*	alert (actionImgLoading + " - " +
+		    /*
+			alert (actionImgLoading + " - " +
 				   actionGetImageMap  + " - " +
 				   actionSectorData  + " - " +
 				   actionGetIndicators + " - " +
 				   actionGetIndicatorValues + " - " +
 				   actionGetSubgroups+ " - " +
-				   actionGetYears); */
+				   actionGetYears + " - " +
+                   actionGetDonors + " - " +
+                   actionChangeFundType); 
+                   
+                   alert(busy);*/
 			
 		if (busy) {
 			document.getElementById("busyIndicator").style.visibility = "visible";
@@ -799,11 +990,18 @@
 				document.getElementsByName("mapLevelRadio")[1].disabled = true;
 			}
 
-			document.getElementById("sectorsMapCombo").disabled = true;
-			document.getElementById("indicatorsCombo").disabled = true;
-			document.getElementById("indicatorSubgroupCombo").disabled = true;
-			document.getElementById("indicatorYearCombo").disabled = true;
-			
+            if (document.getElementById("sectorsMapCombo") != null) {
+			    document.getElementById("sectorsMapCombo").disabled = true;
+			    document.getElementById("indicatorsCombo").disabled = true;
+			    document.getElementById("indicatorSubgroupCombo").disabled = true;
+			    document.getElementById("indicatorYearCombo").disabled = true;
+            }
+            
+            if (document.getElementById("sectorsMapComboFin") != null) {
+                document.getElementById("sectorsMapComboFin").disabled = true;
+                document.getElementById("fundingType").disabled = true;
+                document.getElementById("donorsCombo").disabled = true;
+            }
 			
 		} else if (!actionImgLoading &&
 				   !actionGetImageMap &&
@@ -811,17 +1009,29 @@
 				   !actionGetIndicators &&
 				   !actionGetIndicatorValues &&
 				   !actionGetSubgroups &&
-				   !actionGetYears) {
+				   !actionGetYears &&
+                   !actionGetDonors &&
+                   !actionChangeFundType) {
+                       
 			document.getElementById("busyIndicator").style.visibility = "hidden";
 
 			if (document.getElementsByName("mapLevelRadio")[0] != null) {
 				document.getElementsByName("mapLevelRadio")[0].disabled = false;
 				document.getElementsByName("mapLevelRadio")[1].disabled = false;
 			}
-			document.getElementById("sectorsMapCombo").disabled = false;
-			document.getElementById("indicatorsCombo").disabled = false;
-			document.getElementById("indicatorSubgroupCombo").disabled = false;
-			document.getElementById("indicatorYearCombo").disabled = false;
+            
+            if (document.getElementById("sectorsMapCombo") != null) {
+			    document.getElementById("sectorsMapCombo").disabled = false;
+			    document.getElementById("indicatorsCombo").disabled = false;
+			    document.getElementById("indicatorSubgroupCombo").disabled = false;
+			    document.getElementById("indicatorYearCombo").disabled = false;
+            }
+            
+            if (document.getElementById("sectorsMapComboFin") != null) {
+                document.getElementById("sectorsMapComboFin").disabled = false;
+                document.getElementById("fundingType").disabled = false;
+                document.getElementById("donorsCombo").disabled = false;
+            }
 		}
 		
 	}

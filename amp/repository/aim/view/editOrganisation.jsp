@@ -38,8 +38,7 @@
         border-left:none;
         border-right:none;
         font-size: 11px;
-        font-family:Arial;
-       !important
+        font-family:Arial !important
 
     }
     .tableHeader {
@@ -77,9 +76,8 @@
 
 <script language="JavaScript" type="text/javascript">
     function initScripts() {
-        initSectorScript();
+        initPopInScript();
         initContactScript();
-        initOrganizationScript();
     }
     addLoadEvent(initScripts);
   
@@ -317,7 +315,7 @@
     <c:set var="errMsgAddSectorNumericValue">
         <digi:trn>Please enter numeric value only</digi:trn>
     </c:set>
-
+        
             if (isNaN(frmContrl.value)) {
                 alert("${errMsgAddSectorNumericValue}");
                 frmContrl.value = "";
@@ -388,7 +386,7 @@
                 return false;
         }
 
-        function move() {
+        function cancel() {
     <digi:context name="selectLoc" property="context/module/moduleinstance/organisationManager.do" />
             url = "<%= selectLoc %>?orgSelReset=true";
             document.location.href = url;
@@ -1812,7 +1810,7 @@ function resetPrimary(contList){
                 <input
                         type="button"
                         value="<digi:trn key="btn:cancel">Cancel</digi:trn>"
-                        class="dr-menu" onclick="move()"></td>
+                        class="dr-menu" onclick="cancel()"></td>
             </tr>
             <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                 <tr>

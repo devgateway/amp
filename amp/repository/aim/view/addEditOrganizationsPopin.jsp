@@ -39,33 +39,8 @@
     var checkAndClose=false;
 
 
-    var mySectorPanel = new YAHOO.widget.Panel("newpopins", {
-        width:"600px",
-        fixedcenter: true,
-        constraintoviewport: false,
-        underlay:"none",
-        close:true,
-        visible:false,
-        modal:true,
-        draggable:true,
-        context: ["showbtn", "tl", "bl"]
-    });
-
-    var sectorPanelStart=0;
-    var sectorCheckAndClose=false;
-    function initSectorScript() {
-        var msg='\n<digi:trn key="aim:addSector">Add Sectors</digi:trn>';
-        mySectorPanel.setHeader(msg);
-        mySectorPanel.setBody("");
-        mySectorPanel.beforeHideEvent.subscribe(function() {
-            sectorCheckAndClose=1;
-        });
-
-        mySectorPanel.render(document.body);
-    }
-    function initOrganizationScript() {
-        var msg='\n<digi:trn key="aim:addSector">Add Organizations</digi:trn>';
-        myPanel.setHeader(msg);
+    function initPopInScript() {
+        myPanel.setHeader("");
         myPanel.setBody("");
         myPanel.beforeHideEvent.subscribe(function() {
             panelStart=1;
@@ -140,29 +115,15 @@
         success:responseSuccess,
         failure:responseFailure
     };
-
+    
     var responseSuccessSector = function(o){
-        /* Please see the Success Case section for more
-         * details on the response object's properties.
-         * o.tId
-         * o.status
-         * o.statusText
-         * o.getResponseHeader[ ]
-         * o.getAllResponseHeaders
-         * o.responseText
-         * o.responseXML
-         * o.argument
-         */
-        var response = o.responseText;
-        var content = document.getElementById("popinContent");
-        //response = response.split("<!")[0];
-        content.innerHTML = response;
-        //content.style.visibility = "visible";
-
-        showSectorContent();
+        myPanel.hide();
+        panelStart=1;
+        checkAndClose=false;
+        addSector();
     }
 
-    var responseFailureSector = function(o){
+    var responseFailureSector= function(o){
         // Access the response object's properties in the
         // same manner as listed in responseSuccess( ).
         // Please see the Failure Case section and
@@ -170,39 +131,28 @@
         // response object's properties.
         //alert("Connection Failure!");
     }
-    var sectorCallback =
+
+     var callbackSector =
         {
         success:responseSuccessSector,
         failure:responseFailureSector
     };
 
-    function showContent(type){
+    
+    function  showContent(){
         var element = document.getElementById("popin");
         element.style.display = "inline";
-        var panel;
-        var panStart;
-        if(type==1){
-            panel=mySectorPanel;
-            panStart=sectorPanelStart;
+        if (panelStart < 1){
+            myPanel.setBody(element);
         }
-        else{
-            panel=myPanel;
-            panStart=panelStart;
-        }
-        if (panStart < 1){
-            panel.setBody(element);
-        }
-        if (panStart < 2){
+        if (panelStart< 2){
             document.getElementById("popin").scrollTop=0;
-            panel.show();
-            if(type==1){
-                sectorPanelStart=2;
-            }
-            else{
-                panelStart = 2;
-            }
+            myPanel.show();
+            panelStart=2;
+
+
         }
-        checkErrorAndClose(type);
+        checkErrorAndCloseOrgLocationPopIn();
     }
 
     function generateFields(type){
@@ -265,13 +215,12 @@
         }
     }
     function addSectorBtnPushed(){
-        var postString		= "edit=true&" + generateFields(1);
-    <digi:context name="url" property="context/aim/selectSectors.do"/>
-            var url="${url}?"+postString;
-            var async=new Asynchronous();
-            async.complete=addSector;
-            async.call(url);
-            myclose();
+            var postString		= "edit=true&" + generateFields(1);
+    <digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
+			var url = "${commentUrl}";
+			checkAndClose=true;
+			YAHOO.util.Connect.asyncRequest("POST", url, callbackSector, postString);
+
         }
 
 
@@ -301,11 +250,10 @@
 
         function buttonAddLocation(){
             var postString		= generateFieldsLocation();
-    <digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
+            <digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
             var url = "<%=commentUrl%>";
-            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
             checkAndClose=true;
-            refreshPage();
+            YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
         }
 
         function resetSectors(){
@@ -338,52 +286,28 @@
             var postString		= "edit=true&" + generateFields(1);
     <digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
             var url = "<%=commentUrl%>";
-            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
+            YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
             //YAHOO.util.Connect.asyncRequest("POST", url, callback);
 
         }
 
         function addSelectedSectors(){
-            var postString		= generateFields(3);
+    var postString		= generateFields(3);
             <digi:context name="url" property="context/aim/addSelectedSectors.do"/>
-            var url="${url}?"+postString;
-            var async=new Asynchronous();
-            async.complete=addSector;
-            async.call(url);
-            myclose();
-        }
-        function checkErrorAndClose(type){
-            if(type==1){ //sector
-                if(sectorCheckAndClose==true){
-                    if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-                        mySectorPanel.hide();
-                        sectorPanelStart=1;
-                        addSector();
-                    }
-                    sectorCheckAndClose=false;
-                }
+                var url = "${url}";
+                checkAndClose=true;
+                YAHOO.util.Connect.asyncRequest("POST", url, callbackSector, postString);
             }
-            else{
-                if(checkAndClose==true){
+        
+        function checkErrorAndCloseOrgLocationPopIn(){
+              if(checkAndClose==true){
                     if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-                        var callbackFunction='';
-                        if(document.aimSelectOrganizationForm!=null&&document.aimSelectOrganizationForm.callbackFunction!=null)
-                        callbackFunction=document.aimSelectOrganizationForm.callbackFunction.value;
-                         if( callbackFunction.trim()!=''){
-                                    eval(callbackFunction);
-
-                                }
-                                else{
-                                     refreshPage();
-                                }
-                         myPanel.hide();
-                         panelStart=1;
+                        myPanel.hide();
+                        panelStart=1;
+                        refreshPage();
                     }
                     checkAndClose=false;
-                    
-
                 }
-            }
         }
         function selectPageSectors(pagedata){
             var postString="";
@@ -397,9 +321,9 @@
                 postString+=myarray[i]+((i<myarray.length-1)?"&":"");
             }
             postString+="&"+generateFields(4);
-    <digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
-            var url = "<%=commentUrl%>?"+postString;
-            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, postString);
+             <digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
+            var url = "<%=commentUrl%>?";
+            YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 
         }
         function checkSectorEmpty()
@@ -489,7 +413,7 @@
                     var postString		= generateFields(2);
                  <digi:context name="searchSctr" property="context/aim/searchSectors.do" />
                     var url = "<%= searchSctr%>";
-                    YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, "edit=true&"+postString);
+                    YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
 
                     return true;
                 }
@@ -497,33 +421,29 @@
             else
                 return false;
         }
-        function showPanelLoading(msg,type){
+        function showPanelLoading(msg){
             myPanel.setHeader(msg);
             var content = document.getElementById("popinContent");
             content.innerHTML = '<div style="text-align: center">' +
                 '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
                 '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
-            if(type==null){
-                showContent(2);
-            }
-            else{
-                 showContent(1);
-            }
-            
+                showContent();
+           
         }
+   
         function myAddSectors(params) {
             var msg='\n<digi:trn key="aim:addLocation">Add Sectors</digi:trn>';
             showPanelLoading(msg);
     <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
             var url = "<%=commentUrl%>";
-            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, params);
+            YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
         }
         function myAddLocation(params) {
             var msg='\n<digi:trn key="aim:addLocation">Add Location</digi:trn>';
             showPanelLoading(msg);
-    <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+            <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
             var url = "<%=selectLoc%>";
-            YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, params);
+            YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
         }
 
 
@@ -533,7 +453,7 @@
                 document.selectLocationForm.parentLocId.value=selectEl.value;
     <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
                 var url = "<%=selectLoc%>";
-                YAHOO.util.Connect.asyncRequest("POST", url, sectorCallback, "edit=true&"+generateFieldsLocation());
+                YAHOO.util.Connect.asyncRequest("POST", url, callback , "edit=true&"+generateFieldsLocation());
             }
         }
 

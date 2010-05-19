@@ -1179,7 +1179,7 @@
 		if (mapLevel == null) {
 			mapLevel = 2;
 		}
-		var sec = document.getElementById("sectorsMapCombo").value;
+		var sec = document.getElementById("sectorsMapCombo") != null ? document.getElementById("sectorsMapCombo").value:document.getElementById("sectorsMapComboFin").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
 		

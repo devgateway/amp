@@ -22,9 +22,9 @@ import org.hibernate.Session;
 public final class EUActivityUtil {
 	private static Logger logger = Logger.getLogger(EUActivityUtil.class);
 
-	public static Collection getEUActivities(Long actId) {
+	public static Collection<EUActivity> getEUActivities(Long actId) {
 		Session session = null;
-		Collection euActivities = new ArrayList();
+		Collection<EUActivity> euActivities = new ArrayList<EUActivity>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();

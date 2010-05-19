@@ -24,6 +24,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReporting;
@@ -76,6 +77,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -4086,7 +4088,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}
     	  return updator;
       }
-
+      public static class EUActivityKeyResolver implements KeyResolver<Long, EUActivity>{
+    		@Override
+    		public Long resolveKey(EUActivity element){
+    			return element.getId();
+    		}
+    	}
 
 	
 } // End

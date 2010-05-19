@@ -1023,6 +1023,19 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	
 	        Collection euActs = EUActivityUtil.getEUActivities(eaForm.getActivityId());
+	        Collection <EUActivity> formEuActs= eaForm.getCosting().getCosts();
+	        if(formEuActs!=null && formEuActs.size()>0){
+	        	if(euActs==null){
+	        		euActs=new ArrayList<EUActivity>();
+	        	}
+	        	Map<Long, EUActivity> euActMap=AmpCollectionUtils.createMap(euActs, new ActivityUtil.EUActivityKeyResolver());
+	        	for(EUActivity object : formEuActs){
+	        		EUActivity euActivity=euActMap.get(object.getId());
+	        		if(euActivity==null){
+	        			euActs.add(object);
+	        		}
+	        	}
+	        }
 	        // EUActivities = same as Costs
 	        request.setAttribute("costs", euActs);
 	        request.setAttribute("actId", eaForm.getActivityId());

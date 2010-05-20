@@ -12,109 +12,122 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <digi:instance property="gisWidgetTeaserForm" />
-<script language="javascript" type="text/javascript">
- 
-   
-    function getGraphMap(type){
-        var lastTimeStamp = new Date().getTime();
-        var url="/widget/getWidgetMap.do?type="+type+'&timestamp='+lastTimeStamp;
-        var async=new Asynchronous();
-        async.complete=mapCallBack;
-        async.call(url);
-    }
-    
-    function mapCallBack(status, statusText, responseText, responseXML){
-        var map=responseXML.getElementsByTagName('map')[0];
-	var id=map.getAttribute('id');
-        var mapSpan= document.getElementById(id);
-        mapSpan.innerHTML=responseText;  
-    }
-
-
-</script>
-
 <c:if test="${gisWidgetTeaserForm.rendertype==5}">
-<feature:display name="orgprof_chart_place${gisWidgetTeaserForm.type}" module="Org Profile">
-    <c:choose>
-        <c:when test="${gisWidgetTeaserForm.type==1}">
-            <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
-            <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
-            <jsp:include page="orgSummary.jsp" flush="true"/>
-        </c:when>
-           <c:when test="${gisWidgetTeaserForm.type==7}">
-            <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
-        </c:when>
-        <c:otherwise>
-            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=520~imageWidth=400" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap(${gisWidgetTeaserForm.type})"/>
-            <span id="chartMap${gisWidgetTeaserForm.type}">
-              
-            </span>
-            
-           
-        </c:otherwise>
-    </c:choose>
-   </feature:display>
-     	
+    <feature:display name="orgprof_chart_place${gisWidgetTeaserForm.type}" module="Org Profile">
+        <c:choose>
+            <c:when test="${gisWidgetTeaserForm.type==1}">
+                <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
+                <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
+                <c:set var="orgsCount" scope="request" value="${fn:length(sessionScope.orgProfileFilter.orgIds)}"/>
+                <jsp:include page="orgSummary.jsp" flush="true"/>
+            </c:when>
+            <c:when test="${gisWidgetTeaserForm.type==2||gisWidgetTeaserForm.type==4}">
+                <jsp:include page="/orgProfile/showOrgProfileTables.do?type=${gisWidgetTeaserForm.type}" flush="true"/>
+            </c:when>
+            <c:when test="${gisWidgetTeaserForm.type==7}">
+                <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
+            </c:when>
+            <c:otherwise>
+                <script language="javascript" type="text/javascript">
+                    function getGraphMap_${gisWidgetTeaserForm.type}(transactionType){
+                        var lastTimeStamp = new Date().getTime();
+                        var url="/widget/getWidgetMap.do?type="+${gisWidgetTeaserForm.type}+'&timestamp='+lastTimeStamp;
+                        if (typeof transactionType != 'undefined') {
+                            url+='&transactionType='+transactionType;
+                        }
+                        var async=new Asynchronous();
+                        async.complete=mapCallBack_${gisWidgetTeaserForm.type};
+                        async.call(url);
+                    }
+
+                    function mapCallBack_${gisWidgetTeaserForm.type}(status, statusText, responseText, responseXML){
+                        var map=responseXML.getElementsByTagName('map')[0];
+                        var id=map.getAttribute('id');
+                        var mapSpan= document.getElementById(id);
+                        mapSpan.innerHTML=responseText;
+                    }
+                </script>
+                    <c:choose>
+                        <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
+                            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450~transactionType=0" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
+                            <span id="chartMap${gisWidgetTeaserForm.type}_0">
+                            </span>
+                            <br/>
+                            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450~transactionType=1" usemap="#chartMap${gisWidgetTeaserForm.type}_1" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(1)"/>
+                            <span id="chartMap${gisWidgetTeaserForm.type}_1">
+                            </span>
+                        </c:when>
+                        <c:otherwise>
+                            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
+                            <span id="chartMap${gisWidgetTeaserForm.type}">
+
+                            </span>
+                        </c:otherwise>
+                    </c:choose>
+            </c:otherwise>
+        </c:choose>
+    </feature:display>
+
 
 
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==4}">
-	<img src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}">		
+    <img src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}">
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==3}">
 
-	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
-	
-	<div id="tableWidgetContainer_${gisWidgetTeaserForm.id}">
-		
-	</div>
-         
+    <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
-	<script language="JavaScript">
+    <div id="tableWidgetContainer_${gisWidgetTeaserForm.id}">
+
+    </div>
+
+
+    <script language="JavaScript">
 	
-		function requestTable_${gisWidgetTeaserForm.id}(columnId,itemId){
-			<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />
-			var url = '${tableRendererUrl}~tableId=${gisWidgetTeaserForm.id}';
-			if (columnId!=null && itemId!=null){
-				url+='~columnId='+columnId+'~itemId='+itemId;
-			}
-			var async=new Asynchronous();
-			async.complete=tableCallBack_${gisWidgetTeaserForm.id};
-			async.call(url);
-		}
+        function requestTable_${gisWidgetTeaserForm.id}(columnId,itemId){
+        <digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />
+                var url = '${tableRendererUrl}~tableId=${gisWidgetTeaserForm.id}';
+                if (columnId!=null && itemId!=null){
+                    url+='~columnId='+columnId+'~itemId='+itemId;
+                }
+                var async=new Asynchronous();
+                async.complete=tableCallBack_${gisWidgetTeaserForm.id};
+                async.call(url);
+            }
 	
-		function tableCallBack_${gisWidgetTeaserForm.id}(status, statusText, responseText, responseXML){
-			processTableResponce_${gisWidgetTeaserForm.id}(responseText);
-			applyStyle(document.getElementById("tableWidget${gisWidgetTeaserForm.id}"));
-		}
+            function tableCallBack_${gisWidgetTeaserForm.id}(status, statusText, responseText, responseXML){
+                processTableResponce_${gisWidgetTeaserForm.id}(responseText);
+                applyStyle(document.getElementById("tableWidget${gisWidgetTeaserForm.id}"));
+            }
 	
-		function processTableResponce_${gisWidgetTeaserForm.id}(htmlResponce){
-			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
-			myDiv.innerHTML = htmlResponce;		
-		}
+            function processTableResponce_${gisWidgetTeaserForm.id}(htmlResponce){
+                var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
+                myDiv.innerHTML = htmlResponce;
+            }
 	
-		function tableWidgetFilterChanged_${gisWidgetTeaserForm.id}(columnId){
-			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
-			var selItem = document.getElementsByName('selectedFilterItemId_${gisWidgetTeaserForm.id}')[0];
-			var itemId = selItem.value;
-			myDiv.innerHTML = 'loading...';
-			requestTable_${gisWidgetTeaserForm.id}(columnId,itemId);
-		}
+            function tableWidgetFilterChanged_${gisWidgetTeaserForm.id}(columnId){
+                var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
+                var selItem = document.getElementsByName('selectedFilterItemId_${gisWidgetTeaserForm.id}')[0];
+                var itemId = selItem.value;
+                myDiv.innerHTML = 'loading...';
+                requestTable_${gisWidgetTeaserForm.id}(columnId,itemId);
+            }
 		
-		requestTable_${gisWidgetTeaserForm.id}();
+            requestTable_${gisWidgetTeaserForm.id}();
 	
-	</script>
+    </script>
 
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==1}">
-	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.SHOW_WIDGET_PLACE_NAMES %>" compareWith="true" onTrueEvalBody="true">
-		<digi:trn key="gis:widgetTeaser:emptyPlace">empty teaser: </digi:trn>&nbsp;${gisWidgetTeaserForm.placeName}
-	</gs:test>
+    <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.SHOW_WIDGET_PLACE_NAMES%>" compareWith="true" onTrueEvalBody="true">
+        <digi:trn key="gis:widgetTeaser:emptyPlace">empty teaser: </digi:trn>&nbsp;${gisWidgetTeaserForm.placeName}
+    </gs:test>
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==0}">
-	<digi:trn key="gis:widgetTeaser:noParamSpecified">ERROR : no place param specified in layout definition for this teaser.</digi:trn>
+    <digi:trn key="gis:widgetTeaser:noParamSpecified">ERROR : no place param specified in layout definition for this teaser.</digi:trn>
 </c:if>

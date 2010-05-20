@@ -1,7 +1,4 @@
-
-
 package org.digijava.module.widget.action;
-
 
 import java.io.IOException;
 
@@ -17,27 +14,32 @@ import org.digijava.module.widget.form.WidgetTeaserForm;
 
 public class GetWidgetMap extends Action {
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-		
-		WidgetTeaserForm wForm = (WidgetTeaserForm) form;
-		
-		response.setContentType("text/xml");
-		
-		HttpSession session = request.getSession();
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
-		String map= (String) session.getAttribute("chartMap"+wForm.getType());
-		
-	
-				try {
-					response.getWriter().print(map);
-				} catch (IOException e) {
-					// TODO handle this exception
-					e.printStackTrace();
-				}
-		
-		
-		return null;
-	}
+        WidgetTeaserForm wForm = (WidgetTeaserForm) form;
 
+        response.setContentType("text/xml");
+
+        HttpSession session = request.getSession();
+        String transactionType = request.getParameter("transactionType");
+        String id = "chartMap" + wForm.getType();
+        if (transactionType != null&&!transactionType.equals("")) {
+            id += "_" + transactionType;
+        }
+
+        String map = (String) session.getAttribute(id);
+
+
+        try {
+            response.getWriter().print(map);
+        } catch (IOException e) {
+            // TODO handle this exception
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
 }
 

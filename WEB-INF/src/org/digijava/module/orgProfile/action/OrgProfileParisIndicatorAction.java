@@ -27,6 +27,7 @@ public class OrgProfileParisIndicatorAction extends Action {
 
     private static Logger logger = Logger.getLogger(OrgProfileParisIndicatorAction.class);
 
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -39,7 +40,7 @@ public class OrgProfileParisIndicatorAction extends Action {
         while (iter.hasNext()) {
             AmpAhsurveyIndicator piIndicator = iter.next();
             // currently the rules are undefined for indicator 10b
-            if(piIndicator.getIndicatorCode().equals("10b")){
+            if (piIndicator.getIndicatorCode().equals("10b")) {
                 continue;
             }
             ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter, true);
@@ -68,7 +69,21 @@ public class OrgProfileParisIndicatorAction extends Action {
 
         }
         piForm.setFiscalYear(filter.getYear());
-        piForm.setOrganization(filter.getOrganization());
+        String name = "";
+        if (filter.getOrgIds() != null) {
+            if (filter.getOrgIds().length == 1) {
+                name = filter.getOrganization().getName();
+            } else {
+                name = "Multiple Organizations Selected";
+            }
+        } else {
+            if (filter.getOrgGroupId() != -1) {
+                name = filter.getOrgGroup().getOrgGrpName();
+            } else {
+                name = "All";
+            }
+        }
+        piForm.setName(name);
         piForm.setIndicators(indicatorHelpers);
         return mapping.findForward("forward");
     }

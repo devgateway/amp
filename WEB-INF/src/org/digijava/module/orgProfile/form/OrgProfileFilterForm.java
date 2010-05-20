@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -25,22 +26,63 @@ import org.springframework.beans.BeanWrapperImpl;
 public class OrgProfileFilterForm extends ActionForm {
     
     private static final long serialVersionUID = 1L;
-    private Long orgId;
     private Long year;
     private Long currencyId;
     private Boolean workspaceOnly;
-
     private List<AmpCurrency>currencies;
     private List<AmpOrganisation>organizations;
     private Collection<BeanWrapperImpl> years;
-    
     private int transactionType;
-
     private List<AmpOrgGroup> orgGroups;
     private Long orgGroupId;
     private List<AmpFiscalCalendar> fiscalCalendars;
     private Long fiscalCalendarId;
+    private Long[] orgIds;
+    private Integer largestProjectNumb;
+    private Long selRegionId;
+    private Long selZoneIds[];
+    private List<AmpCategoryValueLocations> regions;
+    private List<AmpCategoryValueLocations> zones;
 
+    public List<AmpCategoryValueLocations> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(List<AmpCategoryValueLocations> regions) {
+        this.regions = regions;
+    }
+
+    public Long getSelRegionId() {
+        return selRegionId;
+    }
+
+    public void setSelRegionId(Long selRegionId) {
+        this.selRegionId = selRegionId;
+    }
+
+    public Long[] getSelZoneIds() {
+        return selZoneIds;
+    }
+
+    public void setSelZoneIds(Long[] selZoneIds) {
+        this.selZoneIds = selZoneIds;
+    }
+
+    public List<AmpCategoryValueLocations> getZones() {
+        return zones;
+    }
+
+    public void setZones(List<AmpCategoryValueLocations> zones) {
+        this.zones = zones;
+    }
+
+    public Integer getLargestProjectNumb() {
+        return largestProjectNumb;
+    }
+
+    public void setLargestProjectNumb(Integer largestProjectNumb) {
+        this.largestProjectNumb = largestProjectNumb;
+    }
     public List<AmpFiscalCalendar> getFiscalCalendars() {
         return fiscalCalendars;
     }
@@ -100,14 +142,6 @@ public class OrgProfileFilterForm extends ActionForm {
 
   
 
-    public Long getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(Long orgId) {
-        this.orgId = orgId;
-    }
-
     public List<AmpOrganisation> getOrganizations() {
         return organizations;
     }
@@ -144,23 +178,30 @@ public class OrgProfileFilterForm extends ActionForm {
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         super.reset(mapping, request);
         workspaceOnly=false;
+        setOrgIds(null);
+        setSelZoneIds(null);
+        setSelRegionId(null);
     }
 
     public String getOrgGroupName() {
-        String name = "All";
-        if (orgGroupId != null && orgGroupId != -1) {
-            AmpOrgGroup group = DbUtil.getAmpOrgGroup(orgGroupId);
-            name = group.getOrgGrpName();
+        AmpOrgGroup group= DbUtil.getAmpOrgGroup(orgGroupId);
+        String name=null;
+        if(group!=null){
+            name=group.getOrgGrpName();
         }
         return name;
-
     }
 
-     public String getOrgName() {
-        String name = "All";
-        if (orgId != null && orgId != -1) {
-            AmpOrganisation organization = DbUtil.getOrganisation(orgId);
-            name = organization.getName();
+    public String getOrgsName() {
+        String name = "";
+        if (orgIds != null) {
+            for (Long id : orgIds) {
+                AmpOrganisation organization = DbUtil.getOrganisation(id);
+                name += organization.getName() + ", ";
+            }
+            if (name.length() > 0) {
+                name = name.substring(0, name.length() - 1);
+            }
         }
         return name;
 
@@ -173,6 +214,13 @@ public class OrgProfileFilterForm extends ActionForm {
         }
         return name;
 
+    }
+     public Long[] getOrgIds() {
+        return orgIds;
+    }
+
+    public void setOrgIds(Long[] orgIds) {
+        this.orgIds = orgIds;
     }
 
 }

@@ -44,7 +44,7 @@ public class OrgProfileWidgetUtil {
     }
     
       /**
-     * Lads table widget by ID.
+     * Loads  widget by ID.
      * @param id
      * @return
      * @throws DgException
@@ -55,7 +55,7 @@ public class OrgProfileWidgetUtil {
 		try {
 			result=(AmpWidgetOrgProfile)session.load(AmpWidgetOrgProfile.class, id);
 		} catch (Exception e) {
-			throw new DgException("Cannot get Table Widget!",e);
+			throw new DgException("Cannot get  Widget!",e);
 		}
     	return result;
     }

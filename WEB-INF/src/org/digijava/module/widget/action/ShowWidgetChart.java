@@ -32,13 +32,23 @@ import org.jfree.chart.plot.Plot;
  */
 public class ShowWidgetChart extends Action {
 
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         ShowWidgetChartForm wForm = (ShowWidgetChartForm) form;
         response.setContentType("image/png");
         HttpSession session = request.getSession();
-        FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
+        FilterHelper filter =null;
+        String chartId="chartMap"+wForm.getChartType();
+        if(wForm.getTransactionType()!=null){
+           filter =new FilterHelper((FilterHelper) session.getAttribute("orgProfileFilter"));
+           filter.setTransactionType(wForm.getTransactionType());
+           chartId+="_"+wForm.getTransactionType();
+        }
+        else{
+            filter = (FilterHelper) session.getAttribute("orgProfileFilter");
+        }     
         AmpWidgetIndicatorChart widget = null;
         if (wForm.getWidgetId() != null) {
             if (wForm.getChartType() == null) {
@@ -65,19 +75,19 @@ public class ShowWidgetChart extends Action {
                 opt.setLangCode(langCode);
                 JFreeChart chart = null;
                 ChartRenderingInfo info = new ChartRenderingInfo();
-                switch (wForm.getChartType().intValue()) {
-                    case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
+                switch (wForm.getChartType().intValue())  {
+                    /* case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                         chart = ChartWidgetUtil.getTypeOfAidChart(opt, filter);
-                        break;
+                        break;*/
 
                     case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
                         chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
-                 
+
                         break;
-                        
-                   case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+
+                 /*  case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
                         chart = ChartWidgetUtil.getODAProfileChart(opt, filter);
-                        break;
+                        break;*/
                    case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
                         chart = ChartWidgetUtil.getSectorByDonorChart(opt, filter);
                         break;
@@ -100,8 +110,8 @@ public class ShowWidgetChart extends Action {
                         opt.getHeight().intValue(),
                         info);
                 
-                    String map = ChartUtilities.getImageMap("chartMap"+wForm.getChartType().intValue(), info);
-                    session.setAttribute("chartMap"+wForm.getChartType().intValue(), map);
+                    String map = ChartUtilities.getImageMap(chartId, info);
+                    session.setAttribute(chartId, map);
                 
       
              

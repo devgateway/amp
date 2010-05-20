@@ -1,14 +1,25 @@
 package org.digijava.module.orgProfile.util;
 
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.rtf.table.RtfCell;
+import java.awt.Color;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
 
+import java.util.ListIterator;
 import java.util.Set;
+import java.util.TreeMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
@@ -22,18 +33,29 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.helper.Project;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
-import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.orgProfile.helper.NameValueYearHelper;
+import org.digijava.module.widget.util.WidgetUtil;
 
 /**
  *
@@ -42,27 +64,32 @@ import org.digijava.module.aim.util.ActivityUtil;
 public class OrgProfileUtil {
 
     private static Logger logger = Logger.getLogger(OrgProfileUtil.class);
+    public static final Color TITLECOLOR = new Color(34, 46, 93);
+    public static final Color BORDERCOLOR = new Color(255, 255, 255);
+    public static final Color CELLCOLOR = new Color(219, 229, 241);
+    public static final Font PLAINFONT = new Font(Font.TIMES_ROMAN, 10);
+    public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD, new Color(255, 255, 255));
 
-   /**
-    *
-    * @param indCode
-    * @param currCode
-    * @param orgId
-    * @param orgGroupId
-    * @param startDate
-    * @param endDate
-    * @param teamMember
-    * @return
-    * @throws org.digijava.kernel.exception.DgException
-    */
-    public static Long getValue(String indCode,  String currCode, Long orgId, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember) throws DgException {
+    /**
+     *
+     * @param indCode
+     * @param currCode
+     * @param orgId
+     * @param orgGroupId
+     * @param startDate
+     * @param endDate
+     * @param teamMember
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
+    public static Long getValue(String indCode, String currCode, Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember, Collection<Long> locationIds) throws DgException {
         Long total = 0l;
         try {
             // questions that must be answered with 'yes' in the survey, nominator column
             int nominator[] = null;
-             // questions that must be answered with 'yes' in the survey, denominator column
+            // questions that must be answered with 'yes' in the survey, denominator column
             int denominator[] = null;
-            int adjustmentType=Constants.ACTUAL;
+            int adjustmentType = Constants.ACTUAL;
             if (indCode.equals("3")) {
                 nominator = new int[]{2, 1};
                 denominator = new int[]{1};
@@ -82,7 +109,7 @@ public class OrgProfileUtil {
 
                         } else {
                             if (indCode.equals("6")) {
-                                total = getPIUValue(orgId, orgGroupId, startDate, endDate, teamMember);
+                                total = getPIUValue(orgIds, orgGroupId, startDate, endDate, teamMember, locationIds);
                                 return total;
                             } else {
                                 if (indCode.equals("7")) {
@@ -96,23 +123,22 @@ public class OrgProfileUtil {
 
                                     } else {
                                         if (indCode.equals("10a")) {
-                                           total=getIndicator10aValue(startDate, endDate, orgId, orgGroupId);
-                                           return total;
+                                            total = getIndicator10aValue(startDate, endDate, orgIds, orgGroupId);
+                                            return total;
                                         } else {
                                             if (indCode.equals("5aii")) {
                                                 nominator = new int[]{1, 5, 6, 7};
-                                                total = getDonorsCount(nominator, orgId, orgGroupId, startDate, endDate, teamMember);
+                                                total = getDonorsCount(nominator, orgIds, orgGroupId, startDate, endDate, teamMember, locationIds);
                                                 return total;
                                             } else {
                                                 if (indCode.equals("5bii")) {
                                                     nominator = new int[]{8, 1};
-                                                    total = getDonorsCount(nominator, orgId, orgGroupId, startDate, endDate, teamMember);
+                                                    total = getDonorsCount(nominator, orgIds, orgGroupId, startDate, endDate, teamMember, locationIds);
                                                     return total;
-                                                }
-                                                else{
-                                                     if (indCode.equals("10b")) {
-                                                         return total;
-                                                     }
+                                                } else {
+                                                    if (indCode.equals("10b") || indCode.equals("8")) {
+                                                        return total;
+                                                    }
 
                                                 }
                                             }
@@ -133,16 +159,15 @@ public class OrgProfileUtil {
             if (nominatorCondition.length() > 0) {
                 if (indCode.equals("7")) {
                     // in that case we are calculating  planned disb.
-                    nominatorValue = getValue(indCode, Constants.PLANNED, currCode, orgId, orgGroupId, startDate, endDate, teamMember, nominatorCondition);
-                }
-                else{
+                    nominatorValue = getValue(indCode, Constants.PLANNED, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, nominatorCondition,locationIds);
+                } else {
                     //calculating  actual disb.
-                      nominatorValue = getValue(indCode, adjustmentType, currCode, orgId, orgGroupId, startDate, endDate, teamMember, nominatorCondition);
+                    nominatorValue = getValue(indCode, adjustmentType, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, nominatorCondition,locationIds);
                 }
             }
             if (denominatorCondition.length() > 0) {
                 //calculating denominator value
-                denominatorValue = getValue(indCode, adjustmentType, currCode, orgId, orgGroupId, startDate, endDate, teamMember, denominatorCondition);
+                denominatorValue = getValue(indCode, adjustmentType, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, denominatorCondition,locationIds);
             }
             if (denominatorValue != null && denominatorValue != 0 && nominatorValue != null) {
                 total = Math.round(nominatorValue / denominatorValue * 100);
@@ -168,26 +193,34 @@ public class OrgProfileUtil {
      * @param year
      * @return
      */
-    public static Long getDonorsCount(int questionNumber[], Long orgId, Long orgGroupId, Date startDate, Date endDate, TeamMember member) {
+    public static Long getDonorsCount(int questionNumber[], Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember member, Collection<Long> locationIds) {
         long size = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
             String queryString = "";
             String whereCondition = getAmpAhsurveyCondition(questionNumber);
+            boolean locationCondition = locationIds != null && !locationIds.isEmpty();
             Query qry = null;
             if (whereCondition.length() > 0) {
-                queryString = "select  distinct f.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " +
-                        " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   ";
+                queryString = "select  distinct f.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  "
+                        + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   ";
+                if (locationCondition) {
+                    queryString += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+                }
 
-                queryString += "  where fd.transactionType =1 and  fd.adjustmentType =1" +
-                        " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate ";
+                queryString += "  where fd.transactionType =1 and  fd.adjustmentType =1"
+                        + " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate ";
                 queryString += " and ah.ampAHSurveyId in (" + whereCondition + ")";
-                if (orgId == null || orgId == -1) {
+                if (locationCondition) {
+                    queryString += " and loc.id in (:locations) ";
+
+                }
+                if (orgIds == null) {
                     if (orgGroupId != null && orgGroupId != -1) {
                         queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
                     }
                 } else {
-                    queryString += " and ah.ampDonorOrgId=:orgId ";
+                    queryString += " and ah.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(orgIds) + ")";
                 }
                 queryString += ChartWidgetUtil.getTeamQuery(member);
                 qry = session.createQuery(queryString);
@@ -197,12 +230,11 @@ public class OrgProfileUtil {
                     qry.setLong("teamId", member.getTeamId());
 
                 }
-                if (orgId == null || orgId == -1) {
-                    if (orgGroupId != null && orgGroupId != -1) {
-                        qry.setLong("orgGroupId", orgGroupId);
-                    }
-                } else {
-                    qry.setLong("orgId", orgId);
+                if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
+                    qry.setLong("orgGroupId", orgGroupId);
+                }
+                if (locationCondition) {
+                    qry.setParameterList("locations", locationIds);
                 }
                 size = qry.list().size();
             }
@@ -225,26 +257,35 @@ public class OrgProfileUtil {
      * @param year
      * @return
      */
-    public static long getPIUValue(Long orgId, Long orgGroupId, Date startDate, Date endDate, TeamMember member) {
+    public static long getPIUValue(Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember member, Collection<Long> locationIds) {
         long size = 0;
+        boolean locationCondition = locationIds != null && !locationIds.isEmpty();
         try {
             Session session = PersistenceManager.getRequestDBSession();
             String queryString = "select  distinct act ";
 
-            queryString += " from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " +
-                    " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   ";
+            queryString += " from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  "
+                    + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   ";
+            if (locationCondition) {
+                queryString += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+            }
 
-            queryString += " where " + " fd.transactionType =1 and  fd.adjustmentType =1" +
-                    " and act.actualStartDate>=:startDate and  act.actualCompletionDate<=:endDate  ";
+            queryString += " where " + " fd.transactionType =1 and  fd.adjustmentType =1"
+                    + " and act.actualStartDate>=:startDate and  act.actualCompletionDate<=:endDate  ";
             queryString += ChartWidgetUtil.getTeamQuery(member);
             queryString += " and res.response='Yes' and q.questionNumber=9";
+            if (locationCondition) {
+                queryString += " and loc.id in (:locations) ";
 
-            if (orgId == null || orgId == -1) {
+            }
+
+            if (orgIds == null) {
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
                 }
+
             } else {
-                queryString += " and ah.ampDonorOrgId=:orgId ";
+                queryString += " and ah.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(orgIds) + ")";
             }
             Query qry = session.createQuery(queryString);
             qry.setDate("startDate", startDate);
@@ -253,19 +294,13 @@ public class OrgProfileUtil {
                 qry.setLong("teamId", member.getTeamId());
 
             }
-            if (orgId == null || orgId == -1) {
-                if (orgGroupId != null && orgGroupId != -1) {
-                    qry.setLong("orgGroupId", orgGroupId);
-                }
-            } else {
-                qry.setLong("orgId", orgId);
+            if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
+                qry.setLong("orgGroupId", orgGroupId);
             }
-
+            if (locationCondition) {
+                qry.setParameterList("locations", locationIds);
+            }
             size = qry.list().size();
-
-
-
-
         } catch (Exception e) {
             logger.error("Unable get value ", e);
 
@@ -321,16 +356,21 @@ public class OrgProfileUtil {
      * @param year
      * @return
      */
-    public static long getIndicator10aValue(Date startDate, Date endDate, Long orgId, Long orgGroupId) {
+    public static long getIndicator10aValue(Date startDate, Date endDate, Long[] orgIds, Long orgGroupId) {
         long value = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            String queryString = "select  distinct cal  from " + AmpCalendar.class.getName() + " cal inner join cal.eventType  type " + " left join cal.organisations org " +
-                    " where (cal.calendarPK.calendar.startDate>=:startDate and cal.calendarPK.calendar.endDate<=:endDate) " + " and type.name='Mission' "; //I think we need made changes in db structure
+            String queryString = "select  distinct cal  from " + AmpCalendar.class.getName() + " cal inner join cal.eventType  type " + " left join cal.organisations org "
+                    + " where (cal.calendarPK.calendar.startDate>=:startDate and cal.calendarPK.calendar.endDate<=:endDate) " + " and type.name='Mission' "; //I think we need made changes in db structure
 
-
-            if (orgId != null && orgId != -1) {
-                queryString += " and :orgId in elements(cal.organisations)";
+            if (orgIds != null) {
+                queryString += " and (";
+                for (Long orgId : orgIds) {
+                    queryString += " ( " + orgId + " in elements(cal.organisations)) or";
+                }
+                // cutting last or
+                queryString = queryString.substring(0, queryString.length() - 2);
+                queryString += ")";
             } else {
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += " and org.orgGrpId=:orgGroupId";
@@ -339,25 +379,15 @@ public class OrgProfileUtil {
             Query qry = session.createQuery(queryString + " and size(cal.organisations)>1 "); //joint
             qry.setDate("startDate", startDate);
             qry.setDate("endDate", endDate);
-            if (orgId != null && orgId != -1) {
-                qry.setLong("orgId", orgId);
-            } else {
-                if (orgGroupId != null && orgGroupId != -1) {
-                    qry.setLong("orgGroupId", orgGroupId);
-
-                }
+            if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
+                qry.setLong("orgGroupId", orgGroupId);
             }
             long jointMisssion = qry.list().size();
             qry = session.createQuery(queryString); // all missions
             qry.setDate("startDate", startDate);
             qry.setDate("endDate", endDate);
-            if (orgId != null && orgId != -1) {
-                qry.setLong("orgId", orgId);
-            } else {
-                if (orgGroupId != null && orgGroupId != -1) {
-                    qry.setLong("orgGroupId", orgGroupId);
-
-                }
+            if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
+                qry.setLong("orgGroupId", orgGroupId);
             }
             long allMisssion = qry.list().size();
             if (allMisssion > 0) {
@@ -373,117 +403,144 @@ public class OrgProfileUtil {
         return value;
     }
 
-
-  /**
+    /**
      * Returns list of 5 (or less) largest projects
      * TODO review this method
      * @param filter
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-
     public static List<Project> getOrganisationLargestProjects(FilterHelper filter) throws DgException {
         Session session = null;
         String queryString = null;
-        TeamMember teamMember=filter.getTeamMember();
+        TeamMember teamMember = filter.getTeamMember();
         List<Project> projects = new ArrayList<Project>();
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-        year -= 1; // previous fiscal year
+        Integer maxResult = filter.getLargestProjectNumb();
+
         Long currId = filter.getCurrId();
         String currCode;
-        Long orgGroupId=filter.getOrgGroupId();
+        Long orgGroupId = filter.getOrgGroupId();
         if (currId == null) {
             currCode = "USD";
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
-        Long orgID = filter.getOrgId();
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Long[] orgIds = filter.getOrgIds();
         // apply calendar filter
-        Date startDate = getStartDate(fiscalCalendarId, year.intValue());
-        Date endDate = getEndDate(fiscalCalendarId, year.intValue());
+        Date startDate = filter.getStartDate();
+        Date endDate = filter.getEndDate();
+        Collection<Long> locationIds = filter.getLocationIds();
+        boolean locationCondition = locationIds != null && locationIds.size() > 0;
         try {
             session = PersistenceManager.getRequestDBSession();
-            /* pick all activities of the organization in the selected year ordered
-             by their amounts in USD
-             alas that "Limit" does not work in the query...  */
-            queryString = " select act.ampActivityId from " + AmpActivity.class.getName() + " act  ";
+            queryString = " select act from " + AmpActivity.class.getName() + " act  ";
 
-            queryString += " inner join act.funding f " +
-                    " inner join f.fundingDetails fd ";
+            queryString += " inner join act.funding f "
+                    + " inner join f.fundingDetails fd ";
 
-            queryString += "  where " +
-                    " fd.transactionType = 0 and  fd.adjustmentType = 1";
 
-            if (orgID == null || orgID == -1) {
-                if (orgGroupId != null && orgGroupId != -1) {
-                queryString += ChartWidgetUtil.getOrganizationQuery(true);
+            if (locationCondition) {
+                queryString += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+            }
+
+            queryString += "  where "
+                    + " fd.transactionType = 0 and  fd.adjustmentType = 1";
+
+            if (locationCondition) {
+                queryString += " and loc.id in (:locations) ";
+
+            }
+
+
+            if (orgIds == null) {
+                if (orgGroupId != -1) {
+                    queryString += ChartWidgetUtil.getOrganizationQuery(true, orgIds);
                 }
             } else {
-                queryString += ChartWidgetUtil.getOrganizationQuery(false);
+                queryString += ChartWidgetUtil.getOrganizationQuery(false, orgIds);
             }
             queryString += " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate  ";
-            queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
-            queryString +=" group by act.ampActivityId order by sum(fd.transactionAmountInBaseCurrency) desc ";
+            queryString += ChartWidgetUtil.getTeamQuery(teamMember);
+            queryString += " group by act.ampActivityId order by sum(fd.transactionAmountInBaseCurrency) desc ";
 
             Query query = session.createQuery(queryString);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if (orgID != null && orgID != -1) {
-                query.setLong("orgID", orgID);
-            } else {
-                if (orgGroupId != null && orgGroupId != -1) {
-                    query.setLong("orgGroupId", orgGroupId);
-                }
+            if (maxResult != -1) {
+                query.setMaxResults(maxResult);
             }
-            if(teamMember!=null){
+            if (orgIds == null && orgGroupId != -1) {
+                query.setLong("orgGroupId", orgGroupId);
+            }
+            if (teamMember != null) {
                 query.setLong("teamId", teamMember.getTeamId());
 
             }
-            List result=query.list();
-            if(result.size()>5){
-                result=result.subList(0, 5);//pick 5 largest projects
+
+            if (locationCondition) {
+                query.setParameterList("locations", locationIds);
             }
+            List result = query.list();
 
 
-            Iterator<Long> activityIter = result.iterator();
+            Iterator<AmpActivity> activityIter = result.iterator();
             // converting funding to selected currency amount and creating projects
             while (activityIter.hasNext()) {
-                Long activityId = activityIter.next();
-                AmpActivity activity=ActivityUtil.getAmpActivity(activityId);
-                queryString = "select fd from " + AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";
-                queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1  ";
-                if (orgID == null || orgID == -1) {
-                    if (orgGroupId != null && orgGroupId != -1) {
-                    queryString += ChartWidgetUtil.getOrganizationQuery(true);
+                AmpActivity activity = activityIter.next();
+
+                if (locationCondition) {
+                    queryString = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
+                } else {
+                    queryString = "select fd ";
+                }
+                queryString += " from ";
+                queryString += AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";
+                queryString += "   inner join f.ampActivityId act ";
+                if (locationCondition) {
+                    queryString += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+                }
+                queryString += " where    fd.adjustmentType = 1  ";
+                if (orgIds == null) {
+                    if (orgGroupId != -1) {
+                        queryString += ChartWidgetUtil.getOrganizationQuery(true, orgIds);
                     }
                 } else {
-                    queryString += ChartWidgetUtil.getOrganizationQuery(false);
+                    queryString += ChartWidgetUtil.getOrganizationQuery(false, orgIds);
                 }
                 queryString += " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate  and act=" + activity.getAmpActivityId();
+                if (locationCondition) {
+                    queryString += " and loc.id in (:locations) ";
+                }
                 query = session.createQuery(queryString);
                 query.setDate("startDate", startDate);
                 query.setDate("endDate", endDate);
-                if (orgID != null && orgID != -1) {
-                    query.setLong("orgID", orgID);
-                } else {
-                    if (orgGroupId != null && orgGroupId != -1) {
-                    query.setLong("orgGroupId", filter.getOrgGroupId());
+                if (orgIds == null && orgGroupId != -1) {
+                    query.setLong("orgGroupId", orgGroupId);
                 }
+                if (locationCondition) {
+                    query.setParameterList("locations", locationIds);
                 }
                 List<AmpFundingDetail> details = query.list();
                 Project project = new Project();
-                project.setSectors(activity.getSectors());
+                Set<AmpActivitySector> sectors = activity.getSectors();
+                Iterator<AmpActivitySector> sectorIter = sectors.iterator();
+                String sectorsName = "";
+                while (sectorIter.hasNext()) {
+                    sectorsName += " " + sectorIter.next().getSectorId().getName() + ",";
+                }
+                if (sectorsName.length() > 0) {
+                    sectorsName = sectorsName.substring(0, sectorsName.length() - 1);
+                }
+                project.setSectorNames(sectorsName);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
 
-                Double amount=cal.getTotActualComm().doubleValue();
+                BigDecimal amount = cal.getTotActualComm().getValue();
+                BigDecimal disbAmount = cal.getTotActualDisb().getValue();
 
                 project.setAmount(FormatHelper.formatNumber(amount));
-                String title=activity.getName();
+                project.setDisbAmount(FormatHelper.formatNumber(disbAmount));
+                String title = activity.getName();
                 if (title.length() > 15) {
                     project.setFullTitle(title);
                     title = title.substring(0, 14) + "...";
@@ -492,8 +549,9 @@ public class OrgProfileUtil {
                 project.setActivityId(activity.getAmpActivityId());
                 projects.add(project);
 
-		}
+            }
         } catch (Exception e) {
+            logger.error("error", e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }
@@ -502,12 +560,15 @@ public class OrgProfileUtil {
         return projects;
     }
 
-
     public static Date getStartDate(Long fiscalCalendarId, int year) {
         Date startDate = null;
         if (fiscalCalendarId != null && fiscalCalendarId != -1) {
             AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
-            startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
+            if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
+                startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
+            } else {
+                startDate = getEthiopianDate(calendar, year, true);
+            }
         } else {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.MONTH, Calendar.JANUARY);
@@ -522,15 +583,19 @@ public class OrgProfileUtil {
         Date endDate = null;
         if (fiscalCalendarId != null && fiscalCalendarId != -1) {
             AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
-            //we need data including the last day of toYear,this is till the first day of toYear+1
-            int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
-            endDate = new Date(getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
+            if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
+                //we need data including the last day of toYear,this is till the first day of toYear+1
+                int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+                endDate = new Date(getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
+            } else {
+                endDate = getEthiopianDate(calendar, year, false);
+            }
 
         } else {
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.MONTH, Calendar.DECEMBER);
-            cal.set(Calendar.DAY_OF_MONTH, 31);
-            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, Calendar.JANUARY);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.YEAR, year + 1);
             endDate = cal.getTime();
         }
         return endDate;
@@ -572,66 +637,68 @@ public class OrgProfileUtil {
 
         return exists;
     }
+
     /**
      * Creates string consisting of surveys ids
      * @param questionNumbers
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-    public static String getAmpAhsurveyCondition(int[] questionNumbers) throws DgException{
-            Session session = PersistenceManager.getRequestDBSession();
-            String queryString = "";
-            String whereCondition = "";
-            Query qry = null;
-            List<AmpAhsurvey> surveys = new ArrayList<AmpAhsurvey>();
-            List<AmpAhsurvey> selectedSurveys = new ArrayList<AmpAhsurvey>();
-            for (int i = 0; i < questionNumbers.length; i++) {
-                queryString = " select ah from " + AmpAhsurvey.class.getName()+" ah ";
-                // not all  actual disbursement
-                if (questionNumbers[0] != 0) {
-                    queryString += " inner join ah.responses res  " + " inner join res.ampQuestionId  q  ";
-                    queryString += " where  res.response='Yes'" + " and q.questionNumber=" + questionNumbers[i] + ") ";
-                }
-                qry = session.createQuery(queryString);
-                List surveyList = qry.list();
-                if (questionNumbers.length == 1) {
-                    surveys.addAll(surveyList);
+    public static String getAmpAhsurveyCondition(int[] questionNumbers) throws DgException {
+        Session session = PersistenceManager.getRequestDBSession();
+        String queryString = "";
+        String whereCondition = "";
+        Query qry = null;
+        List<AmpAhsurvey> surveys = new ArrayList<AmpAhsurvey>();
+        List<AmpAhsurvey> selectedSurveys = new ArrayList<AmpAhsurvey>();
+        for (int i = 0; i < questionNumbers.length; i++) {
+            queryString = " select ah from " + AmpAhsurvey.class.getName() + " ah ";
+            // not all  actual disbursement
+            if (questionNumbers[0] != 0) {
+                queryString += " inner join ah.responses res  " + " inner join res.ampQuestionId  q  ";
+                queryString += " where  res.response='Yes'" + " and q.questionNumber=" + questionNumbers[i] + ") ";
+            }
+            qry = session.createQuery(queryString);
+            List surveyList = qry.list();
+            if (questionNumbers.length == 1) {
+                surveys.addAll(surveyList);
 
-                } else {
-                    if (surveyList.size() > 0) {
-                        if (i == 0) {
-                            surveys.addAll(surveyList);
-                        } else {
-                            Iterator<AmpAhsurvey> iter = surveyList.iterator();
-                            while (iter.hasNext()) {
-                                AmpAhsurvey survey = iter.next();
-                                if (surveys.contains(survey)) {
-                                    selectedSurveys.add(survey);
-                                }
-                            }
-                            surveys.clear();
-                            surveys.addAll(selectedSurveys);
-                            selectedSurveys.clear();
-
-                        }
-
+            } else {
+                if (surveyList.size() > 0) {
+                    if (i == 0) {
+                        surveys.addAll(surveyList);
                     } else {
+                        Iterator<AmpAhsurvey> iter = surveyList.iterator();
+                        while (iter.hasNext()) {
+                            AmpAhsurvey survey = iter.next();
+                            if (surveys.contains(survey)) {
+                                selectedSurveys.add(survey);
+                            }
+                        }
                         surveys.clear();
+                        surveys.addAll(selectedSurveys);
+                        selectedSurveys.clear();
+
                     }
 
+                } else {
+                    surveys.clear();
                 }
 
             }
-            Iterator<AmpAhsurvey> iter = surveys.iterator();
-            while (iter.hasNext()) {
-                if (whereCondition.length() != 0) {
-                    whereCondition += ",";
-                }
-                AmpAhsurvey survey = iter.next();
-                whereCondition += survey.getAmpAHSurveyId();
+
+        }
+        Iterator<AmpAhsurvey> iter = surveys.iterator();
+        while (iter.hasNext()) {
+            if (whereCondition.length() != 0) {
+                whereCondition += ",";
             }
-            return whereCondition ;
+            AmpAhsurvey survey = iter.next();
+            whereCondition += survey.getAmpAHSurveyId();
+        }
+        return whereCondition;
     }
+
     /**
      * Returns funding amount for the specified surveys
      * @param indCode
@@ -646,33 +713,40 @@ public class OrgProfileUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-    public static Double getValue(String indCode, int adjustmentType, String currCode, Long orgId, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember, String condition) throws DgException {
+    public static Double getValue(String indCode, int adjustmentType, String currCode, Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember, String condition, Collection<Long> locationIds) throws DgException {
         Session session = PersistenceManager.getRequestDBSession();
         String queryString = "";
         Double total = new Double(0);
+        boolean locationCondition = locationIds != null && !locationIds.isEmpty();
         Query qry = null;
         queryString = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,";
         queryString += "fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate";
         if (indCode.equals("4")) {
             queryString += ", ah.ampAHSurveyId";
         }
-        queryString += ") from " +
-                AmpAhsurvey.class.getName() +
-                " ah inner join ah.responses res  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   ";
-        queryString += " where  fd.transactionType =1 and  fd.adjustmentType =:adjustmentType" +
-                "  and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate ";
+        queryString += ") from "
+                + AmpAhsurvey.class.getName()
+                + " ah inner join ah.responses res  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   ";
+        if (locationCondition) {
+            queryString += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        }
+        queryString += " where  fd.transactionType =1 and  fd.adjustmentType =:adjustmentType"
+                + "  and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate ";
         queryString += ChartWidgetUtil.getTeamQuery(teamMember);
 
-        if (orgId == null || orgId == -1) {
+        if (orgIds == null) {
             if (orgGroupId != null && orgGroupId != -1) {
                 queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
             }
         } else {
-            queryString += " and ah.ampDonorOrgId=:orgId ";
+            queryString += " and ah.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(orgIds) + ") ";
         }
 
         // specified survyes
         queryString += " and ah.ampAHSurveyId in (" + condition + ")";
+        if (locationCondition) {
+            queryString += " and loc.id in (:locations) ";
+        }
 
         qry = session.createQuery(queryString);
         qry.setDate("startDate", startDate);
@@ -682,12 +756,11 @@ public class OrgProfileUtil {
 
         }
         qry.setInteger("adjustmentType", adjustmentType);
-        if (orgId == null || orgId == -1) {
-            if (orgGroupId != null && orgGroupId != -1) {
-                qry.setLong("orgGroupId", orgGroupId);
-            }
-        } else {
-            qry.setLong("orgId", orgId);
+        if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
+            qry.setLong("orgGroupId", orgGroupId);
+        }
+        if (locationCondition) {
+            qry.setParameterList("locations", locationIds);
         }
         List<AmpFundingDetail> fundingDets = qry.list();
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
@@ -702,7 +775,267 @@ public class OrgProfileUtil {
         return total;
     }
 
+    public static List<NameValueYearHelper> getData(FilterHelper filter, int type) throws DgException {
+        List<NameValueYearHelper> result = new ArrayList<NameValueYearHelper>();
+        TreeMap<Long, BigDecimal> totalValuesComm = new TreeMap<Long, BigDecimal>();
+        TreeMap<Long, BigDecimal> totalValuesDisb = new TreeMap<Long, BigDecimal>();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Collection<AmpCategoryValue> categoryValues = null;
+        if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
+            categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+        } else {
+            categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+        }
+
+        for (AmpCategoryValue categoryValue : categoryValues) {
+            NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+            nameValueYearHelper.setName(categoryValue.getValue());
+            for (Long i = year - 4; i <= year; i++) {
+                // apply calendar filter
+                Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
+                Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
+                DecimalWraper commFunding = null;
+                DecimalWraper disbFunding = null;
+                int transactionType = filter.getTransactionType();
+                if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
+                    switch (transactionType) {
+                        case Constants.COMMITMENT:
+                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.COMMITMENT);
+                            break;
+                        case Constants.DISBURSEMENT:
+                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.DISBURSEMENT);
+                            break;
+                        case 2: //both COMMITMENT & DISBURSEMENT
+                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.COMMITMENT);
+                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.DISBURSEMENT);
+                            break;
+                    }
+
+                } else {
+                    switch (transactionType) {
+                        case Constants.COMMITMENT:
+                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.COMMITMENT);
+                            break;
+                        case Constants.DISBURSEMENT:
+                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.DISBURSEMENT);
+                            break;
+                        case 2: //both COMMITMENT & DISBURSEMENT
+                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.COMMITMENT);
+                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.DISBURSEMENT);
+                            break;
+                    }
+
+                }
+                if (nameValueYearHelper.getValues() == null) {
+                    nameValueYearHelper.setValues(new ArrayList<String>());
+                }
+
+                if (commFunding != null) {
+                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(commFunding.doubleValue()));
+                    if (totalValuesComm.containsKey(i)) {
+                        BigDecimal value = totalValuesComm.get(i);
+                        BigDecimal newValue = commFunding.getValue().add(value);
+                        totalValuesComm.remove(i);
+                        totalValuesComm.put(i, newValue);
+
+                    } else {
+                        totalValuesComm.put(i, commFunding.getValue());
+                    }
+                }
+                if (disbFunding != null) {
+                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(disbFunding.doubleValue()));
+                    if (totalValuesDisb.containsKey(i)) {
+                        BigDecimal value = totalValuesDisb.get(i);
+                        BigDecimal newValue = disbFunding.getValue().add(value);
+                        totalValuesDisb.remove(i);
+                        totalValuesDisb.put(i, newValue);
+
+                    } else {
+                        totalValuesDisb.put(i, disbFunding.getValue());
+                    }
+                }
 
 
+            }
+            result.add(nameValueYearHelper);
 
+        }
+        NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+        nameValueYearHelper.setValues(new ArrayList<String>());
+        nameValueYearHelper.setName("TOTAL");
+        for (Long i = year - 4; i <= year; i++) {
+            if (totalValuesComm.size() > 0) {
+                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(totalValuesComm.get(i)));
+            }
+            if (totalValuesDisb.size() > 0) {
+                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(totalValuesDisb.get(i)));
+            }
+
+        }
+        result.add(nameValueYearHelper);
+        return result;
+    }
+
+    public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
+        for (int i = 4; i >= 0; i--) {
+            PdfPCell cell = new PdfPCell(new Paragraph("" + (filter.getYear() - i), HEADERFONT));
+            if (filter.getTransactionType() == 2) {
+                cell.setColspan(2);
+            }
+            cell.setBackgroundColor(TITLECOLOR);
+            table.addCell(cell);
+        }
+        PdfPCell emptycell = new PdfPCell();
+        emptycell.setBackgroundColor(TITLECOLOR);
+        emptycell.setBorderWidthTop(0);
+        table.addCell(emptycell);
+        for (int i = 4; i >= 0; i--) {
+            PdfPCell cell = null;
+            PdfPCell cellDisb = null;
+            switch (filter.getTransactionType()) {
+                case Constants.COMMITMENT:
+                    cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                    break;
+                case Constants.DISBURSEMENT:
+                    cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                    break;
+                case 2: //both COMMITMENT & DISBURSEMENT
+                    cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                    cellDisb = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                    break;
+            }
+
+
+            cell.setBackgroundColor(TITLECOLOR);
+            table.addCell(cell);
+            if (cellDisb != null) {
+                cellDisb.setBackgroundColor(TITLECOLOR);
+                table.addCell(cellDisb);
+            }
+        }
+
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type);
+        ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
+        while (valuesIter.hasNext()) {
+            NameValueYearHelper value = valuesIter.next();
+            int index = valuesIter.nextIndex();
+            PdfPCell cellCatValue = new PdfPCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId), PLAINFONT));
+            if (index % 2 == 0) {
+                cellCatValue.setBackgroundColor(CELLCOLOR);
+            }
+            table.addCell(cellCatValue);
+            Collection<String> yearValues = value.getValues();
+            Iterator<String> yearValuesIter = yearValues.iterator();
+            while (yearValuesIter.hasNext()) {
+                PdfPCell cell = new PdfPCell(new Paragraph(yearValuesIter.next(), PLAINFONT));
+                if (index % 2 == 0) {
+                    cell.setBackgroundColor(CELLCOLOR);
+                }
+                table.addCell(cell);
+            }
+        }
+
+    }
+
+    public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
+        for (int i = 4; i >= 0; i--) {
+            RtfCell cell = new RtfCell(new Paragraph("" + (filter.getYear() - i), HEADERFONT));
+            if (filter.getTransactionType() == 2) {
+                cell.setColspan(2);
+            }
+            cell.setBackgroundColor(TITLECOLOR);
+            table.addCell(cell);
+        }
+        RtfCell emptycell = new RtfCell();
+        emptycell.setBackgroundColor(TITLECOLOR);
+        emptycell.setBorderWidthTop(0);
+        table.addCell(emptycell);
+        for (int i = 4; i >= 0; i--) {
+            RtfCell cell = null;
+            RtfCell cellDisb = null;
+            switch (filter.getTransactionType()) {
+                case Constants.COMMITMENT:
+                    cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                    break;
+                case Constants.DISBURSEMENT:
+                    cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                    break;
+                case 2: //both COMMITMENT & DISBURSEMENT
+                    cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                    cellDisb = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                    break;
+            }
+
+
+            cell.setBackgroundColor(TITLECOLOR);
+            table.addCell(cell);
+            if (cellDisb != null) {
+                cellDisb.setBackgroundColor(TITLECOLOR);
+                table.addCell(cellDisb);
+            }
+        }
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type);
+        ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
+        while (valuesIter.hasNext()) {
+            NameValueYearHelper value = valuesIter.next();
+            int index = valuesIter.nextIndex();
+            RtfCell cellCatValue = new RtfCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId), PLAINFONT));
+            if (index % 2 == 0) {
+                cellCatValue.setBackgroundColor(CELLCOLOR);
+            }
+            table.addCell(cellCatValue);
+            Collection<String> yearValues = value.getValues();
+            Iterator<String> yearValuesIter = yearValues.iterator();
+            while (yearValuesIter.hasNext()) {
+                RtfCell cell = new RtfCell(new Paragraph(yearValuesIter.next(), PLAINFONT));
+                if (index % 2 == 0) {
+                    cell.setBackgroundColor(CELLCOLOR);
+                }
+                table.addCell(cell);
+            }
+        }
+
+    }
+
+    public static String getFooterText(String langCode, String siteId, FilterHelper filter) throws WorkerException {
+        String footerText = TranslatorWorker.translateText("Selected organizations", langCode, siteId) + ": ";
+        if (filter.getOrgIds() != null) {
+            for (Long id : filter.getOrgIds()) {
+                AmpOrganisation org = DbUtil.getOrganisation(id);
+                footerText += org.getName() + ", ";
+            }
+            if (footerText.length() > 0) {
+                footerText = footerText.substring(0, footerText.length() - 2);
+            }
+        } else {
+            footerText += TranslatorWorker.translateText("All", langCode, siteId);
+        }
+        if (filter.getOrgGroupId() != null && filter.getOrgGroupId() != -1) {
+            footerText += " " + TranslatorWorker.translateText("from", langCode, siteId) + " " + filter.getOrgGroup().getOrgGrpName();
+        }
+        return footerText;
+    }
+
+    public static Date getEthiopianDate(AmpFiscalCalendar calendar, int year, boolean startDate) {
+        Date date;
+        EthiopianCalendar ethCal = new EthiopianCalendar();
+        GregorianCalendar[] dates = null;
+        if (calendar.getIsFiscal()) {
+            dates = ethCal.getGregorianDatesForEthFiscalYr(year);
+        } else {
+            dates = ethCal.getGregorianDatesForEthYr(year);
+        }
+        if (startDate) {
+            date = dates[0].getTime();
+        } else {
+            date = dates[1].getTime();
+        }
+
+        return date;
+    }
 }

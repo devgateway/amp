@@ -1,27 +1,32 @@
-
 package org.digijava.module.orgProfile.helper;
-
-import java.util.Set;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 
 /**
  * Project helper bean.
  * @author medea
  */
 public class Project {
-  // truncated title, 14 characters only
-   private String title;
-   private String fullTitle;
-   private String amount;
-   private Set<AmpActivitySector> sectors;
-   private Long activityId;
+    // truncated title, 14 characters only
+    private String title;
+    private String fullTitle;
+    private String amount;
+    private String sectorNames;
+    private Long activityId;
+    private  String disbAmount;
 
-   public String getFullTitle() {
-        return fullTitle;
+    public String getDisbAmount() {
+        return disbAmount;
     }
 
-    public void setFullTitle(String fullTitle) {
-        this.fullTitle = fullTitle;
+    public void setDisbAmount(String disbAmount) {
+        this.disbAmount = disbAmount;
+    }
+
+    public String getSectorNames() {
+        return sectorNames;
+    }
+
+    public void setSectorNames(String sectorNames) {
+        this.sectorNames = sectorNames;
     }
 
     public Long getActivityId() {
@@ -40,14 +45,6 @@ public class Project {
         this.amount = amount;
     }
 
-    public Set<AmpActivitySector> getSectors() {
-        return sectors;
-    }
-
-    public void setSectors(Set<AmpActivitySector> sectors) {
-        this.sectors = sectors;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -55,5 +52,11 @@ public class Project {
     public void setTitle(String title) {
         this.title = title;
     }
-
+     public String getFullTitle() {
+        return fullTitle;
     }
+
+    public void setFullTitle(String fullTitle) {
+        this.fullTitle = fullTitle;
+    }
+}

@@ -1,12 +1,12 @@
 package org.digijava.module.orgProfile.helper;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
-
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.TeamMember;
@@ -21,12 +21,37 @@ import org.digijava.module.orgProfile.util.OrgProfileUtil;
 public class ParisIndicatorHelper {
 
     private AmpAhsurveyIndicator prIndicator;// indicator
-    private Long organizationId;
     private Long year;
     private Long fiscalCalendarId;
     private Long orgGroupId;
     private String currency;
     private TeamMember member;
+    private Long[] orgIds;
+    private Collection<Long> locationIds;
+
+    public Collection<Long> getLocationIds() {
+        return locationIds;
+    }
+
+    public void setLocationIds(Collection<Long> locationIds) {
+        this.locationIds = locationIds;
+    }
+
+    public Long getOrgGroupId() {
+        return orgGroupId;
+    }
+
+    public void setOrgGroupId(Long orgGroupId) {
+        this.orgGroupId = orgGroupId;
+    }
+
+    public Long[] getOrgIds() {
+        return orgIds;
+    }
+
+    public void setOrgIds(Long[] orgIds) {
+        this.orgIds = orgIds;
+    }
 
     public Long getFiscalCalendarId() {
         return fiscalCalendarId;
@@ -35,7 +60,6 @@ public class ParisIndicatorHelper {
     public void setFiscalCalendarId(Long fiscalCalendarId) {
         this.fiscalCalendarId = fiscalCalendarId;
     }
-
 
     public TeamMember getMember() {
         return member;
@@ -51,13 +75,12 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, 2005);
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
         String indicatorCode = prIndicator.getIndicatorCode();
-        long allDonorBaseLineValue = OrgProfileUtil.getValue( indicatorCode, currency, null, null, startDate, endDate, member);
+        long allDonorBaseLineValue = OrgProfileUtil.getValue( indicatorCode, currency, null, null, startDate, endDate, member,locationIds);
         return allDonorBaseLineValue;
     }
 
     public ParisIndicatorHelper(AmpAhsurveyIndicator prIndicator, FilterHelper helper,boolean previousYear) {
         this.prIndicator = prIndicator;
-        this.organizationId = helper.getOrgId();
         if (previousYear) {
             // in the org profile we are interested in previous year value according to specs.
             this.year = helper.getYear() - 1;
@@ -69,6 +92,8 @@ public class ParisIndicatorHelper {
         this.member = helper.getTeamMember();
         this.orgGroupId = helper.getOrgGroupId();
         this.fiscalCalendarId=helper.getFiscalCalendarId();
+        this.orgIds=helper.getOrgIds();
+        this.locationIds=helper.getLocationIds();
 
 
     }
@@ -78,7 +103,7 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         String indicatorCode = prIndicator.getIndicatorCode();
-        long previousYearValue =OrgProfileUtil.getValue( indicatorCode,  currency, null, null, startDate, endDate, member);;
+        long previousYearValue =OrgProfileUtil.getValue( indicatorCode,  currency, null, null, startDate, endDate, member,locationIds);
         return previousYearValue;
 
     }
@@ -130,7 +155,7 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, 2005);
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
         String indicatorCode = prIndicator.getIndicatorCode();
-        long orgBaseLineValue = OrgProfileUtil.getValue(indicatorCode, currency, organizationId, orgGroupId, startDate, endDate, member);
+        long orgBaseLineValue = OrgProfileUtil.getValue(indicatorCode, currency,orgIds, orgGroupId, startDate, endDate, member,locationIds);
         return orgBaseLineValue;
     }
 
@@ -139,7 +164,7 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         String indicatorCode = prIndicator.getIndicatorCode();
-        long previousYearValue = OrgProfileUtil.getValue( indicatorCode,  currency, organizationId, orgGroupId, startDate, endDate, member);;
+        long previousYearValue = OrgProfileUtil.getValue( indicatorCode,  currency, orgIds, orgGroupId, startDate, endDate, member,locationIds);
 
         return previousYearValue;
     }
@@ -151,8 +176,6 @@ public class ParisIndicatorHelper {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
-
- 
 
     public Long getYear() {
         return year;
@@ -180,14 +203,5 @@ public class ParisIndicatorHelper {
 
         return retSurvey;
     }
-    // all basevalue
 
-    public String getBaseLineValue() {
-        return getFormula().getBaseLineValue();
-    }
-    // all targetvalue
-
-    public String getTargetValue() {
-        return getFormula().getTargetValue();
-    }
 }

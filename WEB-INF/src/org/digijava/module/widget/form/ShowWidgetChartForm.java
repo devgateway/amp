@@ -19,8 +19,17 @@ public class ShowWidgetChartForm extends ActionForm {
 	private String selectedYear;
 	private Boolean showLegend;
 	private Boolean showLabels;
-        private Long chartType;
-        private Long timestamp;
+    private Long chartType;
+    private Long timestamp;
+    private Integer transactionType;
+
+    public Integer getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(Integer transactionType) {
+        this.transactionType = transactionType;
+    }
 
     
 	public Long getTimestamp() {

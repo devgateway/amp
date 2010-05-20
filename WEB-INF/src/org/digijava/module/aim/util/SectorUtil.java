@@ -1617,4 +1617,21 @@ public class SectorUtil {
 		}
 		return topLevelSector;
 	}
+    //TODO replace with recursive method
+    public static List<AmpSector> getAllDescendants(Long parentId) {
+        // we have only three levels of sectors...
+        List<AmpSector> sectors = new ArrayList<AmpSector>();
+        sectors.add(getAmpSector(parentId));
+        List<AmpSector> childrenSectors = getAmpSubSectors(parentId);
+        if(childrenSectors!=null){
+            sectors.addAll(childrenSectors);
+             for (AmpSector sector : childrenSectors) {
+                List<AmpSector> grandChildren = getAmpSubSectors(sector.getAmpSectorId());
+                if( grandChildren!=null){
+                     sectors.addAll(grandChildren);
+                }
+            }
+        }
+        return sectors;
+    }
 }

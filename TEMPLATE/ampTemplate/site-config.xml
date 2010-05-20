@@ -676,7 +676,9 @@
 			</module>
             <module name="orgProfile">
 				<page>largestProjects</page>
-			<page>parisIndicators</page>
+                <page>showOrgProfileTables</page>
+             	<page>parisIndicators</page>
+                <page>largestProjectsPrinterFriendly</page>
 			</module>
 			<module name="mondrian">
 				<page>savehtml</page>

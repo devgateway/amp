@@ -13,6 +13,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -21,7 +22,9 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.orgProfile.form.OrgProfileFilterForm;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -32,20 +35,24 @@ import org.springframework.beans.BeanWrapperImpl;
  */
 public class OrgProfileFilterAction extends Action {
 
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
-        TeamMember tm =(TeamMember) session.getAttribute("currentMember");
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
-        String reset=request.getParameter("reset");
-        if(reset!=null&&reset.equals("true")){
+        String reset = request.getParameter("reset");
+        if (reset != null && reset.equals("true")) {
             orgForm.setCurrencyId(null);
-            orgForm.setOrgId(null);
             orgForm.setOrgGroupId(null);
             orgForm.setFiscalCalendarId(null);
             orgForm.setYear(null);
+            orgForm.setOrgIds(null);
             orgForm.setTransactionType(Constants.COMMITMENT);
+            orgForm.setLargestProjectNumb(5);
+            orgForm.setSelRegionId(null);
+            orgForm.setSelZoneIds(null);
         }
 
         // create filter dropdowns
@@ -59,33 +66,30 @@ public class OrgProfileFilterAction extends Action {
                 orgForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
             }
         }
-        if(orgForm.getCurrencyId()==null){
-            Long currId =tm.getAppSettings().getCurrencyId();
-            if(currId!=null){
+        if (orgForm.getCurrencyId() == null) {
+            Long currId = tm.getAppSettings().getCurrencyId();
+            if (currId != null) {
                 orgForm.setCurrencyId(currId);
-            }
-            else{
+            } else {
                 orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
             }
         }
-        // Org profile is only for Mul and Bil organizations
-        List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getBilMulOrgGroups());
+        List<AmpOrgGroup> orgGroups = new ArrayList(DbUtil.getAllOrgGroups());
         orgForm.setOrgGroups(orgGroups);
-        if(orgForm.getOrgGroupId()!=null&&orgForm.getOrgGroupId()!=-1){
-            if (orgGroups.size() > 0) {
-                List<AmpOrganisation> orgs = DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
-                orgForm.setOrganizations(orgs);
-            }
+        List<AmpOrganisation> orgs = null;
+        if (orgForm.getOrgGroupId() == null || orgForm.getOrgGroupId() == -1) {
+            // all groups
+            orgForm.setOrgGroupId(-1l);
+            orgs = new ArrayList<AmpOrganisation>(DbUtil.getAllOrganisation());
+        } else {
+            orgs = DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
         }
-        else{
-            orgForm.setOrganizations(DbUtil.getBilMulOrganisations());
-        }
-
+        orgForm.setOrganizations(orgs);
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());
         Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
         Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-			orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
+            orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
         }
         if (orgForm.getYear() == null) {
             Long year = null;
@@ -96,7 +100,7 @@ public class OrgProfileFilterAction extends Action {
             }
             orgForm.setYear(year);
         }
-        Collection calendars=DbUtil.getAllFisCalenders();
+        Collection calendars = DbUtil.getAllFisCalenders();
         if (calendars != null) {
             orgForm.setFiscalCalendars(new ArrayList(calendars));
         }
@@ -107,19 +111,36 @@ public class OrgProfileFilterAction extends Action {
                 if (value != null) {
                     fisCalId = Long.parseLong(value);
                 }
+
             }
             orgForm.setFiscalCalendarId(fisCalId);
         }
-        FilterHelper filter=null;
-        if(orgForm.getWorkspaceOnly()!=null&&orgForm.getWorkspaceOnly()){
-            filter=new FilterHelper(orgForm,tm);
+        if (orgForm.getLargestProjectNumb() == null) {
+            orgForm.setLargestProjectNumb(5);
         }
-        else{
-            filter=new FilterHelper(orgForm);
+        if (orgForm.getRegions() == null) {
+            orgForm.setRegions(new ArrayList<AmpCategoryValueLocations>(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry()));
         }
+        Long regionId = orgForm.getSelRegionId();
+        List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
 
-       session.setAttribute("orgProfileFilter", filter);
-      
+        if (regionId != null && regionId != -1) {
+            AmpCategoryValueLocations region = LocationUtil.getAmpCategoryValueLocationById(regionId);
+            if (region.getChildLocations() != null) {
+                zones.addAll(region.getChildLocations());
+
+            }
+
+        }
+        orgForm.setZones(zones);
+
+        FilterHelper filter = null;
+        if (orgForm.getWorkspaceOnly() != null && orgForm.getWorkspaceOnly()) {
+            filter = new FilterHelper(orgForm, tm);
+        } else {
+            filter = new FilterHelper(orgForm);
+        }
+        session.setAttribute("orgProfileFilter", filter);
         return mapping.findForward("forward");
     }
 }

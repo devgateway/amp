@@ -73,7 +73,7 @@
 	}
 	
 	function getErrorId($conn, $stackTrace){
-
+		$stackTrace = str_replace("'", "''", $stackTrace);
 		$query = "SELECT id FROM errors WHERE md5 LIKE md5('".$stackTrace."')";
 		$result = pg_query($conn, $query) or syslog(LOG_INFO, "Error in query: $query. ". pg_last_error($conn));
 		// get the number of rows in the resultset
@@ -119,8 +119,9 @@
 	}	
 	
 	function addScene($conn, $date, $browser, $sessionId){
+		$browser = str_replace("'", "''", $browser);
 		$id = -1;
-		$query = "SELECT nextval('scenes_id_seq') from scenes limit 1;";
+		$query = "SELECT nextval('scenes_id_seq');";
 		$result = pg_query($conn, $query) or syslog(LOG_INFO, "Error in query: $query. ". pg_last_error($conn));
 		// get the number of rows in the resultset
 		$frow = pg_fetch_row($result);
@@ -133,14 +134,14 @@
 		}	
 
 		if ($id == -1)
-			syslog(LOG_INFO, "Could not insert error!");
+			syslog(LOG_INFO, "Could not insert scene!");
 		return $id;
 		
 	}
 	
 	function addOccurrence($conn, $serverId, $errorId, $userId, $sceneId){
 		$id = -1;
-		$query = "SELECT nextval('occurrences_id_seq') from occurrences limit 1;";
+		$query = "SELECT nextval('occurrences_id_seq');";
 		$result = pg_query($conn, $query) or syslog(LOG_INFO, "Error in query: $query. ". pg_last_error($conn));
 		// get the number of rows in the resultset
 		$frow = pg_fetch_row($result);

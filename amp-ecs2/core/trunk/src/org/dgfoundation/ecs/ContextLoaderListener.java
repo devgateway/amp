@@ -1,10 +1,14 @@
 package org.dgfoundation.ecs;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerRepository;
 import org.dgfoundation.ecs.keeper.ErrorKeeperRAM;
 import org.dgfoundation.ecs.logger.ECSRepositorySelector;
 
@@ -29,9 +33,27 @@ public class ContextLoaderListener implements ServletContextListener {
 			
 			if ((propertiesFile != null) && (propertiesFile.trim().length() == 0))
 				propertiesFile = null;
+			boolean ecsDisableBool;
+			if (ecsDisable != null && ecsDisable.compareTo("false") == 0)
+				ecsDisableBool = false;
+			else
+				ecsDisableBool = true;
 			
-			if ("true".compareToIgnoreCase(ecsDisable) == 0 || ecsServerName == null){
-				if (ecsServerName == null){
+			init(ecsDisableBool, ecsServerName, propertiesFile, warPath);
+			
+		} catch (Exception ex) {
+			System.err.println(ex);
+		}
+	}
+	public void contextDestroyed(ServletContextEvent contextEvent) {
+		destroy();
+	}
+	
+	public static synchronized void init(Boolean ecsDisable, String serverName, String propertiesFile, String warPath){
+		LoggerRepository current = LogManager.getLoggerRepository();
+		if (current.getClass().getCanonicalName().startsWith("org.dgfoundation.ecs.logger")){//already changed
+			if (ecsDisable || serverName == null){
+				if (serverName == null){
 					logger.info("+++++++++++++++++++++++++++++++++++++++++");
 					logger.info("+ You need to set ecsServerName context +");
 					logger.info("+ parameter in order to get ECS running +");
@@ -40,21 +62,39 @@ public class ContextLoaderListener implements ServletContextListener {
 				}
 				else{
 					logger.info("* Disabling ECS for: " + warPath);
-					logger.info("* Server name is: " + ecsServerName);
+					logger.info("* Server name is: " + serverName);
 				}
-				ECSRepositorySelector.init(true, ecsServerName, propertiesFile);
 			}
 			else{
 				logger.info("* Enabling ECS for: " + warPath);
-				logger.info("* Server name is: " + ecsServerName);
+				logger.info("* Server name is: " + serverName);
 				logger.info("* Properties file: " + propertiesFile);
-				ECSRepositorySelector.init(false, ecsServerName, propertiesFile);
 			}
-		} catch (Exception ex) {
-			System.err.println(ex);
+			
+			ClassLoader bsLoader = current.getClass().getClassLoader();
+			try {
+				Class bsRepo = bsLoader.loadClass("org.dgfoundation.ecs.logger.ECSRepositorySelector");
+				Object repoInstance = bsRepo.newInstance();
+
+				String methName;
+				if (ecsDisable)
+					methName = "initWithoutECS";
+				else
+					methName = "initWithECS";
+				
+				Method method = repoInstance.getClass().getMethod(methName, String.class, String.class);
+				method.invoke(method, serverName, propertiesFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	public void contextDestroyed(ServletContextEvent contextEvent) {
-		ECSRepositorySelector.destroy();
+	
+	public static synchronized void destroy() {
+		//removeFromRepository();
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		// TODO: disable threads etc
+		// WARN: implement destroy in ECSRepositorySelector as init(boolean);
+		
 	}
 }

@@ -105,6 +105,18 @@ public class ECSRepositorySelector implements RepositorySelector {
 		repositories.put(loader, ecsRepo);
 		repositories2.put(loader, normalRepo);
 	}
+	
+	public static synchronized void destroy(){
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		LoggerRepository repo = repositories.get(loader);
+		if (repo instanceof ECSLoggerRepository){
+			ECSLoggerRepository ecsRepo = (ECSLoggerRepository) repo;
+			ecsRepo.getEcs().stop();
+		}
+		
+		repositories.remove(loader);
+		repositories2.remove(loader);
+	}
 
 	public static synchronized void initWithoutECS(String serverName, String propertiesFile){
 		init();
@@ -112,38 +124,9 @@ public class ECSRepositorySelector implements RepositorySelector {
 		repositories.put(loader, regularRepository);
 	}
 
-	public static synchronized void init(Boolean ecsDisable, String serverName, String propertiesFile){
-		LoggerRepository current = LogManager.getLoggerRepository();
-		if (current.getClass().getCanonicalName().startsWith("org.dgfoundation.ecs.logger")){//already changed
-			ClassLoader bsLoader = current.getClass().getClassLoader();
-			try {
-				Class bsRepo = bsLoader.loadClass("org.dgfoundation.ecs.logger.ECSRepositorySelector");
-				Object repoInstance = bsRepo.newInstance();
-
-				String methName;
-				if (ecsDisable)
-					methName = "initWithoutECS";
-				else
-					methName = "initWithECS";
-				
-				Method method = repoInstance.getClass().getMethod(methName, String.class, String.class);
-				method.invoke(method, serverName, propertiesFile);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	private static synchronized void removeFromRepository() {
 		repositories.remove(Thread.currentThread().getContextClassLoader());
-	}
-
-	public static synchronized void destroy() {
-		removeFromRepository();
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		// TODO: disable threads etc
-		// WARN: implement destroy as init(boolean);
-		
+		repositories2.remove(Thread.currentThread().getContextClassLoader());
 	}
 
 	public LoggerRepository getLoggerRepository() {

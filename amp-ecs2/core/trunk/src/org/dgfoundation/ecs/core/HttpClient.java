@@ -15,7 +15,7 @@ public class HttpClient {
 	private URL url; 
 	public HttpClient() throws ECSException {
 		try {
-			url = new URL("http://ecs.ampdev.net/ecs.php");
+			url = new URL("http://localhost/ecs.php");
 			//TODO: prox support
 			//url.openConnection(proxy);
 		} catch (Exception e) {
@@ -43,7 +43,7 @@ public class HttpClient {
 	        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	        String line = rd.readLine();
 	        if (line == null || line.compareTo("success") != 0)
-	        	throw new Exception("error while sending");
+	        	throw new Exception("error while sending! response["+ rd.toString() + "]");
 	        result = true;
 		}catch (Exception e) {
 			ECSException ae = new ECSException(e);

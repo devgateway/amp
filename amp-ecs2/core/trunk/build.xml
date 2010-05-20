@@ -34,10 +34,9 @@
 		</javac>
 		<jar destfile="ecs-core.jar">
 			<fileset dir="${classes}/" />
-			<!-- <fileset dir="ecsClient/" /> -->
 		</jar>
+		
 		<copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-1.14/lib/ecs-core.jar" />
-		<!-- <copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-1.14/server/default/deploy/amp.war/WEB-INF/lib/ecs-core.jar" /> -->
 	</target>
 	
 	<!-- build for all components -->

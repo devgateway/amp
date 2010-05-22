@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-8431</jira>
+	<keyword>Pipeline</keyword>
+	<author>Gabriel Inchauspe</author>
+	<description>Create the option Commitment Pipeline for report generator.</description>
+
+	<apply>
+		<script>
+			<lang type="sql" delimiter=";">
+				INSERT INTO amp_measures (measureName, aliasName, type, expression, description, allowSplitbyCateg) 
+				VALUES('Pipeline Commitments', 'Pipeline Commitments', 'A', null, null, 1);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

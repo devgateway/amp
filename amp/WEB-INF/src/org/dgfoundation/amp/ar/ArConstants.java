@@ -132,6 +132,7 @@ public final class ArConstants {
 
 	public final static String PLANNED="Planned";
 	public final static String ACTUAL="Actual";
+	public final static String PIPELINE="Pipeline";
 	
 	
 	//created columns

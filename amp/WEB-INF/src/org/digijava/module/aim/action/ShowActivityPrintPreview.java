@@ -688,6 +688,7 @@ public class ShowActivityPrintPreview
               	  eaForm.getFunding().setTotalPlannedExpenditures(calculations.getTotPlannedExp().toString());
               	  eaForm.getFunding().setTotalPlannedDisbursementsOrders(calculations.getTotPlannedDisbOrder().toString());
               	  eaForm.getFunding().setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().toString());
+              	  eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().toString());
                 }
                 
 
@@ -719,6 +720,8 @@ public class ShowActivityPrintPreview
                             fd.setAdjustmentTypeName("Actual");
                         } else if(fd.getAdjustmentType() == 0) {
                             fd.setAdjustmentTypeName("Planned");
+                        } else if (fd.getAdjustmentType() == 2) {
+                            fd.setAdjustmentTypeName("Pipeline");
                         }
                         fd.setCurrencyCode(ampRegFund.getCurrency()
                                            .getCurrencyCode());
@@ -1275,7 +1278,9 @@ public class ShowActivityPrintPreview
 						fd.setAdjustmentTypeName("Actual");
 					} else if (fd.getAdjustmentType() == 0) {
 						fd.setAdjustmentTypeName("Planned");
-					}
+					} else if (fd.getAdjustmentType() == 2) {
+                        fd.setAdjustmentTypeName("Pipeline");
+                    }
 					fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
 					fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
 					fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());

@@ -60,10 +60,10 @@ public class BoliviaDonorFundingCalculator implements DonorFundingCalculator {
 		return total;
 	}
 
-	public DecimalWraper getTotalCommtiments(DecimalWraper planned, DecimalWraper actual) {
+	public DecimalWraper getTotalCommtiments(DecimalWraper planned, DecimalWraper actual, DecimalWraper pipeline) {
 		DecimalWraper total = new DecimalWraper();
 		total.setValue(planned.getValue().add(actual.getValue()));
-		total.setCalculations("plannned=" + planned.getCalculations() + "+ actual =  " + actual.getCalculations());
+		total.setCalculations("plannned=" + planned.getCalculations() + "+ actual =  " + actual.getCalculations() + " pipeline = " + pipeline.getCalculations());
 		// TODO Auto-generated method stub
 		return total;
 	}

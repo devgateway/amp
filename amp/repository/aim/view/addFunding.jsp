@@ -13,7 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
-
+<%@page import="org.digijava.module.aim.helper.Constants"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -655,7 +655,7 @@ DIV.red_notice
 								<img src= "/TEMPLATE/ampTemplate/imagesSource/common/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
 								<td align="center" valign="middle" width="200">
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
-									<b><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></b></a>
+									<b><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></b></a>
 								</td>
 								<td align="center" valign="middle" width="*">&nbsp;
 									
@@ -682,8 +682,9 @@ DIV.red_notice
 	
 												<c:if test="${aimEditActivityForm.planning.statusId!=1}">
 													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text"  disabled="${contentDisabled}">
-														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-														<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+														<html:option value="<%=new Integer(Constants.ACTUAL).toString()%>"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
+														<html:option value="<%=new Integer(Constants.PLANNED).toString()%>"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+														<html:option value="<%=new Integer(Constants.ADJUSTMENT_TYPE_PIPELINE).toString()%>"><digi:trn>Pipeline</digi:trn></html:option>
 													</html:select>
 												</c:if>
 													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>

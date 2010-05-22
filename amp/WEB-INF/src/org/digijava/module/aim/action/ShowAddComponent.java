@@ -463,7 +463,9 @@ public class ShowAddComponent extends Action {
 					fd.setAdjustmentTypeName("Actual");
 				} else if (fd.getAdjustmentType() == 0) {
 					fd.setAdjustmentTypeName("Planned");
-				}
+				} else if (fd.getAdjustmentType() == 2) {
+                    fd.setAdjustmentTypeName("Pipeline");
+                }
 				break;
 			case 2:
 				fd.setTransactionAmount(CurrencyWorker.formatAmount(val));

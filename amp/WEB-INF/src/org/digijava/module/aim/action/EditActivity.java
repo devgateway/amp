@@ -1192,6 +1192,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 		                  calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
 		        		  currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
 		        		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
+		        		  currFunding.setSubtotalPipelineCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));
 		        		  currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
 		        		  currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
 		        		  currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
@@ -1222,6 +1223,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  eaForm.getFunding().setTotalPlannedDisbursements(calculations.getTotPlanDisb().getCalculations());
         	  eaForm.getFunding().setTotalExpenditures(calculations.getTotPlannedExp().getCalculations());  
         	  eaForm.getFunding().setTotalPlannedCommitments(calculations.getTotPlannedComm().getCalculations());
+        	  eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().getCalculations());
         	  eaForm.getFunding().setTotalPlannedExpenditures(calculations.getTotPlannedExp().getCalculations());
         	  eaForm.getFunding().setTotalActualDisbursementsOrders(calculations.getTotActualDisbOrder().getCalculations());
         	  eaForm.getFunding().setTotalPlannedDisbursementsOrders(calculations.getTotPlannedDisbOrder().getCalculations());
@@ -1239,6 +1241,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  eaForm.getFunding().setTotalPlannedExpenditures(calculations.getTotPlannedExp().toString());
         	  eaForm.getFunding().setTotalPlannedDisbursementsOrders(calculations.getTotPlannedDisbOrder().toString());
         	  eaForm.getFunding().setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().toString());
+        	  //pipeline
+        	  eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().toString());
           }
           ArrayList regFunds = new ArrayList(); 
           Iterator rItr = activity.getRegionalFundings().iterator();
@@ -1270,6 +1274,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             }
             else if (fd.getAdjustmentType() == 0) {
               fd.setAdjustmentTypeName("Planned");
+            } else if (fd.getAdjustmentType() == 2) {
+                fd.setAdjustmentTypeName("Pipeline");
             }
             fd.setCurrencyCode(ampRegFund.getCurrency()
                                .getCurrencyCode());
@@ -2020,6 +2026,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					fd.setAdjustmentTypeName("Actual");
 				} else if (fd.getAdjustmentType() == 0) {
 					fd.setAdjustmentTypeName("Planned");
+				} else if (fd.getAdjustmentType() == 2) {
+					fd.setAdjustmentTypeName("Pipeline");
 				}
 		
 				fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());

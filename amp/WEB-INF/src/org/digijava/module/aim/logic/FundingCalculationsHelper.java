@@ -29,6 +29,7 @@ public class FundingCalculationsHelper {
 	DecimalWraper totPlannedDisbOrder = new DecimalWraper();
 
 	DecimalWraper totActualComm = new DecimalWraper();
+	DecimalWraper totPipelineComm = new DecimalWraper();
 	DecimalWraper totActualDisb = new DecimalWraper();
 	DecimalWraper totActualExp = new DecimalWraper();
 	DecimalWraper totActualDisbOrder = new DecimalWraper();
@@ -172,12 +173,18 @@ public class FundingCalculationsHelper {
 					totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
 					totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
 				}
+			} else if (adjType == Constants.ADJUSTMENT_TYPE_PIPELINE) {
+				fundingDetail.setAdjustmentTypeName("Pipeline");
+				if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+					totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
+					totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
+				}
 			}
 
 			fundDetailList.add(fundingDetail);
 		}
 
-		totalCommitments = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm);
+		totalCommitments = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm, totPipelineComm);
 
 		unDisbursementsBalance = Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);
 
@@ -190,6 +197,14 @@ public class FundingCalculationsHelper {
 	
 	public DecimalWraper getUnDisbursementsBalance() {
 		return unDisbursementsBalance;
+	}
+
+	public DecimalWraper getTotPipelineComm() {
+		return totPipelineComm;
+	}
+
+	public void setTotPipelineComm(DecimalWraper totPipelineComm) {
+		this.totPipelineComm = totPipelineComm;
 	}
 
 }

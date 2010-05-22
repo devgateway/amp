@@ -139,5 +139,64 @@
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	<tr><td colspan="4" height="7px"></td></tr>
+	
+	<!-- PIPELINE COMMITMENTS -->
+	<tr><td colspan="4" height="7px"></td></tr>
+	<tr>
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
+			style="text-transform: uppercase"><a>
+		<digi:trn>PIPELINE COMMITMENTS </digi:trn> </a>
+		</td>
+		<td height="20" bgcolor="#FFFFCC"><c:if
+			test="${aimEditActivityForm.funding.fixerate == true}">
+			<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+		</c:if></td>
+	</tr>
+	<logic:iterate name="funding" property="fundingDetails"
+		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		<logic:equal name="fundingDetail" property="transactionType" value="0">
+			<logic:equal name="fundingDetail" property="adjustmentType" value="2">
+						<tr bgcolor="#ffffff">
+							<td width="40%" align="right"  bgcolor="#FFFFFF">
+								<field:display name="Adjustment Type Commitment" feature="Commitments">
+									<digi:trn>
+										<bean:write name="fundingDetail" property="adjustmentTypeName" />
+									</digi:trn>
+								</field:display>
+							</td>
+
+							<td height="18" align="right"><field:display name="Date Commitment"
+								feature="Commitments">
+								<bean:write name="fundingDetail" property="transactionDate" />
+							</field:display></td>
+							<td height="18" align="right"><field:display
+								name="Amount Commitment" feature="Commitments">
+								<!-- <font color="blue">*</font>-->
+								<bean:write name="fundingDetail" property="transactionAmount" />
+							</field:display> <field:display name="Currency Commitment"
+								feature="Commitments">
+								<bean:write name="fundingDetail" property="currencyCode" />
+							</field:display>&nbsp;</td>
+							<td height="18"><field:display name="Exchange Rate"
+								feature="Funding Information">
+								<bean:write name="fundingDetail" property="formattedRate" />
+							</field:display></td>
+						</tr>
+			</logic:equal>
+		</logic:equal>
+	</logic:iterate>
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> SUBTOTAL PIPELINE COMMITMENTS: </digi:trn>
+		</td>
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
+			<c:if test="${not empty funding.subtotalActualCommitments}">
+           			 ${funding.subtotalPipelineCommitments} ${aimEditActivityForm.currCode}
+            </c:if>&nbsp;
+        </td>    
+		<td align="right" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000">&nbsp;</td>
+	</tr>
+	<tr><td colspan="4" height="7px"></td></tr>
 </c:if>
 <!-- End commitments-->

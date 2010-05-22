@@ -280,9 +280,20 @@ public class CategAmountColWorker extends ColumnWorker {
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
 		
-		
+		String adj_type_string = null;
+		switch(adj_type) {
+		case 0:
+			adj_type_string = ArConstants.PLANNED;
+			break;
+		case 1:
+			adj_type_string = ArConstants.ACTUAL;
+			break;
+		case 2:
+			adj_type_string = ArConstants.PIPELINE;
+			break;
+		}
 		MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE,
-				adj_type == 0 ? ArConstants.PLANNED : ArConstants.ACTUAL);
+				adj_type_string);
 		String trStr = null;
 
 		switch (tr_type) {

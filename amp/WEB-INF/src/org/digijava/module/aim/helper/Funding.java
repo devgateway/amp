@@ -40,6 +40,7 @@ public class Funding implements Serializable
 
 	private String subtotalActualCommitments;
 	private String subtotalPlannedCommitments;
+	private String subtotalPipelineCommitments;
 	private String subtotalPlannedDisbursements;
 	private String subtotalDisbursements;
 	private String subtotalPlannedExpenditures;
@@ -199,6 +200,14 @@ public class Funding implements Serializable
 		
 		this.subtotalActualCommitments = s;
 	}
+	public String getSubtotalPipelineCommitments() {
+		return subtotalPipelineCommitments;
+	}
+
+	public void setSubtotalPipelineCommitments(String subtotalPipelineCommitments) {
+		this.subtotalPipelineCommitments = subtotalPipelineCommitments;
+	}
+
 	public String getSubtotalPlannedCommitments(){
 		
 		return this.subtotalPlannedCommitments;

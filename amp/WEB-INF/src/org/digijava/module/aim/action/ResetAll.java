@@ -433,6 +433,8 @@ public class ResetAll extends Action
 							else if (adjType == Constants.ACTUAL)
 							{
 								fundingDetail.setAdjustmentTypeName("Actual");
+							} else if (adjType == Constants.ADJUSTMENT_TYPE_PIPELINE) {
+								fundingDetail.setAdjustmentTypeName("Pipeline");
 							}
 							if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE)
 							{

@@ -358,7 +358,7 @@ public class ViewChannelOverview extends TilesAction {
 				                relOrg.setOrgCode(auxOrgRel.getOrgCode());
 				                relOrg.setBudgetOrgCode(auxOrgRel.getBudgetOrgCode());
 				                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-				                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+				                relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
 				                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 				                relOrg.setAdditionalInformation( orgRole.getAdditionalInfo() );
 				                if (!relOrgs.contains(relOrg)) {
@@ -376,7 +376,7 @@ public class ViewChannelOverview extends TilesAction {
 					                relOrg.setOrgCode(auxOrgRel.getOrgCode());
 					                relOrg.setBudgetOrgCode(auxOrgRel.getBudgetOrgCode());
 					                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-					                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+					                relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
 					                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 					                if (!relOrgs.contains(relOrg)) {
 					                	relOrgs.add(relOrg);

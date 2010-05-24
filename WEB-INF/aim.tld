@@ -179,6 +179,14 @@
 			</description>
 		</attribute>
 		
+		<attribute>
+			<name>showAs</name>
+			<required>false</required>
+			<description>
+				Used to decide whether component should appear as popin or popup.If empty, it's drawn as popup.
+			</description>
+		</attribute>
+		
 		<bodycontent>JSP</bodycontent>
 	</tag>
 

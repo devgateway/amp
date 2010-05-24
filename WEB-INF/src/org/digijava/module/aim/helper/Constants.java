@@ -349,4 +349,13 @@ public class Constants
     public static final int NUM_OF_CHARS_IMPUTATION = 22;
     
     public static final int NUM_OF_CHARS_CODE_CHAPITRE = 11;
+    
+    //org type values
+    public static final String ORG_TYPE_GOVERNMENTAL = "GOVERNMENTAL";
+    public static final String ORG_TYPE_NGO = "NGO";
+    public static final String ORG_TYPE_REGIONAL = "REGIONAL";
+    
+    //organization information
+    public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_ADMIN= 1;
+	public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_PROGRAM = 2;
 }

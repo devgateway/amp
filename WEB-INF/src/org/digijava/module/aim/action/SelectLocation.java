@@ -11,16 +11,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Location;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -29,14 +25,18 @@ public class SelectLocation extends Action {
 
 	private static Logger logger = Logger.getLogger(SelectLocation.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response)
+	public ActionForward execute(ActionMapping mapping, ActionForm form,javax.servlet.http.HttpServletRequest request,javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		eaForm.getLocation().setNoMoreRecords(false);
 		Location location = eaForm.getLocation();
+		
+		// TODO NEEDS REFACTORING TO SUPPORT NOT ONLY ACTIVITY FORM, BUT ORG.MANAGER TOO
+		String resetSelLocs=request.getParameter("resetSelLocs"); //Org.Manager Side -quick fix
+		if(resetSelLocs!=null && resetSelLocs.equalsIgnoreCase("reset")){
+			location.setSelectedLocs(null);
+		}
 		
 		if (location.isLocationReset()) {
 			eaForm.getLocation().setLocationReset(true);
@@ -55,6 +55,12 @@ public class SelectLocation extends Action {
 		}		*/
 
 		Integer impLevelValue;
+		Long impLocLevel=null;
+		if(request.getParameter("implemLocationLevel")!=null){
+			impLocLevel=new Long(request.getParameter("implemLocationLevel"));
+			eaForm.getLocation().setImplemLocationLevel(impLocLevel);			
+		}
+		
 		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getImplemLocationLevel() );
 		if ( implLocValue == null )
 			implLocValue				= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
@@ -73,10 +79,12 @@ public class SelectLocation extends Action {
 			eaForm.getLocation().getSelectedLayers().clear();
 		}
 		String cIso= FeaturesUtil.getDefaultCountryIso();
+		if(request.getParameter("parentLocId")!=null){
+			eaForm.getLocation().setParentLocId(new Long(request.getParameter("parentLocId")));
+		}
 		Long parentLocId			= eaForm.getLocation().getParentLocId();
 		
-		Map<Integer, Collection<KeyValue>> locationByLayers		= 
-								eaForm.getLocation().getLocationByLayers();
+		Map<Integer, Collection<KeyValue>> locationByLayers		= 	eaForm.getLocation().getLocationByLayers();
 		
         if(cIso!=null && parentLocId == null){ // Setting up the country
         	eaForm.getLocation().setDefaultCountryIsSet(true);
@@ -144,12 +152,16 @@ public class SelectLocation extends Action {
         		if (lastLayer < implLocValue.getIndex()){
         			eaForm.getLocation().setNoMoreRecords(true);
         		}
-        		
-        		
-        		
         	}
         	
         }
+        if(request.getParameter("forwardToPopin")!=null){
+        	return mapping.findForward("forwardToPopin");
+        }else{
+        	return mapping.findForward("forwardToPopup");
+        }
+        
+        
 		/* END - Region Manager changes */
 /*
  * modified by Govind
@@ -226,6 +238,6 @@ public class SelectLocation extends Action {
 //              }
 
 
-		return mapping.findForward("forward");
+		
 	}
 }

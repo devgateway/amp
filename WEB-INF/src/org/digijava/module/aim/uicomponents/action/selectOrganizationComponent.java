@@ -1,5 +1,7 @@
 package org.digijava.module.aim.uicomponents.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm
 import org.digijava.module.aim.util.DbUtil;
 
 public class selectOrganizationComponent extends Action {
+	
+	public static final String ROOT_TAG = "ORGANIZATIONS";
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -51,6 +55,21 @@ public class selectOrganizationComponent extends Action {
 					return setOrganizationToForm(mapping, form, request, response);
 				}
 			}
+		}else if("validate".equalsIgnoreCase(subAction)){
+			 //creating xml that will be returned
+			int orgsSize=oForm.getAllSelectedOrgsIds()!=null ? oForm.getAllSelectedOrgsIds().size() : 0;
+	        response.setContentType("text/xml");
+	        OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+	        PrintWriter out = new PrintWriter(outputStream, true);
+	        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	        xml += "<" + ROOT_TAG + ">";
+	        xml += "<" + "organizatoins amount=\"" + new Long(orgsSize).toString() + "\" />";
+	        xml += "</" + ROOT_TAG + ">";
+	        out.println(xml);
+	        out.close();
+	        // return xml
+	        outputStream.close();
+	        return null;
 		}
 
 		return prepare(mapping, form, request, response);

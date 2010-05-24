@@ -51,7 +51,8 @@ public class DonorDimension extends ARDimension {
 		while (it.hasNext()) {
 			AmpOrganisation as= (AmpOrganisation) it.next();
 			if(as.getAmpOrgId()==null) continue;
-			typeMap.put(as.getAmpOrgId(), as.getOrgTypeId()==null?null:as.getOrgTypeId().getAmpOrgTypeId());
+			AmpOrgGroup orgGrp=as.getOrgGrpId();
+			typeMap.put(as.getAmpOrgId(), orgGrp.getOrgType()==null?null:orgGrp.getOrgType().getAmpOrgTypeId());
 			groupMap.put(as.getAmpOrgId(), as.getOrgGrpId()==null?null:as.getOrgGrpId().getAmpOrgGrpId());	       
 		}
 

@@ -2,11 +2,19 @@ package org.digijava.module.aim.form;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.dbentity.AmpOrgRecipient;
+import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
+import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
+import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Pledge;
 
 public class AddOrgForm extends ActionForm {
@@ -16,30 +24,32 @@ public class AddOrgForm extends ActionForm {
 	private String dacOrgCode = null;
 	private String description = null;
 	private String orgCode = null;
-	private String orgIsoCode = null;
-		
+	private String orgIsoCode = null;		
 	private String budgetOrgCode = null;
 	
+	//contact information
 	private String contactPersonName = null;
 	private String contactPersonTitle = null;
 	private String address = null;
 	private String email = null;
 	private String phone = null;
 	private String fax = null;
-	private String orgUrl = null;
 	
+	private String orgUrl = null;	
 	private Long ampOrgId = null;
 	private Long ampOrgTypeId = null;
 	private Long fiscalCalId = null;
 	private Long ampSecSchemeId = null;
 	private Long levelId = null;		//defunct
 	private Long regionId = null;
-	private String countryId = "et";	//defunct
+	private Long countryId = null;
+	//private String countryId = "et";	//defunct
 	private Long ampOrgGrpId = null;
 	
 	private Collection fiscalCal = null;
 	private Collection sectorScheme = null;
-	private Collection country = null;	//defunct
+    private Collection countries = null;
+	//private Collection country = null;	//defunct
 	private Collection region = null;
 	private Collection orgType = null;
 	private Collection level = null;	//defunct
@@ -57,11 +67,51 @@ public class AddOrgForm extends ActionForm {
 	//Sector Preferences
 	private Collection sectors;
 	private Long selSectors[];
-	//
+	
 	//Pledges
 	private ArrayList fundingDetails;
 	private Collection currencies = null;
 	private long transIndexId;
+	
+	
+	private String orgPrimaryPurpose;
+    private List<AmpOrgStaffInformation> staff = null;
+    private List<AmpOrganizationBudgetInformation> orgInfos = null;
+    private List<LabelValueBean> years;
+    private Long typeOfStaff;
+    private String numberOfStaff;
+    private String selectedYear;
+    private Long[] selectedStaff;
+    private Long selectedStaffId;
+    private List<AmpOrgRecipient> recipients;
+    private Long[] selRecipients;
+    private Long implemLocationLevel;
+    private Long[] selLocs;
+    private Long parentLocId;
+    private String type;
+    private String addressAbroad;
+    private String taxNumber;
+    private String regNumbMinPlan;
+    private String legalPersonNum;
+    private String legalPersonRegDate;
+    private String minPlanRegDate;
+    private List<AmpOrganisationDocument> documents;
+    private String orgInfoSelectedYear;
+    private Long orgInfoCurrId;
+    private Long orgInfoType;
+    private String orgInfoPercent;
+    private Long[] selectedOrgInfoIds;
+    private Long selectedOrgInfoId;
+    private String orgInfoAmount;
+    private String otherInformation;
+    private String lineMinRegDate;
+    private String operFuncApprDate;
+    private String receiptLegPersonalityAct;
+    private List<AmpOrganisation> budgetOrgs;
+    private Long[] selBudgetOrg;
+    private Collection<Location> selectedLocs = null;
+	
+	
 	public Pledge getFundingDetail(int index) {
 		int currentSize = fundingDetails.size();
 		if (index >= currentSize) {
@@ -71,10 +121,11 @@ public class AddOrgForm extends ActionForm {
 		}
 		return (Pledge)fundingDetails.get(index);
 	}
+	
 	public void setFundingDetail(int index, Object test){
 		////System.out.println("NU merge!");
 	}
-	//
+	
 	public Collection getCurrencies() {
 		return currencies;
 	}
@@ -84,8 +135,6 @@ public class AddOrgForm extends ActionForm {
 		this.currencies = currencies;
 	}
 
-
-	//
 	 public String getMode() {
 		return mode;
 	}
@@ -123,12 +172,12 @@ public class AddOrgForm extends ActionForm {
 		  ampSecSchemeId = null;
 		  levelId = null;		//defunct
 		  regionId = null;
-		  countryId = "et";	//defunct
+		  countryId = null;	//defunct
 		  ampOrgGrpId = null;
 		
 		  fiscalCal = null;
 		  sectorScheme = null;
-		  country = null;	//defunct
+		  countries = null;	//defunct
 		  region = null;
 		  orgType = null;
 		  level = null;	//defunct
@@ -214,11 +263,11 @@ public class AddOrgForm extends ActionForm {
 		ampSecSchemeId = long1;
 	}
 	
-	public String getCountryId() {
+	public Long getCountryId() {
 		return countryId;
 	}
 	
-	public void setCountryId(String countryId) {
+	public void setCountryId(Long countryId) {
 		this.countryId = countryId;
 	}
 	
@@ -269,15 +318,16 @@ public class AddOrgForm extends ActionForm {
 	public void setSectorScheme(Collection sector) {
 		sectorScheme = sector;
 	}
+
 	
-	public Collection getCountry() {
-		return country;
+	public Collection getCountries() {
+		return countries;
 	}
-	
-	public void setCountry(Collection country) {
-		this.country = country;
+
+	public void setCountries(Collection countries) {
+		this.countries = countries;
 	}
-	
+
 	public Collection getOrgType() {
 		return orgType;
 	}
@@ -485,4 +535,293 @@ public class AddOrgForm extends ActionForm {
 	public void setBudgetOrgCode(String budgetOrgCode) {
 		this.budgetOrgCode = budgetOrgCode;
 	}
+
+	public String getOrgPrimaryPurpose() {
+		return orgPrimaryPurpose;
+	}
+
+	public void setOrgPrimaryPurpose(String orgPrimaryPurpose) {
+		this.orgPrimaryPurpose = orgPrimaryPurpose;
+	}
+
+	public List<AmpOrgStaffInformation> getStaff() {
+		return staff;
+	}
+
+	public void setStaff(List<AmpOrgStaffInformation> staff) {
+		this.staff = staff;
+	}
+
+	public List<AmpOrganizationBudgetInformation> getOrgInfos() {
+		return orgInfos;
+	}
+
+	public void setOrgInfos(List<AmpOrganizationBudgetInformation> orgInfos) {
+		this.orgInfos = orgInfos;
+	}
+
+	public List<LabelValueBean> getYears() {
+		return years;
+	}
+
+	public void setYears(List<LabelValueBean> years) {
+		this.years = years;
+	}
+
+	public Long getTypeOfStaff() {
+		return typeOfStaff;
+	}
+
+	public void setTypeOfStaff(Long typeOfStaff) {
+		this.typeOfStaff = typeOfStaff;
+	}
+
+	public String getNumberOfStaff() {
+		return numberOfStaff;
+	}
+
+	public void setNumberOfStaff(String numberOfStaff) {
+		this.numberOfStaff = numberOfStaff;
+	}
+
+	public String getSelectedYear() {
+		return selectedYear;
+	}
+
+	public void setSelectedYear(String selectedYear) {
+		this.selectedYear = selectedYear;
+	}
+
+	public Long[] getSelectedStaff() {
+		return selectedStaff;
+	}
+
+	public void setSelectedStaff(Long[] selectedStaff) {
+		this.selectedStaff = selectedStaff;
+	}
+
+	public Long getSelectedStaffId() {
+		return selectedStaffId;
+	}
+
+	public void setSelectedStaffId(Long selectedStaffId) {
+		this.selectedStaffId = selectedStaffId;
+	}
+
+	public List<AmpOrgRecipient> getRecipients() {
+		return recipients;
+	}
+
+	public void setRecipients(List<AmpOrgRecipient> recipients) {
+		this.recipients = recipients;
+	}
+
+	public Long[] getSelRecipients() {
+		return selRecipients;
+	}
+
+	public void setSelRecipients(Long[] selRecipients) {
+		this.selRecipients = selRecipients;
+	}
+
+	public Long getImplemLocationLevel() {
+		return implemLocationLevel;
+	}
+
+	public void setImplemLocationLevel(Long implemLocationLevel) {
+		this.implemLocationLevel = implemLocationLevel;
+	}
+
+	public Long[] getSelLocs() {
+		return selLocs;
+	}
+
+	public void setSelLocs(Long[] selLocs) {
+		this.selLocs = selLocs;
+	}
+
+	public Long getParentLocId() {
+		return parentLocId;
+	}
+
+	public void setParentLocId(Long parentLocId) {
+		this.parentLocId = parentLocId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getAddressAbroad() {
+		return addressAbroad;
+	}
+
+	public void setAddressAbroad(String addressAbroad) {
+		this.addressAbroad = addressAbroad;
+	}
+
+	public String getTaxNumber() {
+		return taxNumber;
+	}
+
+	public void setTaxNumber(String taxNumber) {
+		this.taxNumber = taxNumber;
+	}
+
+	public String getRegNumbMinPlan() {
+		return regNumbMinPlan;
+	}
+
+	public void setRegNumbMinPlan(String regNumbMinPlan) {
+		this.regNumbMinPlan = regNumbMinPlan;
+	}
+
+	public String getLegalPersonNum() {
+		return legalPersonNum;
+	}
+
+	public void setLegalPersonNum(String legalPersonNum) {
+		this.legalPersonNum = legalPersonNum;
+	}
+
+	public String getLegalPersonRegDate() {
+		return legalPersonRegDate;
+	}
+
+	public void setLegalPersonRegDate(String legalPersonRegDate) {
+		this.legalPersonRegDate = legalPersonRegDate;
+	}
+
+	public String getMinPlanRegDate() {
+		return minPlanRegDate;
+	}
+
+	public void setMinPlanRegDate(String minPlanRegDate) {
+		this.minPlanRegDate = minPlanRegDate;
+	}
+
+	public List<AmpOrganisationDocument> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(List<AmpOrganisationDocument> documents) {
+		this.documents = documents;
+	}
+
+	public String getOrgInfoSelectedYear() {
+		return orgInfoSelectedYear;
+	}
+
+	public void setOrgInfoSelectedYear(String orgInfoSelectedYear) {
+		this.orgInfoSelectedYear = orgInfoSelectedYear;
+	}
+
+	public Long getOrgInfoCurrId() {
+		return orgInfoCurrId;
+	}
+
+	public void setOrgInfoCurrId(Long orgInfoCurrId) {
+		this.orgInfoCurrId = orgInfoCurrId;
+	}
+
+	public Long getOrgInfoType() {
+		return orgInfoType;
+	}
+
+	public void setOrgInfoType(Long orgInfoType) {
+		this.orgInfoType = orgInfoType;
+	}
+
+	public String getOrgInfoPercent() {
+		return orgInfoPercent;
+	}
+
+	public void setOrgInfoPercent(String orgInfoPercent) {
+		this.orgInfoPercent = orgInfoPercent;
+	}
+
+	public Long[] getSelectedOrgInfoIds() {
+		return selectedOrgInfoIds;
+	}
+
+	public void setSelectedOrgInfoIds(Long[] selectedOrgInfoIds) {
+		this.selectedOrgInfoIds = selectedOrgInfoIds;
+	}
+
+	public Long getSelectedOrgInfoId() {
+		return selectedOrgInfoId;
+	}
+
+	public void setSelectedOrgInfoId(Long selectedOrgInfoId) {
+		this.selectedOrgInfoId = selectedOrgInfoId;
+	}
+
+	public String getOrgInfoAmount() {
+		return orgInfoAmount;
+	}
+
+	public void setOrgInfoAmount(String orgInfoAmount) {
+		this.orgInfoAmount = orgInfoAmount;
+	}
+
+	public String getOtherInformation() {
+		return otherInformation;
+	}
+
+	public void setOtherInformation(String otherInformation) {
+		this.otherInformation = otherInformation;
+	}
+
+	public String getLineMinRegDate() {
+		return lineMinRegDate;
+	}
+
+	public void setLineMinRegDate(String lineMinRegDate) {
+		this.lineMinRegDate = lineMinRegDate;
+	}
+
+	public String getOperFuncApprDate() {
+		return operFuncApprDate;
+	}
+
+	public void setOperFuncApprDate(String operFuncApprDate) {
+		this.operFuncApprDate = operFuncApprDate;
+	}
+
+	public String getReceiptLegPersonalityAct() {
+		return receiptLegPersonalityAct;
+	}
+
+	public void setReceiptLegPersonalityAct(String receiptLegPersonalityAct) {
+		this.receiptLegPersonalityAct = receiptLegPersonalityAct;
+	}
+
+	public List<AmpOrganisation> getBudgetOrgs() {
+		return budgetOrgs;
+	}
+
+	public void setBudgetOrgs(List<AmpOrganisation> budgetOrgs) {
+		this.budgetOrgs = budgetOrgs;
+	}
+
+	public Long[] getSelBudgetOrg() {
+		return selBudgetOrg;
+	}
+
+	public void setSelBudgetOrg(Long[] selBudgetOrg) {
+		this.selBudgetOrg = selBudgetOrg;
+	}
+
+	public Collection<Location> getSelectedLocs() {
+		return selectedLocs;
+	}
+
+	public void setSelectedLocs(Collection<Location> selectedLocs) {
+		this.selectedLocs = selectedLocs;
+	}
+	
 }

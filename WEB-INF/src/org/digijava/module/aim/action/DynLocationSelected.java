@@ -28,6 +28,17 @@ public class DynLocationSelected extends Action {
 			javax.servlet.http.HttpServletResponse response) throws Exception {
 		
 		EditActivityForm eaForm 	= (EditActivityForm) form;
+		/**
+		 * TODO NEEDS REFACTORING ! CURRENTLY WORKED ONLY FOR ACTIVITY FORM.SHOULD BE RE-WRITTEN LIKE IT'S IN 2.0, WITH IT'S FORM E.T.C.
+		 */
+		if(request.getParameter("userSelectedLocs")!=null){
+			String[] selectedLocIds=request.getParameter("userSelectedLocs").split(",");
+			Long [] userSelLocsId = new Long[selectedLocIds.length];
+			for (int i = 0; i < selectedLocIds.length; i++) {
+				userSelLocsId[i]=new Long(selectedLocIds[i]);
+			}
+			eaForm.getLocation().setUserSelectedLocs(userSelLocsId);
+		}
 		Long [] userSelectedLocs	= eaForm.getLocation().getUserSelectedLocs(); 
 		if ( userSelectedLocs != null ) {
 			for (int i=0; i<userSelectedLocs.length; i++) {
@@ -54,6 +65,11 @@ public class DynLocationSelected extends Action {
 			}
 		}
 		
-		return mapping.findForward("forward");
+		if(request.getParameter("forwardForOrg")!=null){
+			request.getSession().setAttribute("locations", eaForm.getLocation().getSelectedLocs());
+			return mapping.findForward("forwardForOrg");
+		}else{
+			return mapping.findForward("forward");
+		}
 	}
 }

@@ -113,6 +113,14 @@ public class CategoryConstants {
 	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT	= 
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
 	
+	//Org. Manager : Staff Information type
+	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";
+	 public static final String ORGANIZATION_STAFF_INFO_KEY="staff_information_type";
+	 
+	// organization budget Information type
+	public static final String ORGANIZATION_BUDGET_INFO_NAME = "NGO Budget Type";
+	public static final String ORGANIZATION_BUDGET_INFO_KEY = "ngo_budget_type";
+	
 	public static class HardCodedCategoryValue {
 		private String valueKey;
 		private String categoryKey;

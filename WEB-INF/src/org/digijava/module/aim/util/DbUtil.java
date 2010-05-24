@@ -49,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -63,9 +64,14 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgLocation;
+import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
+import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -141,8 +147,6 @@ public class DbUtil {
 			result = result.replaceAll("\"", "&quot;");
 			
 		}
-                
-
 		return result;
 
 	}
@@ -715,7 +719,9 @@ public class DbUtil {
         }
         return role;
     }
-
+    
+    @Deprecated
+    //should be removed !!
     public static Object get(Class c, Long id) {
         Session session = null;
         Object o = null;
@@ -734,6 +740,18 @@ public class DbUtil {
                 logger.error("releaseSession() failed " + ex);
             }
         }
+        return o;
+    }
+    
+    public static Object getObject(Class c, Long id) {
+        Session session = null;
+        Object o = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            o = session.load(c, id);
+        } catch (Exception e) {
+            logger.error("Uanble to get object of class " + c.getName() + " width id=" + id + ". Error was:" + e);
+        } 
         return o;
     }
 
@@ -2524,9 +2542,8 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select distinct org from "
-                + AmpOrganisation.class.getName() + " org "
-                + "where org.orgTypeId=:orgType";
+            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
+                +" inner join org.orgGrpId grp where grp.orgType=:orgType";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
@@ -2881,15 +2898,14 @@ public class DbUtil {
 			throw new AimException("update failed",ex);
 		}
     }
-
-    public static void updateOrg(Object object) {
-        Session sess = null;
+    
+    public static void saveOrg(AmpOrganisation org) throws DgException {
+    	Session sess = null;
         Transaction tx = null;
 
         try {
             sess = PersistenceManager.getRequestDBSession();
             tx = sess.beginTransaction();
-            AmpOrganisation org = (AmpOrganisation) object;
             HashSet sect = new HashSet();
             Iterator i = org.getSectors().iterator();
             while (i.hasNext()) {
@@ -2898,18 +2914,7 @@ public class DbUtil {
 
             }
             org.setSectors(sect);
-            
-            Collection<AmpUserExtension> userExtensions	= 
-            	AmpUserUtil.getAmpUserExtensionByOrgId(org.getAmpOrgId());
-            
-            if ( userExtensions != null ) {
-            	for (AmpUserExtension userExt: userExtensions) {
-            		userExt.setOrgGroup(org.getOrgGrpId());
-            		userExt.setOrgType(org.getOrgTypeId());
-            	}
-            }
-
-            sess.update(org);
+            sess.saveOrUpdate(org);
             tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update", e);
@@ -2922,6 +2927,48 @@ public class DbUtil {
             }
         }
     }
+
+//    public static void updateOrg(Object object) {
+//        Session sess = null;
+//        Transaction tx = null;
+//
+//        try {
+//            sess = PersistenceManager.getRequestDBSession();
+//            tx = sess.beginTransaction();
+//            AmpOrganisation org = (AmpOrganisation) object;
+//            HashSet sect = new HashSet();
+//            Iterator i = org.getSectors().iterator();
+//            while (i.hasNext()) {
+//                AmpSector e = (AmpSector) i.next();
+//                sect.add(sess.load(AmpSector.class, e.getAmpSectorId()));
+//
+//            }
+//            org.setSectors(sect);
+//            
+//            Collection<AmpUserExtension> userExtensions	= 
+//            	AmpUserUtil.getAmpUserExtensionByOrgId(org.getAmpOrgId());
+//            
+//            if ( userExtensions != null ) {
+//            	for (AmpUserExtension userExt: userExtensions) {
+//            		AmpOrgGroup orgGrp=org.getOrgGrpId();
+//            		userExt.setOrgGroup(orgGrp);
+//            		userExt.setOrgType(orgGrp.getOrgType());
+//            	}
+//            }
+//
+//            sess.update(org);
+//            tx.commit();
+//        } catch (Exception e) {
+//            logger.error("Unable to update", e);
+//            if (tx != null) {
+//                try {
+//                    tx.rollback();
+//                } catch (HibernateException ex) {
+//                    logger.error("rollback() failed", ex);
+//                }
+//            }
+//        }
+//    }
 
     public static void delete(Object object) throws JDBCException {
         Session sess = null;
@@ -6001,9 +6048,9 @@ public class DbUtil {
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
-                    if (dnOrg.getOrgTypeId() != null) {
-                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
-                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
+                    if (dnOrg.getOrgGrpId().getOrgType() != null) {
+                        if (!dnOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !dnOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equalsIgnoreCase("mul")) {
                             continue;
                         }
                     }
@@ -6490,9 +6537,10 @@ public class DbUtil {
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
-                    if (dnOrg.getOrgTypeId() != null) {
-                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
-                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
+                    AmpOrgType orgType=dnOrg.getOrgGrpId().getOrgType();
+                    if (orgType!= null) {
+                        if (!orgType.getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !orgType.getOrgTypeCode().equalsIgnoreCase("mul")) {
                             continue;
                         }
                     }
@@ -7267,14 +7315,14 @@ public class DbUtil {
             collator.setStrength(Collator.TERTIARY);
     		int result=0;
     		//such long and complicated case is necessary because orgType maybe empty for organisation
-    		if (o1.getOrgTypeId()!=null && o2.getOrgTypeId()!=null) {
-    			AmpOrgType orgType1=o1.getOrgTypeId();
-    			AmpOrgType orgType2=o2.getOrgTypeId();
+    		AmpOrgType orgType1=o1.getOrgGrpId().getOrgType();
+            AmpOrgType orgType2=o1.getOrgGrpId().getOrgType();
+            if (orgType1!=null && orgType2!=null) {
     			result=new HelperAmpOrgTypeNameComparator().compare(orgType1, orgType2);
-    		} else if (o2.getOrgTypeId()==null&&o1.getOrgTypeId()!=null){
-    			result=collator.compare(o1.getOrgTypeId().getOrgType(), "");
-    		}else if (o1.getOrgTypeId()==null&&o2.getOrgTypeId()!=null){
-    			result=collator.compare("", o2.getOrgTypeId().getOrgType());
+    		} else if (orgType2==null&&orgType1!=null){
+    			result=collator.compare(orgType1.getOrgType(), "");
+    		}else if (orgType1==null&&orgType2!=null){
+    			result=collator.compare("", orgType2.getOrgType());
     		}
     		return result;
 
@@ -7373,5 +7421,43 @@ public class DbUtil {
 		}
 		return item;
 	}
+	
+	public static int getOrgTypesAmount(String name,Long groupId) throws Exception{
+    	Session sess = null;
+        Query qry = null;
+        int count=0;
+        try {
+        	 sess = PersistenceManager.getRequestDBSession();
+             String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where o.orgType='"+name+"'";
+             if(groupId!=null && groupId.longValue()!=0){
+            	 queryString += " and o.ampOrgTypeId!="+groupId;
+             }
+             qry = sess.createQuery(queryString);
+             count=((Integer)qry.uniqueResult()).intValue();
+		} catch (Exception e) {
+			logger.error("Exception while getting org types amount:" +e.getMessage());
+		}
+        return count;
+    }
+	
+	public static class HelperAmpOrgRecipientByOrgName implements Comparator<AmpOrgRecipient> {
 
-                }
+        Locale locale;
+        Collator collator;
+
+        public HelperAmpOrgRecipientByOrgName(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrgRecipientByOrgName(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpOrgRecipient o1, AmpOrgRecipient o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            return collator.compare(o1.getOrganization().getName().toLowerCase(), o2.getOrganization().getName().toLowerCase());
+    
+        }
+    }
+}

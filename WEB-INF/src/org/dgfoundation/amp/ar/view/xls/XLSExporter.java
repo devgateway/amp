@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -42,14 +44,13 @@ public abstract class XLSExporter extends Exporter {
 //	}
 	
 	private boolean autoSize = true;
-	protected HSSFCellStyle regularStyle = null;
-	protected HSSFCellStyle amountStyle = null;
-	protected HSSFCellStyle highlightedStyle = null;
+	protected static HSSFCellStyle regularStyle = null;
+	protected static HSSFCellStyle amountStyle = null;
+	protected static HSSFCellStyle highlightedStyle = null;
 	protected HSSFCellStyle hierarchyLevel1Style = null;
 	protected HSSFCellStyle hierarchyOtherStyle = null;
 	protected HSSFCellStyle amountHierarchyLevel1Style = null;
-	protected HSSFCellStyle amountHierarchyOtherStyle = null;
-	
+	protected HSSFCellStyle amountHierarchyOtherStyle = null;	
 
 	protected IntWrapper rowId;
 
@@ -62,6 +63,12 @@ public abstract class XLSExporter extends Exporter {
 	protected HSSFSheet sheet;
 
 	protected HSSFWorkbook wb;
+	
+	public static void resetStyles() {
+        regularStyle = null;
+        amountStyle = null;
+        highlightedStyle = null;
+	}
 
 	protected HSSFCell getRegularCell(HSSFRow row) {
 		HSSFCell cell = row.createCell(colId.shortValue());

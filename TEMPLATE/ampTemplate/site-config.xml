@@ -570,6 +570,7 @@
 				<page>aim_fundingPopupLayout</page>
 				<page>aim_editEUActivity</page>
 				<page>aim_locPopupLayout</page>
+				<page>aim_locPopinLayout</page>
 				<page>aim_publicActivityPreview</page>
 				<page>aim_selectCreateIndicatorForStep9</page>
 				<page>selectCreateIndicators</page>

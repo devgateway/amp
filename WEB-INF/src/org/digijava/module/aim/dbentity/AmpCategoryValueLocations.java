@@ -127,7 +127,7 @@ public class AmpCategoryValueLocations implements Identifiable {
     @Override
 	public boolean equals (Object o) {
     	AmpCategoryValueLocations loc	= (AmpCategoryValueLocations) o;
-    	return id.equals(loc.id);
+    	return id.equals(loc.getId());
     }
 
 	@Override

@@ -246,11 +246,10 @@
 
 
 
-	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+	<table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
 		<tr>
 			<td vAlign="top">
-			<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%"
-				class=box-border-nopadding>
+			<table bgcolor="#f4f4f2" cellPadding="5" cellSpacing="5" width="100%" class="box-border-nopadding">
 				<tr>
 					<td align=left vAlign=top>
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%"
@@ -270,7 +269,7 @@
 											<c:set var="translation">
 												<digi:trn>All</digi:trn>
 											</c:set>
-											<html:select property="ampOrgTypeId" styleClass="inp-text">
+											<html:select property="ampOrgTypeId" styleClass="inp-text" styleId="ampOrgTypeId">
 												<html:option value="-1">${translation}</html:option>
 												<logic:notEmpty name="aimSelectOrganizationForm" property="orgTypes">
 													<html:optionsCollection name="aimSelectOrganizationForm" property="orgTypes" value="ampOrgTypeId" label="orgType" />
@@ -283,7 +282,7 @@
 											<digi:trn>Enter a keyword</digi:trn>
 										</td>
 										<td>
-											<html:text property="keyword" styleClass="inp-text" />
+											<html:text property="keyword" styleClass="inp-text" styleId="keyword"/>
 										</td>
 									</tr>
 									<tr>
@@ -291,7 +290,7 @@
 											<digi:trn>Number of results per page</digi:trn>
 										</td>
 										<td>
-											<html:text property="tempNumResults" size="2" styleClass="inp-text" />
+											<html:text property="tempNumResults" size="2" styleClass="inp-text" styleId="tempNumResults"/>
 										</td>
 									</tr>
 	
@@ -325,13 +324,13 @@
 							<logic:notEmpty name="aimSelectOrganizationForm" property="organizations">
 								<tr>
 									<td align="left" vAlign="top">
-										<table width="100%" cellPadding="3">
+										<table width="100%" cellPadding="3" id="searchResults">
 											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">		
 												<tr>
 													<td bgcolor=#ECF3FD width="1%">&nbsp;</td>		
 													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">		
 														<td bgcolor="#ECF3FD" width="10%">
-															<html:multibox	property="selOrganisations">
+															<html:multibox	property="selOrganisations" styleClass="orgsMultibox">
 																<bean:write name="organisations" property="ampOrgId" />
 															</html:multibox>&nbsp;
 														</td>

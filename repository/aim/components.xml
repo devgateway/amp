@@ -184,6 +184,7 @@
 	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />
 	<page page="viewCommentOverview" name="aim_viewCommentOverviewPopupLayout" title=" - Comment Detail" />
 	<page page="selectDynLocation" name="aim_locPopupLayout" title="AMP - Select Location" />
+	<page page="selectDynLocationPopin" name="aim_locPopinLayout" title="AMP - Select Location" />
 
 	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />
 	<page page="components/selectOrganization" title="AMP - Select Organization" />

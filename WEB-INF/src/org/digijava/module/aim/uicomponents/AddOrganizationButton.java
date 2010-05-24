@@ -21,6 +21,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String aditionalRequestParameters = "";
 	private String styleClass=""; //class name
 	private String useAcronym = "false";
+	private String showAs="" ; //show as popin or popup
 	
 	public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
 	public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
@@ -51,7 +52,13 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append("=");
 				html.append("\""+styleClass+"\"");				
 			}
-			html.append(" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+			
+			if(!"".equalsIgnoreCase(showAs) && "popin".equalsIgnoreCase(showAs)){
+				html.append(" onclick=\"javascript:selectOrg('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+			}else{
+				html.append(" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+			}			
+			
 
 			html.append(PARAM_RESET_FORM);
 			html.append("=true~");
@@ -244,6 +251,14 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 	public void setStyleClass(String styleClass) {
 		this.styleClass = styleClass;
+	}	
+
+	public String getShowAs() {
+		return showAs;
+	}
+
+	public void setShowAs(String showAs) {
+		this.showAs = showAs;
 	}
 
 	/**

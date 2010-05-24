@@ -11,7 +11,7 @@
 <script language="JavaScript">
 
 	function msg() {
-          var msg="<digi:trn key="aim:deleteOrganizationType">Are you sure about deleting this Organization Type ?</digi:trn>"
+          var msg="<digi:trn>Are you sure about deleting this Organization Type ?</digi:trn>"
 		if (confirm(msg)) {
 			document.aimAddOrgTypeForm.action.value = "delete";
 			document.aimAddOrgTypeForm.submit();
@@ -59,6 +59,10 @@
 			fixedTrim = fixedTrim.substring(0, fixedTrim.length - 1); }
 		return fixedTrim
 	}
+
+	function resetRadioButtons(){
+        $("input:radio").attr("checked", false);
+    }
 
 </script>
 
@@ -124,7 +128,7 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+										<table bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="90%" border="0">
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
@@ -142,30 +146,35 @@
 														<tr>
 															<td width="100%">
 																<table width="100%" cellPadding=3 cellSpacing=3 border=0 bgColor=#f4f4f2>
-															  <tr>
+															  		<tr>
 																		<td width="30%" align="right">
-																		<digi:trn key="aim:orgTypeName">Name</digi:trn>	</td>
+																			<font color="red">*</font>
+																			<digi:trn>Name</digi:trn>
+																		</td>
 																	    <td width="30%" >
 																	          <html:text property="orgType" size="35" />
 																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgTypeCode">Type
-                                                                            Code</digi:trn>
+																			<font color="red">*</font>
+																	        <digi:trn>Type Code</digi:trn>
 																		</td>
 																		<td width="30%">
 																           <html:text property="orgTypeCode" size="15" />
 																		</td>
 																	</tr>
 																	<tr>
-																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgTypeIsGovernmental">Is Governmental</digi:trn>
-																		</td>
-																		<td width="30%">
-																           <html:checkbox property="orgTypeIsGovernmental"/>
-																		</td>
+                                                                        <td colspan="2" align="center">
+                                                                            <fieldset style="width: 40%;border-color: #000000; text-align: left;border-style:dotted">
+                                                                            <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
+                                                                            <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
+                                                                            <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
+                                                                            <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="dr-menu"/>
+                                                                            </fieldset>
+                                                                        </td>
 																	</tr>
+																																		
 																	<tr align="center">
 																		<td colspan="2" width="60%">
 																			<table width="100%" cellspacing="5">

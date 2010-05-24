@@ -260,8 +260,9 @@
                                                               				</logic:notEmpty>
 																		</td>--%>
 																		<td>
-																			<logic:notEmpty name="organisation" property="orgTypeId">
-                                                              					<c:out value="${organisation.orgTypeId.orgType}" />
+																			<logic:notEmpty name="organisation" property="orgGrpId">
+																				<c:out value="${organisation.orgGrpId.orgType.orgType}" />
+																				
                                                               					<%--<bean:write name="organisation" property="${organisation.orgTypeId.orgType}" />--%>
                                                               				</logic:notEmpty>
 																		</td>

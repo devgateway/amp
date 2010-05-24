@@ -28,6 +28,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -35,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -55,7 +57,10 @@ import org.digijava.module.calendar.util.CalendarConversor;
 import org.digijava.module.calendar.util.CalendarThread;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.helper.MessageConstants;
+import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
+import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 
@@ -71,6 +76,10 @@ public class ShowCalendarEvent extends Action {
  		CalendarThread.setLocale(navigationLanguage);
  		
         CalendarEventForm ceform = (CalendarEventForm) form;
+        
+        Object teamObj = request.getSession().getAttribute("teamHead");
+        boolean isManager = (teamObj != null && ((String)teamObj).equalsIgnoreCase("yes"));
+        
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.reset(mapping, request);
             ceform.setOrganizations(null);
@@ -230,6 +239,34 @@ public class ShowCalendarEvent extends Action {
             ceform.setMethod("");
             return mapping.findForward("forward");
 
+        } else if (ceform.getMethod().equalsIgnoreCase("valid")) {
+        	if (isManager){
+            	AmpCalendar ampCalendar=AmpDbUtil.getAmpCalendar(ceform.getAmpCalendarId());
+            	CalendarItem calendarItem =  ampCalendar.getCalendarPK().getCalendar().getFirstCalendarItem();
+            	
+
+                if (ceform.getApprove()==MessageConstants.CALENDAR_EVENT_APPROVED){
+            		AuditLoggerUtil.logObject(request.getSession(), request, calendarItem, "Approved");
+            		calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_APPROVED));
+            		AmpDbUtil.updateAmpCalendar(ampCalendar);
+            		
+                	new ApprovedCalendarEventTrigger(calendarItem,
+                			((TeamMember) request.getSession().getAttribute("currentMember")).getMemberName(), 
+                			ampCalendar.getMember());
+            		
+            	} else if (ceform.getApprove()==MessageConstants.CALENDAR_EVENT_NOT_APPROVED){
+            		AuditLoggerUtil.logObject(request.getSession(), request, calendarItem, "Not Approved");
+                	AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+            		
+                	new NotApprovedCalendarEventTrigger(calendarItem,
+                			((TeamMember) request.getSession().getAttribute("currentMember")).getMemberName(), 
+                			ampCalendar.getMember());
+            		
+            	}
+                ceform.setMethod("");
+                return mapping.findForward("forward");            	
+        	}
+        	
         } else if (ceform.getMethod().equalsIgnoreCase("preview")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
@@ -269,6 +306,9 @@ public class ShowCalendarEvent extends Action {
     }
 
     private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
+
+        Object teamObj = request.getSession().getAttribute("teamHead");
+        boolean isManager = (teamObj != null && ((String)teamObj).equalsIgnoreCase("yes"));
         try {
         	
         	if (ceform.getAmpCalendarId() != null && ceform.getAmpCalendarId() > 0) {
@@ -327,6 +367,14 @@ public class ShowCalendarEvent extends Action {
             calendarItem.setCreationIp(RequestUtils.getRemoteAddress(request));
             calendarItem.setCreationDate(new Date());
             calendarItem.setDescription(ceform.getDescription());
+            
+        	Long templId=FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
+            AmpFeaturesVisibility eventApprove = FeaturesUtil.getFeatureByName("Event Approve", "Calendar", templId);
+            if (eventApprove == null || isManager){
+            	calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_APPROVED)); // 1 - Approve by default;
+            } else {
+            	calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_AWAITING)); // 0 - Awaiting Approval;
+            }
             
             // fill calendar object
 
@@ -494,6 +542,7 @@ public class ShowCalendarEvent extends Action {
                 ceform.setEventTitle(calendar.getFirstCalendarItem().getTitle());
                 //description
                 ceform.setDescription(calendar.getFirstCalendarItem().getDescription());
+                ceform.setApprove(calendar.getFirstCalendarItem().getApprove() == null ? MessageConstants.CALENDAR_EVENT_APPROVED : calendar.getFirstCalendarItem().getApprove().intValue());
                 // private event
                 ceform.setPrivateEvent(ampCalendar.isPrivateEvent());
                 

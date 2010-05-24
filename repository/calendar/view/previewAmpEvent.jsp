@@ -32,11 +32,30 @@ function deleteEvent(){
 	}
 	return false;
 }
+
+function valid(value){
+	var err = '<digi:trn>Are You sure?</digi:trn>';
+	if(confirm(err))
+	{
+		if (value){
+			document.getElementById('hdnValid').value = 1;
+		} else {
+			document.getElementById('hdnValid').value = -1;
+		}
+		document.getElementById('hdnMethod').value = "valid";
+		document.getElementById('eventForm').submit();
+		
+		return true;
+	}
+	return false;
+}
+
 </script>
 
-<digi:form action="/showCalendarEvent.do">
+<digi:form styleId="eventForm" action="/showCalendarEvent.do">
 
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
+  <html:hidden styleId="hdnValid" name="calendarEventForm" property="approve"/>
   <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
   <table width="530">
@@ -75,7 +94,12 @@ function deleteEvent(){
 			                   	<td  style="height: 5px;"/>
 			                 </tr>
 			                 <tr>
-			               	 	<td style="background-color: #CCDBFF;height: 18px;"/>
+			               	 	<td style="background-color: #CCDBFF;height: 18px;">
+	                    			<feature:display name="Event Approve" module="Calendar">
+										<c:if test="${calendarEventForm.approve==0}">Awaiting Validation</c:if>
+										<c:if test="${calendarEventForm.approve==-1}">Event not Approved</c:if>
+									</feature:display>
+			               	 	</td>
 			                 </tr>
 			            </table>
                 	</td>                	
@@ -90,7 +114,7 @@ function deleteEvent(){
                 </logic:empty>
 				<logic:notEmpty name="calendarEventForm" property="eventTitle">
 					<tr>
-				      <td style="font-family: Tahoma; font-size: 12px;">        
+				      <td style="font-family: Tahoma; font-size: 12px;">
 				        <div style="padding: 20px; background-color: #F5F5F5;">
 				          <table>
 				            <tr>
@@ -212,6 +236,12 @@ function deleteEvent(){
 				                	&nbsp;
 				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
 				                </c:if>
+								<c:if test="${sessionScope.currentMember.teamHead==true && calendarEventForm.approve==0}">
+	                    			<feature:display name="Event Approve" module="Calendar">
+					                	<input type="button" value="<digi:trn>Approved</digi:trn>" style="width: 100px;" onclick="valid(true);" />
+					                	<input type="button" value="<digi:trn>Not Approved</digi:trn>" style="width: 100px;" onclick="valid(false);" />
+					                </feature:display>
+					            </c:if>
 				                <c:if test="${calendarEventForm.actionButtonsVisible==false}">
 				                	&nbsp;
 				                	<input type="submit" style="width: 100px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">

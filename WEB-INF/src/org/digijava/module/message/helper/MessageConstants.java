@@ -10,9 +10,11 @@ import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigge
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
@@ -38,7 +40,9 @@ public class MessageConstants {
                                                                 ActivityFinalDateForDisbursementsTrigger.class,
                                                                 ActivityProposedApprovalDateTrigger.class,
                                                                 ActivityProposedCompletionDateTrigger.class,
-                                                                ActivityProposedStartDateTrigger.class};
+                                                                ActivityProposedStartDateTrigger.class,
+                                                                ApprovedCalendarEventTrigger.class,
+                                                                NotApprovedCalendarEventTrigger.class};
 
     public static final  String[] triggerName=new String[] {"Save Actvity",
                                                             "Activity Disbursement Date",
@@ -53,7 +57,9 @@ public class MessageConstants {
                                                             "Activity Final Date For Disbursements",
                                                             "Activity Proposed Approval Date",
                                                             "Activity Proposed Completion Date",
-                                                            "Activity Proposed Start Date"};
+                                                            "Activity Proposed Start Date",
+                                                            "Calendar Event Approved",
+                                                            "Calendar Event Not Approved"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";
@@ -98,4 +104,15 @@ public class MessageConstants {
     public static final String SENT_STATUS="sent";
     public static final String UNSENT_STATUS="unsent";
     public static final String FAILED_STATUS="failed";
+    
+	/**
+	 * for Calendar events. 
+	 * 0 	- Awaiting Approval
+	 * 1 	- Approved
+	 * -1	- Not Approved 
+	 */
+    public static final int CALENDAR_EVENT_AWAITING = 0;
+    public static final int CALENDAR_EVENT_APPROVED = 1;
+    public static final int CALENDAR_EVENT_NOT_APPROVED = -1;
+   
 }

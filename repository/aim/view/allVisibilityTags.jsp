@@ -230,6 +230,7 @@
 <feature:display name="Donors" module="Calendar"></feature:display>
 <feature:display name="Save and Send button" module="Calendar"></feature:display>
 <feature:display name="Preview Event button" module="Calendar"></feature:display>
+<feature:display name="Event Approve" module="Calendar"></feature:display>
 <%-- 
 <feature:display name="Recurring Event Button" module="Calendar"></feature:display>
 --%>

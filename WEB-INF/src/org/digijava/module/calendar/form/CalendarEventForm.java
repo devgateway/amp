@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
+import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.aim.helper.Constants;
 
 public class CalendarEventForm
@@ -64,6 +65,7 @@ public class CalendarEventForm
     private Long selOrganizations[];
 	private Collection<AmpOrganisation> organizations;
 	private String description;
+	private int approve = MessageConstants.CALENDAR_EVENT_APPROVED; // Approved by default.
 	private Long eventCreatorId;
 	private Boolean actionButtonsVisible;
 	
@@ -389,6 +391,14 @@ public class CalendarEventForm
 		return description;
 	}
 
+	public int getApprove() {
+		return approve;
+	}
+
+	public void setApprove(int approve) {
+		this.approve = approve;
+	}
+
 	public String getSelectedStartMonth() {
 		return selectedStartMonth;
 	}
@@ -460,5 +470,4 @@ public class CalendarEventForm
 	public void setActionButtonsVisible(Boolean actionButtonsVisible) {
 		this.actionButtonsVisible = actionButtonsVisible;
 	}
-    
 }

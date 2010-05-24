@@ -16,5 +16,7 @@
 		<property name="description" column="DESCRIPTION" type="text" />
 		<property name="creationIp" column="CREATION_IP" type="java.lang.String" />
 		<property name="creationDate" column="CREATION_DATE" type="java.util.Date" />
+		<property name="approve" column="approve" type="java.lang.Integer" />
+		
 	</class>
 </hibernate-mapping>

@@ -206,7 +206,13 @@ color:Black;
 								                                                       	<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left"/>
 					                                                        		</digi:link>
 					                                                        		<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-								                                                   		<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+								                                                   		<span style="color: #ffffff">
+															                    			<feature:display name="Event Approve" module="Calendar">
+																								<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																								<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																							</feature:display>
+								                                                   			${ampCalendarEventItem.title}
+								                                                   		</span>
 								                                                	</c:forEach>
 					                                                        	</c:if>
 					                                                        	&nbsp;
@@ -237,7 +243,13 @@ color:Black;
 												                                </c:if>
 						                                                        <c:if test="${item.dayOfMonth==startDay && !item.enabled}">
 						                                                        	<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-									                                                   	<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+									                                                   	<span style="color: #ffffff">
+															                    			<feature:display name="Event Approve" module="Calendar">
+																								<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																								<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																							</feature:display>
+									                                                   		${ampCalendarEventItem.title}
+									                                                   	</span>
 									                                                </c:forEach>
 						                                                        </c:if>
 						                                                        &nbsp;
@@ -265,7 +277,13 @@ color:Black;
 								                                                       	<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left"/>
 					                                                        		</digi:link>
 					                                                        		<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-								                                                   		<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+								                                                   		<span style="color: #ffffff">
+															                    			<feature:display name="Event Approve" module="Calendar">
+																								<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																								<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																							</feature:display>
+								                                                   			${ampCalendarEventItem.title}
+								                                                   		</span>
 								                                                	</c:forEach>
 					                                                        	</c:if>
 					                                                        	&nbsp;
@@ -280,7 +298,13 @@ color:Black;
 								                                                       	<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left"/>
 					                                                        		</digi:link>
 					                                                        		<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-								                                                   		<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+								                                                   		<span style="color: #ffffff">
+															                    			<feature:display name="Event Approve" module="Calendar">
+																								<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																								<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																							</feature:display>
+								                                                   			${ampCalendarEventItem.title}
+								                                                   		</span>
 								                                                	</c:forEach>
 					                                                        	</c:if>
 					                                                        	&nbsp;
@@ -446,7 +470,13 @@ color:Black;
                                                                                                               	<c:choose>
                                                                                                                 	<c:when test="${(startYear==currentYear && startMonth==currentMonth && startDay==currentDay && startHours==hour && startMinute==min) }">
                                                                                                                         <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-                                                                                                                        	<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+                                                                                                                        	<span style="color: #ffffff">
+																								                    			<feature:display name="Event Approve" module="Calendar">
+																																	<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																																	<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																																</feature:display>
+                                                                                                                        		${ampCalendarEventItem.title}
+                                                                                                                        	</span>
                                                                                                                         </c:forEach>
                                                                                                                      </c:when>
                                                                                                                    	 <c:otherwise>&nbsp;</c:otherwise>
@@ -587,7 +617,13 @@ color:Black;
 																						                    		<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left" style="vertical-align:middle"/>
 																						                   		</digi:link>	
 																						                   			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-																							                    		<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+																							                    		<span style="color: #ffffff">
+																							                    			<feature:display name="Event Approve" module="Calendar">
+																																<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																																<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																															</feature:display>
+																															 ${ampCalendarEventItem.title} 
+																														</span>
 																							                    	</c:forEach>	
 																						                   	</div>
 	                                                                                                        </c:if>
@@ -601,7 +637,13 @@ color:Black;
 																									                   		</digi:link>
 																									                   		<c:if test="${startYear==currentYear && startMonth==monthIndex}">
 																							                   					<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-																								                    				<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+																								                    				<span style="color: #ffffff">
+																										                    			<feature:display name="Event Approve" module="Calendar">
+																																			<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																																			<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																																		</feature:display>
+																								                    					${ampCalendarEventItem.title}
+																								                    				</span>
 																								                    			</c:forEach>
 																							                   				</c:if>
 																									                   	</div>
@@ -618,7 +660,13 @@ color:Black;
 	                                                                                                                            </digi:link>
 	                                                                                                                            <c:if test="${startYear==currentYear && startMonth==monthIndex}">
 	                                                                                                                                <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-	                                                                                                                                    <span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+	                                                                                                                                    <span style="color: #ffffff">
+																											                    			<feature:display name="Event Approve" module="Calendar">
+																																				<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																																				<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																																			</feature:display>
+	                                                                                                                                    	${ampCalendarEventItem.title}
+	                                                                                                                                    </span>
 	                                                                                                                                </c:forEach>
 	                                                                                                                            </c:if>
 	                                                                                                                        </div>
@@ -727,7 +775,13 @@ color:Black;
                                                                                                             </digi:link>
                                                                                                             <c:if test="${startYear==currentYear && startMonth==currentMonth && startDay==item.dayOfMonth}">
 																												<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-                                                                                                                	<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+                                                                                                                	<span style="color: #ffffff">
+																						                    			<feature:display name="Event Approve" module="Calendar">
+																															<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																															<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																														</feature:display>
+                                                                                                                		${ampCalendarEventItem.title}
+                                                                                                                	</span>
                                                                                                             	</c:forEach>
 																											</c:if>
                                                                                                         </div>
@@ -742,7 +796,13 @@ color:Black;
                                                                                                                 </digi:link>
 																												<c:if test="${startYear==currentYear && startMonth==currentMonth && startDay==item.dayOfMonth}">
 																													<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-                                                                                                                		<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+                                                                                                                		<span style="color: #ffffff">
+																							                    			<feature:display name="Event Approve" module="Calendar">
+																																<c:if test="${ampCalendarEventItem.approve==-1}">**</c:if>
+																																<c:if test="${ampCalendarEventItem.approve==0}">*</c:if>
+																															</feature:display>
+                                                                                                                			${ampCalendarEventItem.title}
+                                                                                                                		</span>
                                                                                                             		</c:forEach>
 																												</c:if>
                                                                                                              </div>

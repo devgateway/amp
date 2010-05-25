@@ -963,7 +963,7 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    private FundingData getActivityTotalFundingInUSD(AmpActivity activity,
+    public FundingData getActivityTotalFundingInUSD(AmpActivity activity,
             Date start, Date end) {
         FundingData retVal = null;
         Set fundSet = activity.getFunding();

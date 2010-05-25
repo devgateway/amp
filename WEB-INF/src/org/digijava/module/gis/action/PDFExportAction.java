@@ -817,7 +817,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 						+ selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": "
 						+ indicatorName + "\n" + selectedSubGroupTranslation + ": " + subGroup + "\n"
 						+ selectedTimeIntervalTranslation + ": " + timeInterval + "\n\n"
-						+ TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(
+						+ "Data Source: Dev Info", new Font(
 						Font.HELVETICA, 6)));
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
@@ -1461,7 +1461,8 @@ private int matchesId(Long ptableId) {
 		opt.setShowLabels(showLabels);
 		opt.setHeight(new Integer(660));
 		opt.setWidth(new Integer(420));
-		Long sitId = RequestUtils.getSiteDomain(request).getSite().getId();
+//		Long sitId = RequestUtils.getSiteDomain(request).getSite().getId();
+		String sitId = RequestUtils.getSiteDomain(request).getSite().getSiteId();
 		opt.setSiteId(sitId);
 		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 		opt.setLangCode(langCode);
@@ -1469,9 +1470,7 @@ private int matchesId(Long ptableId) {
 		// generate chart
 		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear, toYear, opt);
 		Plot plot = chart.getPlot();
-		plot.setNoDataMessage(TranslatorWorker.translateText(
-				"There is no data available for the selected filters. Please adjust the date and/or donor filters",
-				RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()));
+		plot.setNoDataMessage("There is no data available for the selected filters. Please adjust the date and/or donor filters");
 		java.awt.Font font = new java.awt.Font(null, 0, 15);
 		plot.setNoDataMessageFont(font);
 		ChartRenderingInfo info = new ChartRenderingInfo();
@@ -1662,62 +1661,53 @@ private int matchesId(Long ptableId) {
 	}
 
 	private FundingData getActivityTotalFundingInUSD(AmpActivity activity) {
-		FundingData retVal = null;
-		Set fundSet = activity.getFunding();
-		Iterator<AmpFunding> fundIt = fundSet.iterator();
+				FundingData retVal = null;
+        Set fundSet = activity.getFunding();
+        Iterator<AmpFunding> fundIt = fundSet.iterator();
 
-		BigDecimal commitment = new BigDecimal(0);
-		BigDecimal disbursement = new BigDecimal(0);
-		BigDecimal expenditure = new BigDecimal(0);
+        BigDecimal commitment = null;
+        BigDecimal disbursement = null;
+        BigDecimal expenditure = null;
 
-		try {
-			while (fundIt.hasNext()) {
-				AmpFunding fund = fundIt.next();
-				Set fundDetaiuls = fund.getFundingDetails();
-				Iterator<AmpFundingDetail> fundDetIt = fundDetaiuls.iterator();
-				while (fundDetIt.hasNext()) {
-					AmpFundingDetail fundDet = fundDetIt.next();
-					BigDecimal exchangeRate = null;
-					/*
-					 * try {
-					 *
-					 * exchangeRate = CurrencyUtil.getLatestExchangeRate(
-					 * fundDet.getAmpCurrencyId().getCurrencyCode());
-					 *
-					 * } catch (AimException ex) { //Add exception reporting }
-					 */
-					exchangeRate = new BigDecimal(fundDet.getFixedExchangeRate());
+        Timestamp startTs = new Timestamp(start.getTime());
+        startTs.setNanos(0);
+        Timestamp endTs = new Timestamp(end.getTime());
+        endTs.setNanos(0);
 
-					/*
-					 * switch (fundDet.getTransactionType().intValue()) { case
-					 * Constants.COMMITMENT: commitment +=
-					 * fundDet.getTransactionAmount() / exchangeRate; break;
-					 *
-					 * case Constants.DISBURSEMENT: disbursement +=
-					 * fundDet.getTransactionAmount() / exchangeRate; break;
-					 *
-					 * case Constants.EXPENDITURE: expenditure +=
-					 * fundDet.getTransactionAmount() / exchangeRate; break; }
-					 */
+        FundingCalculationsHelper fch = new FundingCalculationsHelper();
+//        fch.doCalculations();
 
-					if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-						commitment = commitment.add(fundDet.getTransactionAmount().divide(exchangeRate));
-					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-						disbursement = disbursement.add(fundDet.getTransactionAmount().divide(exchangeRate));
-					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-						expenditure = expenditure.add(fundDet.getTransactionAmount().divide(exchangeRate));
-					}
+        Set fundDetSet = new HashSet();
 
-				}
-			}
-		} catch (Exception ex1) {
-			String ggg = "gadfg";
-			// Add exception reporting
-		}
 
-		retVal = new FundingData(commitment, disbursement, expenditure);
+        try {
+            while (fundIt.hasNext()) {
+                AmpFunding fund = fundIt.next();
+                
+                Set fundDetails = fund.getFundingDetails();
 
-		return retVal;
+                Iterator fdIt = fundDetails.iterator();
+                while (fdIt.hasNext()) {
+                    AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
+                    fundDetSet.add(fd);
+                }
+
+        }
+
+            fch.doCalculations(fundDetSet, "usd");
+
+            commitment = fch.getTotActualComm().getValue();
+            disbursement = fch.getTotActualDisb().getValue();
+            expenditure = fch.getTotActualExp().getValue();
+
+        } catch (Exception ex1) {
+            ex1.printStackTrace();
+            //Add exception reporting
+        }
+
+        retVal = new FundingData(commitment, disbursement, expenditure);
+
+        return retVal;
 	}
 
 }

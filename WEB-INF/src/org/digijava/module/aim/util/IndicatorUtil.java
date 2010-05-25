@@ -102,6 +102,23 @@ public class IndicatorUtil {
 			}
 		}
 	}
+
+
+
+	public static AmpIndicatorSubgroup getIndicatorSubGroup(Long id) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		AmpIndicatorSubgroup indicator = null;
+		try {
+			indicator = (AmpIndicatorSubgroup) session.load(AmpIndicatorSubgroup.class, id);
+		} catch (ObjectNotFoundException e) {
+			logger.debug("indicator with " + id + "not found");
+		} catch (Exception e) {
+			throw new DgException("Cannot load indicator", e);
+		}
+		return indicator;
+	}
+
+
         
      /**
      * Searches database for {@link AmpIndicator} with given name.

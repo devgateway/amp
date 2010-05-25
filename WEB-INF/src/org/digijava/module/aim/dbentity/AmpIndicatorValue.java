@@ -37,6 +37,8 @@ public class AmpIndicatorValue implements Serializable{
 	private AmpLocation location;
 	
 	private AmpCategoryValue indicatorSource;
+	private AmpCategoryValue riskValue;
+	
 
 
         private AmpIndicatorSubgroup subgroup;
@@ -160,6 +162,14 @@ public class AmpIndicatorValue implements Serializable{
 
     }
 
+
+		public AmpCategoryValue getRiskValue() {
+            return riskValue;
+    }
+
+    public void setRiskValue(AmpCategoryValue riskValue) {
+        this.riskValue = riskValue;
+    }
 
 }
 

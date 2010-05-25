@@ -44,6 +44,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
 		
 		
 		/**

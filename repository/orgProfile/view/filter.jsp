@@ -10,17 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>' ></script>
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/panel/container-min.js"/>' ></script>
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/panel/connection-min.js"/>' ></script>
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>' ></script>
-<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
-
 
 <script type="text/javascript" language="javascript">
     var filter; // Filter panel
@@ -131,7 +121,7 @@ function checkAllSeleceted(){
     <table border="0" align="left" width="100%">
         <tr>
             <td>
-                <div style="width:99.7%;height:20px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+                <div id="orgProfToolbarId" style="display: none;width:99.7%;height:20px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
                     <span style="cursor:pointer;float:left;">
                         <DIV id="subtabs">
                             <UL>

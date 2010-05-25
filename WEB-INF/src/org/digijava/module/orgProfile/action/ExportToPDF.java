@@ -92,6 +92,8 @@ public class ExportToPDF extends Action {
             String email = "N/A";
             String contactPhone = "N/A";
             String contactFax = "N/A";
+            String orgBackground = "N/A";
+            String orgDesc = "N/A";
 
             AmpOrgGroup group = null;
             AmpOrgType orgGroupType = null;
@@ -107,6 +109,8 @@ public class ExportToPDF extends Action {
                 email = organization.getEmail();
                 contactPhone = organization.getPhone();
                 contactFax = organization.getFax();
+                orgBackground = organization.getOrgBackground();
+                orgDesc = organization.getOrgDescription();
             } else {
                 if (filter.getOrgIds() != null) {
                     orgGroupTpName = multipleSelected;
@@ -118,6 +122,8 @@ public class ExportToPDF extends Action {
                     email = multipleSelected;
                     contactPhone = multipleSelected;
                     contactFax = multipleSelected;
+                    orgBackground = multipleSelected;
+                    orgDesc = multipleSelected;
                 } else {
                     group = filter.getOrgGroup();
                     if (group != null) {
@@ -164,9 +170,6 @@ public class ExportToPDF extends Action {
                         PdfPTable typeOfAidTbl = null;
                         PdfPTable odaProfileTbl = null;
                         ChartRenderingInfo info = new ChartRenderingInfo();
-
-
-                        String transTypeName = "";
                         String currName = filter.getCurrName();
                         String amountInThousands = "";
                         String typeOfAid = TranslatorWorker.translateText("TYPE OF AID", langCode, siteId);
@@ -174,24 +177,16 @@ public class ExportToPDF extends Action {
                         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                             amountInThousands = "," + TranslatorWorker.translateText("Amounts in thousands", langCode, siteId) + " ";
                         }
-                        switch (filter.getTransactionType()) {
-                            case org.digijava.module.aim.helper.Constants.COMMITMENT:
-                                transTypeName = TranslatorWorker.translateText("Commitment", langCode, siteId);
-                                break;
-                            case org.digijava.module.aim.helper.Constants.DISBURSEMENT:
-                                transTypeName = TranslatorWorker.translateText("Disbursement", langCode, siteId);
-                                break;
-                        }
-                        int colspan=6;
+                        int colspan = 6;
                         switch (type.intValue()) {
                             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                                 // type of aid table
-                                 if(filter.getTransactionType()==2){
-                                    colspan=11;
+                                if (filter.getTransactionType() == 2) {
+                                    colspan = 11;
                                 }
                                 typeOfAidTbl = new PdfPTable(colspan);
                                 typeOfAidTbl.setWidthPercentage(100);
-                                PdfPCell typeofAidTitleCell = new PdfPCell(new Paragraph(typeOfAid + "(" + transTypeName + "|" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                PdfPCell typeofAidTitleCell = new PdfPCell(new Paragraph(typeOfAid + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
                                 typeofAidTitleCell.setColspan(colspan);
                                 typeofAidTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 typeOfAidTbl.addCell(typeofAidTitleCell);
@@ -204,12 +199,12 @@ public class ExportToPDF extends Action {
                                 chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
                                 break;
                             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
-                                 if(filter.getTransactionType()==2){
-                                    colspan=11;
+                                if (filter.getTransactionType() == 2) {
+                                    colspan = 11;
                                 }
                                 odaProfileTbl = new PdfPTable(colspan);
                                 odaProfileTbl.setWidthPercentage(100);
-                                PdfPCell odaProfileTitleCell = new PdfPCell(new Paragraph(odaProfile + "("+ currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                PdfPCell odaProfileTitleCell = new PdfPCell(new Paragraph(odaProfile + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
                                 odaProfileTitleCell.setColspan(colspan);
                                 odaProfileTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 odaProfileTbl.addCell(odaProfileTitleCell);
@@ -222,7 +217,7 @@ public class ExportToPDF extends Action {
                                 if (filter.getTransactionType() == 2) {
                                     FilterHelper newFilter = new FilterHelper(filter);
                                     newFilter.setTransactionType(Constants.COMMITMENT);
-                                    chart = ChartWidgetUtil.getSectorByDonorChart(opt,  newFilter);
+                                    chart = ChartWidgetUtil.getSectorByDonorChart(opt, newFilter);
                                     newFilter.setTransactionType(Constants.DISBURSEMENT);
                                     chartDisb = ChartWidgetUtil.getSectorByDonorChart(opt, newFilter);
 
@@ -231,16 +226,16 @@ public class ExportToPDF extends Action {
                                 }
                                 break;
                             case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
-                                 if (filter.getTransactionType() == 2) {
+                                if (filter.getTransactionType() == 2) {
                                     FilterHelper newFilter = new FilterHelper(filter);
                                     newFilter.setTransactionType(Constants.COMMITMENT);
                                     chart = ChartWidgetUtil.getRegionByDonorChart(opt, newFilter);
                                     newFilter.setTransactionType(Constants.DISBURSEMENT);
-                                    chartDisb = ChartWidgetUtil.getRegionByDonorChart(opt,  newFilter);
+                                    chartDisb = ChartWidgetUtil.getRegionByDonorChart(opt, newFilter);
                                 } else {
                                     chart = ChartWidgetUtil.getRegionByDonorChart(opt, filter);
                                 }
-                               
+
                                 break;
                             case WidgetUtil.ORG_PROFILE_SUMMARY:
 
@@ -294,6 +289,25 @@ public class ExportToPDF extends Action {
                                 orgDnGrpCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                 orgSummaryTbl.addCell(orgDnGrpCell);
 
+                                PdfPCell orgBackgroundCell = new PdfPCell();
+                                orgBackgroundCell.addElement(new Paragraph(TranslatorWorker.translateText("Background of donor", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
+                                orgSummaryTbl.addCell(orgBackgroundCell);
+
+                                PdfPCell orgBackgroundValue = new PdfPCell();
+                                orgBackgroundValue.addElement(new Paragraph(orgBackground, OrgProfileUtil.PLAINFONT));
+                                orgSummaryTbl.addCell(orgBackgroundValue);
+
+                                PdfPCell orgDescCell = new PdfPCell();
+                                orgDescCell.addElement(new Paragraph(TranslatorWorker.translateText("Description", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
+                                orgDescCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                orgSummaryTbl.addCell(orgDescCell);
+
+                                PdfPCell orgDescCellValue = new PdfPCell();
+                                orgDescCellValue.addElement(new Paragraph(orgDesc, OrgProfileUtil.PLAINFONT));
+                                orgDescCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                orgSummaryTbl.addCell(orgDescCellValue);
+
+
                                 PdfPCell orgWbLinkTitleCell = new PdfPCell();
                                 orgWbLinkTitleCell.addElement(new Paragraph(TranslatorWorker.translateText("Web Link", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
                                 orgSummaryTbl.addCell(orgWbLinkTitleCell);
@@ -338,14 +352,20 @@ public class ExportToPDF extends Action {
 
 
                                 //create largest projects table
-                                largetsProjectsTbl = new PdfPTable(new float[]{25, 20,20,35});
-                                largetsProjectsTbl.setWidthPercentage(100);
+                                largetsProjectsTbl = new PdfPTable(new float[]{25, 20,  55});
                                 PdfPCell largestProjectsTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Largest projects", langCode, siteId) + " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));
                                 largestProjectsTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                largestProjectsTitle.setColspan(4);
+                                int largestColspan=3;
+
+                                if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
+                                    largetsProjectsTbl = new PdfPTable(new float[]{25, 20, 20, 35});
+                                    largestColspan=4;
+                                }
+                                largetsProjectsTbl.setWidthPercentage(100);
+                                largestProjectsTitle.setColspan(largestColspan);
                                 largestProjectsTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 largetsProjectsTbl.addCell(largestProjectsTitle);
-
+                                
                                 PdfPCell largestProjectsProjecttitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Project title", langCode, siteId), OrgProfileUtil.HEADERFONT));
                                 largestProjectsProjecttitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 largestProjectsProjecttitle.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -356,15 +376,18 @@ public class ExportToPDF extends Action {
                                 largestProjectsCommitmentTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 largetsProjectsTbl.addCell(largestProjectsCommitmentTitle);
 
-                                PdfPCell largestProjectsDisbTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId) + "(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
-                                largestProjectsDisbTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                largestProjectsDisbTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                largetsProjectsTbl.addCell(largestProjectsDisbTitle);
-
+                                if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
+                                    PdfPCell largestProjectsDisbTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId) + "(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
+                                    largestProjectsDisbTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                    largestProjectsDisbTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    largetsProjectsTbl.addCell(largestProjectsDisbTitle);
+                                }
                                 PdfPCell largestProjectsSectorTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Sector", langCode, siteId), OrgProfileUtil.HEADERFONT));
                                 largestProjectsSectorTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 largestProjectsSectorTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 largetsProjectsTbl.addCell(largestProjectsSectorTitle);
+
+
                                 List<Project> projects = OrgProfileUtil.getOrganisationLargestProjects(filter);
                                 Iterator<Project> projectIter = projects.iterator();
                                 int count = 0;
@@ -378,13 +401,17 @@ public class ExportToPDF extends Action {
                                     if (count % 2 == 0) {
                                         title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                         amount.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        disbAmount.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
+                                            disbAmount.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        }
                                         sectorsCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                     }
 
                                     largetsProjectsTbl.addCell(title);
                                     largetsProjectsTbl.addCell(amount);
-                                    largetsProjectsTbl.addCell(disbAmount);
+                                     if (filter.getTransactionType() == 2) {
+                                        largetsProjectsTbl.addCell(disbAmount);
+                                    }
                                     largetsProjectsTbl.addCell(sectorsCell);
                                     count++;
 

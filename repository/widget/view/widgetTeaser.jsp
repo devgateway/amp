@@ -16,10 +16,7 @@
     <feature:display name="orgprof_chart_place${gisWidgetTeaserForm.type}" module="Org Profile">
         <c:choose>
             <c:when test="${gisWidgetTeaserForm.type==1}">
-                <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
-                <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
-                <c:set var="orgsCount" scope="request" value="${fn:length(sessionScope.orgProfileFilter.orgIds)}"/>
-                <jsp:include page="orgSummary.jsp" flush="true"/>
+                <jsp:include page="/orgProfile/showOrgSummary.do" flush="true"/>
             </c:when>
             <c:when test="${gisWidgetTeaserForm.type==2||gisWidgetTeaserForm.type==4}">
                 <jsp:include page="/orgProfile/showOrgProfileTables.do?type=${gisWidgetTeaserForm.type}" flush="true"/>

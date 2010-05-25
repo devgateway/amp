@@ -124,6 +124,8 @@
                 <property name="operFuncApprDate" column="org_oper_func_approval_date" type="java.util.Date" />
                 <property name="receiptLegPersonalityAct" column="org_rec_leg_per_act" type="java.lang.String" />
                 <many-to-one name="region" column="cat_val_loc_region_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+                <property name="orgBackground" column="org_background" type="java.lang.String" />
+                <property name="orgDescription" column="org_description" type="java.lang.String" />
 
 	</class>
 

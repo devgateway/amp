@@ -80,6 +80,30 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     private String receiptLegPersonalityAct;
 	
 	private transient Set surveyByPointOfDeliveryDonor;
+
+    // this field is saved in org. profile and not from organization manager in admin
+    private String orgBackground;
+    /*
+     *this field is saved in org. profile and not from organization manager in admin
+     * don't confuse it with Description field
+     */
+    private String orgDescription;
+
+    public String getOrgBackground() {
+        return orgBackground;
+    }
+
+    public void setOrgBackground(String orgBackground) {
+        this.orgBackground = orgBackground;
+    }
+
+    public String getOrgDescription() {
+        return orgDescription;
+    }
+
+    public void setOrgDescription(String orgDescription) {
+        this.orgDescription = orgDescription;
+    }
 	
 	public Set getSurveyByPointOfDeliveryDonor() {
 		return surveyByPointOfDeliveryDonor;

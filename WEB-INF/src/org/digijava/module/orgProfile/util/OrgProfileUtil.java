@@ -536,10 +536,12 @@ public class OrgProfileUtil {
                 cal.doCalculations(details, currCode);
 
                 BigDecimal amount = cal.getTotActualComm().getValue();
-                BigDecimal disbAmount = cal.getTotActualDisb().getValue();
-
                 project.setAmount(FormatHelper.formatNumber(amount));
-                project.setDisbAmount(FormatHelper.formatNumber(disbAmount));
+                if (filter.getTransactionType() ==2) { // we are showing disb only when comm&disb is selected
+                    BigDecimal disbAmount = cal.getTotActualDisb().getValue();
+                    project.setDisbAmount(FormatHelper.formatNumber(disbAmount));
+                }
+
                 String title = activity.getName();
                 if (title.length() > 15) {
                     project.setFullTitle(title);

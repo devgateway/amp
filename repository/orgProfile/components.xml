@@ -2,11 +2,11 @@
 <config>
 	<secondary-pages>
 		<page page="filter" name="filter" title="Filter"/>
-
-		<page page="largestProjects" name="largestProjects" title="5 Largest Projects"/>
+        <page page="largestProjects" name="largestProjects" title="5 Largest Projects"/>
         <page page="largestProjectsPrinterFriendly" name="largestProjectsPrinterFriendly" title="Printer Friendly"/>
         <page page="parisIndicators" name="parisIndicators" title="Paris Indicators"/>
         <page page="showOrgProfileTables" name="showOrgProfileTables" title="Show Table"/>
+        <page page="orgSummary" name="orgSummary" title="Organization Summary"/>
 
 	</secondary-pages>
 	<module>

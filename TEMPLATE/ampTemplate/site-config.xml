@@ -676,6 +676,7 @@
 				<page>selectPledgeLocation</page>
 			</module>
             <module name="orgProfile">
+                <page>orgSummary</page>
 				<page>largestProjects</page>
                 <page>showOrgProfileTables</page>
              	<page>parisIndicators</page>

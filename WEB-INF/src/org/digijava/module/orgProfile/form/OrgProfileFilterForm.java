@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -17,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -201,6 +203,25 @@ public class OrgProfileFilterForm extends ActionForm {
             }
             if (name.length() > 0) {
                 name = name.substring(0, name.length() - 1);
+            }
+        }
+        return name;
+
+    }
+    public String getLocationsName() throws DgException {
+        String name = "";
+        if (selZoneIds != null && selZoneIds.length > 0 && selZoneIds[0] != -1) {
+            for (Long zoneId : selZoneIds) {
+                AmpCategoryValueLocations location = LocationUtil.getAmpCategoryValueLocationById(zoneId);
+                name += location.getName() + ",";
+            }
+            if (name.length() > 0) {
+                name = name.substring(0, name.length() - 1);
+            }
+        } else {
+            if (selRegionId != null && selRegionId != -1) {
+                AmpCategoryValueLocations location = LocationUtil.getAmpCategoryValueLocationById(selRegionId);
+                name += location.getName();
             }
         }
         return name;

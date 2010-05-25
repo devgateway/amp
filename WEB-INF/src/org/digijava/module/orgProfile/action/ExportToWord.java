@@ -352,7 +352,15 @@ public class ExportToWord extends Action {
 
                                 //create largest projects table
                                 int largestColspan = 3;
-                                RtfCell largestProjectsTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Five (5) Largest projects", langCode, siteId) + " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));
+                                String titlePart=TranslatorWorker.translateText("Largest projects", langCode, siteId);
+                                int projectNumber=filter.getLargestProjectNumb();
+                                if(projectNumber==-1){
+                                   titlePart=TranslatorWorker.translateText("All", langCode, siteId)+" "+titlePart;
+                                }
+                                else{
+                                    titlePart=projectNumber+" "+titlePart;
+                                }
+                                RtfCell largestProjectsTitle = new RtfCell(new Paragraph(titlePart + " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));
                                 largestProjectsTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
                                     largestColspan = 4;

@@ -353,7 +353,15 @@ public class ExportToPDF extends Action {
 
                                 //create largest projects table
                                 largetsProjectsTbl = new PdfPTable(new float[]{25, 20,  55});
-                                PdfPCell largestProjectsTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Largest projects", langCode, siteId) + " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));
+                                int projectNumber=filter.getLargestProjectNumb();
+                                String titlePart=TranslatorWorker.translateText("Largest projects", langCode, siteId);
+                                if(projectNumber==-1){
+                                   titlePart=TranslatorWorker.translateText("All", langCode, siteId)+" "+titlePart;
+                                }
+                                else{
+                                    titlePart=projectNumber+" "+titlePart;
+                                }
+                                PdfPCell largestProjectsTitle = new PdfPCell(new Paragraph(titlePart+ " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));
                                 largestProjectsTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 int largestColspan=3;
 

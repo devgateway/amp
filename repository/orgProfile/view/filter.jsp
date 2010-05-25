@@ -177,6 +177,16 @@ function checkAllSeleceted(){
                                 </c:otherwise>
                             </c:choose>
                             |&nbsp;
+                            <digi:trn>locations</digi:trn>:
+                            <c:choose>
+                                <c:when test="${not empty orgProfOrgProfileFilterForm.locationsName}">
+                                    ${orgProfOrgProfileFilterForm.locationsName}
+                                </c:when>
+                                <c:otherwise>
+                                    <digi:trn>All</digi:trn>
+                                </c:otherwise>
+                            </c:choose>
+                            |&nbsp;
                             <digi:trn>Year</digi:trn>:${orgProfOrgProfileFilterForm.year}| &nbsp;
                             <digi:trn>Currency</digi:trn>:${orgProfOrgProfileFilterForm.currencyCode}| &nbsp;
                             <digi:trn>Transaction Type</digi:trn>:

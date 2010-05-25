@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <digi:instance property="gisDashboardForm"/>
 
+
 <style>
 	div.navHiden{
 		background-color : #8C8C8C;
@@ -59,6 +60,14 @@
 		displayeRegPercentage = true;
 	</field:display>
 </script>
+
+<script language="JavaScript">
+    var showDevinfo = false;
+    <feature:display name="Show DvInfo data" module="GIS DASHBOARD">
+        showDevinfo = true;
+    </feature:display>
+</script>
+
 
 <div id="content" class="yui-skin-sam" style="width:600px;height:100%;max-width: 600x;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width: 600;">
@@ -124,13 +133,13 @@
 			--%>
 		</td>
 	</tr>	
-	<%--
-	<tr>
-		<td colspan="2">
-			<textarea cols="50" rows="3" id="debugtxt">oeee</textarea>
-		</td>
-	</tr>
-	--%>
+
+    
+    <div id="imageMapContainer" style="visibility:hidden;"></div>
+    
+    <!-- DevInfo block -->
+    
+    <feature:display name="Show DvInfo data" module="GIS DASHBOARD">
 	<tr>
 		<td colspan="2">
 			<span>
@@ -153,6 +162,8 @@
 		</td>
 	</tr>
 	
+    
+    
 	<feature:display name="GIS DASHBOARD" module="GIS DASHBOARD">	
 		<field:display name="Map Level Switch" feature="GIS DASHBOARD">
 		<tr>
@@ -171,9 +182,7 @@
 		</tr>
 		</field:display>
 	</feature:display>
-	
-	<div id="imageMapContainer" style="visibility:hidden;"></div>	
-	
+
 	<tr>
         <td nowrap width="200" style="font-size:12px">
              <digi:trn>Select Sector</digi:trn>:
@@ -228,71 +237,214 @@
 		}
 	</script>
 	
+    </feature:display>
+    
+<!-- Financial data block -->    
+<feature:display name="Show Financial data" module="GIS DASHBOARD">
+    <tr>
+        <td colspan="2">
+            <span>
+                <digi:trn key="gis:minmax:message">
+                Regions with the lowest (MIN) values for the selected indicator are shaded dark green. 
+                Regions with the highest (MAX) value are shaded light green. 
+                For some indicators (such as mortality rates), having the MAX value indicates the lowest performance.
+                </digi:trn>
+            </span>
+            <br>
+            <br>
+            <digi:trn key="gis:datasource:message">
+                Data Source: Dev Info
+            </digi:trn>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif">
+        </td>
+    </tr>
+    
+    
+    
+    <feature:display name="GIS DASHBOARD" module="GIS DASHBOARD">    
+        <field:display name="Map Level Switch" feature="GIS DASHBOARD">
+        <tr>
+            <td width="200" nowrap style="font-size:12px">
+                    <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
+            </td>
+            <td width="90%">
+             <!-- 
+                <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
+                <input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
+                -->
+                <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked >Region view &nbsp;
+                <input title="District view" type="Radio" value="3" name="mapLevelRadio" >District view
+                
+            </td>
+        </tr>
+        </field:display>
+    </feature:display>
+
+    <tr>
+        <td nowrap width="200" style="font-size:12px">
+             <digi:trn>Funding type</digi:trn>:
+        </td>
+        <td>
+            <select id="fundingType" onChange="" style="width:350px" value="commitment">
+            <option value="commitment"><digi:trn>Commitment</digi:trn></option>
+            <option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
+            <option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
+        </select>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap width="200" style="font-size:12px">
+             <digi:trn>Select Sector</digi:trn>:
+        </td>
+        <td>
+            <select id="sectorsMapComboFin" onChange="" style="width:350px">
+            <option value="-1"><digi:trn>Select sector</digi:trn></option>
+            <logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
+                <option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
+            </logic:iterate>
+        </select>
+        </td>
+    </tr>
+    <tr>
+       <td nowrap width="200" style="font-size:12px">
+            <digi:trn>Select Donor</digi:trn>:
+        <td>
+        <select id="donorsCombo" onchange="" style="width:350px">    
+            <option value=-1><digi:trn>All donors</digi:trn></option>
+        </select>
+        </td>
+    </tr>
+    </feature:display>    
+    
 </table>
     </div>
   </div>
 </div>   
 
-<div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
- 	<div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
-	
-	<table class="tableElement" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
-		<tr>
-			<td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
-			<td width="50%" id="tooltipRegionContainer">&nbsp;</td>
-		</tr>
 
-		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Funding details</digi:trn></td>
-		</tr>
-		<tr>
-			<td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
-		</tr>
-		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
-		</tr>
-		<tr>
-			<td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
-			<td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
-		</tr>
-		<tr>
-			<td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
-			<td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
-		</tr>
-		<tr>
-			<td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
-			<td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
-		</tr>
-		
-		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
-		</tr>
-		<tr>
-			<td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
-			<td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
-		</tr>
-		<tr>
-			<td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
-			<td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
-		</tr>
-		<tr>
-			<td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
-			<td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
-		</tr>
-		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Indicator</digi:trn></td>
-		</tr>
-		<tr>
-			<td nowrap width="50%" id="tooltipIndVal"><digi:trn>value</digi:trn></td>
-			<td width="50%" id="tooltipIndUnit">&nbsp;</td>
-		</tr>
-		<tr>
-			<td nowrap width="50%">Source</td>
-			<td id="tooltipIndSrc" style="width:100px; overflow-x: hidden;">&nbsp;</td>
-		</tr>
-	</table>
-	</div> 
-</div>
+<feature:display name="Show DvInfo data" module="GIS DASHBOARD">
+    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
+ 	    <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
+	    
+	    <table class="tableElement" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
+		    <tr>
+			    <td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
+			    <td width="50%" id="tooltipRegionContainer">&nbsp;</td>
+		    </tr>
+
+		    <tr>
+			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Funding details</digi:trn></td>
+		    </tr>
+		    <tr>
+			    <td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
+		    </tr>
+		    <tr>
+			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
+			    <td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
+			    <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
+		    </tr>
+		    
+		    <tr>
+			    <td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
+		    </tr>
+		    <tr>
+			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Indicator</digi:trn></td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%" id="tooltipIndVal"><digi:trn>value</digi:trn></td>
+			    <td width="50%" id="tooltipIndUnit">&nbsp;</td>
+		    </tr>
+		    <tr>
+			    <td nowrap width="50%">Source</td>
+			    <td id="tooltipIndSrc" style="width:100px; overflow-x: hidden;">&nbsp;</td>
+		    </tr>
+	    </table>
+	    </div> 
+    </div>
+</feature:display>
+
+
+<feature:display name="Show Financial data" module="GIS DASHBOARD">
+    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
+         <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
+        
+        <table class="tableElement" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
+            <tr>
+                <td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
+                <td width="50%" id="tooltipRegionContainer">&nbsp;</td>
+            </tr>
+            <tr>
+                <td nowrap width="50%" id="donor"><digi:trn>Donor</digi:trn></td>
+                <td width="50%" id="tooltipDonorContainer">&nbsp;</td>
+            </tr>
+            
+            <tr>
+                <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Funding details</digi:trn></td>
+            </tr>
+            <tr>
+                <td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
+            </tr>
+            <tr>
+                <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
+            </tr>
+            <tr>
+                <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
+                <td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
+            </tr>
+            <tr>
+                <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
+                <td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
+            </tr>
+            <tr>
+                <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
+                <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
+            </tr>
+            
+            <tr>
+                <td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
+            </tr>
+            <tr>
+                <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
+                <td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
+            </tr>
+            <tr>
+                <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
+                <td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
+            </tr>
+            <tr>
+                <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
+                <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
+            </tr>
+        </table>
+        </div> 
+    </div>
+</feature:display>
 
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" src="/repository/gis/view/js/gisMap.js"></script>

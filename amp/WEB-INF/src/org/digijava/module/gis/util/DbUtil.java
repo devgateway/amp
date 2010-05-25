@@ -156,6 +156,47 @@ public class DbUtil {
         return retVal;
     }
 
+    public static List getSectorFoundingDonors(Long sectorId) {
+
+        List subSectorIds = null;
+        if (sectorId > -1) {
+            subSectorIds = getSubSectorIdsWhereclause(sectorId);
+        }
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            if (sectorId > -1) {
+
+                StringBuffer whereCaluse = new StringBuffer();
+                Iterator parentIt = subSectorIds.iterator();
+                while (parentIt.hasNext()) {
+                    Long parSecId = (Long) parentIt.next();
+                    whereCaluse.append(parSecId.longValue());
+                    if (parentIt.hasNext()) {
+                        whereCaluse.append(",");
+                    }
+                }
+                StringBuffer qs = new StringBuffer("select fnd.ampDonorOrgId.name, fnd.ampDonorOrgId.ampOrgId from ");
+                qs.append(AmpFunding.class.getName());
+                qs.append(" fnd, ");
+                qs.append(AmpActivitySector.class.getName());
+                qs.append(" asmap ");
+                qs.append("where fnd.ampActivityId.ampActivityId=asmap.activityId.ampActivityId and asmap.sectorId.ampSectorId in (");
+                qs.append(whereCaluse);
+                qs.append(")");
+                qs.append(" group by fnd.ampDonorOrgId.ampOrgId");
+                q = session.createQuery(qs.toString());
+           }
+            
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get sector funding donors from DB", ex);
+        }
+        return retVal;
+    }
+    
     public static List getSectorFoundings(Long sectorId) {
 
         List subSectorIds = null;

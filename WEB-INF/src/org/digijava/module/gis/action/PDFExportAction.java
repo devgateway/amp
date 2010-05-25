@@ -93,6 +93,7 @@ import com.lowagie.text.pdf.PdfPCellEvent;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEvent;
 import com.lowagie.text.pdf.PdfWriter;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 
 public class PDFExportAction extends Action implements PdfPageEvent {
 	protected static Logger logger = Logger.getLogger(PDFExportAction.class);
@@ -1669,10 +1670,6 @@ private int matchesId(Long ptableId) {
         BigDecimal disbursement = null;
         BigDecimal expenditure = null;
 
-        Timestamp startTs = new Timestamp(start.getTime());
-        startTs.setNanos(0);
-        Timestamp endTs = new Timestamp(end.getTime());
-        endTs.setNanos(0);
 
         FundingCalculationsHelper fch = new FundingCalculationsHelper();
 //        fch.doCalculations();

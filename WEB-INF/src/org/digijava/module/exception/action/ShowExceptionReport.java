@@ -29,7 +29,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.error.keeper.ErrorReporting;
+import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.digijava.kernel.exception.ExceptionHelper;
 import org.digijava.kernel.exception.ExceptionInfo;
 import org.digijava.module.exception.form.DigiExceptionReportForm;
@@ -83,7 +83,7 @@ public final class ShowExceptionReport
         }
         
         if (exceptionInfo != null && exceptionInfo.getException() != null)
-        	ErrorReporting.handle(exceptionInfo.getException(), null, request);
+        	ErrorReportingPlugin.handle(exceptionInfo.getException(), null, request);
         
         
         //generate a unique sufix

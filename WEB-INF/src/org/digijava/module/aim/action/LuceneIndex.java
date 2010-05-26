@@ -26,7 +26,6 @@ import org.codehaus.swizzle.confluence.PageSummary;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
-import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;

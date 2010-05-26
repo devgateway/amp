@@ -4,6 +4,20 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd"
 	version="2.4"
 >
+
+	<!-- ******************************************* -->
+	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
+	<!-- ******************************************* -->
+	<listener>
+		<listener-class>
+			org.dgfoundation.amp.error.keeper.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<!--                 SEGMENT END                 -->
+		        
+	<!--  ADD ENTRIES BELOW -->
+
+
 	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>

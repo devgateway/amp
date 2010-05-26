@@ -32,7 +32,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
-import org.dgfoundation.amp.error.keeper.ErrorReporting;
+import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
@@ -2080,7 +2080,7 @@ public class SaveActivity extends Action {
 			// Record error that initially caused save problems
 			AMPException ae = ExceptionFactory.newAMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
 			ae.addTag(MODULE_TAG); //even if the error only gets reported we still have to tag it
-			ErrorReporting.handle(ae, logger);
+			ErrorReportingPlugin.handle(ae, logger);
 			//logger.error(e);  //no need for this, the ErrorReporting will log the error too
 			
 			recoveryMode = true;
@@ -2134,7 +2134,7 @@ public class SaveActivity extends Action {
 								//Log a small error, that here I should never be
 								AMPException aue = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
 								aue.addTag(MODULE_TAG);
-								ErrorReporting.handle(aue, logger);
+								ErrorReportingPlugin.handle(aue, logger);
 								
 								//We invalidated this step so let's take it all over again
 								badSteps++;
@@ -2173,7 +2173,7 @@ public class SaveActivity extends Action {
 						//Log a small error know what happened
 						AMPException aue = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
 						aue.addTag(MODULE_TAG);
-						ErrorReporting.handle(aue, logger);
+						ErrorReportingPlugin.handle(aue, logger);
 
 						break thisStep;
 					}
@@ -2195,7 +2195,7 @@ public class SaveActivity extends Action {
 						//Log a error -- see what happens
 						AMPException aue = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
 						aue.addTag(MODULE_TAG);
-						ErrorReporting.handle(aue, logger);
+						ErrorReportingPlugin.handle(aue, logger);
 					}
 					if (currentStep == rsp.getNoOfSteps() - 1) //if the last added Step has failed then rebuild the activity
 						rebuild = true;

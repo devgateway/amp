@@ -29,6 +29,12 @@
 	
 	<enable-autologin>true</enable-autologin>
 
+	<!-- ECS Service -->
+	<ecsDisable>true</ecsDisable>
+	<ecsServerName>ampdev.114.local-oracle</ecsServerName>
+	<!-- <propertiesFile></propertiesFile> -->
+	<!--             -->
+
 	    
     <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
             <description>Advanced Database Patcher Module</description>

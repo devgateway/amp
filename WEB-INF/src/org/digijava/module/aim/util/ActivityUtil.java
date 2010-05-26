@@ -27,7 +27,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
-import org.dgfoundation.amp.error.keeper.ErrorReporting;
+import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -1103,7 +1103,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				catch (HibernateException e) {
 					logger.error("Rollback failed", e);
 					AMPException ae = ExceptionFactory.newAMPException(Constants.AMP_ERROR_LEVEL_WARNING, false, e);
-					ErrorReporting.handle(ae, logger);
+					ErrorReportingPlugin.handle(ae, logger);
 					exceptionRaised = true;
 				}
 			}

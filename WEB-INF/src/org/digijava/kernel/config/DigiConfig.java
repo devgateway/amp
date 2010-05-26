@@ -47,6 +47,10 @@ public class DigiConfig {
     private boolean aggregation;
     private boolean search;
     private String serverType;
+    
+    private String ecsDisable;
+    private String ecsServerName;
+	private String propertiesFile;
 
     private ParamSafeHTML paramSafehtml;
     private ParamBbTag paramBbTag;
@@ -358,6 +362,30 @@ public class DigiConfig {
 
 	public void setEnableAutoLogin(boolean enableAutoLogin) {
 		this.enableAutoLogin = enableAutoLogin;
+	}
+
+	public String getEcsDisable() {
+		return ecsDisable;
+	}
+
+	public void setEcsDisable(String ecsDisable) {
+		this.ecsDisable = ecsDisable;
+	}
+
+	public String getEcsServerName() {
+		return ecsServerName;
+	}
+
+	public void setEcsServerName(String ecsServerName) {
+		this.ecsServerName = ecsServerName;
+	}
+
+	public String getPropertiesFile() {
+		return propertiesFile;
+	}
+
+	public void setPropertiesFile(String propertiesFile) {
+		this.propertiesFile = propertiesFile;
 	}
 
 }

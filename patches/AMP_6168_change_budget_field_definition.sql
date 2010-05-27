@@ -1,0 +1,1 @@
+ALTER TABLE `amp_activity` CHANGE `budget` `budget` TINYINT NULL DEFAULT NULL;

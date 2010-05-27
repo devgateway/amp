@@ -120,38 +120,25 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	{
 		
 		if (document.getElementById("budget") != null) {
-			if((document.getElementById("budget").checked==false))
-			{
-					var hbudgetEl	= 	document.getElementById("hbudget");
-					if ( hbudgetEl != null )
-							hbudgetEl.value="false";
-					
-				 	toggleBudgetFields( false );
-			 }
-			else if(document.getElementById("budget").checked==true)
-			{
-				var hbudgetEl	= 	document.getElementById("hbudget");
-				if ( hbudgetEl != null )
-						hbudgetEl.value="true";
-
-				 toggleBudgetFields ( true );
+			var l = document.getElementById("budget").options.length;
+			var bud=false;
+			for(i=0; i<l; i++){
+				if(document.getElementById("budget").options[i].selected && document.getElementById("budget").options[i].value=='1'){
+					toggleBudgetFields ( true );
+				 	bud=true;
+				}
 			}
+			if(!bud){
+			 	toggleBudgetFields( false );
+			 }
 		}
 	}
 
 function InitBud(){
-	if(document.getElementById("hbudget").value=="true"){
-		var budgetEl		= 	document.getElementById("budget");
-		if ( budgetEl != null )
-				budgetEl.checked=true;
-
+	if(document.getElementById("budget").value=="1"){
 		 toggleBudgetFields ( true );
 	}
 	else{
-		var budgetEl		= 	document.getElementById("budget");
-		if ( budgetEl != null )
-				budgetEl.checked=false;
-
 		 toggleBudgetFields ( false );
 	}
 }
@@ -592,11 +579,12 @@ target.style.cursor = "default"
 												<field:display name="On/Off Budget" feature="Budget">	
 											 <tr>
 											 
-												<td valign="top" align="left" colspan="9">	
-													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
-													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
-													</html:checkbox>
-													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
+												<td valign="top" align="left" colspan="9">
+											<html:select property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
+											 	<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
+											 	<html:option value="0"><digi:trn>Off</digi:trn></html:option>
+											 	<html:option value="1"><digi:trn>On</digi:trn></html:option>
+											 </html:select>
 												</td>
 											</tr>
 												</field:display>

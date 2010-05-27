@@ -910,7 +910,7 @@ public class ImportBuilder {
 					activity.setProjectCode(aft.getValue().substring(8, 11));
 				}
 				if( isEqualStringsNWS(aft.getField(), "onBudget") ){
-					activity.setBudget(true);
+					activity.setBudget(new Integer(1));
 				}
 			}
 		}

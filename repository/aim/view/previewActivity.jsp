@@ -678,21 +678,22 @@ function collapseAll() {
 
 								<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
-									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="budget_plus"  onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"/>
-											<img id="budget_minus" onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"style="display : none"/>
+									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="budget_plus"  onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="budget_minus" onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 										<digi:trn key="aim:actBudget">Budget</digi:trn></td>
 										<td bgcolor="#ffffff">
 										<div id="budget_dots">...</div>
 										<div id="act_budget" style="display: none;">
 										<field:display name="On/Off Budget" feature="Budget">	
 
-										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="true">
-										<digi:trn key="aim:actBudgeton">
-												Activity is On Budget										</digi:trn>
+										<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
+										<digi:trn>Activity is On Budget</digi:trn>
 										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="false">
-										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget										</digi:trn>
+										<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
+										<digi:trn>Activity is Off Budget</digi:trn>
+										</logic:equal>
+										<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
+										<digi:trn>Budget Unallocated</digi:trn>
 										</logic:equal>
 										
 										<p/>

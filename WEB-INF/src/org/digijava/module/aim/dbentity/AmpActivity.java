@@ -31,7 +31,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private AmpChapter chapter;
 	
 	
-    private Boolean budget;
+    private Integer budget;
     private String govAgreementNumber;
     private String budgetCodeProjectID;
 
@@ -238,7 +238,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 			// TODO Auto-generated constructor stub
 		}
        
-        public AmpActivity(Long ampActivityId, String name,Boolean budget, Date updatedDate, AmpTeamMember updateBy, String ampid) {
+        public AmpActivity(Long ampActivityId, String name,Integer budget, Date updatedDate, AmpTeamMember updateBy, String ampid) {
         	this.ampActivityId=ampActivityId;
 			this.name=name;
 			this.budget=budget;
@@ -1091,10 +1091,10 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     public void setProposedCompletionDate(Date proposedCompletionDate) {
         this.proposedCompletionDate = proposedCompletionDate;
 	}
-	public Boolean getBudget() {
+	public Integer getBudget() {
 		return budget;
 	}
-	public void setBudget(Boolean budget) {
+	public void setBudget(Integer budget) {
 		this.budget = budget;
 	}
 

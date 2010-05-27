@@ -15,7 +15,7 @@ public class Activity
   private String name;
   private String donors;
   private String ampId;
-  private Boolean budget;
+  private Integer budget;
   private Boolean humanitarianAid;
   	private AmpTeam team;
   
@@ -719,11 +719,11 @@ public void setImpLevel(Collection impLevel) {
     this.uniqueModalities = uniqueModalities;
   }
 
-  public Boolean getBudget() {
+  public Integer getBudget() {
     return budget;
   }
 
-  public void setBudget(Boolean budget) {
+  public void setBudget(Integer budget) {
     this.budget = budget;
   }
 

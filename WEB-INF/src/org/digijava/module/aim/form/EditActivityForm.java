@@ -142,7 +142,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public class Identification {
 		
 		private String ampId = null;
-		private Boolean budget = true;
+		private Integer budget;
 		private AmpTeam team;
 		
 		private String title = null;
@@ -163,7 +163,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long projectCategory = new Long(0);
 		private String govAgreementNumber;
 		private String budgetCodeProjectID;
-		private String budgetCheckbox;
 		private Boolean governmentApprovalProcedures;
 		private Boolean jointCriteria;
 		private Boolean humanitarianAid;
@@ -383,14 +382,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			selectedOrganizations[index] = orgProjectId;
 		}
 
-		public String getBudgetCheckbox() {
-			return budgetCheckbox;
-		}
-
-		public void setBudgetCheckbox(String budgetCheckbox) {
-			this.budgetCheckbox = budgetCheckbox;
-		}
-
 		public Boolean getGovernmentApprovalProcedures() {
 			return governmentApprovalProcedures;
 		}
@@ -585,11 +576,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.ampId = ampId;
 		}
 
-		public Boolean getBudget() {
+		public Integer getBudget() {
 			return budget;
 		}
 
-		public void setBudget(Boolean budget) {
+		public void setBudget(Integer budget) {
 			this.budget = budget;
 		}
 
@@ -4073,9 +4064,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		if (this.getComponents().isComponentReset()) {
 			this.components=new Component();
 		}
-		if (request.getParameter("budgetCheckbox") != null) {
-			this.getIdentification().setBudget(false);
-		}
+
 	}
 
 	public void setSurvey(Survey survey) {

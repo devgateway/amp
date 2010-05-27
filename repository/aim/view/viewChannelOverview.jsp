@@ -392,7 +392,7 @@ function commentWin(val) {
 																		</TR>
 																		<TR>
 																			<TD bgcolor="#ffffff"><c:if
-																				test="${activity.budget}">
+																				test="${activity.budget==1}">
 																				<table>
 																					<field:display name="On/Off Budget" feature="Budget">
 																						<tr>
@@ -513,14 +513,11 @@ function commentWin(val) {
 																				</table>
 																			</c:if> 
 																			<field:display name="On/Off Budget" feature="Budget">
-																			<c:if test="${!activity.budget}">
-																				<digi:trn key="aim:actBudgetoff">
-																						Activity is Off Budget
-																				</digi:trn>
-																			</c:if> <c:if test="${empty activity.budget}">
-																				<digi:trn key="aim:actBudgetoff">
-																						Activity is Off Budget
-																				</digi:trn>
+																			<c:if test="${activity.budget==0}">
+																				<digi:trn>Activity is Off Budget</digi:trn>
+																			</c:if>
+																			<c:if test="${activity.budget==-1}">
+																				<digi:trn>Budget Unallocated</digi:trn>
 																			</c:if>
 																			</field:display>
 																			</TD>

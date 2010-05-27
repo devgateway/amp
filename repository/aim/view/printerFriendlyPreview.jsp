@@ -337,13 +337,14 @@
 										<td bgcolor="#ffffff">
 										<field:display name="On/Off Budget" feature="Budget">	
 
-										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="true">
-										<digi:trn key="aim:actBudgeton">
-												Activity is On Budget										</digi:trn>
+										<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
+										<digi:trn>Activity is On Budget</digi:trn>
 										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="false">
-										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget										</digi:trn>
+										<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
+										<digi:trn>Activity is Off Budget</digi:trn>
+										</logic:equal>
+										<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
+										<digi:trn>Budget Unallocated</digi:trn>
 										</logic:equal>
 										</field:display>
 										</td>
@@ -374,15 +375,16 @@
 											</td>
 										  <td bgcolor="#ffffff">
 											<field:display name="On/Off Budget" feature="Budget">
-											<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="true">
-											<digi:trn key="aim:actBudgeton">
-													Activity is On Budget											</digi:trn>
+											<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
+											<digi:trn>Activity is On Budget</digi:trn>
+											</logic:equal>	
+											<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
+											<digi:trn>Activity is Off Budget</digi:trn>
 											</logic:equal>
-	
-											<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="false">
-											<digi:trn key="aim:actBudgetoff">
-													Activity is Off Budget										</digi:trn>
+											<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
+											<digi:trn>Budget Unallocated</digi:trn>
 											</logic:equal>
+
 											</field:display>
 											</td>
 										</tr>

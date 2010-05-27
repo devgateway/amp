@@ -250,6 +250,9 @@
 .charcounter {
     display: block;
 }
+#myImage {
+    position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
+}
 
 -->
 </style>
@@ -371,22 +374,24 @@
 																	 </field:display>
 																	</tr>
 																	<tr>
-																	  <field:display name="Related Activity Dropdown" feature="Create Message Form">
+																	   <field:display name="Related Activity Dropdown" feature="Create Message Form">
 																		<td align="right" nowrap="nowrap"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left"  nowrap="nowrap">
-																			<div id="statesautocomplete"> 
-																				<html:text property="selectedAct" name="messageForm" style="width:320px;font-size:100%"></html:text>
-																				<img alt="" src="../ampTemplate/images/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>    																			    
-																				<div id="statescontainer" style="width:320px;"></div> 
-                                       											<div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; left:400px;  border: 1px solid silver;">
+                                                                            <div>
+                                                                                <div id="statesautocomplete" >
+                                                                                    <html:text property="selectedAct" name="messageForm" style="width:320px;font-size:100%"  styleId="statesinput" ></html:text>
+                                                                                    <img alt="" src="../ampTemplate/images/help.gif" onmouseover="showMessagesHelpTooltip()" onmouseout="hideMessagesHelpTooltip()" align="top" id="myImage"/>
+                                                                                    <div id="statescontainer" style="width:320px;z-index: 100"></div>
+                                                                                </div>     
+                                                                                <div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; left:400px;  border: 1px solid silver;">
                                                                                     <TABLE WIDTH='200px' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
                                                                                         <TR style="background-color:#376091"><TD style="color:#FFFFFF" nowrap><digi:trn>Message Help</digi:trn></TD></TR>
                                                                                         <TR style="background-color:#FFFFFF"><TD><digi:trn>Type first letter of activity to view suggestions</digi:trn></TD></TR>
                                                                                     </TABLE>
-                                                                            	</div>																				
-																			</div>																		
+                                                                                </div>
+                                                                            </div>
 																		</td>
-																	  </field:display>																			
+																	  </field:display>
 																	</tr>	
                                                                     <tr>
                                                                     	<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
@@ -443,7 +448,7 @@
 																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
-															                                		<div id="contactsAutocomplete"">
+															                                		<div id="contactsAutocomplete">
 															                                			<input type="text" id="contactInput" style="width:200px;font-size:100%">																                                			     
 																										<html:button property="" onclick="addContact(document.getElementById('contactInput'))">Add</html:button>
 												                                						<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,extraReceivers],Style[15])" onmouseout="htm()"/>
@@ -522,10 +527,10 @@
 																						
 
 <script type="text/javascript">
-	var myArray = [
+    	var myArray = [
 		<c:forEach var="relAct" items="${messageForm.relatedActivities}">
 			 "<bean:write name="relAct" filter="true"/>",
-		</c:forEach>     
+		</c:forEach>
 	];
 
 	YAHOO.example.ACJSArray = new function() {
@@ -533,16 +538,16 @@
 	    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
 	    // Instantiate AutoComplete
 	    this.oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS2);
-	    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";    
+	    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
 	    this.oAutoComp2.useShadow = true;
 	    this.oAutoComp2.forceSelection = true;
-            this.oAutoComp2.maxResultsDisplayed = myArray.length; 
+            this.oAutoComp2.maxResultsDisplayed = myArray.length;
 	    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
 	        var sMarkup = oResultItem[0];
 	        return (sMarkup);
 	    };
-	}; 
-        
+	    };
+     
         // attach character counters
         $("#titleMax").charCounter(50,{
 	format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",

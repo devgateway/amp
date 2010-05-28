@@ -147,21 +147,25 @@ public class GetFoundingDetails extends Action {
                         fill = false;
                     }
 
-                    gisUtil.addDataToImage(g2d,
-                                           map.getSegments(),
-                                           -1,
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(),
-                                           fill, false);
-
-                    if (request.getParameter("noCapt") == null) {
-
-                        gisUtil.addCaptionsToImage(g2d,
-                                map.getSegments(),
-                                canvasWidth, canvasHeight,
-                                rect.getLeft(), rect.getRight(),
-                                rect.getTop(), rect.getBottom());
+                    if (map != null) {
+	                    gisUtil.addDataToImage(g2d,
+	                                           map.getSegments(),
+	                                           -1,
+	                                           canvasWidth, canvasHeight,
+	                                           rect.getLeft(), rect.getRight(),
+	                                           rect.getTop(), rect.getBottom(),
+	                                           fill, false);
+	
+	                    if (request.getParameter("noCapt") == null) {
+	
+	                        gisUtil.addCaptionsToImage(g2d,
+	                                map.getSegments(),
+	                                canvasWidth, canvasHeight,
+	                                rect.getLeft(), rect.getRight(),
+	                                rect.getTop(), rect.getBottom());
+	                    }
+                    } else {
+                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
                     }
                     g2d.dispose();
 
@@ -499,6 +503,7 @@ public class GetFoundingDetails extends Action {
 
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
+                    if (map != null) {
                     gisUtil.addDataToImage(g2d,
                                            map.getSegments(),
                                            hilightData, null,
@@ -511,6 +516,9 @@ public class GetFoundingDetails extends Action {
                                                canvasWidth, canvasHeight,
                                                rect.getLeft(), rect.getRight(),
                                                rect.getTop(), rect.getBottom());
+                    } else {
+                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    }
 
                     g2d.dispose();
 
@@ -687,6 +695,7 @@ public class GetFoundingDetails extends Action {
 
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
+                    if (map != null) {
                     gisUtil.addDataToImage(g2d,
                                            map.getSegments(),
                                            hilightData,
@@ -700,6 +709,9 @@ public class GetFoundingDetails extends Action {
                                                canvasWidth, canvasHeight,
                                                rect.getLeft(), rect.getRight(),
                                                rect.getTop(), rect.getBottom());
+                    } else {
+                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    }
 
                     g2d.dispose();
 

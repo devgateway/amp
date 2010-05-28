@@ -318,7 +318,7 @@
                 var indIndex = 0;
                 var donorCmb = $("#donorsCombo");
                 donorCmb.html("");
-                var noneOpt = $("<option value='-1'>All</option>");
+                var noneOpt = $("<option value='-1' selected='true'>All</option>");
                 donorCmb.append(noneOpt);
                 
                 for (index = 0; index < donors.length; index ++) {

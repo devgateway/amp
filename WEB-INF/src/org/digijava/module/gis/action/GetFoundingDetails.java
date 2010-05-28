@@ -925,6 +925,22 @@ public class GetFoundingDetails extends Action {
 
                     indicators.output(sos);
                 }
+            }	else if (map == null) {
+            	response.setContentType("image/png");
+            	BufferedImage graph = new BufferedImage(canvasWidth,
+                        canvasHeight,
+                        BufferedImage.TYPE_INT_ARGB);
+
+                Graphics2D g2d = graph.createGraphics();
+                gisUtil.getNoDataImage(g2d, "No map data in the database");
+                
+                g2d.dispose();
+
+                RenderedImage ri = graph;
+
+                ImageIO.write(ri, "png", sos);
+
+                graph.flush();
             }
 
         } catch (Exception e) {

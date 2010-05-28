@@ -328,6 +328,7 @@
                     var donorOption = $("<option value='"+valueId+"'>"+valueName+"</option>");
                     donorCmb.append(donorOption);
                 }
+                donorCmb[0].selectedIndex = 0;
                 
         }
         

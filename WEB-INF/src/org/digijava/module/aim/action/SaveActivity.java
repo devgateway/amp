@@ -226,8 +226,9 @@ public class SaveActivity extends Action {
 		//Do the initializations and all the information transfer between beans here
 		activity.setAmpId(eaForm.getIdentification().getAmpId());
 		processActivityMustHaveInfo(eaForm, activity);
+		logger.info("before getBudget");
 		activity.setBudget(eaForm.getIdentification().getBudget());
-		
+		logger.info("After getBudget");
 		if (eaForm.getIdentification().getDescription() == null
 				|| eaForm.getIdentification().getDescription().trim().length() == 0) {
 			activity.setDescription(new String(" "));
@@ -255,12 +256,12 @@ public class SaveActivity extends Action {
 		} else {
 			activity.setProjectImpact(eaForm.getIdentification().getProjectImpact());
 		}
-
+		logger.info("before if");
 		if(eaForm.getIdentification().getBudget().intValue()==-1 || eaForm.getIdentification().getBudget().intValue()==0)
 			activity.setChapter(null);
 		else
 			activity.setChapter(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
-		
+		logger.info("after if");
 		if (eaForm.getIdentification().getActivitySummary() == null
 				|| eaForm.getIdentification().getActivitySummary().trim().length() == 0) {
 			activity.setActivitySummary(new String(" "));

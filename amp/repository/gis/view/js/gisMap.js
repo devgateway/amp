@@ -329,6 +329,8 @@
                     donorCmb.append(donorOption);
                 }
                 
+                donorCmb[0].selectedIndex = 0;
+                
         }
         
         

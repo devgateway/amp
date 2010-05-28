@@ -76,6 +76,7 @@ public class SaveIndicatorValues extends Action
 				}
 			}
 		}
+		request.getSession().setAttribute("filledIndicatorsME", eaForm.getIndicator().getIndicatorsME());
 		return mapping.findForward("forward");
 	}
 }

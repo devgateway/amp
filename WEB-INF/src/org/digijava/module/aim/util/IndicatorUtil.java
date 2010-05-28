@@ -930,6 +930,18 @@ public class IndicatorUtil {
 		return null;
 	}
 	
+	public static AmpIndicatorRiskRatings getRisk(Long id){
+		Session sess=null;
+		AmpIndicatorRiskRatings retVal=null;
+		try {
+			sess=PersistenceManager.getRequestDBSession();
+			retVal=(AmpIndicatorRiskRatings)sess.get(AmpIndicatorRiskRatings.class, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+	
 	public static ActivityIndicator createIndicatorHelperBean(IndicatorActivity connection) {
 		ActivityIndicator bean=new ActivityIndicator();
 		bean.setActivityId(connection.getActivity().getAmpActivityId());

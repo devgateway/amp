@@ -49,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -59,6 +60,7 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -223,6 +225,20 @@ public class AddAmpActivity extends Action {
        if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0 && eaForm.getIndicator().getIndicatorsME()==null){
               List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());                                        
               eaForm.getIndicator().setIndicatorsME(indicators);            
+       }
+       
+       if(request.getParameter("previewClicked")!=null){
+    	   if(eaForm.getIndicator().getIndicatorsME()!=null){
+    		   session.setAttribute("indsME", eaForm.getIndicator().getIndicatorsME());
+    		   List<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
+    		   for (ActivityIndicator actInd :(Collection<ActivityIndicator>) eaForm.getIndicator().getIndicatorsME()) {
+    			   if(actInd.getRisk()!=null){
+    				   AmpIndicatorRiskRatings risk=IndicatorUtil.getRisk(actInd.getRisk());
+    				   risks.add(risk);
+    			   }
+    		   }
+    		   session.setAttribute("indsRisks", risks);
+    	   }
        }
 
     //Only currencies having exchanges rates AMP-2620

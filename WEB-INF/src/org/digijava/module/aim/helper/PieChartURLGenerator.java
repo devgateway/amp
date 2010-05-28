@@ -49,22 +49,25 @@ public class PieChartURLGenerator implements PieURLGenerator, Serializable {
         String keyEng = "";
         try {
             // get risks associated with this activity
-            Collection<AmpIndicatorRiskRatings> risks = IndicatorUtil.getRisks(ampActivityId);
-            Iterator<AmpIndicatorRiskRatings> riskIterator = risks.iterator();
-            while (riskIterator.hasNext()) {
-                AmpIndicatorRiskRatings risk = riskIterator.next();
-                String translatedName = TranslatorWorker.translateText(risk.getRatingName(), languageCode, siteId);
-                if (translatedName.equals(key.toString())) {
-                    //get risk name in English, this is how we get rid of  the accents  problem
-                    keyEng = risk.getRatingName();
-                    break;
+        	if(ampActivityId!=null && !ampActivityId.equals(new Long(0))){
+        		Collection<AmpIndicatorRiskRatings> risks = IndicatorUtil.getRisks(ampActivityId);
+                Iterator<AmpIndicatorRiskRatings> riskIterator = risks.iterator();
+                while (riskIterator.hasNext()) {
+                    AmpIndicatorRiskRatings risk = riskIterator.next();
+                    String translatedName = TranslatorWorker.translateText(risk.getRatingName(), languageCode, siteId);
+                    if (translatedName.equals(key.toString())) {
+                        //get risk name in English, this is how we get rid of  the accents  problem
+                        keyEng = risk.getRatingName();
+                        break;
+                    }
                 }
-            }
-            if (url.indexOf("?") > -1) {
-                url += "&amp;" + this.categoryParameterName + "=" + keyEng;
-            } else {
-                url += "?" + this.categoryParameterName + "=" + keyEng;
-            }
+                if (url.indexOf("?") > -1) {
+                    url += "&amp;" + this.categoryParameterName + "=" + keyEng;
+                } else {
+                    url += "?" + this.categoryParameterName + "=" + keyEng;
+                }
+        	}           
+            
             if (this.indexParameterName != null) {
                 url += "&amp;" + this.indexParameterName + "=" + String.valueOf(pieIndex);
             }

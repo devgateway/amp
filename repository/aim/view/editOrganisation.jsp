@@ -460,9 +460,6 @@
                             return false;
                     }
                 }
-
-
-
             }
             else{
                 var orgCode= document.aimAddOrgForm.orgCode.value;
@@ -479,9 +476,33 @@
                 }
 
             }
+            //phone, fax
+            var phoneNum=document.getElementById('phone').value;
+            if(checkNumber(phoneNum)==false){
+                alert('enter correct phone number');
+                return false;
+            }
+            var fax=document.getElementById('fax').value;
+            if(checkNumber(fax)==false){
+            	alert('enter correct fax');
+                return false;
+            }
             return true;
 
-        }
+        }     
+
+        function checkNumber(number){
+    	 	var validChars= "0123456789()+ ";
+    	 	for (var i = 0;  i < number.length;  i++) {
+    	 		var ch = number.charAt(i);
+    	  		if (validChars.indexOf(ch)==-1){
+    	  			//alert('enter correct number');	   			
+    	   			return false;
+    	  		}
+    	 	}	 
+    	 return true;
+    	}
+    	   
         function addDocumentsDM(documentsType, showTheFollowingDocuments) {
             if (showTheFollowingDocuments==null){
                 showTheFollowingDocuments="ALL";

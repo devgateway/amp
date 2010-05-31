@@ -159,7 +159,7 @@ module Reports
       
       def prepare_columns
         # Remove factsheet link
-        data.remove_column(:factsheet_link)
+        data.remove_column('factsheet_link')
       end
       
       build :table_structure do 

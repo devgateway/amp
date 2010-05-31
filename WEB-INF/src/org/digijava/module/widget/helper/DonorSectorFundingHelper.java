@@ -12,7 +12,17 @@ import org.digijava.module.aim.dbentity.AmpSector;
 public class DonorSectorFundingHelper {
 	private AmpSector sector;
 	private double founding;
-	
+    private double disbFunding;
+
+    public double getDisbFunding() {
+        return disbFunding;
+    }
+
+    public void setDisbFunding(double disbFunding) {
+        this.disbFunding = disbFunding;
+    }
+
+
 	public DonorSectorFundingHelper(AmpSector sector){
 		this.sector = sector;
 	}
@@ -24,6 +34,15 @@ public class DonorSectorFundingHelper {
 	 */
 	public void addFunding(double amount){
 		this.founding+=amount;
+	}
+
+    /**
+	 * Adds amount to funding of this sector.
+	 * Amount should always be in one currency.
+	 * @param amount
+	 */
+	public void addDisbFunding(double amount){
+		this.disbFunding+=amount;
 	}
 	
 	public AmpSector getSector() {

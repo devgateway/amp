@@ -18,9 +18,6 @@
             <c:when test="${gisWidgetTeaserForm.type==1}">
                 <jsp:include page="/orgProfile/showOrgSummary.do" flush="true"/>
             </c:when>
-            <c:when test="${gisWidgetTeaserForm.type==2||gisWidgetTeaserForm.type==4}">
-                <jsp:include page="/orgProfile/showOrgProfileTables.do?type=${gisWidgetTeaserForm.type}" flush="true"/>
-            </c:when>
             <c:when test="${gisWidgetTeaserForm.type==7}">
                 <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
             </c:when>
@@ -43,7 +40,48 @@
                         var mapSpan= document.getElementById(id);
                         mapSpan.innerHTML=responseText;
                     }
+                    function  loadDataSource_${gisWidgetTeaserForm.type}(){
+                        var postString		="type=${gisWidgetTeaserForm.type}";
+                            <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
+                            var url = "${url}";
+                            YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
+                        }
+                        function  hideDataSource_${gisWidgetTeaserForm.type}(){
+                            var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
+                            div.style.display="none"
+                            var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
+                            divChart.style.display="block"
+
+                        }
+
+                        var responseSuccess_${gisWidgetTeaserForm.type} = function(o){
+                            var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
+                            var response = o.responseText;
+                            div.innerHTML=response;
+                            div.style.display="block"
+                            var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
+                            divChart.style.display="none"
+                        }
+
+                        var responseFailure_${gisWidgetTeaserForm.type}= function(o){
+                            // Access the response object's properties in the
+                            // same manner as listed in responseSuccess( ).
+                            // Please see the Failure Case section and
+                            // Communication Error sub-section for more details on the
+                            // response object's properties.
+                            //alert("Connection Failure!");
+                        }
+                        var callback_${gisWidgetTeaserForm.type} =
+                            {
+                            success:responseSuccess_${gisWidgetTeaserForm.type},
+                            failure:responseFailure_${gisWidgetTeaserForm.type}
+                        };
                 </script>
+                <a href="javascript:loadDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>show data source</digi:trn></a>
+                <a href="javascript:hideDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>hide data source</digi:trn></a>
+                <div id="table_${gisWidgetTeaserForm.type}" style="display: none">
+                </div>
+                <div id="chartDiv_${gisWidgetTeaserForm.type}">
                     <c:choose>
                         <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
                             <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450~transactionType=0" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
@@ -61,6 +99,7 @@
                             </span>
                         </c:otherwise>
                     </c:choose>
+                </div>
             </c:otherwise>
         </c:choose>
     </feature:display>

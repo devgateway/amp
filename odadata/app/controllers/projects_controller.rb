@@ -85,6 +85,10 @@ class ProjectsController < ApplicationController
     @project = current_donor.projects.find(params[:id]).clone
     @project.donor_project_number += " (copy)"
     @project.title += " (copy)"
+    setup_record_range(@project.fundings, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year)
+    setup_record_range(@project.funding_forecasts, Time.now.year+1, (Time.now.year+1)+Project::FORECAST_RANGE)
+    @project.build_historic_funding if @project.historic_funding.nil?
+    set_funding_currency
     
     render :action => 'new'
   end
@@ -150,7 +154,7 @@ private
   # Initializes a number of e.g. funding records with a year attribute
   # for a specific range
   def setup_record_range(association, from, to)
-    years = (from..to).to_a - association.all.map(&:year)
+    years = (from..to).to_a - association.map(&:year)
     years.each { |year| association.build(:year => year ) }
     
     association
@@ -159,7 +163,7 @@ private
   def set_funding_currency
     @project.fundings.each { |f| f.currency = @project.project_currency }
     @project.funding_forecasts.each { |f| f.currency = @project.project_currency }
-    @project.historic_funding.currency = @project.project_currency
+    @project.historic_funding.andand.currency = @project.project_currency
   end
 
 end

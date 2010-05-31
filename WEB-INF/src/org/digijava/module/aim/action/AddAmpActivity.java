@@ -90,7 +90,6 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
-import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;

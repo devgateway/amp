@@ -10,154 +10,147 @@
 
 <script language="JavaScript">
     <!--
-    function searchIndicators()
-    {	
-                        <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?showAddIndPage=false" />
-                                document.aimIndicatorForm.action = "<%=searchInd%>";
-                                document.aimIndicatorForm.target = "_self";
-                                document.aimIndicatorForm.submit();	
-                            }
-                            function addIndicatorTL(addbutton)
-                            {
-                                var emptychk = false;
-                                if(addbutton == '1')
-                                    emptychk = doesItHaveValue1();
-                                if(addbutton == '2')
-                                    emptychk = doesItHaveValue2()
-                                if(emptychk == true)
-                                {
-                        <digi:context name="addInd" property="context/module/moduleinstance/addIndicatorsTL.do"/>
-                                    document.aimIndicatorForm.action = "<%=addInd%>~forStep9=true";
-                                    document.aimIndicatorForm.target = window.opener.name;
-                                    document.aimIndicatorForm.submit();
-                                    window.close();
-                                }        
-                            }
+    function searchIndicators(){	
+    	<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?showAddIndPage=false" />
+        document.aimIndicatorForm.action = "<%=searchInd%>";
+        document.aimIndicatorForm.target = "_self";
+        document.aimIndicatorForm.submit();	
+    }
 
+    function addIndicatorTL(addbutton) {
+    	var emptychk = false;
+        if(addbutton == '1')
+        	emptychk = doesItHaveValue1();
+        if(addbutton == '2')
+        	emptychk = doesItHaveValue2()
+        if(emptychk == true) {
+        	<digi:context name="addInd" property="context/module/moduleinstance/addIndicatorsTL.do"/>
+            document.aimIndicatorForm.action = "<%=addInd%>~forStep9=true";
+            document.aimIndicatorForm.target = window.opener.name;
+            document.aimIndicatorForm.submit();
+            window.close();
+        }        
+    }
 
-                            function addNewIndicatorTL(selectedSectsSize)
-                            {	
-                                var valid = validateForm(selectedSectsSize);
-                                if (valid == true) {
-                        <digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
-                                    document.aimIndicatorForm.action = "<%=addNewInd%>";
-                                    document.aimIndicatorForm.target = "_self";
-                                    document.aimIndicatorForm.submit();
-                                }
-                                return valid;
-                            }
-                            function unload(){}
+    function addNewIndicatorTL(selectedSectsSize) {	
+    	var valid = validateForm(selectedSectsSize);
+        if (valid == true) {
+        	<digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
+            document.aimIndicatorForm.action = "<%=addNewInd%>";
+            document.aimIndicatorForm.target = "_self";
+            document.aimIndicatorForm.submit();
+        }
+        return valid;
+    }
 
-                            function validateForm(selectedSectsSize) {
-        
-                                var values = document.getElementsByTagName("forEach");
-                
-                                if (document.aimIndicatorForm.indicatorName.value.length == 0) {
-                                    alert("Please enter indicator name");
-                                    document.aimIndicatorForm.indicatorName.focus();
-                                    return false;
-                                }
+    function unload(){}    
 
-                                if(selectedSectsSize!=1) {
-                                    alert("Please add Sectors");
-                                    return false;
-                                }
-                
-                                return true;
-                            }
+    function validateForm(selectedSectsSize) {        						
+    	var values = document.getElementsByTagName("forEach");                
+        if (document.aimIndicatorForm.indicatorName.value.length == 0) {
+        	alert("Please enter indicator name");
+            document.aimIndicatorForm.indicatorName.focus();
+            return false;
+        }
+
+    	if (document.aimIndicatorForm.indicatorCode.value.length == 0) {
+        	alert("Please enter indicator code");
+            document.aimIndicatorForm.indicatorCode.focus();
+            return false;
+        }
+
+        if(selectedSectsSize!=1) {
+        	alert("Please add Sectors");
+            return false;
+        }
+        return true;
+    }
+
+    function isSearchKeyGiven() {
+    	if(trim(document.aimIndicatorForm.searchkey.value).length == 0) {
+        	alert("Please give a Keyword to search");
+            document.aimIndicatorForm.searchkey.focus();
+            return false;
+        }
+        return true;
+    }
+
+    function doesItHaveValue1() {
+    	if(document.aimIndicatorForm.selectedIndicators.value == '') {
+        	alert("Please select an Indicator");
+            document.aimIndicatorForm.selectedIndicators.focus();
+            return false;
+        }
+        return true;
+    }
+
+    function doesItHaveValue2() {
+    	if(document.aimIndicatorForm.selIndicators.value == null) {
+        	alert("Please select an Indicator");
+            return false;
+        }
+        return true;
+    }        
+
+    function closeWindow () {
+    	window.close();
+    }        
+
+    function clearform() {
+    	<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?action=clear"/>
+        document.aimIndicatorForm.action = "<%= searchInd%>";
+        document.aimIndicatorForm.submit();
+    }
         
-                            function isSearchKeyGiven()
-                            {
-                                if(trim(document.aimIndicatorForm.searchkey.value).length == 0)
-                                {
-                                    alert("Please give a Keyword to search");
-                                    document.aimIndicatorForm.searchkey.focus();
-                                    return false;
-                                }
-                                return true;
-                            }
-                            function doesItHaveValue1()
-                            {
-                                if(document.aimIndicatorForm.selectedIndicators.value == '')
-                                {
-                                    alert("Please select an Indicator");
-                                    document.aimIndicatorForm.selectedIndicators.focus();
-                                    return false;
-                                }
-                                return true;
-                            }
-                            function doesItHaveValue2()
-                            {
-                                if(document.aimIndicatorForm.selIndicators.value == null)
-                                {
-                                    alert("Please select an Indicator");
-                                    return false;
-                                }
-                                return true;
-                            }
-        
-                            function closeWindow () {
-                                window.close();
-                            }
-        
-                            function clearform() {
-                <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?action=clear"/>
-                        document.aimIndicatorForm.action = "<%= searchInd%>";
-                        document.aimIndicatorForm.submit();
-                    }
-        
-                    function addSectors() {		
-                <digi:context name="addSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
-                        openURLinWindow('<%= addSector%>',550,400);
-          
-            <digi:context name="justSubmit" property="context/module/moduleinstance/sectorActions.do?actionType=justSubmit" /> 
-                    aimIndicatorForm.action = "<%=justSubmit%>";  
-                    aimIndicatorForm.submit();    
+    function addSectors() {		
+    	<digi:context name="addSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
+        openURLinWindow('<%= addSector%>',550,400);          
+        <digi:context name="justSubmit" property="context/module/moduleinstance/sectorActions.do?actionType=justSubmit" /> 
+        aimIndicatorForm.action = "<%=justSubmit%>";  
+        aimIndicatorForm.submit();    
+    }
+
+    function removeSelSectors() {	
+    	if (validateSector()) {
+        	<digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
+            document.aimIndicatorForm.action = "<%= remSec%>";
+            document.aimIndicatorForm.target = "_self"
+            document.aimIndicatorForm.submit();
+            return true;			
+        }else {
+        	return false;
+        }
+    }        
+
+    function validateSector(){
+    	if (document.aimIndicatorForm.selActivitySector.checked != null) {
+        	if (document.aimIndicatorForm.selActivitySector.checked == false) {
+            	alert("Please choose a sector to remove");
+                return false;
+            }
+        } else {
+        	var length = document.aimIndicatorForm.selActivitySector.length;
+            var flag = 0;
+            for (i = 0;i < length;i ++) {
+            	if (document.aimIndicatorForm.selActivitySector[i].checked == true) {
+                	flag = 1;
+                    break;
                 }
-
-                function removeSelSectors() {	
-                    if (validateSector()) {
-                        <digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
-                                    document.aimIndicatorForm.action = "<%= remSec%>";
-                                    document.aimIndicatorForm.target = "_self"
-                                    document.aimIndicatorForm.submit();
-                                    return true;			
-                                }else {
-                                    return false;
-                                }
-                            }
-        
-                            function validateSector(){
-                                if (document.aimIndicatorForm.selActivitySector.checked != null) {
-                                    if (document.aimIndicatorForm.selActivitySector.checked == false) {
-                                        alert("Please choose a sector to remove");
-                                        return false;
-                                    }
-                                } else {
-                                    var length = document.aimIndicatorForm.selActivitySector.length;
-                                    var flag = 0;
-                                    for (i = 0;i < length;i ++) {
-                                        if (document.aimIndicatorForm.selActivitySector[i].checked == true) {
-                                            flag = 1;
-                                            break;
-                                        }
-                                    }
-
-                                    if (flag == 0) {
-                                        alert("Please choose a sector to remove");
-                                        return false;
-                                    }
-                                }
-                                return true;	
-                            }
-        
-                            function gotoCreateIndPage() {
-                <digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
-                        document.aimIndicatorForm.action = "<%=addIndPage%>";		
-                        document.aimIndicatorForm.submit();
-                    }
-        
-                    -->
+            }
+            if (flag == 0) {
+            	alert("Please choose a sector to remove");
+                return false;
+            }
+        }
+        return true;	
+ 	}
+    
+    function gotoCreateIndPage() {
+    	<digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
+        document.aimIndicatorForm.action = "<%=addIndPage%>";		
+        document.aimIndicatorForm.submit();
+    }
+    -->
 </script>
 
 <digi:form action="/selectCreateIndicators.do">
@@ -168,27 +161,27 @@
     <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
     <c:set target="${bcparams}" property="tId" value="-1"/>
     <c:set target="${bcparams}" property="dest" value="teamLead"/>
-    <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+    <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
         <tr>
-            <td class=r-dotted-lg width=14>&nbsp;</td>
-            <td align=left class=r-dotted-lg vAlign=top width=750>
-                <table cellPadding=5 cellSpacing=0 width="100%" border=0>            
+            <td class="r-dotted-lg" width="14">&nbsp;</td>
+            <td align="left" class="r-dotted-lg" vAlign="top" width="750">
+                <table cellPadding="5" cellSpacing="0" width="100%" border="0">            
                     <tr>
                         <td vAlign="top">
-                            <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+                            <table bgcolor="#f4f4f2" cellPadding="5" cellSpacing="5" width="100%" class="box-border-nopadding">
                                 <tr>
-                                    <td align=left vAlign=top>
-                                    <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+                                    <td align="left" vAlign="top">
+                                    <table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
                                         <tr bgcolor="#006699">
-                                            <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-                                                <digi:trn key="aim:searchind">Search Indicators</digi:trn>
+                                            <td vAlign="middle" width="100%" align ="center" class="textalb" height="20">
+                                                <digi:trn>Search Indicators</digi:trn>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td align="center" bgcolor=#ECF3FD>
-                                                <table cellSpacing=2 cellPadding=2>
+                                            <td align="center" bgcolor="#ECF3FD">
+                                                <table cellSpacing="2" cellPadding="2">
                                                     <tr>
-                                                        <td><digi:trn key="aim:selsector">Select Sector</digi:trn></td>
+                                                        <td><digi:trn>Select Sector</digi:trn></td>
                                                         <td>
                                                             <html:select property="sectorName" styleClass="inp-text">
                                                                 <html:option value="-1">-<digi:trn key="aim:selsector">Select sector</digi:trn>-</html:option>
@@ -199,7 +192,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><digi:trn key="aim:enterKeyword">Enter a keyword</digi:trn></td>
+                                                        <td><digi:trn>Enter a keyword</digi:trn></td>
                                                         <td>
                                                             <html:text property="searchkey" size="20" styleClass="inp-text"/>&nbsp;&nbsp;	
                                                         </td>
@@ -207,13 +200,13 @@
                                                     <tr>
                                                         <td align="center" colspan=2>&nbsp;														
                                                             <html:button  styleClass="dr-menu" property="searchIndicatorKeyword" onclick="return searchIndicators()">
-                                                                <digi:trn key="btn:search">Search</digi:trn> 
+                                                                <digi:trn>Search</digi:trn> 
                                                             </html:button>&nbsp;
                                                             <html:button  styleClass="dr-menu" property="submitButton" onclick="clearform()" >
-                                                                <digi:trn key="btn:clear">Clear</digi:trn> 
+                                                                <digi:trn>Clear</digi:trn> 
                                                             </html:button>&nbsp;
                                                             <html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
-                                                                <digi:trn key="btn:close">Close</digi:trn> 
+                                                                <digi:trn>Close</digi:trn> 
                                                             </html:button>&nbsp;														
                                                         </td>
                                                     </tr>
@@ -221,26 +214,26 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <td>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <table width="100%" cellspacing=0 cellSpacing=0 border="0">
+                                        <table width="100%" cellspacing="0" cellSpacing="0" border="0">
                                             <tr>
                                                 <td noWrap  vAlign="top">
                                                     
                                                     <table width="100%" align="center" border="0" style="font-family:verdana;font-size:11px;">
                                                         <tr bgcolor="#006699">
                                                             <td vAlign="center" width="100%" align ="center" class="textalb" height="20" colspan="2">
-                                                                <b><digi:trn key="aim:PickfromList"> Pick from the List</digi:trn></b>
+                                                                <b><digi:trn> Pick from the List</digi:trn></b>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td align="center" bgcolor="#ECF3FD">
-                                                                <table cellSpacing=2 cellPadding=3 vAlign="top" align="center">
+                                                                <table cellSpacing="2" cellPadding="3" vAlign="top" align="center">
                                                                     <logic:notEmpty name="aimIndicatorForm" property="searchReturn">
                                                                         <tr>
-                                                                            <td  align="right" valign="center"><digi:trn key="aim:IndicatorName">Indicator Name</digi:trn></td>
+                                                                            <td  align="right" valign="center"><digi:trn>Indicator Name</digi:trn></td>
                                                                             <td  align="left">
                                                                                 <html:select property="selectedIndicators" styleClass="inp-text"size="6" multiple="true">																								
                                                                                     <logic:notEmpty name="aimIndicatorForm" property="searchReturn">
@@ -252,14 +245,14 @@
                                                                         <tr>
                                                                             <td  align="center" colspan="2">
                                                                                 <html:button  styleClass="dr-menu" property="addFromList"  onclick="addIndicatorTL(1)">
-                                                                                    <digi:trn key="btn:add">Add</digi:trn> 
+                                                                                    <digi:trn>Add</digi:trn> 
                                                                                 </html:button>
                                                                             </td>
                                                                         </tr>
                                                                     </logic:notEmpty>
                                                                     <logic:empty name="aimIndicatorForm" property="searchReturn">
                                                                         <tr>
-                                                                            <td><digi:trn key="aim:noindicatorinlist">No Indicators in the List</digi:trn></td>
+                                                                            <td><digi:trn>No Indicators in the List</digi:trn></td>
                                                                         </tr>
                                                                     </logic:empty>
                                                                 </table>
@@ -275,14 +268,14 @@
                                         <table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
                                             <tr bgcolor="#006699">
                                                 <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-                                                    <b><digi:trn key="aim:NewIndicatorCreation">Create a New Indicator</digi:trn></b>
+                                                    <b><digi:trn>Create a New Indicator</digi:trn></b>
                                                 </td>
                                             </tr>	
                                             <c:if test="${not empty aimIndicatorForm.showAddInd && aimIndicatorForm.showAddInd=='false'}">
                                                 <tr>
                                                     <td bgcolor="#ECF3FD" align="center" colspan="2" >
                                                         <html:button  styleClass="dr-menu" property=""  onclick="gotoCreateIndPage()">
-                                                            <digi:trn key="btn:crtInd">Add new Indicator</digi:trn> 
+                                                            <digi:trn>Add new Indicator</digi:trn> 
                                                         </html:button>
                                                     </td>
                                                 </tr>									
@@ -290,47 +283,47 @@
                                             <c:if test="${not empty aimIndicatorForm.showAddInd && aimIndicatorForm.showAddInd=='true'}">
                                                 <tr>
                                                     <td align="center" bgcolor="#ECF3FD">
-                                                        <table cellSpacing=2 cellPadding=2>
+                                                        <table cellSpacing="2" cellPadding="2">
                                                             <tr>
-                                                                <td><digi:trn key="aim:indicatorName">Indicator Name</digi:trn><font color="red">*</font></td>
+                                                                <td><digi:trn>Indicator Name</digi:trn><font color="red">*</font></td>
                                                                 <td>
                                                                     <html:text property="indicatorName" size="20" styleClass="inp-text"/>	
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><digi:trn key="aim:description">Description</digi:trn></td>
+                                                                <td><digi:trn>Description</digi:trn></td>
                                                                 <td>
                                                                     <html:textarea property="indicatorDesc" cols="35" rows="2" styleClass="inp-text"/>&nbsp;&nbsp;	
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <digi:trn key="aim:indicatorCode">Indicator Code</digi:trn>
+                                                                    <digi:trn>Indicator Code</digi:trn><font color="red">*</font>
                                                                 </td>
                                                                 <td>
                                                                     <html:text property="indicatorCode" size="20" styleClass="inp-text"/>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><digi:trn key="aim:indicatorType">Indicator Type</digi:trn></td>
+                                                                <td><digi:trn>Indicator Type</digi:trn></td>
                                                                 <td>
                                                                     <html:select property="ascendingInd" styleClass="inp-text">
-                                                                        <html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
-                                                                        <html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>
+                                                                        <html:option value="A"><digi:trn>ascending</digi:trn></html:option>
+                                                                        <html:option value="D"><digi:trn>descending</digi:trn></html:option>
                                                                     </html:select>
                                                                 </td>
                                                             </tr>	
                                                             <tr>
-                                                                <td><digi:trn key="aim:indicatorSector">Sectors</digi:trn><font color="red">*</font></td>
+                                                                <td><digi:trn>Sectors</digi:trn><font color="red">*</font></td>
                                                                 <td>	<!-- sectors start -->
-                                                                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+                                                                    <table cellPadding="5" cellSpacing="1" border="0" width="100%"	bgcolor="#d7eafd">
                                                                         <tr>
                                                                             <td bgcolor="#ECF3FD" width="100%">
-                                                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                                                <table cellPadding="1" cellSpacing="1" border="0" bgcolor="#ffffff" width="100%">
                                                                                     <c:if test="${empty aimIndicatorForm.selectedSectorsForInd}">
                                                                                         <tr>
                                                                                             <td bgcolor="#ECF3FD">
-                                                                                                <input type="button" class="dr-menu" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                                                                <input type="button" class="dr-menu" onclick="addSectors();" value='<digi:trn>Add Sectors</digi:trn>' />
                                                                                             </td>
                                                                                         </tr>
                                                                                     </c:if>
@@ -338,11 +331,11 @@
                                                                                         <c:set var="selectedSectsSize" value="1"></c:set> <!-- used for sectors validation -->
                                                                                         <tr>
                                                                                             <td>
-                                                                                                <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                                                                <table cellSpacing="0" cellPadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                                                                     <c:forEach var="activitySectors" items="${aimIndicatorForm.selectedSectorsForInd}" varStatus="varS">
                                                                                                         <tr>
                                                                                                             <td>
-                                                                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+                                                                                                                <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                                                                                                                     <tr bgcolor="#ECF3FD">
                                                                                                                         <td width="3%" vAlign="center">
                                                                                                                             <html:multibox property="selActivitySector">
@@ -375,15 +368,15 @@
                                                                                                     </c:forEach>
                                                                                                     <tr bgcolor="#ECF3FD">
                                                                                                         <td>
-                                                                                                            <table cellSpacing=2 cellPadding=2>
+                                                                                                            <table cellSpacing="2" cellPadding="2">
                                                                                                                 <tr>
                                                                                                                     <logic:notEmpty name="MS" scope="application">
                                                                                                                         <td>
-                                                                                                                            <input type="button" value="<digi:trn key="btn:addSectors">Add Sectors</digi:trn>" class="dr-menu"  onclick="addSectors();">
+                                                                                                                            <input type="button" value="<digi:trn>Add Sectors</digi:trn>" class="dr-menu"  onclick="addSectors();">
                                                                                                                         </td>
                                                                                                                     </logic:notEmpty>
                                                                                                                     <td >
-                                                                                                                        <input type="button" class="dr-menu" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+                                                                                                                        <input type="button" class="dr-menu" onclick="return removeSelSectors()" value='<digi:trn>Remove Sector</digi:trn>' />
                                                                                                                     </td>
                                                                                                                 </tr>
                                                                                                             </table>
@@ -402,7 +395,7 @@
                                                             </tr>	
                                                             <tr>
                                                                 <td>
-                                                                    <digi:trn key="aim:creationdate">Creation date:</digi:trn>
+                                                                    <digi:trn>Creation date:</digi:trn>
                                                                 </td>
                                                                 <td>
                                                                     <html:text property="creationDate" disabled="true" styleId="txtCreationDate" style="font-family:verdana;font-size:11px;width:80px;"/>
@@ -411,7 +404,7 @@
                                                             <tr>
                                                                 <td align="center" colspan=2>&nbsp;														
                                                                     <html:button  styleClass="dr-menu" property="addnewIndicator"  onclick="addNewIndicatorTL(${selectedSectsSize})">
-                                                                        <digi:trn key="btn:add">Add</digi:trn> 
+                                                                        <digi:trn>Add</digi:trn> 
                                                                     </html:button>
                                                                 </td>
                                                             </tr>
@@ -428,9 +421,5 @@
                 </table>
             </td>
         </tr>
-    </table>
-    
+    </table>    
 </digi:form>
-
-
-

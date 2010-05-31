@@ -186,6 +186,16 @@
         	<%= check_box_tag "report[fields][]", "contracted_agencies" %>
         	<%= Project.human_attribute_name('contracted_agencies') %>
         </li>     
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "on_off_budget" %>
+        	<%= Project.human_attribute_name('on_off_budget') %>
+        </li>
+
+        <li>
+        	<%= check_box_tag "report[fields][]", "on_off_treasury" %>
+        	<%= Project.human_attribute_name('on_off_treasury') %>
+        </li>
       </ul>
     </td>
     

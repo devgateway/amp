@@ -25,6 +25,8 @@ module Reports
       format_column(:private_support) { |r| option_text_by_id(Project, :private_support, Project::PRIVATE_SUPPORT_OPTIONS, r) }
       format_column(:national_regional) { |r| option_text_by_id(Project, :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, r) }
       format_column(:type_of_implementation) { |r| option_text_by_id(Project, :type_of_implementation, Project::IMPLEMENTATION_TYPES, r) }
+      format_column(:on_off_budget) { |r| option_text_by_id(Project, :on_off_budget, Project::ON_OFF_BUDGET_OPTIONS, r) }
+      format_column(:on_off_treasury) { |r| option_text_by_id(Project, :on_off_treasury, Project::ON_OFF_TREASURY_OPTIONS, r) }
       format_column(:geo_relevances) do |r| 
         if r.empty?
           I18n.t('options.national')

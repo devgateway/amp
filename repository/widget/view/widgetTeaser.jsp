@@ -41,27 +41,35 @@
                         mapSpan.innerHTML=responseText;
                     }
                     function  loadDataSource_${gisWidgetTeaserForm.type}(){
+                        var loadLink=document.getElementById("loadDataSource_${gisWidgetTeaserForm.type}_link");
+                        loadLink.style.display="none";
                         var postString		="type=${gisWidgetTeaserForm.type}";
-                            <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
+                    <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
                             var url = "${url}";
                             YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
                         }
                         function  hideDataSource_${gisWidgetTeaserForm.type}(){
                             var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
-                            div.style.display="none"
+                            div.style.display="none";
                             var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
-                            divChart.style.display="block"
+                            divChart.style.display="block";
+                            var loadLink=document.getElementById("loadDataSource_${gisWidgetTeaserForm.type}_link");
+                            loadLink.style.display="block";
+                            var hideLink=document.getElementById("hideDataSource_${gisWidgetTeaserForm.type}_link");
+                            hideLink.style.display="none";
 
                         }
 
-                        var responseSuccess_${gisWidgetTeaserForm.type} = function(o){
-                            var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
-                            var response = o.responseText;
-                            div.innerHTML=response;
-                            div.style.display="block"
-                            var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
-                            divChart.style.display="none"
-                        }
+                    var responseSuccess_${gisWidgetTeaserForm.type} = function(o){
+                        var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
+                        var response = o.responseText;
+                        div.innerHTML=response;
+                        div.style.display="block";
+                        var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
+                        divChart.style.display="none";
+                        var hideLink=document.getElementById("hideDataSource_${gisWidgetTeaserForm.type}_link");
+                        hideLink.style.display="block";
+                    }
 
                         var responseFailure_${gisWidgetTeaserForm.type}= function(o){
                             // Access the response object's properties in the
@@ -77,8 +85,8 @@
                             failure:responseFailure_${gisWidgetTeaserForm.type}
                         };
                 </script>
-                <a href="javascript:loadDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>show data source</digi:trn></a>
-                <a href="javascript:hideDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>hide data source</digi:trn></a>
+                <a id="loadDataSource_${gisWidgetTeaserForm.type}_link" href="javascript:loadDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>show data source</digi:trn></a>
+                <a id="hideDataSource_${gisWidgetTeaserForm.type}_link" style="display: none" href="javascript:hideDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>hide data source</digi:trn></a>
                 <div id="table_${gisWidgetTeaserForm.type}" style="display: none">
                 </div>
                 <div id="chartDiv_${gisWidgetTeaserForm.type}">

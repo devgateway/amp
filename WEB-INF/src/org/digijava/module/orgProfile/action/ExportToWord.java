@@ -167,12 +167,18 @@ public class ExportToWord extends Action {
                         Table parisDecTbl = null;
                         Table typeOfAidTbl = null;
                         Table odaProfileTbl = null;
+                        Table pledgesCommDisbTbl = null;
+                        Table sectorTbl = null;
+                        Table regionTbl = null;
                         ChartRenderingInfo info = new ChartRenderingInfo();
                         String transTypeName = "";
                         String currName = filter.getCurrName();
                         String amountInThousands = "";
                         String typeOfAid = TranslatorWorker.translateText("TYPE OF AID", langCode, siteId);
                         String odaProfile = TranslatorWorker.translateText("ODA Profile", langCode, siteId);
+                        String pledgesCommDisb = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", langCode, siteId);
+                        String regionBreakdown = TranslatorWorker.translateText("Regional Breakdown", langCode, siteId);
+                        String sectorBreakdown = TranslatorWorker.translateText("Primary Sector(s) Breakdown ", langCode, siteId);
 
                         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                             amountInThousands = "," + TranslatorWorker.translateText("Amounts in thousands", langCode, siteId) + " ";
@@ -186,9 +192,12 @@ public class ExportToWord extends Action {
                                 break;
                         }
                         int colspan = 6;
+                        int oneYearColspan = 2;
                         if (filter.getTransactionType() == 2) {
                             colspan = 11;
+                            oneYearColspan = 3;
                         }
+                                              
                         switch (type.intValue()) {
                             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                                 typeOfAidTbl = new Table(colspan);
@@ -200,8 +209,26 @@ public class ExportToWord extends Action {
                                 tpAidTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 typeOfAidTbl.addCell(tpAidTitleCell);
                                 OrgProfileUtil.getDataTable(typeOfAidTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_TYPE_OF_AID);
+                                if (filter.getTransactionType() == 2) {
+                                    FilterHelper newFilter = new FilterHelper(filter);
+                                    newFilter.setTransactionType(Constants.COMMITMENT);
+                                    chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, true);
+                                    newFilter.setTransactionType(Constants.DISBURSEMENT);
+                                    chartDisb = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, true);
+                                } else {
+                                    chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter, true);
+                                }
                                 break;
                             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
+                                pledgesCommDisbTbl = new Table(4);
+                                RtfCell pledgesCommDisbTitleCell = new RtfCell(new Paragraph(pledgesCommDisb + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                pledgesCommDisbTitleCell.setColspan(4);
+                                pledgesCommDisbTbl.addCell(pledgesCommDisbTitleCell);
+                                pledgesCommDisbTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                RtfCell pldsCommDisbdTitleCell = new RtfCell(new Paragraph(pledgesCommDisb, OrgProfileUtil.HEADERFONT));
+                                pldsCommDisbdTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                pledgesCommDisbTbl.addCell(pldsCommDisbdTitleCell);
+                                OrgProfileUtil.getDataTable(pledgesCommDisbTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB);
                                 chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
                                 break;
                             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
@@ -214,8 +241,26 @@ public class ExportToWord extends Action {
                                 odaProfTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                 odaProfileTbl.addCell(odaProfTitleCell);
                                 OrgProfileUtil.getDataTable(odaProfileTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_ODA_PROFILE);
+                                if (filter.getTransactionType() == 2) {
+                                    FilterHelper newFilter = new FilterHelper(filter);
+                                    newFilter.setTransactionType(Constants.COMMITMENT);
+                                    chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, false);
+                                    newFilter.setTransactionType(Constants.DISBURSEMENT);
+                                    chartDisb = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, false);
+                                } else {
+                                    chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter, false);
+                                }
                                 break;
                             case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
+                                sectorTbl = new Table(oneYearColspan);
+                                RtfCell sectorTitleCell = new RtfCell(new Paragraph(sectorBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                sectorTitleCell.setColspan(oneYearColspan);
+                                sectorTbl.addCell(sectorTitleCell);
+                                sectorTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                RtfCell sectorNameTitleCell = new RtfCell(new Paragraph(sectorBreakdown, OrgProfileUtil.HEADERFONT));
+                                sectorNameTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                sectorTbl.addCell(sectorNameTitleCell);
+                                OrgProfileUtil.getDataTable(sectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN);
                                 if (filter.getTransactionType() == 2) {
                                     FilterHelper newFilter = new FilterHelper(filter);
                                     newFilter.setTransactionType(Constants.COMMITMENT);
@@ -228,6 +273,15 @@ public class ExportToWord extends Action {
                                 }
                                 break;
                             case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
+                                regionTbl = new Table(oneYearColspan);
+                                RtfCell regionTitleCell = new RtfCell(new Paragraph(regionBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                regionTitleCell.setColspan(oneYearColspan);
+                                regionTbl.addCell(regionTitleCell);
+                                regionTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                RtfCell regionNameTitleCell = new RtfCell(new Paragraph(regionBreakdown, OrgProfileUtil.HEADERFONT));
+                                regionNameTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                regionTbl.addCell(regionNameTitleCell);
+                                OrgProfileUtil.getDataTable(regionTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN);
                                 if (filter.getTransactionType() == 2) {
                                     FilterHelper newFilter = new FilterHelper(filter);
                                     newFilter.setTransactionType(Constants.COMMITMENT);
@@ -352,13 +406,12 @@ public class ExportToWord extends Action {
 
                                 //create largest projects table
                                 int largestColspan = 3;
-                                String titlePart=TranslatorWorker.translateText("Largest projects", langCode, siteId);
-                                int projectNumber=filter.getLargestProjectNumb();
-                                if(projectNumber==-1){
-                                   titlePart=TranslatorWorker.translateText("All", langCode, siteId)+" "+titlePart;
-                                }
-                                else{
-                                    titlePart=projectNumber+" "+titlePart;
+                                String titlePart = TranslatorWorker.translateText("Largest projects", langCode, siteId);
+                                int projectNumber = filter.getLargestProjectNumb();
+                                if (projectNumber == -1) {
+                                    titlePart = TranslatorWorker.translateText("All", langCode, siteId) + " " + titlePart;
+                                } else {
+                                    titlePart = projectNumber + " " + titlePart;
                                 }
                                 RtfCell largestProjectsTitle = new RtfCell(new Paragraph(titlePart + " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));
                                 largestProjectsTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
@@ -599,17 +652,8 @@ public class ExportToWord extends Action {
 
 
                                 }
-
-
                                 //--end of creating content
-
-
-
-
-
-
                                 break;
-
 
 
                         }
@@ -647,20 +691,31 @@ public class ExportToWord extends Action {
                             Image img = Image.getInstance(outByteStream.toByteArray());
                             img.setAlignment(Image.ALIGN_CENTER);
                             doc.add(img);
-                        } else {
-                            if (orgSummaryTbl != null) {
-                                doc.add(orgSummaryTbl);
+                        }
+                        if (orgSummaryTbl != null) {
+                            doc.add(orgSummaryTbl);
 
-                                doc.add(largetsProjectsTbl);
+                            doc.add(largetsProjectsTbl);
+                        } else {
+                            if (parisDecTbl != null) {
+                                doc.add(parisDecTbl);
                             } else {
-                                if (parisDecTbl != null) {
-                                    doc.add(parisDecTbl);
+                                if (typeOfAidTbl != null) {
+                                    doc.add(typeOfAidTbl);
                                 } else {
-                                    if (typeOfAidTbl != null) {
-                                        doc.add(typeOfAidTbl);
+                                    if (odaProfileTbl != null) {
+                                        doc.add(odaProfileTbl);
                                     } else {
-                                        if (odaProfileTbl != null) {
-                                            doc.add(odaProfileTbl);
+                                        if (pledgesCommDisbTbl != null) {
+                                            doc.add(pledgesCommDisbTbl);
+                                        } else {
+                                            if (sectorTbl != null) {
+                                                doc.add(sectorTbl);
+                                            } else {
+                                                if (regionTbl != null) {
+                                                    doc.add(regionTbl);
+                                                }
+                                            }
                                         }
                                     }
                                 }

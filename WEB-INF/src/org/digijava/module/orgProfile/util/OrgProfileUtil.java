@@ -981,40 +981,57 @@ public class OrgProfileUtil {
     }
 
     public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
-        for (int i = 4; i >= 0; i--) {
+        int yearRange =1;
+        int endRange=0;
+        switch (type) {
+            case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
+                yearRange = 2;
+                break;
+            case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+            case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
+                yearRange = 4;
+                break;
+            case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
+            case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
+                endRange=1;
+        }
+        for (int i = yearRange; i >= endRange; i--) {
             PdfPCell cell = new PdfPCell(new Paragraph("" + (filter.getYear() - i), HEADERFONT));
-            if (filter.getTransactionType() == 2) {
+             if (filter.getTransactionType() == 2 && type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB){
                 cell.setColspan(2);
             }
             cell.setBackgroundColor(TITLECOLOR);
             table.addCell(cell);
         }
-        PdfPCell emptycell = new PdfPCell();
-        emptycell.setBackgroundColor(TITLECOLOR);
-        emptycell.setBorderWidthTop(0);
-        table.addCell(emptycell);
-        for (int i = 4; i >= 0; i--) {
-            PdfPCell cell = null;
-            PdfPCell cellDisb = null;
-            switch (filter.getTransactionType()) {
-                case Constants.COMMITMENT:
-                    cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
-                    break;
-                case Constants.DISBURSEMENT:
-                    cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
-                    break;
-                case 2: //both COMMITMENT & DISBURSEMENT
-                    cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
-                    cellDisb = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
-                    break;
-            }
+
+        if (type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
+            PdfPCell emptycell = new PdfPCell();
+            emptycell.setBackgroundColor(TITLECOLOR);
+            emptycell.setBorderWidthTop(0);
+            table.addCell(emptycell);
+            for (int i = yearRange; i >= endRange; i--) {
+                PdfPCell cell = null;
+                PdfPCell cellDisb = null;
+                switch (filter.getTransactionType()) {
+                    case Constants.COMMITMENT:
+                        cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                        break;
+                    case Constants.DISBURSEMENT:
+                        cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                        break;
+                    case 2: //both COMMITMENT & DISBURSEMENT
+                        cell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                        cellDisb = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                        break;
+                }
 
 
-            cell.setBackgroundColor(TITLECOLOR);
-            table.addCell(cell);
-            if (cellDisb != null) {
-                cellDisb.setBackgroundColor(TITLECOLOR);
-                table.addCell(cellDisb);
+                cell.setBackgroundColor(TITLECOLOR);
+                table.addCell(cell);
+                if (cellDisb != null) {
+                    cellDisb.setBackgroundColor(TITLECOLOR);
+                    table.addCell(cellDisb);
+                }
             }
         }
 
@@ -1042,40 +1059,58 @@ public class OrgProfileUtil {
     }
 
     public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
-        for (int i = 4; i >= 0; i--) {
+        int yearRange =1;
+        int endRange=0;
+        switch (type) {
+            case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
+                yearRange = 2;
+                break;
+            case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+            case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
+                yearRange = 4;
+                break;
+            case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
+            case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
+                endRange=1;
+
+        }
+        for (int i = yearRange; i >= endRange; i--) {
             RtfCell cell = new RtfCell(new Paragraph("" + (filter.getYear() - i), HEADERFONT));
-            if (filter.getTransactionType() == 2) {
+            if (filter.getTransactionType() == 2 && type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
                 cell.setColspan(2);
             }
             cell.setBackgroundColor(TITLECOLOR);
             table.addCell(cell);
         }
-        RtfCell emptycell = new RtfCell();
-        emptycell.setBackgroundColor(TITLECOLOR);
-        emptycell.setBorderWidthTop(0);
-        table.addCell(emptycell);
-        for (int i = 4; i >= 0; i--) {
-            RtfCell cell = null;
-            RtfCell cellDisb = null;
-            switch (filter.getTransactionType()) {
-                case Constants.COMMITMENT:
-                    cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
-                    break;
-                case Constants.DISBURSEMENT:
-                    cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
-                    break;
-                case 2: //both COMMITMENT & DISBURSEMENT
-                    cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
-                    cellDisb = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
-                    break;
-            }
+
+        if (type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
+            RtfCell emptycell = new RtfCell();
+            emptycell.setBackgroundColor(TITLECOLOR);
+            emptycell.setBorderWidthTop(0);
+            table.addCell(emptycell);
+            for (int i = yearRange; i >= endRange; i--) {
+                RtfCell cell = null;
+                RtfCell cellDisb = null;
+                switch (filter.getTransactionType()) {
+                    case Constants.COMMITMENT:
+                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                        break;
+                    case Constants.DISBURSEMENT:
+                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                        break;
+                    case 2: //both COMMITMENT & DISBURSEMENT
+                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                        cellDisb = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                        break;
+                }
 
 
-            cell.setBackgroundColor(TITLECOLOR);
-            table.addCell(cell);
-            if (cellDisb != null) {
-                cellDisb.setBackgroundColor(TITLECOLOR);
-                table.addCell(cellDisb);
+                cell.setBackgroundColor(TITLECOLOR);
+                table.addCell(cell);
+                if (cellDisb != null) {
+                    cellDisb.setBackgroundColor(TITLECOLOR);
+                    table.addCell(cellDisb);
+                }
             }
         }
         List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type);

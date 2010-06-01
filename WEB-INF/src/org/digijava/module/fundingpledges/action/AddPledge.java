@@ -151,6 +151,8 @@ public class AddPledge extends Action {
 					plForm.setDefaultCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()).getCurrencyCode());
 				}
 			}
+			
+			plForm.setPledgeNames(PledgesEntityHelper.getPledgeNames());
 	        request.getSession().setAttribute("pledgeForm", plForm);
             return mapping.findForward("forward");
             

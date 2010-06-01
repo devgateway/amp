@@ -20,6 +20,36 @@
 <% int indexFund = 0; 
 PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
 %>
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/yahoo-dom-event.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/animation-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/datasource-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/autocomplete-min.js"/>"></script> 
+
+<style>
+<!--
+
+.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size: 100%}
+.yui-skin-sam .yui-ac-input{position:absolute;width:100%;font-size: 100%}
+.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
+.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
+.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
+.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
+.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;FONT-SIZE: 100%;}
+.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
+.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
+
+#my_container .yui-ac-content { 
+    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
+    _height:16em; /* ie6 */ 
+} 
+
+-->
+</style>
+
 <script language="JavaScript" type="text/javascript"><!--
 
 var quitRnot1 = 0;
@@ -365,15 +395,60 @@ function setSameContact(){
 		document.getElementsByName("contactAlternate2Telephone")[0].disabled = false;
 		
 	}
-		
 }
+
+document.getElementsByTagName('body')[0].className='yui-skin-sam';
+
 --></script>
+
+<style  type="text/css">
+<!--
+
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #ffffff;
+}
+
+#my_autoComplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#my_autoComplete div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+
+
+#my_autoComplete,
+#my_autoComplete2 {
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+#my_autoComplete {
+    z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+}
+#my_input,
+#my_input2 {
+    _position:absolute; /* abs pos needed for ie quirks */
+}
+.charcounter {
+    display: block;
+}
+#myImage {
+    position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
+}
+
+-->
+</style>
 
 <digi:instance property="pledgeForm" />
 
 <digi:form action="/addPledge.do" method="post">
 
-<body>
 <html:hidden name="pledgeForm" styleId="event" property="fundingEvent"/>
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="1024" vAlign="top" align="center" border=0>
@@ -451,10 +526,11 @@ function setSameContact(){
 													</a>
 												
 												</td>
-												<td valign="middle" align="left" width="70%">
-													<a>
-														<html:text property="pledgeTitle" size="90" styleClass="inp-text"/>
-                            						</a>
+												<td align="left" width="70%">
+													<div id="my_autoComplete"> 
+													    <html:text property="pledgeTitle" styleId="my_input" style="width:320px;font-size:100%"></html:text>	
+													    <div id="my_container" style="width:320px;z-index: 100"></div>																		    	
+													</div> 
 												</td>											
 											</tr>
 										</table>
@@ -1346,7 +1422,29 @@ function removeFunding()
 	}
 }
 
+var myArray = [ 
+		<c:forEach var="pledgeName" items="${pledgeForm.pledgeNames}">
+		"<bean:write name="pledgeName" filter="true"/>",
+		</c:forEach> 
+  	]; 
+
+
+YAHOO.example.ACJSArray = new function() {
+	// Instantiate JS Array DataSource
+    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
+    // Instantiate AutoComplete
+    this.oAutoComp2 = new YAHOO.widget.AutoComplete('my_input','my_container', this.oACDS2);
+    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+    this.oAutoComp2.useShadow = true;
+    this.oAutoComp2.forceSelection = true;
+        this.oAutoComp2.maxResultsDisplayed = myArray.length;
+    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
+        var sMarkup = oResultItem[0];
+        return (sMarkup);
+    };
+};
+
+
 </script>
 
-</body>
 </digi:form>

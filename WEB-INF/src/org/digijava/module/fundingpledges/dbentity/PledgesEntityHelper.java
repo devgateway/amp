@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -346,5 +347,43 @@ public class PledgesEntityHelper {
 			}
 		}
 		return ampOrg;
+	}
+	
+	/**
+	 * get pledge name for autocomplete box 
+	 * @return
+	 * @throws Exception
+	 */
+	public static String[] getPledgeNames() throws Exception {
+		String[] retValue=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List pledgeNames=null;
+		try{
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select pl.title from " +FundingPledges.class.getName()+" pl " ;
+			query=session.createQuery(queryString);
+			pledgeNames=query.list();
+		}catch (Exception e) {
+			logger.error("...Failed to get pledge titles");
+		}
+		
+		if(pledgeNames!=null){
+			retValue=new String[pledgeNames.size()];    		
+			int i=0;
+			for (Object row : pledgeNames) {
+				String titleRow=(String)row;
+				if(titleRow != null){
+					titleRow = titleRow.replace('\n', ' ');
+					titleRow = titleRow.replace('\r', ' ');
+					titleRow = titleRow.replace("\\", "");
+				}
+				
+				retValue[i]=new String(titleRow);					
+				i++;
+			}
+		}
+		return retValue;
 	}
 }

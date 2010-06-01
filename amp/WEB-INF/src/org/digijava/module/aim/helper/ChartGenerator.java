@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +25,13 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -95,19 +96,14 @@ public class ChartGenerator {
 	}
 
 	public static String getActivityRiskChartFileName(Long actId,HttpSession session,PrintWriter pw,int chartWidth,int chartHeight,String url, HttpServletRequest request) throws Exception{
-		Collection<AmpCategoryValue> risks = IndicatorUtil.getRisks(actId);
 
-		/*ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
-        for (Iterator<AmpIndicatorRiskRatings> riskIter = risks.iterator(); riskIter.hasNext(); ) {
-        	AmpIndicatorRiskRatings item = (AmpIndicatorRiskRatings) riskIter.next();
-            String value = item.getRatingName();
-            String key = value.toLowerCase();
-            key = key.replaceAll(" ", "");
-            String msg = TranslatorWorker.translateText(key, langCode, siteId);
-            item.setTranslatedRatingName(msg);
-        }*/
-
-        //Collections.sort((List)risks);
+        Collection<AmpCategoryValue> risks=null;
+		if(session.getAttribute("indsRisks")!=null){
+			 risks=(ArrayList<AmpCategoryValue>)session.getAttribute("indsRisks");
+			 session.removeAttribute("indsRisks");
+		}else{
+			risks = IndicatorUtil.getRisks(actId);
+		}
 
 		ChartParams cp = new ChartParams();
 		cp.setChartHeight(chartHeight);
@@ -202,39 +198,86 @@ public class ChartGenerator {
 
 	public static String getActivityPerformanceChartFileName(Long actId,HttpSession session,PrintWriter pw,
 			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) throws Exception{
-
 		
-		List<IndicatorActivity> values=IndicatorUtil.getIndicatorActivities(actId);;
+		
+		List<IndicatorActivity> values=null;
+		Collection<ActivityIndicator> actIndicators = (Collection)session.getAttribute("indsME");
+		session.removeAttribute("indsME");
+		if(actIndicators!=null && actIndicators.size()>0){
+			for (ActivityIndicator actInd : actIndicators) {
+				AmpCategoryValue risk=null;
+                
+		          AmpIndicator ind=IndicatorUtil.getIndicator(actInd.getIndicatorId());
+		          if(actInd.getRisk()!=null && actInd.getRisk().longValue()>0){
+		        	  risk = CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
+		          }
 
-//		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
-//			if(valuesActivity!=null && valuesActivity.size()>0){
-//				Iterator<IndicatorActivity> it=valuesActivity.iterator();
-//				while(it.hasNext()){
-//					 IndicatorActivity indActivity=it.next();
-//					 values=indActivity.getValues();
-//					 for(Iterator valuesIter=values.iterator();valuesIter.hasNext();){
-//						AmpIndicatorValue value=(AmpIndicatorValue)valuesIter.next();
-//						String val=new Integer(value.getValueType()).toString();
-//						String key = KEY_PERFORMANCE_PREFIX+ val.toLowerCase();
-//						key = key.replaceAll(" ", "");
-//						String msg = CategoryManagerUtil.translate(key, request, val);
-//						//item.setType(msg);
-//
-//					}
-//				}
-//			}
-
-
-
-//		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId,includeBaseline);
-//        for (Iterator valIter = meIndValues.iterator(); valIter.hasNext(); ) {
-//            MEIndicatorValue item = (MEIndicatorValue) valIter.next();
-//            String value = item.getType();
-//            String key = KEY_PERFORMANCE_PREFIX+ value.toLowerCase();
-//            key = key.replaceAll(" ", "");
-//            String msg = CategoryManagerUtil.translate(key, request, value);
-//            item.setType(msg);
-//        }
+		          AmpCategoryValue categoryValue = null;
+		          if(actInd.getIndicatorsCategory() != null && actInd.getIndicatorsCategory().getId() != null){
+		        	  categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getIndicatorsCategory().getId());
+		          }		          
+		         
+		          IndicatorActivity indConn=new IndicatorActivity();
+		          indConn.setIndicator(ind);
+		          indConn.setValues(new HashSet<AmpIndicatorValue>());
+		          //create each type of value and assign to connection
+		          AmpIndicatorValue indValActual = null;
+		          if (actInd.getCurrentVal()!=null){
+		        	  indValActual = new AmpIndicatorValue();
+		        	  indValActual.setValueType(AmpIndicatorValue.ACTUAL);
+		        	  indValActual.setValue(new Double(actInd.getCurrentVal()));
+		        	  indValActual.setComment(actInd.getCurrentValComments());
+		        	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
+		        	  indValActual.setRiskValue(risk);
+		        	  indValActual.setLogFrame(categoryValue);
+		        	  indValActual.setIndicatorConnection(indConn);
+		        	  indConn.getValues().add(indValActual);
+		          }
+		          AmpIndicatorValue indValTarget = null;
+		          if (actInd.getTargetVal()!=null){
+		        	  indValTarget = new AmpIndicatorValue();
+		        	  indValTarget.setValueType(AmpIndicatorValue.TARGET);
+		        	  indValTarget.setValue(new Double(actInd.getTargetVal()));
+		        	  indValTarget.setComment(actInd.getTargetValComments());
+		        	  indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+		        	  indValTarget.setRiskValue(risk);
+		        	  indValTarget.setLogFrame(categoryValue);
+		        	  indValTarget.setIndicatorConnection(indConn);
+		        	  indConn.getValues().add(indValTarget);
+		          }
+		          AmpIndicatorValue indValBase = null;
+		          if (actInd.getBaseVal()!=null){
+		        	  indValBase = new AmpIndicatorValue();
+		        	  indValBase.setValueType(AmpIndicatorValue.BASE);
+		        	  indValBase.setValue(new Double(actInd.getBaseVal()));
+		        	  indValBase.setComment(actInd.getBaseValComments());
+		        	  indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+		        	  indValBase.setRiskValue(risk);
+		        	  indValBase.setLogFrame(categoryValue);
+		        	  indValBase.setIndicatorConnection(indConn);
+		        	  indConn.getValues().add(indValBase);
+		          }
+		          AmpIndicatorValue indValRevised = null;
+		          if (actInd.getRevisedTargetVal()!=null){
+		        	  indValRevised = new AmpIndicatorValue();
+		        	  indValRevised.setValueType(AmpIndicatorValue.REVISED);
+		        	  indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
+		        	  indValRevised.setComment(actInd.getRevisedTargetValComments());
+		        	  indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+		        	  indValRevised.setRiskValue(risk);
+		        	  indValRevised.setLogFrame(categoryValue);
+		        	  indValRevised.setIndicatorConnection(indConn);
+		        	  indConn.getValues().add(indValRevised);
+		          }
+				
+		          if(values==null){
+		        	  values=new ArrayList<IndicatorActivity>();
+		          }
+		          values.add(indConn);
+			}			
+		}else{
+			values=IndicatorUtil.getIndicatorActivities(actId);
+		}
 
 		ChartParams cp = new ChartParams();
 		cp.setChartHeight(chartHeight);

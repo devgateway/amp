@@ -61,6 +61,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
+import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -236,6 +237,20 @@ public class AddAmpActivity extends Action {
        if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0 && eaForm.getIndicator().getIndicatorsME()==null){
               List indicators=IndicatorUtil.getActivityIndHelperBeans(eaForm.getActivityId());
               eaForm.getIndicator().setIndicatorsME(indicators);            
+       }
+       
+       if(request.getParameter("previewClicked")!=null){
+    	   if(eaForm.getIndicator().getIndicatorsME()!=null){
+    		   session.setAttribute("indsME", eaForm.getIndicator().getIndicatorsME());
+    		   List<AmpCategoryValue> risks=new ArrayList<AmpCategoryValue>();
+    		   for (ActivityIndicator actInd :(Collection<ActivityIndicator>) eaForm.getIndicator().getIndicatorsME()) {
+    			   if(actInd.getRisk()!=null){
+    				   AmpCategoryValue risk=CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
+    				   risks.add(risk);
+    			   }
+    		   }
+    		   session.setAttribute("indsRisks", risks);
+    	   }
        }
 
     //Only currencies having exchanges rates AMP-2620

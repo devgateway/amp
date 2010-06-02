@@ -223,7 +223,7 @@
             <digi:trn>Select Time Interval</digi:trn>:
         </td>
 		<td>
-			<select id="indicatorYearCombo" onChange="yearSelected(this)" style="width:350px">
+			<select id="indicatorYearCombo" style="width:350px">
 				<option value="-1"><digi:trn>Select Time Interval</digi:trn></option>
 			</select>
 		</td>

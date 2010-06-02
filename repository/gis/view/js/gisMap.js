@@ -95,6 +95,7 @@
 			if (mapLevel == null) {
 				mapLevel = 2;
 			}
+			
 			$.get(requestURL, jQuery.fn.indicatorsValuesReady, "xml");
 			actionGetIndicatorValues = true;
 		}
@@ -510,6 +511,31 @@
 				}
 				selectCmb[0].selectedIndex = 0;
 		}
+		
+		//Year functions
+	jQuery.fn.yearSelected = function(year){
+		//setBusy(true);
+		var mapLevel = getRadioValue("mapLevelRadio");
+		if (mapLevel == null) {
+			mapLevel = 2;
+		}
+		var ind = document.getElementById("indicatorsCombo").value;
+		var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
+		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+		var toYear = document.getElementsByName('selectedToYear')[0].value;
+		var sec = document.getElementById("sectorsMapCombo").value;
+		
+		var uniqueStr = (new Date()).getTime();
+		
+		actionImgLoading = true;
+		getIndValuesAction = true;
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + subgroupId + "&indYear=" + year + "&sectorId=" + sec + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		
+		alert ('blabla');
+		
+		jQuery.fn.geIndicatorsValues();
+		
+	}
 
 		 jQuery.fn.modifyMapLevelURL  = function(url, newLevel) {
 				var retVal = null;
@@ -615,6 +641,11 @@
                 jQuery.fn.sectorSelectedFin($("#sectorsMapComboFin option:selected").val());
             }
 			actionImgLoading = false;
+		});
+		
+		$("#indicatorYearCombo").change(function(){
+			var year = $("#indicatorYearCombo option:selected").val();
+			jQuery.fn.yearSelected(year);
 		});
         
         
@@ -892,27 +923,7 @@
 	
 	//end of Map level functions
 	
-	//Year functions
-	function yearSelected(year) {
-		//setBusy(true);
-		var mapLevel = getRadioValue("mapLevelRadio");
-		if (mapLevel == null) {
-			mapLevel = 2;
-		}
-		var ind = document.getElementById("indicatorsCombo").value;
-		var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
-		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
-		var toYear = document.getElementsByName('selectedToYear')[0].value;
-		var sec = document.getElementById("sectorsMapCombo").value;
-		
-		var uniqueStr = (new Date()).getTime();
-		
-		actionImgLoading = true;
-		getIndValuesAction = true;
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + subgroupId + "&indYear=" + year.value + "&sectorId=" + sec + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-
-		
-	}
+	
 	
 	function modifyYearURL (url, newYear) {
 		var retVal = null;

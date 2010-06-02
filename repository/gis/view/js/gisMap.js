@@ -527,11 +527,10 @@
 		
 		var uniqueStr = (new Date()).getTime();
 		
-		//actionImgLoading = true;
+		actionImgLoading = true;
 		getIndValuesAction = true;
+		setBusy(true);
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + subgroupId + "&indYear=" + year + "&sectorId=" + sec + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-		
-		jQuery.fn.geIndicatorsValues();
 		
 	}
 
@@ -612,7 +611,11 @@
             actionImgLoading = false;
         });
         
-        
+    
+    $("#testMap").load(function(){
+			jQuery.fn.chekIndicatorValues();
+			actionImgLoading = false;
+		});    
         
         
 		$("#indicatorsCombo").change(function(){

@@ -133,7 +133,7 @@
 
     <c:forEach items="${orgProfLargestProjectsForm.projects}" var="project"  varStatus="status">
         <tr>
-            <td nowrap>
+            <td>
                 <c:choose>
                     <c:when test="${empty project.fullTitle}">
                         ${project.title}

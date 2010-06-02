@@ -176,7 +176,7 @@
                                         <TABLE cellpadding="20" cellspacing="20" width="100%" >
                                             <TBODY>
                                                 <TR>
-                                                    <TD NOWRAP VALIGN="TOP" width="50%"   class="chartPlaceCss">
+                                                    <TD VALIGN="TOP" width="50%"   class="chartPlaceCss">
                                                         <c:set var="stylePlace1">
                                                             display: none;
                                                         </c:set>
@@ -191,7 +191,7 @@
                                                              </digi:insert>
                                                     </div>
                                                 </TD>
-                                                <TD NOWRAP  VALIGN="TOP"   class="chartPlaceCss">
+                                                <TD  VALIGN="TOP"   class="chartPlaceCss">
                                                     <c:set var="stylePlace2">
                                                         display: none; z-index: 1000
                                                     </c:set>
@@ -223,7 +223,7 @@
                                                     </digi:insert>
                                                 </div>
                                             </TD>
-                                            <TD NOWRAP  VALIGN="TOP"  class="chartPlaceCss">
+                                            <TD  VALIGN="TOP"  class="chartPlaceCss">
                                                 <c:set var="stylePlace4">
                                                     display: none; z-index: 1000
                                                 </c:set>
@@ -240,7 +240,7 @@
                                             </TD>
                                         </TR>
                                         <TR>
-                                            <TD NOWRAP  VALIGN="TOP"  class="chartPlaceCss">
+                                            <TD  VALIGN="TOP"  class="chartPlaceCss">
                                                 <c:set var="stylePlace5">
                                                     display: none; z-index: 1000
                                                 </c:set>
@@ -255,7 +255,7 @@
                                                      </digi:insert>
                                             </div>
                                         </TD>
-                                        <TD NOWRAP  VALIGN="TOP"  class="chartPlaceCss">
+                                        <TD  VALIGN="TOP"  class="chartPlaceCss">
                                             <c:set var="stylePlace6">
                                                 display: none; z-index: 1000
                                             </c:set>
@@ -272,7 +272,7 @@
                                         </TD>
                                     </TR>
                                     <TR>
-                                        <TD NOWRAP  VALIGN="TOP" colspan="2"  class="chartPlaceCss">
+                                        <TD VALIGN="TOP" colspan="2"  class="chartPlaceCss">
                                             <c:set var="stylePlace7">
                                                 display: none; z-index: 1000
                                             </c:set>

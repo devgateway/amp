@@ -91,10 +91,10 @@
 		jQuery.fn.geIndicatorsValues = function() {
 			var mapLevel = jQuery.fn.getRadioValue();
 			var indYear = $("#indicatorYearCombo").val();
-			var requestURL = "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear;
-			if (mapLevel == null) {
+		if (mapLevel == null) {
 				mapLevel = 2;
 			}
+			var requestURL = "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear;
 			
 			$.get(requestURL, jQuery.fn.indicatorsValuesReady, "xml");
 			actionGetIndicatorValues = true;
@@ -527,7 +527,7 @@
 		
 		var uniqueStr = (new Date()).getTime();
 		
-		actionImgLoading = true;
+		//actionImgLoading = true;
 		getIndValuesAction = true;
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + subgroupId + "&indYear=" + year + "&sectorId=" + sec + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		

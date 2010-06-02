@@ -227,6 +227,13 @@
                             </td>
                          </tr>
 <!-- 1 -->
+						<logic:notEmpty name="aimSelectSectorForm" property="selSectors">
+						<div id="oldSectors">
+						<logic:iterate name="aimSelectSectorForm" id="id" property="selSectors">
+						<input type="hidden" name="oldSelSectors" value="${id}"/>
+						</logic:iterate>
+						</div>			
+						</logic:notEmpty>
 						<logic:notEmpty name="aimSelectSectorForm" property="pagedCol">
 						<tr>
 							<td rowspan="1" align=left vAlign=top>
@@ -359,6 +366,5 @@
 
 
 </digi:form>
-
 
 

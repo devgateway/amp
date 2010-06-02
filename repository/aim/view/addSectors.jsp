@@ -174,14 +174,8 @@
 			ret+="sectorReset="+document.getElementsByName("sectorReset")[0].value+"&"+
 				 "addButton="  +document.getElementsByName("addButton")[0].value+"&"+
 				 "edit="       +document.getElementsByName("edit")[0].value	;
-			if(document.getElementsByName("selSectors")!=null){
-				var sectors = document.getElementsByName("selSectors").length;
-				for(var i=0; i< sectors; i++){
-					if(document.getElementsByName("selSectors")[i].checked){
-						ret+="&"+document.getElementsByName("selSectors")[i].name+"="+document.getElementsByName("selSectors")[i].value;
-					}
-				}
-			}
+			ret+=getAllSelectedSectors();
+			
 		}
 		else if (type==4){// when changing the page from button links
 			ret+="sectorReset="+document.getElementsByName("sectorReset")[0].value+"&"+
@@ -190,6 +184,52 @@
 		
 		}
 		return ret;
+	}
+	function getAllSelectedSectors(){
+		ret='';
+		var mySectors=new Array();
+		h=0;
+		lold = document.getElementsByName('oldSelSectors').length;
+		for(i=0;i<lold;i++){
+			lsel=document.getElementsByName('selSectors').length;
+			for(j=0;j<lsel;j++){
+				if(document.getElementsByName('oldSelSectors')[i].value==document.getElementsByName('selSectors')[j].value){
+					mySectors[h++]=document.getElementsByName('oldSelSectors')[i].value;
+				}
+			}
+		}
+		la=mySectors.length;
+
+		if(la>0){	
+			for(k=0;k<la;k++){
+				lold = document.getElementsByName('oldSelSectors').length;
+				for(i=0;i<lold;i++){
+					if(document.getElementsByName('oldSelSectors')[i].value==mySectors[k]){
+						var hid = document.getElementsByName('oldSelSectors')[i];
+						var parent = hid.parentNode;
+						parent.removeChild(hid);
+						break;
+					}
+				}	
+			}
+		}
+		 
+		if(document.getElementsByName("selSectors")!=null){
+			var sectors = document.getElementsByName("selSectors").length;
+			for(var i=0; i< sectors; i++){
+				if(document.getElementsByName("selSectors")[i].checked){
+					ret+="&"+document.getElementsByName("selSectors")[i].name+"="+document.getElementsByName("selSectors")[i].value;
+				}
+			}
+		}
+		if(document.getElementsByName("oldSelSectors")!=null){
+			var oldsectors = document.getElementsByName("oldSelSectors").length;
+			for(var i=0; i< oldsectors; i++){
+				ret+="&selSectors="+document.getElementsByName("oldSelSectors")[i].value;
+			}
+		}
+		return ret;
+		
 	}
 	function myclose(){
 		myPanel.hide();	
@@ -255,11 +295,16 @@
 	}	
 
 	function addSelectedSectors(){
-		var postString		= generateFields(3);
-		<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
-		var url = "<%=Url %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		checkAndClose=true;
+		if(getAllSelectedSectors().length>0){
+			var postString		= generateFields(3);
+			<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
+			var url = "<%=Url %>";
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+			checkAndClose=true;
+		}
+		else{
+			alert('<digi:trn>Please, select a sector</digi:trn>');
+		}
 	}
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
@@ -284,6 +329,7 @@
 		postString+="&"+generateFields(4);
 		<digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
 		var url = "<%=commentUrl %>?"+postString;
+		url += generateFields(3);
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
 
 	}

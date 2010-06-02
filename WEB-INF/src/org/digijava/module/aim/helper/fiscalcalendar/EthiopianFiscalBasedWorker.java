@@ -86,4 +86,14 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 		
 	}
 
+	@Override
+	public Comparable getFiscalMonth() throws Exception {
+		return getMonth();
+	}
+
+	@Override
+	public String getFiscalYear() throws Exception {
+		return getYear().toString();
+	}
+
 }

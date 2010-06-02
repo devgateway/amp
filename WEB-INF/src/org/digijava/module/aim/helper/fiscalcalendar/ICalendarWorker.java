@@ -2,7 +2,7 @@ package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Date;
 
-public interface ICalendarWorker {
+public interface ICalendarWorker  {
 
 	public Date getDate() throws Exception;
 
@@ -40,4 +40,8 @@ public interface ICalendarWorker {
 	
 	public Integer getYearDiff(ICalendarWorker worker) throws Exception;
 	
+	
+	public String getFiscalYear() throws Exception;
+   
+	public Comparable getFiscalMonth() throws Exception;
 }

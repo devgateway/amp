@@ -313,14 +313,22 @@ public class CategAmountColWorker extends ColumnWorker {
 		String quarter=null;
 		Comparable month=null;		
 		Integer year=null;
+		String fiscalYear=null;
+		Comparable fiscalMonth=null;
 		
 		if (filter.getCalendarType() != null) {
 			try {
-				ICalendarWorker worker = filter.getCalendarType().getworker();
+			ICalendarWorker worker = filter.getCalendarType().getworker();
 				worker.setTime(td);
 				month = worker.getMonth();
 				quarter = "Q" + worker.getQuarter();
 				year = worker.getYear();
+				
+				fiscalYear=worker.getFiscalYear();
+				fiscalMonth=worker.getFiscalMonth();
+				
+				
+				
 				//The complete will be used to see if the cell is showable
 				MetaInfo dateInfo = this.getCachedMetaInfo(ArConstants.TRANSACTION_DATE, worker.getDate());
 				acc.getMetaData().add(dateInfo);
@@ -343,6 +351,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		MetaInfo qMs = this.getCachedMetaInfo(ArConstants.QUARTER,quarter);
 		MetaInfo mMs = this.getCachedMetaInfo(ArConstants.MONTH,month);
 		MetaInfo aMs = this.getCachedMetaInfo(ArConstants.YEAR, year);
+		
+		MetaInfo fmMs = this.getCachedMetaInfo(ArConstants.FISCAL_M, fiscalMonth);
+		MetaInfo faMs = this.getCachedMetaInfo(ArConstants.FISCAL_Y, fiscalYear);
 
 		
 		
@@ -351,7 +362,9 @@ public class CategAmountColWorker extends ColumnWorker {
 	
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
-		acc.getMetaData().add(mMs);		
+		acc.getMetaData().add(mMs);	
+		acc.getMetaData().add(faMs);
+		acc.getMetaData().add(fmMs);	
 		acc.getMetaData().add(headMeta);
 		
 		if(this.getViewName().equals("v_proposed_cost")) {

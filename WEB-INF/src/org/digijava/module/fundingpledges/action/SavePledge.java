@@ -131,24 +131,40 @@ public class SavePledge extends Action {
 	    		//pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
     		}*/
     		
-    		ArrayList<FundingPledges> fpByNameAndOrg = PledgesEntityHelper.getPledgesByDonorAndTitle(Long.valueOf(plForm.getSelectedOrgId()), plForm.getPledgeTitle());
-    		if (fpByNameAndOrg != null) {
-				if (fpByNameAndOrg.size()!=0) {
-					ActionErrors errors=new ActionErrors();
-					errors.add("incorrectTitle", new ActionError("error.aim.pledges.duplicatedTitle"));
-					saveErrors(request, errors);
-					request.getSession().setAttribute("duplicatedTitleError", errors);
-	        		return mapping.findForward("success");
-				}
-			}
+    		
     		
     		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
+    			if (!PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getTitle().equals(plForm.getPledgeTitle()) ||
+    					PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getOrganization().getAmpOrgId() != Long.parseLong(plForm.getSelectedOrgId())) {
+    				if (isTitleDuplicated(mapping,request,plForm)) {
+    					return mapping.findForward("success");
+    				}
+				}
     			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
 			} else {
+				if (isTitleDuplicated(mapping,request,plForm)) {
+					return mapping.findForward("success");
+				}
 				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
 			}
     		
     		
     		return mapping.findForward("forward");
 		}
+
+
+	private boolean isTitleDuplicated(ActionMapping mapping, HttpServletRequest request, PledgeForm plForm){
+		ArrayList<FundingPledges> fpByNameAndOrg = PledgesEntityHelper.getPledgesByDonorAndTitle(Long.valueOf(plForm.getSelectedOrgId()), plForm.getPledgeTitle());
+		if (fpByNameAndOrg != null) {
+			if (fpByNameAndOrg.size()!=0) {
+				ActionErrors errors=new ActionErrors();
+				errors.add("incorrectTitle", new ActionError("error.aim.pledges.duplicatedTitle"));
+				saveErrors(request, errors);
+				request.getSession().setAttribute("duplicatedTitleError", errors);
+        		//return mapping.findForward("success");
+				return true;
+			}
+		}
+		return false;
+	}
 }

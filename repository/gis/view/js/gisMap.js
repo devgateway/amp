@@ -328,6 +328,7 @@
                     var donorOption = $("<option value='"+valueId+"'>"+valueName+"</option>");
                     donorCmb.append(donorOption);
                 }
+                
                 donorCmb[0].selectedIndex = 0;
                 
         }
@@ -413,6 +414,7 @@
 						indicatorOption.addClass("enbl");
 					}
 				}
+				selectCmb[0].selectedIndex = 0;
 				jQuery.fn.initIndicatorValues();
 		}
         
@@ -459,6 +461,7 @@
 					var opt = $("<option value='"+subgroupId+"'>"+subgroupText+"</option>");
 					selectCmb.append(opt);				
 				}
+				selectCmb[0].selectedIndex = 0;
 			
 		}
 		
@@ -505,6 +508,7 @@
 					var opt = $("<option value='"+yearId+"'>"+yearText+"</option>");
 					selectCmb.append(opt);			
 				}
+				selectCmb[0].selectedIndex = 0;
 		}
 
 		 jQuery.fn.modifyMapLevelURL  = function(url, newLevel) {
@@ -927,9 +931,9 @@
 	
 	function mapYearChanged(){
         if (document.getElementById('sectorsMapCombo') != null) {
-		    sectorSelected(document.getElementById('sectorsMapCombo').value);
+		    		jQuery.fn.sectorSelected(document.getElementById('sectorsMapCombo').value);
         } else if ((document.getElementById('sectorsMapComboFin') != null)) {
-            sectorSelectedFin(document.getElementById('sectorsMapComboFin').value);
+            jQuery.fn.sectorSelectedFin(document.getElementById('sectorsMapComboFin').value);
         }
 	}
 	

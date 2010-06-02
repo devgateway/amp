@@ -2414,7 +2414,9 @@ public class SaveActivity extends Action {
                         		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
                             if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
                                 if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {                                	
-                                    new ApprovedActivityTrigger(aAct, previouslyUpdatedBy);
+                                    if(!eaForm.getIdentification().getPreviousApprovalStatus().equals(Constants.APPROVED_STATUS)){ //if previous status was approved,no need to create new Approved Activity Alert
+                                    	new ApprovedActivityTrigger(aAct, previouslyUpdatedBy);
+                                    }                                	
                                 }
                             } else {
                                 new NotApprovedActivityTrigger(aAct);

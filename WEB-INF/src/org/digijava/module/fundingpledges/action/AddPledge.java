@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -154,6 +155,13 @@ public class AddPledge extends Action {
 			
 			plForm.setPledgeNames(PledgesEntityHelper.getPledgeNames());
 	        request.getSession().setAttribute("pledgeForm", plForm);
+	        
+	        ActionErrors errors = (ActionErrors)request.getSession().getAttribute("duplicatedTitleError");
+	 	 	if(errors!=null){
+	 	 		saveErrors(request, errors);
+	 	 		request.getSession().removeAttribute("duplicatedTitleError");
+	 	 	}
+	        
             return mapping.findForward("forward");
             
     }

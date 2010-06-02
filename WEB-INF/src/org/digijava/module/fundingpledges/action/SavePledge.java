@@ -10,9 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.SectorUtil;
@@ -127,6 +130,18 @@ public class SavePledge extends Action {
 	    		}
 	    		//pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
     		}*/
+    		
+    		ArrayList<FundingPledges> fpByNameAndOrg = PledgesEntityHelper.getPledgesByDonorAndTitle(Long.valueOf(plForm.getSelectedOrgId()), plForm.getPledgeTitle());
+    		if (fpByNameAndOrg != null) {
+				if (fpByNameAndOrg.size()!=0) {
+					ActionErrors errors=new ActionErrors();
+					errors.add("incorrectTitle", new ActionError("error.aim.pledges.duplicatedTitle"));
+					saveErrors(request, errors);
+					request.getSession().setAttribute("duplicatedTitleError", errors);
+	        		return mapping.findForward("success");
+				}
+			}
+    		
     		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
     			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
 			} else {

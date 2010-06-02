@@ -486,6 +486,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 					</table>
 				</td></tr>
 				<tr><td>
+					<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%" border=0>

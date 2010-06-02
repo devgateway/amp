@@ -78,6 +78,33 @@ public class PledgesEntityHelper {
 	        }
 	        return Pledges;
 	}
+	
+	public static ArrayList<FundingPledges> getPledgesByDonorAndTitle(Long donorid, String title){
+		 Session session = null;
+	        Query q = null;
+	        FundingPledges pledge = new FundingPledges();
+	        ArrayList<FundingPledges> Pledges = new ArrayList<FundingPledges>();
+	        List list = null;
+	        try {
+	            session = PersistenceManager.getRequestDBSession();
+	            String queryString = new String();
+	            queryString = "select p from " + FundingPledges.class.getName()
+				+ " p where (p.organization=:id) and (p.title=:title)";
+	            q = session.createQuery(queryString);
+	            q.setParameter("id", donorid,Hibernate.LONG);
+	            q.setParameter("title", title,Hibernate.STRING);
+	            Iterator iter = q.list().iterator();
+	            while (iter.hasNext()) {
+	            	pledge = (FundingPledges) iter.next();
+	            	Pledges.add(pledge);
+	            }
+
+	        } catch (Exception ex) {
+	        	logger.debug("Projects : Unable to get Pledges names from database" + ex.getMessage());
+	        }
+	        return Pledges;
+	}
+	
 	public static FundingPledges getPledgesById(Long id){
 		Session session = null;
 		Query qry = null;

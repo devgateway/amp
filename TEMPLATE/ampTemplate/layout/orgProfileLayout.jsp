@@ -95,7 +95,7 @@
                 font-size:10px;
                 font-family: Arial;
             }
-           
+
             .tableOdd {
                 background-color:#FFFFFF;
                 font-family: Arial;
@@ -295,13 +295,13 @@
                             </TABLE>
                         </TD>
                     </TR>
-                    <TR>
-                        <TD width="100%" >
-                            <digi:insert attribute="footer" />
-                        </TD>
-                    </TR>
                 </TBODY>
             </TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD width="100%" >
+            <digi:insert attribute="footer" />
         </TD>
     </TR>
 </TABLE>

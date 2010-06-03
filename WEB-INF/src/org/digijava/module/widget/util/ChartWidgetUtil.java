@@ -192,6 +192,7 @@ public class ChartWidgetUtil {
         chart.getLegend().setItemFont(plainFont);
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint( new Color(255, 255, 255));
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
@@ -293,6 +294,7 @@ public class ChartWidgetUtil {
         chart.getLegend().setItemFont(plainFont);
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint( new Color(255, 255, 255));
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
@@ -301,6 +303,17 @@ public class ChartWidgetUtil {
         numberAxis.setTickLabelFont(plainFont);
         CategoryAxis categoryAxis = plot.getDomainAxis();
         categoryAxis.setTickLabelFont(plainFont);
+        //setting colours
+        renderer.setSeriesPaint(0, new Color(173,223,255) ); // light  blue
+        renderer.setSeriesPaint(1, new Color(0, 0, 255));// dark blue
+        renderer.setSeriesPaint(2, Color.GREEN);
+        renderer.setSeriesPaint(3, new Color(0,148,0));
+        renderer.setSeriesPaint(4, Color.ORANGE); 
+        renderer.setSeriesPaint(5, new Color(142,53,239)); // purple
+        renderer.setSeriesPaint(6, Color.YELLOW);
+        renderer.setSeriesPaint(7, Color.RED);
+        renderer.setSeriesPaint(8, Color.PINK);
+        renderer.setSeriesPaint(9, Color.BLACK);
         renderer.setItemMargin(0);
         return chart;
     }

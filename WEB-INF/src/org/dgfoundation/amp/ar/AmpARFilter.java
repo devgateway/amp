@@ -1298,7 +1298,10 @@ public class AmpARFilter extends PropertyListable {
 	public boolean isDraft() {
 		return draft;
 	}
-
+	/**
+	 * TODO draft parameter needs to be renamed to hideDraft 
+	 * @param draft
+	 */
 	public void setDraft(boolean draft) {
 		this.draft = draft;
 	}

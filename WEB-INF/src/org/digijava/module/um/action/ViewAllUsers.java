@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.UserBean;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
@@ -62,6 +63,10 @@ import org.digijava.kernel.util.RequestUtils;
 	
 	        if(ubCol == null) {
 	            return mapping.findForward("forward");
+	        }
+	        
+	        if (!RequestUtils.isAdmin(response, session, request)) {
+	        	return null;
 	        }
 	
 	        if(vwForm.getType() == 0) {

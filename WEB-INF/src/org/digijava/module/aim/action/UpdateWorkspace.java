@@ -94,6 +94,7 @@ public class UpdateWorkspace extends Action {
                 newTeam.setAccessType(uwForm.getWorkspaceType());
                 newTeam.setAddActivity(uwForm.getAddActivity());
                 newTeam.setComputation(uwForm.getComputation());
+                newTeam.setHideDraftActivities(uwForm.getHideDraftActivities() );
 
                 // newTeam.setType(typeCategoryValue);
                 if(uwForm.getOrganizations()!=null) 
@@ -127,6 +128,7 @@ public class UpdateWorkspace extends Action {
                 uwForm.setRelatedTeamFlag("no");
                 uwForm.setRelatedTeamName("");
                 uwForm.setAddActivity(null);
+                uwForm.setHideDraftActivities(false);
                 uwForm.setComputation(null);
                 if (uwForm.getChildWorkspaces() != null)
                 	uwForm.getChildWorkspaces().clear();

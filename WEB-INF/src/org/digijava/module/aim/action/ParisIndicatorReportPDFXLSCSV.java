@@ -119,7 +119,13 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 
 						for (int j = 0; j < test.length; j++) {
 							col++;
-							double val = test[j];
+							double val = 0;
+							if(pId.equals("5a") && j == 6){
+								val = test[j+1]; //duplicate the value of the last column.
+								//continue;
+							} else {
+								val = test[j];
+							}
 
 							if (val == -1) {
 								data2[row][col] = "n.a.";

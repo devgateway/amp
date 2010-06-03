@@ -651,7 +651,7 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("					</textElement>");
                 p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Total aid flows disbursed to the government sector", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
                 p2.println("				</staticText>");
-                p2.println("				<staticText>");
+                /*p2.println("				<staticText>");
                 p2.println("					<reportElement");
                 p2.println("						mode='Opaque'");
                 p2.println("						x='959'");
@@ -671,11 +671,11 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
                 p2.println("					</textElement>");
                 p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Proportion aid flows to the government sector using one of the 3 country PFM systems", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
-                p2.println("				</staticText>");
+                p2.println("				</staticText>");*/
                 p2.println("				<staticText>");
                 p2.println("					<reportElement");
                 p2.println("						mode='Opaque'");
-                p2.println("						x='1098'");
+                p2.println("						x='959'");
                 p2.println("						y='0'");
                 p2.println("						width='135'");
                 p2.println("						height='60'");
@@ -698,7 +698,7 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("						mode='Opaque'");
                 p2.println("						x='0'");
                 p2.println("						y='1'");
-                p2.println("						width='1215'");
+                p2.println("						width='959'");
                 p2.println("						height='0'");
                 p2.println("						forecolor='#000000'");
                 p2.println("						backcolor='#FFFFFF'");
@@ -712,7 +712,7 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
                 p2.println("				</line>");
                 int l = 0;
-                for (int j = 0; j <= 9; j++) {
+                for (int j = 0; j <= 8; j++) {
                     p2.println("				<line direction='TopDown'>");
                     p2.println("					<reportElement");
                     p2.println("						mode='Opaque'");
@@ -771,8 +771,13 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                     p2.println("						mode='Opaque'");
                     p2.println("						x='" + x + "'");
                     p2.println("						y='" + y + "'");
-                    p2.println("						width='135'");
-                    p2.println("						height='30'");
+                    if((j-1)%8==0) {
+                    	p2.println("						width='0'");
+	                    p2.println("						height='0'");
+                    } else {
+	                    p2.println("						width='135'");
+	                    p2.println("						height='30'");
+                    }
                     p2.println("						forecolor='#000000'");
                     p2.println("						backcolor='#FFFFFF'");
                     p2.println("						key='textField-3'");
@@ -793,7 +798,7 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                     p2.println("						mode='Opaque'");
                     p2.println("						x='135'");
                     p2.println("						y='" + y + "'");
-                    p2.println("						width='1215'");
+                    p2.println("						width='959'");
                     p2.println("						height='0'");
                     p2.println("						forecolor='#000000'");
                     p2.println("						backcolor='#FFFFFF'");
@@ -825,7 +830,7 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("						mode='Opaque'");
                 p2.println("						x='1'");
                 p2.println("						y='" + height + "'");
-                p2.println("						width='1198'");
+                p2.println("						width='1095'");
                 p2.println("						height='0'");
                 p2.println("						forecolor='#000000'");
                 p2.println("						backcolor='#FFFFFF'");
@@ -842,7 +847,7 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 l = 0;
                 ////System.out.println( " height  "+height);
                 int k = height - 2;
-                for (int j = 0; j <= 9; j++) {
+                for (int j = 0; j <= 8; j++) {
                     p2.println("				<line direction='TopDown'>");
                     p2.println("					<reportElement");
                     p2.println("						mode='Opaque'");

@@ -194,9 +194,16 @@
 														<html:optionsCollection name="umAddUserForm" property="orgTypeColl" value="ampOrgTypeId" label="orgType" />
 													</html:select></td>
 												<td colspan="2">
-													<html:checkbox property="sendEmail"	styleClass="inp-text">
+												<c:if test="${umAddUserForm.registrationByEmail}">
+													<html:checkbox property="sendEmail"	styleClass="inp-text" >
 														<digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn>
 													</html:checkbox></td>
+												</c:if>
+												<c:if test="${!umAddUserForm.registrationByEmail}">
+													<html:checkbox property="sendEmail"	styleClass="inp-text" disabled="true" >
+														<digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn>
+													</html:checkbox></td>
+												</c:if>
 													
 											</tr>
 											<tr>

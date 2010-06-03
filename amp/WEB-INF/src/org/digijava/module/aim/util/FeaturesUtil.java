@@ -889,6 +889,11 @@ public class FeaturesUtil {
 		return null;
 	}
 
+	public static boolean getGlobalSettingValueBoolean(String globalSettingName) {
+		String globalValue = getGlobalSettingValue(globalSettingName);
+		return (globalValue != null && globalValue.equalsIgnoreCase("true"));
+	}
+
 	/**
 	 *
 	 * @author dan

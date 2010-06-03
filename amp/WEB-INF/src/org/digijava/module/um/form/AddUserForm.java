@@ -50,6 +50,7 @@ public class AddUserForm
 	private Collection workspaces;
 	private Collection ampRoles;
 	private boolean sendEmail;	
+	private boolean registrationByEmail;	
 	private String firstNames;
     private String lastName;
     private String email;
@@ -577,5 +578,15 @@ public class AddUserForm
 	public void setTeamMemberId(Long teamMemberId) {
 		this.teamMemberId = teamMemberId;
 	}
+
+	public boolean isRegistrationByEmail() {
+		return registrationByEmail;
+	}
+
+	public void setRegistrationByEmail(boolean registrationByEmail) {
+		this.registrationByEmail = registrationByEmail;
+	}
+	
+	
 
 }

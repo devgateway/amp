@@ -58,4 +58,6 @@ public class GlobalSettingsConstants {
     public static final String BUDGET_SUPPORT_FOR_PI9 = "Budget Support for PI 9";
     
     public static final String ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES = "Allow percentages for all countries";
+    
+    public static final String USER_REGISTRATION_BY_MAIL = "User registration by email";
 }

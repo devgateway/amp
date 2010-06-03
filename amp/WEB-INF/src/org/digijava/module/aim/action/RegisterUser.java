@@ -5,8 +5,6 @@
 package org.digijava.module.aim.action;
 
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -16,7 +14,6 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.mail.DgEmailManager;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.Group;
@@ -24,7 +21,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.ShaCrypt;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -33,10 +29,6 @@ import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class RegisterUser extends Action {
 
@@ -89,63 +81,7 @@ public class RegisterUser extends Action {
 			// set default language
 			user.setRegisterLanguage(RequestUtils
 					.getNavigationLanguage(request));
-			
-			// begin------------ SET USER Email verification
-			Session session = null;
-			Transaction tx = null;
-			String requete;
-			String actemail = "false";
-
-			try {
-
-				//	requete = "from AmpGlobalSettings where id = 53";
-				requete = "from AmpGlobalSettings where settingsName = 'User registration by email'";
-
-			
-				
-				session = PersistenceManager.getSession();
-				tx = session.beginTransaction();
-
-				Query q = session.createQuery(requete);
-
-				List<AmpGlobalSettings> u = q.list();
-
-				if (u != null) {
-					actemail = u.get(0).getGlobalSettingsValue();
-					logger.info("AmpGlobalSettings.getGlobalSettingsValue = " + actemail);
-				}
-
-				tx.commit();
-
-			} catch (Exception ex) {
-				logger
-						.debug(
-								"Unable to get User registration by email value from %amp_global_settings% table ",
-								ex);
-
-				if (tx != null) {
-					try {
-						tx.rollback();
-					} catch (HibernateException ex1) {
-						logger.warn("rollback() failed", ex1);
-					}
-				}
-
-			}
-
-			if (actemail.equals("true")) {
-				logger.info(user.getEmail()
-						+ " in dg_user.EMAIL_VERIFIED is set to: 'true'");
-				user.setEmailVerified(true);
-			} else {
-				user.setEmailVerified(false);
-				logger.info(user.getEmail()
-						+ " in dg_user.EMAIL_VERIFIED is set to:  'false'");
-			}
-
-			// end------------ SET USER Email verification
-                   //     user.setEmailVerified(false);
-
+                        user.setEmailVerified(false);
                         user.setActive(false);
                         user.setBanned(true);
 
@@ -191,17 +127,8 @@ public class RegisterUser extends Action {
                                 String id=ShaCrypt.crypt(user.getEmail().trim()+user.getId()).trim();
                                 String description = "Welcome to AMP!"+ '\n'+'\n'+"We must first verify your email address before you become a full registered member (with login privileges)." +'\n'+ "In order to verify your email and complete the registration process, please click on the link below. " +
                                       '\n'+link+ "confirmRegisteration.do?id="+id;
-                              //DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
-                             // Email is not send email when  entity AmpGlobalSettings id=53 value is true; user is directly validated
-                				if (actemail.equals("false")){
-                					logger.info("Confirm your registration sendMail() to:  "+user.getEmail());
-                				DgEmailManager.sendMail(user.getEmail(),
-                						"Confirm your registration", description);
-                				
-                				}
-                                
-                                
-                                
+                               DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
+
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
 				Long uid[] = new Long[1];

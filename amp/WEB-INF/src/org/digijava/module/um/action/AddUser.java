@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -66,6 +67,7 @@ public class AddUser extends Action {
 			if ("".equals(actionFlag) || actionFlag == null) {
 					registerForm.setErrors(null);
 
+					registerForm.setRegistrationByEmail(FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL));
 					// set country resident data
 
 					HashMap countriesMap = new HashMap();

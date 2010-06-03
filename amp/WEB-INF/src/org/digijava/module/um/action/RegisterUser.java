@@ -27,6 +27,8 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
@@ -60,6 +62,8 @@ public class RegisterUser extends Action {
 			return (mapping.getInputForward());
 		try {
 
+			boolean isMailAvtive = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
+			
 			User user = new User(userRegisterForm.getEmail().toLowerCase(),
 					userRegisterForm.getFirstNames(), userRegisterForm
 							.getLastName());
@@ -100,6 +104,7 @@ public class RegisterUser extends Action {
                         user.setActive(false);
                         user.setBanned(false);
 
+                       
 			SiteDomain siteDomain = (SiteDomain) request
 					.getAttribute(Constants.CURRENT_SITE);
 
@@ -168,12 +173,17 @@ public class RegisterUser extends Action {
 				String pti = ""+'\n'+'\n'+ pti1;
 				
 				DbUtil.registerUser(user);
-                if(userRegisterForm.isSendEmail()){
-		    
-                    String description = des + user.getEmail() + cri + userRegisterForm.getPassword()+pti;
+				
+	            if (isMailAvtive){
+	                if(userRegisterForm.isSendEmail()){
+	        		    
+	                    String description = des + user.getEmail() + cri + userRegisterForm.getPassword()+pti;
 
-                    DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
-                }	
+	                    DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
+	                }	
+	            } else {
+		            user.setEmailVerified(true);
+	            }
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
 				Long uid[] = new Long[1];

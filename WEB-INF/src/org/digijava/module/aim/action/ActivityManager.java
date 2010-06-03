@@ -214,11 +214,25 @@ public class ActivityManager extends Action {
 	 */
 	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		Long ampActId = new Long(Long.parseLong(request.getParameter("id")));
-		AmpActivity activity = ActivityUtil.getAmpActivity(ampActId);
-		AuditLoggerUtil.logObject(session, request, activity, "delete");
-		ActivityUtil.deleteActivity(ampActId);
-		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
+		String tIds=request.getParameter("tIds");
+		List<Long> topicsIds=getActsIds(tIds.trim());
+		for (Long ampActId : topicsIds) {
+			AmpActivity activity = ActivityUtil.getAmpActivity(ampActId);
+			AuditLoggerUtil.logObject(session, request, activity, "delete");
+			ActivityUtil.deleteActivity(ampActId);
+		}
+		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());		
 	}
+	private List<Long> getActsIds(String ids){
+		List<Long> actsIds=new ArrayList<Long>();
+		while(ids.indexOf(",")!= -1){
+			Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
+			actsIds.add(id);
+			ids=ids.substring(ids.indexOf(",")+1);
+		}
+		actsIds.add(new Long(ids.trim()));
+		return actsIds;
+	}
+	
 }
 

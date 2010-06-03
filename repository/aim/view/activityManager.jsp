@@ -18,6 +18,33 @@
 		var translation = "<digi:trn key="aim:activitydelete">Do you want to delete the Activity</digi:trn>"; 
 		return confirm(translation);
 	}
+	function deleteActivities(){
+		if(deleteActs()){
+			 var chk=document.getElementsByTagName('input');
+	         var tIds='';
+	         for(var i=0;i<chk.length;i++){
+	        	 if(chk[i].type == 'checkbox' && chk[i].checked && chk[i].id != 'chkAll'){
+	            	 tIds+=chk[i].value+',';
+	             }
+	         }
+	        if(tIds.length>0){
+	        	tIds=tIds.substring(0,tIds.length-1);
+	        	<digi:context name="deleteActs" property="context/module/moduleinstance/activityManager.do?action=delete"/>
+	    		document.aimActivityForm.action = "<%=deleteActs %>&tIds="+tIds+"";
+	    		//document.aimActivityForm.target = "_self";
+	    		document.aimActivityForm.submit();	
+	        }else{
+	        	var translation = "<digi:trn key="aim:activityselectone">Please select at least one topic to be deleted</digi:trn>"; 
+	            alert(translation);
+	            return false;
+	        }
+		}	
+	}	
+	
+	function deleteActs(){
+		var translation = "<digi:trn jsFriendly='true'>Are You Sure You Want To Remove Selected Activities?</digi:trn>"; 
+		return confirm(translation);
+	}	
 	function load() {}
 
 	function unload() {}
@@ -53,6 +80,19 @@
 		}
 	}
 
+	function selectAll(){
+		var chkAll = document.getElementById('chkAll');
+		var chk = document.getElementsByTagName('input');
+		for(var i=0;i<chk.length;i++){
+            if(chk[i].type == 'checkbox'){
+				if (chkAll.checked) {
+					chk[i].checked = true;
+				}else{
+					chk[i].checked = false;
+           		}
+            }
+		}
+    }
 
 
 	function resetSearch() {
@@ -198,7 +238,12 @@
 	                                                                        </digi:link> 
                                                                           </b>
 																		</td>
-																		<td align="left" width="12">&nbsp;</td>
+																		<td width="5%" align="left" class="ignore">
+																			<c:set var="trnSelectAll">
+																				<digi:trn>Select All</digi:trn>
+																			</c:set> 
+																			<input type="checkbox" id="chkAll" onclick="javascript:selectAll()" title="${trnSelectAll}"/>
+																		</td>
 																</tr>
 
 																<logic:iterate name="aimActivityForm" property="activityList" id="activities"
@@ -227,18 +272,10 @@
 																	</td>
 																	
 																	<td align="left" width="12">
-																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																		<c:set target="${urlParams}" property="id">
-																			<bean:write name="activities" property="ampActivityId"/>
-																		</c:set>
-																		<c:set target="${urlParams}" property="action" value="delete"/>
-																		<c:set var="clickToDeletetheActivity">
-																		<digi:trn key="aim:clickToDeletetheActivity">Click here to Delete Activity</digi:trn>
-																		</c:set>
-																		<digi:link href="/activityManager.do" name="urlParams"
-																		onclick="return deleteIndicator()" title="${clickToDeletetheActivity}" >
-																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
-																		</digi:link>
+																		<c:set var="actId">
+																			<bean:write name="activities" property="ampActivityId" />
+																		</c:set> 
+																		<input type="checkbox" value="${actId}" />
 																	</td>
 																	</tr>
 																</logic:iterate>																
@@ -264,6 +301,7 @@
 																			
 										<tr bgcolor="#ffffff">
 											<td>
+											<table><tr><td>
 												<%
 													ActivityForm aimActivityForm = (ActivityForm) pageContext.getAttribute("aimActivityForm");
 													java.util.List pagelist = new java.util.ArrayList();
@@ -339,7 +377,16 @@
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
 												</c:if>
 												<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
-											</td>											
+											</td>
+											<td width="20%" align="right">
+												<c:set var="trnDeleteSelectedBtn">
+													<digi:trn>Delete Selected Activities</digi:trn>
+												</c:set> 
+												<input type="button" value="${trnDeleteSelectedBtn}" class="dr-menu" onclick="return deleteActivities()">
+											</td>
+											</tr>
+											</table>
+											</td>										
 										</tr>
 										</logic:notEmpty>
 									</table>

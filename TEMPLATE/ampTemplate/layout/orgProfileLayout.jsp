@@ -131,10 +131,13 @@
                 font-size:10px;
                 font-family:Arial,Helvetica,sans-serif;
             }
+            body {
+                margin:0px; padding:0px;
+            }
 
         </style>
     </HEAD>
-    <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+    <BODY>
         <TABLE cellSpacing=0 cellPadding=0 width="100%"  border=0 valign="top" align="left">
             <TBODY>
                 <TR>

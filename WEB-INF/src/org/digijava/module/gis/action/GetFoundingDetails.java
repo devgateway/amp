@@ -1070,6 +1070,9 @@ public class GetFoundingDetails extends Action {
                 Object[] actData = actIt.next();
                 AmpActivity activity = (AmpActivity) actData[0];
                 Float percentsForSectorSelected = (Float) actData[1];
+                
+                if (percentsForSectorSelected != null) {
+                
                 FundingData totalFunding = getActivityTotalFundingInUSD(
                         activity, start, end, donorId);
 
@@ -1157,6 +1160,8 @@ public class GetFoundingDetails extends Action {
 
                 //    Set activiactivity.getFunding();
             }
+            
+        }
 
         }
         Object[] retVal = new Object[2];

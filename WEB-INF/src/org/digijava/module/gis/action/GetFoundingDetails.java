@@ -146,8 +146,8 @@ public class GetFoundingDetails extends Action {
                     if (request.getParameter("noFill") != null) {
                         fill = false;
                     }
-										
-										if (map != null) {
+
+                    if (map != null) {
 	                    gisUtil.addDataToImage(g2d,
 	                                           map.getSegments(),
 	                                           -1,
@@ -163,10 +163,10 @@ public class GetFoundingDetails extends Action {
 	                                canvasWidth, canvasHeight,
 	                                rect.getLeft(), rect.getRight(),
 	                                rect.getTop(), rect.getBottom());
-                    	}
-                  	} else {
-                  		gisUtil.getNoDataImage(g2d, "No map data in the database");
-                  	}
+	                    }
+                    } else {
+                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    }
                     g2d.dispose();
 
                     RenderedImage ri = graph;
@@ -209,7 +209,7 @@ public class GetFoundingDetails extends Action {
                     //Get segments with funding for dashed paint map
                     List secFundings = null;
 
-                    if (secId.longValue() > 0l) {
+                    if (secId.longValue() > -2l) {
                         secFundings = DbUtil.getSectorFoundings(secId);
                     } else {
                         secFundings = new ArrayList();
@@ -219,6 +219,10 @@ public class GetFoundingDetails extends Action {
                             Integer.parseInt(mapLevel),
                             fStartDate.getTime(),
                             fEndDate.getTime(), donorId);
+                    
+                    request.getSession().setAttribute(
+                            "AMP_FUNDING_DATA", fundingList);
+                    
                     Map fundingLocationMap = (Map) fundingList[0];
 
                     List segmentDataList = new ArrayList();
@@ -279,24 +283,20 @@ public class GetFoundingDetails extends Action {
                     g2d.setBackground(new Color(0, 0, 100, 255));
 
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
-										
-										if (map != null) {
-	                    gisUtil.addDataToImage(g2d,
-	                                           map.getSegments(),
-	                                           hilightData,
-	                                           null,
-	                                           canvasWidth, canvasHeight,
-	                                           rect.getLeft(), rect.getRight(),
-	                                           rect.getTop(), rect.getBottom(), true, false);
-	
-	                    gisUtil.addCaptionsToImage(g2d,
-	                                               map.getSegments(),
-	                                               canvasWidth, canvasHeight,
-	                                               rect.getLeft(), rect.getRight(),
-	                                               rect.getTop(), rect.getBottom());
-										} else {
-											gisUtil.getNoDataImage(g2d, "No map data in the database");
-										}
+
+                    gisUtil.addDataToImage(g2d,
+                                           map.getSegments(),
+                                           hilightData,
+                                           null,
+                                           canvasWidth, canvasHeight,
+                                           rect.getLeft(), rect.getRight(),
+                                           rect.getTop(), rect.getBottom(), true, false);
+
+                    gisUtil.addCaptionsToImage(g2d,
+                                               map.getSegments(),
+                                               canvasWidth, canvasHeight,
+                                               rect.getLeft(), rect.getRight(),
+                                               rect.getTop(), rect.getBottom());
 
                     g2d.dispose();
 
@@ -321,13 +321,19 @@ public class GetFoundingDetails extends Action {
 
                         Long secId = new Long(secIdStr);
                         
-
+                        /*
                         List secFundings = DbUtil.getSectorFoundings(secId);
 
                         Object[] fundingList = getFundingsByLocations(secFundings,
                                 Integer.parseInt(mapLevel),
                                 fStartDate.getTime(),
                                 fEndDate.getTime(), donorId);
+                                */
+                        Object[] fundingList = (Object[]) request.getSession().
+                        getAttribute("AMP_FUNDING_DATA");
+                        
+                        request.getSession().removeAttribute("AMP_FUNDING_DATA");
+                        
 
                         Map fundingLocationMap = (Map) fundingList[0];
                         FundingData totalFunding = (FundingData) fundingList[1];
@@ -507,22 +513,22 @@ public class GetFoundingDetails extends Action {
 
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
-										if (map != null) {
-	                    gisUtil.addDataToImage(g2d,
-	                                           map.getSegments(),
-	                                           hilightData, null,
-	                                           canvasWidth, canvasHeight,
-	                                           rect.getLeft(), rect.getRight(),
-	                                           rect.getTop(), rect.getBottom(), true, false);
-	
-	                    gisUtil.addCaptionsToImage(g2d,
-	                                               map.getSegments(),
-	                                               canvasWidth, canvasHeight,
-	                                               rect.getLeft(), rect.getRight(),
-	                                               rect.getTop(), rect.getBottom());
-										} else {
-											gisUtil.getNoDataImage(g2d, "No map data in the database");
-										}
+                    if (map != null) {
+                    gisUtil.addDataToImage(g2d,
+                                           map.getSegments(),
+                                           hilightData, null,
+                                           canvasWidth, canvasHeight,
+                                           rect.getLeft(), rect.getRight(),
+                                           rect.getTop(), rect.getBottom(), true, false);
+
+                    gisUtil.addCaptionsToImage(g2d,
+                                               map.getSegments(),
+                                               canvasWidth, canvasHeight,
+                                               rect.getLeft(), rect.getRight(),
+                                               rect.getTop(), rect.getBottom());
+                    } else {
+                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    }
 
                     g2d.dispose();
 
@@ -699,6 +705,7 @@ public class GetFoundingDetails extends Action {
 
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
+                    if (map != null) {
                     gisUtil.addDataToImage(g2d,
                                            map.getSegments(),
                                            hilightData,
@@ -712,6 +719,9 @@ public class GetFoundingDetails extends Action {
                                                canvasWidth, canvasHeight,
                                                rect.getLeft(), rect.getRight(),
                                                rect.getTop(), rect.getBottom());
+                    } else {
+                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    }
 
                     g2d.dispose();
 
@@ -925,7 +935,7 @@ public class GetFoundingDetails extends Action {
 
                     indicators.output(sos);
                 }
-            }	else if (map == null) {
+            } else if (map == null) {
             	response.setContentType("image/png");
             	BufferedImage graph = new BufferedImage(canvasWidth,
                         canvasHeight,

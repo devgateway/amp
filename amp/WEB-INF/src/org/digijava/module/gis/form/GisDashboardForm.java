@@ -22,7 +22,17 @@ public class GisDashboardForm extends ActionForm {
 	private String selectedToYear;
 	private Collection<LabelValueBean> yearsFrom;
 	private Collection<LabelValueBean> yearsTo;
+	
+	private Collection<LabelValueBean> allDonorOrgs;
 
+	public Collection<LabelValueBean> getAllDonorOrgs () {
+		return this.allDonorOrgs;
+	}
+	
+	public void setAllDonorOrgs (Collection<LabelValueBean> allDonorOrgs) {
+		this.allDonorOrgs = allDonorOrgs;
+	}
+	
     public Collection getSectorCollection() {
         return sectorCollection;
     }

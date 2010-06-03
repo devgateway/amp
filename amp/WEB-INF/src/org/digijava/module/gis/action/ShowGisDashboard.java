@@ -1,5 +1,6 @@
 package org.digijava.module.gis.action;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.gis.form.GisDashboardForm;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.util.ChartWidgetUtil;
@@ -60,15 +62,17 @@ public class ShowGisDashboard extends Action {
 		//fill to years' drop-down
 		gisForm.setYearsTo(ChartWidgetUtil.getYears(false));
 
-
-
-//                Collection ggg = FeaturesUtil.getAMPFieldsVisibility();
-                AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) request.getSession().getAttribute("ampTreeVisibility");
-
-                AmpFieldsVisibility locPercentageVisible = FeaturesUtil.getFieldVisibility("Regional Percentage");
-//                String abcd = locPercentageVisible.getVisible();
-                AmpFieldsVisibility locPercentageMandatory = FeaturesUtil.getFieldVisibility("Validate Mandatory Regional Percentage");
-
+		Collection<LabelValueBean> allDonors = new ArrayList <LabelValueBean>() ; 
+		
+		List allDbDonors = DbUtil.getAllDonors();
+		
+		for (Object donorItem : allDbDonors) {
+			Object[] donorNameId = (Object[]) donorItem;
+			LabelValueBean donorComboItem = new LabelValueBean((String)donorNameId[0], ((Long)donorNameId[1]).toString());
+			allDonors.add(donorComboItem);
+		}
+		
+		gisForm.setAllDonorOrgs(allDonors);
 
 
         return mapping.findForward("forward");

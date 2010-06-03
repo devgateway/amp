@@ -223,7 +223,7 @@
             <digi:trn>Select Time Interval</digi:trn>:
         </td>
 		<td>
-			<select id="indicatorYearCombo" onChange="yearSelected(this)" style="width:350px">
+			<select id="indicatorYearCombo" style="width:350px">
 				<option value="-1"><digi:trn>Select Time Interval</digi:trn></option>
 			</select>
 		</td>
@@ -302,13 +302,16 @@
         </td>
         <td>
             <select id="sectorsMapComboFin" onChange="" style="width:350px">
-            <option value="-1"><digi:trn>Select sector</digi:trn></option>
+            <option value="-2"><digi:trn>Select Sector</digi:trn></option>
+            <option value="-1"><digi:trn>All Sectors</digi:trn></option>
             <logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
                 <option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
             </logic:iterate>
         </select>
         </td>
     </tr>
+    
+    <%--
     <tr>
        <td nowrap width="200" style="font-size:12px">
             <digi:trn>Select Donor</digi:trn>:
@@ -318,6 +321,23 @@
         </select>
         </td>
     </tr>
+    --%>
+    
+    <tr>
+        <td nowrap width="200" style="font-size:12px">
+             <digi:trn>Select Sector</digi:trn>:
+        </td>
+		<td>
+		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px"> -->
+			<select id="donorsCombo" onChange="" style="width:350px">
+			<option value="-1"><digi:trn>All Donors</digi:trn></option>
+			<logic:iterate name="gisDashboardForm" property="allDonorOrgs" id="donor">
+				<option value="<bean:write name="donor" property="value"/>"><bean:write name="donor" property="label"/></option>
+			</logic:iterate>
+		</select>
+		</td>
+	</tr>
+    
     </feature:display>    
     
 </table>

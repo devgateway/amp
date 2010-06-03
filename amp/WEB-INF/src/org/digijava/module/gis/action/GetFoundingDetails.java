@@ -209,7 +209,7 @@ public class GetFoundingDetails extends Action {
                     //Get segments with funding for dashed paint map
                     List secFundings = null;
 
-                    if (secId.longValue() > 0l) {
+                    if (secId.longValue() > -2l) {
                         secFundings = DbUtil.getSectorFoundings(secId);
                     } else {
                         secFundings = new ArrayList();
@@ -219,6 +219,10 @@ public class GetFoundingDetails extends Action {
                             Integer.parseInt(mapLevel),
                             fStartDate.getTime(),
                             fEndDate.getTime(), donorId);
+                    
+                    request.getSession().setAttribute(
+                            "AMP_FUNDING_DATA", fundingList);
+                    
                     Map fundingLocationMap = (Map) fundingList[0];
 
                     List segmentDataList = new ArrayList();
@@ -317,13 +321,19 @@ public class GetFoundingDetails extends Action {
 
                         Long secId = new Long(secIdStr);
                         
-
+                        /*
                         List secFundings = DbUtil.getSectorFoundings(secId);
 
                         Object[] fundingList = getFundingsByLocations(secFundings,
                                 Integer.parseInt(mapLevel),
                                 fStartDate.getTime(),
                                 fEndDate.getTime(), donorId);
+                                */
+                        Object[] fundingList = (Object[]) request.getSession().
+                        getAttribute("AMP_FUNDING_DATA");
+                        
+                        request.getSession().removeAttribute("AMP_FUNDING_DATA");
+                        
 
                         Map fundingLocationMap = (Map) fundingList[0];
                         FundingData totalFunding = (FundingData) fundingList[1];
@@ -925,6 +935,22 @@ public class GetFoundingDetails extends Action {
 
                     indicators.output(sos);
                 }
+            } else if (map == null) {
+            	response.setContentType("image/png");
+            	BufferedImage graph = new BufferedImage(canvasWidth,
+                        canvasHeight,
+                        BufferedImage.TYPE_INT_ARGB);
+
+                Graphics2D g2d = graph.createGraphics();
+                gisUtil.getNoDataImage(g2d, "No map data in the database");
+                
+                g2d.dispose();
+
+                RenderedImage ri = graph;
+
+                ImageIO.write(ri, "png", sos);
+
+                graph.flush();
             }
 
         } catch (Exception e) {

@@ -708,7 +708,7 @@ public class GisUtil {
     }
     
     public void getNoDataImage(Graphics2D g2d, String s) {
-		g2d.setBackground(new Color(255, 255, 255, 255));
+		g2d.setBackground(new Color(200, 200, 200, 255));
 		java.awt.Font f = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 24);
 		g2d.setColor(Color.black);
 		g2d.setFont(f);

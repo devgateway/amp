@@ -436,13 +436,7 @@ public class ExportBuilder {
 		String path = ampColumnEntry.getPath();
 
 		if (path.equalsIgnoreCase("activity.funding.fundingOrg")){
-			if (ampfunding.getAmpDonorOrgId()  != null){
-				funding.setFundingOrg(buildCodeValue(ampfunding.getAmpDonorOrgId().getOrgCode(), ampfunding.getAmpDonorOrgId().getName()));
-			} else {
-				String msg = "Funding.getAmpDonorOrg is null";
-				this.addToLog(ampActivity, msg);
-				throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
-			}
+			funding.setFundingOrg(buildCodeValue(ampfunding.getAmpDonorOrgId().getOrgCode(), ampfunding.getAmpDonorOrgId().getName()));
 		} else if (path.equalsIgnoreCase("activity.funding.assistanceType")){
 			CodeValueType cValue =  buildCodeValue(ampfunding.getTypeOfAssistance());
 			if (cValue == null){

@@ -787,7 +787,7 @@
 										<tr bgcolor="#ecf3fd">
 											<td>&nbsp;</td>
 											<td align="left">&nbsp;</td>
-											<td colspan="5"><b><digi:trn key="aim:fixedRate">Fixed Exchange Rate</digi:trn> - <digi:trn>compared to</digi:trn><digi:trn><gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> </digi:trn></b></td>
+											<td colspan="5"><b><digi:trn key="aim:fixedRate">Fixed Exchange Rate</digi:trn> - <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /></b></td>
 										</tr>
 										<tr><td>&nbsp;</td>
 										<td align="right">

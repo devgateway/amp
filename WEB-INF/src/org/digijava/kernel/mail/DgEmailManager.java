@@ -489,27 +489,21 @@ public class DgEmailManager {
 
         // Get SMTP object from configuration file,
         // see digi.xml for more details
-        logger.info("Start Getting Config");
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
-        logger.info("End Getting Config");
         logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " +
                      smtp.getUserPassword());
-        logger.info("Start Getting Forward Emails");
-        ForwardEmails forwardEmails = DigiConfigManager.getConfig().getForwardEmails();
-        logger.info("End Getting Forward Emails");
+        ForwardEmails forwardEmails = DigiConfigManager.getConfig().
+            getForwardEmails();
 
         // Mail session needs property,
         // we create default property key and fill it
         Properties props = new Properties();
         props.put("mail.smtp.host", smtp.getHost());
-        logger.info("SMTP host resolved:" +props.getProperty("mail.smtp.host"));
         if (smtp.getUserName() != null && smtp.getUserPassword() != null) {
             props.put("mail.smtp.auth", "true");
         }
-        logger.info("Getting session default instance");
         javax.mail.Session session = javax.mail.Session.getDefaultInstance(
             props, null);
-        logger.info("Finished getting session default instance");
 
 
         Address addresses[] = null;
@@ -520,27 +514,19 @@ public class DgEmailManager {
                     getEmails().get(i));
             }
         }
-        
-        logger.info("start creating Mime Message");
-        
         // We create mime message, recipient,
         // to, subject and message content
         MimeMessage message = createMimeMessage(session, emailMessage, addresses);
 
-        logger.info("end creating Mime Message");
-        
+
         try {
             // send mail directly
-        	logger.info("before connect: "+ System.currentTimeMillis());
             Transport transport = session.getTransport("smtp");
             transport.connect(smtp.getHost(), smtp.getUserName(),
                               smtp.getUserPassword());
-        	logger.info("after connect: "+ System.currentTimeMillis());
-
             message.saveChanges(); // implicit with send()
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
-        	logger.info("after close: "+ System.currentTimeMillis());
 
             // log mail
             if (log) {

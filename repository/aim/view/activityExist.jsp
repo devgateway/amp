@@ -214,9 +214,9 @@ function cancel() {
 							
 						</td></tr>
 						<tr><td align="center">
-							<input type="button" value="<digi:trn>Overwrite</digi:trn>" class="dr-menu" onclick="overwrite()"
+							<input type="button" value="Overwrite" class="dr-menu" onclick="overwrite()"
 							name="backButton">
-							<input type="button" value="<digi:trn>Cancel</digi:trn>" class="dr-menu" onclick="cancel()"
+							<input type="button" value="Cancel" class="dr-menu" onclick="cancel()"
 							name="submitButton">
 						</td></tr>
                         </c:if>

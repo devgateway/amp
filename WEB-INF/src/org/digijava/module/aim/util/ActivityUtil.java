@@ -29,7 +29,6 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
-import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;

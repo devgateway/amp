@@ -460,8 +460,6 @@ public class TeamUtil {
                 workspace.setWorkspaceType(team.getAccessType());
                 workspace.setAddActivity(team.getAddActivity());
                 workspace.setComputation(team.getComputation());
-                workspace.setHideDraftActivities(team.getHideDraftActivities() );
-                
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
                 else
@@ -580,7 +578,6 @@ public class TeamUtil {
                 updTeam.setOrganizations(team.getOrganizations());
                 updTeam.setAddActivity(team.getAddActivity());
                 updTeam.setComputation(team.getComputation());
-                updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "

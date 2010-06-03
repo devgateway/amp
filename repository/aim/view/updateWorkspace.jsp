@@ -633,12 +633,6 @@ function cancel()
 																		</td>
 																	</tr>
 																	
-																	<tr>
-																		<td>
-																			<html:checkbox property="hideDraftActivities" value="true"><digi:trn>Hide draft activities</digi:trn></html:checkbox>
-																		</td>
-																	</tr>
-																	
 																</table>
 																<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																	<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">

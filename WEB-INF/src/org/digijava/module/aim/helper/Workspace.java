@@ -20,9 +20,8 @@ public class Workspace {
 	private Long relatedTeam;
 	private boolean hasActivities;
 	private boolean hasMembers;
-	private Collection childWorkspaces;
+	private Collection childWorkspaces; 
 	
-	private Boolean hideDraftActivities;
 	private Boolean addActivity;
 	private Boolean computation;
 	
@@ -169,21 +168,4 @@ public class Workspace {
 	public void setChildOrgs(Collection childOrgs) {
 		this.childOrgs = childOrgs;
 	}
-
-	/**
-	 * @return the hideDraftActivities
-	 */
-	public Boolean getHideDraftActivities() {
-		return hideDraftActivities;
-	}
-
-	/**
-	 * @param hideDraftActivities the hideDraftActivities to set
-	 */
-	public void setHideDraftActivities(Boolean hideDraftActivities) {
-		this.hideDraftActivities = hideDraftActivities;
-	}
-	
-	
-	
 }

@@ -37,7 +37,7 @@
     .tableOdd {
         background-color:#FFFFFF;
         font-family: Arial;
-        font-size:10px;!important
+        font-size:10px !important;
         padding:2px;
     }
 

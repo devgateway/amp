@@ -388,8 +388,31 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Components Grand Total Disbursements" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Grand Total Expenditures" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Physical Progress" feature="Activity - Component Step"></field:display> 
-<field:display name="Conditions for Fund Release" feature="Funding Information"></field:display> 
-<field:display name="Contact Name" feature="Reports Contact Information"></field:display> 
+<field:display name="Conditions for Fund Release" feature="Funding Information"></field:display>
+<field:display name="Donor Contact Name" feature="Reports Contact Information"></field:display>
+<field:display name="Donor Contact Email" feature="Reports Contact Information"></field:display>
+<field:display name="Donor Contact Organization" feature="Reports Contact Information"></field:display>
+<field:display name="Donor Contact Phone" feature="Reports Contact Information"></field:display>
+<field:display name="Donor Contact Fax" feature="Reports Contact Information"></field:display>
+<field:display name="Donor Contact Title" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry Of Finance Contact Name" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry Of Finance Contact Email" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry Of Finance Contact Organization" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry Of Finance Contact Phone" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry Of Finance Contact Fax" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry Of Finance Contact Title" feature="Reports Contact Information"></field:display>
+<field:display name="Sector Ministry Contact Name" feature="Reports Contact Information"></field:display>
+<field:display name="Sector Ministry Contact Email" feature="Reports Contact Information"></field:display>
+<field:display name="Sector Ministry Contact Organization" feature="Reports Contact Information"></field:display>
+<field:display name="Sector Ministry Contact Phone" feature="Reports Contact Information"></field:display>
+<field:display name="Sector Ministry Contact Fax" feature="Reports Contact Information"></field:display>
+<field:display name="Sector Ministry Contact Title" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator Contact Name" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator Contact Email" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator Contact Organization" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator Contact Phone" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator Contact Fax" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator Contact Title" feature="Reports Contact Information"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Contract Donor Disbursements" feature="Contracting"></field:display> 

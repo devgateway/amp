@@ -18,6 +18,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	
 	private Boolean addActivity;
 	private Boolean computation;
+	private Boolean hideDraftActivities;
 
 	private String description;
 
@@ -35,6 +36,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	private String accessType;  	// Management or Team
 	
 	// added for donor-access
+	@Deprecated
 	private String teamCategory;	// Donor or Mofed team
 	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
 	private Set<AmpActivity> activityList;		// activities assigned to donor team
@@ -178,12 +180,14 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	/**
 	 * @return Returns the teamCategory.
 	 */
+	@Deprecated
 	public String getTeamCategory() {
 		return teamCategory;
 	}
 	/**
 	 * @param teamCategory The teamCategory to set.
 	 */
+	@Deprecated
 	public void setTeamCategory(String teamCategory) {
 		this.teamCategory = teamCategory;
 	}
@@ -243,6 +247,20 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 
 	public void setChildrenWorkspaces(Collection childrenWorkspaces) {
 		this.childrenWorkspaces = childrenWorkspaces;
+	}
+
+	/**
+	 * @return the hideDraftActivities
+	 */
+	public Boolean getHideDraftActivities() {
+		return hideDraftActivities;
+	}
+
+	/**
+	 * @param hideDraftActivities the hideDraftActivities to set
+	 */
+	public void setHideDraftActivities(Boolean hideDraftActivities) {
+		this.hideDraftActivities = hideDraftActivities;
 	}
 
 

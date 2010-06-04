@@ -18,6 +18,7 @@ public class TeamMember {
 
 	private String teamName;
 
+	@Deprecated
 	private String teamType; // indicates whether the team is a DONOR team or MOFED team
 	
 	private String teamAccessType; // indicates whether MANAGEMENT or WORKING TEAM
@@ -219,6 +220,7 @@ public class TeamMember {
 	/**
 	 * @return Returns the teamType.
 	 */
+	@Deprecated
 	public String getTeamType() {
 		return teamType;
 	}
@@ -226,6 +228,7 @@ public class TeamMember {
 	/**
 	 * @param teamType The teamType to set.
 	 */
+	@Deprecated
 	public void setTeamType(String teamType) {
 		this.teamType = teamType;
 	}

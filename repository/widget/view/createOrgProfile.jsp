@@ -77,14 +77,17 @@
                         </td>
                         <td  colspan="2">
                             <html:select name="widgetOrgProfileWidgetForm" property="type">
-                                <html:option value="1">Summary</html:option>
-                                <html:option value="2">Type of Aid</html:option>
-                                <html:option value="3">Pledges/Comm/Disb</html:option>
-                                <html:option value="4">ODA Profile</html:option>
-                                <html:option value="5">Sector Breakdown</html:option>
-                                <html:option value="6">Regional Breakdown</html:option>
-                                <html:option value="7">Paris Declaration</html:option>
+                                <html:option value="1"><digi:trn>Summary</digi:trn></html:option>
+                                <html:option value="2"><digi:trn>Type of Aid</digi:trn></html:option>
+                                <html:option value="3"><digi:trn>Pledges/Comm/Disb</digi:trn></html:option>
+                                <html:option value="4"><digi:trn>ODA Profile</digi:trn></html:option>
+                                <html:option value="5"><digi:trn>Sector Breakdown</digi:trn></html:option>
+                                <html:option value="6"><digi:trn>Regional Breakdown</digi:trn></html:option>
+                                <html:option value="7"><digi:trn>Paris Declaration</digi:trn></html:option>
                             </html:select>
+                            
+                                                       
+                            
                         </td>
                         
                     </tr>
@@ -115,7 +118,7 @@
                             </html:submit>
                         </td>
                         <td>
-                            <input type="button" value="Cancel" onclick="cancel()">
+                            <input type="button" value="<digi:trn>Cancel</digi:trn>" onclick="cancel()">
                         </td>
                     </tr>
                 </table>

@@ -208,9 +208,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				// "error.aim.editActivity.userPartOfManagementTeam";
 				// }
 				// else
-				if (tm.getWrite() == false) {
-					//errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
-				}
+					//PLEASE DO NOT COMMENT THIS. IF YOU CANNOT EDIT ACTIVITIES
+					//PLEASE GO TO ADMIN->PERMISSION MANAGER->AmpActivity and select Either NONE or AlwaysAllowed then click apply
+					errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
+				
 			} else {
 				Collection euActs = EUActivityUtil.getEUActivities(activityId);
 				request.setAttribute("costs", euActs);

@@ -97,14 +97,14 @@ public class MessageConstants {
     public static final String OBJECT_TEAM="team";
     public static final String START_DATE="start date";
     public static final String END_DATE="end date";
-
+    
     /**
      * email statuses
      */
     public static final String SENT_STATUS="sent";
     public static final String UNSENT_STATUS="unsent";
     public static final String FAILED_STATUS="failed";
-    
+
 	/**
 	 * for Calendar events. 
 	 * 0 	- Awaiting Approval

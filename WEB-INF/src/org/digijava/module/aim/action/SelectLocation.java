@@ -117,8 +117,8 @@ public class SelectLocation extends Action {
         	Collection<AmpCategoryValueLocations> childrenLocs 	= parentLoc.getChildLocations();
         	int lastLayer=0;
         	if ( childrenLocs != null && childrenLocs.size() > 0 ) {
-        		Integer currentLayer							= 
-        			((AmpCategoryValueLocations)childrenLocs.toArray()[0]).getParentCategoryValue().getIndex();
+        		Integer currentLayer = (parentLoc.getParentCategoryValue().getIndex()) + 1;
+        			//((AmpCategoryValueLocations)childrenLocs.toArray()[0]).getParentCategoryValue().getIndex();
         		
         		if ( currentLayer <= implLocValue.getIndex() ) { 
 	        		ArrayList<KeyValue> childrenKV					= new ArrayList<KeyValue>(childrenLocs.size());

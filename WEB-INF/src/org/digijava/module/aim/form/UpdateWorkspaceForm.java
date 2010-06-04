@@ -23,6 +23,10 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Boolean addActivity=null;
 	@Checkbox(step=1, resetValue="false")
 	private Boolean computation=null;
+	
+	@Checkbox(step=1, resetValue="false")
+	private Boolean hideDraftActivities=null;
+	
 	private Collection organizations;
 	private String id = null;
 	private String teamName = null;
@@ -664,6 +668,20 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
 	public void setTeamAccessType(String teamAccessType) {
 		this.teamAccessType = teamAccessType;
+	}
+
+	/**
+	 * @return the hideDraftActivities
+	 */
+	public Boolean getHideDraftActivities() {
+		return hideDraftActivities;
+	}
+
+	/**
+	 * @param hideDraftActivities the hideDraftActivities to set
+	 */
+	public void setHideDraftActivities(Boolean hideDraftActivities) {
+		this.hideDraftActivities = hideDraftActivities;
 	}
 
 

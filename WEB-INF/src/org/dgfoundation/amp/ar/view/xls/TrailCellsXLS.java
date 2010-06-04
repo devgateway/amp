@@ -74,8 +74,8 @@ public class TrailCellsXLS extends XLSExporter {
 		
 			HSSFCellStyle hierarchyStyle;
 			if(grd.getLevelDepth()==2) 
-				hierarchyStyle = this.getHierarchyLevel1Style(true);
-			else hierarchyStyle=this.getHierarchyOtherStyle(true);
+				hierarchyStyle = this.getHierarchyLevel1Style();
+			else hierarchyStyle=this.getHierarchyOtherStyle();
 			
 			
 			HSSFCell cell = this.getCell(hierarchyStyle);

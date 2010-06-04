@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -211,6 +212,9 @@ public final class ARUtil {
 			}
 			ret.add(grp);
 		}
+
+		Collections.sort((List)ret, new DbUtil.HelperAmpOrgGroupNameComparator());
+		
 		return ret;
 	}
 

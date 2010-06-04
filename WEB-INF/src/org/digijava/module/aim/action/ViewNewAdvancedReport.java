@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
@@ -164,6 +165,17 @@ public class ViewNewAdvancedReport extends Action {
 			filter.setApproved(true);
 			filter.setDraft(true);
 		}
+		/**
+		 * Checks if the team is a computed workspace and in case it is
+		 * it checks if it should hide the draft activities
+		 */
+		if ( tm != null && tm.getComputation() != null && tm.getComputation() ) {
+			Workspace wrksp	= TeamUtil.getWorkspace( tm.getTeamId() );
+			if ( wrksp != null && wrksp.getHideDraftActivities() != null && wrksp.getHideDraftActivities() ) {
+				filter.setDraft(true);
+			}
+		}
+		
 		httpSession.setAttribute("progressValue", ++progressValue); 
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		

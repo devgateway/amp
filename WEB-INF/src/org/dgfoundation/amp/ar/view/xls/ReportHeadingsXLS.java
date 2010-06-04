@@ -104,7 +104,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						
 						if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities()))){
 						
-						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
+						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle());
 						HSSFCellStyle style = null;
 						try{	
 							style = cell.getCellStyle();
@@ -175,7 +175,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 							for(int k=0;k<col.getWidth();k++) {
 								HSSFCell cell = row.getCell(colId.intValue()+k);
 								if(cell==null) cell=row.createCell(colId.intValue()+k);
-								cell.setCellStyle(this.getHighlightedStyle(true));
+								cell.setCellStyle(this.getHighlightedStyle());
 							}
 						}
 

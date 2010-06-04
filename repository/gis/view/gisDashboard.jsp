@@ -63,7 +63,7 @@
 
 <script language="JavaScript">
     var showDevinfo = false;
-    <feature:display name="Show DvInfo data" module="GIS DASHBOARD">
+    <feature:display name="Show DevInfo data" module="GIS DASHBOARD">
         showDevinfo = true;
     </feature:display>
 </script>
@@ -139,7 +139,7 @@
     
     <!-- DevInfo block -->
     
-    <feature:display name="Show DvInfo data" module="GIS DASHBOARD">
+    <feature:display name="Show DevInfo data" module="GIS DASHBOARD">
 	<tr>
 		<td colspan="2">
 			<span>
@@ -346,7 +346,7 @@
 </div>   
 
 
-<feature:display name="Show DvInfo data" module="GIS DASHBOARD">
+<feature:display name="Show DevInfo data" module="GIS DASHBOARD">
     <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
  	    <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
 	    

@@ -45,11 +45,11 @@ public class DefaultDonorFundingCalculator implements DonorFundingCalculator {
 	return actual;
     }
 
-	public DecimalWraper getTotalCommtiments(DecimalWraper planned,
-		DecimalWraper actual) {
-	    // just return the actual
-	    return actual;
-	}
+    public DecimalWraper getTotalCommtiments(DecimalWraper planned, DecimalWraper actual, DecimalWraper pipeline) {
+    	DecimalWraper value = new DecimalWraper();
+        value.setValue(new BigDecimal(actual.doubleValue() + pipeline.doubleValue()));
+        return value;
+    }
 
 	public DecimalWraper getunDisbursementsBalance(DecimalWraper a,
 		DecimalWraper b) {

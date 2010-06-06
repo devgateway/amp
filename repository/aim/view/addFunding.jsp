@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.helper.Constants"%>
 
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
@@ -669,7 +670,7 @@
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Commitment" feature="Commitments">
 								<td align="center" valign="middle" width="75">
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn></font></b>
 								</td>
 								</field:display>
 								<field:display name="Amount Commitment" feature="Commitments">
@@ -690,7 +691,7 @@
 								<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
 								<td align="center" valign="middle" width="200">
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
 								<field:display name="Related Pledge" feature="Commitments">
@@ -721,8 +722,9 @@
 	                                                </c:if>	
 												<c:if test="${aimEditActivityForm.planning.statusId!=1}">
 													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text"  disabled="${contentDisabled}">
-														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-														<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+														<html:option value="<%=new Integer(Constants.ACTUAL).toString()%>"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
+														<html:option value="<%=new Integer(Constants.PLANNED).toString()%>"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+														<html:option value="<%=new Integer(Constants.ADJUSTMENT_TYPE_PIPELINE).toString()%>"><digi:trn>Pipeline</digi:trn></html:option>
 													</html:select>
 												</c:if>
 													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>

@@ -2185,8 +2185,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             if (fd.getAdjustmentType() == Constants.PLANNED) {
               fd.setAdjustmentTypeName("Planned");
             }
-            else {
-              fd.setAdjustmentTypeName("Actual");
+            else if(fd.getAdjustmentType() == Constants.ACTUAL) {
+                fd.setAdjustmentTypeName("Actual");
+            } else if (fd.getAdjustmentType() == Constants.ADJUSTMENT_TYPE_PIPELINE) {
+            	fd.setAdjustmentTypeName("Pipeline");
             }
             fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
             fd.setCurrencyName(cf.getCurrency().getCurrencyName());

@@ -177,7 +177,9 @@ public class FundingAdded extends Action {
 						fundDet.setAdjustmentTypeName("Planned");
 					else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 						fundDet.setAdjustmentTypeName("Actual");
-					}
+                    } else if (fundDet.getAdjustmentType() == Constants.ADJUSTMENT_TYPE_PIPELINE) {
+                    	fundDet.setAdjustmentTypeName("Pipeline");
+                    }
 					//
 					fundDetails.add(fundDet);
 				}

@@ -236,6 +236,16 @@
 	                        	</c:if>&nbsp;        
 	                        </td>
                         </tr>
+						<tr>
+                            <td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+                                key='aim:totalactualcommittment'> TOTAL PIPELINE COMMITMENTS: </digi:trn>
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+                                <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
+                                        <bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> <bean:write name="aimEditActivityForm" property="currCode" />
+                                </c:if>&nbsp;        
+                            </td>
+                        </tr>
                         <feature:display module="Funding"
                             name="Disbursement">
                         <tr>

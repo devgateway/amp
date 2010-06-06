@@ -22,6 +22,7 @@ public class Constants
 	public static final int MTEFPROJECTION = 3 ;
 	public static final int PLANNED = 0 ;
 	public static final int ACTUAL = 1 ;
+	public static final int ADJUSTMENT_TYPE_PIPELINE = 2;
 	public static final int FROM_YEAR = 1983 ;
 	public static final int TO_YEAR = 2005 ;
 

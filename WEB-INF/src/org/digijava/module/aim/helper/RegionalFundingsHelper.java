@@ -75,7 +75,9 @@ public class RegionalFundingsHelper {
 				amt = 0;
 			} else if (fd.getAdjustmentType() == Constants.ACTUAL) {
 				fd.setAdjustmentTypeName("Actual");
-			}
+            } else if (fd.getAdjustmentType() == Constants.ADJUSTMENT_TYPE_PIPELINE) {
+                fd.setAdjustmentTypeName("Pipeline");
+            }
 			
 			if (fd.getTransactionType() == Constants.COMMITMENT) {
 				if (rf.getCommitments() == null) {

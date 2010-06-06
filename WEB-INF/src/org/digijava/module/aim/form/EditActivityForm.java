@@ -1947,6 +1947,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private String totalCommitments;
 		private String totalPlannedCommitments;
+		private String totalPipelineCommitments;
 		private double totalCommitmentsDouble;
 		private String totalDisbursements;
 		private String totalExpenditures;
@@ -2601,6 +2602,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		 */
 		public void setSelectedMTEFProjectionYear(int selectedMTEFProjectionYear) {
 			this.selectedMTEFProjectionYear = selectedMTEFProjectionYear;
+		}
+
+		public String getTotalPipelineCommitments() {
+			return totalPipelineCommitments;
+		}
+
+		public void setTotalPipelineCommitments(String totalPipelineCommitments) {
+			this.totalPipelineCommitments = totalPipelineCommitments;
 		}	
 		
 	}

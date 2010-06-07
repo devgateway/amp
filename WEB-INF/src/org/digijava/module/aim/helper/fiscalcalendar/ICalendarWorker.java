@@ -5,7 +5,9 @@ import java.util.Date;
 public interface ICalendarWorker  {
 
 	public Date getDate() throws Exception;
-
+	
+	
+	
 	/**
 	 * Get the the YEAR according to the current fiscal calendar configuration
 	 * 

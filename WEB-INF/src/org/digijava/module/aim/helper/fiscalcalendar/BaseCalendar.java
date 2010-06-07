@@ -9,15 +9,20 @@ public class BaseCalendar {
 
 	public static final BaseCalendar BASE_GREGORIAN = new BaseCalendar("Gregorian", "GREG-CAL");
 	public static final BaseCalendar BASE_ETHIOPIAN = new BaseCalendar("Ethiopian ", "ETH-CAL");
+	public static final BaseCalendar BASE_NEPALI = new BaseCalendar("Nepali ", "NEP-CAL");
 
 	public static Collection<BaseCalendar> calendarList = null;
 
+	/*
+	 * Nepali Date to English: Subtract - 56 Years - 8 Months - 17 Days
+English Date to Nepali Date: Add - 56 Years - 8 Months - 17 Days
+	 * */
 	// singleton base calendar list
 	static {
 		calendarList = new Vector<BaseCalendar>();
 		calendarList.add(BASE_GREGORIAN);
 		calendarList.add(BASE_ETHIOPIAN);
-
+		calendarList.add(BASE_NEPALI);
 	}
 
 	public static Collection getCalendarList() {

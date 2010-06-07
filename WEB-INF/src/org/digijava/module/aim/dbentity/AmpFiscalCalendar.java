@@ -6,19 +6,21 @@ import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianFiscalBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
+import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.Identifiable;
 
-public class AmpFiscalCalendar implements Serializable, Identifiable
-{
-	private Long ampFiscalCalId ;
-	private Integer startMonthNum ;
-	private Integer yearOffset ;
-	private Integer startDayNum ;
-	private String name ;
-	private String description ;
-	private String baseCal ;
-	private Boolean isFiscal; //This indicates whether calendar is fiscal or not.
-	
+public class AmpFiscalCalendar implements Serializable, Identifiable {
+	private Long ampFiscalCalId;
+	private Integer startMonthNum;
+	private Integer yearOffset;
+	private Integer startDayNum;
+	private String name;
+	private String description;
+	private String baseCal;
+	private Boolean isFiscal; // This indicates whether calendar is fiscal or
+
+	// not.
+
 	/**
 	 * @return
 	 */
@@ -102,7 +104,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable
 	public Object getIdentifier() {
 		return this.getAmpFiscalCalId();
 	}
-	
+
 	public String toString() {
 		return name;
 	}
@@ -110,22 +112,27 @@ public class AmpFiscalCalendar implements Serializable, Identifiable
 	public ICalendarWorker getworker() {
 		if (this.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
 			return new GregorianBasedWorker(this);
-		} else {
-			if(isFiscal)
-			return new EthiopianFiscalBasedWorker(this);
+		} else if (this.getBaseCal().equalsIgnoreCase("NEP-CAL")) {
+			return new NepaliBasedWorker(this);
+
+		} else if (this.getBaseCal().equalsIgnoreCase("ETH-CAL")) {
+			if (isFiscal)
+				return new EthiopianFiscalBasedWorker(this);
 			else
-			return new EthiopianBasedWorker(this);
+				return new EthiopianBasedWorker(this);
 		}
+		return null;
 
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if (obj!=null){
-			AmpFiscalCalendar target=(AmpFiscalCalendar) obj;
-			return target.getAmpFiscalCalId().doubleValue()==this.getAmpFiscalCalId().doubleValue();
+		if (obj != null) {
+			AmpFiscalCalendar target = (AmpFiscalCalendar) obj;
+			return target.getAmpFiscalCalId().doubleValue() == this
+					.getAmpFiscalCalId().doubleValue();
 		}
-		
+
 		return false;
 	}
 
@@ -138,7 +145,3 @@ public class AmpFiscalCalendar implements Serializable, Identifiable
 	}
 
 }
-	
-	
-	
-	

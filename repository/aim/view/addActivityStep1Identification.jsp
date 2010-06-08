@@ -686,10 +686,78 @@ target.style.cursor = "default"
 									</tr>
 								</field:display>	
 
-								</table>
-									<script>
-										InitBud();
-									</script>
+								<field:display name="Procurement System" feature="Identification">
+									<tr bgcolor="#ffffff"><td valign="top" align="left">
+										<a title="<digi:trn key="aim:ProcurementSystem">Procurement System</digi:trn>">
+										<digi:trn key="aim:ProcurementSystem">
+										Procurement System
+										</digi:trn>
+										</a>
+									</td>
+									<td valign="top" align="left">
+											<c:set var="translation">
+												<digi:trn key="aim:addActivityProcSystemFirstLine">Please select from below</digi:trn>
+											</c:set>
+											
+											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.procurementSystem" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PROCUREMENT_SYSTEM_NAME %>" styleClass="inp-text" />
+									</td></tr>	
+								</field:display>
+
+								<field:display name="Reporting System" feature="Identification">
+									<tr bgcolor="#ffffff"><td valign="top" align="left">
+										<a title="<digi:trn key="aim:ReportingSystem">Reporting System</digi:trn>">
+										<digi:trn key="aim:ReportingSystem">
+										Reporting System
+										</digi:trn>
+										</a>
+									</td>
+									<td valign="top" align="left">
+											<c:set var="translation">
+												<digi:trn key="aim:addActivityRepSystemFirstLine">Please select from below</digi:trn>
+											</c:set>
+											
+											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.reportingSystem" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.REPORTING_SYSTEM_NAME %>" styleClass="inp-text" />
+									</td></tr>	
+								</field:display>
+
+								<field:display name="Audit System" feature="Identification">
+									<tr bgcolor="#ffffff"><td valign="top" align="left">
+										<a title="<digi:trn key="aim:AuditSystem">Audit System</digi:trn>">
+										<digi:trn key="aim:AuditSystem">
+										Audit System
+										</digi:trn>
+										</a>
+									</td>
+									<td valign="top" align="left">
+											<c:set var="translation">
+												<digi:trn key="aim:addActivityAuditSystemFirstLine">Please select from below</digi:trn>
+											</c:set>
+											
+											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.auditSystem" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.AUDIT_SYSTEM_NAME %>" styleClass="inp-text" />
+									</td></tr>	
+								</field:display>
+
+								<field:display name="Institutions" feature="Identification">
+									<tr bgcolor="#ffffff"><td valign="top" align="left">
+										<a title="<digi:trn key="aim:Institutions">Institutions</digi:trn>">
+										<digi:trn key="aim:Institutions">
+										Institutions
+										</digi:trn>
+										</a>
+									</td>
+									<td valign="top" align="left">
+											<c:set var="translation">
+												<digi:trn key="aim:addActivityProcSystemFirstLine">Please select from below</digi:trn>
+											</c:set>
+											
+											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.institutions" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INSTITUTIONS_NAME %>" styleClass="inp-text" />
+									</td></tr>	
+								</field:display>
+								
+						</table>
+						<script>
+							InitBud();
+						</script>
 
 <script type="text/javascript">
 	var myArray = [

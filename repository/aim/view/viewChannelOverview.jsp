@@ -1260,7 +1260,110 @@ function commentWin(val) {
 															</TD>
 														</TR>
 													</field:display>
-													
+													<field:display name="Procurement System" feature="Identification">
+                                                    <c:set var="procurementSystem">
+														${aimChannelOverviewForm.procurementSystem}
+                                                    </c:set>
+													<c:if test="${!empty procurementSystem}">
+														<TR>
+															<TD>
+															<TABLE width="100%" cellPadding=3 cellSpacing=1
+																vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TR>
+																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		width=15> <b><digi:trn
+																		key="aim:ProcurementSystem">
+																	Procurement System</digi:trn></b></TD>
+																</TR>
+																<TR>
+																	<TD bgcolor="#ffffff">
+																	${procurementSystem}</TD>
+																</TR>
+															</TABLE>
+															</TD>
+														</TR>
+													</c:if>
+													</field:display>
+
+													<field:display name="Reporting System" feature="Identification">
+                                                    <c:set var="reportingSystem">
+														${aimChannelOverviewForm.reportingSystem}
+                                                    </c:set>
+													<c:if test="${!empty reportingSystem}">
+														<TR>
+															<TD>
+															<TABLE width="100%" cellPadding=3 cellSpacing=1
+																vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TR>
+																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		width=15> <b><digi:trn
+																		key="aim:ReportingSystem">
+																	Reporting System</digi:trn></b></TD>
+																</TR>
+																<TR>
+																	<TD bgcolor="#ffffff">
+																	${reportingSystem}</TD>
+																</TR>
+															</TABLE>
+															</TD>
+														</TR>
+													</c:if>
+													</field:display>
+
+													<field:display name="Audit System" feature="Identification">
+                                                    <c:set var="auditSystem">
+														${aimChannelOverviewForm.auditSystem}
+                                                    </c:set>
+													<c:if test="${!empty auditSystem}">
+														<TR>
+															<TD>
+															<TABLE width="100%" cellPadding=3 cellSpacing=1
+																vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TR>
+																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		width=15> <b><digi:trn
+																		key="aim:AuditSystem">
+																	Audit System</digi:trn></b></TD>
+																</TR>
+																<TR>
+																	<TD bgcolor="#ffffff">
+																	${auditSystem}</TD>
+																</TR>
+															</TABLE>
+															</TD>
+														</TR>
+													</c:if>
+													</field:display>
+
+													<field:display name="Institutions" feature="Identification">
+                                                    <c:set var="institutions">
+														${aimChannelOverviewForm.institutions}
+                                                    </c:set>
+													<c:if test="${!empty institutions}">
+														<TR>
+															<TD>
+															<TABLE width="100%" cellPadding=3 cellSpacing=1
+																vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TR>
+																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		width=15> <b><digi:trn
+																		key="aim:Institutions">
+																	Institutions</digi:trn></b></TD>
+																</TR>
+																<TR>
+																	<TD bgcolor="#ffffff">
+																	${institutions}</TD>
+																</TR>
+															</TABLE>
+															</TD>
+														</TR>
+													</c:if>
+													</field:display>
+
 													<field:display name="Project Category" feature="Identification">
                                           
 													<c:if test="${!empty aimChannelOverviewForm.projectCategory}">

@@ -4,7 +4,15 @@ package org.digijava.module.categorymanager.util;
 public class CategoryConstants {
 	public static final String ACCHAPTER_NAME	= "A.C. Chapter";
 	public static final String ACCHAPTER_KEY	= "acchapter";
-	public static final String ACCESSION_INSTRUMENT_NAME		= "Accession Instrument";
+	public static final String PROCUREMENT_SYSTEM_NAME		= "Procurement System";
+	public static final String PROCUREMENT_SYSTEM_KEY		= "procurement_system";
+	public static final String REPORTING_SYSTEM_NAME		= "Reporting System";
+	public static final String REPORTING_SYSTEM_KEY			= "reporting_system";
+	public static final String AUDIT_SYSTEM_NAME			= "Audit System";
+	public static final String AUDIT_SYSTEM_KEY				= "audit_system";
+	public static final String INSTITUTIONS_NAME			= "Institutions";
+	public static final String INSTITUTIONS_KEY				= "institutions";
+	public static final String ACCESSION_INSTRUMENT_NAME	= "Accession Instrument";
 	public static final String ACCESSION_INSTRUMENT_KEY		= "accessioninstr";
 	public static final String DOCUMENT_TYPE_NAME		= "Document type";
 	public static final String DOCUMENT_TYPE_KEY		= "docType"; 

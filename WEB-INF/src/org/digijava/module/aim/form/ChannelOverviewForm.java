@@ -78,8 +78,12 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String projectCategory;
 	private String financialInstrument;
 	private String acChapter;
+	private String procurementSystem;
+	private String reportingSystem;
+	private String auditSystem;
+	private String institutions;
 	private String accessionInstrument;
-
+	
 	private Collection closingDates;
 	
 	private Integer countryIndex;
@@ -668,7 +672,39 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 				public void setFinancialInstrument(String financialInformation) {
 					this.financialInstrument = financialInformation;
 				}
-  public String getAccessionInstrument() {
+  public String getProcurementSystem() {
+					return procurementSystem;
+				}
+
+				public void setProcurementSystem(String procurementSystem) {
+					this.procurementSystem = procurementSystem;
+				}
+
+				public String getReportingSystem() {
+					return reportingSystem;
+				}
+
+				public void setReportingSystem(String reportingSystem) {
+					this.reportingSystem = reportingSystem;
+				}
+
+				public String getAuditSystem() {
+					return auditSystem;
+				}
+
+				public void setAuditSystem(String auditSystem) {
+					this.auditSystem = auditSystem;
+				}
+
+				public String getInstitutions() {
+					return institutions;
+				}
+
+				public void setInstitutions(String institutions) {
+					this.institutions = institutions;
+				}
+
+public String getAccessionInstrument() {
 	    return accessionInstrument;
 	  }
 

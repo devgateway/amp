@@ -412,14 +412,42 @@ public class ViewChannelOverview extends TilesAction {
 		                		CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories())
 				        ));
 
+				        formBean.setProcurementSystem(
+		                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+		                    CategoryManagerUtil.getAmpCategoryValueFromList(
+		                CategoryConstants.PROCUREMENT_SYSTEM_NAME, activity.getCategories())
+		                )
+		                );
+						        
+				        formBean.setReportingSystem(
+		                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+		                    CategoryManagerUtil.getAmpCategoryValueFromList(
+		                CategoryConstants.REPORTING_SYSTEM_NAME, activity.getCategories())
+		                )
+		                );
+						        
+				        formBean.setAuditSystem(
+		                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+		                    CategoryManagerUtil.getAmpCategoryValueFromList(
+		                CategoryConstants.AUDIT_SYSTEM_NAME, activity.getCategories())
+		                )
+		                );
+						        
+				        formBean.setInstitutions(
+		                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+		                    CategoryManagerUtil.getAmpCategoryValueFromList(
+		                CategoryConstants.INSTITUTIONS_NAME, activity.getCategories())
+		                )
+		                );
+						        
 				        formBean.setAccessionInstrument(
 		                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
 		                    CategoryManagerUtil.getAmpCategoryValueFromList(
 		                CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories())
 		                )
 		                );
-
-				        formBean.setAcChapter(
+						        
+					formBean.setAcChapter(
 		            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
 		                CategoryManagerUtil.getAmpCategoryValueFromList(
 		            CategoryConstants.ACCHAPTER_NAME, activity.getCategories())

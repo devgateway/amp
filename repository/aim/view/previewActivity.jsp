@@ -635,7 +635,7 @@ function collapseAll() {
 									</field:display>
 									<!--END 7 8 9 10 -->    
                                 <!--Begin 11 12  -->   
-                                			<field:display name="Accession Instrument" feature="Identification">
+                                	<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -663,6 +663,47 @@ function collapseAll() {
 &nbsp;									</td>
 									</tr>
 									</field:display>
+									<field:display name="Procurement System" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ProcurementSystem">Procurement System</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/>
+											</c:if>
+&nbsp;										</td>
+									</tr>
+									</field:display>
+									<field:display name="Reporting System" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ReportingSystem">Reporting System</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/>
+											</c:if>
+&nbsp;										</td>
+									</tr>
+									</field:display>
+									<field:display name="Audit System" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:AuditSystem">Audit System</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/>
+											</c:if>
+&nbsp;										</td>
+									</tr>
+									</field:display>
+									<field:display name="Institutions" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:Institutions">Institutions</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.institutions > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/>
+											</c:if>
+&nbsp;										</td>
+									</tr>
+									</field:display>
+									
                                 	<field:display name="Project Category" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ProjectCategory">Project Category</digi:trn>										</td>

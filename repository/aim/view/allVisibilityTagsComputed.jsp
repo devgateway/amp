@@ -222,6 +222,10 @@
 <field:display feature="Sectors" name="Level 1 Sectors List"></field:display> 
 <field:display name="A.C. Chapter" feature="Identification"></field:display> 
 <field:display name="AMP ID" feature="Identification"></field:display> 
+<field:display name="Procurement System" feature="Identification"></field:display> 
+<field:display name="Reporting System" feature="Identification"></field:display> 
+<field:display name="Audit System" feature="Identification"></field:display> 
+<field:display name="Institutions" feature="Identification"></field:display> 
 <field:display name="Accession Instrument" feature="Identification"></field:display> 
 <field:display name="Active Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Activity Approved By" feature="Identification"></field:display> 

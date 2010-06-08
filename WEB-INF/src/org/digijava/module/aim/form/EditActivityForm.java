@@ -159,6 +159,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String linkedActivities = null;
 		private String conditionality = null;
 		private String projectManagement = null;
+		private Long procurementSystem = new Long(0);
+		private Long reportingSystem = new Long(0);
+		private Long auditSystem = new Long(0);
+		private Long institutions = new Long(0);
 		private Long accessionInstrument = new Long(0);
 		private Long projectCategory = new Long(0);
 		private String govAgreementNumber;
@@ -524,6 +528,38 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setProjectManagement(String projectManagement) {
 			this.projectManagement = projectManagement;
+		}
+
+		public Long getProcurementSystem() {
+			return procurementSystem;
+		}
+
+		public void setProcurementSystem(Long procurementSystem) {
+			this.procurementSystem = procurementSystem;
+		}
+
+		public Long getReportingSystem() {
+			return reportingSystem;
+		}
+
+		public void setReportingSystem(Long reportingSystem) {
+			this.reportingSystem = reportingSystem;
+		}
+
+		public Long getAuditSystem() {
+			return auditSystem;
+		}
+
+		public void setAuditSystem(Long auditSystem) {
+			this.auditSystem = auditSystem;
+		}
+
+		public Long getInstitutions() {
+			return institutions;
+		}
+
+		public void setInstitutions(Long institutions) {
+			this.institutions = institutions;
 		}
 
 		public Long getAccessionInstrument() {

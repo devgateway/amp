@@ -507,6 +507,10 @@ public class SaveActivity extends Action {
 		activity.setInternalIds(internalIds);
 
 		/* Saving categories to AmpActivity */
+		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProcurementSystem(), activity.getCategories() );
+		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getReportingSystem(), activity.getCategories() );
+		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAuditSystem(), activity.getCategories() );
+		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getInstitutions(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAccessionInstrument(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAcChapter(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getPlanning().getStatusId(), activity.getCategories() );
@@ -1986,8 +1990,12 @@ public class SaveActivity extends Action {
                     eaForm.setTeamLead(false);
 
 		/* Clearing categories */
-		eaForm.getIdentification().setAccessionInstrument(new Long(0));
-		eaForm.getIdentification().setAcChapter(new Long(0));
+        eaForm.getIdentification().setProcurementSystem(new Long(0));
+        eaForm.getIdentification().setReportingSystem(new Long(0));
+        eaForm.getIdentification().setAuditSystem(new Long(0));
+        eaForm.getIdentification().setInstitutions(new Long(0));
+        eaForm.getIdentification().setAccessionInstrument(new Long(0));
+        eaForm.getIdentification().setAcChapter(new Long(0));
 		eaForm.getPlanning().setStatusId(new Long(0));
 		eaForm.getIdentification().setGbsSbs(new Long(0));
         eaForm.getIdentification().setDraft(null);

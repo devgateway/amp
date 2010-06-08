@@ -515,10 +515,30 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	eaForm.getIdentification().setAcChapter(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+            CategoryConstants.PROCUREMENT_SYSTEM_NAME, activity.getCategories());
+        if (ampCategoryValue != null)
+          eaForm.getIdentification().setProcurementSystem(new Long(ampCategoryValue.getId()));
+
+    	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+            CategoryConstants.REPORTING_SYSTEM_NAME, activity.getCategories());
+        if (ampCategoryValue != null)
+          eaForm.getIdentification().setReportingSystem(new Long(ampCategoryValue.getId()));
+
+    	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+            CategoryConstants.AUDIT_SYSTEM_NAME, activity.getCategories());
+        if (ampCategoryValue != null)
+          eaForm.getIdentification().setAuditSystem(new Long(ampCategoryValue.getId()));
+
+    	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+            CategoryConstants.INSTITUTIONS_NAME, activity.getCategories());
+        if (ampCategoryValue != null)
+          eaForm.getIdentification().setInstitutions(new Long(ampCategoryValue.getId()));
+        
+    	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
             CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setAccessionInstrument(new Long(ampCategoryValue.getId()));
-
+    
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
         if (ampCategoryValue != null)

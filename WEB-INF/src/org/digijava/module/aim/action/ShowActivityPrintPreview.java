@@ -1024,10 +1024,31 @@ public class ShowActivityPrintPreview
                 }
                 
                 ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
-                        CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories());
-                    if (ampCategoryValue != null) {
-                    	eaForm.getIdentification().setAccessionInstrument(ampCategoryValue.getId());
-                    }
+                    CategoryConstants.PROCUREMENT_SYSTEM_NAME, activity.getCategories());
+                if (ampCategoryValue != null)
+                  eaForm.getIdentification().setProcurementSystem(new Long(ampCategoryValue.getId()));
+
+            	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+                    CategoryConstants.REPORTING_SYSTEM_NAME, activity.getCategories());
+                if (ampCategoryValue != null)
+                  eaForm.getIdentification().setReportingSystem(new Long(ampCategoryValue.getId()));
+
+            	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+                    CategoryConstants.AUDIT_SYSTEM_NAME, activity.getCategories());
+                if (ampCategoryValue != null)
+                  eaForm.getIdentification().setAuditSystem(new Long(ampCategoryValue.getId()));
+
+            	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+                    CategoryConstants.INSTITUTIONS_NAME, activity.getCategories());
+                if (ampCategoryValue != null)
+                  eaForm.getIdentification().setInstitutions(new Long(ampCategoryValue.getId()));
+                
+            	ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+                    CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories());
+                if (ampCategoryValue != null) {
+                	eaForm.getIdentification().setAccessionInstrument(ampCategoryValue.getId());
+                }
+                
                 ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
                         CategoryConstants.PROJECT_CATEGORY_NAME, activity.getCategories());
                     if (ampCategoryValue != null) {
@@ -1261,6 +1282,10 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setActAthAgencySource(null);
                 eaForm.getIdentification().setUpdatedBy(null);
                 
+                eaForm.getIdentification().setProcurementSystem(null);
+                eaForm.getIdentification().setReportingSystem(null);
+                eaForm.getIdentification().setAuditSystem(null);
+                eaForm.getIdentification().setInstitutions(null);
                 eaForm.getIdentification().setAccessionInstrument(null);
                 eaForm.getIdentification().setAcChapter(null);
                 

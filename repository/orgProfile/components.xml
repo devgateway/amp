@@ -7,6 +7,7 @@
         <page page="parisIndicators" name="parisIndicators" title="Paris Indicators"/>
         <page page="showOrgProfileTables" name="showOrgProfileTables" title="Show Table"/>
         <page page="orgSummary" name="orgSummary" title="Organization Summary"/>
+        <page page="exportOptions" name="exportOptions" title="Export Options"/>
 
 	</secondary-pages>
 	<module>

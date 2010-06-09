@@ -178,11 +178,15 @@ public class OrgProfileFilterForm extends ActionForm {
 
     @Override
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-        super.reset(mapping, request);
-        workspaceOnly=false;
-        setOrgIds(null);
-        setSelZoneIds(null);
-        setSelRegionId(null);
+        String reset = request.getParameter("exportSetting");
+        if (reset == null) {
+            super.reset(mapping, request);
+            workspaceOnly = false;
+            setOrgIds(null);
+            setSelZoneIds(null);
+            setSelRegionId(null);
+        }
+     
     }
 
     public String getOrgGroupName() {

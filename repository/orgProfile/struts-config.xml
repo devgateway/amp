@@ -10,6 +10,7 @@
         <form-bean name="orgProfilePIForm" type="org.digijava.module.orgProfile.form.OrgProfilePIForm"/>
         <form-bean name="orgProfileNameValueYearForm" type="org.digijava.module.orgProfile.form.OrgProfileNameValueYearForm"/>
         <form-bean name="orgSummaryForm" type="org.digijava.module.orgProfile.form.OrganizationSummaryForm"/>
+        <form-bean name="orgProfileExportOptionsForm" type="org.digijava.module.orgProfile.form.OrgProfileExportOptionsForm"/>
     </form-beans>
 
     <action-mappings>
@@ -34,6 +35,11 @@
              <action name="orgSummaryForm" path="/orgProfile/showOrgSummary" scope="request" type="org.digijava.module.orgProfile.action.OrgSummaryAction" parameter="action" validate="false">
                 <forward name="forward" path="/showLayout.do?layout=orgSummary"/>
                 <forward name="saved"  path="/showLayout.do?layout=orgProfileLayout"/>
+            </action>
+            <action name="orgProfileExportOptionsForm" path="/orgProfile/showExportOptions" type="org.digijava.module.orgProfile.action.ExportOptionsAction" validate="false" parameter="actionType">
+                <forward name="forward" path="/showLayout.do?layout=exportOptions"/>
+                <forward name="exportToWord" path="/orgProfile/wordExport.do"/>
+                <forward name="exportToPDF"  path="/orgProfile/pdfExport.do"/>
             </action>
 
 

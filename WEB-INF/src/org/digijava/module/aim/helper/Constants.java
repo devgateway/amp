@@ -359,4 +359,13 @@ public class Constants
     //organization information
     public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_ADMIN= 1;
 	public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_PROGRAM = 2;
+
+    // org profile
+    public static final int EXPORT_OPTION_CHART_ONLY = 0 ;
+	public static final int EXPORT_OPTION_DATA_SOURCE_ONLY = 1 ;
+	public static final int EXPORT_OPTION_CHART_DATA_SOURCE= 2 ;
+    public static final int EXPORT_OPTION_NONE=3;
+    
+    public static final int EXPORT_TO_WORD = 0 ;
+	public static final int EXPORT_TO_PDF= 1 ;
 }

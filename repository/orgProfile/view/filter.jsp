@@ -14,6 +14,7 @@
 
 <script type="text/javascript" language="javascript">
     var filter; // Filter panel
+    var exportSettingsPanel; // Filter panel
     $(document).ready(function(){
 
         $("#org_group_dropdown_id").change(function () {
@@ -51,68 +52,117 @@
             filter.render();
         });
 
-        $("#displaySettingsButton").click(function () {
-            $("#currentDisplaySettings").toggle();
-            var title=$("#displaySettingsButton").text();
-            var titleEnd=title.substr(title.length-2,2);
-            if(titleEnd=='>>'){
-                $("#displaySettingsButton").html("<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;")
-            }
-            else{
-                $("#displaySettingsButton").html("<digi:trn>Show Current Settings</digi:trn> &gt;&gt;")
-            }
+        $("#changeExportSettingsLink").click(function () {
+    <digi:context name="url" property="context/orgProfile/showExportOptions.do"/>
+                var url = "${url}";
+                YAHOO.util.Connect.asyncRequest("POST", url, exportSettingsCallback, null);
+                exportSettingsPanel=new YAHOO.widget.Panel("exportSettingsPanel",{
+                    width:"520px",
+                    height:"490px",
+                    constraintoviewport: true,
+                    Underlay:"shadow",
+                    modal: true,
+                    close:true,
+                    visible:true,
+                    fixedcenter: true,
+                    draggable:false} );
+                var msg='\n<digi:trn >Export Option</digi:trn>';
+                exportSettingsPanel.setHeader(msg);
+                exportSettingsPanel.setBody("<img src='images/amploading.gif' alt=''>");
+                exportSettingsPanel.render();
+            });
+
+            $("#displaySettingsButton").click(function () {
+                $("#currentDisplaySettings").toggle();
+                var title=$("#displaySettingsButton").text();
+                var titleEnd=title.substr(title.length-2,2);
+                if(titleEnd=='>>'){
+                    $("#displaySettingsButton").html("<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;")
+                }
+                else{
+                    $("#displaySettingsButton").html("<digi:trn>Show Current Settings</digi:trn> &gt;&gt;")
+                }
           
          
-        });
-        $("#deselectAll").click(function () {
-            $("#org_dropdown_id option").removeAttr("selected");
-            $("#region_dropdown_id option").removeAttr("selected");
-            $("#zone_dropdown_id option").removeAttr("selected");
+            });
+            $("#deselectAll").click(function () {
+                $("#org_dropdown_id option").removeAttr("selected");
+                $("#region_dropdown_id option").removeAttr("selected");
+                $("#zone_dropdown_id option").removeAttr("selected");
+            });
+
         });
 
-    });
+        var exportSettingsResponseSuccess = function(o){
+            var response = o.responseText;
+            exportSettingsPanel.setBody(response);
+        }
 
-function checkAllSeleceted(){
-    var valid=true;
-    var allSelected=false;
-    var selectZone=document.getElementById("zone_dropdown_id");
-    var selectedVals = selectZone.options;
-    var selectedNumb=0;
-    for (var i = 0; i <selectedVals.length; i++){
-        var option=selectZone.options[i];
-        if(option.selected){
-            selectedNumb++;
-            if(option.value==-1){
-                allSelected=true;
+        var exportSettingsResponseFailure = function(o){
+            // Access the response object's properties in the
+            // same manner as listed in responseSuccess( ).
+            // Please see the Failure Case section and
+            // Communication Error sub-section for more details on the
+            // response object's properties.
+            //alert("Connection Failure!");
+        }
+        var exportSettingsCallback =
+            {
+            success:exportSettingsResponseSuccess,
+            failure:exportSettingsResponseFailure
+        };
+        function closeSettingsPopin(){
+            exportSettingsPanel.hide();
+        }
+         function exportPage(){
+			<digi:context name="url" property="context/module/moduleinstance/showExportOptions.do?actionType=export" />
+            document.orgProfileExportOptionsForm.action="${url}";
+			document.orgProfileExportOptionsForm.target="_blank";
+			document.orgProfileExportOptionsForm.submit();
+            exportSettingsPanel.hide();
+        }
+
+        function checkAllSeleceted(){
+            var valid=true;
+            var allSelected=false;
+            var selectZone=document.getElementById("zone_dropdown_id");
+            var selectedVals = selectZone.options;
+            var selectedNumb=0;
+            for (var i = 0; i <selectedVals.length; i++){
+                var option=selectZone.options[i];
+                if(option.selected){
+                    selectedNumb++;
+                    if(option.value==-1){
+                        allSelected=true;
+                    }
+
+                }
             }
+            if( allSelected&&selectedNumb>1){
+                valid=false;
+            }
+    
+            return valid;
+        }
+
+        function addActionToURL(actionName){
+            var fullURL=document.URL;
+            var lastSlash=fullURL.lastIndexOf("/");
+            var partialURL=fullURL.substring(0,lastSlash);
+            return partialURL+"/"+actionName;
+        }
+
+
+
+        function buildOrgDropDown(status, statusText, responseText, responseXML){
+            var orgSelect=document.getElementById("org_select");
+            orgSelect.innerHTML=responseText;
 
         }
-    }
-    if( allSelected&&selectedNumb>1){
-        valid=false;
-    }
-    
-    return valid;
-}
-
-    function addActionToURL(actionName){
-        var fullURL=document.URL;
-        var lastSlash=fullURL.lastIndexOf("/");
-        var partialURL=fullURL.substring(0,lastSlash);
-        return partialURL+"/"+actionName;
-    }
-
-
-
-    function buildOrgDropDown(status, statusText, responseText, responseXML){
-        var orgSelect=document.getElementById("org_select");
-        orgSelect.innerHTML=responseText;
-
-    }
-    function  buildZonesDropDown(status, statusText, responseText, responseXML){
-        var zoneSelect=document.getElementById("zone_select");
-        zoneSelect.innerHTML=responseText;
-    }
+        function  buildZonesDropDown(status, statusText, responseText, responseXML){
+            var zoneSelect=document.getElementById("zone_select");
+            zoneSelect.innerHTML=responseText;
+        }
 </script>
 <digi:instance property="orgProfOrgProfileFilterForm"/>
 
@@ -133,11 +183,16 @@ function checkAllSeleceted(){
                                         <a target="_blank" onclick="exportWord(); return false;">
                                             <digi:img  hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/doc.gif" border="0" alt='Export to Word'/>
                                         </a>
-                                        <span id="changeFilterLink">
+                                        <div id="changeFilterLink" style="display: inline">
                                             <a>
                                                 <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/add_filters.png" border="0" alt='Apply Filter'/>
                                             </a>
-                                        </span>
+                                        </div>
+                                                <div id="changeExportSettingsLink" style="display: inline" title="<digi:trn>Click on this icon to view additional export options</digi:trn>">
+                                            <a>
+                                                <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" border="0" alt=''/>
+                                            </a>
+                                        </div>
                                     </div>
                                 </LI>
                             </UL>
@@ -316,7 +371,7 @@ function checkAllSeleceted(){
                     </tr>
                     <tr>
                         <td align="center" colspan="2">
-                            <html:submit styleClass="button" property="apply" onclick="return checkAllSeleceted();"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
+                        <html:submit styleClass="button" property="apply" onclick="return checkAllSeleceted();"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
                     </td>
                 </tr>
             </table>
@@ -375,4 +430,7 @@ function checkAllSeleceted(){
 
 
 </digi:form>
+
+<div id="exportSettingsPanel" class="content">
+</div>
 

@@ -688,6 +688,7 @@
                 <page>showOrgProfileTables</page>
              	<page>parisIndicators</page>
                 <page>largestProjectsPrinterFriendly</page>
+                <page>exportOptions</page>
 			</module>
 			<module name="mondrian">
 				<page>savehtml</page>

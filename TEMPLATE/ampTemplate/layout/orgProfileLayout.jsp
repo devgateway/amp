@@ -16,52 +16,60 @@
 
         <script type="text/javascript">
             function exportPDF() {
-                openURLinResizableWindow("/orgProfile/pdfExport.do", 780, 500);
-            }
-            function exportWord() {
-                openURLinResizableWindow("/orgProfile/wordExport.do", 780, 500);
-            }
-            function setStripsTable(classOdd, classEven) {
-                var tableElements = $(".tableElement");
-                for(var j = 0; j < tableElements.length; j++) {
-                    rows = tableElements[j].getElementsByTagName('tr');
-                    for(var i = 0, n = rows.length; i < n; ++i) {
-                        if(i%2 == 0)
-                            rows[i].className = classEven;
-                        else
-                            rows[i].className = classOdd;
-                    }
-                    rows = null;
+            <digi:context name="url" property="context/module/moduleinstance/pdfExport.do" />
+                    document.orgProfOrgProfileFilterForm.action="${url}";
+                    document.orgProfOrgProfileFilterForm.target="_blank";
+                    document.orgProfOrgProfileFilterForm.submit();
 
                 }
+                function exportWord() {
+            <digi:context name="url" property="context/module/moduleinstance/wordExport.do" />
+                        document.orgProfOrgProfileFilterForm.action="${url}";
+                        document.orgProfOrgProfileFilterForm.target="_blank";
+                        document.orgProfOrgProfileFilterForm.submit();
+            
+                    }
+                    function setStripsTable(classOdd, classEven) {
+                        var tableElements = $(".tableElement");
+                        for(var j = 0; j < tableElements.length; j++) {
+                            rows = tableElements[j].getElementsByTagName('tr');
+                            for(var i = 0, n = rows.length; i < n; ++i) {
+                                if(i%2 == 0)
+                                    rows[i].className = classEven;
+                                else
+                                    rows[i].className = classOdd;
+                            }
+                            rows = null;
 
-            }
-            function setHoveredTable() {
-                var tableElements = $(".tableElement");
-                for(var j = 0; j < tableElements.length; j++) {
-                    if(tableElements){
-                        var className = 'Hovered',
-                        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-                        rows      = tableElements[j].getElementsByTagName('tr');
-
-                        for(var i = 0, n = rows.length; i < n; ++i) {
-                            rows[i].onmouseover = function() {
-                                this.className += ' ' + className;
-                            };
-                            rows[i].onmouseout = function() {
-                                this.className = this.className.replace(pattern, ' ');
-
-                            };
                         }
-                        rows = null;
+
                     }
-                }
-            }
+                    function setHoveredTable() {
+                        var tableElements = $(".tableElement");
+                        for(var j = 0; j < tableElements.length; j++) {
+                            if(tableElements){
+                                var className = 'Hovered',
+                                pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+                                rows      = tableElements[j].getElementsByTagName('tr');
+
+                                for(var i = 0, n = rows.length; i < n; ++i) {
+                                    rows[i].onmouseover = function() {
+                                        this.className += ' ' + className;
+                                    };
+                                    rows[i].onmouseout = function() {
+                                        this.className = this.className.replace(pattern, ' ');
+
+                                    };
+                                }
+                                rows = null;
+                            }
+                        }
+                    }
           
-            function showOrgProfileToolbar(){
-                var toolbar=document.getElementById("orgProfToolbarId");
-                toolbar.style.display="block";
-            }
+                    function showOrgProfileToolbar(){
+                        var toolbar=document.getElementById("orgProfToolbarId");
+                        toolbar.style.display="block";
+                    }
         </script>
         <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
         <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
@@ -135,6 +143,26 @@
                 margin:0px; padding:0px;
             }
 
+            .settingOptions {
+                height: 85px
+            }
+            .settingTitle{
+                font-size: 14px;
+                font-weight: bold;
+                text-align: center;
+                color: White;
+                background-color:
+                    rgb(55, 96, 145);
+
+            }
+            .optionRight{
+                margin-left: 250px
+            }
+            .optionLeft{
+                float:left;
+                width:200px
+
+            }
         </style>
     </HEAD>
     <BODY>

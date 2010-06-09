@@ -18,25 +18,25 @@
 	<li><%= f.select :prj_status, @project.status_options, 
 			:include_blank => t('.prompt'), :translate => true %></li>
     
-  <li class="fifty">
+  <li class="fifty" style="height:70px">
     <%= f.date_select :planned_start, :include_blank => true, :start_year => 1990,
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED) %>
   	<%= error_message_on(:project, :planned_start, "","", "error_message" ) %>
   </li>
 
-  <li class="fifty">
+  <li class="fifty" style="height:70px">
     <%= f.date_select :planned_end, :include_blank => true, :start_year => 1990,
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_SIGNED) %>
     <%= error_message_on(:project, :planned_end, "","", "error_message" ) %>
   </li>
   
-  <li class="fifty">
+  <li class="fifty" style="height:70px">
   	<%= f.date_select :actual_start, :include_blank => true, :start_year => 1990,
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
   	<%= error_message_on(:project, :actual_start, "","", "error_message" ) %>
   </li>
 
-  <li class="fifty">
+  <li class="fifty" style="height:70px">
     <%= f.date_select :actual_end, :include_blank => true, :start_year => 1990,
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
     <%= error_message_on(:project, :actual_end, "","", "error_message" ) %>

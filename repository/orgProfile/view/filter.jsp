@@ -66,7 +66,7 @@
                     visible:true,
                     fixedcenter: true,
                     draggable:false} );
-                var msg='\n<digi:trn >Export Option</digi:trn>';
+                var msg='\n<digi:trn >Export Options</digi:trn>';
                 exportSettingsPanel.setHeader(msg);
                 exportSettingsPanel.setBody("<img src='images/amploading.gif' alt=''>");
                 exportSettingsPanel.render();

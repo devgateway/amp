@@ -34,7 +34,7 @@
                 <c:choose>
                     <c:when test="${helpers.widget.type==7}">
                         <html:radio indexed="true" name="helpers" property="selectedTypeOfExport" value="2"><digi:trn>Include Paris Indicator</digi:trn></html:radio><br/>
-                        <html:radio indexed="true" name="helpers" property="selectedTypeOfExport" value="3" title="${trn}"><digi:trn>Exclude Paris Indicator</digi:trn></html:radio>
+                        <html:radio indexed="true" name="helpers" property="selectedTypeOfExport" value="3"><digi:trn>Exclude Paris Indicator</digi:trn></html:radio>
                     </c:when>
                     <c:when test="${helpers.widget.type==1}">
                         <html:radio indexed="true" name="helpers" property="selectedTypeOfExport" value="2"><digi:trn>Include Summary</digi:trn></html:radio><br/>
@@ -54,7 +54,7 @@
                         </c:set>
                         <html:radio indexed="true" name="helpers" property="selectedTypeOfExport" value="2" title="${trn}"><digi:trn>Chart and Data Source</digi:trn></html:radio><br/>
                         <c:set var="trn">
-                            <digi:trn>this option will exclude both charts and data source table from export</digi:trn>
+                            <digi:trn>this option will exclude both charts and data sources from export</digi:trn>
                         </c:set>
                         <html:radio indexed="true" name="helpers" property="selectedTypeOfExport" value="3" title="${trn}"><digi:trn>None</digi:trn></html:radio>
                     </c:otherwise>

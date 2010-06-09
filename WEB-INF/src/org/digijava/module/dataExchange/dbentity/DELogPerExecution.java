@@ -4,24 +4,57 @@
 package org.digijava.module.dataExchange.dbentity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 
-public class AmpLogPerExecution {
-	private AmpSourceSetting ampSourceSetting;
+public class DELogPerExecution {
+	
+	private Long id;
+	private DESourceSetting DESourceSetting;
 	private String description;
 	private Timestamp executionTime;
 	private String externalTimestamp;
+	private List<DELogPerItem> logItems;
+	
+	
+	
 	/**
-	 * @return the ampSourceSetting
+	 * @return the id
 	 */
-	public AmpSourceSetting getAmpSourceSetting() {
-		return ampSourceSetting;
+	public Long getId() {
+		return id;
 	}
 	/**
-	 * @param ampSourceSetting the ampSourceSetting to set
+	 * @param id the id to set
 	 */
-	public void setAmpSourceSetting(AmpSourceSetting ampSourceSetting) {
-		this.ampSourceSetting = ampSourceSetting;
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
+	/**
+	 * @return the logItems
+	 */
+	public List<DELogPerItem> getLogItems() {
+		return logItems;
+	}
+	/**
+	 * @param logItems the logItems to set
+	 */
+	public void setLogItems(List<DELogPerItem> logItems) {
+		this.logItems = logItems;
+	}
+	/**
+	 * @return the DESourceSetting
+	 */
+	public DESourceSetting getAmpSourceSetting() {
+		return DESourceSetting;
+	}
+	/**
+	 * @param DESourceSetting the DESourceSetting to set
+	 */
+	public void setAmpSourceSetting(DESourceSetting DESourceSetting) {
+		this.DESourceSetting = DESourceSetting;
 	}
 	/**
 	 * @return the description

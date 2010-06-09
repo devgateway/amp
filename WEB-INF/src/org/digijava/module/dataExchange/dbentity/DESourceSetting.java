@@ -9,10 +9,13 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  * 
  *
  */
-public class AmpSourceSetting {
+public class DESourceSetting {
 	public final static String SOURCE_URL			= "URL";
 	public final static String SOURCE_FILE			= "FILE";
 	public final static String SOURCE_WEB_SERVICE	= "WEB_SERVICE";
+	
+	
+	private Long id;
 	
 	/**
 	 * Decides if it is an import or export source
@@ -31,6 +34,7 @@ public class AmpSourceSetting {
 	private String uniqueIdentifierSeparator;
 	
 	private List exportFilters;
+	private List<DESourceSetting> logs;
 	
 	private String languageId;
 	/**import option (dropdown):    
@@ -196,6 +200,20 @@ public class AmpSourceSetting {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

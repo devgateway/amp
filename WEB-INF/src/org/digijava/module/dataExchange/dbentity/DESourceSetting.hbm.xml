@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.dataExchange.dbentity.AmpSourceSetting" table="amp_source_setting">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_SOURCE_SETTING_seq</param>
+			</generator>
+		</id>
+		<property name="isImport" column="is_import" type="java.lang.Boolean" />
+		<property name="source" column="source" type="java.lang.String" />		
+		<property name="approvalStatus" column="approval_status" type="java.lang.String" />
+		<property name="uniqueIdentifier" column="unique_identifier" type="java.lang.String" />
+		<property name="uniqueIdentifierSeparator" column="unique_identifier_separator" type="java.lang.String" />
+		
+		<list name="logs" lazy="false" cascade="all-delete-orphan">
+			<key column="amp_source_setting_id" />
+			<index column="index_column" />
+			<one-to-many class="org.digijava.module.dataExchange.dbentity.AmpLogPerExecution" />
+		</list>
+		
+		
+		
+	</class>
+</hibernate-mapping>

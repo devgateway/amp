@@ -2,14 +2,16 @@ package org.digijava.module.dataExchange.dbentity;
 
 import java.sql.Timestamp;
 
-public class AmpLogPerItem {
+public class DELogPerItem {
 	public static final String LOG_TYPE_INFO	= "INFO";
 	public static final String LOG_TYPE_WARN	= "WARN";
 	public static final String LOG_TYPE_ERROR	= "ERROR";
 	
 	public static final String ITEM_TYPE_ACTIVITY	= "ACTIVITY";
 	
-	private AmpLogPerExecution executionInstance;
+	
+	private Long id;
+	private DELogPerExecution executionInstance;
 	private String logType;
 
 	private String itemType;
@@ -17,17 +19,33 @@ public class AmpLogPerItem {
 	
 	private Timestamp executionTime;
 
+	
+	
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	/**
 	 * @return the executionInstance
 	 */
-	public AmpLogPerExecution getExecutionInstance() {
+	public DELogPerExecution getExecutionInstance() {
 		return executionInstance;
 	}
 
 	/**
 	 * @param executionInstance the executionInstance to set
 	 */
-	public void setExecutionInstance(AmpLogPerExecution executionInstance) {
+	public void setExecutionInstance(DELogPerExecution executionInstance) {
 		this.executionInstance = executionInstance;
 	}
 

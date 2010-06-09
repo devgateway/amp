@@ -2,39 +2,44 @@ package org.digijava.module.dataExchange.engine;
 
 import java.io.InputStream;
 
-import org.digijava.module.dataExchange.dbentity.AmpSourceSetting;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 
 public abstract class SourceBuilder {
 	
-	protected AmpSourceSetting ampSourceSetting;
+	protected DESourceSetting DESourceSetting;
 	protected InputStream inputStream;
- //test
+
 
 	
-	public SourceBuilder(AmpSourceSetting ampSourceSetting,
+	public SourceBuilder(DESourceSetting DESourceSetting,
 			InputStream inputStream) {
 		super();
-		this.ampSourceSetting = ampSourceSetting;
+		this.DESourceSetting = DESourceSetting;
 		this.inputStream = inputStream;
 	}
 	
-	public SourceBuilder(AmpSourceSetting ampSourceSetting) {
+	public SourceBuilder(DESourceSetting DESourceSetting) {
 		super();
-		this.ampSourceSetting = ampSourceSetting;
+		this.DESourceSetting = DESourceSetting;
 	}
 
+	/**
+	 * This will initialize the private property inputStream.
+	 * This must be implemented by all implementers (URLSourceBuilder and WSSourceBuilder).
+	 * For FileSourceBuilder the InputStream will be given as a parameter in the constructor.
+	 */
 	public abstract void process();
 	/**
-	 * @return the ampSourceSetting
+	 * @return the DESourceSetting
 	 */
-	public AmpSourceSetting getAmpSourceSetting() {
-		return ampSourceSetting;
+	public DESourceSetting getAmpSourceSetting() {
+		return DESourceSetting;
 	}
 	/**
-	 * @param ampSourceSetting the ampSourceSetting to set
+	 * @param DESourceSetting the DESourceSetting to set
 	 */
-	public void setAmpSourceSetting(AmpSourceSetting ampSourceSetting) {
-		this.ampSourceSetting = ampSourceSetting;
+	public void setAmpSourceSetting(DESourceSetting DESourceSetting) {
+		this.DESourceSetting = DESourceSetting;
 	}
 	/**
 	 * @return the inputStream

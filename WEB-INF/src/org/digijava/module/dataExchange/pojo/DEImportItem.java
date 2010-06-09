@@ -3,19 +3,19 @@
  */
 package org.digijava.module.dataExchange.pojo;
 
-import org.digijava.module.dataExchange.dbentity.AmpSourceSetting;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 
 /**
  * @author dan
  *
  */
 public class DEImportItem {
-	private AmpSourceSetting ampSourceSetting;
+	private DESourceSetting DESourceSetting;
 	
 	
-	public DEImportItem(AmpSourceSetting ampSourceSetting) {
+	public DEImportItem(DESourceSetting DESourceSetting) {
 		super();
-		this.ampSourceSetting = ampSourceSetting;
+		this.DESourceSetting = DESourceSetting;
 	}
 
 
@@ -24,15 +24,15 @@ public class DEImportItem {
 	}
 
 	public String getInputStream(){
-		return this.ampSourceSetting.getSource();
+		return this.DESourceSetting.getSource();
 	}
 	
-	public AmpSourceSetting getAmpSourceSetting() {
-		return ampSourceSetting;
+	public DESourceSetting getAmpSourceSetting() {
+		return DESourceSetting;
 	}
 
-	public void setAmpSourceSetting(AmpSourceSetting ampSourceSetting) {
-		this.ampSourceSetting = ampSourceSetting;
+	public void setAmpSourceSetting(DESourceSetting DESourceSetting) {
+		this.DESourceSetting = DESourceSetting;
 	}
 	
 	

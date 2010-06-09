@@ -9,17 +9,17 @@ import org.digijava.module.dataExchange.dbentity.AmpSourceSetting;
  * @author dan
  *
  */
-public class AmpImportItem {
+public class DEImportItem {
 	private AmpSourceSetting ampSourceSetting;
 	
 	
-	public AmpImportItem(AmpSourceSetting ampSourceSetting) {
+	public DEImportItem(AmpSourceSetting ampSourceSetting) {
 		super();
 		this.ampSourceSetting = ampSourceSetting;
 	}
 
 
-	public AmpImportItem() {
+	public DEImportItem() {
 		// TODO Auto-generated constructor stub
 	}
 

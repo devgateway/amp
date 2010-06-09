@@ -8,7 +8,7 @@ public abstract class SourceBuilder {
 	
 	protected AmpSourceSetting ampSourceSetting;
 	protected InputStream inputStream;
-
+ //test
 
 	
 	public SourceBuilder(AmpSourceSetting ampSourceSetting,

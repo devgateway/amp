@@ -23,7 +23,7 @@ public abstract class SourceBuilder {
 		this.ampSourceSetting = ampSourceSetting;
 	}
 
-	public abstract void process() ;
+	public abstract void process();
 	/**
 	 * @return the ampSourceSetting
 	 */

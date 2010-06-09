@@ -165,7 +165,7 @@
         </li>
 
         <li id="government_counterpart">
-          <%= f.collection_select :government_counterpart_id,  GovernmentCounterpart.ordered , "id", "name_with_code",
+          <%= f.collection_select :government_counterpart_id,  GovernmentCounterpart.ordered , "id", "code_with_name",
             {:prompt => I18n.t('options.prompt') }, :class => "large" %></li>
 
         <li id="government_project_code">

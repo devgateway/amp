@@ -6,4 +6,7 @@ class GovernmentCounterpart < ActiveRecord::Base
   def name_with_code
     "#{code} - #{name}"
   end
+  def code_with_name
+    "#{name} - #{code}"
+  end
 end

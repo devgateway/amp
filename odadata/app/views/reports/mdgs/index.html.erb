@@ -11,7 +11,7 @@
 	<% @mdgs.each do |mdg| %>
 		<% projects = mdg.projects.published %>
 		<tr>
-			<td><%= mdg.description %></td>
+			<td><strong><%= mdg.id %></strong> - <%= mdg.description %></td>
 			<td><%= projects.size %></td>
 			<td>
 				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0), 

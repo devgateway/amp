@@ -43,5 +43,161 @@ public class AmpSourceSetting {
 	 * In case the source would be a URL
 	 */
 	private String url;
+
+	/**
+	 * @return the isImport
+	 */
+	public Boolean getIsImport() {
+		return isImport;
+	}
+
+	/**
+	 * @param isImport the isImport to set
+	 */
+	public void setIsImport(Boolean isImport) {
+		this.isImport = isImport;
+	}
+
+	/**
+	 * @return the source
+	 */
+	public String getSource() {
+		return source;
+	}
+
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	/**
+	 * @return the importWorkspace
+	 */
+	public AmpTeam getImportWorkspace() {
+		return importWorkspace;
+	}
+
+	/**
+	 * @param importWorkspace the importWorkspace to set
+	 */
+	public void setImportWorkspace(AmpTeam importWorkspace) {
+		this.importWorkspace = importWorkspace;
+	}
+
+	/**
+	 * @return the approvalStatus
+	 */
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	/**
+	 * @param approvalStatus the approvalStatus to set
+	 */
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+	/**
+	 * @return the fields
+	 */
+	public List getFields() {
+		return fields;
+	}
+
+	/**
+	 * @param fields the fields to set
+	 */
+	public void setFields(List fields) {
+		this.fields = fields;
+	}
+
+	/**
+	 * @return the uniqueIdentifier
+	 */
+	public String getUniqueIdentifier() {
+		return uniqueIdentifier;
+	}
+
+	/**
+	 * @param uniqueIdentifier the uniqueIdentifier to set
+	 */
+	public void setUniqueIdentifier(String uniqueIdentifier) {
+		this.uniqueIdentifier = uniqueIdentifier;
+	}
+
+	/**
+	 * @return the uniqueIdentifierSeparator
+	 */
+	public String getUniqueIdentifierSeparator() {
+		return uniqueIdentifierSeparator;
+	}
+
+	/**
+	 * @param uniqueIdentifierSeparator the uniqueIdentifierSeparator to set
+	 */
+	public void setUniqueIdentifierSeparator(String uniqueIdentifierSeparator) {
+		this.uniqueIdentifierSeparator = uniqueIdentifierSeparator;
+	}
+
+	/**
+	 * @return the exportFilters
+	 */
+	public List getExportFilters() {
+		return exportFilters;
+	}
+
+	/**
+	 * @param exportFilters the exportFilters to set
+	 */
+	public void setExportFilters(List exportFilters) {
+		this.exportFilters = exportFilters;
+	}
+
+	/**
+	 * @return the languageId
+	 */
+	public String getLanguageId() {
+		return languageId;
+	}
+
+	/**
+	 * @param languageId the languageId to set
+	 */
+	public void setLanguageId(String languageId) {
+		this.languageId = languageId;
+	}
+
+	/**
+	 * @return the importStrategy
+	 */
+	public String getImportStrategy() {
+		return importStrategy;
+	}
+
+	/**
+	 * @param importStrategy the importStrategy to set
+	 */
+	public void setImportStrategy(String importStrategy) {
+		this.importStrategy = importStrategy;
+	}
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	
 	
 }

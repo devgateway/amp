@@ -3,19 +3,34 @@
  */
 package org.digijava.module.dataExchange.pojo;
 
-import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import org.digijava.module.dataExchange.engine.SourceBuilder;
+import org.digijava.module.dataExchange.jaxb.Activities;
 
 /**
  * @author dan
  *
  */
 public class DEImportItem {
-	private DESourceSetting DESourceSetting;
+	private SourceBuilder sourceBuilder;
+	private Activities activities;
 	
 	
-	public DEImportItem(DESourceSetting DESourceSetting) {
+	public Activities getActivities() {
+		return activities;
+	}
+
+
+	public void setActivities(Activities activities) {
+		this.activities = activities;
+	}
+
+
+	public DEImportItem(SourceBuilder sourceBuilder) {
 		super();
-		this.DESourceSetting = DESourceSetting;
+		this.sourceBuilder = sourceBuilder;
 	}
 
 
@@ -23,18 +38,19 @@ public class DEImportItem {
 		// TODO Auto-generated constructor stub
 	}
 
-	public String getInputStream(){
-		return this.DESourceSetting.getSource();
-	}
-	
-	public DESourceSetting getAmpSourceSetting() {
-		return DESourceSetting;
+
+	public SourceBuilder getSourceBuilder() {
+		return sourceBuilder;
 	}
 
-	public void setAmpSourceSetting(DESourceSetting DESourceSetting) {
-		this.DESourceSetting = DESourceSetting;
+
+	public void setSourceBuilder(SourceBuilder sourceBuilder) {
+		this.sourceBuilder = sourceBuilder;
 	}
 	
+	public InputStream getInputStream(){
+		return new ByteArrayInputStream(this.sourceBuilder.getInputString().getBytes());
+	}
 	
 
 }

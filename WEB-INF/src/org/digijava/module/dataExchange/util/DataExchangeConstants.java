@@ -24,8 +24,4 @@ public class DataExchangeConstants {
 	public static String LOCATION_TYPE_WOREDA = "Woreda";
 	public static String LOCATION_TYPE_DEPARTMENT = "Department";
 	public static String LOCATION_TYPE_DISTRICT = "District";
-	
-	public static String JAXB_INSTANCE = "org.digijava.module.dataExchange.jaxb";
-	//this.getServlet().getServletContext().getRealPath("/")+
-	public static String IDML_SCHEMA_LOCATION = "/doc/IDML2.0.xsd";
 }

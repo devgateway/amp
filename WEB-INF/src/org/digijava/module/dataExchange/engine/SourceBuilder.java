@@ -7,40 +7,24 @@ import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 public abstract class SourceBuilder {
 	
 	protected DESourceSetting DESourceSetting;
-	protected String inputString;
+	protected InputStream inputStream;
 
 
 	
 	public SourceBuilder(DESourceSetting DESourceSetting,
-			String inputStream) {
+			InputStream inputStream) {
 		super();
 		this.DESourceSetting = DESourceSetting;
-		this.inputString = inputStream;
+		this.inputStream = inputStream;
 	}
 	
-	public DESourceSetting getDESourceSetting() {
-		return DESourceSetting;
-	}
-
-	public void setDESourceSetting(DESourceSetting dESourceSetting) {
-		DESourceSetting = dESourceSetting;
-	}
-
-	public String getInputString() {
-		return inputString;
-	}
-
-	public void setInputString(String inputString) {
-		this.inputString = inputString;
-	}
-
 	public SourceBuilder(DESourceSetting DESourceSetting) {
 		super();
 		this.DESourceSetting = DESourceSetting;
 	}
 
 	/**
-	 * This will initialize the private property inputString.
+	 * This will initialize the private property inputStream.
 	 * This must be implemented by all implementers (URLSourceBuilder and WSSourceBuilder).
 	 * For FileSourceBuilder the InputStream will be given as a parameter in the constructor.
 	 */
@@ -48,8 +32,6 @@ public abstract class SourceBuilder {
 	/**
 	 * @return the DESourceSetting
 	 */
-	
-	
 	public DESourceSetting getAmpSourceSetting() {
 		return DESourceSetting;
 	}
@@ -59,7 +41,18 @@ public abstract class SourceBuilder {
 	public void setAmpSourceSetting(DESourceSetting DESourceSetting) {
 		this.DESourceSetting = DESourceSetting;
 	}
-
+	/**
+	 * @return the inputStream
+	 */
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+	/**
+	 * @param inputStream the inputStream to set
+	 */
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+	}
 	
 	
 }

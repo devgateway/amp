@@ -558,6 +558,7 @@
             <module name="widget">
             	<page>popup_addWidgetColumn</page>
             	<page>preview_tableWidget</page>
+                <page>showSectorDonorReport</page>
             </module>
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>

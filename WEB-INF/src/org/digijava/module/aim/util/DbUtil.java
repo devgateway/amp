@@ -2563,7 +2563,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = " select org from " + AmpOrganisation.class.getName() +" org ";
             if(!includeWeirdOrgs){
-               queryString +=  " where org.name not like '%x_%' and org.orgTypeId.orgTypeCode in ('BIL','MUL','Private') ";
+               queryString +=  " where org.name not like '%x_%' and org.orgGrpId.orgType.orgTypeCode in ('BIL','MUL','Private') ";
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
@@ -2591,8 +2591,9 @@ public class DbUtil {
             AmpOrgType tMul=getAmpOrgTypeByCode("MUL");
 
             session = PersistenceManager.getRequestDBSession();
-            queryString = " select org from " + AmpOrganisation.class.getName()
-                + " org where org.orgTypeId='" + tBil.getAmpOrgTypeId() + "' or org.orgTypeId='" + tMul.getAmpOrgTypeId() + "' order by org.name";
+            queryString = " select org from " + AmpOrganisation.class.getName() + " org "
+                    + " inner join org.orgGrpId grp "
+                    + " where grp.orgType='" + tBil.getAmpOrgTypeId() + "' or grp.orgType='" + tMul.getAmpOrgTypeId() + "' order by org.name";
             q = session.createQuery(queryString);
             organizations = q.list();
 

@@ -15,20 +15,82 @@
 		rechart()
 	}
 	function rechart(){
-		lastTimeStamp = new Date().getTime();
-		var chartImage=document.getElementById('sectorByDonorChartImage');
-		chartImage.src = '<digi:file src="images/amploading.gif"/>';
-		//from year
-		var fy=document.getElementsByName('selectedFromYear')[0].value;
-		//to year
-		var ty=document.getElementsByName('selectedToYear')[0].value;
-		var d=document.getElementsByName('selectedDonor')[0].value;
-		var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
-		myUrl+=getLegendState();
-		myUrl+=getLabelState();
-		chartImage.src=myUrl;
-		//alert(myUrl);
-	}
+            lastTimeStamp = new Date().getTime();
+            var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
+            var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
+            sectorByDonorChartImageLoadDiv.style.display="block";
+            sectorByDonorChartImageDiv.style.display="none";
+            var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
+            removeAllChildren(chartImageMap);
+            var chartImage=document.getElementById('sectorByDonorChartImage');
+            //from year
+            var fy=document.getElementsByName('selectedFromYear')[0].value;
+            //to year
+            var ty=document.getElementsByName('selectedToYear')[0].value;
+            var d=document.getElementsByName('selectedDonor')[0].value;
+            var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
+            myUrl+=getLegendState();
+            myUrl+=getLabelState();
+            chartImage.src=myUrl;
+            removeAllChildren(sectorByDonorChartImageDiv);
+            sectorByDonorChartImageDiv.appendChild(chartImage);
+            //alert(myUrl);
+        }
+
+            function loadSectorDonorMap(){
+                getSectorDonorGraphMap(lastTimeStamp);
+            }
+
+            function constructSectorDonorMapUrl(timestmp){
+<digi:context name="donorSectorMap" property="context/widget/getDonorSectorMap.do" />
+        var url="${donorSectorMap}";
+        if (typeof lastTimeStamp != 'undefined') {
+            url+='~timestamp='+timestmp;
+        }
+        return url;
+    }
+
+    function getSectorDonorGraphMap(timestamp){
+        var url=constructSectorDonorMapUrl(timestamp);
+        var async=new Asynchronous();
+        async.complete=updateSectorDonorMapCallBack;
+        async.call(url);
+    }
+    function removeAllChildren(parent){
+        var childrenAreas=parent.childNodes;
+        if(childrenAreas!=null){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+        }
+    }
+
+    function updateSectorDonorMapCallBack(status, statusText, responseText, responseXML){
+        var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
+        var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
+        var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
+        removeAllChildren(chartImageMap);
+        var areas=responseXML.getElementsByTagName('area');
+        for(var i=0;i<areas.length;i++){
+            var area=document.createElement('area');
+            area.setAttribute("title", areas[i].getAttribute("title"));
+            area.setAttribute("alt", areas[i].getAttribute("alt"));
+            area.setAttribute("shape", areas[i].getAttribute("shape"));
+            area.setAttribute("coords", areas[i].getAttribute("coords"));
+            if(areas[i].getAttribute("href")!=null){
+                area.setAttribute("href", "javascript:showSectorDonorWidgetReport('"+areas[i].getAttribute("href")+"')");
+            }
+            chartImageMap.appendChild(area);
+        }
+        sectorByDonorChartImageLoadDiv.style.display="none";
+        sectorByDonorChartImageDiv.style.display="block";
+    }
+
+
+    function showSectorDonorWidgetReport(url) {
+        var popup = window.open(url, "SectorDonorWidgetReport", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+        popup.focus();
+    }
 	function getLegendState(){
 		var chkLegend = document.getElementsByName('showLegends')[0];
 		if (chkLegend.checked){

@@ -65,6 +65,8 @@ import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
+import org.digijava.module.widget.helper.DonorSectorPieChartURLGenerator;
+import org.digijava.module.widget.helper.SectorHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -541,33 +543,59 @@ public class ChartWidgetUtil {
     public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException, WorkerException {
         JFreeChart result = null;
         PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
-
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
-        boolean tooltips = false;
-        boolean urls = false;
+        boolean tooltips = true;
+        boolean urls = true;
         result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
+        String donorString = "";
+        if (donors != null) {
+            donorString += "~donorId=" + getInStatment(donors);
+        }
+        String url = opt.getUrl() + "~startYear=" + fromYear + "~endYear=" + toYear + donorString;
         PiePlot plot = (PiePlot) result.getPlot();
 
         if (opt.isShowTitle()) {
             Font font = new Font(null, 0, 12);
             result.getTitle().setFont(font);
         }
+       String pattern = "{0} {1} ({2})";
+       if (opt.getLabelPattern() != null) {
+               pattern = opt.getLabelPattern();
+        }
 
         if (opt.isShowLabels()) {
-            String pattern = "{0} = {1} ({2})";
-            if (opt.getLabelPattern() != null) {
-                pattern = opt.getLabelPattern();
-            }
-            DecimalFormat format = FormatHelper.getDecimalFormat();
-            format.setMaximumFractionDigits(0);
-            PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
-            plot.setLabelGenerator(gen);
+        PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
+        plot.setLabelGenerator(gen);
+        plot.setSimpleLabels(true);
+        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
+        plot.setLabelGap(0);
+        plot.setLabelLinkMargin(0.05);
+        plot.setLabelShadowPaint(null);
+        plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
         } else {
             plot.setLabelGenerator(null);
         }
 
-        //plot.setSectionOutlinesVisible(false);
+           //plot.setSectionOutlinesVisible(false);
+           LegendTitle lt = result.getLegend();
+           if (lt != null) {
+               Font labelFont = new Font(null, Font.PLAIN, 9);
+               lt.setItemFont(labelFont);
+               plot.setLabelFont(labelFont);
+               lt.setPosition(RectangleEdge.RIGHT);
+               lt.setVerticalAlignment(VerticalAlignment.TOP);
+               lt.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+               plot.setLegendItemShape(new Rectangle(10, 10));
+               DecimalFormat format = FormatHelper.getDecimalFormat();
+               format.setMaximumFractionDigits(0);
+               PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
+               plot.setLegendLabelGenerator(genLegend);
+               plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
+
+           }
+        DonorSectorPieChartURLGenerator urlGen = new DonorSectorPieChartURLGenerator(url);
+        plot.setURLGenerator(urlGen);
         plot.setIgnoreNullValues(true);
         plot.setIgnoreZeroValues(true);
         return result;
@@ -708,27 +736,38 @@ public class ChartWidgetUtil {
             int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
             toDate = new Date(getStartOfYear(toYear.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
         }
-        Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value
+        Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value// to hold whole funding value
         Collection<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper);
         if (fundings != null) {
-            double otherFunfing = 0;
+            Double otherFunding = new Double(0);
+            List<Long> otherIds = new ArrayList<Long>();
             for (DonorSectorFundingHelper funding : fundings) {
                 Double percent = funding.getFounding() / allFundingWrapper[0];
                 // the sectors which percent is less then 5% should be group in "Other"
-                if (percent > 0.05) {
-                    ds.setValue(funding.getSector().getName(), Math.round(funding.getFounding()));
+                AmpSector sector = funding.getSector();
+
+                if (percent >= 0.05) {
+                    SectorHelper secHelper = new SectorHelper();
+                    secHelper.setName(sector.getName());
+                    secHelper.setIds(new ArrayList<Long>());
+                    secHelper.getIds().add(sector.getAmpSectorId());
+                    ds.setValue(secHelper, Math.round(funding.getFounding()));
                 } else {
-                    otherFunfing += funding.getFounding();
+                    otherFunding += funding.getFounding();
+                    otherIds.add(sector.getAmpSectorId());
                 }
             }
-            if (otherFunfing != 0) {
+            if (otherFunding != 0) {
                 String otherSectors = "Other Sectors";
                 try {
                     otherSectors = TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
                 } catch (WorkerException e) {
                     e.printStackTrace();
                 }
-                ds.setValue(otherSectors, Math.round(otherFunfing));
+                SectorHelper secHelper = new SectorHelper();
+                secHelper.setName(otherSectors);
+                secHelper.setIds(otherIds);
+                ds.setValue(secHelper, otherFunding);
             }
         }
         return ds;

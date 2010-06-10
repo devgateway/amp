@@ -16,6 +16,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.widget.form.SectorByDonorTeaserForm;
 import org.digijava.module.widget.helper.ChartOption;
@@ -79,49 +80,62 @@ public class ShowSectorByDonorChart extends Action {
 		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));
 		//fill to years' drop-down
 		cForm.setYearsTo(ChartWidgetUtil.getYears(false));
+        //generate map for this graph
+        String map = ChartUtilities.getImageMap("sectorByDonorChartImageMap", info);
+        
+        //save map with timestamp from request for later use
+        //timestemp is generated with javascript before sending ajax request.
+        ChartUtil.saveMap(map, cForm.getTimestamp(), request.getSession());
+
 		boolean amountsInThousands=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equals("true");
 		cForm.setAmountsInThousands(amountsInThousands);
 		return null;
 	}
 
-	private ChartOption createChartOption(SectorByDonorTeaserForm form,HttpServletRequest request){
-		ChartOption opt= new ChartOption();
+	   private ChartOption createChartOption(SectorByDonorTeaserForm form, HttpServletRequest request) {
+        ChartOption opt = new ChartOption();
 
-		//TITLE
-		if (form.getShowTitle()==null){
-			opt.setShowTitle(true);
-		}else{
-			opt.setShowTitle(form.getShowTitle());
-		}
-		//LEGEND
-		if (form.getShowLegend()==null){
-			opt.setShowLegend(true);
-		}else{
-			opt.setShowLegend(form.getShowLegend());
-		}
-		//LABEL
-		if (form.getShowLabel()==null){
-			opt.setShowLabels(true);
-		}else{
-			opt.setShowLabels(form.getShowLabel());
-		}
-		//HEIGHT
-		if (form.getImageHeight() == null){
-        	opt.setHeight(new Integer(400));
-        }else{
-        	opt.setHeight(form.getImageHeight());
+        // URL
+        String url = RequestUtils.getFullModuleUrl(request);
+        url += "showSectorDonorReport.do";
+        opt.setUrl(url);
+
+
+        //TITLE
+        if (form.getShowTitle() == null) {
+            opt.setShowTitle(true);
+        } else {
+            opt.setShowTitle(form.getShowTitle());
         }
-		//WIDTH
-		if (form.getImageWidth() == null){
-        	opt.setWidth(new Integer(420));
-        }else{
-        	opt.setWidth(form.getImageWidth());
+        //LEGEND
+        if (form.getShowLegend() == null) {
+            opt.setShowLegend(true);
+        } else {
+            opt.setShowLegend(form.getShowLegend());
         }
-                String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
-                opt.setSiteId(siteId);
-                String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-                opt.setLangCode(langCode);
-		return opt;
-	}
+        //LABEL
+        if (form.getShowLabel() == null) {
+            opt.setShowLabels(true);
+        } else {
+            opt.setShowLabels(form.getShowLabel());
+        }
+        //HEIGHT
+        if (form.getImageHeight() == null) {
+            opt.setHeight(new Integer(400));
+        } else {
+            opt.setHeight(form.getImageHeight());
+        }
+        //WIDTH
+        if (form.getImageWidth() == null) {
+            opt.setWidth(new Integer(420));
+        } else {
+            opt.setWidth(form.getImageWidth());
+        }
+        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        opt.setSiteId(siteId);
+        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+        opt.setLangCode(langCode);
+        return opt;
+    }
 
 }

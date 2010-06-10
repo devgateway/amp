@@ -14,25 +14,34 @@ public class ChartOption {
 	private Integer height;
 	private boolean createMap;
 	private String title;
-        private String langCode;
-        private String siteId;
+    private String langCode;
+    private String siteId;
+    private String url;
 
-        public String getLangCode() {
-            return langCode;
-        }
+    public String getUrl() {
+        return url;
+    }
 
-        public void setLangCode(String langCode) {
-            this.langCode = langCode;
-        }
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-        public String getSiteId() {
-            return siteId;
-        }
+    public String getLangCode() {
+        return langCode;
+    }
 
-        public void setSiteId(String siteId) {
-            this.siteId = siteId;
-        }
-	
+    public void setLangCode(String langCode) {
+        this.langCode = langCode;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
+    }
+
 	public boolean isShowLegend() {
 		return showLegend;
 	}

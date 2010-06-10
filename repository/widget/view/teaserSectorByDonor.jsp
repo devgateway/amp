@@ -71,9 +71,16 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="3">
-			<img id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do">
-		</td>
+        <td colspan="3">
+            <div id="sectorByDonorChartImageDiv" style="display:none">
+                <img alt="" id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do" onload="loadSectorDonorMap()" usemap="#sectorByDonorChartImageMap" border="0" >
+            </div>
+            <div id="sectorByDonorChartImageDivLoad">
+                <img src='<digi:file src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>' alt="">
+            </div>
+            <MAP name="sectorByDonorChartImageMap" id="sectorByDonorChartImageMap">
+            </MAP>
+        </td>
 	</tr>
         <tr>
 		<td colspan="3" align="left">

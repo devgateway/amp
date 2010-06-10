@@ -12,7 +12,8 @@
 	  <form-bean name="gisWidgetChartForm" type="org.digijava.module.widget.form.ShowWidgetChartForm"/>
 	  <form-bean name="gisSectorByDonorTeaserForm" type="org.digijava.module.widget.form.SectorByDonorTeaserForm"/>
 	  <form-bean name="gisIndicatorSectorRegionForm" type="org.digijava.module.widget.form.IndicatorSectorRegionForm" />
-          <form-bean name="widgetOrgProfileWidgetForm" type="org.digijava.module.widget.form.OrgProfileWidgetForm" />
+      <form-bean name="widgetOrgProfileWidgetForm" type="org.digijava.module.widget.form.OrgProfileWidgetForm" />
+      <form-bean name="sectorDonorWidgetReportForm" type="org.digijava.module.widget.form.SectorDonorWidgetReportForm"/>
 	</form-beans>
 	
 	<global-forwards>
@@ -80,6 +81,12 @@
 		<action name="gisTableWidgetRenderForm" scope="request"  
 			path="/widget/getTableWidget" 
 			type="org.digijava.module.widget.action.RenderTableWidget"/>
+            
+         <action name="gisSectorByDonorTeaserForm" path="/widget/getDonorSectorMap" scope="request" type="org.digijava.module.widget.action.GetSectoByDonorWidgetMap" validate="false" />
+            
+         <action path="/widget/showSectorDonorReport" name="sectorDonorWidgetReportForm" scope="request" type="org.digijava.module.widget.action.ShowSectorDonorWidgetReport" validate="false">
+            <forward name="forward" path="/showLayout.do?layout=showSectorDonorReport" />
+        </action>
 		
 		<!-- Teasers below this -->
 		<action name="gisWidgetTeaserForm" path="/widget/widgetTeaser" type="org.digijava.module.widget.action.WidgetTeaser"/>

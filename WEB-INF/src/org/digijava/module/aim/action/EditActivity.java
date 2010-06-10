@@ -201,21 +201,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     // Checking whether the user have write access to the activity
 
     if (!gatePermEditAllowed) {
-			if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
-				// if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))&&
-				// !("Donor".equalsIgnoreCase(tm.getTeamAccessType()))) {
-				// errorMsgKey =
-				// "error.aim.editActivity.userPartOfManagementTeam";
-				// }
-				// else
-					//PLEASE DO NOT COMMENT THIS. IF YOU CANNOT EDIT ACTIVITIES
-					//PLEASE GO TO ADMIN->PERMISSION MANAGER->AmpActivity and select Either NONE or AlwaysAllowed then click apply
-					errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
-				
-			} else {
-				Collection euActs = EUActivityUtil.getEUActivities(activityId);
-				request.setAttribute("costs", euActs);
-			}
 
 //			if (errorMsgKey.trim().length() > 0) {
 //				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -236,7 +221,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			if (!isPreview && activity!=null && activity.getTeam()!=null && currentTeam!=null){
 				AmpTeam activityTeam=activity.getTeam();
 				//if user is member of same team to which activity belongs then it can be edited
-				if (currentTeam.getComputation() != null && !currentTeam.getComputation()){
+				if (currentTeam.getComputation() != null && currentTeam.getComputation()){
 					if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
 						errorMsgKey="error.aim.editActivity.noWritePermissionForUser";
 					}
@@ -255,6 +240,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				return null;
 			}
 		}
+    Collection euActs = EUActivityUtil.getEUActivities(activityId);
+	request.setAttribute("costs", euActs);
+	
     // load all themes
     Collection themes = new ArrayList(ProgramUtil.getAllThemes());
     eaForm.getPrograms().setProgramCollection(themes);

@@ -1894,6 +1894,33 @@ function commentWin(val) {
 																	</TD>
 																</TR>
 															</field:display>
+															<field:display name="Mode of Payment" feature="Funding Information">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="left" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																				height=10
+																				src="../ampTemplate/images/arrow-014E86.gif"
+																				width=15> <b><digi:trn>
+																				Mode of Payment</digi:trn></b></TD>
+																		</TR>
+																		<c:if test="${!empty aimChannelOverviewForm.modesOfPayment}">
+
+																			<c:forEach var="modesOfPayment"
+																				items="${aimChannelOverviewForm.modesOfPayment}">
+																				<TR>
+																					<TD bgcolor="#ffffff">
+																						<category:getoptionvalue categoryValueId="${modesOfPayment.id}"/>
+																					</TD>
+																				</TR>
+																			</c:forEach>
+																		</c:if>
+																	</TABLE>
+																	</TD>
+																</TR>
+															</field:display>
 														</feature:display>
 													</module:display>
 

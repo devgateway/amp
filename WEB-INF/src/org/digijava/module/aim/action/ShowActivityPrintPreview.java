@@ -587,6 +587,7 @@ public class ShowActivityPrintPreview
                         fund.setTypeOfAssistance( ampFunding.getTypeOfAssistance() );
                         fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
                         fund.setFundingStatus( ampFunding.getFundingStatus() );
+                        fund.setModeOfPayment( ampFunding.getModeOfPayment() );
                         
                         fund.setFundingId(ampFunding.getAmpFundingId().
                                           longValue());

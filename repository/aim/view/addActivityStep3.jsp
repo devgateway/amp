@@ -643,6 +643,22 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
          	                                                                     </tr>
 																			</field:display>
+																			
+                                                                              <field:display name="Mode of Payment" feature="Funding Information">
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:Financing">Mode of Payment</digi:trn>">
+                                                                                  <digi:trn>Mode of Payment</digi:trn>
+																				</a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <logic:notEmpty name="funding" property="modeOfPayment">
+                                                                                  	<category:getoptionvalue categoryValueId="${funding.modeOfPayment.id}"/>
+                                                                                  </logic:notEmpty>
+                                                                                </td>
+         	                                                                     </tr>
+																			</field:display>
 
 																			<field:display name="Conditions for Fund Release" feature="Funding Information">
                                                                               <tr>

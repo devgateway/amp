@@ -132,6 +132,20 @@
 																		</logic:notEmpty></td>
 																	</tr>
 																</field:display>
+																<field:display name="Mode of Payment"  feature="Funding Information">
+																	<tr>
+																		<td align="left" width="150"><a
+																			title='<digi:trn>Mode of Payment</digi:trn>'>
+																		<digi:trn>Mode of Payment</digi:trn>
+																		</a></td>
+																		<td width="1">:</td>
+																		<td align="left"><logic:notEmpty
+																			name="funding" property="modeOfPayment">
+																			<bean:write name="funding"
+																				property="modeOfPayment.value" />
+																		</logic:notEmpty></td>
+																	</tr>
+																</field:display>
 																<field:display name="Donor Objective" feature="Funding Information">
 																	<tr>
 																		<td align="left" width="150"><a

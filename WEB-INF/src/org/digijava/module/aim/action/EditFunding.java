@@ -113,6 +113,11 @@ public class EditFunding extends Action {
 									formBean.getOldFunding().setFundingStatus( funding.getFundingStatus().getId() );
 								}
 								
+								if ( funding.getModeOfPayment() != null ) {
+									formBean.getFunding().setModeOfPayment( funding.getModeOfPayment().getId() );
+									formBean.getOldFunding().setModeOfPayment( funding.getModeOfPayment().getId() );
+								}
+								
 								formBean.getFunding().setDonorObjective(funding.getDonorObjective());
 								formBean.getOldFunding().setDonorObjective(funding.getDonorObjective());
 								formBean.getFunding().setFundingConditions(funding.getConditions());

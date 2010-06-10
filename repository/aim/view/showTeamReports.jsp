@@ -666,7 +666,7 @@ function confirmFunc() {
               </td></tr>
             </table>
           
-            <TABLE width="750px">
+            <TABLE>
                <TR>
                    <TD COLSPAN="2">
                    <strong><digi:trn key="aim:IconReference">Icons Reference</digi:trn></strong>

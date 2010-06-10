@@ -2008,6 +2008,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long assistanceType = null;  // this is id of a category value from category Type Of Assistance
 		private Long modality = null; // this is id of a category value from category Financing Instrument
 		private Long fundingStatus = null; // this is id of a category value from category Funding Status
+		private Long modeOfPayment = null; // this is id of a category value from category Mode Of Payment
 		
 		private List<MTEFProjection> fundingMTEFProjections;
 		private List<KeyValue> availableMTEFProjectionYears;
@@ -2646,6 +2647,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setTotalPipelineCommitments(String totalPipelineCommitments) {
 			this.totalPipelineCommitments = totalPipelineCommitments;
+		}
+
+		/**
+		 * @return the modeOfPayment
+		 */
+		public Long getModeOfPayment() {
+			return modeOfPayment;
+		}
+
+		/**
+		 * @param modeOfPayment the modeOfPayment to set
+		 */
+		public void setModeOfPayment(Long modeOfPayment) {
+			this.modeOfPayment = modeOfPayment;
 		}	
 		
 	}

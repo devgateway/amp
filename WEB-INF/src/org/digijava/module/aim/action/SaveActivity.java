@@ -994,6 +994,7 @@ public class SaveActivity extends Action {
 						ampFunding.setFinancingInstrument( fund.getFinancingInstrument() );
 						ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
 						ampFunding.setFundingStatus( fund.getFundingStatus() );
+						ampFunding.setModeOfPayment( fund.getModeOfPayment() );
 						ampFunding.setDonorObjective( fund.getDonorObjective() );
 						
 						ampFunding.setAmpActivityId(activity);

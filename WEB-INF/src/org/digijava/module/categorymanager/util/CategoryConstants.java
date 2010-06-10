@@ -57,6 +57,9 @@ public class CategoryConstants {
 	public static final String FUNDING_STATUS_NAME				="Funding Status";
 	public static final String FUNDING_STATUS_KEY					="funding_status";
 	
+	public static final String MODE_OF_PAYMENT_NAME				="Mode of Payment";
+	public static final String MODE_OF_PAYMENT_KEY					="mode_of_payment";
+	
 	public static final String ACTIVITY_LEVEL_NAME					="Activity Level";
 	public static final String ACTIVITY_LEVEL_KEY					="activity_level";
 

@@ -327,6 +327,7 @@ public class ViewChannelOverview extends TilesAction {
                 		formBean=setTypesOfAssistanceToForm(formBean, activity);
                 		formBean=setUniqueModalitiesToForm(formBean, activity);
                 		setFundingStatusesToForm(formBean, activity);
+                		setModesOfPaymentToForm(formBean, activity);
                 		
                                 AmpCategoryValue impLocation=CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY,activity.getCategories());
                                 if(impLocation!=null){
@@ -517,6 +518,20 @@ public class ViewChannelOverview extends TilesAction {
 				fundingStatuses.add(ampFunding.getFundingStatus());
 		}
 		formBean.setFundingStatuses(fundingStatuses);
+		return formBean;
+	}
+	
+	private ChannelOverviewForm setModesOfPaymentToForm(
+			ChannelOverviewForm formBean, AmpActivity activity) {
+		Set<AmpFunding> fundings = activity.getFunding();
+		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
+		ArrayList<AmpCategoryValue> modesOfPayment = new ArrayList<AmpCategoryValue>();
+		while(fundingsIterator.hasNext()){
+			AmpFunding ampFunding = fundingsIterator.next();
+			if(!modesOfPayment.contains(ampFunding.getModeOfPayment()))
+				modesOfPayment.add(ampFunding.getModeOfPayment());
+		}
+		formBean.setModesOfPayment(modesOfPayment);
 		return formBean;
 	}
 

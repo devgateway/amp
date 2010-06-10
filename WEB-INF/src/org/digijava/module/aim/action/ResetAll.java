@@ -425,6 +425,7 @@ public class ResetAll extends Action
 					fund.setTypeOfAssistance( ampFunding.getTypeOfAssistance() );
 					fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 					fund.setFundingStatus(ampFunding.getFundingStatus());
+					fund.setModeOfPayment(ampFunding.getModeOfPayment());
 					fund.setFundingId(ampFunding.getAmpFundingId().intValue());
 					fund.setOrgFundingId(ampFunding.getFinancingId());
 					//fund.setModality(ampFunding.getModalityId());

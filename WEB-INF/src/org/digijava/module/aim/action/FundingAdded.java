@@ -122,6 +122,7 @@ public class FundingAdded extends Action {
 			newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getAssistanceType()) );
 			newFund.setFinancingInstrument( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModality()) );
 			newFund.setFundingStatus( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getFundingStatus()) );
+			newFund.setModeOfPayment( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModeOfPayment()) );
 			newFund.setOrgFundingId(currentFunding.getOrgFundingId());
 			newFund.setConditions(currentFunding.getFundingConditions());
 			//

@@ -954,6 +954,24 @@
                                                                                   </td>
                                                                               </tr>
 																			</field:display>
+																			<field:display name="Mode of Payment" feature="Funding Information">
+                                                                              <tr>
+                                                                                <td align="left" width="339">
+                                                                                  <a>
+                                                                                  	<digi:trn>Mode of Payment</digi:trn>
+																				  </a>                                                                                
+																				 </td>
+                                                                                <td width="10">:</td>
+                                                                                <td align="left">
+                                                                                  <logic:notEmpty name="funding" property="modeOfPayment">
+                                                                                    <digi:trn>
+                                                                                    	<bean:write name="funding" property="modeOfPayment.value"/>
+                                                                                    </digi:trn>
+                                                                                  </logic:notEmpty>                                                                                
+                                                                                  </td>
+                                                                              </tr>
+																			</field:display>
+																			
 				                                                            </table>
                                                                            </td>
                                                                         </tr>

@@ -7,69 +7,69 @@ import java.util.Set;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpFunding implements Serializable
-{
-	private Long ampFundingId ;
-	private AmpOrganisation ampDonorOrgId ;
+public class AmpFunding implements Serializable {
+	private Long ampFundingId;
+	private AmpOrganisation ampDonorOrgId;
 	private AmpActivity ampActivityId;
-	private Long crsTransactionNo ;
-	private String financingId ;
-	private String fundingTermsCode ;
+	private Long crsTransactionNo;
+	private String financingId;
+	private String fundingTermsCode;
 	private Date plannedStartDate;
 	private Date plannedCompletionDate;
 	private Date actualStartDate;
 	private Date actualCompletionDate;
 	private Date originalCompDate;
 	private Date lastAuditDate;
-	private Date reportingDate ;
-	private String conditions ;
-	private String donorObjective ;
-	private String language ;
-	private String version ;
+	private Date reportingDate;
+	private String conditions;
+	private String donorObjective;
+	private String language;
+	private String version;
 	private String calType;
 	private String comments;
-	private Date signatureDate ;
-	private Set fundingDetails ;
+	private Date signatureDate;
+	private Set fundingDetails;
 	private Set<AmpFundingMTEFProjection> mtefProjections;
-//	private AmpTermsAssist ampTermsAssistId ;
+	// private AmpTermsAssist ampTermsAssistId ;
 	private Set closingDateHistory;
-	
+
 	/*
 	 * tanzania adds funding amp-1707
 	 */
 	private Boolean active;
 	private Boolean delegatedCooperation;
 	private Boolean delegatedPartner;
-	
-	private ArrayList <Boolean>activeList;
-	//private AmpModality modalityId;
-	
+
+	private ArrayList<Boolean> activeList;
+	// private AmpModality modalityId;
+
 	private AmpCategoryValue typeOfAssistance;
 	private AmpCategoryValue financingInstrument;
 	private AmpCategoryValue fundingStatus;
-	
-	//private Set survey;
-	
-		/**
-		 * @return
-		 */
-		public Date getActualCompletionDate() {
-			return actualCompletionDate;
-		}
+	private AmpCategoryValue modeOfPayment;
 
-		/**
-		 * @return
-		 */
-		public Date getActualStartDate() {
-			return actualStartDate;
-		}
+	// private Set survey;
 
-		/**
-		 * @return
-		 */
-		public AmpOrganisation getAmpDonorOrgId() {
-			return ampDonorOrgId;
-		}
+	/**
+	 * @return
+	 */
+	public Date getActualCompletionDate() {
+		return actualCompletionDate;
+	}
+
+	/**
+	 * @return
+	 */
+	public Date getActualStartDate() {
+		return actualStartDate;
+	}
+
+	/**
+	 * @return
+	 */
+	public AmpOrganisation getAmpDonorOrgId() {
+		return ampDonorOrgId;
+	}
 
 	/**
 	 * @return
@@ -78,89 +78,89 @@ public class AmpFunding implements Serializable
 		return ampFundingId;
 	}
 
-		/**
-		 * @return
-		 */
-		public String getConditions() {
-			return conditions;
-		}
+	/**
+	 * @return
+	 */
+	public String getConditions() {
+		return conditions;
+	}
 
-		/**
-		 * @return
-		 */
-		public Long getCrsTransactionNo() {
-			return crsTransactionNo;
-		}
+	/**
+	 * @return
+	 */
+	public Long getCrsTransactionNo() {
+		return crsTransactionNo;
+	}
 
-		/**
-		 * @return
-		 */
-		public String getFinancingId() {
-			return financingId;
-		}
+	/**
+	 * @return
+	 */
+	public String getFinancingId() {
+		return financingId;
+	}
 
-		/**
-		 * @return
-		 */
-		public Set getFundingDetails() {
-			return fundingDetails;
-		}
+	/**
+	 * @return
+	 */
+	public Set getFundingDetails() {
+		return fundingDetails;
+	}
 
-		/**
-		 * @return
-		 */
-		public String getFundingTermsCode() {
-			return fundingTermsCode;
-		}
+	/**
+	 * @return
+	 */
+	public String getFundingTermsCode() {
+		return fundingTermsCode;
+	}
 
-		/**
-		 * @return
-		 */
-		public Date getPlannedCompletionDate() {
-			return plannedCompletionDate;
-		}
+	/**
+	 * @return
+	 */
+	public Date getPlannedCompletionDate() {
+		return plannedCompletionDate;
+	}
 
-		/**
-		 * @return
-		 */
-		public Date getPlannedStartDate() {
-			return plannedStartDate;
-		}
+	/**
+	 * @return
+	 */
+	public Date getPlannedStartDate() {
+		return plannedStartDate;
+	}
 
-		/**
-		 * @return
-		 */
-		public Date getReportingDate() {
-			return reportingDate;
-		}
+	/**
+	 * @return
+	 */
+	public Date getReportingDate() {
+		return reportingDate;
+	}
 
-		/**
-		 * @return
-		 */
-		public Date getSignatureDate() {
-			return signatureDate;
-		}
+	/**
+	 * @return
+	 */
+	public Date getSignatureDate() {
+		return signatureDate;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setActualCompletionDate(Date date) {
-			actualCompletionDate = date;
-		}
+	/**
+	 * @param date
+	 */
+	public void setActualCompletionDate(Date date) {
+		actualCompletionDate = date;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setActualStartDate(Date date) {
-			actualStartDate = date;
-		}
+	/**
+	 * @param date
+	 */
+	public void setActualStartDate(Date date) {
+		actualStartDate = date;
+	}
 
-		/**
-		 * @param long1
-		 */
-		public void setAmpDonorOrgId(AmpOrganisation ampDonorOrgId ) {
-			this.ampDonorOrgId = ampDonorOrgId ;
-		}
+	/**
+	 * @param long1
+	 */
+	public void setAmpDonorOrgId(AmpOrganisation ampDonorOrgId) {
+		this.ampDonorOrgId = ampDonorOrgId;
+	}
 
 	/**
 	 * @param long1
@@ -169,69 +169,68 @@ public class AmpFunding implements Serializable
 		ampFundingId = long1;
 	}
 
-		/**
-		 * @param string
-		 */
-		public void setConditions(String string) {
-			conditions = string;
-		}
+	/**
+	 * @param string
+	 */
+	public void setConditions(String string) {
+		conditions = string;
+	}
 
-		/**
-		 * @param long1
-		 */
-		public void setCrsTransactionNo(Long long1) {
-			crsTransactionNo = long1;
-		}
+	/**
+	 * @param long1
+	 */
+	public void setCrsTransactionNo(Long long1) {
+		crsTransactionNo = long1;
+	}
 
-		/**
-		 * @param string
-		 */
-		public void setFinancingId(String string) {
-			financingId = string;
-		}
+	/**
+	 * @param string
+	 */
+	public void setFinancingId(String string) {
+		financingId = string;
+	}
 
-		/**
-		 * @param set
-		 */
-		public void setFundingDetails(Set set) {
-			fundingDetails = set;
-		}
+	/**
+	 * @param set
+	 */
+	public void setFundingDetails(Set set) {
+		fundingDetails = set;
+	}
 
-		/**
-		 * @param string
-		 */
-		public void setFundingTermsCode(String string) {
-			fundingTermsCode = string;
-		}
+	/**
+	 * @param string
+	 */
+	public void setFundingTermsCode(String string) {
+		fundingTermsCode = string;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setPlannedCompletionDate(Date date) {
-			plannedCompletionDate = date;
-		}
+	/**
+	 * @param date
+	 */
+	public void setPlannedCompletionDate(Date date) {
+		plannedCompletionDate = date;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setPlannedStartDate(Date date) {
-			plannedStartDate = date;
-		}
+	/**
+	 * @param date
+	 */
+	public void setPlannedStartDate(Date date) {
+		plannedStartDate = date;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setReportingDate(Date date) {
-			reportingDate = date;
-		}
+	/**
+	 * @param date
+	 */
+	public void setReportingDate(Date date) {
+		reportingDate = date;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setSignatureDate(Date date) {
-			signatureDate = date;
-		}
-
+	/**
+	 * @param date
+	 */
+	public void setSignatureDate(Date date) {
+		signatureDate = date;
+	}
 
 	/**
 	 * @return
@@ -239,12 +238,11 @@ public class AmpFunding implements Serializable
 	public String getLanguage() {
 		return language;
 	}
-		
+
 	public String getVersion() {
 		return version;
 	}
 
-	
 	public void setLanguage(String string) {
 		language = string;
 	}
@@ -253,13 +251,14 @@ public class AmpFunding implements Serializable
 		version = string;
 	}
 
-	public void setAmpActivityId(AmpActivity a ) {
-			this.ampActivityId = a ;
-		}
-		
+	public void setAmpActivityId(AmpActivity a) {
+		this.ampActivityId = a;
+	}
+
 	public AmpActivity getAmpActivityId() {
-			return ampActivityId;
-		}
+		return ampActivityId;
+	}
+
 	/**
 	 * @return
 	 */
@@ -316,7 +315,6 @@ public class AmpFunding implements Serializable
 		calType = string;
 	}
 
-
 	/**
 	 * @return
 	 */
@@ -331,7 +329,6 @@ public class AmpFunding implements Serializable
 		closingDateHistory = set;
 	}
 
-		
 	public AmpCategoryValue getFinancingInstrument() {
 		return financingInstrument;
 	}
@@ -396,7 +393,8 @@ public class AmpFunding implements Serializable
 	}
 
 	/**
-	 * @param donorObjective the donorObjective to set
+	 * @param donorObjective
+	 *            the donorObjective to set
 	 */
 	public void setDonorObjective(String donorObjective) {
 		this.donorObjective = donorObjective;
@@ -410,15 +408,26 @@ public class AmpFunding implements Serializable
 	}
 
 	/**
-	 * @param fundingStatus the fundingStatus to set
+	 * @param fundingStatus
+	 *            the fundingStatus to set
 	 */
 	public void setFundingStatus(AmpCategoryValue fundingStatus) {
 		this.fundingStatus = fundingStatus;
 	}
-	
-	
+
+	/**
+	 * @return the modeOfPayment
+	 */
+	public AmpCategoryValue getModeOfPayment() {
+		return modeOfPayment;
+	}
+
+	/**
+	 * @param modeOfPayment
+	 *            the modeOfPayment to set
+	 */
+	public void setModeOfPayment(AmpCategoryValue modeOfPayment) {
+		this.modeOfPayment = modeOfPayment;
+	}
+
 }
-	
-	
-	
-	

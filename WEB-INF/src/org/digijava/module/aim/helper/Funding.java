@@ -19,6 +19,7 @@ public class Funding implements Serializable
     private AmpCategoryValue typeOfAssistance;
     private AmpCategoryValue financingInstrument;
     private AmpCategoryValue fundingStatus;
+    private AmpCategoryValue modeOfPayment;
     
 	private String orgFundingId;
 	private String signatureDate;
@@ -291,6 +292,20 @@ public class Funding implements Serializable
 
 	public void setSubtotalPipelineCommitments(String subtotalPipelineCommitments) {
 		this.subtotalPipelineCommitments = subtotalPipelineCommitments;
+	}
+
+	/**
+	 * @return the modeOfPayment
+	 */
+	public AmpCategoryValue getModeOfPayment() {
+		return modeOfPayment;
+	}
+
+	/**
+	 * @param modeOfPayment the modeOfPayment to set
+	 */
+	public void setModeOfPayment(AmpCategoryValue modeOfPayment) {
+		this.modeOfPayment = modeOfPayment;
 	}
 	
 }

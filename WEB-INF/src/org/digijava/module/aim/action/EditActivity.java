@@ -1043,6 +1043,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            fund.setTypeOfAssistance(ampFunding.getTypeOfAssistance());
 			            fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 			            fund.setFundingStatus(ampFunding.getFundingStatus());
+			            fund.setModeOfPayment(ampFunding.getModeOfPayment());
 			            
 			            fund.setFundingId(ampFunding.getAmpFundingId().
 			                              longValue());

@@ -169,7 +169,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private ArrayList<AmpCategoryValue> typesOfAssistance;
 	private ArrayList<AmpCategoryValue> modalities;
 	private ArrayList<AmpCategoryValue> fundingStatuses;
-	
+	private ArrayList<AmpCategoryValue> modesOfPayment;
 
 	private Collection relOrgs;
 
@@ -748,6 +748,20 @@ public String getAccessionInstrument() {
 
 		public void setNumOfLocationsPerLayer(List<Integer> numOfLocationsPerLayer) {
 			this.numOfLocationsPerLayer = numOfLocationsPerLayer;
+		}
+
+		/**
+		 * @return the modesOfPayment
+		 */
+		public ArrayList<AmpCategoryValue> getModesOfPayment() {
+			return modesOfPayment;
+		}
+
+		/**
+		 * @param modesOfPayment the modesOfPayment to set
+		 */
+		public void setModesOfPayment(ArrayList<AmpCategoryValue> modesOfPayment) {
+			this.modesOfPayment = modesOfPayment;
 		}
 	  
 

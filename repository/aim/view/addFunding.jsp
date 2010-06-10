@@ -466,6 +466,25 @@
 									
 								</td>
 							</tr>
+							
+							<field:display name="Mode of Payment" feature="Funding Information">
+							<tr>
+								<td align="right" bgcolor="#ECF3FD">
+									<b>
+									<a title="<digi:trn>The mode of payment</digi:trn>">
+									<digi:trn>Mode Of Payment</digi:trn></a>
+									</b>
+								</td>
+								<td align="left" bgcolor="#ECF3FD">
+									<c:set var="translation">
+										<digi:trn>Please select from below</digi:trn>
+									</c:set>
+									
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.modeOfPayment"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.MODE_OF_PAYMENT_KEY %>" styleClass="inp-text"/>
+									
+								</td>
+							</tr>
+							</field:display>
 
 							<field:display name="Funding Status" feature="Funding Information">
 							<tr>

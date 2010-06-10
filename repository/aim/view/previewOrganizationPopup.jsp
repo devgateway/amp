@@ -19,14 +19,10 @@
 <c:if test="${!empty org.organisation.acronym}">
 	<li>Organization Acronym: <bean:write name="org" property="organisation.acronym"/></li>
 </c:if>
-<c:if test="${!empty org.organisation.orgTypeId}">
-	<c:if test="${!empty org.organisation.orgTypeId.orgType}">
-		<li>Organization Type: <bean:write name="org" property="organisation.orgTypeId.orgType"/></li>
-	</c:if>
-</c:if>
 <c:if test="${!empty org.organisation.orgGrpId}">
 	<c:if test="${!empty org.organisation.orgGrpId.orgGrpName}">
 		<li>Organization Group: <bean:write name="org" property="organisation.orgGrpId.orgGrpName"/></li>
+		<li>Organization Type: <bean:write name="org" property="organisation.orgGrpId.orgType.orgType"/></li>
 	</c:if>
 </c:if>
 <c:if test="${!empty org.organisation.orgCode}">

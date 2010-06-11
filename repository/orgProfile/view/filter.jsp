@@ -141,6 +141,15 @@
             if( allSelected&&selectedNumb>1){
                 valid=false;
             }
+            if(valid){
+            <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do" />
+             document.orgProfOrgProfileFilterForm.action="${url}";
+             document.orgProfOrgProfileFilterForm.target="_self";
+             document.orgProfOrgProfileFilterForm.submit();
+             }
+             else{
+                 alert('<digi:trn jsFriendly="true">Select either all option or concrete options</digi:trn>')
+             }
     
             return valid;
         }
@@ -371,7 +380,7 @@
                     </tr>
                     <tr>
                         <td align="center" colspan="2">
-                        <html:submit styleClass="button" property="apply" onclick="return checkAllSeleceted();"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
+                            <input type="button" class="button" onclick="checkAllSeleceted();" value="<digi:trn key="orgProfile:filer:Apply">Apply</digi:trn>">
                     </td>
                 </tr>
             </table>

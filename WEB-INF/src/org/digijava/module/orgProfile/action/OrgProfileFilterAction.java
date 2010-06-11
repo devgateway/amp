@@ -50,7 +50,7 @@ public class OrgProfileFilterAction extends Action {
             orgForm.setYear(null);
             orgForm.setOrgIds(null);
             orgForm.setTransactionType(Constants.COMMITMENT);
-            orgForm.setLargestProjectNumb(5);
+            orgForm.setLargestProjectNumb(10);
             orgForm.setSelRegionId(null);
             orgForm.setSelZoneIds(null);
         }
@@ -116,7 +116,7 @@ public class OrgProfileFilterAction extends Action {
             orgForm.setFiscalCalendarId(fisCalId);
         }
         if (orgForm.getLargestProjectNumb() == null) {
-            orgForm.setLargestProjectNumb(5);
+            orgForm.setLargestProjectNumb(10);
         }
         if (orgForm.getRegions() == null) {
             orgForm.setRegions(new ArrayList<AmpCategoryValueLocations>(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry()));

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -75,6 +76,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.CategoryItemLabelGenerator;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
@@ -82,6 +86,7 @@ import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.RingPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -98,6 +103,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.TextAnchor;
 import org.jfree.ui.VerticalAlignment;
 
 /**
@@ -181,12 +187,7 @@ public class ChartWidgetUtil {
         Font plainFont = new Font("Arial", Font.PLAIN, 10);
         CategoryDataset dataset = getPledgesCommDisbDataset(filter, opt);
         DecimalFormat format = FormatHelper.getDecimalFormat();
-        String amount = "";
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            amount = "Amounts in thousands";
-        } else {
-            amount = "Amounts";
-        }
+        String amount = "Amounts in millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId()) + "(" + filter.getCurrName() + ")";
         chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
@@ -194,7 +195,7 @@ public class ChartWidgetUtil {
         chart.getLegend().setItemFont(plainFont);
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
-        plot.setBackgroundPaint( new Color(255, 255, 255));
+        plot.setBackgroundPaint(Color.WHITE);
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
@@ -207,6 +208,12 @@ public class ChartWidgetUtil {
         renderer.setSeriesPaint(1, new Color(0, 204, 255));
         renderer.setSeriesPaint(2, new Color(204, 255, 255));
         renderer.setItemMargin(0);
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
+        for (int i = 0; i < dataset.getRowCount(); i++) {
+            renderer.setSeriesItemLabelsVisible(i, true);
+            renderer.setSeriesItemLabelGenerator(i, labelGenerator);
+            renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
+        }
         return chart;
     }
 
@@ -221,6 +228,10 @@ public class ChartWidgetUtil {
         boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
+        BigDecimal divideByMillionDenominator=new BigDecimal(1000000);
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+             divideByMillionDenominator=new BigDecimal(1000);
+        }
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -241,11 +252,11 @@ public class ChartWidgetUtil {
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
-            result.addValue(fundingPledge, pledgesTranslatedTitle, new Long(i));
+            result.addValue(fundingPledge/divideByMillionDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
             DecimalWraper fundingComm = getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT);
-            result.addValue(fundingComm.getValue(), actComTranslatedTitle, new Long(i));
+            result.addValue(fundingComm.getValue().divide(divideByMillionDenominator), actComTranslatedTitle, new Long(i));
             DecimalWraper fundingDisb = getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT);
-            result.addValue(fundingDisb.getValue(), actDisbTranslatedTitle, new Long(i));
+            result.addValue(fundingDisb.getValue().divide(divideByMillionDenominator), actDisbTranslatedTitle, new Long(i));
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
                 nodata = false;
             }
@@ -272,12 +283,7 @@ public class ChartWidgetUtil {
         Font plainFont = new Font("Arial", Font.PLAIN, 10);
         CategoryDataset dataset = getTypeOfAidOdaProfileDataset(filter, opt, typeOfAid);
         DecimalFormat format = FormatHelper.getDecimalFormat();
-        String amount = "";
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            amount = "Amounts in thousands";
-        } else {
-            amount = "Amounts";
-        }
+        String amount = "Amounts in Millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg = "";
         if (typeOfAid) {
@@ -291,12 +297,12 @@ public class ChartWidgetUtil {
             titleMsg += TranslatorWorker.translateText("Actual disbursements", opt.getLangCode(), opt.getSiteId()) + " )";
         }
 
-        chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.HORIZONTAL, true, true, false);
+        chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         chart.getTitle().setFont(titleFont);
         chart.getLegend().setItemFont(plainFont);
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
-        plot.setBackgroundPaint( new Color(255, 255, 255));
+        plot.setBackgroundPaint(Color.WHITE);
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
@@ -317,6 +323,12 @@ public class ChartWidgetUtil {
         renderer.setSeriesPaint(8, Color.PINK);
         renderer.setSeriesPaint(9, Color.BLACK);
         renderer.setItemMargin(0);
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
+        for (int i = 0; i < dataset.getRowCount(); i++) {
+            renderer.setSeriesItemLabelsVisible(i, true);
+            renderer.setSeriesItemLabelGenerator(i, labelGenerator);
+            renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
+        }
         return chart;
     }
 
@@ -330,6 +342,10 @@ public class ChartWidgetUtil {
     private static CategoryDataset getTypeOfAidOdaProfileDataset(FilterHelper filter, ChartOption opt, boolean typeOfAid) throws DgException, WorkerException {
         boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
+        double divideByMillionDenominator=1000000;
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+              divideByMillionDenominator=1000;
+        }
         Long year = filter.getYear();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
@@ -354,7 +370,7 @@ public class ChartWidgetUtil {
                 } else {
                     funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), filter.getTransactionType());
                 }
-                result.addValue(funding.doubleValue(), title, i);
+                result.addValue(funding.doubleValue()/divideByMillionDenominator, title, i);
                 if (funding.doubleValue() != 0) {
                     nodata = false;
                 }
@@ -626,11 +642,17 @@ public class ChartWidgetUtil {
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
 
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + " | " + filter.getCurrName() + ")", dataset, true, true, false);
+        chart = ChartFactory.createRingChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + " | " + filter.getCurrName() + ")", dataset, true, true, false);
         chart.getTitle().setFont(titleFont);
         LegendTitle legend = chart.getLegend();
         legend.setItemFont(plainFont);
-        PiePlot plot = (PiePlot) chart.getPlot();
+        RingPlot plot = (RingPlot) chart.getPlot();
+        plot.setOuterSeparatorExtension(0);
+        plot.setInnerSeparatorExtension(0);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setForegroundAlpha(0.6f);
+        plot.setSectionDepth(0.5);
+        plot.setCircular(false);
         plot.setLabelFont(plainFont);
         String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
@@ -647,11 +669,11 @@ public class ChartWidgetUtil {
         plot.setLabelLinkMargin(0.05);
         plot.setLabelShadowPaint(null);
         plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
-        legend.setPosition(RectangleEdge.LEFT);
+        legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
         legend.setHorizontalAlignment(HorizontalAlignment.LEFT);
         plot.setLegendItemShape(new Rectangle(10, 10));
-        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
+        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
         plot.setLegendLabelGenerator(genLegend);
         plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
         return chart;
@@ -682,10 +704,17 @@ public class ChartWidgetUtil {
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + " | " + filter.getCurrName() + ")", dataset, true, true, false);
+        chart =ChartFactory.createRingChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + " | " + filter.getCurrName() + ")", dataset, true, true, false);
         chart.getTitle().setFont(titleFont);
-        PiePlot plot = (PiePlot) chart.getPlot();
+        RingPlot plot = (RingPlot) chart.getPlot();
+        plot.setOuterSeparatorExtension(0);
+        plot.setInnerSeparatorExtension(0);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setForegroundAlpha(0.6f);
         plot.setLabelFont(titleFont);
+        plot.setForegroundAlpha(0.6f);
+        plot.setSectionDepth(0.5);
+        plot.setCircular(false);
         String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
@@ -702,11 +731,11 @@ public class ChartWidgetUtil {
         plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
         plot.setLabelFont(plainFont);
         LegendTitle legend = chart.getLegend();
-        legend.setPosition(RectangleEdge.LEFT);
+        legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
         legend.setItemFont(plainFont);
         plot.setLegendItemShape(new Rectangle(10, 10));
-        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
+        PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
         plot.setLegendLabelGenerator(genLegend);
         plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
         return chart;
@@ -1053,6 +1082,10 @@ public class ChartWidgetUtil {
      */
     @SuppressWarnings("unchecked")
     public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
+       BigDecimal divideByMillionDenominator=new BigDecimal(1000000);
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+              divideByMillionDenominator=new BigDecimal(1000);
+        }
         BigDecimal regionalTotal = BigDecimal.ZERO;
         Long currId = filter.getCurrId();
         String currCode= CurrencyUtil.getCurrency(currId).getCurrencyCode();
@@ -1085,7 +1118,7 @@ public class ChartWidgetUtil {
                 } else {
                     total = cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.getValue().setScale(10, RoundingMode.HALF_UP));
+                ds.setValue(region.getName(), total.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator));
                 regionalTotal = regionalTotal.add(total.getValue());
             }
             List<String> keys = ds.getKeys();
@@ -1258,6 +1291,10 @@ public class ChartWidgetUtil {
      */
     @SuppressWarnings("unchecked")
     public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
+        Double divideByMillionDenominator=new Double(1000000);
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+             divideByMillionDenominator=new Double(1000);
+        }
         DefaultPieDataset ds = new DefaultPieDataset();
         List<AmpSector> sectors = getSectorList(filter);
         // to calculate funding for all sectors
@@ -1294,7 +1331,7 @@ public class ChartWidgetUtil {
                 Double percent = sectorFunding.getFounding() / totAllSectors;
                 // if percent is less than 5, group in "others"
                 if (percent >= 0.05) {
-                    ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding());
+                    ds.setValue(sectorFunding.getSector().getName(), sectorFunding.getFounding()/divideByMillionDenominator);
                 } else {
                     others += sectorFunding.getFounding();
 
@@ -1302,7 +1339,7 @@ public class ChartWidgetUtil {
             }
         }
         if (others.doubleValue() > 0) {
-            ds.setValue("Others", others);
+            ds.setValue("Others", others/divideByMillionDenominator);
         }
 
         return ds;

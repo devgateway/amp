@@ -85,6 +85,7 @@
                 background-color:
                     rgb(55, 96, 145);
                 font-family: Arial;
+                font-weight: bold;
                 text-align:center;
                 border-style:solid;
                 border-right:none;
@@ -103,8 +104,8 @@
                 font-size:10px;
                 font-family: Arial;
             }
-
-            .tableOdd {
+            
+            .tableOdd{
                 background-color:#FFFFFF;
                 font-family: Arial;
                 font-size:10px !important;
@@ -216,7 +217,7 @@
                                                                 z-index: 1000;
                                                             </c:set>
                                                         </feature:display>
-                                                        <div style="${stylePlace1}"
+                                                        <div style="${stylePlace1}">
                                                              <digi:insert attribute="chart1">
                                                                  <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
                                                              </digi:insert>
@@ -231,7 +232,7 @@
                                                             z-index: 1000
                                                         </c:set>
                                                     </feature:display>
-                                                    <div style="${stylePlace2}"
+                                                    <div style="${stylePlace2}">
                                                          <digi:insert attribute="chart2">
                                                              <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
                                                          </digi:insert>
@@ -312,7 +313,7 @@
                                                     z-index: 1000
                                                 </c:set>
                                             </feature:display>
-                                            <div style="${stylePlace7}">
+                                            <div style="${stylePlace7}" class="chartPlaceCss">
                                                 <digi:insert attribute="chart7">
                                                     <digi:put name="widget-teaser-param">orgprof_chart_place7</digi:put>
                                                 </digi:insert>

@@ -91,10 +91,11 @@
                             failure:responseFailure_${gisWidgetTeaserForm.type}
                         };
                 </script>
+                <div style="margin-bottom: 20px">
                 <a id="loadDataSource_${gisWidgetTeaserForm.type}_link" href="javascript:loadDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>show data source</digi:trn></a>
-
                 <img src="images/amploading.gif" alt="" style="display: none" id="loadDataSource_${gisWidgetTeaserForm.type}_image" />
                 <a id="hideDataSource_${gisWidgetTeaserForm.type}_link" style="display: none" href="javascript:hideDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>hide data source</digi:trn></a>
+                </div>
                 <div id="table_${gisWidgetTeaserForm.type}" style="display: none">
                 </div>
                 <div id="chartDiv_${gisWidgetTeaserForm.type}">
@@ -109,7 +110,7 @@
                             </span>
                         </c:when>
                         <c:otherwise>
-           					<img  alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=520~imageWidth=400" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
+           					<img  alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
                             <span id="chartMap${gisWidgetTeaserForm.type}">
 
                             </span>

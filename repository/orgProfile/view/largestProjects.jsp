@@ -42,9 +42,9 @@
     </tr>
     <tr>
         <td class="tableHeaderCls"><digi:trn>Project title</digi:trn></td>
-        <td class="tableHeaderCls"><digi:trn>Commitment</digi:trn>(${sessionScope.orgProfileFilter.currName})</td>
+        <td class="tableHeaderCls"><digi:trn>Commitment</digi:trn><br/>(${sessionScope.orgProfileFilter.currName})</td>
         <c:if test="${sessionScope.orgProfileFilter.transactionType==2}">
-            <td class="tableHeaderCls"><digi:trn>Disbursement</digi:trn>(${sessionScope.orgProfileFilter.currName})</td>
+            <td class="tableHeaderCls"><digi:trn>Disbursement</digi:trn><br/>(${sessionScope.orgProfileFilter.currName})</td>
         </c:if>
         <td class="tableHeaderCls"><digi:trn>Sector</digi:trn></td>
     </tr>

@@ -281,7 +281,13 @@ function confirmFunc() {
                               </digi:trn>
                               </b>
                             </td>
-                            
+                            <td bgColor=#999999 align="center" height="20">
+                              <b>
+                              <digi:trn>
+                              Filtered
+                              </digi:trn>
+                              </b>
+                            </td>
                             <td bgColor=#999999 align="center" height="20">
                               <b>
                               <digi:trn key="aim:hierarchies">
@@ -440,6 +446,14 @@ function confirmFunc() {
                                     </li>
                                   </logic:equal>
                                 </p>
+                              </td>
+							<td align="center">
+	                              <logic:notEmpty name="report" property="filterDataSet">
+	                                  <img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" vspace="2" border="0" align="absmiddle" />
+	                              </logic:notEmpty>
+	                              <logic:empty name="report" property="filterDataSet">
+	                                   <img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" vspace="2" border="0" align="absmiddle" />
+	                              </logic:empty>
                               </td>
                               <td>
                                 <logic:iterate name="report" property="hierarchies" id="hierarchy" >
@@ -685,6 +699,18 @@ function confirmFunc() {
                        <br />
                </TD>
                </TR>
+				<TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Filtered Report&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+                <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Not filtered Report&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
 </c:if>
 <c:if test="${aimTeamReportsForm.showTabs}">
                <TR>
@@ -696,6 +722,18 @@ function confirmFunc() {
                 <TR>
                    <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
                        <digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+				<TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Filtered tab&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+                <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn>Not filtered tab&nbsp;</digi:trn>
                        <br />
                </TD>
                </TR>

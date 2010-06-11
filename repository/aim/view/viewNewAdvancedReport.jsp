@@ -354,6 +354,11 @@ session.setAttribute("progressValue", counter);
 			<tr>
 			
 			<td align="right">
+			<logic:notEmpty name="reportMeta" property="filterDataSet">
+			<span style="cursor:pointer;float:left;cursor:pointer;font-style: italic;">
+	        	<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
+			</span>
+			</logic:notEmpty>
 			<span style="color: red;font-family: Arial;padding-right: 5px">
 				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 				<c:set var="AllAmount">

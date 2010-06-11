@@ -92,6 +92,7 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -185,13 +186,16 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font titleFont = new Font("Arial", Font.BOLD, 12);
         Font plainFont = new Font("Arial", Font.PLAIN, 10);
+        Font subTitleFont = new Font("Arial", Font.BOLD, 10);
         CategoryDataset dataset = getPledgesCommDisbDataset(filter, opt);
         DecimalFormat format = FormatHelper.getDecimalFormat();
         String amount = "Amounts in millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        String titleMsg = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId()) + "(" + filter.getCurrName() + ")";
+        String titleMsg = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId());
         chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         chart.getTitle().setFont(titleFont);
+        TextTitle subTitle = new TextTitle( filter.getCurrName(),subTitleFont);
+        chart.addSubtitle(subTitle);
         chart.getLegend().setItemFont(plainFont);
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
@@ -212,6 +216,7 @@ public class ChartWidgetUtil {
         for (int i = 0; i < dataset.getRowCount(); i++) {
             renderer.setSeriesItemLabelsVisible(i, true);
             renderer.setSeriesItemLabelGenerator(i, labelGenerator);
+            renderer.setSeriesItemLabelFont(i, plainFont);
             renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
         }
         return chart;
@@ -281,24 +286,28 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font titleFont = new Font("Arial", Font.BOLD, 12);
         Font plainFont = new Font("Arial", Font.PLAIN, 10);
+        Font subTitleFont = new Font("Arial", Font.BOLD, 10);
         CategoryDataset dataset = getTypeOfAidOdaProfileDataset(filter, opt, typeOfAid);
         DecimalFormat format = FormatHelper.getDecimalFormat();
         String amount = "Amounts in Millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg = "";
+        String trnsType="";
         if (typeOfAid) {
-            titleMsg = TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId()) + "(" + filter.getCurrName() + ",";
+            titleMsg = TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
         } else {
-            titleMsg = TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId()) + "(" + filter.getCurrName() + ",";
+            titleMsg = TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
         }
         if (filter.getTransactionType() == 0) {
-            titleMsg += TranslatorWorker.translateText("Actual commitments", opt.getLangCode(), opt.getSiteId()) + " )";
+            trnsType = TranslatorWorker.translateText("Actual commitments in", opt.getLangCode(), opt.getSiteId());
         } else {
-            titleMsg += TranslatorWorker.translateText("Actual disbursements", opt.getLangCode(), opt.getSiteId()) + " )";
+            trnsType = TranslatorWorker.translateText("Actual disbursements in", opt.getLangCode(), opt.getSiteId());
         }
 
         chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         chart.getTitle().setFont(titleFont);
+        TextTitle subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
+        chart.addSubtitle(subTitle);
         chart.getLegend().setItemFont(plainFont);
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
@@ -327,6 +336,7 @@ public class ChartWidgetUtil {
         for (int i = 0; i < dataset.getRowCount(); i++) {
             renderer.setSeriesItemLabelsVisible(i, true);
             renderer.setSeriesItemLabelGenerator(i, labelGenerator);
+            renderer.setSeriesItemLabelFont(i, plainFont);
             renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
         }
         return chart;
@@ -630,20 +640,24 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font titleFont = new Font("Arial", Font.BOLD, 12);
         Font plainFont = new Font("Arial", Font.PLAIN, 10);
+        Font subTitleFont = new Font("Arial", Font.BOLD, 10);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
         String transTypeName = "";
         switch (filter.getTransactionType()) {
             case org.digijava.module.aim.helper.Constants.COMMITMENT:
-                transTypeName = "Commitment";
+                transTypeName = "Commitment in";
                 break;
             case org.digijava.module.aim.helper.Constants.DISBURSEMENT:
-                transTypeName = "Disbursement";
+                transTypeName = "Disbursement in";
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
 
-        chart = ChartFactory.createRingChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + " | " + filter.getCurrName() + ")", dataset, true, true, false);
+        chart = ChartFactory.createRingChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ", opt.getLangCode(), opt.getSiteId()), dataset, true, true, false);
         chart.getTitle().setFont(titleFont);
+        TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
+        subTitle.setPadding(5, 5, 5, 5);
+        chart.addSubtitle(0,subTitle);
         LegendTitle legend = chart.getLegend();
         legend.setItemFont(plainFont);
         RingPlot plot = (RingPlot) chart.getPlot();
@@ -692,20 +706,24 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font titleFont = new Font("Arial", Font.BOLD, 12);
         Font plainFont = new Font("Arial", Font.PLAIN, 10);
+        Font subTitleFont = new Font("Arial", Font.BOLD, 10);
 
         DefaultPieDataset dataset = getDonorRegionalDataSet(filter);
         String transTypeName = "";
         switch (filter.getTransactionType()) {
             case org.digijava.module.aim.helper.Constants.COMMITMENT:
-                transTypeName = "Commitment";
+                transTypeName = "Commitment in";
                 break;
             case org.digijava.module.aim.helper.Constants.DISBURSEMENT:
-                transTypeName = "Disbursement";
+                transTypeName = "Disbursement in";
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        chart =ChartFactory.createRingChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + " | " + filter.getCurrName() + ")", dataset, true, true, false);
+        chart =ChartFactory.createRingChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()), dataset, true, true, false);
         chart.getTitle().setFont(titleFont);
+        TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
+        subTitle.setPadding(5, 5, 5, 5);
+        chart.addSubtitle(0,subTitle);
         RingPlot plot = (RingPlot) chart.getPlot();
         plot.setOuterSeparatorExtension(0);
         plot.setInnerSeparatorExtension(0);

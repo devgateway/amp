@@ -76,6 +76,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
@@ -658,8 +659,6 @@ public class ChartWidgetUtil {
         TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
         subTitle.setPadding(5, 5, 5, 5);
         chart.addSubtitle(0,subTitle);
-        LegendTitle legend = chart.getLegend();
-        legend.setItemFont(plainFont);
         RingPlot plot = (RingPlot) chart.getPlot();
         plot.setOuterSeparatorExtension(0);
         plot.setInnerSeparatorExtension(0);
@@ -683,6 +682,10 @@ public class ChartWidgetUtil {
         plot.setLabelLinkMargin(0.05);
         plot.setLabelShadowPaint(null);
         plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
+        plot.setOutlineVisible(false);
+        LegendTitle legend = chart.getLegend();
+        legend.setItemFont(plainFont);
+        legend.setFrame(BlockBorder.NONE);
         legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
         legend.setHorizontalAlignment(HorizontalAlignment.LEFT);
@@ -748,10 +751,12 @@ public class ChartWidgetUtil {
         plot.setLabelShadowPaint(null);
         plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
         plot.setLabelFont(plainFont);
+        plot.setOutlineVisible(false);
         LegendTitle legend = chart.getLegend();
         legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
         legend.setItemFont(plainFont);
+        legend.setFrame(BlockBorder.NONE);
         plot.setLegendItemShape(new Rectangle(10, 10));
         PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
         plot.setLegendLabelGenerator(genLegend);
@@ -1145,7 +1150,7 @@ public class ChartWidgetUtil {
             while (keysIter.hasNext()) {
                 String key = keysIter.next();
                 BigDecimal value = (BigDecimal) ds.getValue(key);
-                Double percent = (value.divide(regionalTotal, 3, RoundingMode.HALF_UP)).doubleValue();
+                Double percent = (value.divide(regionalTotal.divide(divideByMillionDenominator), 3, RoundingMode.HALF_UP)).doubleValue();
                 if (percent <= 0.05) {
                     othersValue = othersValue.add(value);
                     ds.remove(key);

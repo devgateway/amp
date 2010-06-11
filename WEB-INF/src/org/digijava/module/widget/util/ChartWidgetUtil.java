@@ -685,7 +685,7 @@ public class ChartWidgetUtil {
         plot.setOutlineVisible(false);
         LegendTitle legend = chart.getLegend();
         legend.setItemFont(plainFont);
-        legend.setFrame(BlockBorder.NONE);
+        legend.setMargin(0,5,5,10);
         legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
         legend.setHorizontalAlignment(HorizontalAlignment.LEFT);
@@ -756,7 +756,7 @@ public class ChartWidgetUtil {
         legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
         legend.setItemFont(plainFont);
-        legend.setFrame(BlockBorder.NONE);
+        legend.setMargin(0,5,5,10);
         plot.setLegendItemShape(new Rectangle(10, 10));
         PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
         plot.setLegendLabelGenerator(genLegend);

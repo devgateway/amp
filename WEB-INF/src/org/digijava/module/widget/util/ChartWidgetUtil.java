@@ -290,6 +290,7 @@ public class ChartWidgetUtil {
         Font subTitleFont = new Font("Arial", Font.BOLD, 10);
         CategoryDataset dataset = getTypeOfAidOdaProfileDataset(filter, opt, typeOfAid);
         DecimalFormat format = FormatHelper.getDecimalFormat();
+
         String amount = "Amounts in Millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg = "";
@@ -660,8 +661,8 @@ public class ChartWidgetUtil {
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-
-        chart = ChartFactory.createRingChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ", opt.getLangCode(), opt.getSiteId()), dataset, true, true, false);
+        String primarySectorSchemeName=SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
+        chart = ChartFactory.createRingChart(primarySectorSchemeName+" "+TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId()), dataset, true, true, false);
         chart.getTitle().setFont(titleFont);
         TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
         subTitle.setPadding(5, 5, 5, 5);

@@ -254,6 +254,14 @@ en:
           label: Total Commitments {{year}}
         total_disbursements_in:
           label: Total Disbursements {{year}}
+        disbursements_q1_in:
+          label: Disbursements Q1 {{year}}
+        disbursements_q2_in:
+          label: Disbursements Q2 {{year}}
+        disbursements_q3_in:
+          label: Disbursements Q3 {{year}}
+        disbursements_q4_in:
+          label: Disbursements Q4 {{year}}
         commitments_forecast: 
           label: Commitments Forecast
         disbursements_forecast: 

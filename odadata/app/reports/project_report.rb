@@ -43,7 +43,7 @@ module Reports
       end
       
       def localized_heading_for(column)
-        if column.to_s =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)_([0-9]{4})/
+        if column.to_s =~ /(total_commitments|total_disbursements|disbursements_q1|disbursements_q2|disbursements_q3|disbursements_q4|commitments_forecast|disbursements_forecast)_([0-9]{4})/
           search_paths = [
             :"activerecord.attributes.project.#{$1}_in.report_heading",
             :"activerecord.attributes.project.#{$1}_in.label",

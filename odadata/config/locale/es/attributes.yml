@@ -260,6 +260,14 @@ es:
           label: Total compromisso {{year}}
         total_disbursements_in:
           label: Total desembolso {{year}}
+        disbursements_q1_in:
+          label: Desembolsos Q1 {{year}}
+        disbursements_q2_in:
+          label: Desembolsos Q2 {{year}}
+        disbursements_q3_in:
+          label: Desembolsos Q3 {{year}}
+        disbursements_q4_in:
+          label: Desembolsos Q4 {{year}}
         commitments_forecast:
           label: 'Previsões de Compromissos'
         disbursements_forecast:

@@ -55,6 +55,16 @@ class Reports::CustomController < ReportsController
       :funding_details => funding_details, 
       :projects => projects, 
       :middleware => disaggregators_from_params).data
+
+    if format == "html"
+      # Remove quarterly information for the HTML report
+      funding_details.each do |y|
+        data.remove_column("disbursements_q1_#{y}")
+        data.remove_column("disbursements_q2_#{y}")
+        data.remove_column("disbursements_q3_#{y}")
+        data.remove_column("disbursements_q4_#{y}")
+      end
+    end
       
     report = ComplexReport.create!({
       :data => data,

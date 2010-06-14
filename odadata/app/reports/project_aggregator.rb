@@ -16,6 +16,10 @@ class Reports::ProjectAggregator < Ruport::Aggregator
       
       new_fields = @options[:funding_details].inject([]) do |tmp, y|
         tmp << "total_commitments_#{y}"
+        tmp << "disbursements_q1_#{y}"
+        tmp << "disbursements_q2_#{y}"
+        tmp << "disbursements_q3_#{y}"
+        tmp << "disbursements_q4_#{y}"
         tmp << "total_disbursements_#{y}"
         tmp << "commitments_forecast_#{y}"
         tmp << "disbursements_forecast_#{y}"
@@ -32,6 +36,10 @@ class Reports::ProjectAggregator < Ruport::Aggregator
     # Add funding details
     @options[:funding_details].andand.each do |y|
       record["total_commitments_#{y}"] = project.total_commitments(y)
+      record["disbursements_q1_#{y}"] = project.fundings.find_by_year(y).andand.payments_q1
+      record["disbursements_q2_#{y}"] = project.fundings.find_by_year(y).andand.payments_q2
+      record["disbursements_q3_#{y}"] = project.fundings.find_by_year(y).andand.payments_q3
+      record["disbursements_q4_#{y}"] = project.fundings.find_by_year(y).andand.payments_q4
       record["total_disbursements_#{y}"] = project.total_payments(y)
       record["commitments_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.commitments
       record["disbursements_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.payments

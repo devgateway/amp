@@ -57,18 +57,35 @@ public class DocumentManagerRights {
 		);
 	}
 	
+	/**
+	 * add new version button is visible for TM or not...
+	 */
+	public static Boolean hasViewAddNewVersioninsRights (Node node, HttpServletRequest request) {
+		boolean result						= true;
+		Boolean manuallySetNoVersioningFlag	= isManuallySetNoVersioningFlag(request);
+		if (manuallySetNoVersioningFlag != null) {
+			result = result && manuallySetNoVersioningFlag;
+		}
+		return result;
+	}
+	
 	public static Boolean hasVersioningRights (Node node, HttpServletRequest request) {
 		boolean result						= true;
 		Boolean manuallySetNoVersioningFlag	= isManuallySetNoVersioningFlag(request);
 		if (manuallySetNoVersioningFlag != null) {
 			result = result && manuallySetNoVersioningFlag;
 		}
-		return result && 
-			( isOwnerOrTeamLeader(node, request) || (isCreator(node, request)&&isCreatorTeam(node, request)) || 
-					(isAllowedVersioningTeamResourcesForMembers(request)&&isCreatorTeam(node, request)&&isTeamDocument(node, request)) 
-			);
-	}
+		//if it' team leader
+		//or
+		//creator of the document and members are allowed to add versions
+		//or
+		//team member but members are allowed to add versions and also share among workspaces
+		return result && (isTeamLeader(request) || (isCreator(node, request)&&isCreatorTeam(node, request)&& isAllowedVersioningTeamResourcesForMembers(request))
+				|| (isAllowedVersioningTeamResourcesForMembers(request) && isAllowedShareAndUnshareResAcrossWorkspacesForMembers(request) &&isTeamDocument(node, request)));
+		
+		}
 	
+		
 	public static Boolean hasMakePublicRights (Node node, HttpServletRequest request) {
 		Boolean manuallySetNoMakePublicFlag	= isManuallySetNoMakePublicFlag(request);
 		if ( manuallySetNoMakePublicFlag == null )
@@ -82,6 +99,81 @@ public class DocumentManagerRights {
 		return isTeamLeader(request) || isAllowedAddTeamResourcesForMembers(request);
 	}
 	
+	public static boolean hasApproveVersionRights(HttpServletRequest request){
+		return isTeamLeader(request);
+	}
+	
+	public static boolean hasRightToSeePendingVersion(HttpServletRequest request, Node version){
+		return isTeamLeader(request)||isVersionCreator(request, version);
+	}
+	
+	public static Boolean hasShareRights(Node node,HttpServletRequest request, String tabName){
+		Boolean manuallySetNoShareFlag =isManuallySetNoShareFlag(request);
+		if (manuallySetNoShareFlag != null) {
+			return manuallySetNoShareFlag;
+		}
+		
+		if(tabName==null){
+			return false;
+		}else if(tabName.equals(CrConstants.PRIVATE_DOCS_TAB)){
+			return true;
+		}else if(tabName.equals(CrConstants.SHARED_DOCS_TAB)){
+			return false;
+		}else	if(tabName.equals(CrConstants.TEAM_DOCS_TAB)){
+			return hasShareAmongWorkspacesRights(request);
+		}else return false;		
+	}
+	
+	public static Boolean hasUnshareRights(Node node,HttpServletRequest request, String tabName){
+		Boolean manuallySetNoUnShareFlag =isManuallySetNoShareFlag(request);
+		if (manuallySetNoUnShareFlag != null) {
+			return manuallySetNoUnShareFlag;
+		}
+		if(tabName==null){
+			return false;
+		}else if(tabName.equals(CrConstants.PRIVATE_DOCS_TAB)){
+			return false;
+		}else if(tabName.equals(CrConstants.SHARED_DOCS_TAB)){
+			return isTeamLeader(request);
+		}else	if(tabName.equals(CrConstants.TEAM_DOCS_TAB)){
+			return hasUnshareAmongWorkspacesRights(request);
+		}else{
+			return false;		
+		}
+	}
+	
+	/**
+	 * is team member allowed to share team resources across workspaces 
+	 */
+	private static Boolean hasShareAmongWorkspacesRights(HttpServletRequest request) {
+		return isTeamLeader(request) || isAllowedShareAndUnshareResAcrossWorkspacesForMembers(request);
+	}
+	
+	/**
+	 * is team member allowed to unshare globally shared team resources
+	 */
+	private static Boolean hasUnshareAmongWorkspacesRights(HttpServletRequest request) {
+		return isTeamLeader(request) || isAllowedShareAndUnshareResAcrossWorkspacesForMembers(request);
+	}
+	
+//	public static Boolean hasShareRights(Node node){
+//		Boolean retVal=null;
+//		Session session=null;
+//		Query qry=null;
+//		try {
+//			session=PersistenceManager.getRequestDBSession();
+//			qry=session.createQuery("select count(a) from " + CrSharedDoc.class.getName() +" a where a.nodeUUID='"+node.getUUID()+"'");
+//			int count=(Integer)qry.uniqueResult();
+//			if(count>0){
+//				retVal=false;
+//			}else{
+//				retVal=true;
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//		return retVal;
+//	}
 	
 	private static Boolean isTeamLeader( HttpServletRequest request ) {
 		HttpSession httpSession		= request.getSession(); 
@@ -90,6 +182,20 @@ public class DocumentManagerRights {
 			return true;
 		}
 		return false;
+	}
+	
+	private static Boolean isVersionCreator(HttpServletRequest request, Node version){
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		if(teamMember==null){
+			return false;
+		}else{
+			try {
+				return version.getProperty(CrConstants.PROPERTY_VERSION_CREATOR).getString().equals(teamMember.getEmail());
+			} catch (Exception e) {
+				return null;
+			}
+		}
 	}
 	
 	private static Boolean isOwnerOrTeamLeader(Node node, HttpServletRequest request) {
@@ -197,6 +303,23 @@ public class DocumentManagerRights {
 		}
 		return null;
 	}
+	
+	private static Boolean isManuallySetNoShareFlag(HttpServletRequest request) {
+		if ( request.getParameter("shareRights") != null ) {
+			Boolean result	= Boolean.parseBoolean( request.getParameter("shareRights") );
+			return result;
+		}
+		return null;
+	}
+	
+	private static Boolean isManuallySetNoUnshareFlag(HttpServletRequest request) {
+		if ( request.getParameter("unshareRights") != null ) {
+			Boolean result	= Boolean.parseBoolean( request.getParameter("unshareRights") );
+			return result;
+		}
+		return null;
+	}
+	
 	private static Boolean isAllowedAddTeamResourcesForMembers (HttpServletRequest request) {
 		HttpSession httpSession		= request.getSession(); 
 		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
@@ -215,6 +338,16 @@ public class DocumentManagerRights {
 		return sett.getAllowAddTeamRes() >= CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER ;		
 		
 	}
+	
+	private static Boolean isAllowedShareAndUnshareResAcrossWorkspacesForMembers (HttpServletRequest request) {
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(tm.getTeamId());
+		if ( sett.getAllowShareTeamRes() == null )
+			return false;
+		return sett.getAllowShareTeamRes() >= CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER ;
+	}
+	
 	private static Boolean isCreator(Node node, HttpServletRequest request) {
 		NodeWrapper nw = new NodeWrapper(node);
 		

@@ -1,16 +1,14 @@
 package org.digijava.module.contentrepository.dbentity;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class CrDocumentNodeAttributes extends ObjectReferringDocument {
 	private String publicVersionUUID;

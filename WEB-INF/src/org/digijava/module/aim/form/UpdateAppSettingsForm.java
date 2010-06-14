@@ -62,7 +62,12 @@ public class UpdateAppSettingsForm extends ActionForm {
         private int defReportsPerPage;
 
     private Collection<KeyValue> possibleValsAddTR;
-	private Integer allowAddTeamRes	= CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER; 
+    
+    private Collection<KeyValue> shareResAmongWorkspacesPossibleVals; //share resources among workspaces allowed by
+    
+	private Integer allowAddTeamRes	= CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER;
+	
+	private Integer allowShareAccrossWRK	= CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_WM;
 
   public Collection getReports() {
 		return reports;
@@ -273,5 +278,21 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.possibleValsAddTR = possibleValsAddTR;
 	}
 
+	public Collection<KeyValue> getShareResAmongWorkspacesPossibleVals() {
+		return shareResAmongWorkspacesPossibleVals;
+	}
+
+	public void setShareResAmongWorkspacesPossibleVals(
+			Collection<KeyValue> shareResAmongWorkspacesPossibleVals) {
+		this.shareResAmongWorkspacesPossibleVals = shareResAmongWorkspacesPossibleVals;
+	}
+
+	public Integer getAllowShareAccrossWRK() {
+		return allowShareAccrossWRK;
+	}
+
+	public void setAllowShareAccrossWRK(Integer allowShareAccrossWRK) {
+		this.allowShareAccrossWRK = allowShareAccrossWRK;
+	}
 	
 }

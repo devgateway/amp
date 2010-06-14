@@ -19,7 +19,7 @@
 						<thead>
 							<tr>
 								<logic:equal name="checkBoxToHideLocal" value="false">
-									<th><digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn></th>
+									<th><digi:trn>Select</digi:trn></th>
 								</logic:equal>
 								<th><digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
@@ -35,8 +35,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						<logic:iterate name="documentDataCollection" id="documentData"
-							type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
+						<logic:iterate name="documentDataCollection" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
 							<%--
 					int index2;
 					String documentName = documentData.getName();
@@ -63,14 +62,15 @@
 							<tr>
 								<logic:equal name="checkBoxToHideLocal" value="false">
 									<td>
+										<input class="selDocs" type=checkbox value="${documentData.uuid}" name="selectedDocs"/>										
 	                                    &nbsp;                                                          
-		                              </td>
+		                            </td>
 		                        </logic:equal>
 								<td>
-									<bean:write name='documentData' property='title'/>
-									<%-- <script type="text/javascript">
-										document.write(unescape("<bean:write name='documentData' property='title'/>"));
-									</script> --%>
+									<logic:equal name="documentData" property="lastVersionIsShared" value="true">
+										<font color="red">*</font>
+									</logic:equal>
+									<bean:write name='documentData' property='title'/>									
 								</td>
 								<td>
 									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${documentData.contentType}" align="absmiddle"/>
@@ -181,9 +181,31 @@
 								
 								</logic:equal>
 								
-<!--								<c:set var="translation">-->
-<!--									<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>-->
-<!--								</c:set>-->
+								<logic:notEmpty name="documentData" property="shareWith">
+									<logic:equal name="documentData" property="hasShareRights" value="true">										
+										
+										<logic:equal name="documentData" property="needsApproval" value="false">
+											<logic:equal  name="documentData" property="lastVersionIsShared" value="false">
+												<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
+												onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>"><digi:trn>Share</digi:trn></a>
+											</logic:equal>
+										</logic:equal>										
+										<logic:equal name="documentData" property="needsApproval" value="true">
+												<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
+												onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>"><digi:trn>Approve</digi:trn> </a>
+										</logic:equal>
+										
+									</logic:equal>
+								</logic:notEmpty>
+								
+								<logic:equal name="documentData" property="hasUnshareRights" value="true">
+									<logic:equal name="documentData" property="isShared" value="true">
+										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
+										onClick="unshareDoc('<%=documentData.getUuid() %>');" title="<digi:trn>Click here to UnShare this document</digi:trn>">UnShare</a>
+									</logic:equal>									
+								</logic:equal>
+								
+
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"

@@ -2372,6 +2372,24 @@ public class TeamUtil {
         return teams;
     }
     /**
+     * @param teamId
+     * @return all teams,except the one with id= @param teamId
+     */
+    public static Collection<AmpTeam> getAllTeamsExceptGiven(Long teamId){
+    	Session session = null;
+        Query qry = null;
+        Collection teams = null;
+        try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select team from " + AmpTeam.class.getName() + " team where team.ampTeamId!="+teamId+" order by team.name";
+			qry=session.createQuery(queryString);
+			teams=qry.list();
+		} catch (Exception e) {
+			logger.error("can't load teams : " + e);
+		}
+        return teams;
+    }
+    /**
      * Returns Collection of the computation or non computation {@link AmpTeam} objects
      * @param computation boolean
      * @return Collection of AmpTeam

@@ -9,8 +9,7 @@
 
 
 <digi:instance property="crDocumentManagerForm" />
-<bean:define id="myForm" name="crDocumentManagerForm" toScope="page"
-	type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
+<bean:define id="myForm" name="crDocumentManagerForm" toScope="page" type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
 	
 	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">
 	
@@ -26,37 +25,36 @@
 								<th><digi:trn key="contentrepository:versionhistory:header:actions">Actions</digi:trn></th>
 							</tr>
 						</thead>
-						<logic:iterate name="crDocumentManagerForm"
-							property="otherDocuments" id="documentData"
-							type="org.digijava.module.contentrepository.helper.DocumentData">
-							
+						<logic:iterate name="crDocumentManagerForm"	property="otherDocuments" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData">
 							<tr>
-								<td>
-									 <bean:write name="documentData" property="versionNumber" />
+								<td>									
+									 <bean:write name="documentData" property="versionNumber" />									 
 								</td>
 								<td>
 									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
 									<div>&nbsp;</div>
-								</td>
-								<td>
+								</td>								
+								<td>								
 									<c:choose>
 									<c:when test="${documentData.webLink == null}">
 										&nbsp;<bean:write name="documentData" property="name" />
 									</c:when>
 									<c:otherwise>
 										<c:set var="translation">
-											<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to</digi:trn>
+											<digi:trn>Follow link to</digi:trn>
 										</c:set>
-										<a onmouseover="Tip('${translation} ${documentData.webLink}')" 
-										 onmouseout="UnTip()" onclick="window.open('${documentData.webLink}')" 
+										<a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" onclick="window.open('${documentData.webLink}')" 
 											style="cursor:pointer;  color: blue; font-size: 11px"> 
 											<bean:write name="documentData" property="name" />
 										</a>
-									</c:otherwise>	
+									</c:otherwise>
 									 </c:choose>
 									  <c:if test="${documentData.isPublic}">
 									 	<font size="3px" color="blue">*</font>
 									 </c:if>
+									 <c:if test="${documentData.isShared}">
+									  	<font size="3px" color="red">*</font>
+									  </c:if>								 
 								</td>
 								<td>
 									<bean:write name="documentData" property="calendar" />
@@ -68,7 +66,7 @@
 									<bean:write name="documentData" property="notes" />
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
-								<td> 
+								<td>
 								
 								<c:choose>
 									<c:when test="${documentData.webLink == null}">
@@ -89,11 +87,19 @@
 										onmouseover="Tip('${translation} ${documentData.webLink}')"><img src= "/repository/contentrepository/view/images/link_go.gif" border=0></a>
 									</c:otherwise>
 								</c:choose>
+								
+								<logic:equal name="documentData" property="hasApproveVersionRights" value="true">
+									<c:if test="${documentData.currentVersionNeedsApproval==true}">
+										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
+											onClick="approveVersion('<%=documentData.getUuid() %>','<%=documentData.getBaseNodeUUID() %>');"><digi:trn>Approve</digi:trn> </a>
+									</c:if>
+								</logic:equal>
 								</td>
 							</tr>
 						</logic:iterate>
 					</table>
-					* The colored row marks the public version
+					<font color="red">**</font> indicates shared versions of the document
+					* The colored row marks the public version					
 					<br />
 				</logic:notEmpty>
 				

@@ -57,40 +57,40 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 
 <%@page import="java.net.URLDecoder"%>
 
 <c:set var="translation_public_ver_msg">
-		<digi:trn key="contentrepository:publicVersionMsg">The marked version is currently public</digi:trn>
+		<digi:trn>The marked version is currently public</digi:trn>
 </c:set>
 
 <c:set var="headerVersion">
-				<digi:trn key="contentrepository:versionhistory:header:version">Version</digi:trn>
+				<digi:trn>Version</digi:trn>
 </c:set>
 <c:set var="headerType">
-				<digi:trn key="contentrepository:versionhistory:header:type">Type</digi:trn>
+				<digi:trn>Type</digi:trn>
 </c:set>
 
 <c:set var="headerFileName">
-	<digi:trn key="contentrepository:versionhistory:header:resourcename">Resource Name</digi:trn>
+	<digi:trn>Resource Name</digi:trn>
 </c:set>
 
 <c:set var="headerDate">
-				<digi:trn key="contentrepository:versionhistory:header:date">Date</digi:trn>
+				<digi:trn>Date</digi:trn>
 </c:set>
 
 <c:set var="headerFileSize">
-				<digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn>
+				<digi:trn>Size (MB)</digi:trn>
 </c:set>
 
 <c:set var="headerNotes">
-				<digi:trn key="contentrepository:versionhistory:header:notes">Notes</digi:trn>
+				<digi:trn>Notes</digi:trn>
 </c:set>
 
 <c:set var="headerAction">
-				<digi:trn key="contentrepository:versionhistory:header:actions">Actions</digi:trn>
+				<digi:trn>Actions</digi:trn>
 </c:set>
 
 
@@ -109,7 +109,8 @@
 			YAHOO.amp.panels[1].setBody( "<div class='versions_markup' align='center' id='versions_div'>" + o.responseText + "</div>");
 			setHeightOfDiv("versions_div", 250, 250);
 			YAHOO.amp.table.enhanceVersionsMarkup();
-			YAHOO.amp.panels[1].setFooter("* ${translation_public_ver_msg}");
+			var footerText='* ${translation_public_ver_msg} \n <font color="red">*</font> The marked version is shared';
+			YAHOO.amp.panels[1].setFooter(footerText);
 			//createToolTips( document.getElementById('versions_div') );
 		},
 		failure: function () {
@@ -156,7 +157,7 @@
 				<digi:trn key="contentrepository:documentDeleteConnectionProblems">Your request has not been carried out due to connection problems. We are sorry. Please try again !</digi:trn>
 </c:set>
 <c:set var="translation_no_doc_selected">
-			<digi:trn key="contentrepository:noDocumentSelectedAlert">No document has been selected !</digi:trn>
+			<digi:trn>No document has been selected !</digi:trn>
 </c:set>
 <c:set var="translation_remove_failed">
 			<digi:trn key="contentrepository:removeFailedAlert">Documents cannot be removed !</digi:trn>
@@ -230,11 +231,15 @@
 </c:set>
 
 <c:set var="trans_teamDocuments">
-	<digi:trn key="contentrepository:MenuItem:TeamDocuments">Team Documents</digi:trn>
+	<digi:trn>Team Documents</digi:trn>
 </c:set>
 
 <c:set var="trans_publicDocuments">
-	<digi:trn key="contentrepository:MenuItem:PublicDocuments">Public Documents</digi:trn>
+	<digi:trn>Public Documents</digi:trn>
+</c:set>
+
+<c:set var="trans_sharedDocuments">
+	<digi:trn>Shared Documents</digi:trn>
 </c:set>
 
 <c:set var="trans_options">
@@ -481,10 +486,20 @@ function WindowControllerObject(bodyContainerEl) {
 					parameters	+= "&otherUsername=" + obj.userName;
 				if (obj.teamId != null)
 					parameters	+= "&otherTeamId=" + obj.teamId;
+
+				//for shared docs
+				if(obj.sharedDocs!=null){
+					parameters+= "&showSharedDocs=" + obj.sharedDocs;
+				}
 					
 				if (obj.docListInSession != null) {
 					parameters	+= "&docListInSession=" + obj.docListInSession;
 				}
+
+				if(obj.showActions !=null){
+					parameters	+= "&showActions=" + obj.showActions;
+				}
+				
 				if ( this.showOnlyLinks ) 
 						parameters	+= "&showOnlyLinks=" + this.showOnlyLinks;
 				if ( this.showOnlyDocs ) 
@@ -620,16 +635,25 @@ function removeSelectedDocuments() {
 }
 
 function doSelectedDocuments(action) {
-	selectedDocs			= getAllSelectedDocuments();
+	
+	var trEls=$("#team_table").find("input.selDocs:checked");
+	var result= new Array();
+	for (i=0; i<trEls.length; i++) {		
+		result[i]	= trEls[i].value;
+	}
+	selectedDocs= result;
+
+	if(selectedDocs.length==0){
+		selectedDocs			= getAllSelectedDocuments();
+	}
+	
 	var updatedDocsAction	= '<%=org.digijava.module.contentrepository.helper.CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION%>';
 	if (selectedDocs.length == 0) {
 		alert("${translation_no_doc_selected}");
 		return;
 	}
 	
-	var postString 	= createPostString(selectedDocs, action);
-	//alert(postString);	
-	
+	var postString 	= createPostString(selectedDocs, action);	
 	var callback;
 	if (action == 'set') {
 		callback	= {
@@ -687,13 +711,13 @@ function getAllSelectedDocuments () {
 function getSelectedDocumentsFromDatatable(datatable, vec) {
 	var i;
 	var result;
-	if (vec != null)
-			result	= vec;
-	else
+	if (vec != null) {
+		result	= vec;
+	}else{
 		result	= new Array();
-	//alert (datatable);
+	}
+	
 	trEls	= datatable.getSelectedRows();
-	//alert("Rows Selected: " + trEls.length);
 	
 	var vector_length		= result.length;
 	for (i=0; i<trEls.length; i++) {
@@ -719,7 +743,7 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 	var divId					= "other_markup" + num;
 	callbackForOtherDocuments	= {
 		success: function(o) {
-					//alert("C1");
+					//alert(o.responseText);
 					containerElement.innerHTML	= "<div class='all_markup' align='center' id='"+divId+"'>" + o.responseText + "</div>";
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
 					datatable.subscribe("checkboxClickEvent", datatable.onEventSelectRow);
@@ -749,7 +773,8 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	<logic:iterate name="tMembers" id="member" indexId="counterId">
 		var scopeObj	= {
 			teamId				: '<bean:write name="member" property="teamId" />',
-			userName			: '<bean:write name="member" property="email" />'
+			userName			: '<bean:write name="member" property="email" />',
+			showActions : 'false'
 		};
 		var onclickObj 	= {
 			fn					: windowController.populateCallback,
@@ -768,7 +793,8 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	
 	<logic:notEmpty name="meTeamMember">
 		var scopeObj	= {
-			teamId				: '<bean:write name="meTeamMember" property="teamId" />'
+			teamId				: '<bean:write name="meTeamMember" property="teamId" />',
+			showActions : 'false'
 		};
 		var onclickObj 	= {
 			fn					: windowController.populateCallback,
@@ -778,7 +804,23 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		};
 		var mItem2="${trans_teamDocuments}";
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj, id:mItem2} )   );
+	//shared docs tab
+	var scopeObjForShared  = {
+		sharedDocs : 'show',
+		showActions : 'false'
+	};
+
+	var onclickObjForShared 	= {
+			fn					: windowController.populateCallback,
+			obj					: scopeObjForShared,
+			scope				: windowController			
+	};
+	
+	var mItem3="${trans_sharedDocuments}";
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_sharedDocuments}", {onclick: onclickObjForShared, id:mItem3} )   );
 	</logic:notEmpty>
+	
+	
 	/*
 		var onclickObj 	= {
 			fn					: windowController.populateWithPublicDocs,
@@ -982,6 +1024,39 @@ function setHeightOfDiv(divId, maxLimit, value ){
 		obj.style.height	= value;
 		obj.style.overflow	= "scroll";
 	}
+}
+
+function shareDoc(uuid,shareWith){
+	var callback	= new Object();
+	callback.success	= function(o) {
+							window.location.replace( window.location.href );
+						};
+	callback.failure	= function(o) {
+							alert('share failed');
+						};
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/shareDoc.do?uuid="+uuid+"&shareWith="+shareWith, callback);
+}
+
+function unshareDoc(uuid){
+	var callback	= new Object();
+	callback.success	= function(o) {
+							window.location.replace( window.location.href );
+						};
+	callback.failure	= function(o) {
+							alert('unshare failed');
+						};
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/unshareDoc.do?uuid="+uuid, callback);
+}
+
+function approveVersion(versionId, baseNodeUUID){
+	var callback	= new Object();
+	callback.success	= function(o) {
+							window.location.replace( window.location.href );
+						};
+	callback.failure	= function(o) {
+							alert('version approval failed');
+						};
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/approveVersion.do?versionId="+versionId+"&baseNodeUUID="+baseNodeUUID, callback);
 }
 
 function setAttributeOnNode(action, uuid, doReload) {

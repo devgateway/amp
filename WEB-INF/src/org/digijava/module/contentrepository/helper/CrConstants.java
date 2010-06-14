@@ -28,6 +28,21 @@ public class CrConstants {
 	public static final String PROPERTY_FILE_SIZE					= "ampdoc:fileSize";
 	public static final String PROPERTY_CM_DOCUMENT_TYPE			= "ampdoc:cmDocType";
 	
+	
+	//states
+	public static final Integer PENDING_STATUS					= 	0;
+	public static final Integer SHARED_IN_WORKSPACE				= 	1;
+	public static final Integer SHARED_AMONG_WORKSPACES			= 	2;
+	
+	public static final String SHAREABLE_WITH_TEAM 				="team";     //private space resources and pending approval resources are sharable on team level 
+	public static final String SHAREABLE_WITH_OTHER_TEAMS 		="global";  //team resources are shareable on global level
+	
+	//which tab documents are processed
+	public static final String PRIVATE_DOCS_TAB="private resources";
+	public static final String TEAM_DOCS_TAB="team resources";
+	public static final String SHARED_DOCS_TAB="shared resources";
+	public static final String PUBLIC_DOCS_TAB="public resources";
+	
 	public static final String TEMPORARY_UUID						= "__TEMPORARY__";
 	
 	public static final String URL_CONTENT_TYPE						= "URL";
@@ -42,6 +57,8 @@ public class CrConstants {
 	public static final Integer TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER		= 2;
 	public static final Integer TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER	= 3;
 	
+	public static final Integer SHARE_AMONG_WRKSPACES_ALLOWED_WM 				=1;
+	public static final Integer SHARE_AMONG_WRKSPACES_ALLOWED_TM 				=2;
 	
 	public static final String TEAM_PATH_ITEM						= "team";
 	

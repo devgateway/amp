@@ -14,15 +14,19 @@ import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.Version;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 
@@ -35,9 +39,7 @@ public class GetVersionsForDocumentManager extends Action {
 	HttpServletRequest myRequest;
 	DocumentManagerForm myForm;
 	
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response)
+	public ActionForward execute(ActionMapping mapping, ActionForm form,javax.servlet.http.HttpServletRequest request,javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 		
 		myForm							= (DocumentManagerForm) form;
@@ -57,10 +59,21 @@ public class GetVersionsForDocumentManager extends Action {
 				while (nIter.hasNext()) {
 					DocumentData docData	= new DocumentData();
 					Node n					= nIter.nextNode();
-					//String testUUID			= n.getUUID();
-					//System.out.println(testUUID);
-					
-					if ( this.generateDocumentData(n, counter+1, docData) ) {
+					boolean thisVersionNeedsApproval=false;
+					//if this node is not approved,then only TL or it's creator should be allowed to see the version
+					if(DocumentManagerUtil.isGivenVersionPendingApproval(n.getUUID())!=null){
+						thisVersionNeedsApproval=true;
+					}
+					if(thisVersionNeedsApproval){
+						//thisVersionNeedsApproval=true;
+						TeamMember tm=getCurrentTeamMember(request);
+						if(!DocumentManagerRights.hasRightToSeePendingVersion(request, n)){
+							continue;
+						}
+						docData.setHasApproveVersionRights(DocumentManagerRights.hasApproveVersionRights(request));
+						docData.setBaseNodeUUID(nodeUUID);
+					}
+					if ( this.generateDocumentData(n, counter+1, docData,thisVersionNeedsApproval) ) {
 						docs.add(0, docData );
 						counter++;
 					}
@@ -71,7 +84,7 @@ public class GetVersionsForDocumentManager extends Action {
 		return mapping.findForward("forward");
 	}
 	
-	private boolean generateDocumentData (Node n, float verNum, DocumentData docData) 
+	private boolean generateDocumentData (Node n, float verNum, DocumentData docData,boolean versionNeedsApproval) 
 					throws UnsupportedRepositoryOperationException, RepositoryException {
 		
 		NodeWrapper nodeWrapper		= new NodeWrapper(n);
@@ -100,9 +113,21 @@ public class GetVersionsForDocumentManager extends Action {
 		if ( uuidMapVer.containsKey(nodeUUID) ) {
 			docData.setIsPublic(true);
 		}
+		//if this version is shared or not		
+		boolean isCurrentVersionShared=DocumentManagerUtil.isGivenVersionShared(n.getUUID());
+		docData.setIsShared(isCurrentVersionShared);
+		
+		docData.setCurrentVersionNeedsApproval(versionNeedsApproval);
+		
 		docData.process(myRequest);
 		docData.computeIconPath( false );
 		return true;
+	}
+	
+	private TeamMember getCurrentTeamMember( HttpServletRequest request ) {
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		return teamMember;
 	}
 }
 

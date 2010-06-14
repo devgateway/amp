@@ -11,8 +11,7 @@
 
 <%@include file="addDocumentPanel.jsp" %>
 
-<bean:define id="myForm" name="crSelectDocumentForm" toScope="request"
-	type="org.digijava.module.contentrepository.form.SelectDocumentForm" />
+<bean:define id="myForm" name="crSelectDocumentForm" toScope="request" type="org.digijava.module.contentrepository.form.SelectDocumentForm" />
 
 <bean:define id="teamForm" name="myForm" property="teamInformationBeanDM" toScope="page" />
 	
@@ -42,6 +41,7 @@
 
 <br />
 <div id="otherDocumentsDiv">&nbsp;</div>
+<input type="hidden" name="type" id="typeId"/>
 <html:button  styleClass="dr-menu" property="submitButton" onclick="saveSelectedDocuments()" >
 	<digi:trn key="btn:submitDocumentsFromRepository">Submit this</digi:trn>
 </html:button>
@@ -55,5 +55,6 @@
 		<digi:trn key="contentrepository:newWindow">New window</digi:trn>
 	</a>
 </c:if>
+
 <%@include file="documentManagerDivHelper.jsp" %>
 	

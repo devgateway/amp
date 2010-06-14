@@ -23,12 +23,12 @@
 									</td></tr>									
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="documents.managedDocumentList">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding" id="team_table">
 												<logic:iterate name="aimEditActivityForm" property="documents.managedDocumentList"
 												id="selManagedDocuments">
 												<tr>
 													<td>
-														<html:multibox property="selManagedDocs">
+														<html:multibox property="selManagedDocs" styleClass="selectedDocs">
 															<bean:write name="selManagedDocuments" property="id" />
 														</html:multibox>
 														<bean:write name="selManagedDocuments" property="name" /> - 
@@ -45,8 +45,7 @@
 																index2 + 1,((String)fileName).length()) + ".gif";
 															}
 														    %>
-														    <digi:img skipBody="true" src="<%=extension%>" border="0" 
-															 align="absmiddle"/>	
+														    <digi:img skipBody="true" src="<%=extension%>" border="0" align="absmiddle"/>	
 														</c:if>
 															<i>
 														<bean:write name="selManagedDocuments" property="fileName" /></i>

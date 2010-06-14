@@ -562,32 +562,22 @@ ${fn:replace(message,quote,escapedQuote)}
 
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<feature:display name="Related Documents" module="Document">
-
-							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-
-								<!-- contents -->
-
-							<jsp:include page="addActivityStep6RelatedDocuments.jsp"/>
-
-									</td></tr>
+								<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+									<!-- contents -->									
+									<jsp:include page="addActivityStep6RelatedDocuments.jsp"/>
+								</td></tr>
 							</feature:display>
 
-									<tr><td>
-
-										&nbsp;
-
-									</td></tr>
-							<feature:display name="Web Resources" module="Document">
-
-							<jsp:include page="addActivityStep6WebResources.jsp"/>
-							</feature:display>
-									<tr><td bgColor=#f4f4f2>
-
-										&nbsp;
-
-									</td></tr>
-
-									<!-- Managed Documents -->
+							
+							<!-- 
+								<tr><td>&nbsp;</td></tr>
+								<feature:display name="Web Resources" module="Document">
+									<jsp:include page="addActivityStep6WebResources.jsp"/>
+								</feature:display>
+								<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
+							 -->
+							
+							<!-- Managed Documents -->
 										<jsp:include page="addActivityStep6ManagedDocuments.jsp"/>
 									<tr><td>
 
@@ -616,63 +606,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										</td>
 									</tr>
 									</module:display>
-									
-<!--
-
-									<tr><td bgColor=#f4f4f2 align="center">
-
-										<table cellPadding=3>
-
-											<tr>
-
-												<td>
-
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="gotoStep(5)">
-
-															<< <digi:trn key="btn:back">Back</digi:trn>
-
-													</html:button>
-
-
-
-												</td>
-
-												<td>
-
-													<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(7)">
-
-															<digi:trn key="btn:next">Next</digi:trn> >>
-
-													</html:submit>
-
-
-
-												</td>
-
-												<td>
-
-													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
-
-															<digi:trn key="btn:reset">Reset</digi:trn>
-
-													</html:reset>
-
-
-
-												</td>
-
-											</tr>
-
-										</table>
-
-									</td></tr>
-
-	 -->
-
 								</table>
-
-
-
 							</td></tr>
 
 							</table>

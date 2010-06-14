@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.axis.transport.jms.JMSConnectorManager.ShareableObjectPool;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -53,12 +54,15 @@ public class UpdateAppSettings extends Action {
 
 	private static Logger logger = Logger.getLogger(UpdateAppSettings.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws java.lang.Exception {
 
 		UpdateAppSettingsForm uForm = (UpdateAppSettingsForm) form;
+		
+		String shareResAction=request.getParameter("shareResAction");
+		
 		this.populatePossibleValsAddTR(uForm);
+		
+		this.populateShareResAmongWorkspacesPossibleVals(uForm);
 		
 		logger.debug("In updtate app settings");
 		HttpSession session = request.getSession();
@@ -76,14 +80,13 @@ public class UpdateAppSettings extends Action {
 			uForm.setUpdated(false);
 		}
 
-		if (request.getParameter("errors") != null
-				&& request.getParameter("errors").equals("true")) {
+		if (request.getParameter("errors") != null	&& request.getParameter("errors").equals("true")) {
 			uForm.setErrors(true);
 		} else {
 			uForm.setErrors(false);
 		}
 		
-		if (uForm.getType() == null || uForm.getType().trim().equals("")) {
+		if (uForm.getType() == null || uForm.getType().trim().equals("") || (shareResAction!=null && shareResAction.equalsIgnoreCase("getOptions"))) {
 			String path = mapping.getPath();
 			logger.debug("path = " + path);
 			AmpApplicationSettings ampAppSettings = null;
@@ -133,7 +136,10 @@ public class UpdateAppSettings extends Action {
 				if (reportEndYear == null) {
 					reportEndYear = 0;
 				}
-				uForm.setAllowAddTeamRes( ampAppSettings.getAllowAddTeamRes() );
+				if(shareResAction==null){
+					uForm.setAllowAddTeamRes( ampAppSettings.getAllowAddTeamRes() );					
+				}
+				uForm.setAllowShareAccrossWRK(ampAppSettings.getAllowShareTeamRes());
 				uForm.setDefReportsPerPage(reportsPerPage);
 				uForm.setReportStartYear(reportStartYear);
 				uForm.setReportEndYear(reportEndYear);
@@ -262,6 +268,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setValidation(uForm.getValidation());
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
 				ampAppSettings.setAllowAddTeamRes( uForm.getAllowAddTeamRes() );
+				ampAppSettings.setAllowShareTeamRes(uForm.getAllowShareAccrossWRK());
 				//
 				AmpReports ampReport = DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
 				//
@@ -310,8 +317,10 @@ public class UpdateAppSettings extends Action {
 				}
 			}
 			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-			ApplicationSettings applicationSettings = getReloadedAppSettings(tempSettings);
-			tm.setAppSettings(applicationSettings);
+			if(tempSettings!=null){
+				ApplicationSettings applicationSettings = getReloadedAppSettings(tempSettings);
+				tm.setAppSettings(applicationSettings);
+			}			
 			if (session.getAttribute(Constants.CURRENT_MEMBER) != null) {
 				session.removeAttribute(Constants.CURRENT_MEMBER);
 				session.setAttribute(Constants.CURRENT_MEMBER, tm);
@@ -360,10 +369,8 @@ public class UpdateAppSettings extends Action {
 		logger.debug("In restoreApplicationSettings() ");
 
 		/* set all values except id from oldSettings to newSettings */
-		oldSettings.setDefaultRecordsPerPage(newSettings
-				.getDefaultRecordsPerPage());
-		oldSettings.setDefaultReportsPerPage(newSettings
-				.getDefaultReportsPerPage());
+		oldSettings.setDefaultRecordsPerPage(newSettings.getDefaultRecordsPerPage());
+		oldSettings.setDefaultReportsPerPage(newSettings.getDefaultReportsPerPage());
 		oldSettings.setCurrency(newSettings.getCurrency());
 		oldSettings.setFiscalCalendar(newSettings.getFiscalCalendar());
 		oldSettings.setLanguage(newSettings.getLanguage());
@@ -399,8 +406,7 @@ public class UpdateAppSettings extends Action {
 		return appSettings;
 	}
 
-	private void updateAllTeamMembersDefaultReport(Long teamId,
-			AmpReports ampReport) {
+	private void updateAllTeamMembersDefaultReport(Long teamId,AmpReports ampReport) {
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
@@ -444,6 +450,21 @@ public class UpdateAppSettings extends Action {
 			uForm.getPossibleValsAddTR().add(elem1);
 			uForm.getPossibleValsAddTR().add(elem2);
 			uForm.getPossibleValsAddTR().add(elem3);
+		}
+	}
+	
+	private void populateShareResAmongWorkspacesPossibleVals (UpdateAppSettingsForm uForm) {
+		Integer selectedTeamResourceRight=uForm.getAllowAddTeamRes();
+		if (uForm.getShareResAmongWorkspacesPossibleVals() == null || uForm.getShareResAmongWorkspacesPossibleVals().size() == 0 ) {
+			uForm.setShareResAmongWorkspacesPossibleVals(new ArrayList<KeyValue>() );
+			
+			KeyValue elem1	= new KeyValue(CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_WM.toString(), "Managed by Workspace Manager");
+			uForm.getShareResAmongWorkspacesPossibleVals().add(elem1);
+			
+			if(selectedTeamResourceRight.equals(CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER)){
+				KeyValue elem2	= new KeyValue(CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_TM.toString(), "Workspace Members Allowed to Share Resources Across Workspaces");
+				uForm.getShareResAmongWorkspacesPossibleVals().add(elem2);
+			}			
 		}
 	}
 }

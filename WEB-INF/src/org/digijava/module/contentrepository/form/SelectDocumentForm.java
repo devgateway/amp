@@ -11,6 +11,8 @@ import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
  *
  */
 public class SelectDocumentForm extends ActionForm {
+	
+	private String type;
 
 	private TeamInformationBeanDM teamInformationBeanDM;
 	private boolean hasAddRights;
@@ -57,6 +59,10 @@ public class SelectDocumentForm extends ActionForm {
 	public void setShowTheFollowingDocuments(String showTheFollowingDocuments) {
 		this.showTheFollowingDocuments = showTheFollowingDocuments;
 	}
-	
-		
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}	
 }

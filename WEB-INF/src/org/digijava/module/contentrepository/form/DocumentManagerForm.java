@@ -25,12 +25,13 @@ public class DocumentManagerForm extends ActionForm {
 	private String uuid						= null;
 	private Collection<DocumentData> myPersonalDocuments	= null;
 	private Collection<DocumentData> myTeamDocuments		= null;
-	
+	private Collection<DocumentData> sharedDocuments		= null; //shared documents from other workspaces
 	
 	private Collection<DocumentData> otherDocuments		= null;
 	private String otherUsername			= null;
 	private Long otherTeamId				= null;
 	private String docListInSession			= null;
+	private String showSharedDocs			=null;
 	
 	private TeamMember teamMember			= null;
 	private Collection teamMembers			= null;
@@ -38,6 +39,7 @@ public class DocumentManagerForm extends ActionForm {
 	private boolean teamLeader				= false;
 	
 	private boolean ajaxDocumentList		= false;
+	private Boolean showActions =true;
 	
 	private String webLink					= null;
 	private boolean webResource				= false;
@@ -260,7 +262,28 @@ public class DocumentManagerForm extends ActionForm {
 		this.messages = messages;
 	}
 
+	public Collection<DocumentData> getSharedDocuments() {
+		return sharedDocuments;
+	}
 
-	
+	public void setSharedDocuments(Collection<DocumentData> sharedDocuments) {
+		this.sharedDocuments = sharedDocuments;
+	}
+
+	public String getShowSharedDocs() {
+		return showSharedDocs;
+	}
+
+	public void setShowSharedDocs(String showSharedDocs) {
+		this.showSharedDocs = showSharedDocs;
+	}
+
+	public Boolean getShowActions() {
+		return showActions;
+	}
+
+	public void setShowActions(Boolean showActions) {
+		this.showActions = showActions;
+	}
 	
 }

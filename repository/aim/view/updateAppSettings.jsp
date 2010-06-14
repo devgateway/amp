@@ -58,6 +58,14 @@ function checkYear( year, base, range ) {
 	return true;
 
 }
+
+function loadShareRules(){
+	<digi:context name="sel" property="context/module/moduleinstance/defaultSettings.do?shareResAction=getOptions" />;
+	url = "<%= sel %>" ;
+	document.aimUpdateAppSettingsForm.action = url;
+	document.aimUpdateAppSettingsForm.submit();	
+}
+
 </script>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
@@ -295,8 +303,25 @@ function checkYear( year, base, range ) {
 															<digi:trn>Rights for Team Resources</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
-															<html:select property="allowAddTeamRes" styleClass="inp-text">
+															<html:select property="allowAddTeamRes" styleClass="inp-text" onchange="return loadShareRules()" styleId="allowAddTeamRes">
 																<c:forEach var="element" items="${aimUpdateAppSettingsForm.possibleValsAddTR}">
+																	<c:set var="trn">
+																		<digi:trn>${element.value}</digi:trn>
+																	</c:set>
+																	<html:option value="${element.key}">
+																		${trn}
+																	</html:option>
+																</c:forEach>
+															</html:select>
+														</td>
+													</tr>
+													<tr>
+														<td bgcolor="#f4f4f2"  align="right" width="50%">
+															<digi:trn>Rights for Sharing Team Resources Across Workspaces</digi:trn>
+														</td>
+														<td align="left" width="50%" bgcolor="#f4f4f2">
+															<html:select property="allowShareAccrossWRK" styleClass="inp-text">
+																<c:forEach var="element" items="${aimUpdateAppSettingsForm.shareResAmongWorkspacesPossibleVals}">
 																	<c:set var="trn">
 																		<digi:trn>${element.value}</digi:trn>
 																	</c:set>

@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,8 +28,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Query;
-
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
@@ -47,6 +44,10 @@ import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.action.SetAttributes;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
+import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
+import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
+import org.digijava.module.contentrepository.dbentity.TeamNodeState;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeException;
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
@@ -57,6 +58,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.hibernate.Query;
 
 
 public class DocumentManagerUtil {
@@ -268,10 +270,10 @@ public class DocumentManagerUtil {
 		return versions.size() + 1;
 	}
 	
-	public static List getVersions(String uuid, HttpServletRequest request, boolean needWriteSession) {
+	public static List<Version> getVersions(String uuid, HttpServletRequest request, boolean needWriteSession) {
 		if (uuid != null) {
 			Node node;
-			ArrayList versions		= new ArrayList();
+			ArrayList<Version> versions		= new ArrayList<Version>();
 			if (needWriteSession)
 				node				= DocumentManagerUtil.getWriteNode(uuid, request);
 			else
@@ -293,10 +295,7 @@ public class DocumentManagerUtil {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
-			} 
-			
-			
-			
+			}
 		}
 		return null;
 	}
@@ -361,7 +360,7 @@ public class DocumentManagerUtil {
 			return null;
 		try {
 			DocumentManager dm				= new DocumentManager();
-			Collection<DocumentData> ret	= dm.getDocuments(UUIDs, request);
+			Collection<DocumentData> ret	= dm.getDocuments(UUIDs, request,null,false,true);
 			ret.addAll(
 					TemporaryDocumentData.retrieveTemporaryDocDataList(request)
 				);
@@ -510,15 +509,19 @@ public class DocumentManagerUtil {
 	public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
 		String teamId		= "" + teamMember.getTeamId();
 		
-		return
-				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamId);
+		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamId);
 	}
 	public static Node getUserPrivateNode(Session jcrWriteSession, TeamMember teamMember){
 		String userName		= teamMember.getEmail();
 		String teamId		= "" + teamMember.getTeamId();
 		
-		return 
-				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
+		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
+	}
+	
+	public static Node getTeamPendingNode(Session jcrWriteSession, TeamMember teamMember){
+		String teamId		= "" + teamMember.getTeamId();
+		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "pending/"+teamId);
+		
 	}
 	
 	
@@ -620,118 +623,328 @@ public class DocumentManagerUtil {
 		
 		public String getApplicationPath() {
 			return applicationPath;
-		}
+		}		
+	}
 		
-	}
 	
-	
-	
-	public  static ArrayList<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request, Boolean showOnlyDocs, Boolean showOnlyLinks) {
-		ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
-		HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
-		HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+	/**
+	 * get node uuids which were shared or requested to be shared for the given team
+	 * @param teamId
+	 * @param state
+	 * @return
+	 */
+	public static List<String> getSharedNodeUUIDs(Long teamId,Integer state){
+		List<String> retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		String queryString=null;
 		try {
-			while (nodeIterator.hasNext()) {
-				Node documentNode = (Node) nodeIterator.next();
-				NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
-
-				if (nodeWrapper.getWebLink() != null && showOnlyDocs)
-					continue;
-				if (nodeWrapper.getWebLink() == null && showOnlyLinks)
-					continue;
-
-				Boolean hasViewRights = false;
-				Boolean hasShowVersionsRights = false;
-				Boolean hasVersioningRights = false;
-				Boolean hasDeleteRights = false;
-				Boolean hasMakePublicRights = false;
-				Boolean hasDeleteRightsOnPublicVersion = false;
-
-				String uuid = documentNode.getUUID();
-				boolean isPublicVersion = uuidMapVer.containsKey(uuid);
-
-				if (isPublicVersion) {
-					hasViewRights = true;
-				} else
-					hasViewRights = DocumentManagerRights.hasViewRights(documentNode, request);
-
-				if (hasViewRights == null || !hasViewRights.booleanValue()) {
-					continue;
-				}
-
-				String fileName = nodeWrapper.getName();
-				if (fileName == null && nodeWrapper.getWebLink() == null)
-					continue;
-
-				DocumentData documentData = new DocumentData();
-				documentData.setName(fileName);
-				documentData.setUuid(nodeWrapper.getUuid());
-				documentData.setTitle(nodeWrapper.getTitle());
-				documentData.setDescription(nodeWrapper.getDescription());
-				documentData.setNotes(nodeWrapper.getNotes());
-				documentData.setFileSize(nodeWrapper.getFileSizeInMegabytes());
-				documentData.setCalendar(nodeWrapper.getDate());
-				documentData.setDate(nodeWrapper.getCalendarDate());
-				documentData.setVersionNumber(nodeWrapper.getVersionNumber());
-				documentData.setContentType(nodeWrapper.getContentType());
-				documentData.setWebLink(nodeWrapper.getWebLink());
-				documentData.setCmDocTypeId(nodeWrapper.getCmDocTypeId());
-
-				documentData.process(request);
-				documentData.computeIconPath(true);
-
-				if (!isPublicVersion) {
-					hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(documentNode, request);
-					if (hasShowVersionsRights != null)
-						documentData.setHasShowVersionsRights(hasShowVersionsRights);
-
-					hasVersioningRights = DocumentManagerRights.hasVersioningRights(documentNode, request);
-					if (hasVersioningRights != null) {
-						documentData.setHasVersioningRights(hasVersioningRights.booleanValue());
-					}
-					hasDeleteRights = DocumentManagerRights.hasDeleteRights(documentNode, request);
-					if (hasDeleteRights != null) {
-						documentData.setHasDeleteRights(hasDeleteRights.booleanValue());
-					}
-					hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(documentNode, request);
-					if (hasMakePublicRights != null) {
-						documentData.setHasMakePublicRights(hasMakePublicRights.booleanValue());
-					}
-
-					hasDeleteRightsOnPublicVersion = DocumentManagerRights.hasDeleteRightsOnPublicVersion(documentNode, request);
-					if (hasDeleteRightsOnPublicVersion != null) {
-						documentData.setHasDeleteRightsOnPublicVersion(hasDeleteRightsOnPublicVersion.booleanValue());
-					}
-
-					if (uuidMapOrg.containsKey(uuid)) {
-						documentData.setIsPublic(true);
-
-						//Verify if the last (current) version is the public one.
-						Node lastVersion = DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-						String lastVerUUID = lastVersion.getUUID();
-						if (uuidMapVer.containsKey(lastVerUUID)) {
-							documentData.setLastVersionIsPublic(true);
-						}
-
-					} else
-						documentData.setIsPublic(false);
-
-				}
-				// This is not the actual document node. It is the node of the public version. That's why one shouldn't have 
-				// the above rights.
-				else {
-					documentData.setShowVersionHistory(false);
-				}
-				documents.add(documentData);
+			session=PersistenceManager.getRequestDBSession();
+			if(! state.equals(CrConstants.SHARED_AMONG_WORKSPACES)){
+				queryString="select r.nodeUUID from " + CrSharedDoc.class.getName() + " r where r.team="+teamId+" and r.state="+state;
+			}else{
+				queryString="select r.sharedNodeVersionUUID from " + CrSharedDoc.class.getName() + " r where r.team="+teamId+" and r.state="+state;
 			}
-
-			/*}*/
+			
+			qry=session.createQuery(queryString);
+			retVal=qry.list();
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			logger.error("Couldn't Load Resourcess: " + e.toString());
 		}
-
-		return documents;
+		return retVal;
 	}
+	
+	public static CrSharedDoc getCrSharedDoc(String uuid,Long teamId, Integer state){
+		CrSharedDoc retVal=null;
+		org.hibernate.Session session=null;
+		String queryString=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			if(state.equals(CrConstants.PENDING_STATUS) || state.equals(CrConstants.SHARED_AMONG_WORKSPACES)){
+				queryString="select r from " + CrSharedDoc.class.getName() + " r where r.nodeUUID='"+uuid+"' ";
+			}else if(state.equals(CrConstants.SHARED_IN_WORKSPACE)){
+				queryString="select r from " + CrSharedDoc.class.getName() + " r where r.sharedPrivateNodeUUID='"+uuid+"' ";
+			}
+			queryString+=" and r.team="+teamId+" and r.state="+state;
+			qry=session.createQuery(queryString);
+			retVal=(CrSharedDoc)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resourcess: " + e.toString());
+		}
+		return retVal;
+	}
+	
+	/**
+	 * searches if given node was shared on any level and if found returns them
+	 */
+	public static List<CrSharedDoc> getSharedDocsForGivenNode(String uuid){
+		List<CrSharedDoc> retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select r from " + CrSharedDoc.class.getName() + " r where r.nodeUUID='"+uuid+"' or (r.sharedPrivateNodeUUID='"+uuid+"' and r.state!="+CrConstants.PENDING_STATUS+" )";
+			qry=session.createQuery(queryString);
+			retVal=qry.list();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resourcess: " + e.toString());
+		}
+		return retVal;
+	}
+	
+	/**
+	 * 
+	 * @param uuid
+	 * @param nodeVersionUUID
+	 * @param isPrivateDoc indicates whether we want to know private document is shared or team document
+	 * @return
+	 */
+	//DELETEEEEEEEEEEEEEEEEEEEEEEEEEE
+	public static boolean isResourceSharedOrPendingToBeShared(String uuid,String nodeVersionUUID, boolean isPrivateDoc){
+		boolean retVal=false;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+//			session=PersistenceManager.getRequestDBSession();
+//			String queryString="select count(r) from " + CrSharedDoc.class.getName() + " r where ";
+//			if(isPrivateDoc){
+//				queryString+=" (r.nodeUUID='"+uuid+"' and r.sharedNodeVersionUUID='"+nodeVersionUUID+"' and r.state="+CrConstants.PENDING_STATUS+") or "+
+//				" (r.sharedPrivateNodeUUID='"+uuid+"' and r.sharedNodeVersionUUID='"+nodeVersionUUID+"' and r.state="+CrConstants.SHARED_IN_WORKSPACE+")";
+//			}else{
+//				queryString+="";
+//			}
+//			qry=session.createQuery(queryString);
+//			int amount=(Integer)qry.uniqueResult();
+//			if(amount>0){
+//				retVal=true;
+//			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		} 
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param nodeUUID
+	 * @return version number of the node, which was requested to be share, if such exists.
+	 */
+	public static List<String> isPrivateResourceShared(String nodeUUID){
+		List<String> retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select r.sharedNodeVersionUUID from " + CrSharedDoc.class.getName() + " r where ";
+			queryString+=	" (r.sharedPrivateNodeUUID='"+nodeUUID+"'  and r.state="+CrConstants.SHARED_IN_WORKSPACE+")";
+			
+			qry=session.createQuery(queryString);
+			retVal=qry.list();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resources: " + e.toString());
+		} 
+		return retVal;
+	}
+	
+	/**
+	 * checks whether team node's some version is shared with given workspace,if found returns it's shared version
+	 */
+	public static String isTeamResourceSharedWithGivenWorkspace(String nodeUUID,Long workspaceId){
+		CrSharedDoc sharedRecord=loadTeamResourceSharedWithWorkspace(nodeUUID, workspaceId);
+		String retVal=null;
+		if(sharedRecord!=null){
+			retVal=sharedRecord.getSharedNodeVersionUUID();
+		}		
+		return retVal;
+	}
+	
+	/**
+	 * checks whether team node's any version is shared with given workspace and if found, returns it
+	 */
+	public static CrSharedDoc loadTeamResourceSharedWithWorkspace(String nodeUUID,Long workspaceId){
+		CrSharedDoc retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		String queryString=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select r from " + CrSharedDoc.class.getName() + " r where r.state="+CrConstants.SHARED_AMONG_WORKSPACES;
+			if(workspaceId!=null){
+				queryString+=" and r.sharedNodeVersionUUID='"+nodeUUID+"' and r.team="+workspaceId;
+			}else{
+				queryString+=" and r.nodeUUID='"+nodeUUID+"'";
+			}
+			qry=session.createQuery(queryString);
+			qry.setMaxResults(1); //if some version of the node is globally shared, this version is shared for all workspaces and not different for each workspace
+			retVal=(CrSharedDoc)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resources: " + e.toString());
+		} 
+		return retVal;
+	}
+	
+	public static boolean isGivenVersionShared(String versionUUID){
+		boolean retVal=false;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select count(r.sharedNodeVersionUUID) from " + CrSharedDoc.class.getName() + 
+			" r where r.sharedNodeVersionUUID='"+versionUUID+"' and r.state!="+CrConstants.PENDING_STATUS;
+			qry=session.createQuery(queryString);
+			int amount=(Integer)qry.uniqueResult();
+			if(amount>0){
+				retVal=true;
+			}
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resources: " + e.toString());
+		}
+		return retVal;
+	}
+	
+	/**
+	 * checks whether resource(given version) was requested to be shared and is still not approved by TL
+	 * @param nodeUUID
+	 * @return
+	 */
+	public static boolean isResourcePendingtoBeShared (String nodeUUID){
+		boolean retVal=false;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select count(r) from " + CrSharedDoc.class.getName() +" r where r.nodeUUID='"+nodeUUID+"' and r.state="+CrConstants.PENDING_STATUS;
+			qry=session.createQuery(queryString);
+			int amount=(Integer)qry.uniqueResult();
+			if(amount>0){
+				retVal=true;
+			}
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resources: " + e.toString());
+		}
+		return retVal;
+	}
+	
+
+	public static NodeLastApprovedVersion getlastApprovedVersionOfTeamNode(String nodeUUID){
+		NodeLastApprovedVersion retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select r from "+NodeLastApprovedVersion.class.getName() +" r where r.nodeUUID='"+nodeUUID+"'";			
+			qry=session.createQuery(queryString);			
+			retVal=(NodeLastApprovedVersion)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Last Approved Version : " + e.toString());
+		} 
+		return retVal;
+	}
+	
+	public static List<TeamNodePendingVersion> getPendingVersionsForResource(String nodeUUID){
+		List<TeamNodePendingVersion> retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select r from "+TeamNodePendingVersion.class.getName() +" r where r.nodeUUID='"+nodeUUID+"'";			
+			qry=session.createQuery(queryString);			
+			retVal=qry.list();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Last Approved Version : " + e.toString());
+		} 
+		return retVal;
+	}
+	
+	/**
+	 * check whether node's versions is pending approval and if true, return this record
+	 * @param versionID
+	 * @return
+	 */
+	public static TeamNodePendingVersion isGivenVersionPendingApproval(String versionID){
+		TeamNodePendingVersion retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select r from "+TeamNodePendingVersion.class.getName() +" r where r.versionID='"+versionID+"'";			
+			qry=session.createQuery(queryString);			
+			retVal=(TeamNodePendingVersion)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Last Approved Version : " + e.toString());
+		} 
+		return retVal;
+	}
+	
+	/**
+	 * check whether the first version of this resource was shared from private space(Used for Team Level Share and Not Across Wokrspaces)
+	 * if found, return the record
+	 */
+	public static CrSharedDoc isTeamResourceSharedFromPrivateSpace(String nodeUUID){
+		CrSharedDoc retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select r from " + CrSharedDoc.class.getName() + " r where r.nodeUUID='"+nodeUUID+"'  and r.state="+CrConstants.SHARED_IN_WORKSPACE;			
+			qry=session.createQuery(queryString);
+			retVal=(CrSharedDoc)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resources: " + e.toString());
+		} 
+		return retVal;
+	}
+	
+	/**
+	 * get's it's unapproved and last approved versions if found any
+	 * @param nodeUUID
+	 * @return
+	 */
+	public static List<TeamNodeState> getTeamNodeState(String nodeUUID){
+		List<TeamNodeState> retVal=null;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select r from "+TeamNodeState.class.getName() +" r where r.nodeUUID='"+nodeUUID+"'";			
+			qry=session.createQuery(queryString);			
+			retVal=qry.list();
+		} catch (Exception e) {
+			logger.error("Couldn't Load Team Node States : " + e.toString());
+		} 
+		return retVal;
+	}
+	
+	public static void deleteNodeStates(String nodeUUID){
+		org.hibernate.Session session=null;
+		Query query;
+		if(nodeUUID!=null){
+			try {
+				session=PersistenceManager.getRequestDBSession();
+				String qhl="delete from " + TeamNodeState.class.getName()+" t  where t.nodeUUID='"+nodeUUID+"'";
+				query=session.createQuery(qhl);
+				query.executeUpdate();
+			} catch (Exception e) {
+				logger.error("Delete Failed: " +e.toString());
+			}		
+		}		
+	}
+	
+	public static void deleteAllShareRecordsrelatedToResource(String nodeUUID){
+		org.hibernate.Session session=null;
+		Query query;
+		if(nodeUUID!=null){
+			try {
+				session=PersistenceManager.getRequestDBSession();
+				String qhl="delete from " + CrSharedDoc.class.getName() + " r where r.nodeUUID='"+nodeUUID+"' or (r.sharedPrivateNodeUUID='"+nodeUUID+"' and r.state!="+CrConstants.PENDING_STATUS+" )";
+				query=session.createQuery(qhl);
+				query.executeUpdate();
+			} catch (Exception e) {
+				logger.error("Delete Failed: " +e.toString());
+			}		
+		}
+	}
+	
 	
 }

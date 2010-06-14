@@ -5,25 +5,21 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Workspace;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
@@ -43,8 +39,7 @@ public class NodeWrapper {
 		this.node	= node;
 	}
 	
-	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode,  
-			boolean isANewVersion, ActionErrors errors) {
+	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionErrors errors) {
 		
 		FormFile formFile		= myForm.getFileData();
 		
@@ -108,7 +103,7 @@ public class NodeWrapper {
 			if ( !errorAppeared ) {			
 				populateNode(isANewVersion, newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
 					contentType, docType , teamMember.getEmail(), teamMember.getTeamId() );
-			} 
+			}
 			
 			this.node		= newNode;
 
@@ -126,8 +121,114 @@ public class NodeWrapper {
 		
 	}
 	
-	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest myRequest, Node parentNode,  
-			boolean isANewVersion, ActionErrors errors) {
+	/**
+	 * 
+	 * @param myRequest
+	 * @param parentNode
+	 * @param originalNode from which resource we are making new copy
+	 */
+	public NodeWrapper(HttpServletRequest myRequest,Node parentNode,Node originalNode) {
+		try {
+			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+			long docType=originalNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE).getLong();
+			String docTitle=originalNode.getProperty(CrConstants.PROPERTY_TITLE).getString();
+			
+			Node newNode=parentNode.addNode(docTitle);
+			newNode.addMixin("mix:versionable");
+			newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
+			//content type and content
+			String contentType			= originalNode.getProperty(CrConstants.PROPERTY_CONTENT_TYPE).getString();
+			if(originalNode.hasProperty(CrConstants.PROPERTY_WEB_LINK)){
+				newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, originalNode.getProperty(CrConstants.PROPERTY_WEB_LINK).getValue());
+			}else{
+				newNode.setProperty(CrConstants.PROPERTY_DATA, originalNode.getProperty(CrConstants.PROPERTY_DATA).getValue());
+				newNode.setProperty( CrConstants.PROPERTY_NAME, originalNode.getProperty(CrConstants.PROPERTY_NAME).getValue());
+				newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, originalNode.getProperty(CrConstants.PROPERTY_FILE_SIZE).getValue() );
+			}
+			String description=originalNode.getProperty(CrConstants.PROPERTY_DESCRIPTION).getString();
+			if(description!=null){
+				description=URLDecoder.decode(description, "UTF-8");
+			}			 
+			String docNotes=originalNode.getProperty(CrConstants.PROPERTY_NOTES).getString();
+			if(docNotes!=null){
+				description=URLDecoder.decode(docNotes, "UTF-8");
+			}
+			
+			populateNode(false, newNode, URLDecoder.decode(docTitle, "UTF-8"), description, docNotes,contentType, docType , teamMember.getEmail(), teamMember.getTeamId() );
+			this.node		= newNode;
+		} catch (Exception e) {
+			e.printStackTrace();
+			errorAppeared	= true;
+		}		
+	}
+	
+	private Node buildNewNode(HttpServletRequest myRequest, Node parentNode,Node originalNode,boolean isANewVersion) {
+		try {
+			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+			Node newNode 	= null;
+			String docTitle=originalNode.getProperty(CrConstants.PROPERTY_TITLE).getString();
+			long docType = 0;
+			
+			if (isANewVersion){
+				Property docTypeProp = parentNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
+				docType = docTypeProp.getLong();
+				newNode		= parentNode;
+				newNode.checkout();
+			}
+			else{				
+				docType = originalNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE).getLong();
+				newNode	= parentNode.addNode( docTitle );
+				newNode.addMixin("mix:versionable");
+			}			
+			
+			if (isANewVersion){
+				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
+			}
+			else{
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
+			}
+			
+			//content type and content
+			String contentType			= originalNode.getProperty(CrConstants.PROPERTY_CONTENT_TYPE).getString();
+			if(originalNode.hasProperty(CrConstants.PROPERTY_WEB_LINK)){
+				newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, originalNode.getProperty(CrConstants.PROPERTY_WEB_LINK).getValue());
+			}else{
+				newNode.setProperty(CrConstants.PROPERTY_DATA, originalNode.getProperty(CrConstants.PROPERTY_DATA).getValue());
+				newNode.setProperty( CrConstants.PROPERTY_NAME, originalNode.getProperty(CrConstants.PROPERTY_NAME).getValue());
+				newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, originalNode.getProperty(CrConstants.PROPERTY_FILE_SIZE).getValue() );
+			}
+			String description=originalNode.getProperty(CrConstants.PROPERTY_DESCRIPTION).getString();
+			if(description!=null){
+				description=URLDecoder.decode(description, "UTF-8");
+			}			 
+			String docNotes=originalNode.getProperty(CrConstants.PROPERTY_NOTES).getString();
+			if(docNotes!=null){
+				description=URLDecoder.decode(docNotes, "UTF-8");
+			}
+			
+			populateNode(isANewVersion, newNode, URLDecoder.decode(docTitle, "UTF-8"), description, docNotes,contentType, docType , teamMember.getEmail(), teamMember.getTeamId() );
+			return newNode;
+			// this.node		= newNode;
+		} catch (Exception e) {
+			e.printStackTrace();
+			errorAppeared	= true;
+		}
+		return null;
+	}
+	
+	public NodeWrapper(HttpServletRequest myRequest, Node parentNode,Node originalNode,boolean isANewVersion) {
+		try {
+			Node newNode=buildNewNode(myRequest, parentNode, originalNode, isANewVersion);
+			this.node		= newNode;
+		} catch (Exception e) {
+			e.printStackTrace();
+			errorAppeared	= true;
+		}
+	}	
+	
+	
+	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionErrors errors) {
 		
 		FormFile formFile		= tempDoc.getFormFile(); 
 		
@@ -502,6 +603,9 @@ public class NodeWrapper {
 			logger.error(delActivityDocs + " AmpActivityDocument object have been deleted on deletion of referring node. " +
 					"Deletion of this node should not have been allowed.");
 		}
+		//delete all approved/unapproved versions and sharing records
+		DocumentManagerUtil.deleteNodeStates(uuid);
+		DocumentManagerUtil.deleteAllShareRecordsrelatedToResource(uuid);
 		return ret;
 	}
 	

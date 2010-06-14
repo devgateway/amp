@@ -190,17 +190,16 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </script>
 
-<table border=0 bgColor=#ffffff cellPadding=0 cellSpacing=0 width="85%"
-	class="box-border-nopadding">
+<table border=0 bgColor=#ffffff cellPadding=0 cellSpacing=0 width="85%" class="box-border-nopadding">
 	<tr>
 		<td valign="bottom" class="crumb" >
 			&nbsp;&nbsp;&nbsp;
 			<c:set var="translation">
-					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+					<digi:trn>Click here to view MyDesktop</digi:trn>
 			</c:set>
 			<digi:link href="/../aim/viewMyDesktop.do" styleClass="comment" title="${translation}" >
-               	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
-               </digi:link> &gt; <digi:trn key="contentrepository:contentRepository">Content Repository</digi:trn>
+               	<digi:trn>My Desktop</digi:trn>
+               </digi:link> &gt; <digi:trn>Content Repository</digi:trn>
 			<br />
 		</td>
 	</tr>
@@ -208,9 +207,7 @@ function setHoveredTable(tableId, hasHeaders) {
 		<td align=left vAlign=top>
 			<div id="menuContainerDiv"></div>	
 			<span class="subtitle-blue"> &nbsp;&nbsp; 
-				<digi:trn key="contentrepository:contentRepository">
-							Content Repository
-				</digi:trn> 
+				<digi:trn>Content Repository</digi:trn> 
 			</span> 
 			<br />
 			<table border="0" cellPadding=5 cellSpacing=0 width="95%"
@@ -234,12 +231,12 @@ function setHoveredTable(tableId, hasHeaders) {
 			        		<li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
 			        	</c:if>			        	
 					</feature:display>
+					
+					<li id="tab3"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
+					
 					<feature:display name="Public Resources" module="Resources">
-			        	<li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Public Resources</digi:trn></div></a></li>
-			        </feature:display>
-			        <feature:display name="Other Resources" module="Resources">
-			        	<li id="tab4"><a href="#team_mem_res"><div><digi:trn key="rep:res:dhtmlTab:otherResources">Other Resources</digi:trn></div></a></li>
-			        </feature:display>
+			        	<li id="tab4"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Public Resources</digi:trn></div></a></li>
+			       </feature:display>
 			    </ul>            
 			    <div class="yui-content" style="background-color: #EEEEEE;">
 			      <feature:display name="My Resources" module="Resources">
@@ -254,8 +251,8 @@ function setHoveredTable(tableId, hasHeaders) {
 					  		</digi:trn>            
 				    	</button>
 				    </td>
-				    </tr>	
-				    </table>				    	
+				    </tr>
+				    </table>
 			        </div>
 						  <table border="0" cellPadding=1 cellSpacing=0 width="95%"
 							style="position: relative; left: 20px">
@@ -305,6 +302,24 @@ function setHoveredTable(tableId, hasHeaders) {
 					</table>
 			        </div>
 					</feature:display>
+					
+					<!-- Shared Resources Start  -->
+					<div id="shared_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+						<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
+							<tr>
+								<td>
+									<br />
+									<div id="shared_markup" align="center" class="all_markup">
+											<bean:define name="crDocumentManagerForm" property="sharedDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+											<jsp:include page="documentTable.jsp" flush="true" />
+									</div>
+									<br />
+								</td>
+							</tr>
+						</table>	        
+			        </div>
+					<!-- Shared Resources Start  -->
+					
 					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Resources">
 			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
@@ -322,28 +337,9 @@ function setHoveredTable(tableId, hasHeaders) {
 						</table>	        
 			        </div>
 			        </feature:display>
-<!--End public Resources-->
+<!--End public Resources-->			
 
-<!--Other Resources-->
-
-			        <feature:display name="Other Resources" module="Resources">			        
-						<bean:define id="checkBoxToHide" toScope="request" value="false" />
-				        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-					        <table border="0" cellPadding=1 cellSpacing=0 width="100%"
-								style="position: relative; left: 20px" >
-								<tr>
-									<td>
-										<br />
-										<div id="other_markup" align="center" class="all_markup">
-										<div id="otherDocumentsDiv">&nbsp;</div>
-										</div>
-										<br />
-									</td>
-								</tr>
-							</table>
-				    	</div>
-		    	</feature:display>			    
-<!--End Others-->	
+	
 			</div>	
 			</div>		
 			<div id="addDocumentDiv" style="display: none">
@@ -422,10 +418,13 @@ function setHoveredTable(tableId, hasHeaders) {
 <br/>
 
 <c:set var="publicResourcesWindowName">
-	<digi:trn key="cr:windowsName:publicResources">Public Resources</digi:trn>
+	<digi:trn>Public Resources</digi:trn>
 </c:set>
 <c:set var="teammemberResourcesWindowName">
-	<digi:trn key="cr:windowsName:teammemberResources">Team Member Resources</digi:trn>
+	<digi:trn>Team Member Resources</digi:trn>
+</c:set>
+<c:set var="sharedResourcesWindowName">
+	<digi:trn>Shared Resources</digi:trn>
 </c:set>
 	
 <%@include file="documentManagerDivHelper.jsp" %>
@@ -436,12 +435,11 @@ function setHoveredTable(tableId, hasHeaders) {
 	function afterPageLoad(e) {
 		YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 		YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
+		YAHOO.amp.table.sharedDoctable	= YAHOO.amp.table.enhanceMarkup("shared_markup");
 		
 		windowController	= newWindow( "${publicResourcesWindowName}", false, 'publicDocumentsDiv');
 		windowController.populateWithPublicDocs();
-
-		windowController	= newWindow( "${teammemberResourcesWindowName}", true, 'otherDocumentsDiv');
-		windowController.populateWithPublicDocs();
+		
 
 		initFileUploads();
 

@@ -8,7 +8,7 @@
 
 <div id="tableTemplate" style="display:none">
 	<table name="framingTable" border="0" cellPadding=5 cellSpacing=0 width="90%"
-			style="position: relative; left: 2px; font-size: x-small">
+			style="position: relative; left: 2px; font-size: x-small" id="team_table">
 			<tr>
 				<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
 				width="13" height="20"> </td>

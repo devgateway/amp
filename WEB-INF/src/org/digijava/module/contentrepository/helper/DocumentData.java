@@ -37,6 +37,30 @@ public class DocumentData implements Comparable<DocumentData>{
 	
 	boolean showVersionHistory		= true;
 	
+	/**
+	 * is it allowed or not to share this document
+	 */
+	boolean hasShareRights =false;
+	boolean hasUnshareRights =false;
+	/**
+	 * 
+	 */
+	private boolean hasApproveVersionRights=false;
+	/**
+	 * which level of share is allowed for this document
+	 */
+	private String shareWith= null;
+	
+	/** 
+	 * shows whether this document needs approval to become shared or not
+	 */
+	private boolean needsApproval=false;
+	private boolean isShared =false; //whether this resource is already shared.
+	boolean lastVersionIsShared		= false;
+	
+	private boolean currentVersionNeedsApproval=false; 
+	private String baseNodeUUID=null; //in case documentData is just a version of some node, this property holds that main node uuid
+	
 	public boolean getHasDeleteRights() {
 		return hasDeleteRights;
 	}
@@ -182,6 +206,26 @@ public class DocumentData implements Comparable<DocumentData>{
 		this.webLink = webLink;
 	}
 	
+	public boolean isHasShareRights() {
+		return hasShareRights;
+	}
+	public void setHasShareRights(boolean hasShareRights) {
+		this.hasShareRights = hasShareRights;
+	}
+	
+	public String getShareWith() {
+		return shareWith;
+	}
+	public void setShareWith(String shareWith) {
+		this.shareWith = shareWith;
+	}
+	public boolean isNeedsApproval() {
+		return needsApproval;
+	}
+	public void setNeedsApproval(boolean needsApproval) {
+		this.needsApproval = needsApproval;
+	}
+	
 	public void process(HttpServletRequest request) {
 		if (cmDocTypeId != null) {
 			AmpCategoryValue docTypeCv	= CategoryManagerUtil.getAmpCategoryValueFromDb(cmDocTypeId);
@@ -239,6 +283,42 @@ public class DocumentData implements Comparable<DocumentData>{
 	public int compareTo(DocumentData o) {
 		return this.getDate().compareTo(o.date);
 	}
+	public boolean isLastVersionIsShared() {
+		return lastVersionIsShared;
+	}
+	public void setLastVersionIsShared(boolean lastVersionIsShared) {
+		this.lastVersionIsShared = lastVersionIsShared;
+	}
+	public boolean isHasUnshareRights() {
+		return hasUnshareRights;
+	}
+	public void setHasUnshareRights(boolean hasUnshareRights) {
+		this.hasUnshareRights = hasUnshareRights;
+	}	
 	
+	public boolean getIsShared() {
+		return isShared;
+	}
+	public void setIsShared(boolean isShared) {
+		this.isShared = isShared;
+	}
+	public boolean isCurrentVersionNeedsApproval() {
+		return currentVersionNeedsApproval;
+	}
+	public void setCurrentVersionNeedsApproval(boolean currentVersionNeedsApproval) {
+		this.currentVersionNeedsApproval = currentVersionNeedsApproval;
+	}
+	public String getBaseNodeUUID() {
+		return baseNodeUUID;
+	}
+	public void setBaseNodeUUID(String baseNodeUUID) {
+		this.baseNodeUUID = baseNodeUUID;
+	}
+	public boolean isHasApproveVersionRights() {
+		return hasApproveVersionRights;
+	}
+	public void setHasApproveVersionRights(boolean hasApproveVersionRights) {
+		this.hasApproveVersionRights = hasApproveVersionRights;
+	}
 	
 }

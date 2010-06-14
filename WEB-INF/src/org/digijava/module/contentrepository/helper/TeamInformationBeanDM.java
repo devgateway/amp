@@ -27,7 +27,4 @@ public class TeamInformationBeanDM {
 	public void setMyTeamMembers(Collection<TeamMember> myTeamMembers) {
 		this.myTeamMembers = myTeamMembers;
 	}
-	
-	
-	
 }

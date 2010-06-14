@@ -90,6 +90,25 @@ public class ComponentsUtil {
         return col;
     }
     
+	public static AmpComponentType getAmpComponentTypeByName(String name) {
+        Collection col = null;
+        String queryString = null;
+        Session session = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select co from " + AmpComponentType.class.getName() + " co where (TRIM(co.name)=:name)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("name",name.trim(),Hibernate.STRING);
+            col = qry.list();
+            if (col.size() > 0){
+            	return new ArrayList<AmpComponentType>(col).get(0);
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get AmpComponentType  from database " + ex.getMessage());
+        }
+        return null;
+    }
     public static AmpComponentType getComponentTypeById(Long id) {
         Collection col = null;
         String queryString = null;

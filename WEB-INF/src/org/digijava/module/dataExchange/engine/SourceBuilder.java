@@ -48,20 +48,6 @@ public abstract class SourceBuilder {
 	 * For FileSourceBuilder the InputStream will be given as a parameter in the constructor.
 	 */
 	public abstract void process();
-	/**
-	 * @return the DESourceSetting
-	 */
-	
-	
-	public DESourceSetting getAmpSourceSetting() {
-		return DESourceSetting;
-	}
-	/**
-	 * @param DESourceSetting the DESourceSetting to set
-	 */
-	public void setAmpSourceSetting(DESourceSetting DESourceSetting) {
-		this.DESourceSetting = DESourceSetting;
-	}
 
 	
 	

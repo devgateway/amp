@@ -315,10 +315,6 @@ public class ImportBuilder {
 			activity.setStatusReason(actType.getStatusReason().getValue());
 		}
 
-		
-		
-	  
-	  
 	  
 	}//end of step 1	
 
@@ -391,7 +387,6 @@ public class ImportBuilder {
 		
 		
 
-		Long programId;
 		if(activityImported.getPrograms()!=null && activityImported.getPrograms().size() > 0){
 			Set<AmpActivityProgram> programs = new HashSet<AmpActivityProgram>();
 			
@@ -530,10 +525,9 @@ public class ImportBuilder {
 						activity.getCategories().add(acv1);
 					
 				}
-				
-				AmpLocation ampLoc		= DynLocationManagerUtil.getAmpLocation(ampCVLoc);
-				AmpActivityLocation actLoc=new AmpActivityLocation();
-				actLoc.setActivity(activity);//activity);
+				AmpLocation ampLoc			= 	DynLocationManagerUtil.getAmpLocation(ampCVLoc);
+				AmpActivityLocation actLoc	=	new AmpActivityLocation();
+				actLoc.setActivity(activity);
 				actLoc.getActivity().setAmpActivityId(null);
 				actLoc.setLocation(ampLoc);
 				Double percent=new Double(100);
@@ -575,7 +569,7 @@ public class ImportBuilder {
 						role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.CONTRACTING_AGENCY);
 					if(isEqualStringsNWS(type, Constants.IDML_CONTRACTOR))
 						role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.CONTRACTOR);
-					if(isEqualStringsNWS(type, Constants.IDML_EXECUTIN_AGENCY))
+					if(isEqualStringsNWS(type, Constants.IDML_EXECUTING_AGENCY))
 						role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.EXECUTING_AGENCY);
 					if(isEqualStringsNWS(type, Constants.IDML_FUNDING_AGENCY))
 						role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
@@ -1178,12 +1172,8 @@ public class ImportBuilder {
 	}
 
 	private List<AmpActivityProgramSettings> getAllAmpActivityProgramSettings(){
-		AmpActivityProgramSettings primConf = null;
     	List<AmpActivityProgramSettings> configs = null;
-
-			configs = DataExchangeUtils.getAllAmpActivityProgramSettings();
-		
-    	
+		configs = DataExchangeUtils.getAllAmpActivityProgramSettings();
     	return configs;
 	}
 	

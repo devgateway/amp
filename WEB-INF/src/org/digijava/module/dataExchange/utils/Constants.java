@@ -32,7 +32,7 @@ public class Constants {
 	public static final String IDML_CONTRACTING_AGENCY = "Contracting Agency";
 	public static final String IDML_REGIONAL_GROUP = "Regional Group";
 	public static final String IDML_SECTOR_GROUP = "Sector Group";
-	public static final String IDML_EXECUTIN_AGENCY = "Executing Agency";
+	public static final String IDML_EXECUTING_AGENCY = "Executing Agency";
 	public static final String IDML_RESPONSIBLE_ORGANIZATION = "Responsible Organization";
 	public static final String IDML_CONTRACTOR = "Contractor";
 	public static final String IDML_RELATED_INSTITUTIONS = "Related Institutions";
@@ -48,6 +48,12 @@ public class Constants {
 	public static final String CATEG_VALUE_FINANCING_INSTRUMENT = "financing_instrument";
 	public static final String CATEG_VALUE_MTEF_PROJECTION = "mtef_projection";
 	
+	public static final String JAXB_INSTANCE = "org.digijava.module.dataExchange.jaxb";
+	//this.getServlet().getServletContext().getRealPath("/")+
+	public static final String IDML_SCHEMA_LOCATION = "/doc/IDML2.0.xsd";
 	
+	public static final String FIELD_ACTIVITY="activity";
+	public static final String FIELD_ACTIVITY_STATUS="activity.status";
+	public static final String FIELD_ACTIVITY_DESCRIPTION="activity.description";
 	
 }

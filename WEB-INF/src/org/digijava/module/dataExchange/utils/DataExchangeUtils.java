@@ -171,8 +171,7 @@ public class DataExchangeUtils {
 	
 	public static Date XMLGregorianDateToDate(XMLGregorianCalendar importedDate){
 		
-		  // importedDate= actType.getProposedApprovalDate().getDate();
-		  boolean dateToSet=false;
+		  Boolean dateToSet=new Boolean(false);
 		  if(importedDate == null ) return null;
 		  String defaultFormat= "yyyy-MM-dd";
 		  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
@@ -189,7 +188,7 @@ public class DataExchangeUtils {
 					}
 				  	
 			  }
-		  if(dateToSet=true) return result.getTime();
+		  if(dateToSet==true) return result.getTime();
 		  else return null;
 	}
 
@@ -214,6 +213,49 @@ public class DataExchangeUtils {
 		  else return null;
 	}
 
+	
+	/**
+	 * @author dan
+	 */
+	public static void saveActivityNoLogger(AmpActivity activity){
+		Session session = null;
+		//HttpSession httpSession=request.getSession();
+	    Transaction tx = null;
+
+	    Long activityId = null;
+	    
+	    try {
+	    	//session = PersistenceManager.getSession();
+	    	session = PersistenceManager.getRequestDBSession();
+	    	//session.connection().setAutoCommit(false);
+	    	tx = session.beginTransaction();
+
+			session.save(activity);
+	        activityId = activity.getAmpActivityId();
+	        String ampId=ActivityUtil.numericAmpId("00",activityId);//generateAmpId(member.getUser(),activityId );
+	        activity.setAmpId(ampId);
+	        //session.update(activity);
+	        tx.commit();
+	        
+	    }catch (Exception ex) {
+	        logger.error("Exception from saveActivity().", ex);
+	        //we can't throw here the exception because we need to rollback the transaction
+	        ex.printStackTrace();
+	        if ( tx != null)
+	        	tx.rollback();
+	        }
+	    finally {
+	    	try {
+				;//PersistenceManager.releaseSession(session);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    }
+		//TODO: update the lucene index
+		//LuceneUtil.addUpdateActivity(request, false, activityId);
+		//for logging the activity
+		//AuditLoggerUtil.logObject(httpSession, request, activity, "add");
+	}
 	
 	
 	/**
@@ -289,6 +331,30 @@ public class DataExchangeUtils {
         }
         return obResult;
 	}
+	
+	
+	  public static AmpActivity getActivityByComposedKey(String key) {
+		    AmpActivity activity = null;
+		    Session session = null;
+		    try {
+		    	 session = PersistenceManager.getRequestDBSession();
+		      String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
+		          "where lower(a.name) = :lowerName";
+		      Query qry = session.createQuery(qryStr);
+		      qry.setString("lowerName", key.toLowerCase());
+		      Iterator itr = qry.list().iterator();
+		      if (itr.hasNext()) {
+		        activity = (AmpActivity) itr.next();
+		      }
+		    }
+		    catch (Exception e) {
+		      logger.debug("Exception in getActivityByComposedKey() " + e.getMessage());
+		      e.printStackTrace(System.out);
+		    }
+
+		    return activity;
+		  }
+
 	
 	/**
 	 * @author dan
@@ -392,9 +458,9 @@ public class DataExchangeUtils {
 	 * @param id
 	 * @return
 	 */
-	public static Object getElementFromAmp(String fieldType, Object id, CodeValueType element){
 		
-		if( !fieldType.equals(null) ){
+	public static Object getElementFromAmp(String fieldType, Object id, CodeValueType element){
+		if( fieldType!=null ){
 			
 			if(Constants.AMP_ORGANIZATION.equals(fieldType)){
 				if (id instanceof Long) {
@@ -416,7 +482,8 @@ public class DataExchangeUtils {
 				}
 				if (id instanceof String) {
 					String sectorName = (String) id;
-					return getSectorByName(sectorName);
+					//return getSectorByName(sectorName);
+					return getSectorByNameAndCode(sectorName,element.getCode());
 				}
 			}
 			
@@ -427,7 +494,8 @@ public class DataExchangeUtils {
 				}
 				if (id instanceof String) {
 					String programName = (String) id;
-					return getProgramByName(programName);
+					//return getProgramByName(programName);
+					return getProgramByNameAndCode(programName,element.getCode());
 				}
 			}
 			
@@ -495,6 +563,37 @@ public class DataExchangeUtils {
 	}
 
 
+	/**
+	 * @author dan
+	 * @param name
+	 * @return
+	 */
+	
+	public static AmpSector getSectorByNameAndCode(String name, String code) {
+		AmpSector obResult=null;
+        Session sess = null;
+        Query qry = null;
+        String queryString = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            queryString = "select o from " + AmpSector.class.getName()
+                + " o where (TRIM(o.name)=:sectorName) and (TRIM(o.sectorCode)=:sectorCode)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("sectorName", name.trim(), Hibernate.STRING);
+            qry.setParameter("sectorCode", code.trim(), Hibernate.STRING);
+
+            List  result=qry.list();
+            if (result.size() > 0){
+            	obResult= (AmpSector) result.get(0);
+            }
+        } catch (Exception e) {
+            logger.debug("Exception from getSectorByname(): " + e);
+            e.printStackTrace(System.out);
+        }
+        return obResult;
+	}
+	
 	public static void saveComponents(AmpActivity activity,	HttpServletRequest request,	Collection<Components<AmpComponentFunding>> tempComps) {
 		// TODO Auto-generated method stub
 		
@@ -592,19 +691,50 @@ public class DataExchangeUtils {
         return obResult;
 	}
 
+	
+	/**
+	 * @author dan
+	 * @param name
+	 * @return
+	 */
+	
+	public static AmpTheme getProgramByNameAndCode(String name, String code) {
+		AmpTheme obResult=null;
+        Session sess = null;
+        Query qry = null;
+        String queryString = null;
 
-	public static List<AmpActivityProgramSettings> getAllAmpActivityProgramSettings() {
-	   
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            queryString = "select o from " + AmpTheme.class.getName()
+                + " o where (TRIM(o.name)=:programName) and (TRIM(o.themeCode)=:themeCode)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("programName", name.trim(), Hibernate.STRING);
+            qry.setParameter("themeCode", code.trim(), Hibernate.STRING);
+
+            List  result=qry.list();
+            if (result.size() > 0){
+            	obResult= (AmpTheme) result.get(0);
+            }
+        } catch (Exception e) {
+            logger.debug("Exception from getSectorByname(): " + e);
+            e.printStackTrace(System.out);
+        }
+        return obResult;
+	}
+
+	
+	   public static List<AmpActivityProgramSettings> getAllAmpActivityProgramSettings(){
 	        String queryString = null;
 	        Session session = null;
 	        List<AmpActivityProgramSettings> configs = null;
 	        Query qry = null;
 
 	            try {
-					session = PersistenceManager.getRequestDBSession();
-	            queryString = "select cls from " + AmpActivityProgramSettings.class.getName() + " cls ";
-	            qry = session.createQuery(queryString);
-	            configs = qry.list();
+						session = PersistenceManager.getRequestDBSession();
+			            queryString = "select cls from " + AmpActivityProgramSettings.class.getName() + " cls ";
+			            qry = session.createQuery(queryString);
+			            configs = qry.list();
 	            } catch (DgException e) {
 	            	// TODO Auto-generated catch block
 	            	e.printStackTrace();
@@ -732,6 +862,12 @@ public class DataExchangeUtils {
 		}
 			//return newly modified string
 		return tempIdref;
+	}
+
+
+	public static void updateActivityNoLogger(AmpActivity activity) {
+		// TODO Auto-generated method stub
+		
 	}	
 	
 	

@@ -58,7 +58,7 @@ class Reports::CustomController < ReportsController
 
     if format == "html"
       # Remove quarterly information for the HTML report
-      funding_details.each do |y|
+      funding_details.andand.each do |y|
         data.remove_column("disbursements_q1_#{y}")
         data.remove_column("disbursements_q2_#{y}")
         data.remove_column("disbursements_q3_#{y}")

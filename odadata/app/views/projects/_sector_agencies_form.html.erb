@@ -33,7 +33,7 @@
 			
 		<div id="implementing_agencies">
 			<% if @project.implementing_agencies.any? %>
-				<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
+				<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies %>
 			<% else %>
 				<%= render :partial => 'implementing_agency', :object => Agency.new %>
 			<% end %>

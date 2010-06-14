@@ -604,7 +604,7 @@ public class ChartWidgetUtil {
         plot.setBackgroundPaint(Color.WHITE);
         plot.setForegroundAlpha(0.6f);
         plot.setSectionDepth(0.5);
-        plot.setCircular(false);
+        plot.setCircular(true);
         plot.setOutlineVisible(false);
 
         if (opt.isShowTitle()) {
@@ -690,7 +690,7 @@ public class ChartWidgetUtil {
         plot.setBackgroundPaint(Color.WHITE);
         plot.setForegroundAlpha(0.6f);
         plot.setSectionDepth(0.5);
-        plot.setCircular(false);
+        plot.setCircular(true);
         plot.setLabelFont(plainFont);
         String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
@@ -761,7 +761,7 @@ public class ChartWidgetUtil {
         plot.setLabelFont(titleFont);
         plot.setForegroundAlpha(0.6f);
         plot.setSectionDepth(0.5);
-        plot.setCircular(false);
+        plot.setCircular(true);
         String pattern = "{0} {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();

@@ -34,9 +34,9 @@ public class GetOrganizations extends Action {
         List<AmpOrganisation> orgs;
         try {
             if (orgGroupId != null && orgGroupId != -1) {
-                orgs = DbUtil.getOrganisationByGroupId(orgGroupId);
+                orgs = DbUtil.getDonorOrganisationByGroupId(orgGroupId);
             } else {
-                orgs =new ArrayList<AmpOrganisation>(DbUtil.getAllOrganisation());
+                orgs =new ArrayList<AmpOrganisation>(DbUtil.getAllDonorOrgs());
             }
             orgForm.setOrganizations(orgs);
             response.setContentType("text/xml");

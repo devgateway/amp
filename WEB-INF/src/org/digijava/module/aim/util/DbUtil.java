@@ -2657,6 +2657,26 @@ public class DbUtil {
         }
         return organizations;
     }
+
+    public static List<AmpOrganisation> getDonorOrganisationByGroupId(Long orgGroupId) {
+        Session session = null;
+        Query q = null;
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        String queryString = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select distinct f.ampDonorOrgId from " + AmpFunding.class.getName()
+                + " f where f.ampDonorOrgId.orgGrpId=:orgGroupId order by f.ampDonorOrgId.name asc";
+            q = session.createQuery(queryString);
+            q.setLong("orgGroupId", orgGroupId);
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
+        }
+        return organizations;
+    }
     /**
      * 
      * @return List of Mul and Bil organization groups

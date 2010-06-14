@@ -200,9 +200,11 @@ public class ChartWidgetUtil {
         }
         String amount = "Amounts in millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        String titleMsg = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
-        chart.getTitle().setFont(titleFont);
+        chart = ChartFactory.createBarChart3D(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        TextTitle title=chart.getTitle();
+        if(title!=null){
+            title.setFont(titleFont);
+        }
         TextTitle subTitle = new TextTitle( filter.getCurrName(),subTitleFont);
         chart.addSubtitle(subTitle);
         chart.getLegend().setItemFont(plainFont);
@@ -309,21 +311,19 @@ public class ChartWidgetUtil {
 
         String amount = "Amounts in Millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        String titleMsg = "";
         String trnsType="";
-        if (typeOfAid) {
-            titleMsg = TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
-        } else {
-            titleMsg = TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
-        }
+      
         if (filter.getTransactionType() == 0) {
             trnsType = TranslatorWorker.translateText("Actual commitments in", opt.getLangCode(), opt.getSiteId());
         } else {
             trnsType = TranslatorWorker.translateText("Actual disbursements in", opt.getLangCode(), opt.getSiteId());
         }
 
-        chart = ChartFactory.createBarChart3D(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
-        chart.getTitle().setFont(titleFont);
+        chart = ChartFactory.createBarChart3D(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        TextTitle title=chart.getTitle();
+        if(title!=null){
+            title.setFont(titleFont);
+        }
         TextTitle subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
         chart.addSubtitle(subTitle);
         chart.getLegend().setItemFont(plainFont);
@@ -678,9 +678,11 @@ public class ChartWidgetUtil {
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        String primarySectorSchemeName=SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
-        chart = ChartFactory.createRingChart(primarySectorSchemeName+" "+TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId()), dataset, true, true, false);
-        chart.getTitle().setFont(titleFont);
+        chart = ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
+        TextTitle title=chart.getTitle();
+        if(title!=null){
+            title.setFont(titleFont);
+        }
         TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
         subTitle.setPadding(5, 5, 5, 5);
         chart.addSubtitle(0,subTitle);
@@ -748,8 +750,11 @@ public class ChartWidgetUtil {
                 break;
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        chart =ChartFactory.createRingChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()), dataset, true, true, false);
-        chart.getTitle().setFont(titleFont);
+        chart =ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
+        TextTitle title=chart.getTitle();
+        if(title!=null){
+            title.setFont(titleFont);
+        }
         TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
         subTitle.setPadding(5, 5, 5, 5);
         chart.addSubtitle(0,subTitle);

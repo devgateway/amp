@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -73,25 +74,37 @@ public class ShowWidgetChart extends Action {
                 opt.setSiteId(siteId);
                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);
+                String title=null;
                 JFreeChart chart = null;
                 ChartRenderingInfo info = new ChartRenderingInfo();
                 switch (wForm.getChartType().intValue())  {
                     case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
+                        title=TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
+                        opt.setTitle(title);
                         chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter,true);
                         break;
 
                     case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
+                        title=TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId());;
+                        opt.setTitle(title);
                         chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
 
                         break;
 
                   case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+                       title=TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
+                        opt.setTitle(title);
                         chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter,false);
                         break;
                    case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
+                        String primarySectorSchemeName=SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
+                        title=primarySectorSchemeName+" "+TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                        opt.setTitle(title);
                         chart = ChartWidgetUtil.getSectorByDonorChart(opt, filter);
                         break;
                   case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
+                        title=TranslatorWorker.translateText("Regional Breakdown ", opt.getLangCode(), opt.getSiteId());
+                        opt.setTitle(title);
                         chart = ChartWidgetUtil.getRegionByDonorChart(opt, filter);
                         break;
                 }

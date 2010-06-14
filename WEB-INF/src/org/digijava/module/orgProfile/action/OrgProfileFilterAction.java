@@ -80,9 +80,9 @@ public class OrgProfileFilterAction extends Action {
         if (orgForm.getOrgGroupId() == null || orgForm.getOrgGroupId() == -1) {
             // all groups
             orgForm.setOrgGroupId(-1l);
-            orgs = new ArrayList<AmpOrganisation>(DbUtil.getAllOrganisation());
+            orgs = new ArrayList<AmpOrganisation>(DbUtil.getAllDonorOrgs());
         } else {
-            orgs = DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
+            orgs = DbUtil.getDonorOrganisationByGroupId(orgForm.getOrgGroupId());
         }
         orgForm.setOrganizations(orgs);
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());

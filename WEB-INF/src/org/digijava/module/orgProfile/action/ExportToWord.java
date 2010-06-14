@@ -53,6 +53,8 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
+import org.apache.ecs.xhtml.title;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.orgProfile.helper.ExportSettingHelper;
 
 public class ExportToWord extends Action {
@@ -204,6 +206,7 @@ public class ExportToWord extends Action {
                                 }
                             }
                         }
+                        String chartTitle = null;
                         int colspan = 6;
                         int oneYearColspan = 2;
                         if (filter.getTransactionType() == 2) {
@@ -225,6 +228,8 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(typeOfAidTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_TYPE_OF_AID);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
+                                    chartTitle = TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
+                                     
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
@@ -249,6 +254,8 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(pledgesCommDisbTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
+                                    chartTitle = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId());
+
                                     chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
                                 }
                                 break;
@@ -265,6 +272,8 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(odaProfileTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_ODA_PROFILE);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
+                                    chartTitle = TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
+
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
@@ -289,6 +298,8 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(sectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
+                                    String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
+                                    chartTitle = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
@@ -314,6 +325,7 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(regionTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
+                                    chartTitle = TranslatorWorker.translateText("Regional Breakdown ", opt.getLangCode(), opt.getSiteId());
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
@@ -689,24 +701,7 @@ public class ExportToWord extends Action {
 
 
                         }
-                        Font font = new Font(null, 0, 24);
-                        if (chartDisb != null) {
-                            Plot plotDisb = chartDisb.getPlot();
-                            plotDisb.setNoDataMessage("No Data Available");
-                            plotDisb.setNoDataMessageFont(font);
-
-                            ByteArrayOutputStream outByteStreamDisb = new ByteArrayOutputStream();
-                            // write image in response
-                            ChartUtilities.writeChartAsPNG(
-                                    outByteStreamDisb,
-                                    chartDisb,
-                                    opt.getWidth().intValue(),
-                                    opt.getHeight().intValue(),
-                                    info);
-                            Image imgDisb = Image.getInstance(outByteStreamDisb.toByteArray());
-                            imgDisb.setAlignment(Image.ALIGN_MIDDLE);
-                            doc.add(imgDisb);
-                        }
+                        Font font = new Font(null, 0, 24);                
                         if (chart != null) {
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
@@ -722,7 +717,28 @@ public class ExportToWord extends Action {
                                     info);
                             Image img = Image.getInstance(outByteStream.toByteArray());
                             img.setAlignment(Image.ALIGN_CENTER);
+
+                            Paragraph imgTitle = new Paragraph(chartTitle, new  com.lowagie.text.Font( com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
+                            imgTitle.setAlignment(Element.ALIGN_CENTER);
+                            doc.add(imgTitle);
                             doc.add(img);
+                        }
+                         if (chartDisb != null) {
+                            Plot plotDisb = chartDisb.getPlot();
+                            plotDisb.setNoDataMessage("No Data Available");
+                            plotDisb.setNoDataMessageFont(font);
+
+                            ByteArrayOutputStream outByteStreamDisb = new ByteArrayOutputStream();
+                            // write image in response
+                            ChartUtilities.writeChartAsPNG(
+                                    outByteStreamDisb,
+                                    chartDisb,
+                                    opt.getWidth().intValue(),
+                                    opt.getHeight().intValue(),
+                                    info);
+                            Image imgDisb = Image.getInstance(outByteStreamDisb.toByteArray());
+                            imgDisb.setAlignment(Image.ALIGN_MIDDLE);
+                            doc.add(imgDisb);
                         }
                         if (orgSummaryTbl != null) {
                             doc.add(orgSummaryTbl);

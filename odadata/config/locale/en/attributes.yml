@@ -83,6 +83,10 @@ en:
           label: Actual Start - End
         planned_start_end:
           label: Planned Start - End
+        date_of_signing:
+          label: Date of Signing
+          description: |
+            The date of signing the memorandum or the contract.
         implementing_agencies: 
           label: Channel of Delivery
           description: |

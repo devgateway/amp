@@ -41,6 +41,10 @@
   	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
     <%= error_message_on(:project, :actual_end, "","", "error_message" ) %>
   </li>
+  <li>
+    <%= f.date_select :date_of_signing, :include_blank => true, :start_year => 1990,
+  	      :disabled => (@project.publication_locked? && @project.prj_status >= Project::STATUS_ONGOING) %>
+  </li>
   
 	<li><%= f.text_field :website, :class => "large" %></li>
 	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>

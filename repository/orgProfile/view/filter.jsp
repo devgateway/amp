@@ -187,19 +187,22 @@
                                 <LI>
                                     <div>
                                         <a target="_blank" onclick="exportPDF(); return false;">
-                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF'/>
+                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF'/><digi:trn>Export to PDF</digi:trn>
                                         </a>
                                         <a target="_blank" onclick="exportWord(); return false;">
-                                            <digi:img  hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/doc.gif" border="0" alt='Export to Word'/>
+                                            <digi:img  hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/doc.gif" border="0" alt='Export to Word'/> <digi:trn>Export to Word</digi:trn>
                                         </a>
-                                        <div id="changeFilterLink" style="display: inline">
+                                        <div id="changeFilterLink" style="display: inline" title="<digi:trn>Click on this icon to view filter</digi:trn>">
                                             <a>
                                                 <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/add_filters.png" border="0" alt='Apply Filter'/>
+                                                <digi:trn>Filter</digi:trn>
                                             </a>
+                                            
                                         </div>
-                                                <div id="changeExportSettingsLink" style="display: inline" title="<digi:trn>Click on this icon to view additional export options</digi:trn>">
+                                        <div id="changeExportSettingsLink" style="display: inline" title="<digi:trn>Click on this icon to view additional export options</digi:trn>">
                                             <a>
                                                 <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" border="0" alt=''/>
+                                                <digi:trn>Export Options</digi:trn>
                                             </a>
                                         </div>
                                     </div>
@@ -297,7 +300,7 @@
             <table cellpadding="5" cellspacing="0">
                 <tr>
                     <td nowrap align="left" colspan="2">
-                        <html:checkbox  property="workspaceOnly"><b><digi:trn>SHOW ONLY ORGANIZATION PROFILE DATA FROM THIS WORKSPACE?</digi:trn></b></html:checkbox><br/>
+                        <html:checkbox  property="workspaceOnly"><b><digi:trn>SHOW ONLY ORGANIZATION PROFILE DATA FROM THIS WORKSPACE</digi:trn></b></html:checkbox><br/>
                         <font style="color:red;font-weight:bold"><digi:trn>Note: If left unchecked it will show data for all of the current workspaces in AMP</digi:trn></font>
                     </td>
                 </tr>
@@ -325,7 +328,7 @@
 
                 <tr>
                     <td>
-                        <b><digi:trn>Currency Code</digi:trn>:</b>
+                        <b><digi:trn>Currency</digi:trn>:</b>
                     </td>
                     <td>
 
@@ -370,7 +373,7 @@
                         <font style="color:red;font-weight:bold"><digi:trn>Note: fiscal year will affect the data range for the graps as follows:</digi:trn></font>
                         <p>
                             <digi:trn>
-                                *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type of Aid and ODA Profile will display a range of five years (the current year and the previous four years) </digi:trn> *** <digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration are rendering  data of the previous fiscal year</digi:trn></p>
+                                *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type of Aid and ODA Profile will display a range of five years (the current year and the previous four years) </digi:trn> *** <digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration will display  data of the previous fiscal year</digi:trn></p>
                         </td>
                     </tr>
                     <tr>
@@ -426,7 +429,7 @@
                             </html:select>
                         </span>
                         <input type="button" class="button" value="<digi:trn>Deselect All</digi:trn>" id="deselectAll">
-                        <p style="color:red;font-weight:bold"><digi:trn> Note: Data will include all organizations in the current group if none from organization's list is selected.</digi:trn> </p>
+                        <p style="color:red;font-weight:bold"><digi:trn> Note: Data will include all organizations in the current group if none from organizations list is selected.</digi:trn> </p>
                     </td>
                 </tr>
             </table>

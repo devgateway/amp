@@ -8,7 +8,7 @@
 	<li><%= f.text_field :recipient_country_budget_nr, :class => "large" %></li>
 
 	<li><%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name_with_code",
-				{ :required => true, :prompt => t('.prompt') }, :class => "large" %></li>
+				{ :include_blank => t('.prompt'), :required => true }, :class => "large" %></li>
 	
 <!--
 	<li><%#= f.collection_select :country_strategy_id, @project.donor.country_strategies, "id", "strategy_number",

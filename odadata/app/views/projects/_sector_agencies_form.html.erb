@@ -166,7 +166,7 @@
 
         <li id="government_counterpart">
           <%= f.collection_select :government_counterpart_id,  GovernmentCounterpart.ordered , "id", "code_with_name",
-            {:prompt => I18n.t('options.prompt') }, :class => "large" %></li>
+            {:include_blank => I18n.t('options.prompt') }, :class => "large" %></li>
 
         <li id="government_project_code">
           <%= f.text_field :government_project_code, :class => "large" %></li>
@@ -242,10 +242,12 @@
             dropdown_on_off_budget.bind("change", function(e) {
               if(this.value == "false" || this.value == "") {
                 on_off_treasury_label.hide();
-//                $('#project_on_off_treasury').val("false")
                 government_counterpart_label.hide();
-
                 government_project_code_label.hide();
+                // Set the values to off
+                $('#project_on_off_treasury').val("false");
+                $('#project_government_counterpart_id').val("");
+                $("#project_government_project_code").val("");
                 $('#project_grant_loan').trigger('change');
               }
               else
@@ -292,6 +294,7 @@
 
           function recalculate_government_code()
           {
+            if ($('#project_on_off_budget').val() == "false") return false;
 
             var number1 = "-";
             var number2 = "-";

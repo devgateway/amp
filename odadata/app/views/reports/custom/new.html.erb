@@ -112,6 +112,10 @@
         </li>
 -->
         <li>
+        	<%= check_box_tag "report[fields][]", "project_currency" %>
+        	<%= Project.human_attribute_name('project_currency') %>
+        </li>
+        <li>
         	<%= check_box_tag "report[fields][]", "private_support" %>
         	<%= Project.human_attribute_name('private_support') %>
         </li>

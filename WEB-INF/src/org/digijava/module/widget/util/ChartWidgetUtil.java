@@ -574,13 +574,20 @@ public class ChartWidgetUtil {
         String title = (opt.isShowTitle()) ? titleMsg : null;
         boolean tooltips = true;
         boolean urls = true;
-        result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
+        result = ChartFactory.createRingChart(title, ds, opt.isShowLegend(), tooltips, urls);
         String donorString = "";
         if (donors != null) {
             donorString += "~donorId=" + getInStatment(donors);
         }
         String url = opt.getUrl() + "~startYear=" + fromYear + "~endYear=" + toYear + donorString;
-        PiePlot plot = (PiePlot) result.getPlot();
+        RingPlot plot = (RingPlot) result.getPlot();
+        plot.setOuterSeparatorExtension(0);
+        plot.setInnerSeparatorExtension(0);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setForegroundAlpha(0.6f);
+        plot.setSectionDepth(0.5);
+        plot.setCircular(false);
+        plot.setOutlineVisible(false);
 
         if (opt.isShowTitle()) {
             Font font = new Font(null, 0, 12);
@@ -616,7 +623,7 @@ public class ChartWidgetUtil {
                plot.setLegendItemShape(new Rectangle(10, 10));
                DecimalFormat format = FormatHelper.getDecimalFormat();
                format.setMaximumFractionDigits(0);
-               PieSectionLabelGenerator genLegend = new PieChartLegendGenerator();
+               PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
                plot.setLegendLabelGenerator(genLegend);
                plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
 

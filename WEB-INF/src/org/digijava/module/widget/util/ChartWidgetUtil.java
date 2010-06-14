@@ -81,7 +81,9 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieToolTipGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
@@ -190,6 +192,12 @@ public class ChartWidgetUtil {
         Font subTitleFont = new Font("Arial", Font.BOLD, 10);
         CategoryDataset dataset = getPledgesCommDisbDataset(filter, opt);
         DecimalFormat format = FormatHelper.getDecimalFormat();
+        DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
+        toolTipformat.setMaximumFractionDigits(3);
+        String pattern = "{0} {2} ({1})";
+        if (opt.getLabelPattern() != null) {
+            pattern = opt.getLabelPattern();
+        }
         String amount = "Amounts in millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId());
@@ -218,6 +226,7 @@ public class ChartWidgetUtil {
             renderer.setSeriesItemLabelsVisible(i, true);
             renderer.setSeriesItemLabelGenerator(i, labelGenerator);
             renderer.setSeriesItemLabelFont(i, plainFont);
+            renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
             renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
         }
         return chart;
@@ -290,6 +299,13 @@ public class ChartWidgetUtil {
         Font subTitleFont = new Font("Arial", Font.BOLD, 10);
         CategoryDataset dataset = getTypeOfAidOdaProfileDataset(filter, opt, typeOfAid);
         DecimalFormat format = FormatHelper.getDecimalFormat();
+        DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
+        toolTipformat.setMaximumFractionDigits(3);
+        format.setMaximumFractionDigits(0);
+        String pattern = "{0} {2} ({1})";
+        if (opt.getLabelPattern() != null) {
+            pattern = opt.getLabelPattern();
+        }
 
         String amount = "Amounts in Millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
@@ -339,6 +355,7 @@ public class ChartWidgetUtil {
             renderer.setSeriesItemLabelsVisible(i, true);
             renderer.setSeriesItemLabelGenerator(i, labelGenerator);
             renderer.setSeriesItemLabelFont(i, plainFont);
+            renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
             renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
         }
         return chart;
@@ -681,7 +698,7 @@ public class ChartWidgetUtil {
         }
 
         DecimalFormat format = FormatHelper.getDecimalFormat();
-        format.setMaximumFractionDigits(0);
+        format.setMaximumFractionDigits(3);
         PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
         plot.setLabelGenerator(gen);
         plot.setSimpleLabels(true);
@@ -691,6 +708,7 @@ public class ChartWidgetUtil {
         plot.setLabelShadowPaint(null);
         plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
         plot.setOutlineVisible(false);
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
         LegendTitle legend = chart.getLegend();
         legend.setItemFont(plainFont);
         legend.setMargin(0,5,5,10);
@@ -749,7 +767,7 @@ public class ChartWidgetUtil {
             pattern = opt.getLabelPattern();
         }
         DecimalFormat format = FormatHelper.getDecimalFormat();
-        format.setMaximumFractionDigits(0);
+        format.setMaximumFractionDigits(3);
         PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
         plot.setLabelGenerator(gen);
         plot.setSimpleLabels(true);
@@ -760,6 +778,7 @@ public class ChartWidgetUtil {
         plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
         plot.setLabelFont(plainFont);
         plot.setOutlineVisible(false);
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
         LegendTitle legend = chart.getLegend();
         legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);

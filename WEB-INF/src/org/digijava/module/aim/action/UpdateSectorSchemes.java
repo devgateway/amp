@@ -151,7 +151,7 @@ if(event!=null){
 	        				saveErrors(request, errors);
 	        				session.setAttribute("managingSchemes",errors);
 	        			}
-					return mapping.findForward("viewSectorSchemes");
+					return mapping.findForward("addSectorScheme");
 				}
 				
 				if(existScheme(sectorsForm) == 1){

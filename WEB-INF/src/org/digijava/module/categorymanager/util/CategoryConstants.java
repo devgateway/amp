@@ -132,6 +132,10 @@ public class CategoryConstants {
 	public static final String ORGANIZATION_BUDGET_INFO_NAME = "NGO Budget Type";
 	public static final String ORGANIZATION_BUDGET_INFO_KEY = "ngo_budget_type";
 	
+	public static final String CONTACT_TITLE_NAME = "Contact Title";
+	public static final String CONTACT_TITLE_KEY = "contact_title";
+
+	
 	public static class HardCodedCategoryValue {
 		private String valueKey;
 		private String categoryKey;

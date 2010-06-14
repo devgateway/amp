@@ -645,6 +645,7 @@
 				<page>aim_pIPrintSurvey</page>
 				<page>aim_pIPrintReports</page>
 				<page>aim_pIPrintReports2</page>
+		<page>aim_contactComponentPopIn</page>
                 <page>addProposedProjFunding</page>
                 <page>addQuickLink</page>
                 <page>editQuickLink</page>

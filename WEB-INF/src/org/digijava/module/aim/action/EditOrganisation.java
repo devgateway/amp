@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
@@ -34,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPledge;
@@ -1118,6 +1120,45 @@ public class EditOrganisation extends DispatchAction {
       DbUtil.saveOrg(organization);        
       return mapping.findForward("added");
 
+  }
+  
+  public ActionForward deleteContact(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+      if (sessionChk(request)) {
+          return mapping.findForward("index");
+      }
+      AddOrgForm editForm = (AddOrgForm) form;
+      String selContactId = editForm.getSelContactId();        
+      String[] selectedContactInfoIds = editForm.getSelectedContactInfoIds(); //passed contact temp ids
+      List<AmpOrganisationContact> odlOrgContacts=editForm.getOrgContacts();
+      List<AmpOrganisationContact> orgContsForRemoval=new ArrayList<AmpOrganisationContact>();
+      Iterator<AmpOrganisationContact> orgContIter=odlOrgContacts.iterator();
+      while(orgContIter.hasNext()){
+      	AmpOrganisationContact orgCont=orgContIter.next();
+      	AmpContact contact=orgCont.getContact();
+      	if (selContactId != null && selContactId.length()>0) {
+              if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(selContactId))) {
+              	orgContsForRemoval.add(orgCont); 
+                  break;
+              }
+          } else {
+              if (selectedContactInfoIds != null) {
+                  for (String contactId : selectedContactInfoIds) {
+                      if ((contact.getId() != null && !contactId.startsWith("_") && contact.getId().equals(new Long(contactId))) || (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId))) {
+                      	orgContsForRemoval.add(orgCont);
+                      	break;
+                      }
+                  }
+
+              }
+          }
+      }
+      
+      odlOrgContacts.removeAll(orgContsForRemoval);
+      editForm.setOrgContacts(odlOrgContacts);
+      editForm.setSelContactId(null);
+      editForm.setSelectedContactInfoIds(null);
+
+      return mapping.findForward("forward");
   }
   
   public static List<LabelValueBean> getYearsBeanList() {

@@ -368,4 +368,19 @@ public class Constants
     
     public static final int EXPORT_TO_WORD = 0 ;
 	public static final int EXPORT_TO_PDF= 1 ;
+
+	//contact information 
+    public static final String DONOR_CONTACT = "DONOR_CONT";
+    public static final String MOFED_CONTACT = "MOFED_CONT";
+    public static final String SECTOR_MINISTRY_CONTACT = "SECTOR_MINISTRY_CONT";
+    public static final String PROJECT_COORDINATOR_CONTACT = "PROJ_COORDINATOR_CONT";
+    public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT= "IMPL_EXEC_AGENCY_CONT";
+    //contact parameter names
+    public static final String CONTACT_PROPERTY_NAME_EMAIL="contact email";
+    public static final String CONTACT_PROPERTY_NAME_PHONE="contact phone";
+    public static final String CONTACT_PROPERTY_NAME_FAX="contact fax";
+    //contact information pagination elements
+    public static final int CONTACTS_PER_PAGE=15;
+    public static final int PAGES_TO_SHOW=5;
+    //Pagination for Reports and Tabs
 }

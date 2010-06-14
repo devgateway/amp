@@ -157,6 +157,7 @@
     <form-bean name="invalidDataList" type="org.digijava.module.aim.form.InvalidDataListsForm"/>
     <form-bean name="pledgeForm" type="org.digijava.module.fundingpledges.form.PledgeForm"/>
     <form-bean name="viewPledgesForm" type="org.digijava.module.fundingpledges.form.ViewPledgesForm" />
+    <form-bean name="aimAddContactForm" type="org.digijava.module.aim.uicomponents.form.AddContactComponentForm"/>
     
 </form-beans>
 
@@ -1750,6 +1751,13 @@
     	<forward name="forward" path="/showLayout.do?layout=export" />    	
       	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>      
+
+    <action name="aimAddContactForm" path="/aim/addAmpContactInfo" scope="session" type="org.digijava.module.aim.uicomponents.action.AddContactComponent"  parameter="action">
+      <forward name="forward" path="/showLayout.do?layout=aim_contactComponentPopIn" />
+      <forward name="editOrg" path="/editOrganisation.do?actionFlag=reload" redirect="true"/>
+	<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>  
+    </action>
+
     
   </action-mappings>
 </struts-config>

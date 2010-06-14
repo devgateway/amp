@@ -12,6 +12,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Location;
@@ -110,7 +111,11 @@ public class AddOrgForm extends ActionForm {
     private List<AmpOrganisation> budgetOrgs;
     private Long[] selBudgetOrg;
     private Collection<Location> selectedLocs = null;
-	
+    private List<AmpOrganisationContact> orgContacts;
+    
+    private String[] selectedContactInfoIds;
+    private String[] primaryOrgContIds;
+    private String selContactId;
 	
 	public Pledge getFundingDetail(int index) {
 		int currentSize = fundingDetails.size();
@@ -822,6 +827,38 @@ public class AddOrgForm extends ActionForm {
 
 	public void setSelectedLocs(Collection<Location> selectedLocs) {
 		this.selectedLocs = selectedLocs;
+	}
+
+	public void setOrgContacts(List<AmpOrganisationContact> orgContacts) {
+		this.orgContacts = orgContacts;
+	}
+
+	public List<AmpOrganisationContact> getOrgContacts() {
+		return orgContacts;
+	}
+
+	public void setSelectedContactInfoIds(String[] selectedContactInfoIds) {
+		this.selectedContactInfoIds = selectedContactInfoIds;
+	}
+
+	public String[] getSelectedContactInfoIds() {
+		return selectedContactInfoIds;
+	}
+
+	public void setPrimaryOrgContIds(String[] primaryOrgContIds) {
+		this.primaryOrgContIds = primaryOrgContIds;
+	}
+
+	public String[] getPrimaryOrgContIds() {
+		return primaryOrgContIds;
+	}
+
+	public void setSelContactId(String selContactId) {
+		this.selContactId = selContactId;
+	}
+
+	public String getSelContactId() {
+		return selContactId;
 	}
 	
 }

@@ -21,12 +21,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpChapter;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -86,6 +88,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
      */
     private String fundingCurrCode;
     private String regFundingPageCurrCode;
+    private ActivityContactInfo contactInformation;
+    
+    
     
     /**
      * This collection represents the list of surveys available in the Paris Indicator page.
@@ -100,6 +105,169 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		this.surveyFundings = surveyFundings;
 	}
 
+	public class ActivityContactInfo{
+		
+		private List<AmpActivityContact> activityContacts; //holds all activity contacts
+		private List<AmpActivityContact> mofedContacts;
+		private List<AmpActivityContact> donorContacts;
+		private List<AmpActivityContact> sectorMinistryContacts;
+		private List<AmpActivityContact> projCoordinatorContacts;
+		private List<AmpActivityContact> implExecutingAgencyContacts;
+		
+		private String[] primaryDonorContIds;
+		private String[] primaryMofedContIds;
+		private String[] primaryProjCoordContIds;
+		private String[] primarySecMinContIds;
+		private String[] primaryImplExecutingContIds;
+		private Boolean resetDonorIds;
+		private Boolean resetMofedIds;
+		private Boolean resetProjCoordIds;
+		private Boolean resetSecMinIds;
+		private Boolean resetImplExecutingIds;
+		
+		
+		private List<AmpContact> contacts; //holds all existing contacts
+		private String primaryContact;
+		private Boolean primaryAllowed; //defines whether activity contact can be primary or not. primary contact must be one for each type(mofed,donor,e.t.c.)
+		private String contactType;		
+		
+		private String temporaryId; //contact's temporary id		
+
+		
+		public String[] getPrimaryDonorContIds() {
+			return primaryDonorContIds;
+		}
+		public void setPrimaryDonorContIds(String[] primaryDonorContIds) {
+			this.primaryDonorContIds = primaryDonorContIds;
+		}
+		public String[] getPrimaryMofedContIds() {
+			return primaryMofedContIds;
+		}
+		public void setPrimaryMofedContIds(String[] primaryMofedContIds) {
+			this.primaryMofedContIds = primaryMofedContIds;
+		}
+		public String[] getPrimaryProjCoordContIds() {
+			return primaryProjCoordContIds;
+		}
+		public void setPrimaryProjCoordContIds(String[] primaryProjCoordContIds) {
+			this.primaryProjCoordContIds = primaryProjCoordContIds;
+		}
+		public String[] getPrimarySecMinContIds() {
+			return primarySecMinContIds;
+		}
+		public void setPrimarySecMinContIds(String[] primarySecMinContIds) {
+			this.primarySecMinContIds = primarySecMinContIds;
+		}
+		
+		public List<AmpActivityContact> getMofedContacts() {
+			return mofedContacts;
+		}
+		public void setMofedContacts(List<AmpActivityContact> mofedContacts) {
+			this.mofedContacts = mofedContacts;
+		}
+		public List<AmpActivityContact> getDonorContacts() {
+			return donorContacts;
+		}
+		public void setDonorContacts(List<AmpActivityContact> donorContacts) {
+			this.donorContacts = donorContacts;
+		}
+		public List<AmpActivityContact> getSectorMinistryContacts() {
+			return sectorMinistryContacts;
+		}
+		public void setSectorMinistryContacts(
+				List<AmpActivityContact> sectorMinistryContacts) {
+			this.sectorMinistryContacts = sectorMinistryContacts;
+		}
+		public List<AmpActivityContact> getProjCoordinatorContacts() {
+			return projCoordinatorContacts;
+		}
+		public void setProjCoordinatorContacts(
+				List<AmpActivityContact> projCoordinatorContacts) {
+			this.projCoordinatorContacts = projCoordinatorContacts;
+		}
+		public List<AmpActivityContact> getActivityContacts() {
+			return activityContacts;
+		}
+		public void setActivityContacts(List<AmpActivityContact> activityContacts) {
+			this.activityContacts = activityContacts;
+		}
+		public List<AmpContact> getContacts() {
+			return contacts;
+		}
+		public void setContacts(List<AmpContact> contacts) {
+			this.contacts = contacts;
+		}
+		
+		public String getPrimaryContact() {
+			return primaryContact;
+		}
+		public void setPrimaryContact(String primaryContact) {
+			this.primaryContact = primaryContact;
+		}
+		public String getContactType() {
+			return contactType;
+		}
+		public void setContactType(String contactType) {
+			this.contactType = contactType;
+		}
+		public Boolean getPrimaryAllowed() {
+			return primaryAllowed;
+		}
+		public void setPrimaryAllowed(Boolean primaryAllowed) {
+			this.primaryAllowed = primaryAllowed;
+		}
+		public Boolean getResetDonorIds() {
+			return resetDonorIds;
+		}
+		public void setResetDonorIds(Boolean resetDonorIds) {
+			this.resetDonorIds = resetDonorIds;
+		}
+		public Boolean getResetMofedIds() {
+			return resetMofedIds;
+		}
+		public void setResetMofedIds(Boolean resetMofedIds) {
+			this.resetMofedIds = resetMofedIds;
+		}
+		public Boolean getResetProjCoordIds() {
+			return resetProjCoordIds;
+		}
+		public void setResetProjCoordIds(Boolean resetProjCoordIds) {
+			this.resetProjCoordIds = resetProjCoordIds;
+		}
+		public Boolean getResetSecMinIds() {
+			return resetSecMinIds;
+		}
+		public void setResetSecMinIds(Boolean resetSecMinIds) {
+			this.resetSecMinIds = resetSecMinIds;
+		}
+		public List<AmpActivityContact> getImplExecutingAgencyContacts() {
+			return implExecutingAgencyContacts;
+		}
+		public void setImplExecutingAgencyContacts(
+				List<AmpActivityContact> implExecutingAgencyContacts) {
+			this.implExecutingAgencyContacts = implExecutingAgencyContacts;
+		}
+		public String[] getPrimaryImplExecutingContIds() {
+			return primaryImplExecutingContIds;
+		}
+		public void setPrimaryImplExecutingContIds(String[] primaryImplExecutingContIds) {
+			this.primaryImplExecutingContIds = primaryImplExecutingContIds;
+		}
+		public Boolean getResetImplExecutingIds() {
+			return resetImplExecutingIds;
+		}
+		public void setResetImplExecutingIds(Boolean resetImplExecutingIds) {
+			this.resetImplExecutingIds = resetImplExecutingIds;
+		}
+		public String getTemporaryId() {
+			return temporaryId;
+		}
+		public void setTemporaryId(String temporaryId) {
+			this.temporaryId = temporaryId;
+		}
+		
+	}
+	
 	public class Contracts {
 		private List contracts;
 		private Double ipaBudget = null;
@@ -4544,5 +4712,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
         this.regFundingPageCurrCode = regfundingPageCurrCode;
     }
 
+	public void setContactInformation(ActivityContactInfo contactInformation) {
+		this.contactInformation = contactInformation;
+	}
+
+	public ActivityContactInfo getContactInformation() {
+		return contactInformation;
+	}
 }
+
+
 

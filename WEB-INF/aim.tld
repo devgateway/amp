@@ -190,4 +190,95 @@
 		<bodycontent>JSP</bodycontent>
 	</tag>
 
+	
+	<tag>
+		<name>addContactButton</name>
+		<tagclass>
+			org.digijava.module.aim.uicomponents.AddContact
+		</tagclass>
+		<info>Add Contact  tag</info>
+		<attribute>
+			<name>collection</name>
+			<required>true</required>
+			<description>
+				Collection where the selected contacts will be added
+			</description>
+		</attribute>
+
+		<attribute>
+			<rtexprvalue>true</rtexprvalue>
+			<name>form</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>contactType</name>
+			<required>false</required>
+			<description>
+				Activity Contact Type
+			</description>
+		</attribute>
+		<attribute>
+			<name>addOrgBtn</name>
+			<required>false</required>
+			<description>
+				add Organization button visible or not
+			</description>
+		</attribute>
+		
+		<description>
+			The name of the form on any scope that will be used to set
+			the selected contact
+		</description>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+            <name>editContactLink</name>
+            <tagclass>
+			org.digijava.module.aim.uicomponents.EditContactLink
+            </tagclass>
+            <info>Edit Contact  tag</info>
+            <attribute>
+                <name>collection</name>
+                <required>true</required>
+                <description>
+				Collection where the selcted contacts will be added
+                </description>
+            </attribute>
+
+            <attribute>
+                <rtexprvalue>true</rtexprvalue>
+                <name>form</name>
+                <required>true</required>
+            </attribute>
+            <attribute>
+				<name>contactType</name>
+				<required>false</required>
+				 <rtexprvalue>true</rtexprvalue>
+				<description>
+					Activity Contact Type
+				</description>
+			</attribute>
+			<attribute>
+				<name>addOrgBtn</name>
+				<required>false</required>
+				<description>
+					add Organization button visible or not
+				</description>
+			</attribute>
+            <description>
+			The name of the form on any scope that will be used to edit
+			the selected contact
+            </description>
+            <attribute>
+                <name>contactId</name>
+                <required>true</required>
+                <rtexprvalue>true</rtexprvalue>
+                <description>
+                    contactId is id of contact which is going to be updated
+                </description>
+            </attribute>
+            <bodycontent>JSP</bodycontent>
+        </tag>
+
 </taglib>

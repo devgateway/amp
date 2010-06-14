@@ -121,10 +121,12 @@ class Project < ActiveRecord::Base
   named_scope :grant, :conditions => ['grant_loan = ?', 1]
   named_scope :loan, :conditions => ['grant_loan = ?', 2]
   
-  named_scope :national, :joins => "LEFT OUTER JOIN geo_relevances ON geo_relevances.project_id = projects.id", 
-    :conditions => "geo_relevances.province_id IS NULL"
-  named_scope :non_national, :joins => "LEFT OUTER JOIN geo_relevances ON geo_relevances.project_id = projects.id", 
-      :conditions => "geo_relevances.province_id IS DISTINCT FROM NULL"
+  named_scope :national, 
+    :include => :geo_relevances,
+    :conditions => "not exists (select * from geo_relevances where projects.id = geo_relevances.project_id)"
+  named_scope :non_national,
+    :include => :geo_relevances,
+    :conditions => "exists (select * from geo_relevances where projects.id = geo_relevances.project_id)"
       
   ##
   # Callbacks
@@ -196,6 +198,13 @@ class Project < ActiveRecord::Base
       
     # HABTM associations
     [:target_ids].each do |assoc|
+      cloned_instance.send("#{assoc}=", self.send(assoc))
+    end
+#    cloned_instance.implementing_agencies = self.implementing_agencies
+    [:implementing_agencies].each do |assoc|
+      cloned_instance.send("#{assoc}=", self.send(assoc))
+    end
+    [:contracted_agencies].each do |assoc|
       cloned_instance.send("#{assoc}=", self.send(assoc))
     end
     

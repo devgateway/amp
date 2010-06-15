@@ -189,6 +189,16 @@ public class ParisIndicatorReport extends Action {
                     }
                     return mapping.findForward("report1");
                 }
+                if ("10b".equalsIgnoreCase(svForm.getIndicatorCode())) {
+                    svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10b(svForm.getOrgGroup(), svForm.getDonor(),
+                        svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId().toString(), RequestUtils.getNavigationLanguage(request).getCode(), request));
+                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
+                    if(svForm.getPrint() != null && svForm.getPrint().equals("true")){
+                    	svForm.setPrint("false");
+                    	return mapping.findForward("print");
+                    }
+                    return mapping.findForward("report1");
+                }
                 if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
                     svForm.setNumColsCalculated("8");
                 else if ("9".equalsIgnoreCase(svForm.getIndicatorCode()))
@@ -297,7 +307,8 @@ public class ParisIndicatorReport extends Action {
                 svForm.getIndicatorCode().equalsIgnoreCase("5a") ||
                 svForm.getIndicatorCode().equalsIgnoreCase("5b") ||
                 svForm.getIndicatorCode().equalsIgnoreCase("9") ||
-                svForm.getIndicatorCode().equalsIgnoreCase("10a")) {
+                svForm.getIndicatorCode().equalsIgnoreCase("10a") || 
+                svForm.getIndicatorCode().equalsIgnoreCase("10b")) {
 
                 flDonorCol = filterDonors(svForm.getDonorsColl(), 1);
             } else {

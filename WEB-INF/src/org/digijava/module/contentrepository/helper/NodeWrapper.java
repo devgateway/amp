@@ -619,5 +619,36 @@ public class NodeWrapper {
 		
 		return ret;
 	}
+
+	@Override
+	public int hashCode() {
+		return 1;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NodeWrapper other = (NodeWrapper) obj;
+		if (node == null) {
+			if (other.node != null)
+				return false;
+		} else
+			try {
+				if (!node.getUUID().equals(other.node.getUUID()))
+					return false;
+			} catch (UnsupportedRepositoryOperationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return true;
+	}
 	
 }

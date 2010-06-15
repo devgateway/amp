@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,6 +25,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -41,6 +44,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -111,6 +115,7 @@ import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
@@ -119,6 +124,11 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.contentrepository.action.DocumentManager;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
@@ -6493,6 +6503,55 @@ public class DbUtil {
         return result;
     }
 
+    public static Collection getAidSurveyReportByIndicator10b(String orgGroup, String donor, int startYear, int closeYear, String site, String lang, HttpServletRequest request) throws RepositoryException {
+    	Session session = null;
+        String qry = null;
+        ArrayList responses = new ArrayList();
+        Collection calDonorsList = new ArrayList();
+        Set donors = new HashSet();
+        List sortedDonors = new LinkedList();
+        boolean orgGroupFlag = false;
+        int NUM_ANSWER_COLUMNS = 4, i = 0, j = 0;
+        int YEAR_RANGE = (closeYear - startYear + 1);
+        double answersRow[] = null;
+        double allDnRow[] = null;
+        Iterator itr1 = null, itr2 = null;
+        Double percent = null;
+        NumberFormat formatter = new DecimalFormat("#.##");
+        SimpleDateFormat year = new SimpleDateFormat("yyyy");
+        
+        Collection<NodeWrapper> documents = new HashSet();
+		javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
+		// Iterate all AmpTeamMembers.
+		Iterator<AmpTeamMember> iterTeamMembers = TeamMemberUtil.getAllTeamMembers().iterator();
+		while (iterTeamMembers.hasNext()) {
+			// Create helper TeamMember.
+			AmpTeamMember auxAmpTeamMember = iterTeamMembers.next();
+			TeamMember auxTeamMember = new TeamMember();
+			auxTeamMember.setMemberId(auxAmpTeamMember.getAmpTeamMemId());
+			auxTeamMember.setMemberName(UserUtils.getUser(auxAmpTeamMember.getUser().getId()).getName());
+			auxTeamMember.setTeamName(auxAmpTeamMember.getAmpTeam().getName());
+			auxTeamMember.setRoleName(auxAmpTeamMember.getAmpMemberRole().getRole());
+			auxTeamMember.setEmail(UserUtils.getUser(auxAmpTeamMember.getUser().getId()).getEmail());
+			auxTeamMember.setTeamId(auxAmpTeamMember.getAmpTeamMemId());
+			// Get the main team node for this team member.
+			Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember);
+			NodeWrapper auxNodeWrapper = new NodeWrapper(teamNode);
+			// Iterate documents.
+			Iterator iter = teamNode.getNodes();
+			while (iter.hasNext()) {
+				Node nextNode = (Node) iter.next();
+				NodeWrapper nextWrapper = new NodeWrapper(nextNode);
+				
+				//Insert code here to check the new Country Analytic resource and if its "joint".
+				documents.add(nextWrapper);
+				logger.warn(nextNode.getUUID() + nextWrapper.getTitle());
+			}
+		}
+       
+    	return responses;
+    }
+    
     public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear, String site, String lang) {
         Session session = null;
         String qry = null;

@@ -29,122 +29,122 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 
 public class CalendarItem implements LoggerIdentifiable{
 
-	/**
-	 * logging tracer
-	 */
-	private static Logger logger = Logger.getLogger(CalendarItem.class);
+  /**
+   * logging tracer
+   */
+  private static Logger logger = Logger.getLogger(CalendarItem.class);
 
-	/**
-	 * event identity
-	 */
-	private Long id;
+  /**
+   * event identity
+   */
+  private Long id;
 
-	/**
-	 * event item identity
-	 */
-	private Calendar calendar;
+  /**
+   * event item identity
+   */
+  private Calendar calendar;
 
-	/**
-	 * user identity of event item's author
-	 */
-	private Long userId;
+  /**
+   * user identity of event item's author
+   */
+  private Long userId;
 
-	/**
-	 * language in which event item was created
-	 */
-	private String language;
+  /**
+   * language in which event item was created
+   */
+  private String language;
 
-	/**
-	 * title of event item
-	 */
-	private String title;
+  /**
+   * title of event item
+   */
+  private String title;
 
-	/**
-	 * description of event item
-	 */
-	private String description;
+  /**
+   * description of event item
+   */
+  private String description;
 
-	/**
-	 * client computer IP
-	 */
-	private String creationIp;
+  /**
+   * client computer IP
+   */
+  private String creationIp;
 
-	/**
-	 * creation date of event item
-	 */
-	private Date creationDate;
+  /**
+   * creation date of event item
+   */
+  private Date creationDate;
 
 	/**
 	 * for Calendar events. 0 - Awaiting Approval 1 - Approved -1 - Not Approved
 	 */
 	private Integer approve = null;
 
-	public CalendarItem() {
-	}
+  public CalendarItem() {
+  }
 
-	public String getCreationIp() {
-		return creationIp;
-	}
+  public String getCreationIp() {
+    return creationIp;
+  }
 
-	public void setCreationIp(String creationIp) {
-		this.creationIp = creationIp;
-	}
+  public void setCreationIp(String creationIp) {
+    this.creationIp = creationIp;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public Long getId() {
-		return id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getLanguage() {
-		return language;
-	}
+  public String getLanguage() {
+    return language;
+  }
 
-	public void setLanguage(String language) {
-		this.language = language;
-	}
+  public void setLanguage(String language) {
+    this.language = language;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public Long getUserId() {
-		return userId;
-	}
+  public Long getUserId() {
+    return userId;
+  }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
 
-	public Date getCreationDate() {
-		return creationDate;
-	}
+  public Date getCreationDate() {
+    return creationDate;
+  }
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
+  public void setCreationDate(Date creationDate) {
+    this.creationDate = creationDate;
+  }
 
-	public Calendar getCalendar() {
-		return calendar;
-	}
+  public Calendar getCalendar() {
+    return calendar;
+  }
 
-	public void setCalendar(Calendar calendar) {
-		this.calendar = calendar;
-	}
+  public void setCalendar(Calendar calendar) {
+    this.calendar = calendar;
+  }
 
 	public Integer getApprove() {
 		return approve;

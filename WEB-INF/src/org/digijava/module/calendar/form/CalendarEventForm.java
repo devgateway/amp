@@ -1,6 +1,7 @@
 package org.digijava.module.calendar.form;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,12 +15,15 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
-import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.aim.helper.Constants;
 
 public class CalendarEventForm
     extends ActionForm {
-    private Long ampCalendarId;
+	
+
+
+
+	private Long ampCalendarId;
     private String eventTitle;
     private String method;
     private String searchOrgKey;
@@ -41,11 +45,15 @@ public class CalendarEventForm
     private String selectedStartDate;
     private String selectedStartTime;
     private String selectedStartMonth;
+    private String selectedStartYear;
     private Long recurrPeriod;
     private String typeofOccurrence;
     private String recurrStartDate;
     private String recurrEndDate;
-    private String[] occurrWeekDays;
+    private String recurrSelectedStartTime;
+    private String recurrSelectedEndTime;
+    private String occurrWeekDays;
+    private String weekDays;
     private GregorianCalendar startDate;
     private DateBreakDown startDateBreakDown;
     private String selectedEndDate;
@@ -53,23 +61,51 @@ public class CalendarEventForm
     private GregorianCalendar endDate;
     private DateBreakDown endDateBreakDown;
     private Collection months;
-
+    private Long calendarTypeId;
 //    private Collection eventOrganisations;
 //    private String[] selectedEventOrganisations;
 //    private Collection selectedEventOrganisationsCol;
 
-    private Collection attendees;
+    public Long getCalendarTypeId() {
+		return calendarTypeId;
+	}
+
+	public void setCalendarTypeId(Long calendarTypeId) {
+		this.calendarTypeId = calendarTypeId;
+	}
+
+
+	private Collection attendees;
     private String[] selectedAtts;
     private Collection<LabelValueBean> selectedAttsCol;
 
     private Long selOrganizations[];
 	private Collection<AmpOrganisation> organizations;
 	private String description;
-	private int approve = MessageConstants.CALENDAR_EVENT_APPROVED; // Approved by default.
 	private Long eventCreatorId;
+	private String eventCreator;
 	private Boolean actionButtonsVisible;
 	
 
+	
+
+
+	public String getRecurrSelectedStartTime() {
+		return recurrSelectedStartTime;
+	}
+
+	public void setRecurrSelectedStartTime(String recurrSelectedStartTime) {
+		this.recurrSelectedStartTime = recurrSelectedStartTime;
+	}
+
+	public String getRecurrSelectedEndTime() {
+		return recurrSelectedEndTime;
+	}
+
+	public void setRecurrSelectedEndTime(String recurrSelectedEndTime) {
+		this.recurrSelectedEndTime = recurrSelectedEndTime;
+	}
+	
 	public Long[] getSelOrganizations() {
 		return selOrganizations;
 	}
@@ -342,13 +378,15 @@ public class CalendarEventForm
         privateEvent=false;
 
         calendarTypes=null;
-        //selectedCalendarTypeId=null;
+        selectedCalendarTypeId=null;
         selectedCalendarTypeName=null;
 
         eventTypesList=null;
         selectedEventTypeId=null;
         selectedEventTypeName=null;
         description = null;
+        recurrPeriod = null;
+        typeofOccurrence = null;
 //
 //        organisations=null;
 //        selectedOrganisations=null;
@@ -372,7 +410,9 @@ public class CalendarEventForm
         selectedEndTime="00:00";
         endDate=null;
         endDateBreakDown=null;
-
+        recurrEndDate=null;
+        recurrSelectedEndTime=null;
+        
 //        eventOrganisations=null;
 //        selectedEventOrganisations=null;
 //        selectedEventOrganisationsCol=null;
@@ -389,14 +429,6 @@ public class CalendarEventForm
 
 	public String getDescription() {
 		return description;
-	}
-
-	public int getApprove() {
-		return approve;
-	}
-
-	public void setApprove(int approve) {
-		this.approve = approve;
 	}
 
 	public String getSelectedStartMonth() {
@@ -423,11 +455,11 @@ public class CalendarEventForm
 		this.typeofOccurrence = typeofOccurrence;
 	}
 
-	public String[] getOccurrWeekDays() {
+	public String getOccurrWeekDays() {
 		return occurrWeekDays;
 	}
 
-	public void setOccurrWeekDays(String[] occurrWeekDays) {
+	public void setOccurrWeekDays(String occurrWeekDays) {
 		this.occurrWeekDays = occurrWeekDays;
 	}
 
@@ -454,6 +486,23 @@ public class CalendarEventForm
     public void setRecurrEndDate(String recurrEndDate) {
         this.recurrEndDate = recurrEndDate;
     }
+    
+    public String getSelectedStartYear() {
+		return selectedStartYear;
+	}
+
+	public void setSelectedStartYear(String selectedStartYear) {
+		this.selectedStartYear = selectedStartYear;
+	}
+
+	public String getWeekDays() {
+		return weekDays;
+	}
+
+	public void setWeekDays(String weekDays) {
+		this.weekDays = weekDays;
+	}
+
 
 	public Long getEventCreatorId() {
 		return eventCreatorId;
@@ -461,6 +510,14 @@ public class CalendarEventForm
 
 	public void setEventCreatorId(Long eventCreatorId) {
 		this.eventCreatorId = eventCreatorId;
+	}
+	
+	public String getEventCreator() {
+		return eventCreator;
+	}
+
+	public void setEventCreator(String eventCreator) {
+		this.eventCreator = eventCreator;
 	}
 
 	public Boolean getActionButtonsVisible() {
@@ -470,4 +527,5 @@ public class CalendarEventForm
 	public void setActionButtonsVisible(Boolean actionButtonsVisible) {
 		this.actionButtonsVisible = actionButtonsVisible;
 	}
+
 }

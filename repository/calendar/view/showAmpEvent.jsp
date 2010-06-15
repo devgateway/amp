@@ -9,25 +9,183 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
-<jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+
 <!-- Dependencies -->        
 <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>        
 <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
 <!-- Source File -->
-<script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
 <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script>       
-<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script> 
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>        
         
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
+
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+
+<div id="popin" style="display: none">
+	<div id="popinContent" class="content">
+	</div>
+</div>
+
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
+<script type="text/javascript">
+<!--
+
+		YAHOO.namespace("YAHOO.amp");
+
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
+			width:"600px",
+			fixedcenter: true,
+		    constraintoviewport: false,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true,
+		    context: ["showbtn", "tl", "bl"]
+		    });
+	var panelStart=0;
+	var checkAndClose=false;
+	function initOrganizationsScript() {
+		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.beforeHideEvent.subscribe(function() {
+			panelStart=1;
+		}); 
+		
+		myPanel.render(document.body);
+	}
+	//this is called from editActivityMenu.jsp
+	addLoadEvent(initOrganizationsScript);
+-->	
+</script>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#popin .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	.bd a:hover {
+  		background-color:#ecf3fd;
+		font-size: 10px; 
+		color: #0e69b3; 
+		text-decoration: none	  
+	}
+	.bd a {
+	  	color:black;
+	  	font-size:10px;
+	}
+		
+</style>
+<script language="JavaScript">
+    <!--
+   
+    //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
+    function mapCallBack(status, statusText, responseText, responseXML){
+       window.location.reload();
+    }
+    
+    
+    var responseSuccess = function(o){
+	/* Please see the Success Case section for more
+	 * details on the response object's properties.
+	 * o.tId
+	 * o.status
+	 * o.statusText
+	 * o.getResponseHeader[ ]
+	 * o.getAllResponseHeaders
+	 * o.responseText
+	 * o.responseXML
+	 * o.argument
+	 */
+		var response = o.responseText; 
+		var content = document.getElementById("popinContent");
+	    //response = response.split("<!")[0];
+		content.innerHTML = response;
+	    //content.style.visibility = "visible";
+		
+		showContent();
+	}
+ 
+	var responseFailure = function(o){ 
+	// Access the response object's properties in the 
+	// same manner as listed in responseSuccess( ). 
+	// Please see the Failure Case section and 
+	// Communication Error sub-section for more details on the 
+	// response object's properties.
+		//alert("Connection Failure!"); 
+	}  
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	};
+
+	function showContent(){
+		var element = document.getElementById("popin");
+		element.style.display = "inline";
+		if (panelStart < 1){
+			myPanel.setBody(element);
+		}
+		if (panelStart < 2){
+			document.getElementById("popin").scrollTop=0;
+			myPanel.show();
+			panelStart = 2;
+		}
+		checkErrorAndClose();
+	}
+	function checkErrorAndClose(){
+		if(checkAndClose==true){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+				myclose();
+				refreshPage();
+			}
+			checkAndClose=false;			
+		}
+	}
+	function refreshPage(){
+		submitForm();
+	}
+
+	function myclose(){
+		myPanel.hide();	
+		panelStart=1;
+	
+	}
+	function closeWindow() {
+		myclose();
+	}
+	function showPanelLoading(msg){
+		myPanel.setHeader(msg);		
+		var content = document.getElementById("popinContent");
+		content.innerHTML = '<div style="text-align: center">' + 
+		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+		showContent();
+	}
+
+	-->
+
+</script>
 
 
 <digi:instance property="calendarEventForm"/>
@@ -52,13 +210,18 @@
 function removeSelOrgs() {
 	setMethod("removeOrg");
 	selectAtts();
-	document.calendarEventForm.submit();
+	var eventForm = document.getElementById("showAmpEventFormID");
+	eventForm.target = "_self";
+	eventForm.submit();	
+//	document.calendarEventForm.submit();
 }
-function submitForm()
-{
+function submitForm() {
 	setMethod("");
 	selectAtts();
-	document.calendarEventForm.submit();
+	var eventForm = document.getElementById("showAmpEventFormID");
+	eventForm.target = "_self";
+	eventForm.submit();	
+//	document.calendarEventForm.submit();
 }
 
 
@@ -66,17 +229,16 @@ function submitForm()
 </script>
 
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
-
+<jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
+
 <script language="JavaScript" type="text/javascript">
-	var calendarHelp="<digi:trn key='calendar:calendarHelp'>Calendar</digi:trn>"
-	var separateEmails="<digi:trn key='calendar:separateEmails'>Please separate email addresses by semicolons</digi:trn>"
-	var validEmailmsg="<digi:trn >Invalid e-mail address:</digi:trn>"
+
+	var calendarHelp="<digi:trn>Calendar</digi:trn>"
+	var separateEmails="<digi:trn>Please separate email addresses by semicolons</digi:trn>"
+	var validEmailmsg="<digi:trn>Invalid e-mail address:</digi:trn>"
 		var alreadyAdded="<digi:trn >E-mail address already added: </digi:trn>"
-				
+		
 function makePublic(){
 
   var showPrivateEvents = document.getElementsByName('privateEventCheckbox')[0];
@@ -209,54 +371,48 @@ function addOrganisation(orgId, orgName){
     return false;
   }
 
-  function addGuest(guest) {
-    var list = document.getElementById('selreceivers');
-    if (list == null || guest == null || guest.value == null || guest.value == "") {
-      return;
-    }
+    function addGuest(guest) {
+	    var list = document.getElementById('selreceivers');
+	    if (list == null || guest == null || guest.value == null || guest.value == "") {
+            return;
+	    }
 
-   
+        var guestVal=guest.value;
+		
+        while(guestVal.indexOf(";")!=-1){
 
-	var guestVal=guest.value;
+            var optionValue=guestVal.substring(0,guestVal.indexOf(";"));
+            if (!checkEmail(optionValue)){
+                alert(validEmailmsg+' '+optionValue);
+                return false;
+            }
+            if (isGuestAllreadyAdded(optionValue)){
+                alert(alreadyAdded+' '+optionValue);
+                return false;
+            }
+            guestVal=guestVal.substring(guestVal.indexOf(";")+1);
+	    }
 
-
-	
-	while(guestVal.indexOf(";")!=-1){		
-		var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
-		if (!checkEmail(optionValue)){
-			alert(validEmailmsg+' '+optionValue);
-			return false;
+		var guestVal=guest.value;
+		while(guestVal.indexOf(";")!=-1){		
+			var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
+			addOption(list,optionValue,'g:'+optionValue);				
+		    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
 		}
-		if (isGuestAllreadyAdded(optionValue)){
-			alert(alreadyAdded+' '+optionValue);
-			return false;
-		}
-		 guestVal=guestVal.substring(guestVal.indexOf(";")+1);
-	}
+		if(guestVal.length>0){
+            if (!checkEmail(guestVal)){
+                alert(validEmailmsg+' '+guestVal);
+                return false;
+            }
 
-	var guestVal=guest.value;
-	
-	while(guestVal.indexOf(";")!=-1){		
-		var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
-		addOption(list,optionValue,'g:'+optionValue);				
-	    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
-	}
-	
-	if(guestVal.length>0){
-		if (!checkEmail(guestVal)){
-			alert(validEmailmsg+' '+guestVal);
-			return false;
-		}
-
-		if (isGuestAllreadyAdded(guestVal)){
-			alert(alreadyAdded+' '+guestVal);
-			return false;
-		}
+            if (isGuestAllreadyAdded(guestVal)){
+                alert(alreadyAdded+' '+guestVal);
+                return false;
+            }
 			addOption(list,guestVal,'g:'+guestVal);
-	}	
-
-    guest.value = "";
-  }
+		}	
+	    guest.value = "";
+	} 
 
     function isGuestAllreadyAdded(guest){
 	  var selreceivers=document.getElementById('selreceivers');
@@ -267,7 +423,7 @@ function addOrganisation(orgId, orgName){
 	  }
 	  return false
 	}
-
+  
     function checkEmail(email){	
         var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
         var expression = new RegExp(pattern)
@@ -277,7 +433,6 @@ function addOrganisation(orgId, orgName){
         	return false; 
         }
     }
-
    
 
   function removeAtt() {
@@ -370,7 +525,7 @@ function addOrganisation(orgId, orgName){
 		openURLinWindow("<%=rev%>",832,624);
   }
 
-  function sendEvent(button){
+  function sendEvent(){
 		 var list = document.getElementById('selreceivers');  
 		 if(list!=null){
 		  	for(var i = 0; i < list.length; i++) {
@@ -380,10 +535,15 @@ function addOrganisation(orgId, orgName){
 			  
 		document.getElementById('hdnMethod').value = 'save';
 		<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
-		document.calendarEventForm.action = "<%=sendEvent %>";
-		document.calendarEventForm.target = "_self";
-		button.disabled = true;
-		document.calendarEventForm.submit();
+//		document.calendarEventForm.action = "<%=sendEvent %>";
+//		document.calendarEventForm.target = "_self";
+//		document.calendarEventForm.submit();
+		
+		var eventForm = document.getElementById("showAmpEventFormID");
+		eventForm.action = "<%=sendEvent %>"; 
+		eventForm.target = "_self";
+		eventForm.submit();	
+		
   }	  
 	
   function setMethod(mth){
@@ -396,20 +556,41 @@ function addOrganisation(orgId, orgName){
 function recurEvent(){
  	<digi:context name="rev" property="context/module/moduleinstance/recurringEvent.do" />
 	openURLinWindow("<%=rev%>",832,624);
-
 }
-  </script>
+
+function is_mail(m) {
+	var p = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+	//alert(p.test(m));
+	return p.test(m);		  
+}
+
+function submitForm(thisform){
+	var typeid = document.getElementById('selectedCalendarTypeId').value;
+	document.getElementById('CalendatTypeid').value = typeid;
+	setMethod("");
+	selectAtts();
+	
+	var eventForm = document.getElementById("showAmpEventFormID");
+	eventForm.target = "_self";
+	eventForm.submit();	
+//	document.calendarEventForm.submit();
+}
+
+addLoadEvent(delBody);
+</script>
 
 
-<digi:form action="/showCalendarEvent.do">
+<digi:form action="/showCalendarEvent.do" styleId="showAmpEventFormID">
     <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
     <html:hidden name="calendarEventForm" property="selectedStartMonth" styleId="hiddenMonth"/>
+    <html:hidden name="calendarEventForm" property="selectedStartYear" styleId="hiddenYearMonth"/>
     <html:hidden name="calendarEventForm" property="recurrPeriod" styleId="hidden"/>
 	<html:hidden name="calendarEventForm" property="typeofOccurrence" styleId="type"/>
     <html:hidden name="calendarEventForm" property="recurrStartDate" styleId="recurrStrDate"/>
     <html:hidden name="calendarEventForm" property="recurrEndDate" styleId="recurrEndDate"/>
-    <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
-	<html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
+    <html:hidden name="calendarEventForm" property="weekDays" styleId="weekDays"/>
+    <html:hidden name="calendarEventForm" property="recurrSelectedEndTime" styleId="recurrSelectedEndTime"/>
+    <html:hidden name="calendarEventForm" property="recurrSelectedStartTime" styleId="recurrSelectedStartTime"/>
 	
     <table>
     	 <tr>
@@ -456,7 +637,8 @@ function recurEvent(){
 			            <td style="font-family: Tahoma;font-size: 12px;">                
 			                <div style="background-color: #F5F5F5; padding: 20px">
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
-			                    <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
+			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table>
 			                    	<tr>
 			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
@@ -511,10 +693,11 @@ function recurEvent(){
 			                    		<td width="2px">&nbsp;</td>
 			                    		<td align="left">
 			                    			 <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()" styleClass="inp-text">
+			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
 			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
-			                                  		<c:set var="types" value="${calendarEventForm.calendarTypes}"/>
-			                                      	<html:options collection="types" property="value" labelProperty="label"/>
+			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
+				                                        	<html:option value="${type.value}">${type.label}</html:option>
+				                                        </c:forEach>
 			                                     </c:if>
 			                                 </html:select>
 			                    		</td>			                    		
@@ -553,7 +736,9 @@ function recurEvent(){
 			                    		<td width="2px" valign="top">&nbsp;</td>
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
 			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
-			                                          	<table cellpadding="0" cellspacing="0">
+			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
+			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
+			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
 			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px" styleClass="inp-text"/>
@@ -561,14 +746,14 @@ function recurEvent(){
 			                                                <td>
 			                                                &nbsp;
 			                                                </td>
-			                                                <td>
+			                                                <!-- <td>
 			                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
-			                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+			                                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 			                                                  </a>
 			                                                </td>
 			                                                <td>
 			                                                &nbsp;
-			                                                </td>
+			                                                </td> -->
 			                                                <td>
 			                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
 			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -583,6 +768,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>			                                                 
 			                                                  	<script type="text/javascript">
+			                                                  	if(document.getElementById('selectedStartTime') != null)
 				                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
 				                                                </script>	                                                  
 			                                                </td>
@@ -595,6 +781,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartTime')!= null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
 			                                                  </script>
 			                                                </td>
@@ -608,6 +795,7 @@ function recurEvent(){
 			                                                <td>
 			                                                 <select id="selectedStartYear" onchange="updateDate(document.getElementById('selectedStartDate'), 'year', this.value)"></select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartDate') != null)
 			                                                  createYearCombo(document.getElementById('selectedStartYear'), document.getElementById('selectedStartDate').value);
 			                                                  </script>
 			                                                </td>
@@ -625,7 +813,9 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartDate') != null){
 			                                                  selectOptionByValue(document.getElementById('selectedStartMonth'), get('month', document.getElementById('selectedStartDate').value));
+			                                                  }
 			                                                  </script>
 			                                                </td>
 			                                                <td>
@@ -638,6 +828,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartDay'), get('day', document.getElementById('selectedStartDate').value));
 			                                                  </script>
 			                                                </td>
@@ -650,6 +841,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
 			                                                  </script>
 			                                                </td>
@@ -662,6 +854,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
 			                                                  </script>
 			                                                </td>
@@ -686,14 +879,14 @@ function recurEvent(){
 			                                                <td>
 			                                                &nbsp;
 			                                                </td>
-			                                                <td>
+			                                                <!-- <td>
 			                                                  <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
-			                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+			                                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
 			                                                  </a>
 			                                                </td>
 			                                                <td>
 			                                                &nbsp;
-			                                                </td>
+			                                                </td>-->
 			                                                <td>
 			                                                  <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
 			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -712,7 +905,9 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
-			                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
+			                                                  if(document.getElementById('selectedEndTime') != null){
+			                                                  	selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
+			                                                  }
 			                                                  </script>
 			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
@@ -724,7 +919,9 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
-			                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
+			                                                  if(document.getElementById('selectedEndTime') != null){
+			                                                  	selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
+			                                                  }
 			                                                  </script>
 			                                                </td>
 			                                              </tr>
@@ -737,6 +934,7 @@ function recurEvent(){
 			                                                <td>
 			                                                  <select id="selectedEndYear" onchange="updateDate(document.getElementById('selectedEndDate'), 'year', this.value)"></select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  createYearCombo(document.getElementById('selectedEndYear'), document.getElementById('selectedEndDate').value);
 			                                                  </script>
 			                                                </td>
@@ -752,6 +950,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndMonth'), get('month', document.getElementById('selectedEndDate').value));
 			                                                  </script>
 			                                                </td>
@@ -763,6 +962,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndDay'), get('day', document.getElementById('selectedEndDate').value));
 			                                                  </script>
 			                                                </td>
@@ -775,6 +975,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
 			                                                  </script>
 			                                                </td>
@@ -787,6 +988,7 @@ function recurEvent(){
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
 			                                                  </script>
 			                                                </td>
@@ -877,16 +1079,12 @@ function recurEvent(){
 			                            	&nbsp;
 			                          	</feature:display>                           
 			                            <feature:display name="Save and Send button" module="Calendar">
-			                            	<input type="submit" style="min-width: 110px" onclick="return sendEvent(this);" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            	<input type="submit" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            	&nbsp;
 			                            </feature:display>
-			                             
-			                              <!-- 
-			                              Recurring Event will be in 1.14 version
-			                              <feature:display name="Recurring Event Button" module="Calendar">
-			                            	<input type="button" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
-			                             </feature:display>
-			                            -->
+			                            <feature:display name="Recurring Event Button" module="Calendar">
+			                            	<input type="button" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>
+			                            </feature:display>
 			                          </td>
 			                        </tr>
 			                    </table>
@@ -904,13 +1102,13 @@ function recurEvent(){
 		<jsp:include page="/calendar/recurringEvent.do" />
 	</div>
 </digi:form>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <script type="text/javascript">
-	//attach character counters
+	//attach character counters 
 	$("#eventTitle").charCounter(50,{
-									format: " (%1"+ " <digi:trn key="calendar:charactersRemaining">characters remaining</digi:trn>)",
+									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 									pulse: false});
 	$("#descMax").charCounter(300,{
-									format: " (%1"+ " <digi:trn key="calendar:charactersRemaining">characters remaining</digi:trn>)",
+									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 									pulse: false});
 </script>

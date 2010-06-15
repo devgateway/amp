@@ -85,6 +85,12 @@ public class CategoryConstants {
 	public static final String IPA_ACTIVITY_TYPE_KEY="ipa_activity_type";
 	//---
 
+	// activity indicator risk
+	public static final String EVENT_TYPE_NAME = "Event Type";
+	public static final String EVENT_TYPE_KEY = "event_type";
+	public static final String EVENT_COLOR_NAME = "Event Color";
+	public static final String EVENT_COLOR_KEY = "event_color";
+
 	public static final long NONE_TYPE		= 0;
 	public static final long COUNTRY_TYPE	= 1;
 	public static final long REGION_TYPE	= 2;

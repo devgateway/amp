@@ -2,8 +2,6 @@ package org.digijava.module.calendar.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -17,46 +15,51 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.calendar.dbentity.AmpCalendar;
-import org.digijava.module.calendar.dbentity.AmpCalendarPK;
-import org.digijava.module.calendar.dbentity.AmpEventType;
-import org.digijava.module.calendar.entity.AmpCalendarGraph;
+import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.form.CalendarViewForm;
-import org.digijava.module.calendar.util.AmpDbUtil;
-import org.digijava.module.calendar.util.AmpUtil;
-import org.digijava.module.calendar.util.CalendarThread;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ShowCalendarView extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
 
         CalendarViewForm calendarViewForm = (CalendarViewForm) form;
         HttpSession ses = request.getSession();
-        TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+        String printView =  request.getParameter("view");
+        String printDate =  request.getParameter("date");
+        int numDays = 0;
+        
+        if(printView != null){
+        	if(printView.equals("day")){
+        		numDays = 1;
+        	}else if (printView.equals("week")){
+        		numDays = 2;
+        	}else{
+        		
+        		numDays = 3;
+        	}
+        }
+        String print =  request.getParameter("print");
+        
         Boolean showPublicEvents = calendarViewForm.getResetFilter();
         
-        Site site = RequestUtils.getSite(request);
-		CalendarThread.setSite(site);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		CalendarThread.setLocale(navigationLanguage);
-		
+        calendarViewForm.setPrintMode(numDays);
+        if(print != null){
+         if(print.equals("true")){
+        	calendarViewForm.setPrint(true);
+         }else{
+        	 calendarViewForm.setPrint(false);
+         }
+        }else{
+        	calendarViewForm.setPrint(false);
+        }
         if (showPublicEvents == null)
         	showPublicEvents = new Boolean(true);
         
@@ -163,12 +166,12 @@ public class ShowCalendarView extends Action {
         }
 
         // event types
-        List eventTypes = AmpDbUtil.getEventTypes();
-
-        if (eventTypes.size() <= 0) {
+        if (CategoryManagerUtil.getAmpEventColors().size() <= 0) {
             return mapping.findForward("forward");
         }
-        filter.setEventTypes(eventTypes);
+        filter.setEventTypes(CategoryManagerUtil.getAmpEventColors());
+        
+        
         Boolean resetEventTypes=calendarViewForm.getResetEventTypes();
         if(resetEventTypes!=null && resetEventTypes){
         	filter.setSelectedEventTypes(new String[]{});
@@ -215,10 +218,9 @@ public class ShowCalendarView extends Action {
 
 
             if (eventCreated != null) {
-            	// AMP-7257
-            	filter.setShowPublicEvents(showPublicEvents);
+            	 filter.setShowPublicEvents(showPublicEvents);
                 // we are showing private or public events depending on the newly created event
-                // Boolean showPubEvent = (Boolean) eventCreated;
+                //Boolean showPubEvent = (Boolean) eventCreated;
                 //filter.setShowPublicEvents(showPubEvent);
             }/* else {
                 // showPublicEvents
@@ -226,60 +228,35 @@ public class ShowCalendarView extends Action {
             }*/
             
         }else{
-        	 if (filter.getSelectedDonors().length ==0){
-        		 int index = 0;
-        		 String[] selectedDonors = new String[filter.getDonors().size() + 1];
-        		 selectedDonors[index++] = "None";
-        		 it = filter.getDonors().iterator();
+        	 if (filter.getSelectedDonors().length ==0 && calendarViewForm.getResetDonors()!=null && ! calendarViewForm.getResetDonors()){
+        		 String[] selectedDonors = new String[1];
+        		 selectedDonors[0] = "None";
+        		 /*it = filter.getDonors().iterator();
                  while (it.hasNext()) {
                      LabelValueBean lvb = (LabelValueBean) it.next();
                      selectedDonors[index++] = lvb.getValue();
-                 }
+                 }*/
                  filter.setSelectedDonors(selectedDonors);
              }
         }
-        // events
-        Long userId = null;
-        User currentUser = RequestUtils.getUser(request);
-        if (currentUser != null) {
-            userId = currentUser.getId();
-        }
-        
-        AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
-        Collection ampCalendarEvents =new ArrayList();
-        if(filter.getSelectedDonors()!=null && filter.getSelectedDonors().length>0){
-        	ampCalendarEvents=AmpDbUtil.getAmpCalendarEventsByMember(startDate,endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),
-																	member, filter.isShowPublicEvents(), null, null);
-        }
-        	
-        List l = new ArrayList(ampCalendarEvents);
-        Comparator c = new Comparator<AmpCalendar>(){
-        	@Override
-			public int compare(AmpCalendar o1, AmpCalendar o2) {
-        		AmpCalendarPK d1 = o1.getCalendarPK();
-        		AmpCalendarPK d2 = o2.getCalendarPK();
-        		if (d1.getStartYear() != d2.getStartYear())
-        			return d1.getStartYear() - d2.getStartYear();
-        		else
-        			if (d1.getStartMonth() != d2.getStartMonth())
-        				return d1.getStartMonth() - d2.getStartMonth();
-        			else
-        				if (d1.getStartDay() != d2.getStartDay())
-        					return d1.getStartDay() - d2.getStartDay();
-        				else
-        					if (d1.getStartHour() != d2.getStartHour())
-        						return d1.getStartHour() - d2.getStartHour();
-        					else
-        						if (d1.getStartMinute() != d2.getStartMinute())
-        							return d1.getStartMinute() - d2.getStartMinute();
-        						else
-        							return 0;
-			}
-        };
-        Collections.sort(l, c);
-        Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(l,navigator, view,selectedCalendarType);
-        calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
 
+         //fill session
+         ses.setAttribute("mode",calendarViewForm.getView().length());
+         ses.setAttribute("view",calendarViewForm.getPrintMode());
+         ses.setAttribute("print",calendarViewForm.getPrint());
+         ses.setAttribute("date",printDate);
+         ses.setAttribute("publicEvent", filter.isShowPublicEvents());
+         ses.setAttribute("donor", filter.getSelectedDonors());
+         ses.setAttribute("year", calendarViewForm.getBaseDateBreakDown().getYear());
+         ses.setAttribute("month", calendarViewForm.getBaseDateBreakDown().getMonth());
+         ses.setAttribute("day", calendarViewForm.getBaseDateBreakDown().getDayOfMonth());
+         ses.setAttribute("type", calendarViewForm.getBaseDateBreakDown().getType());
+         ses.setAttribute("eventTypes", filter.getSelectedEventTypes());
+         
+         
+         if(calendarViewForm.getPrint()){
+        	 return mapping.findForward("print");
+         }
         return mapping.findForward("success");
     }
 }

@@ -28,35 +28,43 @@ function deleteEvent(){
 	if(confirm(err))
 	{
 		document.getElementById('hdnMethod').value = "delete";
+		document.calendarEventForm.submit();
 		return true;
+	} else {
+		return false;
 	}
-	return false;
+	
 }
 
-function valid(value){
-	var err = '<digi:trn>Are You sure?</digi:trn>';
-	if(confirm(err))
-	{
-		if (value){
-			document.getElementById('hdnValid').value = 1;
-		} else {
-			document.getElementById('hdnValid').value = -1;
-		}
-		document.getElementById('hdnMethod').value = "valid";
-		document.getElementById('eventForm').submit();
+
+function openPrinter(){
+	var id = document.getElementById('id').value;
+
+	//<digi:context name="rev" property="/calendar/showCalendarEvent.do~method=print~resetForm=true" />
+		//openURLinWindow("<%=rev%>",1024,768);
+	window.open('/calendar/showCalendarEvent.do~method=print~resetForm=true~calendarId='+id+'','mywindow','toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
 		
-		return true;
 	}
-	return false;
-}
+
+function getWeekdays(){
+   var weekDays = document.getElementById('weekDays').value;
+   var myDays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+   var result = "";
+   var days = weekDays.split("",weekDays.length);
+    for(i=0; i<weekDays.length; i++){
+    
+    	var wday = myDays[days[i]];
+    	result +=wday+",";  	
+        }
+    return result;
+ }
 
 </script>
 
-<digi:form styleId="eventForm" action="/showCalendarEvent.do">
+<digi:form action="/showCalendarEvent.do">
 
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
-  <html:hidden styleId="hdnValid" name="calendarEventForm" property="approve"/>
-  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+  <html:hidden styleId="id" name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
   <table width="530">
   	 <tr>
@@ -86,7 +94,7 @@ function valid(value){
 	</tr>
 	<tr>				
         <td align="center" nowrap="nowrap" valign="top">
-        	<table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
+        	<table class="contentbox_border" width="100%" cellpadding="1" cellspacing="1">
                 <tr>
                 	<td align="center" style="padding: 0px 3px 0px 3px;">
                 		<table width="100%">
@@ -94,12 +102,7 @@ function valid(value){
 			                   	<td  style="height: 5px;"/>
 			                 </tr>
 			                 <tr>
-			               	 	<td style="background-color: #CCDBFF;height: 18px;">
-	                    			<feature:display name="Event Approve" module="Calendar">
-										<c:if test="${calendarEventForm.approve==0}">Awaiting Validation</c:if>
-										<c:if test="${calendarEventForm.approve==-1}">Event not Approved</c:if>
-									</feature:display>
-			               	 	</td>
+			               	 	<td style="background-color: #CCDBFF;height: 18px;"/>
 			                 </tr>
 			            </table>
                 	</td>                	
@@ -114,12 +117,12 @@ function valid(value){
                 </logic:empty>
 				<logic:notEmpty name="calendarEventForm" property="eventTitle">
 					<tr>
-				      <td style="font-family: Tahoma; font-size: 12px;">
+				      <td style="font-family: Tahoma; font-size: 12px;">        
 				        <div style="padding: 20px; background-color: #F5F5F5;">
 				          <table>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:evntTitle">Event title</digi:trn>
+				                <digi:trn key="calendar:evntTitle">Event title</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
@@ -129,7 +132,7 @@ function valid(value){
 				           <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:Description">Description</digi:trn>
+				                <digi:trn key="calendar:Description">Description</digi:trn>:
 				              </td>
 				              <td>
 				              	<html:textarea name="calendarEventForm" property="description" style="width: 220px;" readonly="true"/>                
@@ -138,7 +141,7 @@ function valid(value){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-				                <digi:trn key="calendar:cType">Calendar type</digi:trn>
+				                <digi:trn key="calendar:cType">Calendar type</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
@@ -157,7 +160,7 @@ function valid(value){
 				            <feature:display name="Event Type" module="Calendar">
 				            	<tr>
 					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-					                <digi:trn key="calendar:eventsType">Event type</digi:trn>
+					                <digi:trn key="calendar:eventsType">Event type</digi:trn>:
 					              </td>
 					              <td style="font-family: Tahoma;font-size: 12px;">
 					                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
@@ -169,7 +172,7 @@ function valid(value){
 				            <feature:display name="Donors" module="Calendar">
 				            	<tr>
 					              <td style="text-align: right;font-family: Tahoma;font-size: 12px; font-weight:bold;"nowrap="nowrap">
-					                <digi:trn key="cal:organizations">Organizations</digi:trn>
+					                <digi:trn key="cal:organizations">Organizations</digi:trn>:
 					              </td>
 					              <td>
 					                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
@@ -181,7 +184,7 @@ function valid(value){
 				            </feature:display>			            
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-				                <digi:trn key="calendar:StDate">Start date</digi:trn>
+				                <digi:trn key="calendar:StDate">Start date</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="selectedStartDate" value="${calendarEventForm.selectedStartDate}"/>
@@ -192,7 +195,7 @@ function valid(value){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
-				                <digi:trn key="calendar:EndDate">End Date</digi:trn>
+				                <digi:trn key="calendar:EndDate">End Date</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="selectedEndDate" value="${calendarEventForm.selectedEndDate}"/>
@@ -203,7 +206,7 @@ function valid(value){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:Attendee">Attendee</digi:trn>
+				                <digi:trn key="calendar:Attendee">Attendee</digi:trn>:
 				              </td>
 				              <td>
 				                <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 70px;">
@@ -216,7 +219,7 @@ function valid(value){
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-				                <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
+				                <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>:
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
@@ -224,37 +227,82 @@ function valid(value){
 				                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
 				              </td>
 				            </tr>
+				            <c:if test="${not empty calendarEventForm.typeofOccurrence}">
+					            <tr height="3px"><td colspan="2"></td></tr>
+					            <tr>
+					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+					                <digi:trn>Recurring Event</digi:trn>:
+					              </td>
+					              <td style="font-family: Tahoma;font-size: 12px;">
+					         		<html:hidden name="calendarEventForm" property="typeofOccurrence" value="${calendarEventForm.typeofOccurrence}"/>
+									<html:hidden name="calendarEventForm" property="recurrPeriod" value="${calendarEventForm.recurrPeriod}"/>
+									<html:hidden name="calendarEventForm" property="occurrWeekDays" value="${calendarEventForm.occurrWeekDays}"/>
+				                	<html:hidden name="calendarEventForm" property="selectedStartMonth" value="${calendarEventForm.selectedStartMonth}"/>
+									<html:hidden name="calendarEventForm" property="selectedStartYear" value="${calendarEventForm.selectedStartYear}"/>
+									<html:hidden name="calendarEventForm" property="recurrStartDate" value="${calendarEventForm.recurrStartDate}"/>
+				                each 
+					               ${calendarEventForm.recurrPeriod} 
+					               ${calendarEventForm.typeofOccurrence}
+					               <input type="hidden" value="${calendarEventForm.occurrWeekDays}" id="weekDays"/>
+					               <script language="javascript">
+					               document.write(getWeekdays());
+						             </script>
+					                 <!--<c:if test="${calendarEventForm.selectedStartMonth != 0}"> ${calendarEventForm.selectedStartMonth}</c:if>
+					                  <c:if test="${calendarEventForm.selectedStartYear != 0}"> ${calendarEventForm.selectedStartYear}</c:if>
+					                 <c:if test="${calendarEventForm.recurrStartDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
+					                  
+					              --></td>
+					            </tr>
+								<tr height="3px"><td colspan="2"></td></tr>
+					            <tr>
+					            <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+					                <digi:trn>Recurring Event End Date</digi:trn>:
+					              </td>
+					               <td style="font-family: Tahoma;font-size: 12px;">
+				                		<html:hidden name="calendarEventForm" property="recurrEndDate" value="${calendarEventForm.recurrEndDate}"/>
+				                		<html:hidden name="calendarEventForm" property="recurrSelectedEndTime" value="${calendarEventForm.recurrSelectedEndTime}"/>
+				                		<c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrEndDate}</c:if>
+					               </td>
+					            </tr>
+				            </c:if>
 				            <tr height="5px"><td colspan="2">&nbsp;</td></tr>
-				            <tr>
-				              <td>
-				              </td>
-				              <td>
-				                <c:if test="${calendarEventForm.actionButtonsVisible!=false}">
-				                	<input type="submit" style="width: 100px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
-				                	&nbsp;
-				                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
-				                	&nbsp;
-				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
-				                </c:if>
-								<c:if test="${sessionScope.currentMember.teamHead==true && calendarEventForm.approve==0}">
-	                    			<feature:display name="Event Approve" module="Calendar">
-					                	<input type="button" value="<digi:trn>Approved</digi:trn>" style="width: 100px;" onclick="valid(true);" />
-					                	<input type="button" value="<digi:trn>Not Approved</digi:trn>" style="width: 100px;" onclick="valid(false);" />
-					                </feature:display>
-					            </c:if>
-				                <c:if test="${calendarEventForm.actionButtonsVisible==false}">
-				                	&nbsp;
-				                	<input type="submit" style="width: 100px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
-				                	&nbsp;
-				                </c:if>
-				              </td>
-				            </tr>
+				            <c:if test="${calendarEventForm.actionButtonsVisible!=false}">
+								<tr>
+					              	<td>
+					              	</td>
+					              	<td>
+					                	<input type="submit" style="width: 110px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
+					                	&nbsp;
+					                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+									</td>
+								</tr>
+								<tr height="3px"><td colspan="2"></td></tr>
+								<tr>
+					              	<td>
+					              	</td>
+									<td>
+					                	<input type="button" value="<digi:trn>Delete</digi:trn>" style="width: 110px;" onclick="deleteEvent();" />
+										&nbsp;
+										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
+									</td>
+								</tr>
+				            </c:if>
+				           	<c:if test="${calendarEventForm.actionButtonsVisible==false}">
+				                <tr>
+					              	<td>
+					              	</td>
+					              	<td>
+				                		<input type="submit" style="width: 110px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
+				                		&nbsp;
+										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
+									</td>
+								</tr>
+				            </c:if>
 				          </table>
 				        </div>
 				      </td>
 				    </tr>
 				</logic:notEmpty>
-                
              </table>
        		</td>
     	</tr>
@@ -263,4 +311,3 @@ function valid(value){
 </tr>
 </table>
 </digi:form>
-

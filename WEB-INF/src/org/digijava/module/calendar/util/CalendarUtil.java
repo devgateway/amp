@@ -22,13 +22,31 @@
 
 package org.digijava.module.calendar.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.exception.NoCategoryClassException;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
+import org.digijava.module.calendar.dbentity.CalendarItem;
+import org.digijava.module.calendar.dbentity.RecurrCalEvent;
 import org.digijava.module.calendar.dbentity.Calendar.TBD;
+import org.digijava.module.calendar.entity.AmpEventType;
+import org.digijava.module.calendar.entity.EventsFilter;
+import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarItemForm;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.help.dbentity.HelpTopic;
+import org.digijava.module.help.helper.HelpTopicsTreeItem;
 
 /**
  * Class with static methods used for Data convertion and form population 
@@ -158,5 +176,128 @@ public class CalendarUtil {
     	//iteration's date(current)
 		CalDate.set(year, month, day, hour, minute);		
 		return CalDate;
+	}
+	
+	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String[] selectedEventTypeIdsIds,String instanceId,Long userId) throws ParseException{
+		String xml="";
+		Collection ampCalendarEvents=null;
+		try {
+			 if(selectedDonorIds!=null && selectedDonorIds.length>0 && selectedEventTypeIdsIds!=null && selectedEventTypeIdsIds.length>0){
+				 ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(member, filter,selectedDonorIds,selectedEventTypeIdsIds, null, null);
+			 }		     
+			//List events = DbUtil.getCalendarEvents(siteId, instanceId, userId);
+			if(ampCalendarEvents!=null && !ampCalendarEvents.isEmpty()){
+				Iterator iter = ampCalendarEvents.iterator();
+				while (iter.hasNext()) {
+					 AmpCalendar ampCalendar = (AmpCalendar) iter.next();
+					 Iterable recc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent();
+					 xml+="<event id=\"" +ampCalendar.getCalendarPK().getCalendar().getId()+"\">";
+					 if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
+						 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+						 xml+="<end_date>"+ampCalendar.getCalendarPK().getRecurrEndDate()+"</end_date>";
+					 }else{
+						 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+						 xml+="<end_date>"+ampCalendar.getCalendarPK().getCalendar().getEndDate()+"</end_date>";
+					 }
+					 Iterator itritm = ampCalendar.getCalendarPK().getCalendar().getCalendarItem().iterator();
+					 while(itritm.hasNext()){
+						 CalendarItem calItme = (CalendarItem) itritm.next();
+						 xml+="<text>"+calItme.getTitle()+"</text>";
+						 if(calItme.getDescription() != null){
+							 xml+="<details>"+calItme.getDescription()+"</details>";
+						 }else{
+						 	xml+="<details>"+"No Description"+"</details>";
+						 }
+					}
+										//AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
+										//id.getEventType().getId();
+					if(ampCalendar.getEventsType() != null){
+						xml+="<type>"+ampCalendar.getEventsType().getId()+"</type>";
+					}else{
+						xml+="<type>"+0+"</type>";
+					}
+					
+					if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
+						 Iterator itrrecc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().iterator();
+						 while(itrrecc.hasNext()){
+							 RecurrCalEvent recurrCalEvent = (RecurrCalEvent) itrrecc.next(); 
+							 if(recurrCalEvent.getTypeofOccurrence().equals("day")||recurrCalEvent.getTypeofOccurrence().equals("year")){
+								 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod() +"</rec_type>";
+							 }else if(recurrCalEvent.getTypeofOccurrence().equals("month")){
+								 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getSelectedStartMonth()+"</rec_type>";
+							 }else if(recurrCalEvent.getTypeofOccurrence().equals("week")){
+								String weekdays = sortingWeekDays(recurrCalEvent.getOccurrWeekDays().toCharArray());
+								xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod()+"___"+weekdays+"</rec_type>";
+							 }
+							 Date SartDate = ampCalendar.getCalendarPK().getCalendar().getStartDate();
+							 Date EndDate = ampCalendar.getCalendarPK().getCalendar().getEndDate();
+							 int  eventLengths = getEventlength(SartDate,EndDate);
+							 xml+="<event_length>"+eventLengths/1000+"</event_length>";
+						}
+					}	
+					xml+="</event>";	
+				}
+			}
+		} catch (CalendarException e) {
+			e.printStackTrace();
+		}
+		return xml;
+	}
+	
+
+
+	public static String getEventTypesCss() throws CalendarException, NoCategoryClassException{
+		String css = "";
+		        
+			List cs =  CategoryManagerUtil.getAmpEventColors();
+			if(!cs.isEmpty()){
+				
+			Iterator iter = cs.iterator();		
+				while(iter.hasNext()){
+					
+					AmpEventType item = (AmpEventType) iter.next();
+					
+					css+=".dhx_cal_event_line.event_"+item.getId()+"{";
+					css+="background-color:"+item.getColor()+";}";
+                    
+                    css+=".dhx_cal_event_line.event_"+item.getId()+" span {";
+					css+="color:white;}";
+					
+					css+=".dhx_cal_event.event_"+item.getId()+" div{";
+					css+="background-color:"+item.getColor()+";";
+					css+="color:white;}";
+					
+					css+=".dhx_cal_event_clear.event_"+item.getId()+"{";
+                    css+="background-color:"+item.getColor()+";";
+					css+="color:white;}";
+
+                    css+=".dhx_cal_event_clear.event_"+item.getId()+" span {";
+					css+="color:white;}";
+				}
+				
+				
+			}
+		return css;
+	}
+	public static String sortingWeekDays(char[] sortableWeekDays) {
+	    String result = "";
+	    char[] content = sortableWeekDays;
+	    java.util.Arrays.sort(content);
+	    for (int i=0; i<content.length; i++) {
+	    	if(i!=0)
+	    	result+= ","+content[i];
+	    	else
+	    		result+=content[i];
+	    }
+	    return result;
+	}
+	
+	public static int getEventlength(Date startDate, Date endDate){
+		
+		int start = (int)startDate.getTime();
+		int end = (int)endDate.getTime();
+		int minus = (end-start);
+		
+		return minus;
 	}
 }

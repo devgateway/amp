@@ -1,5 +1,6 @@
 package org.digijava.module.calendar.action;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +27,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -36,33 +37,33 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
-import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.RecurrCalEvent;
+import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
+import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.calendar.util.AmpUtil;
 import org.digijava.module.calendar.util.CalendarConversor;
 import org.digijava.module.calendar.util.CalendarThread;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
-import org.digijava.module.message.helper.MessageConstants;
-import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
-import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+
 
 public class ShowCalendarEvent extends Action {
 	
@@ -76,10 +77,12 @@ public class ShowCalendarEvent extends Action {
  		CalendarThread.setLocale(navigationLanguage);
  		
         CalendarEventForm ceform = (CalendarEventForm) form;
-        
-        Object teamObj = request.getSession().getAttribute("teamHead");
-        boolean isManager = (teamObj != null && ((String)teamObj).equalsIgnoreCase("yes"));
-        
+        String print = request.getParameter("method");
+        String ampCalendarId = request.getParameter("calendarId");
+        if(!print.isEmpty() && print.equals("print")){
+        	ceform.setAmpCalendarId(new Long(ampCalendarId));
+        	ceform.setMethod(print);
+        }
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.reset(mapping, request);
             ceform.setOrganizations(null);
@@ -89,22 +92,23 @@ public class ShowCalendarEvent extends Action {
         else if(ceform.getMethod().equalsIgnoreCase("removeOrg")) 
         {
         	Long[] listSelectedOrganizations = ceform.getSelOrganizations();
-        	Collection<AmpOrganisation> colOrganizations = ceform.getOrganizations();
-        	Collection<AmpOrganisation> newColOrganizations = new ArrayList<AmpOrganisation>();
-        	newColOrganizations.addAll(colOrganizations);
-        	
-        	Iterator<AmpOrganisation> itOrgs = colOrganizations.iterator();
-        	while(itOrgs.hasNext()){
-        		AmpOrganisation currentOrg = itOrgs.next();
-        		for(int index=0; index < listSelectedOrganizations.length ; index++)
-        		{
-              		if(currentOrg.getAmpOrgId().equals(listSelectedOrganizations[index])){
-              			newColOrganizations.remove(currentOrg);
-              			break;
-              		}
-        		}
-        	}
-        	ceform.setOrganizations(newColOrganizations);
+            if (listSelectedOrganizations != null && listSelectedOrganizations.length > 0) {
+                Collection<AmpOrganisation> colOrganizations = ceform.getOrganizations();
+                Collection<AmpOrganisation> newColOrganizations = new ArrayList<AmpOrganisation>();
+                newColOrganizations.addAll(colOrganizations);
+
+                Iterator<AmpOrganisation> itOrgs = colOrganizations.iterator();
+                while (itOrgs.hasNext()) {
+                    AmpOrganisation currentOrg = itOrgs.next();
+                    for (int index = 0; index < listSelectedOrganizations.length; index++) {
+                        if (currentOrg.getAmpOrgId().equals(listSelectedOrganizations[index])) {
+                            newColOrganizations.remove(currentOrg);
+                            break;
+                        }
+                    }
+                }
+                ceform.setOrganizations(newColOrganizations);
+            }
         }
         	
         // calendar type
@@ -124,25 +128,24 @@ public class ShowCalendarEvent extends Action {
         }
 
         ceform.setCalendarTypes(calendarTypesList);
-        ceform.setEventTypesList(AmpDbUtil.getEventTypes());
-        if (ceform.getSelectedEventTypeId() != null && ceform.getSelectedEventTypeId() > 0) {
-            AmpEventType eventType = AmpDbUtil.getEventType(ceform.getSelectedEventTypeId());
-            if (eventType != null) {
-                ceform.setSelectedEventTypeName(eventType.getName());
-            }
+        if(ceform.getSelectedEventTypeId() != null && ceform.getSelectedEventTypeId() > 0){
+        	String eventTypeName=CategoryManagerUtil.getAmpCategoryValueFromDb(ceform.getSelectedEventTypeId()).getValue();
+        	ceform.setSelectedEventTypeName(eventTypeName);
         }
+        
         // selected calendar type
-        Long selectedCalendarTypeId = ceform.getSelectedCalendarTypeId();
+        Long selectedCalendarTypeId = ceform.getCalendarTypeId();
         if (selectedCalendarTypeId == null ||
-            (!selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_GREGORIAN)) &&
-             !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN)) &&
-             !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY)))) {
-            selectedCalendarTypeId = Long.valueOf(CalendarOptions.defaultCalendarType);
-            ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
-        }
-
+                (!selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_GREGORIAN)) &&
+                 !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN)) &&
+                 !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY)))) {
+                selectedCalendarTypeId = Long.valueOf(CalendarOptions.defaultCalendarType);
+                ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
+      }else{
+        ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
+       }
         ceform.setTeamsMap(loadRecepients());
-
+       
         String[] slAtts = ceform.getSelectedAtts();
         if (slAtts != null) {
             Collection<LabelValueBean> selectedAttsCol = new ArrayList<LabelValueBean> ();
@@ -185,19 +188,21 @@ public class ShowCalendarEvent extends Action {
         
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.setAmpCalendarId(null);
+            ceform.setActionButtonsVisible(true);
         } else if (ceform.getMethod().equalsIgnoreCase("edit")) {
             loadAmpCalendar(ceform, request);
         } else if(ceform.getMethod().equalsIgnoreCase("ok")){
         	ceform.setMethod("");
         	return mapping.findForward("forward");
-        }else if (ceform.getMethod().equalsIgnoreCase("save")) {
+        } else if (ceform.getMethod().equalsIgnoreCase("save")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
-        	ActionErrors errors=validateDate(stDate,endDate);
+        	ActionErrors errors=validateDate(stDate,endDate,ceform);
         	errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
-        		return mapping.findForward("success");        		
+        		ceform.setEventTypesList(CategoryManagerUtil.getAmpEventColors());
+                return mapping.findForward("success");        		
         	}else{
         		saveAmpCalendar(ceform, request);
                 ceform.setMethod("");
@@ -208,83 +213,58 @@ public class ShowCalendarEvent extends Action {
         } else if (ceform.getMethod().equalsIgnoreCase("delete")) {
         	AmpCalendar ampCalendar=AmpDbUtil.getAmpCalendar(ceform.getAmpCalendarId());
         	if(ampCalendar!=null){
-        		//get current member
-            	HttpSession ses = request.getSession();
-                TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
-                /**
-            	 * if event belongs to several users,then deleting event should delete only link between the user that clicked delete button and event,
-            	 * but for other users that event should remain,unless creator decides to remove it.   
-            	 */
-                if(ampCalendar.getMember()!=null && mem.getMemberId().equals(ampCalendar.getMember().getAmpTeamMemId())){
-                	AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
-                	new RemoveCalendarEventTrigger(ampCalendar);
-                }else{
-                	if(ampCalendar.getAttendees()!=null && ampCalendar.getAttendees().size()>0){        		
-                		for (Object obj : ampCalendar.getAttendees()) {
-                			AmpCalendarAttendee attendee=(AmpCalendarAttendee)obj;
-                			if(attendee.getMember()!=null && attendee.getMember().getAmpTeamMemId().equals(mem.getMemberId())){
-                				ampCalendar.getAttendees().remove(attendee);
-                				AmpDbUtil.updateAmpCalendar(ampCalendar);
-                    			//delete that Attendee
-                    			AmpDbUtil.deleteAmpCalendarAttendee(attendee);
-                				break;
-                			}
-        				}
-                	}else{
-                		AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
-                	}
-                }
+        	//get current member
+        	HttpSession ses = request.getSession();
+            TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+            /**
+        	 * if event belongs to several users,then deleting event should delete only link between the user that clicked delete button and event,
+        	 * but for other users that event should remain,unless creator decides to remove it.   
+        	 */
+            if(ampCalendar.getMember()!=null && mem.getMemberId().equals(ampCalendar.getMember().getAmpTeamMemId())){
+            	AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+            	new RemoveCalendarEventTrigger(ampCalendar);
+            }else{
+            	if(ampCalendar.getAttendees()!=null && ampCalendar.getAttendees().size()>0){        		
+            		for (Object obj : ampCalendar.getAttendees()) {
+            			AmpCalendarAttendee attendee=(AmpCalendarAttendee)obj;
+            			if(attendee.getMember()!=null && attendee.getMember().getAmpTeamMemId().equals(mem.getMemberId())){
+            				ampCalendar.getAttendees().remove(attendee);
+            				AmpDbUtil.updateAmpCalendar(ampCalendar);
+                			//delete that Attendee
+                			AmpDbUtil.deleteAmpCalendarAttendee(attendee);
+            				break;
+            			}
+    				}
+            	}else{
+            		AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+            	}
+            }       
         	}
         	
             ceform.setMethod("");
             return mapping.findForward("forward");
-
-        } else if (ceform.getMethod().equalsIgnoreCase("valid")) {
-        	if (isManager){
-            	AmpCalendar ampCalendar=AmpDbUtil.getAmpCalendar(ceform.getAmpCalendarId());
-            	CalendarItem calendarItem =  ampCalendar.getCalendarPK().getCalendar().getFirstCalendarItem();
-            	
-
-                if (ceform.getApprove()==MessageConstants.CALENDAR_EVENT_APPROVED){
-            		AuditLoggerUtil.logObject(request.getSession(), request, calendarItem, "Approved");
-            		calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_APPROVED));
-            		AmpDbUtil.updateAmpCalendar(ampCalendar);
-            		
-                	new ApprovedCalendarEventTrigger(calendarItem,
-                			((TeamMember) request.getSession().getAttribute("currentMember")).getMemberName(), 
-                			ampCalendar.getMember());
-            		
-            	} else if (ceform.getApprove()==MessageConstants.CALENDAR_EVENT_NOT_APPROVED){
-            		AuditLoggerUtil.logObject(request.getSession(), request, calendarItem, "Not Approved");
-                	AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
-            		
-                	new NotApprovedCalendarEventTrigger(calendarItem,
-                			((TeamMember) request.getSession().getAttribute("currentMember")).getMemberName(), 
-                			ampCalendar.getMember());
-            		
-            	}
-                ceform.setMethod("");
-                return mapping.findForward("forward");            	
-        	}
-        	
-        } else if (ceform.getMethod().equalsIgnoreCase("preview")) {
+            
+        } else if (ceform.getMethod().equalsIgnoreCase("preview") || ceform.getMethod().equalsIgnoreCase("print")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
         	ActionErrors errors=new ActionErrors();
         	if(ceform.getAmpCalendarId()==null || !ceform.isResetForm()){
-        		errors=validateDate(stDate,endDate);
+        		errors=validateDate(stDate,endDate,ceform);
         		errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	}        	
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
         		return mapping.findForward("success");        		
         	}else{
+        		  
+                  
         		loadAmpCalendar(ceform, request);
         		if(ceform.getAmpCalendarId()!=null && ceform.getAmpCalendarId() > 0){ //<--this means that user is not creating new event, but previewing old one
         			ceform.setActionButtonsVisible(false);
             		//get current member
             		HttpSession ses = request.getSession();
                     TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+                    ceform.setEventCreator(mem.getMemberName());
             		String[] selattendeess=ceform.getSelectedAtts();
             		if(ceform.getEventCreatorId()!=null && ceform.getEventCreatorId().equals(mem.getMemberId())){
             			ceform.setActionButtonsVisible(true);
@@ -296,19 +276,42 @@ public class ShowCalendarEvent extends Action {
     						}
     					}
             		}
+        		}        		
+        		if(!ceform.getMethod().equalsIgnoreCase("print")){
+        			ceform.setMethod("");
+                	return mapping.findForward("preview");
+        		}else{
+        			
+        			 return mapping.findForward("print");
+             		
         		}
-                ceform.setMethod("");
-                return mapping.findForward("preview");
         	}
         }
-
+        
+        
+//        List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>(); 
+//        
+//        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EVENT_TYPE_KEY);   
+//        Iterator<AmpCategoryValue> categoryClassIter = categoryClass.getPossibleValues().iterator();
+//         while(categoryClassIter.hasNext()){
+//        	AmpEventType eventType = new AmpEventType();
+//        	AmpCategoryValue item = (AmpCategoryValue) categoryClassIter.next();
+//        	 eventType.setName(item.getValue());
+//        	 eventType.setId(item.getId());
+//        	   Iterator<AmpCategoryValue> usedValues = item.getUsedValues().iterator();
+//        	    while (usedValues.hasNext()){
+//        		 AmpCategoryValue categoryValueItem = (AmpCategoryValue) usedValues.next();
+//        		 eventType.setColor(categoryValueItem.getValue());
+//        	 }
+//        	  eventTypeList.add(eventType);
+//        }
+//        
+        ceform.setEventTypesList(CategoryManagerUtil.getAmpEventColors());
         return mapping.findForward("success");
     }
 
-    private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
-
-        Object teamObj = request.getSession().getAttribute("teamHead");
-        boolean isManager = (teamObj != null && ((String)teamObj).equalsIgnoreCase("yes"));
+   
+	private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
         try {
         	
         	if (ceform.getAmpCalendarId() != null && ceform.getAmpCalendarId() > 0) {
@@ -317,9 +320,9 @@ public class ShowCalendarEvent extends Action {
 
             AmpCalendar ampCalendar = new AmpCalendar();
 
-            AmpEventType eventType = AmpDbUtil.getEventType(ceform.getSelectedEventTypeId());
-            ampCalendar.setEventType(eventType);
-
+            AmpCategoryValue value =    CategoryManagerUtil.getAmpCategoryValueFromDb(ceform.getSelectedEventTypeId());
+            ampCalendar.setEventsType(value);
+         
             if(ampCalendar.getMember()==null){
                 HttpSession ses = request.getSession();
                 TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
@@ -368,40 +371,40 @@ public class ShowCalendarEvent extends Action {
             calendarItem.setCreationDate(new Date());
             calendarItem.setDescription(ceform.getDescription());
             
-        	Long templId=FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
-            AmpFeaturesVisibility eventApprove = FeaturesUtil.getFeatureByName("Event Approve", "Calendar", templId);
-            if (eventApprove == null || isManager){
-            	calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_APPROVED)); // 1 - Approve by default;
-            } else {
-            	calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_AWAITING)); // 0 - Awaiting Approval;
-            }
-            
             // fill calendar object
 
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
-            if(ceform.getSelectedStartMonth() != null){           
+            if(ceform.getRecurrPeriod()!=null && ceform.getRecurrPeriod().longValue() != 0){           
 	            Set recEvent =new HashSet();
 	            RecurrCalEvent recurrEvent = new RecurrCalEvent();
 	            recurrEvent.setCalendar(calendar);
 	            recurrEvent.setRecurrPeriod(ceform.getRecurrPeriod());
 	            recurrEvent.setSelectedStartMonth(ceform.getSelectedStartMonth());
 	            recurrEvent.setTypeofOccurrence(ceform.getTypeofOccurrence());
+	            recurrEvent.setOccurrWeekDays(ceform.getWeekDays());
 
                 // selected start date and selected end date
                 String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 	            if (dtformat == null) {
 	                dtformat = "dd/MM/yyyy";
 	            }
+	            dtformat+=" HH:mm";
                  SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
                  Date recurrStartDate=null;
                  Date recurrEndDate= null;
+                 String endDate = null;
+                 String startDate = null;
                  if(ceform.getRecurrStartDate()!=null && !ceform.getRecurrStartDate().equals("")){
-                	 recurrStartDate=sdf.parse(ceform.getRecurrStartDate());
+                	 
+                	 startDate = ceform.getRecurrStartDate() + " " + ceform.getRecurrSelectedStartTime();
+                	 recurrStartDate=sdf.parse(startDate);
                  }
                  if(ceform.getRecurrEndDate()!=null && !ceform.getRecurrEndDate().equals("")){
-                	recurrEndDate= sdf.parse(ceform.getRecurrEndDate());
+                	 
+                	endDate = ceform.getRecurrEndDate() + " " + ceform.getRecurrSelectedEndTime();
+                	recurrEndDate= sdf.parse(endDate);
                  }
                 recurrEvent.setRecurrStartDate(recurrStartDate);
                 recurrEvent.setRecurrEndDate(recurrEndDate);              
@@ -428,10 +431,10 @@ public class ShowCalendarEvent extends Action {
             dtformat+=" HH:mm";
 
             SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
-            
+
             String startDateTime = ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
             String endDateTime = ceform.getSelectedEndDate() + " " + ceform.getSelectedEndTime();
-    		
+
             if (ceform.getSelectedCalendarTypeId().equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN)) ||
             		ceform.getSelectedCalendarTypeId().equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY))){
             	CalendarConversor convert  = new CalendarConversor(ceform.getStartDate().YEAR);
@@ -440,8 +443,8 @@ public class ShowCalendarEvent extends Action {
             	calendar.setStartDate(sdf.parse(AmpUtil.SimpleEthipianToGregorian(startDateTime, convert)));
             	calendar.setEndDate(sdf.parse(AmpUtil.SimpleEthipianToGregorian(endDateTime, convert)));
             }else{
-            	calendar.setStartDate(sdf.parse(startDateTime));
-                calendar.setEndDate(sdf.parse(endDateTime));
+            calendar.setStartDate(sdf.parse(startDateTime));
+            calendar.setEndDate(sdf.parse(endDateTime));
             }
 
             calPK.setCalendar(calendar);
@@ -452,14 +455,14 @@ public class ShowCalendarEvent extends Action {
             AmpDbUtil.updateAmpCalendar(ampCalendar);
             //Create new calendar event alert           
             CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
-           
+            ceform.setResetForm(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
     }
 
-    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) {
+    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws CalendarException, WorkerException, ParseException {
         if (ceform.getAmpCalendarId() != null &&
             ceform.getAmpCalendarId() > 0 &&
             ceform.isResetForm()) {
@@ -498,8 +501,7 @@ public class ShowCalendarEvent extends Action {
                         	}
                         	if(!teams.contains(member.getAmpTeam())){
                         		teams.add(member.getAmpTeam());
-                        	}
-                        	
+                        	}                        	
                         } else if(guest!=null){
                         	guests.add(guest);
                         }
@@ -542,17 +544,18 @@ public class ShowCalendarEvent extends Action {
                 ceform.setEventTitle(calendar.getFirstCalendarItem().getTitle());
                 //description
                 ceform.setDescription(calendar.getFirstCalendarItem().getDescription());
-                ceform.setApprove(calendar.getFirstCalendarItem().getApprove() == null ? MessageConstants.CALENDAR_EVENT_APPROVED : calendar.getFirstCalendarItem().getApprove().intValue());
                 // private event
                 ceform.setPrivateEvent(ampCalendar.isPrivateEvent());
                 
-                if(ampCalendar.getEventType()!=null){
-                	//event type
-                	ceform.setSelectedEventTypeName(ampCalendar.getEventType().getName());
-                	// selected event type
-                    ceform.setSelectedEventTypeId(ampCalendar.getEventType().getId());
+                if(ampCalendar.getEventsType()!=null){
+                	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
+                	if (ampCategoryValue != null){
+                		//event type
+                    	ceform.setSelectedEventTypeName(ampCategoryValue.getValue());
+                    	// selected event type
+                        ceform.setSelectedEventTypeId(ampCategoryValue.getId());
+                	}
                 }
-                
 
                 Collection<AmpOrganisation> orgs = new ArrayList<AmpOrganisation> ();
                 if (ampCalendar.getOrganisations() != null) {
@@ -573,16 +576,48 @@ public class ShowCalendarEvent extends Action {
 
                 DateBreakDown startDateBreakDown = null;
                 DateBreakDown endDateBreakDown = null;
+                DateBreakDown endRecurrDateBreakDown = null;
+                
+             
+                	
+                	Iterator iterRecevent = calendar.getRecurrCalEvent().iterator();
+                	while(iterRecevent.hasNext()){
+                		RecurrCalEvent rec = (RecurrCalEvent) iterRecevent.next();
+                		if(rec.getRecurrEndDate() != null){
+                			GregorianCalendar endRecurrDate = new GregorianCalendar();
+                			endRecurrDate.setTime(rec.getRecurrEndDate());
+                			endRecurrDateBreakDown = new DateBreakDown(endRecurrDate, ceform.getSelectedCalendarTypeId().intValue(),request);
+                			ceform.setRecurrEndDate(endRecurrDateBreakDown.formatDateString());
+                			ceform.setRecurrSelectedEndTime(endRecurrDateBreakDown.formatTimeString());
+                		}
+                		ceform.setRecurrPeriod(rec.getRecurrPeriod());
+                		ceform.setTypeofOccurrence(rec.getTypeofOccurrence());
+                		ceform.setOccurrWeekDays(rec.getOccurrWeekDays());
+                		
+                		if(rec.getTypeofOccurrence().equals( "year")){
+                		ceform.setSelectedStartMonth("");
+                		ceform.setSelectedStartYear(rec.getSelectedStartMonth());
+                		}else if(rec.getTypeofOccurrence().equals( "month")){
+                			ceform.setSelectedStartYear("");
+                			ceform.setSelectedStartMonth(rec.getSelectedStartMonth());
+                		}else{
+                			ceform.setSelectedStartYear("");
+                			ceform.setSelectedStartMonth("");
+                		}
+                		rec.getId();
+                	 
+                	} 
 
                 try {
-                    startDateBreakDown = new DateBreakDown(startDate, ceform.getSelectedCalendarTypeId().intValue());
-                    endDateBreakDown = new DateBreakDown(endDate, ceform.getSelectedCalendarTypeId().intValue());
-
+                    startDateBreakDown = new DateBreakDown(startDate, ceform.getSelectedCalendarTypeId().intValue(),request);
+                    endDateBreakDown = new DateBreakDown(endDate, ceform.getSelectedCalendarTypeId().intValue(),request);
+                    
                     ceform.setSelectedStartDate(startDateBreakDown.formatDateString());
                     ceform.setSelectedStartTime(startDateBreakDown.formatTimeString());
 
                     ceform.setSelectedEndDate(endDateBreakDown.formatDateString());
                     ceform.setSelectedEndTime(endDateBreakDown.formatTimeString());
+                    
                 } catch (Exception ex) {
                 	ex.printStackTrace();
                 }
@@ -611,7 +646,7 @@ public class ShowCalendarEvent extends Action {
         return teamMap;
     }
     
-    private ActionErrors validateDate(String eventStartDate,String eventEndDate) throws Exception{   
+    private ActionErrors validateDate(String eventStartDate,String eventEndDate, CalendarEventForm form) throws Exception{   
     	ActionErrors errors=new ActionErrors();
         String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);            
         if (dtformat == null) {
@@ -622,6 +657,7 @@ public class ShowCalendarEvent extends Action {
         SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
         Date stDate = null;
         Date endDate=null;
+        Date endRecurrDate=null;
         
         try {
         	stDate=sdf.parse(eventStartDate);
@@ -631,14 +667,47 @@ public class ShowCalendarEvent extends Action {
 		
         try {
         	endDate=sdf.parse(eventEndDate);
-		
         } catch (Exception e) {
 			errors.add("incorrectDate", new ActionError("error.calendar.emptyEventEndDate"));
+		}
+        
+        try {
+        	endRecurrDate=sdf.parse(form.getRecurrEndDate() + " " + form.getRecurrSelectedEndTime());
+        } catch (Exception e) {
+			//errors.add("incorrectDate", new ActionError("error.calendar.emptyEventEndDate"));
 		}
         
         if(stDate !=null && !stDate.equals(endDate) && !stDate.before(endDate)){
         	errors.add("incorrectDate", new ActionError("error.calendar.endDateLessThanStartDate"));
         }
+        
+        if(endRecurrDate !=null && endRecurrDate.before(endDate)){
+        	errors.add("incorrectDate", new ActionError("error.calendar.endRecurrDateLessThanEndDate"));
+        }
+        
+        
+        Long diffDate = endDate.getTime() - stDate.getTime();
+        Long diffDays = (diffDate / (24 * 60 * 60 * 1000));
+        Long recurrDays = 0L;
+        
+        if (form.getTypeofOccurrence()!=null && form.getTypeofOccurrence()!="" && form.getRecurrPeriod()!=null && form.getRecurrPeriod()>0){
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("day")) {
+        		recurrDays = form.getRecurrPeriod();
+			}
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("week")) {
+        		recurrDays = form.getRecurrPeriod() * 7;
+			}
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("month")) {
+        		recurrDays = form.getRecurrPeriod() * 30;
+			}
+        	if (form.getTypeofOccurrence().equalsIgnoreCase("year")) {
+        		recurrDays = form.getRecurrPeriod() * 365;
+			}
+        }
+        if ((recurrDays > 0) && (diffDays >= recurrDays)) {
+        	errors.add("incorrectDate", new ActionError("error.calendar.recurrPeriodLessThanEventDuration"));
+		}
+        
     	return errors;
     }
     

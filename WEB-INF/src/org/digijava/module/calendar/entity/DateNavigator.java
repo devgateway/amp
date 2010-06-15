@@ -41,7 +41,7 @@ public class DateNavigator {
     }
 
     private GregorianCalendar add(GregorianCalendar calendar, int type,
-                                  int field, int count) throws
+                                  int field, int count, HttpServletRequest request) throws
         CalendarException, WorkerException {
         GregorianCalendar clone = (GregorianCalendar) calendar.clone();
         if(field == clone.YEAR) {
@@ -54,7 +54,7 @@ public class DateNavigator {
                 count = Math.abs(count);
                 while(count > 0) {
                     DateBreakDown cloneBreakDown = new DateBreakDown(clone,
-                        type);
+                        type,request);
                     int today = cloneBreakDown.getDayOfMonth();
                     int daysInCurrentMonth = cloneBreakDown.
                         getDaysInEthiopianMonth(cloneBreakDown.getMonth());
@@ -91,12 +91,12 @@ public class DateNavigator {
     }
 
     private void setRollerTimestamps(GregorianCalendar baseDate, int type,
-                                     int field) throws CalendarException, WorkerException {
+                                     int field, HttpServletRequest request) throws CalendarException, WorkerException {
         // left roller
-        GregorianCalendar leftDate = add(baseDate, type, field, -1);
+        GregorianCalendar leftDate = add(baseDate, type, field, -1,request);
         setLeftTimestamp((int) (leftDate.getTimeInMillis() / 1000));
         // right roller
-        GregorianCalendar rightDate = add(baseDate, type, field, 1);
+        GregorianCalendar rightDate = add(baseDate, type, field, 1,request);
         setRightTimestamp((int) (rightDate.getTimeInMillis() / 1000));
     }
 
@@ -118,7 +118,7 @@ public class DateNavigator {
             item.setEnabled(true);
             if(monthOffset != 0) {
                 GregorianCalendar clone = add(baseDate, type, baseDate.MONTH,
-                                              monthOffset);
+                                              monthOffset,request);
                 DateBreakDown cloneBreakDown = new DateBreakDown(clone, type, request);
                 item.setMonth(cloneBreakDown.getMonthNameShort());
                 item.setTimestamp((int) (clone.getTimeInMillis() / 1000));
@@ -221,22 +221,22 @@ public class DateNavigator {
         CalendarException, WorkerException {
         if(view.equals(CalendarOptions.CALENDAR_VIEW_YEARLY) || view.equals(CalendarOptions.CALENDAR_VIEW_NONE)) {
             // rollers
-            setRollerTimestamps(baseDate, type, baseDate.YEAR);
+            setRollerTimestamps(baseDate, type, baseDate.YEAR,request);
             // items
             setItems(yearNavigatorItems(baseDate, type, request));
         } else if(view.equals(CalendarOptions.CALENDAR_VIEW_MONTHLY)) {
             // rollers
-            setRollerTimestamps(baseDate, type, baseDate.MONTH);
+            setRollerTimestamps(baseDate, type, baseDate.MONTH,request);
             // items
             setItems(monthNavigatorItems(baseDate, type, view, request));
         } else if(view.equals(CalendarOptions.CALENDAR_VIEW_WEEKLY)) {
             // rollers
-            setRollerTimestamps(baseDate, type, baseDate.WEEK_OF_YEAR);
+            setRollerTimestamps(baseDate, type, baseDate.WEEK_OF_YEAR,request);
             // items
             setItems(monthNavigatorItems(baseDate, type, view, request));
         } else if(view.equals(CalendarOptions.CALENDAR_VIEW_DAYLY)) {
             // rollers
-            setRollerTimestamps(baseDate, type, baseDate.DAY_OF_MONTH);
+            setRollerTimestamps(baseDate, type, baseDate.DAY_OF_MONTH,request);
             // items
             setItems(monthNavigatorItems(baseDate, type, view, request));
         }

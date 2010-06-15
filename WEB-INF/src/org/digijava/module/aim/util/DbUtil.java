@@ -6592,7 +6592,14 @@ public class DbUtil {
                         itr2 = dnOrg.getCalendar().iterator();
                         while (itr2.hasNext()) {
                             AmpCalendar ampCal = (AmpCalendar) itr2.next();
-                            if ("Mission".equalsIgnoreCase(ampCal.getEventType().getName())) {
+                            String eventTypeName="";
+                            if(ampCal.getEventsType()!=null){
+                            	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCal.getEventsType().getId());
+                            	if (ampCategoryValue != null){
+                            		eventTypeName=ampCategoryValue.getValue();
+                            	}
+                            }                            
+                            if ("Mission".equalsIgnoreCase(eventTypeName)) {
                                 Calendar cal = (Calendar) ampCal.getCalendarPK().getCalendar();
                                 if (answersRow[0] == Double.parseDouble(year.format(cal.getStartDate())) ||
                                     answersRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {

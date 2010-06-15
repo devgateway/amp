@@ -20,9 +20,9 @@
 <script type="text/javascript" defer="defer">
 <!--
 
-		YAHOO.namespace("YAHOO.amp");
+		YAHOOAmp.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOO.widget.Panel("newpopins", {
+		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
 			width:"320px",
 			fixedcenter: true,
 		    constraintoviewport: false,

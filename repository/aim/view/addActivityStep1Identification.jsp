@@ -96,7 +96,7 @@ OnBudgetRules.prototype.check		= function () {
 
 
 
-YAHOOAmp.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
+//YAHOOAmp.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
 
 
 function toggleElement ( elementId, show ) {

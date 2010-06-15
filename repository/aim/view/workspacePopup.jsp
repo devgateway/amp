@@ -92,11 +92,11 @@
 		YAHOOAmp.util.Connect.asyncRequest("POST", action+params, WorkspaceframeCallback, '');
 	}
 
-	var currentWorkspaceframe = window.onload;
+	/*var currentWorkspaceframe = window.onload;
 	window.onload = function() {
         currentWorkspaceframe.apply(currentWorkspaceframe);
-   	};
-	//initScriptsWorkspaceframe();
+   	};*/
+   	addLoadEvent(initScriptsWorkspaceframe);
 
 </script>
 <style type="text/css">

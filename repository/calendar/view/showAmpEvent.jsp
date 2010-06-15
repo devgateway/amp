@@ -15,10 +15,10 @@
 <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
 <!-- Source File -->
-<script type="text/javascript" src="<digi:file src="script/yui/menu-amp-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
 <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script>       
-<script type="text/javascript" src="<digi:file src="script/yui/element-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>        
         
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
@@ -41,9 +41,9 @@
 <script type="text/javascript">
 <!--
 
-		YAHOO.namespace("YAHOO.amp");
+		YAHOOAmp.namespace("YAHOO.amp");
 
-		var myPanel = new YAHOO.widget.Panel("newpopins", {
+		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -576,7 +576,7 @@ function submitForm(thisform){
 //	document.calendarEventForm.submit();
 }
 
-addLoadEvent(delBody);
+
 </script>
 
 

@@ -504,7 +504,7 @@ function disableInputs(){
                                              </td>
                                              <td>
                                                <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("recurrSelectedEndDate"),"clear2")'>
-                                                 <img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                 <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
                                                </a>
                                              </td>
                                            </tr>

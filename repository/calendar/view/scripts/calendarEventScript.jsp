@@ -8,14 +8,14 @@
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 
 <script type="text/javascript">
-		YAHOO.namespace("YAHOO.amptab");
+		YAHOOAmp.namespace("YAHOO.amptab");
 		
-		YAHOO.amptab.handleCloseAbout = function() {
+		YAHOOAmp.amptab.handleCloseAbout = function() {
 			if(navigator.appName == 'Microsoft Internet Explorer'){
 			}
 		}
 		
-		YAHOO.amptab.handleClose = function() {
+		YAHOOAmp.amptab.handleClose = function() {
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
 			filter.parent.removeChild(filter);
@@ -23,7 +23,7 @@
 		};
 	
 		var myPanel1Init = false;
-		var myPanel1 = new YAHOO.widget.Panel("new", {
+		var myPanel1 = new YAHOOAmp.widget.Panel("new", {
 			width:"700px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -34,10 +34,10 @@
 		    draggable:true} );
 		    
 		
-	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 	
 		    
-	function initScripts() {
+	function initScriptsRecurr() {
 	
 	    var msg='\n<digi:trn key="cal:calendar:eventsetup">Recurring Event Setup</digi:trn>';
 		myPanel1.setHeader(msg);
@@ -47,7 +47,7 @@
 	}
 	
 	function showRecEvent() {
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("myEvent");
 		element.style.display = "inline";
         var recSelEndDate=document.getElementById("recurrSelectedEndDate");
@@ -89,7 +89,7 @@
 		}
 	}
 
-	addLoadEvent(initScripts);
+	addLoadEvent(initScriptsRecurr);
 	
 function submit() {
 

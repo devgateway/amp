@@ -1,5 +1,6 @@
 package org.digijava.module.orgProfile.action;
 
+import com.lowagie.text.Cell;
 import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -53,7 +54,6 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
-import org.apache.ecs.xhtml.title;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.orgProfile.helper.ExportSettingHelper;
 
@@ -701,8 +701,12 @@ public class ExportToWord extends Action {
 
 
                         }
-                        Font font = new Font(null, 0, 24);                
+                        Font font = new Font(null, 0, 24);
+                        Table chartTable=null;
+                        Table chartTableDisb=null;
                         if (chart != null) {
+                            chartTable=new Table(1);
+                            chartTable.setWidth(100);
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
@@ -720,10 +724,15 @@ public class ExportToWord extends Action {
 
                             Paragraph imgTitle = new Paragraph(chartTitle, new  com.lowagie.text.Font( com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
                             imgTitle.setAlignment(Element.ALIGN_CENTER);
-                            doc.add(imgTitle);
-                            doc.add(img);
+                            RtfCell imgTitleCell=new RtfCell(imgTitle);
+                            imgTitleCell.setHeader(true);
+                            chartTable.addCell(imgTitleCell);
+                            RtfCell cell = new RtfCell(img);
+                            chartTable.addCell(cell);
                         }
                          if (chartDisb != null) {
+                            chartTableDisb=new Table(1);
+                            chartTableDisb.setWidth(100);
                             Plot plotDisb = chartDisb.getPlot();
                             plotDisb.setNoDataMessage("No Data Available");
                             plotDisb.setNoDataMessageFont(font);
@@ -738,7 +747,24 @@ public class ExportToWord extends Action {
                                     info);
                             Image imgDisb = Image.getInstance(outByteStreamDisb.toByteArray());
                             imgDisb.setAlignment(Image.ALIGN_MIDDLE);
-                            doc.add(imgDisb);
+                            Paragraph imgTitle = new Paragraph(chartTitle, new  com.lowagie.text.Font( com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
+                            imgTitle.setAlignment(Element.ALIGN_CENTER);
+                            RtfCell imgTitleCell=new RtfCell(imgTitle);
+                            imgTitleCell.setHeader(true);
+                            chartTableDisb.addCell(imgTitleCell);
+                            RtfCell cell = new RtfCell(imgDisb);
+                            chartTableDisb.addCell(cell);
+                           
+                        }
+                        if(chartTable!=null){
+                            chartTable.setBorder(Table.NO_BORDER);
+                            chartTable.setTableFitsPage(true);
+                            doc.add(chartTable);
+                        }
+                        if(chartTableDisb!=null){
+                            chartTableDisb.setBorder(Table.NO_BORDER);
+                            chartTableDisb.setTableFitsPage(true);
+                            doc.add(chartTableDisb);
                         }
                         if (orgSummaryTbl != null) {
                             doc.add(orgSummaryTbl);

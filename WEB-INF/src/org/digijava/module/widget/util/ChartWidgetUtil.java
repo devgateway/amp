@@ -713,6 +713,7 @@ public class ChartWidgetUtil {
         plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
         LegendTitle legend = chart.getLegend();
         legend.setItemFont(plainFont);
+        legend.setFrame(BlockBorder.NONE);
         legend.setMargin(10,5,5,10);
         legend.setPosition(RectangleEdge.RIGHT);
         legend.setVerticalAlignment(VerticalAlignment.TOP);
@@ -789,6 +790,7 @@ public class ChartWidgetUtil {
         legend.setVerticalAlignment(VerticalAlignment.TOP);
         legend.setItemFont(plainFont);
         legend.setMargin(10,5,5,10);
+        legend.setFrame(BlockBorder.NONE);
         plot.setLegendItemShape(new Rectangle(10, 10));
         PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
         plot.setLegendLabelGenerator(genLegend);

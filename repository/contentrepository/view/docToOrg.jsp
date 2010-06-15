@@ -16,11 +16,9 @@
 		<c:forEach var="org" items="${myForm.orgs}">
 			<li>
 				${org.acronym} ( ${org.name} )
-				<a style="cursor:pointer; text-decoration:underline;"
-					onClick="deleteDocToOrgObj('${myForm.uuidForOrgsShown}', ${org.ampOrgId});"
-					title="<digi:trn>Click here to remove this organisation</digi:trn>">
-					<img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border="0">
-				</a> 
+					<img onClick="deleteDocToOrgObj('${myForm.uuidForOrgsShown}', ${org.ampOrgId});"  style="cursor:pointer; text-decoration:underline;"
+					title="<digi:trn>Click here to remove this organisation</digi:trn>"
+					hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border="0" />
 			</li>
 		</c:forEach>
 	</ul>

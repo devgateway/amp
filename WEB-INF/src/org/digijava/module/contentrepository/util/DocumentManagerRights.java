@@ -69,6 +69,10 @@ public class DocumentManagerRights {
 		return result;
 	}
 	
+	public static Boolean hasAddParticipatingOrgRights(Node node, HttpServletRequest request) {
+		return true && isOwnerOrTeamLeader(node, request);
+	}
+	
 	public static Boolean hasVersioningRights (Node node, HttpServletRequest request) {
 		boolean result						= true;
 		Boolean manuallySetNoVersioningFlag	= isManuallySetNoVersioningFlag(request);

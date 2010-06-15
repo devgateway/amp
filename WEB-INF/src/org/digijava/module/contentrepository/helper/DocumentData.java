@@ -26,11 +26,12 @@ public class DocumentData implements Comparable<DocumentData>{
 	float versionNumber;
 	
 	boolean hasDeleteRights			= false;
-	boolean hasViewRights				= false;
+	boolean hasViewRights			= false;
 	boolean hasShowVersionsRights	= false;
 	boolean hasVersioningRights		= false;
 	boolean hasMakePublicRights		= false;
 	boolean hasDeleteRightsOnPublicVersion	= false;
+	boolean hasAddParticipatingOrgRights	= false;
 	
 	boolean isPublic					= false;
 	boolean lastVersionIsPublic		= false;
@@ -159,6 +160,21 @@ public class DocumentData implements Comparable<DocumentData>{
 	}
 	public void setShowVersionHistory(boolean showVersionHistory) {
 		this.showVersionHistory = showVersionHistory;
+	}
+	
+	
+	
+	/**
+	 * @return the hasAddParticipatingOrgRights
+	 */
+	public boolean isHasAddParticipatingOrgRights() {
+		return hasAddParticipatingOrgRights;
+	}
+	/**
+	 * @param hasAddParticipatingOrgRights the hasAddParticipatingOrgRights to set
+	 */
+	public void setHasAddParticipatingOrgRights(boolean hasAddParticipatingOrgRights) {
+		this.hasAddParticipatingOrgRights = hasAddParticipatingOrgRights;
 	}
 	public float getVersionNumber() {
 		return versionNumber;

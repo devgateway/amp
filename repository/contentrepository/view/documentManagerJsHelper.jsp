@@ -60,6 +60,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 
+
 <%@page import="java.net.URLDecoder"%>
 
 <c:set var="translation_public_ver_msg">
@@ -486,7 +487,7 @@ function WindowControllerObject(bodyContainerEl) {
 					parameters	+= "&otherUsername=" + obj.userName;
 				if (obj.teamId != null)
 					parameters	+= "&otherTeamId=" + obj.teamId;
-
+					
 				//for shared docs
 				if(obj.sharedDocs!=null){
 					parameters+= "&showSharedDocs=" + obj.sharedDocs;
@@ -644,7 +645,7 @@ function doSelectedDocuments(action) {
 	selectedDocs= result;
 
 	if(selectedDocs.length==0){
-		selectedDocs			= getAllSelectedDocuments();
+	selectedDocs			= getAllSelectedDocuments();
 	}
 	
 	var updatedDocsAction	= '<%=org.digijava.module.contentrepository.helper.CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION%>';
@@ -653,7 +654,7 @@ function doSelectedDocuments(action) {
 		return;
 	}
 	
-	var postString 	= createPostString(selectedDocs, action);	
+	var postString 	= createPostString(selectedDocs, action);
 	var callback;
 	if (action == 'set') {
 		callback	= {
@@ -712,7 +713,7 @@ function getSelectedDocumentsFromDatatable(datatable, vec) {
 	var i;
 	var result;
 	if (vec != null) {
-		result	= vec;
+			result	= vec;
 	}else{
 		result	= new Array();
 	}
@@ -819,8 +820,6 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	var mItem3="${trans_sharedDocuments}";
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_sharedDocuments}", {onclick: onclickObjForShared, id:mItem3} )   );
 	</logic:notEmpty>
-	
-	
 	/*
 		var onclickObj 	= {
 			fn					: windowController.populateWithPublicDocs,
@@ -1102,6 +1101,53 @@ function checkDocumentUuid(uuid) {
 		return false;
 	}
 	return true;
+}
+
+function getCallbackForOrgs (panel) {
+	var callbackObj	= {
+			success: function (o) {
+				panel.setBody( o.responseText );
+				
+			},
+			failure: function () {
+				panel.setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
+			}
+		}
+
+	return callbackObj;
+	
+}
+
+function showOrgsPanel(uuid) {
+	if ( YAHOO.amp.orgPanels == null ) {
+		YAHOO.amp.orgPanels	= new Object;
+	}
+	if (uuid == null) {
+		uuid	= YAHOO.amp.orgPanels.lastUuid;
+	}
+	var panel	= YAHOO.amp.orgPanels[uuid]; 
+	if (panel == null) {
+		panel 		= new YAHOO.widget.Panel("panelForOrganisations"+uuid, { width:"400px", visible:true, draggable:true, close:true, modal:true } );
+		panel.setHeader('<digi:trn>Participating Organizations</digi:trn>');
+		panel.setBody("");
+		//panel.setFooter("End of Panel #2");
+		panel.render(document.body);
+		YAHOO.amp.orgPanels[uuid]	= panel;
+		panel.center();
+	}
+	panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	panel.show();
+
+	YAHOO.amp.orgPanels.lastUuid	= uuid;
+	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(panel) );
+
+}
+
+function deleteDocToOrgObj(uuid, ampOrgId) {
+	var panel		= YAHOO.amp.orgPanels[uuid]; 
+	panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	var postString	= "removingUuid=" + uuid + "&removingOrgId=" + ampOrgId;
+	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(panel), postString );
 }
 
 /* Number of possible panels on this page */

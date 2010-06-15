@@ -20,5 +20,8 @@
 		<hibernate-class>
 			org.digijava.module.contentrepository.dbentity.TeamNodeState
 		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations
+		</hibernate-class>
 	</hibernate-classes>
 </module-config>

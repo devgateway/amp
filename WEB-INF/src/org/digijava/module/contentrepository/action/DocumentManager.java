@@ -359,7 +359,8 @@ public class DocumentManager extends Action {
 				Boolean hasDeleteRights			= false;
 				Boolean hasMakePublicRights		= false;
 				Boolean hasDeleteRightsOnPublicVersion	= false;
-				Boolean hasApproveVersionRights =false;
+				Boolean hasApproveVersionRights 		= false;
+				Boolean hasAddParticipatingOrgRights	= false;
 				
 				String uuid						= documentNode.getUUID();
 				boolean isPublicVersion		= uuidMapVer.containsKey(uuid);
@@ -416,6 +417,11 @@ public class DocumentManager extends Action {
 					hasMakePublicRights		= DocumentManagerRights.hasMakePublicRights(baseNode, request);
 					if ( hasMakePublicRights != null ) {
 						documentData.setHasMakePublicRights( hasMakePublicRights.booleanValue() && !isPending);
+					}
+					
+					hasAddParticipatingOrgRights	= DocumentManagerRights.hasAddParticipatingOrgRights(documentNode, request);
+					if (hasAddParticipatingOrgRights != null) {
+						documentData.setHasAddParticipatingOrgRights(hasAddParticipatingOrgRights);
 					}
 					
 					hasDeleteRightsOnPublicVersion			= DocumentManagerRights.hasDeleteRightsOnPublicVersion(baseNode, request);

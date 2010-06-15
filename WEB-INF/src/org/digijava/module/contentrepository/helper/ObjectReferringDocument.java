@@ -16,6 +16,9 @@ public abstract class ObjectReferringDocument {
 	public ObjectReferringDocument() {
 		uuid	= null;
 	}
+	public ObjectReferringDocument(String uuid) {
+		this.uuid	= uuid;
+	}
 	public void remove(Session session) throws HibernateException {
 		this.detach();
 		session.delete(this);

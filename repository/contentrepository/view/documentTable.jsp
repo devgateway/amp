@@ -211,6 +211,12 @@
 									onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"
 									title="<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
 								</logic:equal>
+								
+									<a style="cursor:pointer; text-decoration:underline; color: blue"
+									onClick="showOrgsPanel('<%=documentData.getUuid() %>');" title="<digi:trn>Show Participating Organizations</digi:trn>">
+									<img hspace="2" src= "/repository/contentrepository/view/images/myO.png" border=0>
+									</a>
+									
 								</td>
 							</tr>							
 						</logic:iterate>

@@ -670,12 +670,16 @@
 				<page>amp_selectDocumentDM</page>
 				<page>nondhtmlAddDocument</page>
 			</module>
+			<module name="dataExchange">
+				<page>de_showLog</page>
+			</module>
 		</page-group>
 		<page-group masterLayout="noLayout" tile="body">
 			<module name="contentrepository">
 				<page>amp_getDocumentList</page>
 				<page>amp_getDocumentVersionList</page>
 				<page>amp_deleteDocumentResponse</page>
+				<page>cr_docToOrg</page>
 			</module>
 			<module name="aim">
 				<page>aim_saveMessage</page>
@@ -695,7 +699,9 @@
 			<module name="mondrian">
 				<page>savehtml</page>
             </module>
-            
+            <module name="dataExchange">
+				<page>de_logFeed</page>
+            </module>
 		</page-group>
 	</site-layout>
 </site-config>

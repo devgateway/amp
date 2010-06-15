@@ -6,6 +6,7 @@
     <form-bean name="crDocumentManagerForm" type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
     <form-bean name="crSelectDocumentForm" type="org.digijava.module.contentrepository.form.SelectDocumentForm" />
     <form-bean name="crSetAttributesForm" type="org.digijava.module.contentrepository.form.SetAttributesForm" />
+    <form-bean name="crDocToOrgForm" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
   </form-beans>
   <action-mappings>
   	<action path="/contentrepository/selectDocumentDM" name="crSelectDocumentForm" type="org.digijava.module.contentrepository.action.SelectDocumentDM" scope="session">
@@ -41,6 +42,10 @@
     	<forward name="ajaxDocumentList" path="/showLayout.do?layout=amp_getDocumentList" />
     </action>
     <action path="/contentrepository/setAttributes" type="org.digijava.module.contentrepository.action.SetAttributes" name="crSetAttributesForm" validate="false" />
+    
+    <action path="/contentrepository/docToOrg" scope="session" type="org.digijava.module.contentrepository.action.DocToOrgAction" validate="false" name="crDocToOrgForm">
+    	<forward name="list" path="/showLayout.do?layout=cr_docToOrg" />
+    </action>
    </action-mappings>
 </struts-config>
 

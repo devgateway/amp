@@ -10,7 +10,7 @@ import java.util.List;
 public class DELogPerExecution {
 	
 	private Long id;
-	private DESourceSetting DESourceSetting;
+	private DESourceSetting deSourceSetting;
 	private String description;
 	private Timestamp executionTime;
 	private String externalTimestamp;
@@ -43,18 +43,6 @@ public class DELogPerExecution {
 	 */
 	public void setLogItems(List<DELogPerItem> logItems) {
 		this.logItems = logItems;
-	}
-	/**
-	 * @return the DESourceSetting
-	 */
-	public DESourceSetting getAmpSourceSetting() {
-		return DESourceSetting;
-	}
-	/**
-	 * @param DESourceSetting the DESourceSetting to set
-	 */
-	public void setAmpSourceSetting(DESourceSetting DESourceSetting) {
-		this.DESourceSetting = DESourceSetting;
 	}
 	/**
 	 * @return the description
@@ -91,6 +79,18 @@ public class DELogPerExecution {
 	 */
 	public void setExternalTimestamp(String externalTimestamp) {
 		this.externalTimestamp = externalTimestamp;
+	}
+	/**
+	 * @return the deSourceSetting
+	 */
+	public DESourceSetting getDeSourceSetting() {
+		return deSourceSetting;
+	}
+	/**
+	 * @param deSourceSetting the deSourceSetting to set
+	 */
+	public void setDeSourceSetting(DESourceSetting deSourceSetting) {
+		this.deSourceSetting = deSourceSetting;
 	}
 	
 	

@@ -11,7 +11,7 @@ public class DELogPerItem {
 	
 	
 	private Long id;
-	private DELogPerExecution executionInstance;
+	private DELogPerExecution deLogPerExecution;
 	private String logType;
 
 	private String itemType;
@@ -35,18 +35,20 @@ public class DELogPerItem {
 		this.id = id;
 	}
 
+
+
 	/**
-	 * @return the executionInstance
+	 * @return the deLogPerExecution
 	 */
-	public DELogPerExecution getExecutionInstance() {
-		return executionInstance;
+	public DELogPerExecution getDeLogPerExecution() {
+		return deLogPerExecution;
 	}
 
 	/**
-	 * @param executionInstance the executionInstance to set
+	 * @param deLogPerExecution the deLogPerExecution to set
 	 */
-	public void setExecutionInstance(DELogPerExecution executionInstance) {
-		this.executionInstance = executionInstance;
+	public void setDeLogPerExecution(DELogPerExecution deLogPerExecution) {
+		this.deLogPerExecution = deLogPerExecution;
 	}
 
 	/**

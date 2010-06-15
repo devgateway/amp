@@ -34,7 +34,7 @@ public class DESourceSetting {
 	private String uniqueIdentifierSeparator;
 	
 	private List exportFilters;
-	private List<DESourceSetting> logs;
+	private List<DELogPerExecution> logs;
 	
 	private String languageId;
 	/**import option (dropdown):    
@@ -214,6 +214,20 @@ public class DESourceSetting {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the logs
+	 */
+	public List<DELogPerExecution> getLogs() {
+		return logs;
+	}
+
+	/**
+	 * @param logs the logs to set
+	 */
+	public void setLogs(List<DELogPerExecution> logs) {
+		this.logs = logs;
 	}
 	
 	

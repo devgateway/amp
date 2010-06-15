@@ -27,7 +27,6 @@
         <c:otherwise>1</c:otherwise>
     </c:choose>
 </c:set>
-<div style="height:200px">
     <table border="0" class="tableElement" bgcolor="#dddddd" width="100%" cellspacing="0" cellpadding="0">
         <tr>
             <th colspan="${6*colSpan}" class="tableHeaderCls">
@@ -110,7 +109,6 @@
         </c:forEach>
 
     </table>
-</div>
 
 
 

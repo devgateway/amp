@@ -13,92 +13,137 @@
 
 <digi:instance property="gisWidgetTeaserForm" />
 <c:if test="${gisWidgetTeaserForm.rendertype==5}">
-    <feature:display name="orgprof_chart_place${gisWidgetTeaserForm.type}" module="Org Profile">
-        <c:choose>
-            <c:when test="${gisWidgetTeaserForm.type==1}">
+    <c:choose>
+        <c:when test="${gisWidgetTeaserForm.type==1}">
+            <div  class="chartPlaceCss">
                 <jsp:include page="/orgProfile/showOrgSummary.do" flush="true"/>
-            </c:when>
-            <c:when test="${gisWidgetTeaserForm.type==7}">
+            </div>
+        </c:when>
+        <c:when test="${gisWidgetTeaserForm.type==7}">
+            <div  class="chartPlaceCss">
                 <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
-            </c:when>
-            <c:otherwise>
-                <script language="javascript" type="text/javascript">
-                    function getGraphMap_${gisWidgetTeaserForm.type}(transactionType){
-                        var lastTimeStamp = new Date().getTime();
-                        var url="/widget/getWidgetMap.do?type="+${gisWidgetTeaserForm.type}+'&timestamp='+lastTimeStamp;
-                        if (typeof transactionType != 'undefined') {
-                            url+='&transactionType='+transactionType;
-                        }
-                        var async=new Asynchronous();
-                        async.complete=mapCallBack_${gisWidgetTeaserForm.type};
-                        async.call(url);
+            </div>
+        </c:when>
+        <c:otherwise>
+            <DIV id="tabs">
+                <UL>
+                    <div  class="tab_graph_${gisWidgetTeaserForm.type}_selected">
+                        <LI>
+                            <a name="node">
+                                <div>
+                                    <digi:trn>Graph</digi:trn>
+                                </div>
+                            </a>
+                        </LI>
+                    </div>
+                    <div  class="tab_graph_${gisWidgetTeaserForm.type}_unselected" style="display: none">
+                        <LI>
+                            <span>
+                                <a href="javascript:hideDataSource_${gisWidgetTeaserForm.type}()">
+                                    <div title='<digi:trn>Hide data source table and show chart</digi:trn>'>
+                                        <digi:trn>Graph</digi:trn>
+                                    </div>
+                                </a>
+                            </span>
+                        </LI>
+                    </div>
+
+                    <div  class="tab_graph_${gisWidgetTeaserForm.type}_unselected" style="display: none">
+                        <LI>
+                            <a name="node">
+                                <div>
+                                    <digi:trn>Data Source</digi:trn>
+                                </div>
+                            </a>
+                        </LI>
+                    </div>
+
+                    <div  class="tab_graph_${gisWidgetTeaserForm.type}_selected">
+                        <LI>
+                            <span>
+                                <a  href="javascript:loadDataSource_${gisWidgetTeaserForm.type}()">
+                                    <div title='<digi:trn>Hide Chart and Show data source table</digi:trn>'>
+                                        <digi:trn>Data Source</digi:trn>
+                                    </div>
+                                </a>
+                            </span>
+                        </LI>
+                    </div>
+                </UL>
+            </DIV>
+            <script language="javascript" type="text/javascript">
+                function getGraphMap_${gisWidgetTeaserForm.type}(transactionType){
+                    var lastTimeStamp = new Date().getTime();
+                    var url="/widget/getWidgetMap.do?type="+${gisWidgetTeaserForm.type}+'&timestamp='+lastTimeStamp;
+                    if (typeof transactionType != 'undefined') {
+                        url+='&transactionType='+transactionType;
+                    }
+                    var async=new Asynchronous();
+                    async.complete=mapCallBack_${gisWidgetTeaserForm.type};
+                    async.call(url);
+                }
+
+                function mapCallBack_${gisWidgetTeaserForm.type}(status, statusText, responseText, responseXML){
+                    var map=responseXML.getElementsByTagName('map')[0];
+                    var id=map.getAttribute('id');
+                    var mapSpan= document.getElementById(id);
+                    mapSpan.innerHTML=responseText;
+                }
+                function  loadDataSource_${gisWidgetTeaserForm.type}(){
+                    $(".tab_graph_${gisWidgetTeaserForm.type}_unselected").each(function(index) {
+                        this.style.display="block";
+                    });
+
+                    $(".tab_graph_${gisWidgetTeaserForm.type}_selected").each(function(index) {
+                        this.style.display="none";
+                    });               
+                    var postString		="type=${gisWidgetTeaserForm.type}";
+                <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
+                        var url = "${url}";
+                        YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
+                    }
+                    function  hideDataSource_${gisWidgetTeaserForm.type}(){
+                        $(".tab_graph_${gisWidgetTeaserForm.type}_selected").each(function(index) {
+                            this.style.display="block";
+                        });
+
+                        $(".tab_graph_${gisWidgetTeaserForm.type}_unselected").each(function(index) {
+                            this.style.display="none";
+                        });
+                     
+                        var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
+                        div.style.display="none";
                     }
 
-                    function mapCallBack_${gisWidgetTeaserForm.type}(status, statusText, responseText, responseXML){
-                        var map=responseXML.getElementsByTagName('map')[0];
-                        var id=map.getAttribute('id');
-                        var mapSpan= document.getElementById(id);
-                        mapSpan.innerHTML=responseText;
-                    }
-                    function  loadDataSource_${gisWidgetTeaserForm.type}(){
-                        var loadLink=document.getElementById("loadDataSource_${gisWidgetTeaserForm.type}_link");
+                    var responseSuccess_${gisWidgetTeaserForm.type} = function(o){
+                        var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
                         var loadImg=document.getElementById("loadDataSource_${gisWidgetTeaserForm.type}_image");
-                        var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
-                        divChart.style.display="none";
-                        loadLink.style.display="none";
-                        loadImg.style.display="block";
-                        var postString		="type=${gisWidgetTeaserForm.type}";
-                    <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
-                            var url = "${url}";
-                            YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
-                        }
-                        function  hideDataSource_${gisWidgetTeaserForm.type}(){
-                            var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
-                            div.style.display="none";
-                            var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
-                            divChart.style.display="block";
-                            var loadLink=document.getElementById("loadDataSource_${gisWidgetTeaserForm.type}_link");
-                            loadLink.style.display="block";
-                            var hideLink=document.getElementById("hideDataSource_${gisWidgetTeaserForm.type}_link");
-                            hideLink.style.display="none";
+                        var response = o.responseText;
+                        div.innerHTML=response;
+                        loadImg.style.display="none";
+                        div.style.display="block";
+                    }
 
-                        }
-
-                        var responseSuccess_${gisWidgetTeaserForm.type} = function(o){
-                            var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
-                            var loadImg=document.getElementById("loadDataSource_${gisWidgetTeaserForm.type}_image");
-                            var response = o.responseText;
-                            div.innerHTML=response;
-                            loadImg.style.display="none";
-                            div.style.display="block";
-                            var divChart=document.getElementById("chartDiv_${gisWidgetTeaserForm.type}");
-                            divChart.style.display="none";
-                            var hideLink=document.getElementById("hideDataSource_${gisWidgetTeaserForm.type}_link");
-                            hideLink.style.display="block";
-                        }
-
-                        var responseFailure_${gisWidgetTeaserForm.type}= function(o){
-                            // Access the response object's properties in the
-                            // same manner as listed in responseSuccess( ).
-                            // Please see the Failure Case section and
-                            // Communication Error sub-section for more details on the
-                            // response object's properties.
-                            //alert("Connection Failure!");
-                        }
-                        var callback_${gisWidgetTeaserForm.type} =
-                            {
-                            success:responseSuccess_${gisWidgetTeaserForm.type},
-                            failure:responseFailure_${gisWidgetTeaserForm.type}
-                        };
-                </script>
-                <div style="margin-bottom: 20px">
-                <a id="loadDataSource_${gisWidgetTeaserForm.type}_link" href="javascript:loadDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>show data source</digi:trn></a>
-                <img src="images/amploading.gif" alt="" style="display: none" id="loadDataSource_${gisWidgetTeaserForm.type}_image" />
-                <a id="hideDataSource_${gisWidgetTeaserForm.type}_link" style="display: none" href="javascript:hideDataSource_${gisWidgetTeaserForm.type}()"><digi:trn>hide data source</digi:trn></a>
-                </div>
-                <div id="table_${gisWidgetTeaserForm.type}" style="display: none">
-                </div>
-                <div id="chartDiv_${gisWidgetTeaserForm.type}">
+                    var responseFailure_${gisWidgetTeaserForm.type}= function(o){
+                        // Access the response object's properties in the
+                        // same manner as listed in responseSuccess( ).
+                        // Please see the Failure Case section and
+                        // Communication Error sub-section for more details on the
+                        // response object's properties.
+                        //alert("Connection Failure!");
+                    }
+                    var callback_${gisWidgetTeaserForm.type} =
+                        {
+                        success:responseSuccess_${gisWidgetTeaserForm.type},
+                        failure:responseFailure_${gisWidgetTeaserForm.type}
+                    };
+            </script>
+            <div id="table_${gisWidgetTeaserForm.type}"  class="contentbox_border chartPlaceCss" style="display: none;"></div>
+            <div id="loadDataSource_${gisWidgetTeaserForm.type}_image" class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_unselected" style="display: none" >
+                    <img src="images/amploading.gif" alt=""  />
+            </div>
+            <div  class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_selected ">
+               
                     <c:choose>
                         <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
                             <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450~transactionType=0" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
@@ -110,16 +155,15 @@
                             </span>
                         </c:when>
                         <c:otherwise>
-           					<img  alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
+                            <img  alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=450" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
                             <span id="chartMap${gisWidgetTeaserForm.type}">
 
                             </span>
                         </c:otherwise>
                     </c:choose>
                 </div>
-            </c:otherwise>
-        </c:choose>
-    </feature:display>
+        </c:otherwise>
+    </c:choose>
 
 
 

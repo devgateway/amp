@@ -24,52 +24,52 @@
                 }
                 function exportWord() {
             <digi:context name="url" property="context/module/moduleinstance/wordExport.do" />
-                        document.orgProfOrgProfileFilterForm.action="${url}";
-                        document.orgProfOrgProfileFilterForm.target="_blank";
-                        document.orgProfOrgProfileFilterForm.submit();
+                    document.orgProfOrgProfileFilterForm.action="${url}";
+                    document.orgProfOrgProfileFilterForm.target="_blank";
+                    document.orgProfOrgProfileFilterForm.submit();
             
+                }
+                function setStripsTable(classOdd, classEven) {
+                    var tableElements = $(".tableElement");
+                    for(var j = 0; j < tableElements.length; j++) {
+                        rows = tableElements[j].getElementsByTagName('tr');
+                        for(var i = 0, n = rows.length; i < n; ++i) {
+                            if(i%2 == 0)
+                                rows[i].className = classEven;
+                            else
+                                rows[i].className = classOdd;
+                        }
+                        rows = null;
+
                     }
-                    function setStripsTable(classOdd, classEven) {
-                        var tableElements = $(".tableElement");
-                        for(var j = 0; j < tableElements.length; j++) {
-                            rows = tableElements[j].getElementsByTagName('tr');
+
+                }
+                function setHoveredTable() {
+                    var tableElements = $(".tableElement");
+                    for(var j = 0; j < tableElements.length; j++) {
+                        if(tableElements){
+                            var className = 'Hovered',
+                            pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+                            rows      = tableElements[j].getElementsByTagName('tr');
+
                             for(var i = 0, n = rows.length; i < n; ++i) {
-                                if(i%2 == 0)
-                                    rows[i].className = classEven;
-                                else
-                                    rows[i].className = classOdd;
+                                rows[i].onmouseover = function() {
+                                    this.className += ' ' + className;
+                                };
+                                rows[i].onmouseout = function() {
+                                    this.className = this.className.replace(pattern, ' ');
+
+                                };
                             }
                             rows = null;
-
-                        }
-
-                    }
-                    function setHoveredTable() {
-                        var tableElements = $(".tableElement");
-                        for(var j = 0; j < tableElements.length; j++) {
-                            if(tableElements){
-                                var className = 'Hovered',
-                                pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-                                rows      = tableElements[j].getElementsByTagName('tr');
-
-                                for(var i = 0, n = rows.length; i < n; ++i) {
-                                    rows[i].onmouseover = function() {
-                                        this.className += ' ' + className;
-                                    };
-                                    rows[i].onmouseout = function() {
-                                        this.className = this.className.replace(pattern, ' ');
-
-                                    };
-                                }
-                                rows = null;
-                            }
                         }
                     }
+                }
           
-                    function showOrgProfileToolbar(){
-                        var toolbar=document.getElementById("orgProfToolbarId");
-                        toolbar.style.display="block";
-                    }
+                function showOrgProfileToolbar(){
+                    var toolbar=document.getElementById("orgProfToolbarId");
+                    toolbar.style.display="block";
+                }
         </script>
         <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
         <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
@@ -104,7 +104,7 @@
                 font-size:10px;
                 font-family: Arial;
             }
-            
+
             .tableOdd{
                 background-color:#FFFFFF;
                 font-family: Arial;
@@ -135,10 +135,15 @@
 
             }
             .chartPlaceCss{
+                padding: 20px 20px 20px 20px !important;
                 background-color:#EDF5FF;
-                text-align: left;
                 font-size:10px;
                 font-family:Arial,Helvetica,sans-serif;
+            }
+            .contentbox_border{
+                clear:both;
+                border: 1px solid black;
+                border-width: 1px 1px 1px 1px;
             }
             body {
                 margin:0px; padding:0px;
@@ -208,39 +213,39 @@
                                         <TABLE cellpadding="20" cellspacing="20" width="100%" >
                                             <TBODY>
                                                 <TR>
-                                                    <TD VALIGN="TOP" width="50%"   class="chartPlaceCss">
-                                                        <c:set var="stylePlace1">
-                                                            display: none;
-                                                        </c:set>
-                                                        <feature:display name="orgprof_chart_place1" module="Org Profile">
-                                                            <c:set var="stylePlace1">
-                                                                z-index: 1000;
-                                                            </c:set>
-                                                        </feature:display>
-                                                        <div style="${stylePlace1}">
-                                                             <digi:insert attribute="chart1">
-                                                                 <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
-                                                             </digi:insert>
-                                                    </div>
-                                                </TD>
-                                                <TD  VALIGN="TOP"   class="chartPlaceCss">
-                                                    <c:set var="stylePlace2">
-                                                        display: none; z-index: 1000
+                                                    <TD VALIGN="TOP" style="width: 50%">
+                                                <c:set var="stylePlace1">
+                                                    display: none;
+                                                </c:set>
+                                                <feature:display name="orgprof_chart_place1" module="Org Profile">
+                                                    <c:set var="stylePlace1">
+                                                        z-index: 1000;
                                                     </c:set>
-                                                    <feature:display name="orgprof_chart_place2" module="Org Profile">
-                                                        <c:set var="stylePlace2">
-                                                            z-index: 1000
-                                                        </c:set>
-                                                    </feature:display>
-                                                    <div style="${stylePlace2}">
-                                                         <digi:insert attribute="chart2">
-                                                             <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
-                                                         </digi:insert>
+                                                </feature:display>
+                                                <div style="${stylePlace1}">
+                                                    <digi:insert attribute="chart1">
+                                                        <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
+                                                    </digi:insert>
+                                                </div>
+                                                </TD>
+                                                <TD  VALIGN="TOP"    >
+                                                <c:set var="stylePlace2">
+                                                    display: none; z-index: 1000
+                                                </c:set>
+                                                <feature:display name="orgprof_chart_place2" module="Org Profile">
+                                                    <c:set var="stylePlace2">
+                                                        z-index: 1000
+                                                    </c:set>
+                                                </feature:display>
+                                                <div style="${stylePlace2}">
+                                                    <digi:insert attribute="chart2">
+                                                        <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
+                                                    </digi:insert>
                                                 </div>
                                             </TD>
                                         </TR>
                                         <TR>
-                                            <TD   VALIGN="TOP" class="chartPlaceCss">
+                                            <TD   VALIGN="TOP" style="width: 50%">
                                                 <c:set var="stylePlace3">
                                                     display: none; z-index: 1000
                                                 </c:set>
@@ -255,7 +260,7 @@
                                                     </digi:insert>
                                                 </div>
                                             </TD>
-                                            <TD  VALIGN="TOP"  class="chartPlaceCss">
+                                            <TD  VALIGN="TOP">
                                                 <c:set var="stylePlace4">
                                                     display: none; z-index: 1000
                                                 </c:set>
@@ -272,7 +277,7 @@
                                             </TD>
                                         </TR>
                                         <TR>
-                                            <TD  VALIGN="TOP"  class="chartPlaceCss">
+                                            <TD  VALIGN="TOP"  style="width: 50%" >
                                                 <c:set var="stylePlace5">
                                                     display: none; z-index: 1000
                                                 </c:set>
@@ -287,7 +292,7 @@
                                                      </digi:insert>
                                             </div>
                                         </TD>
-                                        <TD  VALIGN="TOP"  class="chartPlaceCss">
+                                        <TD  VALIGN="TOP"   >
                                             <c:set var="stylePlace6">
                                                 display: none; z-index: 1000
                                             </c:set>
@@ -304,7 +309,7 @@
                                         </TD>
                                     </TR>
                                     <TR>
-                                        <TD VALIGN="TOP" colspan="2"  class="chartPlaceCss">
+                                        <TD VALIGN="TOP" colspan="2"   >
                                             <c:set var="stylePlace7">
                                                 display: none; z-index: 1000
                                             </c:set>
@@ -313,32 +318,32 @@
                                                     z-index: 1000
                                                 </c:set>
                                             </feature:display>
-                                            <div style="${stylePlace7}" class="chartPlaceCss">
+                                            <div style="${stylePlace7}">
                                                 <digi:insert attribute="chart7">
                                                     <digi:put name="widget-teaser-param">orgprof_chart_place7</digi:put>
                                                 </digi:insert>
                                             </div>
-                                        </TD>
-                                    </TR>
-                                </TBODY>
-                            </TABLE>
-                        </TD>
-                    </TR>
+                                </TD>
+                            </TR>
+                        </TBODY>
+                    </TABLE>
+                </TD>
+            </TR>
                 </TBODY>
             </TABLE>
         </TD>
     </TR>
-    <TR>
-        <TD width="100%" >
-            <digi:insert attribute="footer" />
-        </TD>
-    </TR>
-</TABLE>
-<script language="javascript" type="text/javascript">
-    setStripsTable("tableEven", "tableOdd");
-    setHoveredTable();
-    showOrgProfileToolbar();
-</script>
+            <TR>
+                <TD width="100%" >
+                    <digi:insert attribute="footer" />
+                </TD>
+            </TR>
+    </TABLE>
+    <script language="javascript" type="text/javascript">
+        setStripsTable("tableEven", "tableOdd");
+        setHoveredTable();
+        showOrgProfileToolbar();
+    </script>
 </BODY>
 </HTML>
 

@@ -128,6 +128,7 @@ import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
@@ -6503,24 +6504,15 @@ public class DbUtil {
         return result;
     }
 
-    public static Collection getAidSurveyReportByIndicator10b(String orgGroup, String donor, int startYear, int closeYear, String site, String lang, HttpServletRequest request) throws RepositoryException {
-    	Session session = null;
-        String qry = null;
-        ArrayList responses = new ArrayList();
-        Collection calDonorsList = new ArrayList();
-        Set donors = new HashSet();
-        List sortedDonors = new LinkedList();
-        boolean orgGroupFlag = false;
-        int NUM_ANSWER_COLUMNS = 4, i = 0, j = 0;
-        int YEAR_RANGE = (closeYear - startYear + 1);
-        double answersRow[] = null;
-        double allDnRow[] = null;
-        Iterator itr1 = null, itr2 = null;
-        Double percent = null;
-        NumberFormat formatter = new DecimalFormat("#.##");
-        SimpleDateFormat year = new SimpleDateFormat("yyyy");
-        
-        Collection<NodeWrapper> documents = new HashSet();
+    public static Collection getAidSurveyReportByIndicator10b(String orgGroup, String donor, int startYear,
+			int closeYear, String site, String lang, HttpServletRequest request) throws RepositoryException {
+		Set responses = new HashSet();
+		int NUM_ANSWER_COLUMNS = 4;
+		int YEAR_RANGE = (closeYear - startYear + 1);
+		NumberFormat formatter = new DecimalFormat("#.##");
+		SimpleDateFormat year = new SimpleDateFormat("yyyy");
+
+		Collection<NodeWrapper> documents = new HashSet();
 		javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
 		// Iterate all AmpTeamMembers.
 		Iterator<AmpTeamMember> iterTeamMembers = TeamMemberUtil.getAllTeamMembers().iterator();
@@ -6537,20 +6529,72 @@ public class DbUtil {
 			// Get the main team node for this team member.
 			Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember);
 			NodeWrapper auxNodeWrapper = new NodeWrapper(teamNode);
-			// Iterate documents.
+			// Iterate documents and add without duplicates.
 			Iterator iter = teamNode.getNodes();
 			while (iter.hasNext()) {
 				Node nextNode = (Node) iter.next();
 				NodeWrapper nextWrapper = new NodeWrapper(nextNode);
-				
-				//Insert code here to check the new Country Analytic resource and if its "joint".
+				// TODO: Check document type (not available now).
 				documents.add(nextWrapper);
-				logger.warn(nextNode.getUUID() + nextWrapper.getTitle());
 			}
 		}
-       
-    	return responses;
-    }
+		// Check for "joint" resources.
+		Iterator<NodeWrapper> iterDocuments = documents.iterator();
+		while (iterDocuments.hasNext()) {
+			NodeWrapper auxWrapper = iterDocuments.next();
+			Collection<AmpOrganisation> auxOrganizations = DocToOrgDAO.getOrgsObjByUuid(auxWrapper.getUuid());
+			int numberOfOrgs = auxOrganizations.size();
+			Iterator<AmpOrganisation> iterOrgs = auxOrganizations.iterator();
+			while (iterOrgs.hasNext()) {
+				logger.warn(auxWrapper.getTitle());
+				AmpOrganisation auxOrg = iterOrgs.next();
+				ParisIndicator auxPI = new ParisIndicator();
+				auxPI.setDonor(auxOrg.getAcronym());
+				auxPI.setAnswers(new ArrayList());
+				for (int i = 0; i < YEAR_RANGE; i++) {
+					auxPI.getAnswers().add(new double[NUM_ANSWER_COLUMNS]);
+					((double[]) auxPI.getAnswers().get(i))[0] = startYear + i;
+					int docYear = Integer.valueOf(auxWrapper.getDate().substring(auxWrapper.getDate().length() - 4))
+							.intValue();
+					if (docYear == startYear + i) {
+						if (numberOfOrgs > 1) {
+							((double[]) auxPI.getAnswers().get(i))[1]++;
+						}
+						((double[]) auxPI.getAnswers().get(i))[2]++;
+					}
+				}
+
+				// Check if the organization was added before.
+				if (responses.contains(auxPI)) {
+					Iterator<ParisIndicator> iterPI = responses.iterator();
+					while (iterPI.hasNext()) {
+						ParisIndicator auxResponse = iterPI.next();
+						if (auxResponse.getDonor().equals(auxPI.getDonor())) {
+							for (int i = 0; i < YEAR_RANGE; i++) {
+								((double[]) auxResponse.getAnswers().get(i))[1] += ((double[]) auxPI.getAnswers()
+										.get(i))[1];
+								((double[]) auxResponse.getAnswers().get(i))[2] += ((double[]) auxPI.getAnswers()
+										.get(i))[2];
+							}
+						}
+					}
+				} else {
+					responses.add(auxPI);
+				}
+			}
+		}
+
+		/*
+		 * logger.error("------------------------------------------------------------------------------------"
+		 * ); Iterator<NodeWrapper> it = documents.iterator();
+		 * while(it.hasNext()){ NodeWrapper node = it.next();
+		 * logger.error(node.getName() + "-"+node.getUuid()); }logger.error(
+		 * "------------------------------------------------------------------------------------"
+		 * );
+		 */
+
+		return responses;
+	}
     
     public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear, String site, String lang) {
         Session session = null;

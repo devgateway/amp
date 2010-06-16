@@ -246,6 +246,29 @@ public class TeamMemberUtil {
 		return tm;
 
 	}
+	
+	public static TeamMember getTeamMember(Long ampTeamMemberId) {
+		AmpTeamMember ampMem	= getAmpTeamMember(ampTeamMemberId);
+		Long id 	= ampMem.getAmpTeamMemId();
+		User usr 	= UserUtils.getUser(ampMem.getUser().getId());
+		String name = usr.getName();
+		String role = ampMem.getAmpMemberRole().getRole();
+		AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
+		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
+		TeamMember tm = new TeamMember();
+		tm.setMemberId(id);
+		tm.setTeamId(ampMem.getAmpTeam().getAmpTeamId());
+		tm.setMemberName(name);
+		tm.setRoleName(role);
+		tm.setEmail(usr.getEmail());
+		if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
+			tm.setTeamHead(true);
+		} else {
+			tm.setTeamHead(false);
+		}
+		return tm;
+
+	}
 
 	public static AmpTeamMember getTeamHead(Long teamId) {
 
@@ -907,6 +930,24 @@ public class TeamMemberUtil {
 		}
 		Collections.sort(col, alphabeticalTeamComp);
 		return col;
+	}
+	
+	public static AmpTeamMember getAmpTeamMemberByEmailAndTeam(String email, Long teamId){
+		AmpTeamMember retVal= null;
+		Session session = null;
+		Query qry = null;
+		String queryString=null;
+		try {
+			session= PersistenceManager.getRequestDBSession();
+			queryString="select tm from " +AmpTeamMember.class.getName() + " tm where tm.user.email=:usermail and tm.ampTeam="+teamId;
+			qry=session.createQuery(queryString);
+			qry.setString("usermail",email);
+			retVal=(AmpTeamMember)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Unable to get TeamMember" + e.getMessage());
+			e.printStackTrace(System.out);
+		}
+		return retVal;
 	}
 	
 	public static Comparator<AmpTeamMember> alphabeticalTeamComp		=

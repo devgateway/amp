@@ -11,10 +11,13 @@ import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
+import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
+import org.digijava.module.message.triggers.PendingResourceShareTrigger;
+import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
@@ -42,7 +45,10 @@ public class MessageConstants {
                                                                 ActivityProposedCompletionDateTrigger.class,
                                                                 ActivityProposedStartDateTrigger.class,
                                                                 ApprovedCalendarEventTrigger.class,
-                                                                NotApprovedCalendarEventTrigger.class};
+                                                                NotApprovedCalendarEventTrigger.class,
+                                                                PendingResourceShareTrigger.class,
+                                                                ApprovedResourceShareTrigger.class,
+                                                                RejectResourceSharetrigger.class};
 
     public static final  String[] triggerName=new String[] {"Save Actvity",
                                                             "Activity Disbursement Date",
@@ -59,7 +65,10 @@ public class MessageConstants {
                                                             "Activity Proposed Completion Date",
                                                             "Activity Proposed Start Date",
                                                             "Calendar Event Approved",
-                                                            "Calendar Event Not Approved"};
+                                                            "Calendar Event Not Approved",
+                                                            "Resource Share is Pending Approval",
+                                                            "Resource Share is Approved",
+                                                            "Reject Resource Share"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

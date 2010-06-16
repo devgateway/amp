@@ -13,11 +13,14 @@ import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.util.AmpDbUtil;
@@ -42,10 +45,13 @@ import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
+import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
+import org.digijava.module.message.triggers.PendingResourceShareTrigger;
+import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
@@ -99,6 +105,10 @@ public class AmpMessageWorker {
                     newMsg = processActivityProposedCompletionDateEvent(e, newAlert, template);
                 }else if (e.getTrigger().equals(ActivityProposedStartDateTrigger.class)) {
                     newMsg = processActivityProposedStartDateEvent(e, newAlert, template);
+                }else if(e.getTrigger().equals(PendingResourceShareTrigger.class)){
+                	newMsg =processResourceShareEvent(e, newApproval, template, true);
+                }else if(e.getTrigger().equals(ApprovedResourceShareTrigger.class) || e.getTrigger().equals(RejectResourceSharetrigger.class)){
+                	newMsg =processResourceShareEvent(e, newApproval, template, false);
                 }
 
                 AmpMessageUtil.saveOrUpdateMessage(newMsg);
@@ -136,7 +146,11 @@ public class AmpMessageWorker {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_TEAM_ID).toString()));
                 }else if(e.getTrigger().equals(ActivityProposedStartDateTrigger.class)) {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_TEAM_ID).toString()));
-                }else{ //<-- currently for else is left user registration or activity disbursement date triggers
+                }else if(e.getTrigger().equals(PendingResourceShareTrigger.class)){
+                	defineReceiversForResourceShare(template,newMsg,true);
+                }else if(e.getTrigger().equals(ApprovedResourceShareTrigger.class) || e.getTrigger().equals(RejectResourceSharetrigger.class)){
+                	defineReceiversForResourceShare(template,newMsg,false);
+                } else{ //<-- currently for else is left user registration or activity disbursement date triggers
                 	List<String> emailReceivers=new ArrayList<String>();
                     List<AmpMessageState> statesRelatedToTemplate = null;
                     statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
@@ -155,6 +169,21 @@ public class AmpMessageWorker {
                 }
             }
         }
+    }
+    
+   	public static Approval processResourceShareEvent(Event e, Approval approval,TemplateAlert template,boolean needsApproval){
+    	 HashMap<String, String> myHashMap = new HashMap<String, String> ();
+    	 Long teamId=(Long)e.getParameters().get(PendingResourceShareTrigger.PARAM_CREATOR_TEAM);
+    	 String userMail=(String)e.getParameters().get(PendingResourceShareTrigger.PARAM_SHARED_BY);
+         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(PendingResourceShareTrigger.PARAM_NAME));
+         myHashMap.put(MessageConstants.OBJECT_AUTHOR, userMail); //holds email of creator
+         myHashMap.put(MessageConstants.OBJECT_TEAM,  teamId.toString());
+        
+         AmpTeamMember tm=TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(userMail, teamId);         
+         approval.setSenderId(tm.getAmpTeamMemId());
+         
+         approval.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
+         return createApprovalFromTemplate(template, myHashMap, approval, true,false);
     }
 
     /**
@@ -267,7 +296,7 @@ public class AmpMessageWorker {
         }
         approval.setSenderId( ( (AmpTeamMember) e.getParameters().get(NotApprovedActivityTrigger.PARAM_SAVED_BY)).getAmpTeamMemId());
         approval.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
-        return createApprovalFromTemplate(template, myHashMap, approval, true);
+        return createApprovalFromTemplate(template, myHashMap, approval, true,false);
     }
 
     /**
@@ -291,7 +320,7 @@ public class AmpMessageWorker {
         }
         approval.setSenderId( ( (AmpTeamMember) e.getParameters().get(ApprovedActivityTrigger.PARAM_SAVED_BY)).getAmpTeamMemId());
         approval.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
-        return createApprovalFromTemplate(template, myHashMap, approval, false);
+        return createApprovalFromTemplate(template, myHashMap, approval, false,false);
     }
     
     private static Approval processApprovedCalendarEvent(Event e, Approval approval, TemplateAlert template) {
@@ -317,7 +346,7 @@ public class AmpMessageWorker {
         String receivers = user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + user.getName() + ";";
 
         approval.setReceivers(receivers);
-        return createApprovalFromTemplate(template, myHashMap, approval, false);
+        return createApprovalFromTemplate(template, myHashMap, approval, false,false);
     }    
 
     private static AmpAlert processActivitySaveEvent(Event e, AmpAlert alert, TemplateAlert template) {
@@ -516,26 +545,29 @@ public class AmpMessageWorker {
         return createAlertFromTemplate(template, myHashMap, alert);
     }
 
-    private static Approval createApprovalFromTemplate(TemplateAlert template, HashMap<String, String> myMap, Approval newApproval, boolean needsApproval) {
+    private static Approval createApprovalFromTemplate(TemplateAlert template, HashMap<String, String> myMap, Approval newApproval, boolean needsApproval,boolean sourceIsResource) {
         newApproval.setName(DgUtil.fillPattern(template.getName(), myMap));
         newApproval.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
         newApproval.setDraft(false);
         newApproval.setCreationDate(new Date());
         //receivers
-        String receivers;
-        AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(newApproval.getSenderId());
-        receivers = tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<" + tm.getUser().getEmail() + ">;" + tm.getAmpTeam().getName() + ";";
-        if (needsApproval) {
-            //team lead can't be null,because if team has no leader,then no trigger will be invoked
-            String teamId=myMap.get(MessageConstants.OBJECT_TEAM);
+        String receivers="";
+        
+        if((needsApproval&& !sourceIsResource) || !needsApproval){
+        	AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(newApproval.getSenderId());
+            receivers += tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<" + tm.getUser().getEmail() + ">;" + tm.getAmpTeam().getName() + ";";
+        }else{
+        	String teamId=myMap.get(MessageConstants.OBJECT_TEAM);
             AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(Long.parseLong(teamId));
             if(teamHead!=null){
             	receivers += ", " + teamHead.getUser().getFirstNames() + " " + teamHead.getUser().getLastName() + "<" + teamHead.getUser().getEmail() + ">;" + teamHead.getAmpTeam().getName() + ";";
-            }            
+            }
         }
+               
         newApproval.setReceivers(receivers);
         return newApproval;
-    }
+    }   
+    
 
     /**
      * created different kinds of alerts(not approvals or calendar events )
@@ -559,6 +591,56 @@ public class AmpMessageWorker {
         newEvent.setCreationDate(cal.getTime());
         return newEvent;
     }
+    
+    private static void defineReceiversForResourceShare(TemplateAlert template,AmpMessage approval, boolean needsApproval) throws Exception{
+    	List<String> emailReceivers=new ArrayList<String>();
+    	List<TeamMember> receiverTeamMembers=new ArrayList<TeamMember>();
+    	List<AmpMessageState> statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());    	
+    	  if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
+              //create receivers list for resources
+    		  TeamMember sharedBy=TeamMemberUtil.getTeamMember(approval.getSenderId());
+    		  Long teamId=sharedBy.getTeamId();
+              String receivers;
+              if(needsApproval){            	  
+            	  TeamMember teamLead=TeamMemberUtil.getTMTeamHead(teamId);
+            	  receiverTeamMembers.add(teamLead);
+              }else{
+            	  receiverTeamMembers.add(sharedBy);
+              }
+              receivers=fillTOfieldForReceivers(receiverTeamMembers, statesRelatedToTemplate);
+              approval.setReceivers(receivers);
+
+              for (AmpMessageState state : statesRelatedToTemplate) {
+              	AmpTeamMember teamMember=state.getReceiver();                  
+              	/**
+              	 * Approval should get TL or creator of resource depending whether it's approved/not approved message
+              	 */              	
+                  if (teamMember.getAmpTeam().getAmpTeamId().equals(teamId)) {
+                	  boolean createNewMsgState=false;
+                	  if(needsApproval){
+                		  AmpTeamMemberRoles headRole = TeamMemberUtil.getAmpTeamHeadRole();
+                		  AmpTeamMemberRoles ampRole = teamMember.getAmpMemberRole();
+                		  if(headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())){ //TL
+                			  createNewMsgState=true;
+                		  }
+                	  }else{
+                		  if(teamMember.getAmpTeamMemId().equals(sharedBy.getMemberId())){ // member who requested to shared resource
+                			  createNewMsgState=true;                			  
+                		  }
+                	  }
+                	  if(createNewMsgState){
+                		  createMsgState(state, approval,false);
+                          emailReceivers.add(state.getReceiver().getUser().getEmail());
+                          break;
+                	  }
+                      
+                  }
+              }
+              createEmailsAndReceivers(approval,emailReceivers,false);
+          }
+		
+	}
+    
 
     /**
      * this method defines approval receivers and creates corresponding AmpMessageStates.
@@ -759,9 +841,7 @@ public class AmpMessageWorker {
                 Long sendMail = messageSettings.getEmailMsgs();
                 if(sendMail.intValue() == 1){
                 	User user = teamMember.getUser();
-            } 
-             // sendMail(newState,calendarSaveActionWasCalled);                
-
+            }
           }
         } catch (AimException e) {
             e.printStackTrace();

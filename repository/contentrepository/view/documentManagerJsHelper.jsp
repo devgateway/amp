@@ -1058,6 +1058,17 @@ function approveVersion(versionId, baseNodeUUID){
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/approveVersion.do?versionId="+versionId+"&baseNodeUUID="+baseNodeUUID, callback);
 }
 
+function rejectDoc (uuid,actType){
+	var callback	= new Object();
+	callback.success	= function(o) {
+							window.location.replace( window.location.href );
+						};
+	callback.failure	= function(o) {
+							alert('share failed');
+						};
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectDoc.do?actType="+actType+"&uuid="+uuid, callback);
+}
+
 function setAttributeOnNode(action, uuid, doReload) {
 	
 	var callback	= new Object();

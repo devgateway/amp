@@ -137,7 +137,8 @@ public class UpdateAppSettings extends Action {
 					reportEndYear = 0;
 				}
 				if(shareResAction==null){
-					uForm.setAllowAddTeamRes( ampAppSettings.getAllowAddTeamRes() );					
+					uForm.setAllowAddTeamRes( ampAppSettings.getAllowAddTeamRes() );
+					this.populateShareResAmongWorkspacesPossibleVals(uForm);
 				}
 				uForm.setAllowShareAccrossWRK(ampAppSettings.getAllowShareTeamRes());
 				uForm.setDefReportsPerPage(reportsPerPage);
@@ -455,16 +456,14 @@ public class UpdateAppSettings extends Action {
 	
 	private void populateShareResAmongWorkspacesPossibleVals (UpdateAppSettingsForm uForm) {
 		Integer selectedTeamResourceRight=uForm.getAllowAddTeamRes();
-		if (uForm.getShareResAmongWorkspacesPossibleVals() == null || uForm.getShareResAmongWorkspacesPossibleVals().size() == 0 ) {
-			uForm.setShareResAmongWorkspacesPossibleVals(new ArrayList<KeyValue>() );
+		uForm.setShareResAmongWorkspacesPossibleVals(new ArrayList<KeyValue>() );
 			
-			KeyValue elem1	= new KeyValue(CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_WM.toString(), "Managed by Workspace Manager");
-			uForm.getShareResAmongWorkspacesPossibleVals().add(elem1);
+		KeyValue elem1	= new KeyValue(CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_WM.toString(), "Managed by Workspace Manager");
+		uForm.getShareResAmongWorkspacesPossibleVals().add(elem1);
 			
-			if(selectedTeamResourceRight.equals(CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER)){
-				KeyValue elem2	= new KeyValue(CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_TM.toString(), "Workspace Members Allowed to Share Resources Across Workspaces");
-				uForm.getShareResAmongWorkspacesPossibleVals().add(elem2);
-			}			
+		if(selectedTeamResourceRight!=null && selectedTeamResourceRight.equals(CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER)){
+			KeyValue elem2	= new KeyValue(CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_TM.toString(), "Workspace Members Allowed to Share Resources Across Workspaces");
+			uForm.getShareResAmongWorkspacesPossibleVals().add(elem2);
 		}
 	}
 }

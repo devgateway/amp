@@ -24,7 +24,11 @@
     </action>
     <action path="/contentrepository/unshareDoc" type="org.digijava.module.contentrepository.action.UnshareDocument" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
+    </action>    
+    <action path="/contentrepository/rejectDoc" type="org.digijava.module.contentrepository.action.RejectResource" validate="false" parameter="actType">
+    	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>
+    
     <action name="crDocumentManagerForm" scope="request" path="/contentrepository/approveVersion" type="org.digijava.module.contentrepository.action.ApproveVersion" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>

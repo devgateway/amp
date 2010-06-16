@@ -23,7 +23,11 @@ import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-
+import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
+import org.digijava.module.message.triggers.PendingResourceShareTrigger;
+/**
+ * @author dare
+ */
 public class ShareDocument extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception	{
@@ -31,7 +35,8 @@ public class ShareDocument extends Action {
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		String shareWith=request.getParameter("shareWith");
 		if(shareWith!=null){
-			Node node=DocumentManagerUtil.getReadNode(request.getParameter("uuid"), request);
+			String nodeBaseUUID=request.getParameter("uuid"); //node's uuid which was requested to be shared
+			Node node=DocumentManagerUtil.getReadNode(nodeBaseUUID, request);
 			AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			
 			if(shareWith.equals(CrConstants.SHAREABLE_WITH_TEAM)){//user is sharing resource from his private space !
@@ -61,8 +66,13 @@ public class ShareDocument extends Action {
 					
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
+						//if TL approved TM's sharing resource, then new approval should be created
+						if(sharedPrivateNodeVersionUUID!=null){// before becoming team doc,this resource was pending approval
+							new ApprovedResourceShareTrigger(DocumentManagerUtil.getReadNode(nodeBaseUUID, request));
+						}
+						
 						sharedDoc=new CrSharedDoc(nodeWrapper.getUuid(), team, CrConstants.SHARED_IN_WORKSPACE);
-						sharedDoc.setSharedPrivateNodeUUID(node.getUUID());
+						sharedDoc.setSharedPrivateNodeUUID(nodeBaseUUID);
 						
 						if(sharedPrivateNodeVersionUUID!=null){
 							sharedDoc.setSharedNodeVersionUUID((sharedPrivateNodeVersionUUID));
@@ -93,7 +103,9 @@ public class ShareDocument extends Action {
 					//sharedDoc.setSharedNodeVersionUUID(node.getBaseVersion().getUUID());
 					Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(node.getUUID(), request);
 					sharedDoc.setSharedNodeVersionUUID(lastVersionNode.getUUID());
-					DbUtil.saveOrUpdateObject(sharedDoc);					
+					DbUtil.saveOrUpdateObject(sharedDoc);
+					//create new Approval
+					new PendingResourceShareTrigger(lastVersionNode);
 				}
 			}else if(shareWith.equals(CrConstants.SHAREABLE_WITH_OTHER_TEAMS)){
 				/**

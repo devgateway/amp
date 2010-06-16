@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Pledge;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -230,6 +231,24 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgUrl(organization.getOrgUrl());
       editForm.setAddress(organization.getAddress());
 
+   // set contacts
+      List<AmpOrganisationContact> orgConts=ContactInfoUtil.getOrganizationContacts(organization.getAmpOrgId());
+      editForm.setOrgContacts(new ArrayList<AmpOrganisationContact>());
+      if (orgConts!= null && orgConts.size() > 0) {
+      	for (AmpOrganisationContact orgCont : orgConts) {
+				if(orgCont.getPrimaryContact()!=null && orgCont.getPrimaryContact()){
+					if(editForm.getPrimaryOrgContIds()==null){
+						editForm.setPrimaryOrgContIds(new String[1]);
+					}
+					String idToCompare=orgCont.getContact().getId()!=null ? orgCont.getContact().getId().toString() : orgCont.getContact().getTemporaryId();
+					editForm.getPrimaryOrgContIds()[0]=idToCompare;
+				}					
+				editForm.getOrgContacts().add(orgCont);
+			}
+        //editForm.setOrgContacts(new ArrayList<AmpOrganisationContact>(organization.getOrganizationContacts()));
+      }
+      
+      
       //set sectors
       Set<AmpSector> sectors = organization.getSectors();
       if (sectors != null && sectors.size() > 0) {
@@ -275,6 +294,8 @@ public class EditOrganisation extends DispatchAction {
           Collections.sort(activitySectors);
           editForm.setSectors(activitySectors);
       }
+      
+      
       if (organization.getAmpFiscalCalId() != null) {
           editForm.setFiscalCalId(organization.getAmpFiscalCalId().getAmpFiscalCalId());
       }
@@ -1116,6 +1137,29 @@ public class EditOrganisation extends DispatchAction {
     	  organization.setFax(null);
       }
          
+         
+/**
+         * contacts
+         */
+
+        if(organization.getOrganizationContacts()==null){
+        	organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
+        }else{        	
+        	organization.getOrganizationContacts().clear();
+        }
+        
+        List<AmpOrganisationContact> allContacts=new ArrayList<AmpOrganisationContact>();
+        if(editForm.getOrgContacts()!=null && editForm.getOrgContacts().size()>0){
+					allContacts.addAll(editForm.getOrgContacts());
+				}
+        
+      if(allContacts!=null && allContacts.size()>0){
+			for (AmpOrganisationContact orgContact : allContacts) {				
+				fillOrganizationContactPrimaryField(editForm.getPrimaryOrgContIds(),orgContact);
+			}
+				organization.getOrganizationContacts().addAll(allContacts);
+      }         
+         
       this.saveDocuments(request, organization);
       DbUtil.saveOrg(organization);        
       return mapping.findForward("added");
@@ -1350,5 +1394,20 @@ public class EditOrganisation extends DispatchAction {
           }
       }
   }
+  
+  private void fillOrganizationContactPrimaryField(String[] orgContactIds,AmpOrganisationContact orgContact) {
+		if(orgContactIds!=null && orgContactIds.length>0){
+			for (int i = 0; i < orgContactIds.length; i++) {
+				String idToCompare=orgContact.getContact().getId()!=null ? orgContact.getContact().getId().toString() : orgContact.getContact().getTemporaryId();  
+				if(idToCompare.equals(orgContactIds[i])){
+					orgContact.setPrimaryContact(true);
+				}else{
+					orgContact.setPrimaryContact(false);
+				}
+			}
+		}else{
+			orgContact.setPrimaryContact(false);
+		}
+	}
   
 }

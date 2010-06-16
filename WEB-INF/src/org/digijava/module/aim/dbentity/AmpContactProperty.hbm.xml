@@ -14,7 +14,7 @@
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="value" column="value" type="java.lang.String" />
 		
-		<many-to-one name="contact"  column="contact_id" class="org.digijava.module.aim.dbentity.AmpContact" cascade="none" lazy="false"/>
+		<many-to-one name="contact"  column="contact_id" class="org.digijava.module.aim.dbentity.AmpContact" cascade="save-update" lazy="false"/>
 		
 	</class>
 </hibernate-mapping>

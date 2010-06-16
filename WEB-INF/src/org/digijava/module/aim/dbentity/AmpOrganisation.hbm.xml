@@ -112,6 +112,12 @@
                     <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRecipient" />
                 </set>
 
+		<set name="organizationContacts" inverse="true" cascade="all-delete-orphan" lazy="false">
+			<key column="amp_org_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
+		</set>
+
+
                 <property name="addressAbroad" column="address_abroad" type="java.lang.String" />
                 <property name="taxNumber" column="tax_number" type="java.lang.String" />
                 <property name="minPlanRegNumb" column="regist_num_min_plan" type="java.lang.String" />

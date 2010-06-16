@@ -81,6 +81,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	
 	private transient Set surveyByPointOfDeliveryDonor;
 
+	private Set<AmpOrganisationContact> organizationContacts;
+	
     // this field is saved in org. profile and not from organization manager in admin
     private String orgBackground;
     /*
@@ -674,6 +676,14 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	public void setReceiptLegPersonalityAct(String receiptLegPersonalityAct) {
 		this.receiptLegPersonalityAct = receiptLegPersonalityAct;
+	}
+
+	public void setOrganizationContacts(Set<AmpOrganisationContact> organizationContacts) {
+		this.organizationContacts = organizationContacts;
+	}
+
+	public Set<AmpOrganisationContact> getOrganizationContacts() {
+		return organizationContacts;
 	}
 	
 }	

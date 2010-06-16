@@ -59,6 +59,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpField;
@@ -76,6 +78,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -2936,10 +2939,159 @@ public class DbUtil {
     public static void saveOrg(AmpOrganisation org) throws DgException {
     	Session sess = null;
         Transaction tx = null;
-
+                
+        
+        
+        
+        
         try {
             sess = PersistenceManager.getRequestDBSession();
             tx = sess.beginTransaction();
+            sess.clear();
+            
+            /*
+            Set<AmpOrganisationContact> organisationContacts=org.getOrganizationContacts(); //form org contacts
+            
+            
+            if (org.getAmpOrgId() != null) {
+	            if (org.getOrganizationContacts() != null) {
+	                for (AmpOrganisationContact ampOrganisationContact : org.getOrganizationContacts()) {
+	                    AmpContact contact = ampOrganisationContact.getContact();
+	                    contact.getOrganizationContacts().remove(ampOrganisationContact);
+	                    try {
+	                    sess.delete(ampOrganisationContact);
+	                    } catch (Exception ex) {
+	                    	System.out.println(ex);
+	                    }
+	                }
+	                org.getOrganizationContacts().clear();
+	
+	            }
+            }
+            */
+            
+            /**
+             * contact information
+            */            
+                /*         
+             if(org.getAmpOrgId()!=null){ //edit
+            	   List<AmpOrganisationContact> orgDBContacts=ContactInfoUtil.getOrganizationContacts(org.getAmpOrgId());
+            	   // if organization contains contact,which is not in form contact list, we should remove it
+            	   if(orgDBContacts!=null && orgDBContacts.size()>0){
+            		   Iterator<AmpOrganisationContact> iter=orgDBContacts.iterator();
+            		   while(iter.hasNext()){
+                   		  AmpOrganisationContact dbOrgContact=iter.next();
+                   		  int count=0;
+                   		  if(organisationContacts!=null){
+                   			  for (AmpOrganisationContact formOrgCont : organisationContacts) {
+               					if(formOrgCont.getId()!=null && formOrgCont.getId().equals(dbOrgContact.getId())){
+               						count++;
+               						break;
+               					}
+               				}
+                   		  }
+                   		  if(count==0){ //if organization contains contact,which is not in contact list, we should remove it
+                   			  AmpOrganisationContact orgCont=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, dbOrgContact.getId());
+                   			  AmpContact cont=orgCont.getContact();
+                   			  sess.delete(orgCont);
+                   			  cont.getOrganizationContacts().remove(orgCont);
+                   			  sess.update(cont);
+                   			  org.getOrganizationContacts().remove(orgCont);
+                   		  }
+                   	  }
+            	   	}
+               }
+             
+              if(organisationContacts!=null){
+              	//this will remove all organisation contact which are linked to this organisation
+            	  Iterator iterator = organisationContacts.iterator();
+              	while (iterator.hasNext()) {
+              		AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator.next();
+    					if(org.getAmpOrgId()!=null){
+    						if(ampOrganisationContact.getId()!=null){
+    							AmpContact cont=ampOrganisationContact.getContact();
+    							AmpOrganisationContact contToBeRemoved=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, ampOrganisationContact.getId()) ;
+    							if(contToBeRemoved!=null){
+    								sess.delete(contToBeRemoved);
+    	 							cont.getOrganizationContacts().remove(contToBeRemoved);
+    	 							
+    	 							org.getOrganizationContacts().remove(contToBeRemoved);
+    							}
+    							 							
+    						}
+    					}
+    				}
+              	
+              	//now re-save all organisation contacts
+              	for (AmpOrganisationContact organizationContact : organisationContacts) {
+    					//save or update contact
+              		AmpContact contact=organizationContact.getContact();
+                 		AmpContact ampContact=null;
+                 		if(contact.getId()!=null){ //contact already exists.
+                 			ampContact=(AmpContact)sess.get(AmpContact.class, contact.getId());
+                 			ampContact.setName(contact.getName());
+                 			ampContact.setLastname(contact.getLastname());
+                 			ampContact.setTitle(contact.getTitle());
+                 			ampContact.setOrganisationName(contact.getOrganisationName());
+                 			ampContact.setCreator(contact.getCreator());
+                 			ampContact.setShared(true);
+                 			ampContact.setOfficeaddress(contact.getOfficeaddress());
+                 			ampContact.setFunction(contact.getFunction());
+                 			//remove old properties
+                 			if(ampContact.getProperties()!=null){
+                 				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
+                 					sess.delete(dbProperty);
+                 				}
+                 			}
+                 			ampContact.setProperties(null);
+                 			sess.update(ampContact);
+                 		}else{
+                 			sess.save(contact);
+                 		}
+                 		
+                 		//save properties
+                 		if(contact.getProperties()!=null){
+             				for (AmpContactProperty formProperty : contact.getProperties()) {
+             					if(ampContact!=null){
+             						formProperty.setContact(ampContact);
+             					}else{
+             						formProperty.setContact(contact);
+             					}
+             					sess.save(formProperty);
+             				}
+             			}
+                 		               		
+                 		//link org to cont
+                 		AmpOrganisationContact newOrgCont=new AmpOrganisationContact();
+                 		organizationContact.setOrganisation(org);
+                 		organizationContact.setPrimaryContact(organizationContact.getPrimaryContact());
+             			if(ampContact!=null){
+             				organizationContact.setContact(ampContact);
+     					}else{
+     						organizationContact.setContact(contact);
+     					}
+                 		sess.save(organizationContact);
+                 		
+                 		
+    				}
+              }        */    
+            
+            
+            
+            
+            
+           if (org.getOrganizationContacts() != null) {
+        	   for (AmpOrganisationContact contact : org.getOrganizationContacts()){
+        		   contact.setOrganisation(org);
+        		   for (AmpContactProperty prop : contact.getContact().getProperties()) {
+        			   prop.setContact(contact.getContact());
+        		   }
+        	   }
+           }
+            
+            
+            
+            
             HashSet sect = new HashSet();
             Iterator i = org.getSectors().iterator();
             while (i.hasNext()) {

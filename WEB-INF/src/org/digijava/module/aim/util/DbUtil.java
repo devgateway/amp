@@ -6525,7 +6525,7 @@ public class DbUtil {
 			auxTeamMember.setTeamName(auxAmpTeamMember.getAmpTeam().getName());
 			auxTeamMember.setRoleName(auxAmpTeamMember.getAmpMemberRole().getRole());
 			auxTeamMember.setEmail(UserUtils.getUser(auxAmpTeamMember.getUser().getId()).getEmail());
-			auxTeamMember.setTeamId(auxAmpTeamMember.getAmpTeamMemId());
+			auxTeamMember.setTeamId(auxAmpTeamMember.getAmpTeam().getAmpTeamId());
 			// Get the main team node for this team member.
 			Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember);
 			NodeWrapper auxNodeWrapper = new NodeWrapper(teamNode);
@@ -6549,7 +6549,7 @@ public class DbUtil {
 				logger.warn(auxWrapper.getTitle());
 				AmpOrganisation auxOrg = iterOrgs.next();
 				ParisIndicator auxPI = new ParisIndicator();
-				auxPI.setDonor(auxOrg.getAcronym());
+				auxPI.setDonor(auxOrg.getOrgGrpId().getOrgGrpCode());
 				auxPI.setAnswers(new ArrayList());
 				for (int i = 0; i < YEAR_RANGE; i++) {
 					auxPI.getAnswers().add(new double[NUM_ANSWER_COLUMNS]);

@@ -55,7 +55,7 @@ public class ParisIndicator {
 		if (donor == null) {
 			if (other.donor != null)
 				return false;
-		} else if (!donor.equals(other.donor))
+		} else if (!donor.equalsIgnoreCase(other.donor))
 			return false;
 		return true;
 	}

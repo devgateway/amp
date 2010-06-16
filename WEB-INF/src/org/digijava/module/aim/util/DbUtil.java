@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,6 +40,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
@@ -6505,12 +6507,10 @@ public class DbUtil {
     }
 
     public static Collection getAidSurveyReportByIndicator10b(String orgGroup, String donor, int startYear,
-			int closeYear, String site, String lang, HttpServletRequest request) throws RepositoryException {
+			int closeYear, String site, String lang, HttpServletRequest request) throws RepositoryException, UnsupportedEncodingException, WorkerException {
 		Set responses = new HashSet();
 		int NUM_ANSWER_COLUMNS = 4;
 		int YEAR_RANGE = (closeYear - startYear + 1);
-		NumberFormat formatter = new DecimalFormat("#.##");
-		SimpleDateFormat year = new SimpleDateFormat("yyyy");
 
 		Collection<NodeWrapper> documents = new HashSet();
 		javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
@@ -6549,7 +6549,7 @@ public class DbUtil {
 				logger.warn(auxWrapper.getTitle());
 				AmpOrganisation auxOrg = iterOrgs.next();
 				ParisIndicator auxPI = new ParisIndicator();
-				auxPI.setDonor(auxOrg.getOrgGrpId().getOrgGrpCode());
+				auxPI.setDonor(auxOrg.getOrgGrpId().getOrgGrpCode().toUpperCase());
 				auxPI.setAnswers(new ArrayList());
 				for (int i = 0; i < YEAR_RANGE; i++) {
 					auxPI.getAnswers().add(new double[NUM_ANSWER_COLUMNS]);
@@ -6583,16 +6583,30 @@ public class DbUtil {
 				}
 			}
 		}
-
-		/*
-		 * logger.error("------------------------------------------------------------------------------------"
-		 * ); Iterator<NodeWrapper> it = documents.iterator();
-		 * while(it.hasNext()){ NodeWrapper node = it.next();
-		 * logger.error(node.getName() + "-"+node.getUuid()); }logger.error(
-		 * "------------------------------------------------------------------------------------"
-		 * );
-		 */
-
+		// Add All Donors row.
+		if(responses.size() > 0){
+			ParisIndicator all = new ParisIndicator();
+            all.setDonor(TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", lang, site)));
+            all.setAnswers(new ArrayList());
+            responses.add(all);
+            for (int i = 0; i < YEAR_RANGE; i++) {
+				all.getAnswers().add(new double[NUM_ANSWER_COLUMNS]);
+				((double[]) all.getAnswers().get(i))[0] = startYear + i;
+            }
+			Iterator<ParisIndicator> iResponses = responses.iterator();
+			while (iResponses.hasNext()) {
+				ParisIndicator auxPI = iResponses.next();
+				Iterator<double[]> iAnswers = auxPI.getAnswers().iterator();
+				int i = 0;
+				while (iAnswers.hasNext()) {
+					double[] auxAnswers = iAnswers.next();
+					for (int j = 1; j < NUM_ANSWER_COLUMNS; j++) {
+						((double[]) all.getAnswers().get(i))[j] += auxAnswers[j];
+					}
+					i++;
+				}
+			}
+		}
 		return responses;
 	}
     

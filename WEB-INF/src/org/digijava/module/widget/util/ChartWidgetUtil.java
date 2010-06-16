@@ -200,7 +200,7 @@ public class ChartWidgetUtil {
         }
         String amount = "Amounts in millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createBarChart3D(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        chart = ChartFactory.createBarChart(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         TextTitle title=chart.getTitle();
         if(title!=null){
             title.setFont(titleFont);
@@ -217,6 +217,9 @@ public class ChartWidgetUtil {
         numberAxis.setNumberFormatOverride(format);
         numberAxis.setLabelFont(plainFont);
         numberAxis.setTickLabelFont(plainFont);
+        Range oldRange = numberAxis.getRange();
+        Range newRange = Range.expand(oldRange, 0.1, 0.1);
+        numberAxis.setRange(newRange);
         CategoryAxis categoryAxis = plot.getDomainAxis();
         categoryAxis.setTickLabelFont(plainFont);
         renderer.setSeriesPaint(0, new Color(0, 0, 255));
@@ -229,7 +232,7 @@ public class ChartWidgetUtil {
             renderer.setSeriesItemLabelGenerator(i, labelGenerator);
             renderer.setSeriesItemLabelFont(i, plainFont);
             renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
-            renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
+            renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.CENTER,Math.PI / 2 ));
         }
         return chart;
     }
@@ -319,7 +322,7 @@ public class ChartWidgetUtil {
             trnsType = TranslatorWorker.translateText("Actual disbursements in", opt.getLangCode(), opt.getSiteId());
         }
 
-        chart = ChartFactory.createBarChart3D(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        chart = ChartFactory.createBarChart(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         TextTitle title=chart.getTitle();
         if(title!=null){
             title.setFont(titleFont);
@@ -331,10 +334,13 @@ public class ChartWidgetUtil {
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.WHITE);
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        renderer.setDrawBarOutline(false);
+       
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
         numberAxis.setNumberFormatOverride(format);
         numberAxis.setLabelFont(plainFont);
+        Range oldRange = numberAxis.getRange();
+        Range newRange = Range.expand(oldRange, 0.1, 0.1);
+        numberAxis.setRange(newRange);
         numberAxis.setTickLabelFont(plainFont);
         CategoryAxis categoryAxis = plot.getDomainAxis();
         categoryAxis.setTickLabelFont(plainFont);
@@ -343,7 +349,7 @@ public class ChartWidgetUtil {
         renderer.setSeriesPaint(1, new Color(0, 0, 255));// dark blue
         renderer.setSeriesPaint(2, Color.GREEN);
         renderer.setSeriesPaint(3, new Color(0,148,0));
-        renderer.setSeriesPaint(4, Color.ORANGE); 
+        renderer.setSeriesPaint(4, Color.ORANGE);
         renderer.setSeriesPaint(5, new Color(142,53,239)); // purple
         renderer.setSeriesPaint(6, Color.YELLOW);
         renderer.setSeriesPaint(7, Color.RED);
@@ -356,7 +362,7 @@ public class ChartWidgetUtil {
             renderer.setSeriesItemLabelGenerator(i, labelGenerator);
             renderer.setSeriesItemLabelFont(i, plainFont);
             renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
-            renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER, Math.PI / 2));
+            renderer.setSeriesPositiveItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER, TextAnchor.CENTER,Math.PI / 2 ));
         }
         return chart;
     }

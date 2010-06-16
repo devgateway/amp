@@ -355,6 +355,18 @@
                         </html:select>
                     </td>
                 </tr>
+                 <tr>
+                    <td><b><digi:trn>Number of years in time series</digi:trn>:</b></td>
+                    <td align="left">
+                        <html:select property="yearsInRange" styleClass="selectDropDown">
+                            <html:option value="1">1</html:option>
+                            <html:option value="2">2</html:option>
+                            <html:option value="3">3</html:option>
+                            <html:option value="4">4</html:option>
+                            <html:option value="5">5</html:option>
+                        </html:select>
+                    </td>
+                </tr>
                 <tr>
                     <td><b><digi:trn>Number of project to display</digi:trn>:</b></td>
                     <td align="left">

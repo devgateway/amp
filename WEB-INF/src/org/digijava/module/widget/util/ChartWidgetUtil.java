@@ -270,11 +270,12 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
+        int yearsInRange=filter.getYearsInRange()-1;
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         String pledgesTranslatedTitle = TranslatorWorker.translateText("Pledges", opt.getLangCode(), opt.getSiteId());
         String actComTranslatedTitle = TranslatorWorker.translateText("Actual commitments", opt.getLangCode(), opt.getSiteId());
         String actDisbTranslatedTitle = TranslatorWorker.translateText("Actual disbursements", opt.getLangCode(), opt.getSiteId());
-        for (int i = year.intValue() - 2; i <= year.intValue(); i++) {
+        for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
             // apply calendar filter
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
@@ -403,10 +404,11 @@ public class ChartWidgetUtil {
         } else {
             categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
         }
+        int yearsInRange=filter.getYearsInRange()-1;
         for (AmpCategoryValue categoryValue : categoryValues) {
             String title = TranslatorWorker.translateText(categoryValue.getValue(), opt.getLangCode(), opt.getSiteId());
 
-            for (Long i = year - 4; i <= year; i++) {
+            for (Long i = year - yearsInRange; i <= year; i++) {
                 // apply calendar filter
                 Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
                 Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());

@@ -36,9 +36,16 @@ public class FilterHelper implements Serializable {
     private Collection<Long> locationIds;
     private Date startDate;
     private Date endDate;
+    private int yearsInRange;
 
+    public int getYearsInRange() {
+        return yearsInRange;
+    }
 
-    
+    public void setYearsInRange(int yearsInRange) {
+        this.yearsInRange = yearsInRange;
+    }
+  
      public Date getEndDate() {
         return endDate;
     }
@@ -138,6 +145,7 @@ public class FilterHelper implements Serializable {
         this.largestProjectNumb=form.getLargestProjectNumb();
         this.regionId=form.getSelRegionId();
         this.zoneIds=form.getSelZoneIds();
+        this.yearsInRange=form.getYearsInRange();
         initDerivedProperties();
     }
      public FilterHelper(FilterHelper helper) throws DgException {
@@ -151,7 +159,10 @@ public class FilterHelper implements Serializable {
         this.regionId=helper.getRegionId();
         this.zoneIds=helper.getZoneIds();
         this.teamMember=helper.getTeamMember();
-        initDerivedProperties();
+        this.yearsInRange=helper.getYearsInRange();
+        this.startDate=helper.getStartDate();
+        this.endDate=helper.getEndDate();
+        this.locationIds=helper.getLocationIds();
     }
 
     public FilterHelper(Long orgGroupId, Long year, Long fiscalCalendarId) {

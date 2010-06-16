@@ -53,6 +53,7 @@ public class OrgProfileFilterAction extends Action {
             orgForm.setLargestProjectNumb(10);
             orgForm.setSelRegionId(null);
             orgForm.setSelZoneIds(null);
+            orgForm.setYearsInRange(5);
         }
 
         // create filter dropdowns

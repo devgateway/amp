@@ -45,6 +45,15 @@ public class OrgProfileFilterForm extends ActionForm {
     private Long selZoneIds[];
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
+    private int yearsInRange;
+
+    public int getYearsInRange() {
+        return yearsInRange;
+    }
+
+    public void setYearsInRange(int yearsInRange) {
+        this.yearsInRange = yearsInRange;
+    }
 
     public List<AmpCategoryValueLocations> getRegions() {
         return regions;

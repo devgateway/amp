@@ -74,8 +74,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.ItemLabelAnchor;
@@ -92,6 +94,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.RingPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
@@ -200,6 +203,9 @@ public class ChartWidgetUtil {
         }
         String amount = "Amounts in millions";
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
+        ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+        BarRenderer.setDefaultShadowsVisible(false);
+        BarRenderer.setDefaultBarPainter(new StandardBarPainter());
         chart = ChartFactory.createBarChart(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         TextTitle title=chart.getTitle();
         if(title!=null){
@@ -211,6 +217,7 @@ public class ChartWidgetUtil {
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.WHITE);
+        chart.setBackgroundPaint(Color.WHITE);
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
@@ -218,8 +225,8 @@ public class ChartWidgetUtil {
         numberAxis.setLabelFont(plainFont);
         numberAxis.setTickLabelFont(plainFont);
         Range oldRange = numberAxis.getRange();
-        Range newRange = Range.expand(oldRange, 0.1, 0.1);
-        numberAxis.setRange(newRange);
+        Range newRange = Range.expand(oldRange, 0, 0.1);
+        numberAxis.setRange(newRange);       
         CategoryAxis categoryAxis = plot.getDomainAxis();
         categoryAxis.setTickLabelFont(plainFont);
         renderer.setSeriesPaint(0, new Color(0, 0, 255));
@@ -321,8 +328,12 @@ public class ChartWidgetUtil {
         } else {
             trnsType = TranslatorWorker.translateText("Actual disbursements in", opt.getLangCode(), opt.getSiteId());
         }
+        ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+        BarRenderer.setDefaultShadowsVisible(false);
+        BarRenderer.setDefaultBarPainter(new StandardBarPainter());
 
         chart = ChartFactory.createBarChart(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        chart.setBackgroundPaint(Color.WHITE);
         TextTitle title=chart.getTitle();
         if(title!=null){
             title.setFont(titleFont);
@@ -339,7 +350,7 @@ public class ChartWidgetUtil {
         numberAxis.setNumberFormatOverride(format);
         numberAxis.setLabelFont(plainFont);
         Range oldRange = numberAxis.getRange();
-        Range newRange = Range.expand(oldRange, 0.1, 0.1);
+        Range newRange = Range.expand(oldRange, 0, 0.1);
         numberAxis.setRange(newRange);
         numberAxis.setTickLabelFont(plainFont);
         CategoryAxis categoryAxis = plot.getDomainAxis();
@@ -599,6 +610,7 @@ public class ChartWidgetUtil {
         boolean tooltips = true;
         boolean urls = true;
         result = ChartFactory.createRingChart(title, ds, opt.isShowLegend(), tooltips, urls);
+        result.setBackgroundPaint(Color.WHITE);
         String donorString = "";
         if (donors != null) {
             donorString += "~donorId=" + getInStatment(donors);
@@ -650,6 +662,7 @@ public class ChartWidgetUtil {
                PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
                plot.setLegendLabelGenerator(genLegend);
                plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
+               lt.setFrame(BlockBorder.NONE);
 
            }
         DonorSectorPieChartURLGenerator urlGen = new DonorSectorPieChartURLGenerator(url);
@@ -685,6 +698,7 @@ public class ChartWidgetUtil {
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
         chart = ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
+        chart.setBackgroundPaint(Color.WHITE);
         TextTitle title=chart.getTitle();
         if(title!=null){
             title.setFont(titleFont);
@@ -758,6 +772,7 @@ public class ChartWidgetUtil {
         }
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
         chart =ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
+        chart.setBackgroundPaint(Color.WHITE);
         TextTitle title=chart.getTitle();
         if(title!=null){
             title.setFont(titleFont);

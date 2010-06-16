@@ -96,7 +96,10 @@
           <%= check_box_tag "report[fields][]", "actual_end", true %>
           <%= Project.human_attribute_name('actual_end') %>
         </li>
-
+        <li>
+        	<%= check_box_tag "report[fields][]", "date_of_signing" %>
+        	<%= Project.human_attribute_name('date_of_signing') %>
+        </li>
         <li>
         	<%= check_box_tag "report[fields][]", "updated_at" %>
         	<%= Project.human_attribute_name('updated_at') %>

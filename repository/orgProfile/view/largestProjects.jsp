@@ -27,18 +27,22 @@
         document.getElementById("largestProjectsHelpTooltip"+count).style.display = "none";
     }
 </script>
+<c:set var="largestPrjTblName">
+    <c:choose>
+        <c:when test="${sessionScope.orgProfileFilter.largestProjectNumb==-1}">
+            <digi:trn>All</digi:trn>
+        </c:when>
+        <c:otherwise>
+            ${sessionScope.orgProfileFilter.largestProjectNumb}
+        </c:otherwise>
+    </c:choose><digi:trn>LARGEST PROJECTS</digi:trn> (${sessionScope.orgProfileFilter.year-1})
+</c:set>
 <digi:instance property="orgProfLargestProjectsForm"/>
 <table border="0"  bgcolor="#dddddd" width="100%"  class="tableElement" cellspacing="0" cellpadding="0">
     <tr>
         <th colspan="4" class="tableHeaderCls">
-            <c:choose>
-                <c:when test="${sessionScope.orgProfileFilter.largestProjectNumb==-1}">
-                    <digi:trn>All</digi:trn>
-                </c:when>
-                <c:otherwise>
-                    ${sessionScope.orgProfileFilter.largestProjectNumb}
-                </c:otherwise>
-            </c:choose><digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year-1})</th>
+             ${largestPrjTblName}
+       </th>
     </tr>
     <tr>
         <td class="tableHeaderCls"><digi:trn>Project title</digi:trn></td>

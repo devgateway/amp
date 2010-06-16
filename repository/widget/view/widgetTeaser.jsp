@@ -15,14 +15,10 @@
 <c:if test="${gisWidgetTeaserForm.rendertype==5}">
     <c:choose>
         <c:when test="${gisWidgetTeaserForm.type==1}">
-            <div  class="chartPlaceCss">
                 <jsp:include page="/orgProfile/showOrgSummary.do" flush="true"/>
-            </div>
         </c:when>
         <c:when test="${gisWidgetTeaserForm.type==7}">
-            <div  class="chartPlaceCss">
                 <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
-            </div>
         </c:when>
         <c:otherwise>
             <DIV id="tabs">

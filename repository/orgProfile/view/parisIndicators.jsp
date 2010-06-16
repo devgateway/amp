@@ -7,6 +7,21 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
+<DIV id="tabs">
+    <UL>
+        <div>
+            <LI>
+                <a name="node">
+                    <div>
+                        <digi:trn>Paris declaration indicators</digi:trn>
+                    </div>
+                </a>
+            </LI>
+        </div>
+    </UL>
+</DIV>
+<div class="contentbox_border chartPlaceCss">
+
 <digi:instance property="orgProfilePIForm"/>
 
 
@@ -47,6 +62,5 @@
 
         </tr>
     </c:forEach>
-
-
 </table>
+</div>

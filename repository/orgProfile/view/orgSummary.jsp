@@ -56,11 +56,88 @@
             success:additionalInfoResponseSuccess,
             failure:additionalInfoResponseFailure
         };
+        function  loadLargestProjects(){
+            $(".tab_organization_profile_unselected").each(function(index) {
+                this.style.display="block";
+            });
+
+            $(".tab_organization_profile_selected").each(function(index) {
+                this.style.display="none";
+            });
+     
+        }
+        function  hideLargestProjects(){
+            $(".tab_organization_profile_selected").each(function(index) {
+                this.style.display="block";
+            });
+
+            $(".tab_organization_profile_unselected").each(function(index) {
+                this.style.display="none";
+            });
+
+        }
 
 
 </script>
-            
+<c:set var="largestPrjTblName">
+    <c:choose>
+        <c:when test="${sessionScope.orgProfileFilter.largestProjectNumb==-1}">
+            <digi:trn>All</digi:trn>
+        </c:when>
+        <c:otherwise>
+            ${sessionScope.orgProfileFilter.largestProjectNumb}
+        </c:otherwise>
+    </c:choose><digi:trn>LARGEST PROJECTS</digi:trn> (${sessionScope.orgProfileFilter.year-1})
 
+</c:set>
+
+<DIV id="tabs">
+    <UL>
+        <div  class="tab_organization_profile_selected">
+            <LI>
+                <a name="node">
+                    <div>
+                        <digi:trn>Organization Profile</digi:trn>
+                    </div>
+                </a>
+            </LI>
+        </div>
+        <div  class="tab_organization_profile_unselected" style="display: none">
+            <LI>
+                <span>
+                    <a href="javascript:hideLargestProjects()">
+                        <div title='<digi:trn>Hide  largest projects table and show summary</digi:trn>'>
+                            <digi:trn>Organization Profile</digi:trn>
+                        </div>
+                    </a>
+                </span>
+            </LI>
+        </div>
+
+        <div  class="tab_organization_profile_unselected" style="display: none">
+            <LI>
+                <a name="node">
+                    <div>
+                        ${largestPrjTblName}
+                    </div>
+                </a>
+            </LI>
+        </div>
+
+        <div  class="tab_organization_profile_selected">
+            <LI>
+                <span>
+                    <a  href="javascript:loadLargestProjects()">
+                        <div title='<digi:trn>Hide summary and show largest projects table</digi:trn>'>
+                            ${largestPrjTblName}
+                        </div>
+                    </a>
+                </span>
+            </LI>
+        </div>
+    </UL>
+</DIV>
+ <div class="contentbox_border chartPlaceCss tab_organization_profile_selected">
 <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
 <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
 <c:set var="orgsCount" scope="request" value="${fn:length(sessionScope.orgProfileFilter.orgIds)}"/>
@@ -68,7 +145,6 @@
 <digi:form action="/showOrgSummary.do" method="post">
     <html:hidden property="action" styleId="orgSummaryActionId"/>
     <html:hidden name="orgSummaryForm" property="orgId" styleId="orgSummaryOrgId"/>
-    <div>
         <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="0">
             <tr>
                 <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
@@ -188,7 +264,7 @@
         </table>
         <c:if test="${orgsCount==1}">
             <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
-             <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:600px;height:200px;z-index:3">
+            <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:600px;height:200px;z-index:3">
                 <table cellSpacing=0 cellPadding=0 width="100%" border=0  align="left">
                     <tr><td><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
                     <tr><td> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
@@ -197,13 +273,14 @@
             </div>
         </c:if>
     </digi:form>
+</div>
+<div class="tab_organization_profile_unselected contentbox_border chartPlaceCss" style="display:none">
     <div style="float:left">
         <a href="javascript:printLargestProjects()">
             <img alt="print preview" src="/TEMPLATE/ampTemplate/images/print_icon.gif" border="0" >
         </a>
     </div>
     <jsp:include page="/orgProfile/showLargestProjects.do" flush="true"/>
-
 </div>
 
 <script language="javascript" type="text/javascript">

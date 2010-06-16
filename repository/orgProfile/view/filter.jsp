@@ -388,7 +388,7 @@
                 </tr>
             </table>
         </div>
-        <div style="width:200px">
+        <div style="width:200px;float:left">
             <table cellpadding="2" border="0" >
                 <tr align="left" style="background-color:rgb(153, 153, 153); color: rgb(0, 0, 0);">
                     <td>

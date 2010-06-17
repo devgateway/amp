@@ -205,10 +205,10 @@ public class ExportToPDF extends Action {
                             }
                         }
                         String chartTitle = null;
-                        int colspan = 6;
+                        int colspan = filter.getYearsInRange()+1;
                         int oneYearColspan = 2;
                         if (filter.getTransactionType() == 2) {
-                            colspan = 11;
+                            colspan =2*filter.getYearsInRange()+1;
                             oneYearColspan = 3;
                         }
                         switch (type.intValue()) {
@@ -243,9 +243,10 @@ public class ExportToPDF extends Action {
                                 break;
                             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
-                                    pledgesCommDisbTbl = new PdfPTable(4);
+                                    colspan = filter.getYearsInRange()+1;
+                                    pledgesCommDisbTbl = new PdfPTable(colspan);
                                     PdfPCell pledgesCommDisbTitleCell = new PdfPCell(new Paragraph(pledgesCommDisb + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
-                                    pledgesCommDisbTitleCell.setColspan(4);
+                                    pledgesCommDisbTitleCell.setColspan(colspan);
                                     pledgesCommDisbTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     pledgesCommDisbTbl.addCell(pledgesCommDisbTitleCell);
                                     PdfPCell pldsCommDisbdTitleCell = new PdfPCell(new Paragraph(pledgesCommDisb, OrgProfileUtil.HEADERFONT));
@@ -254,9 +255,9 @@ public class ExportToPDF extends Action {
                                     OrgProfileUtil.getDataTable(pledgesCommDisbTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
-                                    chartTitle = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId());
+                                    chartTitle = TranslatorWorker.translateText("Pledges|Commitments|Disbursements|Expenditures", opt.getLangCode(), opt.getSiteId());
                                     opt.setTitle(chartTitle);
-                                    chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
+                                    chart = ChartWidgetUtil.getPledgesCommDisbExpChart(opt, filter);
                                 }
                                 break;
                             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:

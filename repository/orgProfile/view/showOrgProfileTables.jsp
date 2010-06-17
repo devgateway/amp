@@ -18,13 +18,12 @@
 </c:set>
 <c:set var="yearRange">
     <c:choose>
-        <c:when test="${orgProfileNameValueYearForm.type== 3}">
-            2,1,0
-        </c:when>
-        <c:when test="${orgProfileNameValueYearForm.type== 2||orgProfileNameValueYearForm.type== 4}">
-            4,3,2,1,0
-        </c:when>
-        <c:otherwise>1</c:otherwise>
+     <c:when test="${orgProfileNameValueYearForm.type!= 5&&orgProfileNameValueYearForm.type!= 6}">
+        ${sessionScope.orgProfileFilter.yearsInRange}
+     </c:when>
+        <c:otherwise>
+          1
+        </c:otherwise>
     </c:choose>
 </c:set>
     <table border="0" class="tableElement" bgcolor="#dddddd" width="100%" cellspacing="0" cellpadding="0">
@@ -35,7 +34,7 @@
                         <digi:trn>TYPE OF AID</digi:trn>
                     </c:when>
                     <c:when test="${orgProfileNameValueYearForm.type== 3}">
-                        <digi:trn>Pledges|Commitments|Disbursements</digi:trn>
+                        <digi:trn>Pledges|Commitments|Disbursements|Expenditures</digi:trn>
                     </c:when>
                     <c:when test="${orgProfileNameValueYearForm.type==5}">
                         <digi:trn>Primary Sector(s) Breakdown</digi:trn>
@@ -65,14 +64,18 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <c:forEach var="year" items="${yearRange}">
-                <td class="tableHeaderCls" colspan="${colSpan}"> <c:out value="${sessionScope.orgProfileFilter.year-year}" /></td>
+          <c:set var="startYear">
+              ${sessionScope.orgProfileFilter.year-yearRange}
+          </c:set>
+
+           <c:forEach var="year" begin="1" end="${yearRange}">
+                <td class="tableHeaderCls" colspan="${colSpan}"> <c:out value="${startYear+year}" /></td>
             </c:forEach>
 
         </tr>
         <tr>
             <c:if test="${orgProfileNameValueYearForm.type!= 3}">
-                <c:forEach var="year" items="${yearRange}">
+                <c:forEach var="year" begin="0" end="${yearRange-1}">
                     <c:choose>
                         <c:when test="${sessionScope.orgProfileFilter.transactionType=='1'}">
                             <td class="tableHeaderCls"><digi:trn>DISBURSEMENTS</digi:trn></td>

@@ -790,8 +790,9 @@ public class OrgProfileUtil {
         Collection<AmpCategoryValue> categoryValues = null;
         Long currId = filter.getCurrId();
         String currCode= CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        if (type == WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
+        int yearRange = filter.getYearsInRange()-1;
 
+        if (type == WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
             NameValueYearHelper pledgesHelper = new NameValueYearHelper();
             pledgesHelper.setName("Pledges");
             pledgesHelper.setValues(new ArrayList<String>());
@@ -804,8 +805,12 @@ public class OrgProfileUtil {
             disbHelper.setName("Actual disbursements");
             disbHelper.setValues(new ArrayList<String>());
 
+            NameValueYearHelper expHelper = new NameValueYearHelper();
+            expHelper.setName("Actual expenditures");
+            expHelper.setValues(new ArrayList<String>());
 
-            for (int i = year.intValue() - 2; i <= year.intValue(); i++) {
+
+            for (int i =year.intValue()-yearRange; i <= year.intValue(); i++) {
                 // apply calendar filter
                 Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
                 Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
@@ -815,11 +820,14 @@ public class OrgProfileUtil {
                 commHelper.getValues().add(FormatHelper.formatNumber(fundingComm.doubleValue()));
                 DecimalWraper fundingDisb = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT);
                 disbHelper.getValues().add(FormatHelper.formatNumber(fundingDisb.doubleValue()));
+                DecimalWraper fundingExp = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE);
+                expHelper.getValues().add(FormatHelper.formatNumber(fundingExp.doubleValue()));
 
             }
             result.add(pledgesHelper);
             result.add(commHelper);
             result.add(disbHelper);
+            result.add(expHelper);
         } else {
             if (type == WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN) {
                 Collection<DonorSectorFundingHelper> secFundCol = ChartWidgetUtil.getDonorSectorFundingHelperList(filter);
@@ -888,7 +896,7 @@ public class OrgProfileUtil {
                     for (AmpCategoryValue categoryValue : categoryValues) {
                         NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
                         nameValueYearHelper.setName(categoryValue.getValue());
-                        for (Long i = year - 4; i <= year; i++) {
+                        for (Long i = (year - yearRange); i <= year; i++) {
                             // apply calendar filter
                             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
                             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
@@ -961,7 +969,7 @@ public class OrgProfileUtil {
                     NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
                     nameValueYearHelper.setValues(new ArrayList<String>());
                     nameValueYearHelper.setName("TOTAL");
-                    for (Long i = year - 4; i <= year; i++) {
+                    for (Long i = year -yearRange ; i <= year; i++) {
                         if (totalValuesComm.size() > 0) {
                             nameValueYearHelper.getValues().add(FormatHelper.formatNumber(totalValuesComm.get(i)));
                         }
@@ -985,11 +993,9 @@ public class OrgProfileUtil {
         int endRange=0;
         switch (type) {
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
-                yearRange = 2;
-                break;
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
-                yearRange = 4;
+                yearRange = filter.getYearsInRange()-1;
                 break;
             case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
             case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
@@ -1063,11 +1069,9 @@ public class OrgProfileUtil {
         int endRange=0;
         switch (type) {
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
-                yearRange = 2;
-                break;
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
-                yearRange = 4;
+                yearRange = filter.getYearsInRange()-1;
                 break;
             case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
             case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:

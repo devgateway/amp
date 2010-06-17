@@ -221,12 +221,12 @@ public class ChartWidgetUtil {
 	 * @return chart
 	 * @throws DgException
 	 */
-    public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
+    public static JFreeChart getPledgesCommDisbExpChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
 		JFreeChart chart = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
-		CategoryDataset dataset = getPledgesCommDisbDataset(filter, opt);
+		CategoryDataset dataset = getPledgesCommDisbExpDataset(filter, opt);
 		DecimalFormat format = FormatHelper.getDecimalFormat();
 		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
 		toolTipformat.setMaximumFractionDigits(3);
@@ -267,6 +267,7 @@ public class ChartWidgetUtil {
 		renderer.setSeriesPaint(0, new Color(0x40, 0x69, 0x9c));
 		renderer.setSeriesPaint(1, new Color(0x80, 0x99, 0x47));
 		renderer.setSeriesPaint(2, new Color(0x9e, 0x40, 0x3d));
+        renderer.setSeriesPaint(3, new Color(0xb2, 0xa3, 0xc7));
 		renderer.setItemMargin(0);
 		renderer.setDrawBarOutline(true);
 
@@ -289,7 +290,7 @@ public class ChartWidgetUtil {
      * @return CategoryDataset
      * @throws DgException
      */
-    private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter, ChartOption opt) throws DgException, WorkerException {
+    private static CategoryDataset getPledgesCommDisbExpDataset(FilterHelper filter, ChartOption opt) throws DgException, WorkerException {
 		boolean nodata = true; // for displaying no data message
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		Long year = filter.getYear();
@@ -313,17 +314,20 @@ public class ChartWidgetUtil {
         String pledgesTranslatedTitle = TranslatorWorker.translateText("Pledges", opt.getLangCode(), opt.getSiteId());
         String actComTranslatedTitle = TranslatorWorker.translateText("Actual commitments", opt.getLangCode(), opt.getSiteId());
         String actDisbTranslatedTitle = TranslatorWorker.translateText("Actual disbursements", opt.getLangCode(), opt.getSiteId());
-		for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
-			// apply calendar filter
-			Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
-			Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
+        String actExpTranslatedTitle = TranslatorWorker.translateText("Actual expenditures", opt.getLangCode(), opt.getSiteId());
+        for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+            // apply calendar filter
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
             result.addValue(fundingPledge/divideByMillionDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
             DecimalWraper fundingComm = getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT);
             result.addValue(fundingComm.getValue().divide(divideByMillionDenominator), actComTranslatedTitle, new Long(i));
             DecimalWraper fundingDisb = getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT);
             result.addValue(fundingDisb.getValue().divide(divideByMillionDenominator), actDisbTranslatedTitle, new Long(i));
-            if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
+            DecimalWraper fundingExp = getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE);
+            result.addValue(fundingExp.getValue().divide(divideByMillionDenominator), actExpTranslatedTitle, new Long(i));
+            if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0||fundingExp.doubleValue()!=0) {
 				nodata = false;
 			}
 
@@ -1709,11 +1713,12 @@ public class ChartWidgetUtil {
             cal.doCalculations(fundingDets, currCode);
             /*Depending on what is selected in the filter
             we should return either actual commitments
-            or actual Disbursement */
-            if (transactionType == 0) {
-                total = cal.getTotActualComm();
-            } else {
-                total = cal.getTotActualDisb();
+            or actual Disbursement or  */
+            switch(transactionType){
+                case Constants.EXPENDITURE: total=cal.getTotActualExp();break;
+                case Constants.DISBURSEMENT: total=cal.getTotActualDisb();break;
+                default: total = cal.getTotActualComm();
+
             }
 
         } catch (Exception e) {

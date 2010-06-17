@@ -85,9 +85,9 @@ public class ShowWidgetChart extends Action {
                         break;
 
                     case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
-                        title=TranslatorWorker.translateText("Pledges|Commitments|Disbursements", opt.getLangCode(), opt.getSiteId());;
+                        title=TranslatorWorker.translateText("Pledges|Commitments|Disbursements|Expenditures", opt.getLangCode(), opt.getSiteId());;
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getPledgesCommDisbChart(opt, filter);
+                        chart = ChartWidgetUtil.getPledgesCommDisbExpChart(opt, filter);
 
                         break;
 

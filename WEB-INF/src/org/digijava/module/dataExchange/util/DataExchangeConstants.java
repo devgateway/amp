@@ -25,5 +25,17 @@ public class DataExchangeConstants {
 	public static String LOCATION_TYPE_DEPARTMENT = "Department";
 	public static String LOCATION_TYPE_DISTRICT = "District";
 	
-
+	public static final String MISSING_ORGANIZATION = "Missing organization";
+	public static final String MISSING_SECTOR = "Missing sector";
+	public static final String MISSING_MTEF = "Missing mtef projection";
+	public static final String MISSING_PROGRAM = "Missing program";
+	public static final String MISSING_STATUS = "Missing status";
+	public static final String SECTOR_PERCENTAGE = "Sector percentage";
+	public static final String PROGRAM_PERCENTAGE = "Program percentage";
+	public static final String MISSING_IMPLEMENTATION_LOCATION = "Missing implementation location";
+	public static final String MISSING_IMPLEMENTATION_LEVEL = "Missing implementation level";
+	public static final String MISSING_FINANCING_INSTRUMENT = "Missing financing instrument";
+	public static final String MISSING_TYPE_OF_ASSISTANCE = "Missing type of assistance";
+	
+	public static final String TEXT = "text";
 }

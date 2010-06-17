@@ -9,6 +9,8 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable
@@ -90,8 +92,38 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
      * don't confuse it with Description field
      */
     private String orgDescription;
+    
+    //Budget fields
+    private AmpBudgetSector parentsector;
+    private Set<AmpDepartments> departments;
+    private Set<AmpBudgetSector> budgetsectors;
+    
+    
+    public Set<AmpBudgetSector> getBudgetsectors() {
+		return budgetsectors;
+	}
 
-    public String getOrgBackground() {
+	public void setBudgetsectors(Set<AmpBudgetSector> budgetsectors) {
+		this.budgetsectors = budgetsectors;
+	}
+
+	public Set<AmpDepartments> getDepartments() {
+		return departments;
+	}
+
+	public void setDepartments(Set<AmpDepartments> departments) {
+		this.departments = departments;
+	}
+
+	public AmpBudgetSector getParentsector() {
+		return parentsector;
+	}
+
+	public void setParentsector(AmpBudgetSector parentsector) {
+		this.parentsector = parentsector;
+	}
+
+	public String getOrgBackground() {
         return orgBackground;
     }
 

@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
@@ -62,6 +63,9 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -109,7 +113,7 @@ public class ViewChannelOverview extends TilesAction {
 			else {
 				id = formBean.getId();
 			}
-
+			
 			Collection<AmpCategoryValue> implLocationLevels	= null;
 			try {
 				implLocationLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, null, request);
@@ -456,8 +460,31 @@ public class ViewChannelOverview extends TilesAction {
 		            );
 
 
-          	        
-          	        // queryString = "select distinct f.typeOfAssistance.value from " +
+					//Budget Classification
+					if (activity.getBudgetsector()!=null){
+						AmpBudgetSector bsector = BudgetDbUtil.getBudgetSectorById(activity.getBudgetsector());
+						formBean.setBudgetsector(bsector.getCode() + " - " + bsector.getSectorname());
+					}
+					if (activity.getBudgetorganization()!=null){
+						AmpOrganisation org = DbUtil.getOrganisation(activity.getBudgetorganization());
+						formBean.setBudgetorganization(org.getBudgetOrgCode() + " - " + org.getName());
+					}
+					if (activity.getBudgetdepartment()!=null){
+						AmpDepartments dep = BudgetDbUtil.getBudgetDepartmentById(activity.getBudgetdepartment());
+						formBean.setBudgetdepartment(dep.getCode()+ " - " + dep.getName());
+					}
+					if (activity.getBudgetprogram()!=null){
+						AmpTheme prog;
+						try {
+							prog = ProgramUtil.getThemeById(activity.getBudgetprogram());
+							formBean.setBudgetprogram(prog.getThemeCode()+ " - " + prog.getName());
+						} catch (DgException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					
+					// queryString = "select distinct f.typeOfAssistance.value from " +
 //                      AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
 //          
 //                  qry = session.createQuery(queryString);

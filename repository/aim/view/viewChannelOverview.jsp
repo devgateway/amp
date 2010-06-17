@@ -396,9 +396,9 @@ function commentWin(val) {
 																				<table>
 																					<field:display name="On/Off Budget" feature="Budget">
 																						<tr>
-																							<td><digi:trn key="aim:actBudgeton">
-																								Activity is On Budget
-																							</digi:trn></td>
+																							<td>
+																								<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
+																							</td>
 																						</tr>
 
 																						<logic:present name="activity" property="chapter">
@@ -409,96 +409,90 @@ function commentWin(val) {
 																							<td><digi:trn>Code Chapitre</digi:trn>: ${activity.chapter.code} - ${activity.chapter.description}</td>
 																						</tr>
 																						<tr>
-																							<td><digi:trn>Imputations</digi:trn>:</td>
+																							<td>
+																								<digi:trn>Imputations</digi:trn>:
+																							</td>
 																						</tr>
 																						<tr>																						
-																						<td>
-																						<logic:iterate name="activity" property="chapter.imputations" id="imp">
-																						${activity.chapter.year} - ${imp.code} - ${imp.description}
-																						<br/> 
-																						</logic:iterate>
+																							<td>
+																							<logic:iterate name="activity" property="chapter.imputations" id="imp">
+																								${activity.chapter.year} - ${imp.code} - ${imp.description}
+																							<br/> 
+																							</logic:iterate>
 																						</td>
 																						</tr>
 																								<tr>
 																							<td>&nbsp;</td>
 																						</tr>
 																						</logic:present>
-																						
 																						<field:display name="FY" feature="Budget">
 																							<tr>
-																								<td><digi:trn key="aim:actFY">
-																						FY
-																						</digi:trn>: ${activity.FY}</td>
+																								<td>
+																									<digi:trn key="aim:actFY">FY</digi:trn>: ${activity.FY}
+																								</td>
 																							</tr>
 																						</field:display>
 																						<field:display name="Vote" feature="Budget">
 																							<tr>
-																								<td><digi:trn key="aim:actVote">
-																						Vote
-																						</digi:trn>: ${activity.vote}</td>
+																								<td>
+																									<digi:trn key="aim:actVote">Vote</digi:trn>: ${activity.vote}
+																								</td>
 																							</tr>
 																						</field:display>
 																						<field:display name="Sub-Vote" feature="Budget">
 																							<tr>
-																								<td><digi:trn key="aim:actSub-Vote">
-																						Sub-Vote
-																						</digi:trn>: ${activity.subVote}</td>
+																								<td>
+																									<digi:trn key="aim:actSub-Vote">Sub-Vote</digi:trn>: ${activity.subVote}
+																								</td>
 																							</tr>
 																						</field:display>
 																						<field:display name="Sub-Program" feature="Budget">
 																							<tr>
-																								<td><digi:trn key="aim:actSub-Program">
-																						Sub-Program
-																						</digi:trn>: ${activity.subProgram}</td>
+																								<td>
+																									<digi:trn key="aim:actSub-Program">Sub-Program</digi:trn>: ${activity.subProgram}
+																								</td>
 																							</tr>
 																						</field:display>
 																						<field:display name="Project Code" feature="Budget">
 																							<tr>
-																								<td><digi:trn key="aim:actProjectCode">
-																						Project Code
-																						</digi:trn>: ${activity.projectCode}</td>
+																								<td>
+																									<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: ${activity.projectCode}
+																								</td>
 																							</tr>
 																						</field:display>
 																					</field:display>
 																					
-																					<field:display name="Financial Instrument"
-																						feature="Budget">
+																					<field:display name="Financial Instrument" feature="Budget">
 																						<tr>
-																							<td><digi:trn key="aim:actGBS">
-																					Financial Instrument
-																					</digi:trn>: 																							
-																					${aimChannelOverviewForm.financialInstrument}
-                                                                                            
+																							<td>
+																								<digi:trn key="aim:actGBS">Financial Instrument</digi:trn>: ${aimChannelOverviewForm.financialInstrument}
                                                                                             </td>
 																						</tr>
 																					</field:display>
-																					<field:display
-																						name="Government Approval Procedures"
-																						feature="Budget">
+																					<field:display name="Government Approval Procedures" feature="Budget">
 																						<tr>
-																							<td><digi:trn
-																								key="aim:actGovernmentApprovalProcedures">
-																					Government Approval Procedures
-																					</digi:trn>: <c:if
-																								test="${activity.governmentApprovalProcedures==true}">
-																						Yes
-																					</c:if> <c:if
-																								test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
-																						No
-																					</c:if></td>
+																							<td>
+																								<digi:trn key="aim:actGovernmentApprovalProcedures">Government Approval Procedures </digi:trn>: 
+																								<c:if test="${activity.governmentApprovalProcedures==true}">
+																									Yes
+																								</c:if>
+																								<c:if test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
+																									No
+																								</c:if>
+																							</td>
 																						</tr>
 																					</field:display>
-																					<field:display name="Joint Criteria"
-																						feature="Budget">
+																					<field:display name="Joint Criteria" feature="Budget">
 																						<tr>
-																							<td><digi:trn key="aim:actJointCriteria">
-																					Joint Criteria
-																					</digi:trn>: <c:if test="${activity.jointCriteria==true}">
-																								<c:out value="Yes" />
-																							</c:if> <c:if
-																								test="${activity.jointCriteria==false || activity.jointCriteria==''}">
-																								<c:out value="No" />
-																							</c:if></td>
+																							<td>
+																								<digi:trn key="aim:actJointCriteria">Joint Criteria</digi:trn>:
+																							 	<c:if test="${activity.jointCriteria==true}">
+																									<c:out value="Yes" />
+																								</c:if> 
+																								<c:if test="${activity.jointCriteria==false || activity.jointCriteria==''}">
+																									<c:out value="No" />
+																								</c:if>
+																							</td>
 																						</tr>
 																					</field:display>
 																					<field:display name="Humanitarian Aid" feature="Identification">
@@ -509,6 +503,26 @@ function commentWin(val) {
 																								<c:if test="${activity.humanitarianAid==true}">
 																									<digi:trn key="aim:yes">Yes</digi:trn>
 																								</c:if></td></tr>
+																					</field:display>
+																					<field:display name="Budget Classification" feature="Budget">
+																						<tr>
+																							<td style="margin-top: 10px;">
+																								<strong>
+																									<digi:trn>Budget Classification</digi:trn>
+																								</strong>
+																							</td>
+																						</tr>
+																						<tr>
+																							<td>
+																								<li style="margin-left: 10px"> ${aimChannelOverviewForm.budgetsector}</li>
+																								<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 20px"/>
+																								${aimChannelOverviewForm.budgetorganization}<br>
+																								<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 30px"/>
+																								${aimChannelOverviewForm.budgetdepartment}<br>
+																								<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 40px"/>
+																								${aimChannelOverviewForm.budgetprogram}<br>
+																							</td>
+																						</tr>
 																					</field:display>
 																				</table>
 																			</c:if> 

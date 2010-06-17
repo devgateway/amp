@@ -17,6 +17,8 @@ import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Pledge;
+import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;;
 
 public class AddOrgForm extends ActionForm {
 
@@ -111,6 +113,42 @@ public class AddOrgForm extends ActionForm {
     private List<AmpOrganisation> budgetOrgs;
     private Long[] selBudgetOrg;
     private Collection<Location> selectedLocs = null;
+	private Collection<AmpDepartments> departments;
+	private Long[] selecteddepartments;
+	private Collection<AmpBudgetSector> budgetsectors;
+	private Long[] selectedbudgetsectors;
+	public Collection<AmpBudgetSector> getBudgetsectors() {
+		return budgetsectors;
+	}
+
+	public void setBudgetsectors(Collection<AmpBudgetSector> budgetsectors) {
+		this.budgetsectors = budgetsectors;
+	}
+
+	public Long[] getSelectedbudgetsectors() {
+		return selectedbudgetsectors;
+	}
+
+	public void setSelectedbudgetsectors(Long[] selectedbudgetsectors) {
+		this.selectedbudgetsectors = selectedbudgetsectors;
+	}
+
+	public Collection<AmpDepartments> getDepartments() {
+		return departments;
+	}
+
+	public void setDepartments(Collection<AmpDepartments> departments) {
+		this.departments = departments;
+	}
+
+	public Long[] getSelecteddepartments() {
+		return selecteddepartments;
+	}
+
+	public void setSelecteddepartments(Long[] selecteddepartments) {
+		this.selecteddepartments = selecteddepartments;
+	}
+
     private List<AmpOrganisationContact> orgContacts;
     
     private String[] selectedContactInfoIds;

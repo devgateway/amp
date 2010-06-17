@@ -157,6 +157,13 @@
     <form-bean name="invalidDataList" type="org.digijava.module.aim.form.InvalidDataListsForm"/>
     <form-bean name="pledgeForm" type="org.digijava.module.fundingpledges.form.PledgeForm"/>
     <form-bean name="viewPledgesForm" type="org.digijava.module.fundingpledges.form.ViewPledgesForm" />
+    <form-bean name="BudgetManagerForm" type="org.digijava.module.budget.form.BudgetManagerForm" />
+    <form-bean name="RetriveOptionsForm" type="org.digijava.module.budget.form.RetriveOptionsForm" />
+    <form-bean name="EditBudgetSectorForm" type="org.digijava.module.budget.form.EditBudgetSectorForm" />
+    <form-bean name="SetBudgetProgramForm" type="org.digijava.module.budget.form.SetBudgetProgramForm" />
+    <form-bean name="DepartmentsManagerForm" type="org.digijava.module.aim.form.DepartmentsManagerForm" />
+    <form-bean name="EditDepartmentForm" type="org.digijava.module.aim.form.EditDepartmentForm" />
+    
     <form-bean name="aimAddContactForm" type="org.digijava.module.aim.uicomponents.form.AddContactComponentForm"/>
     
 </form-beans>
@@ -1751,11 +1758,32 @@
     	<forward name="forward" path="/showLayout.do?layout=export" />    	
       	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>      
-
-    <action name="aimAddContactForm" path="/aim/addAmpContactInfo" scope="session" type="org.digijava.module.aim.uicomponents.action.AddContactComponent"  parameter="action">
-      <forward name="forward" path="/showLayout.do?layout=aim_contactComponentPopIn" />
-      <forward name="editOrg" path="/editOrganisation.do?actionFlag=reload" redirect="true"/>
-	<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>  
+    <action name="BudgetManagerForm" scope="session" path="/aim/BudgetManager" type="org.digijava.module.budget.action.BudgetManager" validate="false">
+       <forward name="forward" path="/showLayout.do?layout=BudgetManager" />
+       <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="RetriveOptionsForm" scope="session" path="/aim/RetrieveOptionsAction" type="org.digijava.module.budget.action.RetrieveOptionsAction" validate="false"/>
+    
+    <action name="EditBudgetSectorForm" path="/aim/editbudgetsector" scope="session" type="org.digijava.module.budget.action.EditBudgetSector" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=editbudgetsector" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>   
+    <action name="SetBudgetProgramForm" path="/aim/setbudgetprogram" scope="session" type="org.digijava.module.budget.action.SetBudgetProgram" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=setbudgetprogram" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+	 <action name="DepartmentsManagerForm" path="/aim/departmentsmanager" scope="session" type="org.digijava.module.aim.action.DepartmentsManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=departmentsmanager" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+     <action name="EditDepartmentForm" path="/aim/editdepartment" scope="session" type="org.digijava.module.aim.action.EditDepartment" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=editdepartment" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action> 
+	<action name="aimAddContactForm" path="/aim/addAmpContactInfo" scope="session" type="org.digijava.module.aim.uicomponents.action.AddContactComponent"  parameter="action">
+      	<forward name="forward" path="/showLayout.do?layout=aim_contactComponentPopIn" />
+      	<forward name="editOrg" path="/editOrganisation.do?actionFlag=reload" redirect="true"/>
+		<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>  
     </action>
 
     

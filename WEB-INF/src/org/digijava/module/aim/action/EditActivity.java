@@ -107,6 +107,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -677,6 +679,29 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  eaForm.getIdentification().setBudgetCodeProjectID(activity.getBudgetCodeProjectID().trim());
           
           eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
+          
+        //Budget classification
+      	eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
+      	eaForm.getIdentification().setSelectedorg((ActivityUtil.getBudgetOrganization(eaForm.getActivityId())));
+      	eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
+      	eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
+      	
+      	
+      	eaForm.getIdentification().setBudgetsectors(BudgetDbUtil.getBudgetSectors());
+      	eaForm.getIdentification().setBudgetprograms(BudgetDbUtil.getBudgetPrograms());
+      	if (eaForm.getIdentification().getSelectedbudgedsector()!=null){
+      		eaForm.getIdentification().setBudgetorgs(
+      			new ArrayList<AmpOrganisation>(BudgetDbUtil.getOrganizationsBySector(eaForm.getIdentification().getSelectedbudgedsector())));
+      	}else{
+      		eaForm.getIdentification().setBudgetorgs(new ArrayList<AmpOrganisation>());
+      	}
+      	if (eaForm.getIdentification().getSelectedorg()!=null){
+      		eaForm.getIdentification().setBudgetdepartments(
+      			new ArrayList<AmpDepartments>(BudgetDbUtil.getDepartmentsbyOrg(eaForm.getIdentification().getSelectedorg())));
+      	}else{
+      		eaForm.getIdentification().setBudgetdepartments(new ArrayList<AmpDepartments>());
+      	}
+          
           /*
            * Tanzania adds
            */

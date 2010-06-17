@@ -11,7 +11,6 @@ import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
 public class ChannelOverviewForm extends MainProjectDetailsForm
 {
 	private Long id ;
@@ -56,7 +55,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
     private List secondaryPrograms;
     private List nationalPlanObjectivePrograms;
 	private Collection<ActivitySector> activitySectors;
-	
 	private Collection<FinancingBreakdown> financingBreakdown;
         
     public Collection<FinancingBreakdown> getFinancingBreakdown() {
@@ -83,12 +81,50 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String auditSystem;
 	private String institutions;
 	private String accessionInstrument;
-	
 	private Collection closingDates;
-	
 	private Integer countryIndex;
-	
 	private List<Integer> numOfLocationsPerLayer;
+	private String budgetsector;
+	private String budgetorganization;
+	private String budgetdepartment;
+	private String budgetprogram;
+	
+	
+	
+	
+	
+
+	public String getBudgetsector() {
+		return budgetsector;
+	}
+
+	public void setBudgetsector(String budgetsector) {
+		this.budgetsector = budgetsector;
+	}
+
+	public String getBudgetorganization() {
+		return budgetorganization;
+	}
+
+	public void setBudgetorganization(String budgetorganization) {
+		this.budgetorganization = budgetorganization;
+	}
+
+	public String getBudgetdepartment() {
+		return budgetdepartment;
+	}
+
+	public void setBudgetdepartment(String budgetdepartment) {
+		this.budgetdepartment = budgetdepartment;
+	}
+
+	public String getBudgetprogram() {
+		return budgetprogram;
+	}
+
+	public void setBudgetprogram(String budgetprogram) {
+		this.budgetprogram = budgetprogram;
+	}
 
 	/**
 	 * @return Returns the revCompDates.

@@ -9,10 +9,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import mondrian.util.Bug;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
@@ -22,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
@@ -57,6 +61,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ParisUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -323,7 +330,33 @@ public class EditOrganisation extends DispatchAction {
       if(organization.getFax()!=null){
     	  editForm.setFax(organization.getFax());
       }
-
+      
+      //Budget Sectors
+      Collection<Long> selectedbudgetsectors = new Vector<Long>();
+      for (Iterator iterator = organization.getBudgetsectors().iterator(); iterator.hasNext();) {
+    	  AmpBudgetSector sector = (AmpBudgetSector) iterator.next();
+    	  selectedbudgetsectors.add(sector.getIdsector());
+      }
+      if (selectedbudgetsectors.size()!= 0){
+    	  editForm.setSelectedbudgetsectors(selectedbudgetsectors.toArray(new Long[selectedbudgetsectors.size()]));
+      }else{
+    	  Long[] defaultvalue = {0L}; 
+    	  editForm.setSelectedbudgetsectors(defaultvalue);
+      }
+      
+      //Departments
+      Collection<Long> selecteddeps = new Vector<Long>();
+      for (Iterator iterator = organization.getDepartments().iterator(); iterator.hasNext();) {
+    	  AmpDepartments ampdepartment = (AmpDepartments) iterator.next();
+    	  selecteddeps.add(ampdepartment.getId());
+      }
+      if (selecteddeps.size()!= 0){
+    	  editForm.setSelecteddepartments(selecteddeps.toArray(new Long[selecteddeps.size()]));
+      }else{
+    	  Long[] defaultvalue = {0L}; 
+    	  editForm.setSelecteddepartments(defaultvalue);
+      }
+      
       return mapping.findForward("forward");
   }
   
@@ -1101,7 +1134,40 @@ public class EditOrganisation extends DispatchAction {
           }
 
       }
-
+      
+      //Budget sectors
+      Set<AmpBudgetSector> budgetsectors = new HashSet<AmpBudgetSector>();
+      if (editForm.getSelectedbudgetsectors() != null) {
+          Iterator<AmpBudgetSector> itr = editForm.getBudgetsectors().iterator();
+          while (itr.hasNext()) {
+        	  AmpBudgetSector bsector = itr.next();
+              for (int i = 0; i < editForm.getSelectedbudgetsectors().length; i++) {
+            	  if(bsector.getIdsector().equals(editForm.getSelectedbudgetsectors()[i])){
+            		  budgetsectors.add(bsector);
+            	  }
+			}
+        	  
+          }
+      }
+      organization.setBudgetsectors(budgetsectors);
+      
+      //Departments
+      Set<AmpDepartments> departments = new HashSet<AmpDepartments>();
+      if (editForm.getSelecteddepartments() != null) {
+          Iterator<AmpDepartments> itr = editForm.getDepartments().iterator();
+          while (itr.hasNext()) {
+        	  AmpDepartments dep = itr.next();
+              for (int i = 0; i < editForm.getSelecteddepartments().length; i++) {
+            	  if(dep.getId().equals(editForm.getSelecteddepartments()[i])){
+            		  departments.add(dep);
+            	  }
+			}
+        	  
+          }
+      }
+      organization.setDepartments(departments);
+      
+      
       if (organization.getFundingDetails() == null) {
           organization.setFundingDetails(new HashSet<AmpPledge>());
       } else {
@@ -1305,6 +1371,10 @@ public class EditOrganisation extends DispatchAction {
           form.setEmail(null);
           form.setPhone(null);
           form.setFax(null);
+          form.setSelecteddepartments(null);
+          form.setDepartments(BudgetDbUtil.getDepartments());
+          form.setSelectedbudgetsectors(null);
+          form.setBudgetsectors(BudgetDbUtil.getBudgetSectors());
       } catch (Exception ex) {
           logger.error("error",ex);
           new DgException(ex);

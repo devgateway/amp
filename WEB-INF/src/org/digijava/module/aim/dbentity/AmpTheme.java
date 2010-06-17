@@ -18,6 +18,7 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
 	private String budgetProgramCode ;
+	private Integer isbudgetprogram;
 	private String name ;
 	private String encodeName;
 	//private String type ;
@@ -355,6 +356,14 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable
 		@Override
 		public Class getDimensionClass() {
 			return NPODimension.class;
+		}
+
+		public Integer getIsbudgetprogram() {
+			return isbudgetprogram;
+		}
+
+		public void setIsbudgetprogram(Integer isbudgetprogram) {
+			this.isbudgetprogram = isbudgetprogram;
 		}
 
 }

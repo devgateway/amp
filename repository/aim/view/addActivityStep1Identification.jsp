@@ -68,7 +68,81 @@
 </style>
 
 <script language="JavaScript">
+var responseSuccessRetrive = function(o){
+	/* Please see the Success Case section for more
+	 * details on the response object's properties.
+	 * o.tId
+	 * o.status
+	 * o.statusText
+	 * o.getResponseHeader[ ]
+	 * o.getAllResponseHeaders
+	 * o.responseText
+	 * o.responseXML
+	 * o.argument
+	 */
+	 		
+	var text=o.responseText;
+	//Split the document
+	var returnelements=text.split("||")
+	//Process each of the elements
+	if (returnelements[0]=='1'){
+		removeOptionSelected('budgetorg');
+		for ( var i=1; i<returnelements.length; i++ ){
+			valueLabelPair = returnelements[i].split("|")
+			document.getElementById("budgetorg").disabled=false;
+			document.getElementById("budgetorg").options[i-1] = new Option(valueLabelPair[1], valueLabelPair[0]);
+		}
+	}else if (returnelements[0]=='2'){
+		removeOptionSelected('budgetdepart');
+		for ( var i=1; i<returnelements.length; i++ ){
+			valueLabelPair = returnelements[i].split("|")
+			document.getElementById("budgetdepart").options[i-1] = new Option(valueLabelPair[1], valueLabelPair[0]);
+			document.getElementById("budgetdepart").disabled=false;
+			document.getElementById("budgetorg").disabled=false;
+			document.getElementById("budgetprog").disabled=false;
+		}
+	}
+}	
 
+function removeOptionSelected(name)
+{
+  var elSel = document.getElementById(name);
+  var i;
+  for (i = elSel.length - 1; i>=0; i--) {
+    if (elSel.options[i].selected) {
+      elSel.remove(i);
+    }
+  }
+}
+
+
+var responseFailureRetrive = function(o){ 
+// Access the response object's properties in the 
+// same manner as listed in responseSuccess( ). 
+// Please see the Failure Case section and 
+// Communication Error sub-section for more details on the 
+// response object's properties.
+	alert("Connection Failure!"); 
+}  
+
+var RetriveCallback = { 
+	success:responseSuccessRetrive, 
+	failure:responseFailureRetrive 
+};
+
+function getBudgetOptions(id,type)
+{	
+	<digi:context name="retrivevalues" property="/aim/RetrieveOptionsAction.do"/>
+	var params = "id="+ id + "&optionstype=" + type
+	var url= "<%=retrivevalues%>";
+	YAHOOAmp.util.Connect.asyncRequest('POST',url,RetriveCallback,params);
+	document.getElementById("budgetdepart").disabled=true;
+	document.getElementById("budgetorg").disabled=true;
+	document.getElementById("budgetprog").disabled=true;
+}
+
+</script>
+<script language="JavaScript">
 function OnBudgetRules ( textboxId,  messageElId, numOfCharsNeeded) {
 	this.textboxEl		= null;
 	this.messageEl		= null;
@@ -113,6 +187,8 @@ function toggleElement ( elementId, show ) {
 
 function toggleBudgetFields( show ) {
 	toggleElement("CodeChapitre", show);
+	toggleElement("budgetdepart", show);
+	toggleElement("budgetprog", show);
 }
 
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
@@ -578,13 +654,12 @@ target.style.cursor = "default"
 
 												<field:display name="On/Off Budget" feature="Budget">	
 											 <tr>
-											 
-												<td valign="top" align="left" colspan="9">
-											<html:select property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
-											 	<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
-											 	<html:option value="0"><digi:trn>Off</digi:trn></html:option>
-											 	<html:option value="1"><digi:trn>On</digi:trn></html:option>
-											 </html:select>
+											 	<td valign="top" align="left" colspan="9">
+													<html:select property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
+											 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
+											 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
+											 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
+											 		</html:select>
 												</td>
 											</tr>
 												</field:display>
@@ -606,13 +681,51 @@ target.style.cursor = "default"
 											</td>
 											</tr>
 											</table>
-											
-											</td>
+											<!-- Budget classification -->
+											<field:display name="Budget Classification" feature="Budget">		
+											<tr bgcolor="#ffffff">
+												<td valign="top" align="left">
+													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
+														<digi:trn>Budget Classification</digi:trn>
+													</a>
+												</td>
+												<td>
+													<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center">
+                                                  		<tr>
+		                                                    <td>
+		                                                    	<html:select name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" >
+		                                                    		<html:option value="0"><digi:trn>Select</digi:trn></html:option>
+		                                                    		<html:optionsCollection name="aimEditActivityForm" property="identification.budgetsectors" value="idsector" label="sectorname"/>
+		                                                    	</html:select>
+		                                                    </td>
+		                                                    <td>
+		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedorg" styleId="budgetorg" onchange="getBudgetOptions(this.value,'depselect')">
+      																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
+      																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetorgs" value="ampOrgId" label="name"/>
+    															</html:select>
+		                                                    </td>
+		                                                 </tr>
+		                                                <tr>
+		                                                    <td>
+		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selecteddepartment" styleId="budgetdepart">
+      																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
+      																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetdepartments" value="id" label="name"/>
+    															</html:select>
+    														</td>
+		                                                    <td>
+		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedprogram" styleId="budgetprog">
+      																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
+      																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetprograms" value="ampThemeId" label="name"/>
+    															</html:select>
+		                                                    </td>
+                                                  		</tr>
+                                                	</table>
+												</td>
 											</tr>
-											
-											
-									
-						
+											</field:display>
+											<!--End  Budget classification -->
+										</td>
+									</tr>
 								</feature:display>
 								
 								<field:display name="Financial Instrument" feature="Budget">

@@ -764,6 +764,48 @@ function collapseAll() {
 										</logic:equal>
 										--%>										
 										</field:display>
+										<field:display name="Budget Classification" feature="Budget">
+											<strong><digi:trn>Budget Classification</digi:trn>:</strong><br>
+											<c:if test="${!empty aimEditActivityForm.identification.selectedbudgedsector}">
+												<c:forEach var="selectedsector" items="${aimEditActivityForm.identification.budgetsectors}" >
+													<c:if test="${aimEditActivityForm.identification.selectedbudgedsector==selectedsector.idsector}">
+														<li style="margin-left: 10px">
+															<c:out value="${selectedsector.code}"/> - <c:out value="${selectedsector.sectorname}"/>
+														</li> 
+													</c:if>
+												</c:forEach>	
+											</c:if>
+											<br>
+											<c:if test="${!empty aimEditActivityForm.identification.selectedorg}">
+												<c:forEach var="selectedorgs" items="${aimEditActivityForm.identification.budgetorgs}" >
+													<c:if test="${aimEditActivityForm.identification.selectedorg==selectedorgs.ampOrgId}">
+														<li style="margin-left: 10px">
+															<c:out value="${selectedorgs.budgetOrgCode}"/> - <c:out value="${selectedorgs.name}"/>
+														</li>
+													</c:if>
+												</c:forEach>	
+											</c:if>
+											<br>
+											<c:if test="${!empty aimEditActivityForm.identification.selecteddepartment}">
+												<c:forEach var="selecteddep" items="${aimEditActivityForm.identification.budgetdepartments}" >
+													<c:if test="${aimEditActivityForm.identification.selecteddepartment==selecteddep.id}">
+														<li style="margin-left: 10px">
+															<c:out value="${selecteddep.code}"/> - <c:out value="${selecteddep.name}"/>
+														</li> 
+													</c:if>
+												</c:forEach>	
+											</c:if>
+											<br>
+											<c:if test="${!empty aimEditActivityForm.identification.selectedprogram}">
+												<c:forEach var="selectedprog" items="${aimEditActivityForm.identification.budgetprograms}" >
+													<c:if test="${aimEditActivityForm.identification.selectedprogram==selectedprog.ampThemeId}">
+														<li style="margin-left: 10px">
+															<c:out value="${selectedprog.themeCode}"/> - <c:out value="${selectedprog.name}"/>
+														</li> 
+													</c:if>
+												</c:forEach>	
+											</c:if>
+										</field:display>
 										</div>
 										</td>
 									</tr>

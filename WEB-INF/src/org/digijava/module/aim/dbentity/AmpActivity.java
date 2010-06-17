@@ -32,8 +32,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	
 	
     private Integer budget;
-    private String govAgreementNumber;
     private String budgetCodeProjectID;
+    private Long budgetsector;
+    private Long budgetorganization;
+    private Long budgetdepartment;
+    private Long budgetprogram;
+    
+    private String govAgreementNumber;
+    
 
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     private Long ampActivityId ;
@@ -1726,6 +1732,38 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setComponentProgress(Set<AmpPhysicalPerformance> componentProgress) {
 		this.componentProgress = componentProgress;
+	}
+
+	public Long getBudgetsector() {
+		return budgetsector;
+	}
+
+	public void setBudgetsector(Long budgetsector) {
+		this.budgetsector = budgetsector;
+	}
+
+	public Long getBudgetorganization() {
+		return budgetorganization;
+	}
+
+	public void setBudgetorganization(Long budgetorganization) {
+		this.budgetorganization = budgetorganization;
+	}
+
+	public Long getBudgetdepartment() {
+		return budgetdepartment;
+	}
+
+	public void setBudgetdepartment(Long budgetdepartment) {
+		this.budgetdepartment = budgetdepartment;
+	}
+
+	public Long getBudgetprogram() {
+		return budgetprogram;
+	}
+
+	public void setBudgetprogram(Long budgetprogram) {
+		this.budgetprogram = budgetprogram;
 	}
 
 }

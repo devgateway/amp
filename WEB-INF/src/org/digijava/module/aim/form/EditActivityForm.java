@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.ActivityIndicator;
@@ -51,6 +52,8 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.springframework.beans.BeanWrapperImpl;
@@ -377,7 +380,82 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String chapterCode;
 		private AmpChapter chapterForPreview;
 		private Integer chapterYear;
+		private ArrayList<AmpBudgetSector>budgetsectors;
+		private ArrayList<AmpOrganisation>budgetorgs;
+		private ArrayList<AmpDepartments> budgetdepartments;
+		private ArrayList<AmpTheme> budgetprograms;
 		
+		private Long selectedbudgedsector;
+		private Long selectedorg;
+		private Long selecteddepartment;
+		private Long selectedprogram;
+		
+		
+	
+		public ArrayList<AmpOrganisation> getBudgetorgs() {
+			return budgetorgs;
+		}
+
+		public void setBudgetorgs(ArrayList<AmpOrganisation> budgetorgs) {
+			this.budgetorgs = budgetorgs;
+		}
+
+		public ArrayList<AmpDepartments> getBudgetdepartments() {
+			return budgetdepartments;
+		}
+
+		public void setBudgetdepartments(ArrayList<AmpDepartments> budgetdepartments) {
+			this.budgetdepartments = budgetdepartments;
+		}
+
+		public ArrayList<AmpTheme> getBudgetprograms() {
+			return budgetprograms;
+		}
+
+		public void setBudgetprograms(ArrayList<AmpTheme> budgetprograms) {
+			this.budgetprograms = budgetprograms;
+		}
+
+		public Long getSelectedorg() {
+			return selectedorg;
+		}
+
+		public void setSelectedorg(Long selectedorg) {
+			this.selectedorg = selectedorg;
+		}
+
+		public Long getSelecteddepartment() {
+			return selecteddepartment;
+		}
+
+		public void setSelecteddepartment(Long selecteddepartment) {
+			this.selecteddepartment = selecteddepartment;
+		}
+
+		public Long getSelectedprogram() {
+			return selectedprogram;
+		}
+
+		public void setSelectedprogram(Long selectedprogram) {
+			this.selectedprogram = selectedprogram;
+		}
+
+		public Long getSelectedbudgedsector() {
+			return selectedbudgedsector;
+		}
+
+		public void setSelectedbudgedsector(Long selectedbudgedsector) {
+			this.selectedbudgedsector = selectedbudgedsector;
+		}
+
+		public ArrayList<AmpBudgetSector> getBudgetsectors() {
+			return budgetsectors;
+		}
+
+		public void setBudgetsectors(ArrayList<AmpBudgetSector> budgetsectors) {
+			this.budgetsectors = budgetsectors;
+		}
+
 		public String[] getBudgetCodes() {
 			return budgetCodes;
 		}

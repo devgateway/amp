@@ -12,6 +12,12 @@
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="govAgreementNumber" column="gov_agreement_number" type="java.lang.String" />
 		<property name="budgetCodeProjectID" column="budget_code_project_id" type="java.lang.String" />
+		<property name="budgetsector" column="budget_sector" type="java.lang.Long"/>
+		<property name="budgetorganization" column="budget_organization" type="java.lang.Long"/>
+		<property name="budgetdepartment" column="budget_department" type="java.lang.Long"/>
+		<property name="budgetprogram" column="budget_program" type="java.lang.Long"/>
+		<property name="budget" column="budget" type="java.lang.Integer" />
+		
 		<property name="description" column="description" type="text" />
 		<property name="lessonsLearned" column="lessons_learned" type="text" />
 		<property name="objective" column="objectives" type="text" />
@@ -34,7 +40,6 @@
 
 		<property name="documentSpace" column="document_space" type="java.lang.String" />
 		<property name="language" column="language" type="java.lang.String" />
-		<property name="budget" column="budget" type="java.lang.Integer" />
 		<property name="version" column="version" type="java.lang.String" />
 
 		<property name="equalOpportunity" column="equalOpportunity" type="java.lang.String" />

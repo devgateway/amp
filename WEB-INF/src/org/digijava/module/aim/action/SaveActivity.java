@@ -381,6 +381,22 @@ public class SaveActivity extends Action {
 		else
 			activity.setBudgetCodeProjectID(eaForm.getIdentification().getBudgetCodeProjectID());
 		
+		//Budget sector classification
+		if (!eaForm.getIdentification().getSelectedbudgedsector().equals(0)){
+			activity.setBudgetsector(eaForm.getIdentification().getSelectedbudgedsector());
+		}
+		if (!eaForm.getIdentification().getSelectedorg().equals(0)){
+			activity.setBudgetorganization(eaForm.getIdentification().getSelectedorg());
+		}
+		if(eaForm.getIdentification().getBudget().intValue()!=-1 || eaForm.getIdentification().getBudget().intValue()!=0){
+			if (!eaForm.getIdentification().getSelecteddepartment().equals(0)){
+				activity.setBudgetdepartment(eaForm.getIdentification().getSelecteddepartment());
+			}
+			if (!eaForm.getIdentification().getSelectedprogram().equals(0)){
+				activity.setBudgetprogram(eaForm.getIdentification().getSelectedprogram());
+			}
+		}
+		
 		if (eaForm.getIdentification().getCrisNumber() == null
 				|| eaForm.getIdentification().getCrisNumber().trim().length() == 0)
 			activity.setCrisNumber(new String(" "));

@@ -27,6 +27,7 @@
 		<action login-required="true" pattern="/npdSettingsAction" />
 		<action login-required="false" pattern="/feedback" />
 		<action login-required="false" pattern="/confirmRegisteration" />
+		<action login-required="false" pattern="/BudgetManager" />
 	</security>
 
 	<!-- AIM classes Begin-->
@@ -151,6 +152,8 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRecipient</hibernate-class>
 		
+		<hibernate-class>org.digijava.module.budget.dbentity.AmpDepartments</hibernate-class>
+		<hibernate-class>org.digijava.module.budget.dbentity.AmpBudgetSector</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpContact</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityContact</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpContactProperty</hibernate-class>

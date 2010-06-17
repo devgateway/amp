@@ -75,6 +75,8 @@
 <module:display name="Resources"></module:display>
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+
 <feature:display name="My Resources" module="Resources"></feature:display> 
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>
@@ -775,6 +777,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Code Chapitre" feature="Budget"></field:display>
 <field:display name="Budgeting Year" feature="Budget"></field:display>
+<field:display name="Budget Classification" feature="Budget"></field:display>
+<field:display name="Budget Department" feature="Budget"></field:display>
+<field:display name="Budget Sector" feature="Budget"></field:display>
+<field:display name="Budget Organization" feature="Budget"></field:display>
+<field:display name="Budget Program" feature="Budget"></field:display>
 <field:display name="Description Chapitre" feature="Budget"></field:display>
 <field:display name="Description Imputation" feature="Budget"></field:display>
 <field:display name="Table CSS class" feature="Table Widgets"></field:display> 

@@ -417,6 +417,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setMofedCntLastName(activity.getMofedCntLastName());
         oldActivity.setName(activity.getName());
         oldActivity.setBudget(activity.getBudget());
+        oldActivity.setBudgetsector(activity.getBudgetsector());
+        oldActivity.setBudgetorganization(activity.getBudgetorganization());
+        oldActivity.setBudgetdepartment(activity.getBudgetdepartment());
+        oldActivity.setBudgetprogram(activity.getBudgetprogram());
         oldActivity.setChapter(activity.getChapter());
         oldActivity.setProjectComments(activity.getProjectComments());
         oldActivity.setObjective(activity.getObjective());
@@ -4097,5 +4101,72 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			return element.getId();
     		}
     	}
-
+      
+      public static Long getBudgetSector(Long actId) throws DgException{
+      	Session session=null;
+  		String queryString =null;
+  		Query query=null;    		
+  		Long sector=null;
+  		try {
+  			session=PersistenceManager.getRequestDBSession();
+  			queryString= "select a.budgetsector  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+  			query=session.createQuery(queryString);    			
+  			sector=(Long)query.uniqueResult();    			
+  		}catch(Exception ex) { 
+  			logger.error("couldn't load Activity" + ex.getMessage());	
+  			ex.printStackTrace(); 
+  		} 
+  		return sector;
+      }
+      
+      public static Long getBudgetProgram(Long actId) throws DgException{
+        	Session session=null;
+    		String queryString =null;
+    		Query query=null;    		
+    		Long program=null;
+    		try {
+    			session=PersistenceManager.getRequestDBSession();
+    			queryString= "select a.budgetprogram  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			query=session.createQuery(queryString);    			
+    			program=(Long)query.uniqueResult();    			
+    		}catch(Exception ex) { 
+    			logger.error("couldn't load Activity" + ex.getMessage());	
+    			ex.printStackTrace(); 
+    		} 
+    		return program;
+        }
+      public static Long getBudgetOrganization(Long actId) throws DgException{
+        	Session session=null;
+    		String queryString =null;
+    		Query query=null;    		
+    		Long org=null;
+    		try {
+    			session=PersistenceManager.getRequestDBSession();
+    			queryString= "select a.budgetorganization  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			query=session.createQuery(queryString);    			
+    			org=(Long)query.uniqueResult();    			
+    		}catch(Exception ex) { 
+    			logger.error("couldn't load Activity" + ex.getMessage());	
+    			ex.printStackTrace(); 
+    		} 
+    		return org;
+        }
+      public static Long getBudgetDepartment(Long actId) throws DgException{
+        	Session session=null;
+    		String queryString =null;
+    		Query query=null;    		
+    		Long department=null;
+    		try {
+    			session=PersistenceManager.getRequestDBSession();
+    			queryString= "select a.budgetdepartment  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			query=session.createQuery(queryString);    			
+    			department=(Long)query.uniqueResult();    			
+    		}catch(Exception ex) { 
+    			logger.error("couldn't load Activity" + ex.getMessage());	
+    			ex.printStackTrace(); 
+    		} 
+    		return department;
+        }
+      
+      
 } // End

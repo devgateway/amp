@@ -1741,6 +1741,50 @@ window.onload=initScripts();
                         &nbsp;
                     </td>
                 </tr>
+                <!-- Budget Sectors -->
+                <field:display name="Budget Sector" feature="Budget">
+               <tr>
+               <td style=" text-align:right;" class="tdBoldClass">
+               	<digi:trn>Budget Sectors </digi:trn>
+                </td>
+                <c:set var="alttext">
+					<digi:trn>Press control + click to select  multiple items</digi:trn>
+				</c:set>
+                <td colspan="2">
+               		 <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedbudgetsectors">
+                		<tr>
+                        	<td>
+                        		<html:select name="aimAddOrgForm" property="selectedbudgetsectors" multiple="true" alt="${alttext}" >
+                        			<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
+                        			<html:optionsCollection name="aimAddOrgForm" property="budgetsectors" value="idsector" label="sectorname"/>
+                				</html:select>
+                			</td>
+               			</tr>
+               		</table>
+               	</td>
+               	</field:display> 
+               	<!-- End Sectors -->	
+               <!-- Departments -->
+               <field:display name="Budget Department" feature="Budget">
+               <tr>
+               <td style=" text-align:right;" class="tdBoldClass">
+               	<digi:trn>Departments</digi:trn>
+                </td>
+               	<td colspan="2">
+               		 <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selecteddepartments">
+                		<tr>
+                        	<td>
+                        		<html:select name="aimAddOrgForm" property="selecteddepartments" multiple="true" alt="${alttext}" >
+                        			<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
+                        			<html:optionsCollection name="aimAddOrgForm" property="departments" value="id" label="name"/>
+                				</html:select>
+                			</td>
+               			</tr>
+               		</table>
+               	</td>
+               	</field:display> 
+               		
+              <!-- End Departments -->
                 <tr>
                     <td style=" text-align:right;" class="tdBoldClass">
                         <digi:trn>

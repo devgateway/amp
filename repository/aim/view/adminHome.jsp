@@ -376,7 +376,7 @@
                             </td>
                           </tr>
                           </module:display>
-                          <module:display name="Sector  Manager" parentModule="ADMINISTRATIVE SECTION">
+                          <module:display name="Sector Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -385,6 +385,19 @@
                               </c:set>
                               <digi:link href="/getSectorSchemes.do" title="${translation}">
                                 <digi:trn key="aim:sectorManager">Sector Manager</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                          </module:display>
+                          <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
+                          	<tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:clickToViewSectorManager">Click here to view budget manager</digi:trn>
+                              </c:set>
+                              <digi:link href="/BudgetManager.do" title="${translation}">
+                                <digi:trn key="aim:budgetManager">Budget Manager</digi:trn>
                               </digi:link>
                             </td>
                           </tr>

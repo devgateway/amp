@@ -663,9 +663,12 @@
 				<page>addEditData</page>
 				<page>assignNewIndicator</page>
 				<page>showActivityLog</page>
-                                <page>aim_addDisbOrderToDisbPopupLayout</page>
-                                <page>aim_addDisbOrderToContractPopupLayout</page>
-			</module>
+				<page>aim_addDisbOrderToDisbPopupLayout</page>
+                <page>aim_addDisbOrderToContractPopupLayout</page>
+                <page>editbudgetsector</page>
+                <page>setbudgetprogram</page>
+                <page>editdepartment</page>
+            </module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>
 				<page>nondhtmlAddDocument</page>

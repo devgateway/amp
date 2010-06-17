@@ -12,6 +12,7 @@
 			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />
 		<property name="themeCode" column="theme_code" type="java.lang.String" />
 		<property name="budgetProgramCode" column="budget_program_code" type="java.lang.String" />
+		<property name="isbudgetprogram" column="is_budget_program" type="java.lang.Integer" />
 		<property name="name" column="name" type="java.lang.String" />
 		<!-- <property name="type" column="type" type="java.lang.String"/>  -->
 		<property name="indlevel" column="level_" type="java.lang.Integer" />

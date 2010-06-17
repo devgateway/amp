@@ -48,6 +48,8 @@
 	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page page="addNewTheme" name="addNewTheme" title="AMP - Add NewProgram"/>
 	<page name="sectorManager" title=" - Sector Manager" />
+	<page name="BudgetManager" title=" - Budget Manager" />
+	<page name="departmentsmanager" title=" - Departments Manager" />
 	<page name="addSector" title=" - Add Sector" />
 	<page name="addASector" title=" - Add Sector" />
 	<page name="updateAmpActivity" title=" - Add Sector" />
@@ -291,6 +293,9 @@
 
 	<page page="updateCurrencyRates" name="aim_addExchangeRate" title="AMP - Currency Rate Editor" />
 	<page page="updateCurrency" name="aim_updateCurrency" title="AMP - Currency Editor" />
+	<page page="editbudgetsector" name="editbudgetsector" title="AMP - Budget Sector Editor" />
+	<page page="editdepartment" name="editdepartment" title="AMP - Department Editor" />
+	<page page="setbudgetprogram" name="setbudgetprogram" title="AMP - Budget Program" />
 	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />
 	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />
 	<page page="viewProjectDescObj" name="aim_projectDetails" title="AMP - Project Details" />

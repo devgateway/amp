@@ -6687,10 +6687,15 @@ public class DbUtil {
 				Node nextNode = (Node) iter.next();
 				NodeWrapper nextWrapper = new NodeWrapper(nextNode);
 				// Check document type.
-				if (CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper.getCmDocTypeId(), true) != null
-						&& CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper.getCmDocTypeId(), true).getValue()
-								.equalsIgnoreCase(CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY)) {
-					documents.add(nextWrapper);
+				AmpCategoryValue docType = CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper.getCmDocTypeId(),
+						true);
+				logger.error(docType);
+				if (docType != null){
+						if(docType.getValue().equalsIgnoreCase(
+								TranslatorWorker.translateText(
+										CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY, request))) {
+							documents.add(nextWrapper);
+						}
 				}
 			}
 		}

@@ -1,8 +1,11 @@
 package org.digijava.module.widget.util;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -247,6 +250,13 @@ public class ChartWidgetUtil {
         String actComTranslatedTitle = TranslatorWorker.translateText("Actual commitments", opt.getLangCode(), opt.getSiteId());
         String actDisbTranslatedTitle = TranslatorWorker.translateText("Actual disbursements", opt.getLangCode(), opt.getSiteId());
         String actExpTranslatedTitle = TranslatorWorker.translateText("Actual expenditures", opt.getLangCode(), opt.getSiteId());
+
+        Double totalPledges;
+        BigDecimal totalCommitments, totalDisbursements, totalExpenditures;
+
+        totalPledges = 0.0;
+        totalCommitments = totalDisbursements = totalExpenditures = new BigDecimal(0);
+
         for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
             // apply calendar filter
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
@@ -262,8 +272,22 @@ public class ChartWidgetUtil {
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0||fundingExp.doubleValue()!=0) {
 				nodata = false;
 			}
-
+            totalPledges += fundingPledge;
+            totalCommitments = totalCommitments.add(fundingComm.getValue());
+            totalDisbursements = totalDisbursements.add(fundingDisb.getValue());
+            totalExpenditures = totalExpenditures.add(fundingExp.getValue());
 		}
+
+        if (totalPledges == 0.0)
+        	result.removeRow(pledgesTranslatedTitle);
+        if (totalCommitments.equals(new BigDecimal(0)))
+        	result.removeRow(actComTranslatedTitle);
+        if (totalDisbursements.equals(new BigDecimal(0)))
+        	result.removeRow(actDisbTranslatedTitle);
+        if (totalExpenditures.equals(new BigDecimal(0)))
+        	result.removeRow(actExpTranslatedTitle);
+        
+        
 		if (nodata) {
 			result = new DefaultCategoryDataset();
 		}
@@ -299,6 +323,7 @@ public class ChartWidgetUtil {
         int yearsInRange=filter.getYearsInRange()-1;
         for (AmpCategoryValue categoryValue : categoryValues) {
             String title = TranslatorWorker.translateText(categoryValue.getValue(), opt.getLangCode(), opt.getSiteId());
+            Double totalCategory = 0.0;
 
             for (Long i = year - yearsInRange; i <= year; i++) {
                 // apply calendar filter
@@ -311,9 +336,14 @@ public class ChartWidgetUtil {
                     funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), filter.getTransactionType(),Constants.ACTUAL);
                 }
                 result.addValue(funding.doubleValue()/divideByMillionDenominator, title, i);
+                totalCategory = funding.doubleValue();
                 if (funding.doubleValue() != 0) {
                     nodata = false;
                 }
+            }
+            //Check if there are values. If empty, remove the row.
+            if (totalCategory == 0.0){
+            	result.removeRow(title);
             }
         }
         if (nodata) {
@@ -386,11 +416,13 @@ public class ChartWidgetUtil {
 		chart.getLegend().setItemFont(plainFont);
 		chart.getLegend().setBorder(0, 0, 0, 0);
 		chart.getLegend().setBackgroundPaint(new Color(255, 255, 255, 0));
+		chart.setPadding(new RectangleInsets(0,0,0,0));
 
 		// get a reference to the plot for further customisation...
 		CategoryPlot plot = chart.getCategoryPlot();
 		plot.setBackgroundPaint(Color.WHITE);
 		BarRenderer renderer = (BarRenderer) plot.getRenderer();
+		plot.setAxisOffset(new RectangleInsets(0,2,2,0));
 
 		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
 		numberAxis.setNumberFormatOverride(format);
@@ -399,16 +431,23 @@ public class ChartWidgetUtil {
 		Range newRange = Range.expand(oldRange, 0, 0.1);
 		numberAxis.setRange(newRange);
 		numberAxis.setTickLabelFont(plainFont);
+
 		CategoryAxis categoryAxis = plot.getDomainAxis();
 		categoryAxis.setTickLabelFont(plainFont);
 		categoryAxis.setCategoryMargin(0.1);
+		categoryAxis.setMinorTickMarksVisible(false);
+
 		renderer.setItemMargin(0);
+		renderer.setMaximumBarWidth(.045);
 		renderer.setDrawBarOutline(true);
+		renderer.setMinimumBarLength(0.1);
 
 		// renderer.
 		CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
 		for (int i = 0; i < dataset.getRowCount(); i++) {
 			renderer.setSeriesOutlinePaint(i, new Color(0,0,0));
+			
+//			renderer.setSeriesOutlineStroke(i, new BasicStroke(1f));
 			renderer.setSeriesItemLabelsVisible(i, true);
 			renderer.setSeriesItemLabelGenerator(i, labelGenerator);
 			renderer.setSeriesItemLabelFont(i, plainFont);

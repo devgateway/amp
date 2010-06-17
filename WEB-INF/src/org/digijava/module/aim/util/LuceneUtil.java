@@ -332,6 +332,7 @@ public class LuceneUtil implements Serializable {
 			ResultSet rs		= st.executeQuery(qryStr);
 			
 			rs.next();
+			if(rs.getString("mid")==null) return 0;
 			ret = Integer.parseInt(rs.getString("mid"));
 		}
 		catch(Exception ex){

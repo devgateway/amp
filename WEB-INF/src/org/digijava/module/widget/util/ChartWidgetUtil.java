@@ -247,6 +247,8 @@ public class ChartWidgetUtil {
 		TextTitle subTitle = new TextTitle(filter.getCurrName(), subTitleFont);
 		chart.addSubtitle(subTitle);
 		chart.getLegend().setItemFont(plainFont);
+		chart.getLegend().setBorder(0, 0, 0, 0);
+		chart.getLegend().setBackgroundPaint(new Color(255, 255, 255, 0));
 		// get a reference to the plot for further customisation...
 		CategoryPlot plot = chart.getCategoryPlot();
 		plot.setBackgroundPaint(Color.WHITE);

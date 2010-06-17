@@ -135,7 +135,7 @@
 
             }
             .chartPlaceCss{
-                padding: 20px 20px 20px 20px !important;
+                padding: 10px 10px 10px 10px !important;
                 background-color:#EDF5FF;
                 font-size:10px;
                 font-family:Arial,Helvetica,sans-serif;
@@ -172,7 +172,7 @@
         </style>
     </HEAD>
     <BODY>
-        <TABLE cellSpacing=0 cellPadding=0 width="100%"  border=0 valign="top" align="left">
+        <TABLE cellSpacing=0 cellPadding=0 width="1220"  border=0 valign="top" align="left">
             <TBODY>
                 <TR>
                     <TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
@@ -204,16 +204,12 @@
                                         <digi:insert attribute="filters"/>
                                     </TD>
                                 </TR>
-
-                                <TR>
-                                    <TD>&nbsp;</TD>
-                                </TR>
                                 <TR>
                                     <TD>
-                                        <TABLE cellpadding="20" cellspacing="20" width="100%" >
+                                        <TABLE cellpadding="2" cellspacing="2" width="100%" border="0">
                                             <TBODY>
                                                 <TR>
-                                                    <TD VALIGN="TOP" style="width: 50%">
+                                                    <TD VALIGN="TOP" colspan="2">
                                                 <c:set var="stylePlace1">
                                                     display: none;
                                                 </c:set>
@@ -228,7 +224,9 @@
                                                     </digi:insert>
                                                 </div>
                                                 </TD>
-                                                <TD  VALIGN="TOP"    >
+                                        </TR>
+                                        <TR>
+                                                <TD  VALIGN="TOP">
                                                 <c:set var="stylePlace2">
                                                     display: none; z-index: 1000
                                                 </c:set>
@@ -242,6 +240,21 @@
                                                         <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
                                                     </digi:insert>
                                                 </div>
+                                            </TD>
+                                            <TD  VALIGN="TOP">
+                                            <c:set var="stylePlace6">
+                                                display: none; z-index: 1000
+                                            </c:set>
+                                            <feature:display name="orgprof_chart_place6" module="Org Profile">
+                                                <c:set var="stylePlace6">
+                                                    z-index: 1000
+                                                </c:set>
+                                            </feature:display>
+                                            <div style="${stylePlace6}">
+                                                <digi:insert attribute="chart6">
+                                                    <digi:put name="widget-teaser-param">orgprof_chart_place6</digi:put>
+                                                </digi:insert>
+                                            </div>
                                             </TD>
                                         </TR>
                                         <TR>
@@ -293,19 +306,6 @@
                                             </div>
                                         </TD>
                                         <TD  VALIGN="TOP"   >
-                                            <c:set var="stylePlace6">
-                                                display: none; z-index: 1000
-                                            </c:set>
-                                            <feature:display name="orgprof_chart_place6" module="Org Profile">
-                                                <c:set var="stylePlace6">
-                                                    z-index: 1000
-                                                </c:set>
-                                            </feature:display>
-                                            <div style="${stylePlace6}">
-                                                <digi:insert attribute="chart6">
-                                                    <digi:put name="widget-teaser-param">orgprof_chart_place6</digi:put>
-                                                </digi:insert>
-                                            </div>
                                         </TD>
                                     </TR>
                                     <TR>

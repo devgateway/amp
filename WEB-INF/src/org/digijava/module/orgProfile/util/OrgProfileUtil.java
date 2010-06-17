@@ -546,9 +546,9 @@ public class OrgProfileUtil {
                 }
 
                 String title = activity.getName();
-                if (title.length() > 15) {
+                if (title.length() > 60) {
                     project.setFullTitle(title);
-                    title = title.substring(0, 14) + "...";
+                    title = title.substring(0, 60) + "...";
                 }
                 project.setTitle(title);
                 project.setActivityId(activity.getAmpActivityId());

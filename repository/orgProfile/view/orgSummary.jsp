@@ -96,7 +96,7 @@
         <div  class="tab_organization_profile_selected">
             <LI>
                 <a name="node">
-                    <div>
+                    <div style="font-size:9pt;font-weight:bold;">
                         <digi:trn>Organization Profile</digi:trn>
                     </div>
                 </a>
@@ -104,7 +104,7 @@
         </div>
         <div  class="tab_organization_profile_unselected" style="display: none">
             <LI>
-                <span>
+                <span style="font-size:9pt">
                     <a href="javascript:hideLargestProjects()">
                         <div title='<digi:trn>Hide  largest projects table and show summary</digi:trn>'>
                             <digi:trn>Organization Profile</digi:trn>
@@ -117,7 +117,7 @@
         <div  class="tab_organization_profile_unselected" style="display: none">
             <LI>
                 <a name="node">
-                    <div>
+                    <div style="font-size:9pt">
                         ${largestPrjTblName}
                     </div>
                 </a>
@@ -128,7 +128,7 @@
             <LI>
                 <span>
                     <a  href="javascript:loadLargestProjects()">
-                        <div title='<digi:trn>Hide summary and show largest projects table</digi:trn>'>
+                        <div style="font-size:9pt" title='<digi:trn>Hide summary and show largest projects table</digi:trn>'>
                             ${largestPrjTblName}
                         </div>
                     </a>
@@ -145,7 +145,8 @@
 <digi:form action="/showOrgSummary.do" method="post">
     <html:hidden property="action" styleId="orgSummaryActionId"/>
     <html:hidden name="orgSummaryForm" property="orgId" styleId="orgSummaryOrgId"/>
-        <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="0">
+    
+        <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="4">
             <tr>
                 <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
             </tr>

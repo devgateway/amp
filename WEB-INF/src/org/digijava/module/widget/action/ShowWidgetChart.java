@@ -121,7 +121,9 @@ public class ShowWidgetChart extends Action {
                         chart,
                         opt.getWidth().intValue(),
                         opt.getHeight().intValue(),
-                        info);
+                        info,
+                        true,
+                        0);
                 
                     String map = ChartUtilities.getImageMap(chartId, info);
                     session.setAttribute(chartId, map);

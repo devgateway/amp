@@ -58,7 +58,7 @@
                 YAHOO.util.Connect.asyncRequest("POST", url, exportSettingsCallback, null);
                 exportSettingsPanel=new YAHOO.widget.Panel("exportSettingsPanel",{
                     width:"520px",
-                    height:"490px",
+                    height:"610px",
                     constraintoviewport: true,
                     Underlay:"shadow",
                     modal: true,

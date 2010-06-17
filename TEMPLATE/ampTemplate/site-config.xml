@@ -11,14 +11,15 @@
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayout"/>
-                        <put-item name="filters" module="orgProfile"  page="filter"/>
-                        <put-item name="chart1" module="widget" instance="default" teaser="teaserOfWidget"/>
+            <put-item name="filters" module="orgProfile"  page="filter"/>
+             <put-item name="chart1" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart2" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart3" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart4" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart5" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart6" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart7" module="widget" instance="default" teaser="teaserOfWidget"/>
+            <put-item name="chart8" module="widget" instance="default" teaser="teaserOfWidget"/>
 			
 		</layout>
 		

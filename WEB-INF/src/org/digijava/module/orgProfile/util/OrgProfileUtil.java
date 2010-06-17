@@ -789,8 +789,8 @@ public class OrgProfileUtil {
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         Collection<AmpCategoryValue> categoryValues = null;
         Long currId = filter.getCurrId();
-        String currCode= CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        int yearRange = filter.getYearsInRange()-1;
+        String currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        int yearRange = filter.getYearsInRange() - 1;
 
         if (type == WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
             NameValueYearHelper pledgesHelper = new NameValueYearHelper();
@@ -810,17 +810,17 @@ public class OrgProfileUtil {
             expHelper.setValues(new ArrayList<String>());
 
 
-            for (int i =year.intValue()-yearRange; i <= year.intValue(); i++) {
+            for (int i = year.intValue() - yearRange; i <= year.intValue(); i++) {
                 // apply calendar filter
                 Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
                 Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
                 Double fundingPledge = ChartWidgetUtil.getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
                 pledgesHelper.getValues().add(FormatHelper.formatNumber(fundingPledge));
-                DecimalWraper fundingComm = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT);
+                DecimalWraper fundingComm = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL);
                 commHelper.getValues().add(FormatHelper.formatNumber(fundingComm.doubleValue()));
-                DecimalWraper fundingDisb = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT);
+                DecimalWraper fundingDisb = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
                 disbHelper.getValues().add(FormatHelper.formatNumber(fundingDisb.doubleValue()));
-                DecimalWraper fundingExp = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE);
+                DecimalWraper fundingExp = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE, Constants.ACTUAL);
                 expHelper.getValues().add(FormatHelper.formatNumber(fundingExp.doubleValue()));
 
             }
@@ -829,181 +829,215 @@ public class OrgProfileUtil {
             result.add(disbHelper);
             result.add(expHelper);
         } else {
-            if (type == WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN) {
-                Collection<DonorSectorFundingHelper> secFundCol = ChartWidgetUtil.getDonorSectorFundingHelperList(filter);
-                Iterator<DonorSectorFundingHelper> secFundColIter = secFundCol.iterator();
-                while (secFundColIter.hasNext()) {
-                    DonorSectorFundingHelper sectorFunding = secFundColIter.next();
-                    NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
-                    nameValueYearHelper.setName(sectorFunding.getSector().getName());
-                    nameValueYearHelper.setValues(new ArrayList<String>());
-                    switch (transactionType) {
-                        case Constants.COMMITMENT:
-                            nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getFounding()));
-                            break;
-                        case Constants.DISBURSEMENT:
-                            nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getDisbFunding()));
-                            break;
-                        case 2: //both COMMITMENT & DISBURSEMENT
-                            nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getFounding()));
-                            nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getDisbFunding()));
-                            break;
+            if (type == WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY) {
+                NameValueYearHelper plannedHelper = new NameValueYearHelper();
+                plannedHelper.setName("Planned");
+                plannedHelper.setValues(new ArrayList<String>());
+
+                NameValueYearHelper actualHelper = new NameValueYearHelper();
+                actualHelper.setName("Actual");
+                actualHelper.setValues(new ArrayList<String>());
+                for (int i = year.intValue() - yearRange; i <= year.intValue(); i++) {
+                    // apply calendar filter
+                    Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+                    Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
+
+                    if (transactionType != 2) {
+                        DecimalWraper fundingPlanned = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, transactionType, Constants.PLANNED);
+                        plannedHelper.getValues().add(FormatHelper.formatNumber(fundingPlanned.doubleValue()));
+                        DecimalWraper fundingActual = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, transactionType, Constants.ACTUAL);
+                        actualHelper.getValues().add(FormatHelper.formatNumber(fundingActual.doubleValue()));
+                    } else {
+                        DecimalWraper fundingPlannedComm = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.PLANNED);
+                        plannedHelper.getValues().add(FormatHelper.formatNumber(fundingPlannedComm.doubleValue()));
+                        DecimalWraper fundingActualComm = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL);
+                        actualHelper.getValues().add(FormatHelper.formatNumber(fundingActualComm.doubleValue()));
+                        DecimalWraper fundingPlannedDisb = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.PLANNED);
+                        plannedHelper.getValues().add(FormatHelper.formatNumber(fundingPlannedDisb.doubleValue()));
+                        DecimalWraper fundingActualDisb = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+                        actualHelper.getValues().add(FormatHelper.formatNumber(fundingActualDisb.doubleValue()));
                     }
-                    result.add(nameValueYearHelper);
-
                 }
-
+                result.add(plannedHelper);
+                result.add(actualHelper);
             } else {
-                if (type == WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN) {
-                    List<AmpCategoryValueLocations> regions = ChartWidgetUtil.getLocations(filter);
-                    Iterator<AmpCategoryValueLocations> regionIter = regions.iterator();
-                    while (regionIter.hasNext()) {
-                        //calculating funding for each region
-                        AmpCategoryValueLocations region = regionIter.next();
-                        List<AmpFundingDetail> fundingDets = ChartWidgetUtil.getLocationFunding(filter, region);
-                        /*Newly created objects and   selected currency
-                        are passed doCalculations  method*/
-                        FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                        cal.doCalculations(fundingDets, currCode);
+                if (type == WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN) {
+                    Collection<DonorSectorFundingHelper> secFundCol = ChartWidgetUtil.getDonorSectorFundingHelperList(filter);
+                    Iterator<DonorSectorFundingHelper> secFundColIter = secFundCol.iterator();
+                    while (secFundColIter.hasNext()) {
+                        DonorSectorFundingHelper sectorFunding = secFundColIter.next();
                         NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
-                        nameValueYearHelper.setName(region.getName());
-                        if (nameValueYearHelper.getValues() == null) {
-                            nameValueYearHelper.setValues(new ArrayList<String>());
-                        }
+                        nameValueYearHelper.setName(sectorFunding.getSector().getName());
+                        nameValueYearHelper.setValues(new ArrayList<String>());
                         switch (transactionType) {
                             case Constants.COMMITMENT:
-                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualComm().doubleValue()));
+                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getFounding()));
                                 break;
                             case Constants.DISBURSEMENT:
-                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
+                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getDisbFunding()));
                                 break;
                             case 2: //both COMMITMENT & DISBURSEMENT
-                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualComm().doubleValue()));
-                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
+                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getFounding()));
+                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(sectorFunding.getDisbFunding()));
                                 break;
                         }
                         result.add(nameValueYearHelper);
-                        /*Depending on what is selected in the filter
-                        we should return either actual commitments
-                        or actual Disbursement */
+
                     }
+
                 } else {
-                    if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
-                        categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-                    } else {
-                        categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
-                    }
-                    for (AmpCategoryValue categoryValue : categoryValues) {
-                        NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
-                        nameValueYearHelper.setName(categoryValue.getValue());
-                        for (Long i = (year - yearRange); i <= year; i++) {
-                            // apply calendar filter
-                            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
-                            Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
-                            DecimalWraper commFunding = null;
-                            DecimalWraper disbFunding = null;
-
-                            if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
-                                switch (transactionType) {
-                                    case Constants.COMMITMENT:
-                                        commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.COMMITMENT);
-                                        break;
-                                    case Constants.DISBURSEMENT:
-                                        disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.DISBURSEMENT);
-                                        break;
-                                    case 2: //both COMMITMENT & DISBURSEMENT
-                                        commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.COMMITMENT);
-                                        disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.DISBURSEMENT);
-                                        break;
-                                }
-
-                            } else {
-                                switch (transactionType) {
-                                    case Constants.COMMITMENT:
-                                        commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.COMMITMENT);
-                                        break;
-                                    case Constants.DISBURSEMENT:
-                                        disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.DISBURSEMENT);
-                                        break;
-                                    case 2: //both COMMITMENT & DISBURSEMENT
-                                        commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.COMMITMENT);
-                                        disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.DISBURSEMENT);
-                                        break;
-                                }
-
-                            }
+                    if (type == WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN) {
+                        List<AmpCategoryValueLocations> regions = ChartWidgetUtil.getLocations(filter);
+                        Iterator<AmpCategoryValueLocations> regionIter = regions.iterator();
+                        while (regionIter.hasNext()) {
+                            //calculating funding for each region
+                            AmpCategoryValueLocations region = regionIter.next();
+                            List<AmpFundingDetail> fundingDets = ChartWidgetUtil.getLocationFunding(filter, region);
+                            /*Newly created objects and   selected currency
+                            are passed doCalculations  method*/
+                            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                            cal.doCalculations(fundingDets, currCode);
+                            NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+                            nameValueYearHelper.setName(region.getName());
                             if (nameValueYearHelper.getValues() == null) {
                                 nameValueYearHelper.setValues(new ArrayList<String>());
                             }
+                            switch (transactionType) {
+                                case Constants.COMMITMENT:
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualComm().doubleValue()));
+                                    break;
+                                case Constants.DISBURSEMENT:
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
+                                    break;
+                                case 2: //both COMMITMENT & DISBURSEMENT
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualComm().doubleValue()));
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
+                                    break;
+                            }
+                            result.add(nameValueYearHelper);
+                            /*Depending on what is selected in the filter
+                            we should return either actual commitments
+                            or actual Disbursement */
+                        }
+                    } else {
+                        if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
+                            categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+                        } else {
+                            categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+                        }
+                        for (AmpCategoryValue categoryValue : categoryValues) {
+                            NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+                            nameValueYearHelper.setName(categoryValue.getValue());
+                            for (Long i = (year - yearRange); i <= year; i++) {
+                                // apply calendar filter
+                                Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
+                                Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
+                                DecimalWraper commFunding = null;
+                                DecimalWraper disbFunding = null;
 
-                            if (commFunding != null) {
-                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(commFunding.doubleValue()));
-                                if (totalValuesComm.containsKey(i)) {
-                                    BigDecimal value = totalValuesComm.get(i);
-                                    BigDecimal newValue = commFunding.getValue().add(value);
-                                    totalValuesComm.remove(i);
-                                    totalValuesComm.put(i, newValue);
+                                if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
+                                    switch (transactionType) {
+                                        case Constants.COMMITMENT:
+                                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.COMMITMENT, Constants.ACTUAL);
+                                            break;
+                                        case Constants.DISBURSEMENT:
+                                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.DISBURSEMENT, Constants.ACTUAL);
+                                            break;
+                                        case 2: //both COMMITMENT & DISBURSEMENT
+                                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.COMMITMENT, Constants.ACTUAL);
+                                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), Constants.DISBURSEMENT, Constants.ACTUAL);
+                                            break;
+                                    }
 
                                 } else {
-                                    totalValuesComm.put(i, commFunding.getValue());
-                                }
-                            }
-                            if (disbFunding != null) {
-                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(disbFunding.doubleValue()));
-                                if (totalValuesDisb.containsKey(i)) {
-                                    BigDecimal value = totalValuesDisb.get(i);
-                                    BigDecimal newValue = disbFunding.getValue().add(value);
-                                    totalValuesDisb.remove(i);
-                                    totalValuesDisb.put(i, newValue);
+                                    switch (transactionType) {
+                                        case Constants.COMMITMENT:
+                                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.COMMITMENT, Constants.ACTUAL);
+                                            break;
+                                        case Constants.DISBURSEMENT:
+                                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.DISBURSEMENT, Constants.ACTUAL);
+                                            break;
+                                        case 2: //both COMMITMENT & DISBURSEMENT
+                                            commFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.COMMITMENT, Constants.ACTUAL);
+                                            disbFunding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, Constants.DISBURSEMENT, Constants.ACTUAL);
+                                            break;
+                                    }
 
-                                } else {
-                                    totalValuesDisb.put(i, disbFunding.getValue());
                                 }
-                            }
+                                if (nameValueYearHelper.getValues() == null) {
+                                    nameValueYearHelper.setValues(new ArrayList<String>());
+                                }
 
+                                if (commFunding != null) {
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(commFunding.doubleValue()));
+                                    if (totalValuesComm.containsKey(i)) {
+                                        BigDecimal value = totalValuesComm.get(i);
+                                        BigDecimal newValue = commFunding.getValue().add(value);
+                                        totalValuesComm.remove(i);
+                                        totalValuesComm.put(i, newValue);
+
+                                    } else {
+                                        totalValuesComm.put(i, commFunding.getValue());
+                                    }
+                                }
+                                if (disbFunding != null) {
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(disbFunding.doubleValue()));
+                                    if (totalValuesDisb.containsKey(i)) {
+                                        BigDecimal value = totalValuesDisb.get(i);
+                                        BigDecimal newValue = disbFunding.getValue().add(value);
+                                        totalValuesDisb.remove(i);
+                                        totalValuesDisb.put(i, newValue);
+
+                                    } else {
+                                        totalValuesDisb.put(i, disbFunding.getValue());
+                                    }
+                                }
+
+
+                            }
+                            result.add(nameValueYearHelper);
+
+                        }
+                        NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+                        nameValueYearHelper.setValues(new ArrayList<String>());
+                        nameValueYearHelper.setName("TOTAL");
+                        for (Long i = year - yearRange; i <= year; i++) {
+                            if (totalValuesComm.size() > 0) {
+                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(totalValuesComm.get(i)));
+                            }
+                            if (totalValuesDisb.size() > 0) {
+                                nameValueYearHelper.getValues().add(FormatHelper.formatNumber(totalValuesDisb.get(i)));
+                            }
 
                         }
                         result.add(nameValueYearHelper);
-
                     }
-                    NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
-                    nameValueYearHelper.setValues(new ArrayList<String>());
-                    nameValueYearHelper.setName("TOTAL");
-                    for (Long i = year -yearRange ; i <= year; i++) {
-                        if (totalValuesComm.size() > 0) {
-                            nameValueYearHelper.getValues().add(FormatHelper.formatNumber(totalValuesComm.get(i)));
-                        }
-                        if (totalValuesDisb.size() > 0) {
-                            nameValueYearHelper.getValues().add(FormatHelper.formatNumber(totalValuesDisb.get(i)));
-                        }
 
-                    }
-                    result.add(nameValueYearHelper);
                 }
-
             }
+
+
         }
-
-
         return result;
     }
 
     public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
-        int yearRange =1;
-        int endRange=0;
+        int yearRange = 1;
+        int endRange = 0;
         switch (type) {
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
-                yearRange = filter.getYearsInRange()-1;
+            case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
+                yearRange = filter.getYearsInRange() - 1;
                 break;
             case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
             case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
-                endRange=1;
+                endRange = 1;
         }
         for (int i = yearRange; i >= endRange; i--) {
             PdfPCell cell = new PdfPCell(new Paragraph("" + (filter.getYear() - i), HEADERFONT));
-             if (filter.getTransactionType() == 2 && type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB){
+            if (filter.getTransactionType() == 2 && type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
                 cell.setColspan(2);
             }
             cell.setBackgroundColor(TITLECOLOR);
@@ -1065,17 +1099,18 @@ public class OrgProfileUtil {
     }
 
     public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
-        int yearRange =1;
-        int endRange=0;
+        int yearRange = 1;
+        int endRange = 0;
         switch (type) {
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
-                yearRange = filter.getYearsInRange()-1;
+            case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
+                yearRange = filter.getYearsInRange() - 1;
                 break;
             case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
             case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
-                endRange=1;
+                endRange = 1;
 
         }
         for (int i = yearRange; i >= endRange; i--) {

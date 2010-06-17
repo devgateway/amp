@@ -213,75 +213,7 @@ public class ChartWidgetUtil {
 		return chart;
 	}
 
-    /**
-     * Generates chart object from specified filters and options.
-     * This chart then can be rendered as image or pdf or file.
-	 * @param opt
-	 * @param filter
-	 * @return chart
-	 * @throws DgException
-	 */
-    public static JFreeChart getPledgesCommDisbExpChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
-		JFreeChart chart = null;
-		Font titleFont = new Font("Arial", Font.BOLD, 12);
-		Font plainFont = new Font("Arial", Font.PLAIN, 10);
-		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
-		CategoryDataset dataset = getPledgesCommDisbExpDataset(filter, opt);
-		DecimalFormat format = FormatHelper.getDecimalFormat();
-		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
-		toolTipformat.setMaximumFractionDigits(3);
-		String pattern = "{0} {2} ({1})";
-		if (opt.getLabelPattern() != null) {
-			pattern = opt.getLabelPattern();
-		}
-		String amount = "Amounts in millions";
-        String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
-		BarRenderer.setDefaultShadowsVisible(false);
-		BarRenderer.setDefaultBarPainter(new StandardBarPainter());
-        chart = ChartFactory.createBarChart(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
-		TextTitle title = chart.getTitle();
-		if (title != null) {
-			title.setFont(titleFont);
-		}
-		TextTitle subTitle = new TextTitle(filter.getCurrName(), subTitleFont);
-		chart.addSubtitle(subTitle);
-		chart.getLegend().setItemFont(plainFont);
-		chart.getLegend().setBorder(0, 0, 0, 0);
-		chart.getLegend().setBackgroundPaint(new Color(255, 255, 255, 0));
-		// get a reference to the plot for further customisation...
-		CategoryPlot plot = chart.getCategoryPlot();
-		plot.setBackgroundPaint(Color.WHITE);
-		chart.setBackgroundPaint(new Color(255, 255, 255, 0));
-		BarRenderer renderer = (BarRenderer) plot.getRenderer();
-		renderer.setDrawBarOutline(false);
-		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
-		numberAxis.setNumberFormatOverride(format);
-		numberAxis.setLabelFont(plainFont);
-		numberAxis.setTickLabelFont(plainFont);
-		Range oldRange = numberAxis.getRange();
-		Range newRange = Range.expand(oldRange, 0, 0.1);
-		numberAxis.setRange(newRange);
-		CategoryAxis categoryAxis = plot.getDomainAxis();
-		categoryAxis.setTickLabelFont(plainFont);
-		renderer.setSeriesPaint(0, new Color(0x40, 0x69, 0x9c));
-		renderer.setSeriesPaint(1, new Color(0x80, 0x99, 0x47));
-		renderer.setSeriesPaint(2, new Color(0x9e, 0x40, 0x3d));
-        renderer.setSeriesPaint(3, new Color(0xb2, 0xa3, 0xc7));
-		renderer.setItemMargin(0);
-		renderer.setDrawBarOutline(true);
-
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
-		for (int i = 0; i < dataset.getRowCount(); i++) {
-			renderer.setSeriesOutlinePaint(i, new Color(0,0,0));
-			renderer.setSeriesItemLabelsVisible(i, true);
-			renderer.setSeriesItemLabelGenerator(i, labelGenerator);
-			renderer.setSeriesItemLabelFont(i, plainFont);
-            renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
-			renderer.setSeriesNegativeItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER));
-		}
-		return chart;
-	}
+   
 
     /**
      * Generates category dataset using  filters .
@@ -321,11 +253,11 @@ public class ChartWidgetUtil {
             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
             result.addValue(fundingPledge/divideByMillionDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
-            DecimalWraper fundingComm = getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT);
+            DecimalWraper fundingComm = getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT,Constants.ACTUAL);
             result.addValue(fundingComm.getValue().divide(divideByMillionDenominator), actComTranslatedTitle, new Long(i));
-            DecimalWraper fundingDisb = getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT);
+            DecimalWraper fundingDisb = getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT,Constants.ACTUAL);
             result.addValue(fundingDisb.getValue().divide(divideByMillionDenominator), actDisbTranslatedTitle, new Long(i));
-            DecimalWraper fundingExp = getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE);
+            DecimalWraper fundingExp = getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE,Constants.ACTUAL);
             result.addValue(fundingExp.getValue().divide(divideByMillionDenominator), actExpTranslatedTitle, new Long(i));
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0||fundingExp.doubleValue()!=0) {
 				nodata = false;
@@ -337,109 +269,6 @@ public class ChartWidgetUtil {
 		}
 
 		return result;
-	}
-
-	/**
-     * Generates chart object from specified filters and options.
-     * This chart then can be rendered as image or pdf or file.
-     * @param opt
-     * @param filter
-     * @return chart
-     * @throws DgException
-	 */
-    public static JFreeChart getTypeOfAidOdaProfileChart(ChartOption opt, FilterHelper filter, boolean typeOfAid) throws DgException, WorkerException {
-		JFreeChart chart = null;
-		Font titleFont = new Font("Arial", Font.BOLD, 12);
-		Font plainFont = new Font("Arial", Font.PLAIN, 10);
-		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
-		CategoryDataset dataset = getTypeOfAidOdaProfileDataset(filter, opt, typeOfAid);
-		DecimalFormat format = FormatHelper.getDecimalFormat();
-		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
-		toolTipformat.setMaximumFractionDigits(3);
-		format.setMaximumFractionDigits(0);
-		String pattern = "{0} {2} ({1})";
-		if (opt.getLabelPattern() != null) {
-			pattern = opt.getLabelPattern();
-		}
-
-		String amount = "Amounts in Millions";
-        String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
-        String trnsType="";
-      
-        if (filter.getTransactionType() == 0) {
-            trnsType = TranslatorWorker.translateText("Actual commitments in", opt.getLangCode(), opt.getSiteId());
-        } else {
-            trnsType = TranslatorWorker.translateText("Actual disbursements in", opt.getLangCode(), opt.getSiteId());
-        }
-		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
-		BarRenderer.setDefaultShadowsVisible(false);
-		BarRenderer.setDefaultBarPainter(new StandardBarPainter());
-
-        chart = ChartFactory.createBarChart(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
-		chart.setBackgroundPaint(new Color(255, 255, 255, 0));
-		TextTitle title = chart.getTitle();
-		if (title != null) {
-			title.setFont(titleFont);
-		}
-        TextTitle subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
-		chart.addSubtitle(subTitle);
-		chart.getLegend().setItemFont(plainFont);
-		chart.getLegend().setBorder(0, 0, 0, 0);
-		chart.getLegend().setBackgroundPaint(new Color(255, 255, 255, 0));
-
-		// get a reference to the plot for further customisation...
-		CategoryPlot plot = chart.getCategoryPlot();
-		plot.setBackgroundPaint(Color.WHITE);
-		BarRenderer renderer = (BarRenderer) plot.getRenderer();
-
-		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
-		numberAxis.setNumberFormatOverride(format);
-		numberAxis.setLabelFont(plainFont);
-		Range oldRange = numberAxis.getRange();
-		Range newRange = Range.expand(oldRange, 0, 0.1);
-		numberAxis.setRange(newRange);
-		numberAxis.setTickLabelFont(plainFont);
-		CategoryAxis categoryAxis = plot.getDomainAxis();
-		categoryAxis.setTickLabelFont(plainFont);
-		categoryAxis.setCategoryMargin(0.1);
-		// setting colours
-		// First Color Set
-		renderer.setSeriesPaint(0, new Color(0x40, 0x69, 0x9c));
-		renderer.setSeriesPaint(1, new Color(0x3d, 0x8c, 0xa3));
-		renderer.setSeriesPaint(2, new Color(0x80, 0x99, 0x47));
-		renderer.setSeriesPaint(3, new Color(0x69, 0x52, 0x85));
-		renderer.setSeriesPaint(4, new Color(0x9e, 0x40, 0x3d));
-		renderer.setSeriesPaint(5, new Color(0xcc, 0x7a, 0x38));
-		renderer.setSeriesPaint(6, new Color(0xff, 0xff, 0x00));
-		renderer.setSeriesPaint(7, new Color(0xe5, 0xba, 0xb8));
-		renderer.setSeriesPaint(8, new Color(0x9c, 0xba, 0x59));
-		renderer.setSeriesPaint(9, new Color(0xb2, 0xa3, 0xc7));
-//		// Second Color Set
-//		renderer.setSeriesPaint(0, new Color(0x40, 0x69, 0x9c));
-//		renderer.setSeriesPaint(1, new Color(0x3d, 0x8c, 0xa3));
-//		renderer.setSeriesPaint(2, new Color(0x80, 0x99, 0x47));
-//		renderer.setSeriesPaint(3, new Color(0x69, 0x52, 0x85));
-//		renderer.setSeriesPaint(4, new Color(0x9e, 0x40, 0x3d));
-//		renderer.setSeriesPaint(5, new Color(0xcc, 0x7a, 0x38));
-//		renderer.setSeriesPaint(6, new Color(0xff, 0xff, 0x00));
-//		renderer.setSeriesPaint(7, new Color(0xe5, 0xba, 0xb8));
-//		renderer.setSeriesPaint(8, new Color(0x9c, 0xba, 0x59));
-//		renderer.setSeriesPaint(9, new Color(0xb2, 0xa3, 0xc7));
-
-		renderer.setItemMargin(0);
-		renderer.setDrawBarOutline(true);
-
-		// renderer.
-		CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
-		for (int i = 0; i < dataset.getRowCount(); i++) {
-			renderer.setSeriesOutlinePaint(i, new Color(0,0,0));
-			renderer.setSeriesItemLabelsVisible(i, true);
-			renderer.setSeriesItemLabelGenerator(i, labelGenerator);
-			renderer.setSeriesItemLabelFont(i, plainFont);
-            renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
-			renderer.setSeriesNegativeItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER));
-		}
-		return chart;
 	}
 
     /**
@@ -477,9 +306,9 @@ public class ChartWidgetUtil {
                 Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
                 DecimalWraper funding = null;
                 if (typeOfAid) {
-                    funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, filter.getTransactionType());
+                    funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, categoryValue.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
                 } else {
-                    funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), filter.getTransactionType());
+                    funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), filter.getTransactionType(),Constants.ACTUAL);
                 }
                 result.addValue(funding.doubleValue()/divideByMillionDenominator, title, i);
                 if (funding.doubleValue() != 0) {
@@ -493,6 +322,154 @@ public class ChartWidgetUtil {
 
         return result;
     }
+
+    public static JFreeChart getBarChart(ChartOption opt, FilterHelper filter,int widgetType) throws DgException, WorkerException {
+		JFreeChart chart = null;
+		Font titleFont = new Font("Arial", Font.BOLD, 12);
+		Font plainFont = new Font("Arial", Font.PLAIN, 10);
+        Font subTitleFont = new Font("Arial", Font.BOLD, 10);
+        CategoryDataset dataset =null;
+        TextTitle subTitle=null;
+        String trnsType="";
+        if (filter.getTransactionType() == 0) {
+            trnsType = TranslatorWorker.translateText("Actual commitments in", opt.getLangCode(), opt.getSiteId());
+        } else {
+            trnsType = TranslatorWorker.translateText("Actual disbursements in", opt.getLangCode(), opt.getSiteId());
+        }
+        switch (widgetType) {
+
+            case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
+                dataset = ChartWidgetUtil.getPledgesCommDisbExpDataset(filter, opt);
+                subTitle = new TextTitle(filter.getCurrName(), subTitleFont);
+                break;
+            case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+                dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, true);
+                subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
+                break;
+            case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
+                dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, true);
+                subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
+                break;
+            case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
+                dataset = ChartWidgetUtil.getAidPredictiblityDataset(filter,opt);
+                subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
+                break;
+
+        }
+		DecimalFormat format = FormatHelper.getDecimalFormat();
+		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
+		toolTipformat.setMaximumFractionDigits(3);
+		format.setMaximumFractionDigits(0);
+		String pattern = "{0} {2} ({1})";
+		if (opt.getLabelPattern() != null) {
+			pattern = opt.getLabelPattern();
+		}
+
+		String amount = "Amounts in Millions";
+        String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
+
+		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+		BarRenderer.setDefaultShadowsVisible(false);
+		BarRenderer.setDefaultBarPainter(new StandardBarPainter());
+
+        chart = ChartFactory.createBarChart(opt.getTitle(), "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+		chart.setBackgroundPaint(new Color(255, 255, 255, 0));
+		TextTitle title = chart.getTitle();
+		if (title != null) {
+			title.setFont(titleFont);
+		}
+        if (subTitle != null) {
+            subTitle.setPadding(5, 5, 5, 5);
+            chart.addSubtitle(0, subTitle);
+        }
+
+		chart.getLegend().setItemFont(plainFont);
+		chart.getLegend().setBorder(0, 0, 0, 0);
+		chart.getLegend().setBackgroundPaint(new Color(255, 255, 255, 0));
+
+		// get a reference to the plot for further customisation...
+		CategoryPlot plot = chart.getCategoryPlot();
+		plot.setBackgroundPaint(Color.WHITE);
+		BarRenderer renderer = (BarRenderer) plot.getRenderer();
+
+		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
+		numberAxis.setNumberFormatOverride(format);
+		numberAxis.setLabelFont(plainFont);
+		Range oldRange = numberAxis.getRange();
+		Range newRange = Range.expand(oldRange, 0, 0.1);
+		numberAxis.setRange(newRange);
+		numberAxis.setTickLabelFont(plainFont);
+		CategoryAxis categoryAxis = plot.getDomainAxis();
+		categoryAxis.setTickLabelFont(plainFont);
+		categoryAxis.setCategoryMargin(0.1);
+		renderer.setItemMargin(0);
+		renderer.setDrawBarOutline(true);
+
+		// renderer.
+		CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
+		for (int i = 0; i < dataset.getRowCount(); i++) {
+			renderer.setSeriesOutlinePaint(i, new Color(0,0,0));
+			renderer.setSeriesItemLabelsVisible(i, true);
+			renderer.setSeriesItemLabelGenerator(i, labelGenerator);
+			renderer.setSeriesItemLabelFont(i, plainFont);
+            renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
+            renderer.setSeriesPaint(i, colors[i]);
+			renderer.setSeriesNegativeItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER));
+		}
+		return chart;
+	}
+
+   
+
+     /**
+     * Generates category dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
+    private static CategoryDataset getAidPredictiblityDataset(FilterHelper filter, ChartOption opt) throws DgException, WorkerException {
+		boolean nodata = true; // for displaying no data message
+		DefaultCategoryDataset result = new DefaultCategoryDataset();
+		Long year = filter.getYear();
+		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+             divideByMillionDenominator=new BigDecimal(1000);
+        }
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+		Long currId = filter.getCurrId();
+		String currCode;
+		if (currId == null) {
+			currCode = "USD";
+		} else {
+			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+		}
+		int yearsInRange = filter.getYearsInRange() - 1;
+		Long fiscalCalendarId = filter.getFiscalCalendarId();
+        String plannedTitle = TranslatorWorker.translateText("Planned", opt.getLangCode(), opt.getSiteId());
+        String actualTitle = TranslatorWorker.translateText("Actual", opt.getLangCode(), opt.getSiteId());
+        for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+            // apply calendar filter
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
+            DecimalWraper fundingPlanned = getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.PLANNED);
+            result.addValue(fundingPlanned.getValue().divide(divideByMillionDenominator), plannedTitle, new Long(i));
+            DecimalWraper fundingActual = getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
+            result.addValue(fundingActual.getValue().divide(divideByMillionDenominator), actualTitle, new Long(i));
+            if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
+				nodata = false;
+			}
+
+		}
+		if (nodata) {
+			result = new DefaultCategoryDataset();
+		}
+
+		return result;
+	}
 
     /**
      * Generates chart dataset from AMP data.
@@ -746,12 +723,18 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-    public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
+    public static JFreeChart getDonutChart(ChartOption opt, FilterHelper filter,int widgetType) throws DgException, WorkerException {
 		JFreeChart chart = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
-		DefaultPieDataset dataset = getDonorSectorDataSet(filter);
+		DefaultPieDataset dataset = null;
+        if(WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN==widgetType){
+            dataset=getDonorSectorDataSet(filter);
+        }
+        else{
+             dataset=getDonorRegionalDataSet(filter);
+        }
 		String transTypeName = "";
 		switch (filter.getTransactionType()) {
 		case org.digijava.module.aim.helper.Constants.COMMITMENT:
@@ -814,91 +797,6 @@ public class ChartWidgetUtil {
             plot.setSectionPaint(keys.get(i), colors[aInt]);
         }
 
-		plot.setLegendItemShape(new Rectangle(10, 10));
-		PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
-		plot.setLegendLabelGenerator(genLegend);
-		plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
-		return chart;
-	}
-
-    /**
-     * Generates chart object from specified filters and options.
-     * This chart then can be rendered as image or pdf or file.
-     * Each Pie slice contains funding information for the region.
-     * @param opt
-     * @param filter
-     * @return chart
-     * @throws DgException
-     */
-    public static JFreeChart getRegionByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
-		JFreeChart chart = null;
-		Font titleFont = new Font("Arial", Font.BOLD, 12);
-		Font plainFont = new Font("Arial", Font.PLAIN, 10);
-		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
-
-		DefaultPieDataset dataset = getDonorRegionalDataSet(filter);
-		String transTypeName = "";
-		switch (filter.getTransactionType()) {
-		case org.digijava.module.aim.helper.Constants.COMMITMENT:
-			transTypeName = "Commitment in";
-			break;
-		case org.digijava.module.aim.helper.Constants.DISBURSEMENT:
-			transTypeName = "Disbursement in";
-			break;
-		}
-        String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
-        chart =ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
-		chart.setBackgroundPaint(new Color(255,255,255,0));
-		TextTitle title = chart.getTitle();
-		if (title != null) {
-			title.setFont(titleFont);
-		}
-        TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
-		subTitle.setPadding(5, 5, 5, 5);
-		chart.addSubtitle(0, subTitle);
-		RingPlot plot = (RingPlot) chart.getPlot();
-		plot.setOuterSeparatorExtension(0);
-		plot.setInnerSeparatorExtension(0);
-		plot.setBackgroundPaint(new Color(255,255,255,0));
-		plot.setLabelFont(titleFont);
-		plot.setSectionDepth(0.5);
-		plot.setCircular(true);
-		plot.setShadowXOffset(0);
-		plot.setShadowYOffset(0);
-
-		List <Comparable> keys = dataset.getKeys();
-        int aInt;
-       
-        for (int i = 0; i < keys.size(); i++)
-        {
-            aInt = i % colors.length;
-            plot.setSectionPaint(keys.get(i), colors[aInt]);
-        }
-
-        String pattern = "{0} {1} ({2})";
-		if (opt.getLabelPattern() != null) {
-			pattern = opt.getLabelPattern();
-		}
-		DecimalFormat format = FormatHelper.getDecimalFormat();
-		format.setMaximumFractionDigits(3);
-		PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
-		plot.setLabelGenerator(gen);
-		plot.setSimpleLabels(true);
-		plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
-		plot.setLabelGap(0);
-		plot.setLabelLinkMargin(0.05);
-		plot.setLabelShadowPaint(null);
-		plot.setLabelOutlinePaint(new Color(0, 0, 0, 0));
-		plot.setLabelFont(plainFont);
-		plot.setOutlineVisible(false);
-		plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
-		LegendTitle legend = chart.getLegend();
-		legend.setPosition(RectangleEdge.RIGHT);
-		legend.setVerticalAlignment(VerticalAlignment.TOP);
-		legend.setItemFont(plainFont);
-		legend.setMargin(10, 5, 5, 10);
-		legend.setFrame(BlockBorder.NONE);
-		legend.setBackgroundPaint(new Color(255,255,255,0));
 		plot.setLegendItemShape(new Rectangle(10, 10));
 		PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
 		plot.setLegendLabelGenerator(genLegend);
@@ -1638,7 +1536,7 @@ public class ChartWidgetUtil {
     public static DecimalWraper getFunding(FilterHelper filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType) throws DgException {
+            int transactionType,int adjustmentType) throws DgException {
         DecimalWraper total = null;
         String oql = "";
         String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
@@ -1661,7 +1559,7 @@ public class ChartWidgetUtil {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
 
-        oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
+        oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1699,6 +1597,7 @@ public class ChartWidgetUtil {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
             query.setLong("transactionType", transactionType);
+            query.setLong("adjustmentType",adjustmentType);
             if (tm != null) {
                 query.setLong("teamId", tm.getTeamId());
 

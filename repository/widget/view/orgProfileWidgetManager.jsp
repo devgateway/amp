@@ -76,9 +76,12 @@
                                                         </c:when>
                                                         <c:when test="${orgProfile.type==6}">
                                                             <digi:trn>Regional Breakdown</digi:trn>
-                                                        </c:when>   
-                                                        <c:otherwise>
+                                                        </c:when>
+                                                         <c:when test="${orgProfile.type==7}">
                                                             <digi:trn>Paris Declaration</digi:trn>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <digi:trn>Aid Predictiblity</digi:trn>
                                                         </c:otherwise>
                                                     </c:choose>
 				

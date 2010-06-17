@@ -174,15 +174,18 @@ public class ExportToWord extends Action {
                         Table pledgesCommDisbTbl = null;
                         Table sectorTbl = null;
                         Table regionTbl = null;
+                        Table aidPredTable = null;
                         ChartRenderingInfo info = new ChartRenderingInfo();
                         String transTypeName = "";
                         String currName = filter.getCurrName();
                         String amountInThousands = "";
+                        String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
                         String typeOfAid = TranslatorWorker.translateText("TYPE OF AID", langCode, siteId);
                         String odaProfile = TranslatorWorker.translateText("ODA Profile", langCode, siteId);
-                        String pledgesCommDisb = TranslatorWorker.translateText("Pledges|Commitments|Disbursements", langCode, siteId);
+                        String pledgesCommDisbExp = TranslatorWorker.translateText("Pledges|Commitments|Disbursements|Expenditures", langCode, siteId);
                         String regionBreakdown = TranslatorWorker.translateText("Regional Breakdown", langCode, siteId);
-                        String sectorBreakdown = TranslatorWorker.translateText("Primary Sector(s) Breakdown ", langCode, siteId);
+                        String sectorBreakdown =  primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());;
+                        String aidPred = TranslatorWorker.translateText("Aid Predictiblity", langCode, siteId);
 
                         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                             amountInThousands = "," + TranslatorWorker.translateText("Amounts in thousands", langCode, siteId) + " ";
@@ -207,10 +210,10 @@ public class ExportToWord extends Action {
                             }
                         }
                         String chartTitle = null;
-                        int colspan = filter.getYearsInRange()+1;
+                        int colspan = filter.getYearsInRange() + 1;
                         int oneYearColspan = 2;
                         if (filter.getTransactionType() == 2) {
-                            colspan =2*filter.getYearsInRange()+1;
+                            colspan = 2 * filter.getYearsInRange() + 1;
                             oneYearColspan = 3;
                         }
 
@@ -228,36 +231,61 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(typeOfAidTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_TYPE_OF_AID);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
-                                    chartTitle = TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
-                                     
+                                    chartTitle = typeOfAid;
+
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
-                                        chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, true);
+                                        chart = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_TYPE_OF_AID);
                                         newFilter.setTransactionType(Constants.DISBURSEMENT);
-                                        chartDisb = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, true);
+                                        chartDisb = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_TYPE_OF_AID);
                                     } else {
-                                        chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter, true);
+                                        chart = ChartWidgetUtil.getBarChart(opt, filter, WidgetUtil.ORG_PROFILE_TYPE_OF_AID);
                                     }
                                 }
                                 break;
                             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
-                                    colspan = filter.getYearsInRange()+1;
+                                    colspan = filter.getYearsInRange() + 1;
                                     pledgesCommDisbTbl = new Table(colspan);
-                                    RtfCell pledgesCommDisbTitleCell = new RtfCell(new Paragraph(pledgesCommDisb + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    RtfCell pledgesCommDisbTitleCell = new RtfCell(new Paragraph(pledgesCommDisbExp + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
                                     pledgesCommDisbTitleCell.setColspan(colspan);
                                     pledgesCommDisbTbl.addCell(pledgesCommDisbTitleCell);
                                     pledgesCommDisbTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell pldsCommDisbdTitleCell = new RtfCell(new Paragraph(pledgesCommDisb, OrgProfileUtil.HEADERFONT));
+                                    RtfCell pldsCommDisbdTitleCell = new RtfCell(new Paragraph(" ", OrgProfileUtil.HEADERFONT));
                                     pldsCommDisbdTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     pledgesCommDisbTbl.addCell(pldsCommDisbdTitleCell);
                                     OrgProfileUtil.getDataTable(pledgesCommDisbTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
-                                    chartTitle = TranslatorWorker.translateText("Pledges|Commitments|Disbursements|Expenditures", opt.getLangCode(), opt.getSiteId());
+                                    chartTitle = pledgesCommDisbExp;
 
-                                    chart = ChartWidgetUtil.getPledgesCommDisbExpChart(opt, filter);
+                                    chart = ChartWidgetUtil.getBarChart(opt, filter, WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB);
+                                }
+                                break;
+                            case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
+                                if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
+                                    aidPredTable = new Table(colspan);
+                                    RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPred + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    aidPredTitleCell.setColspan(colspan);
+                                    aidPredTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                    aidPredTable.addCell(aidPredTitleCell);
+                                    RtfCell aidPredTitleCellValue = new RtfCell(new Paragraph(aidPred, OrgProfileUtil.HEADERFONT));
+                                    aidPredTitleCellValue.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                    aidPredTable.addCell(aidPredTitleCellValue);
+                                    OrgProfileUtil.getDataTable(aidPredTable, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY);
+                                }
+                                if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
+                                    chartTitle = aidPred;
+                                    if (filter.getTransactionType() == 2) {
+                                        FilterHelper newFilter = new FilterHelper(filter);
+                                        newFilter.setTransactionType(Constants.COMMITMENT);
+                                        chart = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY);
+                                        newFilter.setTransactionType(Constants.DISBURSEMENT);
+                                        chartDisb = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY);
+                                    } else {
+                                        chart = ChartWidgetUtil.getBarChart(opt, filter, WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY);
+                                    }
                                 }
                                 break;
                             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
@@ -273,16 +301,15 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(odaProfileTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_ODA_PROFILE);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
-                                    chartTitle = TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
-
+                                    chartTitle = odaProfile;
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
-                                        chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, false);
+                                        chart = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_ODA_PROFILE);
                                         newFilter.setTransactionType(Constants.DISBURSEMENT);
-                                        chartDisb = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, newFilter, false);
+                                        chartDisb = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_ODA_PROFILE);
                                     } else {
-                                        chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter, false);
+                                        chart = ChartWidgetUtil.getBarChart(opt, filter, WidgetUtil.ORG_PROFILE_ODA_PROFILE);
                                     }
                                 }
                                 break;
@@ -299,17 +326,16 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(sectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
-                                    String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
-                                    chartTitle = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                                    chartTitle = sectorBreakdown;
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
-                                        chart = ChartWidgetUtil.getSectorByDonorChart(opt, newFilter);
+                                        chart = ChartWidgetUtil.getDonutChart(opt, newFilter,WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN);
                                         newFilter.setTransactionType(Constants.DISBURSEMENT);
-                                        chartDisb = ChartWidgetUtil.getSectorByDonorChart(opt, newFilter);
+                                        chartDisb = ChartWidgetUtil.getDonutChart(opt, newFilter,WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN);
 
                                     } else {
-                                        chart = ChartWidgetUtil.getSectorByDonorChart(opt, filter);
+                                        chart = ChartWidgetUtil.getDonutChart(opt, filter,WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN);
                                     }
                                 }
                                 break;
@@ -326,15 +352,15 @@ public class ExportToWord extends Action {
                                     OrgProfileUtil.getDataTable(regionTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN);
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
-                                    chartTitle = TranslatorWorker.translateText("Regional Breakdown ", opt.getLangCode(), opt.getSiteId());
+                                    chartTitle = regionBreakdown;
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
-                                        chart = ChartWidgetUtil.getRegionByDonorChart(opt, newFilter);
+                                        chart = ChartWidgetUtil.getDonutChart(opt, newFilter,WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN);
                                         newFilter.setTransactionType(Constants.DISBURSEMENT);
-                                        chartDisb = ChartWidgetUtil.getRegionByDonorChart(opt, newFilter);
+                                        chartDisb = ChartWidgetUtil.getDonutChart(opt, newFilter,WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN);
                                     } else {
-                                        chart = ChartWidgetUtil.getRegionByDonorChart(opt, filter);
+                                        chart = ChartWidgetUtil.getDonutChart(opt, filter,WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN);
                                     }
                                 }
 
@@ -703,10 +729,10 @@ public class ExportToWord extends Action {
 
                         }
                         Font font = new Font(null, 0, 24);
-                        Table chartTable=null;
-                        Table chartTableDisb=null;
+                        Table chartTable = null;
+                        Table chartTableDisb = null;
                         if (chart != null) {
-                            chartTable=new Table(1);
+                            chartTable = new Table(1);
                             chartTable.setWidth(100);
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
@@ -723,16 +749,16 @@ public class ExportToWord extends Action {
                             Image img = Image.getInstance(outByteStream.toByteArray());
                             img.setAlignment(Image.ALIGN_CENTER);
 
-                            Paragraph imgTitle = new Paragraph(chartTitle, new  com.lowagie.text.Font( com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
+                            Paragraph imgTitle = new Paragraph(chartTitle, new com.lowagie.text.Font(com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
                             imgTitle.setAlignment(Element.ALIGN_CENTER);
-                            RtfCell imgTitleCell=new RtfCell(imgTitle);
+                            RtfCell imgTitleCell = new RtfCell(imgTitle);
                             imgTitleCell.setHeader(true);
                             chartTable.addCell(imgTitleCell);
                             RtfCell cell = new RtfCell(img);
                             chartTable.addCell(cell);
                         }
-                         if (chartDisb != null) {
-                            chartTableDisb=new Table(1);
+                        if (chartDisb != null) {
+                            chartTableDisb = new Table(1);
                             chartTableDisb.setWidth(100);
                             Plot plotDisb = chartDisb.getPlot();
                             plotDisb.setNoDataMessage("No Data Available");
@@ -748,21 +774,21 @@ public class ExportToWord extends Action {
                                     info);
                             Image imgDisb = Image.getInstance(outByteStreamDisb.toByteArray());
                             imgDisb.setAlignment(Image.ALIGN_MIDDLE);
-                            Paragraph imgTitle = new Paragraph(chartTitle, new  com.lowagie.text.Font( com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
+                            Paragraph imgTitle = new Paragraph(chartTitle, new com.lowagie.text.Font(com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
                             imgTitle.setAlignment(Element.ALIGN_CENTER);
-                            RtfCell imgTitleCell=new RtfCell(imgTitle);
+                            RtfCell imgTitleCell = new RtfCell(imgTitle);
                             imgTitleCell.setHeader(true);
                             chartTableDisb.addCell(imgTitleCell);
                             RtfCell cell = new RtfCell(imgDisb);
                             chartTableDisb.addCell(cell);
-                           
+
                         }
-                        if(chartTable!=null){
+                        if (chartTable != null) {
                             chartTable.setBorder(Table.NO_BORDER);
                             chartTable.setTableFitsPage(true);
                             doc.add(chartTable);
                         }
-                        if(chartTableDisb!=null){
+                        if (chartTableDisb != null) {
                             chartTableDisb.setBorder(Table.NO_BORDER);
                             chartTableDisb.setTableFitsPage(true);
                             doc.add(chartTableDisb);
@@ -788,6 +814,9 @@ public class ExportToWord extends Action {
                         }
                         if (regionTbl != null) {
                             doc.add(regionTbl);
+                        }
+                        if(aidPredTable!=null){
+                             doc.add(aidPredTable);
                         }
                     }
                 }

@@ -118,6 +118,7 @@ public class OrgProfileManager  extends DispatchAction {
                 case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN: name="Sector Breakdown"; break;
                   case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN: name="Regional Breakdown"; break;
                    case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION: name="Paris Declaration"; break;
+                    case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY: name="Aid Predictiblity"; break;
         }
         orgProfWidget.setName(name);
         OrgProfileWidgetUtil.saveWidget(orgProfWidget);

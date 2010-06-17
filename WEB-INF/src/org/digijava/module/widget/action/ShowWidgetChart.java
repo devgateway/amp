@@ -40,16 +40,15 @@ public class ShowWidgetChart extends Action {
         ShowWidgetChartForm wForm = (ShowWidgetChartForm) form;
         response.setContentType("image/png");
         HttpSession session = request.getSession();
-        FilterHelper filter =null;
-        String chartId="chartMap"+wForm.getChartType();
-        if(wForm.getTransactionType()!=null){
-           filter =new FilterHelper((FilterHelper) session.getAttribute("orgProfileFilter"));
-           filter.setTransactionType(wForm.getTransactionType());
-           chartId+="_"+wForm.getTransactionType();
-        }
-        else{
+        FilterHelper filter = null;
+        String chartId = "chartMap" + wForm.getChartType();
+        if (wForm.getTransactionType() != null) {
+            filter = new FilterHelper((FilterHelper) session.getAttribute("orgProfileFilter"));
+            filter.setTransactionType(wForm.getTransactionType());
+            chartId += "_" + wForm.getTransactionType();
+        } else {
             filter = (FilterHelper) session.getAttribute("orgProfileFilter");
-        }     
+        }
         AmpWidgetIndicatorChart widget = null;
         if (wForm.getWidgetId() != null) {
             if (wForm.getChartType() == null) {
@@ -70,49 +69,53 @@ public class ShowWidgetChart extends Action {
                 }
             } else {
                 ChartOption opt = createChartOptions(wForm, widget);
-                String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+                String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
                 opt.setSiteId(siteId);
-                String langCode= RequestUtils.getNavigationLanguage(request).getCode();
+                String langCode = RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);
-                String title=null;
+                String title = null;
                 JFreeChart chart = null;
                 ChartRenderingInfo info = new ChartRenderingInfo();
-                switch (wForm.getChartType().intValue())  {
+                switch (wForm.getChartType().intValue()) {
                     case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
-                        title=TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
+                        title = TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter,true);
+                        chart = ChartWidgetUtil.getBarChart(opt, filter, wForm.getChartType().intValue());
                         break;
 
                     case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
-                        title=TranslatorWorker.translateText("Pledges|Commitments|Disbursements|Expenditures", opt.getLangCode(), opt.getSiteId());;
+                        title = TranslatorWorker.translateText("Pledges|Commitments|Disbursements|Expenditures", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getPledgesCommDisbExpChart(opt, filter);
-
+                        chart = ChartWidgetUtil.getBarChart(opt, filter, wForm.getChartType().intValue());
                         break;
 
-                  case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
-                       title=TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
+                    case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
+                        title = TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getTypeOfAidOdaProfileChart(opt, filter,false);
+                       chart = ChartWidgetUtil.getBarChart(opt, filter, wForm.getChartType().intValue());;
                         break;
-                   case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
-                        String primarySectorSchemeName=SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
-                        title=primarySectorSchemeName+" "+TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                    case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
+                        String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
+                        title = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getSectorByDonorChart(opt, filter);
+                        chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue());
                         break;
-                  case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
-                        title=TranslatorWorker.translateText("Regional Breakdown ", opt.getLangCode(), opt.getSiteId());
+                    case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
+                        title = TranslatorWorker.translateText("Regional Breakdown ", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getRegionByDonorChart(opt, filter);
+                        chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue());
+                        break;
+                    case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
+                        title = TranslatorWorker.translateText("Aid Predictiblity", opt.getLangCode(), opt.getSiteId());
+                        opt.setTitle(title);
+                        chart = ChartWidgetUtil.getBarChart(opt, filter, wForm.getChartType().intValue());
                         break;
                 }
-                    Plot plot = chart.getPlot();
-                    String noDataString=TranslatorWorker.translateText("No Data Available",langCode,siteId);
-                    plot.setNoDataMessage(noDataString);
-                    Font font= new Font(null,0,24);
-                    plot.setNoDataMessageFont(font);
+                Plot plot = chart.getPlot();
+                String noDataString = TranslatorWorker.translateText("No Data Available", langCode, siteId);
+                plot.setNoDataMessage(noDataString);
+                Font font = new Font(null, 0, 24);
+                plot.setNoDataMessageFont(font);
 
 
                 // write image in response
@@ -124,13 +127,13 @@ public class ShowWidgetChart extends Action {
                         info,
                         true,
                         0);
-                
-                    String map = ChartUtilities.getImageMap(chartId, info);
-                    session.setAttribute(chartId, map);
-                
-      
-             
-            
+
+                String map = ChartUtilities.getImageMap(chartId, info);
+                session.setAttribute(chartId, map);
+
+
+
+
             }
         } else {
             // System.out.println("No chart assigned to this teaser!");//TODO this should go to form as error message.

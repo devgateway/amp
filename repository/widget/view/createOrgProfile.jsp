@@ -84,6 +84,7 @@
                                 <html:option value="5"><digi:trn>Sector Breakdown</digi:trn></html:option>
                                 <html:option value="6"><digi:trn>Regional Breakdown</digi:trn></html:option>
                                 <html:option value="7"><digi:trn>Paris Declaration</digi:trn></html:option>
+                                 <html:option value="8"><digi:trn>Aid Predictiblity</digi:trn></html:option>
                             </html:select>
                             
                                                        

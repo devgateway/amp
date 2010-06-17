@@ -55,6 +55,7 @@ import org.digijava.kernel.util.RequestUtils;
  * <p>Company: </p>
  * @author not attributable
  * @version 1.0 UserRegisterAction
+ * @deprecated
  */
 
 public class UserRegister

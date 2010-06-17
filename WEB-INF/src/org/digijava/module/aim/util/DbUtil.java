@@ -6686,8 +6686,12 @@ public class DbUtil {
 			while (iter.hasNext()) {
 				Node nextNode = (Node) iter.next();
 				NodeWrapper nextWrapper = new NodeWrapper(nextNode);
-				// TODO: Check document type (not available now).
-				documents.add(nextWrapper);
+				// Check document type.
+				if (CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper.getCmDocTypeId(), true) != null
+						&& CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper.getCmDocTypeId(), true).getValue()
+								.equalsIgnoreCase(CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY)) {
+					documents.add(nextWrapper);
+				}
 			}
 		}
 		// Check for "joint" resources.

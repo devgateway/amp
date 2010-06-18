@@ -42,7 +42,6 @@ public class DEImportItem {
 
 
 	public DEImportItem(SourceBuilder sourceBuilder) {
-		super();
 		this.sourceBuilder = sourceBuilder;
 	}
 

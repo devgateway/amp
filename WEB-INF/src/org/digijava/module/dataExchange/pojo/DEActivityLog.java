@@ -64,6 +64,7 @@ public class DEActivityLog extends DELog{
 		String result = "";
 		HashMap hm = new HashMap<String, ArrayList<DELog> >();
 		generateHashMap(hm);
+		populateHashMap(hm);
 		if(this.getItems()!=null && this.getItems().size()>0){
 
 			String aux = null;
@@ -120,12 +121,13 @@ public class DEActivityLog extends DELog{
 	
 	private String displayLog(ArrayList<DELog> list) {
 		// TODO Auto-generated method stub
-		String s = null;
+		String s = "";
 		if(list!=null)
 			for (Iterator it = list.iterator(); it.hasNext();) {
 				DELog deLog = (DELog) it.next();
 				s+=deLog.display()+"<br/>";
 			}
+		if("".equals(s)) return null;
 		return s;
 	}
 
@@ -134,6 +136,17 @@ public class DEActivityLog extends DELog{
 			for (Iterator it = this.getItems().iterator(); it.hasNext();){
 				DELog deLog = (DELog) it.next();
 				hm.put(deLog.getLogType(), new ArrayList<DELog>());
+			}
+		}
+	}
+	
+	private void populateHashMap(HashMap<String, ArrayList<DELog> > hm){
+		if(this.getItems()!=null && this.getItems().size()>0){
+			for (Iterator it = this.getItems().iterator(); it.hasNext();){
+				DELog deLog = (DELog) it.next();
+				ArrayList<DELog> list = hm.get(deLog.getLogType());
+				list.add(deLog);
+				//hm.put(deLog.getLogType(), list);
 			}
 		}
 	}

@@ -351,10 +351,9 @@ public class DataExchangeUtils {
 					alInfo.add(token);
 			     }
 		
-		query = "select o from " + AmpActivity.class.getName() + " o where true";
+		query = "select a from " + AmpActivity.class.getName() + " a where 1=1";
 		
 		int i=0;
-		hs = new HashMap<String,String>();
 		while  (stKey.hasMoreElements())
 		{
 			String token = (String)stKey.nextElement();

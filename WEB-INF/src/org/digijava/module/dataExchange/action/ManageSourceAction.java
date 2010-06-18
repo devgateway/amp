@@ -119,7 +119,8 @@ public class ManageSourceAction extends MultiAction {
 		}
 		String result = outputStream.toString();
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId() );
-		ss.setLogs(new ArrayList<DELogPerExecution>());
+		if(ss.getLogs() == null)
+			ss.setLogs(new ArrayList<DELogPerExecution>());
 		
 		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
 		DEImportItem 	deItem  = new DEImportItem(fsb);

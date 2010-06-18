@@ -11,7 +11,7 @@ import org.digijava.module.dataExchange.util.DataExchangeConstants;
  *
  */
 public class DEStatusMissingLog extends DELog{
-	private final String logType = DataExchangeConstants.MISSING_ORGANIZATION;
+	private final String logType = DataExchangeConstants.MISSING_STATUS;
 	
 	public DEStatusMissingLog() {
 		// TODO Auto-generated constructor stub

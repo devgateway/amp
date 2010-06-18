@@ -29,7 +29,7 @@ public class DataExchangeConstants {
 	public static final String MISSING_SECTOR = "Missing sectors";
 	public static final String MISSING_MTEF = "Missing mtef projections";
 	public static final String MISSING_PROGRAM = "Missing programs";
-	public static final String MISSING_STATUS = "Missing statuss";
+	public static final String MISSING_STATUS = "Missing status";
 	public static final String SECTOR_PERCENTAGE = "Sector percentage";
 	public static final String PROGRAM_PERCENTAGE = "Program percentage";
 	public static final String MISSING_IMPLEMENTATION_LOCATION = "Missing implementation location";

@@ -35,8 +35,15 @@ public abstract class DELog {
 	}
 	
 	public DELog(CodeValueType cvt) {
+		String result = "";
+		if(cvt!=null && cvt.getValue()!=null && cvt.getValue().trim()!="" )
+			result +=cvt.getValue();
+
+		if(cvt!=null && cvt.getCode()!=null && cvt.getCode().trim()!="" )
+			result +=" with code: "+cvt.getCode();
+
+		this.setEntityName(result);
 		
-		this.setEntityName(cvt.getValue()+" "+cvt.getCode());
 	}
 	
 	public DELog(String description, String entityName) {
@@ -64,7 +71,13 @@ public abstract class DELog {
 	}
 	public String display() {
 		// TODO Auto-generated method stub
-			return  this.getEntityName()+ this.getDescription();
+		String result = "";
+		if(this.getEntityName()!=null && this.getEntityName()!=null && this.getEntityName().trim()!="" )
+			result +=this.getEntityName();
+		if(this.getDescription()!=null && this.getDescription()!=null && this.getDescription().trim()!="" )
+			result +=this.getDescription();
+
+			return  result;
 	}
 	public String display(String separator) {
 		// TODO Auto-generated method stub

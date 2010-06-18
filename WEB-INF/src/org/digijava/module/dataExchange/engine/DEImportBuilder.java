@@ -1690,6 +1690,7 @@ public class DEImportBuilder {
 	public void run() {
 		// TODO Auto-generated method stub
 		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
+		this.getDESourceSetting().getLogs().add(execLog);
 		ImportLogDAO iLog	 		= null;
 		
 		try {
@@ -1705,10 +1706,10 @@ public class DEImportBuilder {
 			e.printStackTrace();
 		}
 		execLog.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-		iLog.saveObject(execLog);
+		iLog.saveObject(this.getDESourceSetting());
 		execLog.setDescription("");
 		boolean ok 	 =	checkInputString(execLog.getDescription());
-		iLog.saveObject(execLog);
+		iLog.saveObject(this.getDESourceSetting());
 		if(!ok) return;
 		processFeed(execLog, iLog);
 		
@@ -1740,6 +1741,9 @@ public class DEImportBuilder {
 			if(contentLogger.getItems() != null || contentLogger.getItems().size() > 0)
 			{
 				item.setDescription(contentLogger.display());
+				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
+				item.setDeLogPerExecution(log);
+				iLog.saveObject(item);
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);

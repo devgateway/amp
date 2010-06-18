@@ -173,19 +173,10 @@ div.fakefile2 input{
 		
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
-					<logic:equal name="fileUploaded" value="false">
-	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div>1. <digi:trn>File Selection and Staging Area</digi:trn></div></a> </li>
-		    			<li id="tab_log_after_import"><a href="#log_after_import"><div>2. <digi:trn> Log after Import</digi:trn></div></a> </li>
-		    			<li id="tab_select_activities" class="disabled"><a href="#select_activities"><div>3. <digi:trn>Select Activities</digi:trn></div></a> </li>
-		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div>4. <digi:trn>Confirm Import</digi:trn></div></a> </li>
-					</logic:equal>
-					
-					<logic:equal name="fileUploaded" value="true">
-	    				<li id="tab_file_selection" class="disabled"><a href="#file_selection"><div>1. <digi:trn>File Selection and Staging Area</digi:trn></div></a> </li>
-		    			<li id="tab_log_after_import" class="selected"><a href="#log_after_import"><div>2. <digi:trn> Log after Import</digi:trn></div></a> </li>
-		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. <digi:trn>Select Activities</digi:trn></div></a> </li>
-		    			<li id="tab_confirm_import" class="enabled"><a href="#confirm_import"><div>4. <digi:trn>Confirm Import</digi:trn></div></a> </li>
-					</logic:equal>    		
+	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div>1. <digi:trn>General Details</digi:trn></div></a> </li>
+		    			<li id="tab_log_after_import"><a href="#log_after_import"><div>2. <digi:trn> Field Selection</digi:trn></div></a> </li>
+		    			<li id="tab_select_activities"><a href="#select_activities"><div>3. <digi:trn>Filter and Identifier</digi:trn></div></a> </li>
+		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div>4. <digi:trn>Type Specific Settings</digi:trn></div></a> </li>
 					
 					    		
     		</ul>
@@ -218,7 +209,7 @@ div.fakefile2 input{
         							<br/><br/><br/>
         							<digi:trn key="aim:pleaseChooseTheLanguage">Please choose the language(s) that exist in imported file
         								</digi:trn><br/>
-        							<table bgcolor="white" width="70%">
+        							<table width="70%">
         							<logic:iterate name="createSourceForm" property="languages" id="lang">
         								<tr><td>
         								<html:multibox property="selectedLanguages" >
@@ -231,7 +222,7 @@ div.fakefile2 input{
         							<br/><br/>
         							<digi:trn>Please choose import strategy</digi:trn>
         							<br/>
-        							<table bgcolor="white" width="70%">
+        							<table  width="70%">
         							<logic:iterate name="createSourceForm" property="importStrategyValues" id="impVal">
         								<tr>
         									<td>
@@ -260,13 +251,26 @@ div.fakefile2 input{
 				<div id="tab_select_activities"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="newToolbarImport.jsp" />
+                    <br />
                     <table>
                     	<tr>
                     		<td>
-                    			<digi:trn>Type unique identifier (title,id,ampid,ptip) separatd by '|' :
+                    			<digi:trn>Type unique identifier (title,id,ampid,ptip) separatd by '|' </digi:trn>: <br/>
                     			<html:text property="uniqueIdentifier"></html:text>
+                    			<br />
+                    			<br />
+                    			<logic:notEmpty name="createSourceForm" property="approvalStatusValues" >
+                    			<digi:trn>Select the approval status that the new activities will have</digi:trn>: <br />
+                    				<div style="margin-left: auto; margin-right: auto; width: 60%;">
+                    				<logic:iterate id="appStatus" name="createSourceForm" property="approvalStatusValues">
+		                    			<html:radio property="approvalStatus" value="${appStatus.key}">${appStatus.value}</html:radio> <br />
+                    				</logic:iterate>
+                    				</div>
+                    			</logic:notEmpty>
                     		</td>
-                    		<td></td>
+                    		<td>
+                    			
+                    		</td>
                     	</tr>
                     </table>
 				</div>

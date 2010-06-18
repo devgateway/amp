@@ -29,6 +29,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
@@ -97,6 +98,13 @@ public class CreateSourceAction extends MultiAction {
 		sourceValues.add(new KeyValue(DESourceSetting.SOURCE_WEB_SERVICE, "From Web Service") );
 		iform.setSourceValues(sourceValues);
 		
+		List<KeyValue> approvalStatusValues	= new ArrayList<KeyValue>();
+		approvalStatusValues.add(new KeyValue(Constants.STARTED_STATUS, "New") );
+		approvalStatusValues.add(new KeyValue(Constants.STARTED_APPROVED_STATUS, "New and validated") );
+		approvalStatusValues.add(new KeyValue(Constants.EDITED_STATUS, "Edited but not validated") );
+		approvalStatusValues.add(new KeyValue(Constants.APPROVED_STATUS, "Edited and validated") );
+		iform.setApprovalStatusValues(approvalStatusValues);
+		
 		Collection<AmpTeam> teams	= TeamUtil.getAllTeams();
 		iform.setTeamValues(teams);
 		
@@ -110,7 +118,7 @@ public class CreateSourceAction extends MultiAction {
 		}
 		//if(request.getParameter("import")!=null) return modeUploadedFile(mapping, iform, request, response);
 		if(request.getParameter("saveImport")!=null) 
-			modeSave(mapping, iform, request, response);
+			return modeSave(mapping, iform, request, response);
 	
 		ActionErrors errors = (ActionErrors) session.getAttribute("DEimportErrors");
 		if(errors != null){
@@ -130,6 +138,7 @@ public class CreateSourceAction extends MultiAction {
 		srcSetting.setFields2( new TreeSet<String>( CreateSourceUtil.getFieldNames(form.getActivityTree(), null) ) );
 		srcSetting.setImportStrategy( form.getImportStrategy() );
 		srcSetting.setUniqueIdentifier( form.getUniqueIdentifier() );
+		srcSetting.setApprovalStatus( form.getApprovalStatus() );
 		
 		if ( form.getTeamValues() != null ) {
 			for (AmpTeam selTeam: form.getTeamValues() ) {
@@ -156,7 +165,7 @@ public class CreateSourceAction extends MultiAction {
 			e.printStackTrace();
 		}
 		
-		return mapping.findForward("forward");
+		return mapping.findForward("showSources");
 		
 		
 	}

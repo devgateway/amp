@@ -14,6 +14,7 @@ public class DELogPerItem {
 	private DELogPerExecution deLogPerExecution;
 	private String logType;
 
+	private String name;
 	private String itemType;
 	private String description;
 	
@@ -105,6 +106,20 @@ public class DELogPerItem {
 	 */
 	public void setExecutionTime(Timestamp executionTime) {
 		this.executionTime = executionTime;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

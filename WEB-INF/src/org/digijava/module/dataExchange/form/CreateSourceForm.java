@@ -33,6 +33,7 @@ public class CreateSourceForm extends ActionForm {
 	private String[] languages;
 	private List<KeyValue> importStrategyValues;
 	private List<KeyValue> sourceValues;
+	private List<KeyValue> approvalStatusValues;
 	private Collection<AmpTeam> teamValues;
 	private AmpColumnEntry activityTree = null;
 	
@@ -261,6 +262,20 @@ public class CreateSourceForm extends ActionForm {
 	 */
 	public void setTeamValues(Collection<AmpTeam> teamValues) {
 		this.teamValues = teamValues;
+	}
+
+	/**
+	 * @return the approvalStatusValues
+	 */
+	public List<KeyValue> getApprovalStatusValues() {
+		return approvalStatusValues;
+	}
+
+	/**
+	 * @param approvalStatusValues the approvalStatusValues to set
+	 */
+	public void setApprovalStatusValues(List<KeyValue> approvalStatusValues) {
+		this.approvalStatusValues = approvalStatusValues;
 	}
 
 

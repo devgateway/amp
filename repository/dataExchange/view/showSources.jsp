@@ -136,11 +136,14 @@
 		</div>
 		
 <div style="float: left;width: 60%;" class="yui-skin-sam">
-<div style="width: 500px; margin-left: auto; margin-right: auto;border: 1px gray solid;">
-	<div style="width: 100%; margin-left: auto; margin-right: auto;background-color:#006699; color: white; ">List of sources</div>
-	<div id="sourcesDiv" style="margin-left: auto; margin-right: auto;width: auto;"></div>
+	<div style="width: 500px; margin-left: auto; margin-right: auto;margin-bottom:20px; border: 1px gray solid;text-align: center;">
+		<div style="width: 100%; margin-left: auto; margin-right: auto;background-color:#006699; color: white; ">List of sources</div>
+		<div id="sourcesDiv" style="margin-left: auto; margin-right: auto;width: auto; height: 400px;overflow: auto; "></div>
+		<a href="/dataExchange/createSource.do?htmlView=true"><digi:trn>Create new source</digi:trn></a><br/>
+	</div>
 </div>
-</div>
+<br />
+
 <div style="float: left; width: 40%;" >
 	<div id="detailsDiv"></div>
 	<div id="selectFileDiv" style="display: none; margin-top: 100px;">

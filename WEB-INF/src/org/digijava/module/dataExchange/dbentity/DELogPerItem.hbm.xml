@@ -10,7 +10,8 @@
 		</id>
 		<property name="description" column="description" type="java.lang.String" />
 		<property name="logType" column="log_type" type="java.lang.String" />
-		<property name="itemType" column="item_type" type="java.lang.String" />						
+		<property name="itemType" column="item_type" type="java.lang.String" />				
+		<property name="name" column="name" type="java.lang.String" />
 		<property name="executionTime" column="execution_time" type="java.sql.Timestamp" />
 		
 		

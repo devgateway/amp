@@ -21,6 +21,8 @@ public abstract class DELog {
 		return items;
 	}
 
+	public abstract String getLogType();
+	
 	public void setItems(ArrayList<DELog> items) {
 		this.items = items;
 	}

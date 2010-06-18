@@ -4,6 +4,7 @@
 package org.digijava.module.dataExchange.pojo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
@@ -40,5 +41,20 @@ public class DEActivityLog extends DELog{
 		// TODO Auto-generated constructor stub
 	}
 
+	public ArrayList<DELog> getListItemLog(String s){
+		ArrayList<DELog> result = new ArrayList<DELog>();
+		for (Iterator it = this.getItems().iterator(); it.hasNext();) {
+			DELog deLog = (DELog) it.next();
+			if(s.equals(deLog.getLogType()))
+				result.add(deLog);
+		}
+		return result;
+	}
+	
+	public String buildLog(String s){
+		String r = "";
+		
+		return r;
+	}
 
 }

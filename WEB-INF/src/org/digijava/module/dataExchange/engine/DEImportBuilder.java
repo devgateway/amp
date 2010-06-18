@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.util.ValidationEventCollector;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -70,6 +68,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.dataExchange.action.ImportValidationEventHandler;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.jaxb.AdditionalFieldType;
@@ -93,6 +92,7 @@ import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.pojo.DEActivityLog;
 import org.digijava.module.dataExchange.pojo.DEFinancInstrMissingLog;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
+import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
 import org.digijava.module.dataExchange.pojo.DEMTEFMissingLog;
 import org.digijava.module.dataExchange.pojo.DEOrgMissingLog;
 import org.digijava.module.dataExchange.pojo.DEProgramMissingLog;
@@ -1590,9 +1590,9 @@ public class DEImportBuilder {
 		return false;
 	}
 	
-	public void checkInputString(){
-		//Activities acts;
-		ValidationEvent[] events = null;
+	public boolean checkInputString(String inputLog){
+		boolean isOk = true;
+		DEImportValidationEventHandler log = new DEImportValidationEventHandler();
 		try {
 			JAXBContext jc = JAXBContext.newInstance(Constants.JAXB_INSTANCE);
 	        Unmarshaller m = jc.createUnmarshaller();
@@ -1601,10 +1601,8 @@ public class DEImportBuilder {
 	        try {
 				path     = rootUrl.toURI().getPath();
 			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//System.out.println("aaaaaaaaaaa"+path);
 	        boolean xsdValidate = true;
 	        
 	        	if(xsdValidate){
@@ -1617,35 +1615,20 @@ public class DEImportBuilder {
 	                 m.setSchema(schema);
 	                 // set your error handler to catch errors during schema construction
 	                 // we can use custom validation event handler
-	                 ValidationEventCollector vec = new ValidationEventCollector();
-
-	                // m.setEventHandler(new ImportValidationEventHandler());
-	                 m.setEventHandler(vec);
+	                 m.setEventHandler(log);
 	                 //m.setValidating(false);
-	                 events = vec.getEvents();
 	                 this.getAmpImportItem().setActivities( (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.testStream) );
-	                 if(vec.hasEvents()){
-	                	 for (int it = 0;it < events.length; it++) {
-	                		 ValidationEvent type = (ValidationEvent) events[it];
-	                		 System.out.println("aaaaa");
-						}
-	                 }
 	           }
-	        	//this.getAmpImportItem().setActivities( (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.ampImportItem.getInputStream()) );
-	        	System.out.println("evenimentele"+events.length);
-	        	
 	        } 
 			catch (SAXException e) {
-				// TODO Auto-generated catch block
+				isOk = false;
 				e.printStackTrace();
-				
 			}
 	        catch (javax.xml.bind.JAXBException jex) {
 	        	jex.printStackTrace();
-	        	System.out.println("evenimentele"+events.length);
-	        	
 	        }
-
+	        inputLog += log.getLog();
+	        return isOk;
 	        
 	}
 

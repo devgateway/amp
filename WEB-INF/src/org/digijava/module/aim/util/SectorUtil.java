@@ -1018,35 +1018,6 @@ public class SectorUtil {
 		return ret;
 	}
 
-	public static List<AmpSector> getAmpSectorsAndSubSectorsHierarchy( String configurationName ) {
- 	 	List<AmpSector> ret     = new ArrayList<AmpSector>();
- 	 	Long id = null;
- 	 	try {
- 	 		Collection<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
- 	 		Iterator<AmpClassificationConfiguration> confIter       = configs.iterator();
- 	 		while ( confIter.hasNext() ) {
- 	 			AmpClassificationConfiguration conf = confIter.next();
- 	 			if ( configurationName.equals( conf.getName() ) ) {
- 	 				if ( conf.getClassification()!= null )
- 	 					id      = conf.getClassification().getAmpSecSchemeId();
- 	 			}
- 	 		}
- 	 		if ( id != null ) {
- 	 			Collection<AmpSector> dbReturnSet = SectorUtil.getAllParentSectors(id);
- 	 			Iterator<AmpSector> iter = dbReturnSet.iterator();
- 	 			while (iter.hasNext()) {
- 	 				AmpSector ampSector = iter.next();
- 	 				ampSector.setName( ampSector.getName().toUpperCase() );
- 	 				ret.add(ampSector);
- 	 				Collection<AmpSector> dbChildReturnSet = SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
- 	 				ampSector.getChildren().addAll( dbChildReturnSet);
- 	 			}
- 	 		}
-		} catch (DgException e) {
-	 	 	e.printStackTrace();
- 	 	}
-		return ret;
- 	 }
 
 // Govind's Starts from here!!
 	/*

@@ -21,8 +21,7 @@
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
-		<script type="text/javascript" src="<digi:file src="script/yui/dom-min.js"/>"></script>        
-		<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
@@ -97,7 +96,7 @@ session.setAttribute("progressValue", counter);
 
 <logic:notEqual name="viewFormat" scope="request" value="print">
 <div id="myFilterWrapper" style="display: none;" >
-	<div id="myFilter" style="display: none; height: 100%; overflow: hidden;" >
+	<div id="myFilter" style="display: none;" >
 			<jsp:include page="/aim/reportsFilterPicker.do" />
 	</div>
 	<div id="myRange" style="display: none">

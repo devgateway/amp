@@ -148,7 +148,6 @@
 		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgStaffInformation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganizationInformation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRecipient</hibernate-class>
 		

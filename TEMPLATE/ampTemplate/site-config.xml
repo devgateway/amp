@@ -689,7 +689,7 @@
 				<page>aim_saveMessage</page>
 				<page>aim_showSelectedFilters</page>
 				<page>tabManagerData</page>
-				<page>aim_filterPicker2</page>
+				<page>aim_filterPicker</page>
 				<page>selectPledgeLocation</page>
 			</module>
             <module name="orgProfile">

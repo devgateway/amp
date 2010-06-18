@@ -158,7 +158,6 @@ background-color: yellow;
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>" ></script>
 
 <!-- END - For DHTML Tab View of Filters -->
@@ -308,13 +307,10 @@ saveReportEngine	= null;
 	
 	function showFilter() {
 		YAHOOAmp.amptab.init();
-		YAHOOAmp.amptab.afterFiltersLoad();
 		var element = document.getElementById("myFilter");
-		element.style.display   = "block";
- 	 	element.style.height    = "380px";
-
- 	 	myPanel1.setBody(element);
- 	 	myPanel1.cfg.setProperty("height", "400px" );
+		element.style.display = "inline";
+		
+		myPanel1.setBody(element);
 		myPanel1.center();
 		myPanel1.show();
 
@@ -332,7 +328,7 @@ saveReportEngine	= null;
 		
 		
 	}
- 	 	
+	
 	function addTitleSelect(selectName){
 		var categoryOptions = document.getElementsByName(selectName);
 		if(categoryOptions[0])

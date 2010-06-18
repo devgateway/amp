@@ -10,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.util.SectorUtil;
 
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
@@ -27,7 +28,11 @@ public class ShowOrgProfileTables extends Action {
         OrgProfileNameValueYearForm orgForm = (OrgProfileNameValueYearForm) form;
         HttpSession session=request.getSession();
         FilterHelper filter= (FilterHelper)session.getAttribute("orgProfileFilter");
-        orgForm.setValues(OrgProfileUtil.getData(filter,orgForm.getType()));
+        Long sectorClassConfigId=orgForm.getSectorClassConfigId();
+        if( sectorClassConfigId==null||sectorClassConfigId==0){
+             sectorClassConfigId=SectorUtil.getPrimaryConfigClassification().getId();
+        }
+        orgForm.setValues(OrgProfileUtil.getData(filter,orgForm.getType(),sectorClassConfigId));
         return mapping.findForward("forward");
 
     }

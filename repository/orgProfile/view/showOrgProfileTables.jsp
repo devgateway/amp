@@ -37,7 +37,7 @@
                         <digi:trn>Pledges|Commitments|Disbursements|Expenditures</digi:trn>
                     </c:when>
                     <c:when test="${orgProfileNameValueYearForm.type==5}">
-                        <digi:trn>Primary Sector(s) Breakdown</digi:trn>
+                        <digi:trn>Sector(s) Breakdown</digi:trn>
                     </c:when>
                     <c:when test="${orgProfileNameValueYearForm.type==6}">
                         <digi:trn>Regional Breakdown</digi:trn>

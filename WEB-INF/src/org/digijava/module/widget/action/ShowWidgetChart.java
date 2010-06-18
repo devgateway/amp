@@ -76,6 +76,7 @@ public class ShowWidgetChart extends Action {
                 String title = null;
                 JFreeChart chart = null;
                 ChartRenderingInfo info = new ChartRenderingInfo();
+                Long sectorClassConfigId=wForm.getSectorClassConfigId();
                 switch (wForm.getChartType().intValue()) {
                     case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                         title = TranslatorWorker.translateText("Type Of Aid", opt.getLangCode(), opt.getSiteId());
@@ -95,15 +96,19 @@ public class ShowWidgetChart extends Action {
                        chart = ChartWidgetUtil.getBarChart(opt, filter, wForm.getChartType().intValue());;
                         break;
                     case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
-                        String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
-                        title = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                        if( sectorClassConfigId==null){
+                            sectorClassConfigId=SectorUtil.getPrimaryConfigClassification().getId();
+                        }
+                        String schemeName = SectorUtil.getClassificationConfigById(sectorClassConfigId).getClassification().getSecSchemeName();
+                        title = schemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue());
+                        
+                        chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue(),sectorClassConfigId);
                         break;
                     case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
                         title = TranslatorWorker.translateText("Regional Breakdown ", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
-                        chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue());
+                        chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue(),sectorClassConfigId);
                         break;
                     case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
                         title = TranslatorWorker.translateText("Aid Predictiblity", opt.getLangCode(), opt.getSiteId());

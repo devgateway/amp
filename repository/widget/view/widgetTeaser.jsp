@@ -9,16 +9,17 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <digi:instance property="gisWidgetTeaserForm" />
 <c:if test="${gisWidgetTeaserForm.rendertype==5}">
     <c:choose>
         <c:when test="${gisWidgetTeaserForm.type==1}">
-                <jsp:include page="/orgProfile/showOrgSummary.do" flush="true"/>
+            <jsp:include page="/orgProfile/showOrgSummary.do" flush="true"/>
         </c:when>
         <c:when test="${gisWidgetTeaserForm.type==7}">
-                <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
+            <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
         </c:when>
         <c:otherwise>
             <DIV id="tabs">
@@ -67,6 +68,9 @@
                     </div>
                 </UL>
             </DIV>
+            <c:set var="imageClass">
+                nonSectorChart
+            </c:set>
             <script language="javascript" type="text/javascript">
                 function getGraphMap_${gisWidgetTeaserForm.type}(transactionType){
                     var lastTimeStamp = new Date().getTime();
@@ -92,13 +96,22 @@
 
                     $(".tab_graph_${gisWidgetTeaserForm.type}_selected").each(function(index) {
                         this.style.display="none";
-                    });               
-                    var postString		="type=${gisWidgetTeaserForm.type}";
+                    });
+                    var postString		="type=${gisWidgetTeaserForm.type}&sectorClassConfigId="+configId;
                 <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
                         var url = "${url}";
                         YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
                     }
                     function  hideDataSource_${gisWidgetTeaserForm.type}(){
+                        $(".sectorChart").each(function(index) {
+                            var newsrc=this.src;
+                            var index=newsrc.indexOf("&sectorClassConfigId=");
+                            if(index!=-1){
+                                newsrc=newsrc.substring(0, index)
+                            }
+                            newsrc+="&sectorClassConfigId="+configId
+                            this.src=newsrc;
+                        });
                         $(".tab_graph_${gisWidgetTeaserForm.type}_selected").each(function(index) {
                             this.style.display="block";
                         });
@@ -106,7 +119,7 @@
                         $(".tab_graph_${gisWidgetTeaserForm.type}_unselected").each(function(index) {
                             this.style.display="none";
                         });
-                     
+
                         var div=document.getElementById("table_${gisWidgetTeaserForm.type}");
                         div.style.display="none";
                     }
@@ -134,34 +147,122 @@
                         failure:responseFailure_${gisWidgetTeaserForm.type}
                     };
             </script>
-            <div id="table_${gisWidgetTeaserForm.type}"  class="contentbox_border chartPlaceCss" style="display: none;"></div>
-            <div id="loadDataSource_${gisWidgetTeaserForm.type}_image" class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_unselected" style="display: none" >
-                    <img src="images/amploading.gif" alt=""  />
-            </div>
-            <div  class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_selected ">
-               
-                    <c:choose>
-                        <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
-                            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=0" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
-                            <span id="chartMap${gisWidgetTeaserForm.type}_0">
-                            </span>
-                            <br/>
-                            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=1" usemap="#chartMap${gisWidgetTeaserForm.type}_1" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(1)"/>
-                            <span id="chartMap${gisWidgetTeaserForm.type}_1">
-                            </span>
-                        </c:when>
-                        <c:otherwise>
-                            <img  alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
-                            <span id="chartMap${gisWidgetTeaserForm.type}">
+                <c:if test="${gisWidgetTeaserForm.type==5}">
+                    <c:set var="imageClass">
+                        sectorChart
+                    </c:set>
+                    <script language="javascript" type="text/javascript">
+                        var configId;
+                        function loadClassification(id){
+                            configId=id;
+                            $("LI[class$='_config_selected']").each(function(index) {
+                                if(this.style.display=='none'){
+                                    this.style.display="block";
+                                }
+                                else{
+                                    this.style.display="none";
+                                }
+                            });
+                            var graphVisible=$(".tab_graph_${gisWidgetTeaserForm.type}_selected:first").css('display');
+                            if(graphVisible=="none"){
+                        <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
+                                    var url="${url}"
+                                    var postString="type=${gisWidgetTeaserForm.type}&sectorClassConfigId="+id;
+                                    YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
+                                }
+                                else{
+                                    $(".sectorChart").each(function(index) {
+                                        var newsrc=this.src;
+                                        var index=newsrc.indexOf("&sectorClassConfigId=");
+                                        if(index!=-1){
+                                            newsrc=newsrc.substring(0, index)
+                                        }
+                                        newsrc+="&sectorClassConfigId="+configId
+                                        this.src=newsrc;
+                                    });
+                                }
 
-                            </span>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
+
+                            }
+                    </script>
+                    <div id="main">
+                        <DIV id="subtabs">
+                            <div style="pa">
+                                <UL>
+                                    <c:forEach var="config" items="${gisWidgetTeaserForm.sectorClassificationConfigs}" varStatus="status">
+                                        <c:if test="${config.name=='Primary'}">
+                                            <field:display name="Primary Sector" feature="Sectors">
+                                                <LI class="primary_config_selected">
+                                                    <span>
+                                                        ${config.classification.secSchemeName}
+                                                    </span>
+                                                    &nbsp;&nbsp;|
+                                                </LI>
+                                                <LI class="secondary_config_selected" style="display: none">
+                                                    <div>
+                                                        <span>
+                                                            <a href="javascript:loadClassification('${config.id}')" >
+                                                                ${config.classification.secSchemeName}
+                                                            </a>
+
+                                                        </span>&nbsp;&nbsp;|
+                                                    </div>
+                                                </LI>
+                                            </field:display>
+                                        </c:if>
+                                        <c:if test="${config.name=='Secondary'}">
+                                            <field:display name="Secondary Sector" feature="Sectors">
+                                                <LI class="secondary_config_selected" style="display: none">
+                                                    <span>
+                                                        ${config.classification.secSchemeName}
+                                                    </span>
+                                                </LI>
+                                                <LI class="primary_config_selected">
+                                                    <div>
+                                                        <span>
+                                                            <a href="javascript:loadClassification('${config.id}')" >
+                                                                ${config.classification.secSchemeName}
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </LI>
+                                            </field:display>
+
+                                        </c:if>
+                                    </c:forEach>
+                                </UL>
+                                &nbsp;
+                            </div>
+                        </DIV>
+                    </div>
+                
+
+                </c:if>
+                    <div id="table_${gisWidgetTeaserForm.type}"  class="contentbox_border chartPlaceCss" style="display: none;"></div>
+                    <div id="loadDataSource_${gisWidgetTeaserForm.type}_image" class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_unselected" style="display: none" >
+                        <img src="images/amploading.gif" alt=""  />
+                    </div>
+                    <div  class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_selected ">
+                        <c:choose>
+                            <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
+                                <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=0" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
+                                <span id="chartMap${gisWidgetTeaserForm.type}_0">
+                                </span>
+                                <br/>
+                                <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=1" usemap="#chartMap${gisWidgetTeaserForm.type}_1" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(1)"/>
+                                <span id="chartMap${gisWidgetTeaserForm.type}_1">
+                                </span>
+                            </c:when>
+                            <c:otherwise>
+                                <img class="${imageClass}" alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
+                                <span id="chartMap${gisWidgetTeaserForm.type}">
+
+                                </span>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
         </c:otherwise>
     </c:choose>
-
-
 
 </c:if>
 

@@ -780,7 +780,7 @@ public class OrgProfileUtil {
         return total;
     }
 
-    public static List<NameValueYearHelper> getData(FilterHelper filter, int type) throws DgException {
+    public static List<NameValueYearHelper> getData(FilterHelper filter, int type,Long sectorClassConfigId) throws DgException {
         List<NameValueYearHelper> result = new ArrayList<NameValueYearHelper>();
         TreeMap<Long, BigDecimal> totalValuesComm = new TreeMap<Long, BigDecimal>();
         TreeMap<Long, BigDecimal> totalValuesDisb = new TreeMap<Long, BigDecimal>();
@@ -862,7 +862,7 @@ public class OrgProfileUtil {
                 result.add(actualHelper);
             } else {
                 if (type == WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN) {
-                    Collection<DonorSectorFundingHelper> secFundCol = ChartWidgetUtil.getDonorSectorFundingHelperList(filter);
+                    Collection<DonorSectorFundingHelper> secFundCol = ChartWidgetUtil.getDonorSectorFundingHelperList(filter,sectorClassConfigId);
                     Iterator<DonorSectorFundingHelper> secFundColIter = secFundCol.iterator();
                     while (secFundColIter.hasNext()) {
                         DonorSectorFundingHelper sectorFunding = secFundColIter.next();
@@ -1021,7 +1021,7 @@ public class OrgProfileUtil {
         return result;
     }
 
-    public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
+    public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type,Long sectorClassConfigId) throws Exception {
         int yearRange = 1;
         int endRange = 0;
         switch (type) {
@@ -1075,7 +1075,7 @@ public class OrgProfileUtil {
             }
         }
 
-        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type);
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type,sectorClassConfigId);
         ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
         while (valuesIter.hasNext()) {
             NameValueYearHelper value = valuesIter.next();
@@ -1098,7 +1098,7 @@ public class OrgProfileUtil {
 
     }
 
-    public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type) throws Exception {
+    public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type,Long sectorClassConfigId) throws Exception {
         int yearRange = 1;
         int endRange = 0;
         switch (type) {
@@ -1152,7 +1152,7 @@ public class OrgProfileUtil {
                 }
             }
         }
-        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type);
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type,sectorClassConfigId);
         ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
         while (valuesIter.hasNext()) {
             NameValueYearHelper value = valuesIter.next();

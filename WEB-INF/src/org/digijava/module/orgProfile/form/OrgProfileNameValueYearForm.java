@@ -8,6 +8,15 @@ public class OrgProfileNameValueYearForm extends ActionForm {
     
     private List<NameValueYearHelper> values;
     private int type;
+    private Long sectorClassConfigId;
+
+    public Long getSectorClassConfigId() {
+        return sectorClassConfigId;
+    }
+
+    public void setSectorClassConfigId(Long sectorClassConfigId) {
+        this.sectorClassConfigId = sectorClassConfigId;
+    }
 
     public int getType() {
         return type;

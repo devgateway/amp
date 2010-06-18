@@ -1,6 +1,8 @@
 package org.digijava.module.widget.form;
 
+import java.util.List;
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.oldTable.DaTable;
 import org.digijava.module.widget.table.WiTable;
@@ -33,17 +35,26 @@ public class WidgetTeaserForm extends ActionForm {
 	 */
 	private Long id;
 	private boolean showPlaceInfo;
+    private List<AmpClassificationConfiguration> sectorClassificationConfigs;
+
+    // used for Org Profile to determine which chart/text render
+    private Long type;
         
-        // used for Org Profile to determine which chart/text render
-        private Long type;
+    public Long getType() {
+        return type;
+    }
 
-        public Long getType() {
-            return type;
-        }
+    public List<AmpClassificationConfiguration> getSectorClassificationConfigs() {
+        return sectorClassificationConfigs;
+    }
 
-        public void setType(Long type) {
-            this.type = type;
-        }
+    public void setSectorClassificationConfigs(List<AmpClassificationConfiguration> sectorClassificationConfigs) {
+        this.sectorClassificationConfigs = sectorClassificationConfigs;
+    }
+
+    public void setType(Long type) {
+        this.type = type;
+    }
 	
 	public boolean isShowPlaceInfo() {
 		return showPlaceInfo;

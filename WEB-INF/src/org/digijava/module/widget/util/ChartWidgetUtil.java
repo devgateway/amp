@@ -786,14 +786,14 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-    public static JFreeChart getDonutChart(ChartOption opt, FilterHelper filter,int widgetType) throws DgException, WorkerException {
+    public static JFreeChart getDonutChart(ChartOption opt, FilterHelper filter,int widgetType,Long sectorClassConfigId) throws DgException, WorkerException {
 		JFreeChart chart = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
 		DefaultPieDataset dataset = null;
         if(WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN==widgetType){
-            dataset=getDonorSectorDataSet(filter);
+            dataset=getDonorSectorDataSet(filter,sectorClassConfigId);
         }
         else{
              dataset=getDonorRegionalDataSet(filter);
@@ -1270,7 +1270,7 @@ public class ChartWidgetUtil {
 
     }
 
-    public static List<AmpSector> getSectorList(FilterHelper filter) throws DgException {
+    public static List<AmpSector> getSectorList(FilterHelper filter,Long sectorClassConfigId) throws DgException {
         Long[] orgIds = filter.getOrgIds();
         Long orgGroupId = filter.getOrgGroupId();
         int transactionType = filter.getTransactionType();
@@ -1313,7 +1313,7 @@ public class ChartWidgetUtil {
         } else {
             oql += getOrganizationQuery(false, orgIds);
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.name='Primary' ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.id=:configId ";
         oql += getTeamQuery(tm);
         if (locationCondition) {
             oql += " and loc.id in (:locations) ";
@@ -1324,6 +1324,7 @@ public class ChartWidgetUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
+            query.setLong("configId", sectorClassConfigId);
             if (orgIds == null && orgGroupId != -1) {
                 query.setLong("orgGroupId", orgGroupId);
             }
@@ -1345,16 +1346,16 @@ public class ChartWidgetUtil {
 
     }
 
-    public static Collection<DonorSectorFundingHelper> getDonorSectorFundingHelperList(FilterHelper filter) throws DgException {
+    public static Collection<DonorSectorFundingHelper> getDonorSectorFundingHelperList(FilterHelper filter,Long sectorClassConfigId) throws DgException {
         int transactionType = filter.getTransactionType();
         String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
-        List<AmpSector> sectors = getSectorList(filter);
+        List<AmpSector> sectors = getSectorList(filter,sectorClassConfigId);
         Iterator<AmpSector> sectorIter = sectors.iterator();
         Map<Long, DonorSectorFundingHelper> sectorsMap = new HashMap<Long, DonorSectorFundingHelper>();
         while (sectorIter.hasNext()) {
             AmpSector sector = sectorIter.next();
             Long sectorId = sector.getAmpSectorId();
-            List<AmpFundingDetail> fundingDets = getSectorFunding(filter, sectorId);
+            List<AmpFundingDetail> fundingDets = getSectorFunding(filter, sectorId,sectorClassConfigId);
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
             DecimalWraper amount = null;
@@ -1416,13 +1417,13 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-    public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
+    public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter,Long sectorClassConfigId) throws DgException {
         Double divideByMillionDenominator=new Double(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
              divideByMillionDenominator=new Double(1000);
         }
         DefaultPieDataset ds = new DefaultPieDataset();
-        List<AmpSector> sectors = getSectorList(filter);
+        List<AmpSector> sectors = getSectorList(filter,sectorClassConfigId);
         // to calculate funding for all sectors
         Double totAllSectors = 0d;
         Iterator<AmpSector> sectorIter = sectors.iterator();
@@ -1431,7 +1432,7 @@ public class ChartWidgetUtil {
         while (sectorIter.hasNext()) {
             AmpSector sector = sectorIter.next();
             // calculate funding for each sector
-            DecimalWraper amount = getSectorFundingAmount(filter, sector.getAmpSectorId());
+            DecimalWraper amount = getSectorFundingAmount(filter, sector.getAmpSectorId(),sectorClassConfigId);
             AmpSector topLevelSector = SectorUtil.getTopLevelParent(sector);
             Long topSectorId = topLevelSector.getAmpSectorId();
             // getting object from map
@@ -1473,7 +1474,7 @@ public class ChartWidgetUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<AmpFundingDetail> getSectorFunding(FilterHelper filter, Long sectorId)
+    public static List<AmpFundingDetail> getSectorFunding(FilterHelper filter, Long sectorId,Long sectorClassConfigId)
             throws DgException {
         Long[] orgIds = filter.getOrgIds();
         Long orgGroupId = filter.getOrgGroupId();
@@ -1504,7 +1505,7 @@ public class ChartWidgetUtil {
         } else {
             oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)    and config.name='Primary'  ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)    and config.id=:configId  ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1524,6 +1525,7 @@ public class ChartWidgetUtil {
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
         query.setDate("endDate", endDate);
+        query.setLong("configId", sectorClassConfigId);
         if (orgIds == null && orgGroupId != -1) {
             query.setLong("orgGroupId", orgGroupId);
         }
@@ -1566,9 +1568,9 @@ public class ChartWidgetUtil {
 
 
     @SuppressWarnings("unchecked")
-    public static DecimalWraper getSectorFundingAmount(FilterHelper filter, Long sectorId)
+    public static DecimalWraper getSectorFundingAmount(FilterHelper filter, Long sectorId,Long sectorClassConfigId)
             throws DgException {
-        List<AmpFundingDetail> fundingDets = getSectorFunding(filter,sectorId);
+        List<AmpFundingDetail> fundingDets = getSectorFunding(filter,sectorId,sectorClassConfigId);
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
         String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
         cal.doCalculations(fundingDets, currCode);

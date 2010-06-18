@@ -23,6 +23,15 @@ public class ShowWidgetChartForm extends ActionForm {
     private Long timestamp;
     private Integer transactionType;
 
+    public Long getSectorClassConfigId() {
+        return sectorClassConfigId;
+    }
+
+    public void setSectorClassConfigId(Long sectorClassConfigId) {
+        this.sectorClassConfigId = sectorClassConfigId;
+    }
+    private Long sectorClassConfigId;
+
     public Integer getTransactionType() {
         return transactionType;
     }

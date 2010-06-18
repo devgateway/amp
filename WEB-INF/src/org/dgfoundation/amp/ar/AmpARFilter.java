@@ -33,6 +33,7 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -48,6 +49,7 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -223,14 +225,18 @@ public class AmpARFilter extends PropertyListable {
 	private boolean widget = false;
 	private boolean publicView = false;
 	private Boolean budget = null;
-	private Integer lineMinRank;
-	private Integer planMinRank;
+	private Collection<Integer> lineMinRank;
+	private Collection<Integer> planMinRank;
 	private String fromDate;
 	private String toDate;
 	private Integer fromMonth;
 	private Integer yearFrom;
 	private Integer toMonth;
 	private Integer yearTo;
+	private Collection<AmpCategoryValueLocations> locationSelected = null;
+	@PropertyListableIgnore
+	private Collection<AmpCategoryValueLocations> relatedLocations;
+	private Boolean unallocatedLocation = null;
 	private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
@@ -606,12 +612,41 @@ public class AmpARFilter extends PropertyListable {
 				+ Util.toCSString(regions) + ")";
 		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("
 				+ Util.toCSString(financingInstruments) + ")";
-		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="
-				+ lineMinRank;
-		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="
-				+ planMinRank;
-		String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
-				+ (regionSelected==null?null:regionSelected.getIdentifier());
+		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
+	 	 		+ Util.toCSString(lineMinRank) + ")";
+	 	String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank IN ("
+	 	 		+ Util.toCSString( planMinRank ) + ")";
+		//String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
+		//		+ (regionSelected==null?null:regionSelected.getIdentifier());
+	 	
+	 	String REGION_SELECTED_FILTER = "";
+		if (unallocatedLocation != null) {
+			if (unallocatedLocation == true) {
+				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id NOT IN(SELECT amp_activity_id FROM amp_activity_location)";
+			}
+		}
+		
+		if (locationSelected!=null) {
+			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
+			allSelectedLocations.addAll(locationSelected);
+			
+			DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
+			this.relatedLocations						= new ArrayList<AmpCategoryValueLocations>();
+			this.relatedLocations.addAll(allSelectedLocations);
+			DynLocationManagerUtil.populateWithAscendants(this.relatedLocations, locationSelected);
+			
+			String allSelectedLocationString			= Util.toCSString(allSelectedLocations);
+			String subSelect			= "SELECT aal.amp_activity_id FROM amp_activity_location aal, amp_location al " +
+					"WHERE ( aal.amp_location_id=al.amp_location_id AND " +
+					"al.location_id IN (" + allSelectedLocationString + ") )";
+			
+			if (REGION_SELECTED_FILTER.equals("")) {
+				REGION_SELECTED_FILTER	= subSelect;
+			} else {
+				REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
+			}			
+		}
+		
 		StringBuffer actStatusValue = new StringBuffer("");
 		if(approvalStatusSelected!=null){
 			for(String valOption:approvalStatusSelected){
@@ -848,12 +883,15 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(FINANCING_INSTR_FILTER);
 		if (risks != null && risks.size() > 0)
 			queryAppend(RISK_FILTER);
-		if ((lineMinRank != null) && (lineMinRank !=-1))
+		if ((lineMinRank != null) && (lineMinRank.size() > 0))
 			queryAppend(LINE_MIN_RANK_FILTER);
-		if ((planMinRank != null)&&(planMinRank!=-1))
+		if ((planMinRank != null)&&(planMinRank.size() > 0))
 			queryAppend(PLAN_MIN_RANK_FILTER);
-		if (regionSelected != null)
+		//if (regionSelected != null)
+		//	queryAppend(REGION_SELECTED_FILTER);
+		if (!REGION_SELECTED_FILTER.equals("")) {
 			queryAppend(REGION_SELECTED_FILTER);
+		}
 		if(approvalStatusSelected!=null)
 			queryAppend(ACTIVITY_STATUS);
 		if (approved == true)
@@ -1165,19 +1203,19 @@ public class AmpARFilter extends PropertyListable {
 
 	private static final String IGNORED_PROPERTIES = "class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
 
-	public Integer getLineMinRank() {
+	public Collection<Integer> getLineMinRank() {
 		return lineMinRank;
 	}
 
-	public void setLineMinRank(Integer lineMinRank) {
+	public void setLineMinRank(Collection<Integer> lineMinRank) {
 		this.lineMinRank = lineMinRank;
 	}
 
-	public Integer getPlanMinRank() {
+	public Collection<Integer> getPlanMinRank() {
 		return planMinRank;
 	}
 
-	public void setPlanMinRank(Integer planMinRank) {
+	public void setPlanMinRank(Collection<Integer> planMinRank) {
 		this.planMinRank = planMinRank;
 	}
 
@@ -1552,6 +1590,51 @@ public class AmpARFilter extends PropertyListable {
 	public void setComputedYear(Integer computedYear) {
 		this.computedYear = computedYear;
 	}
+
+	/**
+	 * @return the locationSelected
+	 */
+	public Collection<AmpCategoryValueLocations> getLocationSelected() {
+		return locationSelected;
+	}
+
+	/**
+	 * @param locationSelected the locationSelected to set
+	 */
+	public void setLocationSelected(
+			Collection<AmpCategoryValueLocations> locationSelected) {
+		this.locationSelected = locationSelected;
+	}
+
+	/**
+	 * @return the unallocatedLocation
+	 */
+	public Boolean getUnallocatedLocation() {
+		return unallocatedLocation;
+	}
+
+	/**
+	 * @param unallocatedLocation the unallocatedLocation to set
+	 */
+	public void setUnallocatedLocation(Boolean unallocatedLocation) {
+		this.unallocatedLocation = unallocatedLocation;
+	}
 	
+	/**
+	 * @return the relatedLocations
+	 */
+	@PropertyListableIgnore
+	public Collection<AmpCategoryValueLocations> getRelatedLocations() {
+		return relatedLocations;
+	}
+
+	/**
+	 * @param relatedLocations the relatedLocations to set
+	 */
+	public void setRelatedLocations(
+			Collection<AmpCategoryValueLocations> relatedLocations) {
+		this.relatedLocations = relatedLocations;
+	}
+
 
 }

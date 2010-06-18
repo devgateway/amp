@@ -1,7 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
+import java.util.Collection;
 import java.util.Set;
 
+import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -9,7 +11,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  *
  * @author medea
  */
-public class AmpCategoryValueLocations implements Identifiable {
+public class AmpCategoryValueLocations implements Identifiable, HierarchyListable {
 
     private Long id;
     private String name;
@@ -133,5 +135,30 @@ public class AmpCategoryValueLocations implements Identifiable {
 	@Override
 	public Object getIdentifier() {
 		return this.id;
+	}
+
+	@Override
+	public Collection<AmpCategoryValueLocations> getChildren() {
+		return this.childLocations;
+	}
+
+	@Override
+	public int getCountDescendants() {
+		int ret = 1;
+		if ( this.getChildren() != null ) {
+			for ( HierarchyListable hl: this.getChildren() )
+				ret += hl.getCountDescendants();
+		}
+		return ret;
+	}
+
+	@Override
+	public String getLabel() {
+		return this.name;
+	}
+
+	@Override
+	public String getUniqueId() {
+		return this.id + "";
 	}
 }

@@ -357,7 +357,7 @@
 
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
 
-	<page page="ar/filterPicker" name="aim_filterPicker" title="AMP - Reports Filter Picker" />
+	<page page="filters/filterPicker2" name="aim_filterPicker2" title="AMP - Reports Filter Picker" />
 	
 	<page page="viewParisIndicatorPopupFilter" name="PI_Filter" title="AMP - PI Reports Filter" />
 	

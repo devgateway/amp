@@ -606,6 +606,23 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 
+	public static AmpCategoryValueLocations getLocationOpenedSession(Long id) {
+ 	 	Session dbSession = null;
+ 	 	try {
+ 	 		dbSession = PersistenceManager.getRequestDBSession();
+ 	 		String queryString = "select loc from "
+ 	 		+ AmpCategoryValueLocations.class.getName()
+ 	 		+ " loc where (loc.id=:id)" ;                   
+ 	 		Query qry = dbSession.createQuery(queryString);
+ 	 		qry.setLong("id", id);
+ 	 		AmpCategoryValueLocations returnLoc = (AmpCategoryValueLocations)qry.uniqueResult();
+ 	 		return returnLoc;
+ 	 	} catch (Exception e) {
+ 	 		e.printStackTrace();
+ 	 	}
+ 	 	return null;
+ 	}
+	
 	public static AmpCategoryValueLocations getLocationByCode(
 			String locationCode, HardCodedCategoryValue hcLocationLayer) {
 		try {
@@ -693,6 +710,44 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 
+	public static void populateWithDescendants(Collection <AmpCategoryValueLocations> destCollection, 
+			Collection<AmpCategoryValueLocations> locations ) {
+		if (  locations != null ) {
+			Iterator<AmpCategoryValueLocations> iterLoc	= locations.iterator();
+			while (iterLoc.hasNext()) {
+				AmpCategoryValueLocations loc	 = 
+					DynLocationManagerUtil.getLocation(iterLoc.next().getId(), true);
+				Set<AmpCategoryValueLocations> childrenLocs		= loc.getChildLocations();
+				if ( childrenLocs  != null && childrenLocs.size() > 0 ) {
+					destCollection.addAll(childrenLocs);
+					populateWithDescendants(destCollection, childrenLocs );
+				}
+			}
+		}
+	}
+	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 
+			Collection<AmpCategoryValueLocations> locations ) {
+		if (  locations != null ) {
+			Iterator<AmpCategoryValueLocations> iterLoc	= locations.iterator();
+			while (iterLoc.hasNext()) {
+				AmpCategoryValueLocations loc	 = iterLoc.next();
+				
+				while (loc.getParentLocation() != null){
+					loc		= loc.getParentLocation();
+					destCollection.add(loc);
+				}
+			}
+		}
+		
+	}
+	
+	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws Exception  {
+ 	 	AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso( 
+ 	 	FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+ 	 	country = getLocationOpenedSession( country.getId() );
+ 	 	return country.getChildLocations();
+ 	 }
+	
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry()
 			throws Exception {
 		TreeSet<AmpCategoryValueLocations> returnSet = new TreeSet<AmpCategoryValueLocations>(

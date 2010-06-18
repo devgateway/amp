@@ -45,9 +45,9 @@ public class ImportLogDAO {
 	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(Long sourceSettingId) {
 		try{
 			String queryString 	= "select lpe from "	+ DELogPerExecution.class.getName() + " lpe where " +
-					"lpe.ampSourceSetting=:ampSourceSettingId";
+					"lpe.deSourceSetting=:deSourceSettingId";
 			Query query			= hbSession.createQuery(queryString);
-			query.setLong("ampSourceSettingId", sourceSettingId );
+			query.setLong("deSourceSettingId", sourceSettingId );
 			List<DELogPerExecution> resultList	=  query.list();
 			return resultList;
 		}

@@ -132,7 +132,6 @@ div.fakefile2 input{
 	  }
 
        function importActivities(){
-           alert("assads");
             var form = document.getElementById('form');
             form.action = "/dataExchange/createSource.do?saveImport=true";
             form.target="_self"

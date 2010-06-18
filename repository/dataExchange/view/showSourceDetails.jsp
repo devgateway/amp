@@ -85,7 +85,7 @@
 	<tr>
 		<td colspan="2" style="text-align: center">
 			<a onclick="executeSource(${myForm.dbId},'${myForm.source }')" style="cursor:pointer; text-decoration:underline; color: blue"><digi:trn>Execute</digi:trn></a> &nbsp; | &nbsp;
-			<a onclick="alert();" style="cursor:pointer; text-decoration:underline; color: blue"><digi:trn>Show Logs</digi:trn></a> &nbsp; | &nbsp;
+			<a href="/dataExchange/showLogs.do?htmlView=true&selectedSourceId=${myForm.dbId}" style="cursor:pointer; text-decoration:underline; color: blue"><digi:trn>Show Logs</digi:trn></a> &nbsp; | &nbsp;
 			<a onclick="deleteSource(${myForm.dbId});" style="cursor:pointer; text-decoration:underline; color: blue"><digi:trn>Delete</digi:trn></a> &nbsp; 
 		</td>
 	</tr>

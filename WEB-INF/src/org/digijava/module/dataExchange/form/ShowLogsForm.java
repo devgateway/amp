@@ -10,5 +10,23 @@ import org.apache.struts.action.ActionForm;
  *
  */
 public class ShowLogsForm extends ActionForm {
+	private Long selectedSourceId;
 
+	/**
+	 * @return the selectedSourceId
+	 */
+	public Long getSelectedSourceId() {
+		return selectedSourceId;
+	}
+
+	/**
+	 * @param selectedSourceId the selectedSourceId to set
+	 */
+	public void setSelectedSourceId(Long selectedSourceId) {
+		this.selectedSourceId = selectedSourceId;
+	}
+
+
+	
+	
 }

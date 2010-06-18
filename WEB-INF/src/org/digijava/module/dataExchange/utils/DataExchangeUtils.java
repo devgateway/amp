@@ -222,14 +222,14 @@ public class DataExchangeUtils {
 	/**
 	 * @author dan
 	 */
-	public static void saveActivityNoLogger(AmpActivity activity){
+	public static void saveActivityNoLogger(AmpActivity activity) throws Exception{
 		Session session = null;
 		//HttpSession httpSession=request.getSession();
 	    Transaction tx = null;
 
 	    Long activityId = null;
 	    
-	    try {
+//	    try {
 	    	//session = PersistenceManager.getSession();
 	    	session = PersistenceManager.getRequestDBSession();
 	    	//session.connection().setAutoCommit(false);
@@ -242,20 +242,20 @@ public class DataExchangeUtils {
 	        //session.update(activity);
 	        tx.commit();
 	        
-	    }catch (Exception ex) {
-	        logger.error("Exception from saveActivity().", ex);
-	        //we can't throw here the exception because we need to rollback the transaction
-	        ex.printStackTrace();
-	        if ( tx != null)
-	        	tx.rollback();
-	        }
-	    finally {
-	    	try {
-				;//PersistenceManager.releaseSession(session);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	    }
+//	    }catch (Exception ex) {
+//	        logger.error("Exception from saveActivity().", ex);
+//	        //we can't throw here the exception because we need to rollback the transaction
+//	        ex.printStackTrace();
+//	        if ( tx != null)
+//	        	tx.rollback();
+//	        }
+//	    finally {
+//	    	try {
+//				;//PersistenceManager.releaseSession(session);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//	    }
 		//TODO: update the lucene index
 		//LuceneUtil.addUpdateActivity(request, false, activityId);
 		//for logging the activity
@@ -920,9 +920,34 @@ public class DataExchangeUtils {
 	}
 
 
-	public static void updateActivityNoLogger(AmpActivity activity) {
+	public static void updateActivityNoLogger(AmpActivity activity) throws Exception{
 		// TODO Auto-generated method stub
-		
+		Session session = null;
+		//HttpSession httpSession=request.getSession();
+	    Transaction tx = null;
+
+//	    try {
+	    	//session = PersistenceManager.getSession();
+	    	session = PersistenceManager.getRequestDBSession();
+	    	//session.connection().setAutoCommit(false);
+	    	tx = session.beginTransaction();
+
+			session.saveOrUpdate(activity);
+	        //session.update(activity);
+	        tx.commit();
+	        
+//	    }catch (Exception ex) {
+//	        logger.error("Exception from saveActivity().", ex);
+//	        //we can't throw here the exception because we need to rollback the transaction
+//	        ex.printStackTrace();
+//	        if ( tx != null)
+//	        	tx.rollback();
+//	        }
+		//TODO: update the lucene index
+		//LuceneUtil.addUpdateActivity(request, false, activityId);
+		//for logging the activity
+		//AuditLoggerUtil.logObject(httpSession, request, activity, "add");
+
 	}	
 	
     /**

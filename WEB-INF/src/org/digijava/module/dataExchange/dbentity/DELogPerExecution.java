@@ -22,6 +22,10 @@ public class DELogPerExecution implements XmlWrappable{
 	
 	
 	
+	public DELogPerExecution(DESourceSetting deSourceSetting) {
+		super();
+		this.deSourceSetting = deSourceSetting;
+	}
 	/**
 	 * @return the id
 	 */
@@ -67,10 +71,10 @@ public class DELogPerExecution implements XmlWrappable{
 		return executionTime;
 	}
 	/**
-	 * @param executionTime the executionTime to set
+	 * @param timestamp the executionTime to set
 	 */
-	public void setExecutionTime(Timestamp executionTime) {
-		this.executionTime = executionTime;
+	public void setExecutionTime(Timestamp timestamp) {
+		this.executionTime = timestamp;
 	}
 	/**
 	 * @return the externalTimestamp

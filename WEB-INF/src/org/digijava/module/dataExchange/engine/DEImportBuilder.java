@@ -4,9 +4,10 @@
 package org.digijava.module.dataExchange.engine;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -68,6 +69,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
+import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
@@ -93,6 +96,7 @@ import org.digijava.module.dataExchange.pojo.DEActivityLog;
 import org.digijava.module.dataExchange.pojo.DEFinancInstrMissingLog;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
+import org.digijava.module.dataExchange.pojo.DELog;
 import org.digijava.module.dataExchange.pojo.DEMTEFMissingLog;
 import org.digijava.module.dataExchange.pojo.DEMockTest;
 import org.digijava.module.dataExchange.pojo.DEOrgMissingLog;
@@ -102,10 +106,13 @@ import org.digijava.module.dataExchange.pojo.DESectorMissingLog;
 import org.digijava.module.dataExchange.pojo.DESectorPercentageLog;
 import org.digijava.module.dataExchange.pojo.DEStatusMissingLog;
 import org.digijava.module.dataExchange.pojo.DETypeAssistMissingLog;
+import org.digijava.module.dataExchange.util.ImportLogDAO;
+import org.digijava.module.dataExchange.util.SessionImportLogDAO;
 import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.hibernate.HibernateException;
 import org.hibernate.type.NullableType;
 import org.xml.sax.SAXException;
 
@@ -141,7 +148,7 @@ public class DEImportBuilder {
 	}
 
 	//fill a new and empty activity based on field selection
-	private void insertActivity(AmpActivity activity, ActivityType actType, Boolean update ){
+	private void insertActivity(AmpActivity activity, ActivityType actType, Boolean update ) throws Exception{
 		//update = false for new activity
 		processPreStep(activity, update);
 		processStep1(activity, actType, update);
@@ -158,14 +165,13 @@ public class DEImportBuilder {
 		
 	}
 	
-	private AmpActivity loadAmpActivity(ActivityType actType, Boolean update){
+	private AmpActivity getAmpActivity(ActivityType actType){
 		AmpActivity activity = null;
-		if(!update) activity = new AmpActivity();
-		else activity = getAmpActivityByComposedKey(actType,getDESourceSetting().getUniqueIdentifier(), getDESourceSetting().getUniqueIdentifierSeparator());
+		activity = getAmpActivityByComposedKey(actType,getDESourceSetting().getUniqueIdentifier(), getDESourceSetting().getUniqueIdentifierSeparator());
 		return activity;
 	}
 	
-	private void updateActivity(AmpActivity activity, ActivityType actType, Boolean update ){
+	private void updateActivity(AmpActivity activity, ActivityType actType, Boolean update )  throws Exception{
 		//update = true for update activity
 		processPreStep(activity, update);
 		processStep1(activity, actType, update);
@@ -182,9 +188,7 @@ public class DEImportBuilder {
 		
 	}
 	
-	private ArrayList<String> validateActivityContent(ActivityType actType, DEActivityLog logger){
-		ArrayList<String> errors = new ArrayList<String>();
-		
+	private void validateActivityContent(ActivityType actType, DEActivityLog logger){
 		validateStep1(actType, logger);
 		
 		//sectors, programs
@@ -196,13 +200,11 @@ public class DEImportBuilder {
 		//related orgs
 		validateStep4(actType, logger);
 		
-		return errors;
-		//return s;
 	}
 
 
 	
-	private void saveActivity(AmpActivity activity, Boolean update) {
+	private void saveActivity(AmpActivity activity, Boolean update) throws Exception{
 		// TODO Auto-generated method stub
 		
 		if(update == false) DataExchangeUtils.saveActivityNoLogger(activity);
@@ -1679,6 +1681,101 @@ public class DEImportBuilder {
 
 	private String toStringCVT(CodeValueType cvt){
 		return cvt.getValue()+":::"+cvt.getCode();
+	}
+	
+	/*
+	 ******* execution
+	 */
+
+	public void run() {
+		// TODO Auto-generated method stub
+		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
+		ImportLogDAO iLog	 		= null;
+		
+		try {
+				iLog		 = 	new SessionImportLogDAO();
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		execLog.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+		iLog.saveObject(execLog);
+		execLog.setDescription("");
+		boolean ok 	 =	checkInputString(execLog.getDescription());
+		iLog.saveObject(execLog);
+		if(!ok) return;
+		processFeed(execLog, iLog);
+		
+	}
+	/**import strategy (dropdown):    
+	public final static String IMPORT_STRATEGY_NEW_PROJ					= "ADD NEW PROJECTS";
+	public final static String IMPORT_STRATEGY_UPD_PROJ					= "UPDATE PROJECTS";
+	public final static String IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ	= "ADD NEW PROJECTS AND UPDATE PROJECTS";
+    */
+	
+	private String getImportStrategy(){
+		return this.getDESourceSetting().getImportStrategy();
+	}
+	
+	private void processFeed(DELogPerExecution log, ImportLogDAO iLog) {
+		for (Iterator it = this.getAmpImportItem().getActivities().getActivity().iterator(); it.hasNext();) {
+			ActivityType actType 	= (ActivityType) it.next();
+			AmpActivity activity 	= getAmpActivity(actType);
+			DELogPerItem	item	= new DELogPerItem();
+			item.setItemType(DELogPerItem.ITEM_TYPE_ACTIVITY);
+			//item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+			DEActivityLog contentLogger = new DEActivityLog();
+			validateActivityContent(actType, contentLogger);
+			
+//			if(activity == null && DESourceSetting.IMPORT_STRATEGY_UPD_PROJ.equals(getImportStrategy()))
+//				//TODO write in log that this activity was skipped
+//				continue;
+			
+			if(contentLogger.getItems() != null || contentLogger.getItems().size() > 0)
+			{
+				item.setDescription(contentLogger.display());
+				continue;
+			}
+			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+			item.setDescription("OK");
+
+			try {
+				
+				if(activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy())
+						||
+						activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ.equals(getImportStrategy()) ){
+					//activity doesn't exist
+					activity = new AmpActivity();
+					insertActivity(activity, actType, false);
+					
+				}
+				else 
+					if(activity != null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
+							activity != null && DESourceSetting.IMPORT_STRATEGY_UPD_PROJ.equals(getImportStrategy()) ){
+						//activity exists
+						updateActivity(activity, actType, true);
+					}
+					else {
+						//write in log that this activity was skipped
+						item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+						item.setDescription("Activity was skipped");
+					}
+			
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
+				item.setDescription(e.getMessage());
+			}
+			item.setDeLogPerExecution(log);
+			iLog.saveObject(item);
+		}
 	}	
 	
 }

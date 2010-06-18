@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.dataExchange.util.WrapperLogPerExecution;
 import org.digijava.module.dataExchange.util.WrapperSourceSetting;
 import org.digijava.module.dataExchange.util.XmlWrappable;
 import org.digijava.module.dataExchange.util.XmlWrapper;

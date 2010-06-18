@@ -17,8 +17,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.engine.DEImportBuilder;
 import org.digijava.module.dataExchange.engine.FileSourceBuilder;
 import org.digijava.module.dataExchange.form.ManageSourceForm;
+import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
 import org.digijava.module.dataExchange.util.XmlCreator;
@@ -115,8 +117,9 @@ public class ManageSourceAction extends MultiAction {
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId() );
 		
 		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
-		
-		
+		DEImportItem 	deItem  = new DEImportItem(fsb);
+		DEImportBuilder deib 	= new DEImportBuilder(deItem);
+		deib.run();
 	}
 
 }

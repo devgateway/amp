@@ -23,6 +23,10 @@ public abstract class DELog {
 
 	public abstract String getLogType();
 	
+	public boolean equalType(String s){
+		return this.getLogType().equals(s);
+	}
+	
 	public void setItems(ArrayList<DELog> items) {
 		this.items = items;
 	}

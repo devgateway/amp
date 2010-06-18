@@ -93,6 +93,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
     private String regFundingPageCurrCode;
     private ActivityContactInfo contactInformation;
     
+	private List<AmpActivityContact> activityContacts; //holds all activity contacts
+	private List<AmpActivityContact> mofedContacts;
+	private List<AmpActivityContact> donorContacts;
+	private List<AmpActivityContact> sectorMinistryContacts;
+	private List<AmpActivityContact> projCoordinatorContacts;
+	private List<AmpActivityContact> implExecutingAgencyContacts;
     
     
     /**
@@ -4317,6 +4323,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		if (reset) {
+			this.activityContacts = null;
 			this.identification = null;
 			this.planning = null;
 			this.location = null;
@@ -4790,12 +4797,66 @@ public class EditActivityForm extends ActionForm implements Serializable {
         this.regFundingPageCurrCode = regfundingPageCurrCode;
     }
 
+    /*
 	public void setContactInformation(ActivityContactInfo contactInformation) {
 		this.contactInformation = contactInformation;
 	}
+	*/
 
 	public ActivityContactInfo getContactInformation() {
-		return contactInformation;
+		if(this.contactInformation==null){
+			this.contactInformation=new ActivityContactInfo ();
+		}
+		return this.contactInformation;
+	}
+
+	public void setActivityContacts(List<AmpActivityContact> activityContacts) {
+		this.activityContacts = activityContacts;
+	}
+
+	public List<AmpActivityContact> getActivityContacts() {
+		return activityContacts;
+	}
+
+	public void setMofedContacts(List<AmpActivityContact> mofedContacts) {
+		this.mofedContacts = mofedContacts;
+	}
+
+	public List<AmpActivityContact> getMofedContacts() {
+		return mofedContacts;
+	}
+
+	public void setDonorContacts(List<AmpActivityContact> donorContacts) {
+		this.donorContacts = donorContacts;
+	}
+
+	public List<AmpActivityContact> getDonorContacts() {
+		return donorContacts;
+	}
+
+	public void setSectorMinistryContacts(List<AmpActivityContact> sectorMinistryContacts) {
+		this.sectorMinistryContacts = sectorMinistryContacts;
+	}
+
+	public List<AmpActivityContact> getSectorMinistryContacts() {
+		return sectorMinistryContacts;
+	}
+
+	public void setProjCoordinatorContacts(List<AmpActivityContact> projCoordinatorContacts) {
+		this.projCoordinatorContacts = projCoordinatorContacts;
+	}
+
+	public List<AmpActivityContact> getProjCoordinatorContacts() {
+		return projCoordinatorContacts;
+	}
+
+	public void setImplExecutingAgencyContacts(
+			List<AmpActivityContact> implExecutingAgencyContacts) {
+		this.implExecutingAgencyContacts = implExecutingAgencyContacts;
+	}
+
+	public List<AmpActivityContact> getImplExecutingAgencyContacts() {
+		return implExecutingAgencyContacts;
 	}
 }
 

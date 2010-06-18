@@ -1786,6 +1786,11 @@
 		<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>  
     </action>
 
+    <action name="aimEditActivityForm"  path="/aim/activityContactInfo" scope="session" type="org.digijava.module.aim.action.ActivityContactInformationAction" validate="false">
+    	<forward name="forward" path="/showLayout.do?layout=addActivityContactInfo" />    	
+      	<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>      
+   </action>
+
     
   </action-mappings>
 </struts-config>

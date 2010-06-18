@@ -12,7 +12,7 @@
   
   .inp-username {color: grey}
 </style>
-<script type="text/javascript" src="script/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="script/jquery.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
 	 

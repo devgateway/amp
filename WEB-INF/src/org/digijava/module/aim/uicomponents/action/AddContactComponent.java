@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -248,6 +249,13 @@ public class AddContactComponent extends DispatchAction{
             }
        	 	target.set(createForm.getTargetForm(), targetCollecion);
        	 	redirectWhere="step8";
+       	 	
+       	 String sessId = request.getSession().getId();
+       	 ServletContext ampContext = getServlet().getServletContext();
+         ArrayList sessList = (ArrayList) ampContext.getAttribute(
+             org.digijava.module.aim.helper.Constants.SESSION_LIST);
+         sessList.remove(sessId);
+       	 	
         }else{
         	 Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target.get(createForm.getTargetForm());
         	 if (contIds != null && contIds.length > 0) { 

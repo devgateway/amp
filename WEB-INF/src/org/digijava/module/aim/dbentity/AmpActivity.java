@@ -239,6 +239,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
    private Date customField4;
    private String customField5;
    private Boolean customField6;
+   
+   private Set <AmpActivityContact> activityContacts;
         
         public AmpActivity() {
 			// TODO Auto-generated constructor stub
@@ -1764,6 +1766,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setBudgetprogram(Long budgetprogram) {
 		this.budgetprogram = budgetprogram;
+	}
+
+	public void setActivityContacts(Set <AmpActivityContact> activityContacts) {
+		this.activityContacts = activityContacts;
+	}
+
+	public Set <AmpActivityContact> getActivityContacts() {
+		return activityContacts;
 	}
 
 }

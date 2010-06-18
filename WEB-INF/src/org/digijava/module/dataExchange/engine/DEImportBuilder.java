@@ -121,15 +121,7 @@ public class DEImportBuilder {
 	
 	private static Logger logger = Logger.getLogger(DEImportBuilder.class);
 	private DEImportItem ampImportItem;
-	private InputStream testStream;
-	
-	public InputStream getTestStream() {
-		return testStream;
-	}
 
-	public void setTestStream(InputStream testStream) {
-		this.testStream = testStream;
-	}
 
 	public HashMap<String, Boolean> getHashFields() {
 		return this.getAmpImportItem().getHashFields();
@@ -173,24 +165,6 @@ public class DEImportBuilder {
 		return activity;
 	}
 	
-	
-	
-	private AmpActivity getAmpActivityByComposedKey(ActivityType actType, String key, String separator) {
-		// TODO Auto-generated method stub
-		AmpActivity activity = null;
-		//activity = ;
-		String dbKey 					= 	actType.getDbKey();
-		HashMap<String, String> hm		= 	new HashMap<String, String>();
-		HashMap<String, NullableType> hmType	= 	new HashMap<String, NullableType>();
-		DataExchangeUtils.generateHashMapTypes(hmType);
-		String query					=	DataExchangeUtils.generateQuery(dbKey, key, separator, hm);
-		activity						=	DataExchangeUtils.getActivityByComposedKey(query, hm,hmType);
-		
-		return activity;
-	}
-
-
-
 	private void updateActivity(AmpActivity activity, ActivityType actType, Boolean update ){
 		//update = true for update activity
 		processPreStep(activity, update);
@@ -226,153 +200,7 @@ public class DEImportBuilder {
 		//return s;
 	}
 
-	private void validateStep4(ActivityType actType, DEActivityLog logger) {
-		// TODO Auto-generated method stub
-		if(actType.getRelatedOrgs()!=null)
-			for (Iterator it = actType.getRelatedOrgs().iterator(); it.hasNext();) {
-				RelatedOrgs relOrg = (RelatedOrgs) it.next();
-				CodeValueType cvt= new CodeValueType();
-				if( isValidString(relOrg.getCode()) )
-					cvt.setCode(relOrg.getCode());
-				if( isValidString(relOrg.getValue()) )
-					cvt.setValue(relOrg.getValue());
-				AmpOrganisation org = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION, cvt);
-				if(org == null )
-					//errors.add(toStringCVT(cvt));
-					logger.getItems().add(new DEOrgMissingLog(cvt));
-					
-			}
 
-	}
-
-	private void validateStep3(ActivityType actType, DEActivityLog logger) {
-		// TODO Auto-generated method stub
-		
-		//funding
-		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
-			FundingType funding = (FundingType) it.next();
-			CodeValueType fundingOrg=funding.getFundingOrg();
-			AmpFunding ampFunding = new AmpFunding();
-			ampFunding.setActive(true);
-			AmpOrganisation ampOrg = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,fundingOrg);
-			if(ampOrg == null)
-				logger.getItems().add(new DEOrgMissingLog(fundingOrg));
-				
-			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
-			
-			//type of assitance
-			if(funding.getAssistanceType() != null){
-				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
-				if(acv == null)
-					//errors.add(toStringCVT(funding.getAssistanceType()));
-					logger.getItems().add(new DETypeAssistMissingLog(funding.getAssistanceType()));
-			}
-			//financing instrument
-			if(funding.getFinancingInstrument() != null){
-				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getFinancingInstrument(), Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
-				if(acv == null)
-					//errors.add(toStringCVT(funding.getFinancingInstrument()));
-					logger.getItems().add(new DEFinancInstrMissingLog(funding.getFinancingInstrument()));
-			}
-			
-			//MTEF projections
-			if(funding.getProjections()!=null)
-			{
-				Iterator mtefItr=funding.getProjections().iterator();
-				while (mtefItr.hasNext())
-				{
-					Projections mtef=(Projections)mtefItr.next();
-					if( mtef.getType()!=null ){
-						CodeValueType cvt = new CodeValueType();
-						cvt.setCode(mtef.getType());
-						cvt.setValue(mtef.getType());
-						AmpCategoryValue acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_MTEF_PROJECTION);
-						if(acv!=null)
-							logger.getItems().add(new DEMTEFMissingLog(cvt));
-							//errors.add(toStringCVT(cvt));
-					}
-				}
-			}
-		}
-		
-		//TODO validate locations
-	}
-
-	private void validateStep2(ActivityType actType, DEActivityLog logger) {
-		// TODO Auto-generated method stub
-		//check sector percentage
-		if(actType.getSectors()!=null && actType.getSectors().size() > 0){
-			//checking the sum of the sector's percentage
-			long percentage = 0;
-			for (Iterator iterator = actType.getSectors().iterator(); iterator.hasNext();) {
-				PercentageCodeValueType idmlSector = (PercentageCodeValueType) iterator.next();
-				percentage+=idmlSector.getPercentage();
-				CodeValueType sectorAux = new CodeValueType();
-				sectorAux.setCode(idmlSector.getCode());
-				sectorAux.setValue(idmlSector.getValue());
-				AmpSector ampSector = (AmpSector) getAmpObject(Constants.AMP_SECTOR,sectorAux);
-				if(ampSector == null) 
-					//errors.add(toStringCVT(sectorAux));
-					logger.getItems().add(new DESectorMissingLog(sectorAux));
-			}
-			if(percentage != 100){
-				//errors.add("The sum of sectors is not 100%");
-				logger.getItems().add(new DESectorPercentageLog());
-			}
-		}
-		
-		
-		if(actType.getPrograms()!=null && actType.getPrograms().size() > 0){
-			Set<AmpActivityProgram> programs = new HashSet<AmpActivityProgram>();
-			long percentage = 0;
-			for (Iterator iterator = actType.getPrograms().iterator(); iterator.hasNext();) {
-				PercentageCodeValueType idmlProgram = (PercentageCodeValueType) iterator.next();
-				percentage+=idmlProgram.getPercentage();
-				CodeValueType programAux = new CodeValueType();
-				programAux.setCode(idmlProgram.getCode());
-				programAux.setValue(idmlProgram.getValue());
-				AmpTheme ampTheme = (AmpTheme) getAmpObject(Constants.AMP_PROGRAM,programAux);
-				if(ampTheme == null)
-					//errors.add(toStringCVT(programAux));
-					logger.getItems().add(new DEProgramMissingLog(programAux));
-			}
-			if(percentage != 100){
-				logger.getItems().add(new DEProgramPercentageLog());
-			}
-		}
-		
-		
-		
-	}
-
-	private void validateStep1(ActivityType actType, DEActivityLog logger) {
-		// TODO Auto-generated method stub
-		//assigning organizations
-		if(actType.getId() != null){
-			ArrayList<Id> ids = (ArrayList<Id>) actType.getId();
-			for (Iterator it = ids.iterator(); it.hasNext();) {
-				Id id = (Id) it.next();
-				AmpOrganisation org = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,id.getAssigningOrg());
-				if(org != null){
-					//errors.add(toStringCVT(id.getAssigningOrg()));
-					logger.getItems().add(new DEOrgMissingLog(id.getAssigningOrg()));
-				}
-			}
-		}
-		
-		//status
-		if(actType.getStatus() != null){
-			AmpCategoryValue acv = getAmpCategoryValueFromCVT(actType.getStatus(), Constants.CATEG_VALUE_ACTIVITY_STATUS);
-			if(acv!=null)
-				//errors.add(toStringCVT(actType.getStatus()));
-				logger.getItems().add(new DEStatusMissingLog(actType.getStatus()));
-		}
-		
-	}
-
-	private String toStringCVT(CodeValueType cvt){
-		return cvt.getValue()+":::"+cvt.getCode();
-	}
 	
 	private void saveActivity(AmpActivity activity, Boolean update) {
 		// TODO Auto-generated method stub
@@ -1233,6 +1061,152 @@ public class DEImportBuilder {
 
 	}
 	
+	/*
+	 *********************** validation
+	 */
+	private void validateStep4(ActivityType actType, DEActivityLog logger) {
+		// TODO Auto-generated method stub
+		if(actType.getRelatedOrgs()!=null)
+			for (Iterator it = actType.getRelatedOrgs().iterator(); it.hasNext();) {
+				RelatedOrgs relOrg = (RelatedOrgs) it.next();
+				CodeValueType cvt= new CodeValueType();
+				if( isValidString(relOrg.getCode()) )
+					cvt.setCode(relOrg.getCode());
+				if( isValidString(relOrg.getValue()) )
+					cvt.setValue(relOrg.getValue());
+				AmpOrganisation org = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION, cvt);
+				if(org == null )
+					//errors.add(toStringCVT(cvt));
+					logger.getItems().add(new DEOrgMissingLog(cvt));
+					
+			}
+
+	}
+
+	private void validateStep3(ActivityType actType, DEActivityLog logger) {
+		// TODO Auto-generated method stub
+		
+		//funding
+		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
+			FundingType funding = (FundingType) it.next();
+			CodeValueType fundingOrg=funding.getFundingOrg();
+			AmpFunding ampFunding = new AmpFunding();
+			ampFunding.setActive(true);
+			AmpOrganisation ampOrg = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,fundingOrg);
+			if(ampOrg == null)
+				logger.getItems().add(new DEOrgMissingLog(fundingOrg));
+				
+			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
+			
+			//type of assitance
+			if(funding.getAssistanceType() != null){
+				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
+				if(acv == null)
+					//errors.add(toStringCVT(funding.getAssistanceType()));
+					logger.getItems().add(new DETypeAssistMissingLog(funding.getAssistanceType()));
+			}
+			//financing instrument
+			if(funding.getFinancingInstrument() != null){
+				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getFinancingInstrument(), Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
+				if(acv == null)
+					//errors.add(toStringCVT(funding.getFinancingInstrument()));
+					logger.getItems().add(new DEFinancInstrMissingLog(funding.getFinancingInstrument()));
+			}
+			
+			//MTEF projections
+			if(funding.getProjections()!=null)
+			{
+				Iterator mtefItr=funding.getProjections().iterator();
+				while (mtefItr.hasNext())
+				{
+					Projections mtef=(Projections)mtefItr.next();
+					if( mtef.getType()!=null ){
+						CodeValueType cvt = new CodeValueType();
+						cvt.setCode(mtef.getType());
+						cvt.setValue(mtef.getType());
+						AmpCategoryValue acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_MTEF_PROJECTION);
+						if(acv!=null)
+							logger.getItems().add(new DEMTEFMissingLog(cvt));
+							//errors.add(toStringCVT(cvt));
+					}
+				}
+			}
+		}
+		
+		//TODO validate locations
+	}
+
+	private void validateStep2(ActivityType actType, DEActivityLog logger) {
+		// TODO Auto-generated method stub
+		//check sector percentage
+		if(actType.getSectors()!=null && actType.getSectors().size() > 0){
+			//checking the sum of the sector's percentage
+			long percentage = 0;
+			for (Iterator iterator = actType.getSectors().iterator(); iterator.hasNext();) {
+				PercentageCodeValueType idmlSector = (PercentageCodeValueType) iterator.next();
+				percentage+=idmlSector.getPercentage();
+				CodeValueType sectorAux = new CodeValueType();
+				sectorAux.setCode(idmlSector.getCode());
+				sectorAux.setValue(idmlSector.getValue());
+				AmpSector ampSector = (AmpSector) getAmpObject(Constants.AMP_SECTOR,sectorAux);
+				if(ampSector == null) 
+					//errors.add(toStringCVT(sectorAux));
+					logger.getItems().add(new DESectorMissingLog(sectorAux));
+			}
+			if(percentage != 100){
+				//errors.add("The sum of sectors is not 100%");
+				logger.getItems().add(new DESectorPercentageLog());
+			}
+		}
+		
+		
+		if(actType.getPrograms()!=null && actType.getPrograms().size() > 0){
+			Set<AmpActivityProgram> programs = new HashSet<AmpActivityProgram>();
+			long percentage = 0;
+			for (Iterator iterator = actType.getPrograms().iterator(); iterator.hasNext();) {
+				PercentageCodeValueType idmlProgram = (PercentageCodeValueType) iterator.next();
+				percentage+=idmlProgram.getPercentage();
+				CodeValueType programAux = new CodeValueType();
+				programAux.setCode(idmlProgram.getCode());
+				programAux.setValue(idmlProgram.getValue());
+				AmpTheme ampTheme = (AmpTheme) getAmpObject(Constants.AMP_PROGRAM,programAux);
+				if(ampTheme == null)
+					//errors.add(toStringCVT(programAux));
+					logger.getItems().add(new DEProgramMissingLog(programAux));
+			}
+			if(percentage != 100){
+				logger.getItems().add(new DEProgramPercentageLog());
+			}
+		}
+		
+		
+		
+	}
+
+	private void validateStep1(ActivityType actType, DEActivityLog logger) {
+		// TODO Auto-generated method stub
+		//assigning organizations
+		if(actType.getId() != null){
+			ArrayList<Id> ids = (ArrayList<Id>) actType.getId();
+			for (Iterator it = ids.iterator(); it.hasNext();) {
+				Id id = (Id) it.next();
+				AmpOrganisation org = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,id.getAssigningOrg());
+				if(org != null){
+					//errors.add(toStringCVT(id.getAssigningOrg()));
+					logger.getItems().add(new DEOrgMissingLog(id.getAssigningOrg()));
+				}
+			}
+		}
+		
+		//status
+		if(actType.getStatus() != null){
+			AmpCategoryValue acv = getAmpCategoryValueFromCVT(actType.getStatus(), Constants.CATEG_VALUE_ACTIVITY_STATUS);
+			if(acv!=null)
+				//errors.add(toStringCVT(actType.getStatus()));
+				logger.getItems().add(new DEStatusMissingLog(actType.getStatus()));
+		}
+		
+	}
 	
 	
 	/*
@@ -1606,7 +1580,7 @@ public class DEImportBuilder {
 	
 	//generating the HashMap with the selected fields from UI
 	public void generateFieldHashMap(){
-		for (Iterator it = this.getDESourceSetting().getFields().iterator(); it.hasNext();) {
+		for (Iterator it = this.getDESourceSetting().getFields2().iterator(); it.hasNext();) {
 			String field = (String) it.next();
 			this.getHashFields().put(field, new Boolean(true));
 		}
@@ -1647,7 +1621,7 @@ public class DEImportBuilder {
 	                 // we can use custom validation event handler
 	                 m.setEventHandler(log);
 	                 //m.setValidating(false);
-	                  acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.testStream) ;
+	                  acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.getAmpImportItem().getInputStream()) ;
 	           }
 	        } 
 			catch (SAXException e) {
@@ -1686,5 +1660,25 @@ public class DEImportBuilder {
 		//httpSession.setAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER,teamMember);
 	}
 
+	private AmpActivity getAmpActivityByComposedKey(ActivityType actType, String key, String separator) {
+		// TODO Auto-generated method stub
+		AmpActivity activity = null;
+		//activity = ;
+		String dbKey 					= 	actType.getDbKey();
+		HashMap<String, String> hm		= 	new HashMap<String, String>();
+		HashMap<String, NullableType> hmType	= 	new HashMap<String, NullableType>();
+		DataExchangeUtils.generateHashMapTypes(hmType);
+		String query					=	DataExchangeUtils.generateQuery(dbKey, key, separator, hm);
+		if(query == null) return activity;
+		activity						=	DataExchangeUtils.getActivityByComposedKey(query, hm,hmType);
+		
+		return activity;
+	}
+	
+
+
+	private String toStringCVT(CodeValueType cvt){
+		return cvt.getValue()+":::"+cvt.getCode();
+	}	
 	
 }

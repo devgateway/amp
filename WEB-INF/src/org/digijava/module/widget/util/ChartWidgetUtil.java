@@ -695,13 +695,16 @@ public class ChartWidgetUtil {
      */
     public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException, WorkerException {
         JFreeChart result = null;
+		Font titleFont = new Font("Arial", Font.BOLD, 12);
+		Font plainFont = new Font("Arial", Font.PLAIN, 10);
+
         PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
         boolean tooltips = true;
         boolean urls = true;
         result = ChartFactory.createRingChart(title, ds, opt.isShowLegend(), tooltips, urls);
-		result.setBackgroundPaint(Color.WHITE);
+		result.setBackgroundPaint(new Color(255,255,255,0));
 		String donorString = "";
 		if (donors != null) {
 			donorString += "~donorId=" + getInStatment(donors);
@@ -710,11 +713,12 @@ public class ChartWidgetUtil {
 		RingPlot plot = (RingPlot) result.getPlot();
 		plot.setOuterSeparatorExtension(0);
 		plot.setInnerSeparatorExtension(0);
-		plot.setBackgroundPaint(Color.WHITE);
-		plot.setForegroundAlpha(0.6f);
+		plot.setBackgroundPaint(new Color(255,255,255,0));
 		plot.setSectionDepth(0.5);
 		plot.setCircular(true);
 		plot.setOutlineVisible(false);
+		plot.setShadowXOffset(0);
+		plot.setShadowYOffset(0);
 
 		if (opt.isShowTitle()) {
 			Font font = new Font(null, 0, 12);
@@ -741,25 +745,35 @@ public class ChartWidgetUtil {
 		// plot.setSectionOutlinesVisible(false);
 		LegendTitle lt = result.getLegend();
 		if (lt != null) {
-			Font labelFont = new Font(null, Font.PLAIN, 9);
-			lt.setItemFont(labelFont);
-			plot.setLabelFont(labelFont);
-			lt.setPosition(RectangleEdge.RIGHT);
-			lt.setVerticalAlignment(VerticalAlignment.TOP);
-			lt.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+			plot.setLabelFont(plainFont);
 			plot.setLegendItemShape(new Rectangle(10, 10));
 			DecimalFormat format = FormatHelper.getDecimalFormat();
 			format.setMaximumFractionDigits(0);
 			PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
 			plot.setLegendLabelGenerator(genLegend);
 			plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
+			lt.setItemFont(plainFont);
 			lt.setFrame(BlockBorder.NONE);
+			lt.setMargin(10, 5, 5, 10);
+			lt.setPosition(RectangleEdge.RIGHT);
+			lt.setVerticalAlignment(VerticalAlignment.CENTER);
+			lt.setHorizontalAlignment(HorizontalAlignment.LEFT);
+			lt.setBackgroundPaint(new Color(255,255,255,0));
 
 		}
 		DonorSectorPieChartURLGenerator urlGen = new DonorSectorPieChartURLGenerator(url);
 		plot.setURLGenerator(urlGen);
 		plot.setIgnoreNullValues(true);
 		plot.setIgnoreZeroValues(true);
+		List <Comparable> keys = ds.getKeys();
+        int aInt;
+        Color[] colors = opt.isMonochrome() ? colorsMonochrome : colorsColor;       
+        for (int i = 0; i < keys.size(); i++)
+        {
+            aInt = i % colors.length;
+            plot.setSectionPaint(keys.get(i), colors[aInt]);
+        }
+
 		return result;
 	}
 

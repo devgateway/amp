@@ -74,7 +74,7 @@ public class ShowSectorByDonorChart extends Action {
         ChartRenderingInfo info = new ChartRenderingInfo();
 
         //write image in response
-		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info);
+		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info, true, 0);
 
 		//fill from years' drop-down
 		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));

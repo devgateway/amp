@@ -3,19 +3,31 @@
  */
 package org.digijava.module.dataExchange.dbentity;
 import java.util.List;
+import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.dataExchange.util.WrapperLogPerExecution;
+import org.digijava.module.dataExchange.util.WrapperSourceSetting;
+import org.digijava.module.dataExchange.util.XmlWrappable;
+import org.digijava.module.dataExchange.util.XmlWrapper;
 /**
  * 
  *
  */
-public class DESourceSetting {
+public class DESourceSetting implements XmlWrappable{
 	public final static String SOURCE_URL			= "URL";
 	public final static String SOURCE_FILE			= "FILE";
 	public final static String SOURCE_WEB_SERVICE	= "WEB_SERVICE";
 	
+	public final static String IMPORT_STRATEGY_NEW_PROJ					= "ADD NEW PROJECTS";
+	public final static String IMPORT_STRATEGY_UPD_PROJ					= "UPDATE PROJECTS";
+	public final static String IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ	= "ADD NEW PROJECTS AND UPDATE PROJECTS";
+	
+	public final static String[] DAYS 	= {"Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+	
 	
 	private Long id;
+	private String name;
 	
 	/**
 	 * Decides if it is an import or export source
@@ -29,9 +41,9 @@ public class DESourceSetting {
 	
 	private AmpTeam importWorkspace;
 	private String approvalStatus;
-	private List  fields;
+	private Set<String>  fields2;
 	private String uniqueIdentifier;
-	private String uniqueIdentifierSeparator;
+	private String uniqueIdentifierSeparator	= "|";
 	
 	private List exportFilters;
 	private List<DELogPerExecution> logs;
@@ -42,6 +54,12 @@ public class DESourceSetting {
 	                        2. update only existing projects
 	                        3. add new projects and update existing projects*/
 	private String importStrategy;
+	
+	
+	private String frequency;
+	private String dayOfWeek;
+	private String time;
+	
 	
 	/**
 	 * In case the source would be a URL
@@ -102,20 +120,6 @@ public class DESourceSetting {
 	 */
 	public void setApprovalStatus(String approvalStatus) {
 		this.approvalStatus = approvalStatus;
-	}
-
-	/**
-	 * @return the fields
-	 */
-	public List getFields() {
-		return fields;
-	}
-
-	/**
-	 * @param fields the fields to set
-	 */
-	public void setFields(List fields) {
-		this.fields = fields;
 	}
 
 	/**
@@ -229,6 +233,83 @@ public class DESourceSetting {
 	public void setLogs(List<DELogPerExecution> logs) {
 		this.logs = logs;
 	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the frequency
+	 */
+	public String getFrequency() {
+		return frequency;
+	}
+
+	/**
+	 * @param frequency the frequency to set
+	 */
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
+
+	/**
+	 * @return the dayOfWeek
+	 */
+	public String getDayOfWeek() {
+		return dayOfWeek;
+	}
+
+	/**
+	 * @param dayOfWeek the dayOfWeek to set
+	 */
+	public void setDayOfWeek(String dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
+	}
+
+	/**
+	 * @return the time
+	 */
+	public String getTime() {
+		return time;
+	}
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	/**
+	 * @return the fields2
+	 */
+	public Set<String> getFields2() {
+		return fields2;
+	}
+
+	/**
+	 * @param fields2 the fields2 to set
+	 */
+	public void setFields2(Set<String> fields2) {
+		this.fields2 = fields2;
+	}
+
+	@Override
+	public XmlWrapper getXmlWrapperInstance() {
+		return new WrapperSourceSetting(this);
+	}
+
+
 	
 	
 	

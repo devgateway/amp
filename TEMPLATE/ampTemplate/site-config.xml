@@ -704,7 +704,7 @@
 				<page>savehtml</page>
             </module>
             <module name="dataExchange">
-				<page>de_logFeed</page>
+				<page>de_showSourceDetails</page>
             </module>
 		</page-group>
 	</site-layout>

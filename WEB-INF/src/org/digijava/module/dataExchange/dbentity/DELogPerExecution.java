@@ -6,8 +6,12 @@ package org.digijava.module.dataExchange.dbentity;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.digijava.module.dataExchange.util.WrapperLogPerExecution;
+import org.digijava.module.dataExchange.util.XmlWrappable;
+import org.digijava.module.dataExchange.util.XmlWrapper;
 
-public class DELogPerExecution {
+
+public class DELogPerExecution implements XmlWrappable{
 	
 	private Long id;
 	private DESourceSetting deSourceSetting;
@@ -92,7 +96,9 @@ public class DELogPerExecution {
 	public void setDeSourceSetting(DESourceSetting deSourceSetting) {
 		this.deSourceSetting = deSourceSetting;
 	}
-	
-	
+	@Override
+	public XmlWrapper getXmlWrapperInstance() {
+		return new WrapperLogPerExecution(this);
+	}
 	
 }

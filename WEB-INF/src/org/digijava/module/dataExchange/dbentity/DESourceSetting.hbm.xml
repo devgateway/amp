@@ -8,6 +8,7 @@
 				<param name="sequence">DE_SOURCE_SETTING_seq</param>
 			</generator>
 		</id>
+		<property name="name" column="name" type="java.lang.String" />
 		<property name="isImport" column="is_import" type="java.lang.Boolean" />
 		<property name="source" column="source" type="java.lang.String" />		
 		<property name="approvalStatus" column="approval_status" type="java.lang.String" />
@@ -19,6 +20,12 @@
 		
 		<many-to-one name="importWorkspace" column="amp_team_id" lazy="false" 
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
+		
+		<set name="fields2" table="de_source_setting_fields" cascade="all" lazy="false">
+			<cache usage="read-write"/>
+			<key column="de_source_setting_id" />
+			<element column="field_string" type="string" />
+		</set>
 		
 		<list name="logs" lazy="false" cascade="all-delete-orphan">
 			<key column="de_source_setting_id" />

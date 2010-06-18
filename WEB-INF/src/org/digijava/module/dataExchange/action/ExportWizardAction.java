@@ -45,7 +45,7 @@ public class ExportWizardAction extends DispatchAction {
 
 		ExportForm eForm = (ExportForm)form;
 
-		eForm.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true));
+		eForm.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true, -10));
 
 		eForm.setDonorTypeList(DbUtil.getAllOrgTypesOfPortfolio());
 		eForm.setDonorGroupList(ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio()));

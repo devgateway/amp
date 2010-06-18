@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.digijava.module.aim.util.filters;
 
 import java.util.Collection;

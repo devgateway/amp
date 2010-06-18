@@ -66,6 +66,4 @@ public class GroupingElement <T extends HierarchyListable> {
 	public void setActionFormProperty(String actionFormProperty) {
 		this.actionFormProperty = actionFormProperty;
 	}
-	
-	
 }

@@ -33,7 +33,7 @@
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
-<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 88%; padding-bottom: 0px;">
+<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;">
 	<ul class="yui-nav">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a> </li>
 		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a> </li>
@@ -114,7 +114,7 @@
 					</c:set>
 					<b><digi:trn>Keyword Search</digi:trn> </b>
 					<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
-						src="/TEMPLATE/ampTemplate/imagesSource/common/info.png" alt="Click to View Calendar" border="0" />
+						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
 						<br />
 						<br />
 						<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
@@ -135,7 +135,7 @@
 							<td colspan="2" align="left">
 							<html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
 							<a id="date1" style="background-color: #F6FAFF;" href='javascript:pickDateById("date1","fromDate")'>
-								<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
 							</td>
 							
@@ -143,7 +143,7 @@
 							<td colspan="2" align="left">
 							<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
 							<a id="date2" style="background-color: #F6FAFF;" href='javascript:pickDateById("date2","toDate")'>
-								<img src="/TEMPLATE/ampTemplate/imagesSource/calendar/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
 							</td>
 						</tr>

@@ -820,14 +820,19 @@ public class OrgProfileUtil {
                 commHelper.getValues().add(FormatHelper.formatNumber(fundingComm.doubleValue()));
                 DecimalWraper fundingDisb = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
                 disbHelper.getValues().add(FormatHelper.formatNumber(fundingDisb.doubleValue()));
-                DecimalWraper fundingExp = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE, Constants.ACTUAL);
-                expHelper.getValues().add(FormatHelper.formatNumber(fundingExp.doubleValue()));
-
+                if (filter.isExpendituresVisible()) {
+                    DecimalWraper fundingExp = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE, Constants.ACTUAL);
+                    expHelper.getValues().add(FormatHelper.formatNumber(fundingExp.doubleValue()));
+                }
             }
+            if(filter.isPledgeVisible()){
             result.add(pledgesHelper);
+            }
             result.add(commHelper);
             result.add(disbHelper);
-            result.add(expHelper);
+            if (filter.isExpendituresVisible()) {
+                result.add(expHelper);
+            }
         } else {
             if (type == WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY) {
                 NameValueYearHelper plannedHelper = new NameValueYearHelper();

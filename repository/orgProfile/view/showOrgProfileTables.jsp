@@ -34,7 +34,16 @@
                         <digi:trn>TYPE OF AID</digi:trn>
                     </c:when>
                     <c:when test="${orgProfileNameValueYearForm.type== 3}">
-                        <digi:trn>Pledges|Commitments|Disbursements|Expenditures</digi:trn>
+                        <c:set var="charttitle">
+                            <c:if test="${sessionScope.orgProfileFilter.pledgeVisible}">
+                                Pledges|
+                            </c:if>
+                             Commitments|Disbursements
+                             <c:if test="${sessionScope.orgProfileFilter.expendituresVisible}">
+                               |Expenditures
+                            </c:if>
+                        </c:set>
+                        <digi:trn>${charttitle}</digi:trn>
                     </c:when>
                     <c:when test="${orgProfileNameValueYearForm.type==5}">
                         <digi:trn>Sector(s) Breakdown</digi:trn>

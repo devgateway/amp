@@ -37,6 +37,24 @@ public class FilterHelper implements Serializable {
     private Date startDate;
     private Date endDate;
     private int yearsInRange;
+    private boolean expendituresVisible;
+    private boolean pledgeVisible;
+
+    public boolean isExpendituresVisible() {
+        return expendituresVisible;
+    }
+
+    public void setExpendituresVisible(boolean expendituresVisible) {
+        this.expendituresVisible = expendituresVisible;
+    }
+
+    public boolean isPledgeVisible() {
+        return pledgeVisible;
+    }
+
+    public void setPledgeVisible(boolean pledgeVisible) {
+        this.pledgeVisible = pledgeVisible;
+    }
 
     public int getYearsInRange() {
         return yearsInRange;
@@ -146,6 +164,8 @@ public class FilterHelper implements Serializable {
         this.regionId=form.getSelRegionId();
         this.zoneIds=form.getSelZoneIds();
         this.yearsInRange=form.getYearsInRange();
+        this.pledgeVisible=form.getPledgeVisible();
+        this.expendituresVisible=form.getExpendituresVisible();
         initDerivedProperties();
     }
      public FilterHelper(FilterHelper helper) throws DgException {

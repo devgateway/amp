@@ -190,7 +190,15 @@ public class ExportToWord extends Action {
                         String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
                         String typeOfAid = TranslatorWorker.translateText("TYPE OF AID", langCode, siteId);
                         String odaProfile = TranslatorWorker.translateText("ODA Profile", langCode, siteId);
-                        String pledgesCommDisbExp = TranslatorWorker.translateText("Pledges|Commitments|Disbursements|Expenditures", langCode, siteId);
+                        String charttitle="";
+                        if(filter.isPledgeVisible()){
+                             charttitle="Pledges|";
+                        }
+                        charttitle+="Commitments|Disbursements";
+                        if(filter.isExpendituresVisible()){
+                             charttitle+="|Expenditures";
+                        }
+                        String pledgesCommDisbExp = TranslatorWorker.translateText(charttitle, langCode, siteId);
                         String regionBreakdown = TranslatorWorker.translateText("Regional Breakdown", langCode, siteId);
                         String sectorBreakdown = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
                         String aidPred = TranslatorWorker.translateText("Aid Predictiblity", langCode, siteId);

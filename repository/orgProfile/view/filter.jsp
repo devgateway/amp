@@ -304,6 +304,22 @@
                         <font style="color:red;font-weight:bold"><digi:trn>Note: If left unchecked it will show data for all of the current workspaces in AMP</digi:trn></font>
                     </td>
                 </tr>
+                <module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
+                  <tr>
+                    <td nowrap align="left" colspan="2">
+                        <html:checkbox  property="pledgeVisible"><b><digi:trn>Include pledges in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
+                    </td>
+                </tr>
+                </module:display>
+                <feature:display module="Funding" name="Expenditures">
+                  <tr>
+                    <td nowrap align="left" colspan="2">
+                        <html:checkbox  property="expendituresVisible"><b><digi:trn>Include expenditures in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
+                    </td>
+                </tr>
+                </feature:display>
+
+
                 <tr>
                     <td align="left" colspan="2">
                         <fieldset>

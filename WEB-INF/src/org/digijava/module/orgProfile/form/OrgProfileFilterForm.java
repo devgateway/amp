@@ -46,7 +46,24 @@ public class OrgProfileFilterForm extends ActionForm {
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
     private int yearsInRange;
+    private Boolean pledgeVisible;
+    private Boolean expendituresVisible;
 
+    public Boolean getExpendituresVisible() {
+        return expendituresVisible;
+    }
+
+    public void setExpendituresVisible(Boolean expendituresVisible) {
+        this.expendituresVisible = expendituresVisible;
+    }
+
+    public Boolean getPledgeVisible() {
+        return pledgeVisible;
+    }
+
+    public void setPledgeVisible(Boolean pledgeVisible) {
+        this.pledgeVisible = pledgeVisible;
+    }
     public int getYearsInRange() {
         return yearsInRange;
     }
@@ -194,6 +211,8 @@ public class OrgProfileFilterForm extends ActionForm {
             setOrgIds(null);
             setSelZoneIds(null);
             setSelRegionId(null);
+            pledgeVisible=false;
+            expendituresVisible=false;
         }
      
     }

@@ -59,6 +59,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.NameValueYearHelper;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
@@ -271,14 +273,20 @@ public class ChartWidgetUtil {
             // apply calendar filter
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
-            Double fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
-            result.addValue(fundingPledge/divideByMillionDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
+            Double fundingPledge=0d;
+            if (filter.isPledgeVisible()) {
+                fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
+                result.addValue(fundingPledge / divideByMillionDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
+            }
             DecimalWraper fundingComm = getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT,Constants.ACTUAL);
             result.addValue(fundingComm.getValue().divide(divideByMillionDenominator), actComTranslatedTitle, new Long(i));
             DecimalWraper fundingDisb = getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT,Constants.ACTUAL);
             result.addValue(fundingDisb.getValue().divide(divideByMillionDenominator), actDisbTranslatedTitle, new Long(i));
-            DecimalWraper fundingExp = getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE,Constants.ACTUAL);
-            result.addValue(fundingExp.getValue().divide(divideByMillionDenominator), actExpTranslatedTitle, new Long(i));
+            DecimalWraper fundingExp=new DecimalWraper();
+            if (filter.isExpendituresVisible()) {
+                fundingExp = getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE, Constants.ACTUAL);
+                result.addValue(fundingExp.getValue().divide(divideByMillionDenominator), actExpTranslatedTitle, new Long(i));
+            }
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0||fundingExp.doubleValue()!=0) {
 				nodata = false;
 			}
@@ -288,13 +296,13 @@ public class ChartWidgetUtil {
             totalExpenditures = totalExpenditures.add(fundingExp.getValue());
 		}
 
-        if (totalPledges == 0.0)
+        if (totalPledges == 0.0&&filter.isPledgeVisible())
         	result.removeRow(pledgesTranslatedTitle);
         if (totalCommitments.equals(new BigDecimal(0)))
         	result.removeRow(actComTranslatedTitle);
         if (totalDisbursements.equals(new BigDecimal(0)))
         	result.removeRow(actDisbTranslatedTitle);
-        if (totalExpenditures.equals(new BigDecimal(0)))
+        if (totalExpenditures.equals(new BigDecimal(0))&&filter.isExpendituresVisible())
         	result.removeRow(actExpTranslatedTitle);
         
         
@@ -1711,9 +1719,10 @@ public class ChartWidgetUtil {
         double totalPlannedPldges = 0;
         String oql = "select fd ";
         oql += " from ";
-        oql += AmpOrganisation.class.getName()
-                + " org inner join org.fundingDetails fd ";
-        oql += " where    fd.adjustmentType = 0 ";
+        oql += FundingPledgesDetails.class.getName()
+                + " fd inner join fd.pledgeid plg ";
+        oql += " inner join  plg.organization org  ";
+        oql += " where  fd.funding_date>=:startDate and fd.funding_date<=:endDate   ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
@@ -1721,9 +1730,8 @@ public class ChartWidgetUtil {
         } else {
             oql += " and org.ampOrgId in (" + getInStatment(orgIds) + ") ";
         }
-        oql += " and fd.date>=:startDate and fd.date<=:endDate ";
         Session session = PersistenceManager.getRequestDBSession();
-        List<AmpPledge> fundingDets = null;
+        List<FundingPledgesDetails> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -1732,11 +1740,11 @@ public class ChartWidgetUtil {
                 query.setLong("orgGroupId", orgGroupId);
             }
             fundingDets = query.list();
-            Iterator<AmpPledge> fundDetIter = fundingDets.iterator();
+            Iterator<FundingPledgesDetails> fundDetIter = fundingDets.iterator();
             while (fundDetIter.hasNext()) {
-                AmpPledge pledge = fundDetIter.next();
+                FundingPledgesDetails pledge = fundDetIter.next();
                 //converting amounts
-                java.sql.Date dt = new java.sql.Date(pledge.getDate().getTime());
+                java.sql.Date dt = new java.sql.Date(pledge.getFunding_date().getTime());
                 double frmExRt = Util.getExchange(pledge.getCurrency().getCurrencyCode(), dt);
                 double toExRt = Util.getExchange(currCode, dt);
                 DecimalWraper amt = CurrencyWorker.convertWrapper(pledge.getAmount(), frmExRt, toExRt, dt);

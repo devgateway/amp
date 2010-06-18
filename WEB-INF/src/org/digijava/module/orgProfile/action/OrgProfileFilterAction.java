@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,6 +41,7 @@ public class OrgProfileFilterAction extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
+        ServletContext ampContext=getServlet().getServletContext();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
         String reset = request.getParameter("reset");
@@ -54,6 +56,8 @@ public class OrgProfileFilterAction extends Action {
             orgForm.setSelRegionId(null);
             orgForm.setSelZoneIds(null);
             orgForm.setYearsInRange(5);
+            orgForm.setExpendituresVisible(FeaturesUtil.isVisibleFeature("Expenditures",  ampContext));
+            orgForm.setPledgeVisible(FeaturesUtil.isVisibleModule("Pledges",  ampContext));
         }
 
         // create filter dropdowns

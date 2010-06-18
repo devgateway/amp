@@ -68,7 +68,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.dataExchange.action.ImportValidationEventHandler;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
@@ -107,6 +106,7 @@ import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.hibernate.type.NullableType;
 import org.xml.sax.SAXException;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
@@ -122,7 +122,7 @@ public class DEImportBuilder {
 	private static Logger logger = Logger.getLogger(DEImportBuilder.class);
 	private DEImportItem ampImportItem;
 	private InputStream testStream;
-
+	
 	public InputStream getTestStream() {
 		return testStream;
 	}
@@ -166,20 +166,30 @@ public class DEImportBuilder {
 		
 	}
 	
-	private AmpActivity loadAmpActivity(Boolean update){
+	private AmpActivity loadAmpActivity(ActivityType actType, Boolean update){
 		AmpActivity activity = null;
 		if(!update) activity = new AmpActivity();
-		else activity = getAmpActivityByComposedKey(getDESourceSetting().getUniqueIdentifier(), getDESourceSetting().getUniqueIdentifierSeparator());
+		else activity = getAmpActivityByComposedKey(actType,getDESourceSetting().getUniqueIdentifier(), getDESourceSetting().getUniqueIdentifierSeparator());
 		return activity;
 	}
 	
 	
-	private AmpActivity getAmpActivityByComposedKey(String key, String separator) {
+	
+	private AmpActivity getAmpActivityByComposedKey(ActivityType actType, String key, String separator) {
 		// TODO Auto-generated method stub
 		AmpActivity activity = null;
 		//activity = ;
+		String dbKey 					= 	actType.getDbKey();
+		HashMap<String, String> hm		= 	new HashMap<String, String>();
+		HashMap<String, NullableType> hmType	= 	new HashMap<String, NullableType>();
+		DataExchangeUtils.generateHashMapTypes(hmType);
+		String query					=	DataExchangeUtils.generateQuery(dbKey, key, separator, hm);
+		activity						=	DataExchangeUtils.getActivityByComposedKey(query, hm,hmType);
+		
 		return activity;
 	}
+
+
 
 	private void updateActivity(AmpActivity activity, ActivityType actType, Boolean update ){
 		//update = true for update activity

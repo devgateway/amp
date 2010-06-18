@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,11 +37,13 @@ import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
+import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.NullableType;
 
 /**
  * @author dan
@@ -333,20 +337,70 @@ public class DataExchangeUtils {
         return obResult;
 	}
 	
+	public static String generateQuery(String info, String key, String separator, HashMap<String, String> hs) {
+		// TODO Auto-generated method stub
+		StringTokenizer stInfo = new StringTokenizer(info, separator);
+		StringTokenizer stKey = new StringTokenizer(key, separator);
+		if(stInfo.countTokens() != stKey.countTokens())
+			return null;
+		String query = "";
+		ArrayList<String> alInfo = new ArrayList<String>();
+		while  (stInfo.hasMoreElements())
+			     {
+					String token = (String)stInfo.nextElement();
+					alInfo.add(token);
+			     }
+		
+		query = "select o from " + AmpActivity.class.getName() + " o where true";
+		
+		int i=0;
+		hs = new HashMap<String,String>();
+		while  (stKey.hasMoreElements())
+		{
+			String token = (String)stKey.nextElement();
+			if(DataExchangeConstants.COLUMN_KEY_ID.equals(token.toLowerCase().trim()))
+			{
+				query	+=	" and TRIM(lower(a.ampActivityId)) = :id";
+				hs.put(DataExchangeConstants.COLUMN_KEY_ID, alInfo.get(i).trim().toLowerCase());
+			}
+			if(DataExchangeConstants.COLUMN_KEY_AMPID.equals(token.toLowerCase().trim()))
+			{
+				query	+=	" and TRIM(lower(a.ampId)) = :ampid";
+				hs.put(DataExchangeConstants.COLUMN_KEY_AMPID, alInfo.get(i).trim().toLowerCase());
+			}
+			if(DataExchangeConstants.COLUMN_KEY_PTIP.equals(token.toLowerCase().trim()))
+			{
+				query	+=	" and TRIM(lower(a.crisNumber)) = :ptip";
+				hs.put(DataExchangeConstants.COLUMN_KEY_PTIP, alInfo.get(i).trim().toLowerCase());
+			}
+			
+			if(DataExchangeConstants.COLUMN_KEY_TITLE.equals(token.toLowerCase().trim()))
+			{
+				query	+=	" and TRIM(lower(a.name)) = :title";
+				hs.put(DataExchangeConstants.COLUMN_KEY_TITLE, alInfo.get(i).trim().toLowerCase());
+			}
+			i++;
+		}
+		return query;
+	}
 	
-	  public static AmpActivity getActivityByComposedKey(String key) {
+	  public static AmpActivity getActivityByComposedKey(String query, HashMap<String,String> param,HashMap<String,NullableType> types) {
 		    AmpActivity activity = null;
 		    Session session = null;
 		    try {
 		    	 session = PersistenceManager.getRequestDBSession();
-		      String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
-		          "where lower(a.name) = :lowerName";
-		      Query qry = session.createQuery(qryStr);
-		      qry.setString("lowerName", key.toLowerCase());
-		      Iterator itr = qry.list().iterator();
-		      if (itr.hasNext()) {
-		        activity = (AmpActivity) itr.next();
-		      }
+//		      String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
+//		          "where lower(a.name) = :lowerName";
+		      Query qry = session.createQuery(query);
+//		      qry.setString("lowerName", key.toLowerCase());
+		      for (Iterator it = param.keySet().iterator(); it.hasNext();) {
+				String key = (String) it.next();
+				qry.setParameter(key, param.get(key), types.get(key));
+			}
+		      List  result=qry.list();
+	            if (result.size() > 0){
+	            	activity= (AmpActivity) result.get(0);
+	            }
 		    }
 		    catch (Exception e) {
 		      logger.debug("Exception in getActivityByComposedKey() " + e.getMessage());
@@ -900,6 +954,16 @@ public class DataExchangeUtils {
         }
         return site;
     }
+
+
+	public static void generateHashMapTypes(HashMap<String, NullableType> hmType) {
+		// TODO Auto-generated method stub
+		hmType.put(DataExchangeConstants.COLUMN_KEY_ID, Hibernate.LONG);
+		hmType.put(DataExchangeConstants.COLUMN_KEY_AMPID, Hibernate.STRING);
+		hmType.put(DataExchangeConstants.COLUMN_KEY_PTIP, Hibernate.STRING);
+		hmType.put(DataExchangeConstants.COLUMN_KEY_TITLE, Hibernate.STRING);
+		
+	}
 
 	
 }

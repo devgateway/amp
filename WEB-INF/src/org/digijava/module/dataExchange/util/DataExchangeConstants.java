@@ -38,4 +38,10 @@ public class DataExchangeConstants {
 	public static final String MISSING_TYPE_OF_ASSISTANCE = "Missing type of assistance";
 	
 	public static final String TEXT = "text";
+	
+	public static final String COLUMN_KEY_TITLE = "title";
+	public static final String COLUMN_KEY_ID = "id";
+	public static final String COLUMN_KEY_AMPID = "ampid";
+	public static final String COLUMN_KEY_PTIP = "ptip";
+	
 }

@@ -1582,7 +1582,7 @@ public class DEImportBuilder {
 	
 	//generating the HashMap with the selected fields from UI
 	public void generateFieldHashMap(){
-		for (Iterator it = this.getDESourceSetting().getFields2().iterator(); it.hasNext();) {
+		for (Iterator it = this.getDESourceSetting().getFields().iterator(); it.hasNext();) {
 			String field = (String) it.next();
 			this.getHashFields().put(field, new Boolean(true));
 		}

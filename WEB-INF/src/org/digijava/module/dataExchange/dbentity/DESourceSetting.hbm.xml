@@ -21,11 +21,12 @@
 		<many-to-one name="importWorkspace" column="amp_team_id" lazy="false" 
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 		
-		<set name="fields2" table="de_source_setting_fields" cascade="all" lazy="false">
+		<list name="fields" table="de_source_setting_fields" cascade="all" lazy="false">
 			<cache usage="read-write"/>
 			<key column="de_source_setting_id" />
+			<list-index column="index_column" />
 			<element column="field_string" type="string" />
-		</set>
+		</list>
 		
 		<list name="logs" lazy="false" cascade="all-delete-orphan">
 			<key column="de_source_setting_id" />

@@ -78,6 +78,9 @@ public class CreateSourceAction extends MultiAction {
 		
 		CreateSourceForm iform = (CreateSourceForm) form;
 		
+		if(request.getParameter("saveImport")!=null) 
+			return modeSave(mapping, iform, request, response);
+		
 		String[] langArray = {"en","fr","es"};
 		if(iform.getLanguages() == null || iform.getLanguages().length < 1) iform.setLanguages(langArray);
 		
@@ -108,18 +111,8 @@ public class CreateSourceAction extends MultiAction {
 		Collection<AmpTeam> teams	= TeamUtil.getAllTeams();
 		iform.setTeamValues(teams);
 		
-		iform.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true, 0) );
+		iform.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true) );
 		
-		
-		
-		if(request.getParameter("loadFile")!=null) {
-			session.setAttribute("DEfileUploaded", "true");
-			return modeLoadFile(mapping, iform, request, response);
-		}
-		//if(request.getParameter("import")!=null) return modeUploadedFile(mapping, iform, request, response);
-		if(request.getParameter("saveImport")!=null) 
-			return modeSave(mapping, iform, request, response);
-	
 		ActionErrors errors = (ActionErrors) session.getAttribute("DEimportErrors");
 		if(errors != null){
 			saveErrors(request, errors);
@@ -135,7 +128,7 @@ public class CreateSourceAction extends MultiAction {
 		DESourceSetting srcSetting	= new DESourceSetting();
 		srcSetting.setName(form.getName() );
 		srcSetting.setSource( form.getSource() );
-		srcSetting.setFields2( new TreeSet<String>( CreateSourceUtil.getFieldNames(form.getActivityTree(), null) ) );
+		srcSetting.setFields(  CreateSourceUtil.getFieldNames(form.getActivityTree(), null) );
 		srcSetting.setImportStrategy( form.getImportStrategy() );
 		srcSetting.setUniqueIdentifier( form.getUniqueIdentifier() );
 		srcSetting.setApprovalStatus( form.getApprovalStatus() );

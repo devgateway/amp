@@ -99,7 +99,7 @@ public class ExportHelper {
 		return retValue.toString();
 	}
 
-	public static AmpColumnEntry getActivityStruct(String name, String key, String path,  Class clazz, boolean requred, int param) {
+	public static AmpColumnEntry getActivityStruct(String name, String key, String path,  Class clazz, boolean requred) {
 		AmpColumnEntry retValue = new AmpColumnEntry(key + ".select", name, path);
 		retValue.setSelect(requred);
 		retValue.setMandatory(requred);
@@ -121,14 +121,12 @@ public class ExportHelper {
 				ParameterizedType type = (ParameterizedType) field.getGenericType();
 				Class claaa = (Class) (type.getActualTypeArguments()[0]);
 				if (claaa.getName().startsWith("org.digijava.module.dataExchange.jaxb")) {
-					if (param < 1)
-						retValue.getList().add(getActivityStruct(field.getName(), newKey + (++index) + "]", newPath, claaa, mandatory, param+1));
+					retValue.getList().add(getActivityStruct(field.getName(), newKey + (++index) + "]", newPath, claaa, mandatory));
 				}
 			} else {
 				Class claaa = (Class) (field.getGenericType());
 				if (claaa.getName().startsWith("org.digijava.module.dataExchange.jaxb")) {
-					if (param < 1)
-					retValue.getList().add(getActivityStruct(field.getName(), newKey + (++index) + "]", newPath, claaa, mandatory, param+1));
+					retValue.getList().add(getActivityStruct(field.getName(), newKey + (++index) + "]", newPath, claaa, mandatory));
 				}
 			}
 		}

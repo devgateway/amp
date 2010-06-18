@@ -99,7 +99,7 @@ public class ManageSourceAction extends MultiAction {
 		msForm.setImportWorkspaceName( ss.getImportWorkspace().getName() );
 		msForm.setLanguage( ss.getLanguageId() );
 		msForm.setFields( new ArrayList<String>() );
-		msForm.getFields().addAll( ss.getFields2() );
+		msForm.getFields().addAll( ss.getFields() );
 		msForm.setDbId( ss.getId() );
 		msForm.setUniqueIdentifier( ss.getUniqueIdentifier() );
 		

@@ -40,7 +40,7 @@ public class DESourceSetting implements XmlWrappable{
 	
 	private AmpTeam importWorkspace;
 	private String approvalStatus;
-	private Set<String>  fields2;
+	private List<String>  fields;
 	private String uniqueIdentifier;
 	private String uniqueIdentifierSeparator	= "|";
 	
@@ -289,18 +289,20 @@ public class DESourceSetting implements XmlWrappable{
 		this.time = time;
 	}
 
+
+
 	/**
-	 * @return the fields2
+	 * @return the fields
 	 */
-	public Set<String> getFields2() {
-		return fields2;
+	public List<String> getFields() {
+		return fields;
 	}
 
 	/**
-	 * @param fields2 the fields2 to set
+	 * @param fields the fields to set
 	 */
-	public void setFields2(Set<String> fields2) {
-		this.fields2 = fields2;
+	public void setFields(List<String> fields) {
+		this.fields = fields;
 	}
 
 	@Override
@@ -308,8 +310,5 @@ public class DESourceSetting implements XmlWrappable{
 		return new WrapperSourceSetting(this);
 	}
 
-
-	
-	
 	
 }

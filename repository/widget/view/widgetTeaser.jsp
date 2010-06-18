@@ -185,7 +185,7 @@
 
                             }
                     </script>
-                    <div id="main">
+                    <div id="main" style="width:610px">
                         <DIV id="subtabs">
                             <div style="pa">
                                 <UL>

@@ -154,6 +154,7 @@
 			</tr>
 			<tr>
 				<td style="text-align: center;">
+					<html:hidden property="action" value="execute"/>
 						<html:hidden property="executingSourceId" styleId="executingSourceId"/>
 						<html:file property="xmlFile"></html:file>
 				</td>

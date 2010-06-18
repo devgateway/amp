@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.engine.DEImportBuilder;
 import org.digijava.module.dataExchange.engine.FileSourceBuilder;
@@ -64,6 +65,9 @@ public class ManageSourceAction extends MultiAction {
 		if ( "delete".equals( msForm.getAction() ) && msForm.getSelectedSourceId() != null) {
 			new SessionSourceSettingDAO().deleteObject(msForm.getSelectedSourceId() );
 			return null;
+		}
+		if ( "execute".equals( msForm.getAction() ) ) {
+			modeExecuteSource(mapping, msForm, request, response);
 		}
 		
 		return modeShowSourceList(mapping, msForm, request, response);
@@ -115,6 +119,7 @@ public class ManageSourceAction extends MultiAction {
 		}
 		String result = outputStream.toString();
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId() );
+		ss.setLogs(new ArrayList<DELogPerExecution>());
 		
 		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
 		DEImportItem 	deItem  = new DEImportItem(fsb);

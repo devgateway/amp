@@ -1058,154 +1058,222 @@ function commentWin(val) {
 
 
 
-													<module:display name="Contact Information"
-														parentModule="PROJECT MANAGEMENT">
-														<feature:display name="Donor Contact Information"
-															module="Contact Information">
+													
+													
+													<module:display name="Contact Information"	parentModule="PROJECT MANAGEMENT">
+														<feature:display name="Donor Contact Information"module="Contact Information">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding=3 cellSpacing=1
-																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TABLE width="100%" cellPadding="3" cellSpacing="1"vAlign="top" align="top" bgcolor="#aaaaaa">
 																	<TR>
-																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																		<b><digi:trn
-																			key="aim:donorFundingContactInformation">
-																				Donor funding Contact Information
-																			</digi:trn></b></TD>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; 
+																			<IMG height="10"src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15"/>
+																			<b><digi:trn >Donor funding Contact Information</digi:trn></b>
+																		</TD>
 																	</TR>
-																	<field:display feature="Donor Contact Information"
-																		name="Donor First Name">
+																	<field:display feature="Donor Contact Information"	name="Donor First Name">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
-																				value="${activity.contFirstName}" />&nbsp; <c:out
-																				value="${activity.contLastName}" /></TD>
+																			<TD bgcolor="#ffffff"><i>
+																			<digi:trn>Name</digi:trn></i>:
+																			<c:if test="${not empty aimChannelOverviewForm.primaryDonorContact}">
+																				<c:out value="${aimChannelOverviewForm.primaryDonorContact.contact.name}" />&nbsp; 
+																				<c:out value="${aimChannelOverviewForm.primaryDonorContact.contact.lastname}" /></TD>
+																			</c:if> 																			
 																		</TR>
 																	</field:display>
-																	<field:display feature="Donor Contact Information"
-																		name="Donor Email">
+																	<field:display feature="Donor Contact Information"	name="Donor Email">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
-																				var="mailTo" value="mailto:${activity.email}" /> <a
-																				href="mailto:${activity.email}">${activity.email}</a></TD>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn>Email</digi:trn></i>:
+																				<c:if test="${not empty aimChannelOverviewForm.primaryDonorContact}">
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryDonorContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																						</c:if>
+																					</c:forEach>																					
+																				</c:if>
+																			</TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display module="Contact Information"
-															name="Government Contact Information">
+														<feature:display module="Contact Information"name="Government Contact Information">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding=3 cellSpacing=1
-																	vAlign="top" align="top" bgcolor="#aaaaaa">
-																	<TR>
-																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																		<b><digi:trn key="aim:mofedContactInformation">
-																			MOFED Contact Information</digi:trn></b></TD>
-																	</TR>
-																	<field:display feature="Government Contact Information"
-																		name="Government First Name">
+																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
-																				value="${activity.mofedCntFirstName}" />&nbsp; <c:out
-																				value="${activity.mofedCntLastName}" /></TD>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
+																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
+																				<b><digi:trn>MOFED Contact Information</digi:trn></b>
+																			</TD>
+																		</TR>
+																		<field:display feature="Government Contact Information"	name="Government First Name">
+																			<TR>
+																				<TD bgcolor="#ffffff">
+																					<i><digi:trn>Name</digi:trn></i>: 
+																					<c:if test="${not empty aimChannelOverviewForm.primaryMofedContact}">
+																						<c:out value="${aimChannelOverviewForm.primaryMofedContact.contact.name}" />&nbsp; 
+																						<c:out value="${aimChannelOverviewForm.primaryMofedContact.contact.lastname}" />
+																					</c:if>
+																				</TD>
+																			</TR>
+																		</field:display>
+																		<field:display feature="Government Contact Information"	name="Government Email">
+																			<TR>
+																				<TD bgcolor="#ffffff">
+																					<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
+																					<c:if test="${not empty aimChannelOverviewForm.primaryMofedContact}">
+																						<c:forEach var="property" items="${aimChannelOverviewForm.primaryMofedContact.contact.properties}">
+																							<c:if test="${property.name=='contact email'}">
+																								<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																								<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																							</c:if>
+																						</c:forEach>																					
+																					</c:if>
+																				</TD>
+																			</TR>
+																		</field:display>
+																	</TABLE>
+																</TD>
+															</TR>
+														</feature:display>
+														<feature:display name="Project Coordinator Contact Information"	module="Contact Information">
+															<TR>
+																<TD>
+																<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; 
+																			<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
+																			<b><digi:trn>Project Coordinator Contact Information</digi:trn></b>
+																		</TD>
+																	</TR>
+																	<field:display feature="Project Coordinator Contact Information" name="Project Coordinator First Name">
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn>Name</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primaryprojCoordinatorContact}">
+																					<c:out value="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.name}" />&nbsp; 
+																					<c:out value="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.lastname}" />
+																				</c:if>
+																			</TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Government Contact Information"
-																		name="Government Email">
+																	<field:display feature="Project Coordinator Contact Information"name="Project Coordinator Email">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonEmail">Email</digi:trn></i>: <a
-																				href="mailto:${activity.mofedCntEmail}">${activity.mofedCntEmail}</a></TD>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primaryprojCoordinatorContact}">
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a>;
+																						</c:if>
+																					</c:forEach>																					
+																				</c:if>
+																			</TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display name="Project Coordinator Contact Information"
-															module="Contact Information">
+														<feature:display name="Sector Ministry Contact Information"	module="Contact Information">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding=3 cellSpacing=1
-																	vAlign="top" align="top" bgcolor="#aaaaaa">
-																	<TR>
-																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																		<b><digi:trn
-																			key="aim:projectCoordinator">
-																				Project Coordinator Contact Information
-																			</digi:trn></b></TD>
-																	</TR>
-																	<field:display feature="Project Coordinator Contact Information"
-																		name="Project Coordinator First Name">
+																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
-																				value="${activity.prjCoFirstName}" />&nbsp; <c:out
-																				value="${activity.prjCoLastName}" /></TD>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
+																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
+																				<b><digi:trn>Sector Ministry Contact Information</digi:trn></b>
+																			</TD>
+																	</TR>
+																	<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name">
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn>Name</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primarySectorMinistryContact}">
+																					<c:out value="${aimChannelOverviewForm.primarySectorMinistryContact.contact.name}" />&nbsp; 
+																					<c:out value="${aimChannelOverviewForm.primarySectorMinistryContact.contact.lastname}" />
+																				</c:if>
+																			</TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Project Coordinator Contact Information"
-																		name="Project Coordinator Email">
+																	<field:display feature="Sector Ministry Contact Information"name="Sector Ministry Contact Email">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
-																				var="mailTo" value="mailto:${activity.prjCoEmail}" /> <a
-																				href="mailto:${activity.prjCoEmail}">${activity.prjCoEmail}</a></TD>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primarySectorMinistryContact}">
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primarySectorMinistryContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																						</c:if>
+																					</c:forEach>																					
+																				</c:if>
+																			</TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display name="Sector Ministry Contact Information"
-															module="Contact Information">
+														<feature:display name="Implementing/Executing Agency Contact Information"	module="Contact Information">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding=3 cellSpacing=1
-																	vAlign="top" align="top" bgcolor="#aaaaaa">
-																	<TR>
-																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																		<b><digi:trn
-																			key="aim:sectorMinistryCnt">
-																				Sector Ministry Contact Information
-																			</digi:trn></b></TD>
-																	</TR>
-																	<field:display feature="Sector Ministry Contact Information"
-																		name="Sector Ministry Contact First Name">
+																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
-																				value="${activity.secMiCntFirstName}" />&nbsp; <c:out
-																				value="${activity.secMiCntLastName}" /></TD>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
+																				<IMG height="10" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15">
+																				<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
+																			</TD>
+																	</TR>
+																	<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact First Name">
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn>Name</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primaryImplExecutingAgencyContact}">
+																					<c:out value="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.name}" />&nbsp; 
+																					<c:out value="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.lastname}" />
+																				</c:if>
+																			</TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Sector Ministry Contact Information"
-																		name="Sector Ministry Contact Email">
+																	<field:display feature="Implementing/Executing Agency Contact Information"name="Implementing/Executing Agency Contact Email">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i><digi:trn
-																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
-																				var="mailTo" value="mailto:${activity.secMiCntEmail}" /> <a
-																				href="mailto:${activity.secMiCntEmail}">${activity.secMiCntEmail}</a></TD>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn>Email</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primaryImplExecutingAgencyContact}">
+																					<c:forEach var="property" items="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.properties}">
+																						<c:if test="${property.name=='contact email'}">
+																							<c:set	var="mailTo" value="mailto:${property.value}" /> 
+																							<a	href="${mailTo}">${property.value}</a> ; &nbsp;	
+																						</c:if>
+																					</c:forEach>																					
+																				</c:if>
+																			</TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
 														</feature:display>
-													</module:display>
+													</module:display>													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
 													<field:display name="Accession Instrument" feature="Identification">
                                                     <c:set var="accessionInstrument">
 														${aimChannelOverviewForm.accessionInstrument}

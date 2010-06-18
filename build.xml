@@ -383,7 +383,7 @@
 		<echo message="Exporting stored functions from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
 			<classpath refid="compile.classpath"/>
-			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,') RETURNS ',returns,' ',body, ';;') FROM proc WHERE db='${clean.source}'</transaction>
+			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,')',if(returns!='',' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}';</transaction>
 		</sql>
 		<echo message="Exporting views from ${clean.source}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
@@ -483,6 +483,11 @@
 			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>
 			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>
 			
+			<!-- GIS DATA -->
+			<transaction>INSERT IGNORE dg_gis_map (SELECT * from ${clean.source}.dg_gis_map)</transaction>
+			<transaction>INSERT IGNORE dg_gis_map_segment (SELECT * from ${clean.source}.dg_gis_map_segment)</transaction>
+			<transaction>INSERT IGNORE dg_gis_map_shape (SELECT * from ${clean.source}.dg_gis_map_shape)</transaction>
+			<transaction>INSERT IGNORE dg_gis_map_point (SELECT * from ${clean.source}.dg_gis_map_point)</transaction>				
 		</sql>
 		
 		<echo message="Importing functions and views into ${clean.db}..."/>

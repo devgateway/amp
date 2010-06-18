@@ -74,7 +74,8 @@ public final class ArConstants {
 	public final static String EXPENDITURE="Expenditures";
 	public final static String PLEDGES_COMMITMENT="Pledges Commitments";
 	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
-	public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
+	public final static String PLEDGE="Pledge";
+	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
 	
     
 	//Computed Field Constants
@@ -120,7 +121,7 @@ public final class ArConstants {
     public final static String PLANNED_DISBURSEMENT_COUNT="PLANNED_DISBURSEMENT_COUNT";
     
     public final static String PLEDGED_TOTAL="PLEDGE_TOTAL";
-    public final static String ACTUAL_PLEDGE_COMMITMENT = "ACTUAL_PLEDGE_COMMITMENT";
+    public final static String TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT = "TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT";
     
     //dates variable names
     public final static String ACTIVITY_CLOSE_DATE_VALUE = "ACTIVITY_CLOSE_DATE_VALUE";

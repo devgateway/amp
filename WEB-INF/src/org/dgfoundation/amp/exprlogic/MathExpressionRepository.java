@@ -76,6 +76,12 @@ public class MathExpressionRepository {
 	public static final String CONSUMPTION_RATE = "consumptionRate";
 
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENT = "selectedYearPlannedDisbursement";
+
+	/***
+	 * Pledge Columns
+	 */
+	public static final String PERCENTAGE_OF_DISBURSEMENT= "percentageOfDisbursement";
+	public static final String COMMITMENT_GAP= "commitmentGap";
 	
 	//public static final String PLEDGES_COMMITMENT_GAP = "commitmentgap";
 	
@@ -124,10 +130,36 @@ public class MathExpressionRepository {
 		buildCumulatedDisbursements();
 		buildConsumptionRate();
 		buildSelectdYearOfPlannedDisbursements();
+		
+		buildPercentageOfDisbursement();
+		buildCommitmentGap();
 //		buildPledgesGap();
 //		buildTotalPledged();
 	}
 
+	/**
+	 * buildPledgesPercentageOfDisbursement (Total disbursed by year/quarter/month)/(TOTAL_ACTUAL_DISBURSEMENT)*100 
+	 */
+	private static void buildPercentageOfDisbursement() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
+			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
+			expresions.put(PERCENTAGE_OF_DISBURSEMENT, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	private static void buildCommitmentGap() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLEDGED_TOTAL, ArConstants.TOTAL_ACTUAL_COMMITMENT);
+			expresions.put(COMMITMENT_GAP, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	
 	/**
 	 * buildOverageProjects Current Date - Proposed Completion
 	 */

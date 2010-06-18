@@ -857,6 +857,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Average Disbursement Rate" feature="Computed Fields"></field:display>
 <field:display name="Project Age Ratio" feature="Computed Fields"></field:display>
 <field:display name="Activity Count" feature="Computed Fields"></field:display>
+<field:display name="Percentage of Disbursement" feature="Computed Fields"></field:display>
+<field:display name="Commitment Gap" feature="Computed Fields"></field:display>
+
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>

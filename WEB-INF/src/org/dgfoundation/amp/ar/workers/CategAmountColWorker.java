@@ -303,6 +303,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		case 6:
 			trStr = ArConstants.PLEDGES_DISBURSEMENT;
 			break;
+		case 7:
+			trStr = ArConstants.PLEDGE;
+			break;
 		}
 
 		if(trStr!=null) {

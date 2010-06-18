@@ -21,7 +21,9 @@ public class DELogPerExecution implements XmlWrappable{
 	private List<DELogPerItem> logItems;
 	
 	
-	
+	public DELogPerExecution() {
+		super();
+	}
 	public DELogPerExecution(DESourceSetting deSourceSetting) {
 		super();
 		this.deSourceSetting = deSourceSetting;

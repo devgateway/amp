@@ -21,6 +21,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -870,6 +871,36 @@ public class DataExchangeUtils {
 		
 	}	
 	
+    /**
+     * Get site by its primary key
+     * @param id site's primary key
+     * @return Site
+     * @throws DgException if database error occurs
+     */
+    public static Site getSite(Long id) throws DgException {
+        Site site = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getSession();
+            site = (Site)session.get(Site.class, id);
+        }
+        catch (Exception ex) {
+            logger.debug("Unable to get site from database ", ex);
+            throw new DgException("Unable to get site from database ", ex);
+        }
+        finally {
+            try {
+                if (session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            }
+            catch (Exception ex1) {
+                logger.warn("releaseSession() failed ", ex1);
+            }
+        }
+        return site;
+    }
+
 	
 }
 

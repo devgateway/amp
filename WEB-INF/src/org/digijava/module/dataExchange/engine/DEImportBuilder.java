@@ -70,6 +70,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.dataExchange.action.ImportValidationEventHandler;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.jaxb.AdditionalFieldType;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
@@ -94,6 +95,7 @@ import org.digijava.module.dataExchange.pojo.DEFinancInstrMissingLog;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
 import org.digijava.module.dataExchange.pojo.DEMTEFMissingLog;
+import org.digijava.module.dataExchange.pojo.DEMockTest;
 import org.digijava.module.dataExchange.pojo.DEOrgMissingLog;
 import org.digijava.module.dataExchange.pojo.DEProgramMissingLog;
 import org.digijava.module.dataExchange.pojo.DEProgramPercentageLog;
@@ -799,6 +801,7 @@ public class DEImportBuilder {
 			boolean isCountry = false;
 			boolean isZone = false;
 			boolean isDistrict = false;
+			//senegal add
 			if("001".equals(location.getLocationName().getCode()) || "0000".equals(location.getLocationName().getCode()) ){
 				ampCVLoc = DynLocationManagerUtil.getLocationByCode("87274", (AmpCategoryValue)null );
 
@@ -807,6 +810,7 @@ public class DEImportBuilder {
 				acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
 				isCountry = true;
 			}
+			//normal use
 			else {
 					ampCVLoc = DynLocationManagerUtil.getLocationByCode(location.getLocationName().getCode(), (AmpCategoryValue)null );
 					
@@ -1071,7 +1075,15 @@ public class DEImportBuilder {
 	//documents
 	private void processDocuments(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
-		MockHttpServletRequest request = null;//(new MockStrutTest()).getActionMockObjectFactory().getMockRequest();
+		//(new MockStrutTest()).getActionMockObjectFactory().getMockRequest();
+		DEMockTest mock = new DEMockTest();
+		try {
+			mock.setUp();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MockHttpServletRequest request = mock.getRequest();
 		if(actType.getDocuments() != null || actType.getDocuments().size() > 0){
 			setTeamMember(request, "admin@amp.org", 0L);
 			Session writeSession = DocumentManagerUtil.getWriteSession(request);
@@ -1102,7 +1114,14 @@ public class DEImportBuilder {
 	//related links
 	private void processRelatedLinks(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
-		MockHttpServletRequest request = null;
+		DEMockTest mock = new DEMockTest();
+		try {
+			mock.setUp();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MockHttpServletRequest request = mock.getRequest();
 		if(actType.getRelatedLinks() != null || actType.getRelatedLinks().size() > 0){
 			setTeamMember(request, "admin@amp.org", 0L);
 			Session writeSession = DocumentManagerUtil.getWriteSession(request);
@@ -1592,6 +1611,7 @@ public class DEImportBuilder {
 	
 	public boolean checkInputString(String inputLog){
 		boolean isOk = true;
+		Activities acts = null;
 		DEImportValidationEventHandler log = new DEImportValidationEventHandler();
 		try {
 			JAXBContext jc = JAXBContext.newInstance(Constants.JAXB_INSTANCE);
@@ -1617,7 +1637,7 @@ public class DEImportBuilder {
 	                 // we can use custom validation event handler
 	                 m.setEventHandler(log);
 	                 //m.setValidating(false);
-	                 this.getAmpImportItem().setActivities( (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.testStream) );
+	                  acts = (org.digijava.module.dataExchange.jaxb.Activities) m.unmarshal(this.testStream) ;
 	           }
 	        } 
 			catch (SAXException e) {
@@ -1628,6 +1648,9 @@ public class DEImportBuilder {
 	        	jex.printStackTrace();
 	        }
 	        inputLog += log.getLog();
+	        if(isOk)
+	        	this.getAmpImportItem().setActivities(acts);
+	        else this.getAmpImportItem().setActivities(null);
 	        return isOk;
 	        
 	}

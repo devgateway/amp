@@ -81,6 +81,7 @@ public class ExportToWord extends Action {
             HttpSession session = request.getSession();
             FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
             List<ExportSettingHelper> helpers = (List<ExportSettingHelper>) request.getAttribute("orgProfileExportSettings");
+            Boolean monochrome = (Boolean)request.getAttribute("orgProfileMonochrome");
             AmpOrganisation organization = filter.getOrganization();
             String multipleSelected = TranslatorWorker.translateText("Multiple Organizations Selected", langCode, siteId);
             String all = TranslatorWorker.translateText("All", langCode, siteId);
@@ -163,6 +164,7 @@ public class ExportToWord extends Action {
                         opt.setHeight(350);
                         opt.setSiteId(siteId);
                         opt.setLangCode(langCode);
+                        opt.setMonochrome(monochrome);
                         JFreeChart chart = null;
                         JFreeChart chartDisb = null;
                         Table orgSummaryTbl = null;

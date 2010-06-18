@@ -87,6 +87,7 @@
                 <digi:trn>this option will export your selection in PDF format</digi:trn>
             </c:set>
             <html:radio  property="selectedFormatOfExport" value="1" title="${trn}"><digi:trn>Export to PDF</digi:trn><digi:img  hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF'/></html:radio><br/>
+            <html:checkbox property="monochromeOption" value="true" title="${trn}"><digi:trn>Monochrome Graphs</digi:trn></html:checkbox><br/>
         </div>
     </div>
     <div style="clear: both;text-align: center">

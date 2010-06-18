@@ -74,6 +74,7 @@ public class ExportToPDF extends Action {
             List<AmpDaWidgetPlace> orgPlaces = WidgetUtil.getAllOrgProfilePlaces();
             Iterator<AmpDaWidgetPlace> placeIter = orgPlaces.iterator();
             List<ExportSettingHelper> helpers = (List<ExportSettingHelper>) request.getAttribute("orgProfileExportSettings");
+            Boolean monochrome = (Boolean)request.getAttribute("orgProfileMonochrome");
             HttpSession session = request.getSession();
             FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
             String footerText = OrgProfileUtil.getFooterText(langCode, siteId, filter);
@@ -170,6 +171,7 @@ public class ExportToPDF extends Action {
                         opt.setHeight(350);
                         opt.setSiteId(siteId);
                         opt.setLangCode(langCode);
+                        opt.setMonochrome(monochrome);
                         JFreeChart chart = null;
                         JFreeChart chartDisb = null;
                         PdfPTable orgSummaryTbl = null;

@@ -2,6 +2,7 @@ package org.digijava.module.orgProfile.form;
 
 import java.util.List;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.orgProfile.helper.ExportSettingHelper;
 
 /**
@@ -13,6 +14,7 @@ public class OrgProfileExportOptionsForm extends ActionForm {
     private static final long serialVersionUID = 1L;
     private List<ExportSettingHelper> helpers;
     private int selectedFormatOfExport;
+    private boolean monochromeOption;
     private String actionType;
 
     public String getActionType() {
@@ -39,4 +41,17 @@ public class OrgProfileExportOptionsForm extends ActionForm {
     public void setHelpers(List<ExportSettingHelper> helpers) {
         this.helpers = helpers;
     }
+
+	public void setMonochromeOption(boolean monochromeOption) {
+		this.monochromeOption = monochromeOption;
+	}
+
+	public boolean isMonochromeOption() {
+		
+		return monochromeOption;
+	}
+	public void reset(ActionMapping mapping,
+            javax.servlet.http.HttpServletRequest request){
+    	monochromeOption = false;
+    }	
 }

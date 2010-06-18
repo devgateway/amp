@@ -17,6 +17,7 @@ public class ChartOption {
     private String langCode;
     private String siteId;
     private String url;
+	private Boolean monochrome ;
 
     public String getUrl() {
         return url;
@@ -89,5 +90,13 @@ public class ChartOption {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public void setMonochrome(Boolean monochromeOption) {
+		this.monochrome = monochromeOption;
+	}
+
+	public Boolean isMonochrome() {
+		return monochrome == null ? false : monochrome;
 	}
 }

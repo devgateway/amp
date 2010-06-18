@@ -124,7 +124,7 @@ import org.jfree.ui.VerticalAlignment;
 public class ChartWidgetUtil {
 
 	//Color Scheme
-	static Color[] colors = {
+	static Color[] colorsColor = {
 		new Color(0x49, 0x78, 0xb1),
 		new Color(0xb3, 0x4a, 0x47),
 		new Color(0x91, 0xaf, 0x53),
@@ -141,20 +141,30 @@ public class ChartWidgetUtil {
 		new Color(0x63, 0x4d, 0x7e),
 		new Color(0x39, 0x86, 0x9b),
 		new Color(0xc2, 0x75, 0x35)
-//Other color scheme. Vivid colors
-/*			new Color(0xeb, 0x1c, 0x24), //eb1c24
-			new Color(0xff, 0xf1, 0x00), //fff100
-			new Color(0x00, 0xa5, 0x51), //00a551
-			new Color(0x00, 0xad, 0xef), //00adef
-			new Color(0x2e, 0x31, 0x92), //2e3192
-			new Color(0xeb, 0x00, 0x8b), //eb008b
-			new Color(0xf7, 0x93, 0x1e), //f7931e
-			new Color(0x74, 0x4c, 0x28), //744c28
-			new Color(0xf8, 0x8e, 0x93), //f88e93
-			new Color(0xff, 0xf8, 0x80), //fff880
-			new Color(0x80, 0xd3, 0xa9) //80d3a9*/
 	};
 
+	static Color[] colorsMonochrome = {
+		new Color(0x55, 0x55, 0x55),
+		new Color(0x9e, 0x9e, 0x9e),
+		new Color(0x72, 0x72, 0x72),
+		new Color(0x46, 0x46, 0x46),
+		new Color(0x83, 0x83, 0x83),
+		new Color(0xc1, 0xc1, 0xc1),
+		new Color(0x9a, 0x9a, 0x9a),
+		new Color(0xc8, 0xc8, 0xc8),
+		new Color(0xaa, 0xaa, 0xaa)
+//		new Color(0x00, 0x00, 0x00),
+////		new Color(0x19, 0x19, 0x19),
+//		new Color(0x32, 0x32, 0x32),
+////		new Color(0x4b, 0x4b, 0x4b),
+//		new Color(0x64, 0x64, 0x64),
+////		new Color(0x7d, 0x7d, 0x7d),
+//		new Color(0x96, 0x96, 0x96),
+////		new Color(0xaf, 0xaf, 0xaf),
+//		new Color(0xc8, 0xc8, 0xc8),
+////		new Color(0xe1, 0xe1, 0xe1),
+//		new Color(0xfa, 0xfa, 0xfa)
+	};
 
 	private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
 
@@ -452,7 +462,7 @@ public class ChartWidgetUtil {
 			renderer.setSeriesItemLabelGenerator(i, labelGenerator);
 			renderer.setSeriesItemLabelFont(i, plainFont);
             renderer.setSeriesToolTipGenerator(i, new StandardCategoryToolTipGenerator(pattern,toolTipformat));
-            renderer.setSeriesPaint(i, colors[i]);
+            renderer.setSeriesPaint(i, opt.isMonochrome() ? colorsMonochrome[i] : colorsColor[i]);
 			renderer.setSeriesNegativeItemLabelPosition(i, new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER));
 		}
 		return chart;
@@ -829,7 +839,7 @@ public class ChartWidgetUtil {
 		legend.setBackgroundPaint(new Color(255,255,255,0));
 		List <Comparable> keys = dataset.getKeys();
         int aInt;
-       
+        Color[] colors = opt.isMonochrome() ? colorsMonochrome : colorsColor;       
         for (int i = 0; i < keys.size(); i++)
         {
             aInt = i % colors.length;

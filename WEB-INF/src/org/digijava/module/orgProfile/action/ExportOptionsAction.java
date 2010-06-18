@@ -68,7 +68,9 @@ public class ExportOptionsAction extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         OrgProfileExportOptionsForm orgForm = (OrgProfileExportOptionsForm) form;
-        request.setAttribute("orgProfileExportSettings",orgForm.getHelpers());
+        request.setAttribute("orgProfileExportSettings", orgForm.getHelpers());
+        request.setAttribute("orgProfileMonochrome", orgForm.isMonochromeOption());
+        	
         String mappingForward="";
         switch(orgForm.getSelectedFormatOfExport()){
             case Constants.EXPORT_TO_WORD: mappingForward="exportToWord";break;

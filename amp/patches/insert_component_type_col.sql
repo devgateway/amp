@@ -1,2 +1,0 @@
-insert into amp_columns(columnName, aliasName, cellType, extractorView, relatedContentPersisterClass) 
- values("Component Type", "component_type", "org.dgfoundation.amp.ar.cell.TextCell", "v_component_type", "org.digijava.module.aim.dbentity.AmpComponentType");

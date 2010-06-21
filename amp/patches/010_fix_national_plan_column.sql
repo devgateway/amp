@@ -1,2 +1,0 @@
-update amp_columns set extractorView = 'v_nationalobjectives_level_0' where extractorView = 'v_nationalobjectives';
-update amp_columns set aliasName = 'nationalojectives_0' where extractorView = 'v_nationalobjectives_level_0';

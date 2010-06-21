@@ -54,13 +54,13 @@ class Project < ActiveRecord::Base
   # Relations
   belongs_to              :donor
   belongs_to              :donor_agency
-  belongs_to              :government_counterpart
   
   belongs_to              :country_strategy
     
   # Agencies (using habtm here is not ideal, but using a rich linking model with a role argument does not work well with Rails)
   has_and_belongs_to_many :implementing_agencies, :class_name => "Agency", :join_table => "implementing_agencies_projects"
   has_and_belongs_to_many :contracted_agencies, :class_name => "Agency", :join_table => "contracted_agencies_projects"
+  has_and_belongs_to_many :government_counterparts, :class_name => "GovernmentCounterpart",  :join_table => "government_counterparts_projects"
   
   # MDG relevance
   has_many                :mdg_relevances, :dependent => :delete_all
@@ -150,7 +150,7 @@ class Project < ActiveRecord::Base
   validates_presence_of     :type_of_implementation, :aid_modality_id, :grant_loan, :officer_responsible_name, :private_support
 
   validates_inclusion_of    :on_off_budget, :in => [true, false]
-  validates_presence_of     :government_counterpart_id, :government_project_code, :if => :on_budget_validation?
+  validates_presence_of     :government_project_code, :if => :on_budget_validation?
 
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances
   validates_associated      :fundings, :funding_forecasts, :historic_funding

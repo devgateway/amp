@@ -17,9 +17,14 @@
 		<dt><%= Project.human_attribute_name('donor_agency') %></dt>
 		<dd><%= @project.donor_agency.andand.name %></dd>
 
-                <dt><%= Project.human_attribute_name('government_counterpart') %></dt>
-		<dd><%=@project.government_counterpart.andand.code %> <%= @project.government_counterpart.andand.name %></dd>
-		
+                <dt><%= Project.human_attribute_name('government_counterparts') %></dt>
+                <dd>
+                        <ul>
+                        <% @project.government_counterparts.each do |govcount| %>
+                            <li><%= govcount.name %></li>
+                        <% end %>
+                    </ul>
+                </dd>
 <!--		<dt><%= Project.human_attribute_name('country_strategy') %></dt>
 		<dd><%= @project.country_strategy.andand.strategy_number || t('.country_strategy_unavailable') %></dd>
 -->

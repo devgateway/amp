@@ -24,7 +24,7 @@ es:
         donor_project_number:
           label: 'Número do Projeto do Doador'
           description: 'Digite o número, ou uma combinação de letras e números utilizadas pela agência doadora para identificar a actividade.'
-        government_counterpart:
+        government_counterparts:
           label: Contraparte do Governo
         oecd_number:
           label: 'Número OECD'

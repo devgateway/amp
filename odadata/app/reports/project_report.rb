@@ -84,6 +84,7 @@ module Reports
       format_column(:markers) { |r| markers_list(r) }
       format_column(:implementing_agencies) { |r| format_as_html_list(r.map(&:name)) rescue nil }
       format_column(:contracted_agencies) { |r| format_as_html_list(r.map(&:name)) rescue nil }
+      format_column(:government_counterparts) { |r| format_as_html_list(r.map(&:name)) rescue nil }
       format_column(:mdgs) { |r| format_as_html_list(r.map(&:name), :class => 'fatlist') rescue nil }
       format_column(:website) { |r| auto_link(r) }
       format_column(:country_strategy) do |r| 
@@ -139,6 +140,7 @@ module Reports
       
       format_column(:implementing_agencies) { |r| r.map(&:name).join(', ') }
       format_column(:contracted_agencies) { |r| r.map(&:name).join(', ') }
+      format_column(:government_counterparts) { |r| r.map(&:name).join(', ') }
       format_column(:mdgs) { |r| r.map(&:name).join(', ') }
       format_column(:country_strategy) { |r| r.strategy_number }
       format_column(:sector_relevances) do |r| 

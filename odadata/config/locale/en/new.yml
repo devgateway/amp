@@ -252,6 +252,7 @@ en:
       add_sector: Add another Sector
       add_implementing_agency: Add Channel of Delivery
       add_contracted_agency: Add Extending Agencies
+      add_government_counterpart: Add Government Counterpart
       del_no: 'No'
       del_yes: 'Yes'
       geo_usage: |

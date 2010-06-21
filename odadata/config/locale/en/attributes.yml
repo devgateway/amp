@@ -20,8 +20,8 @@ en:
         donor_project_number: 
           label: Donor Project Number
           description: "Enter the number, or combination of letters and numbers used by the donor agency to identify the activity"
-        government_counterpart:
-          label: Government Counterpart
+        government_counterparts:
+          label: Government Counterparts
         oecd_number: 
           label: OECD Number
           description: "Unique Project Number given by the OECD DAC on first reporting of the project to the OECD. In 10 digits: YYYYxxxxxx"

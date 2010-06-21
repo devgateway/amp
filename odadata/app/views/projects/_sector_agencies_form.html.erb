@@ -164,9 +164,23 @@
 				:include_blank => t('.prompt'), :translate => true %>
         </li>
 
-        <li id="government_counterpart">
-          <%= f.collection_select :government_counterpart_id,  GovernmentCounterpart.ordered , "id", "code_with_name",
-            {:include_blank => I18n.t('options.prompt') }, :class => "large" %></li>
+        <li id="government_counterpart_section">
+		<%= f.label :government_counterparts %>
+		<%= button_to_function t('.add_government_counterpart'), :style => "float: right; margin-top: -20px; width: 230px" do |page|
+			page.insert_html :bottom, :government_counterpart, :partial => 'government_counterpart', :object => GovernmentCounterpart.new
+		end %>
+
+		<div id="government_counterpart">
+			<% if @project.government_counterparts.any? %>
+				<%= render :partial => 'government_counterpart', :collection => @project.government_counterparts.ordered %>
+			<% else %>
+				<%= render :partial => 'government_counterpart', :object => GovernmentCounterpart.new %>
+			<% end %>
+		</div>
+
+          <%#= f.collection_select :government_counterpart_id,  GovernmentCounterpart.ordered , "id", "code_with_name",
+            {:include_blank => I18n.t('options.prompt') }, :class => "large" %>
+        </li>
 
         <li id="government_project_code">
           <%= f.text_field :government_project_code, :class => "large" %></li>
@@ -216,7 +230,7 @@
                 //Show: Loan Grant/Enters In/On Off CUT/Code/Counterpart
                 $('#enters_in').show();
                 $('#on_off_treasury').show();
-                $('#government_counterpart').show();
+                $('#government_counterpart_section').show();
                 $('#government_project_code').show();
               }
               else
@@ -229,14 +243,14 @@
             });
 
             $("#project_donor_agency_id").bind("change", recalculate_government_code);
-            $("#project_government_counterpart_id").bind("change", recalculate_government_code);
+//            $("#project_government_counterpart_id").bind("change", recalculate_government_code);
             $("#project_loan_to_public_enterprises").bind("change", recalculate_government_code);
             $("#project_enters_in").bind("change", recalculate_government_code);
 
             //Show "On/Off Treasury", "Government Counterpart" and "Government Project Code" only if it's "On budget", except for Food Aid Exception
             dropdown_on_off_budget = $('#project_on_off_budget');
             on_off_treasury_label = $('#on_off_treasury');
-            government_counterpart_label = $('#government_counterpart');
+            government_counterpart_label = $('#government_counterpart_section');
             government_project_code_label = $('#government_project_code');
 
             dropdown_on_off_budget.bind("change", function(e) {
@@ -246,7 +260,7 @@
                 government_project_code_label.hide();
                 // Set the values to off
                 $('#project_on_off_treasury').val("false");
-                $('#project_government_counterpart_id').val("");
+//                $('#project_government_counterpart_id').val("");
                 $("#project_government_project_code").val("");
                 $('#project_grant_loan').trigger('change');
               }
@@ -363,7 +377,7 @@
             government_project_code = $("#project_government_project_code");
             //Extract the Agency Code
             donor_agency_code = ($("#project_donor_agency_id option:selected").val() == "") ? "" : $("#project_donor_agency_id option:selected").text().split(" - ")[0];
-            government_counterpart_code = ($("#project_government_counterpart_id option:selected").val() == "") ? "" : $("#project_government_counterpart_id option:selected").text().split(" - ")[0];
+//            government_counterpart_code = ($("#project_government_counterpart_id option:selected").val() == "") ? "" : $("#project_government_counterpart_id option:selected").text().split(" - ")[0];
             government_project_code.val(number1 + "" + number2 + "" + number3 + "" + donor_agency_code);
 
           }

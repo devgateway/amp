@@ -1,0 +1,8 @@
+<div class="government_counterpart">
+	<select name="project[government_counterpart_ids][]" class="large">
+		<option value=""><%= t('.prompt') %></option>
+		<%= options_from_collection_for_select(GovernmentCounterpart.ordered.all, :id, :name, government_counterpart.id) %>
+	</select>
+		
+	<%= link_to_function I18n.t('projects.delete_associated'), "$(this).parents('.government_counterpart').remove();" %>
+</div>

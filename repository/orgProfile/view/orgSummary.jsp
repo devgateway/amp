@@ -177,10 +177,13 @@
                             <digi:trn>Multiple Organizations Selected</digi:trn>
                         </c:when>
                         <c:when test="${orgsCount==1}">
-                            ${organization.name}&nbsp;
+                            <c:if test="${empty organization.name}">
+                                <digi:trn>Not Available</digi:trn>
+                            </c:if>
+                            ${organization.name}
                         </c:when>
                         <c:otherwise>
-                            <digi:trn>N/A</digi:trn>
+                            <digi:trn>Not Applicable</digi:trn>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -193,10 +196,13 @@
                             <digi:trn>Multiple Organizations Selected</digi:trn>
                         </c:when>
                         <c:when test="${orgsCount==1}">
-                            ${organization.acronym}&nbsp;
+                            <c:if test="${empty organization.acronym}">
+                                 <digi:trn>Not Available</digi:trn>
+                            </c:if>
+                            ${organization.acronym}
                         </c:when>
                         <c:otherwise>
-                            <digi:trn>N/A</digi:trn>
+                            <digi:trn>Not Applicable</digi:trn>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -228,10 +234,13 @@
                             <digi:trn>Multiple Organizations Selected</digi:trn>
                         </c:when>
                         <c:when test="${orgsCount==1}">
-                            ${organization.orgUrl}&nbsp;
+                            <c:if test="${empty organization.orgUrl}">
+                                <digi:trn>Not Available</digi:trn>
+                            </c:if>
+                            ${organization.orgUrl}
                         </c:when>
                         <c:otherwise>
-                            <digi:trn>N/A</digi:trn>
+                            <digi:trn>Not Applicable</digi:trn>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -245,7 +254,7 @@
                                 <digi:trn>Multiple Organizations Selected</digi:trn>
                             </c:when>
                             <c:otherwise>
-                                <digi:trn>N/A</digi:trn>
+                                <digi:trn>Not Applicable</digi:trn>
                             </c:otherwise>
                         </c:choose>
                     </td>

@@ -45,6 +45,10 @@ public class AddUser extends Action {
 
 		AddUserForm registerForm = (AddUserForm) form;
 
+		if(!RequestUtils.isAdmin(response, request.getSession(), request)) {
+			return null;
+		}
+		
 		try {
 			String actionFlag = request.getParameter("actionFlag");
 			logger.debug("actionFlag: " + actionFlag);

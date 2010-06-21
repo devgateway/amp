@@ -51,6 +51,10 @@ public class AddUsersToGroup
                                  javax.servlet.http.HttpServletResponse
                                  response) throws java.lang.Exception {
 
+    	if(!RequestUtils.isAdmin(response, request.getSession(), request)) {
+			return null;
+		}
+    	
         Site currentSite = RequestUtils.getSite(request);
         GroupMembersForm membersForm = (GroupMembersForm) form;
 

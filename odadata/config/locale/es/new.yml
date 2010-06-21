@@ -368,6 +368,7 @@ es:
         title: 'Relatório personalizado'
     districts:
       index:
+        all_districts: Todos os distritos
         title: Projectos de <i>{{province}}</i> por Distritos
         no_projects: 'Número de Projetos'
         list: Lista
@@ -375,6 +376,7 @@ es:
         map: ODAmap
       show:
         title: Projectos de {{district}}
+        all_districts: todos os distritos
     donors:
       map:
         title: Projectos do {{donor}}
@@ -400,6 +402,7 @@ es:
         title: Projectos de {{mdg}}
     provinces:
       index:
+        national: Nacional
         no_projects: 'Número de Projectos'
         list: Lista
         region: 'Província'

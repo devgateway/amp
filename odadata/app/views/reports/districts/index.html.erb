@@ -7,6 +7,16 @@
 		<th><%= t('.list') %></th>
 		<th><%= t('.map') %></th>
 	</tr>
+	<tr style="font-weight: bold">
+		<td><%= t('.all_districts')%></td>
+		<td>
+                <%= Project.published.find(:all, :include => :geo_relevances, :conditions => ["projects.id = geo_relevances.project_id and geo_relevances.district_id is null and geo_relevances.province_id = ?", @province.id]).size %>
+                </td>
+		<td>
+                  <%= reports_link_to image_tag("/images/list.gif", :size => "14x15"), reports_province_districts_path(@province,:all=> true)%>
+		</td>
+                <td><%= icon_link_to('moz_map', map_reports_province_path(@province.id)) %></td>
+	</tr>
 	
 	<% @districts.each do |district| %>
 		<% projects = district.projects.published %>

@@ -8,15 +8,21 @@ module Reports
     def process_record(object, preprocessed_record)
       case @disaggregate_by
       when :province
-        geo_relevances = object.geo_relevances.all(:conditions => ['province_id IN (?)', @locations.map(&:id)])
+        unless @locations[0].nil?
+          geo_relevances = object.geo_relevances.all(:conditions => ['province_id IN (?)', @locations.map(&:id)])
+        end
       when :district
-        geo_relevances = object.geo_relevances.all(:conditions => ['district_id IN (?)', @locations.map(&:id)])
+        unless @locations[0].nil?
+          geo_relevances = object.geo_relevances.all(:conditions => ['district_id IN (?)', @locations.map(&:id)])
+        end
       end
       
-      percentage = geo_relevances.sum(&:amount) / 100.0
-      funding_attributes = preprocessed_record.keys.select { |a| a =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)(_[0-9]{4})?/ }
-      funding_attributes.each do |a|
-        preprocessed_record[a] = preprocessed_record[a] * percentage if preprocessed_record[a]
+      unless @locations[0].nil?
+        percentage = geo_relevances.sum(&:amount) / 100.0
+        funding_attributes = preprocessed_record.keys.select { |a| a =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)(_[0-9]{4})?/ }
+        funding_attributes.each do |a|
+          preprocessed_record[a] = preprocessed_record[a] * percentage if preprocessed_record[a]
+        end
       end
     end
   end

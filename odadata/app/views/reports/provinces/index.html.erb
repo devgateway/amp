@@ -9,16 +9,16 @@
 		<th><%= t('.details') %></th>
 	</tr>
 	
-<!--	<tr style="font-weight: bold">
-		<td>TODO!!!!!</td>
+	<tr style="font-weight: bold">
+		<td><%= t('.national')%></td>
 		<td><%= Project.national.published.size %></td>
 		<td>
-			<%# reports_link_to image_tag("/images/list.gif", :size => "14x15"), 
-					:controller => "reports", :action => "project_list", :query => "location", :value => 0) %>
+                  <%= reports_link_to image_tag("/images/list.gif", :size => "14x15"), reports_province_path(0)%>
 		</td>
-		<td></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
 	</tr>
--->		
+		
 	<% @provinces.each do |province| %>
 		<% projects = province.projects.published %>
 		<tr>
@@ -28,7 +28,7 @@
 				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15"), reports_province_path(province) %>
 			</td>
 			<td><%= icon_link_to('moz_map', map_reports_province_path(province)) %></td>
-			<td><%= reports_link_to t ('.show_municipalities'), reports_province_districts_path(province) %>
+			<td><%= reports_link_to t('.show_municipalities'), reports_province_districts_path(province) %>
 		</tr>
 	<% end %>
 	

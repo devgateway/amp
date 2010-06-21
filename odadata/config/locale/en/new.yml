@@ -368,6 +368,7 @@ en:
         title: Custom Report
     districts:
       index:
+        all_districts: All districts
         title: "Projects of <i>{{province}}</i> by Districts"
         no_projects: Number of Projects
         list: List
@@ -375,6 +376,7 @@ en:
         map: ODAmap
       show:
         title: Projects of {{district}}
+        all_districts: all districts
     donors:
       map:
         title: Projects of {{donor}}
@@ -400,6 +402,7 @@ en:
         title: Projects of {{mdg}}
     provinces:
       index:
+        national: National
         no_projects: Number of Projects
         list: List
         region: Province

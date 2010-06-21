@@ -1,14 +1,20 @@
 class Reports::DistrictsController < ReportsController
   def index
-    @province = Province.find(params[:province_id])
-    @districts = @province.districts.ordered.select { |d| d.projects.published.any? }
-    render :layout => 'report_window'
+    if params[:all] == "true"
+      @province = Province.find(params[:province_id])
+      @projects = Project.published.find(:all, :include => :geo_relevances, :conditions => ["projects.id = geo_relevances.project_id and geo_relevances.district_id is null and geo_relevances.province_id = ?", params[:province_id]])
+      render :layout => 'report_window', :action => :show
+    else
+      @province = Province.find(params[:province_id])
+      @districts = @province.districts.ordered.select { |d| d.projects.published.any? }
+      render :layout => 'report_window'
+    end
   end
   
   def show
     @district = District.find(params[:id])
     @projects = @district.projects.published.ordered.all
-    
+
     @currency_selector = true
     render :layout => 'report_window'
   end

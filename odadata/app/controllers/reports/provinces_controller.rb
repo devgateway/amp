@@ -4,8 +4,12 @@ class Reports::ProvincesController < ReportsController
   end
   
   def show
-    @province = Province.find(params[:id])
-    @projects = @province.projects.published.ordered.all
+    if params[:id] == "0"
+      @projects = Project.national.published.all
+    else
+      @province = Province.find(params[:id])
+      @projects = @province.projects.published.ordered.all
+    end
     
     @currency_selector = true
     render :layout => 'report_window'

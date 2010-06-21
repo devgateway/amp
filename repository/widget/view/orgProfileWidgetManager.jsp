@@ -81,7 +81,7 @@
                                                             <digi:trn>Paris Declaration</digi:trn>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <digi:trn>Aid Predictiblity</digi:trn>
+                                                            <digi:trn>Aid predictability</digi:trn>
                                                         </c:otherwise>
                                                     </c:choose>
 				

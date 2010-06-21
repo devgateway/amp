@@ -380,9 +380,9 @@ public class ChartWidgetUtil {
         TextTitle subTitle=null;
         String trnsType="";
         if (filter.getTransactionType() == 0) {
-            trnsType = TranslatorWorker.translateText("Actual commitments in", opt.getLangCode(), opt.getSiteId());
+            trnsType = TranslatorWorker.translateText(" commitments in", opt.getLangCode(), opt.getSiteId());
         } else {
-            trnsType = TranslatorWorker.translateText("Actual disbursements in", opt.getLangCode(), opt.getSiteId());
+            trnsType = TranslatorWorker.translateText(" disbursements in", opt.getLangCode(), opt.getSiteId());
         }
         switch (widgetType) {
 
@@ -392,13 +392,16 @@ public class ChartWidgetUtil {
                 break;
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
                 dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, true);
+                trnsType= TranslatorWorker.translateText("Actual", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
                 subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                 dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, false);
+                trnsType= TranslatorWorker.translateText("Actual", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
                 subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
+                trnsType= TranslatorWorker.translateText("Actual vs Planned", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
                 dataset = ChartWidgetUtil.getAidPredictiblityDataset(filter,opt);
                 subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
                 break;

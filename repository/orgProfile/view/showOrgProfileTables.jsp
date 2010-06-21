@@ -51,6 +51,9 @@
                     <c:when test="${orgProfileNameValueYearForm.type==6}">
                         <digi:trn>Regional Breakdown</digi:trn>
                     </c:when>
+                      <c:when test="${orgProfileNameValueYearForm.type==8}">
+                        <digi:trn>Aid Predictability</digi:trn>
+                    </c:when>
                     <c:otherwise>
                         <digi:trn>ODA PROFILE</digi:trn>
                     </c:otherwise>

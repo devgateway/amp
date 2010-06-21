@@ -119,7 +119,7 @@ public class ShowWidgetChart extends Action {
                         chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue(),sectorClassConfigId);
                         break;
                     case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
-                        title = TranslatorWorker.translateText("Aid Predictiblity", opt.getLangCode(), opt.getSiteId());
+                        title = TranslatorWorker.translateText("Aid Predictability", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
                         chart = ChartWidgetUtil.getBarChart(opt, filter, wForm.getChartType().intValue());
                         break;

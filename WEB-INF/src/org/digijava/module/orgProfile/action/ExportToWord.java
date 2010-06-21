@@ -88,19 +88,21 @@ public class ExportToWord extends Action {
             AmpOrganisation organization = filter.getOrganization();
             String multipleSelected = TranslatorWorker.translateText("Multiple Organizations Selected", langCode, siteId);
             String all = TranslatorWorker.translateText("All", langCode, siteId);
+            String notApplicable = TranslatorWorker.translateText("Not Applicable", langCode, siteId);
+            String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
 
 
-            String orgName = "";
-            String orgGroupTpName = "";
-            String grpName = "";
-            String orgAcronym = "";
-            String orgUrl = "";
-            String orgBackground = "N/A";
-            String orgDesc = "N/A";
-            String contactName = "N/A";
-            String email = "N/A";
-            String contactPhone = "N/A";
-            String contactFax = "N/A";
+            String orgName = notAvailable;
+            String orgGroupTpName = notAvailable;
+            String grpName = notAvailable;
+            String orgAcronym = notAvailable;
+            String orgUrl = notAvailable;
+            String orgBackground = notAvailable;
+            String orgDesc = notAvailable;
+            String contactName =notAvailable;
+            String email = notAvailable;
+            String contactPhone = notAvailable;
+            String contactFax = notAvailable;
 
             AmpOrgGroup group = null;
             AmpOrgType orgGroupType = null;
@@ -110,14 +112,28 @@ public class ExportToWord extends Action {
                 orgGroupTpName = orgGroupType.getOrgType();
                 grpName = group.getOrgGrpName();
                 orgName = organization.getName();
-                orgAcronym = organization.getAcronym();
-                orgUrl = organization.getOrgUrl();
-                contactName = organization.getContactPersonName();
-                email = organization.getEmail();
-                contactPhone = organization.getPhone();
-                contactFax = organization.getFax();
-                orgBackground = organization.getOrgBackground();
-                orgDesc = organization.getOrgDescription();
+                if (organization.getOrgUrl() != null&&!organization.getOrgUrl().equals("")) {
+                    orgUrl = organization.getOrgUrl();
+                }
+                if (organization.getContactPersonName() != null) {
+                    contactName = organization.getContactPersonName();
+                }
+                if (organization.getEmail() != null) {
+                    email = organization.getEmail();
+                }
+                if (organization.getPhone() != null) {
+                    contactPhone = organization.getPhone();
+                }
+
+                if (organization.getFax() != null) {
+                    contactFax = organization.getFax();
+                }
+                if (organization.getOrgBackground() != null) {
+                    orgBackground = organization.getOrgBackground();
+                }
+                if (organization.getOrgDescription() != null) {
+                    orgDesc = organization.getOrgDescription();
+                }
 
             } else {
                 if (filter.getOrgIds() != null) {
@@ -141,10 +157,9 @@ public class ExportToWord extends Action {
                         orgGroupTpName = all;
                         grpName = all;
                     }
-                    orgName = "N/A";
-                    orgAcronym = "N/A";
-                    orgUrl = "N/A";
-
+                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc =
+                      contactName = email = contactPhone = contactFax = notApplicable;
+                   
                 }
             }
             while (placeIter.hasNext()) {
@@ -201,7 +216,7 @@ public class ExportToWord extends Action {
                         String pledgesCommDisbExp = TranslatorWorker.translateText(charttitle, langCode, siteId);
                         String regionBreakdown = TranslatorWorker.translateText("Regional Breakdown", langCode, siteId);
                         String sectorBreakdown = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
-                        String aidPred = TranslatorWorker.translateText("Aid Predictiblity", langCode, siteId);
+                        String aidPred = TranslatorWorker.translateText("Aid Predictability", langCode, siteId);
 
                         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                             amountInThousands = "," + TranslatorWorker.translateText("Amounts in thousands", langCode, siteId) + " ";

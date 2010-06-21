@@ -98,35 +98,53 @@ public class ExportToPDF extends Action {
             AmpOrganisation organization = filter.getOrganization();
             String multipleSelected = TranslatorWorker.translateText("Multiple Organizations Selected", langCode, siteId);
             String all = TranslatorWorker.translateText("All", langCode, siteId);
+            String notApplicable = TranslatorWorker.translateText("Not Applicable", langCode, siteId);
+            String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
 
-            String orgName = "";
-            String orgGroupTpName = "";
-            String grpName = "";
-            String orgAcronym = "";
-            String orgUrl = "";
-            String contactName = "N/A";
-            String email = "N/A";
-            String contactPhone = "N/A";
-            String contactFax = "N/A";
-            String orgBackground = "N/A";
-            String orgDesc = "N/A";
+
+            String orgName = notAvailable;
+            String orgGroupTpName = notAvailable;
+            String grpName = notAvailable;
+            String orgAcronym = notAvailable;
+            String orgUrl = notAvailable;
+            String orgBackground = notAvailable;
+            String orgDesc = notAvailable;
+            String contactName =notAvailable;
+            String email = notAvailable;
+            String contactPhone = notAvailable;
+            String contactFax = notAvailable;
 
             AmpOrgGroup group = null;
             AmpOrgType orgGroupType = null;
-            if (organization != null) {
+             if (organization != null) {
                 group = organization.getOrgGrpId();
                 orgGroupType = group.getOrgType();
                 orgGroupTpName = orgGroupType.getOrgType();
                 grpName = group.getOrgGrpName();
                 orgName = organization.getName();
-                orgAcronym = organization.getAcronym();
-                orgUrl = organization.getOrgUrl();
-                contactName = organization.getContactPersonName();
-                email = organization.getEmail();
-                contactPhone = organization.getPhone();
-                contactFax = organization.getFax();
-                orgBackground = organization.getOrgBackground();
-                orgDesc = organization.getOrgDescription();
+                if (organization.getOrgUrl() != null&&!organization.getOrgUrl().equals("")) {
+                    orgUrl = organization.getOrgUrl();
+                }
+                if (organization.getContactPersonName() != null) {
+                    contactName = organization.getContactPersonName();
+                }
+                if (organization.getEmail() != null) {
+                    email = organization.getEmail();
+                }
+                if (organization.getPhone() != null) {
+                    contactPhone = organization.getPhone();
+                }
+
+                if (organization.getFax() != null) {
+                    contactFax = organization.getFax();
+                }
+                if (organization.getOrgBackground() != null) {
+                    orgBackground = organization.getOrgBackground();
+                }
+                if (organization.getOrgDescription() != null) {
+                    orgDesc = organization.getOrgDescription();
+                }
+
             } else {
                 if (filter.getOrgIds() != null) {
                     orgGroupTpName = multipleSelected;
@@ -149,9 +167,8 @@ public class ExportToPDF extends Action {
                         orgGroupTpName = all;
                         grpName = all;
                     }
-                    orgName = "N/A";
-                    orgAcronym = "N/A";
-                    orgUrl = "N/A";
+                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc =
+                      contactName = email = contactPhone = contactFax = notApplicable;
 
                 }
             }
@@ -198,7 +215,7 @@ public class ExportToPDF extends Action {
                         String amountInThousands = "";
                         String typeOfAid = TranslatorWorker.translateText("TYPE OF AID", langCode, siteId);
                         String odaProfile = TranslatorWorker.translateText("ODA Profile", langCode, siteId);
-                        String aidPred = TranslatorWorker.translateText("Aid Predictiblity", langCode, siteId);
+                        String aidPred = TranslatorWorker.translateText("Aid Predictability", langCode, siteId);
                         String charttitle="";
                         if(filter.isPledgeVisible()){
                              charttitle="Pledges|";

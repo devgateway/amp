@@ -54,6 +54,9 @@ public class ShowTeamReports extends Action {
 			if (  "true".equals( request.getParameter("tabs") )  ) {
 				rf.setShowTabs(true);
 				forwardName	= "forwardTabs";
+				if(!RequestUtils.isLoggued(response, session, request)) {
+					return null;
+				}
 			}
 			if (  "false".equals( request.getParameter("tabs") )  )
 				rf.setShowTabs(false);
@@ -61,10 +64,6 @@ public class ShowTeamReports extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if ( tm != null )
 			rf.setCurrentMemberId(tm.getMemberId());
-		
-		if(!RequestUtils.isLoggued(response, session, request)) {
-			return null;
-		}
 		
 		if(action==null){
 			getAllReports(appSettingSet, rf, tm, request);

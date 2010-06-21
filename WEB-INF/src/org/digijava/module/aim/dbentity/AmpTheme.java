@@ -1,16 +1,20 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.HierarchyListable;
+import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import edu.emory.mathcs.backport.java.util.TreeSet;
 
-public class AmpTheme implements Serializable, Identifiable, ARDimensionable
+public class AmpTheme implements Serializable, Identifiable, ARDimensionable, HierarchyListable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivity activityId;
@@ -45,6 +49,8 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable
 	private Double externalFinancing;
 	private Double internalFinancing;
 	private Double totalFinancing;
+	
+	private transient Collection<AmpTheme> transientChildren;
 	
 	private String programviewname;
         private Set programSettings;
@@ -364,6 +370,33 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable
 
 		public void setIsbudgetprogram(Integer isbudgetprogram) {
 			this.isbudgetprogram = isbudgetprogram;
+		}
+
+		@Override
+		public Collection<AmpTheme> getChildren() {
+			if (transientChildren == null)
+ 	 	 	 	transientChildren       = new TreeSet( new HierarchyListableComparator() );
+ 	 	 	return transientChildren;
+		}
+
+		@Override
+		public int getCountDescendants() {
+			int ret = 1;
+ 	 	 	if ( this.getChildren() != null ) {
+ 	 	 		for ( HierarchyListable hl: this.getChildren() )
+ 	 	 			ret += hl.getCountDescendants();
+ 	 	 	}
+ 	 	 	return ret;
+		}
+
+		@Override
+		public String getLabel() {
+			return this.name;
+		}
+
+		@Override
+		public String getUniqueId() {
+			return this.ampThemeId + "";
 		}
 
 }

@@ -187,10 +187,24 @@ public class FilterUtil {
 		if (filter.getCurrency() != null)
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
 		
-		form.setLineMinRank( filter.getLineMinRank() );
-		form.setPlanMinRank( filter.getPlanMinRank() );
+		if ( filter.getLineMinRank() != null && filter.getLineMinRank().size() > 0) {
+	 		int i = 0;
+	 	 	Object[] temp   = new Object[filter.getLineMinRank().size()];
+	 	 	for ( Integer intVal:filter.getLineMinRank() ) {
+	 	 		temp[i++]       = intVal.toString();
+	 	 	}
+	 	 	form.setLineMinRanks(temp);
+	 	}
+	 	if ( filter.getPlanMinRank() != null && filter.getPlanMinRank().size() > 0) {
+	 	 	int i = 0;
+	 	 	Object[] temp   = new Object[filter.getPlanMinRank().size()];
+	 	 	for ( Integer intVal:filter.getPlanMinRank() ) {
+	 	 		temp[i++]       = intVal.toString();
+	 	 	}
+	 	 	form.setPlanMinRanks(temp);
+	 	}
 		if ( filter.getRegionSelected() != null )
-			form.setRegionSelected( filter.getRegionSelected().getId() );
+			form.setRegionSelected ( FilterUtil.getObjectsIds(filter.getLocationSelected()));
 		
 		Collection<String> appStatuses		= filter.getApprovalStatusSelected();
 		if ( appStatuses!=null && appStatuses.size()>0  ) {
@@ -214,8 +228,10 @@ public class FilterUtil {
 		form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
 		form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
 
-		if (filter.getBudget() != null)
-			form.setSelectedBudget( filter.getBudget()?1:2 );
+		if (filter.getBudget() != null) {
+	 		form.setSelectedBudgets( new Object[1] );
+	 	 	form.getSelectedBudgets()[0]    = filter.getBudget()?"1":"0" ;
+	 	}
 		
 		form.setJustSearch( filter.isJustSearch() );
 		form.setRenderStartYear( filter.getRenderStartYear()>0 ? filter.getRenderStartYear() : -1 );

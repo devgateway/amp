@@ -193,8 +193,8 @@ public final class ARUtil {
 		return ret;
 	}
 
-	public static Collection filterDonorGroups(Collection donorGroups) {
-		Collection ret = new ArrayList<AmpOrgGroup>();
+	public static Collection<AmpOrgGroup> filterDonorGroups(Collection donorGroups) {
+		Collection<AmpOrgGroup> ret = new ArrayList<AmpOrgGroup>();
 		if (donorGroups == null) {
 			logger
 					.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");

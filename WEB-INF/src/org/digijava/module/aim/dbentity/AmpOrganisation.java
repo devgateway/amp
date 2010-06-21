@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -8,12 +9,13 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable
+public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable, HierarchyListable
 {
 	private Long ampOrgId;
 	private String name ;
@@ -717,5 +719,26 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public Set<AmpOrganisationContact> getOrganizationContacts() {
 		return organizationContacts;
 	}
+
+	@Override
+	public Collection<AmpOrganisation> getChildren() {
+		return null;
+	}
+
+	@Override
+	public int getCountDescendants() {
+		return 1;
+	}
+
+	@Override
+	public String getLabel() {
+		return this.name;
+	}
+
+	@Override
+	public String getUniqueId() {
+		return this.ampOrgId + "";
+	}
+	
 	
 }	

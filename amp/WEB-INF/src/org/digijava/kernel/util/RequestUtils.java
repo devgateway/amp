@@ -24,6 +24,10 @@ package org.digijava.kernel.util;
 
 import org.apache.struts.tiles.ComponentContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 import java.util.Map;
 import org.digijava.kernel.Constants;
 import java.util.HashMap;
@@ -35,6 +39,8 @@ import org.digijava.kernel.entity.Locale;
 import org.hibernate.Session;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.helper.TeamMember;
+
 import javax.security.auth.Subject;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -534,7 +540,7 @@ public class RequestUtils {
     }
 
     /**
-     * Retreive site domain from request based on calculation. This is usually
+     * Retrieve site domain from request based on calculation. This is usually
      * used in filters when current site is not determined yet.
      * @param request HttpServletRequest
      * @return SiteDomain
@@ -546,4 +552,34 @@ public class RequestUtils {
         return siteDomain;
 
     }
+
+	public static boolean isAdmin(HttpServletResponse response, HttpSession session, HttpServletRequest request)
+			throws IOException {
+		boolean ret = true;
+		String str = (String) session.getAttribute("ampAdmin");
+		if (str == null || str.equalsIgnoreCase("no")) {
+			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
+					.getContextPath());
+			url += "/aim/index.do";
+			response.sendRedirect(url);
+			ret = false;
+		}
+		return ret;
+	}
+	
+	public static boolean isLoggued(HttpServletResponse response, HttpSession session, HttpServletRequest request)
+			throws IOException {
+		boolean ret = true;
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm == null) {
+			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
+					.getContextPath());
+			url += "/aim/index.do";
+			response.sendRedirect(url);
+			ret = false;
+		}
+		return ret;
+	}
 }

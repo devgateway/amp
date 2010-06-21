@@ -58,6 +58,11 @@ public class ShowCalendarEvent extends Action {
 	private static Logger logger = Logger.getLogger(ShowCalendarEvent.class);
 	
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	
+    	if(!RequestUtils.isLoggued(response, request.getSession(), request)) {
+			return null;
+		}
+    	
         CalendarEventForm ceform = (CalendarEventForm) form;
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.reset(mapping, request);

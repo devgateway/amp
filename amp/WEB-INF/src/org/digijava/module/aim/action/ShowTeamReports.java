@@ -62,6 +62,10 @@ public class ShowTeamReports extends Action {
 		if ( tm != null )
 			rf.setCurrentMemberId(tm.getMemberId());
 		
+		if(!RequestUtils.isLoggued(response, session, request)) {
+			return null;
+		}
+		
 		if(action==null){
 			getAllReports(appSettingSet, rf, tm, request);
 		}

@@ -56,6 +56,10 @@ public class ViewEditUser extends Action {
         UserLangPreferences langPref = null;
         Long userId = uForm.getId();
 
+        if(!RequestUtils.isAdmin(response, request.getSession(), request)) {
+			return null;
+		}
+        
         if (userId != null) {
             user = UserUtils.getUser(userId);
         } else if (uForm.getEmail() != null) {

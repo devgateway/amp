@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.UserBean;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
@@ -29,6 +30,10 @@ import org.digijava.module.um.util.AmpUserUtil;
 	                                 HttpServletResponse response) throws Exception {
 	    	
 	    	ViewAllUsersForm vwForm = (ViewAllUsersForm) form;
+	    	
+	    	if(!RequestUtils.isAdmin(response, request.getSession(), request)) {
+				return null;
+			}
 	    	
 	    	if(request.getParameter("reset")!=null && request.getParameter("reset").equals("true")){
 	    		vwForm.reset(mapping, request);    		

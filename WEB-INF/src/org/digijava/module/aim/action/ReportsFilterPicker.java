@@ -1065,7 +1065,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
-		if (arf.isPublicView())
+		if (arf.isPublicView() && arf.isWidget() )
 			return mapping.findForward("publicView");
 		return mapping.findForward(arf.isWidget() ? "mydesktop" : "reportView");
 	}

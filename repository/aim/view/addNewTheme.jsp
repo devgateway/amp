@@ -41,7 +41,9 @@
 
 <script language="JavaScript">
 	<!--
-		
+
+	
+	
 	function validate() 
 	{
 		var validNumbers='0123456789,.'
@@ -113,21 +115,26 @@
 		return true;
 	}
 
-		function saveProgram()
-	{
-		var temp = validate();
-		if (temp == true) 
+		function submitProgram()
+		{
+			var temp = validate();
+			if (temp == true) 
+			{
+			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
+			document.aimThemeForm.action = "<%=addThm%>";				
+			document.aimThemeForm.submit();
+			}
+		}
+	
+		function closeProgram()
 		{
 			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
 			document.aimThemeForm.action = "<%=addThm%>";
 			document.aimThemeForm.target = window.opener.name;
-			document.aimThemeForm.submit();
+			window.opener.location.reload();
 			window.close();
-			
-		}
-		
-		return true;
-	}	
+			return true;
+		}	
 	
 		function load()
 	{
@@ -304,10 +311,17 @@
 				<tr bgColor=#ffffff><td height="30" colspan="3"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="3">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return submitProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="reset" value="<digi:trn key="aim:btncancelCancel">Cancel</digi:trn>">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">				</td>
 				</tr>	
   </table>
 
 </digi:form>
+
+
+<script language="JavaScript">
+	<!--
+	if(document.aimThemeForm.event.value=='close') closeProgram();
+	-->
+</script>

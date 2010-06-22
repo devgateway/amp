@@ -152,9 +152,7 @@
                                             <tr>
                                               <td align="left">
                                                 <b>
-                                                  <digi:trn key="aim:primaryprogram">
-                                                 Primary Program
-                                                  </digi:trn>
+                                                  <digi:trn>Primary Programs</digi:trn>
                                                 </b>
                                               </td>
                                             </tr>

@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -103,11 +105,13 @@ public class AddTheme extends Action {
 	 */
 	public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ThemeForm themeForm = (ThemeForm) form;
+		if(checkExisting(mapping,form,request,response)) return  mapping.findForward("addEditForm");
 		AmpTheme ampTheme = new AmpTheme();
 		fillTheme(ampTheme, themeForm);
 		ARUtil.clearDimension(NPODimension.class);
 		DbUtil.add(ampTheme);
-		return mapping.findForward("saved");
+		themeForm.setEvent("close");
+		return mapping.findForward("addEditForm");
 	}
 
 	/**
@@ -132,6 +136,59 @@ public class AddTheme extends Action {
 	}
 
 	/**
+	 * Checks if a different theme with same name and code exists
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public boolean checkExisting(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ThemeForm themeForm = (ThemeForm) form;
+		
+		boolean existing = false;
+		AmpTheme theme = ProgramUtil.getTheme(themeForm.getProgramName());
+		if (theme != null) {
+			if (themeForm.getThemeId() != null
+					&& !themeForm.getThemeId().equals(theme.getAmpThemeId())
+					&& theme.getName().equals(themeForm.getProgramName()))
+				existing = true;
+
+			if (themeForm.getThemeId() == null
+					&& theme.getName().equals(themeForm.getProgramName()))
+				existing = true;
+		}
+
+		AmpTheme themeByCode = ProgramUtil.getThemeByCode(themeForm
+				.getProgramCode());
+		if (themeByCode != null) {
+			if (themeByCode != null
+					&& themeForm.getThemeId() != null
+					&& !themeForm.getThemeId().equals(
+							themeByCode.getAmpThemeId())
+					&& (themeByCode.getThemeCode().equals(themeForm
+							.getProgramCode())))
+				existing = true;
+
+			if (themeForm.getThemeId() == null
+					&& themeByCode.getThemeCode().equals(
+							themeForm.getProgramCode()))
+				existing = true;
+		}
+
+		if (existing) {
+			ActionErrors errors = new ActionErrors();
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					"error.aim.theme.existingTheme"));
+			saveErrors(request, errors);
+		}
+
+		return existing;
+	}
+	
+	
+	/**
 	 * Save the current edited program
 	 * 
 	 * @param mapping
@@ -143,12 +200,14 @@ public class AddTheme extends Action {
 	 */
 	public ActionForward saveEdit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ThemeForm themeForm = (ThemeForm) form;
+		if(checkExisting(mapping,form,request,response)) return  mapping.findForward("addEditForm");
 		String event = request.getParameter("event");
 		AmpTheme tempTheme = new AmpTheme();
 		fillTheme(tempTheme, themeForm);
 		ARUtil.clearDimension(NPODimension.class);
 		ProgramUtil.updateTheme(tempTheme);
-		return mapping.findForward("saved");
+		themeForm.setEvent("close");
+		return mapping.findForward("addEditForm");
 	}
 
 	/**

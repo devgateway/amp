@@ -264,7 +264,7 @@
 			<put-item name="tabBody" module="aim" instance="default" teaser="financingBreakdownFilter"/>
 		</layout>
 		<layout name="layoutFinancialOverview" extends="tabLayout">
-			<put name="title">Activity - Financial Progress - Loan/Donor Specific </put>
+			<put name="title">Activity - Financial Progress </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="financialOverview"/>
 		</layout>
 		<layout name="layoutYearlyInfo" extends="tabLayout">
@@ -395,7 +395,7 @@
        </layout>
 
 	   <layout name="layoutKnowledge" extends="tabLayout">
-        <put name="title">Activity - Knowledge </put>
+        <put name="title">Activity - Documents </put>
         <put-item name="tabBody" module="aim" instance="default"
 			teaser="knowledge"/>
        </layout>

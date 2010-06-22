@@ -1,4 +1,4 @@
-/*
+ /*
  * EditActivity.java
  * Created: Feb 10, 2005
  */

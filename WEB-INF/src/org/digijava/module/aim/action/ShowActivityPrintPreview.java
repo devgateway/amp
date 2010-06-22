@@ -331,7 +331,8 @@ public class ShowActivityPrintPreview
                             .next();
                         OrgProjectId projId = new OrgProjectId();
                         projId.setId(actIntId.getId());
-                         projId.setProjectId(actIntId.getInternalId());
+                        projId.setOrganisation(actIntId.getOrganisation());
+                        projId.setProjectId(actIntId.getInternalId());
                         temp.add(projId);
                     }
                     if(temp != null && temp.size() > 0) {

@@ -2637,9 +2637,12 @@ function collapseAll() {
 											 Activity updated on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
+											<logic:present name="isUserLogged" scope="session">
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewChanges()">
 												<digi:trn key="btn:last5changestoactivity">Last 5 changes to Activity</digi:trn>
-											</html:button>										</td>
+											</html:button>
+											</logic:present>										
+											</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>

@@ -52,6 +52,7 @@ return false;
 				<logic:notEmpty name="myReports" scope="session">
 
 					<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
+						<logic:notEqual name="report" property="drilldownTab" value="true">
 						<div style="margin:2px">
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 							<digi:link title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
@@ -63,6 +64,7 @@ return false;
 			                    </c:if>
 							</digi:link>
 							</div>
+							</logic:notEqual>
 					</logic:iterate>
 
                     <bean:size id="repCount" name="myReports" scope="session" />

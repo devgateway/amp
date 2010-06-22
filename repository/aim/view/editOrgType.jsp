@@ -112,7 +112,9 @@
 						Oraganization Type Manager
 						</digi:trn>
 						</span>
-						<br>
+						<br/>
+						<br/>
+						<digi:trn key="um:allMarkedRequiredField">All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn>						
 						<digi:errors/>
 					</td>
 				</tr>
@@ -148,18 +150,14 @@
 																<table width="100%" cellPadding=3 cellSpacing=3 border=0 bgColor=#f4f4f2>
 															  		<tr>
 																		<td width="30%" align="right">
-																			<font color="red">*</font>
-																			<digi:trn>Name</digi:trn>
-																		</td>
+																		<digi:trn key="aim:orgTypeName">Name</digi:trn><font size="2" color="#FF0000">*</font></td>																
 																	    <td width="30%" >
 																	          <html:text property="orgType" size="35" />
 																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																			<font color="red">*</font>
-																	        <digi:trn>Type Code</digi:trn>
-																		</td>
+																        <digi:trn key="aim:orgTypeCode">Type Code<font size="2" color="#FF0000">*</font></digi:trn></td>
 																		<td width="30%">
 																           <html:text property="orgTypeCode" size="15" />
 																		</td>

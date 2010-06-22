@@ -679,7 +679,7 @@ function confirmFunc() {
                   </c:if>
               </td></tr>
             </table>
-          
+			<logic:present name="isUserLogged" scope="session">          
             <TABLE>
                <TR>
                    <TD COLSPAN="2">
@@ -739,6 +739,7 @@ function confirmFunc() {
                </TR>
 </c:if>
            </TABLE>
+           </logic:present>
 
           </td>
         </tr>

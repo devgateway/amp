@@ -115,29 +115,29 @@ function commentWin(val) {
 										<SPAN><strong>
 										<feature:display module="Project ID and Planning" name="Identification">
 											<field:display name="Project Comments" feature="Identification">
-											&nbsp;&nbsp;<div id="gen" title='<digi:trn key="aim:clickToViewProjectComments">Click here to View Project Comments</digi:trn>'>
-											<a href="#" onclick="javascript:previewOverviewframe('ProjCom','<c:out value="${activity.projectComments}"/>'); return false;" >
-											<digi:trn key="aim:projectComments">Project Comments</digi:trn></a>&nbsp;|</div>&nbsp;
+											&nbsp;&nbsp;<div id="gen" title='<digi:trn>Click here to View Project Comments</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('ProjCom','<c:out value="${activity.projectComments}"/>', '<digi:trn jsFriendly="true">Project Comments</digi:trn>'); return false;" >
+											<digi:trn>Project Comments</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>
 											<field:display name="Description" feature="Identification">
-											<div id="gen" title='<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>'>
-											<a href="#" onclick="javascript:previewOverviewframe('Desc','<c:out value="${activity.description}"/>'); return false;" >
-											<digi:trn key="aim:description">Description</digi:trn></a>&nbsp;|</div>&nbsp;
+											<div id="gen" title='<digi:trn>Click here to View Project Description</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('Desc','<c:out value="${activity.description}"/>', '<digi:trn jsFriendly="true">Description</digi:trn>'); return false;" >
+											<digi:trn>Description</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>
 											<field:display name="Objective" feature="Identification">
-												<div id="gen" title='<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>'>
-												<a href="#" onclick="javascript:previewOverviewframe('Obj','<c:out value="${activity.objective}"/>'); return false;" >
-												<digi:trn key="aim:objectives">Objectives</digi:trn></a>&nbsp;|</div>&nbsp;
+												<div id="gen" title='<digi:trn>Click here to View Project Objectives</digi:trn>'>
+												<a href="#" onclick="javascript:previewOverviewframe('Obj','<c:out value="${activity.objective}"/>', '<digi:trn jsFriendly="true">Objectives</digi:trn>'); return false;" >
+												<digi:trn>Objectives</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>
 											<field:display name="Purpose" feature="Identification">
-											<div id="gen" title='<digi:trn key="aim:clickToViewProjectPurpose">Click here to View Project Purpose</digi:trn>'>
-											<a href="#" onclick="javascript:previewOverviewframe('Purp','<c:out value="${activity.purpose}"/>'); return false;" >
-												<digi:trn key="aim:purpose">Purpose</digi:trn></a>&nbsp;|</div>&nbsp;
+											<div id="gen" title='<digi:trn>Click here to View Project Purpose</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('Purp','<c:out value="${activity.purpose}"/>', '<digi:trn jsFriendly="true">Purpose</digi:trn>'); return false;" >
+												<digi:trn>Purpose</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>
 											<field:display name="Results" feature="Identification">
-											<div id="gen" title='<digi:trn key="aim:clickToViewProjectResults">Click here to View Project Results</digi:trn>'>
-											<a href="#" onclick="javascript:previewOverviewframe('Res','<c:out value="${activity.results}"/>'); return false;" >
-												<digi:trn key="aim:results">Results</digi:trn></a></div>&nbsp;
+											<div id="gen" title='<digi:trn>Click here to View Project Results</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('Res','<c:out value="${activity.results}"/>', '<digi:trn jsFriendly="true">Results</digi:trn>'); return false;" >
+												<digi:trn>Results</digi:trn></a></div>&nbsp;
 											</field:display>
 										</feature:display>
 
@@ -873,24 +873,42 @@ function commentWin(val) {
 																parentModule="PROJECT MANAGEMENT">
 																<feature:display name="Identification"
 																	module="Project ID and Planning">
-																	<TR>
-																		<TD bgcolor="#ffffff">
 																		<field:display name="Description" feature="Identification">
-																			<i><b><digi:trn key="aim:programDescription">Description</digi:trn></b></i>:
+                                                                        <TR>
+                                                                            <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                <IMG
+                                                                                        height=10
+                                                                                        src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                        width=15>
+                                                                                        <b><digi:trn key="aim:programDescription">Description</digi:trn></b>
+                                                                            </TD>
+                                                                        </TR>
+																		<TR>
+																			<TD bgcolor="#ffffff">
 																			<c:if test='${!empty activity.description}'>
 																				<digi:edit key="${activity.description}" />
 																			</c:if>
 																			<br />
+                                                                            </TD>
+                                                                        </TR>
 																		</field:display>
 																		<field:display feature="Identification" name="Objectives">
-																			<field:display feature="Identification" name="Objective">
-																			<i><b><digi:trn key="aim:programObjective">
-																				Objective
-																			</digi:trn></b></i>:
+                                                                        <TR>
+                                                                            <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                <IMG
+                                                                                        height=10
+                                                                                        src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                        width=15>
+                                                                                        <b><digi:trn key="aim:programObjective">
+                                                                                        Objective
+                                                                                    </digi:trn></b>
+                                                                            </TD>
+                                                                        </TR>
+                                                                        <TR>
+                                                                            <TD bgcolor="#ffffff">
 																			<c:if test='${!empty activity.objective}'>
 																				<digi:edit key="${activity.objective}" />
 																			</c:if>
-																			</field:display>
 																		
 																			<ul>
 																				<c:forEach var="comments"
@@ -926,12 +944,22 @@ function commentWin(val) {
 																					</field:display>
 																				</c:forEach>
 																			</ul>
-																			</field:display>
+                                                                            </TD>
+                                                                        </TR>
+																		</field:display>
 
 																		<field:display name="Lessons Learned" feature="Identification">
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
 																			<TR>
 																				<TD bgcolor="#ffffff">
-																					<i><b><digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn></b></i>:
 																					<c:if test="${not empty activity.lessonsLearned && fn:trim(activity.lessonsLearned) ne ''}">
 																						<bean:define id="lessonsLearnedKey">
 																							<c:out value="${activity.lessonsLearned}"/>
@@ -940,7 +968,6 @@ function commentWin(val) {
 																					 </c:if>
 																				</TD>
 																			</TR>
-
 																		</field:display>
 																		
 											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
@@ -989,11 +1016,19 @@ function commentWin(val) {
 
 																		<field:display feature="Identification"
 																			name="Purpose">
-
 																			<c:if test="${!empty activity.purpose}">
-																				<i><b><digi:trn key="aim:programPurpose">Purpose</digi:trn></b></i>:
-                                                                          <digi:edit
-																					key="${activity.purpose}" />
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15>
+                                                                                            <b><digi:trn key="aim:programPurpose">Purpose</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+																				<digi:edit key="${activity.purpose}" />
 																				<ul>
 																					<c:forEach var="comments"
 																						items="${aimChannelOverviewForm.allComments}">
@@ -1016,14 +1051,26 @@ function commentWin(val) {
 																						</c:if>
 																					</c:forEach>
 																				</ul>
+																				</TD>
+																			</TR>
 																			</c:if>
-																		</field:display> <field:display feature="Identification"
+																		</field:display> 
+                                                                        <field:display feature="Identification"
 																			name="Results">
 
 																			<c:if test="${!empty activity.results}">
-																				<i><b><digi:trn key="aim:programResults">Results</digi:trn></b></i>:
-                                                                            <digi:edit
-																					key="${activity.results}" />
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15>
+                                                                                            <b><digi:trn key="aim:programResults">Results</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+	                                                                            <digi:edit key="${activity.results}" />
 																				<ul>
 																					<c:forEach var="comments"
 																						items="${aimChannelOverviewForm.allComments}">
@@ -1046,9 +1093,10 @@ function commentWin(val) {
 																						</c:if>
 																					</c:forEach>
 																				</ul>
+																				</TD>
+																			</TR>
 																			</c:if>
-																		</field:display></TD>
-																	</TR>
+																		</field:display>
 																</feature:display>
 															</module:display>
 														</TABLE>
@@ -1472,8 +1520,8 @@ function commentWin(val) {
 													
 												</TABLE>
 												</TD>
-												<TD width="2%" vAlign="top" align="left">
-													&nbsp;
+												<TD width="2%" vAlign="top" align="left">&nbsp;
+													
 												</TD>
 												<TD width="49%" vAlign="top" align="left">
 												<TABLE width="100%" cellPadding="2" cellSpacing="2"

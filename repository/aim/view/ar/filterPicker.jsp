@@ -63,11 +63,15 @@
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				
+				<logic:present name="isUserLogged" scope="session">
+				
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><b><digi:trn
 						key="rep:filter:ApprovalStatus">Approval Status</digi:trn></b><br/>
 					</td>
 				</tr>
+				
+				</logic:present>
 				
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr  bgcolor="#EEEEEE">
@@ -77,6 +81,7 @@
 				<logic:notEqual name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
 					<c:set var="accessType">false</c:set>
 				</logic:notEqual>
+				<logic:present name="isUserLogged" scope="session">
 				<td colspan="5">
 					<html:select property="approvalStatusSelected" multiple="true"
 						style="width: 300px" styleClass="inp-text" >
@@ -106,6 +111,7 @@
 						</module:display>
 					</html:select>
 					</td>
+					</logic:present>
 				</tr>
 			</table>
 		</td>

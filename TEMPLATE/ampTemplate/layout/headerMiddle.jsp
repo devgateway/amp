@@ -115,7 +115,7 @@ cursor:pointer;
            	</li>
            	<feature:display name="Language Option" module="Tools">
 		            <li style="float:left;">
-		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
 		                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
@@ -158,7 +158,7 @@ border-right:1px solid white;
             </li>
             <feature:display name="Language Option" module="Tools">
 		            <li>
-		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
 		                <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">

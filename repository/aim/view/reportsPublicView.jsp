@@ -41,10 +41,6 @@
 	Showing all Off Budget activities...
 	</digi:trn>
 	<% 
-	} else { 
-	%>	
-	<digi:trn>Showing all public activities...</digi:trn>
-	<% 
 	} 
 	%>
 	</logic:notPresent>

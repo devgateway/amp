@@ -20,6 +20,7 @@
 
 <bean:define id="tMembers" name="teamForm" property="myTeamMembers" />
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 	
 <%@include file="documentManagerJsHelper.jsp" %>
 

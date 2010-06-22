@@ -372,7 +372,7 @@ function fnSubmit() {
 									</tr>
 									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
 									<tr bgcolor="#f4f4f2">
-										<td colspan="5" align="center">
+										<td colspan="7" align="center">
 											<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
 										</td>
 									</tr>

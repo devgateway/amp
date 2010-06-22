@@ -108,6 +108,12 @@
         }		
 		return false;		
 	}
+
+	function isPassVoid(name){
+        return (name == "" || name == null || name.charAt(0) == ' ');
+	}
+	
+	
 	function validate(){
         name = document.umAddUserForm.firstNames.value;
         lastname = document.umAddUserForm.lastName.value;
@@ -135,7 +141,7 @@
         }
         if(validateEmail()==false)
             return false
-        if (isVoid(password)||isVoid(passwordConfirmation))
+        if (isPassVoid(password)||isPassVoid(passwordConfirmation))
         {
 			<c:set var="translation">
 			<digi:trn key="error.registration.passwordBlank">Password field is Blank</digi:trn>

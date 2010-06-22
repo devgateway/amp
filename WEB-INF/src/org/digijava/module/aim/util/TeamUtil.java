@@ -1566,7 +1566,7 @@ public class TeamUtil {
 
     public static Collection getAllTeamAmpActivities(Long teamId) {
         Session session = null;
-        Collection col = null;
+        Collection col = new ArrayList();
 
         try {
             session = PersistenceManager.getSession();
@@ -1581,7 +1581,40 @@ public class TeamUtil {
             	qry=session.createQuery(queryString);
             	qry.setParameter("teamId", teamId, Hibernate.LONG);
             }
-            col = qry.list();
+            Iterator itr = qry.list().iterator();
+            
+            while(itr.hasNext()) {
+
+                AmpActivity activity = (AmpActivity) itr.next();
+                Collection temp1 = activity.getOrgrole();
+                Collection temp2 = new ArrayList();
+                Iterator temp1Itr = temp1.iterator();
+                while(temp1Itr.hasNext()) {
+                    AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
+                    if(!temp2.contains(orgRole))
+                        temp2.add(orgRole);
+                }
+
+                Iterator orgItr = temp2.iterator();
+
+                String donors = "";
+
+                while(orgItr.hasNext()) {
+                    AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+                    if(orgRole.getRole().getRoleCode().equals(
+                        Constants.FUNDING_AGENCY)) {
+                        if(donors.trim().length() > 0) {
+                            donors += ", ";
+                        }
+                        donors += orgRole.getOrganisation().getName();
+                    }
+                }
+
+                activity.setDonors(donors);
+                col.add(activity);
+
+            }
+            
         } catch(Exception e) {
             logger.debug("Exception from getAllTeamAmpActivities()");
             logger.debug(e.toString());

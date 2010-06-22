@@ -219,7 +219,7 @@ function submitPages(){
 									</tr>
 									<c:if test="${empty aimCurrencyForm.currency}">
 									<tr bgcolor="#f4f4f2">
-										<td colspan="4" align="center">
+										<td colspan="5" align="center">
 											<digi:trn key="aim:noCurrencies">No currencies present</digi:trn>
 										</td>
 									</tr>

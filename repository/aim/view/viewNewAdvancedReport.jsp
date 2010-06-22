@@ -455,9 +455,11 @@ session.setAttribute("progressValue", counter);
 </c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
+             <logic:present name="isUserLogged" scope="session">
             	<td align="right">
             		<jsp:include page="legendPopup.jsp"/>
             	</td>
+             </logic:present>
             </logic:notEqual>
             </tr>
             </table>
@@ -613,9 +615,11 @@ session.setAttribute("progressValue", counter);
 </c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
+             <logic:present name="isUserLogged" scope="session">
      		<td align="right">
             	<jsp:include page="legendPopup.jsp" />
             </td>
+             </logic:present>
             </logic:notEqual>
             </tr>
             <tr>

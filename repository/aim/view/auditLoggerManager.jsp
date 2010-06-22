@@ -44,11 +44,27 @@
 </style>
 <script language="javascript">
 
+function actionChanged(value){
+	var header = document.getElementById("frecuencyHeaderId");
+	if (header!= null){
+		if (value == 'delete'){
+			header.innerHTML= "Older then:&nbsp;&nbsp;";
+		}
+		if (value == 'export'){
+			header.innerHTML= "Selected Period:&nbsp;&nbsp;";
+		}
+	}
+}
+
 function submitClean(){
+	if (document.getElementById("actionId").value == 'delete' && ! confirm("Do you really want to delete this log information ?")){
+		return;
+	}
+
  <digi:context name="cleanurl" property="context/module/moduleinstance/auditLoggerManager.do?clean=true" />
- 		document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>";
-		document.aimAuditLoggerManagerForm.target = "_self";
-		document.aimAuditLoggerManagerForm.submit();
+	document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>";
+	document.aimAuditLoggerManagerForm.target = "_self";
+	document.aimAuditLoggerManagerForm.submit();
 }
 
 function show_hide(divID){
@@ -175,7 +191,7 @@ function toggleSettings(){
                                  	<strong>Selected Action:&nbsp;&nbsp;</strong>
                                 	</td>
                                 	<td>
-                                 	<html:select property="useraction" styleClass="inp-text">
+                                 	<html:select property="useraction" styleClass="inp-text" styleId="actionId" onchange="actionChanged(this.value);">
                                  		<html:option value="delete">Delete</html:option>
                                  		<html:option value="export">Export</html:option>
                                  	</html:select>
@@ -183,10 +199,10 @@ function toggleSettings(){
                                  </tr>
                                  <tr>
 									<td align="right">
-                                 	<strong>Selected Period:&nbsp;&nbsp; </strong>
+                                 	<strong id="frecuencyHeaderId">Older then:&nbsp;&nbsp; </strong>
                                  	</td>
                                  	<td align="left" height="30px">
-                                 	<html:select property="frecuency" styleClass="inp-text">
+                                 	<html:select property="frecuency" styleClass="inp-text" >
                                  			<html:option value="30">30 <digi:trn key="aim:days">Days</digi:trn></html:option>
                                  			<html:option value="60">60 <digi:trn key="aim:days">Days</digi:trn></html:option>
                                  			<html:option value="90">90 <digi:trn key="aim:days">Days</digi:trn></html:option>
@@ -434,13 +450,10 @@ function toggleSettings(){
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 						</c:if>
-						<c:set var="translation"> <digi:trn key="aim:lastpage">
-							<span style="font-size: 8pt; font-family: Tahoma;">Last Page</span>
-						</digi:trn>
-						</c:set>
+						<c:set var="translation"><digi:trn key="aim:lastpage">Last Page</digi:trn></c:set>
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
 							<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>
-						</digi:link> 
+						</digi:link>
 					</c:if>
 					<c:out value="${aimAuditLoggerManagerForm.currentPage}"/>&nbsp; 
 					<digi:trn key="aim:of">

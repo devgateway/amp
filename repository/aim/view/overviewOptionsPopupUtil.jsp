@@ -42,15 +42,14 @@
 	
 	function initScriptsOverviewframe() {
 		//alert('initScriptsOverviewframe');
-		var msgP8='\n<digi:trn key="aim:options">Options</digi:trn>';
-		myPanelOverviewframe.setHeader(msgP8);
+		myPanelOverviewframe.setHeader('\n');
 		myPanelOverviewframe.setBody("The Panel is a powerful UI control");
 		myPanelOverviewframe.render(document.body);
 		panelFirstShow = 1;
 		//contentLocal = document.getElementById("myPOverviewframeContent");
 	}
 	
-	function showPOverviewframe() {
+	function showPOverviewframe(title) {
 		//alert('showPOverviewframe');
 		//contentLocal = document.getElementById("myPOverviewframeContent");
 		contentLocal = document.createElement('div');
@@ -64,6 +63,7 @@
 		//contentLocal.parentElement = element5;
 		//if (panelFirstShow == 1){ 
 			contentLocal.style.display = "inline";
+			myPanelOverviewframe.setHeader('\n' + title);
 			myPanelOverviewframe.setBody(contentLocal);
 			panelFirstShow = 0;
 		//}
@@ -123,12 +123,12 @@
 		//document.aimMainProjectDetailsForm.submit();
 	//}
     
-	function previewOverviewframe(type,key)
+	function previewOverviewframe(type,key, title)
 	{
 		//alert('previewOverviewframe');
         var postString		= "type="+type+"&description="+key;
         //alert(postString);
-        showPOverviewframe();
+        showPOverviewframe(title);
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewProjectDetails.do", OverviewframeCallback, postString);
 	}
 

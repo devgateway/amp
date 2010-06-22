@@ -111,7 +111,32 @@ public class ProgramUtil {
 			}
 
 		}
+		
+		/**
+		 * Gets a theme/program by code
+		 * @param code theme code
+		 * @return
+		 */
+		public static AmpTheme getThemeByCode(String code) {
+			Session session = null;
+			AmpTheme theme = null;
 
+			try {
+				session = PersistenceManager.getRequestDBSession();
+				String qryStr = "select theme from " + AmpTheme.class.getName()
+						+ " theme where (theme.themeCode=:code)";
+				Query qry = session.createQuery(qryStr);
+				qry.setParameter("code", code, Hibernate.STRING);
+				Iterator itr = qry.list().iterator();
+				if (itr.hasNext()) {
+					theme = (AmpTheme) itr.next();
+				}
+			} catch (Exception e) {
+				logger.error("Exception from getTheme()");
+				logger.error(e.getMessage());
+			} 
+			return theme;
+		}
 
 
 		public static AmpTheme getTheme(String name) {

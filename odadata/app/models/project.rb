@@ -332,7 +332,7 @@ protected
   # Validation methods
   # Validate that the total sector amount per project is 100%
   def total_sector_amount_is_100
-    return true unless self.sector_relevances.any?
+    return true unless self.sector_relevances.reject(&:marked_for_destruction?).any?
     
     total = self.sector_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     if (total < 95) || (total > 100)
@@ -343,7 +343,7 @@ protected
   
   # Validate that the total location amount per project is nearly 100%
   def total_location_amount_is_100
-    return true unless self.geo_relevances.any?
+    return true unless self.geo_relevances.reject(&:marked_for_destruction?).any?
     
     total = self.geo_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     if (total < 95) || (total > 100)

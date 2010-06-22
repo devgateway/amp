@@ -136,7 +136,7 @@ class Donor < ActiveRecord::Base
   # Forecasts are *not* included!
   def annual_payments
     # Use lazy loading to minimize database queries
-    @annual_payments ||= Funding.find(:all, 
+    @annual_payments = Funding.find(:all, 
       :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year',
       :joins => 'JOIN projects ON fundings.project_id = projects.id',
       :conditions => ['projects.donor_id = ? AND projects.data_status = ?', self.id, Project::PUBLISHED],

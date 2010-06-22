@@ -56,6 +56,9 @@ import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 import javax.servlet.ServletContext;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.orgProfile.helper.ExportSettingHelper;
 
@@ -189,6 +192,7 @@ public class ExportToWord extends Action {
                         JFreeChart chartSecondaryScheme = null;
                         JFreeChart chartDisbSecondaryScheme = null;
                         Table orgSummaryTbl = null;
+                        Table orgContactsTbl=null;
                         Table largetsProjectsTbl = null;
                         Table parisDecTbl = null;
                         Table typeOfAidTbl = null;
@@ -511,34 +515,142 @@ public class ExportToWord extends Action {
                                     orgWbLinkCell.addElement(new Paragraph(orgUrl, OrgProfileUtil.PLAINFONT));
                                     orgSummaryTbl.addCell(orgWbLinkCell);
 
-                                    RtfCell contactNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Name", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                    contactNameCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                    orgSummaryTbl.addCell(contactNameCell);
+                                    int count = 0;
+                                    // contacts for NGO organizations,  we have mixed code in 1.14 :(
+                                    if (orgGroupType!=null&&orgGroupType.getClassification() != null && orgGroupType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
+                                        boolean noContactsToShow = true;
+                                        if (organization != null) {
+                                            orgContactsTbl = new Table(6);
+                                            RtfCell contactHeaderCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Contact Information", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            contactHeaderCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                            contactHeaderCell.setColspan(6);
+                                            contactHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                            orgContactsTbl.addCell(contactHeaderCell);
 
-                                    RtfCell contactNameCellValue = new RtfCell(new Paragraph(contactName, OrgProfileUtil.PLAINFONT));
-                                    contactNameCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                    orgSummaryTbl.addCell(contactNameCellValue);
+                                            RtfCell contactLastNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Last Name", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            contactLastNameCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                            contactLastNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                            orgContactsTbl.addCell(contactLastNameCell);
+
+                                            RtfCell contactNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("First name", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            contactNameCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                            contactNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                            orgContactsTbl.addCell(contactNameCell);
+
+                                            RtfCell contactEmailCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            contactEmailCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                            contactEmailCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                            orgContactsTbl.addCell(contactEmailCell);
+
+                                            RtfCell contactPhoneCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            contactPhoneCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                            contactPhoneCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                            orgContactsTbl.addCell(contactPhoneCell);
+
+                                            RtfCell contactFaxCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            contactFaxCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                            contactFaxCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                            orgContactsTbl.addCell(contactFaxCell);
+
+                                            RtfCell contactTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Title", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            contactTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                            contactTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                            orgContactsTbl.addCell(contactTitleCell);
+                                            //contacts
+                                            if (organization.getOrganizationContacts() != null) {
+                                                List<AmpOrganisationContact> orgContacts = new ArrayList(organization.getOrganizationContacts());
+                                                Iterator<AmpOrganisationContact> contactsIter = orgContacts.iterator();
+                                                while (contactsIter.hasNext()) {
+                                                    AmpOrganisationContact orgCont = contactsIter.next();
+                                                    if (orgCont.getPrimaryContact() != null && orgCont.getPrimaryContact()) {
+                                                        noContactsToShow = false;
+                                                        AmpContact contact = orgCont.getContact();
+                                                        RtfCell name = new RtfCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
+                                                        RtfCell lastName = new RtfCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
+                                                        String emails = "";
+                                                        String phones = "";
+                                                        String faxes = "";
+                                                        for (AmpContactProperty property : contact.getProperties()) {
+                                                            if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
+                                                                emails += property.getValue() + ";\n";
+                                                            } else if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
+                                                                phones += property.getValue() + ";\n";
+                                                            } else {
+                                                                faxes += property.getValue() + ";\n";
+                                                            }
+                                                        }
+                                                        RtfCell emailCell = new RtfCell(new Paragraph(emails, OrgProfileUtil.PLAINFONT));
+                                                        RtfCell phone = new RtfCell(new Paragraph(phones, OrgProfileUtil.PLAINFONT));
+                                                        RtfCell fax = new RtfCell(new Paragraph(faxes, OrgProfileUtil.PLAINFONT));
+                                                        String contacTitle = "";
+                                                        if (contact.getTitle() != null) {
+                                                            contacTitle = contact.getTitle().getValue();
+                                                        }
+                                                        RtfCell title = new RtfCell(new Paragraph(contacTitle, OrgProfileUtil.PLAINFONT));
+                                                        if (count % 2 == 0) {
+                                                            title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                            fax.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                            phone.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                            emailCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                            lastName.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                            name.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                        }
+                                                        orgContactsTbl.addCell(lastName);
+                                                        orgContactsTbl.addCell(name);
+                                                        orgContactsTbl.addCell(emailCell);
+                                                        orgContactsTbl.addCell(phone);
+                                                        orgContactsTbl.addCell(fax);
+                                                        orgContactsTbl.addCell(title);
+                                                        count++;
+                                                    }
+                                                }
+
+                                            }
 
 
-                                    RtfCell contactEmailCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(contactEmailCell);
+                                            if (noContactsToShow) {
+                                                RtfCell contactTitleCl = new RtfCell();
+                                                contactTitleCl.addElement(new Paragraph(TranslatorWorker.translateText("Contact", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
+                                                contactTitleCl.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                orgSummaryTbl.addCell(contactTitleCl);
+                                                RtfCell contactCell = new RtfCell();
+                                                contactCell.addElement(new Paragraph(notAvailable, OrgProfileUtil.PLAINFONT));
+                                                contactCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                                orgSummaryTbl.addCell(contactCell);
+                                            }
+                                        }
+                                    } // contacts for non NGO organizations, we have mixed code in 1.14 :(
+                                    else {
+                                        RtfCell contactNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Name", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        contactNameCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        orgSummaryTbl.addCell(contactNameCell);
 
-                                    RtfCell contactEmailCellValue = new RtfCell(new Paragraph(email, OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(contactEmailCellValue);
+                                        RtfCell contactNameCellValue = new RtfCell(new Paragraph(contactName, OrgProfileUtil.PLAINFONT));
+                                        contactNameCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        orgSummaryTbl.addCell(contactNameCellValue);
 
-                                    RtfCell contactPhoneCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                    contactPhoneCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                    orgSummaryTbl.addCell(contactPhoneCell);
 
-                                    RtfCell contactPhoneCellValue = new RtfCell(new Paragraph(contactPhone, OrgProfileUtil.PLAINFONT));
-                                    contactPhoneCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                    orgSummaryTbl.addCell(contactPhoneCellValue);
+                                        RtfCell contactEmailCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactEmailCell);
 
-                                    RtfCell contactFaxCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(contactFaxCell);
+                                        RtfCell contactEmailCellValue = new RtfCell(new Paragraph(email, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactEmailCellValue);
 
-                                    RtfCell contactFaxCellValue = new RtfCell(new Paragraph(contactFax, OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(contactFaxCellValue);
+                                        RtfCell contactPhoneCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        contactPhoneCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        orgSummaryTbl.addCell(contactPhoneCell);
+
+                                        RtfCell contactPhoneCellValue = new RtfCell(new Paragraph(contactPhone, OrgProfileUtil.PLAINFONT));
+                                        contactPhoneCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
+                                        orgSummaryTbl.addCell(contactPhoneCellValue);
+
+                                        RtfCell contactFaxCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactFaxCell);
+
+                                        RtfCell contactFaxCellValue = new RtfCell(new Paragraph(contactFax, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactFaxCellValue);
+
+                                    }
 
 
 
@@ -587,7 +699,7 @@ public class ExportToWord extends Action {
                                     largetsProjectsTbl.addCell(largestProjectsSectorTitle);
                                     List<Project> projects = OrgProfileUtil.getOrganisationLargestProjects(filter);
                                     Iterator<Project> projectIter = projects.iterator();
-                                    int count = 0;
+                                    count = 0;
                                     while (projectIter.hasNext()) {
                                         Project project = projectIter.next();
                                         String fullTitle = (project.getFullTitle() == null) ? project.getTitle() : project.getFullTitle();
@@ -929,6 +1041,9 @@ public class ExportToWord extends Action {
                         }
                         if (orgSummaryTbl != null) {
                             doc.add(orgSummaryTbl);
+                            if(orgContactsTbl!=null){
+                                doc.add(orgContactsTbl);
+                            }
                             doc.add(largetsProjectsTbl);
                         }
                         if (parisDecTbl != null) {

@@ -190,7 +190,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </script>
 
-<table border=0 bgColor=#ffffff cellPadding=0 cellSpacing=0 width="85%" class="box-border-nopadding">
+<table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">
 	<tr>
 		<td valign="bottom" class="crumb" >
 			&nbsp;&nbsp;&nbsp;
@@ -210,8 +210,7 @@ function setHoveredTable(tableId, hasHeaders) {
 				<digi:trn>Content Repository</digi:trn> 
 			</span> 
 			<br />
-			<table border="0" cellPadding=5 cellSpacing=0 width="95%"
-			style="position: relative; left: 10px">
+			<table border="0" cellPadding=5 cellSpacing=0 width="95%" style="position: relative; left: 10px">
 			<tr><td>
 			<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
@@ -226,10 +225,10 @@ function setHoveredTable(tableId, hasHeaders) {
 			        <feature:display name="Team Resources" module="Resources">
 			        	<c:if  test="${selectedType=='team'}">
 			        		<li id="tab2" class="selected"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
-			        	</c:if>			        	
+			        	</c:if>
 			        	<c:if  test="${selectedType!='team'}">
 			        		<li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
-			        	</c:if>			        	
+			        	</c:if>
 					</feature:display>
 					
 					<li id="tab3"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
@@ -239,69 +238,59 @@ function setHoveredTable(tableId, hasHeaders) {
 			       </feature:display>
 			    </ul>            
 			    <div class="yui-content" style="background-color: #EEEEEE;">
-			      <feature:display name="My Resources" module="Resources">
-			        <div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-			        <div>
-			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
-			        <tr>
-			        <td>
-			        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
-					  		<digi:trn key="contentrepository:addResource">
-					 	    	       Add Resource ...    				
-					  		</digi:trn>            
-				    	</button>
-				    </td>
-				    </tr>
-				    </table>
-			        </div>
-						  <table border="0" cellPadding=1 cellSpacing=0 width="95%"
-							style="position: relative; left: 20px">
-							<tr style="display: block;" id="myDocumentstr">
-								<td colspan="3">
-									<br />
-									<div id="my_markup" align="left" class="all_markup">
-										<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-										<bean:define toScope="request" id="checkBoxToHide" value="true" />
-										<jsp:include page="documentTable.jsp" flush="true" />
-									</div>
-									<br />
-								</td>
-							</tr>
-						</table>
-					</div>
+			    	<feature:display name="My Resources" module="Resources">
+			      		<div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
+								<tr>
+						        	<td>
+							        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
+									  		<digi:trn> Add Resource ...</digi:trn>            
+								    	</button>
+								    </td>
+								</tr>							
+								<tr>
+									<td>
+										<br />									
+											<div id="my_markup" align="left"  class="all_markup">
+												<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+												<bean:define toScope="request" id="checkBoxToHide" value="true" />
+												<jsp:include page="documentTable.jsp" flush="true" />
+										</div>
+										<br />
+									</td>
+								</tr>
+							</table>	        
+				        </div>
 					</feature:display>
+					
+					
 					<feature:display name="Team Resources" module="Resources">
-			        <div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-			        <div>
-			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
-			        	<tr>
-			        	<td>
-						<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
-							<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
-                            	<digi:trn key="contentrepository:addResource">
-		 	    	       				Add Resource ...    							
-	 	    	       			</digi:trn>            
-							</button>
-						<%}%>
-						</td>
-						</tr>
-					</table>	
-			        </div>	        
-					<table border="0" cellPadding=1 cellSpacing=0 width="100%"
-						style="position: relative; left: 20px" >
-						<tr style="display: block;" id="teamDocumentstr">
-							<td colspan="3">
-								<br />
-								<div id="team_markup" align="center" class="all_markup">
-								<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-								<jsp:include page="documentTable.jsp" flush="true" />
-								</div>
-								<br />
-							</td>
-						</tr>
-					</table>
-			        </div>
-					</feature:display>
+						<div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
+								<tr>
+						        	<td>
+									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
+										<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
+			                            	<digi:trn key="contentrepository:addResource">
+					 	    	       				Add Resource ...    							
+				 	    	       			</digi:trn>            
+										</button>
+									<%}%>
+									</td>
+								</tr>							
+								<tr>
+									<td>
+										<br />									
+											<div id="team_markup" align="left"  class="all_markup">
+												<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+												<jsp:include page="documentTable.jsp" flush="true" />
+										</div>
+										<br />
+									</td>
+								</tr>
+							</table>	        
+				        </div>
+					</feature:display>					
 					
 					<!-- Shared Resources Start  -->
 					<div id="shared_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
@@ -309,7 +298,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							<tr>
 								<td>
 									<br />
-									<div id="shared_markup" align="center" class="all_markup">
+									<div id="shared_markup" align="left" class="all_markup">
 											<bean:define name="crDocumentManagerForm" property="sharedDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 											<jsp:include page="documentTable.jsp" flush="true" />
 									</div>
@@ -318,30 +307,28 @@ function setHoveredTable(tableId, hasHeaders) {
 							</tr>
 						</table>	        
 			        </div>
-					<!-- Shared Resources Start  -->
+					<!-- Shared Resources end  -->
 					
 					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Resources">
-			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
-						<table border="0" cellPadding=1 cellSpacing=0 width="100%"
-							style="position: relative; left: 20px" >
-							<tr>
-								<td>
-									<br />
-									<div id="public_markup" align="center" class="all_markup">
-									<div id="publicDocumentsDiv">&nbsp;</div>
-									</div>
-									<br />
-								</td>
-							</tr>
-						</table>	        
-			        </div>
+				        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+							<table border="0" cellPadding=1 cellSpacing=0 width="100%"
+								style="position: relative; left: 20px" >
+								<tr>
+									<td>
+										<br />
+										<div id="public_markup" align="left" class="all_markup">
+										<div id="publicDocumentsDiv">&nbsp;</div>
+										</div>
+										<br />
+									</td>
+								</tr>
+							</table>	        
+				        </div>
 			        </feature:display>
-<!--End public Resources-->			
-
-	
-			</div>	
-			</div>		
+					<!--End public Resources-->
+				</div>
+			</div>
 			<div id="addDocumentDiv" style="display: none">
 				<div align="center">
 				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>

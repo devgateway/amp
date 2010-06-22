@@ -15,7 +15,7 @@
 <logic:empty name="checkBoxToHide" scope="request">
 	<bean:define id="checkBoxToHideLocal" value="false"></bean:define>
 </logic:empty> 
-<table id="team_table" bgcolor="white">
+<table id="team_table" bgcolor="white" width="100%">
 						<thead>
 							<tr>
 								<logic:equal name="checkBoxToHideLocal" value="false">
@@ -98,9 +98,6 @@
 								<td>
 									<bean:write name="documentData" property="fileSize" />
 								</td>
-								<%-- <td>
-									<bean:write name="documentData" property="contentType" />
-								</td> --%>
 								<td>
 									${documentData.cmDocType }
 								</td>
@@ -112,116 +109,123 @@
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								<td nowrap="nowrap"> 
-								<a style="display:none" id="fake1" href="http://www.yahoo.com">FOR_SILK</a>
-								
-								<c:choose>
-								<c:when test="${documentData.webLink == null}">
-									<c:set var="translation">
-										<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
-									</c:set> 
-									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
-									onClick="downloadFile('<bean:write name='documentData' property='uuid' />');"
-	
-									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
-								</c:when>
-								<c:otherwise>
-<!--									<c:set var="translation">-->
-<!--										<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn>-->
-<!--									</c:set> -->
-									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
-									onclick="window.open('${documentData.webLink }')" 
-									onmouseout="UnTip()"
-									onmouseover="Tip('<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn> ${documentData.webLink}')"><img hspace="2" src= "/repository/contentrepository/view/images/link_go.gif" border=0/></a>
-								</c:otherwise>
-								</c:choose>
-								
-
-<!--								<c:set var="translation">-->
-<!--									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>-->
-<!--								</c:set>-->
-								<logic:equal name="documentData" property="hasVersioningRights" value="true">
-								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
-								onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
-								title="<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/update.gif" border=0></a>
-								
-								</logic:equal>
-								
-								<c:set var="translationForWindowTitle">
-									<digi:trn key="contentrepository:versionHistoryWindowTitle">Version History</digi:trn>
-								</c:set> 
-<!--								<c:set var="translation">-->
-<!--									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>-->
-<!--								</c:set> -->
-								<logic:equal name="documentData" property="hasShowVersionsRights" value="true">
-								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
-								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}');"
-								title="<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/version_history.gif" border=0></a>
-								</logic:equal>
-<!--								<c:set var="translation">-->
-<!--									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>-->
-<!--								</c:set>-->
-								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
-									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
-									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
-									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/make_public.gif" border=0></a>
-									</c:if>
-								</logic:equal>
-								
-								
-								<logic:equal name="documentData" property="isPublic" value="true">
-<!--								<c:set var="translation">-->
-<!--									<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>-->
-<!--								</c:set>-->
-								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
-									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
-									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/make_private.gif" border=0></a>
-								</logic:equal>
-								
-								</logic:equal>
-								
-								<logic:notEmpty name="documentData" property="shareWith">
-									<logic:equal name="documentData" property="hasShareRights" value="true">										
-										
-										<logic:equal name="documentData" property="needsApproval" value="false">
-											<logic:equal  name="documentData" property="lastVersionIsShared" value="false">
-												<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
-												onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>"><digi:trn>Share</digi:trn></a>
-											</logic:equal>
-										</logic:equal>										
-										<logic:equal name="documentData" property="needsApproval" value="true">
-												<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
-												onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>"><digi:trn>Approve</digi:trn> </a>
-												
-												<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
-												onClick="rejectDoc('<%=documentData.getUuid() %>','rejectShare');" title="<digi:trn>Click here to Reject this document</digi:trn>"><digi:trn>Reject</digi:trn> </a>
-										</logic:equal>
-										
-									</logic:equal>
-								</logic:notEmpty>
-								
-								<logic:equal name="documentData" property="hasUnshareRights" value="true">
-									<logic:equal name="documentData" property="isShared" value="true">
-										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
-										onClick="unshareDoc('<%=documentData.getUuid() %>');" title="<digi:trn>Click here to UnShare this document</digi:trn>">UnShare</a>
-									</logic:equal>									
-								</logic:equal>
-								
-
-								<logic:equal name="documentData" property="hasDeleteRights" value="true">
-									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
-									onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"
-									title="<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
-								</logic:equal>
-								
-									<a style="cursor:pointer; text-decoration:underline; color: blue"
-									onClick="showOrgsPanel('<%=documentData.getUuid() %>');" title="<digi:trn>Show Participating Organizations</digi:trn>">
-									<img hspace="2" src= "/repository/contentrepository/view/images/myO.png" border=0>
-									</a>
+									<a style="display:none" id="fake1" href="http://www.yahoo.com">FOR_SILK</a>
 									
+									<c:choose>
+										<c:when test="${documentData.webLink == null}">
+											<c:set var="translation">
+												<digi:trn>Click here to download document</digi:trn>
+											</c:set> 
+											<a style="cursor:pointer; text-decoration:none; color: blue" id="D<bean:write name='documentData' property='uuid' />"
+											onClick="downloadFile('<bean:write name='documentData' property='uuid' />');"title="${translation}">
+												<digi:trn>Download</digi:trn>
+											</a>
+										</c:when>
+										<c:otherwise>
+		
+											<a style="cursor:pointer; text-decoration:none; color: blue" id="D<bean:write name='documentData' property='uuid' />"
+											onclick="window.open('${documentData.webLink }')" onmouseout="UnTip()"	onmouseover="Tip('<digi:trn>Follow link to </digi:trn> ${documentData.webLink}')">
+												<digi:trn>Follow the Link</digi:trn>
+											</a>
+										</c:otherwise>
+									</c:choose>
+									
+	
+	
+									<logic:equal name="documentData" property="hasVersioningRights" value="true">
+										<span style="color: blue"><strong>|</strong></span>
+										<a style="cursor:pointer; text-decoration:none; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
+										onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
+										title="<digi:trn>Click here to add a new version of this document</digi:trn>">
+											<digi:trn>Add Version</digi:trn>								
+									</logic:equal>
+									
+									<c:set var="translationForWindowTitle">
+										<digi:trn>Version History</digi:trn>
+									</c:set> 
+									<logic:equal name="documentData" property="hasShowVersionsRights" value="true">
+										<span style="color: blue"><strong>|</strong></span>
+										<a style="cursor:pointer; text-decoration:none; color: blue" id="H<bean:write name='documentData' property='uuid' />"
+										onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}');"
+										title="<digi:trn>Click here to see a list of versions for this document</digi:trn>">
+											<digi:trn>Versions</digi:trn>
+										</a>
+									</logic:equal>
+	
+									<logic:equal name="documentData" property="hasMakePublicRights" value="true">
+										<c:if test="${ (!documentData.isPublic) || (!documentData.lastVersionIsPublic) }">
+											<span style="color: blue"><strong>|</strong></span>
+											<a style="cursor:pointer; text-decoration:none; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
+											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
+											title="<digi:trn>Click here to make this document public</digi:trn>">
+												<digi:trn>Make Public</digi:trn>
+											</a>
+										</c:if>
+									</logic:equal>
+									
+									
+									<logic:equal name="documentData" property="isPublic" value="true">
+										<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
+											<span style="color: blue"><strong>|</strong></span>
+											<a style="cursor:pointer; text-decoration:none; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
+											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
+											title="<digi:trn>Click here to unpublish this document</digi:trn>">
+												<digi:trn>Unpublish</digi:trn>
+											</a>
+										</logic:equal>								
+									</logic:equal>
+									
+									<logic:notEmpty name="documentData" property="shareWith">
+										<logic:equal name="documentData" property="hasShareRights" value="true">										
+											
+											<logic:equal name="documentData" property="needsApproval" value="false">
+												<logic:equal  name="documentData" property="lastVersionIsShared" value="false">
+													<span style="color: blue"><strong>|</strong></span>
+													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue"
+													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>">
+														<digi:trn>Share</digi:trn>
+													</a>
+												</logic:equal>
+											</logic:equal>										
+											<logic:equal name="documentData" property="needsApproval" value="true">
+													<span style="color: blue;"><strong>|</strong></span>
+													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"
+													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>">
+													<digi:trn>Approve</digi:trn> </a>
+													
+													<span style="color: blue"><strong>|</strong></span>
+													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue"
+													onClick="rejectDoc('<%=documentData.getUuid() %>','rejectShare');" title="<digi:trn>Click here to Reject this document</digi:trn>">
+														<digi:trn>Reject</digi:trn> 
+													</a>
+											</logic:equal>
+											
+										</logic:equal>
+									</logic:notEmpty>
+									
+									<logic:equal name="documentData" property="hasUnshareRights" value="true">
+										<logic:equal name="documentData" property="isShared" value="true">
+											<span style="color: blue;"><strong>|</strong></span>
+											<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;" onClick="unshareDoc('<%=documentData.getUuid() %>');" 
+											title="<digi:trn>Click here to UnShare this document</digi:trn>">
+												<digi:trn>UnShare</digi:trn>
+											</a>
+										</logic:equal>									
+									</logic:equal>
+									
+	
+									<logic:equal name="documentData" property="hasDeleteRights" value="true">
+										<span style="color: blue;"><strong>|</strong></span>
+										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"
+										title="<digi:trn>Click here to delete this document</digi:trn>"><digi:trn>Delete</digi:trn></a>
+									</logic:equal>
+								
+									<span style="color: blue;"><strong>|</strong></span> 
+									<a style="cursor:pointer; text-decoration:none; color: blue;" onClick="showOrgsPanel('<%=documentData.getUuid() %>');" title="<digi:trn>Show Participating Organizations</digi:trn>">
+										<digi:trn>Organizations</digi:trn> 
+									</a>									
 								</td>
-							</tr>							
+							</tr>
 						</logic:iterate>
 						</tbody>
 					</table>

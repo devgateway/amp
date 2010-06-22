@@ -5,7 +5,7 @@
 .yui-tt{ background: LightYellow; border-color: black }
 
 .all_markup {margin:1em} 
-.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 90%} 
+.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 98%} 
 .all_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
@@ -99,7 +99,7 @@
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.namespace("YAHOO.amp.table");
 
-	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn key="aim:noRecordsFound">No records found</digi:trn>";
+	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn>No records found</digi:trn>";
 
 	/* Check FormatDateHelper.js for more information */
 	FormatDateHelper.prototype.formatString		= '<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)%>';
@@ -270,7 +270,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	<%
     	String dt = request.getParameter("documentsType");		
 	%>
-	var dt = "<%= dt %>";	
+	var dt = "<%= dt %>";
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
 	    this.columnHeaders = [
 			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
@@ -280,8 +280,8 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	        {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
 	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
 	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
-	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:200},
+	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:400}
 	    ];
 	}
 	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
@@ -298,14 +298,14 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     	    ];
 	}else {
 	    this.columnHeaders = [
-      			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+      			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:400},
        		    {key:"type",text:"${trans_headerType}",sortable:true},
-       	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
+       	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:200},
         	    {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
 	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
             	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
-	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:300},
+	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:1000}
 	    ];
 	}
     this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
@@ -317,6 +317,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 							        pageLinksLength:2												        
 	                			  };
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
+	dataTable.width='2000px';
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);

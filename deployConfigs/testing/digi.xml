@@ -30,7 +30,7 @@
 	<enable-autologin>true</enable-autologin>
 	
 	<!-- ECS Service -->
-	<ecsDisable>true</ecsDisable>
+	<ecsDisable>false</ecsDisable>
 	<ecsServerName>ampdev.114.testing</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->

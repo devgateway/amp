@@ -216,7 +216,7 @@ saveReportEngine	= null;
 			wrapper.appendChild(filter);
 		};
 	
-		var myPanel1 = new YAHOO.widget.Panel("new", {
+		var myPanel1 = new YAHOOAmp.widget.Panel("new", {
 			width:"750px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -226,7 +226,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 		    
-		var myPanel2 = new YAHOO.widget.Panel("new2", {
+		var myPanel2 = new YAHOOAmp.widget.Panel("new2", {
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"shadow",
@@ -235,7 +235,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 
-		var myPanel3 = new YAHOO.widget.Panel("new3", {
+		var myPanel3 = new YAHOOAmp.widget.Panel("new3", {
 			width:"300px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -245,7 +245,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 		    
-		    var myPanel4 = new YAHOO.widget.Panel("new4", {
+		    var myPanel4 = new YAHOOAmp.widget.Panel("new4", {
 			width:"450px",
 		    fixedcenter: true,
 		    constraintoviewport: true,

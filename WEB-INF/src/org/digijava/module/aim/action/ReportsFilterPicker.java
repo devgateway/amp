@@ -178,8 +178,16 @@ public class ReportsFilterPicker extends MultiAction {
  	 	filterForm.getSectorElements().add(sectorsElement);
  	 	filterForm.getSectorElements().add(secondarySectorsElement);
  	 	
- 	 	AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
- 	 	AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
+	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>());
+		
+ 	 	AmpActivityProgramSettings natPlanSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+ 	 	AmpTheme nationalPlanningProg = null;
+		if (natPlanSetting!=null) {
+			nationalPlanningProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
+	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj");
+	 	 	filterForm.getProgramElements().add(natPlanProgElement);
+		}
+
 		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 		AmpTheme primaryProg = null;
 		if (primaryPrgSetting!=null) {
@@ -187,17 +195,14 @@ public class ReportsFilterPicker extends MultiAction {
 			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 			filterForm.getProgramElements().add(primaryProgElement);
 	 	}
-		AmpTheme secondaryProg = null;
+
  	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
+		AmpTheme secondaryProg = null;
  	 	if (secondaryPrg!=null) {
 			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
 			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 			filterForm.getProgramElements().add(secondaryProgElement);
 		}
- 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj");
- 	 	
- 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>());
- 	 	filterForm.getProgramElements().add(natPlanProgElement);
  	 	
  	 	Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());

@@ -354,7 +354,7 @@ public class ChartWidgetUtil {
                     funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), filter.getTransactionType(),Constants.ACTUAL);
                 }
                 result.addValue(funding.doubleValue()/divideByMillionDenominator, title, i);
-                totalCategory = funding.doubleValue();
+                totalCategory += funding.doubleValue();
                 if (funding.doubleValue() != 0) {
                     nodata = false;
                 }
@@ -862,6 +862,9 @@ public class ChartWidgetUtil {
 		legend.setVerticalAlignment(VerticalAlignment.TOP);
 		legend.setHorizontalAlignment(HorizontalAlignment.LEFT);
 		legend.setBackgroundPaint(new Color(255,255,255,0));
+        RectangleInsets legendItemPadding=new RectangleInsets(6,0,0,0);
+        legend.setLegendItemGraphicPadding(legendItemPadding);
+        legend.setItemLabelPadding(legendItemPadding);
 		List <Comparable> keys = dataset.getKeys();
         int aInt;
         Color[] colors = opt.isMonochrome() ? colorsMonochrome : colorsColor;       
@@ -1689,11 +1692,27 @@ public class ChartWidgetUtil {
             /*Depending on what is selected in the filter
             we should return either actual commitments
             or actual Disbursement or  */
-            switch(transactionType){
-                case Constants.EXPENDITURE: total=cal.getTotActualExp();break;
-                case Constants.DISBURSEMENT: total=cal.getTotActualDisb();break;
-                default: total = cal.getTotActualComm();
-
+            switch (transactionType) {
+                case Constants.EXPENDITURE:
+                    if (Constants.PLANNED == adjustmentType) {
+                        total = cal.getTotPlannedExp();
+                    } else {
+                        total = cal.getTotActualExp();
+                    }
+                    break;
+                case Constants.DISBURSEMENT:
+                    if (Constants.ACTUAL == adjustmentType) {
+                        total = cal.getTotActualDisb();
+                    } else {
+                        total = cal.getTotPlanDisb();
+                    }
+                    break;
+                default:
+                    if (Constants.ACTUAL == adjustmentType) {
+                        total = cal.getTotActualComm();
+                    } else {
+                        total = cal.getTotPlannedComm();
+                    }
             }
 
         } catch (Exception e) {

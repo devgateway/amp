@@ -50,20 +50,6 @@
                     <tr align="center" bgcolor="#f4f4f2" valign="top">
                       <td class="f-names">
                         <table cellPadding="0" cellSpacing="0" width="320px">
-                        	<module:display name="Event Type Manager" parentModule="ADMINISTRATIVE SECTION">
-                          <tr>
-                            <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="trnEventTypes">
-                                <digi:trn key="aim:clickToViewEventTypes">Click here to view Event Type Manager</digi:trn>
-                              </c:set>
-                              <digi:link module="calendar" href="/eventTypes.do" title="${trnEventTypes}" >
-                                <digi:trn key="aim:eventTypeManager">Event Type Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                          </module:display>
-
 						<module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">

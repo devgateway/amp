@@ -442,6 +442,13 @@ ${fn:replace(message,quote,escapedQuote)}
 				<tr> <td>
 					<digi:errors/>
 				</td></tr>
+			    <logic:iterate id="element" name="aimEditActivityForm" property="messages">
+                    <tr><td>
+                        <digi:trn key="${element.key}">
+                            <font color="#FF0000"><bean:write name="element" property="value"/></font>
+                        </digi:trn>
+                    </td></tr>
+                </logic:iterate>
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 						<tr><td width="75%" vAlign="top">

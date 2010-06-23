@@ -1338,6 +1338,7 @@
       <forward name="addActivityStepXNR" path="/aim/addActivity.do?edit=true"/>
       <forward name="addActivityStepX" path="/aim/addActivity.do?edit=true" redirect="true"  />
       <forward name="saveErrors" path="/showLayout.do?layout=aim_saveErrors" />
+      <forward name="saveDraft"  path="/aim/editActivity.do?pageId=1~step=1~action=edit~surveyFlag=true~edit=true" redirect="true"/>
     </action>
     <action name="aimEditActivityForm" path="/aim/compDateRevised" scope="session" type="org.digijava.module.aim.action.CompDateRevised">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />

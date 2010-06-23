@@ -180,7 +180,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     if(actIdParam != null && actIdParam !=0L ) 
     	activityId=actIdParam;
     
-  
+    String resetMessages = request.getParameter("resetMessages");
+    if(resetMessages != null && resetMessages.equals("true")) {
+    	if(eaForm.getMessages() != null) {
+    		eaForm.getMessages().clear();
+        }
+    }
+    
     // set Globam Settings Multi-Sector Selecting
    /* String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);
@@ -571,7 +577,14 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
         /* Injecting documents into session */
         SelectDocumentDM.clearContentRepositoryHashMap(request);
-        request.getParameterMap().put("viewAllRights", "true");
+        
+        //Added because of a problem with the save as draft and redirect.
+        try {
+        	request.getParameterMap().put("viewAllRights", "true");
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
         		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
         

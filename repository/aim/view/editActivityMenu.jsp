@@ -155,7 +155,7 @@ function gotoStep(value) {
   }
   if (flag == true) {
     document.aimEditActivityForm.step.value = value;
-    <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+    <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true~resetMessages=true" />
     document.aimEditActivityForm.action = "<%= step %>";
     document.aimEditActivityForm.target = "_self";
     document.aimEditActivityForm.submit();
@@ -860,7 +860,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<tr>
 					<td align="center">
 						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveClicked()">
-							<digi:trn key="aim:save">Save</digi:trn>
+							<digi:trn>Save and Submit</digi:trn>
 						</html:button>
 					</td>
 				</tr>

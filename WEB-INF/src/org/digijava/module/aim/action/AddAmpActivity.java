@@ -168,7 +168,14 @@ public class AddAmpActivity extends Action {
     if (eaForm.getRegFundingPageCurrCode() == null) {
         eaForm.setRegFundingPageCurrCode(currCode);
     }
-      
+
+    String resetMessages = request.getParameter("resetMessages");
+    if(resetMessages != null && resetMessages.equals("true")) {
+    	if(eaForm.getMessages() != null) {
+    		eaForm.getMessages().clear();
+        }
+    }
+    
     //START-patch for error redirecting
     String reqStep = (String) request.getAttribute("step");
     if (reqStep != null && (reqStep.compareTo(eaForm.getStep()) != 0))

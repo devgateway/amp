@@ -2603,6 +2603,9 @@ public class SaveActivity extends Action {
 
 		//We need to getPageId before the cleanup so it doesn't get reset
 		int temp = eaForm.getPageId();
+		if(temp == 0) {
+			temp = 1;
+		}
 
 		/**
 		 *  Perform session & form cleanup
@@ -2611,7 +2614,11 @@ public class SaveActivity extends Action {
 
 		//OLD!!!
 		//boolean surveyFlag = false;
-
+		
+        if(eaForm.getMessages() != null) {
+            eaForm.getMessages().clear();
+        }
+        
 		if (temp == 0)
 			return mapping.findForward("adminHome");
 		else if (temp == 1) {
@@ -2621,10 +2628,19 @@ public class SaveActivity extends Action {
 				logger.debug("forwarding to edit survey action...");
 				return mapping.findForward("saveSurvey");
 			} else {*/
-				if (rsp.isDidRecover())
-					return mapping.findForward("saveErrors");
-				else
-					return mapping.findForward("viewMyDesktop");
+            if (rsp.isDidRecover()) {
+                return mapping.findForward("saveErrors");
+            } else {
+            	if (activity.getDraft()!=null && !activity.getDraft()) {
+            		return mapping.findForward("viewMyDesktop");
+                } else {
+                    //eaForm.setActivityId(ActivityVersionUtil.getLastActivityFromGroup(activity.getAmpActivityGroup().getAmpActivityGroupId()).getAmpActivityId());
+                    // Set to 1 or next time will be -1 and will fail some checks.
+                    eaForm.setPageId(1);
+                    eaForm.addMessage("message.aim.draftSavedSuccesfully", "Your changes have been saved successfully.");
+                    return mapping.findForward("saveDraft");
+                }
+            }
 			//}
 		} else {
 			logger.info("returning null....");

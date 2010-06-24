@@ -150,6 +150,7 @@
                 background: #EDF5FF;
                 border: 1px solid black;
                 border-width: 1px 1px 0px 1px;
+                font-size: 8pt !important;
             }
             .noTopBorder{
                 border-width: 0px 1px 1px 1px;

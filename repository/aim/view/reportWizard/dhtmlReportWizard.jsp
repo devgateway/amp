@@ -370,6 +370,12 @@
 												Monthly Report
 											</digi:trn>
 										</html:radio>
+										
+										<html:radio property="reportPeriod" value="N">
+											<digi:trn>
+												No Grouping
+											</digi:trn>
+										</html:radio>
 										<br /><br />
 									</div>
 								</c:if>

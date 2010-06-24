@@ -73,7 +73,7 @@ function resetElement( elem ) {
 	 	elem[i].checked = false;
 	 	}
 
-YAHOOAmp.namespace("YAHOO.amptab");
+YAHOOAmp.namespace("YAHOOAmp.amptab");
 
 YAHOOAmp.amptab.afterFiltersLoad   = function (){
 		var selColor    = "#BFD2DF";

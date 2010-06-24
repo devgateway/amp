@@ -66,6 +66,7 @@ function toggleSettings(){
 <div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 
+<logic:present name="firstReportName">
 <ul id="PublicTabs" class="yui-nav">
 <logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
 			<logic:equal name="report" property="publicReport" value="true">
@@ -76,17 +77,20 @@ function toggleSettings(){
 </logic:iterate>
 </ul>
 </div>
-
+</logic:present>
 <logic:notPresent name="firstReportName">
+<br /><br />
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
 <digi:trn key="aim:noPublicTabs">
 No Public Tabs
 </digi:trn>
+</div>
 </logic:notPresent>
 
+<logic:present name="firstReportName">
 <div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
 </div>
 </div>	
-<logic:present name="firstReportName">
 	<script type="text/javascript">
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	

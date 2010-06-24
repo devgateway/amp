@@ -16,7 +16,7 @@
 		 var width=document.getElementById('width').value;
 		 var height=document.getElementById('height').value;
 		 var angle=document.getElementById('angle').value;
-                 var pageSize=document.getElementById('pageSize').value;
+         var pageSize=document.getElementById('pageSize').value;
 		 //*** Validate width
 		 if(parseInt(width)==(width-0)){		   	
 			 if(parseInt(width)<10 || parseInt(width)>1000){
@@ -35,15 +35,21 @@
 		 }		 
 		 //***Validate angle	
 
-			if(angle!=''){
-		  		if(parseInt(angle)==(angle-0)) {
+		if(angle!=''){
+			if(parseInt(angle)==(angle-0)) {
 		 		if(parseInt(angle)<0 || parseInt(angle)>90){
-			 	errmsg+='\n<digi:trn>Angle of inclination must be in range from 0 to 90</digi:trn>';
-			}
-		 }else{
-		 	errmsg+='\n<digi:trn>Please enter correct angle</digi:trn>';
-		 }
-				} 
+			 		errmsg+='\n<digi:trn>Angle of inclination must be in range from 0 to 90</digi:trn>';
+			 	}
+		 	}else{
+		 		errmsg+='\n<digi:trn>Please enter correct angle</digi:trn>';
+		 	}
+		} 
+		 //***Validate page size
+		 if(parseInt(pageSize)==(pageSize-0)) {
+		 	if(parseInt(pageSize)<0){
+			 	errmsg+='\n<digi:trn>Activities per page should be grather than 0</digi:trn>';
+		 	}
+		 }		 
 		 
 		 //***Validate error messages
 		 if (errmsg==''){

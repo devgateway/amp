@@ -84,7 +84,7 @@
                 color: White;
                 background-color:
                     rgb(55, 96, 145);
-                font-family: Arial;
+                font-family:Arial,Helvetica,sans-serif;
                 font-weight: bold;
                 text-align:center;
                 border-style:solid;
@@ -97,23 +97,23 @@
             .tableEven {
                 background-color:#dbe5f1;
                 font-size:10px;
-                font-family: Arial;
+                font-family:Arial,Helvetica,sans-serif;
                 padding:2px;
             }
             td {
                 font-size:10px;
-                font-family: Arial;
+                font-family:Arial,Helvetica,sans-serif;
             }
 
             .tableOdd{
                 background-color:#FFFFFF;
-                font-family: Arial;
+                font-family:Arial,Helvetica,sans-serif;
                 font-size:10px !important;
                 padding:2px;
             }
 
             .selectDropDown {
-                font-family: Arial;
+                font-family:Arial,Helvetica,sans-serif;
                 font-size:10px;
                 width:200px;
             }
@@ -138,7 +138,7 @@
                 padding: 10px 10px 10px 10px !important;
                 background-color:#EDF5FF;
                 font-size:10px;
-                font-family:Arial;
+                font-family:Arial,Helvetica,sans-serif;
             }
             .contentbox_border{
                 clear:both;
@@ -185,7 +185,7 @@
         </style>
     </HEAD>
     <BODY>
-        <TABLE cellSpacing=0 cellPadding=0 width="1220"  border=0 valign="top" align="left">
+        <TABLE cellSpacing=0 cellPadding=0  width="100%"  border=0 valign="top" align="left">
             <TBODY>
                 <TR>
                     <TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
@@ -219,7 +219,7 @@
                                 </TR>
                                 <TR>
                                     <TD>
-                                        <TABLE cellpadding="2" cellspacing="2" width="100%" border="0">
+                                        <TABLE cellpadding="2" cellspacing="2" width="1220" border="0">
                                             <TBODY>
                                                 <TR>
                                                     <TD VALIGN="TOP" colspan="2">

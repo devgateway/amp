@@ -187,7 +187,7 @@
                                 <LI>
                                     <div>
                                         <a target="_blank" onclick="exportPDF(); return false;">
-                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF'/><digi:trn>Export to PDF</digi:trn>
+                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF'/> <digi:trn>Export to PDF</digi:trn>
                                         </a>
                                         <a target="_blank" onclick="exportWord(); return false;">
                                             <digi:img  hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/doc.gif" border="0" alt='Export to Word'/> <digi:trn>Export to Word</digi:trn>

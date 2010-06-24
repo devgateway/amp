@@ -146,7 +146,7 @@
             }
             .contentboxEmpty{
                 clear:both;
-                padding:4px 4px 6px 4px;
+                padding:4px 4px 4px 4px;
                 background: #EDF5FF;
                 border: 1px solid black;
                 border-width: 1px 1px 0px 1px;

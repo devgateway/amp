@@ -91,7 +91,15 @@ public class TemporaryDocumentData extends DocumentData {
 		this.setTitle( dmForm.getDocTitle() );
 		this.setDescription( dmForm.getDocDescription() );
 		this.setNotes( dmForm.getDocNotes() );
-		this.setCalendar( DocumentManagerUtil.calendarToString(Calendar.getInstance()) );
+		this.setCalendar( DocumentManagerUtil.calendarToString(Calendar.getInstance(),false));
+		//year of publication
+		Calendar yearOfPublicationDate=null;
+		Long selYearOfPublication=dmForm.getYearOfPublication();
+		if(selYearOfPublication!=null && selYearOfPublication.intValue()!=-1){
+			yearOfPublicationDate=Calendar.getInstance();
+			yearOfPublicationDate.set(selYearOfPublication.intValue(), 1, 1);
+		}
+		this.setYearofPublication(DocumentManagerUtil.calendarToString(yearOfPublicationDate,true));
 		
 		this.setHasViewRights(true);
 		this.setHasVersioningRights(false);

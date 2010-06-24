@@ -102,6 +102,7 @@ public class GetVersionsForDocumentManager extends Action {
 		docData.setContentType	( nodeWrapper.getContentType() );
 		docData.setCmDocTypeId	( nodeWrapper.getCmDocTypeId() );
 		docData.setCalendar		( nodeWrapper.getDate() );
+		docData.setYearofPublication(nodeWrapper.getYearOfPublication());
 		docData.setFileSize		( nodeWrapper.getFileSizeInMegabytes() );
 		docData.setVersionNumber( nodeWrapper.getVersionNumber() );
 		docData.setUuid			( nodeWrapper.getUuid() );
@@ -120,7 +121,7 @@ public class GetVersionsForDocumentManager extends Action {
 		docData.setCurrentVersionNeedsApproval(versionNeedsApproval);
 		
 		docData.process(myRequest);
-		docData.computeIconPath( false );
+		docData.computeIconPath( false );		
 		return true;
 	}
 	

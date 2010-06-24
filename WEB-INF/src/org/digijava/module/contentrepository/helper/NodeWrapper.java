@@ -100,9 +100,15 @@ public class NodeWrapper {
 				}
 			}
 			
-			if ( !errorAppeared ) {			
+			if ( !errorAppeared ) {
+				Calendar yearOfPublicationDate=null;
+				Long selYearOfPublication=myForm.getYearOfPublication();
+				if(selYearOfPublication!=null && selYearOfPublication.intValue()!=-1){
+					yearOfPublicationDate=Calendar.getInstance();
+					yearOfPublicationDate.set(selYearOfPublication.intValue(), 1, 1);
+				}				
 				populateNode(isANewVersion, newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
-					contentType, docType , teamMember.getEmail(), teamMember.getTeamId() );
+					contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
 			}
 			
 			this.node		= newNode;
@@ -154,7 +160,13 @@ public class NodeWrapper {
 				description=URLDecoder.decode(docNotes, "UTF-8");
 			}
 			
-			populateNode(false, newNode, URLDecoder.decode(docTitle, "UTF-8"), description, docNotes,contentType, docType , teamMember.getEmail(), teamMember.getTeamId() );
+			//year of publication
+			Calendar yearOfPublication=null;
+			if(originalNode.hasProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION)){
+				yearOfPublication=originalNode.getProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION).getDate();
+			}
+			
+			populateNode(false, newNode, URLDecoder.decode(docTitle, "UTF-8"), description, docNotes,contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublication );
 			this.node		= newNode;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -207,7 +219,13 @@ public class NodeWrapper {
 				description=URLDecoder.decode(docNotes, "UTF-8");
 			}
 			
-			populateNode(isANewVersion, newNode, URLDecoder.decode(docTitle, "UTF-8"), description, docNotes,contentType, docType , teamMember.getEmail(), teamMember.getTeamId() );
+			//year of publication
+			Calendar yearOfPublication=null;
+			if(originalNode.hasProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION)){
+				yearOfPublication=originalNode.getProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION).getDate();
+			}
+			
+			populateNode(isANewVersion, newNode, URLDecoder.decode(docTitle, "UTF-8"), description, docNotes,contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublication );
 			return newNode;
 			// this.node		= newNode;
 		} catch (Exception e) {
@@ -293,8 +311,14 @@ public class NodeWrapper {
 			}
 			
 			if ( !errorAppeared ) {
+				Calendar yearofPublicationDate=null;
+				if(tempDoc.getYearofPublication()!=null){
+					Integer yearofPublication = new Integer(tempDoc.yearofPublication);
+					yearofPublicationDate= Calendar.getInstance();
+					yearofPublicationDate.set(yearofPublication.intValue(), 1, 1);
+				}
 				populateNode(isANewVersion,newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
-					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId() );
+					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId(), yearofPublicationDate );
 			} 
 			
 			this.node		= newNode;
@@ -313,8 +337,8 @@ public class NodeWrapper {
 		
 	}
 	
-	private void populateNode(boolean isANewVersion,Node newNode, String doTitle, String docDescr, String docNotes, String contentType, Long cmDocType, 
-			String user, Long teamId) {
+	private void populateNode(boolean isANewVersion,Node newNode, String docTitle, String docDescr, String docNotes, String contentType, Long cmDocType, 
+			String user, Long teamId,Calendar yearOfPublication) {
 		try{
 			if (!isANewVersion) {
 				newNode.setProperty( CrConstants.PROPERTY_CREATOR, user );
@@ -325,7 +349,7 @@ public class NodeWrapper {
 			if ( docNotes == null )
 				docNotes = "";
 			
-			String encTitle		= URLEncoder.encode(doTitle, "UTF-8");
+			String encTitle		= URLEncoder.encode(docTitle, "UTF-8");
 			String encDescr		= URLEncoder.encode(docDescr, "UTF-8");
 			String encNotes		= URLEncoder.encode(docNotes, "UTF-8");
 			
@@ -336,6 +360,10 @@ public class NodeWrapper {
 			if(cmDocType != null) newNode.setProperty( CrConstants.PROPERTY_CM_DOCUMENT_TYPE, cmDocType );
 			else logger.error("Doctype is null. It is ok if the file is importing using IDML");
 			newNode.setProperty( CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
+			//year of publication
+			if(yearOfPublication!=null){				
+				newNode.setProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION, yearOfPublication);
+			}			
 			newNode.setProperty( CrConstants.PROPERTY_VERSION_CREATOR, user );
 			newNode.setProperty( CrConstants.PROPERTY_VERSION_CREATOR_TEAM, teamId);
 		}
@@ -433,7 +461,21 @@ public class NodeWrapper {
 		if ( calProperty != null ) {
 			try {
 				Calendar cal 	= calProperty.getDate();
-				return DocumentManagerUtil.calendarToString(cal);
+				return DocumentManagerUtil.calendarToString(cal,false);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		return null;
+	}
+	
+	public String getYearOfPublication() {
+		Property calProperty	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_YEAR_OF_PUBLICATION);
+		if ( calProperty != null ) {
+			try {
+				Calendar cal 	= calProperty.getDate();
+				return DocumentManagerUtil.calendarToString(cal,true);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

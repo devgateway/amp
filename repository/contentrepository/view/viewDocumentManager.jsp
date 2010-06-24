@@ -17,6 +17,7 @@
 <%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%><jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <%@include file="addDocumentPanel.jsp" %>
+<%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 
 <digi:errors />
 
@@ -271,16 +272,14 @@ function setHoveredTable(tableId, hasHeaders) {
 						        	<td>
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
 										<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
-			                            	<digi:trn key="contentrepository:addResource">
-					 	    	       				Add Resource ...    							
-				 	    	       			</digi:trn>            
+			                            	<digi:trn>Add Resource ...</digi:trn>            
 										</button>
 									<%}%>
 									</td>
 								</tr>							
 								<tr>
 									<td>
-										<br />									
+										<br/>
 											<div id="team_markup" align="left"  class="all_markup">
 												<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 												<jsp:include page="documentTable.jsp" flush="true" />
@@ -347,39 +346,52 @@ function setHoveredTable(tableId, hasHeaders) {
 							</td>
 						</tr>
 						<tr>
-						<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
-						<td><html:text property="docTitle" size="30" /></td>
+							<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
+							<td><html:text property="docTitle" size="30" /></td>
 						</tr>
 						<tr>
-						<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
-						<td><html:textarea property="docDescription" cols="28"/></td>
+							<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
+							<td><html:textarea property="docDescription" cols="28"/></td>
 						</tr>
 						<tr>
-						<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
-						<td><html:textarea property="docNotes" cols="28" /></td>
-						</tr>
+							<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
+							<td><html:textarea property="docNotes" cols="28" /></td>
+						</tr>						
 						<tr>
-						<td><strong><digi:trn key="aim:typeOfTheDocument">Type:</digi:trn></strong></td>
-						<td>
-							<c:set var="translation">
-								<digi:trn key="contentrepository:doctype:firstline">Please select a type from below</digi:trn>
-							</c:set>
-							<category:showoptions  firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
-						</td>
-						</tr>
+		                    <td>
+		                    	<strong><digi:trn>Year Of Publication</digi:trn></strong>
+		                    </td>
+		                    <td>		
+		                        <html:select property="yearOfPublication" styleClass="inp-text">
+		                        	<html:option value="-1"><digi:trn>select...</digi:trn></html:option>
+		                        	<c:forEach var="year" items="${crDocumentManagerForm.years}">
+		                        		<html:option value="${year}">${year}</html:option>
+		                        	</c:forEach>
+		                        </html:select>
+		                    </td>
+		                </tr>
+						
+						<tr>
+							<td><strong><digi:trn key="aim:typeOfTheDocument">Type:</digi:trn></strong></td>
+							<td>
+								<c:set var="translation">
+									<digi:trn>Please select a type from below</digi:trn>
+								</c:set>
+								<category:showoptions  firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
+							</td>
+						</tr>						
 						<tr id="tr_path">
-						<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
-						<td>
-			                             <!-- <html:file property="fileData"></html:file> -->
-			                             <div class="fileinputs"> 
-							
-						<input id="fileData" name="fileData" type="file" class="file buton">
-			                        </div></td>
+							<td><strong><digi:trn>Path:</digi:trn><font color="red">*</font></strong></td>
+							<td>
+				                <div class="fileinputs"> 
+									<input id="fileData" name="fileData" type="file" class="file buton">
+			                	</div>
+			               </td>
 						</tr>
 						<tr style="display: none" id="tr_url">
-						<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
-						<td><html:text property="webLink" size="32"></html:text></td>
-						</tr>
+							<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
+							<td><html:text property="webLink" size="32"></html:text></td>
+						</tr>												
 						<tr>
 							<td align="right">
 								<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;

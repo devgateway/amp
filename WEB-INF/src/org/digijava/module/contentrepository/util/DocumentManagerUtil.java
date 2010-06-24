@@ -234,7 +234,8 @@ public class DocumentManagerUtil {
 		return ph.getApplicationPath();
 	}
 	
-	public static String calendarToString(Calendar cal) {
+	public static String calendarToString(Calendar cal,boolean yearofPublication) {
+		String retVal=null;
 		String [] monthNames	= {"", "January", "February", "March", "April", "May", "June",
 									"July", "August", "September", "October", "November", "December"};
 		
@@ -245,7 +246,13 @@ public class DocumentManagerUtil {
 		int hour		= cal.get(Calendar.HOUR_OF_DAY);
 		int minute		= cal.get(Calendar.MINUTE);
 		int second		= cal.get(Calendar.SECOND);
-		return month + "/" + day + "/" + year ;
+		
+		if(yearofPublication){
+			retVal= new Long(year).toString() ;
+		}else{
+			retVal=month + "/" + day + "/" + year ;
+		}
+		return retVal ;
 	}
 	
 	public static Node getNodeOfLastVersion(String currentUUID, HttpServletRequest request) throws CrException, RepositoryException {

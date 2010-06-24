@@ -27,6 +27,7 @@ public class CrConstants {
 	public static final String PROPERTY_WEB_LINK					= "ampdoc:webLink";
 	public static final String PROPERTY_FILE_SIZE					= "ampdoc:fileSize";
 	public static final String PROPERTY_CM_DOCUMENT_TYPE			= "ampdoc:cmDocType";
+	public static final String PROPERTY_YEAR_OF_PUBLICATION			= "ampdoc:yearOfPublication";
 	
 	
 	//states

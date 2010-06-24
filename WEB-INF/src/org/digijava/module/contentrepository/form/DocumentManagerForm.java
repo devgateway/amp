@@ -47,6 +47,9 @@ public class DocumentManagerForm extends ActionForm {
 	private Long docType			= new Long(0);
 	private Long docLang			= null;
 	
+	private Collection<Long> years;
+	private Long yearOfPublication;
+	
 	private Boolean pageCloseFlag	= false;
 	
 	public Boolean getPageCloseFlag() {
@@ -285,5 +288,20 @@ public class DocumentManagerForm extends ActionForm {
 	public void setShowActions(Boolean showActions) {
 		this.showActions = showActions;
 	}
-	
+
+	public Collection<Long> getYears() {
+		return years;
+	}
+
+	public void setYears(Collection<Long> years) {
+		this.years = years;
+	}
+
+	public Long getYearOfPublication() {
+		return yearOfPublication;
+	}
+
+	public void setYearOfPublication(Long yearOfPublication) {
+		this.yearOfPublication = yearOfPublication;
+	}	
 }

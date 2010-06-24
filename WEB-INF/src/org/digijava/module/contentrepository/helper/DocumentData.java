@@ -20,6 +20,7 @@ public class DocumentData implements Comparable<DocumentData>{
 	double fileSize			= 0;
 	Calendar date = null;
 	String iconPath			= null;
+	String yearofPublication	= null;
 	
 	Long cmDocTypeId		= null;
 	
@@ -335,6 +336,12 @@ public class DocumentData implements Comparable<DocumentData>{
 	}
 	public void setHasApproveVersionRights(boolean hasApproveVersionRights) {
 		this.hasApproveVersionRights = hasApproveVersionRights;
+	}
+	public String getYearofPublication() {
+		return yearofPublication;
+	}
+	public void setYearofPublication(String yearofPublication) {
+		this.yearofPublication = yearofPublication;
 	}
 	
 }

@@ -21,17 +21,15 @@
 								<logic:equal name="checkBoxToHideLocal" value="false">
 									<th><digi:trn>Select</digi:trn></th>
 								</logic:equal>
-								<th><digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
-								<th>
-                                	<digi:trn key="contentrepository:TableHeader:ResourceName">Resource Name</digi:trn>   
-                                </th>
-								<th><digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn></th>
-								<%-- <th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th> --%>
-								<th><digi:trn key="contentrepository:TableHeader:CmDocType">Document Type</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
+								<th><digi:trn>Title</digi:trn></th>
+								<th><digi:trn>Type</digi:trn></th>
+								<th><digi:trn>Resource Name</digi:trn></th>
+								<th><digi:trn>Date</digi:trn></th>
+								<th><digi:trn>Year Of Publication</digi:trn></th>
+								<th><digi:trn>Size (MB)</digi:trn></th>
+								<th><digi:trn>Document Type</digi:trn></th>
+								<th><digi:trn>Description</digi:trn></th>
+								<th><digi:trn>Actions</digi:trn></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -95,6 +93,13 @@
 								<td>
 									<bean:write name="documentData" property="calendar" />
 								</td>
+								
+									<td>
+									<bean:write name="documentData" property="yearofPublication" />
+								</td>
+								
+																
+								
 								<td>
 									<bean:write name="documentData" property="fileSize" />
 								</td>
@@ -135,9 +140,9 @@
 									<logic:equal name="documentData" property="hasVersioningRights" value="true">
 										<span style="color: blue"><strong>|</strong></span>
 										<a style="cursor:pointer; text-decoration:none; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
-										onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
+										onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl},'<%=documentData.getYearofPublication() %>' );showMyPanel(0, 'addDocumentDiv');"
 										title="<digi:trn>Click here to add a new version of this document</digi:trn>">
-											<digi:trn>Add Version</digi:trn>								
+											<digi:trn>Add Version</digi:trn>
 									</logic:equal>
 									
 									<c:set var="translationForWindowTitle">

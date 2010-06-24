@@ -255,6 +255,11 @@
 	<digi:trn key="contentrepository:MenuItem:Options:ShowOnlyWebLinks">Show only web links</digi:trn>
 </c:set>
 
+<c:set var="trans_headerYearofPubl">
+	<digi:trn>Year Of Publ.</digi:trn>
+</c:set>
+
+
 <c:set var="trans_wait">
 	<digi:trn>Please wait a moment...</digi:trn>
 </c:set>
@@ -278,6 +283,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 		    {key:"type",text:"${trans_headerType}",sortable:true},
 	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
 	        {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
+	        {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
 	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
 	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
 	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:200},
@@ -291,6 +297,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     		    {key:"type",text:"${trans_headerType}",sortable:true},
     	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
     	        {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
+    	        {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
     	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
     	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
     	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
@@ -302,6 +309,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
        		    {key:"type",text:"${trans_headerType}",sortable:true},
        	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:200},
         	    {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
+        	    {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
 	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
             	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
 	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:300},
@@ -882,10 +890,13 @@ function toggleView(elementId, iconId, isMinus) {
 	return isMinus;
 }
 /* Configures the form with id typeId */
-function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
+function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOfPublication) {
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
 	if (optionId == null)
 		optionId	= 0;
+
+	if(yearOfPublication==null)
+		yearOfPublication='-1';
 
 	var myForm		= document.getElementById('typeId').form;
 	myForm.docTitle.value		= title;
@@ -895,6 +906,7 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 	myForm.fileData.value		= null;
 	myForm.webLink.value		= '';
 	myForm.docType.disabled		= false;
+	myForm.yearOfPublication.disabled		= false;
 	if (isAUrl == null) 
 		isAUrl	= false;
 		
@@ -928,6 +940,9 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 		myForm.docType.style.backgroundColor	= "#eeeeee";
 		myForm.docType.style.color			= "darkgray";
 
+		myForm.yearOfPublication.style.backgroundColor	= "#eeeeee";
+		myForm.yearOfPublication.style.color			= "darkgray";
+
 
 		
 		setPanelHeader(0, "${translation_add_new_version}");
@@ -940,6 +955,16 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 			}
 		}
 		myForm.docType.disabled						= true;
+
+		//year of publication
+		opts									= myForm.yearOfPublication.options;
+		for ( j=0; j<opts.length; j++ ) {
+			if ( opts[j].value	== yearOfPublication ) {
+				opts[j].selected	= true;
+				break;
+			}
+		}
+		myForm.yearOfPublication.disabled			= true;
 	}
 	else {
 		myForm.webResource[1].disabled				= false;

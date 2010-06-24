@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
@@ -60,6 +61,7 @@ public class DocumentManager extends Action {
 			showOnlyLinks 	= true;
 		else
 			showOnlyLinks	= false;
+				
 		
 		if (  myForm.getAjaxDocumentList() ) {
 			ajaxDocumentList(request, myForm);
@@ -69,6 +71,14 @@ public class DocumentManager extends Action {
 		if ( !isLoggeedIn(request) ) {
 			return mapping.findForward("publicView");
 		}
+		
+		//set years
+		myForm.setYears(new ArrayList<Long>());
+	    Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+	    Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+	    for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
+	      	myForm.getYears().add(new Long(i));
+	    }
 
 		showContentRepository(request, myForm, errors);
 		
@@ -211,7 +221,7 @@ public class DocumentManager extends Action {
 					}					
 				}
 			}
-			
+			myForm.setYearOfPublication(null);
 			myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
 			myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
 			myForm.setSharedDocuments(this.getSharedDocuments(teamMember, request));
@@ -392,6 +402,7 @@ public class DocumentManager extends Action {
 				documentData.setContentType( nodeWrapper.getContentType() );
 				documentData.setWebLink( nodeWrapper.getWebLink() );
 				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
+				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
 								
 				documentData.process(request);
 				documentData.computeIconPath(true);
@@ -585,6 +596,7 @@ public class DocumentManager extends Action {
 				documentData.setContentType( nodeWrapper.getContentType() );
 				documentData.setWebLink( nodeWrapper.getWebLink() );
 				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
+				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
 								
 				documentData.process(request);
 				documentData.computeIconPath(true);

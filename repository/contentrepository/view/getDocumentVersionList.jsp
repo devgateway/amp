@@ -16,13 +16,14 @@
 	<table>
 						<thead>
 							<tr>
-								<th><digi:trn key="contentrepository:versionhistory:header:version">Version</digi:trn></th>
-								<th><digi:trn key="contentrepository:versionhistory:header:type">Type</digi:trn></th>
-								<th><digi:trn key="contentrepository:versionhistory:header:resourcename">Resource Name</digi:trn></th>
-								<th><digi:trn key="contentrepository:versionhistory:header:date">Date</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn></th>
-								<th><digi:trn key="contentrepository:versionhistory:header:notes">Notes</digi:trn></th>
-								<th><digi:trn key="contentrepository:versionhistory:header:actions">Actions</digi:trn></th>
+								<th><digi:trn>Version</digi:trn></th>
+								<th><digi:trn>Type</digi:trn></th>
+								<th><digi:trn>Resource Name</digi:trn></th>
+								<th><digi:trn>Date</digi:trn></th>
+								<th><digi:trn>Pub.Year</digi:trn></th>
+								<th><digi:trn>Size (MB)</digi:trn></th>
+								<th><digi:trn>Notes</digi:trn></th>
+								<th><digi:trn>Actions</digi:trn></th>
 							</tr>
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"	property="otherDocuments" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData">
@@ -33,8 +34,8 @@
 								<td>
 									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
 									<div>&nbsp;</div>
-								</td>								
-								<td>								
+								</td>
+								<td>
 									<c:choose>
 									<c:when test="${documentData.webLink == null}">
 										&nbsp;<bean:write name="documentData" property="name" />
@@ -58,6 +59,9 @@
 								</td>
 								<td>
 									<bean:write name="documentData" property="calendar" />
+								</td>
+								<td>
+									<bean:write name="documentData" property="yearofPublication" />
 								</td>
 								<td>
 									<bean:write name="documentData" property="fileSize" />
@@ -98,7 +102,7 @@
 							</tr>
 						</logic:iterate>
 					</table>
-					<font color="red">**</font> indicates shared versions of the document
+					<font color="red">*</font> indicates shared versions of the document
 					* The colored row marks the public version					
 					<br />
 				</logic:notEmpty>

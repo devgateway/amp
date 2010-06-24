@@ -138,7 +138,7 @@
                 padding: 10px 10px 10px 10px !important;
                 background-color:#EDF5FF;
                 font-size:10px;
-                font-family:Arial,Helvetica,sans-serif;
+                font-family:Arial;
             }
             .contentbox_border{
                 clear:both;

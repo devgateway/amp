@@ -77,7 +77,14 @@
                 </c:choose>
             </td>
           <c:set var="startYear">
-              ${sessionScope.orgProfileFilter.year-yearRange}
+              <c:choose>
+                  <c:when test="${orgProfileNameValueYearForm.type!= 5&&orgProfileNameValueYearForm.type!= 6}">
+                      ${sessionScope.orgProfileFilter.year-yearRange}
+                  </c:when>
+                  <c:otherwise>
+                      ${sessionScope.orgProfileFilter.year-yearRange-1}
+                  </c:otherwise>
+              </c:choose>
           </c:set>
 
            <c:forEach var="year" begin="1" end="${yearRange}">

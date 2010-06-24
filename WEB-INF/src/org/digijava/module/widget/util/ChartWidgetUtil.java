@@ -1501,7 +1501,12 @@ public class ChartWidgetUtil {
         Date startDate = filter.getStartDate();
         Date endDate = filter.getEndDate();
         Session session = PersistenceManager.getRequestDBSession();
-        String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
+        String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,";
+        if (!locationCondition) {
+            oql += "actSec.sectorPercentage,fd.fixedExchangeRate)";
+        } else {
+             oql += "0.01f*actloc.locationPercentage*actSec.sectorPercentage,fd.fixedExchangeRate)";
+        }
         oql += " from ";
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";

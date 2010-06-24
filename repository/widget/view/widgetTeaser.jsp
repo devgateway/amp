@@ -152,6 +152,11 @@
                         failure:responseFailure_${gisWidgetTeaserForm.type}
                     };
             </script>
+            <c:if test="${gisWidgetTeaserForm.type!=5}">
+                    <DIV class="contentboxEmpty">
+                       &nbsp;
+                    </DIV>
+            </c:if>
             <c:if test="${gisWidgetTeaserForm.type==5}">
                 <c:set var="imageClass">
                     sectorChart
@@ -199,7 +204,7 @@
                 </script>
                 <div id="main" style="width:610px">
                     <DIV id="subtabs">
-                        <div style="pa">
+                        <div id="pa">
                             <UL>
                                 <c:forEach var="config" items="${gisWidgetTeaserForm.sectorClassificationConfigs}" varStatus="status">
                                     <c:if test="${config.name=='Primary'}">
@@ -250,11 +255,11 @@
 
 
             </c:if>
-            <div id="table_${gisWidgetTeaserForm.type}"  class="contentbox_border chartPlaceCss" style="display: none;"></div>
-            <div id="loadDataSource_${gisWidgetTeaserForm.type}_image" class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_unselected" style="display: none" >
+            <div id="table_${gisWidgetTeaserForm.type}"  class="noTopBorder contentbox_border chartPlaceCss" style="display: none;"></div>
+            <div id="loadDataSource_${gisWidgetTeaserForm.type}_image" class="noTopBorder contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_unselected" style="display: none" >
                 <img src="images/amploading.gif" alt=""  />
             </div>
-            <div  class="contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_selected ">
+            <div  class="noTopBorder contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_selected ">
                 <c:choose>
                     <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
                         <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=0" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>

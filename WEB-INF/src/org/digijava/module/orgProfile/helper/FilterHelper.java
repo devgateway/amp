@@ -2,6 +2,7 @@ package org.digijava.module.orgProfile.helper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import org.digijava.kernel.exception.DgException;
@@ -246,9 +247,7 @@ public class FilterHelper implements Serializable {
         this.endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, previousYear);
         this.locationIds = new ArrayList<Long>();
         if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-            for (Long zoneId : zoneIds) {
-                this.locationIds.add(zoneId);
-            }
+            this.locationIds.addAll(Arrays.asList(zoneIds));
         } else {
             if (zoneIds != null && zoneIds[0] == -1) {
                 AmpCategoryValueLocations region = LocationUtil.getAmpCategoryValueLocationById(regionId);

@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.digijava.module.orgProfile.form;
 
+import org.digijava.module.aim.helper.Constants;
 import java.util.Collection;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -18,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -204,17 +202,33 @@ public class OrgProfileFilterForm extends ActionForm {
 
     @Override
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-        String reset = request.getParameter("exportSetting");
-        if (reset == null) {
+        String reset = request.getParameter("reset");
+        ServletContext ampContext = getServlet().getServletContext();
+        if (reset == null || reset.equals("true")) {
             super.reset(mapping, request);
-            workspaceOnly = false;
+            setWorkspaceOnly(false);
             setOrgIds(null);
             setSelZoneIds(null);
             setSelRegionId(null);
-            pledgeVisible=false;
-            expendituresVisible=false;
+            setPledgeVisible(false);
+            setExpendituresVisible(false);
+            setCurrencyId(null);
+            setOrgGroupId(null);
+            setFiscalCalendarId(null);
+            setYear(null);
+            setOrgIds(null);
+            setTransactionType(Constants.COMMITMENT);
+            setLargestProjectNumb(10);
+            setSelRegionId(null);
+            setSelZoneIds(null);
+            setYearsInRange(5);
+           
         }
-     
+        if(reset!=null&&reset.equals("true")){
+            setExpendituresVisible(FeaturesUtil.isVisibleFeature("Expenditures", ampContext));
+            setPledgeVisible(FeaturesUtil.isVisibleModule("Pledges", ampContext));
+        }
+
     }
 
     public String getOrgGroupName() {

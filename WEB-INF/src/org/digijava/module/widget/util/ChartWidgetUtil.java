@@ -825,9 +825,11 @@ public class ChartWidgetUtil {
 		if (title != null) {
 			title.setFont(titleFont);
 		}
-        TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName()+"("+(filter.getYear() - 1)+")",subTitleFont);
+        TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName(),subTitleFont);
+        TextTitle subTitleDate = new TextTitle(FormatHelper.formatDate(filter.getStartDate())+"-" +FormatHelper.formatDate(filter.getEndDate()),subTitleFont);
 		subTitle.setPadding(5, 5, 5, 5);
 		chart.addSubtitle(0, subTitle);
+        chart.addSubtitle(1, subTitleDate);
 		RingPlot plot = (RingPlot) chart.getPlot();
 		plot.setOuterSeparatorExtension(0);
 		plot.setInnerSeparatorExtension(0);

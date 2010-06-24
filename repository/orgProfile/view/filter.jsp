@@ -20,7 +20,7 @@
         $("#org_group_dropdown_id").change(function () {
             var orgGroupId=$('#org_group_dropdown_id option:selected').val();
             var partialUrl=addActionToURL('getOrganizations.do');
-            var url=partialUrl+'?orgGroupId='+orgGroupId;
+            var url=partialUrl+'?orgGroupId='+orgGroupId+"&reset=false";
             var async=new Asynchronous();
             async.complete=buildOrgDropDown;
             async.call(url);

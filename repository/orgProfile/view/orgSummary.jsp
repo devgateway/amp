@@ -39,8 +39,10 @@
         }
 
         var additionalInfoResponseSuccess = function(o){
-            document.getElementById("orgSummaryActionId").value="view"
-            document.orgProfOrgProfileFilterForm.submit();
+            <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do?reset=false" />
+                document.orgProfOrgProfileFilterForm.action="${url}";
+                document.orgProfOrgProfileFilterForm.target="_self";
+                document.orgProfOrgProfileFilterForm.submit();
         }
 
         var additionalInfoResponseFailure = function(o){
@@ -137,7 +139,7 @@
         </div>
     </UL>
 </DIV>
-<div class="contentbox_border chartPlaceCss tab_organization_profile_selected">
+<div class="topBorder contentbox_border chartPlaceCss tab_organization_profile_selected">
     <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
     <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
     <c:set var="orgsCount" scope="request" value="${fn:length(sessionScope.orgProfileFilter.orgIds)}"/>

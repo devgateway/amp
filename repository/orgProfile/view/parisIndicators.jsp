@@ -20,7 +20,7 @@
         </div>
     </UL>
 </DIV>
-<div class="contentbox_border chartPlaceCss">
+<div class="topBorder contentbox_border chartPlaceCss" style="border-width: 1px 1px 1px 1px;">
 
 <digi:instance property="orgProfilePIForm"/>
 

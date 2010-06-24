@@ -110,7 +110,7 @@
 	}
 
 	function isPassVoid(name){
-        return (name == "" || name == null || name.charAt(0) == ' ');
+        return (name==null || name.length<1);
 	}
 	
 	

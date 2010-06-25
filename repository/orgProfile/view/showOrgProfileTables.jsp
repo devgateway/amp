@@ -112,15 +112,23 @@
         </tr>
 
         <c:forEach items="${orgProfileNameValueYearForm.values}" var="value"  varStatus="status">
-            <c:set var="class">
-                <c:if test="${status.count%2==0}">
+            <c:if test="${status.count%2==0}">
+                <c:set var="class">
                     tableEven
-                </c:if>
-                <c:if test="${status.count%2==1}">
+                </c:set>
+                <c:set var="trbgColor">
+                    #dbe5f1
+                </c:set>
+            </c:if>
+            <c:if test="${status.count%2==1}">
+                <c:set var="class">
                     tableOdd
-                </c:if>
-            </c:set>
-            <tr class="${class}">
+                </c:set>
+                <c:set var="trbgColor">
+                    #FFFFFF
+                </c:set>
+            </c:if>
+               <tr class="${class}" onmouseover="this.style.backgroundColor='#a5bcf2'" onmouseout="this.style.backgroundColor='${trbgColor}'">
                 <td nowrap>
                     <digi:trn>${value.name}</digi:trn>
                 </td>

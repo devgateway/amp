@@ -1755,6 +1755,7 @@ public class DEImportBuilder {
 				if(log.getLogItems() == null) 
 					log.setLogItems(new ArrayList());
 				log.getLogItems().add(item);
+				item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
 				iLog.saveObject(item);
 				//iLog.saveObject(log);
 				continue;
@@ -1794,6 +1795,7 @@ public class DEImportBuilder {
 			//iLog.saveObject(item);
 			if(log.getLogItems() == null) 
 				log.setLogItems(new ArrayList());
+			item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
 			iLog.saveObject(item);
 			//iLog.saveObject(log);
 		}

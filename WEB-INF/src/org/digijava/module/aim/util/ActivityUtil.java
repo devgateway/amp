@@ -864,6 +864,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			ampContact.setShared(true);
     			ampContact.setOfficeaddress(contact.getOfficeaddress());
     			ampContact.setFunction(contact.getFunction());
+
     			
     			/*
     			//remove old properties
@@ -929,16 +930,18 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		}*/
     		
     		if(activityContact.getId()!=null){
-    			/*
-    			AmpActivityContact ampActContact= new AmpActivityContact();
-    				//(AmpActivityContact)session.get(AmpActivityContact.class, activityContact.getId());
+
+    			AmpActivityContact ampActContact = (AmpActivityContact)session.get(AmpActivityContact.class, activityContact.getId());
+
+                /*
     			ampActContact.setContact(activityContact.getContact());
     			ampActContact.setContactType(activityContact.getContactType());
     			ampActContact.setPrimaryContact(activityContact.getPrimaryContact());
     			ampActContact.setActivity(activity);
     			ampActContact.setId(activityContact.getId());
     			*/
-    			//session.update(activityContact);
+                ampActContact.setPrimaryContact(activityContact.getPrimaryContact());
+    			session.update(ampActContact);
     		}else{
     			activityContact.setActivity(activity);
         		session.save(activityContact);
